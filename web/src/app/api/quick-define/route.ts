@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 
 /**
  * Quick-define — the lightweight popover sibling of /api/define.
@@ -109,7 +109,7 @@ async function generatePreview(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: TEXT_MODEL_FAST,
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userMsg },
@@ -124,7 +124,7 @@ async function generatePreview(
       choices?: Array<{ message?: { content?: string } }>;
     };
     const u = usageFrom(data);
-    void logAiUsage({ feature, model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+    void logAiUsage({ feature, model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
     const raw = data.choices?.[0]?.message?.content ?? "";
     if (!raw) return null;
     const parsed = JSON.parse(raw) as { meaning?: string; example?: string };

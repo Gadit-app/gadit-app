@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { classroomDef } from "@/lib/word-sets";
 import { loadWordSet } from "@/lib/curriculum-sets";
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL } from "@/lib/ai-cost";
 
 /**
  * Whole-class activities for a word-set word on the teacher's projector
@@ -62,7 +62,7 @@ Return JSON only.${lang === "ar"
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
     body: JSON.stringify({
-      model: "gpt-4o",
+      model: TEXT_MODEL,
       temperature: 0.4,
       response_format: { type: "json_object" },
       messages: [{ role: "system", content: sys }, { role: "user", content: user }],
@@ -71,7 +71,7 @@ Return JSON only.${lang === "ar"
   if (!res.ok) throw new Error("openai_" + res.status);
   const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
   const u = usageFrom(json);
-  void logAiUsage({ feature: "class_activity", model: "gpt-4o", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+  void logAiUsage({ feature: "class_activity", model: TEXT_MODEL, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
   const raw = JSON.parse(json.choices?.[0]?.message?.content ?? "{}") as { quiz?: unknown[]; game?: unknown[] };
   const quiz: QuizItem[] = (raw.quiz ?? []).map((x) => {
     const o = x as Record<string, unknown>;

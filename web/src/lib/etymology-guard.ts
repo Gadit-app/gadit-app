@@ -6,7 +6,7 @@
  * call (gpt-5.4, which knew the roots far better in a side-by-side test)
  * rewrites the source fields. It only runs in that case, about a cent.
  */
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, SMART_MODEL } from "@/lib/ai-cost";
 
 type Ety = { sourceLanguage?: string; originalWord?: string; breakdown?: string; originalMeaning?: string; historyNote?: string; kidsExplanation?: string };
 type Result = { meanings?: Array<{ meaning?: string }>; etymology?: Ety | null };
@@ -62,12 +62,12 @@ No niqqud. Never invent: a guessed origin is worse than none. If you are not sur
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
       signal: AbortSignal.timeout(12000),
-      body: JSON.stringify({ model: "gpt-5.4", reasoning_effort: "low", response_format: { type: "json_object" }, messages: [{ role: "system", content: sys }, { role: "user", content: `Word: ${word}\nCurrent definitions (do not repeat): ${defs}` }] }),
+      body: JSON.stringify({ model: SMART_MODEL, reasoning_effort: "low", response_format: { type: "json_object" }, messages: [{ role: "system", content: sys }, { role: "user", content: `Word: ${word}\nCurrent definitions (do not repeat): ${defs}` }] }),
     });
     if (!res.ok) return dropped;
     const data = await res.json();
     const u = usageFrom(data);
-    void logAiUsage({ feature: "etymology_fix", model: "gpt-5.4", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+    void logAiUsage({ feature: "etymology_fix", model: SMART_MODEL, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
     const j = JSON.parse(data.choices?.[0]?.message?.content ?? "{}") as Ety & { confidence?: string };
     // Not sure: show no origin rather than a guessed one (the definition repeat goes too).
     if (String(j.confidence ?? "").toLowerCase() !== "high") {

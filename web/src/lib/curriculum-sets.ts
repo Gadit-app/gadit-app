@@ -1,5 +1,5 @@
 import { getAdminDb } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL, SMART_MODEL } from "@/lib/ai-cost";
 import { getWordSet, registerWordSet, isCurriculumSetId, type WordSet } from "@/lib/word-sets";
 import { curTopic, curSubject, curLevelHe, gradeLabel, SUBJECT_LANG, zaTopic, arTopic, arSubject, arLevel, arGradeLabel } from "@/lib/curriculum-catalog";
 import zaSets from "@/lib/curriculum-sets-za.json";
@@ -23,7 +23,7 @@ function clean(s: unknown, max: number): string {
   return String(s ?? "").replace(/\s*[–—]\s*/g, ", ").replace(/\s+/g, " ").trim().slice(0, max);
 }
 
-async function chat(sys: string, user: string, model = "gpt-4o", admin = false): Promise<Array<{ w?: unknown; d?: unknown }>> {
+async function chat(sys: string, user: string, model = TEXT_MODEL, admin = false): Promise<Array<{ w?: unknown; d?: unknown }>> {
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
@@ -97,11 +97,11 @@ Return: {"words":[{"w":"","d":""}]}`;
   // real grammar terms where gpt-4o stayed generic, at about 1 cent a unit.
   // It now and then returns an empty list: try once more, then gpt-4o.
   const meta = { id: t.id, subject: subj.key, title: t.t, grade, lang };
-  for (const model of ["gpt-5.4", "gpt-5.4", "gpt-4o"]) {
+  for (const model of [SMART_MODEL, SMART_MODEL, TEXT_MODEL]) {
     try {
       return toDoc(await chat(sys, user, model, admin), meta, lang === "ar");
     } catch (e) {
-      if (String(e).includes("openai_") || model === "gpt-4o") throw e;
+      if (String(e).includes("openai_") || model === TEXT_MODEL) throw e;
     }
   }
   return null;

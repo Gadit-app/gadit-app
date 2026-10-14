@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyUserAndGetPlan } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL } from "@/lib/ai-cost";
 
 /**
  * "Say it in ___" — pronunciation-practice translator (Gadi 2026-08-18).
@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o",
+        model: TEXT_MODEL,
         response_format: { type: "json_object" },
         temperature: 0.3,
         messages: [
@@ -121,7 +121,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "upstream_error", status: res.status }, { status: 502 });
     }
     const data = await res.json();
-    { const u = usageFrom(data); void logAiUsage({ feature: "say", model: "gpt-4o", tokensIn: u.tokensIn, tokensOut: u.tokensOut, plan: userInfo.plan }); }
+    { const u = usageFrom(data); void logAiUsage({ feature: "say", model: TEXT_MODEL, tokensIn: u.tokensIn, tokensOut: u.tokensOut, plan: userInfo.plan }); }
     const content = data.choices?.[0]?.message?.content;
     if (!content) return NextResponse.json({ error: "empty" }, { status: 502 });
     const parsed = JSON.parse(content) as {

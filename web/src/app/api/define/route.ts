@@ -5,7 +5,7 @@ import { dropSoundAlikeMeanings } from "@/lib/homophones-he";
 import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL, TEXT_MODEL_FAST, SMART_MODEL } from "@/lib/ai-cost";
 import { adminBudgetExceeded, hardCapReached, ADMIN_DAILY_CAP } from "@/lib/ai-budget";
 import { alertEngineDown } from "@/lib/engine-alert";
 import { isDegenerate, sanitizeDegenerateEtymology, isEtymologyFieldGarbled } from "@/lib/define-guard";
@@ -1049,7 +1049,7 @@ async function escalateUncertain(systemPrompt: string, userContent: string, word
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
       signal: AbortSignal.timeout(40000),
       body: JSON.stringify({
-        model: "gpt-5.4",
+        model: SMART_MODEL,
         reasoning_effort: "low",
         response_format: { type: "json_object" },
         messages: [
@@ -1062,7 +1062,7 @@ async function escalateUncertain(systemPrompt: string, userContent: string, word
     if (!res.ok) return null;
     const data = await res.json();
     const u = usageFrom(data);
-    void logAiUsage({ feature: "define_escalate", model: "gpt-5.4", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+    void logAiUsage({ feature: "define_escalate", model: SMART_MODEL, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
     const parsed = JSON.parse(data.choices?.[0]?.message?.content ?? "{}") as Record<string, unknown>;
     if (isUncertainResult(parsed) || !Array.isArray(parsed.meanings) || !parsed.meanings.length) { console.info(`[define] escalate: gpt-5.4 not sure either for "${word}": ${JSON.stringify(parsed).slice(0, 300)}`); return null; }
     let out: Record<string, unknown> = parsed;
@@ -1171,8 +1171,8 @@ Output ONLY the JSON object.`;
   // reason. A cooler second gpt-4o pass breaks any degeneracy basin without
   // reintroducing the mojibake-prone model.
   const attempts: Array<{ model: string; temperature: number }> = [
-    { model: "gpt-4o", temperature: 0.8 },
-    { model: "gpt-4o", temperature: 0.4 },
+    { model: TEXT_MODEL, temperature: 0.8 },
+    { model: TEXT_MODEL, temperature: 0.4 },
   ];
 
   for (const attempt of attempts) {
@@ -1242,7 +1242,7 @@ async function generateValidated(
 ): Promise<{ result: object; attemptsUsed: number } | null> {
   for (let attempt = startAttempt; attempt <= maxAttempts; attempt++) {
     try {
-      const result = await callOpenAI("gpt-4o", systemPrompt, userContent);
+      const result = await callOpenAI(TEXT_MODEL, systemPrompt, userContent);
       const verdict = isDegenerate(result, inputWord, uiLang);
       if (!verdict.degenerate) {
         return { result, attemptsUsed: attempt };
@@ -1501,7 +1501,7 @@ async function backfillTranslation(word: string, wordLangName: string, uiLangNam
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: TEXT_MODEL_FAST,
         temperature: 0,
         max_tokens: 16,
         messages: [
@@ -1513,7 +1513,7 @@ async function backfillTranslation(word: string, wordLangName: string, uiLangNam
     if (!res.ok) return "";
     const data = await res.json();
     const u = usageFrom(data);
-    void logAiUsage({ feature: "backfill_gloss", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+    void logAiUsage({ feature: "backfill_gloss", model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
     return String(data?.choices?.[0]?.message?.content || "").replace(/["'.\n]/g, "").trim().slice(0, 60);
   } catch {
     return "";
@@ -1767,11 +1767,11 @@ export async function POST(req: NextRequest) {
     let openAIResponse: Response;
     let usingFallback = false;
     try {
-      openAIResponse = await openAIStream("gpt-4o", systemPrompt, userContent);
+      openAIResponse = await openAIStream(TEXT_MODEL, systemPrompt, userContent);
       if (!openAIResponse.ok || !openAIResponse.body) throw new Error(`gpt-4o HTTP ${openAIResponse.status}`);
     } catch (e) {
       console.error("gpt-4o stream failed, falling back to gpt-4o-mini:", e);
-      openAIResponse = await openAIStream("gpt-4o-mini", systemPrompt, userContent);
+      openAIResponse = await openAIStream(TEXT_MODEL_FAST, systemPrompt, userContent);
       usingFallback = true;
       if (!openAIResponse.ok || !openAIResponse.body) {
         // Both models failed. The most common cause is upstream — an
@@ -1870,7 +1870,7 @@ export async function POST(req: NextRequest) {
           // (Reader / "Every Word") lookups; model reflects the fallback.
           void logAiUsage({
             feature: contextSentence ? "define_context" : "define",
-            model: usingFallback ? "gpt-4o-mini" : "gpt-4o",
+            model: usingFallback ? TEXT_MODEL_FAST : TEXT_MODEL,
             tokensIn: capturedUsage?.prompt_tokens ?? 0,
             tokensOut: capturedUsage?.completion_tokens ?? 0,
             plan: isRefresh ? "admin" : userInfo?.plan ?? "anon",

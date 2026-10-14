@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom, IMAGE_MODEL } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, IMAGE_MODEL, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 import { curatedImageHint, type WordSet } from "@/lib/word-sets";
 import { topicLevel } from "@/lib/curriculum-catalog";
 
@@ -86,7 +86,7 @@ async function brief(word: string, meaning: string, lang: string, admin = false)
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: TEXT_MODEL_FAST,
         temperature: 0.3,
         max_tokens: 110,
         messages: [
@@ -97,7 +97,7 @@ async function brief(word: string, meaning: string, lang: string, admin = false)
     });
     if (!res.ok) return "";
     const data = await res.json();
-    { const u = usageFrom(data); void logAiUsage({ feature: "image_brief", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut, admin }); }
+    { const u = usageFrom(data); void logAiUsage({ feature: "image_brief", model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut, admin }); }
     return String(data?.choices?.[0]?.message?.content || "").replace(/\s+/g, " ").trim().slice(0, 360);
   } catch {
     return "";

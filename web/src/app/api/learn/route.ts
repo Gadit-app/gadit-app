@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 import {
   applyAnswer, bankFor, isLearnLang, learnTargets, LEARNED_BOX, movePointer, pickSession, wordKey,
   type LearnItem, type LearnLang, type Reads, type WordState,
@@ -151,7 +151,7 @@ async function translateMissing(words: string[], lang: LearnLang, ui: string): P
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
     body: JSON.stringify({
-      model: "gpt-4o-mini",
+      model: TEXT_MODEL_FAST,
       temperature: 0,
       response_format: { type: "json_object" },
       messages: [
@@ -163,7 +163,7 @@ async function translateMissing(words: string[], lang: LearnLang, ui: string): P
   if (!res.ok) return {};
   const data = await res.json();
   const u = usageFrom(data);
-  void logAiUsage({ feature: "learn_list", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+  void logAiUsage({ feature: "learn_list", model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
   try {
     const items = (JSON.parse(data.choices?.[0]?.message?.content ?? "{}").items ?? []) as Array<{ w?: string; t?: string; nq?: string }>;
     const out: Record<string, { t: string; nq?: string }> = {};
@@ -201,12 +201,12 @@ Give 4 checks, two true and two false, each answerable from the text alone. No l
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-    body: JSON.stringify({ model: "gpt-4o-mini", temperature: 0.4, response_format: { type: "json_object" }, messages: [{ role: "system", content: sys }, { role: "user", content: `Topic: ${topic || "school"}\nWords: ${items.map((x) => x.w).join(", ")}` }] }),
+    body: JSON.stringify({ model: TEXT_MODEL_FAST, temperature: 0.4, response_format: { type: "json_object" }, messages: [{ role: "system", content: sys }, { role: "user", content: `Topic: ${topic || "school"}\nWords: ${items.map((x) => x.w).join(", ")}` }] }),
   });
   if (!res.ok) return null;
   const data = await res.json();
   const u = usageFrom(data);
-  void logAiUsage({ feature: "learn_reading", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+  void logAiUsage({ feature: "learn_reading", model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
   try { return cleanReading(JSON.parse(data.choices?.[0]?.message?.content ?? "{}")); } catch { return null; }
 }
 
@@ -225,12 +225,12 @@ Rules: 8 to 20 words, the ones the unit teaches (not "the", "is", names). Up to 
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-    body: JSON.stringify({ model: "gpt-4o-mini", temperature: 0, response_format: { type: "json_object" }, messages: [{ role: "system", content: sys }, { role: "user", content: text }] }),
+    body: JSON.stringify({ model: TEXT_MODEL_FAST, temperature: 0, response_format: { type: "json_object" }, messages: [{ role: "system", content: sys }, { role: "user", content: text }] }),
   });
   if (!res.ok) return null;
   const data = await res.json();
   const u = usageFrom(data);
-  void logAiUsage({ feature: "learn_unit", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+  void logAiUsage({ feature: "learn_unit", model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
   try {
     const j = JSON.parse(data.choices?.[0]?.message?.content ?? "{}") as { topic?: string; words?: Array<{ w?: string; t?: string; nq?: string }>; sentences?: string[]; pronouns?: Array<{ phrase?: string; answer?: string }>; reading?: unknown };
     const seen = new Set<string>();

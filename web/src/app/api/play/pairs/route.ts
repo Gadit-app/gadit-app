@@ -16,7 +16,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -108,7 +108,7 @@ export async function POST(req: NextRequest) {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
         body: JSON.stringify({
-          model: "gpt-4o-mini",
+          model: TEXT_MODEL_FAST,
           temperature: 0,
           max_tokens: 600,
           response_format: { type: "json_object" },
@@ -121,7 +121,7 @@ export async function POST(req: NextRequest) {
       if (res.ok) {
         const json = await res.json();
         const u = usageFrom(json);
-        void logAiUsage({ feature: "play_pairs", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut, plan: user.plan });
+        void logAiUsage({ feature: "play_pairs", model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut, plan: user.plan });
         let map: Record<string, unknown> = {};
         try { map = JSON.parse(json.choices?.[0]?.message?.content ?? "{}"); } catch { /* ignore */ }
         await Promise.all(need.map(async (n, i) => {

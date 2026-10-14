@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyUserAndGetPlan } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 
 const UI_LANG_NAMES: Record<string, string> = {
   he: "Hebrew",
@@ -188,8 +188,8 @@ Compare these two words.`;
     const wrongLang = (p: { summaryA?: string } | null) =>
       !!p && !(p as { error?: string }).error && !!UI_SCRIPT[uiLangCode] && !UI_SCRIPT[uiLangCode].test(String(p.summaryA ?? ""));
 
-    let parsed = await ask("gpt-4o-mini");
-    if ((sameScript && parsed?.error === "different_languages") || wrongLang(parsed)) parsed = await ask("gpt-4o");
+    let parsed = await ask(TEXT_MODEL_FAST);
+    if ((sameScript && parsed?.error === "different_languages") || wrongLang(parsed)) parsed = await ask(TEXT_MODEL);
     if (!parsed) {
       return NextResponse.json({ error: "ai_no_content" }, { status: 500 });
     }

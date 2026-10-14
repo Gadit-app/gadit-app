@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 
 /**
  * Subject-appropriate example sentences for classroom / present mode.
@@ -98,7 +98,7 @@ export async function generateExamples(word: string, meaning: string, uiLang: st
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: TEXT_MODEL_FAST,
         temperature: 0.4,
         max_tokens: 220,
         messages: [
@@ -116,7 +116,7 @@ export async function generateExamples(word: string, meaning: string, uiLang: st
     });
     if (!res.ok) return [];
     const data = await res.json();
-    { const u = usageFrom(data); void logAiUsage({ feature: "class_examples", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut, admin }); }
+    { const u = usageFrom(data); void logAiUsage({ feature: "class_examples", model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut, admin }); }
     const raw = String(data?.choices?.[0]?.message?.content || "");
     return parseExamples(raw);
   } catch {

@@ -1,4 +1,4 @@
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 
 /**
  * Word-quality checks for public word pages, server-side twin of
@@ -68,14 +68,14 @@ export async function vetWords(items: Item[]): Promise<boolean[]> {
 
   await Promise.all(
     batches(toClassify, 30).map(async (b) => {
-      const labels = await ask("gpt-4o-mini", CLASSIFY, b.map((x) => x.c), "seo_vet");
+      const labels = await ask(TEXT_MODEL_FAST, CLASSIFY, b.map((x) => x.c), "seo_vet");
       b.forEach((x, k) => { if (!["word", "idiom", "phrase"].includes(labels[k])) verdict[x.i] = false; });
     }),
   );
   const toSpell = items.map((c, i) => ({ c, i })).filter((x) => verdict[x.i] === null);
   await Promise.all(
     batches(toSpell, 30).map(async (b) => {
-      const labels = await ask("gpt-4o", SPELL, b.map((x) => x.c), "seo_vet");
+      const labels = await ask(TEXT_MODEL, SPELL, b.map((x) => x.c), "seo_vet");
       b.forEach((x, k) => { verdict[x.i] = labels[k] === "ok"; });
     }),
   );

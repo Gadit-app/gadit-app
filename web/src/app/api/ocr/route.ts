@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyUserAndGetPlan } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL } from "@/lib/ai-cost";
 
 /**
  * POST /api/ocr — extract the text from a photographed page OR an uploaded PDF
@@ -67,11 +67,11 @@ async function uprightImage(buf: Buffer): Promise<{ buf: Buffer; type: string } 
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-      body: JSON.stringify({ model: "gpt-4o", temperature: 0, response_format: { type: "json_object" }, messages: [{ role: "user", content }] }),
+      body: JSON.stringify({ model: TEXT_MODEL, temperature: 0, response_format: { type: "json_object" }, messages: [{ role: "user", content }] }),
     });
     if (!res.ok) return { buf: base, type: "image/jpeg" };
     const data = await res.json();
-    { const u = usageFrom(data); void logAiUsage({ feature: "ocr_orient", model: "gpt-4o", tokensIn: u.tokensIn, tokensOut: u.tokensOut }); }
+    { const u = usageFrom(data); void logAiUsage({ feature: "ocr_orient", model: TEXT_MODEL, tokensIn: u.tokensIn, tokensOut: u.tokensOut }); }
     const letter = String(JSON.parse(data.choices?.[0]?.message?.content ?? "{}").upright ?? "A").trim().toUpperCase();
     const deg = ROT["ABCD".indexOf(letter)] ?? 0;
     return { buf: deg ? await sharp(base).rotate(deg).jpeg({ quality: 90 }).toBuffer() : base, type: "image/jpeg" };
@@ -146,7 +146,7 @@ export async function POST(req: NextRequest) {
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o",
+        model: TEXT_MODEL,
         temperature: 0,
         messages: [
           { role: "system", content: OCR_SYSTEM },
@@ -162,7 +162,7 @@ export async function POST(req: NextRequest) {
     }
 
     const data = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
-    { const u = usageFrom(data); void logAiUsage({ feature: "ocr", model: "gpt-4o", tokensIn: u.tokensIn, tokensOut: u.tokensOut, plan: userInfo.plan }); }
+    { const u = usageFrom(data); void logAiUsage({ feature: "ocr", model: TEXT_MODEL, tokensIn: u.tokensIn, tokensOut: u.tokensOut, plan: userInfo.plan }); }
     let text = (data.choices?.[0]?.message?.content ?? "").trim();
     // A blank/black frame makes the model reply with a refusal ("I'm sorry, I
     // can't transcribe…") instead of empty. Treat that as no text so the client

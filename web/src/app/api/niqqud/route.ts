@@ -15,7 +15,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL } from "@/lib/ai-cost";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -39,7 +39,7 @@ async function tashkeel(text: string): Promise<string> {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
     body: JSON.stringify({
-      model: "gpt-4o",
+      model: TEXT_MODEL,
       temperature: 0,
       messages: [
         { role: "system", content: "You add full Arabic diacritics (tashkeel/harakat) to text. Return ONLY the fully vocalized Arabic, with the exact same words, order, punctuation and spacing. Do not translate, explain, or change any wording. Leave any non-Arabic characters untouched." },
@@ -50,7 +50,7 @@ async function tashkeel(text: string): Promise<string> {
   if (!res.ok) throw new Error("openai_" + res.status);
   const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
   const u = usageFrom(json);
-  void logAiUsage({ feature: "tashkeel_arabic", model: "gpt-4o", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+  void logAiUsage({ feature: "tashkeel_arabic", model: TEXT_MODEL, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
   const out = json.choices?.[0]?.message?.content?.trim();
   return out || text;
 }

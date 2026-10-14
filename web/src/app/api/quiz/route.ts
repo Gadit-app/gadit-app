@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyUserAndGetPlan } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 
 const UI_LANG_NAMES: Record<string, string> = {
   he: "Hebrew",
@@ -136,7 +136,7 @@ Generate 4 mixed-type questions about THIS specific meaning.`;
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: TEXT_MODEL_FAST,
         response_format: { type: "json_object" },
         temperature: 0.5,
         messages: [
@@ -147,7 +147,7 @@ Generate 4 mixed-type questions about THIS specific meaning.`;
     });
 
     const data = await res.json();
-    { const u = usageFrom(data); void logAiUsage({ feature: "quiz", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut, plan: userInfo.plan }); }
+    { const u = usageFrom(data); void logAiUsage({ feature: "quiz", model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut, plan: userInfo.plan }); }
     const text = data.choices?.[0]?.message?.content;
     if (!text) {
       return NextResponse.json({ error: "AI returned no content" }, { status: 500 });

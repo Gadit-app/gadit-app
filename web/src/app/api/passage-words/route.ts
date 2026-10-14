@@ -22,7 +22,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -51,7 +51,7 @@ async function analyze(text: string, langName: string): Promise<{ gist: string; 
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
     body: JSON.stringify({
-      model: "gpt-4o-mini",
+      model: TEXT_MODEL_FAST,
       temperature: 0.2,
       max_tokens: 500,
       response_format: { type: "json_object" },
@@ -73,7 +73,7 @@ Output ONLY the JSON object. No markdown, no preamble.`,
   if (!res.ok) throw new Error("openai_" + res.status);
   const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
   const u = usageFrom(json);
-  void logAiUsage({ feature: "passage_words", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+  void logAiUsage({ feature: "passage_words", model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
 
   const content = json.choices?.[0]?.message?.content ?? "{}";
   let parsed: { gist?: unknown; words?: unknown; hard?: unknown } = {};

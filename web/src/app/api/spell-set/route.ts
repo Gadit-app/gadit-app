@@ -15,7 +15,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
-import { logAiUsage, usageFrom } from "@/lib/ai-cost";
+import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -42,7 +42,7 @@ async function generate(topic: string, uiLangName: string, nativeLangName: strin
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
     body: JSON.stringify({
-      model: "gpt-4o-mini",
+      model: TEXT_MODEL_FAST,
       temperature: 0.4,
       max_tokens: 500,
       response_format: { type: "json_object" },
@@ -62,7 +62,7 @@ If the topic IS safe, return {"safe": true, "title": "<the topic as a short clea
   if (!res.ok) throw new Error("openai_" + res.status);
   const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
   const u = usageFrom(json);
-  void logAiUsage({ feature: "spell_set", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+  void logAiUsage({ feature: "spell_set", model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
 
   const content = json.choices?.[0]?.message?.content ?? "{}";
   let parsed: { safe?: unknown; title?: unknown; words?: unknown } = {};
@@ -94,7 +94,7 @@ async function generateList(list: string, uiLangName: string, nativeLangName: st
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
     body: JSON.stringify({
-      model: "gpt-4o-mini",
+      model: TEXT_MODEL_FAST,
       temperature: 0.2,
       max_tokens: 900,
       response_format: { type: "json_object" },
@@ -118,7 +118,7 @@ Output ONLY the JSON object.`,
   if (!res.ok) throw new Error("openai_" + res.status);
   const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
   const u = usageFrom(json);
-  void logAiUsage({ feature: "spell_set_list", model: "gpt-4o-mini", tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+  void logAiUsage({ feature: "spell_set_list", model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
   const content = json.choices?.[0]?.message?.content ?? "{}";
   let parsed: { safe?: unknown; title?: unknown; words?: unknown } = {};
   try { parsed = JSON.parse(content); } catch { /* fall through */ }
@@ -140,7 +140,7 @@ Output ONLY the JSON object.`,
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
           body: JSON.stringify({
-            model: "gpt-4o-mini",
+            model: TEXT_MODEL_FAST,
             temperature: 0,
             response_format: { type: "json_object" },
             messages: [
@@ -151,7 +151,7 @@ Output ONLY the JSON object.`,
         });
         const j2 = await r2.json();
         const u2 = usageFrom(j2);
-        void logAiUsage({ feature: "spell_set_list", model: "gpt-4o-mini", tokensIn: u2.tokensIn, tokensOut: u2.tokensOut });
+        void logAiUsage({ feature: "spell_set_list", model: TEXT_MODEL_FAST, tokensIn: u2.tokensIn, tokensOut: u2.tokensOut });
         const map = (JSON.parse(j2.choices?.[0]?.message?.content ?? "{}").t ?? {}) as Record<string, string>;
         for (const w of stuck) { const v = map[w.en]; if (typeof v === "string" && v.trim()) w.he = v.trim().slice(0, 40); }
       } catch { /* keep the list as it is */ }
