@@ -7,7 +7,7 @@ import { curatedImageHint, classroomDef, classroomItem, isGemaraSet, sameSetWord
 import { loadWordSet } from "@/lib/curriculum-sets";
 import { generateClassroomImage } from "@/lib/classroom-image";
 import { classroomAccess } from "@/lib/classroom-access";
-import { pilotAllowsUser } from "@/lib/pilot-access";
+import { pilotGate } from "@/lib/pilot-access";
 
 // gpt-image-1 at quality:low typically completes in 5-15s; quality:medium
 // can run 10-30s and sometimes >45s when OpenAI is busy. Raise the
@@ -170,8 +170,9 @@ export async function POST(req: NextRequest) {
     // meaning inside the set and shared by every class, so it is not
     // counted against the teacher's monthly image quota.
     if (typeof setId === "string" && setId) {
-      // A pilot unit: only the schools on its allow-list (Gemara phase B).
-      if (!(await pilotAllowsUser(setId, userInfo.userId))) return NextResponse.json({ error: "not_found" }, { status: 404 });
+      // A pilot unit: a signed-in user of an allowed school only (Gemara phase B).
+      const gate = await pilotGate(req, setId);
+      if (gate) return gate;
       const set = await loadWordSet(setId);
       const asked = String(word).trim();
       // A meaning of a unit that lists meanings (Gemara phase A): its own

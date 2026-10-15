@@ -1,4 +1,5 @@
-import { getAdminDb } from "@/lib/firebase-admin";
+import { NextResponse } from "next/server";
+import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { isPilotTopicId } from "@/lib/pilot-topics";
 
 /**
@@ -15,15 +16,34 @@ export function pilotAllows(id: string, schoolId: string | null | undefined): bo
   return !!schoolId && (PILOT_SCHOOLS[id] ?? []).includes(schoolId);
 }
 
-/** For a user id (or a school id from a class code): may it open this pilot unit?
+/** May this signed-in user open the pilot unit? By users/{uid}.schoolId.
  *  Always true for a unit that is not a pilot. */
 export async function pilotAllowsUser(id: string, uid: string): Promise<boolean> {
   if (!isPilotTopicId(id)) return true;
-  if (pilotAllows(id, uid)) return true;
   try {
     const schoolId = (await getAdminDb().collection("users").doc(uid).get()).get("schoolId") as string | undefined;
     return pilotAllows(id, schoolId);
   } catch {
     return false;
   }
+}
+
+/**
+ * The server-side gate of every route that takes a set id. A unit that is not
+ * a pilot passes untouched (null: no new requirement, nothing read). A pilot
+ * unit needs a signed-in user (401) whose school is on the list (else 404).
+ */
+export async function pilotGate(req: Request, setId: string | null | undefined): Promise<NextResponse | null> {
+  if (!isPilotTopicId(setId)) return null;
+  const h = req.headers.get("Authorization") || "";
+  const token = h.startsWith("Bearer ") ? h.slice(7) : "";
+  if (!token) return NextResponse.json({ error: "login_required" }, { status: 401 });
+  let uid = "";
+  try {
+    uid = (await getAdminAuth().verifyIdToken(token)).uid;
+  } catch {
+    return NextResponse.json({ error: "login_required" }, { status: 401 });
+  }
+  if (await pilotAllowsUser(setId as string, uid)) return null;
+  return NextResponse.json({ error: "not_found" }, { status: 404 });
 }

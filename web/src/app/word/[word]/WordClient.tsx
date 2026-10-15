@@ -34,6 +34,8 @@ import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { getWordSet, classroomDef, registerWordSet, isCurriculumSetId, isGemaraSet, setItems, type WordSet, type SetExtras } from "@/lib/word-sets";
+import { isPilotTopicId } from "@/lib/pilot-topics";
+import type { ClassroomQuote } from "@/components/classroom/ClassroomStage";
 import { AppearancePicker } from "@/components/AppearancePicker";
 import VoiceInput from "@/components/VoiceInput";
 import { useHref, wordPath } from "@/lib/href";
@@ -966,6 +968,8 @@ export function WordClient({
   // examples, not a musical-signal or medal example. Falls back to the
   // general /api/define examples until these land (or if none exist).
   const [classroomExamples, setClassroomExamples] = useState<string[]>([]);
+  // An approved Gemara quote of the meaning (a unit that lists meanings).
+  const [classroomQuote, setClassroomQuote] = useState<ClassroomQuote | null>(null);
   const [composeOpen, setComposeOpen] = useState(false);
   const [quizOpen, setQuizOpen] = useState(false);
   const [wordGameOpen, setWordGameOpen] = useState(false);
@@ -1639,8 +1643,10 @@ export function WordClient({
   useEffect(() => {
     if (!classroomMode || (!result && !gemaraStage)) {
       setClassroomExamples([]);
+      setClassroomQuote(null);
       return;
     }
+    setClassroomQuote(null);
     let cancelled = false;
     const meaning = classroomDef(setId, initialWord, currentM) ?? result?.meanings[0]?.meaning ?? "";
     const exLang = wordSet?.lang ?? lang;
@@ -1648,12 +1654,15 @@ export function WordClient({
     if (setId) params.set("set", setId);
     if (meaning) params.set("meaning", meaning);
     if (currentM) params.set("m", currentM);
-    fetch(`/api/classroom-examples?${params.toString()}`)
+    // A pilot unit (Gemara phase B) asks with the teacher's token; other units as before.
+    const pilot = isPilotTopicId(setId);
+    (pilot && user ? user.getIdToken().then((t) => fetch(`/api/classroom-examples?${params.toString()}`, { headers: { Authorization: `Bearer ${t}` } })) : fetch(`/api/classroom-examples?${params.toString()}`))
       .then((r) => (r.ok ? r.json() : null))
-      .then((d: { examples?: string[] } | null) => {
+      .then((d: { examples?: string[]; quote?: ClassroomQuote } | null) => {
         if (!cancelled && Array.isArray(d?.examples) && d.examples.length > 0) {
           setClassroomExamples(d.examples);
         }
+        if (!cancelled && d?.quote) setClassroomQuote(d.quote);
       })
       .catch(() => {
         /* keep define examples */
@@ -1662,7 +1671,7 @@ export function WordClient({
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [classroomMode, initialWord, setId, result, gemaraStage, currentM]);
+  }, [classroomMode, initialWord, setId, result, gemaraStage, currentM, isPilotTopicId(setId) ? user : null]);
 
   // ── Action handlers ───────────────────────────────────────────
   async function handleGenerate(opts?: { meaning?: string; example?: string; silent?: boolean }) {
@@ -2402,6 +2411,7 @@ export function WordClient({
             imageUrl={imageUrl ?? null}
             imageGenerating={imageGenerating}
             examples={classroomExamples.length ? classroomExamples : result?.meanings[0]?.examples ?? []}
+            quote={classroomQuote}
             set={wordSet}
             idx={setIdx}
             items={items}

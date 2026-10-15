@@ -64,6 +64,10 @@ const nextConfig: NextConfig = {
   // On Vercel this is the commit SHA, unique per deploy.
   env: {
     NEXT_PUBLIC_BUILD_ID: process.env.VERCEL_GIT_COMMIT_SHA || "dev",
+    // A LOCAL production preview against the emulators (Gemara phase B) only.
+    // Always inlined ("0" unless the build sets it to "1"), so a normal build
+    // drops the emulator code in lib/firebase.ts completely.
+    NEXT_PUBLIC_GADIT_LOCAL_PREVIEW: process.env.NEXT_PUBLIC_GADIT_LOCAL_PREVIEW === "1" ? "1" : "0",
   },
   // The review addresses of the new landing pages became the real pages
   // (Gadi 2026-10-07): keep any shared review link working.

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { WORD_SETS, type WordSet } from "@/lib/word-sets";
 import { loadWordSet } from "@/lib/curriculum-sets";
+import { isPilotTopicId } from "@/lib/pilot-topics";
 import { classroomStyle } from "@/lib/classroom-image";
 
 /**
@@ -27,6 +28,8 @@ export async function GET(req: NextRequest) {
   if (secret !== expected) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
   const setId = req.nextUrl.searchParams.get("set") ?? "all";
+  // A pilot unit holds approved, imported content only; its pictures are never wiped here.
+  if (isPilotTopicId(setId)) return NextResponse.json({ error: "pilot_managed" }, { status: 403 });
   let targetSets: WordSet[];
   if (setId === "all") targetSets = WORD_SETS;
   else {

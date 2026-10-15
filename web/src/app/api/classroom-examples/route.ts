@@ -3,6 +3,20 @@ import { classroomDef, classroomItem } from "@/lib/word-sets";
 import { loadWordSet } from "@/lib/curriculum-sets";
 import { getOrGenerateExamples } from "@/lib/word-examples";
 import { isPilotTopicId } from "@/lib/pilot-topics";
+import { pilotGate } from "@/lib/pilot-access";
+import { getAdminDb } from "@/lib/firebase-admin";
+import { itemExampleKey } from "@/lib/classroom-keys";
+
+/** A Gemara quote stored with a meaning (exampleCache ex_m_ doc, `quote`),
+ *  returned only when the record says the expert approved and verified it. */
+type ClassroomQuote = { text: string; tractate: string; daf: string; amud: string };
+function approvedQuote(q: unknown): ClassroomQuote | undefined {
+  const o = q as Record<string, unknown> | null;
+  if (!o || o.approved !== true || !o.approvedBy || !o.verifiedAgainst) return undefined;
+  const s = (k: string) => (typeof o[k] === "string" ? (o[k] as string).trim() : "");
+  const out = { text: s("text"), tractate: s("tractate"), daf: s("daf"), amud: s("amud") };
+  return out.text && out.tractate && out.daf && out.amud ? out : undefined;
+}
 
 /**
  * Subject-appropriate example sentences for classroom / present mode.
@@ -46,7 +60,12 @@ async function resolve(params: {
     if (item) {
       // A pilot unit serves approved (imported) examples only, never generates.
       const res = await getOrGenerateExamples(item.w, item.d, uiLang || "he", { item: { m: item.m, rev: item.rev }, generate: !isPilotTopicId(params.setId) });
-      return { examples: res.examples, cached: res.cached, status: 200 as const };
+      let quote: ClassroomQuote | undefined;
+      try {
+        const doc = await getAdminDb().collection("exampleCache").doc(itemExampleKey({ m: item.m, rev: item.rev }, uiLang || "he")).get();
+        quote = approvedQuote(doc.get("quote"));
+      } catch { /* no quote */ }
+      return { examples: res.examples, cached: res.cached, ...(quote ? { quote } : {}), status: 200 as const };
     }
   }
   if (!meaning) meaning = classroomDef(params.setId, word) ?? "";
@@ -64,6 +83,9 @@ async function resolve(params: {
 
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
+  // A pilot unit: a signed-in user of an allowed school only (other units: no change).
+  const gate = await pilotGate(req, sp.get("set"));
+  if (gate) return gate;
   const out = await resolve({
     word: sp.get("word"),
     meaning: sp.get("meaning"),
@@ -74,7 +96,8 @@ export async function GET(req: NextRequest) {
   if ("error" in out && out.error) {
     return NextResponse.json({ error: out.error }, { status: out.status });
   }
-  return NextResponse.json({ examples: out.examples ?? [], cached: out.cached ?? false });
+  const o = out as { examples?: string[]; cached?: boolean; quote?: ClassroomQuote };
+  return NextResponse.json({ examples: o.examples ?? [], cached: o.cached ?? false, ...(o.quote ? { quote: o.quote } : {}) });
 }
 
 export async function POST(req: NextRequest) {
@@ -85,6 +108,8 @@ export async function POST(req: NextRequest) {
     uiLang?: string;
     m?: string;
   };
+  const gate = await pilotGate(req, body.set);
+  if (gate) return gate;
   const out = await resolve({
     word: body.word,
     meaning: body.meaning,
@@ -95,5 +120,6 @@ export async function POST(req: NextRequest) {
   if ("error" in out && out.error) {
     return NextResponse.json({ error: out.error }, { status: out.status });
   }
-  return NextResponse.json({ examples: out.examples ?? [], cached: out.cached ?? false });
+  const o = out as { examples?: string[]; cached?: boolean };
+  return NextResponse.json({ examples: o.examples ?? [], cached: o.cached ?? false });
 }

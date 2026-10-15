@@ -7,6 +7,7 @@ import { ClassProgressChip, type ClassProgress } from "@/components/design/Class
 import type { WordSet, SetItem } from "@/lib/word-sets";
 import { NiqqudProvider, NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
 import { useAuth } from "@/lib/auth-context";
+import { isPilotTopicId } from "@/lib/pilot-topics";
 
 /**
  * The teacher's projector screen for a word-set word (Gadi 2026-10-03:
@@ -26,12 +27,16 @@ type QuizItem = { q: string; options: string[]; answer: number; explain: string 
 type GameItem = { s: string; t: boolean; explain: string };
 type Activity = { quiz: QuizItem[]; game: GameItem[] };
 type Panel = null | "examples" | "quiz" | "game";
+/** A Gemara quote approved by the expert, stored with its meaning (phase B). */
+export type ClassroomQuote = { text: string; tractate: string; daf: string; amud: string };
 
 const COPY = {
   he: {
     wordOf: (i: number, n: number) => `מילה ${i} מתוך ${n}`,
     examples: "דוגמאות", quiz: "חידון לכיתה", game: "משחק לכיתה",
     nextExample: "הדוגמה הבאה",
+    learnEx: "דוגמה ללימוד", fromGemara: "מן הגמרא",
+    source: (q: ClassroomQuote) => `מסכת ${q.tractate} דף ${q.daf} עמוד ${q.amud}`,
     question: (i: number, n: number) => `שאלה ${i} מתוך ${n}`,
     statement: (i: number, n: number) => `משפט ${i} מתוך ${n}`,
     nextQ: "השאלה הבאה", nextS: "המשפט הבא", toSummary: "לסיכום",
@@ -53,6 +58,8 @@ const COPY = {
     wordOf: (i: number, n: number) => `Word ${i} of ${n}`,
     examples: "Examples", quiz: "Class quiz", game: "Class game",
     nextExample: "Next example",
+    learnEx: "Learning example", fromGemara: "From the Gemara",
+    source: (q: ClassroomQuote) => `Tractate ${q.tractate}, daf ${q.daf}, amud ${q.amud}`,
     question: (i: number, n: number) => `Question ${i} of ${n}`,
     statement: (i: number, n: number) => `Statement ${i} of ${n}`,
     nextQ: "Next question", nextS: "Next statement", toSummary: "See results",
@@ -74,6 +81,8 @@ const COPY = {
     wordOf: (i: number, n: number) => `كلمة ${i} من ${n}`,
     examples: "أمثلة", quiz: "اختبار للصف", game: "لعبة للصف",
     nextExample: "المثال التالي",
+    learnEx: "مثال تعليمي", fromGemara: "من الغمارا",
+    source: (q: ClassroomQuote) => `مسيخت ${q.tractate}، ورقة ${q.daf}، صفحة ${q.amud}`,
     question: (i: number, n: number) => `سؤال ${i} من ${n}`,
     statement: (i: number, n: number) => `جملة ${i} من ${n}`,
     nextQ: "السؤال التالي", nextS: "الجملة التالية", toSummary: "إلى النتيجة",
@@ -114,6 +123,8 @@ type StageProps = {
   imageUrl: string | null;
   imageGenerating: boolean;
   examples: string[];
+  /** An approved Gemara quote of this meaning, shown apart from our examples. */
+  quote?: ClassroomQuote | null;
   set: WordSet;
   idx: number;
   /** A unit that lists meanings (Gemara phase A): position and links by meaning id. */
@@ -138,13 +149,14 @@ export function ClassroomStage(props: StageProps) {
 }
 
 function StageInner({
-  word, definition, imageUrl, imageGenerating, examples, set, idx, items, m, lang, onNavigate, onExit, onSearch, progress,
+  word, definition, imageUrl, imageGenerating, examples, quote, set, idx, items, m, lang, onNavigate, onExit, onSearch, progress,
 }: {
   word: string;
   definition: string;
   imageUrl: string | null;
   imageGenerating: boolean;
   examples: string[];
+  quote?: ClassroomQuote | null;
   set: WordSet;
   idx: number;
   items?: SetItem[];
@@ -169,12 +181,21 @@ function StageInner({
   const [searchOpen, setSearchOpen] = useState(false);
   const [q, setQ] = useState("");
 
+  // A pilot unit (Gemara phase B) asks with the teacher's token; every other
+  // unit asks exactly as before, without one.
+  const pilot = isPilotTopicId(set.id);
+  const { user: authUser } = useAuth();
+  const pilotUser = pilot ? authUser : null;
   const loadActivity = useCallback(async () => {
     setActState("loading");
     try {
       const p = new URLSearchParams({ set: set.id, word, meaning: definition });
       if (m) p.set("m", m);
-      const r = await fetch(`/api/class-activity?${p.toString()}`);
+      const headers: Record<string, string> = {};
+      if (pilotUser) headers.Authorization = `Bearer ${await pilotUser.getIdToken()}`;
+      const r = await fetch(`/api/class-activity?${p.toString()}`, pilot ? { headers } : undefined);
+      // A pilot meaning whose quiz and game are not approved yet: nothing to run.
+      if (pilot && r.status === 404) { setActivity({ quiz: [], game: [] }); setActState("ready"); return; }
       if (!r.ok) throw new Error(String(r.status));
       const d = (await r.json()) as Activity;
       setActivity(d);
@@ -182,7 +203,7 @@ function StageInner({
     } catch {
       setActState("error");
     }
-  }, [set.id, word, definition, m]);
+  }, [set.id, word, definition, m, pilot, pilotUser]);
 
   // Prepare the activities as soon as the word is on screen, so the
   // buttons open instantly when the teacher taps them.
@@ -293,13 +314,13 @@ function StageInner({
 
       {/* Actions */}
       <div className="cs-actions">
-        <button type="button" className="cs-act cs-act-ex" onClick={() => setPanel("examples")} disabled={!examples.length}>
+        <button type="button" className="cs-act cs-act-ex" onClick={() => setPanel("examples")} disabled={!examples.length && !quote}>
           <ListIcon /> {c.examples}
         </button>
-        <button type="button" className="cs-act cs-act-quiz" onClick={() => setPanel("quiz")}>
+        <button type="button" className="cs-act cs-act-quiz" onClick={() => setPanel("quiz")} disabled={actState === "ready" && !!activity && !activity.quiz.length}>
           <QuizIcon /> {c.quiz}
         </button>
-        <button type="button" className="cs-act cs-act-game" onClick={() => setPanel("game")}>
+        <button type="button" className="cs-act cs-act-game" onClick={() => setPanel("game")} disabled={actState === "ready" && !!activity && !activity.game.length}>
           <GameIcon /> {c.game}
         </button>
       </div>
@@ -311,7 +332,7 @@ function StageInner({
       {panel && (
         <div className="cs-overlay" role="dialog" aria-modal="true">
           <button type="button" className="cs-close" onClick={() => setPanel(null)} aria-label={c.close}><XIcon /></button>
-          {panel === "examples" && <ExamplesPanel examples={examples} word={word} c={c} />}
+          {panel === "examples" && <ExamplesPanel examples={examples} quote={quote ?? null} labeled={!!items?.length} word={word} c={c} />}
           {(panel === "quiz" || panel === "game") && actState !== "ready" && (
             <div className="cs-card cs-center">
               {actState === "loading" ? (
@@ -335,19 +356,30 @@ function StageInner({
 
 type C = typeof COPY.he;
 
-function ExamplesPanel({ examples, word, c }: { examples: string[]; word: string; c: C }) {
+/** Our examples, and (a unit that lists meanings, Gemara) a label on each of them
+ *  plus the approved Gemara quote as its own card with its source. A unit
+ *  without meanings renders exactly as before. */
+function ExamplesPanel({ examples, quote, labeled, word, c }: { examples: string[]; quote: ClassroomQuote | null; labeled: boolean; word: string; c: C }) {
   const { nq } = useNiqqud();
   const list = examples.slice(0, 3);
+  const steps = list.length + (quote ? 1 : 0);
   const [shown, setShown] = useState(1);
   return (
     <div className="cs-card cs-ex">
       <div className="cs-eyebrow">{c.examples}</div>
       <ol className="cs-ex-list">
         {list.slice(0, shown).map((ex, i) => (
-          <li key={i} className="cs-ex-item"><span className="cs-ex-n">{i + 1}</span><span><Highlight text={nq(ex)} word={word} /></span></li>
+          <li key={i} className="cs-ex-item"><span className="cs-ex-n">{i + 1}</span><span>{labeled && <span className="cs-ex-tag">{c.learnEx}</span>}<Highlight text={nq(ex)} word={word} /></span></li>
         ))}
       </ol>
-      {shown < list.length && (
+      {quote && shown > list.length && (
+        <figure className="cs-quote">
+          <span className="cs-quote-tag">{c.fromGemara}</span>
+          <blockquote className="cs-quote-text"><Highlight text={nq(quote.text)} word={word} /></blockquote>
+          <figcaption className="cs-quote-src">{c.source(quote)}</figcaption>
+        </figure>
+      )}
+      {shown < steps && (
         <button type="button" className="cs-btn" onClick={() => setShown((n) => n + 1)}>{c.nextExample}</button>
       )}
     </div>
@@ -545,6 +577,11 @@ const CSS = `
 .cs-muted{color:var(--soft);font-size:clamp(16px,1.4vw,22px)}
 .cs-ex-list{list-style:none;margin:0 0 26px;padding:0;display:grid;gap:clamp(14px,2.4vh,26px)}
 .cs-ex-item{display:flex;gap:18px;align-items:baseline;font-size:clamp(24px,2.6vw,42px);line-height:1.45;font-weight:500;animation:cs-pop .3s ease}
+.cs-ex-tag{display:block;width:max-content;font-size:clamp(12px,1vw,15px);font-weight:700;color:#0E7490;background:#E3F4F2;border-radius:999px;padding:2px 12px;margin-bottom:6px}
+.cs-quote{margin:0 0 26px;padding:clamp(18px,2.6vh,28px) clamp(20px,2.4vw,34px);border-radius:24px;background:#FFF7E6;border-inline-start:6px solid #F3B544;animation:cs-pop .3s ease}
+.cs-quote-tag{display:inline-block;font-size:clamp(12px,1vw,15px);font-weight:800;color:#92400E;background:#FDE7B5;border-radius:999px;padding:2px 12px;margin-bottom:10px}
+.cs-quote-text{margin:0;font-family:"Frank Ruhl Libre","David Libre",Georgia,serif;font-size:clamp(26px,2.8vw,44px);line-height:1.5;font-weight:600;color:var(--deep)}
+.cs-quote-src{margin-top:10px;font-size:clamp(14px,1.3vw,19px);font-weight:700;color:#92400E}
 .cs-ex-n{flex-shrink:0;width:1.5em;height:1.5em;border-radius:999px;background:#E3F4F2;color:var(--deep);font-weight:800;font-size:.7em;display:grid;place-items:center;transform:translateY(-.12em)}
 .cs-mark{background:linear-gradient(transparent 58%,#B9EDE7 58%);color:var(--deep);font-weight:800;padding:0 .08em}
 .cs-q{font-size:clamp(26px,2.8vw,46px);line-height:1.3;font-weight:700;margin-bottom:clamp(18px,3.4vh,36px);text-wrap:balance}

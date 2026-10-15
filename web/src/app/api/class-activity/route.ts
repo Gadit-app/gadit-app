@@ -6,6 +6,7 @@ import { classActivityKey, itemActivityKey } from "@/lib/classroom-keys";
 import { devDryAi, dryActivity } from "@/lib/dev-safety";
 import { loadWordSet } from "@/lib/curriculum-sets";
 import { isPilotTopicId } from "@/lib/pilot-topics";
+import { pilotGate } from "@/lib/pilot-access";
 import { logAiUsage, usageFrom, TEXT_MODEL } from "@/lib/ai-cost";
 
 /**
@@ -94,6 +95,9 @@ Return JSON only.${lang === "ar"
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
   const setId = (sp.get("set") ?? "").trim();
+  // A pilot unit: a signed-in user of an allowed school only (other units: no change).
+  const gate = await pilotGate(req, setId);
+  if (gate) return gate;
   const asked = (sp.get("word") ?? "").trim();
   const set = setId ? await loadWordSet(setId) : undefined;
   if (!set || !asked) return NextResponse.json({ error: "bad_params" }, { status: 400 });
