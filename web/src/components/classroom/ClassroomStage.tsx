@@ -193,6 +193,8 @@ function StageInner({
   // A pilot unit (Gemara phase B) asks with the teacher's token; every other
   // unit asks exactly as before, without one.
   const pilot = isPilotTopicId(set.id);
+  // A real meaning of the unit (not an older word of a mixed unit).
+  const isMeaning = !!m && !!items?.some((i) => i.m === m && i.k !== "word");
   const { user: authUser } = useAuth();
   const pilotUser = pilot ? authUser : null;
   const loadActivity = useCallback(async () => {
@@ -204,8 +206,9 @@ function StageInner({
       const headers: Record<string, string> = {};
       if (pilotUser) headers.Authorization = `Bearer ${await pilotUser.getIdToken()}`;
       const r = await fetch(`/api/class-activity?${p.toString()}`, pilot ? { headers } : undefined);
-      // A pilot meaning whose quiz and game are not approved yet: nothing to run.
-      if (pilot && r.status === 404) { setActivity({ quiz: [], game: [] }); setActState("ready"); return; }
+      // A meaning (or a pilot word) whose quiz and game are not approved yet:
+      // nothing to run, the buttons stay off (phase C: in every unit).
+      if ((pilot || isMeaning) && r.status === 404) { setActivity({ quiz: [], game: [] }); setActState("ready"); return; }
       if (!r.ok) throw new Error(String(r.status));
       const d = (await r.json()) as Activity;
       setActivity(d);
@@ -213,7 +216,7 @@ function StageInner({
     } catch {
       setActState("error");
     }
-  }, [set.id, word, definition, m, pilot, pilotUser, preview]);
+  }, [set.id, word, definition, m, pilot, pilotUser, preview, isMeaning]);
 
   // Prepare the activities as soon as the word is on screen, so the
   // buttons open instantly when the teacher taps them.
@@ -234,6 +237,8 @@ function StageInner({
   // An approved teaching diagram of this meaning (Gemara pilot): one more
   // button, a full-width 16:9 panel. Meanings without one are unchanged.
   const diagram = m ? items?.find((i) => i.m === m)?.dg : undefined;
+  // A short line on this meaning in this unit's tractate (phase C, optional).
+  const ctx = isMeaning ? items?.find((i) => i.m === m)?.ctx : undefined;
 
   // Step by position: by meaning when the unit lists meanings, else by word.
   const goTo = (i: number) => {
@@ -253,9 +258,9 @@ function StageInner({
     void user.getIdToken().then((t) => fetch("/api/schools/projection", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${t}` },
-      body: JSON.stringify({ kind, word, setId: set.id, subject: set.subject, title: set.title, grade: set.grade ?? "", ...(m ? { m } : {}) }),
+      body: JSON.stringify({ kind, word, setId: set.id, subject: set.subject, title: set.title, grade: set.grade ?? "", ...(m && isMeaning ? { m } : {}) }),
     })).catch(() => {});
-  }, [user, word, set.id, set.subject, set.title, set.grade, m, preview]);
+  }, [user, word, set.id, set.subject, set.title, set.grade, m, preview, isMeaning]);
   useEffect(() => { report("word"); }, [word, set.id, user, m]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (panel === "quiz" || panel === "game") report(panel);
@@ -313,6 +318,7 @@ function StageInner({
             <TTSButton text={word} audioLang={L} useOpenAI ariaLabel={c.listen} className="cs-tts" />
           </div>
           <p className="cs-def">{nq(definition)}</p>
+          {ctx && <p className="cs-ctx">{nq(ctx)}</p>}
         </section>
         {(imageUrl || imageGenerating) && (
           <figure className="cs-pic">
@@ -352,7 +358,7 @@ function StageInner({
         <div className={`cs-overlay${panel === "diagram" ? " is-wide" : ""}`} role="dialog" aria-modal="true">
           <button type="button" className="cs-close" onClick={() => setPanel(null)} aria-label={c.close}><XIcon /></button>
           {panel === "diagram" && diagram && <DiagramPanel dg={diagram} c={c} />}
-          {panel === "examples" && <ExamplesPanel examples={examples} quote={quote ?? null} labeled={!!items?.length} word={word} c={c} />}
+          {panel === "examples" && <ExamplesPanel examples={examples} quote={quote ?? null} labeled={isMeaning} word={word} c={c} />}
           {(panel === "quiz" || panel === "game") && actState !== "ready" && (
             <div className="cs-card cs-center">
               {actState === "loading" ? (
@@ -604,6 +610,7 @@ const CSS = `
 .cs-tts svg{width:26px;height:26px}
 .cs-def{margin:clamp(14px,2.6vh,28px) 0 0;font-size:clamp(22px,min(2.5vw,4.4vh),42px);line-height:1.45;font-weight:600;color:#1E293B;max-width:30ch;text-wrap:pretty}
 .cs-main.no-pic .cs-def{max-width:36ch}
+.cs-ctx{margin:clamp(8px,1.4vh,14px) 0 0;font-size:clamp(16px,min(1.6vw,2.8vh),26px);line-height:1.45;font-weight:600;color:#0E7490;max-width:36ch}
 .cs-pic{margin:0;justify-self:center;width:min(42vw,52vh,560px);aspect-ratio:1/1;border-radius:32px;overflow:hidden;background:#fff;
   box-shadow:0 30px 60px -28px rgba(15,50,60,.38),0 0 0 10px #fff,0 0 0 11px var(--line)}
 .cs-pic img{width:100%;height:100%;object-fit:cover;display:block}

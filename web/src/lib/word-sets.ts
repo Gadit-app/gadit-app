@@ -26,7 +26,22 @@ export type SetVisual = { mode: "auto" | "none" | "hint"; hint?: string };
  *  student sees it, `d` the approved definition, `rev` the content revision
  *  the picture, examples and quiz are keyed on. The same word can appear in
  *  two items with two meanings. */
-export type SetItem = { m: string; w: string; d: string; rev?: number; v?: SetVisual; dg?: SetDiagram };
+export type SetItem = {
+  m: string; w: string; d: string; rev?: number; v?: SetVisual; dg?: SetDiagram;
+  /** A unit that holds words and meanings together (phase C, `mixed`): "word"
+   *  marks an older word of the unit, shown exactly as before (its content is
+   *  keyed on the word); `m` is then its stable position id, never a content key. */
+  k?: "word";
+  /** Where a meaning goes in a mixed unit: after an older word, or in its
+   *  place (only by an explicit decision in the content file). */
+  after?: string;
+  replaces?: string;
+  /** Explanation level of this meaning in this unit ("beg", "adv", "yes"):
+   *  its examples and class activity are keyed on it (the key's variant). */
+  lv?: "beg" | "adv" | "yes";
+  /** A short line on the meaning in this tractate or context, under the definition. */
+  ctx?: string;
+};
 
 /** A teaching diagram of one meaning, approved by the expert (Gemara pilot,
  *  2026-10-15). Our own wording only: never a quote and never a source.
@@ -47,7 +62,13 @@ export type SetDiagram = {
 
 /** Optional unit fields beyond words + definitions. A unit without them
  *  behaves exactly as before. */
-export type SetExtras = { items?: SetItem[]; visuals?: Record<string, SetVisual>; locked?: boolean };
+export type SetExtras = {
+  items?: SetItem[]; visuals?: Record<string, SetVisual>; locked?: boolean;
+  /** Older words and meanings together (phase C): see lib/mixed-units.ts. */
+  mixed?: boolean;
+  /** Stable position ids of the older words of a mixed unit. */
+  wordIds?: Record<string, string>;
+};
 
 export const isGemaraSet = (set: Pick<WordSet, "subject"> | null | undefined) => set?.subject === "gemara";
 
@@ -212,9 +233,15 @@ export function setItems(setId: string | null | undefined): SetItem[] | undefine
 export function classroomItem(setId: string | null | undefined, m: string | null | undefined): SetItem | undefined {
   return m ? setItems(setId)?.find((i) => i.m === m) : undefined;
 }
+/** A real meaning of the unit (not an older word of a mixed unit): its
+ *  content is keyed on the meaning and served only once approved (phase C). */
+export function classroomMeaning(setId: string | null | undefined, m: string | null | undefined): SetItem | undefined {
+  const it = classroomItem(setId, m);
+  return it && it.k !== "word" ? it : undefined;
+}
 /** The picture setting of a word (or meaning) in a unit; "auto" when none. */
 export function classroomVisual(setId: string | null | undefined, word: string, m?: string | null): SetVisual {
-  const item = classroomItem(setId, m);
+  const item = classroomMeaning(setId, m);
   if (item?.v) return item.v;
   return (setId ? DYNAMIC_SETS[setId]?.visuals?.[word.trim()] : undefined) ?? { mode: "auto" };
 }

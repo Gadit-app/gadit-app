@@ -6,6 +6,7 @@ import { devDryAi } from "@/lib/dev-safety";
 import { curTopic, curSubject, curLevelHe, gradeLabel, SUBJECT_LANG, zaTopic, arTopic, arSubject, arLevel, arGradeLabel } from "@/lib/curriculum-catalog";
 import zaSets from "@/lib/curriculum-sets-za.json";
 import { isPilotTopicId } from "@/lib/pilot-topics";
+import { mergeMixed } from "@/lib/mixed-units";
 
 // Server side of the curriculum catalog (Gadi 2026-10-03). A topic's key
 // words and their in-lesson definitions are generated once with gpt-4o the
@@ -195,7 +196,10 @@ function readExtras(raw: Record<string, unknown>): SetExtras {
       const rev = Number.isInteger(x.rev) && (x.rev as number) > 0 ? (x.rev as number) : 1;
       const v = cleanVisual(x.v);
       const dg = cleanDiagram(x.dg);
-      items.push({ m, w, d, rev, ...(v ? { v } : {}), ...(dg ? { dg } : {}) });
+      // Phase C placement, level and context (absent fields stay absent).
+      const after = clean(x.after, 40), replaces = clean(x.replaces, 40), ctx = clean(x.ctx, 160);
+      const lv = LEVELS.has(String(x.lv)) ? (x.lv as SetItem["lv"]) : undefined;
+      items.push({ m, w, d, rev, ...(v ? { v } : {}), ...(dg ? { dg } : {}), ...(after ? { after } : {}), ...(replaces ? { replaces } : {}), ...(lv ? { lv } : {}), ...(ctx ? { ctx } : {}) });
     }
     if (items.length) out.items = items;
   }
@@ -208,8 +212,15 @@ function readExtras(raw: Record<string, unknown>): SetExtras {
     if (Object.keys(visuals).length) out.visuals = visuals;
   }
   if (raw.locked === true) out.locked = true;
+  if (raw.mixed === true && out.items) out.mixed = true;
+  if (raw.wordIds && typeof raw.wordIds === "object") {
+    const ids: Record<string, string> = {};
+    for (const [w, id] of Object.entries(raw.wordIds as Record<string, unknown>)) if (isMeaningId(id) && clean(w, 40)) ids[clean(w, 40)] = id;
+    if (Object.keys(ids).length) out.wordIds = ids;
+  }
   return out;
 }
+const LEVELS = new Set(["beg", "adv", "yes"]);
 
 export async function getCurriculumSetDoc(id: string, create = false, admin = false): Promise<CurriculumSetDoc | null> {
   const isZa = id.startsWith("cur-za-");
@@ -231,7 +242,16 @@ export async function getCurriculumSetDoc(id: string, create = false, admin = fa
   // A unit that lists meanings: its words follow the meanings (a word can
   // appear twice), and a word's plain definition is its first meaning, for
   // every code path that knows only the word.
-  if (extras.items) {
+  if (extras.items && extras.mixed) {
+    // Older words and meanings together (phase C): every stored word stays,
+    // with its own definition; a meaning adds its definition only for a word
+    // the unit did not have.
+    const { entries } = mergeMixed(doc.set.words, doc.defs, extras.items, extras.wordIds);
+    set = { ...set, words: entries.map((i) => i.w) };
+    defs = { ...defs };
+    for (const i of [...entries].reverse()) if (i.k !== "word" && !(i.w in doc.defs)) defs[i.w] = i.d;
+    extras.items = entries;
+  } else if (extras.items) {
     set = { ...set, words: extras.items.map((i) => i.w) };
     defs = { ...defs };
     for (const i of [...extras.items].reverse()) defs[i.w] = i.d;

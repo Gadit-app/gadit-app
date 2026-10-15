@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { classroomDef, classroomItem, isGemaraSet, sameSetWord } from "@/lib/word-sets";
+import { classroomDef, classroomMeaning, isGemaraSet, sameSetWord } from "@/lib/word-sets";
 import { classActivityKey, itemActivityKey } from "@/lib/classroom-keys";
 import { devDryAi, dryActivity } from "@/lib/dev-safety";
 import { loadWordSet } from "@/lib/curriculum-sets";
@@ -101,7 +101,8 @@ export async function GET(req: NextRequest) {
   const asked = (sp.get("word") ?? "").trim();
   const set = setId ? await loadWordSet(setId) : undefined;
   if (!set || !asked) return NextResponse.json({ error: "bad_params" }, { status: 400 });
-  const item = classroomItem(set.id, sp.get("m"));
+  // A meaning (phase C): approved content only; an older word of a mixed unit is a plain word here.
+  const item = classroomMeaning(set.id, sp.get("m"));
   // Gemara: the word as spelled in the unit, so a dictionary spelling fix
   // (תרוץ shown as תירוץ) never fails the quiz. Other subjects: as before.
   const word = item?.w ?? (isGemaraSet(set) ? set.words.find((w) => sameSetWord(w, asked)) : undefined) ?? asked;
@@ -112,7 +113,7 @@ export async function GET(req: NextRequest) {
   if (!meaning) return NextResponse.json({ error: "no_meaning" }, { status: 404 });
 
   const db = getAdminDb();
-  const key = item ? itemActivityKey({ m: item.m, rev: item.rev }, set.lang) : classActivityKey(VERSION, set.lang, set.id, word, meaning);
+  const key = item ? itemActivityKey({ m: item.m, rev: item.rev }, set.lang, item.lv) : classActivityKey(VERSION, set.lang, set.id, word, meaning);
   const ref = db.collection("classActivity").doc(key);
   try {
     const snap = await ref.get();
@@ -121,13 +122,14 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ quiz: d.quiz, game: d.game, cached: true });
     }
   } catch { /* cache read best-effort */ }
-  // A pilot unit serves approved (imported) activities only, never generates.
-  if (isPilotTopicId(set.id)) return NextResponse.json({ error: "not_approved" }, { status: 404 });
+  // A meaning, in any unit, and every word of a pilot unit: approved (imported)
+  // activities only, never generated (Gadi 2026-10-15, phase C).
+  if (item || isPilotTopicId(set.id)) return NextResponse.json({ error: "not_approved" }, { status: 404 });
   // Local test mode: a placeholder activity, nothing generated or written.
   if (devDryAi()) return NextResponse.json({ ...dryActivity(word), cached: false });
   try {
     const out = await generate(word, meaning, set.lang, set.grade ?? "", set.title);
-    try { await ref.set({ ...out, word, setId: set.id, lang: set.lang, meaning, ...(item ? { m: item.m, rev: item.rev } : {}), at: new Date().toISOString() }); } catch { /* ignore */ }
+    try { await ref.set({ ...out, word, setId: set.id, lang: set.lang, meaning, at: new Date().toISOString() }); } catch { /* ignore */ }
     return NextResponse.json({ ...out, cached: false });
   } catch (e) {
     return NextResponse.json({ error: "generate_failed", detail: String(e) }, { status: 502 });

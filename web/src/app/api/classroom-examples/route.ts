@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { classroomDef, classroomItem } from "@/lib/word-sets";
+import { classroomDef, classroomMeaning } from "@/lib/word-sets";
 import { loadWordSet } from "@/lib/curriculum-sets";
 import { getOrGenerateExamples } from "@/lib/word-examples";
 import { isPilotTopicId } from "@/lib/pilot-topics";
@@ -55,14 +55,14 @@ async function resolve(params: {
   if (params.setId) {
     const set = await loadWordSet(params.setId);
     if (set && !uiLang) uiLang = set.lang;
-    // A meaning of a unit that lists meanings: its own definition and key.
-    const item = classroomItem(params.setId, params.m);
+    // A meaning of a unit that lists meanings: its own definition and key, and
+    // approved (imported) examples only, in every unit (phase C).
+    const item = classroomMeaning(params.setId, params.m);
     if (item) {
-      // A pilot unit serves approved (imported) examples only, never generates.
-      const res = await getOrGenerateExamples(item.w, item.d, uiLang || "he", { item: { m: item.m, rev: item.rev }, generate: !isPilotTopicId(params.setId) });
+      const res = await getOrGenerateExamples(item.w, item.d, uiLang || "he", { item: { m: item.m, rev: item.rev }, variant: item.lv, generate: false });
       let quote: ClassroomQuote | undefined;
       try {
-        const doc = await getAdminDb().collection("exampleCache").doc(itemExampleKey({ m: item.m, rev: item.rev }, uiLang || "he")).get();
+        const doc = await getAdminDb().collection("exampleCache").doc(itemExampleKey({ m: item.m, rev: item.rev }, uiLang || "he", item.lv)).get();
         quote = approvedQuote(doc.get("quote"));
       } catch { /* no quote */ }
       return { examples: res.examples, cached: res.cached, ...(quote ? { quote } : {}), status: 200 as const };

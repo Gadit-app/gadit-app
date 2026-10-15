@@ -157,7 +157,7 @@ async function render(prompt: string, refs: string[], quality: "low" | "medium" 
 export type ClassroomImageResult =
   | { status: "cached"; url: string; cacheKey: string }
   | { status: "generated"; url: string; cacheKey: string }
-  | { status: "skipped"; reason: "none" | "sensitive"; cacheKey: string }
+  | { status: "skipped"; reason: "none" | "sensitive" | "not_approved"; cacheKey: string }
   | { status: "error"; error: string; cacheKey: string };
 
 /** The set picture for a word, from cache or drawn now in the house style. */
@@ -187,6 +187,9 @@ export async function generateClassroomImage(opts: {
   // field is contentLocked, new in phase A: the older `approved` flag some
   // pictures carry keeps its old meaning (none).
   if (existing?.url && (!opts.force || existing.contentLocked === true)) return { status: "cached", url: existing.url, cacheKey: cKey };
+  // A meaning (phase C): its picture comes in with its approved content
+  // (the publish tool), never drawn on view or by a forced redraw.
+  if (opts.item) return { status: "skipped", reason: "not_approved", cacheKey: cKey };
   try {
     const w = word.trim();
     const letter = LETTER_REFS[w] ?? LETTER_REFS[w.replace(/[ً-ٰٟ]/g, "")];

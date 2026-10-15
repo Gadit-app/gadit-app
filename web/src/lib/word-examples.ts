@@ -137,11 +137,14 @@ export async function getOrGenerateExamples(
   uiLang: string,
   /** admin = a run from /admin: counted against the admin daily cap. */
   /** item: a meaning of a unit that lists meanings, keyed on its id. */
-  opts: { generate?: boolean; force?: boolean; admin?: boolean; item?: MeaningRef } = {},
+  /** variant: the meaning's explanation level in this unit (phase C). */
+  opts: { generate?: boolean; force?: boolean; admin?: boolean; item?: MeaningRef; variant?: string } = {},
 ): Promise<ExampleResult> {
-  const { generate = true, force = false } = opts;
+  const { force = false } = opts;
+  // A meaning's examples are approved content only (phase C): never generated.
+  const generate = opts.item ? false : opts.generate ?? true;
   const db = getAdminDb();
-  const key = opts.item ? itemExampleKey(opts.item, uiLang) : exampleCacheKey(word, meaning, uiLang);
+  const key = opts.item ? itemExampleKey(opts.item, uiLang, opts.variant) : exampleCacheKey(word, meaning, uiLang);
   const ref = db.collection("exampleCache").doc(key);
 
   const snap = await ref.get();

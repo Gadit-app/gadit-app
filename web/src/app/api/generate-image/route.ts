@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom, IMAGE_MODEL, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 import { recordActivity } from "@/lib/activity-log";
-import { curatedImageHint, classroomDef, classroomItem, isGemaraSet, sameSetWord } from "@/lib/word-sets";
+import { curatedImageHint, classroomDef, classroomMeaning, isGemaraSet, sameSetWord } from "@/lib/word-sets";
 import { loadWordSet } from "@/lib/curriculum-sets";
 import { generateClassroomImage } from "@/lib/classroom-image";
 import { classroomAccess } from "@/lib/classroom-access";
@@ -177,7 +177,7 @@ export async function POST(req: NextRequest) {
       const asked = String(word).trim();
       // A meaning of a unit that lists meanings (Gemara phase A): its own
       // word, definition and picture key.
-      const item = set ? classroomItem(set.id, typeof m === "string" ? m : null) : undefined;
+      const item = set ? classroomMeaning(set.id, typeof m === "string" ? m : null) : undefined;
       // Gemara: the word as spelled in the unit, ignoring niqqud and quote marks.
       const w = item?.w ?? (set && isGemaraSet(set) ? set.words.find((x) => sameSetWord(x, asked)) : undefined) ?? asked;
       if (set && (item || set.words.some((x) => x.trim().toLowerCase() === w.toLowerCase()))) {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { WORD_SETS, classroomDef } from "@/lib/word-sets";
+import { WORD_SETS, classroomDef, setItems } from "@/lib/word-sets";
 import { loadWordSet } from "@/lib/curriculum-sets";
 import { resolveClassroomMeaning } from "@/lib/classroom-word";
 import { generateClassroomImage } from "@/lib/classroom-image";
@@ -58,7 +58,11 @@ async function buildTargets(setId: string): Promise<WordTarget[] | null> {
   if (isPilotTopicId(setId)) return null;
   const set = await loadWordSet(setId);
   if (!set) return null;
-  return set.words.map((w) => ({ word: w, lang: set.lang, setId: set.id }));
+  // A unit with meanings (phase C): only its older words are warmed, as
+  // before; a meaning's content comes in approved, never generated here.
+  const items = setItems(set.id);
+  const words = items ? items.filter((i) => i.k === "word").map((i) => i.w) : set.words;
+  return words.map((w) => ({ word: w, lang: set.lang, setId: set.id }));
 }
 
 export async function GET(req: NextRequest) {
