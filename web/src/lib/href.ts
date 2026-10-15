@@ -74,7 +74,7 @@ export function buildHref(lang: Lang, path: string): string {
   const SUPPORTED = [
     "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am",
     "uk", "tr", "pl", "fa", "id", "nl", "el", "zu", "vi", "fil", "af", "sw",
-    "zh-CN", "zh-TW", "ko", "th", "bn", "da", "hu",
+    "zh-CN", "zh-TW", "ko", "th", "bn", "da", "hu", "xh", "nso", "tn", "st", "ts", "ss", "ve", "nr",
   ];
   const segs = path.split("/").filter(Boolean);
   if (segs[0] && SUPPORTED.includes(segs[0])) segs.shift();

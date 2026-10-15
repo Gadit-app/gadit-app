@@ -360,7 +360,7 @@ const LANG_FIELD_CODE: Record<string, string> = {
   portuguese: "pt", french: "fr", german: "de", italian: "it", dutch: "nl", polish: "pl", czech: "cs",
   slovak: "sk", turkish: "tr", persian: "fa", hindi: "hi", japanese: "ja", chinese: "zh", korean: "ko",
   greek: "el", yiddish: "yi", zulu: "zu", tswana: "tn", afrikaans: "af", swahili: "sw", indonesian: "id",
-  vietnamese: "vi", filipino: "fil", danish: "da", hungarian: "hu", amharic: "am", thai: "th", bengali: "bn",
+  vietnamese: "vi", filipino: "fil", danish: "da", hungarian: "hu", xhosa: "xh", isixhosa: "xh", sepedi: "nso", "northern sotho": "nso", setswana: "tn", sesotho: "st", "southern sotho": "st", tsonga: "ts", xitsonga: "ts", swati: "ss", siswati: "ss", venda: "ve", tshivenda: "ve", ndebele: "nr", isindebele: "nr", amharic: "am", thai: "th", bengali: "bn",
 };
 const SCRIPT_DEFAULT: Partial<Record<Script, string>> = { hebrew: "he", arabic: "ar", cyrillic: "ru", devanagari: "hi", cjk: "ja", latin: "en" };
 const SCRIPT_OF_CODE: Record<string, Script> = {

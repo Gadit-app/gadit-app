@@ -52,6 +52,14 @@ const UI_LANG_NAMES: Record<string, string> = {
   bn: "Bengali",
   da: "Danish",
   hu: "Hungarian",
+  xh: "Xhosa (isiXhosa)",
+  nso: "Northern Sotho (Sepedi)",
+  tn: "Tswana (Setswana)",
+  st: "Southern Sotho (Sesotho)",
+  ts: "Tsonga (Xitsonga)",
+  ss: "Swati (siSwati)",
+  ve: "Venda (Tshivenda)",
+  nr: "South Ndebele (isiNdebele)",
 };
 
 export function uiLangName(uiLang: string): string {

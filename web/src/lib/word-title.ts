@@ -48,7 +48,7 @@ const ENGLISH_NAME: Record<string, string> = {
   de: "German", cs: "Czech", sk: "Slovak", it: "Italian", ja: "Japanese", hi: "Hindi", am: "Amharic",
   uk: "Ukrainian", tr: "Turkish", pl: "Polish", fa: "Persian", id: "Indonesian", nl: "Dutch", el: "Greek",
   zu: "Zulu", vi: "Vietnamese", fil: "Filipino", af: "Afrikaans", sw: "Swahili", "zh-CN": "Chinese",
-  "zh-TW": "Chinese", ko: "Korean", th: "Thai", bn: "Bengali", da: "Danish", hu: "Hungarian",
+  "zh-TW": "Chinese", ko: "Korean", th: "Thai", bn: "Bengali", da: "Danish", hu: "Hungarian", xh: "Xhosa (isiXhosa)", nso: "Northern Sotho (Sepedi)", tn: "Tswana (Setswana)", st: "Southern Sotho (Sesotho)", ts: "Tsonga (Xitsonga)", ss: "Swati (siSwati)", ve: "Venda (Tshivenda)", nr: "South Ndebele (isiNdebele)",
 };
 
 const SUFFIX = " | Gadit";

@@ -58,6 +58,14 @@ const FOOTER_HOME_COPY: Record<Lang, string> = {
   bn: "হোম",
   da: "Forside",
   hu: "Főoldal",
+  xh: "Ekhaya",
+  nso: "Gae",
+  tn: "Gae",
+  st: "Lehae",
+  ts: "Ekaya",
+  ss: "Ekhaya",
+  ve: "Hayani",
+  nr: "Ekhaya",
 };
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).

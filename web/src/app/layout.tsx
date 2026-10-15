@@ -239,6 +239,54 @@ const META: Record<Lang, { title: string; description: string; locale: string }>
       "Egy új eszköz, amely segít, hogy tényleg megérts minden szót. Minden jelentés, példa, kifejezés, és hogy honnan ered a szó. Ingyenes a kezdés, a bővítés nagyon olcsó. Érdemes kipróbálni.",
     locale: "hu_HU",
   },
+  xh: {
+    title: "Gadit, Lonke igama, liqondakele.",
+    description:
+      "Gadit icacisa igama ngalinye ngokunzulu, ngolwimi lwakho.",
+    locale: "xh_ZA",
+  },
+  nso: {
+    title: "Gadit, Lentšu le lengwe le le lengwe, le kwešišwa.",
+    description:
+      "Gadit e hlaloša lentšu le lengwe le le lengwe ka botebo, ka polelo ya gago.",
+    locale: "nso_ZA",
+  },
+  tn: {
+    title: "Gadit, Lefoko lengwe le lengwe, le tlhaloganngwe.",
+    description:
+      "Gadit e tlhalosa lefoko lengwe le lengwe ka botlalo, ka puo ya gago.",
+    locale: "tn_ZA",
+  },
+  st: {
+    title: "Gadit, Lentswe le leng le le leng, le utlwisisehile.",
+    description:
+      "Gadit e hlalosa lentswe le leng le le leng ka botebo, ka puo ya hao.",
+    locale: "st_ZA",
+  },
+  ts: {
+    title: "Gadit, Rito rin'wana na rin'wana, ri twisisiwa.",
+    description:
+      "Gadit yi hlamusela rito rin'wana na rin'wana hi vuenti, hi ririmi ra n'wina.",
+    locale: "ts_ZA",
+  },
+  ss: {
+    title: "Gadit, Ligama ngalinye, licondzakele.",
+    description:
+      "Gadit ichaza ligama ngalinye ngekujula, ngelulwimi lwakho.",
+    locale: "ss_ZA",
+  },
+  ve: {
+    title: "Gadit, Ipfi ḽiṅwe na ḽiṅwe, ḽo pfesesea.",
+    description:
+      "Gadit i ṱalutshedza ipfi ḽiṅwe na ḽiṅwe nga vhuḓalo, nga luambo lwaṋu.",
+    locale: "ve_ZA",
+  },
+  nr: {
+    title: "Gadit, Ilizwi ngalinye, lizwisisekile.",
+    description:
+      "Gadit ihlathulula ilizwi ngalinye ngokuzeleko, ngelimi lakho.",
+    locale: "nr_ZA",
+  },
 };
 
 const ALL_LANGS: Lang[] = LANGUAGES.map((l) => l.code);

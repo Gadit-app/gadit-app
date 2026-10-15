@@ -68,6 +68,14 @@ const FOOTER_HOME_COPY: Record<Lang, string> = {
   bn: "হোম",
   da: "Forside",
   hu: "Főoldal",
+  xh: "Ekhaya",
+  nso: "Gae",
+  tn: "Gae",
+  st: "Lehae",
+  ts: "Ekaya",
+  ss: "Ekhaya",
+  ve: "Hayani",
+  nr: "Ekhaya",
 };
 
 // "Single user" note under each personal-tier price.
@@ -105,6 +113,14 @@ const SINGLE_USER_COPY: Record<Lang, string> = {
   bn: "একজন ব্যবহারকারীর জন্য",
   da: "Til én bruger",
   hu: "Egy felhasználónak",
+  xh: "Kumsebenzisi omnye",
+  nso: "Bakeng sa mošomiši o tee",
+  tn: "Ya modirisi a le mongwe",
+  st: "Bakeng sa mosebedisi a le mong",
+  ts: "Ya mutirhisi un'we",
+  ss: "Kwemsebentisi munye",
+  ve: "Kha mushumisi muthihi",
+  nr: "Komsebenzisi munye",
 };
 
 // Family card sub-line.
@@ -142,6 +158,14 @@ const UP_TO_5_KIDS_COPY: Record<Lang, string> = {
   bn: "সর্বোচ্চ 5 শিশু",
   da: "Op til 5 børn",
   hu: "Legfeljebb 5 gyerek",
+  xh: "Ukuya kuthi ga kubantwana aba-5",
+  nso: "Go fihla go bana ba 5",
+  tn: "Go fitlha go bana ba le 5",
+  st: "Ho fihla ho bana ba 5",
+  ts: "Ku fikela eka vana va 5",
+  ss: "Kufika ebantfwaneni labangu-5",
+  ve: "U swika kha vhana vha 5",
+  nr: "Ukufika kubantwana aba-5",
 };
 
 // Schools enterprise line (text before the contact link).
@@ -179,6 +203,14 @@ const SCHOOLS_OVER_1000_COPY: Record<Lang, string> = {
   bn: "1,000-এর বেশি শিক্ষার্থী? ",
   da: "Mere end 1.000 elever? ",
   hu: "Több mint 1000 diák? ",
+  xh: "Ngaphezu kwabafundi abali-1,000? ",
+  nso: "Barutwana ba fetago 1,000? ",
+  tn: "Baithuti ba feta 1,000? ",
+  st: "Baithuti ba fetang 1,000? ",
+  ts: "Vadyondzi vo tlula 1,000? ",
+  ss: "Bafundzi labangetulu kwa-1,000? ",
+  ve: "Vhagudi vha fhiraho 1,000? ",
+  nr: "Abafundi abangaphezu kwe-1,000? ",
 };
 
 // Schools enterprise contact link label.
@@ -216,6 +248,14 @@ const CONTACT_QUOTE_COPY: Record<Lang, string> = {
   bn: "দামের প্রস্তাবের জন্য যোগাযোগ করুন",
   da: "Kontakt os for et tilbud",
   hu: "Kérj árajánlatot tőlünk",
+  xh: "Qhagamshelana nathi ufumane ixabiso",
+  nso: "Ikgokaganye le rena go hwetša theko",
+  tn: "Ikgolaganye le rona go bona tlhwatlhwa",
+  st: "Ikopanye le rona bakeng sa theko",
+  ts: "Vulavulani na hina leswaku mi kuma nxavo",
+  ss: "Xhumana natsi kute utfole intsengo",
+  ve: "Kwamani ri ni ṋee mutengo",
+  nr: "Thintana nathi bona uthole intengo",
 };
 
 type Billing = "monthly" | "yearly";

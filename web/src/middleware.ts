@@ -17,7 +17,7 @@ import { NextResponse, type NextRequest } from "next/server";
  * cookie / localStorage / browser-locale logic in LangProvider.
  */
 
-const SUPPORTED_LANGS = new Set(["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am", "uk", "tr", "pl", "fa", "id", "nl", "el", "zu", "vi", "fil", "af", "sw", "zh-CN", "zh-TW", "ko", "th", "bn", "da", "hu"]);
+const SUPPORTED_LANGS = new Set(["he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am", "uk", "tr", "pl", "fa", "id", "nl", "el", "zu", "vi", "fil", "af", "sw", "zh-CN", "zh-TW", "ko", "th", "bn", "da", "hu", "xh", "nso", "tn", "st", "ts", "ss", "ve", "nr"]);
 
 // ── Google Play "consumption-only" mode ─────────────────────────────
 // The Play-distributed TWA must not offer or lead to any purchase, or it

@@ -43,6 +43,14 @@ const RATE_YEAR_ONE_COPY: Record<Lang, string> = {
   bn: "প্রথম বছর",
   da: "første år",
   hu: "első év",
+  xh: "unyaka wokuqala",
+  nso: "ngwaga wa mathomo",
+  tn: "ngwaga wa ntlha",
+  st: "selemo sa pele",
+  ts: "lembe ro sungula",
+  ss: "umnyaka wekucala",
+  ve: "ṅwaha wa u thoma",
+  nr: "umnyaka wokuthoma",
 };
 
 // Lifetime commission label.
@@ -80,6 +88,14 @@ const RATE_LIFETIME_COPY: Record<Lang, string> = {
   bn: "আজীবন",
   da: "livstid",
   hu: "élethosszig",
+  xh: "ubomi bonke",
+  nso: "bophelo ka moka",
+  tn: "botshelo jotlhe",
+  st: "bophelo bohle",
+  ts: "vutomi hinkwabyo",
+  ss: "imphilo yonkhe",
+  ve: "vhutshilo hoṱhe",
+  nr: "ipilo yoke",
 };
 
 /**

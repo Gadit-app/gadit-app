@@ -89,6 +89,14 @@ export const CLASSROOM_LANG_LABEL: Record<string, string> = {
   bn: "বাংলা",
   da: "Dansk",
   hu: "Magyar",
+  xh: "isiXhosa",
+  nso: "Sepedi",
+  tn: "Setswana",
+  st: "Sesotho",
+  ts: "Xitsonga",
+  ss: "siSwati",
+  ve: "Tshivenḓa",
+  nr: "isiNdebele",
 };
 
 export function classroomLangLabel(code: string): string {

@@ -32,6 +32,7 @@ import { TTSButton } from "@/components/design/TTSButton";
 import { KidsCelebration } from "@/components/design/KidsCelebration";
 import { langNameIn } from "@/lib/i18n";
 import { DICTATION_SETS, getCatTitle, type DictationSet, type WordPair } from "@/lib/dictation-sets";
+import { nativeSet } from "@/lib/dictation-sets-native";
 import { SPELL_T_EXTRA, CELEBRATIONS_EXTRA } from "@/lib/spell-i18n";
 import { misc } from "@/lib/misc-i18n";
 import { ml } from "@/lib/my-lists-i18n";
@@ -636,6 +637,8 @@ export function SpellClient() {
 
   async function startCategory(s: DictationSet) {
     if (nativeLang === "he") { begin(s); return; }
+    const curated = nativeSet(nativeLang, s.id);
+    if (curated) { begin({ id: s.id, icon: s.icon, titleEn: s.titleEn, titleHe: curated.title, words: curated.words }); return; }
     if (!user || loadingCat) return;
     setLoadingCat(s.id);
     setCreateMsg("");

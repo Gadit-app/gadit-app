@@ -59,6 +59,7 @@ function pickVoice(lang: string | undefined): string {
     it: "nova", nl: "shimmer", uk: "shimmer", tr: "nova", pl: "alloy",
     fa: "nova", id: "nova", el: "shimmer", hi: "nova", ja: "nova",
     am: "nova", zu: "nova",
+    xh: "nova", nso: "nova", tn: "nova", st: "nova", ts: "nova", ss: "nova", ve: "nova", nr: "nova",
   };
   return (lang && map[lang]) || "alloy";
 }

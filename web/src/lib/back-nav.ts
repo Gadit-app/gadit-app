@@ -23,7 +23,7 @@ type NavApi = { currentEntry: NavEntry | null; entries(): NavEntry[] };
 const LANG_PREFIXES = new Set([
   "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am",
   "uk", "tr", "pl", "fa", "id", "nl", "el", "zu", "vi", "fil", "af", "sw",
-  "zh-CN", "zh-TW", "ko", "th", "bn", "da", "hu",
+  "zh-CN", "zh-TW", "ko", "th", "bn", "da", "hu", "xh", "nso", "tn", "st", "ts", "ss", "ve", "nr",
 ]);
 
 /** "/he/family/" → "/family"; the language prefix does not make a different page. */

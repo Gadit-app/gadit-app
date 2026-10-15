@@ -73,6 +73,14 @@ const UPGRADE_TO_COPY: Record<Lang, string> = {
   bn: "{plan}-এ আপগ্রেড করুন",
   da: "Opgrader til {plan}",
   hu: "Váltás erre: {plan}",
+  xh: "Nyusela kwi-{plan}",
+  nso: "Kaonafatša go {plan}",
+  tn: "Tlhatlosetsa go {plan}",
+  st: "Ntlafatsetsa ho {plan}",
+  ts: "Tlakusela eka {plan}",
+  ss: "Khuphukela ku-{plan}",
+  ve: "Khwinifhadzani u ya kha {plan}",
+  nr: "Thuthukisela ku-{plan}",
 };
 
 // Help-link label pointing to /contact#billing.
@@ -110,6 +118,14 @@ const BILLING_HELP_COPY: Record<Lang, string> = {
   bn: "সমস্যা? বিলিং গাইড দেখুন ›",
   da: "Brug for hjælp? Guide til betaling ›",
   hu: "Segítség kell? Fizetési útmutató ›",
+  xh: "Ufuna uncedo ngeentlawulo? Jonga isikhokelo ›",
+  nso: "O nyaka thušo ka ditefo? Bona tlhahlo ›",
+  tn: "O tlhoka thuso ka dituelo? Bona kaedi ›",
+  st: "O hloka thuso ka ditefo? Bona tataiso ›",
+  ts: "Xana mi lava mpfuno hi ku hakela? Vonani xikombandlela ›",
+  ss: "Udzinga lusito ngetinkhokhelo? Buka umhlahlandlela ›",
+  ve: "Ni ṱoḓa thuso nga mbadelo? Sedzani tsumbandila ›",
+  nr: "Udinga isizo ngokubhadela? Qala umhlahlandlela ›",
 };
 
 // Offline pack meter label.
@@ -147,6 +163,14 @@ const OFFLINE_AVAILABLE_COPY: Record<Lang, string> = {
   bn: "অফলাইনে পাওয়া যায়",
   da: "Tilgængelig offline",
   hu: "Offline elérhető",
+  xh: "Iyafumaneka ungekho kwi-intanethi",
+  nso: "E hwetšagala ntle le inthanete",
+  tn: "E a dirisega kwa ntle ga inthanete",
+  st: "E fumaneha ntle le inthanete",
+  ts: "Ya kumeka handle ka inthanete",
+  ss: "Kuyatfolakala ngaphandle kwe-inthanethi",
+  ve: "Zwi a wanala hu si na inthanethe",
+  nr: "Kuyatholakala ngaphandle kwe-inthanethi",
 };
 
 // Unit after the offline word count.
@@ -184,6 +208,14 @@ const WORDS_UNIT_COPY: Record<Lang, string> = {
   bn: "শব্দ",
   da: "ord",
   hu: "szó",
+  xh: "amagama",
+  nso: "mantšu",
+  tn: "mafoko",
+  st: "mantswe",
+  ts: "marito",
+  ss: "emagama",
+  ve: "maipfi",
+  nr: "amezwi",
 };
 
 // Offline pack success line.
@@ -221,6 +253,14 @@ const PACK_ADDED_COPY: Record<Lang, string> = {
   bn: "✓ আপনার নোটবুকে যোগ হয়েছে",
   da: "✓ Tilføjet til din notesbog",
   hu: "✓ Hozzáadva a füzetedhez",
+  xh: "✓ Yongezwe encwadini yakho",
+  nso: "✓ E okeditšwe Pukung ya gago ya mantšu",
+  tn: "✓ E okeditswe mo Bukaneng ya gago",
+  st: "✓ E kentswe Bukaneng ya hao",
+  ts: "✓ Ku engeteriwile eka Buku ya n'wina ya marito",
+  ss: "✓ Kungetwe encwadzini yakho",
+  ve: "✓ Zwo engedzwa kha Bugu yaṋu",
+  nr: "✓ Kungezelelwe ebhukwini lakho lamezwi",
 };
 
 // Link from the offline-pack success line to /notebook.
@@ -258,6 +298,14 @@ const OPEN_NOTEBOOK_COPY: Record<Lang, string> = {
   bn: "নোটবুক খুলুন →",
   da: "Åbn notesbog →",
   hu: "Füzet megnyitása →",
+  xh: "Vula Incwadi →",
+  nso: "Bula Puku ya mantšu →",
+  tn: "Bula Bukana →",
+  st: "Bula Bukana →",
+  ts: "Pfula Buku ya marito →",
+  ss: "Vula Incwadzi →",
+  ve: "Vulani Bugu →",
+  nr: "Vula Ibhuku lamezwi →",
 };
 
 type Plan = "basic" | "clear" | "deep";

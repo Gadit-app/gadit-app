@@ -36,6 +36,14 @@ const UI_LANG_NAMES: Record<string, string> = {
   bn: "Bengali",
   da: "Danish",
   hu: "Hungarian",
+  xh: "Xhosa (isiXhosa)",
+  nso: "Northern Sotho (Sepedi)",
+  tn: "Tswana (Setswana)",
+  st: "Southern Sotho (Sesotho)",
+  ts: "Tsonga (Xitsonga)",
+  ss: "Swati (siSwati)",
+  ve: "Venda (Tshivenda)",
+  nr: "South Ndebele (isiNdebele)",
 };
 
 const SYSTEM_PROMPT = `You are Gadit's word comparison engine. The user gives you two words that look or sound similar (or are easy to confuse), and you explain the difference clearly.

@@ -34,7 +34,7 @@ const LANG_NAMES: Record<string, string> = {
   fa: "Persian", id: "Indonesian", el: "Greek", hi: "Hindi", ja: "Japanese",
   am: "Amharic", zu: "Zulu", vi: "Vietnamese", fil: "Filipino",
   af: "Afrikaans", sw: "Swahili", "zh-CN": "Chinese", "zh-TW": "Chinese",
-  ko: "Korean", th: "Thai", bn: "Bengali", da: "Danish", hu: "Hungarian",
+  ko: "Korean", th: "Thai", bn: "Bengali", da: "Danish", hu: "Hungarian", xh: "Xhosa (isiXhosa)", nso: "Northern Sotho (Sepedi)", tn: "Tswana (Setswana)", st: "Southern Sotho (Sesotho)", ts: "Tsonga (Xitsonga)", ss: "Swati (siSwati)", ve: "Venda (Tshivenda)", nr: "South Ndebele (isiNdebele)",
 };
 
 // Languages written in a non-Latin script — for these we ask the model
