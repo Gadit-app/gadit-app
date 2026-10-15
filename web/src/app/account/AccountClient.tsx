@@ -697,6 +697,7 @@ export function AccountPage() {
           minHeight: "calc(100vh - 220px)",
         }}
       >
+        <ReviewAccessCard />
         {/* HERO, centered above the card so the user's name sits
             optically over the page, not anchored to the start edge.
             The card below can still span the full main width. */}
@@ -1480,6 +1481,39 @@ function RetentionModal({
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+/** "בדיקת תוכן": shown only to an account with an open content-review grant
+ *  (the Gemara expert, 2026-10-15). Everyone else gets nothing, not even an
+ *  empty box. */
+function ReviewAccessCard() {
+  const { user } = useAuth();
+  const href = useHref();
+  const [until, setUntil] = useState<string>("");
+  useEffect(() => {
+    if (!user) return;
+    let alive = true;
+    void (async () => {
+      try {
+        const r = await fetch("/api/review?view=access", { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+        const d = (await r.json()) as { open?: boolean; expiresAt?: string };
+        if (alive && d.open && d.expiresAt) setUntil(d.expiresAt);
+      } catch { /* no card */ }
+    })();
+    return () => { alive = false; };
+  }, [user]);
+  if (!until) return null;
+  return (
+    <div dir="rtl" lang="he" style={{ marginBottom: 28, padding: "18px 20px", borderRadius: 16, border: "1.5px solid var(--teal)", background: "var(--paper, #fff)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 14, flexWrap: "wrap" }}>
+      <div>
+        <div style={{ fontWeight: 800, fontSize: 18 }}>בדיקת תוכן</div>
+        <div style={{ fontSize: 14, color: "var(--ink-muted)", marginTop: 4 }}>
+          פיילוט הגמרא מחכה לבדיקה שלכם. הגישה פתוחה עד {new Date(until).toLocaleString("he-IL", { timeZone: "Asia/Jerusalem", day: "numeric", month: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" })}.
+        </div>
+      </div>
+      <Link href={href("/review")} style={{ background: "var(--teal)", color: "#fff", fontWeight: 700, padding: "10px 18px", borderRadius: 12, textDecoration: "none" }}>לבדיקה</Link>
     </div>
   );
 }

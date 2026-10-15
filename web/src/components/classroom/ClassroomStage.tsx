@@ -26,6 +26,8 @@ import { isPilotTopicId } from "@/lib/pilot-topics";
 type QuizItem = { q: string; options: string[]; answer: number; explain: string };
 type GameItem = { s: string; t: boolean; explain: string };
 type Activity = { quiz: QuizItem[]; game: GameItem[] };
+/** The class activity handed in directly (content review preview). */
+export type ClassroomActivity = Activity;
 type Panel = null | "examples" | "quiz" | "game" | "diagram";
 /** A Gemara quote approved by the expert, stored with its meaning (phase B). */
 export type ClassroomQuote = { text: string; tractate: string; daf: string; amud: string };
@@ -138,6 +140,9 @@ type StageProps = {
   onExit: () => void;
   onSearch: (q: string) => void;
   progress?: ClassProgress | null;
+  /** Content review (2026-10-15): the activity comes in with the props; the
+   *  stage asks the server for nothing and reports no projection. */
+  preview?: Activity;
 };
 
 /** Hebrew and Arabic sets get a niqqud / tashkeel switch the teacher
@@ -152,7 +157,7 @@ export function ClassroomStage(props: StageProps) {
 }
 
 function StageInner({
-  word, definition, imageUrl, imageGenerating, examples, quote, set, idx, items, m, lang, onNavigate, onExit, onSearch, progress,
+  word, definition, imageUrl, imageGenerating, examples, quote, set, idx, items, m, lang, onNavigate, onExit, onSearch, progress, preview,
 }: {
   word: string;
   definition: string;
@@ -169,6 +174,7 @@ function StageInner({
   onExit: () => void;
   onSearch: (q: string) => void;
   progress?: ClassProgress | null;
+  preview?: Activity;
 }) {
   const L = (set.lang || lang) === "he" ? "he" : (set.lang || lang) === "ar" ? "ar" : "en";
   const he = L === "he";
@@ -190,6 +196,7 @@ function StageInner({
   const { user: authUser } = useAuth();
   const pilotUser = pilot ? authUser : null;
   const loadActivity = useCallback(async () => {
+    if (preview) { setActivity(preview); setActState("ready"); return; }
     setActState("loading");
     try {
       const p = new URLSearchParams({ set: set.id, word, meaning: definition });
@@ -206,7 +213,7 @@ function StageInner({
     } catch {
       setActState("error");
     }
-  }, [set.id, word, definition, m, pilot, pilotUser]);
+  }, [set.id, word, definition, m, pilot, pilotUser, preview]);
 
   // Prepare the activities as soon as the word is on screen, so the
   // buttons open instantly when the teacher taps them.
@@ -242,13 +249,13 @@ function StageInner({
   // quiz or game also ticks the dashboard checklist.
   const { user } = useAuth();
   const report = useCallback((kind: "word" | "quiz" | "game") => {
-    if (!user) return;
+    if (!user || preview) return;
     void user.getIdToken().then((t) => fetch("/api/schools/projection", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${t}` },
       body: JSON.stringify({ kind, word, setId: set.id, subject: set.subject, title: set.title, grade: set.grade ?? "", ...(m ? { m } : {}) }),
     })).catch(() => {});
-  }, [user, word, set.id, set.subject, set.title, set.grade, m]);
+  }, [user, word, set.id, set.subject, set.title, set.grade, m, preview]);
   useEffect(() => { report("word"); }, [word, set.id, user, m]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (panel === "quiz" || panel === "game") report(panel);
