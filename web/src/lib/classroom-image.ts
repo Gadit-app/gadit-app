@@ -36,16 +36,22 @@ export function classroomStyle(set: Pick<WordSet, "id">): ClassroomStyle {
 
 /** Gemara terms that never get an automatic picture (Gemara phase A,
  *  2026-10-15): intimate, violent or capital-punishment subjects. A unit can
- *  still give one an approved hint. Matched on the word with niqqud removed;
- *  a listed term matches any word that contains it. To be reviewed by the
+ *  still give one an approved hint. Matched on whole words with niqqud
+ *  removed ("ארבע מיתות בית דין" matches "מיתות"). To be reviewed by the
  *  Gemara expert. */
 export const SENSITIVE_TERMS = [
   "ביאה", "בעילה", "ערווה", "עריות", "זנות", "זונה", "אונס", "מפתה", "ממזר", "נידה",
   "עונש מוות", "מיתה", "מיתות", "סקילה", "שריפה", "הרג", "חנק", "צליבה", "תלייה", "רציחה", "רוצח",
 ];
+const tokens = (s: string) => normSetWord(s).split(/[\s\-־,]+/).filter(Boolean);
+/** Whole words only: "הרג" matches "הרג נפש" but never "הרגל". */
 export function isSensitiveTerm(word: string): boolean {
-  const w = normSetWord(word);
-  return SENSITIVE_TERMS.some((t) => w.includes(normSetWord(t)));
+  const w = tokens(word);
+  return SENSITIVE_TERMS.some((t) => {
+    const tt = tokens(t);
+    for (let i = 0; i + tt.length <= w.length; i++) if (tt.every((x, j) => w[i + j] === x)) return true;
+    return false;
+  });
 }
 const GEMARA_SAFE = "This is for a Talmud lesson in a religious school: respectful and modest, no people in intimate situations, no violence, no blood, no weapons aimed at anyone, no religious figures drawn as faces. Show the idea through symbolic objects (an open Talmud volume, scrolls, scales, a study table, two facing books).";
 
