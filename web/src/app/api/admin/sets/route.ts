@@ -5,6 +5,7 @@ import { resolveClassroomMeaning } from "@/lib/classroom-word";
 import { generateClassroomImage, classroomImageKey, classroomStyle } from "@/lib/classroom-image";
 import { exampleCacheKey, getOrGenerateExamples } from "@/lib/word-examples";
 import { adminBudgetExceeded } from "@/lib/ai-budget";
+import { isPilotTopicId } from "@/lib/pilot-topics";
 
 /**
  * Admin API backing the /admin/sets review grid.
@@ -89,6 +90,8 @@ export async function POST(req: NextRequest) {
   if (await adminBudgetExceeded()) return NextResponse.json({ error: "admin_budget", detail: "Today's admin spend cap is reached. Try again tomorrow." }, { status: 429 });
   const action = body.action ?? "image";
   const word = (body.word ?? "").trim();
+  // A pilot unit holds approved, imported content only; never regenerated here.
+  if (isPilotTopicId(body.set)) return NextResponse.json({ error: "pilot_managed" }, { status: 403 });
   const set = await loadWordSet(body.set ?? "");
   if (!word) return NextResponse.json({ error: "word required" }, { status: 400 });
   if (!set) return NextResponse.json({ error: "set_not_found" }, { status: 404 });

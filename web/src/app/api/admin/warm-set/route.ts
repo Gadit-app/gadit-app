@@ -5,6 +5,7 @@ import { resolveClassroomMeaning } from "@/lib/classroom-word";
 import { generateClassroomImage } from "@/lib/classroom-image";
 import { getOrGenerateExamples } from "@/lib/word-examples";
 import { adminBudgetExceeded } from "@/lib/ai-budget";
+import { isPilotTopicId } from "@/lib/pilot-topics";
 
 /**
  * Admin: batch-warm a classroom word set (or every set). For each word:
@@ -53,6 +54,8 @@ async function buildTargets(setId: string): Promise<WordTarget[] | null> {
   }
   // Async: curriculum sets (cur-*) live in Firestore, and loading one also
   // registers its per-set definitions for resolveClassroomMeaning.
+  // A pilot unit holds approved, imported content only; it is never warmed.
+  if (isPilotTopicId(setId)) return null;
   const set = await loadWordSet(setId);
   if (!set) return null;
   return set.words.map((w) => ({ word: w, lang: set.lang, setId: set.id }));

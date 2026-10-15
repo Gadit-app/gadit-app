@@ -3,6 +3,8 @@ import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
 import { getCurriculumSetDoc } from "@/lib/curriculum-sets";
 import { catalogOfTopic, topicLevel } from "@/lib/curriculum-catalog";
 import { cleanLevels, cleanCurriculum, curriculumAllows } from "@/lib/school-levels";
+import { isPilotTopicId } from "@/lib/pilot-topics";
+import { pilotAllows } from "@/lib/pilot-access";
 
 /**
  * GET /api/curriculum-set?id=cur-xxxxxxxxxx   (Bearer: a school account)
@@ -31,6 +33,14 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "login_required" }, { status: 401 });
   }
   if (!schoolId) return NextResponse.json({ error: "schools_only" }, { status: 403 });
+  // A pilot unit (Gemara phase B): only the schools on its allow-list, and only
+  // from its imported document (never generated). Others see no such unit.
+  if (isPilotTopicId(id)) {
+    if (!pilotAllows(id, schoolId)) return NextResponse.json({ error: "not_found" }, { status: 404 });
+    const doc = await getCurriculumSetDoc(id);
+    if (!doc) return NextResponse.json({ error: "not_found" }, { status: 404 });
+    return NextResponse.json(doc, { headers: { "Cache-Control": "private, max-age=60" } });
+  }
   const sd = (await getAdminDb().collection("schools").doc(schoolId).get()).data() ?? {};
   const levels = cleanLevels(sd.levels);
   if (!curriculumAllows(cleanCurriculum(sd.curriculum, levels), catalog)) return NextResponse.json({ error: "curriculum_not_open" }, { status: 403 });

@@ -2,6 +2,7 @@ import data from "./curriculum-catalog.json";
 import za from "./curriculum-catalog-za.json";
 import arCat from "./curriculum-catalog-ar.json";
 import { WORD_SETS, type WordSet } from "./word-sets";
+import { pilotTopic } from "./pilot-topics";
 
 // The full Israeli school curriculum (Gadi 2026-10-03): every subject and
 // unit from גן to תיכון, state and state-religious, merged from seven
@@ -150,13 +151,14 @@ export const catalogView = (id: CatalogId) => VIEWS[id];
 export function catalogOfTopic(id: string): CatalogId | undefined {
   if (id.startsWith("cur-za-")) return ZA_BY_ID.has(id) ? "za-caps" : undefined;
   if (id.startsWith("cur-ar-")) return AR_BY_ID.has(id) ? "il-ar" : undefined;
-  return curTopic(id) ? "il-he" : undefined;
+  // A pilot unit (lib/pilot-topics.ts) opens like an Israeli unit, but is in no catalog list.
+  return curTopic(id) || pilotTopic(id) ? "il-he" : undefined;
 }
 /** A South African CAPS unit by id (server: words live in curriculum-sets-za.json). */
 export const zaTopic = (id: string) => ZA_BY_ID.get(id);
 export const zaSubjectName = (key: string) => za.subjects.find((s) => s.key === key)?.en ?? key;
 /** The level of any curriculum topic, in its own catalog's level keys. */
-export const topicLevel = (id: string) => (ZA_BY_ID.get(id) ?? AR_BY_ID.get(id) ?? curTopic(id))?.l;
+export const topicLevel = (id: string) => (ZA_BY_ID.get(id) ?? AR_BY_ID.get(id) ?? curTopic(id) ?? pilotTopic(id))?.l;
 /** An Arab state education unit by id, and its subject. */
 export const arTopic = (id: string) => AR_BY_ID.get(id);
 export const arSubject = (key: string) => arCat.subjects.find((s) => s.key === key);

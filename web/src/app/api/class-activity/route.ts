@@ -5,6 +5,7 @@ import { classroomDef, classroomItem, isGemaraSet, sameSetWord } from "@/lib/wor
 import { classActivityKey, itemActivityKey } from "@/lib/classroom-keys";
 import { devDryAi, dryActivity } from "@/lib/dev-safety";
 import { loadWordSet } from "@/lib/curriculum-sets";
+import { isPilotTopicId } from "@/lib/pilot-topics";
 import { logAiUsage, usageFrom, TEXT_MODEL } from "@/lib/ai-cost";
 
 /**
@@ -116,6 +117,8 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ quiz: d.quiz, game: d.game, cached: true });
     }
   } catch { /* cache read best-effort */ }
+  // A pilot unit serves approved (imported) activities only, never generates.
+  if (isPilotTopicId(set.id)) return NextResponse.json({ error: "not_approved" }, { status: 404 });
   // Local test mode: a placeholder activity, nothing generated or written.
   if (devDryAi()) return NextResponse.json({ ...dryActivity(word), cached: false });
   try {

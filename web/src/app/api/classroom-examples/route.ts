@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { classroomDef, classroomItem } from "@/lib/word-sets";
 import { loadWordSet } from "@/lib/curriculum-sets";
 import { getOrGenerateExamples } from "@/lib/word-examples";
+import { isPilotTopicId } from "@/lib/pilot-topics";
 
 /**
  * Subject-appropriate example sentences for classroom / present mode.
@@ -43,7 +44,8 @@ async function resolve(params: {
     // A meaning of a unit that lists meanings: its own definition and key.
     const item = classroomItem(params.setId, params.m);
     if (item) {
-      const res = await getOrGenerateExamples(item.w, item.d, uiLang || "he", { item: { m: item.m, rev: item.rev } });
+      // A pilot unit serves approved (imported) examples only, never generates.
+      const res = await getOrGenerateExamples(item.w, item.d, uiLang || "he", { item: { m: item.m, rev: item.rev }, generate: !isPilotTopicId(params.setId) });
       return { examples: res.examples, cached: res.cached, status: 200 as const };
     }
   }
@@ -56,7 +58,7 @@ async function resolve(params: {
     return { examples: [], cached: false, status: 200 as const };
   }
 
-  const res = await getOrGenerateExamples(word, meaning, uiLang);
+  const res = await getOrGenerateExamples(word, meaning, uiLang, { generate: !isPilotTopicId(params.setId) });
   return { examples: res.examples, cached: res.cached, status: 200 as const };
 }
 

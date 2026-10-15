@@ -5,6 +5,7 @@ import { isMeaningId } from "@/lib/classroom-keys";
 import { devDryAi } from "@/lib/dev-safety";
 import { curTopic, curSubject, curLevelHe, gradeLabel, SUBJECT_LANG, zaTopic, arTopic, arSubject, arLevel, arGradeLabel } from "@/lib/curriculum-catalog";
 import zaSets from "@/lib/curriculum-sets-za.json";
+import { isPilotTopicId } from "@/lib/pilot-topics";
 
 // Server side of the curriculum catalog (Gadi 2026-10-03). A topic's key
 // words and their in-lesson definitions are generated once with gpt-4o the
@@ -188,12 +189,14 @@ function readExtras(raw: Record<string, unknown>): SetExtras {
 
 export async function getCurriculumSetDoc(id: string, create = false, admin = false): Promise<CurriculumSetDoc | null> {
   const isZa = id.startsWith("cur-za-");
-  if (!isCurriculumSetId(id) || !(isZa ? zaTopic(id) : arTopic(id) ?? curTopic(id))) return null;
+  // A pilot unit exists only from its imported document and is never generated.
+  const pilot = isPilotTopicId(id);
+  if (!isCurriculumSetId(id) || !(pilot || (isZa ? zaTopic(id) : arTopic(id) ?? curTopic(id)))) return null;
   const ref = getAdminDb().collection("curriculumSets").doc(id);
   const snap = await ref.get();
   // An admin edit lives in Firestore; a CAPS unit otherwise uses its built-in words.
   let doc = snap.exists ? (snap.data() as CurriculumSetDoc) : isZa ? zaDoc(id) : null;
-  if (!doc && create) {
+  if (!doc && create && !pilot) {
     doc = await generate(id, admin);
     if (doc) await ref.set({ ...doc, version: VERSION, at: new Date().toISOString() });
   }
