@@ -1,6 +1,6 @@
 import { getAdminDb } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom, TEXT_MODEL, SMART_MODEL } from "@/lib/ai-cost";
-import { getWordSet, registerWordSet, isCurriculumSetId, isGemaraSet, type WordSet, type SetExtras, type SetItem, type SetVisual } from "@/lib/word-sets";
+import { getWordSet, registerWordSet, isCurriculumSetId, isGemaraSet, type WordSet, type SetExtras, type SetItem, type SetVisual, type SetDiagram, type DiagramBox } from "@/lib/word-sets";
 import { isMeaningId } from "@/lib/classroom-keys";
 import { devDryAi } from "@/lib/dev-safety";
 import { curTopic, curSubject, curLevelHe, gradeLabel, SUBJECT_LANG, zaTopic, arTopic, arSubject, arLevel, arGradeLabel } from "@/lib/curriculum-catalog";
@@ -156,6 +156,29 @@ function cleanVisual(v: unknown): SetVisual | undefined {
   return { mode: o.mode as "auto" | "none" };
 }
 
+function cleanBox(v: unknown, small: boolean): DiagramBox | undefined {
+  const o = v as Record<string, unknown> | null;
+  const label = clean(o?.label, 40);
+  const text = clean(o?.text, 140);
+  if (!label || !text) return undefined;
+  const s = small ? clean(o?.small, 60) : "";
+  return { label, ...(s ? { small: s } : {}), text };
+}
+/** A stored teaching diagram, validated; anything incomplete is dropped
+ *  (the meaning then shows no diagram, as before). */
+function cleanDiagram(v: unknown): SetDiagram | undefined {
+  const o = v as Record<string, unknown> | null;
+  if (!o || o.layout !== "contrast") return undefined;
+  const title = clean(o.title, 40);
+  const sub = clean(o.sub, 160);
+  const clash = clean(o.clash, 40);
+  const a = cleanBox(o.a, true), b = cleanBox(o.b, true);
+  const question = cleanBox(o.question, false), next = cleanBox(o.next, false);
+  if (!title || !sub || !clash || !a || !b || !question || !next) return undefined;
+  const note = clean(o.note, 160);
+  return { layout: "contrast", title, sub, a, b, clash, question, next, ...(note ? { note } : {}) };
+}
+
 /** The optional phase-A fields of a stored unit, validated. Absent fields stay
  *  absent, so a unit without them is returned exactly as before. */
 function readExtras(raw: Record<string, unknown>): SetExtras {
@@ -171,7 +194,8 @@ function readExtras(raw: Record<string, unknown>): SetExtras {
       seen.add(m);
       const rev = Number.isInteger(x.rev) && (x.rev as number) > 0 ? (x.rev as number) : 1;
       const v = cleanVisual(x.v);
-      items.push({ m, w, d, rev, ...(v ? { v } : {}) });
+      const dg = cleanDiagram(x.dg);
+      items.push({ m, w, d, rev, ...(v ? { v } : {}), ...(dg ? { dg } : {}) });
     }
     if (items.length) out.items = items;
   }

@@ -26,7 +26,24 @@ export type SetVisual = { mode: "auto" | "none" | "hint"; hint?: string };
  *  student sees it, `d` the approved definition, `rev` the content revision
  *  the picture, examples and quiz are keyed on. The same word can appear in
  *  two items with two meanings. */
-export type SetItem = { m: string; w: string; d: string; rev?: number; v?: SetVisual };
+export type SetItem = { m: string; w: string; d: string; rev?: number; v?: SetVisual; dg?: SetDiagram };
+
+/** A teaching diagram of one meaning, approved by the expert (Gemara pilot,
+ *  2026-10-15). Our own wording only: never a quote and never a source.
+ *  "contrast": two sources facing each other, the apparent clash between
+ *  them, the question it raises and what comes next (ורמינהו). */
+export type DiagramBox = { label: string; small?: string; text: string };
+export type SetDiagram = {
+  layout: "contrast";
+  title: string;
+  sub: string;
+  a: DiagramBox;
+  b: DiagramBox;
+  clash: string;
+  question: DiagramBox;
+  next: DiagramBox;
+  note?: string;
+};
 
 /** Optional unit fields beyond words + definitions. A unit without them
  *  behaves exactly as before. */

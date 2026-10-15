@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { KidsCelebration } from "@/components/design/KidsCelebration";
 import { TTSButton } from "@/components/design/TTSButton";
 import { ClassProgressChip, type ClassProgress } from "@/components/design/ClassMilestone";
-import type { WordSet, SetItem } from "@/lib/word-sets";
+import type { WordSet, SetItem, SetDiagram } from "@/lib/word-sets";
 import { NiqqudProvider, NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
 import { useAuth } from "@/lib/auth-context";
 import { isPilotTopicId } from "@/lib/pilot-topics";
@@ -26,7 +26,7 @@ import { isPilotTopicId } from "@/lib/pilot-topics";
 type QuizItem = { q: string; options: string[]; answer: number; explain: string };
 type GameItem = { s: string; t: boolean; explain: string };
 type Activity = { quiz: QuizItem[]; game: GameItem[] };
-type Panel = null | "examples" | "quiz" | "game";
+type Panel = null | "examples" | "quiz" | "game" | "diagram";
 /** A Gemara quote approved by the expert, stored with its meaning (phase B). */
 export type ClassroomQuote = { text: string; tractate: string; daf: string; amud: string };
 
@@ -36,6 +36,7 @@ const COPY = {
     examples: "דוגמאות", quiz: "חידון לכיתה", game: "משחק לכיתה",
     nextExample: "הדוגמה הבאה",
     learnEx: "דוגמה ללימוד", fromGemara: "מן הגמרא",
+    diagram: "תרשים", diagramTag: "תרשים ללימוד",
     source: (q: ClassroomQuote) => `מסכת ${q.tractate} דף ${q.daf} עמוד ${q.amud}`,
     question: (i: number, n: number) => `שאלה ${i} מתוך ${n}`,
     statement: (i: number, n: number) => `משפט ${i} מתוך ${n}`,
@@ -59,6 +60,7 @@ const COPY = {
     examples: "Examples", quiz: "Class quiz", game: "Class game",
     nextExample: "Next example",
     learnEx: "Learning example", fromGemara: "From the Gemara",
+    diagram: "Diagram", diagramTag: "Learning diagram",
     source: (q: ClassroomQuote) => `Tractate ${q.tractate}, daf ${q.daf}, amud ${q.amud}`,
     question: (i: number, n: number) => `Question ${i} of ${n}`,
     statement: (i: number, n: number) => `Statement ${i} of ${n}`,
@@ -82,6 +84,7 @@ const COPY = {
     examples: "أمثلة", quiz: "اختبار للصف", game: "لعبة للصف",
     nextExample: "المثال التالي",
     learnEx: "مثال تعليمي", fromGemara: "من الغمارا",
+    diagram: "مخطط", diagramTag: "مخطط تعليمي",
     source: (q: ClassroomQuote) => `مسيخت ${q.tractate}، ورقة ${q.daf}، صفحة ${q.amud}`,
     question: (i: number, n: number) => `سؤال ${i} من ${n}`,
     statement: (i: number, n: number) => `جملة ${i} من ${n}`,
@@ -221,6 +224,10 @@ function StageInner({
     return () => { window.removeEventListener("keydown", onKey); document.body.dataset.classPanel = ""; };
   }, [panel]);
 
+  // An approved teaching diagram of this meaning (Gemara pilot): one more
+  // button, a full-width 16:9 panel. Meanings without one are unchanged.
+  const diagram = m ? items?.find((i) => i.m === m)?.dg : undefined;
+
   // Step by position: by meaning when the unit lists meanings, else by word.
   const goTo = (i: number) => {
     const it = items?.[i];
@@ -317,6 +324,11 @@ function StageInner({
         <button type="button" className="cs-act cs-act-ex" onClick={() => setPanel("examples")} disabled={!examples.length && !quote}>
           <ListIcon /> {c.examples}
         </button>
+        {diagram && (
+          <button type="button" className="cs-act cs-act-ex" onClick={() => setPanel("diagram")}>
+            <DiagramIcon /> {c.diagram}
+          </button>
+        )}
         <button type="button" className="cs-act cs-act-quiz" onClick={() => setPanel("quiz")} disabled={actState === "ready" && !!activity && !activity.quiz.length}>
           <QuizIcon /> {c.quiz}
         </button>
@@ -330,8 +342,9 @@ function StageInner({
       <button type="button" className="cs-nav cs-nav-next" onClick={() => hasNext && goTo(idx + 1)} disabled={!hasNext} aria-label={c.next}><Chevron /></button>
 
       {panel && (
-        <div className="cs-overlay" role="dialog" aria-modal="true">
+        <div className={`cs-overlay${panel === "diagram" ? " is-wide" : ""}`} role="dialog" aria-modal="true">
           <button type="button" className="cs-close" onClick={() => setPanel(null)} aria-label={c.close}><XIcon /></button>
+          {panel === "diagram" && diagram && <DiagramPanel dg={diagram} c={c} />}
           {panel === "examples" && <ExamplesPanel examples={examples} quote={quote ?? null} labeled={!!items?.length} word={word} c={c} />}
           {(panel === "quiz" || panel === "game") && actState !== "ready" && (
             <div className="cs-card cs-center">
@@ -384,6 +397,46 @@ function ExamplesPanel({ examples, quote, labeled, word, c }: { examples: string
       )}
     </div>
   );
+}
+
+/** A teaching diagram on a 16:9 board that fills the projector (Gemara pilot,
+ *  ורמינהו). Sizes follow the board's width, so it reads the same from the
+ *  back row on any screen. Our own wording, tagged as a learning diagram:
+ *  no quote and no source line ever appear on it. In RTL the first source
+ *  sits on the right. */
+function DiagramPanel({ dg, c }: { dg: SetDiagram; c: C }) {
+  const { nq } = useNiqqud();
+  return (
+    <div className="cs-dg" data-layout={dg.layout}>
+      <span className="cs-dg-tag">{c.diagramTag}</span>
+      <h2 className="cs-dg-title">{nq(dg.title)}</h2>
+      <p className="cs-dg-sub">{nq(dg.sub)}</p>
+      <div className="cs-dg-row">
+        <div className="cs-dg-card" data-side="a">
+          <span className="cs-dg-pill">{nq(dg.a.label)}</span>
+          {dg.a.small && <span className="cs-dg-small">{nq(dg.a.small)}</span>}
+          <span className="cs-dg-body">{nq(dg.a.text)}</span>
+        </div>
+        <div className="cs-dg-clash">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" /></svg>
+          <span>{nq(dg.clash)}</span>
+        </div>
+        <div className="cs-dg-card" data-side="b">
+          <span className="cs-dg-pill">{nq(dg.b.label)}</span>
+          {dg.b.small && <span className="cs-dg-small">{nq(dg.b.small)}</span>}
+          <span className="cs-dg-body">{nq(dg.b.text)}</span>
+        </div>
+      </div>
+      <DownArrow />
+      <div className="cs-dg-q"><b>{nq(dg.question.label)}:</b> {nq(dg.question.text)}</div>
+      <DownArrow />
+      <div className="cs-dg-next"><b>{nq(dg.next.label)}:</b> {nq(dg.next.text)}</div>
+      {dg.note && <div className="cs-dg-note">{nq(dg.note)}</div>}
+    </div>
+  );
+}
+function DownArrow() {
+  return <svg className="cs-dg-arrow" viewBox="0 0 24 24" {...S} strokeWidth={2.6} aria-hidden="true"><path d="M12 4v16M5 13l7 7 7-7" /></svg>;
 }
 
 function Summary({ score, total, c, onAgain, onNextWord, onDone }: {
@@ -500,6 +553,7 @@ function XIcon() { return <svg width="22" height="22" viewBox="0 0 24 24" {...S}
 function CheckIcon() { return <svg width="26" height="26" viewBox="0 0 24 24" {...S} strokeWidth={2.6}><path d="M20 6 9 17l-5-5" /></svg>; }
 function ListIcon() { return <svg width="26" height="26" viewBox="0 0 24 24" {...S}><path d="M8 6h13M8 12h13M8 18h13" /><circle cx="3.5" cy="6" r="1" /><circle cx="3.5" cy="12" r="1" /><circle cx="3.5" cy="18" r="1" /></svg>; }
 function QuizIcon() { return <svg width="26" height="26" viewBox="0 0 24 24" {...S}><circle cx="12" cy="12" r="9.5" /><path d="M9.3 9.2a2.8 2.8 0 0 1 5.4 1c0 1.8-2.7 2.4-2.7 4" /><path d="M12 17.6v.01" /></svg>; }
+function DiagramIcon() { return <svg width="26" height="26" viewBox="0 0 24 24" {...S}><rect x="2.5" y="3.5" width="7" height="6" rx="1.5" /><rect x="14.5" y="3.5" width="7" height="6" rx="1.5" /><rect x="6.5" y="15" width="11" height="5.5" rx="1.5" /><path d="M6 9.5v2.5h12V9.5M12 12v3" /></svg>; }
 function GameIcon() { return <svg width="26" height="26" viewBox="0 0 24 24" {...S}><rect x="2.5" y="7" width="19" height="11" rx="5.5" /><path d="M7.5 10.5v4M5.5 12.5h4" /><path d="M15.5 12h.01M18 14h.01" /></svg>; }
 function Chevron({ back }: { back?: boolean }) {
   // In RTL the "next" arrow points left; the button sits on the left edge.
@@ -629,6 +683,27 @@ const CSS = `
 .cs-spin{width:26px;height:26px;border-radius:999px;border:3px solid #D5E1DE;border-top-color:var(--teal);animation:cs-rot .9s linear infinite;display:inline-block}
 .cs-spin.big{width:54px;height:54px;border-width:5px}
 @keyframes cs-rot{to{transform:rotate(360deg)}}
+.cs-overlay.is-wide{padding:clamp(10px,2.4vh,28px) clamp(10px,1.6vw,28px)}
+.cs-overlay.is-wide .cs-close{z-index:2}
+.cs-dg{container-type:inline-size;position:relative;width:min(100%,calc((100vh - 2 * clamp(10px,2.4vh,28px)) * 16 / 9));aspect-ratio:16/9;max-height:100%;
+  background:#FBFAF7;border-radius:clamp(18px,1.6vw,32px);border:1px solid var(--line);box-shadow:0 40px 90px -40px rgba(15,50,60,.45);
+  padding:2.4cqw 5cqw 2.2cqw;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:1.05cqw;color:#0F3D3E;overflow:hidden;animation:cs-pop .28s cubic-bezier(.2,.9,.3,1.2)}
+.cs-dg-tag{position:absolute;top:1.6cqw;inset-inline-start:2cqw;font-size:1.4cqw;font-weight:700;color:#0E7490;background:#E3F4F2;border-radius:999px;padding:.3cqw 1.1cqw}
+.cs-dg-title{margin:0;text-align:center;font-size:5.2cqw;line-height:1.05;font-weight:800;color:var(--teal)}
+.cs-dg-sub{margin:0 auto;text-align:center;font-size:2.05cqw;line-height:1.35;font-weight:500;max-width:70cqw;text-wrap:balance}
+.cs-dg-row{display:grid;grid-template-columns:1fr 13cqw 1fr;align-items:center;gap:1.6cqw;margin-top:.6cqw}
+.cs-dg-card{background:#fff;border-radius:1.6cqw;padding:1.5cqw 2cqw;border:.14cqw solid #E3F4F2;box-shadow:0 1cqw 2.4cqw -1.3cqw rgba(15,61,62,.45);display:flex;flex-direction:column;align-items:flex-start;gap:.5cqw}
+.cs-dg-pill{background:var(--teal);color:#fff;font-weight:800;font-size:1.6cqw;padding:.35cqw 1.3cqw;border-radius:999px}
+.cs-dg-small{color:#5B6472;font-size:1.5cqw;font-weight:500}
+.cs-dg-body{font-size:3cqw;font-weight:700;line-height:1.25}
+.cs-dg-clash{display:flex;flex-direction:column;align-items:center;gap:.4cqw;color:#E0705F;font-weight:800;font-size:1.6cqw;text-align:center;line-height:1.2}
+.cs-dg-clash svg{width:5.4cqw;height:5.4cqw;filter:drop-shadow(0 .4cqw .7cqw rgba(240,138,126,.45))}
+.cs-dg-arrow{width:2.6cqw;height:2.6cqw;color:var(--teal);margin:-.3cqw auto}
+.cs-dg-q{background:#CDEFE8;border-radius:1.5cqw;padding:1.15cqw 2cqw;text-align:center;font-size:2.4cqw;font-weight:700;line-height:1.3}
+.cs-dg-q b{color:#0B6E6E}
+.cs-dg-next{border:.2cqw dashed #F3B544;background:#FFF8EA;border-radius:1.5cqw;padding:1cqw 2cqw;text-align:center;font-size:2.1cqw;font-weight:600;line-height:1.3}
+.cs-dg-next b{color:#B45309}
+.cs-dg-note{text-align:center;color:#5B6472;font-size:1.5cqw;font-weight:500;margin-top:.3cqw}
 @media (max-width:820px){.cs-main{grid-template-columns:1fr;text-align:center;justify-items:center;padding:0 56px}.cs-word-row{justify-content:center}.cs-pic{width:min(70vw,34vh)}
   .cs-top{grid-template-columns:1fr auto}.cs-dots{display:none}.cs-tiles,.cs-tf{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){.cs-root *{animation:none!important;transition:none!important}}
