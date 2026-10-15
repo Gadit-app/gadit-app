@@ -103,12 +103,14 @@ export async function GET(req: NextRequest) {
     }
 
     // Image
-    let image: "cached" | "generated" | "error" = "error";
+    let image: "cached" | "generated" | "skipped" | "error" = "error";
     let imgError: string | undefined;
     try {
       const img = await generateClassroomImage({ word, meaning: resolved.meaning, lang, set: { id: tSet }, force, admin: true });
       if (img.status === "cached") image = "cached";
       else if (img.status === "generated") image = "generated";
+      // No picture by the unit's setting or the Gemara sensitive-terms list.
+      else if (img.status === "skipped") image = "skipped";
       else { image = "error"; imgError = img.error; }
     } catch (e) {
       imgError = String(e).slice(0, 200);

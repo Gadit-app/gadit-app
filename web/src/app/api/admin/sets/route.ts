@@ -109,8 +109,8 @@ export async function POST(req: NextRequest) {
   if (action === "image" || action === "both") {
     const img = await generateClassroomImage({ word, meaning: resolved.meaning, lang, set, force: true, admin: true });
     imageStatus = img.status;
-    if (img.status !== "error") imageUrl = img.url;
-    else return NextResponse.json({ error: "image_failed", detail: img.error }, { status: 502 });
+    if (img.status === "cached" || img.status === "generated") imageUrl = img.url;
+    else if (img.status === "error") return NextResponse.json({ error: "image_failed", detail: img.error }, { status: 502 });
   }
 
   if (action === "examples" || action === "both") {

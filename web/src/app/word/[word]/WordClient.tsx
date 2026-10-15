@@ -33,7 +33,7 @@ import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
-import { getWordSet, classroomDef, registerWordSet, isCurriculumSetId, type WordSet } from "@/lib/word-sets";
+import { getWordSet, classroomDef, registerWordSet, isCurriculumSetId, isGemaraSet, setItems, type WordSet, type SetExtras } from "@/lib/word-sets";
 import { AppearancePicker } from "@/components/AppearancePicker";
 import VoiceInput from "@/components/VoiceInput";
 import { useHref, wordPath } from "@/lib/href";
@@ -790,18 +790,28 @@ export function WordClient({
     user.getIdToken()
       .then((tk) => fetch(`/api/curriculum-set?id=${encodeURIComponent(setId)}`, { headers: { Authorization: `Bearer ${tk}` } }))
       .then((r) => (r.ok ? r.json() : null))
-      .then((d: { set?: WordSet; defs?: Record<string, string> } | null) => {
+      .then((d: ({ set?: WordSet; defs?: Record<string, string> } & SetExtras) | null) => {
         if (!alive || !d?.set) return;
-        registerWordSet(d.set, d.defs ?? {});
+        registerWordSet(d.set, d.defs ?? {}, { items: d.items, visuals: d.visuals, locked: d.locked });
         setCurLoaded((n) => n + 1);
       })
       .catch(() => {});
     return () => { alive = false; };
   }, [setId, user]);
   const wordSet = setId ? getWordSet(setId) : undefined;
-  const setIdx = wordSet
-    ? wordSet.words.findIndex((w) => w.trim().toLowerCase() === initialWord.trim().toLowerCase())
-    : -1;
+  // A unit that lists meanings (Gemara phase A): the position is the meaning
+  // id in the address (?m=), never shown; the word on screen stays plain.
+  const meaningParam = searchParams?.get("m")?.trim() || "";
+  const items = wordSet ? setItems(setId) : undefined;
+  const setIdx = !wordSet
+    ? -1
+    : items
+      ? (() => {
+          const byM = meaningParam ? items.findIndex((i) => i.m === meaningParam) : -1;
+          return byM >= 0 ? byM : items.findIndex((i) => i.w.trim().toLowerCase() === initialWord.trim().toLowerCase());
+        })()
+      : wordSet.words.findIndex((w) => w.trim().toLowerCase() === initialWord.trim().toLowerCase());
+  const currentM = items && setIdx >= 0 ? items[setIdx].m : undefined;
   // Closing the projector goes back to the unit list it was opened from
   // (Gadi 2026-10-04), or to the word's dictionary page when the teacher
   // switched to present mode from here.
@@ -815,20 +825,30 @@ export function WordClient({
     if (setId && openedPresent) return goBackOr(router, href("/sets"));
     setPresent(false);
   };
-  const goToSetWord = (w: string) =>
-    router.push(href(`/word/${encodeURIComponent(w)}?present=1&set=${encodeURIComponent(setId)}`));
+  const goToSetWord = (w: string, m?: string) =>
+    router.push(href(`/word/${encodeURIComponent(w)}?present=1&set=${encodeURIComponent(setId)}${m ? `&m=${encodeURIComponent(m)}` : ""}`));
+  // Step to a position in the unit (by meaning when the unit lists meanings).
+  const goToSetIndex = (i: number) => {
+    if (!wordSet) return;
+    if (items) { const it = items[i]; if (it) goToSetWord(it.w, it.m); }
+    else if (wordSet.words[i] !== undefined) goToSetWord(wordSet.words[i]);
+  };
   // Classroom mode: a set word shown on the projector. Show ONE relevant
   // definition (Gadi's curated one when we have it, else the first
   // meaning) plus an auto-generated picture, never the full multi-meaning
   // result, so students see the subject-relevant sense only.
   const classroomMode = present && !!wordSet && setIdx >= 0;
+  // Gemara on the projector (phase A): the unit's own definition is all the
+  // screen shows, so the general dictionary is not asked (it read Aramaic as
+  // modern Hebrew, איתמר as a first name). Other subjects: unchanged.
+  const gemaraStage = classroomMode && isGemaraSet(wordSet) && !!classroomDef(setId, initialWord, currentM);
   useEffect(() => {
     if (!wordSet || setIdx < 0) return;
     function onKey(e: KeyboardEvent) {
       if (!wordSet) return;
       if (document.body.dataset.classPanel === "open") return;
-      if (e.key === "ArrowRight" && setIdx < wordSet.words.length - 1) goToSetWord(wordSet.words[setIdx + 1]);
-      else if (e.key === "ArrowLeft" && setIdx > 0) goToSetWord(wordSet.words[setIdx - 1]);
+      if (e.key === "ArrowRight" && setIdx < wordSet.words.length - 1) goToSetIndex(setIdx + 1);
+      else if (e.key === "ArrowLeft" && setIdx > 0) goToSetIndex(setIdx - 1);
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -921,7 +941,8 @@ export function WordClient({
   // line above the result. State lives on the client; the actual
   // counter is in localStorage.
   const [anonSearchesLeft, setAnonSearchesLeft] = useState<number | null>(null);
-  const [imageUrl, setImageUrl] = useState<string | undefined>();
+  // null = the word has no picture by its unit's setting (projector only).
+  const [imageUrl, setImageUrl] = useState<string | null | undefined>();
   const [imageGenerating, setImageGenerating] = useState(false);
   // Kids Mode: a picture per meaning, keyed by meaning index, shown inline
   // under each definition. Adult mode never fills this.
@@ -1073,7 +1094,7 @@ export function WordClient({
   const [classProgress, setClassProgress] = useState<ClassProgress | null>(null);
   const [classHit, setClassHit] = useState<ClassMilestoneHit | null>(null);
   const countedWordRef = useRef<string>("");
-  const resultWord = result && (result.meanings?.length ?? 0) > 0 ? result.word : "";
+  const resultWord = result && (result.meanings?.length ?? 0) > 0 ? result.word : gemaraStage ? initialWord : "";
   useEffect(() => {
     if (!resultWord) return;
     const inSchool = !!classroomCode || (!!user && !!schoolId);
@@ -1109,6 +1130,13 @@ export function WordClient({
     // this gate never blanks an SEO landing. authLoading is in the deps so the
     // effect re-runs the moment auth settles.
     if (authLoading) return;
+    if (gemaraStage) {
+      setResult(null);
+      setLoading(false);
+      setErrorMsg("");
+      setImageUrl(undefined);
+      return;
+    }
     const key = `${initialWord}::${user?.uid ?? "anon"}`;
     if (fetchedFor.current === key) return;
 
@@ -1432,7 +1460,7 @@ export function WordClient({
     // races the first's). plan is read inside run() via the
     // surrounding closure; promptLogin via promptLoginRef.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialWord, lang, user, authLoading, contextSentence, initialResult, preloadLang]);
+  }, [initialWord, lang, user, authLoading, contextSentence, initialResult, preloadLang, gemaraStage, currentM]);
 
   // Classroom mode: auto-generate the picture so the word shows WITH its
   // image by default on the projector, no click. Prompts with the curated
@@ -1440,11 +1468,12 @@ export function WordClient({
   useEffect(() => {
     // Complete result only: mid-stream result.word is a partial prefix
     // ("main" for "main idea"), which drew a generic dictionary picture.
-    if (!classroomMode || loading || !result || imageUrl || imageGenerating || !user) return;
-    const def = classroomDef(setId, initialWord) ?? result.meanings[0]?.meaning ?? "";
-    void handleGenerate({ meaning: def, example: result.meanings[0]?.examples?.[0] ?? "" });
+    // imageUrl === null: the unit has no picture for this word (phase A).
+    if (!classroomMode || loading || (!result && !gemaraStage) || imageUrl || imageUrl === null || imageGenerating || !user) return;
+    const def = classroomDef(setId, initialWord, currentM) ?? result?.meanings[0]?.meaning ?? "";
+    void handleGenerate({ meaning: def, example: result?.meanings[0]?.examples?.[0] ?? "" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [classroomMode, loading, result, imageUrl, imageGenerating, user]);
+  }, [classroomMode, loading, result, imageUrl, imageGenerating, user, gemaraStage, currentM]);
 
   // Kids Mode: generate a picture for EACH meaning, shown inline under its
   // definition with no "Generate" click. Sequential + silent: the first kid
@@ -1589,16 +1618,17 @@ export function WordClient({
   // meaning so the cache key lines up with the admin warm-set. Best
   // effort: on empty/failure we keep the general define examples.
   useEffect(() => {
-    if (!classroomMode || !result) {
+    if (!classroomMode || (!result && !gemaraStage)) {
       setClassroomExamples([]);
       return;
     }
     let cancelled = false;
-    const meaning = classroomDef(setId, initialWord) ?? result.meanings[0]?.meaning ?? "";
+    const meaning = classroomDef(setId, initialWord, currentM) ?? result?.meanings[0]?.meaning ?? "";
     const exLang = wordSet?.lang ?? lang;
     const params = new URLSearchParams({ word: initialWord, uiLang: exLang });
     if (setId) params.set("set", setId);
     if (meaning) params.set("meaning", meaning);
+    if (currentM) params.set("m", currentM);
     fetch(`/api/classroom-examples?${params.toString()}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((d: { examples?: string[] } | null) => {
@@ -1613,13 +1643,13 @@ export function WordClient({
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [classroomMode, initialWord, setId, result]);
+  }, [classroomMode, initialWord, setId, result, gemaraStage, currentM]);
 
   // ── Action handlers ───────────────────────────────────────────
   async function handleGenerate(opts?: { meaning?: string; example?: string; silent?: boolean }) {
     // A student on a class code has no account; the server unlocks the
     // picture on the school's plan during class hours.
-    if (!result || (!user && !classroomCode)) {
+    if ((!result && !gemaraStage) || (!user && !classroomCode)) {
       if (!opts?.silent) promptLogin(v2(lang, "generateImage"));
       return;
     }
@@ -1636,18 +1666,19 @@ export function WordClient({
         },
         body: JSON.stringify({
           // A set word is asked for by its own spelling in the set.
-          word: classroomMode && wordSet ? initialWord : result.word,
+          word: classroomMode && wordSet ? initialWord : result?.word ?? initialWord,
           // Classroom mode passes the curated (subject-relevant) definition
           // so the picture depicts the right sense of the word.
-          meaning: opts?.meaning ?? result.meanings[0]?.meaning ?? "",
+          meaning: opts?.meaning ?? result?.meanings[0]?.meaning ?? "",
           // First example sentence anchors the image prompt to a real
           // scene — biggest win for abstract words ("חוויה", "תקווה")
           // that have no everyday object to photograph. See
           // buildDallePrompt comment for the why.
-          example: opts?.example ?? result.meanings[0]?.examples?.[0] ?? "",
+          example: opts?.example ?? result?.meanings[0]?.examples?.[0] ?? "",
           uiLang: lang,
           // Projector word-set picture in the house style, per set level.
           setId: classroomMode && wordSet ? wordSet.id : undefined,
+          ...(classroomMode && currentM ? { m: currentM } : {}),
           ...(classroomCode ? { cls: classroomCode } : {}),
           // Kids Mode → server swaps to the modern-flat illustration
           // prompt (Style B, locked 2026-06-19) and stores the result
@@ -1682,8 +1713,9 @@ export function WordClient({
         console.error("[generate-image] failed:", res.status, bodyJson);
         return;
       }
-      const data = (await res.json()) as { url?: string };
+      const data = (await res.json()) as { url?: string | null; skipped?: boolean };
       if (data.url) setImageUrl(data.url);
+      else if (data.skipped) setImageUrl(null);
     } catch (e) {
       console.error("generate-image:", e);
       if (opts?.silent) return;
@@ -2109,7 +2141,7 @@ export function WordClient({
                 type="button"
                 aria-label="Previous word"
                 disabled={setIdx <= 0}
-                onClick={() => goToSetWord(wordSet.words[setIdx - 1])}
+                onClick={() => goToSetIndex(setIdx - 1)}
                 style={{ width: 34, height: 34, borderRadius: 999, border: "none", background: setIdx <= 0 ? "#F3F4F6" : "#0EA5A5", color: setIdx <= 0 ? "#9CA3AF" : "#fff", cursor: setIdx <= 0 ? "default" : "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
@@ -2121,7 +2153,7 @@ export function WordClient({
                 type="button"
                 aria-label="Next word"
                 disabled={setIdx >= wordSet.words.length - 1}
-                onClick={() => goToSetWord(wordSet.words[setIdx + 1])}
+                onClick={() => goToSetIndex(setIdx + 1)}
                 style={{ width: 34, height: 34, borderRadius: 999, border: "none", background: setIdx >= wordSet.words.length - 1 ? "#F3F4F6" : "#0EA5A5", color: setIdx >= wordSet.words.length - 1 ? "#9CA3AF" : "#fff", cursor: setIdx >= wordSet.words.length - 1 ? "default" : "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
@@ -2343,22 +2375,25 @@ export function WordClient({
             </button>
           </div>
         )}
-        {result && (classroomMode && wordSet ? (
+        {classroomMode && wordSet && (result || gemaraStage) ? (
           <ClassroomStage
-            word={result.word}
-            definition={classroomDef(setId, initialWord) ?? result.meanings[0]?.meaning ?? ""}
+            // Gemara: the unit's spelling, not the dictionary's correction.
+            word={isGemaraSet(wordSet) || !result ? initialWord : result.word}
+            definition={classroomDef(setId, initialWord, currentM) ?? result?.meanings[0]?.meaning ?? ""}
             imageUrl={imageUrl ?? null}
             imageGenerating={imageGenerating}
-            examples={classroomExamples.length ? classroomExamples : result.meanings[0]?.examples ?? []}
+            examples={classroomExamples.length ? classroomExamples : result?.meanings[0]?.examples ?? []}
             set={wordSet}
             idx={setIdx}
+            items={items}
+            m={currentM}
             lang={lang}
             onNavigate={goToSetWord}
             onExit={exitPresent}
             onSearch={(q) => router.push(href(`/word/${encodeURIComponent(q)}?present=1`))}
             progress={classProgress}
           />
-        ) : (
+        ) : result ? (
           <ResultView
             result={displayResult ?? result}
             streaming={loading}
@@ -2367,7 +2402,7 @@ export function WordClient({
             onToggleNiqqud={toggleNiqqud}
             plan={plan}
             classroomInSession={classroomInSession}
-            imageUrl={imageUrl}
+            imageUrl={imageUrl ?? undefined}
             imageGenerating={imageGenerating}
             kidsImages={kidsImages}
             kidsImagesLoading={kidsImgLoading}
@@ -2396,7 +2431,7 @@ export function WordClient({
               });
             }}
           />
-        ))}
+        ) : null}
 
         {/* HomeFooter intentionally omitted on /word pages, the V2
             navy footer clashes with the cream Wordbook surface. A

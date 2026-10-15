@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom, IMAGE_MODEL, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 import { recordActivity } from "@/lib/activity-log";
-import { curatedImageHint, classroomDef } from "@/lib/word-sets";
+import { curatedImageHint, classroomDef, classroomItem, isGemaraSet, sameSetWord } from "@/lib/word-sets";
 import { loadWordSet } from "@/lib/curriculum-sets";
 import { generateClassroomImage } from "@/lib/classroom-image";
 import { classroomAccess } from "@/lib/classroom-access";
@@ -139,7 +139,7 @@ export async function englishBrief(word: string, meaning: string, example: strin
 
 export async function POST(req: NextRequest) {
   try {
-    const { word, meaning, uiLang, example, kidsMode, setId, cls } = await req.json();
+    const { word, meaning, uiLang, example, kidsMode, setId, cls, m } = await req.json();
 
     if (!word?.trim() || !meaning?.trim()) {
       return NextResponse.json({ error: "word and meaning required" }, { status: 400 });
@@ -170,13 +170,27 @@ export async function POST(req: NextRequest) {
     // counted against the teacher's monthly image quota.
     if (typeof setId === "string" && setId) {
       const set = await loadWordSet(setId);
-      const w = String(word).trim();
-      if (set && set.words.some((x) => x.trim().toLowerCase() === w.toLowerCase())) {
-        const img = await generateClassroomImage({ word: w, meaning: classroomDef(set.id, w) ?? meaning, lang: set.lang, set, uid: userInfo.userId });
+      const asked = String(word).trim();
+      // A meaning of a unit that lists meanings (Gemara phase A): its own
+      // word, definition and picture key.
+      const item = set ? classroomItem(set.id, typeof m === "string" ? m : null) : undefined;
+      // Gemara: the word as spelled in the unit, ignoring niqqud and quote marks.
+      const w = item?.w ?? (set && isGemaraSet(set) ? set.words.find((x) => sameSetWord(x, asked)) : undefined) ?? asked;
+      if (set && (item || set.words.some((x) => x.trim().toLowerCase() === w.toLowerCase()))) {
+        const img = await generateClassroomImage({
+          word: w,
+          meaning: item?.d ?? classroomDef(set.id, w) ?? meaning,
+          lang: set.lang,
+          set,
+          uid: userInfo.userId,
+          ...(item ? { item: { m: item.m, rev: item.rev } } : {}),
+        });
         if (img.status === "error") {
           console.error("[generate-image] classroom:", img.error);
           return NextResponse.json({ error: "image_generation_failed" }, { status: 502 });
         }
+        // No picture by the unit's setting (or a sensitive Gemara term).
+        if (img.status === "skipped") return NextResponse.json({ url: null, skipped: true });
         return NextResponse.json({ url: img.url, cached: img.status === "cached" });
       }
       // A projector request for a word that isn't in the set (a partial

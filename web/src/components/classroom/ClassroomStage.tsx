@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { KidsCelebration } from "@/components/design/KidsCelebration";
 import { TTSButton } from "@/components/design/TTSButton";
 import { ClassProgressChip, type ClassProgress } from "@/components/design/ClassMilestone";
-import type { WordSet } from "@/lib/word-sets";
+import type { WordSet, SetItem } from "@/lib/word-sets";
 import { NiqqudProvider, NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
 import { useAuth } from "@/lib/auth-context";
 
@@ -116,8 +116,11 @@ type StageProps = {
   examples: string[];
   set: WordSet;
   idx: number;
+  /** A unit that lists meanings (Gemara phase A): position and links by meaning id. */
+  items?: SetItem[];
+  m?: string;
   lang: string;
-  onNavigate: (w: string) => void;
+  onNavigate: (w: string, m?: string) => void;
   onExit: () => void;
   onSearch: (q: string) => void;
   progress?: ClassProgress | null;
@@ -135,7 +138,7 @@ export function ClassroomStage(props: StageProps) {
 }
 
 function StageInner({
-  word, definition, imageUrl, imageGenerating, examples, set, idx, lang, onNavigate, onExit, onSearch, progress,
+  word, definition, imageUrl, imageGenerating, examples, set, idx, items, m, lang, onNavigate, onExit, onSearch, progress,
 }: {
   word: string;
   definition: string;
@@ -144,8 +147,10 @@ function StageInner({
   examples: string[];
   set: WordSet;
   idx: number;
+  items?: SetItem[];
+  m?: string;
   lang: string;
-  onNavigate: (w: string) => void;
+  onNavigate: (w: string, m?: string) => void;
   onExit: () => void;
   onSearch: (q: string) => void;
   progress?: ClassProgress | null;
@@ -168,6 +173,7 @@ function StageInner({
     setActState("loading");
     try {
       const p = new URLSearchParams({ set: set.id, word, meaning: definition });
+      if (m) p.set("m", m);
       const r = await fetch(`/api/class-activity?${p.toString()}`);
       if (!r.ok) throw new Error(String(r.status));
       const d = (await r.json()) as Activity;
@@ -176,7 +182,7 @@ function StageInner({
     } catch {
       setActState("error");
     }
-  }, [set.id, word, definition]);
+  }, [set.id, word, definition, m]);
 
   // Prepare the activities as soon as the word is on screen, so the
   // buttons open instantly when the teacher taps them.
@@ -194,7 +200,13 @@ function StageInner({
     return () => { window.removeEventListener("keydown", onKey); document.body.dataset.classPanel = ""; };
   }, [panel]);
 
-  const go = (w: string) => { setPanel(null); onNavigate(w); };
+  // Step by position: by meaning when the unit lists meanings, else by word.
+  const goTo = (i: number) => {
+    const it = items?.[i];
+    setPanel(null);
+    if (it) onNavigate(it.w, it.m);
+    else if (set.words[i] !== undefined) onNavigate(set.words[i]);
+  };
 
   // What the teacher projects feeds the principal dashboard (Gadi
   // 2026-10-10): each word shown, and each class quiz or game opened. The
@@ -206,10 +218,10 @@ function StageInner({
     void user.getIdToken().then((t) => fetch("/api/schools/projection", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${t}` },
-      body: JSON.stringify({ kind, word, setId: set.id, subject: set.subject, title: set.title, grade: set.grade ?? "" }),
+      body: JSON.stringify({ kind, word, setId: set.id, subject: set.subject, title: set.title, grade: set.grade ?? "", ...(m ? { m } : {}) }),
     })).catch(() => {});
-  }, [user, word, set.id, set.subject, set.title, set.grade]);
-  useEffect(() => { report("word"); }, [word, set.id, user]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user, word, set.id, set.subject, set.title, set.grade, m]);
+  useEffect(() => { report("word"); }, [word, set.id, user, m]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (panel === "quiz" || panel === "game") report(panel);
   }, [panel]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -234,7 +246,7 @@ function StageInner({
               aria-label={w}
               aria-current={i === idx ? "step" : undefined}
               title={w}
-              onClick={() => i !== idx && go(w)}
+              onClick={() => i !== idx && goTo(i)}
             />
           ))}
           <span className="cs-pos">{c.wordOf(idx + 1, total)}</span>
@@ -293,8 +305,8 @@ function StageInner({
       </div>
 
       {/* Word-set navigation */}
-      <button type="button" className="cs-nav cs-nav-prev" onClick={() => hasPrev && go(set.words[idx - 1])} disabled={!hasPrev} aria-label={c.prev}><Chevron back /></button>
-      <button type="button" className="cs-nav cs-nav-next" onClick={() => hasNext && go(set.words[idx + 1])} disabled={!hasNext} aria-label={c.next}><Chevron /></button>
+      <button type="button" className="cs-nav cs-nav-prev" onClick={() => hasPrev && goTo(idx - 1)} disabled={!hasPrev} aria-label={c.prev}><Chevron back /></button>
+      <button type="button" className="cs-nav cs-nav-next" onClick={() => hasNext && goTo(idx + 1)} disabled={!hasNext} aria-label={c.next}><Chevron /></button>
 
       {panel && (
         <div className="cs-overlay" role="dialog" aria-modal="true">
@@ -310,10 +322,10 @@ function StageInner({
             </div>
           )}
           {panel === "quiz" && actState === "ready" && activity && (
-            <QuizPanel key={`q-${word}`} items={activity.quiz} c={c} onNextWord={hasNext ? () => go(set.words[idx + 1]) : undefined} onDone={() => setPanel(null)} />
+            <QuizPanel key={`q-${word}${m ?? ""}`} items={activity.quiz} c={c} onNextWord={hasNext ? () => goTo(idx + 1) : undefined} onDone={() => setPanel(null)} />
           )}
           {panel === "game" && actState === "ready" && activity && (
-            <GamePanel key={`g-${word}`} items={activity.game} c={c} onNextWord={hasNext ? () => go(set.words[idx + 1]) : undefined} onDone={() => setPanel(null)} />
+            <GamePanel key={`g-${word}${m ?? ""}`} items={activity.game} c={c} onNextWord={hasNext ? () => goTo(idx + 1) : undefined} onDone={() => setPanel(null)} />
           )}
         </div>
       )}

@@ -1,6 +1,8 @@
 import { getAdminDb } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom, TEXT_MODEL, SMART_MODEL } from "@/lib/ai-cost";
-import { getWordSet, registerWordSet, isCurriculumSetId, type WordSet } from "@/lib/word-sets";
+import { getWordSet, registerWordSet, isCurriculumSetId, isGemaraSet, type WordSet, type SetExtras, type SetItem, type SetVisual } from "@/lib/word-sets";
+import { isMeaningId } from "@/lib/classroom-keys";
+import { devDryAi } from "@/lib/dev-safety";
 import { curTopic, curSubject, curLevelHe, gradeLabel, SUBJECT_LANG, zaTopic, arTopic, arSubject, arLevel, arGradeLabel } from "@/lib/curriculum-catalog";
 import zaSets from "@/lib/curriculum-sets-za.json";
 
@@ -11,7 +13,7 @@ import zaSets from "@/lib/curriculum-sets-za.json";
 // be generated, so the total cost is bounded (~1,600 Hebrew and ~800 Arab
 // education topics, ~1¢ each).
 
-export type CurriculumSetDoc = { set: WordSet; defs: Record<string, string> };
+export type CurriculumSetDoc = { set: WordSet; defs: Record<string, string> } & SetExtras;
 
 const VERSION = "v1";
 const LANG_NAME: Record<string, string> = {
@@ -24,6 +26,8 @@ function clean(s: unknown, max: number): string {
 }
 
 async function chat(sys: string, user: string, model = TEXT_MODEL, admin = false): Promise<Array<{ w?: unknown; d?: unknown }>> {
+  // Local test mode never generates a unit (tests use units seeded in the emulator).
+  if (devDryAi()) throw new Error("dry_no_generate");
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
@@ -142,6 +146,46 @@ function zaDoc(id: string): CurriculumSetDoc | null {
   return { set: { id, subject: t.s, title: t.t, grade: `Grade ${t.g}`, lang: "en", words: w.words }, defs: w.defs };
 }
 
+const VISUAL_MODES = new Set(["auto", "none", "hint"]);
+function cleanVisual(v: unknown): SetVisual | undefined {
+  const o = v as { mode?: unknown; hint?: unknown } | null;
+  if (!o || !VISUAL_MODES.has(String(o.mode))) return undefined;
+  const hint = typeof o.hint === "string" ? o.hint.trim().slice(0, 600) : "";
+  if (o.mode === "hint") return hint ? { mode: "hint", hint } : undefined;
+  return { mode: o.mode as "auto" | "none" };
+}
+
+/** The optional phase-A fields of a stored unit, validated. Absent fields stay
+ *  absent, so a unit without them is returned exactly as before. */
+function readExtras(raw: Record<string, unknown>): SetExtras {
+  const out: SetExtras = {};
+  if (Array.isArray(raw.items)) {
+    const seen = new Set<string>();
+    const items: SetItem[] = [];
+    for (const x of raw.items as Array<Record<string, unknown>>) {
+      const m = x?.m;
+      const w = clean(x?.w, 40);
+      const d = clean(x?.d, 300);
+      if (!isMeaningId(m) || seen.has(m) || !w || !d) continue;
+      seen.add(m);
+      const rev = Number.isInteger(x.rev) && (x.rev as number) > 0 ? (x.rev as number) : 1;
+      const v = cleanVisual(x.v);
+      items.push({ m, w, d, rev, ...(v ? { v } : {}) });
+    }
+    if (items.length) out.items = items;
+  }
+  if (raw.visuals && typeof raw.visuals === "object") {
+    const visuals: Record<string, SetVisual> = {};
+    for (const [w, v] of Object.entries(raw.visuals as Record<string, unknown>)) {
+      const cv = cleanVisual(v);
+      if (cv) visuals[w.trim()] = cv;
+    }
+    if (Object.keys(visuals).length) out.visuals = visuals;
+  }
+  if (raw.locked === true) out.locked = true;
+  return out;
+}
+
 export async function getCurriculumSetDoc(id: string, create = false, admin = false): Promise<CurriculumSetDoc | null> {
   const isZa = id.startsWith("cur-za-");
   if (!isCurriculumSetId(id) || !(isZa ? zaTopic(id) : arTopic(id) ?? curTopic(id))) return null;
@@ -153,8 +197,20 @@ export async function getCurriculumSetDoc(id: string, create = false, admin = fa
     doc = await generate(id, admin);
     if (doc) await ref.set({ ...doc, version: VERSION, at: new Date().toISOString() });
   }
-  if (doc) registerWordSet(doc.set, doc.defs);
-  return doc ? { set: doc.set, defs: doc.defs } : null;
+  if (!doc) return null;
+  const extras = snap.exists ? readExtras(snap.data() as Record<string, unknown>) : {};
+  let set = doc.set;
+  let defs = doc.defs;
+  // A unit that lists meanings: its words follow the meanings (a word can
+  // appear twice), and a word's plain definition is its first meaning, for
+  // every code path that knows only the word.
+  if (extras.items) {
+    set = { ...set, words: extras.items.map((i) => i.w) };
+    defs = { ...defs };
+    for (const i of [...extras.items].reverse()) defs[i.w] = i.d;
+  }
+  registerWordSet(set, defs, extras);
+  return { set, defs, ...extras };
 }
 
 /** Any set by id: hand-made sets from code, curriculum sets from Firestore.
@@ -165,10 +221,14 @@ export async function loadWordSet(id: string): Promise<WordSet | undefined> {
   return getWordSet(id);
 }
 
-/** Admin edit (Gadi 2026-10-04): replace a unit's words and definitions. */
-export async function saveCurriculumSet(id: string, rows: Array<{ w: string; d: string }>): Promise<CurriculumSetDoc | null> {
+/** Admin edit (Gadi 2026-10-04): replace a unit's words and definitions.
+ *  A locked unit (approved content) is saved only with `force`; a unit that
+ *  lists meanings (`items`) is managed by script, never by this editor. */
+export async function saveCurriculumSet(id: string, rows: Array<{ w: string; d: string }>, opts: { force?: boolean } = {}): Promise<CurriculumSetDoc | null> {
   const cur = await getCurriculumSetDoc(id, true, true);
   if (!cur) return null;
+  if (cur.items) throw new Error("items_managed");
+  if (cur.locked && !opts.force) throw new Error("locked");
   const defs: Record<string, string> = {};
   for (const r of rows) {
     const w = clean(r.w, 40);
@@ -178,14 +238,28 @@ export async function saveCurriculumSet(id: string, rows: Array<{ w: string; d: 
   const words = Object.keys(defs);
   if (!words.length) throw new Error("no_words");
   const doc: CurriculumSetDoc = { set: { ...cur.set, words }, defs };
-  await getAdminDb().collection("curriculumSets").doc(id).set({ ...doc, version: VERSION, editedAt: new Date().toISOString() });
-  registerWordSet(doc.set, doc.defs);
-  return doc;
+  const ref = getAdminDb().collection("curriculumSets").doc(id);
+  if (isGemaraSet(cur.set)) {
+    // Gemara: keep the unit's other fields (qa, visuals, locked) instead of
+    // writing the document from scratch; set and defs are replaced whole.
+    await ref.set({ set: doc.set, defs: doc.defs, version: VERSION, editedAt: new Date().toISOString() }, { mergeFields: ["set", "defs", "version", "editedAt"] });
+  } else {
+    await ref.set({ ...doc, version: VERSION, editedAt: new Date().toISOString() });
+  }
+  const extras: SetExtras = { ...(cur.visuals ? { visuals: cur.visuals } : {}), ...(cur.locked ? { locked: true } : {}) };
+  registerWordSet(doc.set, doc.defs, extras);
+  return { ...doc, ...extras };
 }
 
 /** Admin: throw away a unit's words and generate them again. */
 export async function regenerateCurriculumSet(id: string): Promise<CurriculumSetDoc | null> {
   if (!isCurriculumSetId(id) || !(curTopic(id) || zaTopic(id) || arTopic(id))) return null;
+  // Never throw away approved content: a locked unit or one that lists meanings.
+  const existing = await getAdminDb().collection("curriculumSets").doc(id).get();
+  if (existing.exists) {
+    const x = readExtras(existing.data() as Record<string, unknown>);
+    if (x.locked || x.items) throw new Error("locked");
+  }
   await getAdminDb().collection("curriculumSets").doc(id).delete();
   return getCurriculumSetDoc(id, true, true);
 }

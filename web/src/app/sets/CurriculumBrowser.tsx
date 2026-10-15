@@ -8,7 +8,7 @@ import { canStepBack } from "@/lib/back-nav";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { SCHOOL_TYPES, CURRICULA, type Curriculum } from "@/lib/school-levels";
-import { WORD_SETS, getWordSet, registerWordSet, type WordSet } from "@/lib/word-sets";
+import { WORD_SETS, getWordSet, registerWordSet, setItems, type WordSet, type SetExtras } from "@/lib/word-sets";
 import {
   CATALOG_IDS, catalogView, readySetsOf, subjectIcon, categoryIcon,
   type CatalogId, type CatalogView, type ViewSubject, type ViewTopic,
@@ -650,9 +650,9 @@ function TopicRow({ t, open, onToggle }: { t: ViewTopic; open: boolean; onToggle
     user.getIdToken()
       .then((tk) => fetch(`/api/curriculum-set?id=${encodeURIComponent(t.id)}`, { headers: { Authorization: `Bearer ${tk}` } }))
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then((d: { set: WordSet; defs: Record<string, string> }) => {
+      .then((d: { set: WordSet; defs: Record<string, string> } & SetExtras) => {
         if (!alive) return;
-        registerWordSet(d.set, d.defs);
+        registerWordSet(d.set, d.defs, { items: d.items, visuals: d.visuals, locked: d.locked });
         setSet(d.set);
       })
       .catch(() => alive && setFailed(true));
@@ -687,9 +687,17 @@ function TopicRow({ t, open, onToggle }: { t: ViewTopic; open: boolean; onToggle
 
 function WordChips({ set }: { set: WordSet }) {
   const href = useHref();
+  const items = setItems(set.id);
   return (
     <div className="cb-chips" dir={set.lang === "he" || set.lang === "ar" || set.lang === "fa" ? "rtl" : "ltr"}>
-      {set.words.map((w) => (
+      {items
+        ? items.map((it) => (
+            // A unit that lists meanings: one chip per meaning (Gemara phase A).
+            <Link key={it.m} href={href(`/word/${encodeURIComponent(it.w)}?present=1&set=${encodeURIComponent(set.id)}&m=${encodeURIComponent(it.m)}`)} className="cb-chip" onClick={() => rememberReturn(set.id)}>
+              {it.w}
+            </Link>
+          ))
+        : set.words.map((w) => (
         <Link key={w} href={href(`/word/${encodeURIComponent(w)}?present=1&set=${encodeURIComponent(set.id)}`)} className="cb-chip" onClick={() => rememberReturn(set.id)}>
           {w}
         </Link>

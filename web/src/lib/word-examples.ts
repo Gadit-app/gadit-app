@@ -1,6 +1,7 @@
-import crypto from "node:crypto";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
+import { exampleCacheKey, itemExampleKey, type MeaningRef } from "@/lib/classroom-keys";
+import { devDryAi, dryExamples } from "@/lib/dev-safety";
 
 /**
  * Subject-appropriate example sentences for classroom / present mode.
@@ -61,15 +62,9 @@ export function uiLangName(uiLang: string): string {
  * Cache key for a (uiLang, word, meaning) example set. Mirrors the
  * image cache key shape so the two stay in lockstep: same trim +
  * lowercase normalisation, sha256, 24-char slice, `ex_<lang>_` prefix.
+ * Lives in lib/classroom-keys.ts (unchanged), re-exported here.
  */
-export function exampleCacheKey(word: string, meaning: string, uiLang: string): string {
-  const hash = crypto
-    .createHash("sha256")
-    .update(`${uiLang}|${word.trim().toLowerCase()}|${meaning.trim().toLowerCase()}`)
-    .digest("hex")
-    .slice(0, 24);
-  return `ex_${uiLang}_${hash}`;
-}
+export { exampleCacheKey };
 
 /** Split the model's reply into up to 3 clean example lines. */
 function parseExamples(raw: string): string[] {
@@ -141,24 +136,27 @@ export async function getOrGenerateExamples(
   meaning: string,
   uiLang: string,
   /** admin = a run from /admin: counted against the admin daily cap. */
-  opts: { generate?: boolean; force?: boolean; admin?: boolean } = {},
+  /** item: a meaning of a unit that lists meanings, keyed on its id. */
+  opts: { generate?: boolean; force?: boolean; admin?: boolean; item?: MeaningRef } = {},
 ): Promise<ExampleResult> {
   const { generate = true, force = false } = opts;
   const db = getAdminDb();
-  const key = exampleCacheKey(word, meaning, uiLang);
+  const key = opts.item ? itemExampleKey(opts.item, uiLang) : exampleCacheKey(word, meaning, uiLang);
   const ref = db.collection("exampleCache").doc(key);
 
-  if (!force) {
-    const snap = await ref.get();
-    const cached = snap.data()?.examples as string[] | undefined;
-    if (Array.isArray(cached) && cached.length > 0) {
-      return { examples: cached, cached: true, generated: false };
-    }
+  const snap = await ref.get();
+  const cached = snap.data()?.examples as string[] | undefined;
+  // Locked (approved) examples are served even when a regeneration is forced.
+  if (Array.isArray(cached) && cached.length > 0 && (!force || snap.data()?.contentLocked === true)) {
+    return { examples: cached, cached: true, generated: false };
   }
 
   if (!generate) {
     return { examples: [], cached: false, generated: false };
   }
+
+  // Local test mode: placeholder examples, nothing generated or written.
+  if (devDryAi()) return { examples: dryExamples(word), cached: false, generated: true };
 
   const examples = await generateExamples(word, meaning, uiLang, opts.admin === true);
   if (examples.length === 0) {

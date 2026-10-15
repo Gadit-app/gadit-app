@@ -55,7 +55,8 @@ export async function GET(req: NextRequest) {
 
   for (const [w, pre] of prefixes) {
     const snap = await db.collection("imageCache").where("word", "==", w).get();
-    const hits = snap.docs.filter((d) => [...pre].some((p) => d.id.startsWith(p)));
+    // A locked (approved) picture (Gemara phase A, contentLocked) is never deleted here.
+    const hits = snap.docs.filter((d) => [...pre].some((p) => d.id.startsWith(p)) && d.get("contentLocked") !== true);
     perWord[w] = hits.length;
     for (const d of hits) {
       batch.delete(d.ref);

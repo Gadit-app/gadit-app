@@ -9,7 +9,7 @@ import { adminBudgetExceeded } from "@/lib/ai-budget";
  *
  * GET  ?secret=&id=cur-…        → { set, defs, editedAt }   (generates if missing)
  * GET  ?secret=&ready=1         → { ids: [...] } units that already have words
- * POST ?secret=  { id, rows:[{w,d}] }        → save
+ * POST ?secret=  { id, rows:[{w,d}] }        → save (a locked unit needs force:true)
  * POST ?secret=  { id, action: "regen" }     → generate again from scratch
  */
 export const runtime = "nodejs";
@@ -48,14 +48,17 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const unauth = auth(req);
   if (unauth) return unauth;
-  const body = (await req.json().catch(() => ({}))) as { id?: string; action?: string; rows?: Array<{ w: string; d: string }> };
+  const body = (await req.json().catch(() => ({}))) as { id?: string; action?: string; rows?: Array<{ w: string; d: string }>; force?: boolean };
   const id = body.id ?? "";
   try {
     if (body.action === "regen" && (await adminBudgetExceeded())) return NextResponse.json({ error: "admin_budget" }, { status: 429 });
-    const doc = body.action === "regen" ? await regenerateCurriculumSet(id) : await saveCurriculumSet(id, body.rows ?? []);
+    const doc = body.action === "regen" ? await regenerateCurriculumSet(id) : await saveCurriculumSet(id, body.rows ?? [], { force: body.force === true });
     if (!doc) return NextResponse.json({ error: "not_found" }, { status: 404 });
     return NextResponse.json(doc);
   } catch (e) {
+    // Approved content (Gemara phase A): a locked unit, or one whose meanings are managed by script.
+    const msg = e instanceof Error ? e.message : String(e);
+    if (msg === "locked" || msg === "items_managed") return NextResponse.json({ error: msg }, { status: 409 });
     return NextResponse.json({ error: String(e).slice(0, 120) }, { status: 400 });
   }
 }

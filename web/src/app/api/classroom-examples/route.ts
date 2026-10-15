@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { classroomDef } from "@/lib/word-sets";
+import { classroomDef, classroomItem } from "@/lib/word-sets";
 import { loadWordSet } from "@/lib/curriculum-sets";
 import { getOrGenerateExamples } from "@/lib/word-examples";
 
@@ -16,6 +16,7 @@ import { getOrGenerateExamples } from "@/lib/word-examples";
  * USAGE:
  *   GET  /api/classroom-examples?word=<w>&set=<setId>
  *   GET  /api/classroom-examples?word=<w>&meaning=<m>&uiLang=he
+ *   &m=<meaning id> in a unit that lists meanings (Gemara phase A)
  *   POST { word, set?|meaning?, uiLang? }
  * Returns { examples: string[], cached: boolean }.
  */
@@ -26,6 +27,7 @@ async function resolve(params: {
   meaning?: string | null;
   setId?: string | null;
   uiLang?: string | null;
+  m?: string | null;
 }) {
   const word = (params.word ?? "").trim();
   if (!word) return { error: "word required", status: 400 as const };
@@ -38,6 +40,12 @@ async function resolve(params: {
   if (params.setId) {
     const set = await loadWordSet(params.setId);
     if (set && !uiLang) uiLang = set.lang;
+    // A meaning of a unit that lists meanings: its own definition and key.
+    const item = classroomItem(params.setId, params.m);
+    if (item) {
+      const res = await getOrGenerateExamples(item.w, item.d, uiLang || "he", { item: { m: item.m, rev: item.rev } });
+      return { examples: res.examples, cached: res.cached, status: 200 as const };
+    }
   }
   if (!meaning) meaning = classroomDef(params.setId, word) ?? "";
   if (!uiLang) uiLang = "he";
@@ -59,6 +67,7 @@ export async function GET(req: NextRequest) {
     meaning: sp.get("meaning"),
     setId: sp.get("set"),
     uiLang: sp.get("uiLang"),
+    m: sp.get("m"),
   });
   if ("error" in out && out.error) {
     return NextResponse.json({ error: out.error }, { status: out.status });
@@ -72,12 +81,14 @@ export async function POST(req: NextRequest) {
     meaning?: string;
     set?: string;
     uiLang?: string;
+    m?: string;
   };
   const out = await resolve({
     word: body.word,
     meaning: body.meaning,
     setId: body.set,
     uiLang: body.uiLang,
+    m: body.m,
   });
   if ("error" in out && out.error) {
     return NextResponse.json({ error: out.error }, { status: out.status });

@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { classroomDef } from "@/lib/word-sets";
+import { classroomDef, classroomItem, isGemaraSet, sameSetWord } from "@/lib/word-sets";
+import { classActivityKey, itemActivityKey } from "@/lib/classroom-keys";
+import { devDryAi, dryActivity } from "@/lib/dev-safety";
 import { loadWordSet } from "@/lib/curriculum-sets";
 import { logAiUsage, usageFrom, TEXT_MODEL } from "@/lib/ai-cost";
 
@@ -13,7 +15,9 @@ import { logAiUsage, usageFrom, TEXT_MODEL } from "@/lib/ai-cost";
  * total is bounded (~450 words); every result is cached forever in
  * Firestore classActivity/{hash}, so each word is generated once.
  *
- * GET /api/class-activity?set=<setId>&word=<w>[&meaning=<m>]
+ * GET /api/class-activity?set=<setId>&word=<w>[&meaning=<m>][&m=<meaning id>]
+ * A meaning id (unit that lists meanings, Gemara phase A) keys the activity
+ * on the meaning, shared by every unit that holds it.
  * → { quiz: QuizItem[], game: GameItem[], cached }
  */
 export const runtime = "nodejs";
@@ -89,17 +93,21 @@ Return JSON only.${lang === "ar"
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
   const setId = (sp.get("set") ?? "").trim();
-  const word = (sp.get("word") ?? "").trim();
+  const asked = (sp.get("word") ?? "").trim();
   const set = setId ? await loadWordSet(setId) : undefined;
-  if (!set || !word) return NextResponse.json({ error: "bad_params" }, { status: 400 });
-  if (!set.words.some((w) => w.trim().toLowerCase() === word.toLowerCase())) {
+  if (!set || !asked) return NextResponse.json({ error: "bad_params" }, { status: 400 });
+  const item = classroomItem(set.id, sp.get("m"));
+  // Gemara: the word as spelled in the unit, so a dictionary spelling fix
+  // (תרוץ shown as תירוץ) never fails the quiz. Other subjects: as before.
+  const word = item?.w ?? (isGemaraSet(set) ? set.words.find((w) => sameSetWord(w, asked)) : undefined) ?? asked;
+  if (!item && !set.words.some((w) => w.trim().toLowerCase() === word.toLowerCase())) {
     return NextResponse.json({ error: "not_in_set" }, { status: 404 });
   }
-  const meaning = (classroomDef(set.id, word) ?? sp.get("meaning") ?? "").trim().slice(0, 300);
+  const meaning = (item?.d ?? classroomDef(set.id, word) ?? sp.get("meaning") ?? "").trim().slice(0, 300);
   if (!meaning) return NextResponse.json({ error: "no_meaning" }, { status: 404 });
 
   const db = getAdminDb();
-  const key = crypto.createHash("sha1").update(`${VERSION}|${set.lang}|${set.id}|${word}|${meaning}`).digest("hex");
+  const key = item ? itemActivityKey({ m: item.m, rev: item.rev }, set.lang) : classActivityKey(VERSION, set.lang, set.id, word, meaning);
   const ref = db.collection("classActivity").doc(key);
   try {
     const snap = await ref.get();
@@ -108,9 +116,11 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ quiz: d.quiz, game: d.game, cached: true });
     }
   } catch { /* cache read best-effort */ }
+  // Local test mode: a placeholder activity, nothing generated or written.
+  if (devDryAi()) return NextResponse.json({ ...dryActivity(word), cached: false });
   try {
     const out = await generate(word, meaning, set.lang, set.grade ?? "", set.title);
-    try { await ref.set({ ...out, word, setId: set.id, lang: set.lang, meaning, at: new Date().toISOString() }); } catch { /* ignore */ }
+    try { await ref.set({ ...out, word, setId: set.id, lang: set.lang, meaning, ...(item ? { m: item.m, rev: item.rev } : {}), at: new Date().toISOString() }); } catch { /* ignore */ }
     return NextResponse.json({ ...out, cached: false });
   } catch (e) {
     return NextResponse.json({ error: "generate_failed", detail: String(e) }, { status: 502 });

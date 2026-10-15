@@ -36,6 +36,11 @@ const snap = all
 console.log(`Found ${snap.size} cached images${all ? "" : ` for "${word}"`}`);
 for (const doc of snap.docs) {
   const data = doc.data();
+  // A locked (approved) picture (Gemara phase A) is kept unless asked for explicitly.
+  if (data.contentLocked === true && !process.argv.includes("--include-locked")) {
+    console.log(`  keeping locked: ${doc.id}`);
+    continue;
+  }
   console.log(`  deleting cache: ${doc.id} (word: ${data.word})`);
   if (data.storagePath) {
     try {

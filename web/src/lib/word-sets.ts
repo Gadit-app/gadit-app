@@ -16,6 +16,31 @@ export type WordSet = {
   words: string[];
 };
 
+/** How a word's picture is made on the projector (Gemara phase A,
+ *  2026-10-15): drawn as today ("auto"), drawn from an approved English art
+ *  direction ("hint"), or not drawn at all ("none"). */
+export type SetVisual = { mode: "auto" | "none" | "hint"; hint?: string };
+
+/** One meaning in a unit that lists meanings (`items`, Gemara first). `m` is
+ *  a stable meaning id that never shows on screen; `w` is the word as the
+ *  student sees it, `d` the approved definition, `rev` the content revision
+ *  the picture, examples and quiz are keyed on. The same word can appear in
+ *  two items with two meanings. */
+export type SetItem = { m: string; w: string; d: string; rev?: number; v?: SetVisual };
+
+/** Optional unit fields beyond words + definitions. A unit without them
+ *  behaves exactly as before. */
+export type SetExtras = { items?: SetItem[]; visuals?: Record<string, SetVisual>; locked?: boolean };
+
+export const isGemaraSet = (set: Pick<WordSet, "subject"> | null | undefined) => set?.subject === "gemara";
+
+/** Same word for set membership in Gemara units: niqqud and cantillation
+ *  marks ignored, Hebrew gershayim and plain quotes treated alike. */
+export function normSetWord(w: string): string {
+  return w.normalize("NFD").replace(/\p{M}/gu, "").replace(/[״“”]/g, '"').replace(/[׳‘’]/g, "'").replace(/\s+/g, " ").trim().toLowerCase();
+}
+export const sameSetWord = (a: string, b: string) => normSetWord(a) === normSetWord(b);
+
 export const SET_SUBJECTS: { key: string; he: string }[] = [
   { key: "language", he: "שפה ועברית" },
   { key: "math", he: "חשבון" },
@@ -146,8 +171,10 @@ export function curatedDef(word: string): string | undefined {
  *  grade), falling back to the word-level curated definition. Use this
  *  wherever a set is known: the same word can mean different things in
  *  different lessons (Gadi 2026-10-03). */
-export function classroomDef(setId: string | null | undefined, word: string): string | undefined {
+export function classroomDef(setId: string | null | undefined, word: string, m?: string | null): string | undefined {
   const w = word.trim();
+  const item = setId && m ? classroomItem(setId, m) : undefined;
+  if (item) return item.d;
   return (setId ? SET_DEFS[setId]?.[w] ?? DYNAMIC_SETS[setId]?.defs[w] : undefined) ?? CURATED_DEFS[w];
 }
 
@@ -156,9 +183,23 @@ export function classroomDef(setId: string | null | undefined, word: string): st
 // /api/curriculum-set, the server via loadWordSet in curriculum-sets.ts)
 // registers it here, so getWordSet and classroomDef work the same for
 // generated and hand-made sets.
-const DYNAMIC_SETS: Record<string, { set: WordSet; defs: Record<string, string> }> = {};
-export function registerWordSet(set: WordSet, defs: Record<string, string>) {
-  DYNAMIC_SETS[set.id] = { set, defs };
+const DYNAMIC_SETS: Record<string, { set: WordSet; defs: Record<string, string> } & SetExtras> = {};
+export function registerWordSet(set: WordSet, defs: Record<string, string>, extras: SetExtras = {}) {
+  DYNAMIC_SETS[set.id] = { set, defs, ...extras };
+}
+/** The meanings of a unit that lists them, else undefined. */
+export function setItems(setId: string | null | undefined): SetItem[] | undefined {
+  const items = setId ? DYNAMIC_SETS[setId]?.items : undefined;
+  return items && items.length ? items : undefined;
+}
+export function classroomItem(setId: string | null | undefined, m: string | null | undefined): SetItem | undefined {
+  return m ? setItems(setId)?.find((i) => i.m === m) : undefined;
+}
+/** The picture setting of a word (or meaning) in a unit; "auto" when none. */
+export function classroomVisual(setId: string | null | undefined, word: string, m?: string | null): SetVisual {
+  const item = classroomItem(setId, m);
+  if (item?.v) return item.v;
+  return (setId ? DYNAMIC_SETS[setId]?.visuals?.[word.trim()] : undefined) ?? { mode: "auto" };
 }
 export const isCurriculumSetId = (id: string | null | undefined) => !!id && id.startsWith("cur-");
 

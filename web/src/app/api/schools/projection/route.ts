@@ -40,6 +40,8 @@ export async function POST(req: NextRequest) {
   const kind = cut(b.kind, 10);
   const word = cut(b.word, 80);
   const setId = cut(b.setId, 120);
+  // A meaning id (unit that lists meanings): two meanings of one word count apart.
+  const m = /^[a-z]{2,8}-\d{6}-s\d{1,3}$/.test(cut(b.m, 40)) ? cut(b.m, 40) : "";
   if (!KINDS.has(kind) || !word || !setId) return NextResponse.json({ error: "bad_body" }, { status: 400 });
 
   const db = getAdminDb();
@@ -49,10 +51,11 @@ export async function POST(req: NextRequest) {
   const now = Date.now();
   const day = ilDay(now);
   const school = db.collection("schools").doc(schoolId);
-  const id = crypto.createHash("sha1").update(`${day}|${kind}|${setId}|${word}`).digest("hex").slice(0, 32);
+  const id = crypto.createHash("sha1").update(`${day}|${kind}|${setId}|${word}${m ? `|${m}` : ""}`).digest("hex").slice(0, 32);
   await school.collection("projections").doc(id).set(
     {
       kind, word, setId,
+      ...(m ? { m } : {}),
       subject: cut(b.subject, 80),
       title: cut(b.title, 120),
       grade: cut(b.grade, 40),

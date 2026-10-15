@@ -1,8 +1,10 @@
 import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom, IMAGE_MODEL, TEXT_MODEL_FAST } from "@/lib/ai-cost";
-import { curatedImageHint, type WordSet } from "@/lib/word-sets";
+import { curatedImageHint, getWordSet, isGemaraSet, classroomVisual, normSetWord, type WordSet } from "@/lib/word-sets";
 import { topicLevel } from "@/lib/curriculum-catalog";
+import { classroomImageKey, itemImageKey, type ClassroomStyle, type MeaningRef } from "@/lib/classroom-keys";
+import { devDryAi, DRY_IMAGE_URL } from "@/lib/dev-safety";
 
 /**
  * The Gadit house style for word-set pictures (Gadi 2026-10-04). One
@@ -21,7 +23,8 @@ import { topicLevel } from "@/lib/curriculum-catalog";
  * every set picture is redrawn once in the new style.
  */
 
-export type ClassroomStyle = "kids" | "teen";
+export type { ClassroomStyle } from "@/lib/classroom-keys";
+export { classroomImageKey } from "@/lib/classroom-keys";
 
 const SITE = "https://www.gadit.app";
 
@@ -31,14 +34,20 @@ export function classroomStyle(set: Pick<WordSet, "id">): ClassroomStyle {
   return l === "middle" || l === "high" || l === "senior" ? "teen" : "kids";
 }
 
-export function classroomImageKey(word: string, meaning: string, lang: string, style: ClassroomStyle): string {
-  const hash = crypto
-    .createHash("sha256")
-    .update(`${lang}|${word.trim().toLowerCase()}|${meaning.trim().toLowerCase()}`)
-    .digest("hex")
-    .slice(0, 24);
-  return `img_cls2_${style}_${lang}_${hash}`;
+/** Gemara terms that never get an automatic picture (Gemara phase A,
+ *  2026-10-15): intimate, violent or capital-punishment subjects. A unit can
+ *  still give one an approved hint. Matched on the word with niqqud removed;
+ *  a listed term matches any word that contains it. To be reviewed by the
+ *  Gemara expert. */
+export const SENSITIVE_TERMS = [
+  "ביאה", "בעילה", "ערווה", "עריות", "זנות", "זונה", "אונס", "מפתה", "ממזר", "נידה",
+  "עונש מוות", "מיתה", "מיתות", "סקילה", "שריפה", "הרג", "חנק", "צליבה", "תלייה", "רציחה", "רוצח",
+];
+export function isSensitiveTerm(word: string): boolean {
+  const w = normSetWord(word);
+  return SENSITIVE_TERMS.some((t) => w.includes(normSetWord(t)));
 }
+const GEMARA_SAFE = "This is for a Talmud lesson in a religious school: respectful and modest, no people in intimate situations, no violence, no blood, no weapons aimed at anyone, no religious figures drawn as faces. Show the idea through symbolic objects (an open Talmud volume, scrolls, scales, a study table, two facing books).";
 
 const KIDS = "Gadit house style for children: a soft modern 3D render like a premium animated film, smooth matte rounded shapes, warm soft global illumination with gentle shadows. A small scene with real depth: the idea itself is the hero, large, sharp and in the center of the frame; a calm, softly blurred, uncluttered warm off-white background. Visual teaching cues make the idea obvious at a glance: clearly countable objects, soft glowing arrows, gentle highlights on what matters. Palette only teal, mint, warm amber and soft coral.";
 const KID_CHILD = "The child in the scene is EXACTLY the boy from the reference image: same face, same short brown hair, same teal t-shirt, natural slim proportions. Use the reference only for how the boy looks: he is busy doing the action in the description, a supporting part of the scene, never standing idle at the side, and the idea itself stays the large hero.";
@@ -80,7 +89,7 @@ const AR_LETTER_REFS: Array<[string[], LetterRef]> = [
 ];
 for (const [words, v] of AR_LETTER_REFS) for (const w of words) LETTER_REFS[w] = v;
 
-async function brief(word: string, meaning: string, lang: string, admin = false): Promise<string> {
+async function brief(word: string, meaning: string, lang: string, admin = false, gemara = false): Promise<string> {
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -90,7 +99,7 @@ async function brief(word: string, meaning: string, lang: string, admin = false)
         temperature: 0.3,
         max_completion_tokens: 110,
         messages: [
-          { role: "system", content: "You turn a school vocabulary word and its meaning in a lesson into a short ENGLISH description of ONE clear illustration of that EXACT meaning, for a classroom projector. Make the idea itself the large central subject, with simple visual teaching cues (countable objects, arrows, a highlight) that let a student understand it at a glance. Include a child only when the idea is an action or experience a person does; otherwise show no people. Never use digits unless the idea is about numbers, and never chemical symbols or labels; show amounts as countable objects and substances as simple drops, bubbles or particles. Never write words or sentences in the picture (image models garble them), in any language: show language ideas with symbols, for example blank colorful word cards for a sentence or grey lines on a page for a paragraph. Single punctuation marks are fine. Reply with ONLY the description, one sentence, no preamble." },
+          { role: "system", content: "You turn a school vocabulary word and its meaning in a lesson into a short ENGLISH description of ONE clear illustration of that EXACT meaning, for a classroom projector. Make the idea itself the large central subject, with simple visual teaching cues (countable objects, arrows, a highlight) that let a student understand it at a glance. Include a child only when the idea is an action or experience a person does; otherwise show no people. Never use digits unless the idea is about numbers, and never chemical symbols or labels; show amounts as countable objects and substances as simple drops, bubbles or particles. Never write words or sentences in the picture (image models garble them), in any language: show language ideas with symbols, for example blank colorful word cards for a sentence or grey lines on a page for a paragraph. Single punctuation marks are fine. Reply with ONLY the description, one sentence, no preamble." + (gemara ? " " + GEMARA_SAFE : "") },
           { role: "user", content: `Word (${lang}): ${word}\nMeaning in the lesson: ${meaning}\n\nDescribe the illustration:` },
         ],
       }),
@@ -142,6 +151,7 @@ async function render(prompt: string, refs: string[], quality: "low" | "medium" 
 export type ClassroomImageResult =
   | { status: "cached"; url: string; cacheKey: string }
   | { status: "generated"; url: string; cacheKey: string }
+  | { status: "skipped"; reason: "none" | "sensitive"; cacheKey: string }
   | { status: "error"; error: string; cacheKey: string };
 
 /** The set picture for a word, from cache or drawn now in the house style. */
@@ -154,15 +164,23 @@ export async function generateClassroomImage(opts: {
   uid?: string;
   /** A run from /admin: counted against the admin daily cap. */
   admin?: boolean;
+  /** A meaning of a unit that lists meanings: keyed on its id, not the text. */
+  item?: MeaningRef;
 }): Promise<ClassroomImageResult> {
   const { word, meaning, lang } = opts;
   const style = classroomStyle(opts.set);
-  const cKey = classroomImageKey(word, meaning, lang, style);
+  const cKey = opts.item ? itemImageKey(opts.item, lang, style) : classroomImageKey(word, meaning, lang, style);
   const ref = getAdminDb().collection("imageCache").doc(cKey);
-  if (!opts.force) {
-    const url = (await ref.get()).data()?.url as string | undefined;
-    if (url) return { status: "cached", url, cacheKey: cKey };
-  }
+  // The unit's own picture setting, and the Gemara safety net.
+  const gemara = isGemaraSet(getWordSet(opts.set.id));
+  const visual = classroomVisual(opts.set.id, word, opts.item?.m);
+  if (visual.mode === "none") return { status: "skipped", reason: "none", cacheKey: cKey };
+  if (gemara && visual.mode !== "hint" && isSensitiveTerm(word)) return { status: "skipped", reason: "sensitive", cacheKey: cKey };
+  const existing = (await ref.get()).data() as { url?: string; contentLocked?: boolean } | undefined;
+  // Locked (approved) content is served even when a redraw is forced. The
+  // field is contentLocked, new in phase A: the older `approved` flag some
+  // pictures carry keeps its old meaning (none).
+  if (existing?.url && (!opts.force || existing.contentLocked === true)) return { status: "cached", url: existing.url, cacheKey: cKey };
   try {
     const w = word.trim();
     const letter = LETTER_REFS[w] ?? LETTER_REFS[w.replace(/[ً-ٰٟ]/g, "")];
@@ -176,12 +194,19 @@ export async function generateClassroomImage(opts: {
       // 28 Arabic letters only survive at high quality (~17¢, drawn once).
       quality = letter.high ? "high" : "medium";
     } else {
-      const b = curatedImageHint(w) || (await brief(w, meaning, lang, opts.admin === true)) || `${w}: ${meaning}`;
+      const approvedHint = visual.mode === "hint" ? visual.hint : undefined;
+      const b = curatedImageHint(w) || approvedHint || (devDryAi() ? "" : await brief(w, meaning, lang, opts.admin === true, gemara)) || `${w}: ${meaning}`;
       // The fixed boy only when the scene has a person in it; a picture of
       // a thing stays a picture of the thing.
       const person = /(child|children|boy|girl|kid|kids|student|students|person|people|teacher|man|woman|family)/i.test(b);
       refs = style === "kids" && person ? ["kid.png"] : [];
       prompt = `${base} ${refs.length ? KID_CHILD : ""} Draw this: ${b} ${NO_TEXT}`;
+    }
+    if (devDryAi()) {
+      // Local test mode: log what would be drawn, draw nothing, write nothing.
+      const shown = prompt.includes("Draw this") ? prompt.slice(prompt.indexOf("Draw this")) : prompt;
+      console.info(`[dry-image] ${cKey} gemara=${gemara} prompt=${JSON.stringify(shown.replace(/\s+/g, " ").slice(0, 400))}`);
+      return { status: "generated", url: DRY_IMAGE_URL, cacheKey: cKey };
     }
     const out = await render(prompt.replace(/\s+/g, " "), refs, quality);
     void logAiUsage({ feature: "image_classroom", model: IMAGE_MODEL, images: 1, imageQuality: quality, costUsd: out.cost, admin: opts.admin === true });
