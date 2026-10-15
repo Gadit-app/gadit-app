@@ -1,6 +1,6 @@
 import { curriculumHint } from "@/lib/curriculum-words";
 import { noteUncertainWord } from "@/lib/uncertain-words";
-import { fixEtymology, repeatsDefinition, dropRepeatedOrigin } from "@/lib/etymology-guard";
+import { fixEtymology, repeatsDefinition, dropRepeatedOrigin, needsOriginRepair } from "@/lib/etymology-guard";
 import { dropSoundAlikeMeanings } from "@/lib/homophones-he";
 import { NextRequest, NextResponse, after } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
@@ -96,6 +96,7 @@ If the user's spelling is ALSO a real word (even if less common), define EXACTLY
 - "נחשל" (with ח) IS a real Hebrew word meaning backward/weak/lagging. Define THAT. Do NOT swap it for "נכשל" (with כ, failed).
 - "פרש" — define פרש (horseman/withdrew/spread). Do NOT swap for "פרס" or "פירש".
 Treat every input as deliberate when it maps to a real word.
+- TERMS OF A FIELD ARE REAL WORDS (Gadi 2026-10-15: a parent typed "אוריתמיה" and was told "did you mean אריתמיה?"). A term from a specific field counts as a real word even when it is rare and a common word is spelled almost the same: education movements (Waldorf / anthroposophy: "אוריתמיה" = eurythmy, the anthroposophic movement art, NOT a typo for "אריתמיה"; "ציור רטוב" = wet-on-wet watercolor painting; "רישום צורות" = form drawing), religion and Talmud, music, art, science, medicine, sport, crafts. Hebrew spelling variants of a loanword are the same word ("ולדורף" and "וולדורף" are both Waldorf): define it, never offer the other spelling as a correction.
 
 RULE 1b — If the typed string is NOT a real word at all, but there's an obvious real word the user likely intended (a plausible typo or missing letter), suggest it:
 - "אדיפלי" is NOT a real Hebrew word, but "אדיפאלי" (Oedipal, עם א' נוספת) IS — suggest it.
@@ -1672,8 +1673,22 @@ export async function POST(req: NextRequest) {
             void getAdminDb().collection("cache").doc(cacheKey).set({ translation: t }, { merge: true });
           }
         }
+        // Entries cached before the etymology guard (2026-10-14) can still
+        // show the definition again as the origin ("שרשרת", cached in June:
+        // "תכשיט העשוי מחוליות"). Serve it without that line and repair the
+        // cache after the response, once per word (crawlers never trigger it).
+        let served: object = cached;
+        const repeats = repeatsDefinition(cached);
+        if ((repeats || needsOriginRepair(cached)) && !isBotUA(req.headers.get("user-agent"))) {
+          served = repeats ? dropRepeatedOrigin(cached) : cached;
+          const shown = served;
+          after(async () => {
+            if (repeats) await setCachedResult(cacheKey, shown);
+            await setCachedResult(cacheKey, await fixEtymology(cached, word, uiLangName, { force: true }));
+          });
+        }
         // Cached response — send as a single SSE event so the client can use one code path
-        const payload = { ...cached, fromCache: true };
+        const payload = { ...served, fromCache: true };
         const body = `data: ${JSON.stringify({ type: "done", result: payload })}\n\n`;
         return new Response(body, {
           headers: {

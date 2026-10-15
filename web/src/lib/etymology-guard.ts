@@ -48,9 +48,24 @@ export function dropRepeatedOrigin<T>(result: T): T {
 
 const strip = (s: unknown) => String(s ?? "").normalize("NFC").replace(/[֑-ׇ]/g, "").replace(/[–—]/g, ",").trim();
 
-export async function fixEtymology<T>(result: T, word: string, uiLangName: string): Promise<T> {
+/** True when the origin line is empty and no repair was tried yet: entries
+ *  whose repeated origin was dropped before the repair could name a root. */
+export function needsOriginRepair(result: unknown): boolean {
+  const r = result as Result & { etyChecked?: boolean };
+  return !!r?.etymology && !String(r.etymology.originalMeaning ?? "").trim() && r.etyChecked !== true;
+}
+
+/** Rewrites a repeated (or, with force, a missing) origin. The result is
+ *  marked etyChecked so a word is repaired at most once. */
+export async function fixEtymology<T>(result: T, word: string, uiLangName: string, opts: { force?: boolean } = {}): Promise<T> {
   const r = result as unknown as Result;
-  if (!r?.etymology || !repeatsDefinition(r)) return result;
+  if (!r?.etymology || (!opts.force && !repeatsDefinition(r))) return result;
+  return { ...(await repairEtymology(r, word, uiLangName) as object), etyChecked: true } as unknown as T;
+}
+
+async function repairEtymology<T>(result: T, word: string, uiLangName: string): Promise<T> {
+  const r = result as unknown as Result;
+  if (!r?.etymology) return result;
   // Whatever happens below, the definition is never shown again as the origin.
   // The history note stays: gpt-4o's were weak (for "גרב" it cited a verse in
   // Isaiah that is not there), but gpt-5.4's are sound (the Proverbs verse for
@@ -63,8 +78,8 @@ export async function fixEtymology<T>(result: T, word: string, uiLangName: strin
  "originalWord": "<the source word in Latin transliteration when the source language differs from the word's own language; else empty>",
  "originalMeaning": "<one sentence: the source word or the ROOT (for Hebrew/Arabic in dotted form, e.g. ס.מ.ר) and its original concrete sense, and the path it took. NEVER repeat or paraphrase the current definitions>",
  "historyNote": "<1-3 sentences: first appearance (Bible, Mishnah, Talmud, a coiner) and sister-language cognates. Never a law, a school subject or today's usage. Empty if unknown>",
- "confidence": "<high only when this etymology is the one standard dictionaries (Even-Shoshan, Klein, Wiktionary) give; otherwise low>"}
-No niqqud. Never invent: a guessed origin is worse than none. If you are not sure, set confidence to low.`;
+ "confidence": "<high: the etymology standard dictionaries (Even-Shoshan, Klein, Wiktionary) give. medium: the accepted scholarly view or the clearly likely one, and then the originalMeaning says so ('כנראה' / 'probably'). low: a guess>"}
+No niqqud. Never invent: a guessed origin is worse than none, so a guess is low.`;
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -77,8 +92,10 @@ No niqqud. Never invent: a guessed origin is worse than none. If you are not sur
     const u = usageFrom(data);
     void logAiUsage({ feature: "etymology_fix", model: SMART_MODEL, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
     const j = JSON.parse(data.choices?.[0]?.message?.content ?? "{}") as Ety & { confidence?: string };
-    // Not sure: show no origin rather than a guessed one (the definition repeat goes too).
-    if (String(j.confidence ?? "").toLowerCase() !== "high") {
+    // A guess: show no origin rather than a guessed one (the definition repeat
+    // goes too). "medium" is kept (Gadi 2026-10-15, "שרשרת": gpt-5.4 gave the
+    // right root ש.ר.ש.ר but marked it low when only high was accepted).
+    if (!["high", "medium"].includes(String(j.confidence ?? "").toLowerCase())) {
       return dropped;
     }
     const fixed: Ety = {

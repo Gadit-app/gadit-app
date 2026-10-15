@@ -29,7 +29,7 @@ export const dynamic = "force-dynamic";
 
 type Target = { ref: DocumentReference; scope: ClassScope };
 
-async function resolveTargets(req: NextRequest, cls: string): Promise<{ display: Target; extra: Target[]; readOnly?: boolean } | null> {
+async function resolveTargets(req: NextRequest, cls: string): Promise<{ display: Target; extra: Target[]; readOnly?: boolean; logTo?: DocumentReference } | null> {
   const db = getAdminDb();
   const code = cls ? normalizeClassCode(cls) : null;
   if (code) {
@@ -57,9 +57,18 @@ async function resolveTargets(req: NextRequest, cls: string): Promise<{ display:
   const schoolId = user.get("schoolId");
   if (typeof schoolId !== "string" || !schoolId) return null;
   const schoolRef = db.collection("schools").doc(schoolId);
-  // A school with a single classroom is, for the kids, "our class".
-  const classes = await schoolRef.collection("classrooms").count().get();
-  return { display: { ref: schoolRef, scope: classes.data().count <= 1 ? "class" : "school" }, extra: [], readOnly };
+  // A school with a single classroom is, for the kids, "our class". Its
+  // lookups from the school account also belong to that classroom, so the
+  // class page and the dashboard count them (Gadi 2026-10-15: Greenwarth's
+  // kids search on the school account, 566 lookups, and their class showed 0).
+  const classes = await schoolRef.collection("classrooms").limit(2).get();
+  const only = classes.size === 1 ? classes.docs[0].ref : null;
+  return {
+    display: { ref: schoolRef, scope: classes.size <= 1 ? "class" : "school" },
+    extra: only ? [{ ref: only, scope: "class" }] : [],
+    readOnly,
+    ...(only ? { logTo: only } : {}),
+  };
 }
 
 async function addWord(t: Target, wordId: string, word: string): Promise<{ count: number; isNew: boolean }> {
@@ -91,6 +100,11 @@ export async function POST(req: NextRequest) {
   const [main] = await Promise.all([
     addWord(targets.display, wordId, word),
     ...targets.extra.map((t) => addWord(t, wordId, word)),
+    // The lookup in the classroom's log, as a class-code search would be.
+    ...(targets.logTo ? [
+      targets.logTo.collection("searches").add({ word, at: new Date().toISOString(), via: "school_account" }),
+      targets.logTo.set({ searchCount: FieldValue.increment(1) }, { merge: true }),
+    ] : []),
   ]);
   const hit = main.isNew && CLASS_THRESHOLDS.includes(main.count);
   return NextResponse.json({
