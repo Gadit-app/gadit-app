@@ -991,6 +991,11 @@ export function WordClient({
   }
   useEffect(() => {
     if (!niqqud || !(isHebrewWord || isArabicWord) || !result || !user) { setNiqResult(null); return; }
+    // Only once the definition is complete (2026-10-15): while it streams,
+    // `result` changes on every chunk, and each change sent a new request.
+    // A gpt-5.4 definition streams for 20-45s, so hundreds of requests
+    // reached the vowelizer, which then answered with plain text.
+    if (loading) return;
     let cancelled = false;
     (async () => {
       try {
@@ -1014,14 +1019,21 @@ export function WordClient({
         const unique = Array.from(new Set(texts));
         if (unique.length === 0) { setNiqResult(null); return; }
         const idToken = await user.getIdToken();
-        const res = await fetch("/api/niqqud", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-          body: JSON.stringify({ texts: unique }),
-        });
-        if (!res.ok) throw new Error("niqqud");
-        const data = (await res.json()) as { niqqud?: string[] };
-        const niq = data.niqqud ?? [];
+        // The server takes up to 40 texts a request; a word with many
+        // meanings has more, so they go in batches.
+        const batches: string[][] = [];
+        for (let i = 0; i < unique.length; i += 40) batches.push(unique.slice(i, i + 40));
+        const parts = await Promise.all(batches.map(async (texts) => {
+          const res = await fetch("/api/niqqud", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+            body: JSON.stringify({ texts }),
+          });
+          if (!res.ok) throw new Error("niqqud");
+          const data = (await res.json()) as { niqqud?: string[] };
+          return data.niqqud ?? [];
+        }));
+        const niq = parts.flat();
         if (cancelled || niq.length !== unique.length) return;
         const map = new Map<string, string>();
         unique.forEach((tx, i) => map.set(tx, niq[i] ?? tx));
@@ -1045,7 +1057,7 @@ export function WordClient({
       }
     })();
     return () => { cancelled = true; };
-  }, [niqqud, isHebrewWord, isArabicWord, result, user, kidsMode]);
+  }, [niqqud, isHebrewWord, isArabicWord, result, user, kidsMode, loading]);
   const displayResult = niqqud && niqResult ? niqResult : result;
   const [reportContext, setReportContext] = useState<ReportContext | null>(
     null
