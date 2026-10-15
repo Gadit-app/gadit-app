@@ -784,6 +784,8 @@ export function WordClient({
   // Curriculum sets (cur-...) are generated server side; fetch and register
   // them once so getWordSet / classroomDef see them (Gadi 2026-10-03).
   const [, setCurLoaded] = useState(0);
+  // The unit that could not be loaded (so a page waiting for it stops waiting).
+  const [curFailed, setCurFailed] = useState("");
   useEffect(() => {
     if (!isCurriculumSetId(setId) || getWordSet(setId) || !user) return;
     let alive = true;
@@ -791,11 +793,12 @@ export function WordClient({
       .then((tk) => fetch(`/api/curriculum-set?id=${encodeURIComponent(setId)}`, { headers: { Authorization: `Bearer ${tk}` } }))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: ({ set?: WordSet; defs?: Record<string, string> } & SetExtras) | null) => {
-        if (!alive || !d?.set) return;
+        if (!alive) return;
+        if (!d?.set) { setCurFailed(setId); return; }
         registerWordSet(d.set, d.defs ?? {}, { items: d.items, visuals: d.visuals, locked: d.locked });
         setCurLoaded((n) => n + 1);
       })
-      .catch(() => {});
+      .catch(() => { if (alive) setCurFailed(setId); });
     return () => { alive = false; };
   }, [setId, user]);
   const wordSet = setId ? getWordSet(setId) : undefined;
@@ -1137,6 +1140,10 @@ export function WordClient({
       setImageUrl(undefined);
       return;
     }
+    // A meaning address (?m=) exists only for units that list meanings
+    // (Gemara): opened directly or refreshed, wait for the unit instead of
+    // asking the dictionary first. Addresses without ?m= are unchanged.
+    if (present && meaningParam && isCurriculumSetId(setId) && !wordSet && user && curFailed !== setId) return;
     const key = `${initialWord}::${user?.uid ?? "anon"}`;
     if (fetchedFor.current === key) return;
 
@@ -1460,7 +1467,7 @@ export function WordClient({
     // races the first's). plan is read inside run() via the
     // surrounding closure; promptLogin via promptLoginRef.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialWord, lang, user, authLoading, contextSentence, initialResult, preloadLang, gemaraStage, currentM]);
+  }, [initialWord, lang, user, authLoading, contextSentence, initialResult, preloadLang, gemaraStage, currentM, !!wordSet, curFailed]);
 
   // Classroom mode: auto-generate the picture so the word shows WITH its
   // image by default on the projector, no click. Prompts with the curated
