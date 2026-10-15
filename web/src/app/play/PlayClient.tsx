@@ -13,6 +13,7 @@
  */
 
 import { GaditIcon } from "@/components/design/GaditIcon";
+import { ml } from "@/lib/my-lists-i18n";
 import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import { planCopy } from "@/lib/plan-copy";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -3009,16 +3010,77 @@ export function PlayPage() {
   //     can't fill 4 same-script options on its own. The curated words
   //     backfill the distractor pool so the user's own words still
   //     appear in rounds instead of being dropped as degenerate.
+  // Which words the notebook games use (Gat's question, Gadi 2026-10-15:
+  // "when Ziv has 300 words, which ones does a game use?").
+  //   smart (default): the newest words plus a fresh random handful of the
+  //                    older ones, so a big notebook keeps today's words in play;
+  //   all:             the whole notebook, as before;
+  //   list:<id>:       one of the child's saved lists from Homework.
+  // Remembered on this device.
+  const [source, setSource] = useState("smart");
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from the device
+    try { const v = localStorage.getItem("gadit.play.source"); if (v) setSource(v); } catch { /* private mode */ }
+  }, []);
+  const chooseSource = (v: string) => {
+    setSource(v);
+    try { localStorage.setItem("gadit.play.source", v); } catch { /* private mode */ }
+  };
+  const [lists, setLists] = useState<Array<{ setId: string; title: string; words: Array<{ en: string; he: string }> }>>([]);
+  useEffect(() => {
+    if (loading || !user || !isPaid) return;
+    let alive = true;
+    void (async () => {
+      try {
+        const r = await fetch("/api/dictation-sets", { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+        const d = (await r.json()) as { sets?: Array<{ setId?: string; title?: string; words?: Array<{ en: string; he: string }> }> };
+        if (!alive || !Array.isArray(d.sets)) return;
+        setLists(d.sets
+          .filter((x) => x.setId && Array.isArray(x.words) && x.words.length >= MIN_WORDS_FOR_GAME.quiz)
+          .map((x) => ({ setId: x.setId as string, title: x.title || "", words: x.words as Array<{ en: string; he: string }> })));
+      } catch { /* the notebook still plays */ }
+    })();
+    return () => { alive = false; };
+  }, [loading, user, isPaid]);
+  const activeList = source.startsWith("list:") ? lists.find((l) => l.setId === source.slice(5)) : undefined;
+  const sourceNotebook = useMemo((): PlayWord[] => {
+    const nb = pool ?? [];
+    if (activeList) {
+      // The list's words, each with its notebook entry when the child saved it.
+      const byWord = new Map(nb.map((p) => [p.word.trim().toLowerCase(), p]));
+      const out: PlayWord[] = [];
+      const seen = new Set<string>();
+      for (const w of activeList.words) {
+        const hit = byWord.get(w.en.trim().toLowerCase()) ?? byWord.get(w.he.trim().toLowerCase());
+        const pw: PlayWord | null = hit ?? (w.en.trim() && w.he.trim() && w.en.trim() !== w.he.trim()
+          ? { word: w.en.trim(), language: "", meaning: w.he.trim(), examples: [], uiLang: lang }
+          : null);
+        if (pw && !seen.has(pw.word.toLowerCase())) { seen.add(pw.word.toLowerCase()); out.push(pw); }
+      }
+      return out;
+    }
+    if (source === "all" || nb.length <= 40) return nb;
+    // smart: the 25 newest (the notebook comes newest first) and 15 older
+    // ones that rotate every day (the same mix all day, a new one tomorrow).
+    const day = new Date().toISOString().slice(0, 10);
+    const rank = (w: string) => { let h = 0; const k = day + "|" + w; for (let i = 0; i < k.length; i++) h = (h * 31 + k.charCodeAt(i)) >>> 0; return h; };
+    const rest = [...nb.slice(25)].sort((a, b) => rank(a.word) - rank(b.word));
+    return [...nb.slice(0, 25), ...rest.slice(0, 15)];
+  }, [pool, source, activeList, lang]);
+  const listMode = !!activeList && sourceNotebook.length >= MIN_WORDS_FOR_GAME.quiz;
+
   const effectivePool = useMemo(() => {
     const curated = getCuratedPlayPool(lang, kidsMode);
-    const notebook = pool ?? [];
+    const notebook = sourceNotebook;
+    // A saved list plays on its own words only.
+    if (listMode) return notebook;
     const seen = new Set(notebook.map((p) => p.word.trim().toLowerCase()));
     const merged = [...notebook];
     for (const c of curated) {
       if (!seen.has(c.word.trim().toLowerCase())) merged.push(c);
     }
     return merged;
-  }, [pool, lang, kidsMode]);
+  }, [sourceNotebook, listMode, lang, kidsMode]);
 
   // "Words in": which language the notebook games use (Gadi 2026-10-09: a
   // Hebrew UI showed English rounds). The languages present in the pool
@@ -3057,8 +3119,8 @@ export function PlayPage() {
     return () => { alive = false; };
   }, [lang]);
   const gamePool = useMemo(
-    () => (activeWordLang === "all" ? effectivePool : effectivePool.filter((p) => wordLangOf(p) === activeWordLang)),
-    [effectivePool, activeWordLang],
+    () => (listMode || activeWordLang === "all" ? effectivePool : effectivePool.filter((p) => wordLangOf(p) === activeWordLang)),
+    [effectivePool, activeWordLang, listMode],
   );
   const lessonLang = stage.kind === "lesson" ? stage.learnLang : null;
   // Every answer in learning mode goes to /api/learn, a few at a time.
@@ -3675,7 +3737,24 @@ export function PlayPage() {
             // with an empty notebook.
             return (
               <section key={section.id} className={`wb-play-section wb-play-span-${Math.min(sectionGames.length, 4)}`}>
-                {section.id === "notebook" && langCounts.length >= 2 ? (
+                {section.id === "notebook" && ((pool?.length ?? 0) > 40 || lists.length > 0) && (
+                  <div className="wb-play-langs" role="radiogroup" aria-label={ml("playOn", lang)} style={{ gridColumn: "1 / -1", width: "100%", maxWidth: "none", display: "flex", flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "flex-start", gap: 8, marginBottom: 12 }}>
+                    <span className="wb-play-langs-label">{ml("playOn", lang)}</span>
+                    {[["smart", ml("srcSmart", lang)], ["all", ml("srcAll", lang)], ...lists.map((l) => [`list:${l.setId}`, l.title] as [string, string])].map(([v, label]) => (
+                      <button
+                        key={v}
+                        type="button"
+                        role="radio"
+                        aria-checked={(source === v) || (v === "smart" && source.startsWith("list:") && !activeList)}
+                        className={`wb-play-lang${source === v || (v === "smart" && source.startsWith("list:") && !activeList) ? " is-on" : ""}`}
+                        onClick={() => chooseSource(v)}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {section.id === "notebook" && langCounts.length >= 2 && !listMode ? (
                   <div className="wb-play-section-head">
                     <h2 className="wb-play-section-heading">{section.label}</h2>
                     <div className="wb-play-langs" role="radiogroup" aria-label={wordsInLabel(lang)}>

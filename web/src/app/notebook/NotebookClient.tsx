@@ -28,8 +28,9 @@ import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { KidsGameHeader } from "@/components/design/KidsGameHeader";
 import { useHref } from "@/lib/href";
 import { listRecentCached } from "@/lib/offline-db";
-import { NOTEBOOK_DICT_EXTRA, SPELL_T_EXTRA } from "@/lib/spell-i18n";
+import { SPELL_T_EXTRA } from "@/lib/spell-i18n";
 import { misc } from "@/lib/misc-i18n";
+import { ml } from "@/lib/my-lists-i18n";
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
 const LANGS = LANGUAGES;
@@ -399,255 +400,6 @@ type DictSet = {
   lastScore?: number;
   lastTotal?: number;
 };
-const DICT_COPY: Record<string, {
-  heading: string;
-  sub: string;
-  again: string;
-  times: (n: number) => string;
-  score: (s: number, t: number) => string;
-}> = {
-  he: {
-    heading: "הכתבות",
-    sub: "סדרות שכבר תרגלת. אפשר לחזור ולתרגל אותן שוב.",
-    again: "לתרגל שוב",
-    times: (n) => (n === 1 ? "תורגל פעם אחת" : `תורגל ${n} פעמים`),
-    score: (s, t) => `${s}/${t} נכון`,
-  },
-  en: {
-    heading: "Dictations",
-    sub: "Series you've practiced. Come back and practice them again.",
-    again: "Practice again",
-    times: (n) => (n === 1 ? "Practiced once" : `Practiced ${n} times`),
-    score: (s, t) => `${s}/${t} correct`,
-  },
-  ar: {
-    heading: "الإملاءات",
-    sub: "سلاسل تدربت عليها. يمكنك العودة والتدرب عليها من جديد.",
-    again: "تدرب من جديد",
-    times: (n) => (n === 1 ? "تم التدريب مرة واحدة" : n === 2 ? "تم التدريب مرتين" : n >= 3 && n <= 10 ? `تم التدريب ${n} مرات` : `تم التدريب ${n} مرة`),
-    score: (s, t) => `${s}/${t} صحيحة`,
-  },
-  ru: {
-    heading: "Диктанты",
-    sub: "Твои пройденные наборы. Возвращайся и тренируйся снова.",
-    again: "Тренироваться снова",
-    times: (n) => {
-      if (n === 1) return "Пройдено один раз";
-      const m10 = n % 10, m100 = n % 100;
-      const few = m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14);
-      return `Пройдено ${n} ${few ? "раза" : "раз"}`;
-    },
-    score: (s, t) => `${s}/${t} верно`,
-  },
-  es: {
-    heading: "Dictados",
-    sub: "Series que ya practicaste. Vuelve y practícalas otra vez.",
-    again: "Practicar de nuevo",
-    times: (n) => (n === 1 ? "Practicado una vez" : `Practicado ${n} veces`),
-    score: (s, t) => `${s}/${t} correctas`,
-  },
-  pt: {
-    heading: "Ditados",
-    sub: "Séries que você já praticou. Volte e pratique de novo.",
-    again: "Praticar de novo",
-    times: (n) => (n === 1 ? "Praticado uma vez" : `Praticado ${n} vezes`),
-    score: (s, t) => `${s}/${t} corretas`,
-  },
-  fr: {
-    heading: "Dictées",
-    sub: "Les séries que tu as déjà pratiquées. Reviens t'entraîner quand tu veux.",
-    again: "Recommencer",
-    times: (n) => (n === 1 ? "Pratiquée une fois" : `Pratiquée ${n} fois`),
-    score: (s, t) => `${s}/${t} correctes`,
-  },
-  de: {
-    heading: "Diktate",
-    sub: "Reihen, die du geübt hast. Komm zurück und übe sie noch einmal.",
-    again: "Nochmal üben",
-    times: (n) => (n === 1 ? "Einmal geübt" : `${n}-mal geübt`),
-    score: (s, t) => `${s}/${t} richtig`,
-  },
-  cs: {
-    heading: "Diktáty",
-    sub: "Tvoje procvičené série. Vrať se a procvič si je znovu.",
-    again: "Procvičit znovu",
-    times: (n) => (n === 1 ? "Procvičeno jednou" : `Procvičeno ${n}krát`),
-    score: (s, t) => `${s}/${t} správně`,
-  },
-  sk: {
-    heading: "Diktáty",
-    sub: "Tvoje precvičené série. Vráť sa a precvič si ich znova.",
-    again: "Precvičiť znova",
-    times: (n) => (n === 1 ? "Precvičené raz" : `Precvičené ${n}-krát`),
-    score: (s, t) => `${s}/${t} správne`,
-  },
-  it: {
-    heading: "Dettati",
-    sub: "Le serie su cui ti sei già esercitato. Torna e riprova quando vuoi.",
-    again: "Esercitati di nuovo",
-    times: (n) => (n === 1 ? "Fatto una volta" : `Fatto ${n} volte`),
-    score: (s, t) => `${s}/${t} corrette`,
-  },
-  ja: {
-    heading: "かきとり",
-    sub: "れんしゅうしたシリーズだよ。もういちどれんしゅうしてみよう。",
-    again: "もういちど",
-    times: (n) => `${n}かいれんしゅうした`,
-    score: (s, t) => `${t}もんちゅう${s}もんせいかい`,
-  },
-  hi: {
-    heading: "श्रुतलेख",
-    sub: "जिन सेट का तुमने अभ्यास किया है। वापस आओ और फिर से अभ्यास करो।",
-    again: "फिर से अभ्यास करो",
-    times: (n) => (n === 1 ? "एक बार अभ्यास किया" : `${n} बार अभ्यास किया`),
-    score: (s, t) => `${s}/${t} सही`,
-  },
-  am: {
-    heading: "የቃላት ጽሕፈት",
-    sub: "ቀድሞ የተለማመዱ ስብስቦች። እንደገና መለማመድ ይቻላል።",
-    again: "እንደገና ተለማመድ",
-    times: (n) => (n === 1 ? "አንድ ጊዜ ተለማምዷል" : `${n} ጊዜ ተለማምዷል`),
-    score: (s, t) => `${s}/${t} ትክክል`,
-  },
-  uk: {
-    heading: "Диктанти",
-    sub: "Твої пройдені набори. Повертайся і тренуйся знову.",
-    again: "Тренуватися знову",
-    times: (n) => {
-      if (n === 1) return "Пройдено один раз";
-      const m10 = n % 10, m100 = n % 100;
-      const few = m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14);
-      return `Пройдено ${n} ${few ? "рази" : "разів"}`;
-    },
-    score: (s, t) => `${s}/${t} правильно`,
-  },
-  tr: {
-    heading: "Dikteler",
-    sub: "Çalıştığın seriler. Geri dön ve tekrar çalış.",
-    again: "Tekrar çalış",
-    times: (n) => (n === 1 ? "Bir kez çalışıldı" : `${n} kez çalışıldı`),
-    score: (s, t) => `${s}/${t} doğru`,
-  },
-  pl: {
-    heading: "Dyktanda",
-    sub: "Twoje przećwiczone serie. Wróć i poćwicz je jeszcze raz.",
-    again: "Ćwicz ponownie",
-    times: (n) => (n === 1 ? "Ćwiczone raz" : `Ćwiczone ${n} razy`),
-    score: (s, t) => `${s}/${t} poprawnie`,
-  },
-  fa: {
-    heading: "املاها",
-    sub: "مجموعه‌هایی که تمرین کردی. برگرد و دوباره تمرین کن.",
-    again: "دوباره تمرین کن",
-    times: (n) => (n === 1 ? "یک بار تمرین شد" : `${n} بار تمرین شد`),
-    score: (s, t) => `${s}/${t} درست`,
-  },
-  id: {
-    heading: "Dikte",
-    sub: "Seri yang sudah kamu latih. Ayo kembali dan latih lagi.",
-    again: "Latih lagi",
-    times: (n) => (n === 1 ? "Dilatih sekali" : `Dilatih ${n} kali`),
-    score: (s, t) => `${s}/${t} benar`,
-  },
-  nl: {
-    heading: "Dictees",
-    sub: "Reeksen die je hebt geoefend. Kom terug en oefen ze nog eens.",
-    again: "Opnieuw oefenen",
-    times: (n) => (n === 1 ? "Eén keer geoefend" : `${n} keer geoefend`),
-    score: (s, t) => `${s}/${t} goed`,
-  },
-  el: {
-    heading: "Υπαγορεύσεις",
-    sub: "Σειρές που έχεις εξασκήσει. Γύρνα και εξασκήσου ξανά.",
-    again: "Εξάσκηση ξανά",
-    times: (n) => (n === 1 ? "Εξάσκηση μία φορά" : `Εξάσκηση ${n} φορές`),
-    score: (s, t) => `${s}/${t} σωστά`,
-  },
-  zu: {
-    heading: "Ukubhala ngokulalela",
-    sub: "Amaqoqo osuwazijwayeza. Buya uphinde uzijwayeze.",
-    again: "Phinda uzijwayeze",
-    times: (n) => (n === 1 ? "Kujwayezwe kanye" : `Kujwayezwe izikhathi ezingu-${n}`),
-    score: (s, t) => `${s}/${t} kulungile`,
-  },
-  vi: {
-    heading: "Bài chính tả",
-    sub: "Những loạt bài bạn đã luyện. Quay lại và luyện lại nhé.",
-    again: "Luyện lại",
-    times: (n) => (n === 1 ? "Đã luyện một lần" : `Đã luyện ${n} lần`),
-    score: (s, t) => `Đúng ${s}/${t}`,
-  },
-  fil: {
-    heading: "Mga Dikta",
-    sub: "Mga seryeng napraktis mo na. Bumalik at praktisin ulit.",
-    again: "Praktisin ulit",
-    times: (n) => (n === 1 ? "Napraktis nang isang beses" : `Napraktis nang ${n} beses`),
-    score: (s, t) => `${s}/${t} tama`,
-  },
-  af: {
-    heading: "Diktees",
-    sub: "Reekse wat jy geoefen het. Kom terug en oefen hulle weer.",
-    again: "Oefen weer",
-    times: (n) => (n === 1 ? "Een keer geoefen" : `${n} keer geoefen`),
-    score: (s, t) => `${s}/${t} reg`,
-  },
-  sw: {
-    heading: "Imla",
-    sub: "Mfululizo uliojizoeza. Rudi ujizoeze tena.",
-    again: "Jizoeze tena",
-    times: (n) => (n === 1 ? "Umejizoeza mara moja" : `Umejizoeza mara ${n}`),
-    score: (s, t) => `${s}/${t} sahihi`,
-  },
-  "zh-CN": {
-    heading: "听写",
-    sub: "你练习过的系列。回来再练一遍吧。",
-    again: "再练一遍",
-    times: (n) => (n === 1 ? "练习过一次" : `练习过 ${n} 次`),
-    score: (s, t) => `答对 ${s}/${t}`,
-  },
-  "zh-TW": {
-    heading: "聽寫",
-    sub: "你練習過的系列。回來再練一遍吧。",
-    again: "再練一遍",
-    times: (n) => (n === 1 ? "練習過一次" : `練習過 ${n} 次`),
-    score: (s, t) => `答對 ${s}/${t}`,
-  },
-  ko: {
-    heading: "받아쓰기",
-    sub: "연습했던 묶음이에요. 다시 와서 또 연습해 봐요.",
-    again: "다시 연습하기",
-    times: (n) => (n === 1 ? "한 번 연습함" : `${n}번 연습함`),
-    score: (s, t) => `${s}/${t} 정답`,
-  },
-  th: {
-    heading: "เขียนตามคำบอก",
-    sub: "ชุดที่ฝึกไปแล้ว กลับมาฝึกอีกครั้งนะ",
-    again: "ฝึกอีกครั้ง",
-    times: (n) => (n === 1 ? "ฝึกไปแล้วหนึ่งครั้ง" : `ฝึกไปแล้ว ${n} ครั้ง`),
-    score: (s, t) => `ถูก ${s}/${t}`,
-  },
-  bn: {
-    heading: "শ্রুতিলিখন",
-    sub: "যেসব সিরিজ অনুশীলন করেছ। ফিরে এসে আবার অনুশীলন করো।",
-    again: "আবার অনুশীলন করো",
-    times: (n) => (n === 1 ? "একবার অনুশীলন করা হয়েছে" : `${n} বার অনুশীলন করা হয়েছে`),
-    score: (s, t) => `${s}/${t} সঠিক`,
-  },
-  da: {
-    heading: "Diktater",
-    sub: "Serier du har øvet. Kom tilbage og øv dem igen.",
-    again: "Øv igen",
-    times: (n) => (n === 1 ? "Øvet én gang" : `Øvet ${n} gange`),
-    score: (s, t) => `${s}/${t} rigtige`,
-  },
-  hu: {
-    heading: "Tollbamondások",
-    sub: "Sorozatok, amelyeket gyakoroltál. Gyere vissza, és gyakorold újra.",
-    again: "Gyakorold újra",
-    times: (n) => (n === 1 ? "Egyszer gyakoroltad" : `${n} alkalommal gyakoroltad`),
-    score: (s, t) => `${s}/${t} helyes`,
-  },
-};
 
 /** Games that open on one notebook word (see FOCUS_GAMES in /play). */
 const PRACTICE_GAMES = ["flashcards", "flashdefs", "quiz", "memory", "anagram"] as const;
@@ -784,6 +536,16 @@ export function NotebookPage() {
   // Saved dictation sets (spelling-practice series) — shown under "הכתבות",
   // separate from the words grid. Best-effort; empty on any failure.
   const [dictSets, setDictSets] = useState<DictSet[]>([]);
+  // Deleting a word from the notebook, with a one-tap confirmation.
+  const [confirmDelWord, setConfirmDelWord] = useState("");
+  async function deleteWord(id: string) {
+    setConfirmDelWord("");
+    if (!user) return;
+    setItems((cur) => (cur ? cur.filter((i) => i.id !== id) : cur));
+    try {
+      await fetch("/api/notebook?id=" + encodeURIComponent(id), { method: "DELETE", headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+    } catch { /* removed on this screen */ }
+  }
   useEffect(() => {
     if (loading || !user) return;
     if (plan === "basic") return;
@@ -801,18 +563,6 @@ export function NotebookPage() {
     })();
     return () => { cancelled = true; };
   }, [loading, user, plan]);
-  // Resolve the Dictations-section copy: inline he/en, else the localized
-  // templates from the spell-i18n batch, else English.
-  const dcExtra = NOTEBOOK_DICT_EXTRA[lang];
-  const dc = DICT_COPY[lang] ?? (dcExtra
-    ? {
-        heading: dcExtra.heading,
-        sub: dcExtra.sub,
-        again: dcExtra.again,
-        times: (n: number) => (n === 1 ? dcExtra.timesOne : dcExtra.timesMany.replace("{n}", String(n))),
-        score: (s: number, tt: number) => dcExtra.scoreLine.replace("{a}", String(s)).replace("{b}", String(tt)),
-      }
-    : DICT_COPY.en);
   const allLabel = SPELL_T_EXTRA[lang]?.allFilter
     ?? (lang === "he" ? "הכול" : lang === "ar" ? "الكل" : lang === "ru" ? "Все" : "All");
 
@@ -942,37 +692,11 @@ export function NotebookPage() {
             kid can jump straight back into a set (especially the missed words).
             Kept separate from "My words" by design (Gadi 2026-09-19). */}
         {dictSets.length > 0 && (
-          <section className="wb-notebook-langsec wb-dict-section">
-            <h2 className="wb-notebook-langhead">
-              <span className="wb-notebook-langname">{dc.heading}</span>
-              <span className="wb-notebook-langcount">{dictSets.length}</span>
-            </h2>
-            <p className="wb-dict-sub">{dc.sub}</p>
-            <ul className="wb-notebook-grid">
-              {dictSets.map((s) => (
-                <li key={s.setId} className="wb-notebook-card wb-dict-card">
-                  <Link
-                    href={href(`/homework?set=${encodeURIComponent(s.setId)}`)}
-                    className="wb-notebook-card-link"
-                  >
-                    <div className="wb-notebook-card-head">
-                      <span className="wb-notebook-card-word">
-                        <span aria-hidden="true" style={{ marginInlineEnd: 8 }}>{s.icon || "✏️"}</span>
-                        {s.title}
-                      </span>
-                    </div>
-                    <p className="wb-notebook-card-meaning">
-                      {dc.times(s.timesPracticed ?? 1)}
-                      {typeof s.lastScore === "number" && typeof s.lastTotal === "number"
-                        ? ` · ${dc.score(s.lastScore, s.lastTotal)}`
-                        : ""}
-                    </p>
-                    <span className="wb-dict-again">{dc.again} →</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
+          // "My practice" lives in Homework (Gadi 2026-10-15: the notebook is
+          // a place of its own); a short way there.
+          <Link href={href("/homework?v=dict")} className="wb-dict-again" style={{ display: "inline-flex", alignItems: "center", gap: 6, margin: "4px 0 14px", fontWeight: 700 }}>
+            {ml("myPractices", lang)} ({dictSets.length}) →
+          </Link>
         )}
 
         {/* Language filter — only when there's more than one language to pick. */}
@@ -1011,7 +735,7 @@ export function NotebookPage() {
                 {group.map((item) => {
               const offline = offlineWords.has(item.word.toLowerCase());
               return (
-                <li key={item.id} className="wb-notebook-card">
+                <li key={item.id} className="wb-notebook-card" style={{ position: "relative" }}>
                   <Link
                     href={href(`/word/${encodeURIComponent(item.word)}`)}
                     className="wb-notebook-card-link"
@@ -1032,6 +756,23 @@ export function NotebookPage() {
                       </div>
                     )}
                   </Link>
+                  <button
+                    type="button"
+                    className="wb-nb-del"
+                    aria-label={ml("delWord", lang)}
+                    title={ml("delWord", lang)}
+                    onClick={() => setConfirmDelWord(confirmDelWord === item.id ? "" : item.id)}
+                    style={{ position: "absolute", top: 8, insetInlineEnd: 8, width: 30, height: 30, borderRadius: 9, border: "1px solid var(--hairline,#E5E7EB)", background: "var(--surface,#fff)", color: "#B91C1C", cursor: "pointer", display: "grid", placeItems: "center", zIndex: 2 }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6l-1 14H6L5 6" /></svg>
+                  </button>
+                  {confirmDelWord === item.id && (
+                    <div role="alert" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8, margin: "0 12px 10px", padding: "8px 10px", borderRadius: 10, background: "#FEF2F2", border: "1px solid #FCD4D4", color: "#7F1D1D", fontSize: 13.5 }}>
+                      <span style={{ flex: 1, minWidth: 120 }}>{ml("confirmDelWord", lang, { w: item.word })}</span>
+                      <button type="button" onClick={() => void deleteWord(item.id)} style={{ padding: "7px 12px", borderRadius: 9, border: "none", background: "#B91C1C", color: "#fff", fontWeight: 700, cursor: "pointer" }}>{ml("yesDel", lang)}</button>
+                      <button type="button" onClick={() => setConfirmDelWord("")} style={{ padding: "7px 10px", borderRadius: 9, border: "1px solid #FCD4D4", background: "transparent", color: "#7F1D1D", cursor: "pointer" }}>{ml("cancel", lang)}</button>
+                    </div>
+                  )}
                   {canPlay && (
                     <div className="wb-nb-practice">
                       <button

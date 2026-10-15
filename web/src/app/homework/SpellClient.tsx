@@ -34,6 +34,7 @@ import { langNameIn } from "@/lib/i18n";
 import { DICTATION_SETS, getCatTitle, type DictationSet, type WordPair } from "@/lib/dictation-sets";
 import { SPELL_T_EXTRA, CELEBRATIONS_EXTRA } from "@/lib/spell-i18n";
 import { misc } from "@/lib/misc-i18n";
+import { ml } from "@/lib/my-lists-i18n";
 
 // Internal direction ids: "he2en" = native → English, "en2he" = English →
 // native. The "he" in the name is legacy — the non-English side is the
@@ -468,8 +469,53 @@ export function SpellClient() {
   // words). Shown at the top of the pick screen. Gadi 2026-09-19.
   const [history, setHistory] = useState<Array<{
     setId: string; title: string; icon: string; direction?: string;
-    timesPracticed?: number; lastScore?: number; lastTotal?: number;
+    timesPracticed?: number; lastScore?: number; lastTotal?: number; custom?: boolean;
   }>>([]);
+  // The child's own lists (Gat's request, Gadi 2026-10-15): a name for each
+  // new list, rename and delete in "My practice".
+  const [listName, setListName] = useState("");
+  const [renaming, setRenaming] = useState<{ id: string; value: string } | null>(null);
+  const [confirmDel, setConfirmDel] = useState("");
+  const kidFirst = (user?.displayName ?? "").trim().split(/\s+/)[0] ?? "";
+  const defaultListName = () => {
+    const n = history.filter((h) => h.custom || h.setId.startsWith("custom_")).length + 1;
+    return kidFirst ? ml("defaultNameKid", lang, { name: kidFirst, n }) : ml("defaultName", lang, { n });
+  };
+  // Save a list the child just made, named, before it is practiced.
+  async function saveNewList(words: WordPair[], name: string, icon: string) {
+    if (!user) return;
+    try {
+      await fetch("/api/dictation-sets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
+        body: JSON.stringify({ setId: hashWords(words), title: name, icon, direction: qdir, words, saveOnly: true }),
+      });
+      void loadHistory();
+    } catch { /* the practice still runs */ }
+  }
+  async function renameList(id: string, title: string) {
+    const name = title.trim();
+    setRenaming(null);
+    if (!user || !name) return;
+    setHistory((h) => h.map((x) => (x.setId === id ? { ...x, title: name, custom: true } : x)));
+    try {
+      await fetch("/api/dictation-sets", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
+        body: JSON.stringify({ setId: id, title: name }),
+      });
+    } catch { /* shown locally */ }
+  }
+  async function deleteList(id: string) {
+    setConfirmDel("");
+    if (!user) return;
+    setHistory((h) => h.filter((x) => x.setId !== id));
+    try {
+      await fetch("/api/dictation-sets?id=" + encodeURIComponent(id), { method: "DELETE", headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+    } catch { /* removed locally */ }
+  }
+  const listCamRef = useRef<HTMLInputElement>(null);
+  const upRef = useRef<HTMLInputElement>(null);
   const [topic, setTopic] = useState("");
   const [listText, setListText] = useState("");
   const [creating, setCreating] = useState(false);
@@ -517,8 +563,11 @@ export function SpellClient() {
         setCreateMsg(data.safe === false ? t("unsafe", lang) : t("createErr", lang));
         return;
       }
-      begin({ id: "custom", icon: "📝", titleEn: data.title || "My list", titleHe: data.title || "הרשימה שלי", words: data.words });
+      const name = listName.trim() || defaultListName();
+      begin({ id: "custom", icon: "📝", titleEn: name, titleHe: name, words: data.words });
+      void saveNewList(data.words, name, "📝");
       setListText("");
+      setListName("");
     } catch {
       setCreateMsg(t("createErr", lang));
     } finally {
@@ -543,8 +592,11 @@ export function SpellClient() {
         setCreateMsg(data.safe === false ? t("unsafe", lang) : t("createErr", lang));
         return;
       }
-      begin({ id: "custom", icon: "✨", titleEn: data.title || tp, titleHe: data.title || tp, words: data.words });
+      const name = listName.trim() || data.title || tp;
+      begin({ id: "custom", icon: "✨", titleEn: name, titleHe: name, words: data.words });
+      void saveNewList(data.words, name, "✨");
       setTopic("");
+      setListName("");
     } catch {
       setCreateMsg(t("createErr", lang));
     } finally {
@@ -1057,7 +1109,7 @@ export function SpellClient() {
               </div>
               <button type="button" className="wb-learn-simple-go" onClick={() => { setDrill("spell"); setHw("dict"); }}>{dc.choose}</button>
               {history.length > 0 && (
-                <button type="button" className="wb-learn-simple-link" onClick={() => { setDrill("spell"); setHw("dict"); }}>{t("yourDictations", lang)}</button>
+                <button type="button" className="wb-learn-simple-link" onClick={() => { setDrill("spell"); setHw("dict"); }}>{ml("myPractices", lang)}</button>
               )}
             </section>
             <section className="wb-learn-simple" dir={dir}>
@@ -1080,11 +1132,24 @@ export function SpellClient() {
             {history.length > 0 && (
               <div style={{ marginTop: 16 }}>
                 <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "0 0 10px" }}>
-                  {t("yourDictations", lang)}
+                  {ml("myPractices", lang)}
                 </h2>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   {history.map((h) => (
-                    <button key={h.setId} type="button" onClick={() => openSaved(h.setId)}
+                    <div key={h.setId} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    {renaming?.id === h.setId ? (
+                      <form onSubmit={(e) => { e.preventDefault(); void renameList(h.setId, renaming.value); }}
+                        style={{ display: "flex", gap: 8, background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 13, padding: "9px 11px" }}>
+                        <input autoFocus value={renaming.value} maxLength={60} dir={dir === "rtl" ? "rtl" : "auto"}
+                          aria-label={ml("listName", lang)}
+                          onChange={(e) => setRenaming({ id: h.setId, value: e.target.value })}
+                          style={{ flex: 1, minWidth: 0, padding: "9px 11px", fontSize: 15, borderRadius: 10, border: "1px solid var(--hairline,#E5E7EB)", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)" }} />
+                        <button type="submit" style={{ flex: "none", padding: "9px 14px", borderRadius: 10, border: "none", background: TEAL, color: "#fff", fontWeight: 700, cursor: "pointer" }}>{ml("save", lang)}</button>
+                        <button type="button" onClick={() => setRenaming(null)} style={{ flex: "none", padding: "9px 12px", borderRadius: 10, border: "1px solid var(--hairline,#E5E7EB)", background: "transparent", color: "var(--ink,#0B1220)", cursor: "pointer" }}>{ml("cancel", lang)}</button>
+                      </form>
+                    ) : (
+                    <div style={{ display: "flex", alignItems: "stretch", gap: 6 }}>
+                    <button type="button" onClick={() => openSaved(h.setId)}
                       style={{
                         display: "flex", alignItems: "center", gap: 12, textAlign: dir === "rtl" ? "right" : "left",
                         background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 13,
@@ -1093,7 +1158,9 @@ export function SpellClient() {
                       <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, display: "grid", placeItems: "center", fontSize: 18, background: TEAL + "1A" }}>{h.icon || "✏️"}</span>
                       <span style={{ flex: 1, minWidth: 0 }}>
                         <span style={{ display: "block", fontSize: 14.5, fontWeight: 700, color: "var(--ink,#0B1220)" }}>{h.title}</span>
-                        {typeof h.lastScore === "number" && typeof h.lastTotal === "number" && (
+                        {h.timesPracticed === 0 ? (
+                          <span style={{ display: "block", fontSize: 12, color: "var(--ink-muted,#6B7280)" }}>{ml("notYet", lang)}</span>
+                        ) : typeof h.lastScore === "number" && typeof h.lastTotal === "number" && (
                           <span style={{ display: "block", fontSize: 12, color: "var(--ink-muted,#6B7280)" }}>
                             <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{h.lastScore}/{h.lastTotal}</span>{" "}
                             {t("correctWord", lang)}
@@ -1104,10 +1171,96 @@ export function SpellClient() {
                         {t("practiceAgain", lang)}
                       </span>
                     </button>
+                    <button type="button" aria-label={ml("rename", lang)} title={ml("rename", lang)}
+                      onClick={() => { setConfirmDel(""); setRenaming({ id: h.setId, value: h.title }); }}
+                      style={{ flex: "none", width: 40, borderRadius: 12, border: "1px solid var(--hairline,#E5E7EB)", background: "var(--surface,#fff)", color: "var(--ink-muted,#6B7280)", cursor: "pointer", display: "grid", placeItems: "center" }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>
+                    </button>
+                    <button type="button" aria-label={ml("del", lang)} title={ml("del", lang)}
+                      onClick={() => { setRenaming(null); setConfirmDel(confirmDel === h.setId ? "" : h.setId); }}
+                      style={{ flex: "none", width: 40, borderRadius: 12, border: "1px solid var(--hairline,#E5E7EB)", background: "var(--surface,#fff)", color: "#B91C1C", cursor: "pointer", display: "grid", placeItems: "center" }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6l-1 14H6L5 6" /></svg>
+                    </button>
+                    </div>
+                    )}
+                    {confirmDel === h.setId && (
+                      <div role="alert" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8, padding: "9px 12px", borderRadius: 12, background: "#FEF2F2", border: "1px solid #FCD4D4", color: "#7F1D1D", fontSize: 14 }}>
+                        <span style={{ flex: 1, minWidth: 140 }}>{ml("confirmDel", lang, { name: h.title })}</span>
+                        <button type="button" onClick={() => void deleteList(h.setId)} style={{ padding: "8px 14px", borderRadius: 10, border: "none", background: "#B91C1C", color: "#fff", fontWeight: 700, cursor: "pointer" }}>{ml("yesDel", lang)}</button>
+                        <button type="button" onClick={() => setConfirmDel("")} style={{ padding: "8px 12px", borderRadius: 10, border: "1px solid #FCD4D4", background: "transparent", color: "#7F1D1D", cursor: "pointer" }}>{ml("cancel", lang)}</button>
+                      </div>
+                    )}
+                    </div>
                   ))}
                 </div>
               </div>
             )}
+
+            {/* The child's own list first (Gat, 2026-10-15): it was hidden below every topic. */}
+            <div style={{ marginTop: 16, background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 16, padding: "16px 16px 14px", boxShadow: `0 6px 18px ${TEAL}12` }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+                <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, background: TEAL + "1A", display: "grid", placeItems: "center", fontSize: 18 }}>✨</span>
+                <div>
+                  <div style={{ fontSize: 15.5, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{t("createTitle", lang)}</div>
+                  <div style={{ fontSize: 12.5, color: "var(--ink-muted,#6B7280)" }}>{ml("createSubAll", lang)}</div>
+                </div>
+              </div>
+              <input
+                value={listName}
+                onChange={(e) => setListName(e.target.value)}
+                placeholder={defaultListName()}
+                aria-label={ml("listName", lang)}
+                dir={dir === "rtl" ? "rtl" : "auto"}
+                maxLength={60}
+                style={{ width: "100%", marginTop: 10, padding: "10px 13px", fontSize: 14.5, borderRadius: 11, border: "1px solid var(--hairline,#E5E7EB)", outline: "none", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)" }}
+              />
+              <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+                <input
+                  value={topic}
+                  onChange={(e) => { setTopic(e.target.value); setCreateMsg(""); }}
+                  onKeyDown={(e) => { if (e.key === "Enter") createSet(); }}
+                  placeholder={t("topicPlaceholder", lang)}
+                  dir={dir === "rtl" ? "rtl" : "auto"}
+                  maxLength={40}
+                  style={{ flex: 1, minWidth: 0, padding: "11px 13px", fontSize: 15, borderRadius: 11, border: "1px solid var(--hairline,#E5E7EB)", outline: "none", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)" }}
+                />
+                <button type="button" onClick={createSet} disabled={creating || topic.trim().length < 2}
+                  style={{ flex: "none", padding: "11px 16px", borderRadius: 11, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating || topic.trim().length < 2 ? 0.6 : 1 }}>
+                  {creating ? t("creating", lang) : t("generate", lang)}
+                </button>
+              </div>
+              <div style={{ marginTop: 14, fontSize: 13, fontWeight: 700, color: "var(--ink-muted,#6B7280)" }}>{ml("orPaste", lang)}</div>
+              <textarea
+                value={listText}
+                onChange={(e) => { setListText(e.target.value); setCreateMsg(""); }}
+                placeholder={ml("pastePh", lang)}
+                dir={dir === "rtl" ? "rtl" : "auto"}
+                rows={3}
+                maxLength={800}
+                style={{ width: "100%", marginTop: 6, padding: "10px 13px", fontSize: 15, borderRadius: 11, border: "1px solid var(--hairline,#E5E7EB)", outline: "none", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)", resize: "vertical", lineHeight: 1.6 }}
+              />
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
+                <button type="button" onClick={() => void createFromList()} disabled={creating || listText.trim().length < 2}
+                  style={{ padding: "10px 16px", borderRadius: 11, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating || listText.trim().length < 2 ? 0.6 : 1 }}>
+                  {creating ? t("creating", lang) : ml("makeList", lang)}
+                </button>
+                {canCamera && (
+                <button type="button" onClick={() => listCamRef.current?.click()} disabled={creating}
+                  style={{ padding: "10px 14px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
+                  📷 {ml("takePhoto", lang)}
+                </button>
+                )}
+                <button type="button" onClick={() => upRef.current?.click()} disabled={creating}
+                  style={{ padding: "10px 14px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
+                  🖼️ {ml("uploadPic", lang)}
+                </button>
+                <input ref={listCamRef} type="file" accept="image/*" capture="environment" hidden
+                  onChange={(e) => { const f = e.target.files?.[0]; if (f) void fromPhoto(f); e.target.value = ""; }} />
+                <input ref={upRef} type="file" accept="image/*" hidden
+                  onChange={(e) => { const f = e.target.files?.[0]; if (f) void fromPhoto(f); e.target.value = ""; }} />
+              </div>
+              {createMsg && <div style={{ marginTop: 8, fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{createMsg}</div>}
+            </div>
 
             <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "22px 0 12px" }}>{t("pickCat", lang)}</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12 }}>
@@ -1181,31 +1334,7 @@ export function SpellClient() {
                 </div>}
               </>
             )}
-            <div style={{ marginTop: 20, background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 16, padding: "16px 16px 14px", boxShadow: `0 6px 18px ${TEAL}12` }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-                <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, background: TEAL + "1A", display: "grid", placeItems: "center", fontSize: 18 }}>✨</span>
-                <div>
-                  <div style={{ fontSize: 15.5, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{t("createTitle", lang)}</div>
-                  <div style={{ fontSize: 12.5, color: "var(--ink-muted,#6B7280)" }}>{t("createSub", lang)}</div>
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-                <input
-                  value={topic}
-                  onChange={(e) => { setTopic(e.target.value); setCreateMsg(""); }}
-                  onKeyDown={(e) => { if (e.key === "Enter") createSet(); }}
-                  placeholder={t("topicPlaceholder", lang)}
-                  dir={dir === "rtl" ? "rtl" : "auto"}
-                  maxLength={40}
-                  style={{ flex: 1, minWidth: 0, padding: "11px 13px", fontSize: 15, borderRadius: 11, border: "1px solid var(--hairline,#E5E7EB)", outline: "none", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)" }}
-                />
-                <button type="button" onClick={createSet} disabled={creating || topic.trim().length < 2}
-                  style={{ flex: "none", padding: "11px 16px", borderRadius: 11, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating || topic.trim().length < 2 ? 0.6 : 1 }}>
-                  {creating ? t("creating", lang) : t("generate", lang)}
-                </button>
-              </div>
-              {createMsg && <div style={{ marginTop: 8, fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{createMsg}</div>}
-            </div>
+
           </>
         )}
 
