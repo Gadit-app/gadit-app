@@ -441,6 +441,8 @@ const CSS = `
 .sch-h3 { font-size: 25px; font-weight: 800; margin: 0 0 10px; line-height: 1.3; text-wrap: balance; }
 .sch-lead { font-size: 22px; font-weight: 700; margin: 0 0 26px; text-wrap: balance; }
 .sch-body { font-size: 17.5px; line-height: 1.85; color: var(--body); margin: 0 0 14px; }
+/* A narrow paragraph stays centered (.sch-body's margin came later and won). */
+.sch-body.sch-narrow { margin-left: auto; margin-right: auto; }
 .sch-strong { font-size: 20px; font-weight: 800; color: var(--ink); margin: 26px 0 0; text-align: center; }
 .sch-reframe { font-size: 23px; line-height: 1.5; font-weight: 700; color: var(--teal-d); margin: 26px 0 0; text-align: center; text-wrap: balance; }
 
