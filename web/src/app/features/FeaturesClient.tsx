@@ -609,6 +609,374 @@ const GROUP_COPY: Record<string, GroupCopy> = {
     },
     bubble: "Manje sengiyi-gad it!",
   },
+  xh: {
+    groupTitles: {
+      understand: "Qonda igama",
+      learn: <>Qonda uze <Hl>ulibone</Hl> igama</>,
+      master: <>Qonda, ubone, uze <Hl>ulikhumbule igama ngonaphakade</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Zonke iintsingiselo, izivakalisi zokwenyani ngokomxholo, izaci elikuzo, kunye nalapho lavela khona.",
+      learn:
+        "Umfanekiso wegama, inkcazelo elungele abantwana, incwadi yakho yamagama, nesivakalisi osibhalayo ufumane ingxelo ngaso.",
+      master:
+        "Imibuzo eyenzelwe wena nemidlalo yamagama ebethelela igama ixesha elide.",
+    },
+    family: {
+      title: <>Qonda, bona, khumbula <Hl>nosapho lonke</Hl></>,
+      sub: "Umrhumo omnye unika ilungu ngalinye losapho iakhawunti yalo, nazo zonke iimpawu eziphambili. Ukuya kutsho kubantwana aba-5.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Iprofayile eyahlukileyo yelungu ngalinye losapho",
+          body: "Incwadi yamagama, imbali yokukhangela, nokulandelelana kokufunda komntwana nomzali ngamnye.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Dibanisa isixhobo ngekhowudi ye-QR",
+          body: "Umntwana wakho uskena i-QR efowunini yakhe aze angene. Uhlala edityanisiwe ngonaphakade, akukho phasiwedi.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Ibhodi yomzali",
+          body: "Bona lonke igama umntwana ngamnye alikhangeleyo nexesha alikhangele ngalo, ulandele isantya sakhe ngokukhawuleza.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Ukuya kutsho kubantwana aba-5 kumrhumo omnye",
+          body: "Umntwana ngamnye ufumana zonke iimpawu ze-Deep. Umzali uhlawula kanye kusapho lonke.",
+        },
+      ],
+    },
+    bubble: "Ngoku ndilenzile i-GAD!",
+  },
+  nso: {
+    groupTitles: {
+      understand: "Kwešiša lentšu",
+      learn: <>Kwešiša le go <Hl>bona</Hl> lentšu</>,
+      master: <>Kwešiša, bona, gomme o <Hl>gopole lentšu ka mehla</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Tlhalošo ye nngwe le ye nngwe, mafoko a nnete ka bokao bja ona, dika tšeo lentšu le dulago go tšona, le mo le tšwago gona.",
+      learn:
+        "Seswantšho sa lentšu, tlhalošo ye e loketšego bana, puku ya gago ya mantšu, le lefoko leo o le ngwalago o hwetša dikarabelo.",
+      master:
+        "Ditlhahlobo tše di go loketšego le dipapadi tša mantšu tšeo di tiišago lentšu go ya go ile.",
+    },
+    family: {
+      title: <>Kwešiša, bona, gopola <Hl>bakeng sa lapa ka moka</Hl></>,
+      sub: "Peeletšo e tee e fa leloko le lengwe le le lengwe la lapa akhaonto ya lona, le dikarolo ka moka tše di tšwetšego pele. Go fihla go bana ba 5.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Profaele ye e arogilego ya leloko le lengwe le le lengwe la lapa",
+          body: "Puku ya mantšu, histori ya dinyakišišo, le matšatši a go ithuta ka go latelana a ngwana yo mongwe le yo mongwe le a motswadi.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Kopanya sedirišwa ka khoutu ya QR",
+          body: "Ngwana wa gago o skena QR ka mogala wa gagwe gomme a tsena. Se dula se kopane ka mehla, ntle le phasewete.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Letlakala la taolo la motswadi",
+          body: "Bona lentšu le lengwe le le lengwe leo ngwana yo mongwe le yo mongwe a le nyakilego le neng, o latele lebelo la gagwe ka go lebelela gatee.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Go fihla go bana ba 5 ka peeletšo e tee",
+          body: "Ngwana yo mongwe le yo mongwe o hwetša dikarolo ka moka tša Deep. Motswadi o lefa gatee bakeng sa lapa ka moka.",
+        },
+      ],
+    },
+    bubble: "Bjale ke a le GAD!",
+  },
+  tn: {
+    groupTitles: {
+      understand: "Tlhaloganya lefoko",
+      learn: <>Tlhaloganya mme o <Hl>bone</Hl> lefoko</>,
+      master: <>Tlhaloganya, bona, mme o <Hl>gopole lefoko ka metlha</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Bokao bongwe le bongwe, dipolelo tsa nnete mo seemong sa tsone, dikapolelo tse lefoko le leng mo go tsone, le kwa le tswang teng.",
+      learn:
+        "Setshwantsho sa lefoko, tlhaloso e e tshwanetseng bana, bukana ya gago ya mafoko, le polelo e o e kwalang o bo o bona maikutlo.",
+      master:
+        "Ditlhatlhobo tse di dirilweng wena le metshameko ya mafoko e e tsenyang lefoko mo tlhaloganyong ka lobaka lo loleele.",
+    },
+    family: {
+      title: <>Tlhaloganya, bona, gopola <Hl>mo lelapeng lotlhe</Hl></>,
+      sub: "Ikwadiso e le nngwe e naya leloko lengwe le lengwe la lelapa akhaonto ya lone, e na le dintlha tsotlhe tse di tseneletseng. Go fitlha go bana ba le 5.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Porofaele e e farologaneng mo lelokong lengwe le lengwe la lelapa",
+          body: "Bukana ya mafoko, hisitori ya dipatlo, le malatsi a a latelanang a go ithuta mo ngwaneng mongwe le mongwe le motsadi mongwe le mongwe.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Golaganya sedirisiwa ka khoutu ya QR",
+          body: "Ngwana wa gago o sekena QR ka mogala wa gagwe mme a tsena. O nna a golaganye ka metlha, kwa ntle ga lefoko la sephiri.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Lebota la motsadi",
+          body: "Bona lefoko lengwe le lengwe le ngwana mongwe le mongwe a le batlileng le gore leng, o latele lebelo la gagwe ka go leba gangwe.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Go fitlha go bana ba le 5 mo ikwadisong e le nngwe",
+          body: "Ngwana mongwe le mongwe o bona dintlha tsotlhe tsa Deep. Motsadi o duela gangwe fela mo lelapeng lotlhe.",
+        },
+      ],
+    },
+    bubble: "Jaanong ke a le GAD!",
+  },
+  st: {
+    groupTitles: {
+      understand: "Utlwisisa lentswe",
+      learn: <>Utlwisisa mme o <Hl>bone</Hl> lentswe</>,
+      master: <>Utlwisisa, bona, mme o <Hl>hopole lentswe ka ho sa feleng</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Moelelo o mong le o mong, dipolelo tsa nnete maemong a tsona, dikapolelo tseo lentswe le leng ho tsona, le moo le tswang teng.",
+      learn:
+        "Setshwantsho sa lentswe, tlhaloso e loketseng bana, bukana ya hao, le polelo eo o e ngolang mme o fumane maikutlo.",
+      master:
+        "Dikwisi tse o lokiseditsweng le dipapadi tsa mantswe tse etsang hore lentswe le dule le wena nako e telele.",
+    },
+    family: {
+      title: <>Utlwisisa, bona, hopola <Hl>bakeng sa lelapa lohle</Hl></>,
+      sub: "Ngodiso e le nngwe e fa setho se seng le se seng sa lelapa akhaonte ya sona, ka dikarolo tsohle tse tswetseng pele. Ho fihlela bana ba 5.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Profaele e arohileng bakeng sa setho se seng le se seng sa lelapa",
+          body: "Bukana ya mantswe, nalane ya dipatlo, le matsatsi a latellanang a ho ithuta bakeng sa ngwana e mong le e mong le motswadi e mong le e mong.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Hokela sesebediswa ka khoutu ya QR",
+          body: "Ngwana wa hao o skena QR ka fono ya hae mme o a kena. Se dula se hokahantswe ka ho sa feleng, ha ho phasewete.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Leqephe la taolo la motswadi",
+          body: "Bona lentswe le leng le le leng leo ngwana ka mong a le batlileng le hore ke neng, mme o latele lebelo la hae ka ho sheba hanngwe.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Ho fihlela bana ba 5 ngodisong e le nngwe",
+          body: "Ngwana e mong le e mong o fumana dikarolo tsohle tsa Deep. Motswadi o lefa hang bakeng sa lelapa lohle.",
+        },
+      ],
+    },
+    bubble: "Jwale ke e GAD!",
+  },
+  ts: {
+    groupTitles: {
+      understand: "Twisisa rito",
+      learn: <>Twisisa u tlhela u <Hl>vona</Hl> rito</>,
+      master: <>Twisisa, vona, u <Hl>tsundzuka rito hilaha ku nga heriki</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Tinhlamuselo hinkwato, swivulwa swa xiviri eka xiyimo xa swona, swivulavulelo leswi rito ri kumekaka eka swona, na laha ri humaka kona.",
+      learn:
+        "Xifaniso xa rito, nhlamuselo leyi vana va yi twisisaka, buku ya marito ya n'wina, na xivulwa lexi mi xi tsalaka mi kuma switsundzuxo.",
+      master:
+        "Mavutiso lama lulamiseriweke n'wina na mintlangu ya marito leyi khomisaka rito nkarhi wo leha.",
+    },
+    family: {
+      title: <>Twisisa, vona, tsundzuka <Hl>eka ndyangu hinkwawo</Hl></>,
+      sub: "Mbhaliso wun'we wu nyika xirho xin'wana na xin'wana xa ndyangu akhawunti ya xona, yi ri na swihlawulekisi hinkwaswo swa le henhla. Ku fika eka vana va 5.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Phrofayili yo hambana eka xirho xin'wana na xin'wana xa ndyangu",
+          body: "Buku ya marito, matimu ya ku lava, na masiku ya ku dyondza hi ku landzelelana eka n'wana na mutswari un'wana na un'wana.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Hlanganisa xitirhisiwa hi khodi ya QR",
+          body: "N'wana wa n'wina u skena khodi ya QR hi riqingho ra yena kutani a nghena. Xi tshama xi hlanganisiwile hilaha ku nga heriki, a ku laveki phasiwedi.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Dashibodo ya mutswari",
+          body: "Vonani rito rin'wana na rin'wana leri n'wana un'wana na un'wana a ri laveke na rini, mi landzelela ku ya emahlweni ka vona hi ku languta kan'we.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Ku fika eka vana va 5 eka mbhaliso wun'we",
+          body: "N'wana un'wana na un'wana u kuma swihlawulekisi hinkwaswo swa Deep. Mutswari u hakela kan'we eka ndyangu hinkwawo.",
+        },
+      ],
+    },
+    bubble: "Sweswi ndzi ri GAD!",
+  },
+  ss: {
+    groupTitles: {
+      understand: "Condza ligama",
+      learn: <>Condza futsi <Hl>ubone</Hl> ligama</>,
+      master: <>Condza, ubone, futsi <Hl>ulikhumbule ligama phakadze</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Yonkhe inchazelo, imisho yangempela esimeni, tisho leligama lelikuto, nekutsi livelaphi.",
+      learn:
+        "Sitfombe saleligama, inchazelo lefanele bantfwana, incwadzi yakho yemagama, nemusho lowubhalako bese utfola imibono.",
+      master:
+        "Imibuto lehambisana nawe nemidlalo yemagama lebetsela ligama engcondvweni sikhatsi lesidze.",
+    },
+    family: {
+      title: <>Condza, bona, khumbula <Hl>kuwo wonkhe umndeni</Hl></>,
+      sub: "Kubhalisa kunye kunika lilunga ngalinye lemndeni i-akhawunti yalo, lenato tonkhe tintfo letitfutfukile. Kufika ebantfwaneni labangu-5.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Iphrofayili letehlukile yalilunga ngalinye lemndeni",
+          body: "Incwadzi yemagama, umlandvo wekusesha, nemalanga ekufundza ngekulandzelana kumntfwana nemtali ngamunye.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Xhuma lithuluzi ngekhodi ye-QR",
+          body: "Umntfwana wakho uskena i-QR efonini yakhe bese uyangena. Uhlala axhumekile unomphela, kute liphasiwedi.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Libhodi lemtali",
+          body: "Bona onkhe emagama umntfwana ngamunye lawaseshile nekutsi nini, ulandzele inshesha yakhe ngekubuka kanye.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Kufika ebantfwaneni labangu-5 ekubhaliseni kunye",
+          body: "Umntfwana ngamunye utfola tonkhe tintfo te-Deep. Umtali ukhokha kanye kuwo wonkhe umndeni.",
+        },
+      ],
+    },
+    bubble: "Nyalo sengili-GAD!",
+  },
+  ve: {
+    groupTitles: {
+      understand: "Pfesesani ipfi",
+      learn: <>Pfesesani ni <Hl>vhone</Hl> ipfi</>,
+      master: <>Pfesesani, vhonani, ni <Hl>humbule ipfi lini na lini</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Ndeme dzoṱhe, mitaladzi ya vhukuma kha nyimele, mirero ine ḽa wanala khayo, na hune ḽa bva hone.",
+      learn:
+        "Tshifanyiso tsha ipfi, ṱhalutshedzo ya vhana, bugu yaṋu ya maipfi, na mutaladzi une na u ṅwala ni wane vhuṱanzi.",
+      master:
+        "Mbudziso dzo itelwaho inwi na mitambo ya maipfi zwine zwa ita uri ipfi ḽi dzule tshifhinga tshilapfu.",
+    },
+    family: {
+      title: <>Pfesesani, vhonani, humbulani <Hl>kha muṱa woṱhe</Hl></>,
+      sub: "Ṅwaliso muthihi u ṋea muraḓo muṅwe na muṅwe wa muṱa akhaunthu yawe, na zwishumiswa zwoṱhe zwa nṱha. U swika kha vhana vha 5.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Phrofaiḽi yo khethekanaho kha muraḓo muṅwe na muṅwe wa muṱa",
+          body: "Bugu ya maipfi, zwe a ṱoḓa, na maḓuvha a u guda nga u tevhekana kha ṅwana muṅwe na muṅwe na mubebi muṅwe na muṅwe.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Ṱumanyani tshishumiswa nga khoudu ya QR",
+          body: "Ṅwana waṋu u sekena QR nga founu yawe a dzhena. Tshi dzula tsho ṱumanywa lini na lini, hu si na phasiwedi.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Tshikirini tsha vhabebi",
+          body: "Vhonani ipfi ḽiṅwe na ḽiṅwe ḽe ṅwana muṅwe na muṅwe a ḽi ṱoḓa na uri lini, ni tevhele u ya phanḓa hawe nga u lavhelesa luthihi.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "U swika kha vhana vha 5 kha ṅwaliso muthihi",
+          body: "Ṅwana muṅwe na muṅwe u wana zwishumiswa zwoṱhe zwa Deep. Mubebi u badela luthihi kha muṱa woṱhe.",
+        },
+      ],
+    },
+    bubble: "Zwino ndo ḽi GAD!",
+  },
+  nr: {
+    groupTitles: {
+      understand: "Zwisisa ilizwi",
+      learn: <>Zwisisa begodu <Hl>ubone</Hl> ilizwi</>,
+      master: <>Zwisisa, ubone, begodu <Hl>ukhumbule ilizwi unomphela</Hl></>,
+    },
+    groupSubs: {
+      understand:
+        "Zoke iinhlathululo, imitjho yamambala ngokwesimo, izaga elitholakala kizo, nalapho lisuka khona.",
+      learn:
+        "Isithombe selizwi, ihlathululo efanele abantwana, ibhuku lamezwi lakho, nomutjho owutlolako uthole amazwana.",
+      master:
+        "Iinkhwizi ezilungiselelwe wena nemidlalo yamezwi eqinisa ilizwi isikhathi eside.",
+    },
+    family: {
+      title: <>Zwisisa, bona, khumbula <Hl>emndenini woke</Hl></>,
+      sub: "Ukubhalisela kunye kunikela ilunga ngalinye lomndeni i-akhawunti yalo, neenzuzo zoke ezithuthukileko. Abantwana abafika ku-5.",
+      features: [
+        {
+          id: "profile",
+          icon: "profile",
+          title: "Iphrofayili ehlukileko yelunga ngalinye lomndeni",
+          body: "Ibhuku lamezwi, umlando wokufuna, namalanga alandelanako wokufunda womntwana nombelethi ngamunye.",
+        },
+        {
+          id: "qr",
+          icon: "qr",
+          title: "Hlanganisa idivayisi ngekhowudi ye-QR",
+          body: "Umntwana wakho uskena i-QR efowunini yakhe bese ayangena. Ihlala ihlanganisiwe unomphela, ngaphandle kwephasiwedi.",
+        },
+        {
+          id: "dashboard",
+          icon: "dashboard",
+          title: "Ideshibhodi yababelethi",
+          body: "Bona ilizwi ngalinye umntwana ngamunye alifunileko nokuthi kunini, ulandele ijubane lakhe msinyana.",
+        },
+        {
+          id: "people",
+          icon: "people",
+          title: "Abantwana abafika ku-5 ekubhaliseleni kunye",
+          body: "Umntwana ngamunye uthola zoke iinzuzo ze-Deep. Umbelethi ubhadela kanye emndenini woke.",
+        },
+      ],
+    },
+    bubble: "Nje sengiyenzile i-GAD!",
+  },
   el: {
     groupTitles: {
       understand: "Κατάλαβε τη λέξη",
@@ -1809,6 +2177,206 @@ const COPY: Record<string, {
       { id: "compose",     icon: "compose",     tier: "clear", title: "Bhala umusho, uthole impendulo",    body: "Yakha umusho wakho siqu ngegama bese uthola ukulungiswa nempendulo ngokushesha." },
       { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Imibuzo eyenzelwe wena",            body: "Umbuzo wansuku zonke ngamagama owawafundayo, ukuze ahlale nawe isikhathi eside." },
       { id: "compare",     icon: "compare",     tier: "deep",  title: "Imidlalo yamagama",                 body: "Imidlalo ekhulisa isilulumagama sakho: ukuhambisanisa, ukuqagela, ukwakha ukuxhumana phakathi kwamagama." },
+    ],
+  },
+  xh: {
+    heroEyebrow: "Iimpawu",
+    heroTitle: "Isichazi-magama esingemi kwintsingiselo.",
+    heroSub: "I-Gadit iliqonda igama ukuya kuthi ga ekupheleni. Zonke iintsingiselo, izivakalisi zokwenyani ngokomxholo, izaci, imvelaphi nokuziqhelisa. De igama liqondakale ngokwenene. Yile nto siyibiza ngokuthi kukwenza i-GAD igama.",
+    ctaPrimary: "Qalisa simahla",
+    ctaSecondary: "Jonga amaxabiso",
+    signin: "Ngena", pricing: "Amaxabiso", search: "Khangela", features: "Iimpawu",
+    sectionLabel: "Into oyifumanayo",
+    finalCtaTitle: "Ukulungele ukuyizama?",
+    finalCtaSub: "Qalisa nge-Basic, simahla ngokupheleleyo. Nyusela ngokucofa kanye, kuphela xa ufuna ngaphezulu.",
+    finalCtaBtn: "Qalisa ngoku",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Zonke iintsingiselo",                   body: "Zonke iintsingiselo zegama, nkqu nezinqabileyo, zilandelelaniswe ngokokuba zisetyenziswa kangakanani." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Izivakalisi zokwenyani ngokomxholo",    body: "Izivakalisi ezintathu zokwenyani kwintsingiselo nganye, ukuze umxholo uqondakale ngoko nangoko." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Izaci namabinzana",                     body: "Lonke ibinzana eli gama liyinxalenye yalo, kunye nentsingiselo epheleleyo yebinzana." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "Apho igama lavela khona",               body: "Ulwimi igama elaqala kulo, nento elalithetha yona ekuqaleni." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Inkcazelo yabantwana",                  body: "Inguqulelo ecacileyo nelula umntwana anokuyifunda ngaphandle kwamagama anzima." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Igama njengomfanekiso",                 body: "Umfanekiso owodwa wegama, ohambelana ncam nentsingiselo oyifundayo." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Incwadi yakho yamagama",                body: "Gcina amagama ofuna ukuwakhumbula. Ayafumaneka nangaphandle kwe-intanethi." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Bhala isivakalisi, ufumane ingxelo",    body: "Yakha esakho isivakalisi ngegama uze ufumane ulungiso nengxelo ngoko nangoko." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Imibuzo eyenzelwe wena",                body: "Umbuzo wemihla ngemihla ngamagama owafundileyo, ukuze ahlale nawe ixesha elide." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Imidlalo yamagama",                     body: "Imidlalo ekhulisa isigama sakho: ukudibanisa, ukuqikelela, ukwakha unxulumano phakathi kwamagama." },
+    ],
+  },
+  nso: {
+    heroEyebrow: "Dikarolo",
+    heroTitle: "Pukuntšu ye e sa emego go tlhalošo.",
+    heroSub: "Gadit e kwešiša lentšu go fihla mafelelong. Tlhalošo ye nngwe le ye nngwe, mafoko a nnete ka bokao bja ona, dika, mothopo le tlwaetšo. Go fihlela lentšu le kwagala ka nnete. Ke seo re se bitšago go GAD lentšu.",
+    ctaPrimary: "Thoma ka mahala",
+    ctaSecondary: "Bona ditheko",
+    signin: "Tsena", pricing: "Ditheko", search: "Nyaka", features: "Dikarolo",
+    sectionLabel: "Seo o se hwetšago",
+    finalCtaTitle: "O itokišitše go e leka?",
+    finalCtaSub: "Thoma ka Basic, ka mahala ka botlalo. Kaonafatša ka go kgotla gatee, fela ge o nyaka tše dintši.",
+    finalCtaBtn: "Thoma bjale",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Tlhalošo ye nngwe le ye nngwe", body: "Ditlhalošo ka moka tša lentšu, le tše di sa tlwaelegago, di rulagantšwe go ya ka moo di šomišwago gantši ka gona." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Mafoko a nnete ka bokao bja ona", body: "Mafoko a mararo a nnete a tlhalošo ye nngwe le ye nngwe, gore bokao bo kwagale gateetee." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Dika le dipolelwana", body: "Polelwana ye nngwe le ye nngwe yeo lentšu le lego karolo ya yona, le bokao ka botlalo bja polelwana yeo." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "Mo lentšu le tšwago gona", body: "Polelo yeo lentšu le thomilego go yona, le seo le bego le se ra mathomong." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Tlhalošo ya bana", body: "Tlhalošo ye e kwagalago, ye bonolo yeo ngwana a ka e balago ntle le mantšu a thata." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Lentšu bjalo ka seswantšho", body: "Seswantšho se se ikgethilego sa lentšu, se sepelelana le tlhalošo yeo o e balago." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Puku ya gago ya mantšu", body: "Boloka mantšu ao o nyakago go a gopola. A hwetšagala le ge go se na inthanete." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Ngwala lefoko, o hwetše dikarabelo", body: "Bopa lefoko la gago ka lentšu leo gomme o hwetše tshokollo le dikarabelo gateetee." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Ditlhahlobo tše di go loketšego", body: "Tlhahlobo ya letšatši le letšatši ya mantšu ao o ithutilego ona, gore a dule le wena go ya go ile." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Dipapadi tša mantšu", body: "Dipapadi tše di godišago mantšu a gago: go bapanya, go akanya, le go aga dikamano magareng ga mantšu." },
+    ],
+  },
+  tn: {
+    heroEyebrow: "Dintlha",
+    heroTitle: "Thanodi e e sa emeng fa tlhalosong.",
+    heroSub: "Gadit e tlhaloganya lefoko go fitlha kwa bofelong. Bokao bongwe le bongwe, dipolelo tsa nnete mo seemong sa tsone, dikapolelo, tshimologo le boikatiso. Go fitlha lefoko le tlhaloganngwa tota. Seo ke se re se bitsang go GAD lefoko.",
+    ctaPrimary: "Simolola ka mahala",
+    ctaSecondary: "Bona ditlhwatlhwa",
+    signin: "Tsena", pricing: "Ditlhwatlhwa", search: "Batla", features: "Dintlha",
+    sectionLabel: "Se o se bonang",
+    finalCtaTitle: "A o siametse go e leka?",
+    finalCtaSub: "Simolola ka Basic, ka mahala gotlhelele. Tlhatlosa ka go tobetsa gangwe, fa fela o batla go feta.",
+    finalCtaBtn: "Simolola jaanong",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Tlhaloso nngwe le nngwe",                 body: "Ditlhaloso tsotlhe tsa lefoko, le tse di sa tlwaelegang, di rulagantswe go ya ka fa di dirisiwang gantsi ka teng." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Dipolelo tsa nnete mo seemong sa tsone",        body: "Dipolelo tsa nnete di le tharo mo bokaong bongwe le bongwe, gore seemo se tlhaloganngwe ka bonako." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Dikapolelo le dipolelo",           body: "Kapolelo nngwe le nngwe e lefoko e leng karolo ya yone, le bokao jotlhe jwa kapolelo." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "Kwa lefoko le tswang teng",         body: "Puo e lefoko le simolotseng mo go yone, le se le neng le se raya kwa tshimologong." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Tlhaloso ya bana",                body: "Tlhaloso e e phepafetseng, e e bonolo, e ngwana a ka e balang kwa ntle ga mafoko a a thata." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Lefoko jaaka setshwantsho",             body: "Setshwantsho se se ikgethileng sa lefoko, se se tsamaisanang tota le bokao jo o bo balang." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Bukana ya gago ya mafoko",           body: "Boloka mafoko a o batlang go a gopola. A a bonala le fa o se na inthanete." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Kwala polelo, o bone maikutlo",   body: "Kwala polelo ya gago ka lefoko mme o bone tshiamiso le maikutlo ka bonako." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Ditlhatlhobo tse di dirilweng wena",             body: "Tlhatlhobo ya letsatsi le letsatsi ka mafoko a o a ithutileng, gore a nne le wena ka lobaka lo loleele." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Metshameko ya mafoko",                       body: "Metshameko e e godisang mafoko a gago: go tsamaisanya, go akanya, go aga dikamano magareng ga mafoko." },
+    ],
+  },
+  st: {
+    heroEyebrow: "Dikarolo",
+    heroTitle: "Bukantswe e sa emeng tlhalosong feela.",
+    heroSub: "Gadit e utlwisisa lentswe ho fihlela qetellong. Moelelo o mong le o mong, dipolelo tsa nnete maemong a tsona, dikapolelo, tshimoloho le boikwetliso. Ho fihlela lentswe le utlwahala ka nnete. Sena ke seo re se bitsang ho GAD lentswe.",
+    ctaPrimary: "Qala mahala",
+    ctaSecondary: "Sheba ditheko",
+    signin: "Kena", pricing: "Ditheko", search: "Batla", features: "Dikarolo",
+    sectionLabel: "Seo o se fumanang",
+    finalCtaTitle: "O se o loketse ho e leka?",
+    finalCtaSub: "Qala ka Basic, mahala ka botlalo. Ntlafatsa ka ho tobetsa hanngwe, feela ha o batla ho feta.",
+    finalCtaBtn: "Qala jwale",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Tlhaloso e nngwe le e nngwe", body: "Meelelo yohle ya lentswe, esita le e sa tlwaelehang, e hlophisitswe ho ya ka hore e sebediswa hakae." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Dipolelo tsa nnete maemong a tsona", body: "Dipolelo tse tharo tsa nnete bakeng sa moelelo ka mong, hore maemo a utlwahale hang hang." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Dikapolelo le dipolelo", body: "Kapolelo e nngwe le e nngwe eo lentswe e leng karolo ya yona, le moelelo o felletseng wa poleloana." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "Moo lentswe le tswang teng", body: "Puo eo lentswe le qadileng ho yona, le seo le neng le se bolela qalong." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Tlhaloso ya bana", body: "Tlhaloso e hlakileng, e bonolo, eo ngwana a ka e balang ntle le mantswe a thata." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Lentswe e le setshwantsho", body: "Setshwantsho se ikgethang bakeng sa lentswe, se tsamaisanang le moelelo oo o o balang." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Bukana ya hao ya mantswe", body: "Boloka mantswe ao o batlang ho a hopola. E fumaneha esita le ntle le inthanete." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Ngola polelo, o fumane maikutlo", body: "Iqapele polelo ya hao ka lentswe lena mme o fumane tlhahiso le maikutlo hang hang." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Dikwisi tse o lokiseditsweng", body: "Kwisi ya letsatsi le letsatsi ka mantswe ao o ithutileng ona, hore a dule le wena nako e telele." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Dipapadi tsa mantswe", body: "Dipapadi tse holisang tlotlontswe ya hao: ho tsamaisa, ho hakanya, ho aha dikamano pakeng tsa mantswe." },
+    ],
+  },
+  ts: {
+    heroEyebrow: "Swihlawulekisi",
+    heroTitle: "Dikixinari leyi nga yimiki eka nhlamuselo.",
+    heroSub: "Gadit yi twisisa rito ku fikela emakumu. Tinhlamuselo hinkwato, swivulwa swa xiviri eka xiyimo xa swona, swivulavulelo, masungulo na ntoloveto. Ku fikela loko rito ri twala hakunene. Hi swona leswi hi swi vitanaka ku GAD rito.",
+    ctaPrimary: "Sungula mahala",
+    ctaSecondary: "Vona minxavo",
+    signin: "Nghena", pricing: "Minxavo", search: "Lava", features: "Swihlawulekisi",
+    sectionLabel: "Leswi mi swi kumaka",
+    finalCtaTitle: "Xana mi lunghekele ku ringeta?",
+    finalCtaSub: "Sungulani hi Basic, mahala hi ku helela. Tlakusani hi ku thinta kan'we, ntsena loko mi lava swo tala.",
+    finalCtaBtn: "Sungula sweswi",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Tinhlamuselo hinkwato",                 body: "Tinhlamuselo hinkwato ta rito, hambi ku ri leti nga tolovelekangiki, ti hleriwile hi ku ya hi ndlela leyi ti tirhisiwaka ha yona." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Swivulwa swa xiviri eka xiyimo xa swona",        body: "Swivulwa swinharhu swa xiviri eka nhlamuselo yin'wana na yin'wana, leswaku xiyimo xi twisiseka hi ku hatlisa." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Swivulavulelo na swivulwa",           body: "Xivulavulelo xin'wana na xin'wana lexi rito ri nga xiphemu xa xona, xi ri na nhlamuselo hinkwayo ya xivulwa." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "Laha rito ri humaka kona",         body: "Ririmi leri rito ri sunguleke eka rona, na leswi a ri swi vula eku sunguleni." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Nhlamuselo ya vana",                body: "Nhlamuselo leyi twisisekaka, yo olova, leyi n'wana a nga yi hlayaka handle ka marito yo tika." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Rito hi xifaniso",             body: "Xifaniso lexi nga riki na xin'wana xo fana na xona xa rito, lexi fambelanaka na nhlamuselo leyi mi yi hlayaka." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Buku ya marito ya n'wina",           body: "Hlayisani marito lawa mi lavaka ku ma tsundzuka. Ma kumeka hambi ku nga ri na inthanete." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Tsala xivulwa, u kuma switsundzuxo",   body: "Tsalani xivulwa xa n'wina hi rito leri kutani mi kuma ku lulamisiwa na switsundzuxo hi ku hatlisa." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Mavutiso lama lulamiseriweke n'wina",             body: "Mavutiso ya siku na siku hi marito lawa mi ma dyondzeke, leswaku ma tshama na n'wina nkarhi wo leha." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Mintlangu ya marito",                       body: "Mintlangu leyi kurisaka vutivi bya marito: ku fambelanisa, ku ringanyeta, ku aka vuxaka exikarhi ka marito." },
+    ],
+  },
+  ss: {
+    heroEyebrow: "Lokukhona",
+    heroTitle: "Sichazamagama lesingemi enchazelweni nje.",
+    heroSub: "Gadit iyalicondza ligama kuze kube sekugcineni. Yonkhe inchazelo, imisho yangempela esimeni, tisho, imvelaphi nekuticecesha. Kuze ligama licace ngempela. Loko sikubita ngekutsi ku-GAD ligama.",
+    ctaPrimary: "Cala mahhala",
+    ctaSecondary: "Buka emanani",
+    signin: "Ngena", pricing: "Emanani", search: "Sesha", features: "Lokukhona",
+    sectionLabel: "Lokutfolako",
+    finalCtaTitle: "Sewulungele kuzama?",
+    finalCtaSub: "Cala nge-Basic, mahhala ngalokuphelele. Khuphula ngekucindzetela kanye, kuphela nawufuna lokunyenti.",
+    finalCtaBtn: "Cala nyalo",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Yonkhe inchazelo",                 body: "Tonkhe tinchazelo teligama, ngisho naletingavamile, tihlelwe ngekutsi tisetjentiswa kangakanani." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Imisho yangempela esimeni",        body: "Imisho lemitsatfu yangempela kumcondvo ngamunye, kute simo sicace masinyane." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Tisho netinkhulumo",               body: "Yonkhe inkhulumo leligama liyincenye yayo, kanye nemcondvo lophelele walesisho." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "Kutsi ligama livelaphi",           body: "Lulwimi ligama lelacala kulo, nekutsi bekusho kutsini ekucaleni." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Inchazelo yebantfwana",            body: "Inchazelo lecacile, lelula umntfwana langayifundza ngaphandle kwemagama lalukhuni." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Ligama njengesitfombe",            body: "Sitfombe lesehlukile saleligama, lesihambisana ngco nemcondvo lowufundzako." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Incwadzi yakho yemagama",          body: "Gcina emagama lofuna kuwakhumbula. Iyatfolakala ngisho ungenayo i-inthanethi." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Bhala umusho, utfole imibono",     body: "Bhala umusho wakho usebentisa ligama bese utfola kulungiswa nemibono khona lapho." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Imibuto lehambisana nawe",         body: "Imibuto yemalanga onkhe ngemagama lowafundzile, kute ahlale nawe sikhatsi lesidze." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Imidlalo yemagama",                body: "Imidlalo lekhulisa emagama akho: kufanisa, kucagela, nekwakha kuhlobana emkhatsini wemagama." },
+    ],
+  },
+  ve: {
+    heroEyebrow: "Zwine ya ita",
+    heroTitle: "Bugu ya maipfi i sa imi kha ṱhalutshedzo.",
+    heroSub: "Gadit i pfesesa ipfi u swika magumoni. Ndeme dzoṱhe, mitaladzi ya vhukuma kha nyimele, mirero, vhubvo na nḓowelo. U swika ipfi ḽi tshi pfesesea vhukuma. Ndi zwone zwine ra zwi vhidza u GAD ipfi.",
+    ctaPrimary: "Thomani mahala",
+    ctaSecondary: "Vhonani mitengo",
+    signin: "Dzhenani", pricing: "Mitengo", search: "Ṱoḓani", features: "Zwine ya ita",
+    sectionLabel: "Zwine na zwi wana",
+    finalCtaTitle: "No ḓilugisela u lingedza?",
+    finalCtaSub: "Thomani nga Basic, mahala tshoṱhe. Khwinifhadzani nga u kwama luthihi, musi fhedzi ni tshi ṱoḓa zwinzhi.",
+    finalCtaBtn: "Thomani zwino",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Ṱhalutshedzo dzoṱhe",                 body: "Ndeme dzoṱhe dza ipfi, na dzi sa wanali kanzhi, dzo dzudzanywa u ya nga uri dzi shumiswa lungafhani." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Mitaladzi ya vhukuma kha nyimele",        body: "Mitaladzi miraru ya vhukuma kha ndeme iṅwe na iṅwe, uri nyimele i pfesesee nga u ṱavhanya." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Mirero na maambele",           body: "Murero muṅwe na muṅwe une ipfi ḽa vha tshipiḓa tshawo, na ndeme yoṱhe ya maambele ayo." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "Hune ipfi ḽa bva hone",         body: "Luambo lune ipfi ḽa thoma khaḽo, na zwe ḽa vha ḽi tshi amba u thomani." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Ṱhalutshedzo ya vhana",                body: "Ṱhalutshedzo yo khunaho, yo leluwaho ine ṅwana a nga i vhala hu si na maipfi a konḓaho." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Ipfi sa tshifanyiso",             body: "Tshifanyiso tshi sa fani na tshiṅwe tsha ipfi, tsho tshimbilelana na ndeme yone-yone ine na khou i vhala." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Bugu yaṋu ya maipfi",           body: "Vhulungani maipfi ane na ṱoḓa u a humbula. I a wanala na hu si na inthanethe." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Ṅwalani mutaladzi, ni wane vhuṱanzi",   body: "Vhumbani mutaladzi waṋu nga ipfi iḽi ni wane tshilugiso na vhuṱanzi nga u ṱavhanya." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Mbudziso dzo itelwaho inwi",             body: "Mbudziso ya ḓuvha ḽiṅwe na ḽiṅwe nga maipfi e na a guda, uri a dzule naṋi tshifhinga tshilapfu." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Mitambo ya maipfi",                       body: "Mitambo ine ya engedza maipfi aṋu: u ṱanganyisa, u humbulela, u fhaṱa vhushaka vhukati ha maipfi." },
+    ],
+  },
+  nr: {
+    heroEyebrow: "Iinzuzo",
+    heroTitle: "Isihlathululimezwi esingagcini ehlathululweni.",
+    heroSub: "I-Gadit izwisisa ilizwi ngokuzeleko. Zoke iinhlathululo, imitjho yamambala ngokwesimo, izaga, umsuka nokuzilolonga. Bekube ilizwi lizwisiseka ngamambala. Lokho kusikubiza ngokuthi kwenza i-GAD elizwini.",
+    ctaPrimary: "Thoma mahala",
+    ctaSecondary: "Bona amanani",
+    signin: "Ngena", pricing: "Amanani", search: "Funa", features: "Iinzuzo",
+    sectionLabel: "Okutholako",
+    finalCtaTitle: "Ulungele ukuyilinga?",
+    finalCtaSub: "Thoma nge-Basic, mahala ngokuzeleko. Thuthukisa ngokuthinta kanye, kwaphela nawufuna okungeziweko.",
+    finalCtaBtn: "Thoma nje",
+    tierLabel: { basic: "Basic", clear: "Clear", deep: "Deep" },
+    list: [
+      { id: "definitions", icon: "definitions", tier: "basic", title: "Zoke iinhlathululo",                 body: "Zoke iinhlathululo zelizwi, ngitjho nalezo ezingavamileko, zihlelwe ngokuthi zisetjenziswa kangangani." },
+      { id: "examples",    icon: "examples",    tier: "basic", title: "Imitjho yamambala ngokwesimo",        body: "Imitjho yamambala emithathu ehlathululweni ngayinye, bona isimo sizwisiseke msinyana." },
+      { id: "idioms",      icon: "idioms",      tier: "basic", title: "Izaga neenkulumo",           body: "Yoke ikulumo ilizwi eliyingcenye yayo, nehlathululo ezeleko yekulumo leyo." },
+      { id: "origin",      icon: "origin",      tier: "basic", title: "Lapho ilizwi lisuka khona",         body: "Ilimi ilizwi elathoma kilo, nalokho ebelikutjho ekuthomeni." },
+      { id: "kids",        icon: "kids",        tier: "clear", title: "Ihlathululo yabantwana",                body: "Ihlathululo ekhanyako nelula umntwana angayifunda ngaphandle kwamezwi abudisi." },
+      { id: "image",       icon: "image",       tier: "clear", title: "Ilizwi njengesithombe",             body: "Isithombe esikhethekileko selizwi, esifanelana ngokuqondileko nehlathululo oyifundako." },
+      { id: "notebook",    icon: "notebook",    tier: "clear", title: "Ibhuku lamezwi lakho",           body: "Bulunga amezwi ofuna ukuwakhumbula. Ayatholakala ngitjho nangaphandle kwe-inthanethi." },
+      { id: "compose",     icon: "compose",     tier: "clear", title: "Tlola umutjho, uthole amazwana",   body: "Tlola umutjho wakho ngelizwi leli bese uthola ukulungiswa namazwana msinyana." },
+      { id: "quiz",        icon: "quiz",        tier: "deep",  title: "Iinkhwizi ezilungiselelwe wena",             body: "Ikhwizi yelanga ngelanga ngamezwi owafundileko, bona ahlale nawe isikhathi eside." },
+      { id: "compare",     icon: "compare",     tier: "deep",  title: "Imidlalo yamezwi",                       body: "Imidlalo ekhulisa amezwi wakho: ukufanisa, ukuqagela, nokwakha ukuhlobana hlangana kwamezwi." },
     ],
   },
   el: {
