@@ -7,6 +7,7 @@ import Stripe from "stripe";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { rateFor, COMMISSION_HOLD_MS, YEAR_ONE_MS, PartnerTier } from "@/lib/partners";
+import { autoEnrollPartner } from "@/lib/partner-auto";
 import { isNewSchoolsPrice, NEW_SCHOOLS_YEARLY_IDS } from "@/lib/schools-prices";
 import { dunningLang, buildDunningEmail } from "@/lib/dunning-email";
 import BILLING_I18N from "@/lib/billing-email-i18n.json";
@@ -102,11 +103,24 @@ async function accruePartnerCommission(invoice: Stripe.Invoice) {
  * creation, so a family that upgraded from a free account produced no alert
  * (Gadi 2026-07-27).
  */
+/** "Monthly · $5.99" / "Yearly · ₪199.00" from the subscription's first item, in the
+ *  currency it is billed in (a multi-currency price keeps the others in currency_options). */
+function billingLine(sub: Stripe.Subscription | null): string | null {
+  const price = sub?.items?.data?.[0]?.price;
+  if (!sub || !price) return null;
+  const every = price.recurring?.interval === "year" ? "Yearly" : price.recurring?.interval === "month" ? "Monthly" : price.recurring?.interval ?? "";
+  const cur = (sub.currency || price.currency || "").toLowerCase();
+  const opt = (price as unknown as { currency_options?: Record<string, { unit_amount?: number | null }> }).currency_options;
+  const cents = cur === price.currency ? price.unit_amount : opt?.[cur]?.unit_amount ?? null;
+  const amount = cents == null ? "" : new Intl.NumberFormat("en-US", { style: "currency", currency: cur.toUpperCase() }).format(cents / 100);
+  return [every, amount].filter(Boolean).join(" · ") || null;
+}
+
 async function notifyPaidActivation(
   uid: string,
   tier: string,
   email: string | null,
-  opts?: { fromTrial?: boolean },
+  opts?: { fromTrial?: boolean; sub?: Stripe.Subscription | null },
 ) {
   try {
     const resendKey = process.env.RESEND_API_KEY;
@@ -121,9 +135,18 @@ async function notifyPaidActivation(
     // is a CONVERSION, not a fresh signup. Labelling the two apart stops
     // the "New subscription" alert from looking like a duplicate signup
     // weeks after the trial began (Gadi 2026-08-10).
-    const converted = !!opts?.fromTrial;
-    const heading = converted ? `Trial converted to paid 💰` : `New ${tier} subscription 💰`;
-    const kindLabel = converted ? "Trial → paid" : "New paid signup";
+    // With the subscription in hand, the alert says what was bought (monthly or
+    // yearly, the price) and the real state: a trial that just STARTED with a
+    // card is not a conversion yet (Gadi 2026-10-16: "Irit, month or year?").
+    const sub = opts?.sub ?? null;
+    const trialing = sub?.status === "trialing";
+    const converted = !trialing && !!opts?.fromTrial;
+    const heading = trialing ? `New ${tier} trial 🎉` : converted ? `Trial converted to paid 💰` : `New ${tier} subscription 💰`;
+    const kindLabel = trialing ? "Free trial started (card on file)" : converted ? "Trial → paid" : "New paid signup";
+    const billing = billingLine(sub);
+    const trialEndText = trialing && sub?.trial_end
+      ? new Date(sub.trial_end * 1000).toLocaleDateString("en-IL", { timeZone: "Asia/Jerusalem", day: "2-digit", month: "short", year: "numeric" }) + " (first charge)"
+      : null;
 
     const when = new Date().toLocaleString("en-IL", {
       timeZone: "Asia/Jerusalem",
@@ -138,7 +161,9 @@ async function notifyPaidActivation(
     <div style="padding:24px;">
       <table style="width:100%;border-collapse:collapse;font-size:14px;">
         <tr><td style="padding:8px 0;color:#6B7280;width:110px;">Plan</td><td style="padding:8px 0;font-weight:600;">${tier}</td></tr>
+        ${billing ? `<tr><td style="padding:8px 0;color:#6B7280;">Billing</td><td style="padding:8px 0;font-weight:600;">${billing}</td></tr>` : ""}
         <tr><td style="padding:8px 0;color:#6B7280;">Type</td><td style="padding:8px 0;font-weight:500;">${kindLabel}</td></tr>
+        ${trialEndText ? `<tr><td style="padding:8px 0;color:#6B7280;">Trial ends</td><td style="padding:8px 0;">${trialEndText}</td></tr>` : ""}
         <tr><td style="padding:8px 0;color:#6B7280;">Email</td><td style="padding:8px 0;font-weight:500;">${(email ?? "(none)").replace(/</g, "&lt;")}</td></tr>
         <tr><td style="padding:8px 0;color:#6B7280;">When</td><td style="padding:8px 0;">${when} (Israel time)</td></tr>
       </table>
@@ -151,9 +176,11 @@ async function notifyPaidActivation(
     const res = await sendMail({
       from: "Gadit <notify@gadit.app>",
       to: notifyTo,
-      subject: converted
-        ? `💰 Trial converted to paid (${tier}): ${email ?? uid}`
-        : `💰 New ${tier} subscription: ${email ?? uid}`,
+      subject: (trialing
+        ? `🎉 New ${tier} trial`
+        : converted
+          ? `💰 Trial converted to paid (${tier})`
+          : `💰 New ${tier} subscription`) + `${billing ? ` (${billing})` : ""}: ${email ?? uid}`,
       html,
     });
     if (res.error) {
@@ -702,7 +729,9 @@ async function activateFromSubscriptionMetadata(sub: Stripe.Subscription): Promi
     // trial_end set on the sub means this subscription ran a free trial;
     // by the time we reach activation that trial has ended, so this is a
     // trial-to-paid conversion rather than a fresh paid signup.
-    await notifyPaidActivation(uid, tier, email, { fromTrial: !!sub.trial_end });
+    await notifyPaidActivation(uid, tier, email, { fromTrial: !!sub.trial_end, sub });
+    // Every new subscriber gets the partner link (not schools: an institution).
+    if (!schools) await autoEnrollPartner(uid, email);
   }
   if (family) { await stampFamilyActivated(uid); await sendFamilyWelcome(uid, email); }
   return true;
@@ -975,7 +1004,8 @@ export async function POST(req: NextRequest) {
 
       if (plan !== "basic") {
         const tier = family ? "Family" : schools ? "Schools" : plan === "clear" ? "Clear" : "Deep";
-        await notifyPaidActivation(userId, tier, customerEmail, { fromTrial: !!trialEnd });
+        await notifyPaidActivation(userId, tier, customerEmail, { fromTrial: !!trialEnd, sub });
+        if (!schools) await autoEnrollPartner(userId, customerEmail);
       }
       if (family) { await stampFamilyActivated(userId); await sendFamilyWelcome(userId, customerEmail); }
     }
