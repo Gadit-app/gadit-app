@@ -105,9 +105,14 @@ async function accruePartnerCommission(invoice: Stripe.Invoice) {
  */
 /** "Monthly · $5.99" / "Yearly · ₪199.00" from the subscription's first item, in the
  *  currency it is billed in (a multi-currency price keeps the others in currency_options). */
-function billingLine(sub: Stripe.Subscription | null): string | null {
-  const price = sub?.items?.data?.[0]?.price;
+async function billingLine(sub: Stripe.Subscription | null): Promise<string | null> {
+  let price = sub?.items?.data?.[0]?.price;
   if (!sub || !price) return null;
+  // The subscription's own currency (an Israeli family pays ILS on a USD-based
+  // price): its amount lives in currency_options, which needs an expand.
+  if (sub.currency && sub.currency !== price.currency) {
+    try { price = await stripe.prices.retrieve(price.id, { expand: ["currency_options"] }); } catch { /* keep the bare price */ }
+  }
   const every = price.recurring?.interval === "year" ? "Yearly" : price.recurring?.interval === "month" ? "Monthly" : price.recurring?.interval ?? "";
   const cur = (sub.currency || price.currency || "").toLowerCase();
   const opt = (price as unknown as { currency_options?: Record<string, { unit_amount?: number | null }> }).currency_options;
@@ -143,7 +148,7 @@ async function notifyPaidActivation(
     const converted = !trialing && !!opts?.fromTrial;
     const heading = trialing ? `New ${tier} trial 🎉` : converted ? `Trial converted to paid 💰` : `New ${tier} subscription 💰`;
     const kindLabel = trialing ? "Free trial started (card on file)" : converted ? "Trial → paid" : "New paid signup";
-    const billing = billingLine(sub);
+    const billing = await billingLine(sub);
     const trialEndText = trialing && sub?.trial_end
       ? new Date(sub.trial_end * 1000).toLocaleDateString("en-IL", { timeZone: "Asia/Jerusalem", day: "2-digit", month: "short", year: "numeric" }) + " (first charge)"
       : null;
