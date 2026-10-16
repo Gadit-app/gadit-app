@@ -79,7 +79,16 @@ export function getLangDir(lang: Lang) {
  * rather than "Chinese (China) / (Taiwan)".
  */
 const DISPLAY_CODE: Record<string, string> = { "zh-CN": "zh-Hans", "zh-TW": "zh-Hant" };
+/** Viewer languages whose names the server (Node, full ICU) knows but browsers do
+ *  not (Chrome has no xh/nso/tn/st... data): the server would write "IsiXhosa" and
+ *  the browser "isiXhosa", a hydration mismatch (React #418, 2026-10-16). For these
+ *  viewers names always come from our own labels, the same on both sides. */
+const NO_BROWSER_NAMES = new Set(["xh", "nso", "tn", "st", "ts", "ss", "ve", "nr"]);
 export function langNameIn(code: string, viewerLang: string): string {
+  if (NO_BROWSER_NAMES.has(viewerLang)) {
+    if (code.startsWith("@")) return code === "@za" ? "South Africa" : code.slice(1).toUpperCase();
+    return LANGUAGES.find((l) => l.code === code)?.label ?? code;
+  }
   // A regional group row of the pickers ("@za", lang-groups.ts): the country's name.
   if (code.startsWith("@")) {
     const region = code.slice(1).toUpperCase();
