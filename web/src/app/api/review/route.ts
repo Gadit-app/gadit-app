@@ -1,15 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { FieldPath } from "firebase-admin/firestore";
 import { getAdminAuth } from "@/lib/firebase-admin";
-import { openGrant, logReview, reviewRef, reviewMeaning, type PartDecision } from "@/lib/content-review";
+import { openGrant, logReview, reviewRef, reviewMeaning, saveDecision, historyOf, type PartDecision } from "@/lib/content-review";
 import { DECISIONS, STATUS_OF, checkFixes, partOf, partsFor, quoteOf, snapshotOf, type Decision } from "@/lib/review-parts";
 
 /**
  * The expert's content review (Gemara pilot, 2026-10-15).
  *   GET  /api/review?view=access           { open, expiresAt, name } (anyone signed in)
  *   GET  /api/review?view=list             the meanings and the decisions so far
- *   GET  /api/review?view=meaning&m=<id>   one draft meaning and its decisions
+ *   GET  /api/review?view=meaning&m=<id>   one draft meaning, its decisions, the questions
+ *                                          for the expert on it and the expert's OWN
+ *                                          history records on it (never another's)
  *   POST /api/review  { m, part, decision, notes, fixes, quoteCheck }
+ *                     saves the decision and a history record together; there is no
+ *                     way here to change or delete a history record.
  * Bearer token required. Everything but view=access needs an open grant for
  * this exact uid (reviewGrants/{uid}); without one the answer is 404, as if
  * there were no review. Every view, save and refusal is logged.
@@ -48,6 +51,8 @@ export async function GET(req: NextRequest) {
     await logReview(g.reviewId, { uid: who.uid, email: who.email, action: "list" });
     return NextResponse.json({
       title: head.title, expiresAt: g.expiresAt, name: g.name, email: who.email,
+      // Review groups (2026-10-17): absent for a review loaded without them, like the pilot.
+      ...(Array.isArray(head.groups) && head.groups.length ? { groups: head.groups } : {}),
       meanings: (head.meanings ?? []).map((x: { m: string; w: string; rev: number; parts: string[] }) => ({
         ...x,
         decided: Object.fromEntries(Object.entries(dec[x.m] ?? {}).filter(([, d]) => (d as PartDecision).rev === x.rev).map(([p, d]) => [p, (d as PartDecision).status])),
@@ -57,11 +62,16 @@ export async function GET(req: NextRequest) {
   if (view === "meaning") {
     const m = req.nextUrl.searchParams.get("m") ?? "";
     if (!(head.meanings ?? []).some((x: { m: string }) => x.m === m)) return NO();
-    const x = await reviewMeaning(g.reviewId, m);
+    const doc = (await reviewRef(g.reviewId).collection("meanings").doc(m).get()).data();
+    const x = doc?.data ?? null;
     if (!x) return NO();
-    const d = (await reviewRef(g.reviewId).collection("decisions").doc(m).get()).data();
+    const [d, history] = await Promise.all([reviewRef(g.reviewId).collection("decisions").doc(m).get().then((s) => s.data()), historyOf(g.reviewId, m, who.uid)]);
     await logReview(g.reviewId, { uid: who.uid, email: who.email, action: "view", m });
-    return NextResponse.json({ meaning: x, parts: partsFor(x).map((p) => p.id), decisions: d?.parts ?? {} }, { headers: PRIVATE });
+    return NextResponse.json({
+      meaning: x, parts: partsFor(x).map((p) => p.id), decisions: d?.parts ?? {},
+      questions: Array.isArray(doc?.questions) ? doc.questions : [],
+      history: history.map(({ id, part, rev, at, before, after, notes, changed, textBefore, textAfter }) => ({ id, part, rev, at, before: before ? { decision: before.decision.decision, status: before.decision.status, at: before.decision.at, recordedInHistory: before.recordedInHistory } : null, after, notes, changed, textBefore, textAfter })),
+    }, { headers: PRIVATE });
   }
   return NextResponse.json({ error: "bad_view" }, { status: 400 });
 }
@@ -112,11 +122,10 @@ export async function POST(req: NextRequest) {
     at: new Date().toISOString(),
     rev: Number(x.rev) || 1,
   };
-  // One part at a time: the other parts' decisions stay as they are.
-  // update() replaces that one part whole (a merge would keep an old correction).
-  const ref = reviewRef(g.reviewId).collection("decisions").doc(m);
-  await ref.set({ m, updatedAt: d.at }, { merge: true });
-  await ref.update(new FieldPath("parts", part.id), d);
-  await logReview(g.reviewId, { uid: who.uid, email: who.email, action: "save", m, part: part.id, decision, changes: Object.keys(fixes) });
-  return NextResponse.json({ ok: true, decision: d }, { headers: PRIVATE });
+  // One part at a time: the other parts' decisions stay as they are; that one part is
+  // replaced whole (a merge would keep an old correction), and the history record of
+  // the change is created in the same transaction.
+  const saved = await saveDecision(g.reviewId, x, part, d);
+  await logReview(g.reviewId, { uid: who.uid, email: who.email, action: "save", m, part: part.id, decision, changes: Object.keys(fixes), historyId: saved.decision.historyId });
+  return NextResponse.json({ ok: true, decision: saved.decision }, { headers: PRIVATE });
 }

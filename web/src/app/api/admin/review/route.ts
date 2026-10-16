@@ -5,6 +5,7 @@ import { exportReview, reviewRef } from "@/lib/content-review";
 /**
  * Admin side of the expert content review (Gemara pilot, 2026-10-15).
  *   GET  ?secret=…&action=status&review=<id>   grants, decisions so far, the last log entries
+ *   GET  ?secret=…&action=history&review=<id>[&m=<meaning>]   every history record, oldest first
  *   GET  ?secret=…&action=export&review=<id>   the content after the decisions, in the
  *                                              pilot-content.json format (for import-pilot.mjs)
  *   POST ?secret=…  { action: "grant", uid, email, name, review, expiresAt }
@@ -32,6 +33,12 @@ export async function GET(req: NextRequest) {
   if (action === "export") {
     const out = await exportReview(id);
     return out ? NextResponse.json(out) : NextResponse.json({ error: "not_found" }, { status: 404 });
+  }
+  if (action === "history") {
+    const m = req.nextUrl.searchParams.get("m") ?? "";
+    const col = reviewRef(id).collection("history");
+    const s = await (m ? col.where("m", "==", m) : col).get();
+    return NextResponse.json({ history: s.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => String((a as { at?: string }).at).localeCompare(String((b as { at?: string }).at))) });
   }
   const head = await reviewRef(id).get();
   if (!head.exists) return NextResponse.json({ error: "not_found" }, { status: 404 });

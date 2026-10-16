@@ -8,12 +8,20 @@
  *   contentReviews/{reviewId}/meanings/{m}   one draft meaning (content format)
  *   contentReviews/{reviewId}/decisions/{m}  the expert's decision per part
  *   contentReviews/{reviewId}/log/{auto}     every view, save and refusal
+ *   contentReviews/{reviewId}/history/{auto} one record per saved decision: who, which
+ *                                            part, on which revision, the decision and
+ *                                            the text before and after (2026-10-17).
+ *                                            Written only with create() in the same
+ *                                            transaction as the decision; nothing in the
+ *                                            app updates or deletes a record.
  * The grant is keyed by the expert's own uid: no other account, and no one in
  * the expert's family, can open the review. Every read and every save checks
  * it again on the server.
  */
+import crypto from "node:crypto";
+import { FieldPath } from "firebase-admin/firestore";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { PARTS, STATUS_OF, applyFixes, partOf, quoteOf, type Decision, type Meaning, type PartId } from "@/lib/review-parts";
+import { PARTS, STATUS_OF, applyFixes, partOf, partsFor, quoteOf, snapshotOf, type Decision, type Meaning, type Part, type PartId } from "@/lib/review-parts";
 
 export type Grant = { uid: string; reviewId: string; email: string; name: string; expiresAt: string; active: boolean };
 export type PartDecision = {
@@ -27,6 +35,29 @@ export type PartDecision = {
   by: { uid: string; email: string; name: string };
   at: string;
   rev: number;
+  /** The history record of this save (absent on decisions saved before 2026-10-17). */
+  historyId?: string;
+};
+export type HistoryRecord = {
+  reviewId: string;
+  m: string;
+  w: string;
+  part: PartId;
+  rev: number;
+  /** sha256 of the meaning as the expert saw it. */
+  contentHash: string;
+  by: { uid: string; email: string; name: string };
+  at: string;
+  /** The decision this save replaced, whole, as it was stored; null for the first.
+   *  recordedInHistory is false when it was saved before the history existed. */
+  before: { decision: PartDecision; recordedInHistory: boolean } | null;
+  after: { decision: Decision; status: PartDecision["status"]; fixes: Record<string, string>; quoteCheck?: PartDecision["quoteCheck"] };
+  notes: string;
+  /** The part's text before this save (the earlier decision's, on the same revision,
+   *  else the content) and after it; changed: the fields that differ. */
+  textBefore: Record<string, string>;
+  textAfter: Record<string, string>;
+  changed: string[];
 };
 
 const db = () => getAdminDb();
@@ -48,6 +79,45 @@ export async function logReview(reviewId: string, entry: Record<string, unknown>
   try {
     await reviewRef(reviewId).collection("log").add({ ...entry, at: new Date().toISOString() });
   } catch { /* the log never blocks the review */ }
+}
+
+const canon = (v: unknown): unknown => (Array.isArray(v) ? v.map(canon) : v && typeof v === "object" ? Object.fromEntries(Object.keys(v).sort().map((k) => [k, canon((v as Record<string, unknown>)[k])])) : v);
+export const contentHash = (x: Meaning) => crypto.createHash("sha256").update(JSON.stringify(canon(x))).digest("hex");
+
+/**
+ * Saves one part's decision and its history record in ONE transaction: the current
+ * decision is replaced (the other parts stay as they are), the record of what it
+ * replaced is created, never overwritten. A decision saved before the history
+ * existed is kept whole as the record's "before": no history is invented for it.
+ */
+export async function saveDecision(reviewId: string, x: Meaning, part: Part, d: PartDecision): Promise<{ decision: PartDecision; history: HistoryRecord }> {
+  const ref = reviewRef(reviewId).collection("decisions").doc(x.m);
+  const hRef = reviewRef(reviewId).collection("history").doc();
+  const decision: PartDecision = { ...d, historyId: hRef.id };
+  let history!: HistoryRecord;
+  await db().runTransaction(async (t) => {
+    const cur = await t.get(ref);
+    const prev = (cur.exists ? (cur.data()?.parts ?? {})[part.id] : undefined) as PartDecision | undefined;
+    const textBefore = prev && prev.rev === d.rev && prev.snapshot ? prev.snapshot : snapshotOf(part, x);
+    history = {
+      reviewId, m: x.m, w: String(x.w ?? ""), part: part.id, rev: d.rev, contentHash: contentHash(x),
+      by: d.by, at: d.at,
+      before: prev ? { decision: prev, recordedInHistory: !!prev.historyId } : null,
+      after: { decision: d.decision, status: d.status, fixes: d.fixes, ...(d.quoteCheck ? { quoteCheck: d.quoteCheck } : {}) },
+      notes: d.notes, textBefore, textAfter: d.snapshot,
+      changed: Object.keys(d.snapshot).filter((k) => (textBefore[k] ?? "") !== d.snapshot[k]),
+    };
+    if (cur.exists) t.update(ref, new FieldPath("parts", part.id), decision, "updatedAt", d.at);
+    else t.set(ref, { m: x.m, updatedAt: d.at, parts: { [part.id]: decision } });
+    t.create(hRef, history);
+  });
+  return { decision, history };
+}
+
+/** One expert's own history records on one meaning of the review, oldest first. */
+export async function historyOf(reviewId: string, m: string, uid: string): Promise<Array<HistoryRecord & { id: string }>> {
+  const s = await reviewRef(reviewId).collection("history").where("m", "==", m).get();
+  return s.docs.map((h) => ({ id: h.id, ...(h.data() as HistoryRecord) })).filter((h) => h.by?.uid === uid).sort((a, b) => a.at.localeCompare(b.at));
 }
 
 export async function reviewMeaning(reviewId: string, m: string): Promise<Meaning | null> {
@@ -74,7 +144,10 @@ export async function exportReview(reviewId: string) {
     const x: Meaning = JSON.parse(JSON.stringify(base));
     const parts = dec.get(x.m)?.parts ?? {};
     const line: Record<string, string> = {};
+    const present = new Set(partsFor(x).map((p) => p.id));
     for (const p of PARTS) {
+      // A level with no text of its own has no part: nothing to export for it.
+      if (p.id.startsWith("level_") && !present.has(p.id)) continue;
       const d = parts[p.id];
       if (!d) { line[p.id] = x.approvals?.[p.id]?.status ?? (p.id === "diagram" ? "-" : "draft"); continue; }
       if (d.rev !== x.rev) { problems.push(`${x.m}/${p.id}: decided on rev ${d.rev}, the meaning is rev ${x.rev}: left out`); line[p.id] = "stale"; continue; }

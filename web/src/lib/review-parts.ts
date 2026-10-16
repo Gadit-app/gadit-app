@@ -10,7 +10,8 @@ import type { SetDiagram } from "@/lib/word-sets";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type Meaning = Record<string, any>;
 
-export type PartId = "definition" | "examples" | "quote" | "visual" | "quiz" | "game" | "diagram";
+export type LevelId = "beg" | "adv" | "yes";
+export type PartId = "definition" | "examples" | "quote" | "visual" | "quiz" | "game" | "diagram" | `level_${LevelId}`;
 export type Decision = "approve" | "fix" | "reject";
 export type Field = {
   key: string;
@@ -21,10 +22,28 @@ export type Field = {
   long?: boolean;
   /** "answer": 1 to 4; "bool": true / false. */
   kind?: "answer" | "bool";
+  /** A context field that is left out of the screen when it is empty. */
+  hideEmpty?: boolean;
 };
 export type Part = { id: PartId; label: string; fields: Field[] };
 
-export const PART_IDS: PartId[] = ["definition", "examples", "quote", "visual", "quiz", "game", "diagram"];
+export const PART_IDS: PartId[] = ["definition", "examples", "quote", "visual", "quiz", "game", "diagram", "level_beg", "level_adv", "level_yes"];
+
+/**
+ * Text per learning level (Gadi 2026-10-17). A level has its own part only when
+ * the meaning has its own text for it; nothing is ever written for a level that
+ * has none. The publish tool (scripts/gemara/meanings-publish.mjs, levelOf and
+ * levelOfUnit) shows a level's text only once that level's part is approved;
+ * otherwise, and for a level with no text, the projector shows the base
+ * definition. Approving the base definition approves no level.
+ */
+export const LEVELS: Array<{ id: LevelId; label: string; where: string }> = [
+  { id: "beg", label: "הסבר למתחילים", where: "ביחידות של בית הספר היסודי" },
+  { id: "adv", label: "הסבר למתקדמים", where: "ביחידות של חטיבת הביניים והתיכון" },
+  { id: "yes", label: "הסבר לישיבות ולמבוגרים", where: "ביחידות לישיבות ולמבוגרים" },
+];
+export const levelText = (x: Meaning, lv: LevelId): string => String(x.levels?.[lv]?.d ?? "").trim();
+export const levelPart = (lv: LevelId) => `level_${lv}` as PartId;
 export const DECISIONS: Decision[] = ["approve", "fix", "reject"];
 export const STATUS_OF: Record<Decision, "approved" | "draft" | "rejected"> = { approve: "approved", fix: "draft", reject: "rejected" };
 
@@ -65,6 +84,13 @@ for (let i = 0; i < 5; i++) {
   gameFields.push({ key: `tf${n}_explain`, label: `משפט ${n}, הסבר`, get: (x) => x.game?.[i]?.explain ?? "", set: (x, v) => (x.game[i].explain = v), long: true });
 }
 
+const formsText = (x: Meaning) => (x.forms ?? []).map((f: Meaning | string) => (typeof f === "string" ? f : f?.t ?? "")).filter(Boolean).join(", ");
+const levelFields = (lv: LevelId): Field[] => [
+  { key: `level_${lv}_definition`, label: "הנוסח לרמה הזאת", get: (x) => String(x.levels?.[lv]?.d ?? ""), set: (x, v) => { x.levels = x.levels ?? {}; x.levels[lv] = { ...(x.levels[lv] ?? {}), d: v }; }, long: true },
+  { key: `level_${lv}_simple`, label: "הסבר פשוט לרמה הזאת", get: (x) => String(x.levels?.[lv]?.simple ?? ""), set: (x, v) => { x.levels = x.levels ?? {}; x.levels[lv] = { ...(x.levels[lv] ?? {}), simple: v }; }, long: true },
+  { key: `level_${lv}_base`, label: "הגדרת הבסיס, להשוואה", get: (x) => String(x.d ?? ""), set: null },
+];
+
 export const PARTS: Part[] = [
   { id: "definition", label: "הגדרה", fields: [
     field("word", "המילה", ["w"]),
@@ -72,6 +98,8 @@ export const PARTS: Part[] = [
     field("role", "תפקיד", ["role"]),
     field("definition", "ההגדרה", ["d"], true),
     field("simple_explanation", "הסבר פשוט", ["simple"], true),
+    { key: "forms", label: "כתיבים וקיצורים של אותה משמעות", get: formsText, set: null, hideEmpty: true },
+    { key: "related_phrases", label: "צירופים קשורים (לא כתיב של המילה)", get: (x) => (x.relatedPhrases ?? []).join(", "), set: null, hideEmpty: true },
   ] },
   { id: "examples", label: "דוגמאות שלנו", fields: [
     { key: "example_ours_1", label: "דוגמה 1", get: (x) => oursOf(x)[0]?.text ?? "", set: setOurs(0), long: true },
@@ -100,10 +128,26 @@ export const PARTS: Part[] = [
     box("x", "label", "הסתירה"), box("q", "text", "השאלה"), box("n", "text", "מה בא אחר כך"),
     { key: "diagram_note", label: "הערה בתחתית", get: (x) => dgOf(x)?.note ?? "", set: (x, v) => { if (dgOf(x)) x.visual.diagram.note = v; }, long: true },
   ] },
+  ...LEVELS.map((l): Part => ({ id: levelPart(l.id), label: l.label, fields: levelFields(l.id) })),
 ];
 export const partOf = (id: string) => PARTS.find((p) => p.id === id);
-/** The parts of one meaning: the diagram only when it has one. */
-export const partsFor = (x: Meaning) => PARTS.filter((p) => p.id !== "diagram" || !!dgOf(x));
+/** The parts of one meaning: the diagram only when it has one, a level only when it has its own text. */
+export const partsFor = (x: Meaning) => PARTS.filter((p) => {
+  if (p.id === "diagram") return !!dgOf(x);
+  const lv = LEVELS.find((l) => levelPart(l.id) === p.id);
+  return lv ? !!levelText(x, lv.id) : true;
+});
+
+/** What the projector shows for each level, by the publish rule, after the expert's
+ *  decisions so far: a level's own text once approved, else the base definition. */
+export function projectorByLevel(x: Meaning, statusOf: (part: PartId) => string | undefined) {
+  return LEVELS.map((l) => {
+    const own = levelText(x, l.id);
+    const status = own ? statusOf(levelPart(l.id)) : undefined;
+    const shows: "own" | "base" = own && status === "approved" ? "own" : "base";
+    return { ...l, own, status, shows, text: shows === "own" ? own : String(x.d ?? "") };
+  });
+}
 
 export const DASH = /[–—]/;
 export const MAX_FIELD = 600;
