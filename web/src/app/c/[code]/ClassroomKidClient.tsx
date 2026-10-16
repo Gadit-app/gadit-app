@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
 import { useHref, wordPath } from "@/lib/href";
 import { LANGUAGES } from "@/lib/i18n";
+import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { useKidsMode } from "@/lib/use-kids-mode";
 import VoiceInput from "@/components/VoiceInput";
@@ -922,6 +923,7 @@ function ClassroomLangSwitch() {
     return () => document.removeEventListener("mousedown", onClick);
   }, [open]);
   const active = CLASSROOM_LANGS.find((l) => l.code === lang) ?? CLASSROOM_LANGS[1];
+  const langRows = useLangRows(lang);
   return (
     <div ref={wrapRef} className="wb-classroom-lang">
       <button
@@ -938,12 +940,12 @@ function ClassroomLangSwitch() {
       </button>
       {open && (
         <ul className="wb-classroom-lang-menu" role="listbox">
-          {CLASSROOM_LANGS.map((l) => (
+          {langRows.map((l) => (
             <li key={l.code}>
               <button
                 type="button"
                 className={l.code === lang ? "is-active" : ""}
-                onClick={() => { setLang(l.code as typeof lang); setOpen(false); }}
+                onClick={() => { if (toggleLangGroup(l.code)) return; setLang(l.code as typeof lang); setOpen(false); }}
               >
                 <img
                   className="wb-classroom-lang-flag"

@@ -80,6 +80,18 @@ export function getLangDir(lang: Lang) {
  */
 const DISPLAY_CODE: Record<string, string> = { "zh-CN": "zh-Hans", "zh-TW": "zh-Hant" };
 export function langNameIn(code: string, viewerLang: string): string {
+  // A regional group row of the pickers ("@za", lang-groups.ts): the country's name.
+  if (code.startsWith("@")) {
+    const region = code.slice(1).toUpperCase();
+    try {
+      const dn = new Intl.DisplayNames([viewerLang], { type: "region" });
+      if (dn.resolvedOptions().locale.toLowerCase().startsWith(viewerLang.toLowerCase().split("-")[0])) {
+        const name = dn.of(region);
+        if (name && name !== region) return name;
+      }
+    } catch { /* fall through */ }
+    return region === "ZA" ? "South Africa" : region;
+  }
   const native = LANGUAGES.find((l) => l.code === code)?.label ?? code;
   try {
     const dn = new Intl.DisplayNames([viewerLang], { type: "language" });

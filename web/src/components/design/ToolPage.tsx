@@ -14,6 +14,7 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { useAuth } from "@/lib/auth-context";
 import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
+import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
 import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
@@ -103,6 +104,7 @@ function ToolLangSwitch() {
     return () => document.removeEventListener("mousedown", onClick);
   }, [open]);
   const active = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0];
+  const langRows = useLangRows(lang);
   return (
     <div ref={wrapRef} className="wb-lang-chip-wrap">
       <button type="button" className="wb-lang-chip" onClick={() => setOpen((v) => !v)}>
@@ -114,9 +116,9 @@ function ToolLangSwitch() {
       </button>
       {open && (
         <ul className="wb-lang-menu" role="listbox">
-          {LANGUAGES.map((l) => (
+          {langRows.map((l) => (
             <li key={l.code}>
-              <button type="button" className={l.code === lang ? "is-active" : ""} onClick={() => { setLang(l.code as Lang); setOpen(false); }}>
+              <button type="button" className={l.code === lang ? "is-active" : ""} onClick={() => { if (toggleLangGroup(l.code)) return; setLang(l.code as Lang); setOpen(false); }}>
                 <span style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1.2 }}>
                   <span>{langNameIn(l.code, lang)}</span>
                   {langNameIn(l.code, lang) !== l.label && (

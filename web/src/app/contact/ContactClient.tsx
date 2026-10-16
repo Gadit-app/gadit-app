@@ -25,6 +25,7 @@ import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
+import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
 import { HelpCenter } from "@/components/HelpCenter";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
@@ -44,6 +45,8 @@ function LangSwitch() {
   }, [open]);
 
   const active = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[1];
+
+  const langRows = useLangRows(lang);
   return (
     <div ref={wrapRef} className="wb-lang-chip-wrap">
       <button type="button" className="wb-lang-chip" onClick={() => setOpen((v) => !v)}>
@@ -55,12 +58,12 @@ function LangSwitch() {
       </button>
       {open && (
         <ul className="wb-lang-menu" role="listbox">
-          {LANGUAGES.map((l) => (
+          {langRows.map((l) => (
             <li key={l.code}>
               <button
                 type="button"
                 className={l.code === lang ? "is-active" : ""}
-                onClick={() => { setLang(l.code as Lang); setOpen(false); }}
+                onClick={() => { if (toggleLangGroup(l.code)) return; setLang(l.code as Lang); setOpen(false); }}
               >
                 <img className="wb-lang-flag" src={`https://flagcdn.com/40x30/${l.flag}.png`} srcSet={`https://flagcdn.com/80x60/${l.flag}.png 2x`} width="20" height="15" alt="" loading="lazy" />
                 <span style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1.2 }}>

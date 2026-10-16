@@ -38,6 +38,7 @@ import { useKidsMode } from "@/lib/use-kids-mode";
 import { resolvePartnerArea } from "@/lib/partner-nav";
 import { useLang } from "@/lib/lang-context";
 import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
+import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
 import { v2 } from "@/lib/i18n-v2";
 import { useHref } from "@/lib/href";
 import { isPwaInstalledOrDone } from "@/components/InstallPwaPrompt";
@@ -396,6 +397,7 @@ export function WbShellBurger({
   // hamburger looking for settings, and it frees the crowded mobile topbar
   // where the standalone globe was clipping off the edge. Collapsed by default.
   const [langOpen, setLangOpen] = useState(false);
+  const langRows = useLangRows(lang);
   // Show the install entry only where installing is actually possible:
   // a real mobile browser (not an Instagram/Facebook webview), not
   // already running as the installed app. Resolved post-hydration so
@@ -507,12 +509,12 @@ export function WbShellBurger({
           </button>
           {langOpen && (
             <div style={{ maxHeight: 260, overflowY: "auto", overscrollBehavior: "contain" }}>
-              {LANGUAGES.map((l) => (
+              {langRows.map((l) => (
                 <button
                   key={l.code}
                   type="button"
                   className={l.code === lang ? "is-active" : ""}
-                  onClick={() => { setLang(l.code as Lang); setLangOpen(false); setOpen(false); }}
+                  onClick={() => { if (toggleLangGroup(l.code)) return; setLang(l.code as Lang); setLangOpen(false); setOpen(false); }}
                   style={{ paddingInlineStart: 30, textAlign: dir === "rtl" ? "right" : "left" }}
                 >
                   <span style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1.2 }}>

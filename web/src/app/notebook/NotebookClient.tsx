@@ -15,6 +15,7 @@ import { wordLangLabel } from "@/components/design/result";
 import { planCopy, FREE_NOTEBOOK_MAX } from "@/lib/plan-copy";
 import { useEffect, useRef, useState } from "react";
 import { LANGUAGES } from "@/lib/i18n";
+import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
@@ -359,6 +360,7 @@ function LangSwitch() {
     return () => document.removeEventListener("mousedown", onClick);
   }, [open]);
   const active = LANGS.find((l) => l.code === lang) ?? LANGS[1];
+  const langRows = useLangRows(lang);
   return (
     <div ref={wrapRef} className="wb-lang-chip-wrap">
       <button type="button" className="wb-lang-chip" onClick={() => setOpen((v) => !v)}>
@@ -370,12 +372,12 @@ function LangSwitch() {
       </button>
       {open && (
         <ul className="wb-lang-menu" role="listbox">
-          {LANGS.map((l) => (
+          {langRows.map((l) => (
             <li key={l.code}>
               <button
                 type="button"
                 className={l.code === lang ? "is-active" : ""}
-                onClick={() => { setLang(l.code); setOpen(false); }}
+                onClick={() => { if (toggleLangGroup(l.code)) return; setLang(l.code); setOpen(false); }}
               >
                 <img className="wb-lang-flag" src={`https://flagcdn.com/40x30/${l.flag}.png`} srcSet={`https://flagcdn.com/80x60/${l.flag}.png 2x`} width="20" height="15" alt="" loading="lazy" />{l.label}
               </button>

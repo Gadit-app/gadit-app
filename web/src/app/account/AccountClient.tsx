@@ -35,6 +35,7 @@ import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { DeleteAccountModal } from "@/components/design/DeleteAccountModal";
 import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
+import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
 import { useHref } from "@/lib/href";
 import { countCached, setCachedWord } from "@/lib/offline-db";
 
@@ -380,6 +381,7 @@ function tierBg(plan: Plan): string {
 // chip that opens a tiny popover with the 9 langs.
 function LangSwitch() {
   const { lang, setLang, dir } = useLang();
+  const langRows = useLangRows(lang);
   const [open, setOpen] = useState(false);
   const current = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0];
   return (
@@ -408,11 +410,11 @@ function LangSwitch() {
             minWidth: 160,
           }}
         >
-          {LANGUAGES.map((l) => (
+          {langRows.map((l) => (
             <button
               key={l.code}
               type="button"
-              onClick={() => { setLang(l.code as Lang); setOpen(false); }}
+              onClick={() => { if (toggleLangGroup(l.code)) return; setLang(l.code as Lang); setOpen(false); }}
               style={{
                 display: "block",
                 width: "100%",

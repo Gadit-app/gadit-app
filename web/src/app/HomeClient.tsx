@@ -27,6 +27,7 @@ import { type UpgradeTrigger } from "@/components/UpgradeModal";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { LANGUAGES } from "@/lib/i18n";
+import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
 
 // Code-split off the anonymous marketing homepage's critical bundle (Gadi
 // 2026-09-23 PageSpeed pass): AppearancePicker + KidsGameHeader render only
@@ -103,6 +104,7 @@ function LangSwitch() {
     };
   }, [open]);
   const active = LANGS.find((l) => l.code === lang) ?? LANGS[0];
+  const langRows = useLangRows(lang);
   return (
     <div ref={wrapRef} className="wb-lang-chip-wrap">
       <button
@@ -123,14 +125,14 @@ function LangSwitch() {
       </button>
       {open && (
         <ul className="wb-lang-menu" role="listbox">
-          {LANGS.map((l) => (
+          {langRows.map((l) => (
             <li key={l.code}>
               <button
                 type="button"
                 role="option"
                 aria-selected={l.code === lang}
                 className={l.code === lang ? "is-active" : ""}
-                onClick={() => { setLang(l.code); setOpen(false); }}
+                onClick={() => { if (toggleLangGroup(l.code)) return; setLang(l.code); setOpen(false); }}
               >
                 <img className="wb-lang-flag" src={`https://flagcdn.com/40x30/${l.flag}.png`} srcSet={`https://flagcdn.com/80x60/${l.flag}.png 2x`} width="20" height="15" alt="" loading="lazy" />{l.label}
               </button>

@@ -43,6 +43,7 @@ import { goBackOr } from "@/lib/back-nav";
 import { getCachedWord, setCachedWord, setPinned as setPinnedDb } from "@/lib/offline-db";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
 import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
+import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
 import { track } from "@/lib/track";
 import { useKidsMode } from "@/lib/use-kids-mode";
 
@@ -623,6 +624,8 @@ function WordbookLangSwitch() {
 
   const active = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0];
 
+  const langRows = useLangRows(lang);
+
   return (
     <div ref={wrapRef} className="wb-lang-wrap">
       <button
@@ -649,7 +652,7 @@ function WordbookLangSwitch() {
       </button>
       {open && (
         <div className="wb-lang-panel" role="listbox">
-          {LANGUAGES.map((l) => (
+          {langRows.map((l) => (
             <button
               key={l.code}
               type="button"
@@ -657,7 +660,7 @@ function WordbookLangSwitch() {
               aria-selected={l.code === lang}
               className={l.code === lang ? "is-active" : ""}
               onClick={() => {
-                setLang(l.code as Lang);
+                if (toggleLangGroup(l.code)) return; setLang(l.code as Lang);
                 setOpen(false);
               }}
             >
