@@ -71,6 +71,7 @@ function recLocale(lang: string): string {
     fr: "fr-FR", de: "de-DE", it: "it-IT", nl: "nl-NL", cs: "cs-CZ", sk: "sk-SK",
     uk: "uk-UA", tr: "tr-TR", pl: "pl-PL", fa: "fa-IR", id: "id-ID", el: "el-GR",
     hi: "hi-IN", ja: "ja-JP", am: "am-ET", zu: "zu-ZA",
+    af: "af-ZA", xh: "xh-ZA", nso: "nso-ZA", tn: "tn-ZA", st: "st-ZA", ts: "ts-ZA", ss: "ss-ZA", ve: "ve-ZA", nr: "nr-ZA",
   };
   return map[lang] ?? "en-US";
 }

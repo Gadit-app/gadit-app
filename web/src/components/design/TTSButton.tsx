@@ -87,6 +87,9 @@ function toBcp47(audioLang: string | undefined): string {
     ja: "ja-JP",
     am: "am-ET",
     zu: "zu-ZA",
+    // The other South African languages (2026-10-16): a device voice is rare, then
+    // the server read-aloud takes over, but the locale is still the right hint.
+    af: "af-ZA", xh: "xh-ZA", nso: "nso-ZA", tn: "tn-ZA", st: "st-ZA", ts: "ts-ZA", ss: "ss-ZA", ve: "ve-ZA", nr: "nr-ZA",
   };
   const short = audioLang.split("-")[0].toLowerCase();
   return map[short] ?? audioLang;
