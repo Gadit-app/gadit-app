@@ -21,7 +21,12 @@ import {
  * webhook deliveries from creating two partners. Never throws: provisioning
  * must not depend on it.
  */
+/** OFF (Gadi 2026-10-16): the partner link goes only to the college's coach-track
+ *  students, not to every subscriber. Stays off until that audience is identified. */
+const AUTO_ENROLL_ENABLED = false;
+
 export async function autoEnrollPartner(uid: string, email: string | null): Promise<void> {
+  if (!AUTO_ENROLL_ENABLED) return;
   try {
     const mail = (email ?? "").trim().toLowerCase();
     if (!mail || !mail.includes("@")) return;
