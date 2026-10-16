@@ -2194,6 +2194,70 @@ export const NOTEBOOK_DICT_EXTRA: Record<string, NotebookDictStrings> = {
     "timesMany": "Uzanywe izikhathi ezingu-{n}",
     "scoreLine": "{a}/{b} kulungile"
   },
+  xh: {
+    "heading": "Upelo",
+    "sub": "Uthotho osele uziqhelise ngalo. Buyela uze uziqhelise ngalo kwakhona.",
+    "again": "Ziqhelise kwakhona",
+    "timesOne": "Uziqhelise kanye",
+    "timesMany": "Uziqhelise izihlandlo ezi-{n}",
+    "scoreLine": "{a}/{b} zichanekile"
+  },
+  nso: {
+    "heading": "Ditlwaetšo tša mopeleto",
+    "sub": "Dihlopha tšeo o šetšego o di itlwaeditše. Boa o di itlwaetše gape.",
+    "again": "Itlwaetše gape",
+    "timesOne": "E itlwaeditšwe gatee",
+    "timesMany": "E itlwaeditšwe ga {n}",
+    "scoreLine": "{a}/{b} a nepagetše"
+  },
+  tn: {
+    "heading": "Mopeleto",
+    "sub": "Ditlhopha tse o setseng o di ikatisitse. Boela o di ikatise gape.",
+    "again": "Ikatise gape",
+    "timesOne": "E ikatisitswe gangwe",
+    "timesMany": "E ikatisitswe ga {n}",
+    "scoreLine": "{a}/{b} di nepagetse"
+  },
+  st: {
+    "heading": "Mopeleto",
+    "sub": "Dihlopha tseo o seng o di ikwetlisitse. Kgutla o di ikwetlise hape.",
+    "again": "Ikwetlise hape",
+    "timesOne": "E ikwetlisitswe hanngwe",
+    "timesMany": "E ikwetlisitswe makgetlo a {n}",
+    "scoreLine": "{a}/{b} di nepahetse"
+  },
+  ts: {
+    "heading": "Mapeletelo",
+    "sub": "Minxaxamelo leyi u se u yi titoloveteke. Vuya u yi titoloveta nakambe.",
+    "again": "Titoloveta nakambe",
+    "timesOne": "Yi titolovetiwile kan'we",
+    "timesMany": "Yi titolovetiwile minkarhi ya {n}",
+    "scoreLine": "{a}/{b} swi lulamile"
+  },
+  ss: {
+    "heading": "Kupela",
+    "sub": "Tinhlu losewuticecesha ngato. Buyela uphindze uticecesha ngato.",
+    "again": "Ticecesha futsi",
+    "timesOne": "Kuticeceshwe kanye",
+    "timesMany": "Kuticeceshwe tikhatsi letingu-{n}",
+    "scoreLine": "{a}/{b} kulungile"
+  },
+  ve: {
+    "heading": "Mipeleto",
+    "sub": "Zwigwada zwe na zwi ḓowela. Humelani ni zwi ḓowele hafhu.",
+    "again": "Ḓowelani hafhu",
+    "timesOne": "Zwo ḓowelwa luthihi",
+    "timesMany": "Zwo ḓowelwa lwa {n}",
+    "scoreLine": "{a}/{b} zwo vha zwone"
+  },
+  nr: {
+    "heading": "Ukupela",
+    "sub": "Amaqoqo osele uzilolonge ngawo. Buyela uzilolonge ngawo godu.",
+    "again": "Zilolonge godu",
+    "timesOne": "Kuzilolongwe kanye",
+    "timesMany": "Kuzilolongwe izikhathi ezili-{n}",
+    "scoreLine": "{a}/{b} kulungile"
+  },
   "vi": {
     "heading": "Bài chính tả",
     "sub": "Những loạt bài bạn đã luyện. Quay lại và luyện lại nhé.",
@@ -2429,6 +2493,62 @@ export const ACTIVITY_ALERT_EXTRA: Record<string, ActivityAlertStrings> = {
     "sayTitle": "{kid} uzilolonge ukuphimisela",
     "sayLead": "{kid} usanda kuzilolonga ukusho amagama ngokuzwakalayo:",
     "score": "{a} ku-{b} okulungile"
+  },
+  xh: {
+    "spellTitle": "U-{kid} uziqhelise ngopelo",
+    "spellLead": "U-{kid} usandula ukugqiba ukuziqhelisa upelo:",
+    "sayTitle": "U-{kid} uziqhelise ukubiza",
+    "sayLead": "U-{kid} usandula ukuziqhelisa ukuthetha amagama ngokuvakalayo:",
+    "score": "{a} kwe-{b} zichanekile"
+  },
+  nso: {
+    "spellTitle": "{kid} o itlwaeditše mopeleto",
+    "spellLead": "{kid} o sa tšwa go fetša tlwaetšo ya mopeleto:",
+    "sayTitle": "{kid} o itlwaeditše go bitša mantšu",
+    "sayLead": "{kid} o sa tšwa go itlwaetša go bolela mantšu ka lentšu le le kwagalago:",
+    "score": "{a} go {b} a nepagetše"
+  },
+  tn: {
+    "spellTitle": "{kid} o ikatisitse mopeleto",
+    "spellLead": "{kid} o sa tswa go fetsa boikatiso jwa mopeleto:",
+    "sayTitle": "{kid} o ikatisitse go bitsa mafoko",
+    "sayLead": "{kid} o sa tswa go ikatisa go bua mafoko ka lentswe:",
+    "score": "{a} mo go {b} di nepagetse"
+  },
+  st: {
+    "spellTitle": "{kid} o ikwetlisitse mopeleto",
+    "spellLead": "{kid} o sa tswa qeta boikwetliso ba mopeleto:",
+    "sayTitle": "{kid} o ikwetlisitse ho bitsa mantswe",
+    "sayLead": "{kid} o sa tswa ikwetlisa ho bua mantswe ka lentswe le phahameng:",
+    "score": "{a} ho {b} di nepahetse"
+  },
+  ts: {
+    "spellTitle": "{kid} u titolovete mapeletelo",
+    "spellLead": "{kid} u ha ku heta ntoloveto wa mapeletelo:",
+    "sayTitle": "{kid} u titolovete mpfumawulo",
+    "sayLead": "{kid} u ha ku titoloveta ku vula marito hi rito ra le henhla:",
+    "score": "{a} eka {b} swi lulamile"
+  },
+  ss: {
+    "spellTitle": "{kid} uticeceshe kupela",
+    "spellLead": "{kid} usandza kucedza kuticecesha kupela:",
+    "sayTitle": "{kid} uticeceshe kuphimisa",
+    "sayLead": "{kid} usandza kuticecesha kusho emagama ngelivi:",
+    "score": "{a} kwa-{b} kulungile"
+  },
+  ve: {
+    "spellTitle": "{kid} o ḓowela mupeleto",
+    "spellLead": "{kid} o kha ḓi fhedza nḓowelo ya mupeleto:",
+    "sayTitle": "{kid} o ḓowela u bula",
+    "sayLead": "{kid} o kha ḓi ḓowela u amba maipfi nga ipfi ḽa nṱha:",
+    "score": "{a} kha {b} zwo vha zwone"
+  },
+  nr: {
+    "spellTitle": "U-{kid} uzilolonge ukupela",
+    "spellLead": "U-{kid} usanda kuqeda ukuzilolonga ukupela:",
+    "sayTitle": "U-{kid} uzilolonge ukuphimisa",
+    "sayLead": "U-{kid} usanda kuzilolonga ukutjho amezwi ngelizwi eliphezulu:",
+    "score": "{a} kwa-{b} kulungile"
   },
   "vi": {
     "spellTitle": "{kid} đã luyện chính tả",

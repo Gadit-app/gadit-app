@@ -227,6 +227,102 @@
    "{w} ngesiZulu: {t}"
   ]
  },
+ "xh": {
+  "same": [
+   "{w}: intsingiselo, iinkcazelo nemizekelo",
+   "{w}: intsingiselo neenkcazelo",
+   "{w}: iinkcazelo"
+  ],
+  "foreign": [
+   "{w} ngesiXhosa: {t}, intsingiselo nemizekelo",
+   "{w} ngesiXhosa: {t}, intsingiselo",
+   "{w} ngesiXhosa: {t}"
+  ]
+ },
+ "nso": {
+  "same": [
+   "{w}: bokao, ditlhalošo le mehlala",
+   "{w}: bokao le ditlhalošo",
+   "{w}: ditlhalošo"
+  ],
+  "foreign": [
+   "{w} ka Sepedi: {t}, bokao le mehlala",
+   "{w} ka Sepedi: {t}, bokao",
+   "{w} ka Sepedi: {t}"
+  ]
+ },
+ "tn": {
+  "same": [
+   "{w}: bokao, ditlhaloso le dikai",
+   "{w}: bokao le ditlhaloso",
+   "{w}: ditlhaloso"
+  ],
+  "foreign": [
+   "{w} ka Setswana: {t}, bokao le dikai",
+   "{w} ka Setswana: {t}, bokao",
+   "{w} ka Setswana: {t}"
+  ]
+ },
+ "st": {
+  "same": [
+   "{w}: moelelo, ditlhaloso le mehlala",
+   "{w}: moelelo le ditlhaloso",
+   "{w}: ditlhaloso"
+  ],
+  "foreign": [
+   "{w} ka Sesotho: {t}, moelelo le mehlala",
+   "{w} ka Sesotho: {t}, moelelo",
+   "{w} ka Sesotho: {t}"
+  ]
+ },
+ "ts": {
+  "same": [
+   "{w}: nhlamuselo, tinhlamuselo na swikombiso",
+   "{w}: nhlamuselo na tinhlamuselo",
+   "{w}: tinhlamuselo"
+  ],
+  "foreign": [
+   "{w} hi Xitsonga: {t}, nhlamuselo na swikombiso",
+   "{w} hi Xitsonga: {t}, nhlamuselo",
+   "{w} hi Xitsonga: {t}"
+  ]
+ },
+ "ss": {
+  "same": [
+   "{w}: inchazelo, tinchazelo netibonelo",
+   "{w}: inchazelo netinchazelo",
+   "{w}: tinchazelo"
+  ],
+  "foreign": [
+   "{w} ngesiSwati: {t}, inchazelo netibonelo",
+   "{w} ngesiSwati: {t}, inchazelo",
+   "{w} ngesiSwati: {t}"
+  ]
+ },
+ "ve": {
+  "same": [
+   "{w}: ndeme, ṱhalutshedzo na tsumbo",
+   "{w}: ndeme na ṱhalutshedzo",
+   "{w}: ṱhalutshedzo"
+  ],
+  "foreign": [
+   "{w} nga Tshivenḓa: {t}, ndeme na tsumbo",
+   "{w} nga Tshivenḓa: {t}, ndeme",
+   "{w} nga Tshivenḓa: {t}"
+  ]
+ },
+ "nr": {
+  "same": [
+   "{w}: ihlathululo, iinhlathululo nezibonelo",
+   "{w}: ihlathululo neenhlathululo",
+   "{w}: iinhlathululo"
+  ],
+  "foreign": [
+   "{w} ngesiNdebele: {t}, ihlathululo nezibonelo",
+   "{w} ngesiNdebele: {t}, ihlathululo",
+   "{w} ngesiNdebele: {t}"
+  ]
+ },
  "vi": {
   "same": [
    "{w}: nghĩa, định nghĩa và ví dụ",

@@ -593,6 +593,222 @@
    "foot": "Sikhona kunoma yimuphi umbuzo. Vele uphendule le imeyili."
   }
  },
+ "xh": {
+  "dunning": {
+   "subjectFirst": "Intlawulo yakho ayiphumelelanga. Uneentsuku ezi-7 zokuhlaziya ikhadi lakho",
+   "subjectReminder": "Isikhumbuzo: kusele iintsuku ezi-{days} zokuhlaziya ikhadi lakho",
+   "subjectReminderOne": "Isikhumbuzo: kusele usuku olunye lokuhlaziya ikhadi lakho",
+   "h1First": "Intlawulo yomrhumo wakho ayiphumelelanga",
+   "h1Reminder": "Ikhadi lakho lisafuna ukuhlaziywa",
+   "p1First": "Sizamile ukuhlaziya umrhumo wakho we-Gadit kodwa intlawulo ayiphumelelanga, mhlawumbi ikhadi lalaliwe okanye liphelelwe lixesha.",
+   "p1Reminder": "Intlawulo yomrhumo wakho we-Gadit ayikaphumeleli.",
+   "p2First": "<b>Ukufikelela kwakho kuhlala kuvuliwe iintsuku ezi-7.</b> Ukuhlaziya ikhadi lakho kuthatha ngaphantsi komzuzu, kwaye yonke into iyaqhubeka njengesiqhelo, ungaphulukani neencwadi zamagama nenkqubela yabantwana bakho.",
+   "p2Reminder": "<b>Emva kweentsuku ezi-{days} ukufikelela kwakho kuza kutshintshela kwisicwangciso sasimahla.</b> Ukuhlaziya ikhadi lakho kuthatha ngaphantsi komzuzu, kwaye iincwadi zamagama nenkqubela yabantwana bakho ziyagcinwa.",
+   "p2ReminderOne": "<b>Emva kosuku olunye ukufikelela kwakho kuza kutshintshela kwisicwangciso sasimahla.</b> Ukuhlaziya ikhadi lakho kuthatha ngaphantsi komzuzu, kwaye iincwadi zamagama nenkqubela yabantwana bakho ziyagcinwa.",
+   "cta": "Hlaziya ikhadi",
+   "foot": "Ukuba sele ulihlaziyile, ungayityeshela le imeyile. Ukuba kukho into engacacanga, phendula nje, sikhona.",
+   "sign": "Iqela le-Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Isicwangciso sakho se-Gadit Family sele siyasebenza 🎉",
+   "heading": "Usapho lwakho lukulungele ukuqalisa",
+   "intro": "Wamkelekile kwi-Gadit Family. Isicwangciso sakho sosapho siyasebenza. Nanga amanyathelo amathathu okuqala okulungiselela wonke umntu:",
+   "s1": "Dibanisa umzali wesibini, ukuze nobabini nilandele inkqubela yabantwana.",
+   "s2": "Dibanisa abantwana, ngamnye kwisixhobo sakhe, ngaphandle kwephasiwedi, ngekhowudi emfutshane yokudibanisa nje.",
+   "s3": "Gcina i-Gadit kwisikrini sasekhaya, efowunini, kwithebhulethi okanye kwikhompyutha.",
+   "cta": "Qalisa amanyathelo okuqala",
+   "foot": "Sikhona nakuwuphi na umbuzo. Phendula nje le imeyile."
+  }
+ },
+ "nso": {
+  "dunning": {
+   "subjectFirst": "Tefo ya gago ga se ya atlega. O na le matšatši a 7 go mpshafatša karata ya gago",
+   "subjectReminder": "Kgopotšo: go šetše matšatši a {days} go mpshafatša karata ya gago",
+   "subjectReminderOne": "Kgopotšo: go šetše letšatši le 1 go mpshafatša karata ya gago",
+   "h1First": "Tefo ya peeletšo ya gago ga se ya atlega",
+   "h1Reminder": "Karata ya gago e sa nyaka go mpshafatšwa",
+   "p1First": "Re lekile go mpshafatša peeletšo ya gago ya Gadit eupša tefo ga se ya atlega, mohlomongwe ka gobane karata e gannwe goba nako ya yona e fedile.",
+   "p1Reminder": "Tefo ya peeletšo ya gago ya Gadit e sa ntše e se ya atlega.",
+   "p2First": "<b>Phihlelelo ya gago e dula e bulegile matšatši a 7.</b> Go mpshafatša karata ya gago go tšea ka fase ga motsotso, gomme tšohle di tšwela pele bjalo ka mehleng, ntle le go lahlegelwa ke dipuku tša mantšu le tšwelopele ya bana ba gago.",
+   "p2Reminder": "<b>Ka morago ga matšatši a {days} phihlelelo ya gago e tla fetogela go leano la mahala.</b> Go mpshafatša karata ya gago go tšea ka fase ga motsotso, gomme dipuku tša mantšu le tšwelopele ya bana ba gago di a bolokwa.",
+   "p2ReminderOne": "<b>Ka morago ga letšatši le 1 phihlelelo ya gago e tla fetogela go leano la mahala.</b> Go mpshafatša karata ya gago go tšea ka fase ga motsotso, gomme dipuku tša mantšu le tšwelopele ya bana ba gago di a bolokwa.",
+   "cta": "Mpshafatša karata",
+   "foot": "Ge o šetše o e mpshafaditše, o ka hlokomologa imeile ye. Ge go na le se se sa kwagalego, araba fela gomme re gona.",
+   "sign": "Sehlopha sa Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Leano la gago la Gadit Family le a šoma 🎉",
+   "heading": "Lapa la gago le loketše go thoma",
+   "intro": "O amogelwa go Gadit Family. Leano la gago la lapa le a šoma. Dikgato tše tharo tša mathomo tša go lokišetša bohle ke tše:",
+   "s1": "Kopanya motswadi wa bobedi, gore ka bobedi le latele tšwelopele ya bana.",
+   "s2": "Kopanya bana, yo mongwe le yo mongwe sedirišweng sa gagwe ntle le phasewete, ka khoutu ye kopana ya go kopanya fela.",
+   "s3": "Boloka Gadit sekirining sa gae, mogaleng, thebeleteng goba khomphutheng.",
+   "cta": "Thoma dikgato tša mathomo",
+   "foot": "Re gona bakeng sa potšišo efe goba efe. Araba fela imeile ye."
+  }
+ },
+ "tn": {
+  "dunning": {
+   "subjectFirst": "Tefo ya gago ga e a atlega. O na le malatsi a le 7 go ntšhafatsa karata ya gago",
+   "subjectReminder": "Kgopotso: go setse malatsi a le {days} go ntšhafatsa karata ya gago",
+   "subjectReminderOne": "Kgopotso: go setse letsatsi le le 1 go ntšhafatsa karata ya gago",
+   "h1First": "Tefo ya ikwadiso ya gago ga e a atlega",
+   "h1Reminder": "Karata ya gago e sa ntse e tlhoka go ntšhafadiwa",
+   "p1First": "Re lekile go ntšhafatsa ikwadiso ya gago ya Gadit mme tefo ga e a atlega, go bonala karata e ganetswe kgotsa nako ya yone e fedile.",
+   "p1Reminder": "Tefo ya ikwadiso ya gago ya Gadit e sa ntse e sa atlega.",
+   "p2First": "<b>Phitlhelelo ya gago e nna e bulegile malatsi a le 7.</b> Go ntšhafatsa karata go tsaya nako e e kwa tlase ga motsotso, mme sengwe le sengwe se tswelela jaaka ka metlha, o sa latlhegelwe ke dibukana le kgatelopele ya bana ba gago.",
+   "p2Reminder": "<b>Mo malatsing a le {days} phitlhelelo ya gago e fetogela kwa leanong la mahala.</b> Go ntšhafatsa karata go tsaya nako e e kwa tlase ga motsotso, mme dibukana le kgatelopele ya bana ba gago di a bolokwa.",
+   "p2ReminderOne": "<b>Mo letsatsing le le 1 phitlhelelo ya gago e fetogela kwa leanong la mahala.</b> Go ntšhafatsa karata go tsaya nako e e kwa tlase ga motsotso, mme dibukana le kgatelopele ya bana ba gago di a bolokwa.",
+   "cta": "Ntšhafatsa karata",
+   "foot": "Fa o setse o e ntšhafaditse, o ka itlhokomolosa imeile e. Fa sengwe se sa tlhaloganyesege, araba fela mme re teng.",
+   "sign": "Setlhopha sa Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Leano la gago la Gadit Family le simolotse 🎉",
+   "heading": "Lelapa la gago le siametse go simolola",
+   "intro": "O amogelesegile mo Gadit Family. Leano la gago la lelapa le a dira. Dikgato tse tharo tsa ntlha tsa go baakanyetsa mongwe le mongwe ke tse:",
+   "s1": "Golaganya motsadi wa bobedi, gore lo babedi lo sale morago kgatelopele ya bana.",
+   "s2": "Golaganya bana, mongwe le mongwe mo sedirisiweng sa gagwe, kwa ntle ga lefoko la sephiri, ka khoutu e khutshwane ya kgolagano fela.",
+   "s3": "Boloka Gadit mo sekirining sa gae, mo mogaleng, thebolete kgotsa khomputara.",
+   "cta": "Simolola dikgato tsa ntlha",
+   "foot": "Re teng go araba potso nngwe le nngwe. Araba imeile e fela."
+  }
+ },
+ "st": {
+  "dunning": {
+   "subjectFirst": "Tefo ya hao ha e a atleha. O na le matsatsi a 7 ho ntjhafatsa karete ya hao",
+   "subjectReminder": "Kgopotso: ho setse matsatsi a {days} ho ntjhafatsa karete ya hao",
+   "subjectReminderOne": "Kgopotso: ho setse letsatsi le 1 ho ntjhafatsa karete ya hao",
+   "h1First": "Tefo ya ngodiso ya hao ha e a atleha",
+   "h1Reminder": "Karete ya hao e ntse e hloka ho ntjhafatswa",
+   "p1First": "Re lekile ho ntjhafatsa ngodiso ya hao ya Gadit empa tefo ha e a atleha, mohlomong karete e hanilwe kapa nako ya yona e fedile.",
+   "p1Reminder": "Tefo ya ngodiso ya hao ya Gadit e ntse e so atlehe.",
+   "p2First": "<b>Phihlello ya hao e dula e butswe matsatsi a 7.</b> Ho ntjhafatsa karete ya hao ho nka nako e ka tlase ho motsotso, mme tsohle di tswela pele jwalo ka tlwaelo, ntle le ho lahlehelwa ke dibukana le tswelopele ya bana ba hao.",
+   "p2Reminder": "<b>Ka mora matsatsi a {days} phihlello ya hao e fetela moralong wa mahala.</b> Ho ntjhafatsa karete ya hao ho nka nako e ka tlase ho motsotso, mme dibukana le tswelopele ya bana ba hao di a bolokwa.",
+   "p2ReminderOne": "<b>Ka mora letsatsi le 1 phihlello ya hao e fetela moralong wa mahala.</b> Ho ntjhafatsa karete ya hao ho nka nako e ka tlase ho motsotso, mme dibukana le tswelopele ya bana ba hao di a bolokwa.",
+   "cta": "Ntjhafatsa karete",
+   "foot": "Haeba o se o e ntjhafaditse, o ka hlokomoloha imeile ena. Haeba ho na le ho sa hlakang, araba feela, re teng.",
+   "sign": "Sehlopha sa Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Moralo wa hao wa Gadit Family o se o sebetsa 🎉",
+   "heading": "Lelapa la hao le se le loketse ho qala",
+   "intro": "Rea o amohela ho Gadit Family. Moralo wa hao wa lelapa o a sebetsa. Mehato e meraro ya pele ya ho lokisetsa bohle ke ena:",
+   "s1": "Hokela motswadi wa bobedi, e le hore lona ka bobedi le latele tswelopele ya bana.",
+   "s2": "Hokela bana, e mong le e mong sesebedisweng sa hae, ntle le phasewete, ka khoutu e kgutshwane ya ho hokela feela.",
+   "s3": "Boloka Gadit skrineng sa lehae, fonong, thepleteng kapa khomputareng.",
+   "cta": "Qala mehato ya pele",
+   "foot": "Re teng bakeng sa potso efe kapa efe. Araba feela imeile ena."
+  }
+ },
+ "ts": {
+  "dunning": {
+   "subjectFirst": "Ku hakela ka n'wina a ku humelelanga. Mi na masiku ya 7 ku pfuxeta khadi ra n'wina",
+   "subjectReminder": "Xitsundzuxo: ku sale masiku ya {days} ku pfuxeta khadi ra n'wina",
+   "subjectReminderOne": "Xitsundzuxo: ku sale siku rin'we ku pfuxeta khadi ra n'wina",
+   "h1First": "Ku hakela ka mbhaliso wa n'wina a ku humelelanga",
+   "h1Reminder": "Khadi ra n'wina ra ha fanele ku pfuxetiwa",
+   "p1First": "Hi ringetile ku pfuxeta mbhaliso wa n'wina wa Gadit kambe ku hakerisiwa a ku humelelanga, kumbexana hikuva khadi ri aleriwile kumbe nkarhi wa rona wu hundzile.",
+   "p1Reminder": "Ku hakela ka mbhaliso wa n'wina wa Gadit a ku si humelela.",
+   "p2First": "<b>Mi ta ya emahlweni mi tirhisa akhawunti ya n'wina ku ringana masiku ya 7.</b> Ku pfuxeta khadi swi teka ehansi ka minete yin'we, naswona hinkwaswo swi ya emahlweni tanihi ntolovelo, handle ka ku lahlekeriwa hi tibuku ta marito na ku ya emahlweni ka vana va n'wina.",
+   "p2Reminder": "<b>Endzhaku ka masiku ya {days}, akhawunti ya n'wina yi ta tlhelela eka pulani ya mahala.</b> Ku pfuxeta khadi swi teka ehansi ka minete yin'we, naswona tibuku ta marito na ku ya emahlweni ka vana va n'wina swi ta hlayisiwa.",
+   "p2ReminderOne": "<b>Endzhaku ka siku rin'we, akhawunti ya n'wina yi ta tlhelela eka pulani ya mahala.</b> Ku pfuxeta khadi swi teka ehansi ka minete yin'we, naswona tibuku ta marito na ku ya emahlweni ka vana va n'wina swi ta hlayisiwa.",
+   "cta": "Pfuxeta khadi",
+   "foot": "Loko mi se mi ri pfuxetile, mi nga honisa imeyili leyi. Loko ku ri na leswi nga twaliki, hlamulani ntsena, hi kona.",
+   "sign": "Ntlawa wa Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Pulani ya n'wina ya Gadit Family yi sungurile ku tirha 🎉",
+   "heading": "Ndyangu wa n'wina wu lunghekele ku sungula",
+   "intro": "Mi amukeriwile eka Gadit Family. Pulani ya n'wina ya ndyangu ya tirha. Hi lawa magoza manharhu yo sungula ya ku lunghiselela un'wana na un'wana:",
+   "s1": "Hlanganisani mutswari wa vumbirhi, leswaku havambirhi mi landzelela ku ya emahlweni ka vana.",
+   "s2": "Hlanganisani vana, un'wana na un'wana eka xitirhisiwa xa yena, handle ka phasiwedi, hi khodi yo koma yo hlanganisa ntsena.",
+   "s3": "Hlayisani Gadit eka xikirini xa le kaya, eka riqingho, thebulete kumbe khompyuta.",
+   "cta": "Sungula magoza yo sungula",
+   "foot": "Hi kona eka xivutiso xin'wana na xin'wana. Hlamulani imeyili leyi ntsena."
+  }
+ },
+ "ss": {
+  "dunning": {
+   "subjectFirst": "Inkhokhelo yakho ayiphumelelanga. Unemalanga langu-7 kuvuselela likhadi lakho",
+   "subjectReminder": "Sikhumbuto: kusele emalanga langu-{days} kuvuselela likhadi lakho",
+   "subjectReminderOne": "Sikhumbuto: kusele lilanga linye kuvuselela likhadi lakho",
+   "h1First": "Inkhokhelo yekubhalisa kwakho ayiphumelelanga",
+   "h1Reminder": "Likhadi lakho lisadzinga kuvuselelwa",
+   "p1First": "Sizamile kuvuselela kubhalisa kwakho kwe-Gadit kodvwa inkhokhelo ayiphumelelanga, kungenteka kutsi likhadi lalilwe nobe seliphelelwe sikhatsi.",
+   "p1Reminder": "Inkhokhelo yekubhalisa kwakho kwe-Gadit ayikaphumeleli.",
+   "p2First": "<b>Kungena kwakho kuhlala kuvulekile emalanga langu-7.</b> Kuvuselela likhadi kutsatsa ngaphansi kwemzuzu, futsi konkhe kuchubeka njengakuvamile, ngaphandle kwekulahlekelwa tincwadzi nenchubekelembili yebantfwana bakho.",
+   "p2Reminder": "<b>Ngemuva kwemalanga langu-{days} kungena kwakho kutawuya elihlelweni lelimahhala.</b> Kuvuselela likhadi kutsatsa ngaphansi kwemzuzu, futsi tincwadzi nenchubekelembili yebantfwana bakho kuyagcinwa.",
+   "p2ReminderOne": "<b>Ngemuva kwelilanga linye kungena kwakho kutawuya elihlelweni lelimahhala.</b> Kuvuselela likhadi kutsatsa ngaphansi kwemzuzu, futsi tincwadzi nenchubekelembili yebantfwana bakho kuyagcinwa.",
+   "cta": "Vuselela likhadi",
+   "foot": "Nangabe sewulivuselele, ungayinaki le-imeyili. Nangabe kukhona lokungacaci, vele uphendvule, sikhona.",
+   "sign": "Licembu le-Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Lihlelo lakho le-Gadit Family selisebenta 🎉",
+   "heading": "Umndeni wakho sewulungele kucala",
+   "intro": "Wemukelekile ku-Gadit Family. Lihlelo lakho lemndeni liyasebenta. Nati tinyatselo letintsatfu tekucala kute ulungiselele wonkhe umuntfu:",
+   "s1": "Xhuma umtali wesibili, kute nobabili nilandzele inchubekelembili yebantfwana.",
+   "s2": "Xhuma bantfwana, ngamunye ngelithuluzi lakhe, ngaphandle kwelipasiwedi, ngekhodi lemfishane yekuxhumana nje.",
+   "s3": "Gcina i-Gadit esikrinini sasekhaya, efonini, ethebulethini nobe ekhompyutheni.",
+   "cta": "Cala tinyatselo tekucala",
+   "foot": "Sikhona kunobe ngumuphi umbuto. Vele uphendvule le-imeyili."
+  }
+ },
+ "ve": {
+  "dunning": {
+   "subjectFirst": "Mbadelo yaṋu a yo ngo bvelela. Ni na maḓuvha a 7 a u vusulusa garaṱa yaṋu",
+   "subjectReminder": "Tsivhudzo: ho sala maḓuvha a {days} a u vusulusa garaṱa yaṋu",
+   "subjectReminderOne": "Tsivhudzo: ho sala ḓuvha ḽa 1 ḽa u vusulusa garaṱa yaṋu",
+   "h1First": "Mbadelo ya ṅwaliso waṋu a yo ngo bvelela",
+   "h1Reminder": "Garaṱa yaṋu i kha ḓi ṱoḓa u vusuluswa",
+   "p1First": "Ro lingedza u vusulusa ṅwaliso waṋu wa Gadit fhedzi mbadelo a yo ngo bvelela, zwi nga vha zwo itiswa nga garaṱa yo hanwaho kana yo fhelelwaho nga tshifhinga.",
+   "p1Reminder": "Mbadelo ya ṅwaliso waṋu wa Gadit i kha ḓi vha i songo bvelela.",
+   "p2First": "<b>U dzhena haṋu hu ḓo bvela phanḓa lwa maḓuvha a 7.</b> U vusulusa garaṱa yaṋu zwi dzhia tshifhinga tshi si gathi u fhira minithi, nahone zwoṱhe zwi bvela phanḓa sa misi, ni sa xelelwi nga bugu na mvelaphanḓa ya vhana vhaṋu.",
+   "p2Reminder": "<b>Nga maḓuvha a {days} u dzhena haṋu hu ḓo pfukela kha pulane ya mahala.</b> U vusulusa garaṱa yaṋu zwi dzhia tshifhinga tshi si gathi u fhira minithi, nahone bugu na mvelaphanḓa ya vhana vhaṋu zwi ḓo vhulungwa.",
+   "p2ReminderOne": "<b>Nga ḓuvha ḽa 1 u dzhena haṋu hu ḓo pfukela kha pulane ya mahala.</b> U vusulusa garaṱa yaṋu zwi dzhia tshifhinga tshi si gathi u fhira minithi, nahone bugu na mvelaphanḓa ya vhana vhaṋu zwi ḓo vhulungwa.",
+   "cta": "Vusulusani garaṱa",
+   "foot": "Arali no no i vusulusa, ni nga sa dzhiele nṱha imeiḽi iyi. Arali hu na zwi sa pfeseseiho, fhindulani fhedzi nahone ri hone.",
+   "sign": "Tshigwada tsha Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Pulane yaṋu ya Gadit Family yo thoma u shuma 🎉",
+   "heading": "Muṱa waṋu wo ḓilugisa",
+   "intro": "Ri a ni ṱanganedza kha Gadit Family. Pulane yaṋu ya muṱa i khou shuma. Hezwi ndi zwiga zwiraru zwa u thoma uri muṅwe na muṅwe a lugiselwe:",
+   "s1": "Ṱumanyani mubebi wa vhuvhili, uri inwi vhavhili ni tevhele mvelaphanḓa ya vhana.",
+   "s2": "Ṱumanyani vhana, muṅwe na muṅwe kha tshishumiswa tshawe hu si na phasiwedi, nga khoudu pfufhi ya u ṱumanya fhedzi.",
+   "s3": "Vhulungani Gadit kha tshikirini tsha hayani, kha founu, thebulete kana khomphyutha.",
+   "cta": "Thomani zwiga zwa u thoma",
+   "foot": "Ri hone kha mbudziso iṅwe na iṅwe. Fhindulani fhedzi kha imeiḽi iyi."
+  }
+ },
+ "nr": {
+  "dunning": {
+   "subjectFirst": "Ukubhadela kwakho akuphumelelanga. Unamalanga ali-7 wokubuyekeza ikarada yakho",
+   "subjectReminder": "Isikhumbuzo: kusele amalanga ali-{days} wokubuyekeza ikarada yakho",
+   "subjectReminderOne": "Isikhumbuzo: kusele ilanga linye lokubuyekeza ikarada yakho",
+   "h1First": "Ukubhadelela ukubhalisela kwakho akuphumelelanga",
+   "h1Reminder": "Ikarada yakho isatlhoga ukubuyekezwa",
+   "p1First": "Silinge ukuvuselela ukubhalisela kwakho kwe-Gadit kodwana ukubhadeliswa akuphumelelanga, kungenzeka ikarada yaliwe namkha isiphelelwe sikhathi.",
+   "p1Reminder": "Ukubhadelela ukubhalisela kwakho kwe-Gadit kusesengakaphumeleli.",
+   "p2First": "<b>Ukungena kwakho kuhlala kuvuliwe amalanga ali-7.</b> Ukubuyekeza ikarada kuthatha ngaphasi komzuzu, begodu koke kuragela phambili njengejayelo, ngaphandle kokulahlekelwa mabhuku wamezwi nokuthuthuka kwabantwana bakho.",
+   "p2Reminder": "<b>Ngemva kwamalanga ali-{days} ukungena kwakho kuzakudlulela ehlelweni lamahala.</b> Ukubuyekeza ikarada kuthatha ngaphasi komzuzu, begodu amabhuku wamezwi nokuthuthuka kwabantwana bakho kuyabulungwa.",
+   "p2ReminderOne": "<b>Ngemva kwelanga linye ukungena kwakho kuzakudlulela ehlelweni lamahala.</b> Ukubuyekeza ikarada kuthatha ngaphasi komzuzu, begodu amabhuku wamezwi nokuthuthuka kwabantwana bakho kuyabulungwa.",
+   "cta": "Buyekeza ikarada",
+   "foot": "Nange sewuyibuyekezile, ungayitjhiya i-imeyili le. Nange kukhona okungakhanyi, phendula nje, sikhona.",
+   "sign": "Ithimba le-Gadit"
+  },
+  "familyWelcome": {
+   "subject": "Ihlelo lakho le-Gadit Family selisebenza 🎉",
+   "heading": "Umndeni wakho sele ulungele ukuthoma",
+   "intro": "Wamukelekile ku-Gadit Family. Ihlelo lakho lomndeni liyasebenza. Nanga amagadango amathathu wokuthoma bona woke umuntu alungiselelwe:",
+   "s1": "Hlanganisa umbelethi wesibili, bona nobabili nilandelele ukuthuthuka kwabantwana.",
+   "s2": "Hlanganisa abantwana, ngamunye kudivayisi yakhe, ngaphandle kwephasiwedi, ngekhowudi efitjhani yokuhlanganisa kwaphela.",
+   "s3": "Bulunga i-Gadit esikrinini sekhaya, efowunini, kuthebhulethi namkha ekhomphyutheni.",
+   "cta": "Thoma amagadango wokuthoma",
+   "foot": "Sikhona nanyana ngimuphi umbuzo. Phendula nje i-imeyili le."
+  }
+ },
  "vi": {
   "dunning": {
    "subjectFirst": "Thanh toán của bạn không thành công. Bạn có 7 ngày để cập nhật thẻ",
