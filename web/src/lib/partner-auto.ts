@@ -1,6 +1,8 @@
 import { createHash } from "node:crypto";
-import { getAdminDb } from "@/lib/firebase-admin";
+import Stripe from "stripe";
+import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { sendPartnerWelcome } from "@/lib/partner-email";
+import { isCollegeGrad } from "@/lib/college-grads";
 import {
   generatePartnerCode,
   generateDashboardToken,
@@ -10,23 +12,39 @@ import {
 } from "@/lib/partners";
 
 /**
- * Every new subscriber becomes a partner (Gadi 2026-10-16: "everyone who signs
- * up, a college director or any student, gets the partner link directly").
- * Called once a Family or Individual subscription first activates (trial with a
- * card included). Same founder terms as the one-off bootstrap of 2026-08-17
- * (30% year one, 10% for life), welcome e-mail in the customer's UI language.
+ * Coach-track graduates of the college become founder partners automatically
+ * (Gadi 2026-10-16): 30% of every payment in year one, then 10% of every
+ * payment for life, renewals included. Checked at signup and again when the
+ * customer starts paying. A graduate is matched by the hash of the e-mail or
+ * of the last 9 phone digits against the college's list (lib/college-grads).
+ * Everyone else is NOT enrolled: the partner link is for the college's
+ * coach-track people only.
  *
  * Idempotent: a customer who is already a partner (same e-mail, or a partner
  * doc owned by this uid) is skipped, and a lock doc per e-mail stops two
- * webhook deliveries from creating two partners. Never throws: provisioning
- * must not depend on it.
+ * deliveries from creating two partners. Never throws: signup and
+ * provisioning must not depend on it.
  */
-/** OFF (Gadi 2026-10-16): the partner link goes only to the college's coach-track
- *  students, not to every subscriber. Stays off until that audience is identified. */
-const AUTO_ENROLL_ENABLED = false;
 
-export async function autoEnrollPartner(uid: string, email: string | null): Promise<void> {
-  if (!AUTO_ENROLL_ENABLED) return;
+/** Every phone we may know for this user: the auth record, the user doc and
+ *  the Stripe customer. Read only to hash them for the graduate check. */
+async function knownPhones(uid: string, user: Record<string, unknown>, extra: (string | null | undefined)[]): Promise<string[]> {
+  const out = new Set<string>();
+  const add = (v: unknown) => { if (typeof v === "string" && v.trim()) out.add(v); };
+  extra.forEach(add);
+  add(user.phone); add(user.phoneNumber);
+  try { add((await getAdminAuth().getUser(uid)).phoneNumber); } catch { /* no auth record */ }
+  const cust = typeof user.stripeCustomerId === "string" ? user.stripeCustomerId : null;
+  if (cust && process.env.STRIPE_SECRET_KEY) {
+    try {
+      const c = await new Stripe(process.env.STRIPE_SECRET_KEY).customers.retrieve(cust);
+      if (!("deleted" in c && c.deleted)) add((c as Stripe.Customer).phone);
+    } catch { /* customer unreadable: e-mail match still applies */ }
+  }
+  return [...out];
+}
+
+export async function autoEnrollPartner(uid: string, email: string | null, phones: (string | null | undefined)[] = []): Promise<void> {
   try {
     const mail = (email ?? "").trim().toLowerCase();
     if (!mail || !mail.includes("@")) return;
@@ -41,6 +59,11 @@ export async function autoEnrollPartner(uid: string, email: string | null): Prom
       const asTyped = await db.collection("partners").where("email", "==", email.trim()).limit(1).get();
       if (!asTyped.empty) return;
     }
+    const user = (await db.collection("users").doc(uid).get()).data() ?? {};
+    // Only coach-track graduates. null = the college list is unreachable right
+    // now: skip quietly, the next signup or payment event checks again.
+    if ((await isCollegeGrad(mail, await knownPhones(uid, user, phones))) !== true) return;
+
     const lock = db.collection("partnerAutoEnroll").doc(createHash("sha256").update(mail).digest("hex").slice(0, 32));
     try {
       await lock.create({ uid, at: new Date().toISOString() });
@@ -48,7 +71,6 @@ export async function autoEnrollPartner(uid: string, email: string | null): Prom
       return; // another delivery is enrolling this customer
     }
 
-    const user = (await db.collection("users").doc(uid).get()).data() ?? {};
     const name = String(user.displayName || user.name || mail.split("@")[0]);
     const lang = typeof user.uiLang === "string" && user.uiLang ? user.uiLang : "he";
 
@@ -71,7 +93,7 @@ export async function autoEnrollPartner(uid: string, email: string | null): Prom
       status: "active",
       dashboardToken,
       lang,
-      audience: "Subscriber (auto-enrolled founder on activation)",
+      audience: "College coach-track graduate (auto-enrolled founder)",
       clicks: 0,
       signups: 0,
       ownerUid: uid,

@@ -1,9 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { sendMail } from "@/lib/mail";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { isDisposableEmail } from "@/lib/email/disposable";
 import { REFERRAL_USER_COOKIE } from "@/lib/referral";
+import { autoEnrollPartner } from "@/lib/partner-auto";
 
 /**
  * One-shot notify Gadi by email when a brand-new user signs up.
@@ -195,6 +196,11 @@ export async function POST(req: NextRequest) {
       await userRef.set({ notifiedSignup: true, notifiedSignupAt: FieldValue.serverTimestamp() }, { merge: true });
       return NextResponse.json({ sent: false, reason: "family_device" });
     }
+
+    // A coach-track graduate of the college becomes a founder partner right at
+    // signup. Runs after the response, so the college list can never slow or
+    // fail the signup; the paid-activation webhook checks again.
+    if (email) after(() => autoEnrollPartner(uid, email, [decoded.phone_number]));
 
     // Throwaway inbox → suppress ALL mail (admin notify + welcome + drip).
     // We still keep the account (they can use the app), but mailing a

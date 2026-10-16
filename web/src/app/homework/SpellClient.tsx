@@ -184,7 +184,8 @@ function randomCelebration(lang: string): string {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-const TEAL = "#0EA5A5";
+const TEAL = "#0B7F7F"; // white text on it passes AA (#0EA5A5 was 3.0)
+const TEAL_INK = "var(--teal-deep, #0A7472)"; // teal TEXT: follows the kid skins
 
 /** "2026-10-14" → "14/10" (the test date on the "for tonight" strip). */
 function fmtDate(d: string): string {
@@ -1178,7 +1179,7 @@ export function SpellClient() {
                           </span>
                         )}
                       </span>
-                      <span style={{ flex: "none", fontSize: 13, fontWeight: 700, color: TEAL }}>
+                      <span style={{ flex: "none", fontSize: 13, fontWeight: 700, color: TEAL_INK }}>
                         {t("practiceAgain", lang)}
                       </span>
                     </button>
@@ -1257,12 +1258,12 @@ export function SpellClient() {
                 </button>
                 {canCamera && (
                 <button type="button" onClick={() => listCamRef.current?.click()} disabled={creating}
-                  style={{ padding: "10px 14px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
+                  style={{ padding: "10px 14px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL_INK, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
                   📷 {ml("takePhoto", lang)}
                 </button>
                 )}
                 <button type="button" onClick={() => upRef.current?.click()} disabled={creating}
-                  style={{ padding: "10px 14px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
+                  style={{ padding: "10px 14px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL_INK, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
                   🖼️ {ml("uploadPic", lang)}
                 </button>
                 <input ref={listCamRef} type="file" accept="image/*" capture="environment" hidden
@@ -1375,7 +1376,7 @@ export function SpellClient() {
                   {creating ? t("creating", lang) : t("pasteBtn", lang)}
                 </button>
                 <button type="button" onClick={() => photoRef.current?.click()} disabled={creating}
-                  style={{ padding: "10px 16px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
+                  style={{ padding: "10px 16px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL_INK, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
                   📷 {t("photoBtn", lang)}
                 </button>
                 <input ref={photoRef} type="file" accept="image/*" hidden
@@ -1467,7 +1468,7 @@ export function SpellClient() {
 
                   {/* Feedback */}
                   {result === "correct" && (
-                    <div style={{ marginTop: 14, fontSize: 16, fontWeight: 800, color: TEAL }}>✓ {t("correct", lang)}</div>
+                    <div style={{ marginTop: 14, fontSize: 16, fontWeight: 800, color: TEAL_INK }}>✓ {t("correct", lang)}</div>
                   )}
                   {result === "wrong" && (
                     <div style={{ marginTop: 14 }}>

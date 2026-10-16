@@ -735,7 +735,7 @@ async function activateFromSubscriptionMetadata(sub: Stripe.Subscription): Promi
     // by the time we reach activation that trial has ended, so this is a
     // trial-to-paid conversion rather than a fresh paid signup.
     await notifyPaidActivation(uid, tier, email, { fromTrial: !!sub.trial_end, sub });
-    // Every new subscriber gets the partner link (not schools: an institution).
+    // A coach-track graduate becomes a founder partner (not schools: an institution).
     if (!schools) await autoEnrollPartner(uid, email);
   }
   if (family) { await stampFamilyActivated(uid); await sendFamilyWelcome(uid, email); }
@@ -1010,7 +1010,7 @@ export async function POST(req: NextRequest) {
       if (plan !== "basic") {
         const tier = family ? "Family" : schools ? "Schools" : plan === "clear" ? "Clear" : "Deep";
         await notifyPaidActivation(userId, tier, customerEmail, { fromTrial: !!trialEnd, sub });
-        if (!schools) await autoEnrollPartner(userId, customerEmail);
+        if (!schools) await autoEnrollPartner(userId, customerEmail, [session.customer_details?.phone]);
       }
       if (family) { await stampFamilyActivated(userId); await sendFamilyWelcome(userId, customerEmail); }
     }
