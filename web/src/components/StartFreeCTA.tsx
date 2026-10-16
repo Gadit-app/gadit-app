@@ -33,7 +33,7 @@ const START_SHORT: Record<string, string> = {
   pt: "Começar", fr: "Commencer", de: "Starten", it: "Inizia", nl: "Beginnen",
   cs: "Začít", sk: "Začať", uk: "Почати", tr: "Başla", pl: "Zacznij",
   fa: "شروع", id: "Mulai", el: "Ξεκίνα", ja: "始める", hi: "शुरू करें",
-  am: "ይጀምሩ", zu: "Qala", af: "Begin", bn: "শুরু করুন", da: "Start",
+  am: "ይጀምሩ", zu: "Qala", xh: "Qalisa", nso: "Thoma", tn: "Simolola", st: "Qala", ts: "Sungula", ss: "Cala", ve: "Thomani", nr: "Thoma", af: "Begin", bn: "শুরু করুন", da: "Start",
   fil: "Magsimula", hu: "Kezdés", ko: "시작", sw: "Anza", th: "เริ่ม",
   vi: "Bắt đầu", "zh-CN": "开始", "zh-TW": "開始",
 };

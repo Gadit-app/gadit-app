@@ -3109,7 +3109,7 @@ export const NATIVE_DICTATION_SETS: Record<string, Record<string, { title: strin
    ]
   },
   "days": {
-   "title": "Maḓuvha na Minwedzi",
+   "title": "Maḓuvha na Miṅwedzi",
    "words": [
     {
      "en": "Sunday",

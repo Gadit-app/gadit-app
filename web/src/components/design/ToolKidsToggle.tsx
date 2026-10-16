@@ -16,7 +16,7 @@ const NAME: Record<string, string> = {
   en: "Kids", he: "ילדים", ar: "الأطفال", ru: "Дети", es: "Niños", pt: "Crianças",
   fr: "Enfants", de: "Kinder", cs: "Děti", sk: "Deti", it: "Bambini", ja: "キッズ",
   hi: "बच्चे", am: "ልጆች", uk: "Діти", tr: "Çocuklar", pl: "Dzieci", fa: "کودکان",
-  id: "Anak", nl: "Kinderen", el: "Παιδιά", zu: "Izingane", vi: "Trẻ em", fil: "Bata",
+  id: "Anak", nl: "Kinderen", el: "Παιδιά", zu: "Izingane", xh: "Abantwana", nso: "Bana", tn: "Bana", st: "Bana", ts: "Vana", ss: "Bantfwana", ve: "Vhana", nr: "Abantwana", vi: "Trẻ em", fil: "Bata",
   af: "Kinders", sw: "Watoto", "zh-CN": "儿童", "zh-TW": "兒童", ko: "어린이", th: "เด็ก",
   bn: "শিশু", da: "Børn", hu: "Gyerekek",
 };

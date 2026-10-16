@@ -59,6 +59,46 @@ const COPY: Record<string, {
     hubLede: "Khetha umdlalo ukuze ulole isilulumagama sakho",
     backToClassroom: "← Buyela ekilasini",
   },
+  xh: {
+    hubTitle: "Imidlalo yamagama",
+    hubLede: "Khetha umdlalo ukuze uphucule isigama sakho",
+    backToClassroom: "← Buyela eklasini",
+  },
+  nso: {
+    hubTitle: "Dipapadi tša Mantšu",
+    hubLede: "Kgetha papadi gore o matlafatše mantšu a gago",
+    backToClassroom: "← Boela phapošing",
+  },
+  tn: {
+    hubTitle: "Metshameko ya Mafoko",
+    hubLede: "Tlhopha motshameko go tokafatsa mafoko a gago",
+    backToClassroom: "← Boela kwa phaposing",
+  },
+  st: {
+    hubTitle: "Dipapadi tsa Mantswe",
+    hubLede: "Kgetha papadi ho matlafatsa tlotlontswe ya hao",
+    backToClassroom: "← Kgutlela tlelaseng",
+  },
+  ts: {
+    hubTitle: "Mintlangu ya Marito",
+    hubLede: "Hlawula ntlangu leswaku u kulisa vutivi bya wena bya marito",
+    backToClassroom: "← Tlhelela etlilasini",
+  },
+  ss: {
+    hubTitle: "Imidlalo Yemagama",
+    hubLede: "Khetsa umdlalo kute ucijise emagama akho",
+    backToClassroom: "← Buyela ekilasini",
+  },
+  ve: {
+    hubTitle: "Mitambo ya maipfi",
+    hubLede: "Khethani mutambo uri ni khwinise maipfi aṋu",
+    backToClassroom: "← Humelani kha kilasi",
+  },
+  nr: {
+    hubTitle: "Imidlalo Yamezwi",
+    hubLede: "Khetha umdlalo bona uqinise amezwi wakho",
+    backToClassroom: "← Buyela ekilasini",
+  },
   el: {
     hubTitle: "Παιχνίδια λέξεων",
     hubLede: "Διάλεξε ένα παιχνίδι για να βελτιώσεις το λεξιλόγιό σου",

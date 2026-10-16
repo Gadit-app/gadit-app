@@ -45,7 +45,7 @@ const WORD_SETS_COPY: Record<string, string> = {
   pt: "Conjuntos de palavras", fr: "Listes de mots", de: "Wortlisten", cs: "Sady slov", sk: "Sady slov",
   it: "Gruppi di parole", ja: "単語セット", hi: "शब्द समूह", am: "የቃላት ስብስቦች", uk: "Набори слів",
   tr: "Kelime setleri", pl: "Zestawy słów", fa: "مجموعه‌های واژه", id: "Kumpulan kata", nl: "Woordensets",
-  el: "Σύνολα λέξεων", zu: "Amaqoqo amagama", vi: "Bộ từ vựng", fil: "Mga set ng salita", af: "Woordstelle",
+  el: "Σύνολα λέξεων", zu: "Amaqoqo amagama", xh: "Amaqela amagama", nso: "Dihlopha tša mantšu", tn: "Disete tsa mafoko", st: "Dihlopha tsa mantswe", ts: "Mintlawa ya marito", ss: "Emaceba emagama", ve: "Zwigwada zwa maipfi", nr: "Amaqoqo wamezwi", vi: "Bộ từ vựng", fil: "Mga set ng salita", af: "Woordstelle",
   sw: "Seti za maneno", "zh-CN": "词汇组", "zh-TW": "詞彙組", ko: "단어 세트", th: "ชุดคำศัพท์",
   bn: "শব্দের সেট", da: "Ordsæt", hu: "Szócsomagok",
 };
@@ -55,7 +55,7 @@ const INVITE_FRIENDS_COPY: Record<string, string> = {
   pt: "Convidar amigos", fr: "Inviter des amis", de: "Freunde einladen", cs: "Pozvat přátele", sk: "Pozvať priateľov",
   it: "Invita amici", ja: "友だちを招待", hi: "दोस्तों को आमंत्रित करें", am: "ጓደኞችን ይጋብዙ", uk: "Запросити друзів",
   tr: "Arkadaşlarını davet et", pl: "Zaproś znajomych", fa: "دعوت از دوستان", id: "Undang teman", nl: "Vrienden uitnodigen",
-  el: "Πρόσκληση φίλων", zu: "Mema abangani", vi: "Mời bạn bè", fil: "Mag-imbita ng mga kaibigan", af: "Nooi vriende",
+  el: "Πρόσκληση φίλων", zu: "Mema abangani", xh: "Mema abahlobo", nso: "Mema bagwera", tn: "Laletsa ditsala", st: "Mema metswalle", ts: "Rhamba vanghana", ss: "Mema bangani", ve: "Rambani khonani", nr: "Mema abangani", vi: "Mời bạn bè", fil: "Mag-imbita ng mga kaibigan", af: "Nooi vriende",
   sw: "Alika marafiki", "zh-CN": "邀请好友", "zh-TW": "邀請好友", ko: "친구 초대", th: "ชวนเพื่อน",
   bn: "বন্ধুদের আমন্ত্রণ জানান", da: "Inviter venner", hu: "Barátok meghívása",
 };
@@ -69,6 +69,14 @@ export const DARK_LABEL: Record<string, string> = {
   uk: "Темна тема", tr: "Karanlık mod", pl: "Tryb ciemny", fa: "حالت تیره",
   id: "Mode gelap", el: "Σκοτεινή λειτουργία", hi: "डार्क मोड", ja: "ダークモード",
   am: "ጨለማ ገጽታ", zu: "Imodi emnyama",
+  xh: "Imo emnyama",
+  nso: "Mokgwa wa leswiswi",
+  tn: "Mokgwa wa lefifi",
+  st: "Mokgwa o lefifi",
+  ts: "Xiyimo xa munyama",
+  ss: "Simo semnyama",
+  ve: "Tshiimo tsha swiswi",
+  nr: "Imodi emnyama",
   vi: "Chế độ tối",
   fil: "Madilim na mode",
   af: "Donker modus",
@@ -94,6 +102,14 @@ type Copy = {
 const COPY: Record<string, Copy> = {
   en: { account: "Account",            family: "My family",         school: "My school",         dashboard: "Partner area",  signOut: "Sign out",    openMenu: "Open account menu" },
   zu: { account: "I-akhawunti",         family: "Umndeni wami",      school: "Isikole sami",      dashboard: "Indawo yabalingani", signOut: "Phuma",       openMenu: "Vula imenyu ye-akhawunti" },
+  xh: { account: "Iakhawunti",            family: "Usapho lwam",         school: "Isikolo sam",         dashboard: "Indawo yeqabane",  signOut: "Phuma",    openMenu: "Vula imenyu yeakhawunti" },
+  nso: { account: "Akhaonto",            family: "Lapa la ka",         school: "Sekolo sa ka",         dashboard: "Sebaka sa balekane",  signOut: "Tšwa",    openMenu: "Bula lenaneo la akhaonto" },
+  tn: { account: "Akhaonto",            family: "Lelapa la me",         school: "Sekolo sa me",         dashboard: "Lefelo la molekane",  signOut: "Tswa",    openMenu: "Bula lenaane la akhaonto" },
+  st: { account: "Akhaonte",            family: "Lelapa la ka",         school: "Sekolo sa ka",         dashboard: "Sebaka sa molekane",  signOut: "Tswa",    openMenu: "Bula lenane la akhaonte" },
+  ts: { account: "Akhawunti",            family: "Ndyangu wa mina",         school: "Xikolo xa mina",         dashboard: "Ndhawu ya vatirhisani",  signOut: "Huma",    openMenu: "Pfula menyu ya akhawunti" },
+  ss: { account: "I-akhawunti",            family: "Umndeni wami",         school: "Sikolwa sami",         dashboard: "Indzawo yemlingani",  signOut: "Phuma",    openMenu: "Vula imenyu ye-akhawunti" },
+  ve: { account: "Akhaunthu",            family: "Muṱa wanga",         school: "Tshikolo tshanga",         dashboard: "Fhethu ha mushumisani",  signOut: "Bvani",    openMenu: "Vulani menyu ya akhaunthu" },
+  nr: { account: "I-akhawunti",            family: "Umndeni wami",         school: "Isikolo sami",         dashboard: "Indawo yomlingani",  signOut: "Phuma",    openMenu: "Vula imenyu ye-akhawunti" },
   el: { account: "Λογαριασμός",         family: "Η οικογένειά μου",  school: "Το σχολείο μου",    dashboard: "Περιοχή συνεργατών", signOut: "Αποσύνδεση",  openMenu: "Άνοιγμα μενού λογαριασμού" },
   he: { account: "החשבון שלי",          family: "המשפחה שלי",        school: "בית הספר שלי",      dashboard: "אזור שותפים",   signOut: "התנתקות",     openMenu: "פתח תפריט חשבון" },
   ar: { account: "حسابي",               family: "عائلتي",           school: "مدرستي",            dashboard: "منطقة الشركاء", signOut: "تسجيل الخروج", openMenu: "افتح قائمة الحساب" },
@@ -148,7 +164,7 @@ function tierStyle(
 import { FamilyProfileSwitcher, prefetchSwitchMembers } from "./FamilyProfileSwitcher";
 
 /** "My students" for a coach (Gadi 2026-10-12): /coach was linked from nowhere. */
-const COACH_LINK: Record<string, string> = {"en": "My students", "he": "התלמידים שלי", "ar": "طلابي", "ru": "Мои ученики", "es": "Mis alumnos", "pt": "Meus alunos", "fr": "Mes élèves", "de": "Meine Schüler", "cs": "Moji žáci", "sk": "Moji žiaci", "it": "I miei studenti", "ja": "私の生徒", "hi": "मेरे छात्र", "am": "የእኔ ተማሪዎች", "uk": "Мої учні", "tr": "Öğrencilerim", "pl": "Moi uczniowie", "fa": "شاگردان من", "id": "Murid saya", "nl": "Mijn leerlingen", "el": "Οι μαθητές μου", "zu": "Abafundi bami", "vi": "Học sinh của tôi", "fil": "Aking mga estudyante", "af": "My leerders", "sw": "Wanafunzi wangu", "zh-CN": "我的学生", "zh-TW": "我的學生", "ko": "내 학생", "th": "นักเรียนของฉัน", "bn": "আমার শিক্ষার্থীরা", "da": "Mine elever", "hu": "Tanítványaim"};
+const COACH_LINK: Record<string, string> = {"en": "My students", "he": "התלמידים שלי", "ar": "طلابي", "ru": "Мои ученики", "es": "Mis alumnos", "pt": "Meus alunos", "fr": "Mes élèves", "de": "Meine Schüler", "cs": "Moji žáci", "sk": "Moji žiaci", "it": "I miei studenti", "ja": "私の生徒", "hi": "मेरे छात्र", "am": "የእኔ ተማሪዎች", "uk": "Мої учні", "tr": "Öğrencilerim", "pl": "Moi uczniowie", "fa": "شاگردان من", "id": "Murid saya", "nl": "Mijn leerlingen", "el": "Οι μαθητές μου", "zu": "Abafundi bami", "xh": "Abafundi bam", "nso": "Baithuti ba ka", "tn": "Baithuti ba me", "st": "Baithuti ba ka", "ts": "Vadyondzi va mina", "ss": "Bafundzi bami", "ve": "Vhagudi vhanga", "nr": "Abafundi bami", "vi": "Học sinh của tôi", "fil": "Aking mga estudyante", "af": "My leerders", "sw": "Wanafunzi wangu", "zh-CN": "我的学生", "zh-TW": "我的學生", "ko": "내 학생", "th": "นักเรียนของฉัน", "bn": "আমার শিক্ষার্থীরা", "da": "Mine elever", "hu": "Tanítványaim"};
 
 export function WbUserMenu() {
   const { user, plan, planReady, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl, logout, isIndividual } = useAuth();
