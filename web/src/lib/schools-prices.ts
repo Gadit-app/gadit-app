@@ -109,6 +109,14 @@ export function studentsUpTo(n: number, lang: string): string {
     case "nl": return `tot ${n} leerlingen`;
     case "el": return `έως ${n} μαθητές`;
     case "zu": return `kufika kubafundi abangu-${n}`;
+    case "xh": return `ukuya kubafundi aba-${n}`;
+    case "nso": return `go fihla go baithuti ba ${n}`;
+    case "tn": return `go fitlha baithuti ba le ${n}`;
+    case "st": return `ho fihlela baithuti ba ${n}`;
+    case "ts": return `ku fika eka vadyondzi va ${n}`;
+    case "ss": return `kufika ebafundzini labangu-${n}`;
+    case "ve": return `u swika kha vhagudi vha ${n}`;
+    case "nr": return `abafundi abafika ku-${n}`;
     case "vi": return `tối đa ${n} học sinh`;
     case "fil": return `hanggang ${n} estudyante`;
     case "af": return `tot ${n} leerders`;
