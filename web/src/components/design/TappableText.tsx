@@ -64,6 +64,9 @@ export function TappableText({ text, skipWord }: Props) {
           anchor={popover.anchor}
           lang={lang}
           fromWord={skipWord}
+          // The sentence it was tapped in, so the preview gives THAT sense
+          // ("פי" in "פי שניים" is times, not mouth; Gadi 2026-10-18).
+          context={text}
           onClose={() => setPopover(null)}
         />
       )}

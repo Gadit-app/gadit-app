@@ -29,7 +29,9 @@ export function tokenizeWords(text: string): WordToken[] {
   // \p{M} keeps combining marks (Hebrew niqqud, Arabic tashkeel, Indic matras)
   // ATTACHED to their base letter, so a vowelized word stays one tappable token
   // instead of fragmenting into single letters + marks.
-  const re = /([\p{L}][\p{L}\p{N}\p{M}'’\-]*)|([\s]+)|([^\p{L}\p{N}\p{M}\s]+)/gu;
+  // Numbers are plain text, never dropped (Gadi 2026-10-18: "3 כפול 4 שווה 12"
+  // showed as "כפול שווה" because a bare number matched no group).
+  const re = /([\p{L}][\p{L}\p{N}\p{M}'’\-]*)|([\s]+)|([^\p{L}\p{M}\s]+)/gu;
   let m: RegExpExecArray | null;
   while ((m = re.exec(text))) {
     const word = m[1];
