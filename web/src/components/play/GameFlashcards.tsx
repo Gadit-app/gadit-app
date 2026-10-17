@@ -566,7 +566,8 @@ export function GameFlashcards({
         </span>
       </button>
       {/* Hear the word, outside the card so a tap never flips it (Gadi 2026-10-11). */}
-      <div className="wb-flash-say"><TTSButton text={card.word.word} audioLang={wordLangOf(card.word)} useOpenAI ariaLabel={card.word.word} className="wb-word-act-icon wb-play-speak" /></div>
+      {/* Not before the flip when the word is the answer: hearing it would give it away (Gadi 2026-10-17). */}
+      {!(meaningFirst && !flipped) && <div className="wb-flash-say"><TTSButton text={card.word.word} audioLang={wordLangOf(card.word)} useOpenAI ariaLabel={card.word.word} className="wb-word-act-icon wb-play-speak" /></div>}
       {flipped && (
         <div className="wb-flash-actions">
           <button type="button" className="wb-flash-btn wb-flash-no" onClick={() => answer(false)}>{f.notYet}</button>

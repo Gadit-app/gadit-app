@@ -44,6 +44,8 @@ export function GameSentenceBuilder({ sentences, onExit, lang, t, audioLang }: {
   const [idx, setIdx] = useState(0);
   const [placed, setPlaced] = useState<number[]>([]);
   const [verdict, setVerdict] = useState<"right" | "wrong" | null>(null);
+  // Hebrew is built right to left (Gadi's son, 2026-10-17: the sentence came out reversed).
+  const textDir = audioLang.startsWith("he") ? "rtl" : "ltr";
   const [score, setScore] = useState(0);
   const [missed, setMissed] = useState<string[]>([]);
 
@@ -85,15 +87,15 @@ export function GameSentenceBuilder({ sentences, onExit, lang, t, audioLang }: {
       <PlayHeader title={c.buildTitle} progress={`${idx + 1}/${rounds.length}`} score={score} onExit={onExit} t={t} />
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow">{c.buildPrompt}</div>
-        <div className={`wb-sb-line${verdict ? ` is-${verdict}` : ""}`} dir="ltr" lang={audioLang}>
+        <div className={`wb-sb-line${verdict ? ` is-${verdict}` : ""}`} dir={textDir} lang={audioLang}>
           {placed.length === 0 && <span className="wb-sb-hint">…</span>}
           {placed.map((id, pos) => (
-            <button key={id} type="button" className="wb-sb-tile is-placed" onClick={() => unplace(pos)} disabled={!!verdict}>{byId.get(id)}</button>
+            <button key={id} type="button" className={`wb-sb-tile is-placed${verdict ? ` is-${verdict}` : ""}`} onClick={() => unplace(pos)} disabled={!!verdict}>{byId.get(id)}</button>
           ))}
         </div>
       </div>
       {!verdict && (
-        <div className="wb-sb-pool" dir="ltr" lang={audioLang}>
+        <div className="wb-sb-pool" dir={textDir} lang={audioLang}>
           {r.tiles.filter((x) => !placed.includes(x.id)).map((x) => (
             <button key={x.id} type="button" className="wb-sb-tile" onClick={() => tap(x.id)}>{x.w}</button>
           ))}
@@ -102,7 +104,7 @@ export function GameSentenceBuilder({ sentences, onExit, lang, t, audioLang }: {
       {verdict && (
         <div className="wb-sb-reveal">
           <div className={verdict === "right" ? "wb-sb-right" : "wb-sb-wrong"}>{verdict === "right" ? c.buildRight : c.buildWrong}</div>
-          <div className="wb-sb-answer" dir="ltr" lang={audioLang}>
+          <div className="wb-sb-answer" dir={textDir} lang={audioLang}>
             {r.sentence}
             <TTSButton text={r.sentence} audioLang={audioLang} useOpenAI ariaLabel={r.sentence} className="wb-word-act-icon wb-play-speak" />
           </div>
@@ -120,7 +122,10 @@ const SB_CSS = `
 .wb-sb-hint { color: var(--wb-ink-soft, #6B7280); font-size: 20px; }
 .wb-sb-pool { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 18px; }
 .wb-sb-tile { font: inherit; font-size: 19px; font-weight: 700; min-height: 48px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--wb-border, #D1D5DB); background: var(--surface, #fff); color: var(--wb-ink, #0f172a); cursor: pointer; box-shadow: 0 2px 0 rgba(15,23,42,0.08); }
-.wb-sb-tile.is-placed { background: color-mix(in srgb, var(--accent, #0EA5A5) 14%, var(--surface, #fff)); border-color: var(--accent, #0EA5A5); }
+/* Placed tiles: a calm blue that no kid skin turns pink (pink and red read as a mistake); green when right, red when wrong. */
+.wb-sb-tile.is-placed { background: #EFF6FF; border-color: #60A5FA; color: #0f172a; }
+.wb-sb-tile.is-placed.is-right { background: #D1FAE5; border-color: #10B981; color: #065F46; }
+.wb-sb-tile.is-placed.is-wrong { background: #FFE4E6; border-color: #F43F5E; color: #9F1239; }
 .wb-sb-tile:disabled { cursor: default; }
 .wb-sb-reveal { display: grid; justify-items: center; gap: 10px; margin-top: 18px; text-align: center; }
 .wb-sb-right { font-weight: 800; font-size: 18px; color: #047857; }

@@ -14948,6 +14948,7 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
 .wordbook .wb-kids-mini-track { position: relative; width: 32px; height: 18px; border-radius: 999px; background: var(--rule, #CBD5E1); flex: none; transition: background 160ms; }
 .wordbook .wb-kids-mini-track span { position: absolute; top: 2px; inset-inline-start: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(15, 23, 42, .3); transition: inset-inline-start 160ms; }
 .wordbook .wb-kids-mini.is-on { color: var(--ink, #0f172a); border-color: color-mix(in srgb, var(--accent, #0EA5A5) 50%, transparent); background: color-mix(in srgb, var(--accent, #0EA5A5) 10%, var(--surface, #fff)); }
+.wordbook .wb-kids-mini:not(.is-on) img { filter: saturate(.55); opacity: .8; }
 .wordbook .wb-kids-mini.is-on img { filter: none; }
 .wordbook .wb-kids-mini.is-on .wb-kids-mini-track { background: var(--accent, #0EA5A5); }
 .wordbook .wb-kids-mini.is-on .wb-kids-mini-track span { inset-inline-start: 16px; }
@@ -15103,9 +15104,11 @@ html[data-theme="dark"] .wb-learn-simple-link, html[data-theme="dark"] .wb-dict-
 
 /* Report a mistake in a question (Gadi 2026-10-12): a quiet flag, one tap. */
 .wb-report-q { position: relative; display: inline-flex; align-items: center; vertical-align: middle; }
-.wb-report-q-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--hairline, #E5E7EB); background: transparent; color: var(--ink-muted, #6B7280); display: inline-grid; place-items: center; cursor: pointer; padding: 0; }
-.wb-report-q-btn:hover { color: #B45309; border-color: rgba(180, 83, 9, .35); }
-.wb-report-q-btn:disabled { color: #0E8A5F; border-color: rgba(14, 138, 95, .35); cursor: default; }
+.wb-report-q-btn { height: 30px; padding: 0 11px 0 9px; border-radius: 999px; border: 1.5px solid rgba(180, 83, 9, .45); background: #FFF7E8; color: #92400E; display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: 13px; font-weight: 700; line-height: 1; white-space: nowrap; cursor: pointer; }
+.wb-report-q-btn:hover { background: #FFEFCF; border-color: rgba(180, 83, 9, .7); }
+.wb-report-q-btn:focus-visible { outline: 2px solid #B45309; outline-offset: 2px; }
+@media (max-width: 360px) { .wb-report-q-label { display: none; } .wb-report-q-btn { padding: 0 8px; } }
+.wb-report-q-btn:disabled { color: #0E8A5F; background: #ECFDF5; border-color: rgba(14, 138, 95, .45); cursor: default; }
 .wb-report-q-thanks { position: absolute; top: calc(100% + 6px); inset-inline-end: 0; z-index: 30; white-space: nowrap; background: #0F172A; color: #fff; font-size: 12.5px; font-weight: 600; border-radius: 8px; padding: 6px 10px; box-shadow: 0 6px 16px rgba(0,0,0,.18); }
 
 /* One look across the kids' tools (Gadi 2026-10-12): Homework uses the game cards, with pictures in the same style. */

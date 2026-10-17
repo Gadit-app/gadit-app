@@ -40,7 +40,10 @@ export function lessonData(lang: LearnLang, ui: string, id: string) {
   const bank = new Map(bankFor(lang, ui).map((x) => [x.w.toLowerCase(), x]));
   const items = l.words.flatMap((w) => {
     const b = bank.get(w.toLowerCase());
-    return b?.t ? [{ w: b.w, t: b.t, ...(b.nq ? { nq: b.nq } : {}) }] : [];
+    // en: the English side, so a Hebrew word's picture follows the English one
+    // (שלום showed "peace", not "hello"; Gadi 2026-10-17).
+    const en = !b ? undefined : lang === "en" ? b.w : (b as { en?: string }).en;
+    return b?.t ? [{ w: b.w, t: b.t, ...(b.nq ? { nq: b.nq } : {}), ...(en ? { en } : {}) }] : [];
   });
   const t = topicName(lang, l.topic, ui);
   return { id: l.id, topic: `${t.name} ${l.part}`, items, sentences: l.sentences, pronouns: l.pronouns, reading: l.reading };

@@ -504,3 +504,6 @@ const CSS = `
   .sch-safe { padding: 24px 20px; }
 }
 `;
+
+/** The page styles, shared with the international page (SchoolsGlobalLanding, 2026-10-17). */
+export const SCH_PAGE_CSS = CSS + CSS2;

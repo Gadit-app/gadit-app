@@ -89,6 +89,8 @@ export async function GET(req: NextRequest) {
       lastDigestDate?: string;
     };
     if (s.dailyDigest?.enabled === false) continue; // opt-out only
+    // A demo school never gets the digest (Gadi 2026-10-17: they were mailing @gadit.app every day).
+    if ((s as { isDemo?: boolean }).isDemo) continue;
     const hour = typeof s.dailyDigest?.hour === "number" ? s.dailyDigest.hour : DEFAULT_HOUR;
     const tz = s.activeHours?.timezone || DEFAULT_TZ;
     const { hour: nowHour, dateKey } = localParts(tz);

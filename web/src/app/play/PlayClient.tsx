@@ -3569,7 +3569,10 @@ function focusPool(pool: PlayWord[], word: string, game: GameId): PlayWord[] {
   return [hit, ...others.slice(0, Math.max(0, size - 1))];
 }
 
-export function PlayPage() {
+/** openingLesson: the page was opened to play a lesson (?lesson=), so it shows
+ *  a loading screen, not the games menu, until the lesson arrives (Gadi
+ *  2026-10-17: "Continue" flashed the games and then jumped). */
+export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } = {}) {
   const { user, plan, planReady, loading, promptLogin, familyRole, kidsAccess } = useAuth();
   const isKidPlayer = familyRole === "kid";
   const { lang, dir } = useLang();
@@ -3579,6 +3582,7 @@ export function PlayPage() {
 
   type Stage = { kind: "menu" } | { kind: "lesson"; lesson: Lesson; learnLang: string } | { kind: "playing"; game: GameId } | { kind: "duel"; code?: string; preset?: { title: string; questions: DuelQuestion[] } };
   const [stage, setStage] = useState<Stage>({ kind: "menu" });
+  const [lessonPending, setLessonPending] = useState(openingLesson);
   // "Practice this word" from the notebook (Gadi 2026-10-09):
   // /play?game=<id>&word=<word> opens that game with the word in it.
   const [focus, setFocus] = useState<{ game: GameId; word: string } | null>(null);
@@ -3826,8 +3830,11 @@ export function PlayPage() {
         const ll = (j.lang ?? j.profile?.lang) as string | undefined;
         if (l && ll) setStage({ kind: "lesson", lesson: l, learnLang: ll });
       } catch { /* stays on the menu */ }
+      setLessonPending(false);
     })();
   }, [user, lang]);
+  // Signed out: there is no lesson to open, show the page.
+  useEffect(() => { if (!loading && !user) setLessonPending(false); }, [loading, user]);
   // Open the focus game once the notebook has loaded (so the word is in it).
   const focusStartedRef = useRef(false);
   useEffect(() => {
@@ -4162,6 +4169,13 @@ export function PlayPage() {
   }, [playingGame, isPaid, lang, gamePool, kidsMode, playingTitle]);
 
   // ─── A lesson from workbook pages (Gadi 2026-10-11) ─────────────
+  if (stage.kind === "menu" && lessonPending) {
+    return (
+      <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
+        <div className="wb-play-loading">…</div>
+      </div>
+    );
+  }
   if (stage.kind === "lesson") {
     const lessonId = stage.lesson.id;
     const markDone = async () => {

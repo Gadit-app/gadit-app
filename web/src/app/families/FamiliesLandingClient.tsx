@@ -1,6 +1,8 @@
 "use client";
 
 import { Testimonials, FAMILY_TESTIMONIALS_HE } from "@/components/design/Testimonials";
+import type { FamI18n } from "./i18n/types";
+import { fillDeep, landingPrices, screensLang } from "@/lib/landing-i18n";
 import { INDIVIDUAL_DISPLAY, INDIVIDUAL_MONTHLY } from "@/lib/individual-prices";
 import { planCopy } from "@/lib/plan-copy";
 import { REAL_COPY, REAL_CSS, PhoneShot, Lines } from "./RealScreens";
@@ -49,7 +51,7 @@ const ANGLES: Angle[] = ["vocab", "relief", "anxiety", "safe"];
 
 type FeatureCopy = { kicker: string; title: string; body: string };
 
-type Copy = {
+export type Copy = {
   heroBadge: string;
   whatIs: string;
   ctaMicro: string;
@@ -8437,18 +8439,23 @@ const FEATURE_IMG: Array<string | null> = [
 
 /* ────────────────────────── page ────────────────────────── */
 
-export default function FamiliesLandingClient({ withNav = false, classic = false }: { withNav?: boolean; classic?: boolean }) {
+export default function FamiliesLandingClient({ withNav = false, classic = false, i18n }: { withNav?: boolean; classic?: boolean; i18n?: FamI18n }) {
   const params = useSearchParams();
   const { user, familyId, promptLogin } = useAuth();
   const { lang, dir } = useLang();
   const href = useHref();
   const he = lang === "he";
-  const c = (COPY as Record<string, Copy>)[lang] ?? COPY.en;
+  // Every language (2026-10-17): a page given its copy file (i18n/<lang>.ts,
+  // the /families/landing-intl review page) renders the real-screens page in
+  // that language, with the English screens and the language's prices.
+  const prices = landingPrices(lang);
+  const c = i18n ? fillDeep(i18n.copy, prices) : ((COPY as Record<string, Copy>)[lang] ?? COPY.en);
   // Real app screens: Hebrew first (captured from the Hebrew demo family).
   // English copy is ready in REAL_COPY.en but waits for an English demo
   // family's screens; every other language keeps the illustrations.
   // `classic` = the pre-2026-09-28 illustrated page, kept at /families/landing-old.
-  const real = !classic && lang === "he" ? REAL_COPY.he : undefined;
+  const real = i18n ? fillDeep(i18n.real, prices) : !classic && lang === "he" ? REAL_COPY.he : undefined;
+  const shotLang = i18n ? screensLang(lang) : lang;
 
   // Default angle: vocab (Gadi 2026-07-17 + council: the master promise
   // is visible vocabulary growth; the pain angles stay as variants).
@@ -8719,8 +8726,8 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
             <div className="fam-hero-visual">
               {real ? (
                 <div className="fam-real-hero">
-                  <PhoneShot lang={lang} name="notebook" alt={real.shotAlt} priority />
-                  <PhoneShot lang={lang} name="word" alt={real.shotAlt} priority />
+                  <PhoneShot lang={shotLang} name="notebook" alt={real.shotAlt} priority />
+                  <PhoneShot lang={shotLang} name="word" alt={real.shotAlt} priority />
                 </div>
               ) : (
               <div className="fam-hero-stage">
@@ -8811,8 +8818,8 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                 </div>
                 <div className="fam-feature-visual">
                   <div className="fam-real-pair">
-                    <PhoneShot lang={lang} name={real.dash.img} alt={real.shotAlt} />
-                    {real.dash.img2 && <PhoneShot lang={lang} name={real.dash.img2} alt={real.shotAlt} />}
+                    <PhoneShot lang={shotLang} name={real.dash.img} alt={real.shotAlt} />
+                    {real.dash.img2 && <PhoneShot lang={shotLang} name={real.dash.img2} alt={real.shotAlt} />}
                   </div>
                 </div>
               </div>
@@ -8842,7 +8849,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                 </div>
                 {!showAllCards && (
                   <button type="button" className="fam-cta-ghost fam-cards-more" onClick={() => setShowAllCards(true)}>
-                    לכל היכולות
+                    {i18n?.ui.allCards ?? "לכל היכולות"}
                   </button>
                 )}
                 <div className="fam-chain-turn">
@@ -8899,7 +8906,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                       <h3 className="fam-real-step-title">{st.t}</h3>
                       <p className="fam-real-step-body"><Lines text={st.b} /></p>
                     </div>
-                    <PhoneShot lang={lang} name={st.img} alt={real.shotAlt} />
+                    <PhoneShot lang={shotLang} name={st.img} alt={real.shotAlt} />
                   </div>
                 ))}
               </div>
@@ -8961,8 +8968,8 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                 </ul>
               </div>
               <div className="fam-real-pair">
-                <PhoneShot lang={lang} name={real.homework.img} alt={real.shotAlt} />
-                <PhoneShot lang={lang} name={real.homework.img2} alt={real.shotAlt} />
+                <PhoneShot lang={shotLang} name={real.homework.img} alt={real.shotAlt} />
+                <PhoneShot lang={shotLang} name={real.homework.img2} alt={real.shotAlt} />
               </div>
             </div>
           </section>
@@ -8984,11 +8991,11 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
               <div className="fam-feature-visual">
                 {f.img2 ? (
                   <div className="fam-real-pair">
-                    <PhoneShot lang={lang} name={f.img} alt={real.shotAlt} />
-                    <PhoneShot lang={lang} name={f.img2} alt={real.shotAlt} />
+                    <PhoneShot lang={shotLang} name={f.img} alt={real.shotAlt} />
+                    <PhoneShot lang={shotLang} name={f.img2} alt={real.shotAlt} />
                   </div>
                 ) : (
-                  <PhoneShot lang={lang} name={f.img} alt={real.shotAlt} />
+                  <PhoneShot lang={shotLang} name={f.img} alt={real.shotAlt} />
                 )}
               </div>
             </div>
@@ -9010,8 +9017,8 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
               </div>
               <div className="fam-feature-visual">
                 <div className="fam-real-pair">
-                  <PhoneShot lang={lang} name={real.games.img} alt={real.shotAlt} />
-                  {real.games.img2 && <PhoneShot lang={lang} name={real.games.img2} alt={real.shotAlt} />}
+                  <PhoneShot lang={shotLang} name={real.games.img} alt={real.shotAlt} />
+                  {real.games.img2 && <PhoneShot lang={shotLang} name={real.games.img2} alt={real.shotAlt} />}
                 </div>
               </div>
             </div>

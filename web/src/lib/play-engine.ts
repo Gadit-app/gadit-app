@@ -554,6 +554,10 @@ function blankOut(sentence: string, word: string): string {
 export function buildFillBlankQuestions(
   pool: PlayWord[],
   count: number,
+  /** Wrong options to use instead of the pool's own words. A lesson's words are
+   *  all one topic (colors), so any of them fits the blank ("הכחול הזה ___":
+   *  בהיר and כהה are both right); words from other topics cannot (2026-10-17). */
+  distractorWords?: string[],
 ): FillBlankQuestion[] {
   const withExamples = pool.filter((p) => usableFillBlankExamples(p).length > 0);
   // Oversample: some targets may produce degenerate rounds (fewer than
@@ -567,7 +571,9 @@ export function buildFillBlankQuestions(
     // Same script-matching guardrail as Quiz — a Hebrew target word
     // must not offer English distractor words.
     const targetScript = scriptOf(target.word);
-    const candidates = pool.filter((p) => p.word !== target.word);
+    const candidates = distractorWords?.length
+      ? distractorWords.filter((w) => w !== target.word).map((w) => ({ word: w }))
+      : pool.filter((p) => p.word !== target.word);
     const sameScriptCandidates = candidates.filter(
       (p) => scriptOf(p.word) === targetScript,
     );

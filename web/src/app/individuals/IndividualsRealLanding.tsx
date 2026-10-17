@@ -7,7 +7,10 @@ import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { useHref } from "@/lib/href";
 import { useAuth } from "@/lib/auth-context";
 import { track } from "@/lib/track";
-import { INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY, INDIVIDUAL_DISPLAY } from "@/lib/individual-prices";
+import { INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY } from "@/lib/individual-prices";
+import { fill, landingDir, landingFont, landingPrices, screensLang } from "@/lib/landing-i18n";
+import type { IndCopy } from "./i18n/types";
+import HE from "./i18n/he";
 
 /**
  * The Hebrew Individuals landing (Gadi 2026-10-06), built like the Families
@@ -20,103 +23,18 @@ import { INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY, INDIVIDUAL_DISPLAY } from "@/lib
  * card and reminder line under the hero CTA, "who it's for" right after the
  * pain, the secondary tools in one block, a 5-line price list with the
  * yearly saving, a quiet free-account link next to the price, new FAQs.
+ *
+ * Every language (2026-10-17): the copy comes from i18n/<lang>.ts (Hebrew is
+ * the default, unchanged); prices and screens follow the language
+ * (lib/landing-i18n.ts).
  */
 
-type Step = { t: string; b: string; img: string };
-type Tool = { kicker: string; title: string; body: string; points: string[]; img: string; img2?: string };
-type MiniTool = { kicker: string; title: string; body: string; img: string };
 
-const C = {
-  topCta: "ניסיון חינם",
-  credPill: "הצוות של Gadit לימד יותר מ-15,000 לומדים ב-15 שנה",
-  h1: "להבין כל מילה עד הסוף.",
-  whatIs: "נתקעתם על מילה במכתב מהבנק, במאמר או בחוזה? תקבלו את כל המשמעויות, דוגמאות ומקור המילה, בהסבר בשפה שלכם. כל מילה נשמרת במחברת, ו-Gadit מחזיר אותה עד שהיא נשארת.",
-  heroCta: "התחילו 14 ימי ניסיון חינם",
-  ctaNote: "נדרש כרטיס אשראי, והחיוב הראשון רק בתום 14 הימים. יומיים לפני כן נשלח תזכורת במייל. ביטול בלחיצה, בלי טלפון.",
-  howCta: "איך זה עובד",
-  heroPoints: [`${INDIVIDUAL_DISPLAY.ilsMonthly} לחודש`, "הסבר ב-33 שפות", "בלי פרסומות"],
-  shotAlt: "מסך אמיתי מתוך Gadit",
-  pain: {
-    title: "מבינים את הרעיון, אבל מילה אחת עוצרת הכול",
-    lead: "מילה שמבינים רק בערך נשארת בערך.",
-    paras: [
-      "במאמר באנגלית, במכתב מהבנק, בשיעור או בפגישה, מילה אחת לא ברורה מפילה משפט שלם.",
-      "מתרגם נותן מילה מקבילה. הוא לא מסביר מה המילה אומרת במשפט הזה, ולא עוזר לזכור אותה בפעם הבאה.",
-    ],
-    reframe: "Gadit מסביר כל מילה עד הסוף, מוצא את המשמעות שמתאימה למשפט, ושומר אותה בשבילכם.",
-  },
-  whoKicker: "בשביל מי",
-  whoTitle: "קוראים, לומדים או עובדים בשפה שעוד לא שולטים בה?",
-  who: [
-    { t: "עולים חדשים", b: "מכתבים מהבנק, טפסים ומיילים מהעבודה. כל מילה בעברית מוסברת בשפה שלכם." },
-    { t: "סטודנטים", b: "מאמרים באנגלית ומושגים מקצועיים, עם המשמעות המדויקת לפי המשפט." },
-    { t: "אנשי מקצוע", b: "חוזים, מסמכים ומיילים, בלי לנחש מה מילה אחת אומרת." },
-    { t: "לומדי שפות", b: "מילים, ניבים והגייה, ומחברת שמחזירה כל מילה עד שהיא נשארת." },
-  ],
-  howKicker: "איך זה עובד",
-  howTitle: "ארבעה צעדים, ואוצר המילים שלכם גדל",
-  steps: [
-    { t: "חפשו מילה, בכל שפה", b: "כל המשמעויות של המילה, דוגמאות לכל משמעות, תמונה ומקור המילה. ההסבר תמיד בשפה שלכם.", img: "word" },
-    { t: "המשמעות הנכונה לפי המשפט", b: "כתבו את המשפט שבו המילה הופיעה, ו-Gadit יבחר את המשמעות שמתאימה בדיוק למשפט הזה.", img: "context" },
-    { t: "כל מילה נשמרת במחברת שלכם", b: "כל מילה שחיפשתם נשמרת מעצמה. אוצר המילים שלכם נבנה במקום אחד, ואפשר לחזור לכל מילה.", img: "notebook" },
-    { t: "תרגלו עד שהמילה נשארת", b: "תרגול חכם מחזיר כל מילה בזמן הנכון: מילה ששכחתם חוזרת מהר, ומילה שידעתם חוזרת בעוד כמה ימים.", img: "practice" },
-  ] as Step[],
-  stepsCta: "התחילו 14 ימי ניסיון חינם",
-  photo: {
-    kicker: "צילום דף",
-    title: "צלמו דף, והבינו כל מילה בו",
-    body: "מאמר, חוזה, מכתב או פרק מספר. צלמו או הדביקו את הטקסט, ולחצו על כל מילה כדי לקבל את המשמעות שלה. אפשר גם להבין משפט שלם בלחיצה.",
-    points: ["צילום דף ישר מהמצלמה", "לחיצה על כל מילה", "המילים החשובות בקטע, לפני שמתחילים לקרוא"],
-    img: "read",
-    img2: "read-word",
-  } as Tool,
-  moreKicker: "עוד כלים",
-  moreTitle: "עוד כלים שעוזרים לזכור",
-  more: [
-    { kicker: "תגיד את זה", title: "שמעו משפט, ואמרו אותו בעצמכם", body: "Gadit מקריא את המשפט בקול, ואתם מקבלים ציון על ההגייה.", img: "say" },
-    { kicker: "השוואת מילים", title: "שתי מילים דומות, וההבדל ביניהן", body: "ההבדל בין affect ל-effect, או בין אומנות לאמנות, עם דוגמאות והטעות הנפוצה.", img: "compare" },
-    { kicker: "משחקים וחידונים", title: "תרגול קצר מהמילים שלכם", body: "חידונים ומשחקים שנבנים מהמילים שחיפשתם ושנשמרו במחברת שלכם.", img: "play" },
-  ] as MiniTool[],
-  priceKicker: "מחיר",
-  priceTitle: "Individual: כל הכלים, לאדם אחד",
-  monthly: "לחודש",
-  yearlyLine: `או ${INDIVIDUAL_DISPLAY.ilsYearly} לשנה, חודשיים מתנה`,
-  bothTrial: "בשני המסלולים 14 ימי ניסיון חינם.",
-  includes: [
-    "חיפושים ללא הגבלה, עם המשמעות לפי המשפט",
-    "מחברת לכל המילים ותרגול חכם",
-    "צילום דף ולחיצה על כל מילה",
-    "תגיד את זה: תרגול הגייה עם ציון",
-    "משחקים, חידונים והשוואת מילים",
-  ],
-  priceCta: "התחילו 14 ימי ניסיון חינם",
-  priceTerms: "14 ימי ניסיון חינם, ואחריהם {price} לחודש.\nנדרש כרטיס אשראי, ויומיים לפני החיוב נשלח תזכורת במייל.\nמבטלים בכל רגע מעמוד החשבון, בלי לפנות לאף אחד.",
-  freeLink: "עדיין לא רוצים להזין כרטיס? התחילו בחשבון חינמי, 10 חיפושים ביום.",
-  familyNote: "יש ילדים בבית?\nFamily עולה ₪19.90 לחודש, ומצרף עד 5 ילדים וגם את ההורה השני, עם מצב ילדים ולוח הורה.",
-  familyLink: "להכיר את Family",
-  faqKicker: "שאלות נפוצות",
-  faqTitle: "מה שואלים לפני שמתחילים",
-  faq: [
-    { q: "מה ההבדל בין Gadit למתרגם?", a: "Gadit מסביר מילים.\nלכל מילה הוא נותן את כל המשמעויות, דוגמאות, תמונה ומקור המילה, ובוחר את המשמעות שמתאימה למשפט.\nכשהמילה בשפה אחרת מופיעה גם מילה מקבילה, אבל העיקר הוא להבין אותה עד הסוף." },
-    { q: "באילו שפות זה עובד?", a: "מחפשים מילה בכל שפה.\nההסבר נכתב באחת מ-33 שפות, ביניהן עברית, אנגלית, רוסית, ערבית, אמהרית, צרפתית וספרדית." },
-    { q: "על אילו מכשירים זה עובד?", a: "בכל דפדפן, בטלפון ובמחשב, בלי התקנה.\nבאנדרואיד יש גם אפליקציה ב-Google Play." },
-    { q: "מה קורה לדף שצילמתי?", a: "התמונה משמשת רק כדי לקרוא את הטקסט, ולא נשמרת אצלנו." },
-    { q: "אפשר להשתמש בחינם?", a: "כן.\nבחשבון חינמי יש 10 חיפושים ביום, ומחברת עד 30 מילים.\nIndividual פותח חיפושים ללא הגבלה ואת כל הכלים." },
-    { q: "מה קורה למילים אם לא ממשיכים?", a: "כל המילים שכבר שמרתם נשארות במחברת.\nבחשבון החינמי אפשר להמשיך לחפש 10 מילים ביום." },
-    { q: "כמה זמן לוקחת ההרשמה?", a: "פחות מדקה, עם מייל או עם חשבון Google." },
-    { q: "איך מבטלים?", a: "בעמוד החשבון, בלחיצה על \"ניהול חיוב\".\nאם מבטלים לפני תום 14 ימי הניסיון, לא יהיה שום חיוב.\nיומיים לפני סוף הניסיון יגיע אליכם מייל תזכורת עם התאריך והסכום." },
-    { q: "מה ההבדל בין Individual ל-Family?", a: "Individual הוא לאדם אחד, עם כל הכלים.\nFamily מתאים כשיש ילדים בבית: עד 5 ילדים וגם ההורה השני, לכל ילד אזור משלו, מצב ילדים, לוח הורה ותרגול הכתבה." },
-  ],
-  finalTitle: "המילה הבאה כבר לא תעצור אתכם.",
-  finalBody: "14 ימי ניסיון חינם.\nביטול בכל רגע, בלי טלפון.",
-  finalCta: "התחילו 14 ימי ניסיון חינם",
-};
-
-function Phone({ name, priority = false }: { name: string; priority?: boolean }) {
+function Phone({ name, priority = false, lang = "he", alt }: { name: string; priority?: boolean; lang?: string; alt: string }) {
   return (
     <div className="ind-phone">
       <div className="ind-phone-screen">
-        <Image src={`/ind/screens/he/${name}.webp`} alt={C.shotAlt} width={780} height={1688} sizes="(max-width: 760px) 62vw, 270px" priority={priority} />
+        <Image src={`/ind/screens/${screensLang(lang)}/${name}.webp`} alt={alt} width={780} height={1688} sizes="(max-width: 760px) 62vw, 270px" priority={priority} />
       </div>
     </div>
   );
@@ -131,7 +49,10 @@ function Check() {
   );
 }
 
-export function IndividualsRealLanding() {
+export function IndividualsRealLanding({ copy = HE, lang = "he" }: { copy?: IndCopy; lang?: string }) {
+  const C = copy;
+  const prices = landingPrices(lang);
+  const F = (s: string) => fill(s, prices);
   const href = useHref();
   const { promptLogin } = useAuth();
   const start = (where: string, yearly = false) => {
@@ -148,7 +69,7 @@ export function IndividualsRealLanding() {
   };
   const t = C.photo;
   return (
-    <div className="ind" dir="rtl" lang="he">
+    <div className="ind" dir={landingDir(lang)} lang={lang} style={lang === "he" ? undefined : { fontFamily: landingFont(lang) }}>
       <style>{CSS + CSS2}</style>
       <header className="ind-top">
         <Link href={href("/")} className="ind-logo" aria-label="Gadit" dir="ltr" translate="no">Gad<span>it</span></Link>
@@ -173,11 +94,11 @@ export function IndividualsRealLanding() {
                 <a href="#how" className="ind-ghost">{C.howCta}</a>
               </div>
               <p className="ind-cta-note"><Lines text={C.ctaNote} /></p>
-              <ul className="ind-points">{C.heroPoints.map((p) => <li key={p}><Check />{p}</li>)}</ul>
+              <ul className="ind-points">{C.heroPoints.map((p) => <li key={p}><Check />{F(p)}</li>)}</ul>
             </div>
             <div className="ind-hero-visual">
-              <Phone name="notebook" priority />
-              <Phone name="word" priority />
+              <Phone name="notebook" priority lang={lang} alt={C.shotAlt} />
+              <Phone name="word" priority lang={lang} alt={C.shotAlt} />
             </div>
           </div>
         </section>
@@ -215,7 +136,7 @@ export function IndividualsRealLanding() {
                   <h3 className="ind-h3">{s.t}</h3>
                   <p className="ind-body"><Lines text={s.b} /></p>
                 </div>
-                <Phone name={s.img} />
+                <Phone name={s.img} lang={lang} alt={C.shotAlt} />
               </div>
             ))}
           </div>
@@ -233,8 +154,8 @@ export function IndividualsRealLanding() {
               <ul className="ind-list">{t.points.map((p) => <li key={p}>{p}</li>)}</ul>
             </div>
             <div className="ind-feature-visual is-pair">
-              <Phone name={t.img} />
-              {t.img2 && <Phone name={t.img2} />}
+              <Phone name={t.img} lang={lang} alt={C.shotAlt} />
+              {t.img2 && <Phone name={t.img2} lang={lang} alt={C.shotAlt} />}
             </div>
           </div>
         </section>
@@ -248,7 +169,7 @@ export function IndividualsRealLanding() {
                 <div className="ind-kicker ind-start">{m.kicker}</div>
                 <h3 className="ind-h3">{m.title}</h3>
                 <p className="ind-body"><Lines text={m.body} /></p>
-                <Phone name={m.img} />
+                <Phone name={m.img} lang={lang} alt={C.shotAlt} />
               </div>
             ))}
           </div>
@@ -259,18 +180,18 @@ export function IndividualsRealLanding() {
           <h2 className="ind-h2 ind-center"><Lines text={C.priceTitle} /></h2>
           <div className="ind-price-card">
             <div className="ind-price-row">
-              <span className="ind-price" dir="ltr">{INDIVIDUAL_DISPLAY.ilsMonthly}</span>
+              <span className="ind-price" dir="ltr">{prices.monthly}</span>
               <span className="ind-price-per">{C.monthly}</span>
             </div>
-            <button type="button" className="ind-price-year ind-yearly-btn" onClick={() => start("price-yearly", true)}>{C.yearlyLine}</button>
+            <button type="button" className="ind-price-year ind-yearly-btn" onClick={() => start("price-yearly", true)}>{F(C.yearlyLine)}</button>
             <div className="ind-both-trial">{C.bothTrial}</div>
             <ul className="ind-includes">{C.includes.map((p) => <li key={p}><Check />{p}</li>)}</ul>
             <button type="button" className="ind-cta ind-cta-wide" onClick={() => start("price")}>{C.priceCta}</button>
-            <p className="ind-terms"><Lines text={C.priceTerms.replace("{price}", INDIVIDUAL_DISPLAY.ilsMonthly)} /></p>
+            <p className="ind-terms"><Lines text={F(C.priceTerms)} /></p>
           </div>
           <button type="button" className="ind-free-link" onClick={startFree}>{C.freeLink}</button>
           <p className="ind-family-note">
-            <Lines text={C.familyNote} /><br /><Link href={href("/families")}>{C.familyLink}</Link>
+            <Lines text={F(C.familyNote)} /><br /><Link href={href("/families")}>{C.familyLink}</Link>
           </p>
         </section>
 
@@ -297,9 +218,9 @@ export function IndividualsRealLanding() {
       </main>
       {/* Legal links on a page that starts a trial / collects details (QA 2026-10-07). */}
       <footer style={{ textAlign: "center", padding: "26px 16px 34px", fontSize: 13.5, color: "#6B7A80" }}>
-        <a href={href("/terms")} style={{ color: "inherit" }}>תנאי שימוש</a>
+        <a href={href("/terms")} style={{ color: "inherit" }}>{C.terms}</a>
         <span style={{ margin: "0 10px" }}>·</span>
-        <a href={href("/privacy")} style={{ color: "inherit" }}>מדיניות פרטיות</a>
+        <a href={href("/privacy")} style={{ color: "inherit" }}>{C.privacy}</a>
         <span style={{ margin: "0 10px" }}>·</span>
         <span dir="ltr">© Gadit 2026</span>
       </footer>
@@ -308,6 +229,8 @@ export function IndividualsRealLanding() {
 }
 
 const CSS2 = `
+/* A long language name (українська, Tshivenḓa) must not push the bar past a phone screen (2026-10-17). */
+@media (max-width: 480px) { .ind:not([lang="he"]) .ind-top-lang button[aria-haspopup] > span { display: none; } }
 .ind-cta-note { margin: 12px 0 0; font-size: 13.5px; line-height: 1.6; color: var(--body); max-width: 460px; }
 .ind-steps-cta { text-align: center; margin-top: 40px; }
 .ind-more { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; max-width: 1060px; margin: 34px auto 0; }
@@ -413,7 +336,8 @@ const CSS = `
   .ind-top { padding: 10px 14px; }
   .ind-top-cta { padding: 9px 14px; font-size: 13.5px; }
   .ind-hero { padding: 36px 16px 64px; }
-  .ind-pill { font-size: 12px; white-space: nowrap; }
+  .ind-pill { font-size: 12px; white-space: nowrap; max-width: 100%; }
+  .ind:not([lang="he"]) .ind-pill { white-space: normal; text-align: start; }
   .ind-whatis { font-size: 16.5px; }
   .ind-hero-visual .ind-phone { max-width: 190px; }
   .ind-step { grid-template-columns: 1fr; padding: 28px 20px; border-radius: 26px; gap: 22px; }

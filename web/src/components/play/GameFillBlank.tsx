@@ -24,16 +24,19 @@ export function GameFillBlank({
   onExit,
   lang,
   t,
+  distractorWords,
 }: {
   pool: PlayWord[];
+  /** See buildFillBlankQuestions: wrong options from outside the pool. */
+  distractorWords?: string[];
   onExit: () => void;
   lang: string;
   t: PlayT;
 }) {
   const { nq } = useNiqqud(); // display-only vowel points
   const questions = useMemo(
-    () => buildFillBlankQuestions(pool, SESSION_SIZE.fillblank),
-    [pool],
+    () => buildFillBlankQuestions(pool, SESSION_SIZE.fillblank, distractorWords),
+    [pool, distractorWords],
   );
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);

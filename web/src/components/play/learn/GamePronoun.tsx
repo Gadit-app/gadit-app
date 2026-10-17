@@ -56,7 +56,9 @@ export function GamePronoun({ items, onExit, lang, t, audioLang }: {
     setPicked(p);
     if (p === r.answer) setScore((s) => s + 1);
     else setMissed((m) => [...m, { word: r.phrase, meaning: r.answer }]);
-    setTimeout(() => { setIdx((i) => i + 1); setPicked(null); }, p === r.answer ? 900 : 1600);
+    // New buttons for every question (key holds idx), and the tapped one loses
+    // focus: on a tablet the previous answer looked still pressed (Shiloh, 2026-10-17).
+    setTimeout(() => { (document.activeElement as HTMLElement | null)?.blur?.(); setIdx((i) => i + 1); setPicked(null); }, p === r.answer ? 900 : 1600);
   };
 
   return (
@@ -78,7 +80,7 @@ export function GamePronoun({ items, onExit, lang, t, audioLang }: {
             else cls += " is-dimmed";
           }
           return (
-            <button key={p} type="button" className={cls} onClick={() => pick(p)} disabled={!!picked} style={{ textAlign: "center", fontSize: 20, fontWeight: 700 }}>
+            <button key={`${idx}-${p}`} type="button" className={cls} onClick={() => pick(p)} disabled={!!picked} style={{ textAlign: "center", fontSize: 20, fontWeight: 700 }}>
               {p}
             </button>
           );
