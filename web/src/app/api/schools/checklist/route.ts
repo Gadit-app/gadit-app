@@ -24,9 +24,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "invalid_token" }, { status: 401 });
   }
   let step = "";
+  let tz = "";
   try {
-    const b = (await req.json()) as { step?: unknown };
-    if (b.step === "activity" || b.step === "teachers") step = b.step;
+    const b = (await req.json()) as { step?: unknown; tz?: unknown };
+    if (b.step === "activity" || b.step === "teachers" || b.step === "timezone") step = b.step;
+    if (typeof b.tz === "string" && b.tz.length <= 64) tz = b.tz;
   } catch { /* fall through */ }
   if (!step) return NextResponse.json({ error: "bad_step" }, { status: 400 });
 
@@ -34,6 +36,16 @@ export async function POST(req: NextRequest) {
   const u = (await db.collection("users").doc(uid).get()).data();
   if (u?.schoolId !== uid) return NextResponse.json({ ok: true, skipped: "not_school" });
   const ref = db.collection("schools").doc(uid);
+  // The principal's browser timezone, saved once (2026-10-17): it sets the
+  // school's default hours and digest hour (lib/school.ts schoolHoursFor).
+  if (step === "timezone") {
+    let valid = false;
+    try { new Intl.DateTimeFormat("en-US", { timeZone: tz }); valid = !!tz; } catch { /* not a timezone */ }
+    if (!valid) return NextResponse.json({ error: "bad_tz" }, { status: 400 });
+    const s = (await ref.get()).data();
+    if (s && !s.timezone) await ref.set({ timezone: tz }, { merge: true });
+    return NextResponse.json({ ok: true });
+  }
   const cur = ((await ref.get()).data()?.checklist ?? {}) as Record<string, unknown>;
   if (!cur[step]) await ref.set({ checklist: { [step]: new Date().toISOString() } }, { merge: true });
   return NextResponse.json({ ok: true });

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
 import {
   DEFAULT_SCHOOL_HOURS,
+  schoolHoursFor,
   isClassroomInSession,
   normalizeClassCode,
   studentCodesOff,
@@ -64,6 +65,8 @@ export async function GET(req: NextRequest) {
     name?: string;
     logoUrl?: string | null;
     activeHours?: ActiveHours;
+    curriculum?: string;
+    timezone?: string;
     skinAccent?: string | null;
   };
   const classroom = classroomSnap.data() as { name?: string; students?: string[] };
@@ -76,7 +79,7 @@ export async function GET(req: NextRequest) {
   // top of the always-on basic dictionary. Outside the window, /c/<CODE>
   // still works but only as a Basic-tier dictionary plus a soft hint
   // that "Want full Gadit at home? Try Family."
-  const schedule = school.activeHours ?? DEFAULT_SCHOOL_HOURS;
+  const schedule = schoolHoursFor(school);
   const inSession = isClassroomInSession(new Date(), schedule);
 
   return NextResponse.json({

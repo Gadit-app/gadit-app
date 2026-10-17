@@ -15,6 +15,7 @@ import { type Lang } from "@/lib/i18n";
 import { misc } from "@/lib/misc-i18n";
 import { homeworkCopy } from "@/lib/homework-i18n";
 import { notifyActivity } from "@/lib/notify-activity-client";
+import { ReportQuestionButton } from "@/components/play/ReportQuestionButton";
 
 /**
  * /read — the Reader. Paste or photograph a passage; Gadit lays it out as
@@ -796,6 +797,11 @@ export function ReaderClient() {
               <div dir="auto" style={{ textAlign: "start" }}>
                 <ReaderText text={text} reviewed={reviewed} onReview={markReviewed} hardKeys={hardKeys} />
               </div>
+            </div>
+            {/* "Found a mistake?" here too (Gadi 2026-10-17): the key words, the
+                gist and any open explanation go with the report. */}
+            <div style={{ display: "flex", justifyContent: "center", marginTop: 14 }}>
+              <ReportQuestionButton where="read" snapshot={() => ({ text: (document.querySelector("main")?.innerText || "").slice(0, 3000) })} />
             </div>
             {fromHw && (
               <Link href={href("/homework")} className="wb-hw-done"

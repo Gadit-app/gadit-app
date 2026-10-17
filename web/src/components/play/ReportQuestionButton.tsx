@@ -17,7 +17,7 @@ import { useLang } from "@/lib/lang-context";
 const COPY: Record<string, [string, string, string]> = {
   en: ["Report a mistake in this question", "Thanks! We'll check it.", "Found a mistake?"],
   he: ["דיווח על טעות בשאלה", "תודה! נבדוק את זה.", "מצאתם טעות?"],
-  ar: ["الإبلاغ عن خطأ في هذا السؤال", "شكرًا! سنتحقق من ذلك.", "وجدتم خطأ؟"],
+  ar: ["الإبلاغ عن خطأ في هذا السؤال", "شكرًا! سنتحقق من ذلك.", "وجدت خطأ؟"],
   ru: ["Сообщить об ошибке в вопросе", "Спасибо! Мы проверим.", "Нашли ошибку?"],
   es: ["Informar de un error en esta pregunta", "¡Gracias! Lo revisaremos.", "¿Encontraste un error?"],
   pt: ["Avisar sobre um erro nesta pergunta", "Obrigado! Vamos verificar.", "Achou um erro?"],
@@ -35,7 +35,7 @@ const COPY: Record<string, [string, string, string]> = {
   fa: ["گزارش اشتباه در این سؤال", "ممنون! بررسی می‌کنیم.", "اشتباهی پیدا کردید؟"],
   id: ["Laporkan kesalahan di soal ini", "Terima kasih! Kami akan memeriksanya.", "Ada kesalahan?"],
   nl: ["Meld een fout in deze vraag", "Bedankt! We kijken ernaar.", "Fout gevonden?"],
-  el: ["Αναφορά λάθους σε αυτή την ερώτηση", "Ευχαριστούμε! Θα το ελέγξουμε.", "Βρήκατε λάθος;"],
+  el: ["Αναφορά λάθους σε αυτή την ερώτηση", "Ευχαριστούμε! Θα το ελέγξουμε.", "Βρήκες λάθος;"],
   zu: ["Bika iphutha kulo mbuzo", "Siyabonga! Sizokuhlola.", "Uthole iphutha?"],
   xh: ["Xela impazamo kulo mbuzo", "Enkosi! Siza kuyijonga.", "Ufumene impazamo?"],
   nso: ["Bega phošo potšišong ye", "Re a leboga! Re tla e lekola.", "O hweditše phošo?"],

@@ -2845,7 +2845,7 @@ const ACTIVITY_COPY: Record<string, { title: string; sub: string; empty: string;
   ko: {
     title: "최근 검색",
     sub: "아이들이 찾아본 모든 단어를 최신순으로 보여 드려요.",
-    empty: "아직 검색 기록이 없어요. 아이들이 어린이 모드에서 단어를 찾으면 여기에 표시돼요.",
+    empty: "아직 검색 기록이 없어요. 아이들이 키즈 모드에서 단어를 찾으면 여기에 표시돼요.",
     today: "오늘",
     yesterday: "어제",
   },
