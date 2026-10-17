@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Kezdd el a 14 napos ingyenes próbát",
   ctaNote: "Bankkártya szükséges, és az első terhelés csak a 14 nap után jön. Két nappal előtte emlékeztető e-mailt küldünk. Egy kattintással lemondhatod, telefonhívás nélkül.",
   howCta: "Hogyan működik",
-  heroPoints: ["{monthly} havonta", "Magyarázatok 41 nyelven", "Hirdetések nélkül"],
+  heroPoints: ["{monthly} havonta", "Magyarázatok több mint 40 nyelven", "Hirdetések nélkül"],
   shotAlt: "Valódi képernyő a Gaditból",
   pain: {
     title: "Érted a lényeget, de egyetlen szó mindent megállít",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Amit az emberek kérdeznek, mielőtt elkezdik",
   faq: [
     { q: "Miben más a Gadit, mint egy fordító?", a: "A Gadit szavakat magyaráz.\nMinden szóhoz megadja az összes jelentést, példákat, egy képet és a szó eredetét, és kiválasztja a mondathoz illő jelentést.\nHa a szó egy másik nyelven van, egy megfelelő szót is látsz, de a cél az, hogy a végéig megértsd." },
-    { q: "Milyen nyelveken működik?", a: "Bármilyen nyelvű szóra rákereshetsz.\nA magyarázat 41 nyelv egyikén készül, köztük angolul, spanyolul, franciául, arabul, oroszul, magyarul és kínaiul." },
+    { q: "Milyen nyelveken működik?", a: "Bármilyen nyelvű szóra rákereshetsz.\nA magyarázat több mint 40 nyelv egyikén készül, köztük angolul, spanyolul, franciául, arabul, oroszul, magyarul és kínaiul." },
     { q: "Milyen eszközökön működik?", a: "Bármilyen böngészőben, telefonon és számítógépen, telepítés nélkül.\nAndroidra a Google Playen alkalmazás is van." },
     { q: "Mi történik a lefotózott oldallal?", a: "A fotót csak a szöveg beolvasására használjuk, és nem őrizzük meg." },
     { q: "Használhatom ingyen?", a: "Igen.\nAz ingyenes fiókban napi 10 keresés és legfeljebb 30 szavas füzet jár.\nAz Individual korlátlan keresést és minden eszközt megnyit." },

@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Anza jaribio lako la bure la siku 14",
   ctaNote: "Kadi inahitajika, na malipo ya kwanza hufanyika tu baada ya siku 14. Siku mbili kabla, tunakutumia barua pepe ya kukukumbusha. Ghairi kwa mbofyo mmoja, bila kupiga simu.",
   howCta: "Jinsi inavyofanya kazi",
-  heroPoints: ["{monthly} kwa mwezi", "Maelezo katika lugha 41", "Hakuna matangazo"],
+  heroPoints: ["{monthly} kwa mwezi", "Maelezo katika lugha zaidi ya 40", "Hakuna matangazo"],
   shotAlt: "Skrini halisi ya Gadit",
   pain: {
     title: "Unaelewa wazo, lakini neno moja linasimamisha kila kitu",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Watu huuliza nini kabla ya kuanza",
   faq: [
     { q: "Gadit inatofautianaje na zana ya kutafsiri?", a: "Gadit inaeleza maneno.\nKwa kila neno inatoa maana zote, mifano, picha na asili ya neno, na inachagua maana inayofaa sentensi.\nNeno likiwa kwa lugha nyingine unaona pia neno linalolingana, lakini lengo ni kulielewa hadi mwisho." },
-    { q: "Inafanya kazi kwa lugha zipi?", a: "Unaweza kutafuta neno kwa lugha yoyote.\nMaelezo huandikwa kwa mojawapo ya lugha 41, zikiwemo Kiingereza, Kihispania, Kifaransa, Kiarabu, Kiswahili, Kihindi na Kichina." },
+    { q: "Inafanya kazi kwa lugha zipi?", a: "Unaweza kutafuta neno kwa lugha yoyote.\nMaelezo huandikwa kwa mojawapo ya lugha zaidi ya 40, zikiwemo Kiingereza, Kihispania, Kifaransa, Kiarabu, Kiswahili, Kihindi na Kichina." },
     { q: "Inafanya kazi kwenye vifaa gani?", a: "Kwenye kivinjari chochote, kwenye simu na kompyuta, bila kusakinisha chochote.\nKwenye Android pia kuna programu kwenye Google Play." },
     { q: "Nini kinatokea kwa ukurasa niliopiga picha?", a: "Picha inatumika kusoma maandishi tu, na hatuihifadhi." },
     { q: "Ninaweza kuitumia bure?", a: "Ndiyo.\nAkaunti ya bure ina utafutaji 10 kwa siku na daftari la hadi maneno 30.\nIndividual inafungua utafutaji bila kikomo na kila zana." },

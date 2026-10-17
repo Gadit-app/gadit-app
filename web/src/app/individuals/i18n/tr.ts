@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "14 günlük ücretsiz denemeni başlat",
   ctaNote: "Kart gerekir ve ilk ödeme ancak 14 gün sonra alınır. İki gün önce sana hatırlatma e-postası göndeririz. Tek tıkla iptal edersin, telefon görüşmesi yok.",
   howCta: "Nasıl çalışır",
-  heroPoints: ["Ayda {monthly}", "41 dilde açıklamalar", "Reklam yok"],
+  heroPoints: ["Ayda {monthly}", "40'tan fazla dilde açıklamalar", "Reklam yok"],
   shotAlt: "Gadit'ten gerçek bir ekran",
   pain: {
     title: "Ne demek istendiğini anlıyorsun, ama tek bir kelime her şeyi durduruyor",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "İnsanların başlamadan önce sorduğu sorular",
   faq: [
     { q: "Gadit bir çeviri aracından nasıl farklı?", a: "Gadit kelimeleri açıklar.\nHer kelime için tüm anlamları, örnekleri, bir resmi ve kelimenin kökenini verir, ayrıca cümleye uyan anlamı seçer.\nKelime başka bir dildeyse karşılık gelen bir kelime de görürsün, ama asıl amaç onu sonuna kadar anlaman." },
-    { q: "Hangi dillerde çalışıyor?", a: "Herhangi bir dildeki bir kelimeyi arayabilirsin.\nAçıklama 41 dilden birinde yazılır, aralarında İngilizce, İspanyolca, Fransızca, Arapça, Rusça, Türkçe ve Çince var." },
+    { q: "Hangi dillerde çalışıyor?", a: "Herhangi bir dildeki bir kelimeyi arayabilirsin.\nAçıklama 40'tan fazla dilden birinde yazılır, aralarında İngilizce, İspanyolca, Fransızca, Arapça, Rusça, Türkçe ve Çince var." },
     { q: "Hangi cihazlarda çalışıyor?", a: "Herhangi bir tarayıcıda, telefonda ve bilgisayarda, hiçbir şey yüklemeden.\nAndroid için Google Play'de bir uygulama da var." },
     { q: "Fotoğrafını çektiğim sayfaya ne oluyor?", a: "Fotoğraf yalnızca metni okumak için kullanılır ve onu saklamayız." },
     { q: "Ücretsiz kullanabilir miyim?", a: "Evet.\nÜcretsiz hesapta günde 10 arama ve en fazla 30 kelimelik bir defter var.\nIndividual sınırsız aramayı ve tüm araçları açar." },

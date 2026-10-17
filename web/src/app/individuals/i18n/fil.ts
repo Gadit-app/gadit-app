@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Simulan ang 14 na araw na libreng trial",
   ctaNote: "Kailangan ng card, at ang unang singil ay pagkatapos lang ng 14 na araw. Dalawang araw bago nito, padadalhan ka namin ng email na paalala. I-cancel sa isang click, walang tawag sa telepono.",
   howCta: "Paano ito gumagana",
-  heroPoints: ["{monthly} kada buwan", "Paliwanag sa 41 na wika", "Walang ads"],
+  heroPoints: ["{monthly} kada buwan", "Paliwanag sa mahigit 40 na wika", "Walang ads"],
   shotAlt: "Totoong screen mula sa Gadit",
   pain: {
     title: "Gets mo ang ideya, pero isang salita ang nagpapahinto sa lahat",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Mga itinatanong bago magsimula",
   faq: [
     { q: "Paano naiiba ang Gadit sa isang translator?", a: "Nagpapaliwanag ng mga salita ang Gadit.\nPara sa bawat salita, ibinibigay nito ang lahat ng kahulugan, mga halimbawa, isang larawan at ang pinagmulan ng salita, at pinipili nito ang kahulugang bagay sa pangungusap.\nKapag nasa ibang wika ang salita, makikita mo rin ang katumbas na salita, pero ang layunin ay maunawaan ito hanggang dulo." },
-    { q: "Sa anong mga wika ito gumagana?", a: "Puwede kang maghanap ng salita sa kahit anong wika.\nNakasulat ang paliwanag sa isa sa 41 na wika, kasama ang English, Spanish, French, Arabic, Russian, Filipino at Chinese." },
+    { q: "Sa anong mga wika ito gumagana?", a: "Puwede kang maghanap ng salita sa kahit anong wika.\nNakasulat ang paliwanag sa isa sa mahigit 40 na wika, kasama ang English, Spanish, French, Arabic, Russian, Filipino at Chinese." },
     { q: "Sa anong mga device ito gumagana?", a: "Sa kahit anong browser, sa phone at computer, nang walang kailangang i-install.\nSa Android, may app din sa Google Play." },
     { q: "Ano ang nangyayari sa pahinang kinunan ko ng litrato?", a: "Ginagamit lang ang litrato para mabasa ang teksto, at hindi namin ito itinatago." },
     { q: "Puwede ko ba itong gamitin nang libre?", a: "Oo.\nAng libreng account ay may 10 paghahanap kada araw at kwadernong hanggang 30 salita.\nBinubuksan ng Individual ang walang limitasyong paghahanap at lahat ng tool." },

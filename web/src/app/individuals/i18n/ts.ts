@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Sungulani ndzingo wa n'wina wa mahala wa masiku ya 14",
   ctaNote: "Ku laveka khadi, naswona ku hakerisiwa ko sungula ku ta ntsena endzhaku ka masiku ya 14. Masiku mambirhi emahlweni ka kona, hi mi rhumela imeyili yo mi tsundzuxa. Khanselani hi ku thinta kan'we, handle ko ba riqingho.",
   howCta: "Ndlela leyi swi tirhaka ha yona",
-  heroPoints: ["{monthly} hi n'hweti", "Tinhlamuselo hi tindzimi ta 41", "A ku na swinavelo"],
+  heroPoints: ["{monthly} hi n'hweti", "Tinhlamuselo hi tindzimi to tlula 40", "A ku na swinavelo"],
   shotAlt: "Xikirini xa xiviri xa Gadit",
   pain: {
     title: "Mi twisisa mianakanyo, kambe rito rin'we ri yimisa hinkwaswo",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Leswi vanhu va swi vutisaka emahlweni ko sungula",
   faq: [
     { q: "Xana Gadit yi hambana njhani na muhundzuluxeri?", a: "Gadit yi hlamusela marito.\nEka rito rin'wana na rin'wana yi nyika tinhlamuselo hinkwato, swikombiso, xifaniso na masungulo ya rito, naswona yi hlawula nhlamuselo leyi fambelanaka na xivulwa.\nLoko rito ri ri hi ririmi rin'wana mi vona ni rito leri fanaka, kambe xikongomelo i ku ri twisisa ku fikela emakumu." },
-    { q: "Yi tirha hi tindzimi tihi?", a: "Mi nga lava rito hi ririmi rin'wana na rin'wana.\nNhlamuselo yi tsariwa hi ririmi rin'wana ra tindzimi ta 41, ku katsa Xinghezi, Xipanixi, Xifurwa, Xiarabu, Xirhaxiya, Xihindi na Xichayina." },
+    { q: "Yi tirha hi tindzimi tihi?", a: "Mi nga lava rito hi ririmi rin'wana na rin'wana.\nNhlamuselo yi tsariwa hi ririmi rin'wana ra tindzimi to tlula 40, ku katsa Xinghezi, Xipanixi, Xifurwa, Xiarabu, Xirhaxiya, Xihindi na Xichayina." },
     { q: "Yi tirha eka switirhisiwa swihi?", a: "Eka bulawuza yin'wana na yin'wana, eka riqingho na le khompyutheni, handle ko nghenisa nchumu.\nEka Android ku tlhela ku va na app eka Google Play." },
     { q: "Ku humelela yini hi tluka leri ndzi ri tekeke xifaniso?", a: "Xifaniso xi tirhisiwa ntsena ku hlaya tsalwa, naswona a hi xi hlayisi." },
     { q: "Xana ndzi nga yi tirhisa mahala?", a: "Ina.\nAkhawunti ya mahala yi na ku lava ka 10 hi siku na buku ya marito yo fika eka marito ya 30.\nIndividual yi pfula ku lava handle ka ndzilakano na switirhisiwa hinkwaswo." },

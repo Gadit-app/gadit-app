@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Začnite 14-dňové skúšobné obdobie zadarmo",
   ctaNote: "Je potrebná platobná karta a prvá platba prebehne až po 14 dňoch. Dva dni vopred vám pošleme pripomienku e-mailom. Zrušenie jedným kliknutím, bez telefonovania.",
   howCta: "Ako to funguje",
-  heroPoints: ["{monthly} mesačne", "Vysvetlenia v 41 jazykoch", "Bez reklám"],
+  heroPoints: ["{monthly} mesačne", "Vysvetlenia vo viac ako 40 jazykoch", "Bez reklám"],
   shotAlt: "Skutočná obrazovka z aplikácie Gadit",
   pain: {
     title: "Chápete zmysel, ale jedno slovo všetko zastaví",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Na čo sa ľudia pýtajú, skôr než začnú",
   faq: [
     { q: "Čím sa Gadit líši od prekladača?", a: "Gadit slová vysvetľuje.\nKu každému slovu ukáže všetky významy, príklady, obrázok a pôvod slova a vyberie význam, ktorý sedí do vety.\nKeď je slovo v inom jazyku, uvidíte aj zodpovedajúce slovo, ale zmyslom je pochopiť ho do hĺbky." },
-    { q: "V akých jazykoch to funguje?", a: "Slovo môžete vyhľadať v akomkoľvek jazyku.\nVysvetlenie je napísané v jednom zo 41 jazykov, medzi nimi slovenčina, angličtina, španielčina, francúzština, arabčina, ruština a čínština." },
+    { q: "V akých jazykoch to funguje?", a: "Slovo môžete vyhľadať v akomkoľvek jazyku.\nVysvetlenie je napísané v jednom z viac ako 40 jazykov, medzi nimi slovenčina, angličtina, španielčina, francúzština, arabčina, ruština a čínština." },
     { q: "Na akých zariadeniach to funguje?", a: "V akomkoľvek prehliadači, na telefóne aj počítači, bez inštalácie.\nPre Android je k dispozícii aj aplikácia na Google Play." },
     { q: "Čo sa stane so stránkou, ktorú odfotím?", a: "Fotka sa použije len na prečítanie textu a neukladáme ju." },
     { q: "Môžem to používať zadarmo?", a: "Áno.\nBezplatný účet má 10 vyhľadaní denne a zošit až na 30 slov.\nIndividual odomyká neobmedzené vyhľadávanie a všetky nástroje." },

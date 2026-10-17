@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Qala ukuzama mahhala izinsuku eziyi-14",
   ctaNote: "Kudingeka ikhadi, futhi inkokhelo yokuqala ifika kuphela ngemva kwezinsuku eziyi-14. Ezinsukwini ezimbili ngaphambili, sikuthumelela i-imeyili yesikhumbuzo. Khansela ngokuchofoza kanye, ngaphandle kocingo.",
   howCta: "Kusebenza kanjani",
-  heroPoints: ["{monthly} ngenyanga", "Izincazelo ngezilimi ezingu-41", "Azikho izikhangiso"],
+  heroPoints: ["{monthly} ngenyanga", "Izincazelo ngezilimi ezingaphezu kuka-40", "Azikho izikhangiso"],
   shotAlt: "Isikrini sangempela se-Gadit",
   pain: {
     title: "Uyawuqonda umqondo, kodwa igama elilodwa limisa konke",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Lokho abantu abakubuzayo ngaphambi kokuqala",
   faq: [
     { q: "I-Gadit yehluke kanjani kumhumushi?", a: "I-Gadit ichaza amagama.\nKuwo wonke amagama inikeza zonke izincazelo, izibonelo, isithombe nomsuka wegama, futhi ikhetha incazelo efanelana nomusho.\nUma igama lingolunye ulimi ubona negama elifanayo, kodwa inhloso ukuliqonda ngokugcwele." },
-    { q: "Isebenza ngaziphi izilimi?", a: "Ungabheka igama nganoma yiluphi ulimi.\nIncazelo ibhalwa ngolunye lwezilimi ezingu-41, phakathi kwazo isiNgisi, iSpanishi, isiFulentshi, isi-Arabhu, isiRashiya, isiHindi nesiShayina." },
+    { q: "Isebenza ngaziphi izilimi?", a: "Ungabheka igama nganoma yiluphi ulimi.\nIncazelo ibhalwa ngolunye lwezilimi ezingaphezu kuka-40, phakathi kwazo isiNgisi, iSpanishi, isiFulentshi, isi-Arabhu, isiRashiya, isiHindi nesiShayina." },
     { q: "Isebenza kumadivayisi aliphi?", a: "Kunoma yisiphi isiphequluli, efonini nasekhompyutheni, ngaphandle kokufaka lutho.\nKu-Android kukhona ne-app ku-Google Play." },
     { q: "Kwenzekani ekhasini engilithwebulile?", a: "Isithombe sisetshenziselwa kuphela ukufunda umbhalo, futhi asisigcini." },
     { q: "Ngingayisebenzisa mahhala?", a: "Yebo.\nI-akhawunti yamahhala inokubheka amagama ayi-10 ngosuku nencwadi yamanothi efika emagameni angu-30.\nI-Individual ivula ukubheka amagama okungenamkhawulo nawo wonke amathuluzi." },

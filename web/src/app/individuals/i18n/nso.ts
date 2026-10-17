@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Thoma teko ya gago ya mahala ya matšatši a 14",
   ctaNote: "Go nyakega karata, gomme tefo ya mathomo e tla fela ka morago ga matšatši a 14. Matšatši a mabedi pele ga fao, re go romela imeile ya kgopotšo. Khansela ka go kgotla gatee, o sa letše mogala.",
   howCta: "Ka moo e šomago ka gona",
-  heroPoints: ["{monthly} ka kgwedi", "Ditlhalošo ka dipolelo tše 41", "Ga go dipapatšo"],
+  heroPoints: ["{monthly} ka kgwedi", "Ditlhalošo ka dipolelo tše di fetago 40", "Ga go dipapatšo"],
   shotAlt: "Sekirini sa nnete sa Gadit",
   pain: {
     title: "O kwešiša kgopolo, eupša lentšu le tee le emiša tšohle",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Seo batho ba se botšišago pele ba thoma",
   faq: [
     { q: "Gadit e fapana bjang le mofetoledi?", a: "Gadit e hlaloša mantšu.\nLentšung le lengwe le le lengwe e fa ditlhalošo ka moka, mehlala, seswantšho le mothopo wa lentšu, gomme e kgetha tlhalošo ye e sepelelanago le lefoko.\nGe lentšu le le ka polelo ye nngwe o bona le lentšu le le swanago, eupša maikemišetšo ke go le kwešiša go fihla mafelelong." },
-    { q: "E šoma ka dipolelo dife?", a: "O ka nyaka lentšu ka polelo efe goba efe.\nTlhalošo e ngwalwa ka e nngwe ya dipolelo tše 41, go akaretšwa Seisemane, Sepanishe, Sefora, Searabia, Serashia, Sehindi le Setšhaena." },
+    { q: "E šoma ka dipolelo dife?", a: "O ka nyaka lentšu ka polelo efe goba efe.\nTlhalošo e ngwalwa ka e nngwe ya dipolelo tše di fetago 40, go akaretšwa Seisemane, Sepanishe, Sefora, Searabia, Serashia, Sehindi le Setšhaena." },
     { q: "E šoma didirišweng dife?", a: "Ka sefetleking sefe goba sefe, mogaleng le khomphutheng, o sa tsenye selo.\nGo Android go na le app gape go Google Play." },
     { q: "Go direga eng ka letlakala leo ke le tšerego seswantšho?", a: "Seswantšho se šomišwa fela go bala sengwalwa, gomme ga re se boloke." },
     { q: "Na nka e šomiša mahala?", a: "Ee.\nAkhaonto ya mahala e na le dinyakišišo tše 10 ka letšatši le puku ya mantšu ya go fihla go mantšu a 30.\nIndividual e bula dinyakišišo tše di sa felego le didirišwa ka moka." },

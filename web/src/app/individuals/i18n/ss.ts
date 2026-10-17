@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Cala kulinga kwakho kwamahhala kwemalanga langu-14",
   ctaNote: "Kudzingeka likhadi, futsi inkhokhelo yekucala ifika kuphela ngemuva kwemalanga langu-14. Emalangeni lamabili ngaphambili, sikutfumelela i-imeyili yesikhumbuto. Khansela ngekucindzetela kanye, ngaphandle kwekushaya lucingo.",
   howCta: "Kusebenta njani",
-  heroPoints: ["{monthly} ngenyanga", "Tinchazelo ngetilwimi letingu-41", "Kute tikhangiso"],
+  heroPoints: ["{monthly} ngenyanga", "Tinchazelo ngetilwimi letingetulu kwa-40", "Kute tikhangiso"],
   shotAlt: "Sikrini sangempela se-Gadit",
   pain: {
     title: "Uyawucondza umcondvo, kodvwa ligama linye limisa konkhe",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Loko bantfu labakubutako ngaphambi kwekutsi bacale",
   faq: [
     { q: "Gadit yehluke njani kumhumushi?", a: "Gadit ichaza emagama.\nKulo lonkhe ligama inika tonkhe tinchazelo, tibonelo, sitfombe nemvelaphi yeligama, futsi ikhetsa inchazelo lefanele umusho.\nNangabe ligama liselulwimini lolunye ubona neligama lelifanako, kodvwa inhloso kulicondzisisa ngalokugcwele." },
-    { q: "Isebenta ngetiphi tilwimi?", a: "Ungasesha ligama nganobe ngumuphi lulwimi.\nInchazelo ibhalwa ngalolunye lwetilwimi letingu-41, emkhatsini wato siNgisi, siSpanishi, siFulentshi, si-Arabhu, siRashiya, siHindi nesiShayina." },
+    { q: "Isebenta ngetiphi tilwimi?", a: "Ungasesha ligama nganobe ngumuphi lulwimi.\nInchazelo ibhalwa ngalolunye lwetilwimi letingetulu kwa-40, emkhatsini wato siNgisi, siSpanishi, siFulentshi, si-Arabhu, siRashiya, siHindi nesiShayina." },
     { q: "Isebenta kumaphi emathuluzi?", a: "Kunobe nguyiphi ibhrawuza, elifonini nasekhompyutheni, ngaphandle kwekufaka lutfo.\nKu-Android kukhona ne-app ku-Google Play." },
     { q: "Kwentekani ekhasini lengilitfwebulile?", a: "Sitfombe sisetjentiselwa kuphela kufundza umbhalo, futsi asisigcini." },
     { q: "Ngingayisebentisa mahhala?", a: "Yebo.\nI-akhawunti yamahhala inekusesha lokungu-10 ngelilanga nencwadzi lefika emagameni langu-30.\nIndividual ivula kusesha lokungenamkhawulo nawo onkhe emathulusi." },

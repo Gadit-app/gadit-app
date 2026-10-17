@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Qalisa ulingo lwakho lwasimahla lweentsuku ezili-14",
   ctaNote: "Kufuneka ikhadi, kwaye intlawulo yokuqala ifika kuphela emva kweentsuku ezili-14. Kwiintsuku ezimbini ngaphambili, sikuthumelela i-imeyili yesikhumbuzo. Rhoxisa ngokucofa kanye, ngaphandle kokufowuna.",
   howCta: "Isebenza njani",
-  heroPoints: ["{monthly} ngenyanga", "Iinkcazelo ngeelwimi ezingama-41", "Akukho zibhengezo"],
+  heroPoints: ["{monthly} ngenyanga", "Iinkcazelo ngeelwimi ezingaphezu kwama-40", "Akukho zibhengezo"],
   shotAlt: "Isikrini sokwenene se-Gadit",
   pain: {
     title: "Uyayiqonda ingcamango, kodwa igama elinye limisa yonke into",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Into ebuzwa ngabantu ngaphambi kokuba baqalise",
   faq: [
     { q: "I-Gadit yahluke njani kumguquleli?", a: "I-Gadit icacisa amagama.\nKwigama ngalinye inika zonke iintsingiselo, imizekelo, umfanekiso nemvelaphi yegama, kwaye ikhetha intsingiselo ehambelana nesivakalisi.\nXa igama lisolunye ulwimi ubona negama elihambelanayo, kodwa injongo kukuliqonda ukuya esiphelweni." },
-    { q: "Isebenza ngeziphi iilwimi?", a: "Ungakhangela igama nangaluphi na ulwimi.\nInkcazelo ibhalwa ngolunye lweelwimi ezingama-41, phakathi kwazo isiNgesi, isiSpanish, isiFrentshi, isiArabhu, isiRashiya, isiHindi nesiTshayina." },
+    { q: "Isebenza ngeziphi iilwimi?", a: "Ungakhangela igama nangaluphi na ulwimi.\nInkcazelo ibhalwa ngolunye lweelwimi ezingaphezu kwama-40, phakathi kwazo isiNgesi, isiSpanish, isiFrentshi, isiArabhu, isiRashiya, isiHindi nesiTshayina." },
     { q: "Isebenza kwezixhobo ezintoni?", a: "Kuyo nayiphi na ibhrawuza, kwifowuni nakwikhompyutha, ngaphandle kokufaka nto.\nKwi-Android kukho ne-app kwi-Google Play." },
     { q: "Kwenzeka ntoni kwiphepha endilifotileyo?", a: "Ifoto isetyenziselwa kuphela ukufunda isicatshulwa, kwaye asiyigcini." },
     { q: "Ndingayisebenzisa simahla?", a: "Ewe.\nI-akhawunti yasimahla inokukhangela okuli-10 ngosuku nencwadi ukuya kumagama angama-30.\nI-Individual ivula ukukhangela okungenamda nazo zonke izixhobo." },

@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Simolola teko ya gago ya mahala ya malatsi a le 14",
   ctaNote: "Go tlhokega karata, mme tuelo ya ntlha e tla fela morago ga malatsi a le 14. Malatsi a le mabedi pele ga foo, re go romela imeile ya kgakololo. Khansela ka go tobetsa gangwe, o sa letse mogala.",
   howCta: "Kafa e dirang ka teng",
-  heroPoints: ["{monthly} ka kgwedi", "Ditlhaloso ka dipuo di le 41", "Ga go na dipapatso"],
+  heroPoints: ["{monthly} ka kgwedi", "Ditlhaloso ka dipuo tse di fetang 40", "Ga go na dipapatso"],
   shotAlt: "Sekirini sa mmatota sa Gadit",
   pain: {
     title: "O tlhaloganya kakanyo, mme lefoko le le lengwe le emisa sengwe le sengwe",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Se batho ba se botsang pele ba simolola",
   faq: [
     { q: "Gadit e farologana jang le mofetoledi?", a: "Gadit e tlhalosa mafoko.\nMo lefokong lengwe le lengwe e naya ditlhaloso tsotlhe, dikai, setshwantsho le tshimologo ya lefoko, mme e tlhopha tlhaloso e e tsamaisanang le polelo.\nFa lefoko le le ka puo e nngwe o bona le lefoko le le tshwanang, mme maikaelelo ke go le tlhaloganya go fitlha kwa bofelong." },
-    { q: "E dira ka dipuo dife?", a: "O ka batla lefoko ka puo nngwe le nngwe.\nTlhaloso e kwalwa ka nngwe ya dipuo di le 41, go akaretsa Sekgoa, Sepanishe, Sefora, Searabia, Serashia, Sehindi le Setšhaena." },
+    { q: "E dira ka dipuo dife?", a: "O ka batla lefoko ka puo nngwe le nngwe.\nTlhaloso e kwalwa ka nngwe ya dipuo tse di fetang 40, go akaretsa Sekgoa, Sepanishe, Sefora, Searabia, Serashia, Sehindi le Setšhaena." },
     { q: "E dira mo didirisweng dife?", a: "Mo sebatling sefe kana sefe, mo mogaleng le mo khomputareng, o sa tsenye sepe.\nMo Android go na le app gape mo Google Play." },
     { q: "Go direga eng ka tsebe e ke e tseileng setshwantsho?", a: "Setshwantsho se dirisiwa fela go bala mokwalo, mme ga re se boloke." },
     { q: "A nka e dirisa mahala?", a: "Ee.\nAkhaonto ya mahala e na le dipatlo di le 10 ka letsatsi le bukana ya mafoko go fitlha a le 30.\nIndividual e bula dipatlo kwa ntle ga selekanyo le didirisiwa tsotlhe." },

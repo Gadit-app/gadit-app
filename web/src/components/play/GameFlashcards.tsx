@@ -42,6 +42,52 @@ import { QText } from "./QText";
 
 export type FlashMode = "words" | "meanings";
 
+/** Picture on the card or not (Gadi 2026-10-17, asked by two families): a child
+ *  who wants to work the word out alone hides it. [shown, hidden], remembered. */
+const PIC_TOGGLE: Record<string, [string, string]> = {
+  en: ["Picture: on", "Picture: off"],
+  he: ["עם תמונה", "בלי תמונה"],
+  ar: ["مع صورة", "بدون صورة"],
+  ru: ["С картинкой", "Без картинки"],
+  es: ["Con imagen", "Sin imagen"],
+  pt: ["Com imagem", "Sem imagem"],
+  fr: ["Avec image", "Sans image"],
+  de: ["Mit Bild", "Ohne Bild"],
+  cs: ["S obrázkem", "Bez obrázku"],
+  sk: ["S obrázkom", "Bez obrázka"],
+  it: ["Con immagine", "Senza immagine"],
+  ja: ["絵あり", "絵なし"],
+  hi: ["चित्र के साथ", "बिना चित्र"],
+  am: ["ከስዕል ጋር", "ያለ ስዕል"],
+  uk: ["З малюнком", "Без малюнка"],
+  tr: ["Resimli", "Resimsiz"],
+  pl: ["Z obrazkiem", "Bez obrazka"],
+  fa: ["با تصویر", "بدون تصویر"],
+  id: ["Dengan gambar", "Tanpa gambar"],
+  nl: ["Met plaatje", "Zonder plaatje"],
+  el: ["Με εικόνα", "Χωρίς εικόνα"],
+  zu: ["Nesithombe", "Ngaphandle kwesithombe"],
+  xh: ["Nomfanekiso", "Ngaphandle komfanekiso"],
+  nso: ["Le seswantšho", "Ntle le seswantšho"],
+  tn: ["Le setshwantsho", "Kwantle ga setshwantsho"],
+  st: ["Le setshwantsho", "Ntle le setshwantsho"],
+  ts: ["Na xifaniso", "Handle ka xifaniso"],
+  ss: ["Nesitfombe", "Ngaphandle kwesitfombe"],
+  ve: ["Na tshifanyiso", "Hu si na tshifanyiso"],
+  nr: ["Nesithombe", "Ngaphandle kwesithombe"],
+  vi: ["Có hình", "Không hình"],
+  fil: ["May larawan", "Walang larawan"],
+  af: ["Met prent", "Sonder prent"],
+  sw: ["Na picha", "Bila picha"],
+  "zh-CN": ["有图片", "无图片"],
+  "zh-TW": ["有圖片", "無圖片"],
+  ko: ["그림 있음", "그림 없음"],
+  th: ["มีรูปภาพ", "ไม่มีรูปภาพ"],
+  bn: ["ছবিসহ", "ছবি ছাড়া"],
+  da: ["Med billede", "Uden billede"],
+  hu: ["Képpel", "Kép nélkül"],
+};
+
 type FlashCopy = {
   wordsTitle: string; wordsDesc: string; defsTitle: string; defsDesc: string;
   tapToFlip: string; tapBack: string; sayIn: (l: string) => string; knew: string; notYet: string; again: string;
@@ -359,7 +405,10 @@ export function GameFlashcards({
     const en = c.word.picWord || (c.pair?.pairLang === "English" ? c.pair.pair : /^english$/i.test(c.word.language) ? c.word.word : undefined);
     return (en && pics[en]) || pics[c.word.word] || (c.pair ? pics[c.pair.pair] : undefined);
   };
-  const deckHasPics = first.some((c) => !!picOf(c));
+  const [showPics, setShowPics] = useState(() => { try { return localStorage.getItem("gadit-flash-pics") !== "0"; } catch { return true; } });
+  const togglePics = () => setShowPics((v) => { try { localStorage.setItem("gadit-flash-pics", v ? "0" : "1"); } catch { /* private mode */ } return !v; });
+  const anyPics = first.some((c) => !!picOf(c));
+  const deckHasPics = showPics && anyPics;
   const [i, setI] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [reverse, setReverse] = useState(false);
@@ -518,7 +567,7 @@ export function GameFlashcards({
   const backText = meaningFirst ? card.word.word : mode === "words" && pair ? (reverse ? card.word.word : pair.pair) : card.word.meaning;
   const askLang = mode === "words" && pair ? langLabel(reverse ? wordLangName : pair.pairLang, lang) : "";
   const example = mode === "meanings" && !meaningFirst ? card.word.examples?.[0] : undefined;
-  const pic = picOf(card);
+  const pic = showPics ? picOf(card) : undefined;
   const ask = flipped ? f.tapBack : mode === "words" ? (askLang ? f.sayIn(askLang) : f.tapToFlip) : meaningFirst ? dc.askWord : dc.askMeaning;
 
   return (
@@ -539,6 +588,15 @@ export function GameFlashcards({
               </button>
             ))}
           </div>
+        )}
+        {anyPics && (
+          <button type="button" className={`wb-flash-pictoggle${showPics ? " is-on" : ""}`} aria-pressed={showPics} onClick={togglePics}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <rect x="3" y="4" width="18" height="16" rx="3" /><circle cx="9" cy="10" r="2" /><path d="m21 16-5-5-9 9" />
+              {!showPics && <path d="M3 3l18 18" />}
+            </svg>
+            {(PIC_TOGGLE[lang] ?? PIC_TOGGLE.en)[showPics ? 0 : 1]}
+          </button>
         )}
       </div>
       <button
@@ -604,6 +662,9 @@ export const FLASH_CSS = `
 .wb-flash-front.has-pic .wb-flash-meaning { margin-block: auto; }
 .wb-flash-front.has-pic .wb-flash-meaning { padding-inline: 20px; font-size: clamp(15px, 4vw, 18px); }
 .wb-flash-front.has-pic .wb-flash-again { z-index: 1; }
+.wb-flash-pictoggle { display: inline-flex; align-items: center; gap: 6px; margin: 10px auto 0; font: inherit; font-size: 13px; font-weight: 700; color: #475569; background: rgba(15,23,42,0.06); border: 0; border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.wb-flash-pictoggle.is-on { color: #086868; background: rgba(14,165,165,0.10); }
+.wb-flash-pictoggle:focus-visible { outline: 2px solid #0EA5A5; outline-offset: 2px; }
 .wb-flash-dirs { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 10px; }
 .wb-flash-dir { font: inherit; font-size: 13px; font-weight: 700; color: #086868; background: rgba(14,165,165,0.10); border: 0; border-radius: 999px; padding: 6px 12px; cursor: pointer; }
 .wb-flash-dir.is-on { background: #0B7F7F; color: #fff; }

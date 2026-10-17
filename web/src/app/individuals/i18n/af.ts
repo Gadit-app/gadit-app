@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Begin jou gratis proeflopie van 14 dae",
   ctaNote: "'n Kaart word benodig, en die eerste debiet kom eers ná die 14 dae. Twee dae vooraf stuur ons vir jou 'n herinnering per e-pos. Kanselleer met een klik, sonder 'n oproep.",
   howCta: "Hoe dit werk",
-  heroPoints: ["{monthly} per maand", "Verduidelikings in 41 tale", "Geen advertensies"],
+  heroPoints: ["{monthly} per maand", "Verduidelikings in meer as 40 tale", "Geen advertensies"],
   shotAlt: "'n Regte skerm uit Gadit",
   pain: {
     title: "Jy kry die idee, maar een woord stop alles",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Wat mense vra voordat hulle begin",
   faq: [
     { q: "Hoe verskil Gadit van 'n vertaler?", a: "Gadit verduidelik woorde.\nVir elke woord gee dit elke betekenis, voorbeelde, 'n prent en die oorsprong van die woord, en dit kies die betekenis wat by die sin pas.\nAs die woord in 'n ander taal is, sien jy ook 'n ooreenstemmende woord, maar die doel is om dit tot op die bodem te verstaan." },
-    { q: "In watter tale werk dit?", a: "Jy kan 'n woord in enige taal opsoek.\nDie verduideliking word in een van 41 tale geskryf, onder meer Engels, Spaans, Frans, Arabies, Russies, Hindi en Chinees." },
+    { q: "In watter tale werk dit?", a: "Jy kan 'n woord in enige taal opsoek.\nDie verduideliking word in een van meer as 40 tale geskryf, onder meer Engels, Spaans, Frans, Arabies, Russies, Hindi en Chinees." },
     { q: "Op watter toestelle werk dit?", a: "In enige blaaier, op foon en rekenaar, sonder om iets te installeer.\nOp Android is daar ook 'n app op Google Play." },
     { q: "Wat gebeur met die bladsy wat ek gefotografeer het?", a: "Die foto word net gebruik om die teks te lees, en ons hou dit nie." },
     { q: "Kan ek dit gratis gebruik?", a: "Ja.\n'n Gratis rekening het 10 opsoeke per dag en 'n notaboek van tot 30 woorde.\nIndividual maak onbeperkte opsoeke en alle gereedskap oop." },

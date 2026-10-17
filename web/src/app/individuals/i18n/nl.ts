@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Start je gratis proefperiode van 14 dagen",
   ctaNote: "Een betaalkaart is nodig, en de eerste betaling volgt pas na de 14 dagen. Twee dagen ervoor sturen we je een herinnering per e-mail. Opzeggen met één klik, zonder te bellen.",
   howCta: "Zo werkt het",
-  heroPoints: ["{monthly} per maand", "Uitleg in 41 talen", "Geen advertenties"],
+  heroPoints: ["{monthly} per maand", "Uitleg in meer dan 40 talen", "Geen advertenties"],
   shotAlt: "Een echt scherm uit Gadit",
   pain: {
     title: "Je snapt de strekking, maar één woord houdt alles tegen",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Wat mensen vragen voordat ze beginnen",
   faq: [
     { q: "Wat is het verschil tussen Gadit en een vertaler?", a: "Gadit legt woorden uit.\nVoor elk woord geeft het alle betekenissen, voorbeelden, een afbeelding en de herkomst van het woord, en het kiest de betekenis die bij de zin past.\nAls het woord in een andere taal is, zie je ook een woord dat erbij past, maar het doel is om het helemaal te begrijpen." },
-    { q: "In welke talen werkt het?", a: "Je kunt een woord in elke taal opzoeken.\nDe uitleg is geschreven in een van 41 talen, waaronder Nederlands, Engels, Spaans, Frans, Arabisch, Russisch en Chinees." },
+    { q: "In welke talen werkt het?", a: "Je kunt een woord in elke taal opzoeken.\nDe uitleg is geschreven in een van de meer dan 40 talen, waaronder Nederlands, Engels, Spaans, Frans, Arabisch, Russisch en Chinees." },
     { q: "Op welke apparaten werkt het?", a: "In elke browser, op telefoon en computer, zonder iets te installeren.\nOp Android is er ook een app in Google Play." },
     { q: "Wat gebeurt er met de pagina die ik fotografeer?", a: "De foto wordt alleen gebruikt om de tekst te lezen, en we bewaren hem niet." },
     { q: "Kan ik het gratis gebruiken?", a: "Ja.\nEen gratis account heeft 10 zoekopdrachten per dag en een notitieboek tot 30 woorden.\nIndividual geeft onbeperkt opzoeken en alle tools." },

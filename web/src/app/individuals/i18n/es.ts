@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Empieza tu prueba gratis de 14 días",
   ctaNote: "Se necesita una tarjeta, y el primer cobro llega solo después de los 14 días. Dos días antes te enviamos un correo de aviso. Cancela con un clic, sin llamadas.",
   howCta: "Cómo funciona",
-  heroPoints: ["{monthly} al mes", "Explicaciones en 41 idiomas", "Sin anuncios"],
+  heroPoints: ["{monthly} al mes", "Explicaciones en más de 40 idiomas", "Sin anuncios"],
   shotAlt: "Una pantalla real de Gadit",
   pain: {
     title: "Entiendes la idea, pero una palabra lo frena todo",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Lo que la gente pregunta antes de empezar",
   faq: [
     { q: "¿En qué se diferencia Gadit de un traductor?", a: "Gadit explica palabras.\nPara cada palabra te da todos sus significados, ejemplos, una imagen y el origen de la palabra, y elige el significado que encaja en la frase.\nCuando la palabra está en otro idioma también ves una palabra equivalente, pero lo importante es entenderla hasta el fondo." },
-    { q: "¿En qué idiomas funciona?", a: "Puedes buscar una palabra en cualquier idioma.\nLa explicación se escribe en uno de 41 idiomas, entre ellos español, inglés, francés, árabe, ruso, hindi y chino." },
+    { q: "¿En qué idiomas funciona?", a: "Puedes buscar una palabra en cualquier idioma.\nLa explicación se escribe en uno de los más de 40 idiomas, entre ellos español, inglés, francés, árabe, ruso, hindi y chino." },
     { q: "¿En qué dispositivos funciona?", a: "En cualquier navegador, en el móvil y en el ordenador, sin instalar nada.\nEn Android también hay una app en Google Play." },
     { q: "¿Qué pasa con la página que fotografié?", a: "La foto solo se usa para leer el texto, y no la guardamos." },
     { q: "¿Puedo usarlo gratis?", a: "Sí.\nUna cuenta gratis tiene 10 búsquedas al día y un cuaderno de hasta 30 palabras.\nIndividual abre búsquedas ilimitadas y todas las herramientas." },

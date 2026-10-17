@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Starte deinen 14-tägigen Gratis-Test",
   ctaNote: "Eine Karte ist nötig, und die erste Abbuchung erfolgt erst nach den 14 Tagen. Zwei Tage vorher schicken wir dir eine Erinnerungs-E-Mail. Mit einem Klick kündigen, ohne Anruf.",
   howCta: "So funktioniert's",
-  heroPoints: ["{monthly} im Monat", "Erklärungen in 41 Sprachen", "Keine Werbung"],
+  heroPoints: ["{monthly} im Monat", "Erklärungen in über 40 Sprachen", "Keine Werbung"],
   shotAlt: "Ein echter Bildschirm aus Gadit",
   pain: {
     title: "Du verstehst den Sinn, aber ein Wort bremst alles aus",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Was Leute fragen, bevor sie loslegen",
   faq: [
     { q: "Was unterscheidet Gadit von einem Übersetzer?", a: "Gadit erklärt Wörter.\nFür jedes Wort zeigt es alle Bedeutungen, Beispiele, ein Bild und die Herkunft des Wortes, und es wählt die Bedeutung, die zum Satz passt.\nWenn das Wort in einer anderen Sprache ist, siehst du auch ein passendes Wort, aber es geht darum, das Wort bis ins Letzte zu verstehen." },
-    { q: "In welchen Sprachen funktioniert es?", a: "Du kannst ein Wort in jeder Sprache nachschlagen.\nDie Erklärung wird in einer von 41 Sprachen geschrieben, darunter Deutsch, Englisch, Spanisch, Arabisch, Russisch, Hindi und Chinesisch." },
+    { q: "In welchen Sprachen funktioniert es?", a: "Du kannst ein Wort in jeder Sprache nachschlagen.\nDie Erklärung wird in einer von über 40 Sprachen geschrieben, darunter Deutsch, Englisch, Spanisch, Arabisch, Russisch, Hindi und Chinesisch." },
     { q: "Auf welchen Geräten funktioniert es?", a: "In jedem Browser, auf Handy und Computer, ohne etwas zu installieren.\nFür Android gibt es außerdem eine App bei Google Play." },
     { q: "Was passiert mit der Seite, die ich fotografiert habe?", a: "Das Foto wird nur verwendet, um den Text zu lesen, und wir speichern es nicht." },
     { q: "Kann ich es kostenlos nutzen?", a: "Ja.\nEin kostenloses Konto hat 10 Nachschlagen am Tag und ein Notizbuch mit bis zu 30 Wörtern.\nIndividual schaltet unbegrenztes Nachschlagen und alle Werkzeuge frei." },

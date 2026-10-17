@@ -11,7 +11,7 @@ const en: IndCopy = {
   heroCta: "Start your 14-day free trial",
   ctaNote: "A card is required, and the first charge comes only after the 14 days. Two days before, we send you a reminder email. Cancel in one click, no phone call.",
   howCta: "How it works",
-  heroPoints: ["{monthly} a month", "Explanations in 41 languages", "No ads"],
+  heroPoints: ["{monthly} a month", "Explanations in more than 40 languages", "No ads"],
   shotAlt: "A real screen from Gadit",
   pain: {
     title: "You get the idea, but one word stops everything",
@@ -75,7 +75,7 @@ const en: IndCopy = {
   faqTitle: "What people ask before they start",
   faq: [
     { q: "How is Gadit different from a translator?", a: "Gadit explains words.\nFor every word it gives every meaning, examples, a picture and the word's origin, and it picks the meaning that fits the sentence.\nWhen the word is in another language you also see a matching word, but the point is to understand it all the way." },
-    { q: "Which languages does it work in?", a: "You can look up a word in any language.\nThe explanation is written in one of 41 languages, among them English, Spanish, French, Arabic, Russian, Hindi and Chinese." },
+    { q: "Which languages does it work in?", a: "You can look up a word in any language.\nThe explanation is written in one of more than 40 languages, among them English, Spanish, French, Arabic, Russian, Hindi and Chinese." },
     { q: "Which devices does it work on?", a: "In any browser, on phone and computer, with nothing to install.\nOn Android there is also an app on Google Play." },
     { q: "What happens to the page I photographed?", a: "The photo is used only to read the text, and we do not keep it." },
     { q: "Can I use it for free?", a: "Yes.\nA free account has 10 lookups a day and a notebook of up to 30 words.\nIndividual opens unlimited lookups and every tool." },

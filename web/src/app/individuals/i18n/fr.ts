@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Commencez votre essai gratuit de 14 jours",
   ctaNote: "Une carte est demandée, et le premier prélèvement n'a lieu qu'après les 14 jours. Deux jours avant, nous vous envoyons un e-mail de rappel. Résiliez en un clic, sans appel.",
   howCta: "Comment ça marche",
-  heroPoints: ["{monthly} par mois", "Explications dans 41 langues", "Sans publicité"],
+  heroPoints: ["{monthly} par mois", "Explications dans plus de 40 langues", "Sans publicité"],
   shotAlt: "Un vrai écran de Gadit",
   pain: {
     title: "Vous saisissez l'idée, mais un mot bloque tout",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Ce qu'on nous demande avant de commencer",
   faq: [
     { q: "En quoi Gadit est-il différent d'un traducteur ?", a: "Gadit explique les mots.\nPour chaque mot, il donne tous les sens, des exemples, une image et l'origine du mot, et il choisit le sens qui correspond à la phrase.\nQuand le mot est dans une autre langue, vous voyez aussi un mot équivalent, mais l'objectif est de le comprendre jusqu'au bout." },
-    { q: "Dans quelles langues ça fonctionne ?", a: "Vous pouvez chercher un mot dans n'importe quelle langue.\nL'explication est rédigée dans l'une de 41 langues, dont le français, l'anglais, l'espagnol, l'arabe, le russe, l'hindi et le chinois." },
+    { q: "Dans quelles langues ça fonctionne ?", a: "Vous pouvez chercher un mot dans n'importe quelle langue.\nL'explication est rédigée dans l'une des plus de 40 langues, dont le français, l'anglais, l'espagnol, l'arabe, le russe, l'hindi et le chinois." },
     { q: "Sur quels appareils ça fonctionne ?", a: "Dans n'importe quel navigateur, sur téléphone et ordinateur, sans rien installer.\nSur Android, il existe aussi une application sur Google Play." },
     { q: "Que devient la page que j'ai photographiée ?", a: "La photo sert uniquement à lire le texte, et nous ne la conservons pas." },
     { q: "Puis-je l'utiliser gratuitement ?", a: "Oui.\nUn compte gratuit donne 10 recherches par jour et un carnet de 30 mots maximum.\nIndividual débloque les recherches illimitées et tous les outils." },

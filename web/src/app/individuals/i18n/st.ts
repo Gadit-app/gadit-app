@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Qala nako ya hao ya teko ya mahala ya matsatsi a 14",
   ctaNote: "Ho hlokahala karete, mme tefo ya pele e tla feela ka mora matsatsi a 14. Matsatsi a mabedi pele ho moo, re o romella imeile ya kgopotso. Emisa ka ho tobetsa hang, ntle le ho letsa mohala.",
   howCta: "Kamoo e sebetsang kateng",
-  heroPoints: ["{monthly} ka kgwedi", "Ditlhaloso ka dipuo tse 41", "Ha ho dipapatso"],
+  heroPoints: ["{monthly} ka kgwedi", "Ditlhaloso ka dipuo tse fetang 40", "Ha ho dipapatso"],
   shotAlt: "Skrine sa nnete sa Gadit",
   pain: {
     title: "O utlwisisa mohopolo, empa lentswe le le leng le emisa tsohle",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Seo batho ba se botsang pele ba qala",
   faq: [
     { q: "Gadit e fapana jwang le sefetoledi?", a: "Gadit e hlalosa mantswe.\nLentsweng le leng le le leng e fana ka meelelo yohle, mehlala, setshwantsho le tshimoloho ya lentswe, mme e kgetha moelelo o tsamaisanang le polelo.\nHa lentswe le le ka puo e nngwe o bona le lentswe le tshwanang, empa sepheo ke ho le utlwisisa ho fihlela qetellong." },
-    { q: "E sebetsa ka dipuo dife?", a: "O ka batla lentswe ka puo efe kapa efe.\nTlhaloso e ngolwa ka e nngwe ya dipuo tse 41, ho kenyeletswa Senyesemane, Sepanishe, Sefora, Searabia, Serashia, Sehindi le Sechaena." },
+    { q: "E sebetsa ka dipuo dife?", a: "O ka batla lentswe ka puo efe kapa efe.\nTlhaloso e ngolwa ka e nngwe ya dipuo tse fetang 40, ho kenyeletswa Senyesemane, Sepanishe, Sefora, Searabia, Serashia, Sehindi le Sechaena." },
     { q: "E sebetsa disebedisweng dife?", a: "Sebading sefe kapa sefe sa inthanete, mohaleng le khomputareng, ntle le ho kenya letho.\nHo Android ho boetse ho na le app ho Google Play." },
     { q: "Ho etsahala eng ka leqephe leo ke le nkileng setshwantsho?", a: "Setshwantsho se sebediswa feela ho bala sengolwa, mme ha re se boloke." },
     { q: "Na nka e sebedisa mahala?", a: "E.\nAkhaonte ya mahala e na le dipatlo tse 10 ka letsatsi le bukana ya mantswe a ka fihlang ho 30.\nIndividual e bula dipatlo tse se nang moeli le disebediswa tsohle." },

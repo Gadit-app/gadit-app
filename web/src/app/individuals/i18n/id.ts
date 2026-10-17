@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Mulai uji coba gratis 14 hari",
   ctaNote: "Kartu diperlukan, dan tagihan pertama baru dikenakan setelah 14 hari. Dua hari sebelumnya, kami mengirimkan email pengingat. Batalkan dengan satu klik, tanpa perlu menelepon.",
   howCta: "Cara kerjanya",
-  heroPoints: ["{monthly} per bulan", "Penjelasan dalam 41 bahasa", "Tanpa iklan"],
+  heroPoints: ["{monthly} per bulan", "Penjelasan dalam lebih dari 40 bahasa", "Tanpa iklan"],
   shotAlt: "Tampilan asli dari Gadit",
   pain: {
     title: "Kamu menangkap maksudnya, tapi satu kata menghentikan semuanya",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Yang ditanyakan orang sebelum mulai",
   faq: [
     { q: "Apa bedanya Gadit dengan penerjemah?", a: "Gadit menjelaskan kata.\nUntuk setiap kata, Gadit memberikan semua arti, contoh, gambar, dan asal-usul kata, lalu memilih arti yang cocok dengan kalimatnya.\nJika katanya dalam bahasa lain, kamu juga melihat kata padanannya, tapi tujuannya adalah memahaminya sampai tuntas." },
-    { q: "Bekerja dalam bahasa apa saja?", a: "Kamu bisa mencari kata dalam bahasa apa pun.\nPenjelasannya ditulis dalam salah satu dari 41 bahasa, di antaranya bahasa Inggris, Spanyol, Prancis, Arab, Rusia, Indonesia, dan Mandarin." },
+    { q: "Bekerja dalam bahasa apa saja?", a: "Kamu bisa mencari kata dalam bahasa apa pun.\nPenjelasannya ditulis dalam salah satu dari lebih dari 40 bahasa, di antaranya bahasa Inggris, Spanyol, Prancis, Arab, Rusia, Indonesia, dan Mandarin." },
     { q: "Bisa dipakai di perangkat apa saja?", a: "Di browser apa pun, di ponsel dan komputer, tanpa perlu memasang apa pun.\nDi Android juga ada aplikasinya di Google Play." },
     { q: "Apa yang terjadi pada halaman yang saya foto?", a: "Foto hanya dipakai untuk membaca teksnya, dan kami tidak menyimpannya." },
     { q: "Bisakah saya memakainya gratis?", a: "Bisa.\nAkun gratis mendapat 10 pencarian per hari dan buku catatan hingga 30 kata.\nIndividual membuka pencarian tanpa batas dan semua alat." },

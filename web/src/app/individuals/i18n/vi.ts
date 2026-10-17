@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Bắt đầu 14 ngày dùng thử miễn phí",
   ctaNote: "Cần có thẻ, và lần thanh toán đầu tiên chỉ diễn ra sau 14 ngày. Hai ngày trước đó, chúng tôi gửi bạn email nhắc nhở. Hủy chỉ với một cú nhấp, không cần gọi điện.",
   howCta: "Cách hoạt động",
-  heroPoints: ["{monthly} mỗi tháng", "Giải thích bằng 41 ngôn ngữ", "Không quảng cáo"],
+  heroPoints: ["{monthly} mỗi tháng", "Giải thích bằng hơn 40 ngôn ngữ", "Không quảng cáo"],
   shotAlt: "Một màn hình thật từ Gadit",
   pain: {
     title: "Bạn hiểu ý chính, nhưng một từ khiến mọi thứ dừng lại",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Những điều mọi người hỏi trước khi bắt đầu",
   faq: [
     { q: "Gadit khác công cụ dịch ở điểm nào?", a: "Gadit giải thích từ.\nVới mỗi từ, Gadit đưa ra mọi nghĩa, ví dụ, một hình ảnh và nguồn gốc của từ, rồi chọn nghĩa phù hợp với câu.\nKhi từ đó thuộc một ngôn ngữ khác, bạn cũng thấy một từ tương ứng, nhưng mục tiêu là hiểu từ đó đến tận cùng." },
-    { q: "Gadit hoạt động với những ngôn ngữ nào?", a: "Bạn có thể tra từ bằng bất kỳ ngôn ngữ nào.\nLời giải thích được viết bằng một trong 41 ngôn ngữ, trong đó có tiếng Anh, tiếng Tây Ban Nha, tiếng Pháp, tiếng Ả Rập, tiếng Nga, tiếng Việt và tiếng Trung." },
+    { q: "Gadit hoạt động với những ngôn ngữ nào?", a: "Bạn có thể tra từ bằng bất kỳ ngôn ngữ nào.\nLời giải thích được viết bằng một trong hơn 40 ngôn ngữ, trong đó có tiếng Anh, tiếng Tây Ban Nha, tiếng Pháp, tiếng Ả Rập, tiếng Nga, tiếng Việt và tiếng Trung." },
     { q: "Gadit chạy trên những thiết bị nào?", a: "Trên mọi trình duyệt, cả điện thoại lẫn máy tính, không cần cài đặt gì.\nTrên Android còn có ứng dụng trên Google Play." },
     { q: "Trang giấy tôi chụp sẽ được xử lý thế nào?", a: "Ảnh chỉ được dùng để đọc văn bản, và chúng tôi không lưu giữ ảnh." },
     { q: "Tôi có thể dùng miễn phí không?", a: "Có.\nTài khoản miễn phí có 10 lượt tra mỗi ngày và sổ tay lưu tối đa 30 từ.\nGói Individual mở khóa tra từ không giới hạn và mọi công cụ." },

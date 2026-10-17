@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Zacznij 14-dniowy bezpłatny okres próbny",
   ctaNote: "Potrzebna jest karta płatnicza, a pierwsza płatność nastąpi dopiero po 14 dniach. Dwa dni wcześniej wyślemy ci przypomnienie e-mailem. Anulujesz jednym kliknięciem, bez dzwonienia.",
   howCta: "Jak to działa",
-  heroPoints: ["{monthly} miesięcznie", "Wyjaśnienia w 41 językach", "Bez reklam"],
+  heroPoints: ["{monthly} miesięcznie", "Wyjaśnienia w ponad 40 językach", "Bez reklam"],
   shotAlt: "Prawdziwy ekran z Gadit",
   pain: {
     title: "Rozumiesz ogólny sens, ale jedno słowo wszystko zatrzymuje",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "O co ludzie pytają, zanim zaczną",
   faq: [
     { q: "Czym Gadit różni się od tłumacza?", a: "Gadit wyjaśnia słowa.\nDla każdego słowa podaje wszystkie znaczenia, przykłady, obrazek i pochodzenie słowa oraz wybiera znaczenie, które pasuje do zdania.\nGdy słowo jest w innym języku, widzisz też jego odpowiednik, ale chodzi o to, żeby zrozumieć je do końca." },
-    { q: "W jakich językach to działa?", a: "Możesz wyszukać słowo w dowolnym języku.\nWyjaśnienie jest napisane w jednym z 41 języków, w tym polski, angielski, hiszpański, francuski, arabski, rosyjski i chiński." },
+    { q: "W jakich językach to działa?", a: "Możesz wyszukać słowo w dowolnym języku.\nWyjaśnienie jest napisane w jednym z ponad 40 języków, w tym polski, angielski, hiszpański, francuski, arabski, rosyjski i chiński." },
     { q: "Na jakich urządzeniach to działa?", a: "W każdej przeglądarce, na telefonie i komputerze, bez instalowania czegokolwiek.\nNa Androida jest też aplikacja w Google Play." },
     { q: "Co dzieje się ze stroną, którą sfotografuję?", a: "Zdjęcie służy tylko do odczytania tekstu i nie przechowujemy go." },
     { q: "Czy mogę korzystać za darmo?", a: "Tak.\nDarmowe konto ma 10 wyszukiwań dziennie i notatnik na maksymalnie 30 słów.\nIndividual odblokowuje nielimitowane wyszukiwanie i wszystkie narzędzia." },

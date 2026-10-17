@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Thoma ukulinga mahala kwamalanga ali-14",
   ctaNote: "Kutlhogeka ikarada, begodu ukubhadela kokuthoma kufika kwaphela ngemva kwamalanga ali-14. Amalanga amabili ngaphambili, sikuthumelela i-imeyili yesikhumbuzo. Khansela ngokuthinta kanye, ngaphandle kokufowuna.",
   howCta: "Kusebenza njani",
-  heroPoints: ["{monthly} ngenyanga", "Iinhlathululo ngamalimi ama-41", "Azikho iinkhangiso"],
+  heroPoints: ["{monthly} ngenyanga", "Iinhlathululo ngamalimi angaphezu kwama-40", "Azikho iinkhangiso"],
   shotAlt: "Isikrini samambala se-Gadit",
   pain: {
     title: "Uyawuzwisisa umqondo, kodwana ilizwi linye limisa koke",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Lokho abantu abakubuzako ngaphambi kobana bathome",
   faq: [
     { q: "I-Gadit yehluke njani emtjhugululini?", a: "I-Gadit ihlathulula amezwi.\nElizwini ngalinye inikela zoke iinhlathululo, izibonelo, isithombe nomsuka welizwi, begodu ikhetha ihlathululo efanele umutjho.\nNalilizwi lelinye ilimi ubona nelizwi elifanako, kodwana umnqopho kukulizwisisa ngokupheleleko." },
-    { q: "Isebenza ngamaphi amalimi?", a: "Ungafuna ilizwi ngelimi nanyana ngiliphi.\nIhlathululo itlolwa ngelinye lamalimi ama-41, phakathi kwawo isiNgisi, isiSpanishi, isiFrentjhi, isi-Arabhu, isiRashiya, isiHindi nesiTjhayina." },
+    { q: "Isebenza ngamaphi amalimi?", a: "Ungafuna ilizwi ngelimi nanyana ngiliphi.\nIhlathululo itlolwa ngelinye lamalimi angaphezu kwama-40, phakathi kwawo isiNgisi, isiSpanishi, isiFrentjhi, isi-Arabhu, isiRashiya, isiHindi nesiTjhayina." },
     { q: "Isebenza kimaphi amadivayisi?", a: "Kibhrawuza nanyana ngiyiphi, efowunini nekhomphyutheni, ngaphandle kokufaka litho.\nKu-Android kunayo ne-app ku-Google Play." },
     { q: "Kwenzekani ekhasini engilithathe isithombe?", a: "Isithombe sisetjenziselwa kwaphela ukufunda umtlolo, begodu asisibulungi." },
     { q: "Ngingayisebenzisa mahala?", a: "Iye.\nI-akhawunti yamahala inokufuna okuli-10 ngelanga nebhuku lamezwi elifika emezwini ama-30.\nI-Individual ivula ukufuna ngaphandle komkhawulo nawo woke amathulusi." },

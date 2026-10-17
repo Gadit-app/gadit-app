@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Start din gratis prøveperiode på 14 dage",
   ctaNote: "Der kræves et betalingskort, og den første betaling sker først efter de 14 dage. To dage før sender vi dig en påmindelse på e-mail. Opsig med ét klik, uden at ringe.",
   howCta: "Sådan virker det",
-  heroPoints: ["{monthly} om måneden", "Forklaringer på 41 sprog", "Ingen reklamer"],
+  heroPoints: ["{monthly} om måneden", "Forklaringer på over 40 sprog", "Ingen reklamer"],
   shotAlt: "Et rigtigt skærmbillede fra Gadit",
   pain: {
     title: "Du forstår idéen, men ét ord stopper det hele",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Det spørger folk om, før de starter",
   faq: [
     { q: "Hvordan er Gadit anderledes end en oversætter?", a: "Gadit forklarer ord.\nFor hvert ord giver den alle betydninger, eksempler, et billede og ordets oprindelse, og den vælger den betydning, der passer til sætningen.\nNår ordet er på et andet sprog, ser du også et tilsvarende ord, men pointen er at forstå det helt til bunds." },
-    { q: "Hvilke sprog virker det på?", a: "Du kan slå et ord op på et hvilket som helst sprog.\nForklaringen skrives på et af 41 sprog, blandt andet dansk, engelsk, spansk, fransk, arabisk, russisk og kinesisk." },
+    { q: "Hvilke sprog virker det på?", a: "Du kan slå et ord op på et hvilket som helst sprog.\nForklaringen skrives på et af over 40 sprog, blandt andet dansk, engelsk, spansk, fransk, arabisk, russisk og kinesisk." },
     { q: "Hvilke enheder virker det på?", a: "I enhver browser, på telefon og computer, uden at installere noget.\nPå Android findes der også en app i Google Play." },
     { q: "Hvad sker der med den side, jeg fotograferer?", a: "Billedet bruges kun til at læse teksten, og vi gemmer det ikke." },
     { q: "Kan jeg bruge det gratis?", a: "Ja.\nEn gratis konto har 10 opslag om dagen og en notesbog med op til 30 ord.\nIndividual åbner for ubegrænsede opslag og alle værktøjer." },

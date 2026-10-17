@@ -9,7 +9,7 @@ const copy: IndCopy = {
   heroCta: "Thomani tshilingo tshaṋu tsha mahala tsha maḓuvha a 14",
   ctaNote: "Hu ṱoḓea garaṱa, nahone mbadelo ya u thoma i ḓa fhedzi nga murahu ha maḓuvha a 14. Maḓuvha mavhili phanḓa ha zwenezwo, ri ni rumela imeiḽi ya u ni humbudza. Khanselani nga u kwama luthihi, ni sa founi.",
   howCta: "Zwi shuma hani",
-  heroPoints: ["{monthly} nga ṅwedzi", "Ṱhalutshedzo nga nyambo dza 41", "A hu na zwiambadzo"],
+  heroPoints: ["{monthly} nga ṅwedzi", "Ṱhalutshedzo nga nyambo dzi fhiraho 40", "A hu na zwiambadzo"],
   shotAlt: "Tshikirini tsha vhukuma tsha Gadit",
   pain: {
     title: "Ni a pfesesa muhumbulo, fhedzi ipfi ḽithihi ḽi imisa zwoṱhe",
@@ -73,7 +73,7 @@ const copy: IndCopy = {
   faqTitle: "Zwine vhathu vha vhudzisa phanḓa ha u thoma",
   faq: [
     { q: "Gadit i fhambana hani na mutalutshedzi?", a: "Gadit i ṱalutshedza maipfi.\nKha ipfi ḽiṅwe na ḽiṅwe i ṋea ndeme dzoṱhe, tsumbo, tshifanyiso na vhubvo ha ipfi, nahone i khetha ndeme ine ya tshimbilelana na mutaladzi.\nMusi ipfi ḽi nga luṅwe luambo ni vhona na ipfi ḽi fanaho, fhedzi ndivho ndi u ḽi pfesesa u swika magumoni." },
-    { q: "I shuma nga nyambo dzifhio?", a: "Ni nga ṱoḓa ipfi nga luambo luṅwe na luṅwe.\nṰhalutshedzo i ṅwalwa nga luṅwe lwa nyambo dza 41, hu tshi katelwa Luisimane, Lusipeini, Lufura, Luarabu, Lurashia, Luhindi na Lutshaina." },
+    { q: "I shuma nga nyambo dzifhio?", a: "Ni nga ṱoḓa ipfi nga luambo luṅwe na luṅwe.\nṰhalutshedzo i ṅwalwa nga luṅwe lwa nyambo dzi fhiraho 40, hu tshi katelwa Luisimane, Lusipeini, Lufura, Luarabu, Lurashia, Luhindi na Lutshaina." },
     { q: "I shuma kha zwishumiswa zwifhio?", a: "Kha burausa iṅwe na iṅwe, kha founu na kha khomphiyutha, hu si na tshine tsha dzheniswa.\nKha Android hu dovha ha vha na app kha Google Play." },
     { q: "Hu itea mini nga siaṱari ḽe nda ḽi dzhia tshifanyiso?", a: "Tshifanyiso tshi shumiswa fhedzi u vhala ṱhaluso, nahone a ri tshi vhulungi." },
     { q: "Naa ndi nga i shumisa mahala?", a: "Ee.\nAkhaunthu ya mahala i na u ṱoḓa lwa 10 nga ḓuvha na bugu ya maipfi u swika kha 30.\nIndividual i vula u ṱoḓa hu si na mukano na zwishumiswa zwoṱhe." },
