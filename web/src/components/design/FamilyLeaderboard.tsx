@@ -133,7 +133,9 @@ const CSS = `
 .fam-lb-who { flex: 1; min-width: 0; display: grid; gap: 1px; }
 .fam-lb-name { font-weight: 800; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .fam-lb-you { margin-inline-start: 6px; font-size: 11.5px; font-weight: 800; color: var(--accent, #0EA5A5); }
-.fam-lb-rank { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ink-muted, #6b7280); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.fam-lb-rank { display: flex; align-items: center; gap: 6px; flex-shrink: 1; max-width: 45%; min-width: 0; font-size: 13px; font-weight: 600; color: var(--ink-muted, #6b7280); }
+.fam-lb-rank-t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.fam-lb-num { min-width: 2.2em; text-align: end; }
 .fam-lb-rank img { display: inline-block; flex-shrink: 0; }
 .fam-lb-num { font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--ink, #1f2937); }
 .fam-lb-num.is-zero { color: var(--ink-faint, #9ca3af); }
@@ -204,11 +206,12 @@ export function FamilyLeaderboard({ lang, dir }: { lang: string; dir: "ltr" | "r
                   <bdi>{name}</bdi>
                   {r.isYou && <span className="fam-lb-you">{t.you}</span>}
                 </span>
-                <span className="fam-lb-rank">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={rankIconSrc(r.rankKey)} alt="" width={28} height={28} style={{ width: 28, height: 28, objectFit: "contain" }} />
-                  {rankLabel(r.rankKey, lang)}
-                </span>
+              </span>
+              {/* The rank on the same line, toward the number (Gadi 2026-10-17). */}
+              <span className="fam-lb-rank">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={rankIconSrc(r.rankKey)} alt="" width={34} height={34} style={{ width: 34, height: 34, objectFit: "contain" }} />
+                <span className="fam-lb-rank-t">{rankLabel(r.rankKey, lang)}</span>
               </span>
               <span className={`fam-lb-num${n === 0 ? " is-zero" : ""}`}>{n}</span>
             </li>
