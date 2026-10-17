@@ -15167,3 +15167,19 @@ html[data-theme="dark"] .wordbook .wb-home-search-input::placeholder, html[data-
   .wordbook .wb-shell-topbar .wb-skin-dd-trigger > svg { display: none; }
   .wordbook .wb-shell-topbar .wb-skin-dd-trigger { padding: 7px 8px; }
 }
+
+/* Word header on a phone (Gadi 2026-10-17, a subscriber with a larger phone
+   font saw "משמעת" broken into "משמע / ת"): the speaker sits above the share
+   button, the niqqud button beside them, and the word gets the rest of the row
+   and is never broken mid-word. display:contents lets the title, the speaker and
+   the niqqud button take places in the header's own grid. */
+@media (max-width: 640px) {
+  .wordbook .wb-word-head { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 8px; row-gap: 4px; align-items: center; }
+  .wordbook .wb-word-head > .wb-word-head-main, .wordbook .wb-word-head-main > .wb-word-title-row { display: contents; }
+  .wordbook .wb-word-head .wb-word-meta { grid-column: 1 / -1; grid-row: 1; }
+  .wordbook .wb-word-head .wb-word-title { grid-column: 1; grid-row: 2 / span 2; overflow-wrap: break-word; word-break: normal; }
+  .wordbook .wb-word-head .wb-niqqud-btn { grid-column: 2; grid-row: 2 / span 2; }
+  .wordbook .wb-word-head .wb-word-listen-btn { grid-column: 3; grid-row: 2; justify-self: center; }
+  .wordbook .wb-word-head .wb-word-actions { grid-column: 3; grid-row: 3; justify-self: center; flex-direction: column; margin: 0; }
+  .wordbook .wb-word-head .wb-word-translation { grid-column: 1 / -1; grid-row: 4; }
+}

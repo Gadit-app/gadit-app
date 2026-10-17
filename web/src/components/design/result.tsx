@@ -459,6 +459,7 @@ export function WordHeader({
           {showNiqqud && onToggleNiqqud && (
             <button
               type="button"
+              className="wb-niqqud-btn"
               onClick={onToggleNiqqud}
               aria-pressed={niqqudOn}
               title={isArabicHeadword ? "التشكيل لمن يقرأ بمساعدة" : miscUi(lang).niqqudTitle}
