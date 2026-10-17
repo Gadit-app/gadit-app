@@ -39,6 +39,7 @@ import type { ClassroomQuote } from "@/components/classroom/ClassroomStage";
 import { AppearancePicker } from "@/components/AppearancePicker";
 import VoiceInput from "@/components/VoiceInput";
 import { useHref, wordPath } from "@/lib/href";
+import { sentencePlaceholder } from "@/lib/sentence-copy";
 import { goBackOr } from "@/lib/back-nav";
 import { getCachedWord, setCachedWord, setPinned as setPinnedDb } from "@/lib/offline-db";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
@@ -827,6 +828,10 @@ export function WordClient({
   // Lives in WordClient (not chrome) so the input doesn't reset every
   // time the masthead re-renders for share/lang/menu toggles.
   const [headerQuery, setHeaderQuery] = useState("");
+  // Optional sentence under the persistent search bar, same as the home
+  // field but one line that grows down as it fills (Gadi 2026-10-17).
+  const [headerSentence, setHeaderSentence] = useState("");
+  const headerSentenceRef = useRef<HTMLTextAreaElement>(null);
   // When wrong-keyboard auto-correct fires, the original mis-typed
   // word is preserved in ?from=… so we can show a banner that lets
   // the user override and search the original anyway. ?stay=1 is
@@ -2302,12 +2307,15 @@ export function WordClient({
         <div className="wb-word-searchbar-stage" style={present ? (showSearch ? { marginTop: 64, marginBottom: 20 } : { display: "none" }) : undefined}>
         <div className="wb-word-searchbar-wrap">
           <form
-            className="wb-word-searchbar"
+            className="wb-word-searchform"
             onSubmit={(e) => {
               e.preventDefault();
               const q = headerQuery.trim();
               if (!q) return;
+              const ctx = headerSentence.trim();
               setHeaderQuery("");
+              setHeaderSentence("");
+              if (headerSentenceRef.current) headerSentenceRef.current.style.height = "";
               // Preserve the classroom context when the persistent
               // search bar is used inside a classroom session — the
               // kid stays in classroom mode AND the new word gets
@@ -2318,9 +2326,11 @@ export function WordClient({
               const clsParam = classroomCode
                 ? `?cls=${encodeURIComponent(classroomCode)}${classroomStudentName ? `&sn=${encodeURIComponent(classroomStudentName)}` : ""}`
                 : "";
-              router.push(href(wordPath(q, clsParam)));
+              const extra = [clsParam.replace(/^\?/, ""), ctx ? `sentence=${encodeURIComponent(ctx)}` : ""].filter(Boolean).join("&");
+              router.push(href(wordPath(q, extra)));
             }}
           >
+            <div className="wb-word-searchbar">
             {/* Convention layout, same recipe the homepage pill follows
                 (LLM Council R3 2026-06-20): input at the START edge,
                 action cluster (mic + magnifier-submit) at the END.
@@ -2369,6 +2379,29 @@ export function WordClient({
                 <path d="m20 20-4-4" />
               </svg>
             </button>
+            </div>
+            <textarea
+              ref={headerSentenceRef}
+              className="wb-word-sentence-input"
+              value={headerSentence}
+              rows={1}
+              dir={dir === "rtl" ? "rtl" : "ltr"}
+              onChange={(e) => {
+                setHeaderSentence(e.target.value);
+                const el = e.target;
+                el.style.height = "";
+                el.style.height = `${Math.min(el.scrollHeight + 2, 160)}px`;
+              }}
+              onKeyDown={(e) => {
+                // Enter searches, as in the word field; Shift+Enter breaks the line.
+                if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+                  e.preventDefault();
+                  e.currentTarget.form?.requestSubmit();
+                }
+              }}
+              placeholder={sentencePlaceholder(lang)}
+              aria-label={sentencePlaceholder(lang)}
+            />
           </form>
         </div>
         </div>

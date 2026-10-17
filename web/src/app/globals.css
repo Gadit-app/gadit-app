@@ -15183,3 +15183,45 @@ html[data-theme="dark"] .wordbook .wb-home-search-input::placeholder, html[data-
   .wordbook .wb-word-head .wb-word-actions { grid-column: 3; grid-row: 3; justify-self: center; flex-direction: column; margin: 0; }
   .wordbook .wb-word-head .wb-word-translation { grid-column: 1 / -1; grid-row: 4; }
 }
+
+/* Word page: the optional sentence under the persistent search bar
+   (Gadi 2026-10-17). One line like the word field, grows down as it
+   fills, the user can drag it taller. Quieter than the pill above. */
+.wordbook .wb-word-searchform {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.wordbook .wb-word-sentence-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--surface);
+  border: 1px solid var(--rule, #E5E7EB);
+  border-radius: 23px;
+  padding: 11px 16px;
+  min-height: 46px;
+  max-height: 160px;
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink, #111827);
+  resize: vertical;
+  outline: none;
+  overflow-y: auto;
+  transition: border-color 160ms, box-shadow 160ms;
+}
+.wordbook .wb-word-sentence-input::placeholder {
+  color: var(--ink-faint, #9CA3AF);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wordbook .wb-word-sentence-input:focus {
+  border-color: rgba(14, 165, 165, 0.55);
+  box-shadow: 0 0 0 3px rgba(14, 165, 165, 0.12);
+}
+html[data-theme="dark"] .wordbook .wb-word-sentence-input { background: #2A3634; border-color: rgba(255, 255, 255, .2); }
+html[data-theme="dark"] .wordbook .wb-word-sentence-input::placeholder { color: #A9B8B5; opacity: 1; }
+@media (max-width: 560px) {
+  .wordbook .wb-word-sentence-input { font-size: 14px; padding: 11px 14px; }
+}
