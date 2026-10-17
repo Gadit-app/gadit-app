@@ -99,7 +99,8 @@ const CSS = `
   border-radius: 22px;
   padding: 20px 20px 14px;
   box-shadow: 0 8px 24px rgba(31,41,55,0.06);
-  margin: 0 0 22px;
+  /* The same breathing room as the cards above it (Gadi 2026-10-17). */
+  margin: 18px 0 22px;
   color: var(--ink, #1f2937);
 }
 .fam-lb-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
@@ -132,7 +133,8 @@ const CSS = `
 .fam-lb-who { flex: 1; min-width: 0; display: grid; gap: 1px; }
 .fam-lb-name { font-weight: 800; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .fam-lb-you { margin-inline-start: 6px; font-size: 11.5px; font-weight: 800; color: var(--accent, #0EA5A5); }
-.fam-lb-rank { font-size: 12.5px; color: var(--ink-muted, #6b7280); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fam-lb-rank { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ink-muted, #6b7280); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.fam-lb-rank img { display: inline-block; flex-shrink: 0; }
 .fam-lb-num { font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--ink, #1f2937); }
 .fam-lb-num.is-zero { color: var(--ink-faint, #9ca3af); }
 `;
@@ -204,7 +206,7 @@ export function FamilyLeaderboard({ lang, dir }: { lang: string; dir: "ltr" | "r
                 </span>
                 <span className="fam-lb-rank">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={rankIconSrc(r.rankKey)} alt="" width={28} height={28} style={{ width: 28, height: 28, objectFit: "contain", verticalAlign: "-9px", marginInlineEnd: 4 }} />
+                  <img src={rankIconSrc(r.rankKey)} alt="" width={28} height={28} style={{ width: 28, height: 28, objectFit: "contain" }} />
                   {rankLabel(r.rankKey, lang)}
                 </span>
               </span>
