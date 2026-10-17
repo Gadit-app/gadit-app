@@ -154,6 +154,19 @@ async function render(prompt: string, refs: string[], quality: "low" | "medium" 
   return { b64, cost: usageCost(j.usage) };
 }
 
+/** A dictionary word's picture in the Gadit house style (Gadi 2026-10-17:
+ *  "the new pictures look great, keep them this way across all of Gadit").
+ *  The same brief and style as the projector and the lessons: KIDS for
+ *  Kids Mode, TEEN otherwise. The caller stores it. */
+export async function houseImage(word: string, meaning: string, lang: string, kids: boolean): Promise<{ b64: string; cost?: number }> {
+  const w = word.trim();
+  const b = curatedImageHint(w) || (await brief(w, meaning, lang)) || `${w}: ${meaning}`;
+  const person = /(child|children|boy|girl|kid|kids|student|students|person|people|teacher|man|woman|family)/i.test(b);
+  const refs = kids && person ? ["kid.png"] : [];
+  const prompt = `${kids ? KIDS : TEEN} ${refs.length ? KID_CHILD : ""} Draw this: ${b} ${NO_TEXT}`;
+  return render(prompt.replace(/\s+/g, " "), refs, "low");
+}
+
 export type ClassroomImageResult =
   | { status: "cached"; url: string; cacheKey: string }
   | { status: "generated"; url: string; cacheKey: string }
