@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { SCHOOL_SET_MAX_SETS, SCHOOL_SET_MAX_WORDS } from "@/lib/school-set-ids";
+import { SCHOOL_SET_MAX_SETS, SCHOOL_SET_MAX_WORDS, defaultSetLevel } from "@/lib/school-set-ids";
 import {
-  requestSchool, listSchoolSets, createSchoolSet, updateSchoolSet, deleteSchoolSet, SchoolSetError,
+  requestSchool, listSchoolSets, createSchoolSet, updateSchoolSet, deleteSchoolSet, schoolLevels, SchoolSetError,
 } from "@/lib/school-sets";
 
 /**
  * A school's own word sets (Gadi 2026-10-17), for the "Our sets" section of
  * /sets. Bearer: a member of the school (users/{uid}.schoolId).
  *
- *   GET                              → { sets: WordSet[], maxWords, maxSets }  (newest first)
- *   POST   { title, words: string[] } → { set }   (409 too_many_sets at 100)
- *   PATCH  { id, title?, words? }     → { set }   rename and/or replace the words
+ *   GET                                     → { sets: (WordSet & {defs})[], defaultLevel, maxWords, maxSets }  (newest first)
+ *   POST   { title, words: string[], level } → { set }   (409 too_many_sets at 100)
+ *   PATCH  { id, title?, words?, level? }    → { set }   rename, replace the words, change the level
+ * level: "elementary" | "secondary" (middle and high school). Saving writes
+ * the per-set definitions of new words (one model call), so it can take a
+ * few seconds.
  *   DELETE ?id=<id>                   → { ok }
  *
  * Words are trimmed and de-duplicated; 1 to 40 per set. The set opens on the
@@ -18,6 +21,9 @@ import {
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+// Saving waits for the definitions: written, checked by a second opinion,
+// the flagged ones rewritten and checked once more (lib/school-set-defs.ts).
+export const maxDuration = 120;
 
 const NO_STORE = { "Cache-Control": "private, no-store" };
 
@@ -38,8 +44,8 @@ export async function GET(req: NextRequest) {
   const s = await school(req);
   if (s.error) return s.error;
   try {
-    const sets = await listSchoolSets(s.who.schoolId);
-    return NextResponse.json({ sets, maxWords: SCHOOL_SET_MAX_WORDS, maxSets: SCHOOL_SET_MAX_SETS }, { headers: NO_STORE });
+    const [sets, levels] = await Promise.all([listSchoolSets(s.who.schoolId), schoolLevels(s.who.schoolId)]);
+    return NextResponse.json({ sets, defaultLevel: defaultSetLevel(levels), maxWords: SCHOOL_SET_MAX_WORDS, maxSets: SCHOOL_SET_MAX_SETS }, { headers: NO_STORE });
   } catch (e) {
     return fail(e);
   }
@@ -48,9 +54,9 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const s = await school(req);
   if (s.error) return s.error;
-  const b = (await req.json().catch(() => ({}))) as { title?: unknown; words?: unknown };
+  const b = (await req.json().catch(() => ({}))) as { title?: unknown; words?: unknown; level?: unknown };
   try {
-    return NextResponse.json({ set: await createSchoolSet(s.who.schoolId, s.who.uid, b.title, b.words) }, { headers: NO_STORE });
+    return NextResponse.json({ set: await createSchoolSet(s.who.schoolId, s.who.uid, b.title, b.words, b.level) }, { headers: NO_STORE });
   } catch (e) {
     return fail(e);
   }
@@ -59,9 +65,9 @@ export async function POST(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   const s = await school(req);
   if (s.error) return s.error;
-  const b = (await req.json().catch(() => ({}))) as { id?: unknown; title?: unknown; words?: unknown };
+  const b = (await req.json().catch(() => ({}))) as { id?: unknown; title?: unknown; words?: unknown; level?: unknown };
   try {
-    const set = await updateSchoolSet(typeof b.id === "string" ? b.id : "", s.who.schoolId, { title: b.title, words: b.words });
+    const set = await updateSchoolSet(typeof b.id === "string" ? b.id : "", s.who.schoolId, { title: b.title, words: b.words, level: b.level });
     return NextResponse.json({ set }, { headers: NO_STORE });
   } catch (e) {
     return fail(e);

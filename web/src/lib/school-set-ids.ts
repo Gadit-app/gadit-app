@@ -16,7 +16,29 @@ export const SCHOOL_SET_MAX_SETS = 100;
 export const SCHOOL_SET_TITLE_MAX = 60;
 const WORD_MAX = 40;
 
-const ID_RE = /^cur-sch-[a-z0-9]{16,32}$/;
+/** A school set's level (Gadi 2026-10-17): it sets the picture style, the
+ *  definitions' wording, the examples and the class quiz. */
+export type SchoolSetLevel = "elementary" | "secondary";
+export const SCHOOL_SET_LEVELS: SchoolSetLevel[] = ["elementary", "secondary"];
+export const cleanSetLevel = (v: unknown): SchoolSetLevel => (v === "secondary" ? "secondary" : "elementary");
+/** Catalog levels taught at middle or high school age (the teen picture style). */
+const TEEN_LEVELS = new Set(["middle", "high", "senior", "secondary"]);
+export const isTeenLevel = (l: string | null | undefined): boolean => !!l && TEEN_LEVELS.has(l);
+/** The level a new set starts on: the school's own when all its levels are
+ *  of one kind, else elementary. */
+export function defaultSetLevel(schoolLevels: string[]): SchoolSetLevel {
+  return schoolLevels.length > 0 && schoolLevels.every((l) => TEEN_LEVELS.has(l)) ? "secondary" : "elementary";
+}
+/** The level as the set's grade line: shown on the projector and read by the
+ *  class quiz prompt ("activities for <grade> students"). */
+export function schoolSetGrade(level: SchoolSetLevel, lang: string): string {
+  const sec = level === "secondary";
+  if (lang === "he") return sec ? "חטיבת ביניים ותיכון" : "בית ספר יסודי";
+  if (lang === "ar") return sec ? "المرحلتان الإعداديّة والثانويّة" : "المرحلة الابتدائيّة";
+  return sec ? "Middle and high school" : "Primary school";
+}
+
+const ID_RE =/^cur-sch-[a-z0-9]{16,32}$/;
 export const isSchoolSetId = (id: string | null | undefined): boolean => !!id && ID_RE.test(id);
 
 /** Hebrew niqqud and cantillation, Arabic tashkeel and tatweel: words are

@@ -3,29 +3,44 @@ import crypto from "node:crypto";
 import { NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { registerWordSet, type WordSet } from "@/lib/word-sets";
+import { hardCapReached } from "@/lib/ai-budget";
+import { writeSetDefs } from "@/lib/school-set-defs";
 import {
   SCHOOL_SET_PREFIX, SCHOOL_SET_MAX_SETS, SCHOOL_SET_MAX_WORDS, SCHOOL_SET_TITLE_MAX,
-  isSchoolSetId, cleanSetWords, setLangOf,
+  isSchoolSetId, cleanSetWords, setLangOf, cleanSetLevel, schoolSetGrade, type SchoolSetLevel,
 } from "@/lib/school-set-ids";
 
 /**
  * A school's own word sets, server side (Gadi 2026-10-17). One document per
  * set in schoolSets/{id} (Admin SDK only; no client rule opens it):
- *   { schoolId, set: WordSet, defs: {}, createdBy, createdAt, updatedAt }
+ *   { schoolId, set: WordSet (with level), defs: {word: definition},
+ *     defsTriedAt?, createdBy, createdAt, updatedAt }
  * `set` has the same shape as a curriculum unit's, so getCurriculumSetDoc and
  * loadWordSet hand it to the projector, the set picture, the examples and the
- * class quiz unchanged. A custom set has no per-set definitions: the
- * projector falls back to the word's dictionary definition, as for any word
- * without a curated one.
+ * class quiz unchanged.
+ *
+ * Definitions: every word gets its own definition in the sense of the set
+ * (lib/school-set-defs.ts), written when the set is saved, only for words that
+ * have none (a level change rewrites them all), each checked by a second
+ * opinion before it is kept (a definition that fails twice is left out for
+ * a later try). When that fails the set is
+ * saved anyway, and the next open of the set (its list on /sets, or the
+ * projector loading it) tries again, at most once in 10 minutes. The
+ * dictionary definition is only the last resort.
+ *
+ * The level ("elementary" / "secondary") sets the picture style
+ * (classroomStyle), the definitions' wording, the examples and the class quiz
+ * (through set.grade, derived from the level).
  *
  * Only members of the school (users/{uid}.schoolId) read or change its sets;
  * every route that takes a set id checks it (schoolSetGate, via pilotGate).
  */
 
 const COL = "schoolSets";
+const RETRY_MS = 10 * 60 * 1000;
 
-export type SchoolSetDoc = { set: WordSet; defs: Record<string, string>; schoolId: string; updatedAt?: string };
-export type SchoolSetRow = WordSet & { updatedAt: string };
+export type SchoolSetDoc = { set: WordSet; defs: Record<string, string>; schoolId: string; updatedAt?: string; defsTriedAt?: string };
+export type SchoolSetRow = WordSet & { updatedAt: string; defs: Record<string, string> };
 
 function readDoc(id: string, raw: Record<string, unknown> | undefined): SchoolSetDoc | null {
   const s = raw?.set as Partial<WordSet> | undefined;
@@ -33,15 +48,46 @@ function readDoc(id: string, raw: Record<string, unknown> | undefined): SchoolSe
   if (!s || !schoolId) return null;
   const words = cleanSetWords(s.words);
   if (!words.length) return null;
-  const set: WordSet = {
-    id,
-    subject: "",
-    title: typeof s.title === "string" ? s.title : "",
-    lang: typeof s.lang === "string" && s.lang ? s.lang : setLangOf(words),
-    words,
+  const lang = typeof s.lang === "string" && s.lang ? s.lang : setLangOf(words);
+  const level = cleanSetLevel(s.level);
+  const set: WordSet = { id, subject: "", title: typeof s.title === "string" ? s.title : "", grade: schoolSetGrade(level, lang), lang, words, level };
+  const stored = (raw?.defs && typeof raw.defs === "object" ? raw.defs : {}) as Record<string, unknown>;
+  const defs: Record<string, string> = {};
+  for (const w of words) if (typeof stored[w] === "string" && stored[w]) defs[w] = stored[w] as string;
+  return {
+    set, defs, schoolId,
+    updatedAt: typeof raw?.updatedAt === "string" ? raw.updatedAt : "",
+    defsTriedAt: typeof raw?.defsTriedAt === "string" ? raw.defsTriedAt : undefined,
   };
-  return { set, defs: {}, schoolId, updatedAt: typeof raw?.updatedAt === "string" ? raw.updatedAt : "" };
 }
+
+const missingDefs = (d: SchoolSetDoc) => d.set.words.filter((w) => !d.defs[w]);
+
+/** Write the missing definitions of a set (one call). Never throws: on any
+ *  failure the set keeps what it has, and defsTriedAt holds off the next try. */
+async function fillDefs(doc: SchoolSetDoc, budgetMs = 85_000): Promise<SchoolSetDoc> {
+  const missing = missingDefs(doc);
+  if (!missing.length) return doc;
+  const ref = getAdminDb().collection(COL).doc(doc.set.id);
+  const now = new Date().toISOString();
+  try {
+    // Marked first, so two requests opening the same set do not both write.
+    await ref.set({ defsTriedAt: now }, { merge: true });
+    if (await hardCapReached()) return doc;
+    // Written, checked by a second opinion, the flagged ones rewritten once;
+    // whatever still fails is left out for a later try.
+    const out = await writeSetDefs(missing, doc.set.title, cleanSetLevel(doc.set.level), doc.set.lang, budgetMs);
+    if (out.dropped.length) console.warn("[school-sets] definitions held back after review:", out.dropped.length);
+    const defs = { ...doc.defs, ...out.defs };
+    // Field paths, so a word with a dot or a slash is still one key.
+    await ref.update({ defs, defsAt: new Date().toISOString() });
+    return { ...doc, defs, defsTriedAt: now };
+  } catch (e) {
+    console.warn("[school-sets] definitions not written:", String(e).slice(0, 120));
+    return { ...doc, defsTriedAt: now };
+  }
+}
+const mayRetry = (d: SchoolSetDoc) => missingDefs(d).length > 0 && (!d.defsTriedAt || Date.now() - Date.parse(d.defsTriedAt) > RETRY_MS);
 
 /** One school set by id, registered so getWordSet / classroomDef see it.
  *  No access check here: the routes check the school (schoolSetGate). */
@@ -51,6 +97,16 @@ export async function getSchoolSetDoc(id: string): Promise<SchoolSetDoc | null> 
   const doc = snap.exists ? readDoc(id, snap.data()) : null;
   if (doc) registerWordSet(doc.set, doc.defs);
   return doc;
+}
+
+/** The projector's load of a set its school opened: definitions a failed
+ *  save left out are written now (at most once in 10 minutes). */
+export async function completeSchoolSetDefs(doc: SchoolSetDoc): Promise<SchoolSetDoc> {
+  if (!mayRetry(doc)) return doc;
+  // The projector waits for this: a short budget (the route allows 45 seconds).
+  const out = await fillDefs(doc, 35_000);
+  registerWordSet(out.set, out.defs);
+  return out;
 }
 
 /** The signed-in user and their school ("" when not a school), or null. */
@@ -88,21 +144,43 @@ export function cleanSetTitle(t: unknown): string {
   return String(t ?? "").replace(/\s*[–—]\s*/g, ", ").replace(/\s+/g, " ").trim().slice(0, SCHOOL_SET_TITLE_MAX);
 }
 
-/** The school's sets, newest first. */
+const rowOf = (d: SchoolSetDoc): SchoolSetRow => ({ ...d.set, updatedAt: d.updatedAt ?? "", defs: d.defs });
+
+/** The school's sets, newest first, with their definitions. One set whose
+ *  definitions failed earlier gets them now (a short budget). */
 export async function listSchoolSets(schoolId: string): Promise<SchoolSetRow[]> {
   const snap = await getAdminDb().collection(COL).where("schoolId", "==", schoolId).get();
-  const rows: Array<{ row: SchoolSetRow; at: string }> = [];
+  const rows: Array<{ doc: SchoolSetDoc; at: string }> = [];
   for (const d of snap.docs) {
     const doc = readDoc(d.id, d.data());
     const at = d.get("createdAt");
-    if (doc) rows.push({ row: { ...doc.set, updatedAt: doc.updatedAt ?? "" }, at: typeof at === "string" ? at : "" });
+    if (doc) rows.push({ doc, at: typeof at === "string" ? at : "" });
   }
-  return rows.sort((a, b) => b.at.localeCompare(a.at)).map((r) => r.row);
+  rows.sort((a, b) => b.at.localeCompare(a.at));
+  let retries = 0;
+  for (const r of rows) {
+    if (retries < 1 && mayRetry(r.doc)) {
+      retries++;
+      r.doc = await fillDefs(r.doc, 40_000);
+    }
+    registerWordSet(r.doc.set, r.doc.defs);
+  }
+  return rows.map((r) => rowOf(r.doc));
+}
+
+/** The level a new set starts on, from the school's levels. */
+export async function schoolLevels(schoolId: string): Promise<string[]> {
+  const v = (await getAdminDb().collection("schools").doc(schoolId).get()).get("levels");
+  return Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : [];
 }
 
 export class SchoolSetError extends Error {
-  constructor(public code: "no_title" | "no_words" | "too_many_words" | "too_many_sets" | "not_found", public status = 400) {
+  code: "no_title" | "no_words" | "too_many_words" | "too_many_sets" | "not_found";
+  status: number;
+  constructor(code: SchoolSetError["code"], status = 400) {
     super(code);
+    this.code = code;
+    this.status = status;
   }
 }
 
@@ -113,7 +191,7 @@ function checkWords(raw: unknown): string[] {
   return words;
 }
 
-export async function createSchoolSet(schoolId: string, uid: string, title: unknown, words: unknown): Promise<SchoolSetRow> {
+export async function createSchoolSet(schoolId: string, uid: string, title: unknown, words: unknown, level: unknown): Promise<SchoolSetRow> {
   const t = cleanSetTitle(title);
   if (!t) throw new SchoolSetError("no_title");
   const list = checkWords(words);
@@ -122,25 +200,35 @@ export async function createSchoolSet(schoolId: string, uid: string, title: unkn
   if (count >= SCHOOL_SET_MAX_SETS) throw new SchoolSetError("too_many_sets", 409);
   const id = SCHOOL_SET_PREFIX + crypto.randomBytes(12).toString("hex");
   const now = new Date().toISOString();
-  const set: WordSet = { id, subject: "", title: t, lang: setLangOf(list), words: list };
+  const lv: SchoolSetLevel = cleanSetLevel(level);
+  const set: WordSet = { id, subject: "", title: t, lang: setLangOf(list), words: list, level: lv };
   await db.collection(COL).doc(id).set({ schoolId, set, defs: {}, createdBy: uid, createdAt: now, updatedAt: now });
-  registerWordSet(set, {});
-  return { ...set, updatedAt: now };
+  // The definitions are written now; a failure leaves them for the next open.
+  const doc = await fillDefs({ set: { ...set, grade: schoolSetGrade(lv, set.lang) }, defs: {}, schoolId, updatedAt: now });
+  registerWordSet(doc.set, doc.defs);
+  return rowOf(doc);
 }
 
-/** Rename a set and/or replace its words (only within its own school). */
-export async function updateSchoolSet(id: string, schoolId: string, patch: { title?: unknown; words?: unknown }): Promise<SchoolSetRow> {
+/** Rename a set, replace its words and/or change its level (only within its
+ *  own school). Definitions of unchanged words are kept; a new level rewrites them. */
+export async function updateSchoolSet(id: string, schoolId: string, patch: { title?: unknown; words?: unknown; level?: unknown }): Promise<SchoolSetRow> {
   const ref = getAdminDb().collection(COL).doc(id);
   const cur = isSchoolSetId(id) ? readDoc(id, (await ref.get()).data()) : null;
   if (!cur || cur.schoolId !== schoolId) throw new SchoolSetError("not_found", 404);
   const title = patch.title === undefined ? cur.set.title : cleanSetTitle(patch.title);
   if (!title) throw new SchoolSetError("no_title");
   const words = patch.words === undefined ? cur.set.words : checkWords(patch.words);
+  const level = patch.level === undefined ? cleanSetLevel(cur.set.level) : cleanSetLevel(patch.level);
+  const keep = level === cleanSetLevel(cur.set.level);
+  const defs: Record<string, string> = {};
+  if (keep) for (const w of words) if (cur.defs[w]) defs[w] = cur.defs[w];
   const now = new Date().toISOString();
-  const set: WordSet = { id, subject: "", title, lang: setLangOf(words), words };
-  await ref.set({ set, updatedAt: now }, { merge: true });
-  registerWordSet(set, {});
-  return { ...set, updatedAt: now };
+  const set: WordSet = { id, subject: "", title, lang: setLangOf(words), words, level };
+  // `defs` is written whole (not merged), so a removed word's definition goes with it.
+  await ref.update({ set, defs, updatedAt: now, defsTriedAt: null });
+  const doc = await fillDefs({ set: { ...set, grade: schoolSetGrade(level, set.lang) }, defs, schoolId, updatedAt: now });
+  registerWordSet(doc.set, doc.defs);
+  return rowOf(doc);
 }
 
 export async function deleteSchoolSet(id: string, schoolId: string): Promise<void> {

@@ -6,7 +6,7 @@ import { cleanLevels, cleanCurriculum, curriculumAllows } from "@/lib/school-lev
 import { isPilotTopicId } from "@/lib/pilot-topics";
 import { pilotAllows } from "@/lib/pilot-access";
 import { isSchoolSetId } from "@/lib/school-set-ids";
-import { getSchoolSetDoc, requestSchool } from "@/lib/school-sets";
+import { getSchoolSetDoc, completeSchoolSetDefs, requestSchool } from "@/lib/school-sets";
 
 /**
  * GET /api/curriculum-set?id=cur-xxxxxxxxxx   (Bearer: a school account)
@@ -26,8 +26,10 @@ export async function GET(req: NextRequest) {
     const who = await requestSchool(req);
     if (!who) return NextResponse.json({ error: "login_required" }, { status: 401 });
     if (!who.schoolId) return NextResponse.json({ error: "schools_only" }, { status: 403 });
-    const own = await getSchoolSetDoc(id);
-    if (!own || own.schoolId !== who.schoolId) return NextResponse.json({ error: "not_found" }, { status: 404 });
+    const found = await getSchoolSetDoc(id);
+    if (!found || found.schoolId !== who.schoolId) return NextResponse.json({ error: "not_found" }, { status: 404 });
+    // Definitions a failed save left out are written now (at most once in 10 minutes).
+    const own = await completeSchoolSetDefs(found);
     return NextResponse.json({ set: own.set, defs: own.defs }, { headers: { "Cache-Control": "private, no-store" } });
   }
   const catalog = catalogOfTopic(id);

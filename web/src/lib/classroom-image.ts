@@ -28,10 +28,11 @@ export { classroomImageKey } from "@/lib/classroom-keys";
 
 const SITE = "https://www.gadit.app";
 
-export function classroomStyle(set: Pick<WordSet, "id">): ClassroomStyle {
-  const l = topicLevel(set.id);
+export function classroomStyle(set: Pick<WordSet, "id"> & { level?: string }): ClassroomStyle {
+  // A school's own set carries its level ("elementary" / "secondary").
+  const l = topicLevel(set.id) ?? set.level ?? getWordSet(set.id)?.level;
   if (!l) return "kids"; // the hand-made sets are all elementary
-  return l === "middle" || l === "high" || l === "senior" ? "teen" : "kids";
+  return l === "middle" || l === "high" || l === "senior" || l === "secondary" ? "teen" : "kids";
 }
 
 /** Gemara terms that never get an automatic picture (Gemara phase A,

@@ -543,6 +543,21 @@ const PREPARING_PICTURE_COPY: Record<string, string> = {
   hu: "Készítjük a képet...",
 };
 
+// The unit's own meaning above the dictionary's, for a word opened from a
+// unit (Gadi 2026-10-17: "דמות" from a theatre unit opened on the dictionary's
+// first sense, the outward look, which has nothing to do with the lesson).
+const LESSON_SENSE_COPY: Record<string, string> = {
+  en: "In this lesson", he: "במשמעות של השיעור", ar: "في هذا الدرس", ru: "В этом уроке", es: "En esta lección",
+  pt: "Nesta lição", fr: "Dans cette leçon", de: "In dieser Lektion", cs: "V této lekci", sk: "V tejto lekcii",
+  it: "In questa lezione", ja: "このレッスンでは", hi: "इस पाठ में", am: "በዚህ ትምህርት", uk: "У цьому уроці",
+  tr: "Bu derste", pl: "W tej lekcji", fa: "در این درس", id: "Dalam pelajaran ini", nl: "In deze les",
+  el: "Σε αυτό το μάθημα", zu: "Kulesi sifundo", xh: "Kwesi sifundo", nso: "Thutong ye", tn: "Mo thutong e",
+  st: "Thutong ena", ts: "Eka dyondzo leyi", ss: "Kulesifundvo", ve: "Kha ngudo iyi", nr: "Esifundweni lesi",
+  vi: "Trong bài học này", fil: "Sa araling ito", af: "In hierdie les", sw: "Katika somo hili",
+  "zh-CN": "在这节课中", "zh-TW": "在這堂課中", ko: "이 수업에서", th: "ในบทเรียนนี้", bn: "এই পাঠে",
+  da: "I denne lektion", hu: "Ebben a leckében",
+};
+
 function pick<T>(map: Record<string, T>, lang: string): T {
   return map[lang] ?? map.en;
 }
@@ -2540,7 +2555,26 @@ export function WordClient({
             onSearch={(q) => router.push(href(`/word/${encodeURIComponent(q)}?present=1`))}
             progress={classProgress}
           />
+        ) : classroomMode && isCurriculumSetId(setId) && !wordSet && curFailed !== setId ? (
+          // The projector waits for its unit, so the class never sees the
+          // dictionary's first sense before the unit's own (2026-10-17).
+          null
         ) : result ? (
+          <>
+          {(() => {
+            const lessonDef = wordSet ? classroomDef(setId, initialWord, currentM) : undefined;
+            if (!lessonDef) return null;
+            return (
+              <div dir={dir} style={{ maxWidth: 880, margin: "0 auto 12px", padding: "0 20px" }}>
+                <div style={{ background: "var(--card,#fff)", border: "1.5px solid var(--teal,#0EA5A5)", borderRadius: 16, padding: "14px 18px" }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--teal-deep,#0A7472)", marginBottom: 4 }}>
+                    {pick(LESSON_SENSE_COPY, lang)}{wordSet?.title ? ` · ${wordSet.title}` : ""}
+                  </div>
+                  <div style={{ fontSize: 17, lineHeight: 1.5, color: "var(--ink,#111827)" }}>{lessonDef}</div>
+                </div>
+              </div>
+            );
+          })()}
           <ResultView
             result={displayResult ?? result}
             streaming={loading}
@@ -2578,6 +2612,7 @@ export function WordClient({
               });
             }}
           />
+          </>
         ) : null}
 
         {/* HomeFooter intentionally omitted on /word pages, the V2

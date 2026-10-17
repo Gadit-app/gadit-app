@@ -7,7 +7,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import type { Lang } from "@/lib/i18n";
 import { registerWordSet, type WordSet } from "@/lib/word-sets";
-import { isSchoolSetId, splitSetWords, SCHOOL_SET_MAX_WORDS, SCHOOL_SET_MAX_SETS, SCHOOL_SET_TITLE_MAX } from "@/lib/school-set-ids";
+import { isSchoolSetId, splitSetWords, cleanSetLevel, SCHOOL_SET_LEVELS, SCHOOL_SET_MAX_WORDS, SCHOOL_SET_MAX_SETS, SCHOOL_SET_TITLE_MAX, type SchoolSetLevel } from "@/lib/school-set-ids";
 import { OUR_SETS_COPY, fillCopy, type OurSetsCopy } from "./our-sets-copy";
 
 /**
@@ -17,10 +17,14 @@ import { OUR_SETS_COPY, fillCopy, type OurSetsCopy } from "./our-sets-copy";
  * or by the lesson topic; the list stays editable until it is saved. A saved
  * set opens on the projector exactly like a ready set (?present=1&set=<id>):
  * same word page, picture, examples, class quiz and game. Stored per school
- * via /api/school-sets. In the viewer's UI language (every UI language).
+ * via /api/school-sets, with its own definition for every word (written when
+ * the set is saved) and a level, elementary or middle and high school, that
+ * sets the pictures, definitions, examples and class quiz. In the viewer's UI
+ * language (every UI language).
  */
 
-type Editor = { id?: string; title: string; text: string };
+type Editor = { id?: string; title: string; text: string; level: SchoolSetLevel };
+type OurSet = WordSet & { defs?: Record<string, string> };
 type Busy = "" | "photo" | "topic" | "save" | "delete";
 
 /** The projector's close button returns here, with this set open
@@ -49,7 +53,8 @@ export default function OurSets() {
   const href = useHref();
   const c = OUR_SETS_COPY[lang as Lang] ?? OUR_SETS_COPY.en;
 
-  const [sets, setSets] = useState<WordSet[] | null>(null);
+  const [sets, setSets] = useState<OurSet[] | null>(null);
+  const [defaultLevel, setDefaultLevel] = useState<SchoolSetLevel>("elementary");
   const [open, setOpen] = useState("");
   const [editor, setEditor] = useState<Editor | null>(null);
   const [confirmDel, setConfirmDel] = useState("");
@@ -66,10 +71,12 @@ export default function OurSets() {
     user.getIdToken()
       .then((tk) => fetch("/api/school-sets", { headers: { Authorization: `Bearer ${tk}` }, cache: "no-store" }))
       .then((r) => (r.ok ? r.json() : { sets: [] }))
-      .then((j: { sets?: WordSet[] }) => {
+      .then((j: { sets?: OurSet[]; defaultLevel?: string }) => {
         if (!alive) return;
         const list = Array.isArray(j.sets) ? j.sets : [];
-        for (const s of list) registerWordSet(s, {});
+        // With the set's own definitions, so the projector shows them (classroomDef).
+        for (const s of list) registerWordSet(s, s.defs ?? {});
+        setDefaultLevel(cleanSetLevel(j.defaultLevel));
         setSets(list);
         try {
           const r = JSON.parse(sessionStorage.getItem(SETS_RETURN_KEY) || "null") as { setId?: string } | null;
@@ -149,15 +156,15 @@ export default function OurSets() {
       const r = await authed("/api/school-sets", {
         method: editor.id ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...(editor.id ? { id: editor.id } : {}), title, words }),
+        body: JSON.stringify({ ...(editor.id ? { id: editor.id } : {}), title, words, level: editor.level }),
       });
-      const j = (await r.json().catch(() => ({}))) as { set?: WordSet; error?: string };
+      const j = (await r.json().catch(() => ({}))) as { set?: OurSet; error?: string };
       if (!r.ok || !j.set) {
         setMsg({ text: j.error === "too_many_sets" ? fillCopy(c.limit, { max: SCHOOL_SET_MAX_SETS }) : j.error === "too_many_words" ? fillCopy(c.tooMany, { max: SCHOOL_SET_MAX_WORDS }) : c.err, bad: true });
         return;
       }
       const set = j.set;
-      registerWordSet(set, {});
+      registerWordSet(set, set.defs ?? {});
       setSets((list) => (editor.id ? (list ?? []).map((s) => (s.id === set.id ? set : s)) : [set, ...(list ?? [])]));
       setOpen(set.id);
       closeEditor();
@@ -207,7 +214,7 @@ export default function OurSets() {
           {sets.length > 0 && <span className="os-count">{sets.length}</span>}
         </h2>
         {!editor && (
-          <button type="button" className="os-new" disabled={atLimit} title={atLimit ? fillCopy(c.limit, { max: SCHOOL_SET_MAX_SETS }) : undefined} onClick={() => startEditor({ title: "", text: "" })}>
+          <button type="button" className="os-new" disabled={atLimit} title={atLimit ? fillCopy(c.limit, { max: SCHOOL_SET_MAX_SETS }) : undefined} onClick={() => startEditor({ title: "", text: "", level: defaultLevel })}>
             <PlusIcon /> {c.create}
           </button>
         )}
@@ -218,6 +225,16 @@ export default function OurSets() {
           <label className="os-label" htmlFor="os-name">{c.nameLabel}</label>
           <input id="os-name" className="os-input" dir={dir} value={editor.title} maxLength={SCHOOL_SET_TITLE_MAX} placeholder={c.namePh}
             onChange={(e) => { setEditor({ ...editor, title: e.target.value }); setMsg(null); }} />
+
+          <span className="os-label" id="os-level">{c.levelLabel}</span>
+          <div className="os-levels" role="radiogroup" aria-labelledby="os-level">
+            {SCHOOL_SET_LEVELS.map((l) => (
+              <button key={l} type="button" role="radio" aria-checked={editor.level === l} className={"os-level" + (editor.level === l ? " on" : "")}
+                onClick={() => setEditor({ ...editor, level: l })}>
+                {l === "secondary" ? c.secondary : c.elementary}
+              </button>
+            ))}
+          </div>
 
           <label className="os-label" htmlFor="os-words">{c.wordsLabel}</label>
           <textarea id="os-words" className="os-input os-text" dir={dir} rows={7} value={editor.text} placeholder={c.wordsPh}
@@ -248,7 +265,7 @@ export default function OurSets() {
 
           <div className="os-actions">
             <button type="button" className="os-save" disabled={!!busy} onClick={() => void save()}>
-              {busy === "save" ? <span className="os-spin light" aria-hidden /> : null} {busy === "save" ? c.saving : c.save}
+              {busy === "save" ? <span className="os-spin light" aria-hidden /> : null} {busy === "save" ? c.savingDefs : c.save}
             </button>
             <button type="button" className="os-cancel" disabled={busy === "save"} onClick={closeEditor}>{c.cancel}</button>
           </div>
@@ -267,6 +284,7 @@ export default function OurSets() {
               <li key={set.id} className={"os-row" + (isOpen ? " open" : "")}>
                 <button type="button" className="os-row-head" aria-expanded={isOpen} onClick={() => { setOpen(isOpen ? "" : set.id); setConfirmDel(""); }}>
                   <span className="os-row-title">{set.title}</span>
+                  <span className="os-row-level">{set.level === "secondary" ? c.secondary : c.elementary}</span>
                   <span className="os-row-meta">{wordsN(c, lang, set.words.length)}</span>
                   <Chevron down={isOpen} rtl={dir === "rtl"} />
                 </button>
@@ -284,7 +302,7 @@ export default function OurSets() {
                         </Link>
                       )}
                       <span className="os-row-tools">
-                        <button type="button" className="os-link" disabled={!!busy || !!editor} onClick={() => startEditor({ id: set.id, title: set.title, text: set.words.join("\n") })}>{c.edit}</button>
+                        <button type="button" className="os-link" disabled={!!busy || !!editor} onClick={() => startEditor({ id: set.id, title: set.title, text: set.words.join("\n"), level: cleanSetLevel(set.level) })}>{c.edit}</button>
                         <button type="button" className="os-link danger" disabled={!!busy} onClick={() => setConfirmDel(confirmDel === set.id ? "" : set.id)}>{c.del}</button>
                       </span>
                     </div>
@@ -383,6 +401,11 @@ const CSS = `
 .os-row-head{width:100%;display:flex;align-items:center;gap:10px;padding:13px 14px;border:none;background:none;font:inherit;color:var(--ink);cursor:pointer;text-align:start}
 .os-row-head:hover .os-row-title{color:var(--c)}
 .os-row-title{flex:1;min-width:0;font-weight:700;font-size:15.5px;line-height:1.4}
+.os-levels{display:inline-flex;gap:4px;align-self:flex-start;background:var(--paper-deep,#EEF2F1);padding:4px;border-radius:12px;flex-wrap:wrap}
+.os-level{border:1px solid transparent;background:transparent;font:inherit;font-size:14.5px;font-weight:700;color:var(--ink-soft);padding:7px 14px;border-radius:9px;cursor:pointer}
+.os-level:hover{color:var(--ink)}
+.os-level.on{background:var(--surface);color:var(--c);border-color:color-mix(in srgb,var(--c) 35%,var(--rule));box-shadow:0 1px 3px rgba(11,18,32,.1)}
+.os-row-level{flex-shrink:0;font-size:12px;font-weight:700;color:var(--c);background:color-mix(in srgb,var(--c) 8%,#fff);border:1px solid color-mix(in srgb,var(--c) 20%,#fff);border-radius:7px;padding:1px 8px}
 .os-row-meta{flex-shrink:0;font-size:12.5px;font-weight:700;color:var(--ink-faint);background:var(--paper);border-radius:7px;padding:2px 8px}
 .os-row-body{padding:0 14px 14px;display:flex;flex-direction:column;gap:12px}
 .os-chips{display:flex;flex-wrap:wrap;gap:6px}
