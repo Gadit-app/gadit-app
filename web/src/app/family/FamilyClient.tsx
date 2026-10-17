@@ -33,6 +33,7 @@ import { LANGUAGES } from "@/lib/i18n";
 import { FamilySetupChecklist } from "./FamilySetupChecklist";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { CoachesSection } from "@/components/design/CoachesSection";
+import { FamilyLeaderboard } from "@/components/design/FamilyLeaderboard";
 import { enableOwnerPush, disableOwnerPush, hasLocalPushSubscription } from "@/lib/push-client";
 import { db } from "@/lib/firebase";
 import {
@@ -2507,6 +2508,8 @@ export function FamilyClient() {
                   <Link href={href("/family/add")} className="wb-family-cta">{c.add}</Link>
                 </div>
               )}
+              {/* Family leaderboard (Gadi 2026-10-17): parents and kids on one board. */}
+              <FamilyLeaderboard lang={lang} dir={dir} />
               <ActivityFeed user={user} lang={lang} dir={dir} />
             </div>
           )}

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { isPilotTopicId } from "@/lib/pilot-topics";
+import { isSchoolSetId } from "@/lib/school-set-ids";
+import { schoolSetGate } from "@/lib/school-sets";
 
 /**
  * Who may open a pilot unit (Gemara phase B, 2026-10-15): an explicit list of
@@ -34,6 +36,8 @@ export async function pilotAllowsUser(id: string, uid: string): Promise<boolean>
  * unit needs a signed-in user (401) whose school is on the list (else 404).
  */
 export async function pilotGate(req: Request, setId: string | null | undefined): Promise<NextResponse | null> {
+  // A school's own set (2026-10-17): a signed-in member of that school only.
+  if (isSchoolSetId(setId)) return schoolSetGate(req, setId);
   if (!isPilotTopicId(setId)) return null;
   const h = req.headers.get("Authorization") || "";
   const token = h.startsWith("Bearer ") ? h.slice(7) : "";

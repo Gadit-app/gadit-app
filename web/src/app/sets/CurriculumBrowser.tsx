@@ -13,6 +13,7 @@ import {
   CATALOG_IDS, catalogView, readySetsOf, subjectIcon, categoryIcon,
   type CatalogId, type CatalogView, type ViewSubject, type ViewTopic,
 } from "@/lib/curriculum-catalog";
+import OurSets from "./OurSets";
 
 /**
  * /sets: the national curriculum of the school (Gadi 2026-10-03/04). The
@@ -264,7 +265,11 @@ export default function CurriculumBrowser({ legacy }: { legacy?: ReactNode }) {
       <main className="cb-main">
         <CatCtx.Provider value={{ view, T, allowed }}>
           {!school ? null : !allowed.length ? (
-            <SchoolTypePicker T={pickUi} uiLang={uiOf(lang)} owner={school.owner} onSet={(levels, curriculum) => setSchool({ ...school, levels, curriculum })} />
+            <>
+              {/* A teacher's own sets don't wait for the school type (2026-10-17). */}
+              <OurSets />
+              <SchoolTypePicker T={pickUi} uiLang={uiOf(lang)} owner={school.owner} onSet={(levels, curriculum) => setSchool({ ...school, levels, curriculum })} />
+            </>
           ) : subject ? (
             <SubjectView
               subject={subject}
@@ -325,6 +330,9 @@ function HomeView(props: {
         <br />
         {T.sub2}
       </p>
+
+      {/* The school's own sets first (Gadi 2026-10-17). */}
+      <OurSets />
 
       <div className="cb-search">
         <SearchIcon />

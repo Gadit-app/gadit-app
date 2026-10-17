@@ -8,6 +8,7 @@ import type { WordSet, SetItem, SetDiagram } from "@/lib/word-sets";
 import { NiqqudProvider, NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
 import { useAuth } from "@/lib/auth-context";
 import { isPilotTopicId } from "@/lib/pilot-topics";
+import { isSchoolSetId } from "@/lib/school-set-ids";
 
 /**
  * The teacher's projector screen for a word-set word (Gadi 2026-10-03:
@@ -196,7 +197,10 @@ function StageInner({
   // A real meaning of the unit (not an older word of a mixed unit).
   const isMeaning = !!m && !!items?.some((i) => i.m === m && i.k !== "word");
   const { user: authUser } = useAuth();
-  const pilotUser = pilot ? authUser : null;
+  // A school's own set asks with the token too (only its school may open it),
+  // and its quiz and game are generated like any unit's.
+  const withToken = pilot || isSchoolSetId(set.id);
+  const pilotUser = withToken ? authUser : null;
   const loadActivity = useCallback(async () => {
     if (preview) { setActivity(preview); setActState("ready"); return; }
     setActState("loading");
@@ -205,7 +209,7 @@ function StageInner({
       if (m) p.set("m", m);
       const headers: Record<string, string> = {};
       if (pilotUser) headers.Authorization = `Bearer ${await pilotUser.getIdToken()}`;
-      const r = await fetch(`/api/class-activity?${p.toString()}`, pilot ? { headers } : undefined);
+      const r = await fetch(`/api/class-activity?${p.toString()}`, withToken ? { headers } : undefined);
       // A meaning (or a pilot word) whose quiz and game are not approved yet:
       // nothing to run, the buttons stay off (phase C: in every unit).
       if ((pilot || isMeaning) && r.status === 404) { setActivity({ quiz: [], game: [] }); setActState("ready"); return; }
@@ -216,7 +220,7 @@ function StageInner({
     } catch {
       setActState("error");
     }
-  }, [set.id, word, definition, m, pilot, pilotUser, preview, isMeaning]);
+  }, [set.id, word, definition, m, pilot, withToken, pilotUser, preview, isMeaning]);
 
   // Prepare the activities as soon as the word is on screen, so the
   // buttons open instantly when the teacher taps them.

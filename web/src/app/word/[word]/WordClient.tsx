@@ -35,6 +35,7 @@ import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { getWordSet, classroomDef, registerWordSet, isCurriculumSetId, isGemaraSet, setItems, type WordSet, type SetExtras } from "@/lib/word-sets";
 import { isPilotTopicId } from "@/lib/pilot-topics";
+import { isSchoolSetId } from "@/lib/school-set-ids";
 import type { ClassroomQuote } from "@/components/classroom/ClassroomStage";
 import { AppearancePicker } from "@/components/AppearancePicker";
 import VoiceInput from "@/components/VoiceInput";
@@ -1742,8 +1743,9 @@ export function WordClient({
     if (setId) params.set("set", setId);
     if (meaning) params.set("meaning", meaning);
     if (currentM) params.set("m", currentM);
-    // A pilot unit (Gemara phase B) asks with the teacher's token; other units as before.
-    const pilot = isPilotTopicId(setId);
+    // A pilot unit (Gemara phase B) and a school's own set ask with the
+    // teacher's token; other units as before.
+    const pilot = isPilotTopicId(setId) || isSchoolSetId(setId);
     (pilot && user ? user.getIdToken().then((t) => fetch(`/api/classroom-examples?${params.toString()}`, { headers: { Authorization: `Bearer ${t}` } })) : fetch(`/api/classroom-examples?${params.toString()}`))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: { examples?: string[]; quote?: ClassroomQuote } | null) => {
@@ -1759,7 +1761,7 @@ export function WordClient({
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [classroomMode, initialWord, setId, result, gemaraStage, currentM, isPilotTopicId(setId) ? user : null]);
+  }, [classroomMode, initialWord, setId, result, gemaraStage, currentM, isPilotTopicId(setId) || isSchoolSetId(setId) ? user : null]);
 
   // ── Action handlers ───────────────────────────────────────────
   async function handleGenerate(opts?: { meaning?: string; example?: string; silent?: boolean }) {

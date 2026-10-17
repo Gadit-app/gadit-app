@@ -45,7 +45,7 @@ const FEATURE_HE: Record<string, string> = {
   tashkeel_arabic: "ניקוד ערבי", backfill_gloss: "השלמת תרגום",
   word_idioms: "ניבים וצירופים", word_question: "שאלות על מילה", passage_words: "מילים חשובות בקטע",
   spell_set: "תרגול הכתבה", spell_set_list: "רשימת הכתבה", etymology_fallback: "מקור המילה",
-  kids: "הסבר לילדים", notebook: "מחברת",
+  kids: "הסבר לילדים", notebook: "מחברת", school_set_words: "מילים לסט של בית ספר",
 };
 
 export async function GET(req: NextRequest) {

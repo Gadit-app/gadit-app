@@ -7,6 +7,8 @@ import { curTopic, curSubject, curLevelHe, gradeLabel, SUBJECT_LANG, zaTopic, ar
 import zaSets from "@/lib/curriculum-sets-za.json";
 import { isPilotTopicId } from "@/lib/pilot-topics";
 import { mergeMixed } from "@/lib/mixed-units";
+import { isSchoolSetId } from "@/lib/school-set-ids";
+import { getSchoolSetDoc } from "@/lib/school-sets";
 
 // Server side of the curriculum catalog (Gadi 2026-10-03). A topic's key
 // words and their in-lesson definitions are generated once with gpt-4o the
@@ -223,6 +225,11 @@ function readExtras(raw: Record<string, unknown>): SetExtras {
 const LEVELS = new Set(["beg", "adv", "yes"]);
 
 export async function getCurriculumSetDoc(id: string, create = false, admin = false): Promise<CurriculumSetDoc | null> {
+  // A school's own set (schoolSets/{id}, lib/school-sets.ts): words only, never generated.
+  if (isSchoolSetId(id)) {
+    const own = await getSchoolSetDoc(id);
+    return own ? { set: own.set, defs: own.defs } : null;
+  }
   const isZa = id.startsWith("cur-za-");
   // A pilot unit exists only from its imported document and is never generated.
   const pilot = isPilotTopicId(id);
@@ -272,6 +279,8 @@ export async function loadWordSet(id: string): Promise<WordSet | undefined> {
  *  A locked unit (approved content) is saved only with `force`; a unit that
  *  lists meanings (`items`) is managed by script, never by this editor. */
 export async function saveCurriculumSet(id: string, rows: Array<{ w: string; d: string }>, opts: { force?: boolean } = {}): Promise<CurriculumSetDoc | null> {
+  // A school's own set is changed only by that school (/api/school-sets).
+  if (isSchoolSetId(id)) return null;
   const cur = await getCurriculumSetDoc(id, true, true);
   if (!cur) return null;
   if (cur.items) throw new Error("items_managed");

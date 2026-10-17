@@ -1086,6 +1086,9 @@ function MeaningEntry({
                   src={imageUrl}
                   alt={word}
                   closeLabel={v2(lang, "backLabel")}
+                  shareLabel={v2(lang, "shareLabel")}
+                  word={word}
+                  pageUrl={typeof window !== "undefined" ? `${window.location.origin}${window.location.pathname}` : undefined}
                   onClose={() => setLightboxOpen(false)}
                 />
               )}
