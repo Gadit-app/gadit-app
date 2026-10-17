@@ -14948,6 +14948,7 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
 .wordbook .wb-kids-mini-track { position: relative; width: 32px; height: 18px; border-radius: 999px; background: var(--rule, #CBD5E1); flex: none; transition: background 160ms; }
 .wordbook .wb-kids-mini-track span { position: absolute; top: 2px; inset-inline-start: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(15, 23, 42, .3); transition: inset-inline-start 160ms; }
 .wordbook .wb-kids-mini.is-on { color: var(--ink, #0f172a); border-color: color-mix(in srgb, var(--accent, #0EA5A5) 50%, transparent); background: color-mix(in srgb, var(--accent, #0EA5A5) 10%, var(--surface, #fff)); }
+.wordbook .wb-kids-mini:not(.is-on) img { filter: saturate(.55); opacity: .8; }
 .wordbook .wb-kids-mini.is-on img { filter: none; }
 .wordbook .wb-kids-mini.is-on .wb-kids-mini-track { background: var(--accent, #0EA5A5); }
 .wordbook .wb-kids-mini.is-on .wb-kids-mini-track span { inset-inline-start: 16px; }
@@ -14988,7 +14989,9 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
   display: inline-flex; align-items: center; gap: 6px; margin: 0 0 12px; padding: 6px 2px; background: none; border: none;
   font-family: inherit; font-size: 14px; font-weight: 700; color: #0A7472; cursor: pointer;
 }
-html[data-theme="dark"] .wb-hw-tonight-k, html[data-theme="dark"] .wb-hw-back, html[data-theme="space"] .wb-hw-tonight-k, html[data-theme="space"] .wb-hw-back, html[data-theme="ocean"] .wb-hw-tonight-k, html[data-theme="ocean"] .wb-hw-back, html[data-theme="jungle"] .wb-hw-tonight-k, html[data-theme="jungle"] .wb-hw-back, html[data-theme="neon"] .wb-hw-tonight-k, html[data-theme="neon"] .wb-hw-back, html[data-theme="sunset"] .wb-hw-tonight-k, html[data-theme="sunset"] .wb-hw-back, html[data-theme="aurora"] .wb-hw-tonight-k, html[data-theme="aurora"] .wb-hw-back, html[data-theme="cosmos"] .wb-hw-tonight-k, html[data-theme="cosmos"] .wb-hw-back, html[data-theme="lava"] .wb-hw-tonight-k, html[data-theme="lava"] .wb-hw-back, html[data-theme="royal"] .wb-hw-tonight-k, html[data-theme="royal"] .wb-hw-back { color: #5EEAD4; }
+html[data-theme="dark"] .wb-hw-tonight-k, html[data-theme="dark"] .wb-hw-back { color: #5EEAD4; }
+/* Kid skins: the deep teal each skin derives for its own ground (Gadi 2026-10-17: the fixed light mint read faint on light skins). */
+html[data-theme="space"] .wb-hw-tonight-k, html[data-theme="space"] .wb-hw-back, html[data-theme="ocean"] .wb-hw-tonight-k, html[data-theme="ocean"] .wb-hw-back, html[data-theme="jungle"] .wb-hw-tonight-k, html[data-theme="jungle"] .wb-hw-back, html[data-theme="neon"] .wb-hw-tonight-k, html[data-theme="neon"] .wb-hw-back, html[data-theme="sunset"] .wb-hw-tonight-k, html[data-theme="sunset"] .wb-hw-back, html[data-theme="aurora"] .wb-hw-tonight-k, html[data-theme="aurora"] .wb-hw-back, html[data-theme="cosmos"] .wb-hw-tonight-k, html[data-theme="cosmos"] .wb-hw-back, html[data-theme="lava"] .wb-hw-tonight-k, html[data-theme="lava"] .wb-hw-back, html[data-theme="royal"] .wb-hw-tonight-k, html[data-theme="royal"] .wb-hw-back { color: var(--teal-deep, #0A7472); }
 @media (max-width: 420px) {
   .wb-hw-card { padding: 14px 12px; }
   .wb-hw-card-t { font-size: 15px; }
@@ -15067,6 +15070,8 @@ html[data-theme="dark"] .wb-hw-add-btn, html[data-theme="space"] .wb-hw-add-btn,
 .wb-learn-simple-go:disabled { opacity: .6; cursor: default; }
 .wb-learn-simple-go:focus-visible, .wb-learn-simple-link:focus-visible, .wb-dict-mode:focus-visible, .wb-dict-change:focus-visible { outline: 2px solid #0A7472; outline-offset: 2px; }
 .wb-learn-simple-link { align-self: center; background: none; border: 0; padding: 4px 6px; font: inherit; font-size: 14.5px; font-weight: 700; color: #0A7472; cursor: pointer; }
+/* "All lessons" reads as a button, not loose text (Gadi 2026-10-17): a rounded outline. */
+.wb-learn-simple-link:not(.is-quiet) { border: 1.5px solid currentColor; border-radius: 999px; padding: 8px 20px; }
 .wb-learn-simple-link.is-quiet { font-weight: 500; color: var(--ink-muted, #6B7280); }
 .wb-dict-setup { display: flex; flex-direction: column; gap: 12px; background: var(--surface, #fff); border: 1px solid var(--hairline, #E5E7EB); border-radius: 16px; padding: 18px 16px; }
 .wb-dict-setup .wb-hw-intake-save { align-self: flex-start; margin-top: 6px; }
@@ -15076,7 +15081,9 @@ html[data-theme="dark"] .wb-hw-add-btn, html[data-theme="space"] .wb-hw-add-btn,
 .wb-dict-mode { border: 0; background: transparent; border-radius: 999px; padding: 5px 10px; font: inherit; font-size: 12.5px; font-weight: 700; color: var(--ink-muted, #6B7280); cursor: pointer; }
 .wb-dict-mode.is-on { background: var(--surface, #fff); color: var(--ink, #0B1220); box-shadow: 0 1px 2px rgba(15, 23, 42, .15); }
 .wb-dict-change { border: 0; background: none; padding: 4px 2px; font: inherit; font-size: 13px; font-weight: 700; color: #0A7472; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
-html[data-theme="dark"] .wb-learn-simple-link, html[data-theme="dark"] .wb-dict-change, html[data-theme="space"] .wb-learn-simple-link, html[data-theme="space"] .wb-dict-change, html[data-theme="ocean"] .wb-learn-simple-link, html[data-theme="ocean"] .wb-dict-change, html[data-theme="jungle"] .wb-learn-simple-link, html[data-theme="jungle"] .wb-dict-change, html[data-theme="neon"] .wb-learn-simple-link, html[data-theme="neon"] .wb-dict-change, html[data-theme="sunset"] .wb-learn-simple-link, html[data-theme="sunset"] .wb-dict-change, html[data-theme="aurora"] .wb-learn-simple-link, html[data-theme="aurora"] .wb-dict-change, html[data-theme="cosmos"] .wb-learn-simple-link, html[data-theme="cosmos"] .wb-dict-change, html[data-theme="lava"] .wb-learn-simple-link, html[data-theme="lava"] .wb-dict-change, html[data-theme="royal"] .wb-learn-simple-link, html[data-theme="royal"] .wb-dict-change { color: #5EEAD4; }
+html[data-theme="dark"] .wb-learn-simple-link, html[data-theme="dark"] .wb-dict-change { color: #5EEAD4; }
+/* Kid skins: the deep teal each skin derives for its own ground (Gadi 2026-10-17: the fixed light mint read faint on light skins). */
+html[data-theme="space"] .wb-learn-simple-link, html[data-theme="space"] .wb-dict-change, html[data-theme="ocean"] .wb-learn-simple-link, html[data-theme="ocean"] .wb-dict-change, html[data-theme="jungle"] .wb-learn-simple-link, html[data-theme="jungle"] .wb-dict-change, html[data-theme="neon"] .wb-learn-simple-link, html[data-theme="neon"] .wb-dict-change, html[data-theme="sunset"] .wb-learn-simple-link, html[data-theme="sunset"] .wb-dict-change, html[data-theme="aurora"] .wb-learn-simple-link, html[data-theme="aurora"] .wb-dict-change, html[data-theme="cosmos"] .wb-learn-simple-link, html[data-theme="cosmos"] .wb-dict-change, html[data-theme="lava"] .wb-learn-simple-link, html[data-theme="lava"] .wb-dict-change, html[data-theme="royal"] .wb-learn-simple-link, html[data-theme="royal"] .wb-dict-change { color: var(--teal-deep, #0A7472); }
 
 /* Listen and pick (Gadi 2026-10-12): the word plays, three big answers. */
 .wb-pick { display: flex; flex-direction: column; align-items: center; gap: 18px; background: var(--surface, #fff); border: 1px solid var(--hairline, #E5E7EB); border-radius: 18px; padding: 26px 18px 22px; }
@@ -15103,9 +15110,11 @@ html[data-theme="dark"] .wb-learn-simple-link, html[data-theme="dark"] .wb-dict-
 
 /* Report a mistake in a question (Gadi 2026-10-12): a quiet flag, one tap. */
 .wb-report-q { position: relative; display: inline-flex; align-items: center; vertical-align: middle; }
-.wb-report-q-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--hairline, #E5E7EB); background: transparent; color: var(--ink-muted, #6B7280); display: inline-grid; place-items: center; cursor: pointer; padding: 0; }
-.wb-report-q-btn:hover { color: #B45309; border-color: rgba(180, 83, 9, .35); }
-.wb-report-q-btn:disabled { color: #0E8A5F; border-color: rgba(14, 138, 95, .35); cursor: default; }
+.wb-report-q-btn { height: 30px; padding: 0 11px 0 9px; border-radius: 999px; border: 1.5px solid rgba(180, 83, 9, .45); background: #FFF7E8; color: #92400E; display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: 13px; font-weight: 700; line-height: 1; white-space: nowrap; cursor: pointer; }
+.wb-report-q-btn:hover { background: #FFEFCF; border-color: rgba(180, 83, 9, .7); }
+.wb-report-q-btn:focus-visible { outline: 2px solid #B45309; outline-offset: 2px; }
+@media (max-width: 360px) { .wb-report-q-label { display: none; } .wb-report-q-btn { padding: 0 8px; } }
+.wb-report-q-btn:disabled { color: #0E8A5F; background: #ECFDF5; border-color: rgba(14, 138, 95, .45); cursor: default; }
 .wb-report-q-thanks { position: absolute; top: calc(100% + 6px); inset-inline-end: 0; z-index: 30; white-space: nowrap; background: #0F172A; color: #fff; font-size: 12.5px; font-weight: 600; border-radius: 8px; padding: 6px 10px; box-shadow: 0 6px 16px rgba(0,0,0,.18); }
 
 /* One look across the kids' tools (Gadi 2026-10-12): Homework uses the game cards, with pictures in the same style. */
@@ -15163,4 +15172,62 @@ html[data-theme="dark"] .wordbook .wb-home-search-input::placeholder, html[data-
   .wordbook .wb-shell-lang-mobile-trigger.is-compact { padding: 0 6px; min-width: 34px; justify-content: center; }
   .wordbook .wb-shell-topbar .wb-skin-dd-trigger > svg { display: none; }
   .wordbook .wb-shell-topbar .wb-skin-dd-trigger { padding: 7px 8px; }
+}
+
+/* Word header on a phone (Gadi 2026-10-17, a subscriber with a larger phone
+   font saw "משמעת" broken into "משמע / ת"): the speaker sits above the share
+   button, the niqqud button beside them, and the word gets the rest of the row
+   and is never broken mid-word. display:contents lets the title, the speaker and
+   the niqqud button take places in the header's own grid. */
+@media (max-width: 640px) {
+  .wordbook .wb-word-head { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 8px; row-gap: 4px; align-items: center; }
+  .wordbook .wb-word-head > .wb-word-head-main, .wordbook .wb-word-head-main > .wb-word-title-row { display: contents; }
+  .wordbook .wb-word-head .wb-word-meta { grid-column: 1 / -1; grid-row: 1; }
+  .wordbook .wb-word-head .wb-word-title { grid-column: 1; grid-row: 2 / span 2; overflow-wrap: break-word; word-break: normal; }
+  .wordbook .wb-word-head .wb-niqqud-btn { grid-column: 2; grid-row: 2 / span 2; }
+  .wordbook .wb-word-head .wb-word-listen-btn { grid-column: 3; grid-row: 2; justify-self: center; }
+  .wordbook .wb-word-head .wb-word-actions { grid-column: 3; grid-row: 3; justify-self: center; flex-direction: column; margin: 0; }
+  .wordbook .wb-word-head .wb-word-translation { grid-column: 1 / -1; grid-row: 4; }
+}
+
+/* Word page: the optional sentence under the persistent search bar
+   (Gadi 2026-10-17). One line like the word field, grows down as it
+   fills, the user can drag it taller. Quieter than the pill above. */
+.wordbook .wb-word-searchform {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.wordbook .wb-word-sentence-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--surface);
+  border: 1px solid var(--rule, #E5E7EB);
+  border-radius: 23px;
+  padding: 11px 16px;
+  min-height: 46px;
+  max-height: 160px;
+  font-family: var(--wb-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink, #111827);
+  resize: vertical;
+  outline: none;
+  overflow-y: auto;
+  transition: border-color 160ms, box-shadow 160ms;
+}
+.wordbook .wb-word-sentence-input::placeholder {
+  color: var(--ink-faint, #9CA3AF);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wordbook .wb-word-sentence-input:focus {
+  border-color: rgba(14, 165, 165, 0.55);
+  box-shadow: 0 0 0 3px rgba(14, 165, 165, 0.12);
+}
+html[data-theme="dark"] .wordbook .wb-word-sentence-input { background: #2A3634; border-color: rgba(255, 255, 255, .2); }
+html[data-theme="dark"] .wordbook .wb-word-sentence-input::placeholder { color: #A9B8B5; opacity: 1; }
+@media (max-width: 560px) {
+  .wordbook .wb-word-sentence-input { font-size: 14px; padding: 11px 14px; }
 }

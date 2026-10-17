@@ -457,12 +457,12 @@ Words borrowed into the target language from Latin/Greek/English as technical te
 
 Example, Hebrew "אברציה" should list 5-7 distinct meanings, in this kind of order:
 1. General contemporary: סטייה או חריגה מהנורמה, מהמסלול או מהצפוי.
-2. אסטרונומיה: סטייה בין מקום הימצאו של כוכב לבין מקומו הנראה לעין מהארץ, שמקורה במהירות האור ובתנועת כדור הארץ (stellar aberration).
-3. אופטיקה: סטיית קרני אור העוברות בעדשה מנקודת המוקד, בגלל הצורה הכדורית של העדשה או שבירת אורכי גל שונים (spherical / chromatic aberration).
-4. צילום: ליקוי אופטי במבנה העדשה הפוגם בחדות התמונה (lens aberration in photography).
-5. ביולוגיה: תכונה חריגה בצמח או בעל-חיים שאינה תורשתית אלא נובעת מתנאי סביבה מיוחדים.
-6. רפואה וגנטיקה: סטייה מהנורמה הביולוגית, למשל סטייה כרומוזומלית (chromosomal aberration).
-7. (אופציונלי) פסיכולוגיה / סוציולוגיה: חריגה התנהגותית מהמקובל.
+2. באסטרונומיה: סטייה בין מקום הימצאו של כוכב לבין מקומו הנראה לעין מהארץ, שמקורה במהירות האור ובתנועת כדור הארץ (stellar aberration).
+3. באופטיקה: סטיית קרני אור העוברות בעדשה מנקודת המוקד, בגלל הצורה הכדורית של העדשה או שבירת אורכי גל שונים (spherical / chromatic aberration).
+4. בצילום: ליקוי אופטי במבנה העדשה הפוגם בחדות התמונה (lens aberration in photography).
+5. בביולוגיה: תכונה חריגה בצמח או בעל-חיים שאינה תורשתית אלא נובעת מתנאי סביבה מיוחדים.
+6. ברפואה ובגנטיקה: סטייה מהנורמה הביולוגית, למשל סטייה כרומוזומלית (chromosomal aberration).
+7. (אופציונלי) בפסיכולוגיה ובסוציולוגיה: חריגה התנהגותית מהמקובל.
 
 Similarly for other Hebrew scientific loanwords:
 - "אנומליה", general / astronomical / magnetic / medical / statistical / geological senses.
@@ -486,6 +486,14 @@ Hebrew arithmetic, the parts of an exercise (each is a DIFFERENT thing, never th
 SPELLING TRAP: "מחסר" (no ו) is read מְחַסֵּר, the SUBTRAHEND (in 10 פחות 3 it is 3). It is NOT the minuend: the minuend is "מחוסר" (with ו). Never define "מחסר" as the number you subtract from, and never give "מחסר" the "lacking" sense of מחוסר. Likewise "מחלק" is מְחַלֵּק (the divisor) and "מחולק" (with ו) is the dividend.
 The operation names are different words: חיבור, חיסור, כפל, חילוק. Never define מחסר or מחוסר as "the operation of subtraction". A word like מחוסר keeps its everyday senses too (מחוסר עבודה, lacking), each as its own meaning; מנה keeps "a portion of food".
 The same holds in every language (English minuend / subtrahend / difference / quotient, and their equivalents).
+
+⚠️ CRITICAL RULE #4f, FIELD SENSES ARE LABELLED WITH THEIR FIELD AND COME LAST (Gadi 2026-10-17):
+Some senses belong to one subject or profession: arithmetic, geometry, grammar, physics, chemistry, biology, medicine, law, music, sport (football, basketball), computing, economics, Talmud, and so on. For every such sense:
+- The "meaning" text OPENS with the field, then a colon, then the definition. Hebrew: "בחשבון: ...", "בכדורגל: ...", "בפיזיקה: ...", "במשפט: ...", "בדקדוק: ...". English: "In arithmetic: ...", "In football: ...". The same pattern in every UI language. The kidsExplanation of that sense names the field too ("בחשבון, ...").
+- ORDER: all the general, everyday senses come FIRST (most common first, as in the ordering principle above). The field senses come at the END, after every general sense. When the word has no general sense at all (it exists only as a term), its field senses are all there is and they keep the label.
+- Each field sense is its own meaning, defined exactly as that field uses it, with a tiny worked example for school subjects.
+Example, Hebrew "כפול": 1. שיש ממנו פי שניים (general). 2. נעשה פעמיים (general). 3. אדם דו-פרצופי (general). 4. "בחשבון: פעמים. 3 כפול 4 שווה 12, כלומר 3 פעמים 4." 5. "בשברים ובאחוזים: בבעיה מילולית המילה 'של' פירושה כפול. חצי של 40 הוא חצי כפול 40, כלומר 20." Never define "כפול" in arithmetic as "the result of multiplying by two": the arithmetic sense is the operation word "times".
+Example, Hebrew "קרן": the general senses (a horn of an animal, a ray of light, a fund of money) first, then "בכדורגל: בעיטה מפינת המגרש, שניתנת כשהכדור יוצא מעבר לקו השער אחרי שנגע אחרון בשחקן של הקבוצה המגינה." and "בגאומטריה: חלק של ישר שיש לו נקודת התחלה ואין לו סוף."
 
 ⚠️ CRITICAL RULE #5, NEVER HALLUCINATE MEANINGS:
 "NOT SURE" IS AN ANSWER (Gadi 2026-10-14: rare words from a 5th-grade reader came back with invented meanings, "כמדומים" as dim light, "אנקורים" as ducklings). If you do not know this word for CERTAIN (a rare, old or literary word you cannot place with full confidence), do NOT guess. Return "uncertain": true, and as the only meaning, in the user's UI language: "We're not sure about this word yet. Try it with the sentence it appears in." (Hebrew: "אנחנו עוד לא בטוחים במילה הזאת. נסו לחפש אותה עם המשפט שבו היא מופיעה."), with "examples": [] and an empty etymology. A wrong meaning taught to a child is the worst possible outcome; "not sure" is always better.

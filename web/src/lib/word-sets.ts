@@ -14,6 +14,9 @@ export type WordSet = {
   grade?: string;
   lang: string;
   words: string[];
+  /** A school's own set (lib/school-sets.ts): "elementary" or "secondary"
+   *  (middle and high school). Catalog units take their level from the catalog. */
+  level?: string;
 };
 
 /** How a word's picture is made on the projector (Gemara phase A,

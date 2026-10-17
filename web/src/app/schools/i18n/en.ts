@@ -1,0 +1,127 @@
+import type { SchCopy } from "./types";
+
+/** English international Schools page: the master every other language is
+ *  translated from (2026-10-17). Same structure as the Hebrew page, but only
+ *  what a school outside Israel really gets: ready-made units for South
+ *  Africa (CAPS, grades 4 to 9), any word on the projector, students on their
+ *  own devices with a class code, the dashboard built from their lookups, and
+ *  a self-serve 14-day trial in US dollars. */
+const en: SchCopy = {
+  topCta: "Free trial",
+  dashCta: "Go to the dashboard",
+  credPill: "Built by educators who taught more than 15,000 learners",
+  h1: "Every lesson's key words, ready to project in class.",
+  whatIs: "The teacher projects a word, and the whole class sees a picture, a definition that fits the lesson and examples. A quiz and a game for the whole class check that the words landed. Students can also look words up on their own devices with a class code, and read the explanation in their own language.",
+  heroCta: "Start a 14-day free trial",
+  ctaNote: "14 days free, then from {from} a month. Cancel any time.",
+  howCta: "How it works",
+  heroPoints: ["549 ready-made CAPS units, grades 4 to 9", "Students join with a class code, no accounts", "Explanations in more than 40 languages"],
+  shotAlt: "A real screen from Gadit",
+  pain: {
+    title: "Why does a student who studied fail the test?",
+    lead: "They did not understand some of the words in the material, so they did not understand the topic.",
+    paras: [
+      "Every lesson is built on words: photosynthesis, sovereignty, common denominator, and dozens more words in the text itself.",
+      "A student who does not understand some of them understands only part of the material. They do not raise a hand, they guess and move on, and the gap grows from lesson to lesson.",
+      "On the test it shows: in the text, in the questions and in their answers.",
+    ],
+    reframe: "Gadit gives the teacher the lesson's words on the big screen, with an explanation that fits the lesson.",
+  },
+  howKicker: "How it works",
+  howTitle: "Three steps, from the unit to understanding",
+  steps: [
+    { t: "Choose a unit, or any word", b: "Schools in South Africa get 549 ready-made units for CAPS grades 4 to 9, in 11 subjects, each with its key words and a definition that fits the lesson. Any teacher can also look up any word, in any language, and project it.", img: "sets" },
+    { t: "Project the words in class", b: "Every word on the big screen, with a picture, a definition and examples.", img: "stage" },
+    { t: "A quiz and a game for the whole class", b: "The class answers together a quiz and a game built from the unit's words. So the teacher sees right away whether the words landed.", img: "quiz" },
+  ],
+  prep: {
+    kicker: "For teachers",
+    title: "Less time preparing words, more time teaching",
+    body: "The key words of every CAPS unit are already prepared, with definitions, pictures and examples that fit the topic. The teacher picks a unit and starts teaching.",
+  },
+  tools: [
+    {
+      kicker: "For the principal and the staff",
+      title: "See which words every class is looking up",
+      body: "The school dashboard is built from the words students look up with their class code. You see how many words each class looked up, the languages students read the explanations in, and the words they got stuck on. So you know where to go back.",
+      points: ["Every class on one screen", "The words students got stuck on", "A class word count with goals, no competition between students"],
+      img: "overview",
+    },
+    {
+      kicker: "On the student's own device",
+      title: "Every student looks words up alone, without an account",
+      body: "Students join from a phone, a tablet or a computer with the class code. They look up any word and get an explanation at their level, with a picture and examples. Every word goes into the class notebook, and the word games are built from the class's words.",
+      points: ["A class code, no accounts and no passwords", "An explanation at the student's level", "A class notebook and word games"],
+      img: "student",
+      phone: true,
+    },
+    {
+      kicker: "In the home language too",
+      title: "A student who thinks in another language can follow the lesson",
+      body: "They read the material in the language of the lesson, but they still think in their home language. On their device they can read the full explanation in their own language, and the word itself stays at the center.",
+      points: ["A full explanation, not a translated word", "More than 40 languages, including all 11 official languages of South Africa", "For newcomers and for every student who struggles with the language"],
+      img: "student-lang",
+      phone: true,
+    },
+  ],
+  safeKicker: "Privacy and safety",
+  safeTitle: "Safe for school from day one",
+  safe: [
+    "Students have no accounts: they join with a class code and give no personal details.",
+    "Class codes can be time-bound.",
+    "No ads, and no content that is not suitable for children.",
+    "Works in any browser, with nothing to install and no IT team.",
+  ],
+  whoKicker: "Who we are",
+  whoTitle: "A team of educators",
+  whoBody: "The Gadit team has taught more than 15,000 learners over 15 years. We built Gadit so that teachers have the lesson's words ready on the screen.",
+  trialKicker: "Free trial",
+  trialTitle: "What the free trial includes",
+  trialItems: [
+    "14 days, with every tool and every class.",
+    "A card is required, and the first charge comes only after the 14 days.",
+    "Cancel before the trial ends and you pay nothing.",
+    "Setup takes a few minutes: create your classes and share the code.",
+  ],
+  priceKicker: "Pricing",
+  priceTitle: "A price by the number of students",
+  priceSub: "Every plan includes every tool.\nPay monthly or yearly by card.\nOn the yearly plan you get two months free.",
+  billedMonthly: "Monthly",
+  billedYearly: "Yearly",
+  yearlySave: "2 months free",
+  upTo: "Up to {students} students",
+  perMonth: "a month",
+  perYear: "a year",
+  yearlyPerMonth: "About {price} a month",
+  tierCta: "Start a free trial",
+  includesTitle: "In every plan",
+  includes: [
+    "549 CAPS units for grades 4 to 9, in 11 subjects",
+    "A projector screen, a quiz and a game for the class",
+    "Classes and class codes for your students",
+    "A class notebook, word games and class goals",
+    "The school dashboard",
+    "Explanations in more than 40 languages",
+  ],
+  larger: "More than 1,000 students, or a group of schools?\nWe will be glad to prepare a tailored offer.",
+  contactLink: "Contact us",
+  faqKicker: "Questions",
+  faqTitle: "What principals ask before they start",
+  faq: [
+    { q: "Do the words fit what the teacher is teaching?", a: "For schools in South Africa, yes.\nEvery CAPS unit was built from the curriculum of its subject and grade, with a definition that fits the context of the lesson.\nThe same word gets a different meaning in science and in history, and Gadit defines it by the lesson." },
+    { q: "We are not in South Africa. Is it still useful?", a: "Yes.\nThe teacher can look up any word, in any language, and project it with a picture, a definition and examples.\nStudents look up words on their own devices with the class code, and read the explanation in their own language.\nReady-made curriculum units are available for CAPS today." },
+    { q: "How are students counted?", a: "By the number of students who use Gadit in your school.\nYou can move to a bigger plan at any time." },
+    { q: "What happens at the end of the trial?", a: "If you do not cancel, the plan you chose starts and the card is charged.\nCancel before the 14 days end and you pay nothing." },
+    { q: "Do students need accounts or email addresses?", a: "No.\nStudents join with the class code and give no personal details." },
+    { q: "Which home languages are there?", a: "The explanation is available in more than 40 languages, among them English, Afrikaans, isiZulu, isiXhosa, Sesotho, Arabic, French, Spanish and Portuguese." },
+    { q: "Is it a translation?", a: "No.\nGadit explains words.\nFor every word it gives the meaning that fits the lesson, examples, a picture and the word's origin.\nA student can read the same explanation in their home language, and the word itself stays at the center." },
+    { q: "Can students keep going at home?", a: "Yes.\nParents can open Gadit Family, and the child keeps going at home with Kids Mode, a personal notebook and practice.\nIt is a separate plan for parents, not part of the school's plan." },
+  ],
+  finalTitle: "In the next lesson, the lesson's words can already be on the screen.",
+  finalBody: "Setup takes a few minutes.\nNothing to install, no IT team, and no student accounts.",
+  finalCta: "Start a 14-day free trial",
+  terms: "Terms of use",
+  privacy: "Privacy policy",
+};
+
+export default en;

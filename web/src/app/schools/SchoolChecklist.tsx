@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
@@ -528,6 +528,23 @@ export function SchoolChecklist({ lang, curriculum, classrooms, words, logo, che
   const href = useHref();
   const c = COPY[lang] ?? COPY.en;
   const [teachersLocal, setTeachersLocal] = useState(false);
+  // Tell the server this school's timezone once, for its school hours and
+  // digest hour (2026-10-17). The server keeps the first one it gets.
+  useEffect(() => {
+    if (!user) return;
+    let tz = "";
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch { /* old browser */ }
+    if (!tz) return;
+    void (async () => {
+      try {
+        await fetch("/api/schools/checklist", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
+          body: JSON.stringify({ step: "timezone", tz }),
+        });
+      } catch { /* best-effort */ }
+    })();
+  }, [user]);
 
   const done = {
     curriculum: !!curriculum,

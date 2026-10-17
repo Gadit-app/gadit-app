@@ -4,6 +4,7 @@ import { GaditIcon } from "./GaditIcon";
 import { useEffect, useMemo, useState } from "react";
 import { computeGamification, toLocalDateStr, RANKS } from "@/lib/gamification";
 import { gameCopy, rankLabel } from "@/lib/gamification-labels";
+import { rankIconSrc } from "@/lib/rank-icons";
 import { KID_THEMES, themeName } from "@/lib/appearance";
 import { KidsCelebration } from "./KidsCelebration";
 import { useAuth } from "@/lib/auth-context";
@@ -38,7 +39,7 @@ function streakProgress(streak: number): number {
 
 // One per rank tier (see RANKS). The 6 long-tail tiers (champion..grandmaster)
 // escalate past the crown so the ladder keeps feeling like it grows.
-const RANK_EMOJI = ["🌱", "🔍", "🧭", "🗺️", "🎖️", "👑", "🏆", "🦉", "🎨", "🌟", "🧙", "🐉"];
+// The rank pictures replaced the emoji (2026-10-17): lib/rank-icons.ts.
 
 // Small local copy for the ranks table (he + en, en fallback) so a new
 // surface doesn't force a full gamification-labels sweep.
@@ -201,7 +202,8 @@ export function KidsGameHeader({
         {/* Explorer rank — tap for the full ranks table */}
         <button type="button" className="wb-kids-tile wb-kids-tile-btn" onClick={() => setRanksOpen(true)}>
           <div className="wb-kids-tile-head">
-            <Chip icon="rank" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={rankIconSrc(g.rank.key)} alt="" width={52} height={52} style={{ width: 52, height: 52, flexShrink: 0, objectFit: "contain" }} />
             <div style={{ minWidth: 0, textAlign: dir === "rtl" ? "right" : "left" }}>
               <div className="wb-kids-tile-label">{c.rankTitle}</div>
               <div className="wb-kids-tile-num is-rank" style={{ color: PURPLE }}>{rankLabel(g.rank.key, lang)}</div>
@@ -273,7 +275,8 @@ function RanksModal({ onClose, points, currentIndex, lang, dir }: {
                 background: isCurrent ? "color-mix(in srgb, #8B5CF6 10%, transparent)" : "transparent",
                 opacity: unlocked ? 1 : 0.55,
               }}>
-                <span style={{ fontSize: 26, lineHeight: 1, flexShrink: 0, filter: unlocked ? "none" : "grayscale(1)" }}>{RANK_EMOJI[i]}</span>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={rankIconSrc(r.key)} alt="" width={48} height={48} loading="lazy" style={{ width: 48, height: 48, flexShrink: 0, objectFit: "contain", filter: unlocked ? "none" : "grayscale(1)" }} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 15, fontWeight: 800 }}>{rankLabel(r.key, lang)}</div>
                   <div style={{ fontSize: 12.5, color: "var(--ink-muted)" }}>{r.min}+ {rc.words}</div>

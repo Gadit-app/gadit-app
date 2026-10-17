@@ -30,7 +30,7 @@
  * surface for shared classroom devices.
  */
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
@@ -363,6 +363,21 @@ function useNavLinks(): NavLink[] {
 
 /** Desktop centre nav. Drop-in replacement for the old inline
  *  <nav className="wb-shell-nav"> blocks. */
+/** A top-menu item for the page you are already on still takes you to that
+ *  page's start (Gadi 2026-10-17: "שיעורי בית" inside a dictation did
+ *  nothing, because the URL was the same). Same path: load it fresh, so any
+ *  inner step (a game, a set, a lesson) closes. */
+function backToStart(e: ReactMouseEvent<HTMLAnchorElement>, url: string) {
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+  try {
+    const to = new URL(url, window.location.href);
+    if (to.pathname === window.location.pathname) {
+      e.preventDefault();
+      window.location.assign(to.pathname + to.search);
+    }
+  } catch { /* let the link work normally */ }
+}
+
 export function WbShellNav({ active }: { active?: NavKey }) {
   const links = useNavLinks();
   const { lang } = useLang();
@@ -375,6 +390,7 @@ export function WbShellNav({ active }: { active?: NavKey }) {
       {(
         <Link
           href={href("/")}
+          onClick={(e) => backToStart(e, href("/"))}
           className={`wb-shell-navlink wb-shell-navlink-icon${active === "home" ? " is-active" : ""}`}
           aria-label={v2(lang, "navSearch")}
           title={v2(lang, "navSearch")}
@@ -399,6 +415,7 @@ export function WbShellNav({ active }: { active?: NavKey }) {
           <Link
             key={l.key}
             href={l.href}
+            onClick={(e) => backToStart(e, l.href)}
             className={`wb-shell-navlink${active === l.key ? " is-active" : ""}${BUY_NAV_KEYS.has(l.key) ? " gd-buy" : ""}`}
           >
             {l.label}
@@ -521,7 +538,7 @@ export function WbShellBurger({
                 key={l.key}
                 href={l.href}
                 className={`wb-shell-mobile-link${active === l.key ? " is-active" : ""}${BUY_NAV_KEYS.has(l.key) ? " gd-buy" : ""}`}
-                onClick={() => setOpen(false)}
+                onClick={(e) => { setOpen(false); backToStart(e, l.href); }}
               >
                 {l.label}
               </Link>

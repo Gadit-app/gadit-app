@@ -75,7 +75,10 @@ function restoreMaleSpelling(orig: string, voc: string): string | null {
     const c = O[i];
     const v = V[j];
     if (v && v[0] === c) {
-      if ((c === "ו" || c === "י") && O[i + 1] === c && V[j + 1]?.[0] !== c) { out.push(c); i++; continue; }
+      // A doubled consonantal vav/yod (האוויר, הייתה): the vowel goes on the first
+      // letter and the second stays bare (הָיְיתָה, not הָייְתָה; Gadi 2026-10-17,
+      // a subscriber's report on "המורה הייתה נחרצת").
+      if ((c === "ו" || c === "י") && O[i + 1] === c && V[j + 1]?.[0] !== c) { out.push(v, c); i += 2; j++; continue; }
       out.push(v); i++; j++; continue;
     }
     const prev = out[out.length - 1] ?? "";
@@ -148,7 +151,7 @@ export async function POST(req: NextRequest) {
       const isHeb = HEBREW.test(trimmed);
       const isAr = !isHeb && ARABIC.test(trimmed);
       if (!isHeb && !isAr) return text; // nothing to vowelize
-      const ref = db.collection("niqqudCache").doc(hashKey(trimmed, isAr ? "ar1:" : "v2:")); // v2: ktiv-male restore
+      const ref = db.collection("niqqudCache").doc(hashKey(trimmed, isAr ? "ar1:" : "v3:")); // v3: doubled vav/yod pointed on the first letter
       try {
         const snap = await ref.get();
         if (snap.exists) return (snap.data() as { niqqud?: string }).niqqud ?? text;

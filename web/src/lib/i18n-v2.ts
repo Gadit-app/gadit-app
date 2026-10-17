@@ -7066,7 +7066,7 @@ const ja: Partial<V2Strings> = {
   tierBasicPitch: "基本から始める。",
   tierBasicCta: "始める",
   tierClearTagline: "見える化",
-  tierClearPitch: "画像、子どもモード、フィードバックで単語に命を吹き込む。",
+  tierClearPitch: "画像、キッズモード、フィードバックで単語に命を吹き込む。",
   tierClearBadge: "一番人気",
   tierClearCta: "14日間の無料お試しを始める",
   tierClearCtaYearly: "年額で登録",
@@ -7115,8 +7115,8 @@ const ja: Partial<V2Strings> = {
 
   kidsModeLabel: "子ども",
   kidsModeTooltipOff: "タップすると、すべての単語が親が子に説明するように解説されます。",
-  kidsModeTooltipOn: "子どもモードがオンです。すべての定義が子ども向けに書かれます。タップでオフにできます。",
-  kidsModeBasicGate: "子どもモードは Clear の機能です。アップグレードしてご利用ください。",
+  kidsModeTooltipOn: "キッズモードがオンです。すべての定義が子ども向けに書かれます。タップでオフにできます。",
+  kidsModeBasicGate: "キッズモードは Clear の機能です。アップグレードしてご利用ください。",
 
   signupWelcomeTitle: "Gadit へようこそ！",
   signupWelcomeBody: "アカウントが用意できました。気になる単語を検索してみましょう。",
@@ -7350,7 +7350,7 @@ const ja: Partial<V2Strings> = {
   softWallSignupCta: "無料登録",
   softWallBasicTitle: "今日の上限に達しました",
   softWallBasicBody:
-    "無料アカウントは1日20回検索できます。上限は明日リセットされます。または Clear にアップグレードすると、検索無制限に加え、画像、子どもモード、文法フィードバックも使えます。",
+    "無料アカウントは1日20回検索できます。上限は明日リセットされます。または Clear にアップグレードすると、検索無制限に加え、画像、キッズモード、文法フィードバックも使えます。",
   softBannerSearchesLeft: (n) =>
     Number(n) === 1
       ? "今日の無料検索は残り1回。無料登録で1日20回に。"
@@ -10895,8 +10895,8 @@ Object.assign(ko, {
   "navAffiliates": "제휴",
   "kidsModeLabel": "아이",
   "kidsModeTooltipOff": "부모가 아이에게 설명하듯, 모든 단어를 쉽게 풀어드려요. 눌러 보세요.",
-  "kidsModeTooltipOn": "아이 모드가 켜져 있어요. 모든 뜻풀이가 아이 눈높이로 쓰여요. 끄려면 누르세요.",
-  "kidsModeBasicGate": "아이 모드는 Clear 기능이에요. 업그레이드하면 사용할 수 있어요.",
+  "kidsModeTooltipOn": "키즈 모드가 켜져 있어요. 모든 뜻풀이가 아이 눈높이로 쓰여요. 끄려면 누르세요.",
+  "kidsModeBasicGate": "키즈 모드는 Clear 기능이에요. 업그레이드하면 사용할 수 있어요.",
   "signupWelcomeTitle": "Gadit에 오신 걸 환영해요!",
   "signupWelcomeBody": "계정이 준비됐어요. 아무 단어나 검색하며 시작해 보세요.",
   "pricingPageHeadline": "세 가지 요금제. 모두 진짜 내용을 담았어요.",
@@ -10909,7 +10909,7 @@ Object.assign(ko, {
   "tierBasicCta": "시작하기",
   "tierBasicFeatures": "하루 단어 검색 20회¶모든 뜻 (주된 뜻만이 아니라)¶뜻마다 예문 3개¶어원과 유래¶로그인 필요",
   "tierClearTagline": "그려보기",
-  "tierClearPitch": "그림, 아이 모드, 피드백으로 단어에 생기를 불어넣으세요.",
+  "tierClearPitch": "그림, 키즈 모드, 피드백으로 단어에 생기를 불어넣으세요.",
   "tierClearBadge": "가장 인기",
   "tierClearCta": "14일 무료 체험 시작",
   "tierClearCtaYearly": "연간 구독하기",
@@ -11106,7 +11106,7 @@ Object.assign(ko, {
   "softWallAnonBody": "무료로 가입하면 하루에 단어 20개까지, 전체 뜻풀이, 예문, 관용구, 어원과 함께 검색할 수 있어요.",
   "softWallSignupCta": "무료로 가입하기",
   "softWallBasicTitle": "오늘의 한도에 도달했어요",
-  "softWallBasicBody": "무료 계정은 하루 20회 검색할 수 있어요. 한도는 내일 초기화돼요. Clear로 업그레이드하면 무제한 검색은 물론 그림, 아이 모드, 문법 피드백까지 쓸 수 있어요.",
+  "softWallBasicBody": "무료 계정은 하루 20회 검색할 수 있어요. 한도는 내일 초기화돼요. Clear로 업그레이드하면 무제한 검색은 물론 그림, 키즈 모드, 문법 피드백까지 쓸 수 있어요.",
   "clearUnlocksThis": "Clear에서 열려요",
   "visualizeThisWord": "그림으로 보기",
   "visualBlurb": "Gadit이 만든 생생한 그림 하나로, 이 단어의 느낌을 붙잡아 주는 시각적 이미지예요.",

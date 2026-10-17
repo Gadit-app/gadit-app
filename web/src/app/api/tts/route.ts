@@ -103,14 +103,48 @@ async function geminiSpeech(text: string, apiKey: string): Promise<{ wav: Buffer
   };
   const inline = json.candidates?.[0]?.content?.parts?.find((p) => p.inlineData?.data)?.inlineData;
   if (!inline?.data) throw new Error("gemini_no_audio");
-  const pcm = Buffer.from(inline.data, "base64");
   const rate = Number((inline.mimeType ?? "").match(/rate=(\d+)/)?.[1] ?? 24000);
+  return { wav: cleanWav(Buffer.from(inline.data, "base64"), rate), tokensIn: json.usageMetadata?.promptTokenCount ?? 0, tokensOut: json.usageMetadata?.candidatesTokenCount ?? 0 };
+}
+
+/** A WAV header for 16-bit mono PCM. */
+function wavOf(pcm: Buffer, rate: number): Buffer {
   const h = Buffer.alloc(44);
   h.write("RIFF", 0); h.writeUInt32LE(36 + pcm.length, 4); h.write("WAVE", 8);
   h.write("fmt ", 12); h.writeUInt32LE(16, 16); h.writeUInt16LE(1, 20); h.writeUInt16LE(1, 22);
   h.writeUInt32LE(rate, 24); h.writeUInt32LE(rate * 2, 28); h.writeUInt16LE(2, 32); h.writeUInt16LE(16, 34);
   h.write("data", 36); h.writeUInt32LE(pcm.length, 40);
-  return { wav: Buffer.concat([h, pcm]), tokensIn: json.usageMetadata?.promptTokenCount ?? 0, tokensOut: json.usageMetadata?.candidatesTokenCount ?? 0 };
+  return Buffer.concat([h, pcm]);
+}
+
+/**
+ * Only the sound (Gadi 2026-10-17, "a strange noise at the end of every
+ * word"). Gemini used to return raw PCM; it now returns a whole WAV file with
+ * a C2PA provenance chunk (a ~6 KB signature) after the audio. Wrapping that
+ * in another header played the inner header as a click at the start and the
+ * signature as a loud burst of noise at the end. This keeps just the PCM of
+ * the innermost "data" chunk, at its own sample rate, and drops every other
+ * chunk. Raw PCM and our own clean files pass through as they are; files
+ * cached before the fix are cleaned when they are read.
+ */
+function cleanWav(buf: Buffer, rate = 24000, depth = 0): Buffer {
+  if (buf.length < 12 || buf.toString("ascii", 0, 4) !== "RIFF" || buf.toString("ascii", 8, 12) !== "WAVE") {
+    return depth === 0 ? wavOf(buf, rate) : buf;
+  }
+  let fmtRate = rate;
+  let data: Buffer | null = null;
+  for (let at = 12; at + 8 <= buf.length; ) {
+    const id = buf.toString("ascii", at, at + 4);
+    const size = buf.readUInt32LE(at + 4);
+    const body = buf.subarray(at + 8, Math.min(buf.length, at + 8 + size));
+    if (id === "fmt " && body.length >= 8) fmtRate = body.readUInt32LE(4);
+    if (id === "data") { data = body; break; }
+    at += 8 + size + (size % 2);
+  }
+  if (!data) return depth === 0 ? wavOf(Buffer.alloc(0), fmtRate) : buf;
+  // A WAV inside the data chunk (our old header around Gemini's own file).
+  if (depth < 2 && data.length >= 12 && data.toString("ascii", 0, 4) === "RIFF") return cleanWav(data, fmtRate, depth + 1);
+  return wavOf(Buffer.from(data.subarray(0, data.length - (data.length % 2))), fmtRate);
 }
 
 function contentHash(text: string, voice: string, model: string, format: string): string {
@@ -175,7 +209,10 @@ export async function POST(req: NextRequest) {
       const [exists] = await file.exists();
       if (exists) {
         const [buffer] = await file.download();
-        return new Response(buffer as unknown as BodyInit, { headers: audioHeaders("HIT") });
+        const clean = cleanWav(buffer);
+        // A file cached before the fix: store the clean one once.
+        if (clean.length !== buffer.length) void file.save(clean, { contentType: "audio/wav", metadata: { cacheControl: "public, max-age=31536000, immutable" } }).catch(() => {});
+        return new Response(clean as unknown as BodyInit, { headers: audioHeaders("HIT") });
       }
     } catch (err) {
       console.warn("[tts] storage read failed (gemini):", err);

@@ -27,6 +27,7 @@ import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { KidsGameHeader } from "@/components/design/KidsGameHeader";
+import { FamilyLeaderboard } from "@/components/design/FamilyLeaderboard";
 import { useHref } from "@/lib/href";
 import { listRecentCached } from "@/lib/offline-db";
 import { SPELL_T_EXTRA } from "@/lib/spell-i18n";
@@ -515,7 +516,7 @@ const PRACTICE_COPY: Record<string, PracticeCopy> = {
 };
 
 export function NotebookPage() {
-  const { user, plan, planReady, loading, promptLogin, familyRole } = useAuth();
+  const { user, plan, planReady, loading, promptLogin, familyRole, familyId } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -760,6 +761,13 @@ export function NotebookPage() {
             lang={lang}
             dir={dir}
           />
+        )}
+
+        {/* Family leaderboard (Gadi 2026-10-17): a kid (or a paired second
+            parent) sees their whole family's board here; the owner sees it
+            on /family. Hides itself outside a family. */}
+        {familyId && user && familyId !== user.uid && (
+          <FamilyLeaderboard lang={lang} dir={dir} />
         )}
 
         {/* הכתבות — saved spelling-practice series, ABOVE the words grid so a

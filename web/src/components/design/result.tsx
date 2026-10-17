@@ -459,6 +459,7 @@ export function WordHeader({
           {showNiqqud && onToggleNiqqud && (
             <button
               type="button"
+              className="wb-niqqud-btn"
               onClick={onToggleNiqqud}
               aria-pressed={niqqudOn}
               title={isArabicHeadword ? "التشكيل لمن يقرأ بمساعدة" : miscUi(lang).niqqudTitle}
@@ -1085,6 +1086,9 @@ function MeaningEntry({
                   src={imageUrl}
                   alt={word}
                   closeLabel={v2(lang, "backLabel")}
+                  shareLabel={v2(lang, "shareLabel")}
+                  word={word}
+                  pageUrl={typeof window !== "undefined" ? `${window.location.origin}${window.location.pathname}` : undefined}
                   onClose={() => setLightboxOpen(false)}
                 />
               )}

@@ -192,7 +192,9 @@ export const REAL_COPY: Record<string, RealCopy> = {
 /** Landing copy rule (Gadi 2026-09-28): a new sentence never continues on
  *  the same line. Each sentence (and a clause after a colon) gets its own line. */
 export function Lines({ text }: { text: string }) {
-  const parts = text.split(/(?<=[.?!:])\s+/).filter(Boolean);
+  // Also the sentence marks of other scripts (2026-10-17): 。！？ (CJK, no space after),
+  // । ॥ (Devanagari, Bengali), ። ፧ (Ethiopic), ؟ (Arabic, Persian).
+  const parts = text.split(/(?<=[.?!:؟।॥።፧])\s+|(?<=[。！？])/).filter((t) => t.trim());
   return (
     <>
       {parts.map((t, i) => (
@@ -276,7 +278,8 @@ export const REAL_CSS = `
   .fam-hero-points { justify-content: center; }
   .fam-hero-ctas { justify-content: center; }
   .fam-rtop { padding: 10px 14px; }
-  .fam-cred-pill { font-size: 12px; padding: 6px 12px 6px 10px; gap: 8px; white-space: nowrap; }
+  .fam-cred-pill { font-size: 12px; padding: 6px 12px 6px 10px; gap: 8px; white-space: nowrap; max-width: 100%; }
+  .fam-page:not([dir="rtl"]) .fam-cred-pill, .fam-page[dir="rtl"]:not(:lang(he)) .fam-cred-pill { white-space: normal; text-align: start; }
   .fam-cred-dots i { width: 11px; height: 11px; }
   .fam-real-hero .fam-phone { max-width: 190px; }
   .fam-real-step, .fam-real-step:nth-child(even) { grid-template-columns: 1fr; gap: 16px; }

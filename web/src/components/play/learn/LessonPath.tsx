@@ -19,12 +19,13 @@ import { GameSentenceBuilder } from "./GameSentenceBuilder";
 import { GameReading } from "./GameReading";
 import { setLessonNext } from "@/lib/lesson-flow";
 import { lessonCopy } from "./lesson-i18n";
+import { bankFor } from "@/lib/learn/engine";
 
 export type Lesson = {
   /** A built-in lesson's id (a photographed one has none). */
   id?: string;
   topic: string;
-  items: Array<{ w: string; t: string; nq?: string }>;
+  items: Array<{ w: string; t: string; nq?: string; en?: string }>;
   sentences: string[];
   pronouns: Array<{ phrase: string; answer: string }>;
   reading?: { title: string; text: string; checks: Array<{ s: string; yes: boolean }> } | null;
@@ -56,8 +57,18 @@ export function LessonPath({ lesson, learnLang, lang, t, onExit, onDone }: {
       examples: lesson.sentences.filter((s) => re.test(s)),
       language: learnLang === "he" ? "Hebrew" : "English",
       uiLang: lang,
+      ...(x.en ? { picWord: x.en } : {}),
     };
   }), [lesson, learnLang, lang]);
+
+  // Wrong options for the fill-in step: words of the same language from OTHER
+  // topics, so only one option can fit the sentence (2026-10-17).
+  const otherWords = useMemo(() => {
+    const bank = bankFor(learnLang === "he" ? "he" : "en", lang);
+    const mine = new Set(lesson.items.map((x) => x.w));
+    const topics = new Set(bank.filter((b) => mine.has(b.w)).map((b) => b.topic));
+    return bank.filter((b) => !mine.has(b.w) && !topics.has(b.topic) && !/\s/.test(b.w)).map((b) => b.w);
+  }, [lesson, learnLang, lang]);
 
   const steps = useMemo<StepId[]>(() => {
     const out: StepId[] = ["cards", "match"];
@@ -105,7 +116,7 @@ export function LessonPath({ lesson, learnLang, lang, t, onExit, onDone }: {
       <div key={step}>
         {step === "cards" && <GameFlashcards {...props} mode="meanings" skipPicker />}
         {step === "match" && <GameQuiz {...props} />}
-        {step === "fill" && <GameFillBlank {...props} />}
+        {step === "fill" && <GameFillBlank {...props} distractorWords={otherWords} />}
         {step === "truefalse" && <GameTrueFalse {...props} />}
         {step === "reading" && lesson.reading && <GameReading reading={lesson.reading} onExit={next} lang={lang} t={t} audioLang={audioLang} dirText={learnLang === "he" ? "rtl" : "ltr"} />}
         {step === "pronoun" && <GamePronoun items={lesson.pronouns} onExit={next} lang={lang} t={t} audioLang={audioLang} />}

@@ -70,6 +70,9 @@ const FEATURE_LABELS: Record<string, { he: string; en: string; note?: { he: stri
   image_classroom: { he: "תמונה (כיתה)", en: "Image (classroom)" },
   curriculum_set: { he: "סט מתוכנית לימודים", en: "Curriculum set" },
   class_activity: { he: "פעילות כיתתית", en: "Class activity" },
+  school_set_defs: { he: "הגדרות לסט של בית ספר", en: "School set definitions", note: { he: "קריאה אחת לכל שמירה", en: "one call per save" } },
+  school_set_defs_qa: { he: "בדיקת הגדרות לסט של בית ספר", en: "School set definitions check", note: { he: "דעה שנייה לפני שמירה", en: "second opinion before saving" } },
+  school_set_words: { he: "מילים לסט של בית ספר", en: "School set words", note: { he: "מצילום דף או מנושא", en: "from a page photo or a topic" } },
   seo_vet: { he: "בדיקת מילים (אדמין)", en: "Word vetting (admin)" },
 };
 

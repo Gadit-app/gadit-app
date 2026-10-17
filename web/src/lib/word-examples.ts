@@ -91,7 +91,7 @@ function parseExamples(raw: string): string[] {
  * in EXACTLY the given `meaning`. No caching. Returns [] on any failure
  * so callers can fall back to the general define examples.
  */
-export async function generateExamples(word: string, meaning: string, uiLang: string, admin = false): Promise<string[]> {
+export async function generateExamples(word: string, meaning: string, uiLang: string, admin = false, audience?: "teen"): Promise<string[]> {
   const langName = uiLangName(uiLang);
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -108,7 +108,10 @@ export async function generateExamples(word: string, meaning: string, uiLang: st
           {
             role: "system",
             content:
-              "You write short, natural example sentences for a children's educational dictionary. You stay strictly within the ONE meaning the user gives you and never drift to another sense of the word.",
+              audience === "teen"
+                // A school set for middle and high school (2026-10-17): sentences for teenagers.
+                ? "You write short, natural example sentences for a school dictionary used by middle and high school students (ages 12 to 18): the kind of sentence a teenager meets in class and in reading, never childish. You stay strictly within the ONE meaning the user gives you and never drift to another sense of the word."
+                : "You write short, natural example sentences for a children's educational dictionary. You stay strictly within the ONE meaning the user gives you and never drift to another sense of the word.",
           },
           {
             role: "user",
@@ -146,13 +149,14 @@ export async function getOrGenerateExamples(
   /** admin = a run from /admin: counted against the admin daily cap. */
   /** item: a meaning of a unit that lists meanings, keyed on its id. */
   /** variant: the meaning's explanation level in this unit (phase C). */
-  opts: { generate?: boolean; force?: boolean; admin?: boolean; item?: MeaningRef; variant?: string } = {},
+  /** audience "teen": a middle and high school set; its own cache entry. */
+  opts: { generate?: boolean; force?: boolean; admin?: boolean; item?: MeaningRef; variant?: string; audience?: "teen" } = {},
 ): Promise<ExampleResult> {
   const { force = false } = opts;
   // A meaning's examples are approved content only (phase C): never generated.
   const generate = opts.item ? false : opts.generate ?? true;
   const db = getAdminDb();
-  const key = opts.item ? itemExampleKey(opts.item, uiLang, opts.variant) : exampleCacheKey(word, meaning, uiLang);
+  const key = opts.item ? itemExampleKey(opts.item, uiLang, opts.variant) : exampleCacheKey(word, meaning, uiLang) + (opts.audience === "teen" ? "_teen" : "");
   const ref = db.collection("exampleCache").doc(key);
 
   const snap = await ref.get();
@@ -169,7 +173,7 @@ export async function getOrGenerateExamples(
   // Local test mode: placeholder examples, nothing generated or written.
   if (devDryAi()) return { examples: dryExamples(word), cached: false, generated: true };
 
-  const examples = await generateExamples(word, meaning, uiLang, opts.admin === true);
+  const examples = await generateExamples(word, meaning, uiLang, opts.admin === true, opts.audience);
   if (examples.length === 0) {
     return { examples: [], cached: false, generated: false };
   }

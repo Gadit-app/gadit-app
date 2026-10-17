@@ -28,10 +28,11 @@ export { classroomImageKey } from "@/lib/classroom-keys";
 
 const SITE = "https://www.gadit.app";
 
-export function classroomStyle(set: Pick<WordSet, "id">): ClassroomStyle {
-  const l = topicLevel(set.id);
+export function classroomStyle(set: Pick<WordSet, "id"> & { level?: string }): ClassroomStyle {
+  // A school's own set carries its level ("elementary" / "secondary").
+  const l = topicLevel(set.id) ?? set.level ?? getWordSet(set.id)?.level;
   if (!l) return "kids"; // the hand-made sets are all elementary
-  return l === "middle" || l === "high" || l === "senior" ? "teen" : "kids";
+  return l === "middle" || l === "high" || l === "senior" || l === "secondary" ? "teen" : "kids";
 }
 
 /** Gemara terms that never get an automatic picture (Gemara phase A,
@@ -55,7 +56,7 @@ export function isSensitiveTerm(word: string): boolean {
 }
 const GEMARA_SAFE = "This is for a Talmud lesson in a religious school: respectful and modest, no people in intimate situations, no violence, no blood, no weapons aimed at anyone, no religious figures drawn as faces. Show the idea through symbolic objects (an open Talmud volume, scrolls, scales, a study table, two facing books).";
 
-const KIDS = "Gadit house style for children: a soft modern 3D render like a premium animated film, smooth matte rounded shapes, warm soft global illumination with gentle shadows. A small scene with real depth: the idea itself is the hero, large, sharp and in the center of the frame; a calm, softly blurred, uncluttered warm off-white background. Visual teaching cues make the idea obvious at a glance: clearly countable objects, soft glowing arrows, gentle highlights on what matters. Palette only teal, mint, warm amber and soft coral.";
+const KIDS = "Gadit house style for children: a soft modern 3D render like a premium animated film, smooth matte rounded shapes, warm soft global illumination with gentle shadows. A small scene with real depth: the idea itself is the hero, large, sharp and in the center of the frame; a calm, softly blurred, uncluttered warm off-white background. Simple enough for a young child to name it at once, like a picture-book page (Gadi 2026-10-17): a concrete thing is shown as ONE of it, whole and easy to recognize, in its real natural colors (hair is brown, black, blond or red; a tooth is white). Arrows, several objects or highlights only when the meaning itself is a movement, a direction, a change or an amount. Nothing else around it: no side objects, no small icons in circles, no extra props that compete with the idea. A body part is shown on a natural-looking child, with ONE soft highlight or ONE arrow on exactly that part. A greeting or polite phrase is the everyday moment people say it. The soft Gadit palette (teal, mint, warm amber, soft coral) is for the background and props, never for things that have their own real color.";
 const KID_CHILD = "The child in the scene is EXACTLY the boy from the reference image: same face, same short brown hair, same teal t-shirt, natural slim proportions. Use the reference only for how the boy looks: he is busy doing the action in the description, a supporting part of the scene, never standing idle at the side, and the idea itself stays the large hero.";
 const TEEN = "Gadit house style: a clean modern soft 3D render, smooth matte rounded shapes like premium app icons, soft global illumination and gentle shadows. The idea itself is the hero, large, sharp and centered, on a calm plain warm off-white background, with soft glowing cues on what matters. Palette only teal, mint, warm amber and soft coral. People, when needed, are stylized friendly 3D teenagers.";
 const LETTERS = "Keep EVERY letter, dot and vowel mark in the reference image EXACTLY as drawn: same shapes, same order, same positions, nothing added, removed or changed. Turn them into big, chunky, smooth, matte 3D letters in teal and mint.";
@@ -105,7 +106,7 @@ async function brief(word: string, meaning: string, lang: string, admin = false,
         temperature: 0.3,
         max_completion_tokens: 110,
         messages: [
-          { role: "system", content: "You turn a school vocabulary word and its meaning in a lesson into a short ENGLISH description of ONE clear illustration of that EXACT meaning, for a classroom projector. Make the idea itself the large central subject, with simple visual teaching cues (countable objects, arrows, a highlight) that let a student understand it at a glance. Include a child only when the idea is an action or experience a person does; otherwise show no people. Never use digits unless the idea is about numbers, and never chemical symbols or labels; show amounts as countable objects and substances as simple drops, bubbles or particles. Never write words or sentences in the picture (image models garble them), in any language: show language ideas with symbols, for example blank colorful word cards for a sentence or grey lines on a page for a paragraph. Single punctuation marks are fine. Reply with ONLY the description, one sentence, no preamble." + (gemara ? " " + GEMARA_SAFE : "") },
+          { role: "system", content: "You turn a school vocabulary word and its meaning in a lesson into a short ENGLISH description of ONE clear illustration of that EXACT meaning, for a classroom projector. Make the idea itself the large central subject and keep it as simple as a picture-book page, so a child names it at once: a concrete thing is ONE recognizable object in its real colors, with nothing around it (no side objects, no small icons in circles); arrows, several objects or a highlight only when the meaning is a movement, a direction, a change or an amount; a body part is shown on a natural-looking child with ONE highlight or ONE arrow on exactly that part; a greeting, a polite phrase or a feeling is ONE everyday moment where people say or feel it, with those people in it. Include a child only when the idea is an action or experience a person does; otherwise show no people. Never use digits unless the idea is about numbers, and never chemical symbols or labels; show amounts as countable objects and substances as simple drops, bubbles or particles. Never write words or sentences in the picture (image models garble them), in any language: show language ideas with symbols, for example blank colorful word cards for a sentence or grey lines on a page for a paragraph. Single punctuation marks are fine. Reply with ONLY the description, one sentence, no preamble." + (gemara ? " " + GEMARA_SAFE : "") },
           { role: "user", content: `Word (${lang}): ${word}\nMeaning in the lesson: ${meaning}\n\nDescribe the illustration:` },
         ],
       }),
@@ -154,10 +155,23 @@ async function render(prompt: string, refs: string[], quality: "low" | "medium" 
   return { b64, cost: usageCost(j.usage) };
 }
 
+/** A dictionary word's picture in the Gadit house style (Gadi 2026-10-17:
+ *  "the new pictures look great, keep them this way across all of Gadit").
+ *  The same brief and style as the projector and the lessons: KIDS for
+ *  Kids Mode, TEEN otherwise. The caller stores it. */
+export async function houseImage(word: string, meaning: string, lang: string, kids: boolean): Promise<{ b64: string; cost?: number }> {
+  const w = word.trim();
+  const b = curatedImageHint(w) || (await brief(w, meaning, lang)) || `${w}: ${meaning}`;
+  const person = /(child|children|boy|girl|kid|kids|student|students|person|people|teacher|man|woman|family)/i.test(b);
+  const refs = kids && person ? ["kid.png"] : [];
+  const prompt = `${kids ? KIDS : TEEN} ${refs.length ? KID_CHILD : ""} Draw this: ${b} ${NO_TEXT}`;
+  return render(prompt.replace(/\s+/g, " "), refs, "low");
+}
+
 export type ClassroomImageResult =
   | { status: "cached"; url: string; cacheKey: string }
   | { status: "generated"; url: string; cacheKey: string }
-  | { status: "skipped"; reason: "none" | "sensitive" | "not_approved"; cacheKey: string }
+  | { status: "skipped"; reason: "none" | "sensitive" | "not_approved" | "quota"; cacheKey: string }
   | { status: "error"; error: string; cacheKey: string };
 
 /** The set picture for a word, from cache or drawn now in the house style. */
@@ -172,6 +186,11 @@ export async function generateClassroomImage(opts: {
   admin?: boolean;
   /** A meaning of a unit that lists meanings: keyed on its id, not the text. */
   item?: MeaningRef;
+  /** Asked only when the picture is not cached yet: may a new one be drawn
+   *  (the school's monthly picture cap, 2026-10-17)? */
+  allowNew?: () => Promise<boolean>;
+  /** Called once a new picture is drawn and stored. */
+  onGenerated?: () => Promise<void>;
 }): Promise<ClassroomImageResult> {
   const { word, meaning, lang } = opts;
   const style = classroomStyle(opts.set);
@@ -190,6 +209,7 @@ export async function generateClassroomImage(opts: {
   // A meaning (phase C): its picture comes in with its approved content
   // (the publish tool), never drawn on view or by a forced redraw.
   if (opts.item) return { status: "skipped", reason: "not_approved", cacheKey: cKey };
+  if (opts.allowNew && !(await opts.allowNew())) return { status: "skipped", reason: "quota", cacheKey: cKey };
   try {
     const w = word.trim();
     const letter = LETTER_REFS[w] ?? LETTER_REFS[w.replace(/[ً-ٰٟ]/g, "")];
@@ -230,6 +250,7 @@ export async function generateClassroomImage(opts: {
     await file.makePublic();
     const url = `https://storage.googleapis.com/${bucket.name}/${storagePath}`;
     await ref.set({ url, word, uiLang: lang, meaning: meaning.slice(0, 500), style, setId: opts.set.id, storagePath, createdAt: new Date().toISOString() });
+    if (opts.onGenerated) await opts.onGenerated().catch(() => {});
     return { status: "generated", url, cacheKey: cKey };
   } catch (e) {
     return { status: "error", error: String(e).slice(0, 200), cacheKey: cKey };

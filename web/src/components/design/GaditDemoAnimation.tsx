@@ -1811,7 +1811,7 @@ const DEMO: Record<string, DemoContent> = {
       etymologyLabel: "語源",
       etyFromLabel: "出典",
       etyMeantLabel: "元の意味",
-      kidsToggle: "子どもモード",
+      kidsToggle: "キッズモード",
       kidsLabel: "子ども向け説明",
       composeLabel: "あなたの文を書く",
       imageLabel: "ビジュアル",

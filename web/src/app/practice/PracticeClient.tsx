@@ -22,6 +22,7 @@ import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { PracticeV2 } from "@/components/design/PracticeV2";
+import { ReportQuestionButton } from "@/components/play/ReportQuestionButton";
 
 // Footer "Home" link label, every UI language.
 const FOOTER_HOME_COPY: Record<Lang, string> = {
@@ -118,6 +119,12 @@ export function PracticePage() {
         }}
       >
         {!loading && user && plan === "deep" && <PracticeV2 />}
+        {/* "Found a mistake?" on every kids' surface (Gadi 2026-10-17). */}
+        {!loading && user && plan === "deep" && (
+          <div style={{ display: "flex", justifyContent: "center", marginTop: 14 }}>
+            <ReportQuestionButton where="practice" snapshot={() => ({ text: (document.querySelector("main")?.innerText || "").slice(0, 3000) })} />
+          </div>
+        )}
       </main>
 
       <footer className="wb-home-footer">

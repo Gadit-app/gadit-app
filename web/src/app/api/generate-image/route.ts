@@ -5,9 +5,11 @@ import { logAiUsage, usageFrom, IMAGE_MODEL, TEXT_MODEL_FAST } from "@/lib/ai-co
 import { recordActivity } from "@/lib/activity-log";
 import { curatedImageHint, classroomDef, classroomMeaning, isGemaraSet, sameSetWord } from "@/lib/word-sets";
 import { loadWordSet } from "@/lib/curriculum-sets";
-import { generateClassroomImage } from "@/lib/classroom-image";
+import { generateClassroomImage, houseImage } from "@/lib/classroom-image";
 import { classroomAccess } from "@/lib/classroom-access";
 import { pilotGate } from "@/lib/pilot-access";
+import { SCHOOL_MONTHLY_NEW_IMAGES } from "@/lib/school";
+import { FieldValue } from "firebase-admin/firestore";
 
 // gpt-image-1 at quality:low typically completes in 5-15s; quality:medium
 // can run 10-30s and sometimes >45s when OpenAI is busy. Raise the
@@ -181,6 +183,9 @@ export async function POST(req: NextRequest) {
       // Gemara: the word as spelled in the unit, ignoring niqqud and quote marks.
       const w = item?.w ?? (set && isGemaraSet(set) ? set.words.find((x) => sameSetWord(x, asked)) : undefined) ?? asked;
       if (set && (item || set.words.some((x) => x.trim().toLowerCase() === w.toLowerCase()))) {
+        // The school's monthly cap on NEW set pictures (2026-10-17).
+        const schoolId = ((await getAdminDb().collection("users").doc(userInfo.userId).get()).get("schoolId") as string | undefined) || "";
+        const usageDoc = schoolId ? getAdminDb().collection("schools").doc(schoolId).collection("imageUsage").doc(currentMonthKey()) : null;
         const img = await generateClassroomImage({
           word: w,
           meaning: item?.d ?? classroomDef(set.id, w) ?? meaning,
@@ -188,6 +193,10 @@ export async function POST(req: NextRequest) {
           set,
           uid: userInfo.userId,
           ...(item ? { item: { m: item.m, rev: item.rev } } : {}),
+          ...(usageDoc ? {
+            allowNew: async () => (((await usageDoc.get()).get("count") as number | undefined) ?? 0) < SCHOOL_MONTHLY_NEW_IMAGES,
+            onGenerated: async () => { await usageDoc.set({ count: FieldValue.increment(1), updatedAt: new Date().toISOString() }, { merge: true }); },
+          } : {}),
         });
         if (img.status === "error") {
           console.error("[generate-image] classroom:", img.error);
@@ -267,6 +276,16 @@ export async function POST(req: NextRequest) {
     // A curated per-word hint (word-sets.ts) wins over the guessed brief,
     // same as the admin warm path, so the projector and a cache miss here
     // draw the same pedagogically-checked picture.
+    // The Gadit house style first (Gadi 2026-10-17), the same picture style
+    // as the lessons and the projector. The older flat prompt below is only
+    // the fallback when it fails (a refusal, an outage).
+    let buffer: Buffer | null = null;
+    try {
+      buffer = Buffer.from((await houseImage(word, meaning, uiLangCode, isKidsMode)).b64, "base64");
+    } catch (e) {
+      console.error("[generate-image] house style:", String(e).slice(0, 300));
+    }
+    if (!buffer) {
     const brief = curatedImageHint(word) || (await englishBrief(word, meaning, safeExample, uiLangCode));
     const dallePrompt = brief
       ? (isKidsMode
@@ -316,7 +335,6 @@ export async function POST(req: NextRequest) {
     // The API now returns either a base64 payload OR a hosted URL,
     // depending on the model/endpoint version. Handle both.
     const result = dalleData.data?.[0] as { b64_json?: string; url?: string } | undefined;
-    let buffer: Buffer;
     if (result?.b64_json) {
       buffer = Buffer.from(result.b64_json, "base64");
     } else if (result?.url) {
@@ -332,6 +350,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "no_image_returned" }, { status: 502 });
     }
 
+    }
     // Telemetry: one fresh image generation. Kids-mode images use a
     // SEPARATE cache namespace, so the same word viewed in both modes bills
     // twice — the "image_kids" split lets /admin/ai-costs expose that.

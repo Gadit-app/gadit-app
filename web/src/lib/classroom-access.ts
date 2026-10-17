@@ -1,5 +1,5 @@
 import { getAdminDb } from "@/lib/firebase-admin";
-import { DEFAULT_SCHOOL_HOURS, isClassroomInSession, normalizeClassCode, studentCodesOff, type ActiveHours } from "@/lib/school";
+import { DEFAULT_SCHOOL_HOURS, isClassroomInSession, normalizeClassCode, schoolHoursFor, studentCodesOff, type ActiveHours } from "@/lib/school";
 
 /**
  * A student's class code, checked on the server (Gadi 2026-10-05). Students
@@ -37,7 +37,7 @@ export async function classroomAccess(raw: unknown): Promise<ClassroomAccess | n
         // Israeli schools are teacher-only: their codes unlock nothing.
         const curriculum = (school.data() as { curriculum?: string } | undefined)?.curriculum;
         if (school.exists && active && !studentCodesOff(curriculum)) {
-          v = { schoolId, classroomId, activeHours: (school.data() as { activeHours?: ActiveHours }).activeHours };
+          v = { schoolId, classroomId, activeHours: schoolHoursFor(school.data() as { activeHours?: ActiveHours; curriculum?: string; timezone?: string }) };
         }
       }
     } catch (e) {

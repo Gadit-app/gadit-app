@@ -1,0 +1,50 @@
+// The optional "add the sentence" hint, shared by the home search and the
+// word-page search bar (the word page gained the field 2026-10-17).
+// Same strings as HomeClient COPY.sentencePlaceholder.
+export const SENTENCE_PLACEHOLDER: Record<string, string> = {
+  uk: "(Необовʼязково) Введіть речення, у якому вживається слово, щоб отримати одне точне визначення",
+  tr: "(İsteğe bağlı) Tek ve kesin bir tanım almak için kelimenin geçtiği cümleyi yaz",
+  pl: "(Opcjonalnie) Wpisz zdanie, w którym występuje słowo, aby otrzymać jedną precyzyjną definicję",
+  fa: "(اختیاری) جمله‌ای که کلمه در آن آمده را بنویس تا یک تعریف دقیق بگیری",
+  id: "(Opsional) Ketik kalimat tempat kata itu muncul untuk mendapatkan satu definisi yang tepat",
+  nl: "(Optioneel) Typ de zin waarin het woord voorkomt voor een precieze definitie",
+  he: "(אופציונלי) הקלידו את המשפט שבו מופיעה המילה כדי לקבל הגדרה אחת מדויקת",
+  en: "(Optional) Type the sentence where the word appears to get one precise definition",
+  zu: "(Okukhethwayo) Bhala umusho lapho igama livela khona ukuthola incazelo eyodwa enembayo",
+  xh: "(Akunyanzelekanga) Chwetheza isivakalisi elivela kuso igama ukuze ufumane intsingiselo enye echanekileyo",
+  nso: "(Ga go gapeletšwe) Tlanya lefoko leo lentšu le tšwelelago go lona gore o hwetše tlhalošo e tee ye e nepagetšego",
+  tn: "(Ga go patelediwe) Kwala polelo e lefoko le leng mo go yone go bona tlhaloso e le nngwe e e tlhomameng",
+  st: "(Ha ho qobellwe) Ngola polelo eo lentswe le hlahang ho yona hore o fumane tlhaloso e le nngwe e nepahetseng",
+  ts: "(A swi boheki) Tsala xivulwa lexi rito ri kumekaka eka xona leswaku u kuma nhlamuselo yin'we leyi kongomeke",
+  ss: "(Uma utsandza) Bhala umusho lelivela kuwo ligama kute utfole inchazelo yinye lecondzile",
+  ve: "(A zwi kombetshedzwi) Ṅwalani mutaladzi une ipfi ḽa wanala khawo uri ni wane ṱhalutshedzo ithihi yone-yone",
+  nr: "(Akukateleleki) Tlola umutjho ilizwi elivela kiwo bona uthole ihlathululo eqondileko",
+  el: "(Προαιρετικό) Γράψε την πρόταση όπου εμφανίζεται η λέξη για να πάρεις έναν ακριβή ορισμό",
+  ar: "(اختياري) اكتب الجملة التي تظهر فيها الكلمة للحصول على تعريف واحد دقيق",
+  ru: "(Необязательно) Введите предложение со словом, чтобы получить одно точное определение",
+  es: "(Opcional) Escribe la frase donde aparece la palabra para obtener una definición precisa",
+  pt: "(Opcional) Escreva a frase onde a palavra aparece para obter uma definição precisa",
+  fr: "(Optionnel) Tapez la phrase où le mot apparaît pour obtenir une définition précise",
+  de: "(Optional) Tippe den Satz ein, in dem das Wort vorkommt, um eine genaue Definition zu erhalten",
+  cs: "(Volitelné) Napiš větu, ve které se slovo objevuje, abys získal jednu přesnou definici",
+  sk: "(Voliteľné) Napíš vetu, v ktorej sa slovo nachádza, aby si získal jednu presnú definíciu",
+  it: "(Opzionale) Scrivi la frase in cui appare la parola per ottenere una definizione precisa",
+  ja: "（任意）単語が出てくる文を入力すると、ぴったりの意味が一つだけ表示されます",
+  hi: "(वैकल्पिक) वह वाक्य लिखें जिसमें शब्द आया है, सटीक एक परिभाषा मिलेगी",
+  am: "(አማራጭ) ቃሉ የሚገኝበትን ዓረፍተ ነገር ይጻፉ፣ አንድ ትክክለኛ ትርጉም ያገኛሉ",
+  vi: "(Tùy chọn) Nhập câu chứa từ đó để nhận một định nghĩa chính xác",
+  fil: "(Opsyonal) I-type ang pangungusap kung saan lumalabas ang salita para makakuha ng isang tiyak na kahulugan",
+  af: "(Opsioneel) Tik die sin waar die woord voorkom om een presiese definisie te kry",
+  sw: "(Si lazima) Andika sentensi ambapo neno linapatikana ili upate maana moja sahihi",
+  "zh-CN": "（可选）输入这个词所在的句子，获得一个精准的释义",
+  "zh-TW": "（選填）輸入這個詞所在的句子，獲得一個精準的釋義",
+  ko: "(선택) 단어가 나오는 문장을 입력하면 정확한 뜻 하나를 알려드립니다",
+  th: "(ไม่บังคับ) พิมพ์ประโยคที่มีคำนั้นอยู่ เพื่อรับความหมายที่ตรงที่สุดเพียงหนึ่งเดียว",
+  bn: "(ঐচ্ছিক) শব্দটি যে বাক্যে আছে সেটি লিখুন, একটি নির্ভুল অর্থ পেতে",
+  da: "(Valgfrit) Skriv sætningen, hvor ordet optræder, for at få én præcis betydning",
+  hu: "(Nem kötelező) Írd be a mondatot, amelyben a szó szerepel, hogy egyetlen pontos jelentést kapj",
+};
+
+export function sentencePlaceholder(lang: string): string {
+  return SENTENCE_PLACEHOLDER[lang] ?? SENTENCE_PLACEHOLDER.en;
+}

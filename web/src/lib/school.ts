@@ -60,6 +60,10 @@ export interface School {
    *  experience 24/7. Default if unset: Israel school week
    *  (Sun-Thu, 7:30-15:00, Asia/Jerusalem). */
   activeHours?: ActiveHours;
+  /** IANA timezone of the principal's browser, saved once from the dashboard
+   *  (2026-10-17), so a school outside Israel and South Africa gets its own
+   *  school hours and digest hour. */
+  timezone?: string;
   /** Optional accent colour (hex) that themes the /c/<CODE> classroom
    *  surface to the school's branding, ideally matched to the logo. Unset =
    *  Gadit's default teal. */
@@ -101,6 +105,24 @@ export const DEFAULT_SCHOOL_HOURS: ActiveHours = {
   days: [0, 1, 2, 3, 4],        // Sun, Mon, Tue, Wed, Thu
   timezone: "Asia/Jerusalem",
 };
+
+/** New set pictures a school may have drawn per calendar month (Gadi
+ *  2026-10-17, ~1¢ each, so ~$5). Cached pictures never count; past the cap
+ *  the word shows with its definition and no picture. */
+export const SCHOOL_MONTHLY_NEW_IMAGES = 500;
+
+/** A school's classroom hours (Gadi 2026-10-17: every school ran on the
+ *  Israeli week). Its own schedule when set; otherwise by curriculum or
+ *  saved timezone: Israel Sun-Thu, South Africa and everyone else Mon-Fri,
+ *  7:30-15:00 local time. */
+export function schoolHoursFor(s: { activeHours?: ActiveHours | null; curriculum?: string | null; timezone?: string | null } | null | undefined): ActiveHours {
+  if (s?.activeHours) return s.activeHours;
+  const cur = s?.curriculum ?? "";
+  if (cur.startsWith("il-")) return DEFAULT_SCHOOL_HOURS;
+  const tz = s?.timezone || (cur.startsWith("za-") ? "Africa/Johannesburg" : "");
+  if (!tz || tz === "Asia/Jerusalem") return DEFAULT_SCHOOL_HOURS;
+  return { ...DEFAULT_SCHOOL_HOURS, days: [1, 2, 3, 4, 5], timezone: tz };
+}
 
 /** Resolves the given moment to the day-of-week and minute-of-day in
  *  the supplied IANA timezone. Uses Intl.DateTimeFormat so the

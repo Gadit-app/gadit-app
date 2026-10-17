@@ -20,6 +20,8 @@ export function generateMetadata(): Promise<Metadata> {
   return pageMetadata("play", BASE_METADATA);
 }
 
-export default function PlayRoute() {
-  return <PlayPage />;
+export default async function PlayRoute({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  // A lesson link (/play?lesson=...) opens on a loading screen, not the games menu.
+  const { lesson } = await searchParams;
+  return <PlayPage openingLesson={!!lesson} />;
 }

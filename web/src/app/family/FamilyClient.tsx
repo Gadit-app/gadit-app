@@ -33,6 +33,7 @@ import { LANGUAGES } from "@/lib/i18n";
 import { FamilySetupChecklist } from "./FamilySetupChecklist";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { CoachesSection } from "@/components/design/CoachesSection";
+import { FamilyLeaderboard } from "@/components/design/FamilyLeaderboard";
 import { enableOwnerPush, disableOwnerPush, hasLocalPushSubscription } from "@/lib/push-client";
 import { db } from "@/lib/firebase";
 import {
@@ -2507,6 +2508,8 @@ export function FamilyClient() {
                   <Link href={href("/family/add")} className="wb-family-cta">{c.add}</Link>
                 </div>
               )}
+              {/* Family leaderboard (Gadi 2026-10-17): parents and kids on one board. */}
+              <FamilyLeaderboard lang={lang} dir={dir} />
               <ActivityFeed user={user} lang={lang} dir={dir} />
             </div>
           )}
@@ -2845,7 +2848,7 @@ const ACTIVITY_COPY: Record<string, { title: string; sub: string; empty: string;
   ko: {
     title: "최근 검색",
     sub: "아이들이 찾아본 모든 단어를 최신순으로 보여 드려요.",
-    empty: "아직 검색 기록이 없어요. 아이들이 어린이 모드에서 단어를 찾으면 여기에 표시돼요.",
+    empty: "아직 검색 기록이 없어요. 아이들이 키즈 모드에서 단어를 찾으면 여기에 표시돼요.",
     today: "오늘",
     yesterday: "어제",
   },

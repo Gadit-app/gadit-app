@@ -11,7 +11,7 @@
  */
 
 import { ReportQuestionButton } from "./ReportQuestionButton";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import type { PlayWord, QuizQuestion } from "@/lib/play-engine";
 import { buildQuizQuestions, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
@@ -142,6 +142,12 @@ export function PlayHeader({
   onExit: () => void;
   t: PlayT;
 }) {
+  // A new question in any game: the answer tapped on the last one lets go of
+  // its focus, so on a tablet it no longer looks pressed (Gadi's son, 2026-10-17).
+  useEffect(() => {
+    const a = document.activeElement as HTMLElement | null;
+    if (a && a.tagName === "BUTTON" && a.closest(".wb-play-stage") && !a.closest(".wb-play-header")) a.blur();
+  }, [progress]);
   return (
     <div className="wb-play-header">
       <button type="button" className="wb-play-exit" onClick={onExit} aria-label={t.exit}>

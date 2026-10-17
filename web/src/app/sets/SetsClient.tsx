@@ -7,6 +7,7 @@ import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth-context";
 import { setsBySubject, type WordSet } from "@/lib/word-sets";
 import CurriculumBrowser from "./CurriculumBrowser";
+import OurSets from "./OurSets";
 
 // One color per subject, so the sections read as clearly separate topics.
 const SUBJECT_COLORS: Record<string, { accent: string; soft: string; border: string }> = {
@@ -305,6 +306,9 @@ export default function SetsClient() {
       <main style={S.main}>
         <h1 style={S.h1}>{c.title}</h1>
         <p style={S.subtitle}>{c.sub}</p>
+
+        {/* The school's own sets first (Gadi 2026-10-17). */}
+        <OurSets />
 
         {groups.map((g) => {
           const col = SUBJECT_COLORS[g.key] ?? SUBJECT_COLORS._default;

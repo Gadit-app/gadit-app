@@ -35,10 +35,12 @@ import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { getWordSet, classroomDef, registerWordSet, isCurriculumSetId, isGemaraSet, setItems, type WordSet, type SetExtras } from "@/lib/word-sets";
 import { isPilotTopicId } from "@/lib/pilot-topics";
+import { isSchoolSetId } from "@/lib/school-set-ids";
 import type { ClassroomQuote } from "@/components/classroom/ClassroomStage";
 import { AppearancePicker } from "@/components/AppearancePicker";
 import VoiceInput from "@/components/VoiceInput";
 import { useHref, wordPath } from "@/lib/href";
+import { sentencePlaceholder } from "@/lib/sentence-copy";
 import { goBackOr } from "@/lib/back-nav";
 import { getCachedWord, setCachedWord, setPinned as setPinnedDb } from "@/lib/offline-db";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
@@ -541,6 +543,21 @@ const PREPARING_PICTURE_COPY: Record<string, string> = {
   hu: "Készítjük a képet...",
 };
 
+// The unit's own meaning above the dictionary's, for a word opened from a
+// unit (Gadi 2026-10-17: "דמות" from a theatre unit opened on the dictionary's
+// first sense, the outward look, which has nothing to do with the lesson).
+const LESSON_SENSE_COPY: Record<string, string> = {
+  en: "In this lesson", he: "במשמעות של השיעור", ar: "في هذا الدرس", ru: "В этом уроке", es: "En esta lección",
+  pt: "Nesta lição", fr: "Dans cette leçon", de: "In dieser Lektion", cs: "V této lekci", sk: "V tejto lekcii",
+  it: "In questa lezione", ja: "このレッスンでは", hi: "इस पाठ में", am: "በዚህ ትምህርት", uk: "У цьому уроці",
+  tr: "Bu derste", pl: "W tej lekcji", fa: "در این درس", id: "Dalam pelajaran ini", nl: "In deze les",
+  el: "Σε αυτό το μάθημα", zu: "Kulesi sifundo", xh: "Kwesi sifundo", nso: "Thutong ye", tn: "Mo thutong e",
+  st: "Thutong ena", ts: "Eka dyondzo leyi", ss: "Kulesifundvo", ve: "Kha ngudo iyi", nr: "Esifundweni lesi",
+  vi: "Trong bài học này", fil: "Sa araling ito", af: "In hierdie les", sw: "Katika somo hili",
+  "zh-CN": "在这节课中", "zh-TW": "在這堂課中", ko: "이 수업에서", th: "ในบทเรียนนี้", bn: "এই পাঠে",
+  da: "I denne lektion", hu: "Ebben a leckében",
+};
+
 function pick<T>(map: Record<string, T>, lang: string): T {
   return map[lang] ?? map.en;
 }
@@ -827,6 +844,10 @@ export function WordClient({
   // Lives in WordClient (not chrome) so the input doesn't reset every
   // time the masthead re-renders for share/lang/menu toggles.
   const [headerQuery, setHeaderQuery] = useState("");
+  // Optional sentence under the persistent search bar, same as the home
+  // field but one line that grows down as it fills (Gadi 2026-10-17).
+  const [headerSentence, setHeaderSentence] = useState("");
+  const headerSentenceRef = useRef<HTMLTextAreaElement>(null);
   // When wrong-keyboard auto-correct fires, the original mis-typed
   // word is preserved in ?from=… so we can show a banner that lets
   // the user override and search the original anyway. ?stay=1 is
@@ -1737,8 +1758,9 @@ export function WordClient({
     if (setId) params.set("set", setId);
     if (meaning) params.set("meaning", meaning);
     if (currentM) params.set("m", currentM);
-    // A pilot unit (Gemara phase B) asks with the teacher's token; other units as before.
-    const pilot = isPilotTopicId(setId);
+    // A pilot unit (Gemara phase B) and a school's own set ask with the
+    // teacher's token; other units as before.
+    const pilot = isPilotTopicId(setId) || isSchoolSetId(setId);
     (pilot && user ? user.getIdToken().then((t) => fetch(`/api/classroom-examples?${params.toString()}`, { headers: { Authorization: `Bearer ${t}` } })) : fetch(`/api/classroom-examples?${params.toString()}`))
       .then((r) => (r.ok ? r.json() : null))
       .then((d: { examples?: string[]; quote?: ClassroomQuote } | null) => {
@@ -1754,7 +1776,7 @@ export function WordClient({
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [classroomMode, initialWord, setId, result, gemaraStage, currentM, isPilotTopicId(setId) ? user : null]);
+  }, [classroomMode, initialWord, setId, result, gemaraStage, currentM, isPilotTopicId(setId) || isSchoolSetId(setId) ? user : null]);
 
   // ── Action handlers ───────────────────────────────────────────
   async function handleGenerate(opts?: { meaning?: string; example?: string; silent?: boolean }) {
@@ -2302,12 +2324,15 @@ export function WordClient({
         <div className="wb-word-searchbar-stage" style={present ? (showSearch ? { marginTop: 64, marginBottom: 20 } : { display: "none" }) : undefined}>
         <div className="wb-word-searchbar-wrap">
           <form
-            className="wb-word-searchbar"
+            className="wb-word-searchform"
             onSubmit={(e) => {
               e.preventDefault();
               const q = headerQuery.trim();
               if (!q) return;
+              const ctx = headerSentence.trim();
               setHeaderQuery("");
+              setHeaderSentence("");
+              if (headerSentenceRef.current) headerSentenceRef.current.style.height = "";
               // Preserve the classroom context when the persistent
               // search bar is used inside a classroom session — the
               // kid stays in classroom mode AND the new word gets
@@ -2318,9 +2343,11 @@ export function WordClient({
               const clsParam = classroomCode
                 ? `?cls=${encodeURIComponent(classroomCode)}${classroomStudentName ? `&sn=${encodeURIComponent(classroomStudentName)}` : ""}`
                 : "";
-              router.push(href(wordPath(q, clsParam)));
+              const extra = [clsParam.replace(/^\?/, ""), ctx ? `sentence=${encodeURIComponent(ctx)}` : ""].filter(Boolean).join("&");
+              router.push(href(wordPath(q, extra)));
             }}
           >
+            <div className="wb-word-searchbar">
             {/* Convention layout, same recipe the homepage pill follows
                 (LLM Council R3 2026-06-20): input at the START edge,
                 action cluster (mic + magnifier-submit) at the END.
@@ -2369,6 +2396,29 @@ export function WordClient({
                 <path d="m20 20-4-4" />
               </svg>
             </button>
+            </div>
+            <textarea
+              ref={headerSentenceRef}
+              className="wb-word-sentence-input"
+              value={headerSentence}
+              rows={1}
+              dir={dir === "rtl" ? "rtl" : "ltr"}
+              onChange={(e) => {
+                setHeaderSentence(e.target.value);
+                const el = e.target;
+                el.style.height = "";
+                el.style.height = `${Math.min(el.scrollHeight + 2, 160)}px`;
+              }}
+              onKeyDown={(e) => {
+                // Enter searches, as in the word field; Shift+Enter breaks the line.
+                if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+                  e.preventDefault();
+                  e.currentTarget.form?.requestSubmit();
+                }
+              }}
+              placeholder={sentencePlaceholder(lang)}
+              aria-label={sentencePlaceholder(lang)}
+            />
           </form>
         </div>
         </div>
@@ -2505,7 +2555,26 @@ export function WordClient({
             onSearch={(q) => router.push(href(`/word/${encodeURIComponent(q)}?present=1`))}
             progress={classProgress}
           />
+        ) : classroomMode && isCurriculumSetId(setId) && !wordSet && curFailed !== setId ? (
+          // The projector waits for its unit, so the class never sees the
+          // dictionary's first sense before the unit's own (2026-10-17).
+          null
         ) : result ? (
+          <>
+          {(() => {
+            const lessonDef = wordSet ? classroomDef(setId, initialWord, currentM) : undefined;
+            if (!lessonDef) return null;
+            return (
+              <div dir={dir} style={{ maxWidth: 880, margin: "0 auto 12px", padding: "0 20px" }}>
+                <div style={{ background: "var(--card,#fff)", border: "1.5px solid var(--teal,#0EA5A5)", borderRadius: 16, padding: "14px 18px" }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--teal-deep,#0A7472)", marginBottom: 4 }}>
+                    {pick(LESSON_SENSE_COPY, lang)}{wordSet?.title ? ` · ${wordSet.title}` : ""}
+                  </div>
+                  <div style={{ fontSize: 17, lineHeight: 1.5, color: "var(--ink,#111827)" }}>{lessonDef}</div>
+                </div>
+              </div>
+            );
+          })()}
           <ResultView
             result={displayResult ?? result}
             streaming={loading}
@@ -2543,6 +2612,7 @@ export function WordClient({
               });
             }}
           />
+          </>
         ) : null}
 
         {/* HomeFooter intentionally omitted on /word pages, the V2
