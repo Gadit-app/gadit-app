@@ -9,9 +9,10 @@ import {
  * /sets. Bearer: a member of the school (users/{uid}.schoolId).
  *
  *   GET                                     → { sets: (WordSet & {defs})[], defaultLevel, maxWords, maxSets }  (newest first)
- *   POST   { title, words: string[], level } → { set }   (409 too_many_sets at 100)
- *   PATCH  { id, title?, words?, level? }    → { set }   rename, replace the words, change the level
- * level: "elementary" | "secondary" (middle and high school). Saving writes
+ *   POST   { title, words: string[], level, lang? } → { set }   (409 too_many_sets at 100)
+ *   PATCH  { id, title?, words?, level?, lang? }    → { set }   rename, replace the words, change the level or language
+ * level: "elementary" | "secondary" (middle and high school). lang: any UI
+ * language the teacher picked (else detected from the words' script). Saving writes
  * the per-set definitions of new words (one model call), so it can take a
  * few seconds.
  *   DELETE ?id=<id>                   → { ok }
@@ -54,9 +55,9 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const s = await school(req);
   if (s.error) return s.error;
-  const b = (await req.json().catch(() => ({}))) as { title?: unknown; words?: unknown; level?: unknown };
+  const b = (await req.json().catch(() => ({}))) as { title?: unknown; words?: unknown; level?: unknown; lang?: unknown };
   try {
-    return NextResponse.json({ set: await createSchoolSet(s.who.schoolId, s.who.uid, b.title, b.words, b.level) }, { headers: NO_STORE });
+    return NextResponse.json({ set: await createSchoolSet(s.who.schoolId, s.who.uid, b.title, b.words, b.level, b.lang) }, { headers: NO_STORE });
   } catch (e) {
     return fail(e);
   }
@@ -65,9 +66,9 @@ export async function POST(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
   const s = await school(req);
   if (s.error) return s.error;
-  const b = (await req.json().catch(() => ({}))) as { id?: unknown; title?: unknown; words?: unknown; level?: unknown };
+  const b = (await req.json().catch(() => ({}))) as { id?: unknown; title?: unknown; words?: unknown; level?: unknown; lang?: unknown };
   try {
-    const set = await updateSchoolSet(typeof b.id === "string" ? b.id : "", s.who.schoolId, { title: b.title, words: b.words, level: b.level });
+    const set = await updateSchoolSet(typeof b.id === "string" ? b.id : "", s.who.schoolId, { title: b.title, words: b.words, level: b.level, lang: b.lang });
     return NextResponse.json({ set }, { headers: NO_STORE });
   } catch (e) {
     return fail(e);

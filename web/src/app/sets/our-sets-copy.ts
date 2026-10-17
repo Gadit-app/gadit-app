@@ -16,6 +16,7 @@ export type OurSetsCopy = {
   needName: string; needWords: string; limit: string; err: string;
   present: string; words: string;
   levelLabel: string; elementary: string; secondary: string; savingDefs: string;
+  langLabel: string;
 };
 
 export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
@@ -29,6 +30,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Give the set a name.", needWords: "Add at least one word.", limit: "You have reached {max} sets. Delete an old set to create a new one.", err: "Something went wrong. Please try again.",
     present: "Present to class", words: "words",
     levelLabel: "Level", elementary: "Elementary", secondary: "Middle and high school", savingDefs: "Saving and writing a definition for each word...",
+    langLabel: "Language of the words",
   },
   he: {
     title: "הסטים שלנו", empty: "כאן יופיעו הסטים שבית הספר יוצר: מילים משיעור, מפרק בספר או מדף שצילמתם.", create: "סט חדש",
@@ -40,6 +42,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "תנו לסט שם.", needWords: "הוסיפו לפחות מילה אחת.", limit: "הגעתם ל-{max} סטים. כדי ליצור סט חדש, מחקו סט ישן.", err: "משהו השתבש. נסו שוב.",
     present: "הצגה בכיתה", words: "מילים",
     levelLabel: "שכבה", elementary: "יסודי", secondary: "חטיבה ותיכון", savingDefs: "שומרים וכותבים הגדרה לכל מילה...",
+    langLabel: "שפת המילים",
   },
   ar: {
     title: "مجموعاتنا", empty: "هنا تظهر المجموعات التي تنشئها المدرسة: كلمات من درس، أو من فصل في الكتاب، أو من صفحة مصوّرة.", create: "مجموعة جديدة",
@@ -51,6 +54,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "يجب إعطاء المجموعة اسمًا.", needWords: "يجب إضافة كلمة واحدة على الأقل.", limit: "وصلت المدرسة إلى {max} مجموعة. لإنشاء مجموعة جديدة يجب حذف مجموعة قديمة.", err: "حدث خطأ ما. يمكن المحاولة مرّة أخرى.",
     present: "عرض على الصفّ", words: "كلمات",
     levelLabel: "المرحلة", elementary: "ابتدائي", secondary: "إعدادي وثانوي", savingDefs: "جارٍ الحفظ وكتابة تعريف لكلّ كلمة...",
+    langLabel: "لغة الكلمات",
   },
   ru: {
     title: "Наши наборы", empty: "Здесь появятся наборы, которые создаёт ваша школа: слова из урока, из главы учебника или со сфотографированной страницы.", create: "Новый набор",
@@ -62,6 +66,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Дайте набору название.", needWords: "Добавьте хотя бы одно слово.", limit: "У вас уже {max} наборов. Чтобы создать новый, удалите старый.", err: "Что-то пошло не так. Попробуйте ещё раз.",
     present: "Показать классу", words: "слов",
     levelLabel: "Ступень", elementary: "Начальная школа", secondary: "Средняя и старшая школа", savingDefs: "Сохраняем и пишем определение для каждого слова...",
+    langLabel: "Язык слов",
   },
   es: {
     title: "Nuestros grupos", empty: "Aquí aparecerán los grupos que crea tu escuela: palabras de una clase, de un capítulo del libro o de una página fotografiada.", create: "Nuevo grupo",
@@ -73,6 +78,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Ponle un nombre al grupo.", needWords: "Añade al menos una palabra.", limit: "Has llegado a {max} grupos. Elimina uno antiguo para crear uno nuevo.", err: "Algo salió mal. Inténtalo de nuevo.",
     present: "Presentar a la clase", words: "palabras",
     levelLabel: "Nivel", elementary: "Primaria", secondary: "Secundaria y bachillerato", savingDefs: "Guardando y escribiendo una definición para cada palabra...",
+    langLabel: "Idioma de las palabras",
   },
   pt: {
     title: "Nossos conjuntos", empty: "Aqui aparecem os conjuntos que a sua escola cria: palavras de uma aula, de um capítulo do livro ou de uma página fotografada.", create: "Novo conjunto",
@@ -84,6 +90,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Dê um nome ao conjunto.", needWords: "Adicione pelo menos uma palavra.", limit: "Vocês chegaram a {max} conjuntos. Exclua um antigo para criar um novo.", err: "Algo deu errado. Tente novamente.",
     present: "Apresentar à turma", words: "palavras",
     levelLabel: "Nível", elementary: "Ensino fundamental I", secondary: "Ensino fundamental II e médio", savingDefs: "Salvando e escrevendo uma definição para cada palavra...",
+    langLabel: "Idioma das palavras",
   },
   fr: {
     title: "Nos séries", empty: "Ici apparaissent les séries créées par votre école : des mots d'une leçon, d'un chapitre du livre ou d'une page photographiée.", create: "Nouvelle série",
@@ -95,6 +102,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Donnez un nom à la série.", needWords: "Ajoutez au moins un mot.", limit: "Vous avez atteint {max} séries. Supprimez-en une ancienne pour en créer une nouvelle.", err: "Une erreur s'est produite. Veuillez réessayer.",
     present: "Présenter à la classe", words: "mots",
     levelLabel: "Niveau", elementary: "Primaire", secondary: "Collège et lycée", savingDefs: "Enregistrement et rédaction d'une définition pour chaque mot...",
+    langLabel: "Langue des mots",
   },
   de: {
     title: "Unsere Sammlungen", empty: "Hier erscheinen die Sammlungen Ihrer Schule: Wörter aus einer Stunde, aus einem Kapitel im Buch oder von einer fotografierten Seite.", create: "Neue Sammlung",
@@ -106,6 +114,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Geben Sie der Sammlung einen Namen.", needWords: "Fügen Sie mindestens ein Wort hinzu.", limit: "Sie haben {max} Sammlungen erreicht. Löschen Sie eine alte, um eine neue anzulegen.", err: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
     present: "Der Klasse zeigen", words: "Wörter",
     levelLabel: "Stufe", elementary: "Grundschule", secondary: "Mittel- und Oberstufe", savingDefs: "Wird gespeichert, für jedes Wort wird eine Definition geschrieben...",
+    langLabel: "Sprache der Wörter",
   },
   cs: {
     title: "Naše sady", empty: "Zde se zobrazí sady, které vytváří vaše škola: slova z hodiny, z kapitoly v knize nebo z vyfocené stránky.", create: "Nová sada",
@@ -117,6 +126,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Pojmenujte sadu.", needWords: "Přidejte alespoň jedno slovo.", limit: "Máte už {max} sad. Chcete-li vytvořit novou, smažte některou starou.", err: "Něco se pokazilo. Zkuste to znovu.",
     present: "Promítnout třídě", words: "slov",
     levelLabel: "Stupeň", elementary: "První stupeň", secondary: "Druhý stupeň a střední škola", savingDefs: "Ukládáme a píšeme definici ke každému slovu...",
+    langLabel: "Jazyk slov",
   },
   sk: {
     title: "Naše sady", empty: "Tu sa zobrazia sady, ktoré vytvára vaša škola: slová z hodiny, z kapitoly v knihe alebo z odfotenej strany.", create: "Nová sada",
@@ -128,6 +138,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Pomenujte sadu.", needWords: "Pridajte aspoň jedno slovo.", limit: "Máte už {max} sád. Ak chcete vytvoriť novú, vymažte niektorú starú.", err: "Niečo sa pokazilo. Skúste to znova.",
     present: "Premietnuť triede", words: "slov",
     levelLabel: "Stupeň", elementary: "Prvý stupeň", secondary: "Druhý stupeň a stredná škola", savingDefs: "Ukladáme a píšeme definíciu ku každému slovu...",
+    langLabel: "Jazyk slov",
   },
   it: {
     title: "I nostri gruppi", empty: "Qui compaiono i gruppi creati dalla tua scuola: parole di una lezione, di un capitolo del libro o di una pagina fotografata.", create: "Nuovo gruppo",
@@ -139,6 +150,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Dai un nome al gruppo.", needWords: "Aggiungi almeno una parola.", limit: "Hai raggiunto {max} gruppi. Elimina un gruppo vecchio per crearne uno nuovo.", err: "Qualcosa è andato storto. Riprova.",
     present: "Mostra alla classe", words: "parole",
     levelLabel: "Livello", elementary: "Primaria", secondary: "Secondaria di primo e secondo grado", savingDefs: "Salvataggio e scrittura di una definizione per ogni parola...",
+    langLabel: "Lingua delle parole",
   },
   ja: {
     title: "学校のセット", empty: "学校で作ったセットがここに表示されます。授業の単語、教科書の章、撮影したページから作れます。", create: "新しいセット",
@@ -150,6 +162,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "セットに名前を付けてください。", needWords: "単語を1つ以上追加してください。", limit: "セットが{max}個に達しました。新しく作るには古いセットを削除してください。", err: "問題が発生しました。もう一度お試しください。",
     present: "クラスに表示", words: "語",
     levelLabel: "学年", elementary: "小学校", secondary: "中学・高校", savingDefs: "保存して、各単語の定義を作成しています...",
+    langLabel: "単語の言語",
   },
   hi: {
     title: "हमारे सेट", empty: "आपके स्कूल के बनाए सेट यहाँ दिखेंगे: पाठ के शब्द, किताब के किसी अध्याय के शब्द या फ़ोटो खींचे गए पेज के शब्द।", create: "नया सेट",
@@ -161,6 +174,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "सेट को एक नाम दें।", needWords: "कम से कम एक शब्द जोड़ें।", limit: "आपके {max} सेट पूरे हो गए हैं। नया सेट बनाने के लिए कोई पुराना सेट हटाएँ।", err: "कुछ गड़बड़ हो गई। फिर से कोशिश करें।",
     present: "कक्षा को दिखाएँ", words: "शब्द",
     levelLabel: "स्तर", elementary: "प्राथमिक", secondary: "माध्यमिक और उच्च माध्यमिक", savingDefs: "सेव कर रहे हैं और हर शब्द की परिभाषा लिख रहे हैं...",
+    langLabel: "शब्दों की भाषा",
   },
   am: {
     title: "የእኛ ስብስቦች", empty: "ትምህርት ቤትዎ የሚፈጥራቸው ስብስቦች እዚህ ይታያሉ፦ ከትምህርት፣ ከመጽሐፍ ምዕራፍ ወይም ፎቶ ከተነሳ ገጽ የተወሰዱ ቃላት።", create: "አዲስ ስብስብ",
@@ -172,6 +186,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "ለስብስቡ ስም ይስጡ።", needWords: "ቢያንስ አንድ ቃል ያክሉ።", limit: "{max} ስብስቦች ደርሰዋል። አዲስ ለመፍጠር የቆየ ስብስብ ይሰርዙ።", err: "የሆነ ችግር ተፈጥሯል። እንደገና ይሞክሩ።",
     present: "ለክፍሉ አሳይ", words: "ቃላት",
     levelLabel: "ደረጃ", elementary: "አንደኛ ደረጃ", secondary: "መካከለኛና ሁለተኛ ደረጃ", savingDefs: "በማስቀመጥ ላይ፣ ለእያንዳንዱ ቃል ትርጉም እየጻፍን ነው...",
+    langLabel: "የቃላቱ ቋንቋ",
   },
   uk: {
     title: "Наші набори", empty: "Тут з'являться набори, які створює ваша школа: слова з уроку, з розділу підручника або зі сфотографованої сторінки.", create: "Новий набір",
@@ -183,6 +198,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Дайте набору назву.", needWords: "Додайте хоча б одне слово.", limit: "У вас уже {max} наборів. Щоб створити новий, видаліть старий.", err: "Щось пішло не так. Спробуйте ще раз.",
     present: "Показати класу", words: "слів",
     levelLabel: "Ступінь", elementary: "Початкова школа", secondary: "Середня і старша школа", savingDefs: "Зберігаємо й пишемо визначення для кожного слова...",
+    langLabel: "Мова слів",
   },
   tr: {
     title: "Setlerimiz", empty: "Okulunuzun oluşturduğu setler burada görünür: bir dersten, kitaptaki bir bölümden ya da fotoğrafı çekilen bir sayfadan kelimeler.", create: "Yeni set",
@@ -194,6 +210,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Sete bir ad verin.", needWords: "En az bir kelime ekleyin.", limit: "{max} sete ulaştınız. Yeni bir set oluşturmak için eski bir seti silin.", err: "Bir sorun oluştu. Lütfen tekrar deneyin.",
     present: "Sınıfa göster", words: "kelime",
     levelLabel: "Kademe", elementary: "İlkokul", secondary: "Ortaokul ve lise", savingDefs: "Kaydediliyor, her kelime için bir tanım yazılıyor...",
+    langLabel: "Kelimelerin dili",
   },
   pl: {
     title: "Nasze zestawy", empty: "Tu pojawią się zestawy tworzone przez waszą szkołę: słowa z lekcji, z rozdziału podręcznika lub ze sfotografowanej strony.", create: "Nowy zestaw",
@@ -205,6 +222,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Nadaj zestawowi nazwę.", needWords: "Dodaj co najmniej jedno słowo.", limit: "Masz już {max} zestawów. Aby utworzyć nowy, usuń jakiś stary.", err: "Coś poszło nie tak. Spróbuj ponownie.",
     present: "Pokaż klasie", words: "słów",
     levelLabel: "Poziom", elementary: "Klasy młodsze", secondary: "Klasy starsze i liceum", savingDefs: "Zapisujemy i piszemy definicję każdego słowa...",
+    langLabel: "Język słów",
   },
   fa: {
     title: "مجموعه‌های ما", empty: "مجموعه‌هایی که مدرسه می‌سازد اینجا نمایش داده می‌شوند: واژه‌های یک درس، یک فصل کتاب یا صفحه‌ای که از آن عکس گرفته‌اید.", create: "مجموعه جدید",
@@ -216,6 +234,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "برای مجموعه نامی بنویسید.", needWords: "دست‌کم یک واژه اضافه کنید.", limit: "به {max} مجموعه رسیده‌اید. برای ساختن مجموعه جدید، یک مجموعه قدیمی را حذف کنید.", err: "مشکلی پیش آمد. دوباره امتحان کنید.",
     present: "نمایش برای کلاس", words: "واژه",
     levelLabel: "مقطع", elementary: "دبستان", secondary: "دوره متوسطه اول و دوم", savingDefs: "در حال ذخیره و نوشتن تعریف برای هر واژه...",
+    langLabel: "زبان واژه‌ها",
   },
   id: {
     title: "Kumpulan kami", empty: "Kumpulan yang dibuat sekolah Anda muncul di sini: kata dari pelajaran, dari bab di buku, atau dari halaman yang difoto.", create: "Kumpulan baru",
@@ -227,6 +246,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Beri nama kumpulan ini.", needWords: "Tambahkan minimal satu kata.", limit: "Anda sudah punya {max} kumpulan. Hapus kumpulan lama untuk membuat yang baru.", err: "Terjadi kesalahan. Silakan coba lagi.",
     present: "Tampilkan ke kelas", words: "kata",
     levelLabel: "Jenjang", elementary: "SD", secondary: "SMP dan SMA", savingDefs: "Menyimpan dan menulis definisi untuk setiap kata...",
+    langLabel: "Bahasa kata-kata",
   },
   nl: {
     title: "Onze sets", empty: "Hier verschijnen de sets die je school maakt: woorden uit een les, uit een hoofdstuk van het boek of van een gefotografeerde pagina.", create: "Nieuwe set",
@@ -238,6 +258,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Geef de set een naam.", needWords: "Voeg minstens één woord toe.", limit: "Je hebt {max} sets bereikt. Verwijder een oude set om een nieuwe te maken.", err: "Er ging iets mis. Probeer het opnieuw.",
     present: "Aan de klas tonen", words: "woorden",
     levelLabel: "Niveau", elementary: "Basisschool", secondary: "Middelbare school", savingDefs: "Opslaan en voor elk woord een definitie schrijven...",
+    langLabel: "Taal van de woorden",
   },
   el: {
     title: "Τα σετ μας", empty: "Εδώ εμφανίζονται τα σετ που δημιουργεί το σχολείο σου: λέξεις από ένα μάθημα, από ένα κεφάλαιο του βιβλίου ή από μια σελίδα που φωτογράφισες.", create: "Νέο σετ",
@@ -249,6 +270,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Δώσε ένα όνομα στο σετ.", needWords: "Πρόσθεσε τουλάχιστον μία λέξη.", limit: "Έφτασες τα {max} σετ. Διάγραψε ένα παλιό για να φτιάξεις καινούργιο.", err: "Κάτι πήγε στραβά. Δοκίμασε ξανά.",
     present: "Προβολή στην τάξη", words: "λέξεις",
     levelLabel: "Βαθμίδα", elementary: "Δημοτικό", secondary: "Γυμνάσιο και Λύκειο", savingDefs: "Αποθήκευση και σύνταξη ορισμού για κάθε λέξη...",
+    langLabel: "Γλώσσα των λέξεων",
   },
   zu: {
     title: "Amasethi ethu", empty: "Lapha kuzovela amasethi esikole sakho: amagama esifundo, esahluko sencwadi noma ekhasi olithathe isithombe.", create: "Isethi entsha",
@@ -260,6 +282,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Nika isethi igama.", needWords: "Engeza okungenani igama elilodwa.", limit: "Usufinyelele amasethi angu-{max}. Susa isethi endala ukuze wakhe entsha.", err: "Kukhona okungahambanga kahle. Sicela uzame futhi.",
     present: "Yibonise ekilasini", words: "amagama",
     levelLabel: "Izinga", elementary: "Amabanga aphansi", secondary: "Amabanga aphakathi naphezulu", savingDefs: "Iyalondoloza futhi ibhala incazelo yegama ngalinye...",
+    langLabel: "Ulimi lwamagama",
   },
   xh: {
     title: "Amaqela ethu", empty: "Apha kuya kuvela amaqela enziwe sisikolo sakho: amagama esifundo, wesahluko sencwadi okanye wephepha othathe umfanekiso walo.", create: "Iqela elitsha",
@@ -271,6 +294,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Linike igama iqela.", needWords: "Yongeza ubuncinane igama elinye.", limit: "Ufikelele kumaqela angama-{max}. Cima iqela elidala ukuze wenze elitsha.", err: "Kukho into engahambanga kakuhle. Nceda uzame kwakhona.",
     present: "Bonisa eklasini", words: "amagama",
     levelLabel: "Inqanaba", elementary: "Amabanga aphantsi", secondary: "Amabanga aphakathi naphezulu", savingDefs: "Iyagcina kwaye ibhala inkcazelo yegama ngalinye...",
+    langLabel: "Ulwimi lwamagama",
   },
   nso: {
     title: "Dihlopha tša rena", empty: "Mo go tla tšwelela dihlopha tšeo sekolo sa gago se di dirago: mantšu a thuto, a kgaolo ya puku goba a letlakala leo o le tšerego seswantšho.", create: "Sehlopha se seswa",
@@ -282,6 +306,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Efa sehlopha leina.", needWords: "Oketša bonyane lentšu le tee.", limit: "O fihlile go dihlopha tše {max}. Phumola sehlopha sa kgale gore o dire se seswa.", err: "Go na le seo se sa sepelago gabotse. Hle leka gape.",
     present: "Bontšha phapoši", words: "mantšu",
     levelLabel: "Legato", elementary: "Dikreiti tša fase", secondary: "Dikreiti tša magareng le tša godimo", savingDefs: "Re a boloka le go ngwala tlhalošo ya lentšu le lengwe le le lengwe...",
+    langLabel: "Polelo ya mantšu",
   },
   tn: {
     title: "Disete tsa rona", empty: "Fano go tla bonala disete tse sekolo sa gago se di dirang: mafoko a thuto, a kgaolo ya buka kgotsa a tsebe e o e tsereng setshwantsho.", create: "Sete e ntšhwa",
@@ -293,6 +318,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Naya sete leina.", needWords: "Oketsa bonnye lefoko le le lengwe.", limit: "O fitlhile disete di le {max}. Phimola sete ya bogologolo go dira e ntšhwa.", err: "Sengwe se ile phoso. Tsweetswee leka gape.",
     present: "Bontsha phaposi", words: "mafoko",
     levelLabel: "Legato", elementary: "Dikereiti tse di kwa tlase", secondary: "Dikereiti tse di fa gare le tse di kwa godimo", savingDefs: "Re a boloka le go kwala tlhaloso ya lefoko lengwe le lengwe...",
+    langLabel: "Puo ya mafoko",
   },
   st: {
     title: "Dihlopha tsa rona", empty: "Mona ho tla hlaha dihlopha tseo sekolo sa hao se di etsang: mantswe a thuto, a kgaolo ya buka kapa a leqephe leo o le nkileng setshwantsho.", create: "Sehlopha se setjha",
@@ -304,6 +330,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Fa sehlopha lebitso.", needWords: "Eketsa bonyane lentswe le le leng.", limit: "O fihlile ho dihlopha tse {max}. Hlakola sehlopha sa kgale ho etsa se setjha.", err: "Ho na le se sa tsamaeng hantle. Ka kopo leka hape.",
     present: "Bontsha tlelase", words: "mantswe",
     levelLabel: "Boemo", elementary: "Dikereiti tse tlase", secondary: "Dikereiti tse bohareng le tse hodimo", savingDefs: "Re a boloka mme re ngola tlhaloso ya lentswe ka leng...",
+    langLabel: "Puo ya mantswe",
   },
   ts: {
     title: "Mintlawa ya hina", empty: "Laha ku ta humelela mintlawa leyi xikolo xa n'wina xi yi endlaka: marito ya dyondzo, ya ndzima ya buku kumbe ya pheji leyi mi yi tekeke xifaniso.", create: "Ntlawa lowuntshwa",
@@ -315,6 +342,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Nyikani ntlawa vito.", needWords: "Engeteleni rito rin'we hi xitsongo.", limit: "Mi fikile eka mintlawa ya {max}. Susani ntlawa wa khale leswaku mi endla lowuntshwa.", err: "Ku na leswi nga fambangiki kahle. Hi kombela mi ringeta nakambe.",
     present: "Kombisa eka tlilasi", words: "marito",
     levelLabel: "Levhele", elementary: "Tigireyidi ta le hansi", secondary: "Tigireyidi ta le xikarhi na ta le henhla", savingDefs: "Hi hlayisa naswona hi tsala nhlamuselo ya rito rin'wana na rin'wana...",
+    langLabel: "Ririmi ra marito",
   },
   ss: {
     title: "Emaceba etfu", empty: "Lapha kutawuvela emaceba lentiwe sikolwa sakho: emagama esifundvo, esehluko sencwadzi noma ekhasi lolitsatse sitfombe.", create: "Liceba lelisha",
@@ -326,6 +354,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Nika liceba libito.", needWords: "Engeta lokungenani ligama linye.", limit: "Sewufike emacebeni langu-{max}. Susa liceba lelidzala kute wente lelisha.", err: "Kukhona lokungakahambi kahle. Sicela uzame futsi.",
     present: "Khombisa likilasi", words: "emagama",
     levelLabel: "Libanga", elementary: "Emabanga laphansi", secondary: "Emabanga lasemkhatsini nalaphezulu", savingDefs: "Iyagcina futsi ibhala inchazelo yeligama ngalinye...",
+    langLabel: "Lulwimi lwemagama",
   },
   ve: {
     title: "Zwigwada zwashu", empty: "Fhano hu ḓo vhonala zwigwada zwine tshikolo tshaṋu tsha zwi ita: maipfi a ngudo, a ndima ya bugu kana a siaṱari ḽe na ḽi dzhiela tshifanyiso.", create: "Tshigwada tshiswa",
@@ -337,6 +366,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Ṋeani tshigwada dzina.", needWords: "Engedzani ipfi ḽithihi nga u ṱukesa.", limit: "No swika kha zwigwada zwa {max}. Bvisani tshigwada tsha kale u itela u ita tshiswa.", err: "Hu na zwi songo tshimbila zwavhuḓi. Ri humbela ni lingedze hafhu.",
     present: "Sumbedzani kilasini", words: "maipfi",
     levelLabel: "Vhuimo", elementary: "Gireidi dza fhasi", secondary: "Gireidi dza vhukati na dza nṱha", savingDefs: "Ri khou vhulunga nahone ri khou ṅwala ṱalutshedzo ya ipfi ḽiṅwe na ḽiṅwe...",
+    langLabel: "Luambo lwa maipfi",
   },
   nr: {
     title: "Amaqoqo wethu", empty: "Lapha kuzokuvela amaqoqo enziwe sikolo sakho: amezwi wesifundo, wesahluko sencwadi namkha wekhasi othathe isithombe salo.", create: "Iqoqo elitjha",
@@ -348,6 +378,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Nikela iqoqo ibizo.", needWords: "Engeza okungenani ilizwi linye.", limit: "Ufikile emaqoqweni ali-{max}. Susa iqoqo elidala bona wenze elitjha.", err: "Kunento engakahambi kuhle. Sibawa ulinge godu.",
     present: "Tjengisa ekilasini", words: "amezwi",
     levelLabel: "Izinga", elementary: "Amabanga aphasi", secondary: "Amabanga aphakathi naphezulu", savingDefs: "Siyabulunga begodu sitlola ihlathululo yelizwi ngalinye...",
+    langLabel: "Ilimi lamezwi",
   },
   vi: {
     title: "Bộ từ của trường", empty: "Các bộ từ do trường bạn tạo sẽ hiện ở đây: từ trong một bài học, một chương sách hoặc một trang đã chụp.", create: "Bộ từ mới",
@@ -359,6 +390,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Hãy đặt tên cho bộ từ.", needWords: "Hãy thêm ít nhất một từ.", limit: "Bạn đã có {max} bộ từ. Hãy xóa một bộ cũ để tạo bộ mới.", err: "Đã có lỗi xảy ra. Vui lòng thử lại.",
     present: "Trình chiếu cho lớp", words: "từ",
     levelLabel: "Cấp học", elementary: "Tiểu học", secondary: "THCS và THPT", savingDefs: "Đang lưu và viết định nghĩa cho từng từ...",
+    langLabel: "Ngôn ngữ của các từ",
   },
   fil: {
     title: "Ang aming mga set", empty: "Dito lalabas ang mga set na ginagawa ng inyong paaralan: mga salita mula sa isang aralin, sa isang kabanata ng libro, o sa isang pahinang kinunan ng larawan.", create: "Bagong set",
@@ -370,6 +402,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Bigyan ng pangalan ang set.", needWords: "Magdagdag ng kahit isang salita.", limit: "Umabot na kayo sa {max} set. Magbura ng lumang set para makagawa ng bago.", err: "May nangyaring mali. Pakisubukang muli.",
     present: "Ipakita sa klase", words: "salita",
     levelLabel: "Antas", elementary: "Elementarya", secondary: "Junior at senior high school", savingDefs: "Sine-save at isinusulat ang kahulugan ng bawat salita...",
+    langLabel: "Wika ng mga salita",
   },
   af: {
     title: "Ons stelle", empty: "Stelle wat jou skool skep, verskyn hier: woorde uit 'n les, uit 'n hoofstuk in die boek of van 'n bladsy wat jy afgeneem het.", create: "Nuwe stel",
@@ -381,6 +414,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Gee die stel 'n naam.", needWords: "Voeg ten minste een woord by.", limit: "Jy het {max} stelle bereik. Skrap 'n ou stel om 'n nuwe een te skep.", err: "Iets het verkeerd geloop. Probeer asseblief weer.",
     present: "Wys vir die klas", words: "woorde",
     levelLabel: "Vlak", elementary: "Laerskool", secondary: "Hoërskool", savingDefs: "Stoor en skryf 'n definisie vir elke woord...",
+    langLabel: "Taal van die woorde",
   },
   sw: {
     title: "Seti zetu", empty: "Seti ambazo shule yako inaunda zitaonekana hapa: maneno ya somo, ya sura ya kitabu au ya ukurasa uliopigwa picha.", create: "Seti mpya",
@@ -392,6 +426,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Ipe seti jina.", needWords: "Ongeza angalau neno moja.", limit: "Mmefikia seti {max}. Futa seti ya zamani ili kuunda mpya.", err: "Hitilafu imetokea. Tafadhali jaribu tena.",
     present: "Onyesha darasani", words: "maneno",
     levelLabel: "Ngazi", elementary: "Shule ya msingi", secondary: "Sekondari", savingDefs: "Inahifadhi na kuandika maana ya kila neno...",
+    langLabel: "Lugha ya maneno",
   },
   "zh-CN": {
     title: "我们的单词组", empty: "学校创建的单词组会显示在这里：来自一节课、课本的一个章节，或拍下的一页。", create: "新建单词组",
@@ -403,6 +438,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "请给单词组起个名字。", needWords: "请至少添加一个单词。", limit: "已达到 {max} 个单词组。要新建，请先删除一个旧的。", err: "出了点问题，请重试。",
     present: "投屏给全班", words: "个单词",
     levelLabel: "学段", elementary: "小学", secondary: "初中和高中", savingDefs: "正在保存，并为每个单词撰写释义...",
+    langLabel: "单词的语言",
   },
   "zh-TW": {
     title: "我們的單字組", empty: "學校建立的單字組會顯示在這裡：來自一堂課、課本的一個章節，或拍下的一頁。", create: "新增單字組",
@@ -414,6 +450,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "請為單字組取個名字。", needWords: "請至少加入一個單字。", limit: "已達 {max} 個單字組。要新增，請先刪除一個舊的。", err: "發生了一些問題，請再試一次。",
     present: "投影給全班", words: "個單字",
     levelLabel: "學段", elementary: "國小", secondary: "國中和高中", savingDefs: "正在儲存，並為每個單字撰寫釋義...",
+    langLabel: "單字的語言",
   },
   ko: {
     title: "우리 학교 세트", empty: "학교에서 만든 세트가 여기에 표시됩니다. 수업, 교과서 단원, 촬영한 페이지의 단어로 만들 수 있습니다.", create: "새 세트",
@@ -425,6 +462,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "세트 이름을 입력하세요.", needWords: "단어를 하나 이상 추가하세요.", limit: "세트가 {max}개에 도달했습니다. 새로 만들려면 오래된 세트를 삭제하세요.", err: "문제가 발생했습니다. 다시 시도해 주세요.",
     present: "수업 화면에 띄우기", words: "단어",
     levelLabel: "학교급", elementary: "초등학교", secondary: "중·고등학교", savingDefs: "저장하고 단어마다 뜻풀이를 쓰는 중...",
+    langLabel: "단어의 언어",
   },
   th: {
     title: "ชุดคำของเรา", empty: "ชุดคำที่โรงเรียนสร้างจะแสดงที่นี่ ทั้งคำจากบทเรียน จากบทในหนังสือ หรือจากหน้าที่ถ่ายรูปไว้", create: "ชุดคำใหม่",
@@ -436,6 +474,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "ตั้งชื่อให้ชุดคำ", needWords: "เพิ่มอย่างน้อยหนึ่งคำ", limit: "มีชุดคำครบ {max} ชุดแล้ว ลบชุดเก่าก่อนเพื่อสร้างชุดใหม่", err: "เกิดข้อผิดพลาด โปรดลองอีกครั้ง",
     present: "ฉายให้ห้องเรียน", words: "คำ",
     levelLabel: "ระดับชั้น", elementary: "ประถมศึกษา", secondary: "มัธยมศึกษา", savingDefs: "กำลังบันทึกและเขียนความหมายของแต่ละคำ...",
+    langLabel: "ภาษาของคำ",
   },
   bn: {
     title: "আমাদের সেট", empty: "আপনার স্কুলের তৈরি সেটগুলো এখানে দেখা যাবে: কোনো পাঠ, বইয়ের কোনো অধ্যায় বা ছবি তোলা পাতার শব্দ।", create: "নতুন সেট",
@@ -447,6 +486,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "সেটের একটি নাম দিন।", needWords: "অন্তত একটি শব্দ যোগ করুন।", limit: "আপনার {max}টি সেট হয়ে গেছে। নতুন সেট বানাতে একটি পুরোনো সেট মুছুন।", err: "কিছু ভুল হয়েছে। আবার চেষ্টা করুন।",
     present: "ক্লাসে দেখান", words: "শব্দ",
     levelLabel: "স্তর", elementary: "প্রাথমিক", secondary: "মাধ্যমিক ও উচ্চ মাধ্যমিক", savingDefs: "সেভ হচ্ছে, প্রতিটি শব্দের সংজ্ঞা লেখা হচ্ছে...",
+    langLabel: "শব্দগুলোর ভাষা",
   },
   da: {
     title: "Vores sæt", empty: "Her vises de sæt, din skole opretter: ord fra en lektion, fra et kapitel i bogen eller fra en side, du har fotograferet.", create: "Nyt sæt",
@@ -458,6 +498,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Giv sættet et navn.", needWords: "Tilføj mindst ét ord.", limit: "Du har nået {max} sæt. Slet et gammelt sæt for at oprette et nyt.", err: "Noget gik galt. Prøv igen.",
     present: "Vis for klassen", words: "ord",
     levelLabel: "Trin", elementary: "Indskoling og mellemtrin", secondary: "Udskoling og gymnasium", savingDefs: "Gemmer og skriver en definition til hvert ord...",
+    langLabel: "Ordenes sprog",
   },
   hu: {
     title: "Saját szócsoportjaink", empty: "Itt jelennek meg az iskola által készített szócsoportok: szavak egy óráról, a könyv egy fejezetéből vagy egy lefényképezett oldalról.", create: "Új szócsoport",
@@ -469,6 +510,7 @@ export const OUR_SETS_COPY: Record<Lang, OurSetsCopy> = {
     needName: "Adjon nevet a szócsoportnak.", needWords: "Adjon hozzá legalább egy szót.", limit: "Elérte a(z) {max} szócsoportot. Új létrehozásához töröljön egy régit.", err: "Valami hiba történt. Próbálja újra.",
     present: "Kivetítés az osztálynak", words: "szó",
     levelLabel: "Szint", elementary: "Alsó tagozat", secondary: "Felső tagozat és középiskola", savingDefs: "Mentés, és minden szóhoz meghatározás írása...",
+    langLabel: "A szavak nyelve",
   },
 };
 

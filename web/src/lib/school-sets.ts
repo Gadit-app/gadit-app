@@ -1,13 +1,14 @@
 import "server-only";
 import crypto from "node:crypto";
 import { NextResponse } from "next/server";
+import type { DocumentReference, WriteBatch } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { registerWordSet, type WordSet } from "@/lib/word-sets";
 import { hardCapReached } from "@/lib/ai-budget";
 import { writeSetDefs } from "@/lib/school-set-defs";
 import {
   SCHOOL_SET_PREFIX, SCHOOL_SET_MAX_SETS, SCHOOL_SET_MAX_WORDS, SCHOOL_SET_TITLE_MAX,
-  isSchoolSetId, cleanSetWords, setLangOf, cleanSetLevel, schoolSetGrade, type SchoolSetLevel,
+  isSchoolSetId, cleanSetWords, setLangOf, cleanSetLevel, cleanSetLang, schoolSetGrade, type SchoolSetLevel,
 } from "@/lib/school-set-ids";
 
 /**
@@ -191,7 +192,7 @@ function checkWords(raw: unknown): string[] {
   return words;
 }
 
-export async function createSchoolSet(schoolId: string, uid: string, title: unknown, words: unknown, level: unknown): Promise<SchoolSetRow> {
+export async function createSchoolSet(schoolId: string, uid: string, title: unknown, words: unknown, level: unknown, lang?: unknown): Promise<SchoolSetRow> {
   const t = cleanSetTitle(title);
   if (!t) throw new SchoolSetError("no_title");
   const list = checkWords(words);
@@ -201,7 +202,8 @@ export async function createSchoolSet(schoolId: string, uid: string, title: unkn
   const id = SCHOOL_SET_PREFIX + crypto.randomBytes(12).toString("hex");
   const now = new Date().toISOString();
   const lv: SchoolSetLevel = cleanSetLevel(level);
-  const set: WordSet = { id, subject: "", title: t, lang: setLangOf(list), words: list, level: lv };
+  // The language the teacher chose, else the one the words' script points to.
+  const set: WordSet = { id, subject: "", title: t, lang: cleanSetLang(lang, list), words: list, level: lv };
   await db.collection(COL).doc(id).set({ schoolId, set, defs: {}, createdBy: uid, createdAt: now, updatedAt: now });
   // The definitions are written now; a failure leaves them for the next open.
   const doc = await fillDefs({ set: { ...set, grade: schoolSetGrade(lv, set.lang) }, defs: {}, schoolId, updatedAt: now });
@@ -209,9 +211,10 @@ export async function createSchoolSet(schoolId: string, uid: string, title: unkn
   return rowOf(doc);
 }
 
-/** Rename a set, replace its words and/or change its level (only within its
- *  own school). Definitions of unchanged words are kept; a new level rewrites them. */
-export async function updateSchoolSet(id: string, schoolId: string, patch: { title?: unknown; words?: unknown; level?: unknown }): Promise<SchoolSetRow> {
+/** Rename a set, replace its words, change its level or its language (only
+ *  within its own school). Definitions of unchanged words are kept; a new
+ *  level or language rewrites them all. */
+export async function updateSchoolSet(id: string, schoolId: string, patch: { title?: unknown; words?: unknown; level?: unknown; lang?: unknown }): Promise<SchoolSetRow> {
   const ref = getAdminDb().collection(COL).doc(id);
   const cur = isSchoolSetId(id) ? readDoc(id, (await ref.get()).data()) : null;
   if (!cur || cur.schoolId !== schoolId) throw new SchoolSetError("not_found", 404);
@@ -219,11 +222,12 @@ export async function updateSchoolSet(id: string, schoolId: string, patch: { tit
   if (!title) throw new SchoolSetError("no_title");
   const words = patch.words === undefined ? cur.set.words : checkWords(patch.words);
   const level = patch.level === undefined ? cleanSetLevel(cur.set.level) : cleanSetLevel(patch.level);
-  const keep = level === cleanSetLevel(cur.set.level);
+  const lang = patch.lang === undefined ? cur.set.lang : cleanSetLang(patch.lang, words);
+  const keep = level === cleanSetLevel(cur.set.level) && lang === cur.set.lang;
   const defs: Record<string, string> = {};
   if (keep) for (const w of words) if (cur.defs[w]) defs[w] = cur.defs[w];
   const now = new Date().toISOString();
-  const set: WordSet = { id, subject: "", title, lang: setLangOf(words), words, level };
+  const set: WordSet = { id, subject: "", title, lang, words, level };
   // `defs` is written whole (not merged), so a removed word's definition goes with it.
   await ref.update({ set, defs, updatedAt: now, defsTriedAt: null });
   const doc = await fillDefs({ set: { ...set, grade: schoolSetGrade(level, set.lang) }, defs, schoolId, updatedAt: now });
@@ -236,4 +240,35 @@ export async function deleteSchoolSet(id: string, schoolId: string): Promise<voi
   const snap = isSchoolSetId(id) ? await ref.get() : null;
   if (!snap?.exists || snap.get("schoolId") !== schoolId) throw new SchoolSetError("not_found", 404);
   await ref.delete();
+}
+
+/** Writes in batches of 400 (Firestore's cap is 500 per batch). */
+async function inBatches(refs: DocumentReference[], op: (b: WriteBatch, r: DocumentReference) => void): Promise<void> {
+  const db = getAdminDb();
+  for (let i = 0; i < refs.length; i += 400) {
+    const batch = db.batch();
+    for (const r of refs.slice(i, i + 400)) op(batch, r);
+    await batch.commit();
+  }
+}
+
+/** A school removed from /admin/schools: its own sets go with it (only
+ *  that school's). Idempotent: a second run finds nothing. */
+export async function deleteSchoolSetsOf(schoolId: string): Promise<number> {
+  if (!schoolId) return 0;
+  const snap = await getAdminDb().collection(COL).where("schoolId", "==", schoolId).select().get();
+  await inBatches(snap.docs.map((d) => d.ref), (b, r) => b.delete(r));
+  return snap.size;
+}
+
+/** Two school records merged (/api/admin/schools/merge): the source's sets
+ *  move to the target. Ids stay the same, so projector links keep working.
+ *  Idempotent: a second run finds nothing to move. The target may end up
+ *  above the 100-set limit, which only stops new sets. */
+export async function moveSchoolSets(sourceId: string, targetId: string): Promise<number> {
+  if (!sourceId || !targetId || sourceId === targetId) return 0;
+  const snap = await getAdminDb().collection(COL).where("schoolId", "==", sourceId).select().get();
+  const now = new Date().toISOString();
+  await inBatches(snap.docs.map((d) => d.ref), (b, r) => b.update(r, { schoolId: targetId, movedFrom: sourceId, updatedAt: now }));
+  return snap.size;
 }

@@ -6,6 +6,7 @@ import { SCHOOL_TYPES, cleanLevels, cleanCurriculum } from "@/lib/school-levels"
 import { isInternalEmail } from "@/lib/internal-accounts";
 import { studentCodesOff } from "@/lib/school";
 import { SCHOOL_DRIP } from "@/lib/email-drip/school-drip";
+import { deleteSchoolSetsOf } from "@/lib/school-sets";
 
 /** Y-M-D in Israel, the same day key /api/schools/projection writes. */
 function ilDay(ms: number): string {
@@ -256,7 +257,8 @@ export async function GET(req: NextRequest) {
  *
  * Nukes schools/{uid} and every classroom + searches subcollection under it
  * (recursiveDelete), deletes the classroomCodes/* docs that route to it, and
- * clears the owner user's schoolId so it no longer appears as a school. Does
+ * clears the owner user's schoolId so it no longer appears as a school. The
+ * school's own word sets (schoolSets) are deleted too. Does
  * NOT touch Stripe/billing — cancel the subscription separately if needed.
  *
  * For clearing out test/duplicate schools. Admin-gated, irreversible.
@@ -306,9 +308,12 @@ export async function DELETE(req: NextRequest) {
   // The school doc + all classrooms + their searches, in one recursive sweep.
   await db.recursiveDelete(schoolRef);
 
+  // The school's own word sets (schoolSets, top level), only this school's.
+  const deletedSets = await deleteSchoolSetsOf(schoolId);
+
   // Detach the owner user so they drop out of the schools list. Leaves the
   // account (and any Stripe subscription) intact; billing is handled apart.
   await db.collection("users").doc(schoolId).set({ schoolId: FieldValue.delete() }, { merge: true }).catch(() => {});
 
-  return NextResponse.json({ ok: true, deletedCodes: codesSnap.size });
+  return NextResponse.json({ ok: true, deletedCodes: codesSnap.size, deletedSets });
 }

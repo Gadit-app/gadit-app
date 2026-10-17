@@ -10,6 +10,8 @@
  * schoolSets/{id} (lib/school-sets.ts, server only).
  */
 
+import { LANGUAGES } from "@/lib/i18n";
+
 export const SCHOOL_SET_PREFIX = "cur-sch-";
 export const SCHOOL_SET_MAX_WORDS = 40;
 export const SCHOOL_SET_MAX_SETS = 100;
@@ -38,7 +40,14 @@ export function schoolSetGrade(level: SchoolSetLevel, lang: string): string {
   return sec ? "Middle and high school" : "Primary school";
 }
 
-const ID_RE =/^cur-sch-[a-z0-9]{16,32}$/;
+/** The set's language as the teacher chose it (any UI language), else the
+ *  one its words' script points to. */
+const SET_LANGS = new Set<string>(LANGUAGES.map((l) => l.code));
+export function cleanSetLang(v: unknown, words: string[]): string {
+  return typeof v === "string" && SET_LANGS.has(v) ? v : setLangOf(words);
+}
+
+const ID_RE = /^cur-sch-[a-z0-9]{16,32}$/;
 export const isSchoolSetId = (id: string | null | undefined): boolean => !!id && ID_RE.test(id);
 
 /** Hebrew niqqud and cantillation, Arabic tashkeel and tatweel: words are

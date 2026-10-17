@@ -5,9 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import { useHref } from "@/lib/href";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
-import type { Lang } from "@/lib/i18n";
+import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 import { registerWordSet, type WordSet } from "@/lib/word-sets";
-import { isSchoolSetId, splitSetWords, cleanSetLevel, SCHOOL_SET_LEVELS, SCHOOL_SET_MAX_WORDS, SCHOOL_SET_MAX_SETS, SCHOOL_SET_TITLE_MAX, type SchoolSetLevel } from "@/lib/school-set-ids";
+import { isSchoolSetId, splitSetWords, setLangOf, cleanSetLevel, SCHOOL_SET_LEVELS, SCHOOL_SET_MAX_WORDS, SCHOOL_SET_MAX_SETS, SCHOOL_SET_TITLE_MAX, type SchoolSetLevel } from "@/lib/school-set-ids";
 import { OUR_SETS_COPY, fillCopy, type OurSetsCopy } from "./our-sets-copy";
 
 /**
@@ -23,7 +23,8 @@ import { OUR_SETS_COPY, fillCopy, type OurSetsCopy } from "./our-sets-copy";
  * language (every UI language).
  */
 
-type Editor = { id?: string; title: string; text: string; level: SchoolSetLevel };
+/** lang null: follows the words' script until the teacher picks one. */
+type Editor = { id?: string; title: string; text: string; level: SchoolSetLevel; lang: string | null };
 type OurSet = WordSet & { defs?: Record<string, string> };
 type Busy = "" | "photo" | "topic" | "save" | "delete";
 
@@ -156,7 +157,7 @@ export default function OurSets() {
       const r = await authed("/api/school-sets", {
         method: editor.id ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...(editor.id ? { id: editor.id } : {}), title, words, level: editor.level }),
+        body: JSON.stringify({ ...(editor.id ? { id: editor.id } : {}), title, words, level: editor.level, lang: editor.lang ?? setLangOf(words) }),
       });
       const j = (await r.json().catch(() => ({}))) as { set?: OurSet; error?: string };
       if (!r.ok || !j.set) {
@@ -214,7 +215,7 @@ export default function OurSets() {
           {sets.length > 0 && <span className="os-count">{sets.length}</span>}
         </h2>
         {!editor && (
-          <button type="button" className="os-new" disabled={atLimit} title={atLimit ? fillCopy(c.limit, { max: SCHOOL_SET_MAX_SETS }) : undefined} onClick={() => startEditor({ title: "", text: "", level: defaultLevel })}>
+          <button type="button" className="os-new" disabled={atLimit} title={atLimit ? fillCopy(c.limit, { max: SCHOOL_SET_MAX_SETS }) : undefined} onClick={() => startEditor({ title: "", text: "", level: defaultLevel, lang: null })}>
             <PlusIcon /> {c.create}
           </button>
         )}
@@ -235,6 +236,14 @@ export default function OurSets() {
               </button>
             ))}
           </div>
+
+          <label className="os-label" htmlFor="os-lang">{c.langLabel}</label>
+          <select id="os-lang" className="os-input os-select" dir={dir} value={editor.lang ?? setLangOf(words)}
+            onChange={(e) => setEditor({ ...editor, lang: e.target.value })}>
+            {LANGUAGES.map((l) => (
+              <option key={l.code} value={l.code}>{langNameIn(l.code, lang)}</option>
+            ))}
+          </select>
 
           <label className="os-label" htmlFor="os-words">{c.wordsLabel}</label>
           <textarea id="os-words" className="os-input os-text" dir={dir} rows={7} value={editor.text} placeholder={c.wordsPh}
@@ -285,6 +294,7 @@ export default function OurSets() {
                 <button type="button" className="os-row-head" aria-expanded={isOpen} onClick={() => { setOpen(isOpen ? "" : set.id); setConfirmDel(""); }}>
                   <span className="os-row-title">{set.title}</span>
                   <span className="os-row-level">{set.level === "secondary" ? c.secondary : c.elementary}</span>
+                  <span className="os-row-level lang">{langNameIn(set.lang, lang)}</span>
                   <span className="os-row-meta">{wordsN(c, lang, set.words.length)}</span>
                   <Chevron down={isOpen} rtl={dir === "rtl"} />
                 </button>
@@ -302,7 +312,7 @@ export default function OurSets() {
                         </Link>
                       )}
                       <span className="os-row-tools">
-                        <button type="button" className="os-link" disabled={!!busy || !!editor} onClick={() => startEditor({ id: set.id, title: set.title, text: set.words.join("\n"), level: cleanSetLevel(set.level) })}>{c.edit}</button>
+                        <button type="button" className="os-link" disabled={!!busy || !!editor} onClick={() => startEditor({ id: set.id, title: set.title, text: set.words.join("\n"), level: cleanSetLevel(set.level), lang: set.lang })}>{c.edit}</button>
                         <button type="button" className="os-link danger" disabled={!!busy} onClick={() => setConfirmDel(confirmDel === set.id ? "" : set.id)}>{c.del}</button>
                       </span>
                     </div>
@@ -405,6 +415,8 @@ const CSS = `
 .os-level{border:1px solid transparent;background:transparent;font:inherit;font-size:14.5px;font-weight:700;color:var(--ink-soft);padding:7px 14px;border-radius:9px;cursor:pointer}
 .os-level:hover{color:var(--ink)}
 .os-level.on{background:var(--surface);color:var(--c);border-color:color-mix(in srgb,var(--c) 35%,var(--rule));box-shadow:0 1px 3px rgba(11,18,32,.1)}
+.os-select{max-width:320px;cursor:pointer}
+.os-row-level.lang{color:var(--ink-soft);background:var(--paper);border-color:var(--rule)}
 .os-row-level{flex-shrink:0;font-size:12px;font-weight:700;color:var(--c);background:color-mix(in srgb,var(--c) 8%,#fff);border:1px solid color-mix(in srgb,var(--c) 20%,#fff);border-radius:7px;padding:1px 8px}
 .os-row-meta{flex-shrink:0;font-size:12.5px;font-weight:700;color:var(--ink-faint);background:var(--paper);border-radius:7px;padding:2px 8px}
 .os-row-body{padding:0 14px 14px;display:flex;flex-direction:column;gap:12px}
@@ -429,6 +441,9 @@ const CSS = `
 @keyframes osspin{to{transform:rotate(360deg)}}
 @media (max-width:560px){
   .os-topic{flex-direction:column}
+  .os-row-head{flex-wrap:wrap;row-gap:6px}
+  .os-row-title{flex-basis:100%}
+  .os-select{max-width:none}
   .os-row-actions{flex-direction:column;align-items:stretch}
   .os-present{justify-content:center}
   .os-row-tools{justify-content:center}

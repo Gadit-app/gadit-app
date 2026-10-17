@@ -141,7 +141,6 @@ export function FamilyLeaderboard({ lang, dir }: { lang: string; dir: "ltr" | "r
   const { user } = useAuth();
   const t = copyFor(lang);
   const [rows, setRows] = useState<Row[] | null>(null);
-  const [view, setView] = useState<"week" | "all">("week");
 
   useEffect(() => {
     if (!user) return;
@@ -162,7 +161,9 @@ export function FamilyLeaderboard({ lang, dir }: { lang: string; dir: "ltr" | "r
 
   if (!rows || rows.length < 2) return null;
 
-  const val = (r: Row) => (view === "week" ? r.week : r.allTime);
+  // One running board, no weekly reset (Gadi 2026-10-17): every word anyone
+  // in the family ever looked up counts.
+  const val = (r: Row) => r.allTime;
   const sorted = [...rows].sort((a, b) => val(b) - val(a) || b.allTime - a.allTime || a.name.localeCompare(b.name));
   // Ties share a place (1, 1, 3), so two kids with the same count both get gold.
   const places: number[] = [];
@@ -174,13 +175,9 @@ export function FamilyLeaderboard({ lang, dir }: { lang: string; dir: "ltr" | "r
       <style>{CSS}</style>
       <div className="fam-lb-head">
         <h2 className="fam-lb-title"><span aria-hidden>🏆</span>{t.title}</h2>
-        <div className="fam-lb-toggle" role="group" aria-label={t.title}>
-          <button type="button" aria-pressed={view === "week"} onClick={() => setView("week")}>{t.week}</button>
-          <button type="button" aria-pressed={view === "all"} onClick={() => setView("all")}>{t.all}</button>
-        </div>
       </div>
-      <p className="fam-lb-sub">{view === "week" ? t.subWeek : t.subAll}</p>
-      {nobody && <p className="fam-lb-empty">{view === "week" ? t.emptyWeek : t.emptyAll}</p>}
+      <p className="fam-lb-sub">{t.subAll}</p>
+      {nobody && <p className="fam-lb-empty">{t.emptyAll}</p>}
       <ol className="fam-lb-list">
         {sorted.map((r, i) => {
           const place = places[i];
@@ -207,7 +204,7 @@ export function FamilyLeaderboard({ lang, dir }: { lang: string; dir: "ltr" | "r
                 </span>
                 <span className="fam-lb-rank">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={rankIconSrc(r.rankKey)} alt="" width={20} height={20} style={{ width: 20, height: 20, objectFit: "contain", verticalAlign: "-5px", marginInlineEnd: 4 }} />
+                  <img src={rankIconSrc(r.rankKey)} alt="" width={28} height={28} style={{ width: 28, height: 28, objectFit: "contain", verticalAlign: "-9px", marginInlineEnd: 4 }} />
                   {rankLabel(r.rankKey, lang)}
                 </span>
               </span>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FieldValue, type CollectionReference, type Firestore, type WriteBatch } from "firebase-admin/firestore";
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
+import { moveSchoolSets } from "@/lib/school-sets";
 
 /**
  * POST /api/admin/schools/merge  { sourceId, targetId }
@@ -12,7 +13,8 @@ import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
  * TARGET (so existing kid codes keep working, no re-share needed). The
  * school-level class dictionary (dictWords + uniqueWordCount), the projector
  * log (projections, counts added on the same day|kind|set|word) and the
- * dashboard checklist (a step done in either school stays done) move too.
+ * dashboard checklist (a step done in either school stays done) move too,
+ * and so do the school's own word sets (schoolSets, ids unchanged).
  * Then SOURCE is recursively deleted and its owner user is detached.
  *
  * Pick TARGET = the account you want to keep (the one holding the active
@@ -158,6 +160,10 @@ export async function POST(req: NextRequest) {
   if (Object.keys(checklist).length) patch.checklist = checklist;
   if (Object.keys(patch).length) await tgtRef.set(patch, { merge: true });
 
+  // The source's own word sets move to the target (same ids, so projector
+  // links keep working).
+  const movedSets = await moveSchoolSets(sourceId, targetId);
+
   // Delete the source school entirely and detach its owner user.
   await db.recursiveDelete(srcRef);
   await db.collection("users").doc(sourceId).set({ schoolId: FieldValue.delete() }, { merge: true }).catch(() => {});
@@ -171,5 +177,6 @@ export async function POST(req: NextRequest) {
     movedSchoolWords: schoolDict.added,
     addedUniqueWords,
     movedProjections: srcProj.size,
+    movedSets,
   });
 }
