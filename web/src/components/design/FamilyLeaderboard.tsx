@@ -14,6 +14,7 @@ import { useAuth } from "@/lib/auth-context";
 import { avatarUrl, defaultMemberName, memberColorFor, type MemberRole } from "@/lib/family";
 import { type RankKey } from "@/lib/gamification";
 import { rankLabel } from "@/lib/gamification-labels";
+import { rankIconSrc } from "@/lib/rank-icons";
 
 type Row = {
   memberId: string;
@@ -204,7 +205,11 @@ export function FamilyLeaderboard({ lang, dir }: { lang: string; dir: "ltr" | "r
                   <bdi>{name}</bdi>
                   {r.isYou && <span className="fam-lb-you">{t.you}</span>}
                 </span>
-                <span className="fam-lb-rank">{rankLabel(r.rankKey, lang)}</span>
+                <span className="fam-lb-rank">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={rankIconSrc(r.rankKey)} alt="" width={20} height={20} style={{ width: 20, height: 20, objectFit: "contain", verticalAlign: "-5px", marginInlineEnd: 4 }} />
+                  {rankLabel(r.rankKey, lang)}
+                </span>
               </span>
               <span className={`fam-lb-num${n === 0 ? " is-zero" : ""}`}>{n}</span>
             </li>

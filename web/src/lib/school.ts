@@ -106,6 +106,11 @@ export const DEFAULT_SCHOOL_HOURS: ActiveHours = {
   timezone: "Asia/Jerusalem",
 };
 
+/** New set pictures a school may have drawn per calendar month (Gadi
+ *  2026-10-17, ~1¢ each, so ~$5). Cached pictures never count; past the cap
+ *  the word shows with its definition and no picture. */
+export const SCHOOL_MONTHLY_NEW_IMAGES = 500;
+
 /** A school's classroom hours (Gadi 2026-10-17: every school ran on the
  *  Israeli week). Its own schedule when set; otherwise by curriculum or
  *  saved timezone: Israel Sun-Thu, South Africa and everyone else Mon-Fri,

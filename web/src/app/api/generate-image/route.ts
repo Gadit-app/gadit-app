@@ -8,6 +8,8 @@ import { loadWordSet } from "@/lib/curriculum-sets";
 import { generateClassroomImage, houseImage } from "@/lib/classroom-image";
 import { classroomAccess } from "@/lib/classroom-access";
 import { pilotGate } from "@/lib/pilot-access";
+import { SCHOOL_MONTHLY_NEW_IMAGES } from "@/lib/school";
+import { FieldValue } from "firebase-admin/firestore";
 
 // gpt-image-1 at quality:low typically completes in 5-15s; quality:medium
 // can run 10-30s and sometimes >45s when OpenAI is busy. Raise the
@@ -181,6 +183,9 @@ export async function POST(req: NextRequest) {
       // Gemara: the word as spelled in the unit, ignoring niqqud and quote marks.
       const w = item?.w ?? (set && isGemaraSet(set) ? set.words.find((x) => sameSetWord(x, asked)) : undefined) ?? asked;
       if (set && (item || set.words.some((x) => x.trim().toLowerCase() === w.toLowerCase()))) {
+        // The school's monthly cap on NEW set pictures (2026-10-17).
+        const schoolId = ((await getAdminDb().collection("users").doc(userInfo.userId).get()).get("schoolId") as string | undefined) || "";
+        const usageDoc = schoolId ? getAdminDb().collection("schools").doc(schoolId).collection("imageUsage").doc(currentMonthKey()) : null;
         const img = await generateClassroomImage({
           word: w,
           meaning: item?.d ?? classroomDef(set.id, w) ?? meaning,
@@ -188,6 +193,10 @@ export async function POST(req: NextRequest) {
           set,
           uid: userInfo.userId,
           ...(item ? { item: { m: item.m, rev: item.rev } } : {}),
+          ...(usageDoc ? {
+            allowNew: async () => (((await usageDoc.get()).get("count") as number | undefined) ?? 0) < SCHOOL_MONTHLY_NEW_IMAGES,
+            onGenerated: async () => { await usageDoc.set({ count: FieldValue.increment(1), updatedAt: new Date().toISOString() }, { merge: true }); },
+          } : {}),
         });
         if (img.status === "error") {
           console.error("[generate-image] classroom:", img.error);

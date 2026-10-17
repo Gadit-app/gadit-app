@@ -171,7 +171,7 @@ export async function houseImage(word: string, meaning: string, lang: string, ki
 export type ClassroomImageResult =
   | { status: "cached"; url: string; cacheKey: string }
   | { status: "generated"; url: string; cacheKey: string }
-  | { status: "skipped"; reason: "none" | "sensitive" | "not_approved"; cacheKey: string }
+  | { status: "skipped"; reason: "none" | "sensitive" | "not_approved" | "quota"; cacheKey: string }
   | { status: "error"; error: string; cacheKey: string };
 
 /** The set picture for a word, from cache or drawn now in the house style. */
@@ -186,6 +186,11 @@ export async function generateClassroomImage(opts: {
   admin?: boolean;
   /** A meaning of a unit that lists meanings: keyed on its id, not the text. */
   item?: MeaningRef;
+  /** Asked only when the picture is not cached yet: may a new one be drawn
+   *  (the school's monthly picture cap, 2026-10-17)? */
+  allowNew?: () => Promise<boolean>;
+  /** Called once a new picture is drawn and stored. */
+  onGenerated?: () => Promise<void>;
 }): Promise<ClassroomImageResult> {
   const { word, meaning, lang } = opts;
   const style = classroomStyle(opts.set);
@@ -204,6 +209,7 @@ export async function generateClassroomImage(opts: {
   // A meaning (phase C): its picture comes in with its approved content
   // (the publish tool), never drawn on view or by a forced redraw.
   if (opts.item) return { status: "skipped", reason: "not_approved", cacheKey: cKey };
+  if (opts.allowNew && !(await opts.allowNew())) return { status: "skipped", reason: "quota", cacheKey: cKey };
   try {
     const w = word.trim();
     const letter = LETTER_REFS[w] ?? LETTER_REFS[w.replace(/[ً-ٰٟ]/g, "")];
@@ -244,6 +250,7 @@ export async function generateClassroomImage(opts: {
     await file.makePublic();
     const url = `https://storage.googleapis.com/${bucket.name}/${storagePath}`;
     await ref.set({ url, word, uiLang: lang, meaning: meaning.slice(0, 500), style, setId: opts.set.id, storagePath, createdAt: new Date().toISOString() });
+    if (opts.onGenerated) await opts.onGenerated().catch(() => {});
     return { status: "generated", url, cacheKey: cKey };
   } catch (e) {
     return { status: "error", error: String(e).slice(0, 200), cacheKey: cKey };
