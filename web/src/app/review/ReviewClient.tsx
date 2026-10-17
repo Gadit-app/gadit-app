@@ -32,7 +32,7 @@ type Question = { part?: string; kind: "decision" | "question"; q: string; optio
 type HistoryItem = { id: string; part: PartId; rev: number; at: string; before: { decision: Decision; status: string; at: string; recordedInHistory: boolean } | null; after: { decision: Decision; status: string }; notes: string; changed: string[] };
 type MeaningData = { meaning: Meaning; parts: PartId[]; decisions: Record<string, SavedDecision>; questions?: Question[]; history?: HistoryItem[] };
 
-const DECISION_LABEL: Record<Decision, string> = { approve: "אישור", fix: "תיקון", reject: "דחייה" };
+const DECISION_LABEL: Record<Decision, string> = { approve: "אישור", fix: "תיקון", reject: "דחייה", clarify: "דורש בירור" };
 const STATUS_LABEL: Record<string, string> = { approved: "אושר", draft: "לתיקון", rejected: "נדחה" };
 const ERRORS: Array<[RegExp, string]> = [
   [/quote_check_required/, "כדי לאשר ציטוט צריך למלא את המהדורה, המסכת, הדף והעמוד שנבדקו."],
@@ -46,7 +46,9 @@ const ERRORS: Array<[RegExp, string]> = [
 const errorText = (e: string) => ERRORS.find(([r]) => r.test(e))?.[1] ?? "השמירה לא הצליחה. נסו שוב.";
 const shortTime = (iso: string) => new Date(iso).toLocaleString("he-IL", { timeZone: "Asia/Jerusalem", day: "numeric", month: "numeric", hour: "2-digit", minute: "2-digit" });
 const israelTime = (iso: string) => new Date(iso).toLocaleString("he-IL", { timeZone: "Asia/Jerusalem", weekday: "long", day: "numeric", month: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" });
-const doneOf = (x: ListItem) => x.parts.every((p) => x.decided[p]);
+// A part waiting for clarification is not decided yet (2026-10-18).
+const isDecided = (v: string | undefined) => !!v && v !== "clarify";
+const doneOf = (x: ListItem) => x.parts.every((p) => isDecided(x.decided[p]));
 const countText = (n: number, one: string, many: string) => (n === 1 ? one : `${n} ${many}`);
 
 export function ReviewClient() {
@@ -102,7 +104,7 @@ export function ReviewClient() {
 
   const onSaved = (m: string, part: PartId, d: SavedDecision, h: HistoryItem) => {
     setCur((c) => (c && c.meaning.m === m ? { ...c, decisions: { ...c.decisions, [part]: d }, history: [...(c.history ?? []), h] } : c));
-    setList((l) => (l ? { ...l, meanings: l.meanings.map((x) => (x.m === m ? { ...x, decided: { ...x.decided, [part]: d.status } } : x)) } : l));
+    setList((l) => (l ? { ...l, meanings: l.meanings.map((x) => (x.m === m ? { ...x, decided: { ...x.decided, [part]: d.decision === "clarify" ? "clarify" : d.status } } : x)) } : l));
   };
 
   if (loading || (user && state === "loading")) return <Shell><p className="rv-muted">טוענים...</p></Shell>;
@@ -134,7 +136,7 @@ export function ReviewClient() {
   // Choosing the meaning already open keeps it (clearing it would wait for a load that never comes).
   const go = (m: string) => { if (m !== sel) { setCur(null); setSel(m); } window.scrollTo({ top: 0 }); };
   const goGroup = (i: number) => { setGrp(i); const first = groups?.[i]?.ms[0]; if (first) go(first); };
-  const done = shown.reduce((n, x) => n + x.parts.filter((p) => x.decided[p]).length, 0);
+  const done = shown.reduce((n, x) => n + x.parts.filter((p) => isDecided(x.decided[p])).length, 0);
   const all = shown.reduce((n, x) => n + x.parts.length, 0);
   const hasLevels = !!cur && LEVELS.some((l) => levelText(cur.meaning, l.id));
   const questions = cur?.questions ?? [];
@@ -169,7 +171,7 @@ export function ReviewClient() {
       )}
       <nav className="rv-chips" aria-label="המשמעויות">
         {shown.map((x, i) => {
-          const n = x.parts.filter((p) => x.decided[p]).length;
+          const n = x.parts.filter((p) => isDecided(x.decided[p])).length;
           return (
             <button key={x.m} type="button" className={`rv-chip${x.m === sel ? " is-on" : ""}${n === x.parts.length ? " is-done" : ""}`} onClick={() => go(x.m)}>
               <span>{x.w}{shown.filter((y) => y.w === x.w).length > 1 ? ` (${shown.filter((y, j) => y.w === x.w && j <= i).length})` : ""}</span>
@@ -230,9 +232,11 @@ export function ReviewClient() {
 /** What the projector shows at each level, by the publish rule and the decisions so far. */
 function LevelBoard({ x, decisions }: { x: Meaning; decisions: Record<string, SavedDecision> }) {
   const rows = projectorByLevel(x, (p) => { const d = decisions[p]; return d && d.rev === x.rev ? d.status : undefined; });
-  const why = (r: (typeof rows)[number]) => (!r.own ? "אין נוסח ייעודי לרמה הזאת, ולכן יוצג נוסח הבסיס."
+  const decOf = (p: PartId) => { const d = decisions[p]; return d && d.rev === x.rev ? d.decision : undefined; };
+  const why = (r: (typeof rows)[number]) => (r.shows === "none" ? "הגדרת הבסיס עוד לא אושרה, ולכן המשמעות לא תוצג במקרן באף רמה."
+    : !r.own ? "אין נוסח ייעודי לרמה הזאת, ולכן יוצג נוסח הבסיס המאושר."
     : r.status === "approved" ? "נוסח ייעודי, אושר."
-    : `יש נוסח ייעודי, והוא ${r.status === "rejected" ? "נדחה" : r.status === "draft" ? "סומן לתיקון" : "עוד לא אושר"}. עד שיאושר, יוצג נוסח הבסיס.`);
+    : `יש נוסח ייעודי, והוא ${r.status === "rejected" ? "נדחה" : decOf(`level_${r.id}` as PartId) === "clarify" ? "סומן כדורש בירור" : r.status === "draft" ? "סומן לתיקון" : "עוד לא אושר"}. עד שיאושר, יוצג נוסח הבסיס המאושר.`);
   return (
     <div className="rv-levels">
       <h3>מה יוצג במקרן בכל רמה</h3>
@@ -243,7 +247,7 @@ function LevelBoard({ x, decisions }: { x: Meaning; decisions: Record<string, Sa
           {rows.map((r) => (
             <tr key={r.id}>
               <th scope="row">{r.label}<small>{r.where}</small></th>
-              <td>{r.text}</td>
+              <td>{r.shows === "none" ? <span className="rv-muted">לא יוצג</span> : r.text}</td>
               <td className={`rv-why s-${r.shows}`}>{why(r)}{r.own && r.shows === "base" ? <small>אחרי אישור יוצג: {r.own}</small> : null}</td>
             </tr>
           ))}
@@ -367,7 +371,7 @@ function PartCard({ part, x, saved, api, onSaved, label, questions = [], history
             </fieldset>
           )}
           <div className="rv-decide" role="radiogroup" aria-label={`החלטה: ${label ?? part.label}`}>
-            {(["approve", "fix", "reject"] as Decision[]).map((d) => (
+            {(["approve", "fix", "reject", "clarify"] as Decision[]).map((d) => (
               <button key={d} type="button" role="radio" aria-checked={decision === d} className={`rv-dec d-${d}${decision === d ? " is-on" : ""}`} onClick={() => setDecision(d)}>{DECISION_LABEL[d]}</button>
             ))}
           </div>
@@ -486,6 +490,7 @@ const CSS = `
 .rv-dec.d-approve.is-on{background:#16A34A;border-color:#16A34A;color:#fff}
 .rv-dec.d-fix.is-on{background:#D97706;border-color:#D97706;color:#fff}
 .rv-dec.d-reject.is-on{background:#DC2626;border-color:#DC2626;color:#fff}
+.rv-dec.d-clarify.is-on{background:#4F46E5;border-color:#4F46E5;color:#fff}
 .rv-save{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .rv-ok{color:#15803D;font-weight:600;font-size:14px}.rv-err{color:#B91C1C;font-weight:600;font-size:14px}
 .rv-hist{border-top:1px dashed #D5E3E0;padding-top:8px}

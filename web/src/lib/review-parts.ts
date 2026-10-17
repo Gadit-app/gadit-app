@@ -12,7 +12,10 @@ export type Meaning = Record<string, any>;
 
 export type LevelId = "beg" | "adv" | "yes";
 export type PartId = "definition" | "examples" | "quote" | "visual" | "quiz" | "game" | "diagram" | `level_${LevelId}`;
-export type Decision = "approve" | "fix" | "reject";
+/** "clarify" (2026-10-18): the expert needs an answer before deciding. It is
+ *  not an approval: the part stays a draft, is never publishable, keeps its
+ *  history like any decision and leaves the other parts as they are. */
+export type Decision = "approve" | "fix" | "reject" | "clarify";
 export type Field = {
   key: string;
   label: string;
@@ -44,8 +47,8 @@ export const LEVELS: Array<{ id: LevelId; label: string; where: string }> = [
 ];
 export const levelText = (x: Meaning, lv: LevelId): string => String(x.levels?.[lv]?.d ?? "").trim();
 export const levelPart = (lv: LevelId) => `level_${lv}` as PartId;
-export const DECISIONS: Decision[] = ["approve", "fix", "reject"];
-export const STATUS_OF: Record<Decision, "approved" | "draft" | "rejected"> = { approve: "approved", fix: "draft", reject: "rejected" };
+export const DECISIONS: Decision[] = ["approve", "fix", "reject", "clarify"];
+export const STATUS_OF: Record<Decision, "approved" | "draft" | "rejected"> = { approve: "approved", fix: "draft", reject: "rejected", clarify: "draft" };
 
 export const quoteOf = (x: Meaning) => (x.examples ?? []).find((e: Meaning) => e.kind === "quote") ?? null;
 const oursOf = (x: Meaning) => (x.examples ?? []).filter((e: Meaning) => e.kind === "ours");
@@ -139,13 +142,16 @@ export const partsFor = (x: Meaning) => PARTS.filter((p) => {
 });
 
 /** What the projector shows for each level, by the publish rule, after the expert's
- *  decisions so far: a level's own text once approved, else the base definition. */
+ *  decisions so far: a level's own text once approved, else the APPROVED base
+ *  definition; with no approved base the meaning is not publishable at all
+ *  ("none"), whatever its levels say (2026-10-18). */
 export function projectorByLevel(x: Meaning, statusOf: (part: PartId) => string | undefined) {
+  const baseOk = statusOf("definition") === "approved";
   return LEVELS.map((l) => {
     const own = levelText(x, l.id);
     const status = own ? statusOf(levelPart(l.id)) : undefined;
-    const shows: "own" | "base" = own && status === "approved" ? "own" : "base";
-    return { ...l, own, status, shows, text: shows === "own" ? own : String(x.d ?? "") };
+    const shows: "own" | "base" | "none" = !baseOk ? "none" : own && status === "approved" ? "own" : "base";
+    return { ...l, own, status, shows, text: shows === "own" ? own : shows === "base" ? String(x.d ?? "") : "" };
   });
 }
 

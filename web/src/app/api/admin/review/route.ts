@@ -11,6 +11,11 @@ import { exportReview, reviewRef } from "@/lib/content-review";
  *   POST ?secret=…  { action: "grant", uid, email, name, review, expiresAt }
  *                   { action: "extend", uid, expiresAt }
  *                   { action: "close", uid }
+ *                   { action: "archive", review } | { action: "unarchive", review }
+ *                   An archived review (the first pilot once it is done, 2026-10-18)
+ *                   stays whole for the admin: status, history and export keep
+ *                   working, nothing is deleted. It can't be granted again, and it
+ *                   is refused while an expert's grant on it is still open.
  * A grant is for one uid only; its email must be that account's email.
  */
 export const runtime = "nodejs";
@@ -60,6 +65,19 @@ export async function POST(req: NextRequest) {
   const bad = authz(req);
   if (bad) return bad;
   const b = (await req.json().catch(() => null)) as Record<string, unknown> | null;
+  if (b?.action === "archive" || b?.action === "unarchive") {
+    const review = String(b.review ?? "");
+    if (!REVIEW_ID.test(review) || !(await reviewRef(review).get()).exists) return NextResponse.json({ error: "no_such_review" }, { status: 404 });
+    const at = new Date().toISOString();
+    if (b.action === "archive") {
+      const open = await getAdminDb().collection("reviewGrants").where("reviewId", "==", review).get();
+      const live = open.docs.filter((d) => d.get("active") === true && Date.parse(String(d.get("expiresAt"))) > Date.now());
+      if (live.length) return NextResponse.json({ error: "review_in_use", openGrants: live.length }, { status: 409 });
+    }
+    await reviewRef(review).set(b.action === "archive" ? { archived: true, archivedAt: at } : { archived: false, unarchivedAt: at }, { merge: true });
+    await reviewRef(review).collection("log").add({ action: b.action, at, by: "admin" });
+    return NextResponse.json({ ok: true, review, archived: b.action === "archive" });
+  }
   const uid = typeof b?.uid === "string" ? b.uid.trim() : "";
   if (!uid) return NextResponse.json({ error: "uid_required" }, { status: 400 });
   const ref = getAdminDb().collection("reviewGrants").doc(uid);
@@ -68,7 +86,9 @@ export async function POST(req: NextRequest) {
     const review = String(b.review ?? "");
     const email = String(b.email ?? "").trim().toLowerCase();
     const name = String(b.name ?? "").trim().slice(0, 80);
-    if (!REVIEW_ID.test(review) || !(await reviewRef(review).get()).exists) return NextResponse.json({ error: "no_such_review" }, { status: 404 });
+    const head = await reviewRef(review).get();
+    if (!REVIEW_ID.test(review) || !head.exists) return NextResponse.json({ error: "no_such_review" }, { status: 404 });
+    if (head.get("archived") === true) return NextResponse.json({ error: "review_archived" }, { status: 409 });
     if (!name || !validEnd(b.expiresAt)) return NextResponse.json({ error: "name_and_future_expiresAt_required" }, { status: 400 });
     let account = "";
     try { account = ((await getAdminAuth().getUser(uid)).email ?? "").toLowerCase(); } catch { return NextResponse.json({ error: "no_such_user" }, { status: 404 }); }

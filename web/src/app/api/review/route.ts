@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
       ...(Array.isArray(head.groups) && head.groups.length ? { groups: head.groups } : {}),
       meanings: (head.meanings ?? []).map((x: { m: string; w: string; rev: number; parts: string[] }) => ({
         ...x,
-        decided: Object.fromEntries(Object.entries(dec[x.m] ?? {}).filter(([, d]) => (d as PartDecision).rev === x.rev).map(([p, d]) => [p, (d as PartDecision).status])),
+        decided: Object.fromEntries(Object.entries(dec[x.m] ?? {}).filter(([, d]) => (d as PartDecision).rev === x.rev).map(([p, d]) => [p, (d as PartDecision).decision === "clarify" ? "clarify" : (d as PartDecision).status])),
       })),
     }, { headers: PRIVATE });
   }
