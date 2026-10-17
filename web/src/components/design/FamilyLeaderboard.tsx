@@ -115,13 +115,24 @@ const CSS = `
 .fam-lb-sub { margin: 8px 0 12px; font-size: 13px; color: var(--ink-muted, #6b7280); line-height: 1.45; }
 .fam-lb-empty { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: var(--ink-soft, #3f4856); }
 .fam-lb-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
-.fam-lb-row { display: flex; align-items: center; gap: 11px; padding: 8px 10px; border-radius: 14px; }
+/* Fixed columns (Gadi 2026-10-17): place, picture, name, then the rank from the
+   middle of the row, so every rank picture stands on one straight line, then the number. */
+.fam-lb-row { display: grid; grid-template-columns: 30px 36px minmax(0, 1fr) minmax(0, 1fr) 3em; align-items: center; column-gap: 11px; padding: 8px 10px; border-radius: 14px; }
 .fam-lb-row.is-you { background: color-mix(in srgb, var(--accent, #0EA5A5) 12%, transparent); }
 .fam-lb-pos {
   width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
   font-size: 13px; font-weight: 800; color: var(--ink-muted, #6b7280);
   font-variant-numeric: tabular-nums;
+  /* Every place in a circle, 4 and on too, so the column lines up. */
+  background: color-mix(in srgb, var(--ink, #1f2937) 7%, transparent);
+}
+@media (max-width: 420px) {
+  .fam-lb { padding: 16px 12px 10px; }
+  .fam-lb-row { grid-template-columns: 26px 30px minmax(0, 0.75fr) minmax(0, 1.25fr) 2.3em; column-gap: 7px; padding: 8px 6px; }
+  .fam-lb-rank { gap: 5px; font-size: 12px; }
+  .fam-lb-rank img { width: 28px !important; height: 28px !important; }
+  .fam-lb-num { font-size: 17px; }
 }
 .fam-lb-pos.is-medal { color: #fff; background: var(--medal); box-shadow: 0 0 0 3px color-mix(in srgb, var(--medal) 25%, transparent); }
 .fam-lb-av {
@@ -130,14 +141,13 @@ const CSS = `
   color: #fff; font-weight: 800; font-size: 15px;
 }
 .fam-lb-av img { width: 100%; height: 100%; object-fit: cover; }
-.fam-lb-who { flex: 1; min-width: 0; display: grid; gap: 1px; }
+.fam-lb-who { min-width: 0; display: grid; gap: 1px; }
 .fam-lb-name { font-weight: 800; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .fam-lb-you { margin-inline-start: 6px; font-size: 11.5px; font-weight: 800; color: var(--accent, #0EA5A5); }
-.fam-lb-rank { display: flex; align-items: center; gap: 6px; flex-shrink: 1; max-width: 45%; min-width: 0; font-size: 13px; font-weight: 600; color: var(--ink-muted, #6b7280); }
+.fam-lb-rank { display: flex; align-items: center; justify-content: flex-start; gap: 8px; min-width: 0; font-size: 13px; font-weight: 600; color: var(--ink-muted, #6b7280); }
 .fam-lb-rank-t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
-.fam-lb-num { min-width: 2.2em; text-align: end; }
 .fam-lb-rank img { display: inline-block; flex-shrink: 0; }
-.fam-lb-num { font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--ink, #1f2937); }
+.fam-lb-num { text-align: end; font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--ink, #1f2937); }
 .fam-lb-num.is-zero { color: var(--ink-faint, #9ca3af); }
 `;
 
