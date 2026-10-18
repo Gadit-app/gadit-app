@@ -1355,8 +1355,10 @@ export function WordClient({
     }
     // A meaning address (?m=) exists only for units that list meanings
     // (Gemara): opened directly or refreshed, wait for the unit instead of
-    // asking the dictionary first. Addresses without ?m= are unchanged.
-    if (present && meaningParam && isCurriculumSetId(setId) && !wordSet && user && curFailed !== setId) return;
+    // asking the dictionary first. So does a direct link into a managed unit
+    // (the pilot), even without ?m=: its words never go to the dictionary
+    // engine while the unit loads. Other addresses are unchanged.
+    if (present && (meaningParam || isPilotTopicId(setId)) && isCurriculumSetId(setId) && !wordSet && user && curFailed !== setId) return;
     const key = `${initialWord}::${user?.uid ?? "anon"}`;
     if (fetchedFor.current === key) return;
 

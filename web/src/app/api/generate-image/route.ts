@@ -8,6 +8,7 @@ import { loadWordSet } from "@/lib/curriculum-sets";
 import { generateClassroomImage, houseImage } from "@/lib/classroom-image";
 import { classroomAccess } from "@/lib/classroom-access";
 import { pilotGate } from "@/lib/pilot-access";
+import { isPilotTopicId } from "@/lib/pilot-topics";
 import { verifiedSchoolId } from "@/lib/school-identity";
 import { SCHOOL_MONTHLY_NEW_IMAGES } from "@/lib/school";
 import { FieldValue } from "firebase-admin/firestore";
@@ -195,6 +196,8 @@ export async function POST(req: NextRequest) {
           set,
           uid: userInfo.userId,
           ...(item ? { item: { m: item.m, rev: item.rev } } : {}),
+          // A managed unit (the pilot): a stored picture or none, never drawn here.
+          ...(isPilotTopicId(set.id) ? { managed: true } : {}),
           ...(usageDoc ? {
             allowNew: async () => (((await usageDoc.get()).get("count") as number | undefined) ?? 0) < SCHOOL_MONTHLY_NEW_IMAGES,
             onGenerated: async () => { await usageDoc.set({ count: FieldValue.increment(1), updatedAt: new Date().toISOString() }, { merge: true }); },

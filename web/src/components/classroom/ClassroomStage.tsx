@@ -1063,12 +1063,20 @@ type StageProps = {
   preview?: Activity;
 };
 
+/** A managed Gemara unit (2026-10-18): the pilot unit, or a Gemara unit that
+ *  lists approved meanings. Students see only what passed its approval, so
+ *  nothing machine-made is added on top: no automatic niqqud, no synthetic
+ *  voice. Every other unit and subject is unchanged. */
+export const isManagedGemara = (set: Pick<WordSet, "id" | "subject">, items?: SetItem[]): boolean =>
+  set.subject === "gemara" && (isPilotTopicId(set.id) || !!items?.some((i) => i.k !== "word"));
+
 /** Hebrew and Arabic sets get a niqqud / tashkeel switch the teacher
- *  turns on or off for the class (Gadi 2026-10-04). Display only. */
+ *  turns on or off for the class (Gadi 2026-10-04). Display only. Not in a
+ *  managed Gemara unit (automatic niqqud is not approved content). */
 export function ClassroomStage(props: StageProps) {
   const l = props.set.lang || props.lang;
   return (
-    <NiqqudProvider available={l === "he" || l === "ar"} lang={l === "ar" ? "ar" : "he"}>
+    <NiqqudProvider available={(l === "he" || l === "ar") && !isManagedGemara(props.set, props.items)} lang={l === "ar" ? "ar" : "he"}>
       <StageInner {...props} />
     </NiqqudProvider>
   );
@@ -1117,6 +1125,9 @@ function StageInner({
   // A school's own set asks with the token too (only its school may open it),
   // and its quiz and game are generated like any unit's.
   const withToken = pilot || isSchoolSetId(set.id);
+  // A managed Gemara unit: no synthetic voice, and the quiz and game buttons
+  // open only once their approved content is known to be there.
+  const managed = isManagedGemara(set, items);
   const pilotUser = withToken ? authUser : null;
   const loadActivity = useCallback(async () => {
     if (preview) { setActivity(preview); setActState("ready"); return; }
@@ -1236,7 +1247,7 @@ function StageInner({
         <section className="cs-text">
           <div className="cs-word-row">
             <h1 className="cs-word">{nq(word)}</h1>
-            <TTSButton text={word} audioLang={L} useOpenAI ariaLabel={c.listen} className="cs-tts" />
+            {!managed && <TTSButton text={word} audioLang={L} useOpenAI ariaLabel={c.listen} className="cs-tts" />}
           </div>
           <p className="cs-def">{nq(definition)}</p>
           {ctx && <p className="cs-ctx">{nq(ctx)}</p>}
@@ -1263,10 +1274,10 @@ function StageInner({
             <DiagramIcon /> {c.diagram}
           </button>
         )}
-        <button type="button" className="cs-act cs-act-quiz" onClick={() => setPanel("quiz")} disabled={actState === "ready" && !!activity && !activity.quiz.length}>
+        <button type="button" className="cs-act cs-act-quiz" onClick={() => setPanel("quiz")} disabled={managed ? !(actState === "ready" && !!activity?.quiz.length) : actState === "ready" && !!activity && !activity.quiz.length}>
           <QuizIcon /> {c.quiz}
         </button>
-        <button type="button" className="cs-act cs-act-game" onClick={() => setPanel("game")} disabled={actState === "ready" && !!activity && !activity.game.length}>
+        <button type="button" className="cs-act cs-act-game" onClick={() => setPanel("game")} disabled={managed ? !(actState === "ready" && !!activity?.game.length) : actState === "ready" && !!activity && !activity.game.length}>
           <GameIcon /> {c.game}
         </button>
       </div>

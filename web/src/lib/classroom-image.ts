@@ -186,6 +186,9 @@ export async function generateClassroomImage(opts: {
   admin?: boolean;
   /** A meaning of a unit that lists meanings: keyed on its id, not the text. */
   item?: MeaningRef;
+  /** A managed unit (the pilot, 2026-10-18): only a stored picture, never a new
+   *  one, even for a word asked without its meaning id. */
+  managed?: boolean;
   /** Asked only when the picture is not cached yet: may a new one be drawn
    *  (the school's monthly picture cap, 2026-10-17)? */
   allowNew?: () => Promise<boolean>;
@@ -208,7 +211,7 @@ export async function generateClassroomImage(opts: {
   if (existing?.url && (!opts.force || existing.contentLocked === true)) return { status: "cached", url: existing.url, cacheKey: cKey };
   // A meaning (phase C): its picture comes in with its approved content
   // (the publish tool), never drawn on view or by a forced redraw.
-  if (opts.item) return { status: "skipped", reason: "not_approved", cacheKey: cKey };
+  if (opts.item || opts.managed) return { status: "skipped", reason: "not_approved", cacheKey: cKey };
   if (opts.allowNew && !(await opts.allowNew())) return { status: "skipped", reason: "quota", cacheKey: cKey };
   try {
     const w = word.trim();
