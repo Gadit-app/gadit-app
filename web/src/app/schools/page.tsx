@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { SchoolsLandingSwitch } from "./SchoolsLandingSwitch";
+import { SchoolsI18nPage } from "./SchoolsI18nPage";
+import { loadSchCopy } from "./i18n";
+import { resolveShareLang } from "@/lib/landing-metadata";
 import { shareMetadata, type ShareCopy } from "@/lib/landing-metadata";
 
 /** Localized share (OG/WhatsApp) copy for the Schools landing, reused by
@@ -71,6 +73,9 @@ export function generateMetadata(): Promise<Metadata> {
   return shareMetadata(SCHOOLS_OG);
 }
 
-export default function SchoolsLandingRoute() {
-  return <SchoolsLandingSwitch />;
+// The real-screens page in every language (Gadi approved replacing the old
+// pages, 2026-10-18). Hebrew renders as before.
+export default async function SchoolsLandingRoute() {
+  const lang = await resolveShareLang();
+  return <SchoolsI18nPage initial={await loadSchCopy(lang === "he" ? "en" : lang)} />;
 }

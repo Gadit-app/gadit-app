@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { individualsMetadata } from "../individuals-metadata";
-import { IndividualsLandingSwitch } from "../IndividualsLandingSwitch";
+import { IndividualsI18nPage } from "../IndividualsI18nPage";
+import { loadIndCopy } from "../i18n";
+import { resolveShareLang } from "@/lib/landing-metadata";
 
 /**
  * /individuals/landing: the STANDALONE Individuals page, the link to send in
@@ -13,6 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return { ...(await individualsMetadata()), robots: { index: false, follow: true } };
 }
 
-export default function IndividualsLandingRoute() {
-  return <IndividualsLandingSwitch />;
+// The real-screens page in every language (Gadi approved replacing the old
+// pages, 2026-10-18). Hebrew renders as before.
+export default async function IndividualsLandingRoute() {
+  return <IndividualsI18nPage initial={await loadIndCopy(await resolveShareLang())} />;
 }

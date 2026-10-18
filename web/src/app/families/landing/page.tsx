@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import FamiliesLandingClient from "../FamiliesLandingClient";
+import { FamiliesI18nPage } from "../FamiliesI18nPage";
+import { loadFamI18n } from "../i18n";
+import { resolveShareLang } from "@/lib/landing-metadata";
 import { shareMetadata } from "@/lib/landing-metadata";
 import { FAMILIES_OG } from "../page";
 
@@ -14,10 +16,14 @@ export function generateMetadata(): Promise<Metadata> {
   return shareMetadata(FAMILIES_OG, { noindex: true });
 }
 
-export default function FamiliesLandingRoute() {
+// The real-screens page in every language (Gadi approved replacing the old
+// pages, 2026-10-18). Hebrew renders as before.
+export default async function FamiliesLandingRoute() {
+  const lang = await resolveShareLang();
+  const initial = await loadFamI18n(lang === "he" ? "en" : lang);
   return (
     <Suspense fallback={null}>
-      <FamiliesLandingClient />
+      <FamiliesI18nPage initial={initial} />
     </Suspense>
   );
 }

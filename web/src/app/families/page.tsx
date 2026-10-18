@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import FamiliesLandingClient from "./FamiliesLandingClient";
+import { FamiliesI18nPage } from "./FamiliesI18nPage";
+import { loadFamI18n } from "./i18n";
+import { resolveShareLang } from "@/lib/landing-metadata";
 import { shareMetadata, type ShareCopy } from "@/lib/landing-metadata";
 
 /** Localized share (OG/WhatsApp) copy for the Family landing, reused by
@@ -70,13 +72,17 @@ export function generateMetadata(): Promise<Metadata> {
   return shareMetadata(FAMILIES_OG);
 }
 
-export default function FamiliesPage() {
+// The real-screens page in every language (Gadi approved replacing the old
+// pages, 2026-10-18). Hebrew renders as before.
+export default async function FamiliesPage() {
+  const lang = await resolveShareLang();
+  const initial = await loadFamI18n(lang === "he" ? "en" : lang);
   // In-site version: WITH the top nav, so it lives inside the site and the
   // three products (individuals, Families, Schools) stay reachable. The
   // no-nav campaign version lives at /families/landing.
   return (
     <Suspense fallback={null}>
-      <FamiliesLandingClient withNav />
+      <FamiliesI18nPage initial={initial} withNav />
     </Suspense>
   );
 }
