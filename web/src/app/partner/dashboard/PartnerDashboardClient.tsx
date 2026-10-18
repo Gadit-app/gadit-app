@@ -6,7 +6,7 @@ import { EarningsCalculator } from "./EarningsCalculator";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { BackLink } from "@/components/BackLink";
-import { LANGUAGES, type Lang } from "@/lib/i18n";
+import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 
 // Commission rate line labels ("25% year one · 10% for life").
 const RATE_YEAR_ONE_COPY: Record<Lang, string> = {
@@ -1914,7 +1914,7 @@ export function PartnerDashboardClient() {
                   <div style={S.linkLangRow}>
                     <span style={S.linkLangLabel}>{t.linkLangLabel}</span>
                     <select value={linkLang} onChange={(e) => setLinkLang(e.target.value)} style={S.linkLangSelect}>
-                      {LINK_LANGS.map((l) => (<option key={l.code} value={l.code}>{l.native}</option>))}
+                      {LINK_LANGS.map((l) => (<option key={l.code} value={l.code}>{langNameIn(l.code, lang)}</option>))}
                     </select>
                   </div>
                 </div>
@@ -1954,7 +1954,7 @@ export function PartnerDashboardClient() {
                   <div style={S.linkLangRow}>
                     <span style={S.linkLangLabel}>{t.linkLangLabel}</span>
                     <select value={linkLang} onChange={(e) => setLinkLang(e.target.value)} style={S.linkLangSelect}>
-                      {LINK_LANGS.map((l) => (<option key={l.code} value={l.code}>{l.native}</option>))}
+                      {LINK_LANGS.map((l) => (<option key={l.code} value={l.code}>{langNameIn(l.code, lang)}</option>))}
                     </select>
                   </div>
                 </div>

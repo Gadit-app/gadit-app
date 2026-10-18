@@ -13,7 +13,7 @@
 import { SAY_NAV } from "@/components/design/WbShellChrome";
 import { toLocalDateStr } from "@/lib/gamification";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { LANGUAGES, type Lang } from "@/lib/i18n";
+import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
@@ -501,11 +501,11 @@ export function SayTool({ onClose, framed = false }: { onClose?: () => void; fra
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
             <label style={{ flex: "1 1 180px", fontSize: 13, fontWeight: 600, opacity: 0.75 }}>
               {t.from}
-              <LangSelect value={sourceLang} onChange={setSourceLang} />
+              <LangSelect value={sourceLang} onChange={setSourceLang} viewer={lang} />
             </label>
             <label style={{ flex: "1 1 180px", fontSize: 13, fontWeight: 600, opacity: 0.75 }}>
               {t.to}
-              <LangSelect value={targetLang} onChange={setTargetLang} options={learnable} />
+              <LangSelect value={targetLang} onChange={setTargetLang} options={learnable} viewer={lang} />
             </label>
           </div>
 
@@ -548,7 +548,7 @@ export function SayTool({ onClose, framed = false }: { onClose?: () => void; fra
           {result && (
             <div style={{ marginTop: 26, background: "var(--surface, #fff)", border: "1px solid var(--rule, #E7E7E2)", borderRadius: 18, padding: "22px 22px 24px" }}>
               <div style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#0EA5A5", marginBottom: 12 }}>
-                {t.hearing} · {LANGUAGES.find((l) => l.code === result.targetLang)?.label}
+                {t.hearing} · {langNameIn(result.targetLang, lang)}
               </div>
               <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
                 <div dir={dirOf(result.targetLang)} style={{ fontSize: 26, fontWeight: 700, lineHeight: 1.3, flex: 1 }}>
@@ -616,10 +616,12 @@ export function SayTool({ onClose, framed = false }: { onClose?: () => void; fra
 }
 
 function LangSelect({
-  value, onChange, options = LANGUAGES,
+  value, onChange, options = LANGUAGES, viewer,
 }: {
   value: string; onChange: (v: string) => void;
   options?: typeof LANGUAGES;
+  /** The UI language: every name is shown in it (Gadi 2026-10-18). */
+  viewer: string;
 }) {
   return (
     <select
@@ -632,7 +634,7 @@ function LangSelect({
       }}
     >
       {options.map((l) => (
-        <option key={l.code} value={l.code}>{l.label}</option>
+        <option key={l.code} value={l.code}>{langNameIn(l.code, viewer)}</option>
       ))}
     </select>
   );

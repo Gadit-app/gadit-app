@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
-import { LANGUAGES } from "@/lib/i18n";
+import { LANGUAGES, langNameIn } from "@/lib/i18n";
 
 // "Your language" for the signup form's language question, so the partner's
 // email language is chosen, never guessed. A few natives + English fallback.
@@ -2462,7 +2462,7 @@ export function PartnersClient() {
                   the page language; the partner can change it. */}
               <label style={{ display: "block", fontSize: 12.5, color: "var(--ink-muted)", margin: "2px 0 5px" }}>{LANG_Q[lang] ?? LANG_Q.en}</label>
               <select style={{ ...S.input, cursor: "pointer" }} value={signupLang} onChange={(e) => setSignupLang(e.target.value)}>
-                {LANGUAGES.map((l) => (<option key={l.code} value={l.code}>{l.label}</option>))}
+                {LANGUAGES.map((l) => (<option key={l.code} value={l.code}>{langNameIn(l.code, lang)}</option>))}
               </select>
               {state === "error" && <div style={S.formErr}>{errMsg}</div>}
               <button type="submit" style={S.formCta} disabled={state === "sending"}>

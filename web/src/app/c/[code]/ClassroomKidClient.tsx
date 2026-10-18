@@ -22,7 +22,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
 import { useHref, wordPath } from "@/lib/href";
-import { LANGUAGES } from "@/lib/i18n";
+import { LANGUAGES, langNameIn } from "@/lib/i18n";
 import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { useKidsMode } from "@/lib/use-kids-mode";
@@ -1076,7 +1076,9 @@ function ClassroomLangSwitch() {
                   alt=""
                   loading="lazy"
                 />
-                <span>{l.label}</span>
+                {/* The name in the page's language, the native name beside it (Gadi 2026-10-18). */}
+                <span>{langNameIn(l.code, lang)}</span>
+                {langNameIn(l.code, lang) !== l.label && <span dir={l.dir} style={{ fontSize: 11, opacity: 0.5, unicodeBidi: "isolate" }}>{l.label}</span>}
               </button>
             </li>
           ))}
