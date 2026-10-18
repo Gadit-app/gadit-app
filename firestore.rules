@@ -38,12 +38,18 @@ service cloud.firestore {
     // own users doc so existing per-uid code (notebook, history, image
     // cache) keeps working unchanged.
     match /users/{uid} {
-      allow read, write: if isUser(uid);
+      // Read only from the browser (2026-10-18): the account doc holds the
+      // plan, subscription status, familyId, schoolId and points, and every
+      // write already goes through the server (Admin SDK). A client write here
+      // let anyone give themselves a paid plan or another school's access.
+      allow read: if isUser(uid);
+      allow write: if false;
 
-      // Subcollections (notebook, history, kidsModePref, etc.) inherit
-      // the per-uid scope.
+      // Subcollections (notebook, history, ...): the same, read only. The
+      // app writes them through its API routes.
       match /{document=**} {
-        allow read, write: if isUser(uid);
+        allow read: if isUser(uid);
+        allow write: if false;
       }
     }
 
