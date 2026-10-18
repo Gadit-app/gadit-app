@@ -1,10 +1,22 @@
+import Image from "next/image";
 /**
  * Real words from real families and teachers (Gadi 2026-10-12: Reut Arbel,
  * a teacher and a mother of three, and Ziv, grade 5). Shortened from what
  * they sent, one sentence per line. Hebrew landing pages only for now.
  * A child is named by first name and grade only.
  */
-export type Testimonial = { quote: string; who: string };
+export type Testimonial = { quote: string; who: string; photo?: string };
+
+/** Name line with the person's round photo (Gadi 2026-10-18: real faces make
+ *  the words feel real). Photos live in /public/testimonials, 192px webp. */
+function Who({ t }: { t: Testimonial }) {
+  return (
+    <figcaption className="gt-quote-who">
+      {t.photo && <Image src={t.photo} alt="" width={52} height={52} unoptimized className="gt-quote-photo" />}
+      <span>{t.who}</span>
+    </figcaption>
+  );
+}
 
 /** One testimonial between two sections (Gadi 2026-10-18): the words sit
  *  next to the topic they talk about instead of only at the bottom. */
@@ -14,7 +26,7 @@ export function InlineTestimonial({ item }: { item: Testimonial }) {
       <blockquote>
         {item.quote.split("\n").map((line, i) => <p key={i}>{line}</p>)}
       </blockquote>
-      <figcaption>{item.who}</figcaption>
+      <Who t={item} />
     </figure>
   );
 }
@@ -30,7 +42,7 @@ export function Testimonials({ kicker, title, items }: { kicker: string; title: 
             <blockquote>
               {t.quote.split("\n").map((line, i) => <p key={i}>{line}</p>)}
             </blockquote>
-            <figcaption>{t.who}</figcaption>
+            <Who t={t} />
           </figure>
         ))}
       </div>
@@ -48,6 +60,7 @@ export const AMIR_LEVI_HE: Testimonial = {
     "ממליץ בחום על האפליקציה, לכל המשפחה!",
   ].join("\n"),
   who: "אמיר לוי, אבא של תום ואורי",
+  photo: "/testimonials/amir-levi.webp",
 };
 
 export const FAMILY_TESTIMONIALS_HE: Testimonial[] = [
@@ -60,6 +73,7 @@ export const FAMILY_TESTIMONIALS_HE: Testimonial[] = [
       "ובסופי שבוע אנחנו עוברים יחד על המילים החדשות של השבוע, ומשחקים בהן.",
     ].join("\n"),
     who: "רעות ארבל, אמא לשלושה",
+    photo: "/testimonials/reut-arbel.webp",
   },
   {
     quote: [
@@ -73,6 +87,7 @@ export const FAMILY_TESTIMONIALS_HE: Testimonial[] = [
       "ממליצה בחום גדול!",
     ].join("\n"),
     who: "גת מגידו, אמא של זיו",
+    photo: "/testimonials/gat-megido.webp",
   },
   {
     quote: [
@@ -83,6 +98,7 @@ export const FAMILY_TESTIMONIALS_HE: Testimonial[] = [
       "ממש ממש ממש ממש ממש ממש אוהבת את האפליקציה.",
     ].join("\n"),
     who: "זיו, כיתה ה'",
+    photo: "/testimonials/ziv.webp",
   },
   {
     quote: [
@@ -105,6 +121,7 @@ export const FAMILY_TESTIMONIALS_HE: Testimonial[] = [
       "אני כל כך שמחה שיש את Gadit, מילון אמיתי, חכם ונוח שבאמת עוזר לי בחיים.",
     ].join("\n"),
     who: "רומי, בת 12",
+    photo: "/testimonials/romi.webp",
   },
 ];
 

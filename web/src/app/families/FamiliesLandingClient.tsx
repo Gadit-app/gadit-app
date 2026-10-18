@@ -9195,7 +9195,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
         {lang === "he" && (
           <section className="fam-band fam-band-sand">
             <div className="fam-section">
-              <Testimonials kicker="מהשטח" title="מה מספרות המשפחות" items={[FAMILY_TESTIMONIALS_HE[0], FAMILY_TESTIMONIALS_HE[3], FAMILY_TESTIMONIALS_HE[4]]} />
+              <Testimonials kicker="מהשטח" title="מה מספרות המשפחות" items={[FAMILY_TESTIMONIALS_HE[0], FAMILY_TESTIMONIALS_HE[4]]} />
             </div>
           </section>
         )}
