@@ -268,6 +268,98 @@ const GENERIC_ERROR_COPY: Record<string, string> = {
   hu: "Valami hiba történt. Próbáld újra.",
 };
 
+// /api/define 400 (invalid_input): the API's own `message` is English only,
+// so the page shows this localized line instead (QA 2026-10-18).
+const INVALID_WORD_COPY: Record<string, string> = {
+  en: "That doesn't look like a word we can define. Try a single word or a short phrase.",
+  he: "זה לא נראה כמו מילה שאפשר להגדיר. נסו מילה אחת או צירוף קצר.",
+  ar: "لا يبدو هذا كلمة يمكننا تعريفها. جرّب كلمة واحدة أو عبارة قصيرة.",
+  ru: "Это не похоже на слово, которое мы можем объяснить. Попробуйте одно слово или короткую фразу.",
+  es: "Eso no parece una palabra que podamos definir. Prueba con una sola palabra o una frase corta.",
+  pt: "Isso não parece uma palavra que possamos definir. Tente uma única palavra ou uma frase curta.",
+  fr: "Cela ne ressemble pas à un mot que nous pouvons définir. Essayez un seul mot ou une courte expression.",
+  de: "Das sieht nicht nach einem Wort aus, das wir erklären können. Versuche ein einzelnes Wort oder eine kurze Wendung.",
+  cs: "Tohle nevypadá jako slovo, které umíme vysvětlit. Zkus jedno slovo nebo krátké spojení.",
+  sk: "Toto nevyzerá ako slovo, ktoré vieme vysvetliť. Skús jedno slovo alebo krátke spojenie.",
+  it: "Non sembra una parola che possiamo definire. Prova con una sola parola o una breve espressione.",
+  ja: "定義できる単語ではないようです。1つの単語か短いフレーズでお試しください。",
+  hi: "यह ऐसा शब्द नहीं लगता जिसका हम अर्थ बता सकें। एक शब्द या छोटा वाक्यांश आज़माएँ।",
+  am: "ይህ ልንፈታው የምንችለው ቃል አይመስልም። አንድ ቃል ወይም አጭር ሐረግ ይሞክሩ።",
+  uk: "Це не схоже на слово, яке ми можемо пояснити. Спробуйте одне слово або коротку фразу.",
+  tr: "Bu, tanımlayabileceğimiz bir kelimeye benzemiyor. Tek bir kelime ya da kısa bir ifade dene.",
+  pl: "To nie wygląda na słowo, które możemy wyjaśnić. Spróbuj jednego słowa lub krótkiego wyrażenia.",
+  fa: "این شبیه واژه‌ای نیست که بتوانیم معنی کنیم. یک واژه یا عبارتی کوتاه را امتحان کنید.",
+  id: "Itu tidak terlihat seperti kata yang bisa kami jelaskan. Coba satu kata atau frasa pendek.",
+  nl: "Dat lijkt geen woord dat we kunnen uitleggen. Probeer één woord of een korte uitdrukking.",
+  el: "Αυτό δεν μοιάζει με λέξη που μπορούμε να εξηγήσουμε. Δοκίμασε μία λέξη ή μια σύντομη φράση.",
+  zu: "Lokho akubukeki njengegama esingalichaza. Zama igama elilodwa noma ibinzana elifushane.",
+  xh: "Oko akubonakali njengegama esinokulichaza. Zama igama elinye okanye ibinzana elifutshane.",
+  nso: "Seo ga se bonagale bjalo ka lentšu leo re ka le hlalošago. Leka lentšu le tee goba sekafoko se sekopana.",
+  tn: "Seo ga se lebege jaaka lefoko le re ka le tlhalosang. Leka lefoko le le lengwe kgotsa polelwana e khutshwane.",
+  st: "Seo ha se shebahale jwalo ka lentswe leo re ka le hlalosang. Leka lentswe le le leng kapa polelwana e kgutshwane.",
+  ts: "Leswi a swi languteki tanihi rito leri hi nga ri hlamuselaka. Ringetani rito rin'we kumbe xiga xo koma.",
+  ss: "Loko akubukeki njengeligama lesingalichaza. Zama ligama linye nobe libinzana lelifushane.",
+  ve: "Hezwi a zwi vhonali sa ipfi ḽine ra nga ḽi ṱalutshedza. Lingedzani ipfi ḽithihi kana fhungo ḽipfufhi.",
+  nr: "Lokho akubonakali njengelizwi esingalihlathulula. Linga ilizwi linye namkha ibinzana elifitjhani.",
+  vi: "Đó có vẻ không phải là một từ chúng tôi có thể giải nghĩa. Hãy thử một từ hoặc một cụm từ ngắn.",
+  fil: "Mukhang hindi iyan salitang kaya naming ipaliwanag. Subukan ang isang salita o maikling parirala.",
+  af: "Dit lyk nie na 'n woord wat ons kan verduidelik nie. Probeer 'n enkele woord of 'n kort frase.",
+  sw: "Hilo halionekani kuwa neno tunaloweza kulieleza. Jaribu neno moja au kifungu kifupi.",
+  "zh-CN": "这看起来不像是我们能解释的词。请试试单个词或简短的短语。",
+  "zh-TW": "這看起來不像是我們能解釋的詞。請試試單一詞語或簡短的片語。",
+  ko: "설명할 수 있는 단어가 아닌 것 같아요. 단어 하나나 짧은 구절로 다시 시도해 주세요.",
+  th: "ดูเหมือนว่านี่ไม่ใช่คำที่เราอธิบายได้ ลองพิมพ์คำเดียวหรือวลีสั้น ๆ",
+  bn: "এটি এমন কোনো শব্দ মনে হচ্ছে না যার অর্থ আমরা বলতে পারি। একটি শব্দ বা ছোট একটি বাক্যাংশ চেষ্টা করুন।",
+  da: "Det ligner ikke et ord, vi kan forklare. Prøv et enkelt ord eller en kort vending.",
+  hu: "Ez nem tűnik olyan szónak, amit meg tudunk magyarázni. Próbálj egyetlen szót vagy egy rövid kifejezést.",
+};
+
+// /api/define 503 (service_unavailable / engine_unavailable): localized
+// instead of the API's English `message` (QA 2026-10-18).
+const ENGINE_UNAVAILABLE_COPY: Record<string, string> = {
+  en: "Our definition engine is temporarily unavailable. Please try again in a few minutes.",
+  he: "מנוע ההגדרות שלנו לא זמין כרגע. נסו שוב בעוד כמה דקות.",
+  ar: "محرّك التعريفات لدينا غير متاح مؤقتًا. حاول مرة أخرى بعد بضع دقائق.",
+  ru: "Сервис определений временно недоступен. Попробуйте ещё раз через несколько минут.",
+  es: "Nuestro motor de definiciones no está disponible por ahora. Inténtalo de nuevo en unos minutos.",
+  pt: "Nosso mecanismo de definições está temporariamente indisponível. Tente novamente em alguns minutos.",
+  fr: "Notre moteur de définitions est temporairement indisponible. Réessayez dans quelques minutes.",
+  de: "Unsere Erklärungen sind vorübergehend nicht verfügbar. Versuche es in ein paar Minuten erneut.",
+  cs: "Náš slovník je dočasně nedostupný. Zkus to znovu za pár minut.",
+  sk: "Náš slovník je dočasne nedostupný. Skús to znova o pár minút.",
+  it: "Il nostro motore delle definizioni è temporaneamente non disponibile. Riprova tra qualche minuto.",
+  ja: "定義エンジンが一時的に利用できません。数分後にもう一度お試しください。",
+  hi: "हमारा परिभाषा इंजन अभी कुछ देर के लिए उपलब्ध नहीं है। कुछ मिनट बाद फिर से कोशिश करें।",
+  am: "የትርጉም አገልግሎታችን ለጊዜው አይገኝም። ከጥቂት ደቂቃዎች በኋላ እንደገና ይሞክሩ።",
+  uk: "Сервіс визначень тимчасово недоступний. Спробуйте ще раз за кілька хвилин.",
+  tr: "Tanım motorumuz geçici olarak kullanılamıyor. Birkaç dakika sonra tekrar dene.",
+  pl: "Nasz silnik definicji jest chwilowo niedostępny. Spróbuj ponownie za kilka minut.",
+  fa: "موتور تعریف واژه‌های ما موقتاً در دسترس نیست. چند دقیقه دیگر دوباره امتحان کنید.",
+  id: "Mesin definisi kami sementara tidak tersedia. Coba lagi dalam beberapa menit.",
+  nl: "Onze definitiedienst is tijdelijk niet beschikbaar. Probeer het over een paar minuten opnieuw.",
+  el: "Η υπηρεσία ορισμών μας δεν είναι διαθέσιμη προσωρινά. Δοκίμασε ξανά σε λίγα λεπτά.",
+  zu: "Uhlelo lwethu lwezincazelo alutholakali okwamanje. Zama futhi emizuzwini embalwa.",
+  xh: "Inkqubo yethu yeenkcazelo ayifumaneki okwangoku. Zama kwakhona kwimizuzu embalwa.",
+  nso: "Tirelo ya rena ya ditlhalošo ga e hwetšagale ga bjale. Leka gape ka morago ga metsotso e mmalwa.",
+  tn: "Tirelo ya rona ya ditlhaloso ga e yo ka nakwana. Leka gape morago ga metsotso e mmalwa.",
+  st: "Tshebeletso ya rona ya ditlhaloso ha e fumanehe hajwale. Leka hape kamora metsotso e mmalwa.",
+  ts: "Vukorhokeri bya hina bya tinhlamuselo a byi kumeki sweswi. Ringetani nakambe endzhaku ka timinete ti nga ri tingani.",
+  ss: "Luhlelo lwetfu lwetinchazelo alutfolakali kwanyalo. Phindza uzame emaminitini lambalwa.",
+  ve: "Tshumelo yashu ya ṱhaluso a i wanali zwino. Lingedzani hafhu nga murahu ha mimunithi mi si gathi.",
+  nr: "Ihlelo lethu lamahlathululo alitholakali nje. Linga godu ngemva kwemizuzu embalwa.",
+  vi: "Công cụ giải nghĩa của chúng tôi tạm thời không khả dụng. Hãy thử lại sau vài phút.",
+  fil: "Pansamantalang hindi available ang aming definition engine. Subukan ulit pagkalipas ng ilang minuto.",
+  af: "Ons definisie-enjin is tydelik nie beskikbaar nie. Probeer weer oor 'n paar minute.",
+  sw: "Huduma yetu ya maana za maneno haipatikani kwa sasa. Jaribu tena baada ya dakika chache.",
+  "zh-CN": "我们的释义服务暂时无法使用。请几分钟后再试。",
+  "zh-TW": "我們的釋義服務暫時無法使用。請幾分鐘後再試。",
+  ko: "뜻풀이 엔진을 잠시 사용할 수 없어요. 몇 분 뒤에 다시 시도해 주세요.",
+  th: "ระบบคำอธิบายของเราใช้งานไม่ได้ชั่วคราว ลองใหม่อีกครั้งในอีกไม่กี่นาที",
+  bn: "আমাদের সংজ্ঞা ইঞ্জিন সাময়িকভাবে বন্ধ আছে। কয়েক মিনিট পরে আবার চেষ্টা করুন।",
+  da: "Vores definitionsmotor er midlertidigt utilgængelig. Prøv igen om et par minutter.",
+  hu: "A szómagyarázó motorunk átmenetileg nem érhető el. Próbáld újra néhány perc múlva.",
+};
+
 const NETWORK_LOST_COPY: Record<string, string> = {
   en: "Lost network connection. Check your internet and try again.",
   he: "החיבור לאינטרנט אבד. בדקו את הרשת ונסו שוב.",
@@ -1363,7 +1455,9 @@ export function WordClient({
             // IDB miss / unsupported — fall through to the error path.
           }
         }
-        setErrorMsg(String(e));
+        // Raw error to the console only; the reader sees a localized line.
+        console.error("[define] fetch failed:", e);
+        setErrorMsg(pick(NETWORK_LOST_COPY, lang));
         setLoading(false);
         return;
       }
@@ -1394,14 +1488,13 @@ export function WordClient({
       }
       if (res.status === 400) {
         // Server rejected the input as not a plausible word. Surface
-        // the human-readable message instead of a raw HTTP code.
+        // a localized message (the API's `message` is English only).
         const body = (await res.json().catch(() => ({}))) as {
+          error?: string;
           message?: string;
         };
-        setErrorMsg(
-          body.message ??
-            "That doesn't look like a word we can define. Try a single word or a short phrase."
-        );
+        console.error("[define] 400:", body.error, body.message);
+        setErrorMsg(pick(INVALID_WORD_COPY, lang));
         setLoading(false);
         return;
       }
@@ -1412,26 +1505,26 @@ export function WordClient({
         // 2026-06-22 incident: OpenAI quota ran out and a subscriber
         // saw a raw "HTTP 500".
         const body = (await res.json().catch(() => ({}))) as {
+          error?: string;
           message?: string;
         };
-        setErrorMsg(
-          body.message ??
-            "Our definition engine is temporarily unavailable. Please try again in a few minutes."
-        );
+        console.error("[define] 503:", body.error, body.message);
+        setErrorMsg(pick(ENGINE_UNAVAILABLE_COPY, lang));
         setLoading(false);
         return;
       }
       if (res.status === 204) {
         // The server declined to generate (it took this visitor for a bot).
         // A calm message, never the raw stream text (Gadi 2026-10-06).
-        setErrorMsg("Something went wrong. Please try again in a moment.");
+        setErrorMsg(pick(GENERIC_ERROR_COPY, lang));
         setLoading(false);
         return;
       }
       if (!res.ok || !res.body) {
         // Generic last-resort fallback for any unexpected non-2xx —
         // still less scary than "HTTP 500".
-        setErrorMsg("Something went wrong. Please try again in a moment.");
+        console.error("[define] unexpected response:", res.status);
+        setErrorMsg(pick(GENERIC_ERROR_COPY, lang));
         setLoading(false);
         return;
       }
@@ -1507,7 +1600,10 @@ export function WordClient({
             finalResult = event.result;
           } else if (event.type === "error") {
             streamError = true;
-            setErrorMsg(event.message);
+            // The server's text can be a raw String(e) and is English only:
+            // log it, show a localized line (QA 2026-10-18).
+            console.error("[define] stream error:", event.message);
+            setErrorMsg(pick(GENERIC_ERROR_COPY, lang));
           }
         }
       }
@@ -1557,7 +1653,7 @@ export function WordClient({
       } else if (!cancelled && !streamError) {
         // Keep the server's message when it sent one; otherwise a calm one
         // instead of the raw "Stream ended without final result".
-        setErrorMsg("Something went wrong. Please try again in a moment.");
+        setErrorMsg(pick(GENERIC_ERROR_COPY, lang));
       }
       setLoading(false);
     }

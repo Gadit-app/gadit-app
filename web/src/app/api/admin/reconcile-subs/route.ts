@@ -1,4 +1,5 @@
 import { isIndividualPriceId } from "@/lib/individual-prices";
+import { isNewSchoolsPrice } from "@/lib/schools-prices";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getAdminDb } from "@/lib/firebase-admin";
@@ -61,6 +62,9 @@ function getPlanFromPriceId(priceId: string): "basic" | "clear" | "deep" {
   };
   if (LEGACY_FAMILY_PRICE_IDS.includes(priceId)) return "deep";
   if (isIndividualPriceId(priceId)) return "deep";
+  // The $97 / $297 / $497 schools tiers (QA 2026-10-18: a real run would have
+  // downgraded every school on them to basic). Same rule as the webhook.
+  if (isNewSchoolsPrice(priceId)) return "deep";
   return map[priceId] ?? "basic";
 }
 
@@ -79,7 +83,8 @@ function isSchoolsPriceId(priceId: string): boolean {
     priceId === process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_MONTHLY ||
     priceId === process.env.STRIPE_PRICE_SCHOOLS_MEDIUM_YEARLY ||
     priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_MONTHLY ||
-    priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY
+    priceId === process.env.STRIPE_PRICE_SCHOOLS_LARGE_YEARLY ||
+    isNewSchoolsPrice(priceId)
   );
 }
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { Testimonials, SCHOOL_TESTIMONIALS_HE } from "@/components/design/Testimonials";
+import { IL_SCHOOL_PRICES } from "@/lib/schools-prices";
 import Image from "next/image";
 import Link from "next/link";
 import { Lines } from "../families/RealScreens";
@@ -27,12 +28,9 @@ import { track } from "@/lib/track";
 type Step = { t: string; b: string; img: string; phone?: boolean };
 type Tool = { kicker: string; title: string; body: string; points: string[]; img: string; phone?: boolean };
 
-/** Israeli school prices per school year, VAT included (Gadi 2026-10-08). */
-export const IL_SCHOOL_PRICES = [
-  { key: "s", label: "עד 100 תלמידים", yearly: 3950 },
-  { key: "m", label: "101 עד 500 תלמידים", yearly: 6950 },
-  { key: "l", label: "501 עד 1,000 תלמידים", yearly: 9950 },
-];
+// Israeli school prices per school year live in lib/schools-prices.ts now,
+// shared with /pricing (QA 2026-10-18).
+export { IL_SCHOOL_PRICES };
 
 const C = {
   topCta: "פיילוט חינם",

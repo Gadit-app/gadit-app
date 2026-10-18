@@ -32,7 +32,7 @@ import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
-import { SCHOOLS_TIERS, SCHOOLS_TIER_LIST, studentsUpTo, type SchoolsTierKey } from "@/lib/schools-prices";
+import { SCHOOLS_TIERS, SCHOOLS_TIER_LIST, IL_SCHOOL_PRICES, studentsUpTo, type SchoolsTierKey } from "@/lib/schools-prices";
 
 // Footer "Home" link label, every UI language.
 const FOOTER_HOME_COPY: Record<Lang, string> = {
@@ -4870,6 +4870,12 @@ export function PricingPageRoute() {
         {(() => {
           const s = c.school ?? COPY.en.school!;
           const period = billing === "yearly" ? c.yr : c.mo;
+          // Hebrew schools buy through the ₪ order form on /schools, per school
+          // year with VAT (QA 2026-10-18: the cards showed $97/$297/$497 and the
+          // button opened ₪3,950/₪6,950/₪9,950). Show the price they will see.
+          const ilOf = (k: string) => (lang === "he" ? IL_SCHOOL_PRICES.find((p) => p.key === k) : undefined);
+          const priceOf = (t: (typeof SCHOOLS_TIER_LIST)[number]) => { const il = ilOf(t.key); return il ? `₪${il.yearly.toLocaleString("en-US")}` : billing === "yearly" ? t.usdYearly : t.usdMonthly; };
+          const periodOf = (t: (typeof SCHOOLS_TIER_LIST)[number]) => (ilOf(t.key) ? "לשנת לימודים" : period);
           return (
             <>
               {/* Desktop: one mustard comparison table, mirroring the
@@ -4889,11 +4895,11 @@ export function PricingPageRoute() {
                     <div key={t.key} className="wb-sc-head">
                       <div className="wb-sc-cap">{studentsUpTo(t.maxStudents, lang)}</div>
                       <div className="wb-sc-price">
-                        {billing === "yearly" ? t.usdYearly : t.usdMonthly}
-                        <span className="wb-sc-per">{period}</span>
+                        {priceOf(t)}
+                        <span className="wb-sc-per">{periodOf(t)}</span>
                       </div>
                       <div className="wb-sc-sub">
-                        {billing === "yearly" ? `≈ ${t.usdYearlyPerMonth} ${c.mo}` : " "}
+                        {ilOf(t.key) ? "כולל מע״מ" : billing === "yearly" ? `≈ ${t.usdYearlyPerMonth} ${c.mo}` : " "}
                       </div>
                       <button
                         type="button"
@@ -4943,12 +4949,12 @@ export function PricingPageRoute() {
                       <div className="wb-school-cta-col">
                         <div className="wb-school-price-row">
                           <span className="wb-school-price">
-                            {billing === "yearly" ? t.usdYearly : t.usdMonthly}
+                            {priceOf(t)}
                           </span>
-                          <span className="wb-school-period">{period}</span>
+                          <span className="wb-school-period">{periodOf(t)}</span>
                         </div>
                         <div className="wb-school-subprice">
-                          {billing === "yearly" ? `≈ ${t.usdYearlyPerMonth} ${c.mo} · ` : ""}
+                          {ilOf(t.key) ? "כולל מע״מ · " : billing === "yearly" ? `≈ ${t.usdYearlyPerMonth} ${c.mo} · ` : ""}
                           {studentsUpTo(t.maxStudents, lang)}
                         </div>
                         <button

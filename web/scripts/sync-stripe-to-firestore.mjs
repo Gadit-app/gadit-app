@@ -86,7 +86,15 @@ if (!active) {
 }
 
 const priceId = active.items.data[0]?.price?.id ?? "";
-const plan = PRICE_TO_PLAN[priceId] ?? "basic";
+const plan = PRICE_TO_PLAN[priceId];
+// This old script knows only Clear and Deep. Any other paid price (Family,
+// Individual, Schools) must never be written as basic (QA 2026-10-18): stop and
+// use /api/admin/reconcile-subs, which shares the webhook's mapping.
+if (!plan) {
+  console.error(`
+Price ${priceId} is not Clear or Deep. Nothing was written: run /api/admin/reconcile-subs (dryRun=1 first) instead.`);
+  process.exit(2);
+}
 
 await db.collection("users").doc(userRecord.uid).set(
   {

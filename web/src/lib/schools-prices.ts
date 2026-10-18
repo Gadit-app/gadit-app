@@ -137,3 +137,12 @@ export function schoolsTierForPrice(priceId: string | null | undefined): Schools
   if (!priceId) return null;
   return SCHOOLS_TIER_LIST.find((t) => t.monthly === priceId || t.yearly === priceId) ?? null;
 }
+
+/** Israeli school prices per school year, VAT included (Gadi 2026-10-08), the
+ *  same s / m / l caps as SCHOOLS_TIER_LIST (100, 500, 1,000 students). Shown on
+ *  the Hebrew /schools page and the Hebrew /pricing schools cards. */
+export const IL_SCHOOL_PRICES = [
+  { key: "s", label: "עד 100 תלמידים", yearly: 3950 },
+  { key: "m", label: "101 עד 500 תלמידים", yearly: 6950 },
+  { key: "l", label: "501 עד 1,000 תלמידים", yearly: 9950 },
+];

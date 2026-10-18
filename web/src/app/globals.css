@@ -5149,6 +5149,10 @@ html[data-theme="dark"] .wordbook .wb-verb-stamp-pos {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  /* Items wrap between themselves on a phone (QA 2026-10-18: the deck links
+     ran off the screen in every language). Each item stays whole (nowrap below). */
+  flex-wrap: wrap;
+  row-gap: 6px;
   font-family: var(--wb-sans);
   font-size: 12.5px;
   color: var(--ink-muted); /* was --ink-faint: failed AA contrast at 12.5px */
@@ -7012,6 +7016,11 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
   max-width: 1180px;
   margin: 0 auto;
   padding: clamp(32px, 5vw, 64px) clamp(20px, 4vw, 40px) 80px;
+  /* A flex child: without these a long French or Greek line set its width,
+     and the page ran wider than a phone (QA 2026-10-18). */
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ─── Hero ────────────────────────────────────────────────────── */
@@ -11153,6 +11162,9 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
 }
 .wordbook .wb-demo-anim-search-input {
   flex: 1;
+  /* Let the demo field shrink on a phone (QA 2026-10-18: /features was wider
+     than the screen and the hero text was cut mid-word). */
+  min-width: 0;
   font-family: var(--wb-sans);
   font-size: 15px;
   padding: 11px 16px;

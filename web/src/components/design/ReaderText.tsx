@@ -27,6 +27,9 @@ type Props = {
   /** Normalized keys (wordKey) of the harder words to highlight for attention
    *  (Gadi 2026-09-19). Empty until the background analysis returns. */
   hardKeys?: Set<string>;
+  /** Localized tooltip + aria-label for the per-sentence "understand" control
+   *  (from the Reader's copy table); English fallback. */
+  understandLabel?: string;
 };
 
 /** Detect the passage's dominant script so TTS speaks each word in the text's
@@ -80,7 +83,7 @@ function toSentences(tokens: Tok[]): Sentence[] {
   return out;
 }
 
-export function ReaderText({ text, reviewed, onReview, hardKeys }: Props) {
+export function ReaderText({ text, reviewed, onReview, hardKeys, understandLabel = "Understand this sentence" }: Props) {
   const { lang } = useLang();
   const tokens = useMemo(() => tokenizeWords(text), [text]);
   const textLang = useMemo(() => detectTextLang(text), [text]);
@@ -134,8 +137,8 @@ export function ReaderText({ text, reviewed, onReview, hardKeys }: Props) {
                 type="button"
                 className="wb-sentence-understand"
                 aria-haspopup="dialog"
-                aria-label="Understand this sentence"
-                title="Understand this sentence"
+                aria-label={understandLabel}
+                title={understandLabel}
                 onClick={(e) => { e.stopPropagation(); setSentPop({ sentence: s.text, anchor: e.currentTarget }); }}
                 style={{
                   display: "inline-flex", alignItems: "center", justifyContent: "center",

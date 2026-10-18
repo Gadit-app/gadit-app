@@ -62,19 +62,19 @@ export function PrivacyBodyPt() {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong> &mdash; processa as palavras e frases que você envia para gerar definições,
+          <strong>OpenAI</strong>: processa as palavras e frases que você envia para gerar definições,
           feedback de frases, quizzes e transcrição de voz (Whisper), e gera imagens (DALL·E 3). Os dados enviados
           à OpenAI são regidos pela política de uso de dados da API da OpenAI.
         </li>
         <li>
-          <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage) &mdash; armazena sua conta,
+          <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): armazena sua conta,
           perfil, status de assinatura, histórico de pesquisa e imagens geradas.
         </li>
         <li>
-          <strong>Stripe</strong> &mdash; processa pagamentos, assinaturas e portal de cobrança.
+          <strong>Stripe</strong>: processa pagamentos, assinaturas e portal de cobrança.
         </li>
         <li>
-          <strong>Vercel</strong> &mdash; hospeda e entrega o site, e fornece análises anonimizadas e medição de desempenho.
+          <strong>Vercel</strong>: hospeda e entrega o site, e fornece análises anonimizadas e medição de desempenho.
         </li>
       </ul>
 
@@ -104,8 +104,8 @@ export function PrivacyBodyPt() {
 
       <h2>6. Segurança</h2>
       <p>
-        Utilizamos salvaguardas padrão do setor &mdash; conexões criptografadas (HTTPS), APIs autenticadas e
-        controles de acesso &mdash; para proteger suas informações. Nenhum método de transmissão ou armazenamento na
+        Utilizamos salvaguardas padrão do setor: conexões criptografadas (HTTPS), APIs autenticadas e
+        controles de acesso, para proteger suas informações. Nenhum método de transmissão ou armazenamento na
         internet é 100% seguro, portanto não podemos garantir segurança absoluta, mas trabalhamos continuamente
         para reduzir riscos.
       </p>

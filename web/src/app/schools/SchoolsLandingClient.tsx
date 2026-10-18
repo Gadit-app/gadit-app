@@ -176,7 +176,7 @@ const COPY: Record<string, T> = {
     probCallout1Title: "The compounding gap",
     probCallout1Body: "Unlearned words build an invisible barrier to every future lesson.",
     probCallout2Title: "The time drain",
-    probCallout2Body: "Teachers lose 5–10 minutes per lesson on definitions.",
+    probCallout2Body: "Teachers lose 5-10 minutes per lesson on definitions.",
     probCallout3Title: "The silent dropout",
     probCallout3Body: "Students zone out when a paragraph has too many unknown words.",
     howTag: "How It Works",
@@ -249,7 +249,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Can it be used outside class hours?",
-        a: "Classroom codes are bound to the school's active hours (default Sunday–Thursday 7:30–15:00, configurable). Outside that window the code gives basic dictionary access but no extended features. This prevents the school code from becoming a free 24/7 substitute for the Family tier.",
+        a: "Classroom codes are bound to the school's active hours (default Sunday-Thursday 7:30-15:00, configurable). Outside that window the code gives basic dictionary access but no extended features. This prevents the school code from becoming a free 24/7 substitute for the Family tier.",
       },
       {
         q: "What if my school has more than 500 students?",
@@ -2048,7 +2048,7 @@ const COPY: Record<string, T> = {
     probCallout1Title: "Растущий разрыв",
     probCallout1Body: "Невыученные слова строят невидимую стену для каждого будущего урока.",
     probCallout2Title: "Утечка времени",
-    probCallout2Body: "Учителя теряют 5–10 минут на каждом уроке, объясняя слова.",
+    probCallout2Body: "Учителя теряют 5-10 минут на каждом уроке, объясняя слова.",
     probCallout3Title: "Тихий отрыв",
     probCallout3Body: "Ученики отключаются, когда в абзаце слишком много незнакомых слов.",
     howTag: "Как это работает",
@@ -2069,7 +2069,7 @@ const COPY: Record<string, T> = {
     teacherB4: "Фильтр по дате, ученику или слову",
     privTag: "Приватность в архитектуре",
     privH2: "Полная видимость для учителей. Ноль риска данных для школы.",
-    privSub: "Мы не собираем личные данные учеников. Не потому что хорошо их прячем, а потому что вообще их не собираем. Архитектура — это и есть соответствие требованиям.",
+    privSub: "Мы не собираем личные данные учеников. Не потому что хорошо их прячем, а потому что вообще их не собираем. Сама архитектура и есть соответствие требованиям.",
     privPoint1: "Без аккаунтов учеников. Без email, без паролей, без удостоверений.",
     privPoint2: "Никакая личная информация не покидает школу. Поиски помечаются только именем из списка.",
     privPoint3: "Коды классов работают только в школьное время. Настраивается для каждой школы.",
@@ -2121,7 +2121,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Можно ли использовать вне школьных часов?",
-        a: "Коды классов привязаны к школьному расписанию (по умолчанию воскресенье–четверг 7:30–15:00, настраивается). Вне этого окна код даёт базовый доступ к словарю, но без расширенных функций. Это предотвращает превращение школьного кода в бесплатную замену тарифа Family на 24/7.",
+        a: "Коды классов привязаны к школьному расписанию (по умолчанию воскресенье-четверг 7:30-15:00, настраивается). Вне этого окна код даёт базовый доступ к словарю, но без расширенных функций. Это предотвращает превращение школьного кода в бесплатную замену тарифа Family на 24/7.",
       },
       {
         q: "Что если в моей школе больше 500 учеников?",
@@ -2343,7 +2343,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "هل يمكن استخدامه خارج ساعات المدرسة؟",
-        a: "أكواد الصفوف مقيّدة بساعات المدرسة الفعّالة (افتراضيًا الأحد–الخميس 7:30–15:00، قابلة للضبط). خارج هذه النافذة يعطي الكود وصولاً قاموسيًا أساسيًا فقط. هذا يمنع تحوّل كود المدرسة إلى بديل مجاني لخطة Family على مدار اليوم.",
+        a: "أكواد الصفوف مقيّدة بساعات المدرسة الفعّالة (افتراضيًا الأحد-الخميس 7:30-15:00، قابلة للضبط). خارج هذه النافذة يعطي الكود وصولاً قاموسيًا أساسيًا فقط. هذا يمنع تحوّل كود المدرسة إلى بديل مجاني لخطة Family على مدار اليوم.",
       },
       {
         q: "ماذا لو كانت مدرستي أكثر من 500 طالب؟",
@@ -2455,7 +2455,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Lze to použít mimo školní hodiny?",
-        a: "Třídní kódy jsou vázány na aktivní hodiny školy (výchozí neděle–čtvrtek 7:30–15:00, nastavitelné). Mimo toto okno dává kód pouze základní přístup ke slovníku. To zabraňuje, aby se školní kód stal volnou náhradou tarifu Family 24 hodin denně.",
+        a: "Třídní kódy jsou vázány na aktivní hodiny školy (výchozí neděle-čtvrtek 7:30-15:00, nastavitelné). Mimo toto okno dává kód pouze základní přístup ke slovníku. To zabraňuje, aby se školní kód stal volnou náhradou tarifu Family 24 hodin denně.",
       },
       {
         q: "Co když má moje škola více než 500 žáků?",
@@ -2567,7 +2567,7 @@ const COPY: Record<string, T> = {
       },
       {
         q: "Dá sa to použiť mimo školských hodín?",
-        a: "Triedne kódy sú viazané na aktívne hodiny školy (predvolene nedeľa–štvrtok 7:30–15:00, nastaviteľné). Mimo tohto okna dáva kód iba základný prístup k slovníku. To zabraňuje, aby sa školský kód stal voľnou náhradou tarifu Family 24 hodín denne.",
+        a: "Triedne kódy sú viazané na aktívne hodiny školy (predvolene nedeľa-štvrtok 7:30-15:00, nastaviteľné). Mimo tohto okna dáva kód iba základný prístup k slovníku. To zabraňuje, aby sa školský kód stal voľnou náhradou tarifu Family 24 hodín denne.",
       },
       {
         q: "Čo ak má moja škola viac ako 500 žiakov?",
@@ -4808,13 +4808,13 @@ const PRICING_UI: Record<string, PricingUI> = {
         tiers: { small: "עד 100 תלמידים", medium: "101 עד 500 תלמידים", large: "501 עד 1,000 תלמידים" } },
   en: { perYear: "/ year", orderCta: "Get a quote",
         plusVat: "+ VAT", netNote: "All prices exclude VAT.",
-        tiers: { small: "Up to 100 students", medium: "101–500 students", large: "501–1,000 students" } },
+        tiers: { small: "Up to 100 students", medium: "101-500 students", large: "501-1,000 students" } },
   ar: { perYear: "سنويًا", orderCta: "لطلب عرض سعر",
         plusVat: "+ ض.ق.م", netNote: "جميع الأسعار لا تشمل ضريبة القيمة المضافة.",
-        tiers: { small: "حتى 100 طالب", medium: "101–500 طالب", large: "501–1,000 طالب" } },
+        tiers: { small: "حتى 100 طالب", medium: "101-500 طالب", large: "501-1,000 طالب" } },
   ru: { perYear: "в год", orderCta: "Запросить счёт",
         plusVat: "+ НДС", netNote: "Все цены указаны без НДС.",
-        tiers: { small: "до 100 учеников", medium: "101–500 учеников", large: "501–1,000 учеников" } },
+        tiers: { small: "до 100 учеников", medium: "101-500 учеников", large: "501-1,000 учеников" } },
 };
 
 // Labels for the international USD pricing block (non-Hebrew). Native for
@@ -5158,7 +5158,7 @@ const XLANG: Record<string, XLang> = {
     keyline: "Ваши многоязычные ученики перестают отставать по всем другим предметам, потому что наконец могут читать материал.",
     demoWordLabel: "В уроке написано",
     demoMeaningLabel: "Ученик понимает",
-    note: "Это не только для новых репатриантов. Это для каждого ученика, который встречает трудное слово, на любом из 30+ языков. Цель — понимание материала, и это самый сильный инструмент для этого.",
+    note: "Это не только для новых репатриантов. Это для каждого ученика, который встречает трудное слово, на любом из 30+ языков. Цель: понимание материала, и это самый сильный инструмент для этого.",
   },
   es: {
     tag: "Entre idiomas",
@@ -5535,7 +5535,7 @@ const XLANG: Record<string, XLang> = {
 // 30 languages for the cross-language section (was en/he/ar only), added
 // 2026-08-22 so it is native instead of English fallback on the schools page.
 Object.assign(XLANG, {
-  "ru": {"tag":"Межъязыковой доступ","h2":"А если слово на языке, которым ученик ещё не владеет свободно?","body1":"Ребёнок читает урок на языке обучения, но по-прежнему думает на русском, амхарском или арабском. Он натыкается на незнакомое слово, не поднимает руку и тихо тонет, пока класс идёт дальше.","body2":"В Gadit такой ученик находит это слово и получает полное значение на своём родном языке, а затем продолжает читать урок. Барьер понимания исчезает за одно касание.","keyline":"Ваши многоязычные ученики перестают отставать по всем остальным предметам, потому что наконец-то могут прочитать материал.","demoWordLabel":"В уроке сказано","demoMeaningLabel":"Ученик понимает","note":"Это не только для новых репатриантов. Это для каждого ученика, который встречает трудное слово, на любом из более чем 30+ языков. Цель — понять материал, и это самый сильный инструмент для этого."},
+  "ru": {"tag":"Межъязыковой доступ","h2":"А если слово на языке, которым ученик ещё не владеет свободно?","body1":"Ребёнок читает урок на языке обучения, но по-прежнему думает на русском, амхарском или арабском. Он натыкается на незнакомое слово, не поднимает руку и тихо тонет, пока класс идёт дальше.","body2":"В Gadit такой ученик находит это слово и получает полное значение на своём родном языке, а затем продолжает читать урок. Барьер понимания исчезает за одно касание.","keyline":"Ваши многоязычные ученики перестают отставать по всем остальным предметам, потому что наконец-то могут прочитать материал.","demoWordLabel":"В уроке сказано","demoMeaningLabel":"Ученик понимает","note":"Это не только для новых репатриантов. Это для каждого ученика, который встречает трудное слово, на любом из более чем 30+ языков. Цель: понять материал, и это самый сильный инструмент для этого."},
   "es": {"tag":"Entre idiomas","h2":"¿Y cuando la palabra está en un idioma que el alumno aún no domina del todo?","body1":"Un niño lee la lección en el idioma de enseñanza, pero sigue pensando en ruso, amárico o árabe. Se topa con una palabra que no conoce, no levanta la mano y se hunde en silencio mientras la clase avanza.","body2":"En Gadit, ese alumno busca la palabra y obtiene el significado completo en su propio idioma, y luego sigue leyendo la lección. La barrera de comprensión desaparece con un solo toque.","keyline":"Tus alumnos multilingües dejan de quedarse atrás en todas las demás materias, porque por fin pueden leer el material.","demoWordLabel":"La lección dice","demoMeaningLabel":"El alumno entiende","note":"Esto no es solo para recién llegados. Es para cada alumno que se topa con una palabra difícil, en cualquiera de más de 30+ idiomas. El objetivo es comprender el material, y esta es la herramienta más potente para lograrlo."},
   "pt": {"tag":"Entre idiomas","h2":"E quando a palavra está num idioma que o aluno ainda não domina por completo?","body1":"Uma criança lê a aula no idioma de ensino, mas continua a pensar em russo, amárico ou árabe. Ela esbarra numa palavra que não conhece, não levanta a mão e afunda em silêncio enquanto a turma segue em frente.","body2":"No Gadit, esse aluno procura a palavra e recebe o significado completo no seu próprio idioma, e depois continua a ler a aula. A barreira de compreensão desaparece com um único toque.","keyline":"Os seus alunos multilíngues param de ficar para trás em todas as outras disciplinas, porque finalmente conseguem ler o material.","demoWordLabel":"A aula diz","demoMeaningLabel":"O aluno entende","note":"Isto não é só para recém-imigrantes. É para cada aluno que esbarra numa palavra difícil, em qualquer um de mais de 30+ idiomas. O objetivo é compreender o material, e esta é a ferramenta mais forte para isso."},
   "fr": {"tag":"Entre les langues","h2":"Et quand le mot est dans une langue que l'élève ne maîtrise pas encore vraiment ?","body1":"Un enfant lit la leçon dans la langue d'enseignement, mais pense toujours en russe, en amharique ou en arabe. Il bute sur un mot qu'il ne connaît pas, ne lève pas la main et coule en silence pendant que la classe avance.","body2":"Dans Gadit, cet élève cherche le mot et obtient le sens complet dans sa propre langue, puis reprend la lecture de la leçon. La barrière de compréhension tombe en une seule touche.","keyline":"Vos élèves multilingues cessent de prendre du retard dans toutes les autres matières, parce qu'ils peuvent enfin lire le contenu.","demoWordLabel":"La leçon dit","demoMeaningLabel":"L'élève comprend","note":"Ce n'est pas seulement pour les nouveaux immigrants. C'est pour chaque élève qui bute sur un mot difficile, dans l'une des plus de 30+ langues. Le but, c'est de comprendre le contenu, et voici l'outil le plus puissant pour y arriver."},
@@ -5546,7 +5546,7 @@ Object.assign(XLANG, {
   "ja": {"tag":"言語をまたいで","h2":"その単語が、生徒がまだ十分に習得していない言語だったら?","body1":"子どもは指導言語で授業を読んでいても、頭の中ではまだロシア語やアムハラ語、アラビア語で考えています。知らない単語にぶつかっても手を挙げず、クラスが先へ進むなか、静かに溺れていきます。","body2":"Gaditなら、その生徒は単語を調べて自分の母語で完全な意味を受け取り、そのまま授業を読み続けられます。理解の壁が、ワンタップで消えます。","keyline":"多言語の生徒たちは、他のすべての教科で遅れをとらなくなります。ようやく教材を読めるようになるからです。","demoWordLabel":"授業ではこう書かれている","demoMeaningLabel":"生徒はこう理解する","note":"これは新しく来た移民だけのものではありません。難しい単語にぶつかるすべての生徒のためのもので、30+以上のあらゆる言語に対応します。目的は教材を理解することであり、そのための最も強力なツールです。"},
   "hi": {"tag":"भाषाओं के पार","h2":"और जब शब्द उस भाषा में हो जिस पर छात्र की अभी पूरी पकड़ नहीं है?","body1":"एक बच्चा पाठ शिक्षा की भाषा में पढ़ता है, पर सोचता अब भी रूसी, अम्हारिक या अरबी में है। वह किसी अनजान शब्द पर अटक जाता है, हाथ नहीं उठाता, और जब कक्षा आगे बढ़ती रहती है तो चुपचाप पिछड़ता जाता है।","body2":"Gadit में वह छात्र उस शब्द को खोजता है और उसका पूरा अर्थ अपनी ही भाषा में पा लेता है, और फिर पाठ पढ़ना जारी रखता है। समझ की दीवार एक ही टैप में गिर जाती है।","keyline":"आपके बहुभाषी छात्र हर दूसरे विषय में पिछड़ना बंद कर देते हैं, क्योंकि अब वे आखिरकार सामग्री पढ़ पाते हैं।","demoWordLabel":"पाठ में लिखा है","demoMeaningLabel":"छात्र समझ पाता है","note":"यह केवल नए प्रवासियों के लिए नहीं है। यह हर उस छात्र के लिए है जो किसी कठिन शब्द पर अटकता है, 30+ से अधिक भाषाओं में से किसी में भी। लक्ष्य है सामग्री को समझना, और इसके लिए यह सबसे सशक्त उपकरण है।"},
   "am": {"tag":"በቋንቋዎች መካከል","h2":"ቃሉ ተማሪው ገና ሙሉ በሙሉ ባልተካነበት ቋንቋ ቢሆንስ?","body1":"አንድ ልጅ ትምህርቱን በማስተማሪያ ቋንቋ ያነባል፣ ግን አሁንም በሩስኛ፣ በአማርኛ ወይም በዐረብኛ ያስባል። የማያውቀውን ቃል ሲያጋጥመው እጁን አያነሳም፣ ክፍሉ ወደፊት እየሄደ ሳለ በጸጥታ ይሰጥማል።","body2":"በGadit ውስጥ ያ ተማሪ ቃሉን ይፈልጋል፣ ሙሉ ትርጉሙን በራሱ ቋንቋ ያገኛል፣ ከዚያም ትምህርቱን ማንበብ ይቀጥላል። የመረዳት እንቅፋቱ በአንድ ንክኪ ይጠፋል።","keyline":"ባለብዙ ቋንቋ ተማሪዎችዎ በሁሉም ሌሎች ትምህርቶች ወደኋላ መቅረት ያቆማሉ፣ ምክንያቱም በመጨረሻ ይዘቱን ማንበብ ስለሚችሉ ነው።","demoWordLabel":"ትምህርቱ ይላል","demoMeaningLabel":"ተማሪው ይረዳል","note":"ይህ ለአዲስ ስደተኞች ብቻ አይደለም። ከባድ ቃል ለሚያጋጥመው ለእያንዳንዱ ተማሪ ነው፣ ከ30+ በላይ ቋንቋዎች በማንኛውም። ግቡ ይዘቱን መረዳት ነው፣ ለዚህም ይህ በጣም ኃይለኛ መሣሪያ ነው።"},
-  "uk": {"tag":"Між мовами","h2":"А якщо слово тією мовою, якою учень ще не володіє вільно?","body1":"Дитина читає урок мовою навчання, але досі думає російською, амхарською чи арабською. Вона натрапляє на незнайоме слово, не піднімає руку і тихо тоне, поки клас рухається далі.","body2":"У Gadit такий учень знаходить це слово й отримує повне значення своєю рідною мовою, а потім читає урок далі. Бар'єр розуміння зникає за один дотик.","keyline":"Ваші багатомовні учні перестають відставати з усіх інших предметів, бо нарешті можуть прочитати матеріал.","demoWordLabel":"В уроці сказано","demoMeaningLabel":"Учень розуміє","note":"Це не лише для нових репатріантів. Це для кожного учня, який натрапляє на складне слово, будь-якою з понад 30+ мов. Мета — зрозуміти матеріал, і це найпотужніший інструмент для цього."},
+  "uk": {"tag":"Між мовами","h2":"А якщо слово тією мовою, якою учень ще не володіє вільно?","body1":"Дитина читає урок мовою навчання, але досі думає російською, амхарською чи арабською. Вона натрапляє на незнайоме слово, не піднімає руку і тихо тоне, поки клас рухається далі.","body2":"У Gadit такий учень знаходить це слово й отримує повне значення своєю рідною мовою, а потім читає урок далі. Бар'єр розуміння зникає за один дотик.","keyline":"Ваші багатомовні учні перестають відставати з усіх інших предметів, бо нарешті можуть прочитати матеріал.","demoWordLabel":"В уроці сказано","demoMeaningLabel":"Учень розуміє","note":"Це не лише для нових репатріантів. Це для кожного учня, який натрапляє на складне слово, будь-якою з понад 30+ мов. Мета: зрозуміти матеріал, і це найпотужніший інструмент для цього."},
   "tr": {"tag":"Diller arası","h2":"Ya kelime, öğrencinin henüz tam olarak hâkim olmadığı bir dildeyse?","body1":"Bir çocuk dersi öğretim dilinde okur ama hâlâ Rusça, Amharca ya da Arapça düşünür. Bilmediği bir kelimeye takılır, elini kaldırmaz ve sınıf ilerlerken sessizce boğulur.","body2":"Gadit'te o öğrenci kelimeyi arar ve tam anlamını kendi dilinde alır, sonra dersi okumaya devam eder. Anlama engeli tek dokunuşla ortadan kalkar.","keyline":"Çok dilli öğrencileriniz diğer tüm derslerde geride kalmayı bırakır, çünkü artık materyali okuyabiliyorlardır.","demoWordLabel":"Derste şöyle diyor","demoMeaningLabel":"Öğrenci şöyle anlıyor","note":"Bu yalnızca yeni göçmenler için değil. Zor bir kelimeye takılan her öğrenci için, 30+ dilden herhangi birinde. Amaç materyali anlamaktır ve bu, bunun için en güçlü araçtır."},
   "pl": {"tag":"Między językami","h2":"A gdy słowo jest w języku, którego uczeń jeszcze w pełni nie opanował?","body1":"Dziecko czyta lekcję w języku nauczania, ale wciąż myśli po rosyjsku, amharsku albo arabsku. Natrafia na nieznane słowo, nie podnosi ręki i po cichu tonie, podczas gdy klasa idzie dalej.","body2":"W Gadit taki uczeń wyszukuje to słowo i dostaje pełne znaczenie we własnym języku, a potem czyta lekcję dalej. Bariera zrozumienia znika za jednym dotknięciem.","keyline":"Twoi wielojęzyczni uczniowie przestają zostawać w tyle we wszystkich innych przedmiotach, bo w końcu potrafią przeczytać materiał.","demoWordLabel":"W lekcji jest napisane","demoMeaningLabel":"Uczeń rozumie","note":"To nie tylko dla nowych imigrantów. To dla każdego ucznia, który natrafia na trudne słowo, w dowolnym z ponad 30+ języków. Celem jest zrozumienie materiału, a to najsilniejsze narzędzie, żeby to osiągnąć."},
   "fa": {"tag":"میان‌زبانی","h2":"و وقتی واژه به زبانی است که دانش‌آموز هنوز کاملاً بر آن مسلط نیست چه؟","body1":"کودکی درس را به زبان آموزش می‌خواند اما هنوز به روسی، امهری یا عربی فکر می‌کند. به واژه‌ای ناآشنا برمی‌خورد، دستش را بلند نمی‌کند و در حالی که کلاس پیش می‌رود، بی‌صدا غرق می‌شود.","body2":"در Gadit، آن دانش‌آموز واژه را جست‌وجو می‌کند و معنای کامل آن را به زبان خودش می‌گیرد، و سپس به خواندن درس ادامه می‌دهد. سد فهم با یک لمس از میان می‌رود.","keyline":"دانش‌آموزان چندزبانه‌ی شما دیگر در همه‌ی درس‌های دیگر عقب نمی‌مانند، چون بالاخره می‌توانند مطلب را بخوانند.","demoWordLabel":"در درس آمده است","demoMeaningLabel":"دانش‌آموز می‌فهمد","note":"این فقط برای مهاجران تازه‌وارد نیست. برای هر دانش‌آموزی است که به واژه‌ای دشوار برمی‌خورد، به هر یک از بیش از 30+ زبان. هدف فهمیدن مطلب است، و این نیرومندترین ابزار برای آن است."},
@@ -6220,7 +6220,7 @@ export function SchoolsLandingClient({ standalone = false }: { standalone?: bool
                 <div className="wb-schools-mockup-dots">
                   <span /><span /><span />
                 </div>
-                <div className="wb-schools-mockup-title">/schools/manage — Class 7B</div>
+                <div className="wb-schools-mockup-title">/schools/manage · Class 7B</div>
               </div>
               <div className="wb-schools-mockup-body">
                 <div className="wb-schools-mockup-eyebrow">{t.mockupSearches}</div>

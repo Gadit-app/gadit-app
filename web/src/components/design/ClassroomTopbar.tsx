@@ -16,7 +16,7 @@ import { BackLink } from "@/components/BackLink";
  * pronunciation-tool nav label used elsewhere.
  */
 
-const LABELS: Record<string, { notebook: string; games: string; say: string; back: string }> = {
+export const LABELS: Record<string, { notebook: string; games: string; say: string; back: string }> = {
   en: { notebook: "Class Notebook", games: "Word Games", say: "Say it", back: "Back" },
   he: { notebook: "מחברת הכיתה", games: "משחקי מילים", say: "תגיד את זה", back: "חזרה" },
   zu: { notebook: "Incwadi Yekilasi", games: "Imidlalo Yamagama", say: "Yisho", back: "Emuva" },

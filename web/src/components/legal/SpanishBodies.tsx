@@ -63,19 +63,19 @@ export function PrivacyBodyEs(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong> &mdash; procesa las palabras y oraciones que usted envía para generar definiciones,
+          <strong>OpenAI</strong>: procesa las palabras y oraciones que usted envía para generar definiciones,
           comentarios sobre oraciones, cuestionarios y transcripción de voz (Whisper), y genera imágenes (DALL·E 3). Los
           datos enviados a OpenAI se rigen por la política de uso de datos de la API de OpenAI.
         </li>
         <li>
-          <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage) &mdash; almacena su cuenta, perfil,
+          <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): almacena su cuenta, perfil,
           estado de suscripción, historial de búsqueda e imágenes generadas.
         </li>
         <li>
-          <strong>Stripe</strong> &mdash; gestiona los pagos, las suscripciones y el portal de facturación.
+          <strong>Stripe</strong>: gestiona los pagos, las suscripciones y el portal de facturación.
         </li>
         <li>
-          <strong>Vercel</strong> &mdash; aloja y sirve el sitio web, y proporciona analítica anónima y medición del
+          <strong>Vercel</strong>: aloja y sirve el sitio web, y proporciona analítica anónima y medición del
           rendimiento.
         </li>
       </ul>
@@ -107,8 +107,8 @@ export function PrivacyBodyEs(): ReactElement {
 
       <h2>6. Seguridad</h2>
       <p>
-        Utilizamos medidas de seguridad estándar del sector &mdash; conexiones cifradas (HTTPS), API autenticadas y
-        controles de acceso &mdash; para proteger su información. Ningún método de transmisión o almacenamiento en
+        Utilizamos medidas de seguridad estándar del sector: conexiones cifradas (HTTPS), API autenticadas y
+        controles de acceso, para proteger su información. Ningún método de transmisión o almacenamiento en
         internet es 100% seguro, por lo que no podemos garantizar una seguridad absoluta, pero trabajamos de forma
         continua para reducir los riesgos.
       </p>

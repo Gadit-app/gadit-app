@@ -38,6 +38,7 @@ import { LANGUAGES } from "@/lib/i18n";
 import { db } from "@/lib/firebase";
 import type { Classroom, School } from "@/lib/school";
 import { studentCodesOff } from "@/lib/school";
+import { LABELS as CLASS_TOPBAR_LABELS } from "@/components/design/ClassroomTopbar";
 import {
   ALLOWED_LOGO_MIMES,
   CLASSROOM_COLORS,
@@ -3316,7 +3317,7 @@ export function SchoolsClient() {
                 <span style={{ fontFamily: "var(--wb-sans)", fontWeight: 600, color: current, fontSize: 15 }} dir="ltr">
                   Gad<span style={{ fontStyle: "italic", fontWeight: 400, color: "#0EA5A5" }}>it</span>
                 </span>
-                <span style={{ fontSize: 13, color: current, fontWeight: 600 }}>{a.previewLabel === "Preview" ? "Class Notebook" : "מחברת הכיתה"}</span>
+                <span style={{ fontSize: 13, color: current, fontWeight: 600 }}>{/* The classroom topbar's own label, every language (QA 2026-10-18). */}{(CLASS_TOPBAR_LABELS[lang] ?? CLASS_TOPBAR_LABELS.en).notebook}</span>
                 <span
                   style={{
                     display: "inline-flex", alignItems: "center", justifyContent: "center",
