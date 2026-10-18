@@ -384,24 +384,28 @@ export const REAL_CSS = `
 .fam-premium {
   --pm-card: inset 0 1px 0 rgba(255,255,255,0.7), 0 2px 6px rgba(16,40,60,0.08), 0 30px 64px -22px rgba(16,40,60,0.38);
 }
-.fam-premium .fam-real-steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; max-width: 1180px; margin-top: 40px; }
+/* The five steps (Gadi 2026-10-18: the phones peeking cut off at the bottom
+   looked broken): one compact card per step, the explanation on the start
+   side (right in Hebrew) and the WHOLE phone beside it, the same in every
+   step. Phones stack under the text only on narrow screens. */
+.fam-premium .fam-real-steps { display: grid; gap: 22px; max-width: 820px; margin-top: 40px; }
 .fam-premium .fam-real-step, .fam-premium .fam-real-step:nth-child(even) {
-  display: flex; flex-direction: column; gap: 18px; grid-template-columns: none;
-  padding: 24px 18px 0; border-radius: 26px; overflow: hidden; min-height: 470px;
+  display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 36px; align-items: center;
+  padding: 28px 44px; border-radius: 28px; overflow: visible; min-height: 0;
 }
 .fam-premium .fam-real-step:nth-child(even) .fam-real-step-text { order: 0; }
 .fam-premium .fam-real-step-text { padding: 0; }
-.fam-premium .fam-real-step-title { font-size: 18px; margin-bottom: 6px; }
-.fam-premium .fam-real-step-body { font-size: 14.5px; line-height: 1.65; }
-.fam-premium .fam-real-step > .fam-phone { max-width: 190px; width: 100%; margin: auto auto -150px; }
-.fam-premium .fam-real-step-num { width: 30px; height: 30px; font-size: 15px; }
-@media (max-width: 1180px) {
-  .fam-premium .fam-real-steps { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 20px 30px; margin-inline: -20px; scrollbar-width: thin; }
-  .fam-premium .fam-real-step, .fam-premium .fam-real-step:nth-child(even) { flex: 0 0 min(78vw, 250px); scroll-snap-align: center; }
-}
+.fam-premium .fam-real-step-title { font-size: 22px; margin-bottom: 8px; }
+.fam-premium .fam-real-step-body { font-size: 16px; line-height: 1.7; }
+.fam-premium .fam-real-step > .fam-phone { max-width: 210px; width: 100%; margin: 0 auto; }
+.fam-premium .fam-real-step-num { width: 32px; height: 32px; font-size: 15px; }
 @media (min-width: 880px) {
-  .fam-premium .fam-real-step { padding: 24px 18px 0; }
-  .fam-premium .fam-real-step > .fam-phone { max-width: 190px; }
+  .fam-premium .fam-real-step { padding: 28px 44px; }
+  .fam-premium .fam-real-step > .fam-phone { max-width: min(210px, 34vh); }
+}
+@media (max-width: 620px) {
+  .fam-premium .fam-real-step, .fam-premium .fam-real-step:nth-child(even) { grid-template-columns: 1fr; gap: 18px; padding: 24px 20px; }
+  .fam-premium .fam-real-step > .fam-phone { max-width: 200px; }
 }
 
 /* Homework: deep teal, white text, white cards */
