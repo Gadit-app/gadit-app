@@ -357,6 +357,8 @@ async function maybeNotifyScheduledCancel(sub: Stripe.Subscription, event: Strip
       ? "Family"
       : isSchoolsPriceId(priceId)
       ? "Schools"
+      : isIndividualPriceId(priceId)
+      ? "Individual"
       : getPlanFromPriceId(priceId) === "clear"
       ? "Clear"
       : "Deep";
@@ -401,6 +403,8 @@ async function maybeNotifyDeletedCancel(sub: Stripe.Subscription) {
       ? "Family"
       : isSchoolsPriceId(priceId)
       ? "Schools"
+      : isIndividualPriceId(priceId)
+      ? "Individual"
       : getPlanFromPriceId(priceId) === "clear"
       ? "Clear"
       : "Deep";
@@ -730,7 +734,7 @@ async function activateFromSubscriptionMetadata(sub: Stripe.Subscription): Promi
   if (schools) await bootstrapSchool(uid, billingCycle, email);
 
   if (plan !== "basic") {
-    const tier = family ? "Family" : schools ? "Schools" : plan === "clear" ? "Clear" : "Deep";
+    const tier = family ? "Family" : schools ? "Schools" : isIndividualPriceId(priceId) ? "Individual" : plan === "clear" ? "Clear" : "Deep";
     // trial_end set on the sub means this subscription ran a free trial;
     // by the time we reach activation that trial has ended, so this is a
     // trial-to-paid conversion rather than a fresh paid signup.
@@ -1008,7 +1012,7 @@ export async function POST(req: NextRequest) {
       }
 
       if (plan !== "basic") {
-        const tier = family ? "Family" : schools ? "Schools" : plan === "clear" ? "Clear" : "Deep";
+        const tier = family ? "Family" : schools ? "Schools" : isIndividualPriceId(priceId) ? "Individual" : plan === "clear" ? "Clear" : "Deep";
         await notifyPaidActivation(userId, tier, customerEmail, { fromTrial: !!trialEnd, sub });
         if (!schools) await autoEnrollPartner(userId, customerEmail, [session.customer_details?.phone]);
       }
