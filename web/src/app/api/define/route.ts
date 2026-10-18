@@ -13,6 +13,17 @@ import { recordUserActivity } from "@/lib/user-activity";
 import { recordWordSearch } from "@/lib/word-search-log";
 import { recordActivity, isBotUA } from "@/lib/activity-log";
 import { classroomAccess } from "@/lib/classroom-access";
+import { detectWrongKeyboard } from "@/lib/keyboard-layout";
+
+/** Wrong keyboard (QA 2026-10-18: ",knhs", which is "תלמיד" typed on an
+ *  English layout, was given an invented meaning). The word is never
+ *  redirected (a real foreign word like "dream" must still be defined); the
+ *  model is told what the same keys spell on the other layout and decides. */
+function keyboardHint(word: string, uiLangCode: string): string {
+  const other = detectWrongKeyboard(word, uiLangCode);
+  if (!other || other === word) return "";
+  return `\nKeyboard note: on the ${uiLangCode === "he" ? "Hebrew" : "English"} keyboard layout these same keys spell "${other}". If the typed string is a real word or name in any language, ignore this note and define it normally. If it is NOT a real word (it looks like "${other}" typed with the wrong keyboard), do not invent a meaning: use RULE 1b with "suggestedWord": "${other}" when "${other}" is a real word, otherwise RULE 1c.`;
+}
 
 // Three-tier daily quota model.
 // ANON_DAILY_LIMIT: how many word searches a NOT-signed-in visitor can
@@ -107,10 +118,10 @@ Return this JSON shape when the exact typed word is not real but a likely-intend
   "language": "<detected>",
   "multiplemeanings": false,
   "suggestedWord": "<the correctly-spelled word>",
-  "meanings": [{"meaning": "המילה '<typed>' לא נמצאה במילון. אולי התכוונת ל-'<suggested>'?", "examples": ["", "", ""]}],
+  "meanings": [{"meaning": "המילה '<typed>' לא נמצאה במילון. אולי התכוונתם ל-'<suggested>'?", "examples": ["", "", ""]}],
   "etymology": {"sourceLanguage": "", "originalWord": "", "breakdown": "", "originalMeaning": "", "historyNote": "", "kidsExplanation": ""}
 }
-(adapt the sentence template to the user's UI language; examples: Hebrew "אולי התכוונת ל-X?"; English "Did you mean 'X'?"; Arabic "هل تقصد 'X'؟"; Russian "Возможно, вы имели в виду 'X'?")
+(adapt the sentence template to the user's UI language; examples: Hebrew "אולי התכוונתם ל-X?"; English "Did you mean 'X'?"; Arabic "هل تقصد 'X'؟"; Russian "Возможно, вы имели в виду 'X'?")
 
 RULE 1c — If the typed string is NOT a real word and you have NO good suggestion, return the plain "not found" fallback (no "suggestedWord" field):
 {
@@ -1793,7 +1804,7 @@ export async function POST(req: NextRequest) {
     const systemPrompt = isPaid ? basePrompt + KIDS_ADDON : basePrompt;
     const userContent = contextSentence
       ? `Word: ${word}\nSentence: ${contextSentence}\nUser's UI language (RESPOND ENTIRELY in this language, meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}`
-      : `Word: ${word}\nUser's UI language (RESPOND ENTIRELY in this language, meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}${await curriculumHint(word)}`;
+      : `Word: ${word}\nUser's UI language (RESPOND ENTIRELY in this language, meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}${await curriculumHint(word)}${keyboardHint(word, uiLangCode)}`;
 
     // Stream from OpenAI
     let openAIResponse: Response;
