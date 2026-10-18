@@ -1,6 +1,6 @@
 "use client";
 
-import { Testimonials, FAMILY_TESTIMONIALS_HE } from "@/components/design/Testimonials";
+import { Testimonials, InlineTestimonial, AMIR_LEVI_HE, FAMILY_TESTIMONIALS_HE } from "@/components/design/Testimonials";
 import type { FamI18n } from "./i18n/types";
 import { fillDeep, landingPrices, screensLang } from "@/lib/landing-i18n";
 import { INDIVIDUAL_DISPLAY, INDIVIDUAL_MONTHLY } from "@/lib/individual-prices";
@@ -8825,6 +8825,12 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
               </div>
             </section>
 
+            {lang === "he" && (
+              <section className="fam-band fam-band-sand">
+                <div className="gt-quote-inline-band"><InlineTestimonial item={AMIR_LEVI_HE} /></div>
+              </section>
+            )}
+
             <section className="fam-band fam-band-white">
               <div className="fam-section fam-center fam-section-wide">
                 <h2 className="fam-h2">{c.chainTitle}</h2>
@@ -8974,6 +8980,11 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
             </div>
           </section>
         )}
+        {lang === "he" && (
+          <section className="fam-band fam-band-sand">
+            <div className="gt-quote-inline-band"><InlineTestimonial item={FAMILY_TESTIMONIALS_HE[1]} /></div>
+          </section>
+        )}
 
         {real && real.tools.map((f, i) => (
           <section key={`real-${i}`} className={`fam-band ${i % 2 === 0 ? "fam-band-cream" : "fam-band-white"}`}>
@@ -9022,6 +9033,11 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                 </div>
               </div>
             </div>
+          </section>
+        )}
+        {lang === "he" && (
+          <section className="fam-band fam-band-sand">
+            <div className="gt-quote-inline-band"><InlineTestimonial item={FAMILY_TESTIMONIALS_HE[2]} /></div>
           </section>
         )}
 
@@ -9179,7 +9195,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
         {lang === "he" && (
           <section className="fam-band fam-band-sand">
             <div className="fam-section">
-              <Testimonials kicker="מהשטח" title="מה מספרות המשפחות" items={FAMILY_TESTIMONIALS_HE} />
+              <Testimonials kicker="מהשטח" title="מה מספרות המשפחות" items={[FAMILY_TESTIMONIALS_HE[0], FAMILY_TESTIMONIALS_HE[3], FAMILY_TESTIMONIALS_HE[4]]} />
             </div>
           </section>
         )}

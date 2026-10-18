@@ -6,6 +6,19 @@
  */
 export type Testimonial = { quote: string; who: string };
 
+/** One testimonial between two sections (Gadi 2026-10-18): the words sit
+ *  next to the topic they talk about instead of only at the bottom. */
+export function InlineTestimonial({ item }: { item: Testimonial }) {
+  return (
+    <figure className="gt-quote gt-quote-inline">
+      <blockquote>
+        {item.quote.split("\n").map((line, i) => <p key={i}>{line}</p>)}
+      </blockquote>
+      <figcaption>{item.who}</figcaption>
+    </figure>
+  );
+}
+
 export function Testimonials({ kicker, title, items }: { kicker: string; title: string; items: Testimonial[] }) {
   return (
     <div className="gt-quotes">
@@ -24,6 +37,18 @@ export function Testimonials({ kicker, title, items }: { kicker: string; title: 
     </div>
   );
 }
+
+/** Amir Levi, father of Tom and Ori (2026-10-18). Lightly edited: one
+ *  sentence per line, the brand in Latin letters. */
+export const AMIR_LEVI_HE: Testimonial = {
+  quote: [
+    "אפליקציית Gadit נותנת לנו כמשפחה מענה לצורך אמיתי וחשוב, במיוחד עבור הילדים.",
+    "היא כוללת הגדרות מילוניות מקיפות עם דוגמאות, והכול בצורה נגישה וקלה להבנה.",
+    "הילדים יכולים ללמוד באופן עצמאי יותר, להבין מילים חדשות ולהעשיר את אוצר המילים שלהם.",
+    "מדובר באפליקציה מצוינת לכל המשפחה!",
+  ].join("\n"),
+  who: "אמיר לוי, אבא של תום ואורי",
+};
 
 export const FAMILY_TESTIMONIALS_HE: Testimonial[] = [
   {

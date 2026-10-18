@@ -15122,6 +15122,10 @@ html[data-theme="space"] .wb-learn-simple-link, html[data-theme="space"] .wb-dic
 .gt-quote blockquote p { margin: 0; }
 .gt-quote blockquote p:first-child::before { content: "\201D"; display: block; font-size: 44px; line-height: .7; color: #0EA5A5; font-family: Georgia, serif; margin-bottom: 6px; }
 .gt-quote figcaption { font-size: 14px; font-weight: 700; color: #0A7472; }
+/* One quote between sections (Gadi 2026-10-18). */
+.gt-quote-inline-band { padding: 8px 20px 36px; display: flex; justify-content: center; }
+.gt-quote-inline { width: 100%; max-width: 620px; box-sizing: border-box; }
+.fam-band:has(> .gt-quote-inline-band) { padding-block: 28px; }
 
 /* Report a mistake in a question (Gadi 2026-10-12): a quiet flag, one tap. */
 .wb-report-q { position: relative; display: inline-flex; align-items: center; vertical-align: middle; }
