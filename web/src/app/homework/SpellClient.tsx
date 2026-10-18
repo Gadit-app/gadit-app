@@ -34,6 +34,7 @@ import { langNameIn } from "@/lib/i18n";
 import { DICTATION_SETS, getCatTitle, type DictationSet, type WordPair } from "@/lib/dictation-sets";
 import { nativeSet } from "@/lib/dictation-sets-native";
 import { SPELL_T_EXTRA, CELEBRATIONS_EXTRA } from "@/lib/spell-i18n";
+import { CURSIVE_FAMILY, drawCursiveStart, drawLetterStart, isLatinWord, loadCursiveFont, traceStyleCopy } from "@/lib/trace-letters";
 import { misc } from "@/lib/misc-i18n";
 import { ml } from "@/lib/my-lists-i18n";
 
@@ -210,13 +211,17 @@ function hashWords(words: WordPair[]): string {
   return "custom_" + h.toString(36);
 }
 
-/** Finger-tracing canvas: the word is drawn in faint simple print (non-cursive)
- *  as a guide, and the child traces over it with a finger. Writing practice, no
- *  grading — the type mode is the test. Gadi 2026-09-19. */
-function TraceCanvas({ word, rtl, clearLabel }: { word: string; rtl: boolean; clearLabel: string }) {
+/** Finger-tracing canvas: the word is drawn faintly as a guide, and the child
+ *  traces over it with a finger. Writing practice, no grading; the type mode is
+ *  the test. Gadi 2026-09-19. English words come in two styles (Gadi
+ *  2026-10-18): print, with a small dot and arrow on each letter showing where
+ *  it starts and which way the first stroke goes, or joined school cursive. */
+function TraceCanvas({ word, rtl, clearLabel, cursive = false }: { word: string; rtl: boolean; clearLabel: string; cursive?: boolean }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
   const drawing = useRef(false);
   const last = useRef<{ x: number; y: number } | null>(null);
+  const latin = isLatinWord(word);
+  const joined = cursive && latin;
 
   function guide() {
     const c = ref.current;
@@ -230,11 +235,41 @@ function TraceCanvas({ word, rtl, clearLabel }: { word: string; rtl: boolean; cl
     c.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
-    // faint baseline
-    ctx.strokeStyle = "#EEF2F3";
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(12, h * 0.80); ctx.lineTo(w - 12, h * 0.80); ctx.stroke();
+    const baseline = (y: number) => {
+      ctx.strokeStyle = "#EEF2F3";
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(12, y); ctx.lineTo(w - 12, y); ctx.stroke();
+    };
+    ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
 
+    if (joined) {
+      // Joined handwriting is drawn as ONE string so the letters connect.
+      let size = Math.min(h * 0.5, 72);
+      const fit = () => {
+        ctx.font = `400 ${size}px "${CURSIVE_FAMILY}", cursive`;
+        return ctx.measureText(word);
+      };
+      let m = fit();
+      while ((m.actualBoundingBoxLeft + m.actualBoundingBoxRight > w - 32
+        || m.actualBoundingBoxAscent + m.actualBoundingBoxDescent > h - 24) && size > 14) { size -= 2; m = fit(); }
+      const inkW = m.actualBoundingBoxLeft + m.actualBoundingBoxRight;
+      const inkH = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
+      const x = (w - inkW) / 2 + m.actualBoundingBoxLeft;
+      const y = (h - inkH) / 2 + m.actualBoundingBoxAscent;
+      baseline(y);
+      ctx.fillStyle = "#CFD8E0";
+      ctx.strokeStyle = "#CFD8E0";
+      ctx.lineWidth = Math.max(1.5, size * 0.035); // a thicker ghost line to trace on
+      ctx.lineJoin = "round";
+      ctx.fillText(word, x, y);
+      ctx.strokeText(word, x, y);
+      // One start arrow, where the pen first touches: the first letter's lead-in.
+      drawCursiveStart(ctx, word, x, y, size);
+      return;
+    }
+
+    baseline(h * 0.80);
     // Draw the word letter-by-letter with a GENEROUS gap so a finger has room
     // between letters (Gadi 2026-09-19). Bigger letters, too. Per-letter draw
     // also lets us honor RTL (Hebrew answers) by laying out right-to-left.
@@ -250,8 +285,6 @@ function TraceCanvas({ word, rtl, clearLabel }: { word: string; rtl: boolean; cl
     };
     while (totalW() > w - 24 && size > 16) size -= 2;
     setFont();
-    ctx.textBaseline = "alphabetic";
-    ctx.textAlign = "left";
     ctx.fillStyle = "#CFD8E0";
     const gap = GAP * size;
     const tw = totalW();
@@ -266,15 +299,26 @@ function TraceCanvas({ word, rtl, clearLabel }: { word: string; rtl: boolean; cl
       }
     } else {
       let x = (w - tw) / 2; // left edge
+      const starts: { ch: string; x: number }[] = [];
       for (const ch of letters) {
         ctx.fillText(ch, x, y);
+        starts.push({ ch, x });
         x += ctx.measureText(ch).width + gap;
       }
+      // English print: where each letter starts (drawn after all the letters,
+      // so no letter covers an arrow).
+      if (latin) for (const st of starts) drawLetterStart(ctx, st.ch, st.x, y, size);
     }
   }
 
-  useEffect(() => { guide(); /* redraw on word change */ // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [word]);
+  useEffect(() => {
+    // redraw on word or style change; joined writing waits for its font
+    let live = true;
+    if (joined) void loadCursiveFont().then(() => { if (live) guide(); });
+    else guide();
+    return () => { live = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [word, joined]);
   useEffect(() => {
     const onR = () => guide();
     window.addEventListener("resize", onR);
@@ -368,6 +412,13 @@ export function SpellClient() {
   const setMode = (m: "type" | "trace") => {
     setModeState(m);
     try { localStorage.setItem(MODE_KEY, m); } catch { /* this visit only */ }
+  };
+  // English tracing: print or joined (cursive), remembered on this device.
+  const STYLE_KEY = "gadit-trace-style";
+  const [traceStyle, setTraceStyleState] = useState<"print" | "cursive">("print");
+  const setTraceStyle = (v: "print" | "cursive") => {
+    setTraceStyleState(v);
+    try { localStorage.setItem(STYLE_KEY, v); } catch { /* this visit only */ }
   };
   const [set, setSet] = useState<DictationSet | null>(null);
   const setIdRef = useRef<string>("");
@@ -804,6 +855,8 @@ export function SpellClient() {
       if (isDir(d)) { setQdir(d); setDirRemembered(true); }
       const m = localStorage.getItem(MODE_KEY);
       if (m === "type" || m === "trace") setModeState(m);
+      const ts = localStorage.getItem(STYLE_KEY);
+      if (ts === "print" || ts === "cursive") setTraceStyleState(ts);
       const pl = localStorage.getItem(PICK_KEY);
       if (pl === "native" || pl === "en") setPickLang(pl);
     } catch { /* ask each time */ }
@@ -1484,8 +1537,19 @@ export function SpellClient() {
                 </>
               ) : (
                 <>
-                  <div style={{ fontSize: 12.5, color: "var(--ink-muted,#9CA3AF)", margin: "14px 0 8px" }}>{t("traceHint", lang)}</div>
-                  <TraceCanvas key={promptOf(current) + ":" + idx} word={answerOf(current)} rtl={answerRtl} clearLabel={t("clear", lang)} />
+                  <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 8, margin: "14px 0 8px" }}>
+                    <span style={{ fontSize: 12.5, color: "var(--ink-muted,#9CA3AF)" }}>{t("traceHint", lang)}</span>
+                    {isLatinWord(answerOf(current)) && (
+                      <span className="wb-dict-modes" role="radiogroup" aria-label={traceStyleCopy(lang).cursive}>
+                        {(["print", "cursive"] as const).map((v) => (
+                          <button key={v} type="button" role="radio" aria-checked={traceStyle === v} className={`wb-dict-mode${traceStyle === v ? " is-on" : ""}`} onClick={() => setTraceStyle(v)}>
+                            <span aria-hidden="true" style={v === "cursive" ? { fontFamily: "cursive", fontStyle: "italic" } : undefined}>Aa</span> {traceStyleCopy(lang)[v]}
+                          </button>
+                        ))}
+                      </span>
+                    )}
+                  </div>
+                  <TraceCanvas key={promptOf(current) + ":" + idx} word={answerOf(current)} rtl={answerRtl} clearLabel={t("clear", lang)} cursive={traceStyle === "cursive"} />
                   <button type="button" onClick={next}
                     style={{ marginTop: 16, width: "100%", padding: "13px", borderRadius: 12, border: "none", background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
                     {t("next", lang)}
