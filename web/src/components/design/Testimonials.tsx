@@ -34,7 +34,7 @@ export function InlineTestimonial({ item }: { item: Testimonial }) {
 export function Testimonials({ kicker, title, items }: { kicker: string; title: string; items: Testimonial[] }) {
   return (
     <div className="gt-quotes">
-      <div className="gt-quotes-kicker">{kicker}</div>
+      {kicker && <div className="gt-quotes-kicker">{kicker}</div>}
       <h2 className="gt-quotes-title">{title}</h2>
       <div className="gt-quotes-grid">
         {items.map((t) => (
@@ -122,6 +122,56 @@ export const FAMILY_TESTIMONIALS_HE: Testimonial[] = [
     ].join("\n"),
     who: "רומי, בת 12",
     photo: "/testimonials/romi.webp",
+  },
+];
+
+/** The families page bottom (Gadi 2026-10-18): what the KIDS say and what the
+ *  PARENTS say, two cards side by side in each row, shortened so the two
+ *  cards in a row come out the same length. Their own words, trimmed. */
+export const KIDS_TESTIMONIALS_HE: Testimonial[] = [
+  {
+    quote: [
+      "מאוד מאוד אהבתי את ההכתבות, את המשחקים, ואת שיעורי הבית שאפשר לתרגם עם Gadit.",
+      "אפשר לצלם טקסט של שיעורי הבית ולראות את הפירוש של כל המילים.",
+      "ויש יעדים, שממש מוסיפים מוטיבציה ללמוד מילים חדשות.",
+      "ממש ממש ממש אוהבת את האפליקציה!",
+    ].join("\n"),
+    who: "זיו, כיתה ה'",
+    photo: "/testimonials/ziv.webp",
+  },
+  {
+    quote: [
+      "Gadit מאוד עוזרת לי בלימודים!",
+      "בעבר הרגשתי שאני צריכה להיסחב עם מיליון ספרים ומילונים רק כדי להבין מילה חדשה.",
+      "היום אני מקלידה את המילה בצ'יק צ'אק, ומקבלת גם תמונה לצד ההגדרות.",
+      "אני כל כך שמחה שיש את Gadit, מילון חכם ונוח שבאמת עוזר לי.",
+    ].join("\n"),
+    who: "רומי, בת 12",
+    photo: "/testimonials/romi.webp",
+  },
+];
+
+export const PARENTS_TESTIMONIALS_HE: Testimonial[] = [
+  {
+    quote: [
+      "כאמא לילדה עם קשיים שפתיים, הרבה פעמים הרגשתי תסכול כשהיא לא הבינה מושגים פשוטים.",
+      "מאז שהכנסתי את Gadit לטלפונים של שלושת הילדים שלי, השינוי פשוט מדהים.",
+      "לימדתי אותם הרגל אחד: לא מבינים מילה? פותחים Gadit.",
+      "היום הם כבר לא באים לשאול אותי על כל דבר, הם בודקים לבד.",
+    ].join("\n"),
+    who: "רעות ארבל, אמא לשלושה",
+    photo: "/testimonials/reut-arbel.webp",
+  },
+  {
+    quote: [
+      "Gadit היא אפליקציה כיפית, נוחה וידידותית מאוד, במיוחד לילדים!",
+      "הבת שלי התאמנה איתה לקראת הכתבה באנגלית.",
+      "בעבר היינו מכינות כרטיסיות, ועם Gadit הכול פשוט ומהנה.",
+      "היא נהנתה מאוד, והצליחה מאוד בהכתבה.",
+      "ממליצה בחום!",
+    ].join("\n"),
+    who: "גת מגידו, אמא של זיו",
+    photo: "/testimonials/gat-megido.webp",
   },
 ];
 
