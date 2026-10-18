@@ -6,25 +6,36 @@
  *  - the print/cursive switch labels in every UI language.
  */
 
-/** Joined US school handwriting (Playwrite US Trad, OFL), self-hosted. */
+/** The two English handwriting fonts, self-hosted and loaded only when a
+ *  child traces an English word:
+ *  - print: Andika (SIL, OFL), a font made for learning to read and write, with
+ *    the handwritten one-story "a" and "g" instead of the computer ones;
+ *  - cursive: joined US school handwriting (Playwrite US Trad, OFL). */
+export const PRINT_FAMILY = "Gadit Print";
 export const CURSIVE_FAMILY = "Gadit Cursive";
-let cursiveReady: Promise<boolean> | null = null;
-export function loadCursiveFont(): Promise<boolean> {
+const FONT_FILES: Record<string, { url: string; weight: string }> = {
+  [PRINT_FAMILY]: { url: "/fonts/andika-latin-700.woff2", weight: "700" },
+  [CURSIVE_FAMILY]: { url: "/fonts/playwrite-us-trad-400.woff2", weight: "400" },
+};
+const fontReady: Record<string, Promise<boolean> | undefined> = {};
+export function loadTraceFont(family: string): Promise<boolean> {
   if (typeof window === "undefined" || typeof FontFace === "undefined") return Promise.resolve(false);
-  if (!cursiveReady) {
-    cursiveReady = (async () => {
+  const f = FONT_FILES[family];
+  if (!f) return Promise.resolve(false);
+  if (!fontReady[family]) {
+    fontReady[family] = (async () => {
       try {
-        const face = new FontFace(CURSIVE_FAMILY, "url(/fonts/playwrite-us-trad-400.woff2) format('woff2')");
+        const face = new FontFace(family, `url(${f.url}) format('woff2')`, { weight: f.weight });
         await face.load();
         document.fonts.add(face);
         return true;
       } catch {
-        cursiveReady = null; // try again next time
+        fontReady[family] = undefined; // try again next time
         return false;
       }
     })();
   }
-  return cursiveReady;
+  return fontReady[family]!;
 }
 
 /** Plain English letters only (the start-point table covers a-z, A-Z). */

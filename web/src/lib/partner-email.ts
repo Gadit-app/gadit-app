@@ -1101,13 +1101,13 @@ export function buildWelcomeEmail(
   // The primary {link} token in the body points to the FAMILIES landing,
   // not the general homepage (Gadi 2026-08-13: partners sell Families +
   // Schools, so no general Gadit link anywhere).
-  const link = `${SITE}${lang === "en" ? "" : `/${lang}`}/families/landing?ref=${partner.code}`;
+  const link = `${SITE}/${lang}/families/landing?ref=${partner.code}`;
   // Per-product referral links (general Gadit, Families landing, Schools
   // landing). RefCapture attributes ?ref on any page, so a partner who
   // wants to sell Family shares the Families link directly (Gadi
   // 2026-08-05). Links match the email language; other languages are in
   // the dashboard.
-  const linkPrefix = lang === "en" ? "" : `/${lang}`;
+  const linkPrefix = `/${lang}`; // always named, English too (an unprefixed link opens in the visitor's saved language)
   // Families + Schools only (Gadi 2026-08-13): these are the products we
   // want partners to sell, so the general Gadit link was dropped from the
   // welcome email (and the portal).

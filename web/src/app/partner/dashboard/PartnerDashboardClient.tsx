@@ -1738,7 +1738,10 @@ type ProductKey = keyof typeof PRODUCT_PATHS;
 
 function buildRefLink(code: string, lang: string, path = ""): string {
   const base = "https://www.gadit.app";
-  const prefix = lang === "en" ? "" : `/${lang}`;
+  // Always name the language, English too: without a prefix the page opens
+  // in the language the VISITOR saved before, so an English link opened in a
+  // Hebrew browser showed Hebrew (Gadi 2026-10-18).
+  const prefix = `/${lang}`;
   return path
     ? `${base}${prefix}${path}?ref=${code}`
     : `${base}${prefix}/?ref=${code}`;

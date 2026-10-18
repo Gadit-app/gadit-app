@@ -34,7 +34,7 @@ import { langNameIn } from "@/lib/i18n";
 import { DICTATION_SETS, getCatTitle, type DictationSet, type WordPair } from "@/lib/dictation-sets";
 import { nativeSet } from "@/lib/dictation-sets-native";
 import { SPELL_T_EXTRA, CELEBRATIONS_EXTRA } from "@/lib/spell-i18n";
-import { CURSIVE_FAMILY, drawCursiveStart, drawLetterStart, isLatinWord, loadCursiveFont, traceStyleCopy } from "@/lib/trace-letters";
+import { CURSIVE_FAMILY, PRINT_FAMILY, drawCursiveStart, drawLetterStart, isLatinWord, loadTraceFont, traceStyleCopy } from "@/lib/trace-letters";
 import { misc } from "@/lib/misc-i18n";
 import { ml } from "@/lib/my-lists-i18n";
 
@@ -216,11 +216,15 @@ function hashWords(words: WordPair[]): string {
  *  the test. Gadi 2026-09-19. English words come in two styles (Gadi
  *  2026-10-18): print, with a small dot and arrow on each letter showing where
  *  it starts and which way the first stroke goes, or joined school cursive. */
-function TraceCanvas({ word, rtl, clearLabel, cursive = false }: { word: string; rtl: boolean; clearLabel: string; cursive?: boolean }) {
+function TraceCanvas({ word: given, rtl, clearLabel, cursive = false }: { word: string; rtl: boolean; clearLabel: string; cursive?: boolean }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
   const drawing = useRef(false);
   const last = useRef<{ x: number; y: number } | null>(null);
-  const latin = isLatinWord(word);
+  const latin = isLatinWord(given);
+  // English is traced the way it is written by hand: small letters, in a
+  // handwriting font (one-story a and g), never the computer's letters
+  // (Gadi 2026-10-18).
+  const word = latin ? given.toLowerCase() : given;
   const joined = cursive && latin;
 
   function guide() {
@@ -276,7 +280,7 @@ function TraceCanvas({ word, rtl, clearLabel, cursive = false }: { word: string;
     const letters = Array.from(word);
     const GAP = 0.42; // gap as a fraction of the font size
     let size = Math.min(h * 0.74, 96); // bigger than before
-    const setFont = () => { ctx.font = `700 ${size}px "Rubik", system-ui, sans-serif`; };
+    const setFont = () => { ctx.font = latin ? `700 ${size}px "${PRINT_FAMILY}", "Rubik", sans-serif` : `700 ${size}px "Rubik", system-ui, sans-serif`; };
     const totalW = () => {
       setFont();
       let s = 0;
@@ -312,9 +316,9 @@ function TraceCanvas({ word, rtl, clearLabel, cursive = false }: { word: string;
   }
 
   useEffect(() => {
-    // redraw on word or style change; joined writing waits for its font
+    // redraw on word or style change; English waits for its handwriting font
     let live = true;
-    if (joined) void loadCursiveFont().then(() => { if (live) guide(); });
+    if (latin) void loadTraceFont(joined ? CURSIVE_FAMILY : PRINT_FAMILY).then(() => { if (live) guide(); });
     else guide();
     return () => { live = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
