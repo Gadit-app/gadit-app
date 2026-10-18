@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAdminAuth } from "@/lib/firebase-admin";
 import { verifiedSchoolId } from "@/lib/school-identity";
+import { gemaraCatalogClosed, gemaraCatalogOffSchools, isOldGemaraCatalogUnit } from "@/lib/gemara-catalog-gate";
 import { isPilotTopicId } from "@/lib/pilot-topics";
 import { isSchoolSetId } from "@/lib/school-set-ids";
 import { schoolSetGate } from "@/lib/school-sets";
@@ -39,6 +40,19 @@ export async function pilotAllowsUser(id: string, uid: string): Promise<boolean>
 export async function pilotGate(req: Request, setId: string | null | undefined): Promise<NextResponse | null> {
   // A school's own set (2026-10-17): a signed-in member of that school only.
   if (isSchoolSetId(setId)) return schoolSetGate(req, setId);
+  // An older Gemara catalog unit closed for the asking school (only when a
+  // school is chosen; otherwise nothing is read and nothing changes).
+  if (isOldGemaraCatalogUnit(setId) && gemaraCatalogOffSchools().size) {
+    const h0 = req.headers.get("Authorization") || "";
+    const t0 = h0.startsWith("Bearer ") ? h0.slice(7) : "";
+    if (t0) {
+      try {
+        const sid = await verifiedSchoolId((await getAdminAuth().verifyIdToken(t0)).uid);
+        if (gemaraCatalogClosed(setId, sid)) return NextResponse.json({ error: "not_found" }, { status: 404 });
+      } catch { /* an invalid token is treated as before: no token */ }
+    }
+    return null;
+  }
   if (!isPilotTopicId(setId)) return null;
   const h = req.headers.get("Authorization") || "";
   const token = h.startsWith("Bearer ") ? h.slice(7) : "";

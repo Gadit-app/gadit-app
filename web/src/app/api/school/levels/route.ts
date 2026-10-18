@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { requestVerifiedSchool } from "@/lib/school-identity";
+import { gemaraCatalogOffSchools } from "@/lib/gemara-catalog-gate";
 import { SCHOOL_TYPES, cleanLevels, cleanCurriculum } from "@/lib/school-levels";
 
 /**
@@ -23,7 +24,9 @@ export async function GET(req: NextRequest) {
   if (!u.schoolId) return NextResponse.json({ error: "not_a_school" }, { status: 403 });
   const d = (await getAdminDb().collection("schools").doc(u.schoolId).get()).data() ?? {};
   const levels = cleanLevels(d.levels);
-  return NextResponse.json({ schoolId: u.schoolId, owner: u.uid === u.schoolId, curriculum: cleanCurriculum(d.curriculum, levels), levels });
+  // gemaraCatalogOff: the older Gemara catalog units are closed for this school
+  // (lib/gemara-catalog-gate.ts); /sets leaves them out, the server refuses them.
+  return NextResponse.json({ schoolId: u.schoolId, owner: u.uid === u.schoolId, curriculum: cleanCurriculum(d.curriculum, levels), levels, gemaraCatalogOff: gemaraCatalogOffSchools().has(u.schoolId) });
 }
 
 export async function POST(req: NextRequest) {

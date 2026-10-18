@@ -5,6 +5,7 @@ import crypto from "node:crypto";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { verifiedSchoolId } from "@/lib/school-identity";
+import { gemaraCatalogClosed } from "@/lib/gemara-catalog-gate";
 
 /**
  * POST /api/schools/projection  { kind, setId, word, subject, title, grade }
@@ -54,6 +55,8 @@ export async function POST(req: NextRequest) {
   if (!schoolId) return NextResponse.json({ ok: true, skipped: "not_school" });
   // A pilot unit counts only for the schools on its allow-list.
   if (isPilotTopicId(setId) && !pilotAllows(setId, schoolId)) return NextResponse.json({ error: "not_found" }, { status: 404 });
+  // An older Gemara catalog unit closed for this school is not logged either.
+  if (gemaraCatalogClosed(setId, schoolId)) return NextResponse.json({ error: "not_found" }, { status: 404 });
 
   const now = Date.now();
   const day = ilDay(now);

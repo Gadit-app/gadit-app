@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { requestVerifiedSchool } from "@/lib/school-identity";
+import { gemaraCatalogClosed } from "@/lib/gemara-catalog-gate";
 import { getCurriculumSetDoc } from "@/lib/curriculum-sets";
 import { catalogOfTopic, topicLevel } from "@/lib/curriculum-catalog";
 import { cleanLevels, cleanCurriculum, curriculumAllows } from "@/lib/school-levels";
@@ -42,6 +43,9 @@ export async function GET(req: NextRequest) {
   if (!who) return NextResponse.json({ error: "login_required" }, { status: 401 });
   const schoolId = who.schoolId;
   if (!schoolId) return NextResponse.json({ error: "schools_only" }, { status: 403 });
+  // An older Gemara catalog unit closed for this school (lib/gemara-catalog-gate.ts,
+  // off unless a school is chosen): as if it did not exist, direct links included.
+  if (gemaraCatalogClosed(id, schoolId)) return NextResponse.json({ error: "not_found" }, { status: 404 });
   // A pilot unit (Gemara phase B): only the schools on its allow-list, and only
   // from its imported document (never generated). Others see no such unit.
   if (isPilotTopicId(id)) {

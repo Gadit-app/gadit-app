@@ -1549,15 +1549,15 @@ export default function CurriculumBrowser({ legacy }: { legacy?: ReactNode }) {
   const sp = useSearchParams();
   const { lang } = useLang();
   const { user } = useAuth();
-  const [school, setSchool] = useState<{ levels: string[]; curriculum: Curriculum | ""; owner: boolean } | null>(null);
+  const [school, setSchool] = useState<{ levels: string[]; curriculum: Curriculum | ""; owner: boolean; gemaraOff?: boolean } | null>(null);
   useEffect(() => {
     if (!user) return;
     let alive = true;
     user.getIdToken()
       .then((tk) => fetch("/api/school/levels", { headers: { Authorization: `Bearer ${tk}` } }))
       .then((r) => (r.ok ? r.json() : { levels: [], curriculum: "", owner: false }))
-      .then((j: { levels: string[]; curriculum: Curriculum | ""; owner: boolean }) => {
-        if (alive) setSchool({ levels: j.levels ?? [], curriculum: j.curriculum ?? "", owner: !!j.owner });
+      .then((j: { levels: string[]; curriculum: Curriculum | ""; owner: boolean; gemaraCatalogOff?: boolean }) => {
+        if (alive) setSchool({ levels: j.levels ?? [], curriculum: j.curriculum ?? "", owner: !!j.owner, gemaraOff: j.gemaraCatalogOff === true });
       })
       .catch(() => { if (alive) setSchool({ levels: [], curriculum: "", owner: false }); });
     return () => { alive = false; };
@@ -1570,7 +1570,11 @@ export default function CurriculumBrowser({ legacy }: { legacy?: ReactNode }) {
   });
   const sc = school?.curriculum;
   const viewId: CatalogId = sc === "il-he" || sc === "il-ar" || sc === "za-caps" ? sc : viewPick;
-  const view = catalogView(viewId);
+  // The older Gemara catalog units, closed for this school by the server
+  // (2026-10-18, off unless Gadi picks the school): left out of the list too.
+  const baseView = catalogView(viewId);
+  const gemaraOff = school?.gemaraOff === true;
+  const view = useMemo(() => (gemaraOff ? { ...baseView, topics: baseView.topics.filter((t) => t.s !== "gemara") } : baseView), [baseView, gemaraOff]);
   // The English catalog speaks the teacher's own UI language (2026-10-18);
   // the Hebrew and Arabic catalogs keep their own.
   const T: T = view.ui === "en" && !RTL_UI.has(lang) ? strOf(lang) : STR[view.ui];
