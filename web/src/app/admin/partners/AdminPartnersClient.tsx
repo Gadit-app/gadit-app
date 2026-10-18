@@ -80,6 +80,13 @@ const T = {
     copyDash: "Copy portal link",
     openDash: "Open dashboard →",
     resend: "Resend email",
+    manualBtn: "Manual commission",
+    manualHint: "For a payment outside Stripe (an Israeli school by bank transfer). The partner's share is booked on the full amount, VAT included, held 30 days.",
+    manualCustomer: "Customer (school name)",
+    manualAmount: "Amount paid, incl. VAT",
+    manualYear1: "First year",
+    manualLater: "After the first year",
+    manualSave: "Book commission",
     del: "Delete",
     confirmDel: "Permanently delete this partner and all their commission records? This cannot be undone.",
     copied: "Copied ✓",
@@ -148,6 +155,13 @@ const T = {
     copyDash: "העתק קישור פורטל",
     openDash: "פתיחת דשבורד ←",
     resend: "שלח מייל שוב",
+    manualBtn: "עמלה ידנית",
+    manualHint: "לתשלום מחוץ ל-Stripe (בית ספר בישראל בהעברה בנקאית). העמלה נרשמת על הסכום המלא כולל מע\"מ, ומשתחררת אחרי 30 יום.",
+    manualCustomer: "לקוח (שם בית הספר)",
+    manualAmount: "סכום ששולם, כולל מע\"מ",
+    manualYear1: "שנה ראשונה",
+    manualLater: "אחרי השנה הראשונה",
+    manualSave: "רישום העמלה",
     del: "מחיקה",
     confirmDel: "למחוק לצמיתות את השותף הזה ואת כל רשומות העמלה שלו? אי אפשר לשחזר.",
     copied: "הועתק ✓",
@@ -227,6 +241,12 @@ export default function AdminPartnersClient() {
   const [rows, setRows] = useState<Row[] | null>(null);
   const [query, setQuery] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
+  // Manual commission form (one partner at a time).
+  const [manualId, setManualId] = useState<string | null>(null);
+  const [mCustomer, setMCustomer] = useState("");
+  const [mAmount, setMAmount] = useState("");
+  const [mCur, setMCur] = useState<"ils" | "usd">("ils");
+  const [mYearOne, setMYearOne] = useState(true);
   const [flash, setFlash] = useState<string | null>(null); // `${id}:${kind}`
 
   // Add-partner form
@@ -621,6 +641,32 @@ export default function AdminPartnersClient() {
                   </div>
                 )}
 
+                {manualId === r.id && (
+                  <div style={{ marginTop: 12, padding: 12, border: "1px solid #E5E7EB", borderRadius: 10, background: "#FAFAF9", display: "flex", flexDirection: "column", gap: 8 }}>
+                    <div style={{ fontSize: 12.5, color: "#6B7280" }}>{t.manualHint}</div>
+                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+                      <input value={mCustomer} onChange={(e) => setMCustomer(e.target.value)} placeholder={t.manualCustomer} dir={lang === "he" ? "rtl" : "ltr"} style={{ flex: "1 1 200px", padding: "8px 10px", border: "1px solid #D1D5DB", borderRadius: 8, fontFamily: "inherit" }} />
+                      <input value={mAmount} onChange={(e) => setMAmount(e.target.value.replace(/[^0-9.]/g, ""))} placeholder={t.manualAmount} inputMode="decimal" dir="ltr" style={{ width: 150, padding: "8px 10px", border: "1px solid #D1D5DB", borderRadius: 8, fontFamily: "inherit" }} />
+                      <select value={mCur} onChange={(e) => setMCur(e.target.value === "usd" ? "usd" : "ils")} style={{ padding: "8px", border: "1px solid #D1D5DB", borderRadius: 8 }}>
+                        <option value="ils">₪</option>
+                        <option value="usd">$</option>
+                      </select>
+                      <select value={mYearOne ? "1" : "2"} onChange={(e) => setMYearOne(e.target.value === "1")} style={{ padding: "8px", border: "1px solid #D1D5DB", borderRadius: 8 }}>
+                        <option value="1">{t.manualYear1}</option>
+                        <option value="2">{t.manualLater}</option>
+                      </select>
+                      <button
+                        style={btnPrimary}
+                        disabled={!mCustomer.trim() || !(Number(mAmount) > 0) || busy === r.id + "manualCommission"}
+                        onClick={async () => {
+                          const ok = await act(r.id, "manualCommission", { customer: mCustomer.trim(), amount: Number(mAmount), currency: mCur, yearOne: mYearOne });
+                          if (ok) setManualId(null);
+                        }}
+                      >{t.manualSave}</button>
+                    </div>
+                  </div>
+                )}
+
                 {actErr?.id === r.id && (
                   <div role="alert" style={{ marginTop: 12, background: "#FEF2F2", color: "#991B1B", border: "1px solid #FECACA", borderRadius: 8, padding: "8px 12px", fontSize: 13 }}>
                     {actErr.msg}
@@ -630,6 +676,7 @@ export default function AdminPartnersClient() {
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12 }}>
                   <button style={btn} onClick={() => { setEditId(r.id); setEName(r.name); setEEmail(r.email); }}>{t.edit}</button>
                   <button style={btn} onClick={() => openRates(r)}>{t.editRates}</button>
+                  <button style={btn} onClick={() => { setManualId(manualId === r.id ? null : r.id); setMCustomer(""); setMAmount(""); setMCur("ils"); setMYearOne(true); }}>{t.manualBtn}</button>
                   {payable.length > 0 && (
                     <button style={btnPrimary} disabled={busy === r.id + "markPaid"} onClick={() => act(r.id, "markPaid")}>{t.markPaid}</button>
                   )}

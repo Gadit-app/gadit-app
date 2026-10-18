@@ -10,6 +10,7 @@
  * Body: { schoolName, contactName, role?, email, phone?, city?, size?, notes?, lang? }
  * Response: { ok: true }
  */
+import { REFERRAL_COOKIE } from "@/lib/partners";
 import { NextRequest, NextResponse } from "next/server";
 import { sendMail } from "@/lib/mail";
 import { getAdminDb } from "@/lib/firebase-admin";
@@ -51,6 +52,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "missing_fields" }, { status: 400 });
     }
 
+    // The partner whose link brought this school (the 60-day referral
+    // cookie), so the partner's share can be booked when the school pays by
+    // bank transfer (Gadi 2026-10-18).
+    let partner: { id: string; code: string; name: string } | null = null;
+    const refId = req.cookies.get(REFERRAL_COOKIE)?.value;
+    if (refId && /^[A-Za-z0-9_-]{1,64}$/.test(refId)) {
+      try {
+        const ps = await getAdminDb().collection("partners").doc(refId).get();
+        const pd = ps.data();
+        if (ps.exists && pd?.status !== "suspended") partner = { id: ps.id, code: String(pd?.code ?? ""), name: String(pd?.name ?? "") };
+      } catch { /* the order still goes through */ }
+    }
+
     const order = {
       schoolName,
       contactName,
@@ -67,6 +81,8 @@ export async function POST(req: NextRequest) {
       kind,
       status: "pending" as const,
       createdAt: new Date().toISOString(),
+      partnerId: partner?.id ?? null,
+      partnerCode: partner?.code ?? null,
     };
 
     try {
@@ -98,6 +114,7 @@ export async function POST(req: NextRequest) {
 <b>Start grade:</b> ${esc(grade || "(none)")}<br/>
 <b>School type:</b> ${esc(schoolType || "(none)")}<br/>
 <b>Notes:</b> ${esc(notes || "(none)")}</p>
+${partner ? `<p><b>Came through partner:</b> ${esc(partner.name)} (${esc(partner.code)}). When the school pays, book the partner's share: /admin/partners, "Manual commission".</p>` : ""}
 <p>Next: open the school account + one-time code, and send the tax invoice.</p>`,
         });
       }

@@ -15,6 +15,7 @@
  * Auth: ADMIN_SECRET via ?secret= (identical to the other admin routes;
  * there is no verifyAdmin helper in this project). No `runtime` export.
  */
+import { bookPartnerCommission } from "@/lib/partner-commission";
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { sendPartnerWelcome } from "@/lib/partner-email";
@@ -242,6 +243,8 @@ export async function PATCH(req: NextRequest) {
     partnerId?: string; action?: string;
     rateYearOne?: number | string; rateLifetime?: number | string; lang?: string;
     name?: string; email?: string;
+    // manualCommission
+    customer?: string; amount?: number | string; currency?: string; yearOne?: boolean; note?: string;
   };
   try {
     body = await req.json();
@@ -267,6 +270,34 @@ export async function PATCH(req: NextRequest) {
       : tierFor(current) === "founder" ? DEFAULT_RATE_YEAR_ONE : current;
     await ref.update({ rateYearOne, tier: tierFor(rateYearOne) });
     return NextResponse.json({ ok: true, tier: tierFor(rateYearOne), rateYearOne });
+  }
+
+  // A manual commission (Gadi 2026-10-18): Israeli schools pay by bank
+  // transfer through Invoice4U, outside Stripe, so the admin books the
+  // partner's share when the payment arrives. `amount` = what the customer
+  // paid, VAT included, in major units. `customer` names the customer (the
+  // school), so repeat payments by the same school count as ONE paying
+  // customer for the earned tier.
+  if (action === "manualCommission") {
+    const customer = (body.customer ?? "").toString().trim().slice(0, 120);
+    const amountMajor = Number(body.amount);
+    const currency = body.currency === "usd" ? "usd" : "ils";
+    if (!customer || !Number.isFinite(amountMajor) || amountMajor <= 0 || amountMajor > 100000) {
+      return NextResponse.json({ error: "customer_and_amount_required" }, { status: 400 });
+    }
+    const key = customer.toLowerCase().replace(/\s+/g, " ");
+    const now = Date.now();
+    const r = await bookPartnerCommission(db, ref, snap.data(), {
+      docId: `manual-${now}`,
+      referredUid: `manual:${key}`,
+      gross: Math.round(amountMajor * 100),
+      currency,
+      yearOne: body.yearOne !== false,
+      paidAtMs: now,
+      note: (body.note ?? customer).toString().slice(0, 200),
+      manual: true,
+    });
+    return NextResponse.json({ ok: true, ...r });
   }
 
   // Set explicit rates (percentages) on a partner.
