@@ -305,3 +305,46 @@ function RanksModal({ onClose, points, currentIndex, lang, dir }: {
     </div>
   );
 }
+
+/**
+ * The rank for a grown up (Gadi 2026-10-18): parents and individual users
+ * get their rank too, quietly, in their notebook. Only the rank, never the
+ * streak or the weekly goal, and nothing on the home page. Same points and
+ * the same tree pictures as the children, so a family compares on one ladder.
+ */
+export function AdultRankLine({
+  addedAtDates,
+  understoodCount = 0,
+  lang,
+  dir,
+}: {
+  addedAtDates: string[];
+  understoodCount?: number;
+  lang: string;
+  dir: "rtl" | "ltr";
+}) {
+  const c = gameCopy(lang);
+  const g = useMemo(() => {
+    const now = Date.now();
+    return computeGamification(addedAtDates, now, toLocalDateStr(new Date(now).toISOString()), understoodCount, []);
+  }, [addedAtDates, understoodCount]);
+  const toNext = g.rank.next === null ? 0 : Math.max(0, g.rank.next - g.points);
+  return (
+    <div
+      dir={dir}
+      style={{
+        display: "flex", alignItems: "center", gap: 12, margin: "4px 0 18px",
+        padding: "10px 14px", borderRadius: 14, border: "1px solid var(--rule, #E5E7EB)",
+        background: "var(--surface, #fff)", maxWidth: 420,
+      }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={rankIconSrc(g.rank.key)} alt="" width={44} height={44} style={{ width: 44, height: 44, flexShrink: 0, objectFit: "contain" }} />
+      <div style={{ minWidth: 0 }}>
+        <div style={{ fontSize: 12, color: "var(--ink-muted, #6B7280)" }}>{c.rankTitle}</div>
+        <div style={{ fontSize: 15, fontWeight: 800, color: "var(--ink, #111827)" }}>{rankLabel(g.rank.key, lang)}</div>
+        <div style={{ fontSize: 12, color: "var(--ink-muted, #6B7280)" }}>{g.rank.next === null ? c.topRank : c.toNext(toNext)}</div>
+      </div>
+    </div>
+  );
+}

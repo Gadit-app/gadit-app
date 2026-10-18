@@ -26,7 +26,7 @@ import { AppearancePicker } from "@/components/AppearancePicker";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
-import { KidsGameHeader } from "@/components/design/KidsGameHeader";
+import { KidsGameHeader, AdultRankLine } from "@/components/design/KidsGameHeader";
 import { FamilyLeaderboard } from "@/components/design/FamilyLeaderboard";
 import { useHref } from "@/lib/href";
 import { listRecentCached } from "@/lib/offline-db";
@@ -756,6 +756,17 @@ export function NotebookPage() {
             goal and explorer rank, all from the notebook's own addedAt dates. */}
         {items && items.length > 0 && familyRole === "kid" && (
           <KidsGameHeader
+            addedAtDates={items.map((i) => i.addedAt).filter(Boolean)}
+            understoodCount={items.filter((i) => i.understood).length}
+            lang={lang}
+            dir={dir}
+          />
+        )}
+
+        {/* The rank for grown ups (Gadi 2026-10-18): parents and individual
+            users, quietly here, never on the home page. */}
+        {items && items.length > 0 && user && familyRole !== "kid" && (
+          <AdultRankLine
             addedAtDates={items.map((i) => i.addedAt).filter(Boolean)}
             understoodCount={items.filter((i) => i.understood).length}
             lang={lang}
