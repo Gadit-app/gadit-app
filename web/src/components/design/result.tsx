@@ -34,6 +34,7 @@
  *     design). IdiomsCard export is kept as a no-op for legacy callers.
  */
 
+import { gadCopy } from "@/lib/gadit-button-copy";
 import { useState, useEffect, useMemo, type ReactNode } from "react";
 import { miscUi } from "@/lib/misc-ui-i18n";
 import { useLang } from "@/lib/lang-context";
@@ -125,7 +126,7 @@ export interface WordResult {
 // ActionDef — IDs surfaced by the Take it further tiles. WordClient
 // receives the id via onAction and dispatches to the right behavior.
 // "kids" and "compare" are new for the wordbook redesign.
-export type ActionId = "save" | "image" | "compose" | "practice" | "compare" | "kids";
+export type ActionId = "save" | "image" | "compose" | "practice" | "compare" | "kids" | "gadit";
 
 // ─── Helpers ───────────────────────────────────────────────────
 const LANG_NAMES: Record<string, string[]> = {
@@ -1687,6 +1688,24 @@ function ActionBar({
 // detached and visually noisy on cream paper.
 
 // ─── ResultView (page composition) ─────────────────────────────
+function GadItButton({ lang, onClick }: { lang: string; onClick: () => void }) {
+  const c = gadCopy(lang);
+  return (
+    <div style={{ margin: "18px 20px 6px" }}>
+      <button
+        type="button"
+        onClick={onClick}
+        aria-label={`${c.button} ${c.hint}`}
+        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, width: "100%", minHeight: 56, borderRadius: 16, border: "none", background: "#0B7F7F", color: "#fff", fontSize: 19, fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 6px rgba(11,127,127,.25)" }}
+      >
+        <span aria-hidden="true">✓</span>
+        <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{c.button}</span>
+      </button>
+      <div style={{ textAlign: "center", fontSize: 12.5, color: "var(--ink-muted, #6B7280)", marginTop: 6 }}>{c.hint}</div>
+    </div>
+  );
+}
+
 export function ResultView({
   result,
   plan,
@@ -1830,6 +1849,13 @@ export function ResultView({
         kidsImages={kidsImages}
         kidsImagesLoading={kidsImagesLoading}
       />
+
+      {/* "Gad it!" (Gadi 2026-10-18): after reading, one quick question; a
+          correct answer marks the word understood. Not for an anonymous
+          classroom kid (no notebook) and not while the text is still coming. */}
+      {onAction && !streaming && !classroomInSession && (result.meanings?.length ?? 0) > 0 && (
+        <GadItButton lang={lang} onClick={() => onAction("gadit")} />
+      )}
 
       <IdiomsSection
         meanings={result.meanings ?? []}

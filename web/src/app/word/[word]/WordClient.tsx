@@ -1168,6 +1168,7 @@ export function WordClient({
   const [classroomQuote, setClassroomQuote] = useState<ClassroomQuote | null>(null);
   const [composeOpen, setComposeOpen] = useState(false);
   const [quizOpen, setQuizOpen] = useState(false);
+  const [gadOpen, setGadOpen] = useState(false);
   const [wordGameOpen, setWordGameOpen] = useState(false);
 
   // Niqqud (מנוקד) — optional Hebrew vowel points for young readers (grades
@@ -2072,7 +2073,20 @@ export function WordClient({
     return () => { cancelled = true; };
   }, [result, plan, lang, initialWord]);
 
-  function handleAction(id: "save" | "image" | "compose" | "practice" | "compare" | "kids") {
+  function handleAction(id: "save" | "image" | "compose" | "practice" | "compare" | "kids" | "gadit") {
+    if (id === "gadit") {
+      // "Gad it!": one quick question (same gate as the quiz).
+      if (!user) {
+        promptLogin(v2(lang, "quizEyebrow"));
+        return;
+      }
+      if (plan !== "deep") {
+        router.push(href("/pricing"));
+        return;
+      }
+      setGadOpen(true);
+      return;
+    }
     if (id === "save") return handleSave();
     if (id === "image") return handleGenerate();
     if (id === "compose") {
@@ -2733,6 +2747,17 @@ export function WordClient({
         onClose={() => setReportContext(null)}
         context={reportContext ?? undefined}
       />
+
+      {result && gadOpen && (
+        <QuizModalV2
+          open={gadOpen}
+          onClose={() => setGadOpen(false)}
+          word={result.word}
+          meaning={result.meanings[0]?.meaning ?? ""}
+          language={result.language}
+          single
+        />
+      )}
 
       {result && (
         <QuizModalV2

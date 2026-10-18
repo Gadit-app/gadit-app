@@ -82,7 +82,24 @@ export interface Commission {
   createdAt: number;       // ms epoch
   releaseAt: number;       // ms epoch — payable after this
   paidAt?: number | null;  // ms epoch once an admin marks it paid
+  kind?: "bonus";          // a one-off bonus, not a share of an invoice
 }
+
+/** Earned tier (Gadi 2026-10-18, after the council): a partner whose
+ *  customers include this many PAYING customers earns this lifetime rate
+ *  (after each customer's first year) from then on, founders and standard
+ *  partners alike. Never lowers a rate that is already higher. */
+export const EARNED_TIER_PAYING = 5;
+export const EARNED_LIFETIME_RATE = 0.15;
+
+/** First paying customer bonus (Gadi 2026-10-18): a one-off cash bonus when a
+ *  partner's FIRST paying customer pays, if that happens by the deadline.
+ *  Booked as a commission doc (id FIRST_SALE_BONUS_ID), held like the rest.
+ *  Shekel payments earn the shekel bonus, every other currency the dollar one. */
+export const FIRST_SALE_BONUS_MINOR = { ils: 5000, usd: 1500 } as const;
+export const FIRST_SALE_BONUS_UNTIL = Date.parse("2026-12-31T23:59:59+02:00");
+export const FIRST_SALE_BONUS_ID = "bonus-first-paying-customer";
+export const firstSaleBonusActive = (atMs: number = Date.now()) => atMs <= FIRST_SALE_BONUS_UNTIL;
 
 /** Commissions are held this long before they become payable. */
 export const COMMISSION_HOLD_MS = 30 * 24 * 60 * 60 * 1000;

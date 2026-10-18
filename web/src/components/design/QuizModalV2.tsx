@@ -29,6 +29,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { Eyebrow } from "./primitives";
+import { gadCopy } from "@/lib/gadit-button-copy";
 
 interface QuizQuestion {
   type: "A" | "B" | "C" | "D";
@@ -224,6 +225,35 @@ function QuizOption({
 }
 
 // ─── Final score screen ───────────────────────────────────────
+/** After the one "Gad it!" question: a short celebration when it was right
+ *  (+10 only when the points were really awarded), a gentle "almost" when not. */
+function GadItFinal({ lang, correct, award, onClose }: { lang: Parameters<typeof v2>[0]; correct: boolean; award: "awarded" | "already" | null; onClose: () => void }) {
+  const c = gadCopy(lang);
+  return (
+    <div className="gd-font-sans-ui" style={{ textAlign: "center", padding: "28px 8px 8px" }}>
+      <style>{`@keyframes gd-gad-pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}@media (prefers-reduced-motion: reduce){.gd-gad-pop{animation:none!important}}`}</style>
+      {correct ? (
+        <>
+          <div className="gd-gad-pop" aria-hidden="true" style={{ fontSize: 44, animation: "gd-gad-pop .5s ease-out" }}>🌱</div>
+          <div dir="ltr" style={{ unicodeBidi: "isolate", fontSize: 26, fontWeight: 800, color: "var(--gd-ink-900, #0B1220)", marginTop: 6 }}>
+            {c.success}{award === "awarded" && <span style={{ color: "#0B7F7F", marginInlineStart: 8 }}>+10</span>}
+          </div>
+          {award && <p style={{ fontSize: 14.5, color: "var(--gd-ink-700, #374151)", marginTop: 8 }}>{award === "already" ? c.alreadySub : c.doneSub}</p>}
+        </>
+      ) : (
+        <p style={{ fontSize: 16, fontWeight: 700, color: "var(--gd-ink-800, #1F2937)", marginTop: 4 }}>{c.wrong}</p>
+      )}
+      <button
+        type="button"
+        onClick={onClose}
+        style={{ marginTop: 18, padding: "12px 26px", borderRadius: 12, border: "none", background: "#0B7F7F", color: "#fff", fontWeight: 700, fontSize: 15, cursor: "pointer", fontFamily: "inherit" }}
+      >
+        {v2(lang, "quizBackToWord")}
+      </button>
+    </div>
+  );
+}
+
 function QuizFinal({
   correct,
   total,
@@ -370,11 +400,15 @@ export function QuizModalV2({
   word,
   meaning,
   language,
+  single = false,
 }: {
   open: boolean;
   onClose: () => void;
   word: string;
   meaning: string;
+  /** "Gad it!" (Gadi 2026-10-18): ONE quick question; a correct answer marks
+   *  the word understood (+10 once) and shows the gad-it moment. */
+  single?: boolean;
   /** The word's language, matching how it was saved to the notebook, so a
    *  passed quiz can mark it understood + award comprehension points. */
   language?: string;
@@ -394,6 +428,8 @@ export function QuizModalV2({
   // Tracks which questions the user got right (after revealing each)
   const [results, setResults] = useState<boolean[]>([]);
   const [done, setDone] = useState(false);
+  // What the understood API answered, for the gad-it moment.
+  const [award, setAward] = useState<"awarded" | "already" | null>(null);
 
   // Reset every time we open from scratch
   useEffect(() => {
@@ -406,6 +442,7 @@ export function QuizModalV2({
       setRevealed(false);
       setResults([]);
       setDone(false);
+      setAward(null);
     }
   }, [open]);
 
@@ -432,11 +469,13 @@ export function QuizModalV2({
     (async () => {
       try {
         const idToken = await user.getIdToken();
-        await fetch("/api/notebook/understood", {
+        const r = await fetch("/api/notebook/understood", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
           body: JSON.stringify({ word, language, source: "quiz" }),
         });
+        const j = (await r.json().catch(() => ({}))) as { awarded?: number; understood?: boolean; alreadyUnderstood?: boolean };
+        setAward(j.alreadyUnderstood ? "already" : j.understood ? "awarded" : null);
         // Points may have crossed a rank threshold that unlocks a new skin;
         // drop the picker's cached rank so it refetches fresh next mount.
         try { sessionStorage.removeItem("gadit-kid-rankindex"); } catch { /* ignore */ }
@@ -460,7 +499,7 @@ export function QuizModalV2({
           "Content-Type": "application/json",
           Authorization: `Bearer ${idToken}`,
         },
-        body: JSON.stringify({ word, meaning, uiLang: lang }),
+        body: JSON.stringify({ word, meaning, uiLang: lang, count: single ? 1 : 4 }),
       });
       if (!res.ok) {
         if (res.status === 402) {
@@ -475,13 +514,13 @@ export function QuizModalV2({
         setErrorMsg("No questions returned.");
         return;
       }
-      setQuestions(data.questions.slice(0, 4));
+      setQuestions(data.questions.slice(0, single ? 1 : 4));
     } catch {
       setErrorMsg("Quiz unavailable right now.");
     } finally {
       setLoading(false);
     }
-  }, [user, lang, word, meaning, promptLogin]);
+  }, [user, lang, word, meaning, promptLogin, single]);
 
   // Kick off the fetch when modal opens
   useEffect(() => {
@@ -583,8 +622,13 @@ export function QuizModalV2({
           </svg>
         </button>
 
+        {/* === The gad-it moment (single question) === */}
+        {done && questions && single && (
+          <GadItFinal lang={lang} correct={!!results[0]} award={award} onClose={onClose} />
+        )}
+
         {/* === Final score state === */}
-        {done && questions && (
+        {done && questions && !single && (
           <QuizFinal
             correct={results.filter(Boolean).length}
             total={questions.length}

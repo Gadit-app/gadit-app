@@ -109,7 +109,9 @@ CRITICAL RULES:
 
 export async function POST(req: NextRequest) {
   try {
-    const { word, meaning, uiLang } = await req.json();
+    const { word, meaning, uiLang, count } = await req.json();
+    // "Gad it!" on the word page asks ONE quick question (Gadi 2026-10-18).
+    const single = count === 1;
     if (!word?.trim() || !meaning?.trim()) {
       return NextResponse.json({ error: "word and meaning required" }, { status: 400 });
     }
@@ -135,7 +137,9 @@ export async function POST(req: NextRequest) {
 Meaning being practiced: ${meaning}
 User's UI language: ${uiLangName}
 
-Generate 4 mixed-type questions about THIS specific meaning.`;
+${single
+  ? "Generate EXACTLY 1 question (this overrides the count above): Type A, the sentence that uses the word correctly in this meaning. Return a questions array with that one item."
+  : "Generate 4 mixed-type questions about THIS specific meaning."}`;
 
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",

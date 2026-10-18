@@ -101,7 +101,7 @@ export async function GET(req: NextRequest) {
       const payingUids = new Set<string>();
       for (const cd of commSnap.docs) {
         const c = cd.data() as Commission;
-        payingUids.add(c.referredUid);
+        if (c.kind !== "bonus") payingUids.add(c.referredUid);
         const cur = (c.currency || "usd").toLowerCase();
         const b = (earnings[cur] ??= { pending: 0, released: 0, paid: 0 });
         b[commissionState(c, now)] += c.amount || 0;

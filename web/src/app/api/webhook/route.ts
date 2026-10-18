@@ -6,7 +6,7 @@ import crypto from "node:crypto";
 import Stripe from "stripe";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { rateFor, COMMISSION_HOLD_MS, YEAR_ONE_MS, PartnerTier } from "@/lib/partners";
+import { rateFor, COMMISSION_HOLD_MS, YEAR_ONE_MS, PartnerTier, EARNED_TIER_PAYING, EARNED_LIFETIME_RATE, FIRST_SALE_BONUS_MINOR, FIRST_SALE_BONUS_ID, firstSaleBonusActive } from "@/lib/partners";
 import { autoEnrollPartner } from "@/lib/partner-auto";
 import { isNewSchoolsPrice, NEW_SCHOOLS_YEARLY_IDS } from "@/lib/schools-prices";
 import { dunningLang, buildDunningEmail } from "@/lib/dunning-email";
@@ -69,7 +69,16 @@ async function accruePartnerCommission(invoice: Stripe.Invoice) {
     // tier default for any legacy partner created before rates were stored.
     const tier = (partner?.tier as PartnerTier) ?? "standard";
     const explicit = yearOne ? partner?.rateYearOne : partner?.rateLifetime;
-    const rate = typeof explicit === "number" ? explicit : rateFor(tier, yearOne);
+    let rate = typeof explicit === "number" ? explicit : rateFor(tier, yearOne);
+
+    // Paying customers so far (bonus docs are not payments).
+    const prior = await partnerRef.collection("commissions").get();
+    const payingBefore = new Set<string>();
+    prior.forEach((d) => { const c = d.data(); if (c.kind !== "bonus" && c.referredUid) payingBefore.add(c.referredUid); });
+    const payingAfter = new Set(payingBefore).add(userId);
+    // Earned tier: from the 5th paying customer, 15% after the first year.
+    const earned = payingAfter.size >= EARNED_TIER_PAYING;
+    if (!yearOne && earned) rate = Math.max(rate, EARNED_LIFETIME_RATE);
     const amount = Math.round(gross * rate);
 
     const now = Date.now();
@@ -88,6 +97,33 @@ async function accruePartnerCommission(invoice: Stripe.Invoice) {
     console.log(
       `[webhook] commission ${amount} ${invoice.currency} -> partner ${partnerId} (rate ${rate}, invoice ${invoice.id})`,
     );
+
+    // The partner reached the earned tier: their lifetime rate is 15% from now on.
+    if (earned && (typeof partner?.rateLifetime !== "number" || partner.rateLifetime < EARNED_LIFETIME_RATE)) {
+      await partnerRef.update({ rateLifetime: EARNED_LIFETIME_RATE, earnedTierAt: now });
+    }
+
+    // First paying customer bonus, once per partner, until the deadline.
+    if (payingBefore.size === 0 && firstSaleBonusActive(paidAtMs)) {
+      const bonusRef = partnerRef.collection("commissions").doc(FIRST_SALE_BONUS_ID);
+      const cur = (invoice.currency ?? "usd").toLowerCase() === "ils" ? "ils" : "usd";
+      await db.runTransaction(async (tx) => {
+        if ((await tx.get(bonusRef)).exists) return;
+        tx.set(bonusRef, {
+          invoiceId: FIRST_SALE_BONUS_ID,
+          referredUid: userId,
+          gross: 0,
+          amount: FIRST_SALE_BONUS_MINOR[cur],
+          currency: cur,
+          rate: 0,
+          yearOne: true,
+          kind: "bonus",
+          createdAt: now,
+          releaseAt: now + COMMISSION_HOLD_MS,
+          paidAt: null,
+        });
+      });
+    }
   } catch (e) {
     console.warn("[webhook] accruePartnerCommission failed (non-blocking):", e);
   }

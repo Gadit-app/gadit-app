@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { EarningsCalculator } from "./EarningsCalculator";
+import { fillOffer, offerCopy, offerValues } from "@/lib/partner-offer-copy";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { BackLink } from "@/components/BackLink";
@@ -126,6 +127,8 @@ type Stats = {
   earnings: Record<string, Bucket>;
   referrals?: Referral[];
   payout?: Payout;
+  earnedTier?: { threshold: number; rate: number; reached: boolean };
+  firstSaleBonus?: { active: boolean; until: string; earned: boolean };
 };
 
 // Section-10 additions (account status, conversion, payout, referrals
@@ -1747,6 +1750,42 @@ function buildRefLink(code: string, lang: string, path = ""): string {
     : `${base}${prefix}/?ref=${code}`;
 }
 
+/** The offer in MONEY (Gadi 2026-10-18): what one paying family is worth,
+ *  progress to the earned 15% tier, and the first paying customer bonus. */
+function OfferCard({ lang, stats }: { lang: string; stats: Stats }) {
+  const c = offerCopy(lang);
+  const v = offerValues(lang, stats.rateYearOne, stats.rateLifetime, stats.payingCustomers);
+  const tier = stats.earnedTier;
+  const bonus = stats.firstSaleBonus;
+  const n = tier?.threshold ?? 5;
+  const pct = Math.min(100, Math.round((stats.payingCustomers / n) * 100));
+  const line: React.CSSProperties = { fontSize: 14.5, color: "#1F2937", lineHeight: 1.6, margin: "6px 0" };
+  return (
+    <div style={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: 16, padding: "18px 20px", marginTop: 10 }}>
+      <div style={{ fontSize: 15, fontWeight: 800, color: "#111827", marginBottom: 6 }}>{c.offerTitle}</div>
+      <p style={line}>{fillOffer(c.perFamily, v)}</p>
+      {tier?.reached ? (
+        <p style={{ ...line, color: "#0b7d7d", fontWeight: 700 }}>{fillOffer(c.tierReached, v)}</p>
+      ) : (
+        <>
+          <p style={line}>{fillOffer(c.tierGoal, v)}</p>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 4 }}>
+            <div style={{ flex: 1, height: 8, borderRadius: 99, background: "#EEF2F3", overflow: "hidden" }}>
+              <div style={{ width: `${pct}%`, height: "100%", background: "#0EA5A5" }} />
+            </div>
+            <span style={{ fontSize: 12.5, color: "#6B7280", whiteSpace: "nowrap" }}>{fillOffer(c.tierProgress, v)}</span>
+          </div>
+        </>
+      )}
+      {bonus?.earned ? (
+        <p style={{ ...line, color: "#0b7d7d", fontWeight: 700 }}>🎉 {fillOffer(c.bonusEarned, v)}</p>
+      ) : bonus?.active ? (
+        <p style={{ ...line, background: "#FFF7E6", borderRadius: 10, padding: "8px 12px", marginTop: 12 }}>🎁 {fillOffer(c.bonusLine, v)}</p>
+      ) : null}
+    </div>
+  );
+}
+
 export function PartnerDashboardClient() {
   const { lang } = useLang();
   const href = useHref();
@@ -1921,6 +1960,8 @@ export function PartnerDashboardClient() {
                     </select>
                   </div>
                 </div>
+
+                <OfferCard lang={lang} stats={stats} />
 
                 <EarningsCalculator lang={lang} rateYearOne={stats.rateYearOne} rateLifetime={stats.rateLifetime} />
               </>

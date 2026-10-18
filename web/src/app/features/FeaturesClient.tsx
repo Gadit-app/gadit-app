@@ -7,6 +7,7 @@
  * paired with the tier badge that unlocks it.
  */
 
+import { NO_GAD_LANGS, gadCopy } from "@/lib/gadit-button-copy";
 import { planCopy } from "@/lib/plan-copy";
 import { useEffect, useRef, useState } from "react";
 import { LANGUAGES, type Lang } from "@/lib/i18n";
@@ -2925,7 +2926,7 @@ export function FeaturesPage() {
             page closes on the same metaphor it opened with. */}
         <section className="wb-feat-final">
           <div className="wb-feat-final-character">
-            <div className="wb-feat-final-bubble">{gc.bubble}</div>
+            <div className="wb-feat-final-bubble">{NO_GAD_LANGS.has(lang) ? gadCopy(lang).success : gc.bubble}</div>
             <img
               src="/gad-it-character.png"
               alt=""

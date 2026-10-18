@@ -1,5 +1,7 @@
 "use client";
 
+import { fillOffer, offerCopy, offerValues } from "@/lib/partner-offer-copy";
+import { firstSaleBonusActive } from "@/lib/partners";
 import { planCopy } from "@/lib/plan-copy";
 import { useMemo, useState } from "react";
 import Link from "next/link";
@@ -2303,6 +2305,8 @@ export function PartnersClient() {
   const { lang } = useLang();
   const href = useHref();
   const t = COPY[(lang in COPY ? lang : "en") as keyof typeof COPY];
+  const oc = offerCopy(lang);
+  const ov = offerValues(lang, 0.25, 0.1);
   const dir = t.dir;
 
   const [count, setCount] = useState(20);
@@ -2412,6 +2416,11 @@ export function PartnersClient() {
             <div style={{ ...S.rateBig, color: "#6D28D9" }}>{t.founderRate}</div>
             <div style={S.rateSub}>{t.founderSub}</div>
           </div>
+        </div>
+        {/* Earned tier + first paying customer bonus (Gadi 2026-10-18). */}
+        <div style={{ marginTop: 14, fontSize: 15, color: "#374151", lineHeight: 1.6 }}>
+          <div>{fillOffer(oc.publicTier, ov)}</div>
+          {firstSaleBonusActive() && <div style={{ marginTop: 4 }}>🎁 {fillOffer(oc.publicBonus, ov)}</div>}
         </div>
       </section>
 

@@ -12,7 +12,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { Partner, Commission, commissionState, PAYOUT_MINIMUM_MINOR } from "@/lib/partners";
+import { Partner, Commission, commissionState, PAYOUT_MINIMUM_MINOR, EARNED_TIER_PAYING, EARNED_LIFETIME_RATE, FIRST_SALE_BONUS_MINOR, FIRST_SALE_BONUS_UNTIL, firstSaleBonusActive } from "@/lib/partners";
 
 export const maxDuration = 30;
 
@@ -52,6 +52,7 @@ export async function GET(req: NextRequest) {
     const byCurrency: Record<string, Bucket> = {};
     const payingUids = new Set<string>();
     let commissionCount = 0;
+    let bonusEarned = false;
 
     // Per referred customer, for the "who signed up through you" table.
     type Ref = { uid: string; first: number; total: number; currency: string; released: number; paid: number; nextRelease: number };
@@ -59,8 +60,8 @@ export async function GET(req: NextRequest) {
 
     for (const d of commSnap.docs) {
       const c = d.data() as Commission;
-      commissionCount++;
-      payingUids.add(c.referredUid);
+      if (c.kind === "bonus") bonusEarned = true;
+      else { commissionCount++; payingUids.add(c.referredUid); }
       const cur = (c.currency || "usd").toLowerCase();
       const b = (byCurrency[cur] ??= { pending: 0, released: 0, paid: 0 });
       const state = commissionState(c, now);
@@ -104,6 +105,9 @@ export async function GET(req: NextRequest) {
       signups: partner.signups || 0,
       payingCustomers: payingUids.size,
       commissionCount,
+      // Earned tier + first paying customer bonus (Gadi 2026-10-18).
+      earnedTier: { threshold: EARNED_TIER_PAYING, rate: EARNED_LIFETIME_RATE, reached: payingUids.size >= EARNED_TIER_PAYING },
+      firstSaleBonus: { active: firstSaleBonusActive(now), until: new Date(FIRST_SALE_BONUS_UNTIL).toISOString(), minor: FIRST_SALE_BONUS_MINOR, earned: bonusEarned },
       earnings: byCurrency, // { ils: {pending,released,paid}, usd: {...} }
       referrals,
       payout: {

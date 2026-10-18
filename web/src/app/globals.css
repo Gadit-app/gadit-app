@@ -4964,6 +4964,9 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   transform: translateY(-1px);
   animation: wb-flip-period 3.2s ease-in-out 4s 1 both;
 }
+/* No "Gad it." flip where "gad" reads as an insult or a bad word (Gadi 2026-10-18). */
+html:is([lang="ru"], [lang="uk"], [lang="pl"], [lang="cs"], [lang="sk"], [lang="fa"], [lang="hi"]) .wordbook .wb-wordmark-it { animation: none; }
+html:is([lang="ru"], [lang="uk"], [lang="pl"], [lang="cs"], [lang="sk"], [lang="fa"], [lang="hi"]) .wordbook .wb-wordmark-it::after { display: none; }
 @keyframes wb-flip-space {
   0% { padding-inline-start: 0; }
   18%, 78% { padding-inline-start: 6px; }

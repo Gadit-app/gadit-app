@@ -1,4 +1,6 @@
 import "server-only";
+import { fillOffer, offerCopy, offerValues } from "@/lib/partner-offer-copy";
+import { firstSaleBonusActive } from "@/lib/partners";
 import { sendMail } from "@/lib/mail";
 import { emailHeaderHtml, EMAIL_BG, EMAIL_CARD_MAX } from "@/lib/email-brand";
 import { getAdminDb } from "./firebase-admin";
@@ -1136,6 +1138,13 @@ export function buildWelcomeEmail(
   // can show as boxes in some subject renderers).
   const t = (s: string) => applyVars(s, vars, rtl);
   const tb = (s: string) => applyVarsHtml(s, vars, rtl);
+  // The earned tier and the first paying customer bonus, in money (Gadi 2026-10-18).
+  const oc = offerCopy(lang);
+  const ov = offerValues(lang, partner.rateYearOne ?? 0.25, partner.rateLifetime ?? 0.1);
+  const offerHtml = [
+    fillOffer(oc.publicTier, ov),
+    firstSaleBonusActive() ? fillOffer(oc.publicBonus, ov) : "",
+  ].filter(Boolean).map((line) => `<div style="font-size:14px;color:#374151;margin-top:8px;">${esc(line)}</div>`).join("");
   const dir = rtl ? "rtl" : "ltr";
   const align = rtl ? "right" : "left";
 
@@ -1169,6 +1178,7 @@ export function buildWelcomeEmail(
       <div style="background:rgba(14,165,165,0.08);border-radius:12px;padding:16px;margin:0 0 18px;">
         <div style="font-weight:700;margin:0 0 6px;">${tb(c.commissionLine)}</div>
         <div style="font-size:14px;color:#374151;">${tb(c.commissionExplain)}</div>
+        ${offerHtml}
       </div>
 
       <div style="text-align:center;margin:20px 0 8px;">

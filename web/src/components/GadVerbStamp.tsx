@@ -23,9 +23,12 @@
 
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
+import { NO_GAD_LANGS } from "@/lib/gadit-button-copy";
 
 export function GadVerbStamp() {
   const { lang } = useLang();
+  // "gad" reads as an insult or a bad word in these languages (Gadi 2026-10-18).
+  if (NO_GAD_LANGS.has(lang)) return null;
 
   return (
     <aside
