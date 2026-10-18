@@ -8,6 +8,7 @@ import { loadWordSet } from "@/lib/curriculum-sets";
 import { generateClassroomImage, houseImage } from "@/lib/classroom-image";
 import { classroomAccess } from "@/lib/classroom-access";
 import { pilotGate } from "@/lib/pilot-access";
+import { verifiedSchoolId } from "@/lib/school-identity";
 import { SCHOOL_MONTHLY_NEW_IMAGES } from "@/lib/school";
 import { FieldValue } from "firebase-admin/firestore";
 
@@ -184,7 +185,8 @@ export async function POST(req: NextRequest) {
       const w = item?.w ?? (set && isGemaraSet(set) ? set.words.find((x) => sameSetWord(x, asked)) : undefined) ?? asked;
       if (set && (item || set.words.some((x) => x.trim().toLowerCase() === w.toLowerCase()))) {
         // The school's monthly cap on NEW set pictures (2026-10-17).
-        const schoolId = ((await getAdminDb().collection("users").doc(userInfo.userId).get()).get("schoolId") as string | undefined) || "";
+        // The VERIFIED school (lib/school-identity.ts): never another school's quota.
+        const schoolId = await verifiedSchoolId(userInfo.userId);
         const usageDoc = schoolId ? getAdminDb().collection("schools").doc(schoolId).collection("imageUsage").doc(currentMonthKey()) : null;
         const img = await generateClassroomImage({
           word: w,

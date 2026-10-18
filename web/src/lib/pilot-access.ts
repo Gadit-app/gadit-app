@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { getAdminAuth } from "@/lib/firebase-admin";
+import { verifiedSchoolId } from "@/lib/school-identity";
 import { isPilotTopicId } from "@/lib/pilot-topics";
 import { isSchoolSetId } from "@/lib/school-set-ids";
 import { schoolSetGate } from "@/lib/school-sets";
@@ -18,13 +19,13 @@ export function pilotAllows(id: string, schoolId: string | null | undefined): bo
   return !!schoolId && (PILOT_SCHOOLS[id] ?? []).includes(schoolId);
 }
 
-/** May this signed-in user open the pilot unit? By users/{uid}.schoolId.
+/** May this signed-in user open the pilot unit? By the account's VERIFIED
+ *  school (lib/school-identity.ts), never by users/{uid}.schoolId alone.
  *  Always true for a unit that is not a pilot. */
 export async function pilotAllowsUser(id: string, uid: string): Promise<boolean> {
   if (!isPilotTopicId(id)) return true;
   try {
-    const schoolId = (await getAdminDb().collection("users").doc(uid).get()).get("schoolId") as string | undefined;
-    return pilotAllows(id, schoolId);
+    return pilotAllows(id, await verifiedSchoolId(uid));
   } catch {
     return false;
   }

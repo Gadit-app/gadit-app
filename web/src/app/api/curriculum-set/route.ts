@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
+import { getAdminDb } from "@/lib/firebase-admin";
+import { requestVerifiedSchool } from "@/lib/school-identity";
 import { getCurriculumSetDoc } from "@/lib/curriculum-sets";
 import { catalogOfTopic, topicLevel } from "@/lib/curriculum-catalog";
 import { cleanLevels, cleanCurriculum, curriculumAllows } from "@/lib/school-levels";
@@ -36,16 +37,10 @@ export async function GET(req: NextRequest) {
   const level = topicLevel(id);
   if (!catalog || !level) return NextResponse.json({ error: "not_found" }, { status: 404 });
 
-  const h = req.headers.get("Authorization") || "";
-  const token = h.startsWith("Bearer ") ? h.slice(7) : "";
-  if (!token) return NextResponse.json({ error: "login_required" }, { status: 401 });
-  let schoolId = "";
-  try {
-    const { uid } = await getAdminAuth().verifyIdToken(token);
-    schoolId = ((await getAdminDb().collection("users").doc(uid).get()).data()?.schoolId as string) || "";
-  } catch {
-    return NextResponse.json({ error: "login_required" }, { status: 401 });
-  }
+  // The account's VERIFIED school (lib/school-identity.ts), never users/{uid}.schoolId alone.
+  const who = await requestVerifiedSchool(req);
+  if (!who) return NextResponse.json({ error: "login_required" }, { status: 401 });
+  const schoolId = who.schoolId;
   if (!schoolId) return NextResponse.json({ error: "schools_only" }, { status: 403 });
   // A pilot unit (Gemara phase B): only the schools on its allow-list, and only
   // from its imported document (never generated). Others see no such unit.

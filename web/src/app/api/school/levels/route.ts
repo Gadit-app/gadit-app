@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
+import { getAdminDb } from "@/lib/firebase-admin";
+import { requestVerifiedSchool } from "@/lib/school-identity";
 import { SCHOOL_TYPES, cleanLevels, cleanCurriculum } from "@/lib/school-levels";
 
 /**
@@ -10,17 +11,10 @@ import { SCHOOL_TYPES, cleanLevels, cleanCurriculum } from "@/lib/school-levels"
  */
 export const runtime = "nodejs";
 
+/** The signed-in user and their VERIFIED school (lib/school-identity.ts). */
 async function who(req: NextRequest) {
-  const h = req.headers.get("Authorization") || "";
-  const token = h.startsWith("Bearer ") ? h.slice(7) : "";
-  if (!token) return null;
-  try {
-    const { uid } = await getAdminAuth().verifyIdToken(token);
-    const schoolId = ((await getAdminDb().collection("users").doc(uid).get()).data()?.schoolId as string) || "";
-    return { uid, schoolId };
-  } catch {
-    return null;
-  }
+  const w = await requestVerifiedSchool(req);
+  return w ? { uid: w.uid, schoolId: w.schoolId } : null;
 }
 
 export async function GET(req: NextRequest) {

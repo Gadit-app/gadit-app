@@ -2,7 +2,8 @@ import "server-only";
 import crypto from "node:crypto";
 import { NextResponse } from "next/server";
 import type { DocumentReference, WriteBatch } from "firebase-admin/firestore";
-import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { getAdminDb } from "@/lib/firebase-admin";
+import { requestVerifiedSchool } from "@/lib/school-identity";
 import { registerWordSet, type WordSet } from "@/lib/word-sets";
 import { hardCapReached } from "@/lib/ai-budget";
 import { writeSetDefs } from "@/lib/school-set-defs";
@@ -110,18 +111,11 @@ export async function completeSchoolSetDefs(doc: SchoolSetDoc): Promise<SchoolSe
   return out;
 }
 
-/** The signed-in user and their school ("" when not a school), or null. */
+/** The signed-in user and their VERIFIED school ("" when not a school), or
+ *  null (lib/school-identity.ts: users/{uid}.schoolId alone is not proof). */
 export async function requestSchool(req: Request): Promise<{ uid: string; schoolId: string } | null> {
-  const h = req.headers.get("Authorization") || "";
-  const token = h.startsWith("Bearer ") ? h.slice(7) : "";
-  if (!token) return null;
-  try {
-    const { uid } = await getAdminAuth().verifyIdToken(token);
-    const schoolId = (await getAdminDb().collection("users").doc(uid).get()).get("schoolId");
-    return { uid, schoolId: typeof schoolId === "string" ? schoolId : "" };
-  } catch {
-    return null;
-  }
+  const who = await requestVerifiedSchool(req);
+  return who ? { uid: who.uid, schoolId: who.schoolId } : null;
 }
 
 /**

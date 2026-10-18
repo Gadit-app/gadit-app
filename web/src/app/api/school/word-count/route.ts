@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { FieldValue, type DocumentReference } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { verifiedSchoolId } from "@/lib/school-identity";
 import { normalizeClassCode } from "@/lib/school";
 import { CLASS_THRESHOLDS, nextThreshold, normalizeClassWord, rankIndexFor, type ClassScope } from "@/lib/class-milestones";
 
@@ -53,9 +54,10 @@ async function resolveTargets(req: NextRequest, cls: string): Promise<{ display:
     uid = decoded.uid;
     readOnly = decoded.adminImpersonation === true;
   } catch { return null; }
-  const user = await db.collection("users").doc(uid).get();
-  const schoolId = user.get("schoolId");
-  if (typeof schoolId !== "string" || !schoolId) return null;
+  // The account's VERIFIED school (lib/school-identity.ts): a schoolId the
+  // account wrote itself never adds words to another school's dictionary.
+  const schoolId = await verifiedSchoolId(uid);
+  if (!schoolId) return null;
   const schoolRef = db.collection("schools").doc(schoolId);
   // A school with a single classroom is, for the kids, "our class". Its
   // lookups from the school account also belong to that classroom, so the

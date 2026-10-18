@@ -34,13 +34,17 @@ export async function schoolDayReport(db: Firestore, day: string, isInternal: (e
   const schools = schoolsSnap.docs.filter((d) => d.get("isDemo") !== true);
   if (!schools.length) return [];
 
-  // Who belongs to which school (the owner's uid is the school id).
+  // Who belongs to which school (the owner's uid is the school id). Another
+  // account counts only when the server lists it (schoolMembers/{uid}, see
+  // lib/school-identity.ts) and its own schoolId agrees: a schoolId an account
+  // wrote itself never puts its words in another school's report.
   const uidToSchool = new Map<string, string>();
   for (const s of schools) uidToSchool.set(s.id, s.id);
-  const members = await db.collection("users").where("schoolId", ">", "").select("schoolId").get();
-  for (const m of members.docs) {
+  const listed = await db.collection("schoolMembers").get();
+  for (const m of listed.docs) {
     const sid = m.get("schoolId");
-    if (typeof sid === "string" && schools.some((s) => s.id === sid)) uidToSchool.set(m.id, sid);
+    if (typeof sid !== "string" || !schools.some((s) => s.id === sid)) continue;
+    if ((await db.collection("users").doc(m.id).get()).get("schoolId") === sid) uidToSchool.set(m.id, sid);
   }
 
   // The day's window with a margin; rows are then matched by their Israel day.

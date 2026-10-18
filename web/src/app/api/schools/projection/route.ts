@@ -4,6 +4,7 @@ import { pilotAllows } from "@/lib/pilot-access";
 import crypto from "node:crypto";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { verifiedSchoolId } from "@/lib/school-identity";
 
 /**
  * POST /api/schools/projection  { kind, setId, word, subject, title, grade }
@@ -47,8 +48,10 @@ export async function POST(req: NextRequest) {
   if (!KINDS.has(kind) || !word || !setId) return NextResponse.json({ error: "bad_body" }, { status: 400 });
 
   const db = getAdminDb();
-  const schoolId = (await db.collection("users").doc(uid).get()).get("schoolId");
-  if (typeof schoolId !== "string" || !schoolId) return NextResponse.json({ ok: true, skipped: "not_school" });
+  // The account's VERIFIED school (lib/school-identity.ts): a schoolId the
+  // account wrote itself never writes into another school's log.
+  const schoolId = await verifiedSchoolId(uid);
+  if (!schoolId) return NextResponse.json({ ok: true, skipped: "not_school" });
   // A pilot unit counts only for the schools on its allow-list.
   if (isPilotTopicId(setId) && !pilotAllows(setId, schoolId)) return NextResponse.json({ error: "not_found" }, { status: 404 });
 
