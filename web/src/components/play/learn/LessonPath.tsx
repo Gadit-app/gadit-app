@@ -19,7 +19,11 @@ import { GameSentenceBuilder } from "./GameSentenceBuilder";
 import { GameReading } from "./GameReading";
 import { setLessonNext } from "@/lib/lesson-flow";
 import { lessonCopy } from "./lesson-i18n";
-import { bankFor } from "@/lib/learn/engine";
+// The banks themselves, not bankFor: the fill-in step needs only the words
+// and topics, and bankFor would pull every UI language's translations into
+// the client bundle (2026-10-18).
+import { ENGLISH_BANK } from "@/lib/learn/english-bank";
+import { HEBREW_BANK } from "@/lib/learn/hebrew-bank";
 
 export type Lesson = {
   /** A built-in lesson's id (a photographed one has none). */
@@ -64,11 +68,11 @@ export function LessonPath({ lesson, learnLang, lang, t, onExit, onDone }: {
   // Wrong options for the fill-in step: words of the same language from OTHER
   // topics, so only one option can fit the sentence (2026-10-17).
   const otherWords = useMemo(() => {
-    const bank = bankFor(learnLang === "he" ? "he" : "en", lang);
+    const bank: Array<{ w: string; topic: string }> = learnLang === "he" ? HEBREW_BANK : ENGLISH_BANK;
     const mine = new Set(lesson.items.map((x) => x.w));
     const topics = new Set(bank.filter((b) => mine.has(b.w)).map((b) => b.topic));
     return bank.filter((b) => !mine.has(b.w) && !topics.has(b.topic) && !/\s/.test(b.w)).map((b) => b.w);
-  }, [lesson, learnLang, lang]);
+  }, [lesson, learnLang]);
 
   const steps = useMemo<StepId[]>(() => {
     const out: StepId[] = ["cards", "match"];

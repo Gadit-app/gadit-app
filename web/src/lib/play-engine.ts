@@ -201,7 +201,7 @@ const UI_SCRIPT: Record<string, RegExp> = {
   he: /\p{Script=Hebrew}/u, ar: /\p{Script=Arabic}/u, fa: /\p{Script=Arabic}/u,
   ru: /\p{Script=Cyrillic}/u, uk: /\p{Script=Cyrillic}/u, el: /\p{Script=Greek}/u,
   hi: /\p{Script=Devanagari}/u, am: /\p{Script=Ethiopic}/u, bn: /\p{Script=Bengali}/u,
-  th: /\p{Script=Thai}/u, ko: /\p{Script=Hangul}/u, ja: /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u,
+  th: /\p{Script=Thai}/u, ko: /\p{Script=Hangul}/u, ja: /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}ー]/u,
   "zh-CN": /\p{Script=Han}/u, "zh-TW": /\p{Script=Han}/u,
 };
 /** True when most letters of `text` are in the UI language's script. */

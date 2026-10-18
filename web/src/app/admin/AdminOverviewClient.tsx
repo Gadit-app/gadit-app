@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAdminContext } from "./admin-context";
+import { useAdminContext, type AdminLang } from "./admin-context";
 import { TOKENS } from "@/lib/admin-config";
 
 /**
@@ -15,6 +15,28 @@ import { TOKENS } from "@/lib/admin-config";
  */
 
 type ByTier = { clear: number; deep: number; individual?: number; family: number; schools: number };
+
+// Mirrors api/admin/overview/attention.ts (kept as a local type so this
+// client never imports server code).
+type AttentionKind = "payment" | "scheduled" | "ended" | "unmapped";
+type AttentionPerson = {
+  subId: string;
+  email: string | null;
+  name: string | null;
+  uid: string | null;
+  country: string | null;
+  tier: string;
+  billing: string;
+  amount: number | null;
+  currency: string;
+  monthlyUsd: number;
+  status: string;
+  date: string | null;
+  date2: string | null;
+  reason: string | null;
+  stripeCustomerId: string | null;
+  priceId: string | null;
+};
 
 type Overview = {
   generatedAt: string;
@@ -64,6 +86,7 @@ type Overview = {
     unmappedPriceCount: number;
     unmappedPriceIds: string[];
     atRisk?: Array<{ email: string | null; tier: string; monthlyUsd: number; currency: string; status: string }>;
+    lists?: Partial<Record<AttentionKind, AttentionPerson[]>>;
   };
   activity: {
     searchesToday: number;
@@ -133,6 +156,28 @@ const STRINGS = {
     aScheduled: "Scheduled cancels",
     aEnded: "Ended this week",
     aUnmapped: "Unmapped prices",
+    // who is behind each chip
+    noName: "No name",
+    emptyList: "No details to show",
+    openUser: "Subscribers",
+    openCustomer: "Customer in Stripe",
+    openSub: "Subscription in Stripe",
+    perMo: "/mo",
+    perYr: "/yr",
+    dPayment: "Failed charge",
+    dPayment2: "Period ends",
+    dScheduled: "Ends",
+    dScheduled2: "Cancel requested",
+    dEnded: "Ended",
+    dEnded2: "Cancel requested",
+    dUnmapped: "Since",
+    stPastDue: "Card declined",
+    stUnpaid: "Unpaid",
+    stIncomplete: "First payment not completed",
+    rsRequested: "Asked to cancel",
+    rsFailed: "Payment failed",
+    rsDisputed: "Payment disputed",
+    unmappedIds: "Price IDs",
     // existing
     funnelTitle: "Conversion funnel · 30 days",
     funnelAnonymous: "Anonymous visitors who searched",
@@ -196,6 +241,27 @@ const STRINGS = {
     aScheduled: "ביטולים מתוזמנים",
     aEnded: "הסתיימו השבוע",
     aUnmapped: "מחירים לא ממופים",
+    noName: "ללא שם",
+    emptyList: "אין פרטים להצגה",
+    openUser: "במנויים",
+    openCustomer: "לקוח ב-Stripe",
+    openSub: "מנוי ב-Stripe",
+    perMo: "לחודש",
+    perYr: "לשנה",
+    dPayment: "חיוב שנכשל",
+    dPayment2: "סוף התקופה",
+    dScheduled: "מסתיים",
+    dScheduled2: "בקשת ביטול",
+    dEnded: "הסתיים",
+    dEnded2: "בקשת ביטול",
+    dUnmapped: "מנוי מאז",
+    stPastDue: "חיוב נכשל",
+    stUnpaid: "לא שולם",
+    stIncomplete: "תשלום ראשון לא הושלם",
+    rsRequested: "ביטול לבקשת הלקוח",
+    rsFailed: "תשלום נכשל",
+    rsDisputed: "מחלוקת על תשלום",
+    unmappedIds: "מזהי מחיר",
     funnelTitle: "משפך המרה · 30 ימים",
     funnelAnonymous: "אנונימיים שחיפשו",
     funnelSignedUp: "נרשמו",
@@ -221,6 +287,8 @@ export default function AdminOverviewClient() {
   const [data, setData] = useState<Overview | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Which "needs attention" chip is open (one at a time; click again closes).
+  const [openKind, setOpenKind] = useState<AttentionKind | null>(null);
   const t = STRINGS[lang];
 
   useEffect(() => {
@@ -250,14 +318,16 @@ export default function AdminOverviewClient() {
   // Annualized headline: monthly recurring × 12, rounded, thousands-grouped.
   const perYear = (n: number) => t.perYear.replace("%", Math.round(n * 12).toLocaleString("en-US"));
 
-  const alertItems = al
-    ? [
-        { label: t.aPastDue, count: al.paymentProblemCount ?? al.pastDueCount },
-        { label: t.aScheduled, count: al.scheduledCancelCount },
-        { label: t.aEnded, count: al.endedThisWeekCount },
-        { label: t.aUnmapped, count: al.unmappedPriceCount },
-      ].filter((x) => x.count > 0)
+  const alertItems: Array<{ kind: AttentionKind; label: string; count: number }> = al
+    ? ([
+        { kind: "payment", label: t.aPastDue, count: al.paymentProblemCount ?? al.pastDueCount },
+        { kind: "scheduled", label: t.aScheduled, count: al.scheduledCancelCount },
+        { kind: "ended", label: t.aEnded, count: al.endedThisWeekCount },
+        { kind: "unmapped", label: t.aUnmapped, count: al.unmappedPriceCount },
+      ] as const).filter((x) => x.count > 0)
     : [];
+  const openItem = alertItems.find((a) => a.kind === openKind) ?? null;
+  const openList: AttentionPerson[] = openItem ? al?.lists?.[openItem.kind] ?? [] : [];
 
   return (
     <>
@@ -362,26 +432,44 @@ export default function AdminOverviewClient() {
           {alertItems.length > 0 && (
             <div style={{ ...cardStyle, marginBottom: 16, borderColor: "#FECACA", background: "#FEF2F2" }}>
               <div style={{ ...sectionTitleStyle, color: "#991B1B" }}>{t.alertsTitle}</div>
+              {/* Each chip opens the people behind it right under the chips
+                  (Gadi 2026-10-18). One open at a time; click again closes. */}
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {alertItems.map((a) => (
-                  <div key={a.label} style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 12px", borderRadius: 999, border: "1px solid #FCA5A5", background: "#FFFFFF", fontSize: 13, color: "#7F1D1D" }}>
-                    <span style={{ fontWeight: 500 }}>{a.label}</span>
-                    <span style={{ fontWeight: 700, color: TOKENS.danger }}>{a.count}</span>
-                  </div>
-                ))}
+                {alertItems.map((a) => {
+                  const on = openKind === a.kind;
+                  return (
+                    <button
+                      key={a.kind}
+                      type="button"
+                      aria-expanded={on}
+                      aria-controls="ov-attention-list"
+                      onClick={() => setOpenKind(on ? null : a.kind)}
+                      style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 12px", borderRadius: 999, border: `1px solid ${on ? TOKENS.danger : "#FCA5A5"}`, background: on ? "#FEE2E2" : "#FFFFFF", fontSize: 13, color: "#7F1D1D", font: "inherit", cursor: "pointer" }}
+                    >
+                      <span style={{ fontWeight: on ? 700 : 500, fontSize: 13 }}>{a.label}</span>
+                      <span style={{ fontWeight: 700, color: TOKENS.danger, fontSize: 13 }}>{a.count}</span>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ transform: on ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </button>
+                  );
+                })}
               </div>
-              {al?.atRisk && al.atRisk.length > 0 && (
-                <div style={{ marginTop: 12, display: "grid", gap: 6 }}>
-                  {al.atRisk.map((s, i) => (
-                    <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, padding: "8px 12px", borderRadius: 10, border: "1px solid #FCA5A5", background: "#FFFFFF", fontSize: 13 }}>
-                      {s.email ? (
-                        <a href={`mailto:${s.email}`} dir="ltr" style={{ fontWeight: 600, color: "#B91C1C", textDecoration: "none" }}>{s.email}</a>
-                      ) : (
-                        <span dir="ltr" style={{ color: TOKENS.inkFaint }}>—</span>
-                      )}
-                      <span dir="ltr" style={{ color: TOKENS.inkSoft, whiteSpace: "nowrap" }}>{s.tier === "clear" || s.tier === "deep" ? "Individual" : s.tier.charAt(0).toUpperCase() + s.tier.slice(1)} · ${s.monthlyUsd.toFixed(2)}/mo · {s.status}</span>
+              {openItem && (
+                <div id="ov-attention-list" style={{ marginTop: 12, display: "grid", gap: 6 }}>
+                  {openList.length === 0 && (
+                    <div style={{ padding: "8px 12px", borderRadius: 10, border: "1px solid #FCA5A5", background: "#FFFFFF", fontSize: 13, color: TOKENS.inkSoft }}>
+                      {t.emptyList}
                     </div>
+                  )}
+                  {openList.map((p) => (
+                    <AttentionRow key={p.subId} p={p} kind={openItem.kind} t={t} lang={lang} />
                   ))}
+                  {openItem.kind === "unmapped" && (al?.unmappedPriceIds?.length ?? 0) > 0 && (
+                    <div style={{ fontSize: 12, color: TOKENS.inkSoft }}>
+                      {t.unmappedIds}: <span dir="ltr">{al?.unmappedPriceIds.join(", ")}</span>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -421,6 +509,138 @@ export default function AdminOverviewClient() {
       )}
       <style>{OV_CSS}</style>
     </>
+  );
+}
+
+type Strings = (typeof STRINGS)[AdminLang];
+
+const tierLabel = (tier: string) =>
+  tier === "clear" || tier === "deep" ? "Individual" : tier.charAt(0).toUpperCase() + tier.slice(1);
+
+function fmtAmount(amount: number, currency: string): string {
+  try {
+    return new Intl.NumberFormat("en-US", { style: "currency", currency: currency.toUpperCase() }).format(amount);
+  } catch {
+    return `${amount.toFixed(2)} ${currency.toUpperCase()}`;
+  }
+}
+
+// Same real-flag images as Subscribers (flagcdn PNGs render on Windows too).
+function FlagImg({ iso2 }: { iso2: string }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={`https://flagcdn.com/40x30/${iso2.toLowerCase()}.png`}
+      srcSet={`https://flagcdn.com/80x60/${iso2.toLowerCase()}.png 2x`}
+      width={18}
+      height={13}
+      alt={iso2}
+      title={iso2}
+      loading="lazy"
+      style={{ borderRadius: 2, display: "inline-block", verticalAlign: "middle", boxShadow: "0 0 0 0.5px rgba(15,23,42,0.18)", flexShrink: 0 }}
+    />
+  );
+}
+
+const linkStyle: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 4, fontSize: 12, fontWeight: 600, color: TOKENS.purple, textDecoration: "none", whiteSpace: "nowrap" };
+
+function ExternalIcon() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+      <polyline points="15 3 21 3 21 9" />
+      <line x1="10" y1="14" x2="21" y2="3" />
+    </svg>
+  );
+}
+
+function UserIcon() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
+  );
+}
+
+// One person behind a "needs attention" chip: who, what they pay, the date
+// that matters for this chip, and where to open them.
+function AttentionRow({ p, kind, t, lang }: { p: AttentionPerson; kind: AttentionKind; t: Strings; lang: AdminLang }) {
+  const day = (iso: string | null) =>
+    iso
+      ? new Date(iso).toLocaleDateString(lang === "he" ? "he-IL" : "en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Jerusalem" })
+      : null;
+  const [l1, l2] =
+    kind === "payment" ? [t.dPayment, t.dPayment2] :
+    kind === "scheduled" ? [t.dScheduled, t.dScheduled2] :
+    kind === "ended" ? [t.dEnded, t.dEnded2] :
+    [t.dUnmapped, ""];
+  const dates = [
+    p.date ? `${l1} ${day(p.date)}` : null,
+    p.date2 && l2 ? `${l2} ${day(p.date2)}` : null,
+  ].filter(Boolean).join(" · ");
+  const note =
+    kind === "payment"
+      ? (p.status === "past_due" ? t.stPastDue : p.status === "unpaid" ? t.stUnpaid : p.status === "incomplete" ? t.stIncomplete : p.status)
+      : kind === "ended" && p.reason
+        ? (p.reason === "cancellation_requested" ? t.rsRequested : p.reason === "payment_failed" ? t.rsFailed : p.reason === "payment_disputed" ? t.rsDisputed : p.reason)
+        : null;
+  const interval = p.billing === "monthly" ? t.perMo : p.billing === "yearly" ? t.perYr : "";
+  const country = p.country && /^[A-Za-z]{2}$/.test(p.country) ? p.country.toUpperCase() : null;
+
+  return (
+    <div className="ov-att-row" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.4fr) minmax(0, 1.4fr) auto", alignItems: "center", gap: 12, padding: "9px 12px", borderRadius: 10, border: "1px solid #FCA5A5", background: "#FFFFFF", fontSize: 13 }}>
+      {/* Who */}
+      <div style={{ minWidth: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
+          {country && <FlagImg iso2={country} />}
+          <span style={{ fontWeight: 700, color: p.name ? TOKENS.ink : TOKENS.inkFaint, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            {p.name || t.noName}
+          </span>
+          <span dir="ltr" style={{ fontSize: 11, fontWeight: 600, color: TOKENS.inkSoft, background: "#F3F4F6", borderRadius: 999, padding: "1px 7px", whiteSpace: "nowrap" }}>
+            {tierLabel(p.tier)}
+          </span>
+        </div>
+        {p.email && (
+          <a href={`mailto:${p.email}`} dir="ltr" style={{ display: "block", marginTop: 2, fontSize: 12, color: "#B91C1C", textDecoration: "none", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", textAlign: "start" }}>
+            {p.email}
+          </a>
+        )}
+      </div>
+      {/* Money + dates */}
+      <div style={{ minWidth: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+          {p.amount != null && (
+            <span style={{ fontWeight: 700, color: TOKENS.ink }}>
+              <span dir="ltr">{fmtAmount(p.amount, p.currency)}</span>
+              {interval && <span style={{ fontWeight: 500, color: TOKENS.inkSoft }}> {interval}</span>}
+            </span>
+          )}
+          {note && <span style={{ fontSize: 11, fontWeight: 700, color: TOKENS.danger }}>{note}</span>}
+        </div>
+        {dates && <div style={{ marginTop: 2, fontSize: 12, color: TOKENS.inkSoft }}>{dates}</div>}
+        {kind === "unmapped" && p.priceId && <div dir="ltr" style={{ marginTop: 2, fontSize: 11, color: TOKENS.inkFaint, textAlign: "start" }}>{p.priceId}</div>}
+      </div>
+      {/* Where to open them */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 3 }}>
+        {p.uid && (
+          <a href={`/admin/users?q=${encodeURIComponent(p.email || p.uid)}`} style={linkStyle}>
+            <UserIcon />
+            {t.openUser}
+          </a>
+        )}
+        {p.stripeCustomerId && (
+          <a href={`https://dashboard.stripe.com/customers/${p.stripeCustomerId}`} target="_blank" rel="noopener noreferrer" style={linkStyle}>
+            <ExternalIcon />
+            {t.openCustomer}
+          </a>
+        )}
+        <a href={`https://dashboard.stripe.com/subscriptions/${p.subId}`} target="_blank" rel="noopener noreferrer" style={linkStyle}>
+          <ExternalIcon />
+          {t.openSub}
+        </a>
+      </div>
+    </div>
   );
 }
 
@@ -522,5 +742,6 @@ const OV_CSS = `
 }
 @media (max-width: 520px) {
   .ov-grid { grid-template-columns: 1fr !important; }
+  .ov-att-row { grid-template-columns: 1fr !important; gap: 6px !important; }
 }
 `;

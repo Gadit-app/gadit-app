@@ -48,6 +48,29 @@ export type RevenueSubscriber = {
    *  trial auto-cancels at trial end (missing_payment_method: "cancel") and
    *  never charges, so it's pipeline vanity, not real forecastable revenue. */
   hasCard?: boolean;
+  // --- Detail for the Overview "needs attention" lists (all optional, so
+  //     every other consumer is unaffected). ---
+  /** Stripe customer name, when Stripe has one. */
+  name?: string | null;
+  priceId?: string;
+  /** What one invoice charges, native currency, after recurring discounts
+   *  (monthly price for monthly, yearly price for yearly). */
+  amountNative?: number;
+  /** Current billing period (ISO), from the subscription item. */
+  periodStart?: string | null;
+  periodEnd?: string | null;
+  /** When a scheduled cancellation takes effect (ISO). */
+  cancelAt?: string | null;
+  /** When the cancel was requested / the sub ended (ISO). */
+  canceledAt?: string | null;
+  endedAt?: string | null;
+  /** Stripe's cancellation_details.reason (cancellation_requested, payment_failed, ...). */
+  cancelReason?: string | null;
+  /** Set exactly where the matching overview counters are bumped, so each
+   *  list always matches its count. */
+  scheduledCancel?: boolean;
+  endedThisWeek?: boolean;
+  unmappedPrice?: boolean;
 };
 
 export type BreakdownEntry = { tier: Tier; billing: Billing; count: number; mrr: number };
@@ -365,6 +388,9 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
     // When this sub began (or would begin) collecting money.
     const payingStartMs = trialEndMs || createdMs;
 
+    const iso = (sec: number | null | undefined) => (sec ? new Date(sec * 1000).toISOString() : null);
+    // Newer Stripe API keeps the billing period on the subscription ITEM.
+    const item0 = s.items.data[0] as (Stripe.SubscriptionItem & { current_period_start?: number; current_period_end?: number }) | undefined;
     const sub: RevenueSubscriber = {
       uid: s.id,
       email,
@@ -378,6 +404,15 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
       signedUpAt: new Date(createdMs).toISOString(),
       stripeCustomerId,
       country,
+      name: cust?.name ?? null,
+      priceId,
+      amountNative: Math.round(monthlyNative * (monthsInInterval(primary) || 1) * 100) / 100,
+      periodStart: iso(item0?.current_period_start),
+      periodEnd: iso(item0?.current_period_end),
+      cancelAt: iso(s.cancel_at),
+      canceledAt: iso(s.canceled_at),
+      endedAt: iso(s.ended_at),
+      cancelReason: s.cancellation_details?.reason ?? null,
     };
 
     // Trial → paid resolution (spec §13.1): a trial that has ended and is
@@ -398,8 +433,8 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
       hasActiveByCustomer.set(custKey, true);
       mrr += monthlyUsd;
       if (s.status === "past_due") { atRiskMrr += monthlyUsd; pastDueCount += 1; atRisk.push(sub); }
-      if (s.cancel_at_period_end) scheduledCancelCount += 1;
-      if (unsupported && monthlyUsd === 0) { unmappedPriceIds.add(priceId || "(no-price)"); }
+      if (s.cancel_at_period_end) { scheduledCancelCount += 1; sub.scheduledCancel = true; }
+      if (unsupported && monthlyUsd === 0) { unmappedPriceIds.add(priceId || "(no-price)"); sub.unmappedPrice = true; }
       if (billing !== "unknown" && monthlyUsd > 0) bump(payBreak, tier, billing, monthlyUsd);
       const eps = earliestPayingStartByCustomer.get(custKey);
       if (eps == null || payingStartMs < eps) earliestPayingStartByCustomer.set(custKey, payingStartMs);
@@ -426,7 +461,7 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
       const wasPaying = !s.trial_end || endedMs > trialEndMs + 2 * 86_400_000;
       if (wasPaying) {
         if (endedMs > thirtyDaysAgo) recentlyCanceled.push(sub);
-        if (endedMs > weekAgo) endedThisWeekCount += 1;
+        if (endedMs > weekAgo) { endedThisWeekCount += 1; sub.endedThisWeek = true; }
         if (endedMs >= monthStart) {
           churnedMrr += monthlyUsd;
           const le = lastEndedByCustomer.get(custKey) ?? 0;

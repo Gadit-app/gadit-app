@@ -237,7 +237,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Тепер я gad it!",
+    bubble: "Now I gad it!",
   },
   tr: {
     groupTitles: {
@@ -283,7 +283,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Şimdi anladım, gad it!",
+    bubble: "Now I gad it!",
   },
   pl: {
     groupTitles: {
@@ -329,7 +329,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Teraz to złapałem!",
+    bubble: "Now I gad it!",
   },
   fa: {
     groupTitles: {
@@ -375,7 +375,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "حالا گرفتمش!",
+    bubble: "Now I gad it!",
   },
   id: {
     groupTitles: {
@@ -421,7 +421,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Sekarang aku paham!",
+    bubble: "Now I gad it!",
   },
   nl: {
     groupTitles: {
@@ -467,7 +467,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Nu snap ik het!",
+    bubble: "Now I gad it!",
   },
   he: {
     groupTitles: {
@@ -607,7 +607,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Manje sengiyi-gad it!",
+    bubble: "Now I gad it!",
   },
   xh: {
     groupTitles: {
@@ -653,7 +653,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Ngoku ndilenzile i-GAD!",
+    bubble: "Now I gad it!",
   },
   nso: {
     groupTitles: {
@@ -699,7 +699,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Bjale ke a le GAD!",
+    bubble: "Now I gad it!",
   },
   tn: {
     groupTitles: {
@@ -745,7 +745,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Jaanong ke a le GAD!",
+    bubble: "Now I gad it!",
   },
   st: {
     groupTitles: {
@@ -791,7 +791,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Jwale ke e GAD!",
+    bubble: "Now I gad it!",
   },
   ts: {
     groupTitles: {
@@ -837,7 +837,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Sweswi ndzi ri GAD!",
+    bubble: "Now I gad it!",
   },
   ss: {
     groupTitles: {
@@ -883,7 +883,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Nyalo sengili-GAD!",
+    bubble: "Now I gad it!",
   },
   ve: {
     groupTitles: {
@@ -929,7 +929,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Zwino ndo ḽi GAD!",
+    bubble: "Now I gad it!",
   },
   nr: {
     groupTitles: {
@@ -975,7 +975,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Nje sengiyenzile i-GAD!",
+    bubble: "Now I gad it!",
   },
   el: {
     groupTitles: {
@@ -1021,7 +1021,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Τώρα το έπιασα, gad it!",
+    bubble: "Now I gad it!",
   },
   hi: {
     groupTitles: {

@@ -140,7 +140,17 @@ function parseList(text: string): Array<{ w: string; t?: string }> {
   return out;
 }
 
-const LANG_NAME: Record<string, string> = { he: "Hebrew", ar: "Arabic", ru: "Russian", en: "English" };
+/** The child's UI language, as the translation prompts name it (every UI
+ *  language since learning English opened to all of them, 2026-10-18). */
+const LANG_NAME: Record<string, string> = {
+  he: "Hebrew", ar: "Arabic", ru: "Russian", en: "English", es: "Spanish", pt: "Portuguese", fr: "French",
+  de: "German", cs: "Czech", sk: "Slovak", it: "Italian", ja: "Japanese (kana first, as for a child)", hi: "Hindi",
+  am: "Amharic", uk: "Ukrainian", tr: "Turkish", pl: "Polish", fa: "Persian (Farsi)", id: "Indonesian", nl: "Dutch",
+  el: "Greek", zu: "isiZulu", xh: "isiXhosa", nso: "Sepedi (Northern Sotho)", tn: "Setswana", st: "Sesotho (Southern Sotho)",
+  ts: "Xitsonga", ss: "siSwati", ve: "Tshivenda", nr: "South African isiNdebele", vi: "Vietnamese", fil: "Filipino",
+  af: "Afrikaans", sw: "Swahili", "zh-CN": "Simplified Chinese", "zh-TW": "Traditional Chinese (Taiwan)", ko: "Korean",
+  th: "Thai", bn: "Bengali", da: "Danish", hu: "Hungarian",
+};
 
 /** Translate the list words we don't have, in one small call. */
 async function translateMissing(words: string[], lang: LearnLang, ui: string): Promise<Record<string, { t: string; nq?: string }>> {

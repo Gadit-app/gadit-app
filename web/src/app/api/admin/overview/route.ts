@@ -4,6 +4,7 @@ import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { summarizeStripeRevenue } from "@/lib/admin-revenue";
 import { customerCategory, internalUids, isPayingStatus, type CustomerCategory } from "@/lib/internal-accounts";
 import type { UserRecord } from "firebase-admin/auth";
+import { buildAttentionLists, type UserLookup } from "./attention";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -93,6 +94,22 @@ export async function GET(req: NextRequest) {
     return { uid: u.uid, email: u.email ?? (typeof d.email === "string" ? d.email : null), familyId: d.familyId, schoolId: d.schoolId };
   }));
   const counted = authUsers.filter((u) => !internal.has(u.uid));
+
+  // Stripe customer / email → account, for the "needs attention" lists
+  // (name, country flag, link to Subscribers).
+  const look: UserLookup = { byCustomer: new Map(), byEmail: new Map(), info: new Map() };
+  for (const u of authUsers) {
+    const d = userDocs.get(u.uid) ?? {};
+    if (typeof d.stripeCustomerId === "string" && d.stripeCustomerId) look.byCustomer.set(d.stripeCustomerId, u.uid);
+    const email = (u.email ?? (typeof d.email === "string" ? d.email : "")).trim().toLowerCase();
+    if (email && !look.byEmail.has(email)) look.byEmail.set(email, u.uid);
+    const name =
+      (u.displayName ?? "").trim() ||
+      (typeof d.displayName === "string" ? d.displayName.trim() : "") ||
+      (typeof d.name === "string" ? d.name.trim() : "") ||
+      null;
+    look.info.set(u.uid, { name, country: typeof d.country === "string" && d.country ? d.country.toUpperCase() : null });
+  }
 
   // ---------- 2) Accounts (money comes from Stripe) ----------
   const byCategory: Record<CustomerCategory, number> = { basic: 0, individual: 0, family: 0, schools: 0 };
@@ -234,6 +251,8 @@ export async function GET(req: NextRequest) {
         currency: s.currency,
         status: s.status,
       })),
+      // Who is behind each chip (opened inline on the Overview).
+      lists: buildAttentionLists(rev, look),
     },
     businessTz: rev.businessTz,
     activity: {

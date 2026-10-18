@@ -12,6 +12,7 @@
  */
 import { ENGLISH_BANK, ENGLISH_TOPICS } from "./english-bank";
 import { HEBREW_BANK, HEBREW_TOPICS } from "./hebrew-bank";
+import { ENGLISH_BANK_T } from "./english-bank-langs";
 
 export type LearnLang = "en" | "he";
 export type Reads = "no" | "little" | "yes";
@@ -30,19 +31,23 @@ const DAY = 86_400_000;
 const INTERVAL_DAYS = [0, 1, 2, 4, 8, 16];
 export const LEARNED_BOX = 3;
 
-/** Which languages a kid can learn, by the language of the app. */
+/** Which languages a kid can learn, by the language of the app. English
+ *  is open to every UI language but English itself (Gadi 2026-10-18);
+ *  Hebrew as a second language stays with Arabic, Russian and English. */
 export function learnTargets(uiLang: string): LearnLang[] {
-  if (uiLang === "he") return ["en"];
   if (uiLang === "ar" || uiLang === "ru") return ["en", "he"];
   if (uiLang === "en") return ["he"];
-  return [];
+  return ["en"];
 }
 
-/** The bank for a target language, translated into the kid's language. */
+/** The bank for a target language, translated into the kid's language.
+ *  English: he/ar/ru live on the bank rows, the other UI languages in
+ *  english-bank-t/<lang>.json; a word missing there falls back to English. */
 export function bankFor(lang: LearnLang, uiLang: string): LearnItem[] {
   if (lang === "en") {
-    const k = uiLang === "ar" ? "ar" : uiLang === "ru" ? "ru" : "he";
-    return ENGLISH_BANK.map((x) => ({ w: x.w, t: x[k], d: x.d, topic: x.topic, src: "bank" as const }));
+    const own = uiLang === "he" || uiLang === "ar" || uiLang === "ru" ? uiLang : null;
+    const more = own ? null : ENGLISH_BANK_T[uiLang];
+    return ENGLISH_BANK.map((x) => ({ w: x.w, t: own ? x[own] : more?.[x.w]?.trim() || x.w, d: x.d, topic: x.topic, src: "bank" as const }));
   }
   const k = uiLang === "ar" ? "ar" : uiLang === "ru" ? "ru" : "en";
   return HEBREW_BANK.map((x) => ({ w: x.w, nq: x.nq, t: x[k], en: x.en, d: x.d, topic: x.topic, src: "bank" as const }));

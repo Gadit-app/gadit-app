@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
-import { TermsBodyEs } from "@/components/legal/SpanishBodies";
-import { TermsBodyPt } from "@/components/legal/PortugueseBodies";
-import { TermsBodyFr } from "@/components/legal/FrenchBodies";
+import { translatedLegalLocales } from "@/components/legal/registry";
 
 export const metadata: Metadata = {
   title: "Terms of Use, Gadit",
@@ -341,9 +339,7 @@ export default function TermsPage() {
       locales={{
         en: { title: "Terms of Use", body: <EnglishBody /> },
         he: { title: "תנאי שימוש", body: <HebrewBody /> },
-        es: { title: "Términos de uso", body: <TermsBodyEs /> },
-        pt: { title: "Termos de uso", body: <TermsBodyPt /> },
-        fr: { title: "Conditions d'utilisation", body: <TermsBodyFr /> },
+        ...translatedLegalLocales("terms"),
       }}
     />
   );

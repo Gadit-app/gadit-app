@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -150,12 +150,16 @@ export default function LegalPage({
   const href = useHref();
 
   // Prefer the UI language, otherwise English
-  const initial: Lang = locales[uiLang] ? uiLang : "en";
-  const [locale, setLocale] = useState<Lang>(initial);
-
-  useEffect(() => {
-    setLocale(locales[uiLang] ? uiLang : "en");
-  }, [uiLang, locales]);
+  // A language picked on this page holds until the UI language changes; then
+  // the document follows the UI language again (derived, no effect needed).
+  const [picked, setPicked] = useState<{ lang: Lang; forUi: Lang } | null>(null);
+  const locale: Lang =
+    picked && picked.forUi === uiLang && locales[picked.lang]
+      ? picked.lang
+      : locales[uiLang]
+        ? uiLang
+        : "en";
+  const setLocale = (lang: Lang) => setPicked({ lang, forUi: uiLang });
 
   const active = locales[locale] ?? locales.en!;
   const dir = getLangDir(locale);
@@ -173,24 +177,48 @@ export default function LegalPage({
   return (
     <main className="min-h-screen bg-[#F8FAFC] pt-28 pb-20 px-4" dir={dir}>
       <div className="max-w-2xl mx-auto">
-        {/* Language toggle */}
+        {/* Language picker: a compact select, since every UI language has a
+            translation (41 buttons would not fit a phone). */}
         <div className="flex justify-end mb-6" dir="ltr">
-          <div className="inline-flex flex-wrap rounded-full bg-white border border-slate-200 p-1 text-xs gap-0.5">
-            {available.map(({ code, label }) => (
-              <button
-                key={code}
-                type="button"
-                onClick={() => setLocale(code)}
-                className="px-3 py-1 rounded-full transition-all"
-                style={{
-                  background: locale === code ? "rgb(37 99 235)" : "transparent",
-                  color: locale === code ? "white" : "rgb(100 116 139)",
-                }}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+          <label className="relative inline-flex items-center max-w-full">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="absolute left-3 text-slate-400 pointer-events-none"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20" />
+            </svg>
+            <select
+              aria-label="Language"
+              value={locale}
+              onChange={(e) => setLocale(e.target.value as Lang)}
+              className="appearance-none max-w-full rounded-full bg-white border border-slate-200 text-xs text-slate-600 pl-8 pr-8 py-1.5 cursor-pointer hover:border-blue-300 focus:outline-none focus:border-blue-500"
+            >
+              {available.map(({ code, label }) => (
+                <option key={code} value={code}>
+                  {label}
+                </option>
+              ))}
+            </select>
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              width="12"
+              height="12"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              className="absolute right-3 text-slate-400 pointer-events-none"
+            >
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </label>
         </div>
 
         <article

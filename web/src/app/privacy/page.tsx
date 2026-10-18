@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
-import { PrivacyBodyEs } from "@/components/legal/SpanishBodies";
-import { PrivacyBodyPt } from "@/components/legal/PortugueseBodies";
-import { PrivacyBodyFr } from "@/components/legal/FrenchBodies";
+import { translatedLegalLocales } from "@/components/legal/registry";
 
 export const metadata: Metadata = {
   title: "Privacy Policy, Gadit",
@@ -284,9 +282,7 @@ export default function PrivacyPage() {
       locales={{
         en: { title: "Privacy Policy", body: <EnglishBody /> },
         he: { title: "מדיניות פרטיות", body: <HebrewBody /> },
-        es: { title: "Política de privacidad", body: <PrivacyBodyEs /> },
-        pt: { title: "Política de privacidade", body: <PrivacyBodyPt /> },
-        fr: { title: "Politique de confidentialité", body: <PrivacyBodyFr /> },
+        ...translatedLegalLocales("privacy"),
       }}
     />
   );

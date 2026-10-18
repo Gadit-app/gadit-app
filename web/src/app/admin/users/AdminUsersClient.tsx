@@ -323,7 +323,12 @@ export default function AdminUsersClient() {
   const [data, setData] = useState<ApiResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
+  // ?q= prefills the search (the Overview "needs attention" lists link here
+  // per person). Safe to read window: admin pages mount only client-side,
+  // after the AdminShell unlock.
+  const [search, setSearch] = useState(() =>
+    typeof window === "undefined" ? "" : new URLSearchParams(window.location.search).get("q") ?? "",
+  );
   const [planFilter, setPlanFilter] = useState<PlanFilter>("");
   const [countryFilter, setCountryFilter] = useState<string>("");
   const [sortBy, setSortBy] = useState<"createdAt" | "lastSeenAt" | "searchCount" | "plan" | "country">("createdAt");
