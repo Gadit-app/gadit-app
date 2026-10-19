@@ -75,14 +75,14 @@ export const REAL_COPY: Record<string, RealCopy> = {
       reframe: "Gadit מסביר לה כל מילה במילים פשוטות ועם תמונה. בלי לקרוא לכם ובלי לנחש.",
     },
     howKicker: "איך זה עובד",
-    howTitle: "חמישה צעדים, ואוצר המילים מתחיל לגדול",
+    howTitle: "חמישה צעדים ואוצר המילים מתחיל לגדול",
     shotAlt: "מסך אמיתי מתוך Gadit",
     steps: [
       { t: "מוסיפים את בני המשפחה", b: "לכל ילד שם, גיל וצבע. זה לוקח פחות מדקה. עד 5 ילדים וגם ההורה השני.", img: "add" },
       { t: "מחברים את המכשירים של הילדים", b: "הילד נכנס מהטלפון או מהטאבלט שלו עם קוד QR או קוד בן 6 ספרות, בלי סיסמה. אין לו מכשיר משלו? יש מסך משותף לילדים.", img: "pair" },
-      { t: "הילד מחפש מילה", b: "כל מילה מוסברת בשפה של ילדים עם תמונה לכל משמעות, דוגמאות ומקור המילה.", img: "word" },
-      { t: "כל מילה נשמרת במחברת שלו", b: "בלי ללחוץ על כלום. המחברת גדלה מילה אחרי מילה עם רצף ימים ויעד שבועי.", img: "notebook" },
-      { t: "מתרגלים עד שהמילה נשארת", b: "משחקים וחידונים שנבנים מהמילים שהילד עצמו חיפש.", img: "play" },
+      { t: "הילדים מתחילים להבין מילים", b: "כל מילה מוסברת בשפה של ילדים עם תמונה לכל משמעות, דוגמאות ומקור המילה.", img: "word" },
+      { t: "מתרגלים עד שהמילה נכנסת לזיכרון", b: "משחקים וחידונים שנבנים מהמילים שהילד עצמו חיפש.", img: "play" },
+      { t: "כל מילה נשמרת במחברת המילים", b: "בלי ללחוץ על כלום. המחברת גדלה מילה אחרי מילה עם רצף ימים ויעד שבועי.", img: "notebook" },
     ],
     dash: {
       kicker: "לוח בקרה להורים",
@@ -398,28 +398,26 @@ export const REAL_CSS = `
 .fam-premium {
   --pm-card: inset 0 1px 0 rgba(255,255,255,0.7), 0 2px 6px rgba(16,40,60,0.08), 0 30px 64px -22px rgba(16,40,60,0.38);
 }
-/* The five steps (Gadi 2026-10-18: the phones peeking cut off at the bottom
-   looked broken): one compact card per step, the explanation on the start
-   side (right in Hebrew) and the WHOLE phone beside it, the same in every
-   step. Phones stack under the text only on narrow screens. */
-.fam-premium .fam-real-steps { display: grid; gap: 22px; max-width: 820px; margin-top: 40px; }
+/* The five steps right before the price (Gadi 2026-10-19): one row of five, each a
+   short title above the WHOLE phone, no text under it. Scrolls sideways on
+   narrow screens, every phone whole. */
+.fam-premium .fam-real-steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; max-width: 1180px; margin-top: 36px; }
 .fam-premium .fam-real-step, .fam-premium .fam-real-step:nth-child(even) {
-  display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 36px; align-items: center;
-  padding: 28px 44px; border-radius: 28px; overflow: visible; min-height: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 16px; grid-template-columns: none;
+  padding: 22px 14px 22px; border-radius: 24px; overflow: visible; min-height: 0; text-align: center;
 }
 .fam-premium .fam-real-step:nth-child(even) .fam-real-step-text { order: 0; }
-.fam-premium .fam-real-step-text { padding: 0; }
-.fam-premium .fam-real-step-title { font-size: 22px; margin-bottom: 8px; }
-.fam-premium .fam-real-step-body { font-size: 16px; line-height: 1.7; }
-.fam-premium .fam-real-step > .fam-phone { max-width: 210px; width: 100%; margin: 0 auto; }
-.fam-premium .fam-real-step-num { width: 32px; height: 32px; font-size: 15px; }
+.fam-premium .fam-real-step-text { padding: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; min-height: 76px; }
+.fam-premium .fam-real-step-title { font-size: 17px; line-height: 1.35; margin: 0; text-align: center; }
+.fam-premium .fam-real-step > .fam-phone { max-width: 170px; width: 100%; margin: auto auto 0; }
+.fam-premium .fam-real-step-num { width: 30px; height: 30px; font-size: 15px; }
 @media (min-width: 880px) {
-  .fam-premium .fam-real-step { padding: 28px 44px; }
-  .fam-premium .fam-real-step > .fam-phone { max-width: min(210px, 34vh); }
+  .fam-premium .fam-real-step { padding: 22px 14px; }
+  .fam-premium .fam-real-step > .fam-phone { max-width: 170px; }
 }
-@media (max-width: 620px) {
-  .fam-premium .fam-real-step, .fam-premium .fam-real-step:nth-child(even) { grid-template-columns: 1fr; gap: 18px; padding: 24px 20px; }
-  .fam-premium .fam-real-step > .fam-phone { max-width: 200px; }
+@media (max-width: 1100px) {
+  .fam-premium .fam-real-steps { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 20px 26px; margin-inline: -20px; scrollbar-width: thin; }
+  .fam-premium .fam-real-step, .fam-premium .fam-real-step:nth-child(even) { flex: 0 0 min(64vw, 220px); scroll-snap-align: center; }
 }
 
 /* Homework: deep teal, white text, white cards */

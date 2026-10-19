@@ -8911,60 +8911,6 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
         )}
 
 
-        {/* 4 · How it works (Gadi 2026-07-28, 5-model synthesis): the old
-             negative word→sentence→paragraph chain was redundant with the
-             pain + puzzle above (too much problem-piling before showing the
-             product), so it is now a POSITIVE 4-step of the actual flow,
-             ending in the visible-progress payoff + CTA. */}
-        <section className="fam-band fam-band-white">
-          <div className="fam-section fam-center fam-section-wide">
-            <div className="fam-kicker" id="fam-how">{real ? real.howKicker : c.chainKicker}</div>
-            <h2 className="fam-h2">{real ? real.howTitle : c.chainTitle}</h2>
-            {real ? (
-              <>
-              <div className="fam-real-steps">
-                {real.steps.map((st, i) => (
-                  <div key={i} className="fam-real-step">
-                    <div className="fam-real-step-text">
-                      <span className="fam-real-step-num">{i + 1}</span>
-                      <h3 className="fam-real-step-title">{st.t}</h3>
-                      <p className="fam-real-step-body"><Lines text={st.b} /></p>
-                    </div>
-                    <PhoneShot lang={shotLang} name={st.img} alt={real.shotAlt} />
-                  </div>
-                ))}
-              </div>
-              </>
-            ) : (
-            <div className="fam-how-steps">
-              {c.howBlocks.map((blk, i) => {
-                const Mock = HOW_MOCKS[i] ?? HOW_MOCKS[0];
-                return (
-                  <div key={i} className="fam-how-step">
-                    <div className="fam-how-step-head">
-                      <span className="fam-how-num">{i + 1}</span>
-                      <span className="fam-how-text">{blk.t}</span>
-                    </div>
-                    <div className="fam-how-visual">
-                      <Mock lang={lang} />
-                    </div>
-                    <p className="fam-how-body">{blk.b}</p>
-                  </div>
-                );
-              })}
-            </div>
-            )}
-            {!real && (
-            <div className="fam-chain-turn">
-              <div className="fam-chain-turn-title">{c.chainTurnTitle}</div>
-              <p className="fam-chain-turn-body">{c.chainTurnBody}</p>
-              <button type="button" className="fam-cta" onClick={() => startTrial("chain")}>
-                {ctaLabel}
-              </button>
-            </div>
-            )}
-          </div>
-        </section>
 
 
         {real && real.tools.map((f, i) => (
@@ -9140,20 +9086,6 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
           </div>
         </section>
 
-        {/* 8 · Value stack */}
-        <section className="fam-band fam-band-cream">
-          <div className="fam-section">
-            <h2 className="fam-h2">{c.stackTitle}</h2>
-            <ul className="fam-list fam-stack">
-              {c.stackItems.map((item, i) => (
-                <li key={i}>
-                  <CheckIcon color="#0EA5A5" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
 
         {/* 8.5 · Credibility (Gadi 2026-07-28): the honest proof the page
              lacked. 15 years in education, 15,000+ parents/students/
@@ -9178,6 +9110,77 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
             </div>
           </section>
         )}
+
+        {/* Order (Gadi 2026-10-19): the five steps, then what the plan includes,
+            right before the price. The steps show only their titles. */}
+        {/* 4 · How it works (Gadi 2026-07-28, 5-model synthesis): the old
+             negative word→sentence→paragraph chain was redundant with the
+             pain + puzzle above (too much problem-piling before showing the
+             product), so it is now a POSITIVE 4-step of the actual flow,
+             ending in the visible-progress payoff + CTA. */}
+        <section className="fam-band fam-band-white">
+          <div className="fam-section fam-center fam-section-wide">
+            <div className="fam-kicker" id="fam-how">{real ? real.howKicker : c.chainKicker}</div>
+            <h2 className="fam-h2">{real ? real.howTitle : c.chainTitle}</h2>
+            {real ? (
+              <>
+              <div className="fam-real-steps">
+                {real.steps.map((st, i) => (
+                  <div key={i} className="fam-real-step">
+                    <div className="fam-real-step-text">
+                      <span className="fam-real-step-num">{i + 1}</span>
+                      <h3 className="fam-real-step-title">{st.t}</h3>
+                    </div>
+                    <PhoneShot lang={shotLang} name={st.img} alt={real.shotAlt} />
+                  </div>
+                ))}
+              </div>
+              </>
+            ) : (
+            <div className="fam-how-steps">
+              {c.howBlocks.map((blk, i) => {
+                const Mock = HOW_MOCKS[i] ?? HOW_MOCKS[0];
+                return (
+                  <div key={i} className="fam-how-step">
+                    <div className="fam-how-step-head">
+                      <span className="fam-how-num">{i + 1}</span>
+                      <span className="fam-how-text">{blk.t}</span>
+                    </div>
+                    <div className="fam-how-visual">
+                      <Mock lang={lang} />
+                    </div>
+                    <p className="fam-how-body">{blk.b}</p>
+                  </div>
+                );
+              })}
+            </div>
+            )}
+            {!real && (
+            <div className="fam-chain-turn">
+              <div className="fam-chain-turn-title">{c.chainTurnTitle}</div>
+              <p className="fam-chain-turn-body">{c.chainTurnBody}</p>
+              <button type="button" className="fam-cta" onClick={() => startTrial("chain")}>
+                {ctaLabel}
+              </button>
+            </div>
+            )}
+          </div>
+        </section>
+
+        {/* 8 · Value stack */}
+        <section className="fam-band fam-band-cream">
+          <div className="fam-section">
+            <h2 className="fam-h2">{c.stackTitle}</h2>
+            <ul className="fam-list fam-stack">
+              {c.stackItems.map((item, i) => (
+                <li key={i}>
+                  <CheckIcon color="#0EA5A5" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
 
         {/* 9 · Pricing */}
         <section className="fam-band fam-band-white" id="fam-pricing">
