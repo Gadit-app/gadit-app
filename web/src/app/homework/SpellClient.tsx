@@ -18,7 +18,7 @@ import { homeworkCopy } from "@/lib/homework-i18n";
 import { intakeCopy } from "@/lib/homework-intake-i18n";
 import { dictCopy } from "@/lib/dictation-i18n";
 import { picCopy } from "@/lib/picture-pick-i18n";
-import { PIC_DICT_SET_IDS, isPicBandSet } from "@/lib/picture-pick";
+import { PIC_DICT_SET_IDS, isPicBandSet, picDistractors, picPool, picPoolToDraw } from "@/lib/picture-pick";
 import { notifyActivity } from "@/lib/notify-activity-client";
 import { BAND_SETS, BAND_COPY, BAND_TOPIC_ICON, bandSetTitle, type BandSet } from "@/lib/band-sets";
 import { HomeworkIntake, type SavedTask } from "@/components/homework/HomeworkIntake";
@@ -864,13 +864,21 @@ export function SpellClient() {
     return stableShuffle([ans, ...stableShuffle(others, ans).slice(0, 2)], ans + idx);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [drill, current, set, pickLang, idx]);
-  // The picture game: the right picture and two others of the same topic.
+  // The picture game: the right picture and two that cannot be it, from
+  // another topic first (lib/picture-pick.ts, Gadi 2026-10-19). Fixed for
+  // the round, while more pictures keep arriving in the background.
+  const picOptsRef = useRef(new Map<string, string[]>());
   const picOptions = useMemo(() => {
-    if (drill !== "pic" || !current || !set) return [] as string[];
-    const ans = current.en.trim();
-    const others = [...new Set(set.words.map((w) => w.en.trim()))].filter((x) => pics[x] && norm(x) !== norm(ans) && pics[x] !== pics[ans]);
-    return stableShuffle([ans, ...stableShuffle(others, ans).slice(0, 2)], ans + idx);
-  }, [drill, current, set, pics, idx]);
+    if (drill !== "pic" || !current) return [] as string[];
+    const ans = norm(current.en);
+    const k = `${idx}|${ans}`;
+    const known = picOptsRef.current.get(k);
+    if (known) return known;
+    const others = picDistractors(ans, Object.keys(pics).filter((x) => pics[x] !== pics[ans]), ans + idx);
+    const opts = stableShuffle([ans, ...others], ans + idx);
+    picOptsRef.current.set(k, opts);
+    return opts;
+  }, [drill, current, pics, idx]);
   // The word plays by itself on every new question.
   useEffect(() => {
     if (phase !== "quiz" || drill === "spell" || !current) return;
@@ -945,36 +953,63 @@ export function SpellClient() {
     setResult(null);
     setPicked(null);
     setPhase("quiz");
+    picOptsRef.current.clear();
     if (drillRef.current === "pic") void loadPictures(s);
     setTimeout(() => inputRef.current?.focus(), 50);
   }
 
-  /** The picture game: the topic's pictures from the shared cache, the
-   *  missing ones drawn now (three at a time, once per word for everyone).
-   *  Only words with a picture are played. */
+  /** The picture game: the topic's pictures and other topics' pictures from
+   *  the shared cache in one request, the missing ones drawn now, five at a
+   *  time (once per word for everyone). The game starts as soon as one round
+   *  is ready and each word joins it when its picture lands (Gadi
+   *  2026-10-19: 0/10 for ten seconds, 30 to 40 seconds in all). Only words
+   *  with a picture and two safe other pictures are played. */
   async function loadPictures(s: DictationSet) {
     if (!user) return;
     const run = ++picRun.current;
-    const words = [...new Set(s.words.map((w) => w.en.trim()).filter(Boolean))];
+    const words = [...new Set(s.words.map((w) => norm(w.en)).filter(Boolean))];
+    const pool = picPool(words);
     setPics({});
     setPicFew(false);
     setQueue([]);
+    setIdx(0);
     setPicLoad({ done: 0, total: words.length });
     const headers = { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` };
     let have: Record<string, string> = {};
     try {
-      const r = await fetch("/api/pick-pictures", { method: "POST", headers, body: JSON.stringify({ words }) });
-      have = ((await r.json().catch(() => ({}))) as { images?: Record<string, string> }).images ?? {};
+      const r = await fetch("/api/pick-pictures", { method: "POST", headers, body: JSON.stringify({ words: [...words, ...pool] }) });
+      const got = ((await r.json().catch(() => ({}))) as { images?: Record<string, string> }).images ?? {};
+      for (const [w, url] of Object.entries(got)) have[norm(w)] = url;
     } catch { /* drawn below */ }
     if (run !== picRun.current) return;
+    // Other topics' pictures the rounds still need come first, then the set's own.
+    const extra = picPoolToDraw(words, pool, new Set(Object.keys(have)));
     const missing = words.filter((w) => !have[w]);
-    let done = words.length - missing.length;
-    setPicLoad({ done, total: words.length });
+    const toDraw = [...extra, ...missing];
+    const total = words.length + extra.length;
+    let done = total - toDraw.length;
+    setPicLoad({ done, total });
+    // Words join the game as soon as their round can be played.
+    const queued = new Set<string>();
+    const release = () => {
+      const ready = s.words.filter((w) => {
+        const k = norm(w.en);
+        if (queued.has(k) || !have[k]) return false;
+        return picDistractors(k, Object.keys(have).filter((x) => have[x] !== have[k]), k).length >= 2;
+      });
+      if (!ready.length) return;
+      for (const w of ready) queued.add(norm(w.en));
+      // Fetch the pictures now, so the round shows them at once.
+      for (const url of Object.values(have)) { try { new Image().src = url; } catch { /* shown when needed */ } }
+      setPics({ ...have });
+      setQueue((q) => [...q, ...[...ready].sort(() => Math.random() - 0.5)]);
+    };
+    release();
     let at = 0;
     let stop = false;
     const worker = async () => {
       while (!stop && run === picRun.current) {
-        const w = missing[at++];
+        const w = toDraw[at++];
         if (w === undefined) return;
         try {
           const r = await fetch("/api/pick-pictures", { method: "POST", headers, body: JSON.stringify({ words: [w], create: true }) });
@@ -984,18 +1019,17 @@ export function SpellClient() {
           if (url) have = { ...have, [w]: url };
         } catch { /* this word is left out */ }
         done++;
-        if (run === picRun.current) setPicLoad({ done, total: words.length });
+        if (run !== picRun.current) return;
+        setPicLoad({ done, total });
+        release();
       }
     };
-    await Promise.all([worker(), worker(), worker()]);
+    await Promise.all([worker(), worker(), worker(), worker(), worker()]);
     if (run !== picRun.current) return;
-    const playable = s.words.filter((w) => have[w.en.trim()]);
     setPicLoad(null);
-    if (new Set(playable.map((w) => have[w.en.trim()])).size < 3) { setPicFew(true); return; }
-    setPics(have);
-    setSet({ ...s, words: playable });
-    setQueue([...playable].sort(() => Math.random() - 0.5));
-    setIdx(0);
+    const played = s.words.filter((w) => queued.has(norm(w.en)));
+    if (!played.length) { setPicFew(true); return; }
+    setSet({ ...s, words: played });
   }
 
   function check() {
@@ -1041,7 +1075,9 @@ export function SpellClient() {
     setResult(null);
     setTyped("");
     setPicked(null);
-    if (idx + 1 < queue.length) {
+    // The picture game while pictures are still being drawn: wait for the
+    // next word on the "getting the pictures ready" screen.
+    if (idx + 1 < queue.length || (drill === "pic" && picLoad)) {
       setIdx(idx + 1);
       setTimeout(() => inputRef.current?.focus(), 50);
       return;
@@ -1066,6 +1102,11 @@ export function SpellClient() {
   }
   const nextRef = useRef(next);
   nextRef.current = next;
+  // The pictures finished while the child was waiting for one more word:
+  // the pass ends as usual (misses again, or done).
+  useEffect(() => {
+    if (phase === "quiz" && drill === "pic" && !picLoad && !picFew && queue.length > 0 && idx >= queue.length) nextRef.current();
+  }, [phase, drill, picLoad, picFew, queue.length, idx]);
 
   // Letter-level highlight of the correct answer vs what the kid typed.
   function AnswerDiff({ answer, typedVal }: { answer: string; typedVal: string }) {
@@ -1130,7 +1171,8 @@ export function SpellClient() {
   // The shared tool frame (Gadi 2026-10-11): the top bar stays, the title
   // looks like every other tool's.
   return (
-    <ToolPage active="spell" width={640} title={phase !== "pick" || hw === "hub" ? hc.title : setupFor || hw === "dict" ? (drill === "pic" ? pc.name : drill === "pick" ? dc.pickName : dc.name) : hw === "add" ? ic.add : hc[hw]} sub={phase === "pick" && hw === "hub" ? hc.sub : undefined}>
+    // Learning words is a grid of tiles as wide as the games' grid (four in a row).
+    <ToolPage active="spell" width={phase === "pick" && !setupFor && hw === "learn" ? 880 : 640} title={phase !== "pick" || hw === "hub" ? hc.title : setupFor || hw === "dict" ? (drill === "pic" ? pc.name : drill === "pick" ? dc.pickName : dc.name) : hw === "add" ? ic.add : hc[hw]} sub={phase === "pick" && hw === "hub" ? hc.sub : undefined}>
       <div style={{ fontFamily: '"Rubik", system-ui, sans-serif' }}>
         {phase === "pick" && hw === "hub" && (
           <div className="wb-hw-hub">
@@ -1185,7 +1227,7 @@ export function SpellClient() {
             <input ref={bigPhotoRef} type="file" accept="image/*" multiple hidden onChange={takeFiles} />
             <input ref={camRef} type="file" accept="image/*" capture="environment" hidden onChange={takeFiles} />
             {/* Order (Gadi 2026-10-12): learn the words, read, then get ready for the test. */}
-            <div className="wb-hw-grid">
+            <div className="wb-hw-grid wb-hw-tiles">
               <button type="button" className="wb-play-card has-cover wb-play-cat-notebook" onClick={() => setHw("learn")}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img className="wb-play-card-cover" src="/play/hw-learn.webp" alt="" width={720} height={480} />
@@ -1265,47 +1307,38 @@ export function SpellClient() {
 
         {/* Learning words: two cards, the language course and dictation
             (Gadi 2026-10-12, the council). */}
+        {/* Learning words (Gadi 2026-10-19): tiles like the games' tiles,
+            four in a row on a computer and two on a phone, so a new tool is
+            one more tile. A tap opens the tool; the course's lessons and
+            the language choice open on a row under the tiles. */}
         {phase === "pick" && !setupFor && hw === "learn" && (
           <div className="wb-learn-home">
             <style>{LEARN_CSS}</style>
-            <LearnCard simple lang={lang} dir={dir} refreshKey={0} onState={() => {}} onLesson={(l) => router.push(href(`/play?lesson=${encodeURIComponent(l.id ?? "photo")}&from=learn`))} />
-            <section className="wb-learn-simple" dir={dir}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="wb-learn-simple-cover" src="/play/hw-dict.webp" alt="" width={720} height={480} />
-              <div className="wb-learn-simple-head">
-                <div className="wb-learn-text">
-                  <b>{dc.name}</b>
-                  <span>{dc.sub}</span>
-                </div>
-              </div>
-              <button type="button" className="wb-learn-simple-go" onClick={() => { setDrill("spell"); setHw("dict"); }}>{dc.choose}</button>
-              {history.length > 0 && (
-                <button type="button" className="wb-learn-simple-link" onClick={() => { setDrill("spell"); setHw("dict"); }}>{ml("myPractices", lang)}</button>
-              )}
-            </section>
-            <section className="wb-learn-simple" dir={dir}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="wb-learn-simple-cover" src="/play/hw-pick.webp" alt="" width={720} height={480} />
-              <div className="wb-learn-simple-head">
-                <div className="wb-learn-text">
-                  <b>{dc.pickName}</b>
-                  <span>{dc.pickSub}</span>
-                </div>
-              </div>
-              <button type="button" className="wb-learn-simple-go" onClick={() => { setDrill("pick"); setHw("dict"); }}>{dc.choose}</button>
-            </section>
-            {/* The same game with pictures, for children who don't read yet. */}
-            <section className="wb-learn-simple" dir={dir}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="wb-learn-simple-cover" src="/play/hw-pick.webp" alt="" width={720} height={480} />
-              <div className="wb-learn-simple-head">
-                <div className="wb-learn-text">
-                  <b>{pc.name}</b>
-                  <span>{pc.sub}</span>
-                </div>
-              </div>
-              <button type="button" className="wb-learn-simple-go" onClick={() => { setDrill("pic"); setBandTopic(null); setCreateMsg(""); setHw("dict"); }}>{dc.choose}</button>
-            </section>
+            <ul className="wb-play-grid wb-hw-tiles">
+              <LearnCard tile lang={lang} dir={dir} refreshKey={0} onState={() => {}} onLesson={(l) => router.push(href(`/play?lesson=${encodeURIComponent(l.id ?? "photo")}&from=learn`))} />
+              <li>
+                <button type="button" className="wb-play-card has-cover wb-play-cat-precision" onClick={() => { setDrill("spell"); setHw("dict"); }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="wb-play-card-cover" src="/play/hw-dict.webp" alt="" width={720} height={480} />
+                  <span className="wb-play-card-text"><span className="wb-play-card-title">{dc.name}</span><span className="wb-play-card-desc">{dc.sub}</span></span>
+                </button>
+              </li>
+              <li>
+                <button type="button" className="wb-play-card has-cover wb-play-cat-origin" onClick={() => { setDrill("pick"); setHw("dict"); }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="wb-play-card-cover" src="/play/quiz.webp" alt="" width={720} height={480} />
+                  <span className="wb-play-card-text"><span className="wb-play-card-title">{dc.pickName}</span><span className="wb-play-card-desc">{dc.pickSub}</span></span>
+                </button>
+              </li>
+              {/* The same game with pictures, for children who don't read yet. */}
+              <li>
+                <button type="button" className="wb-play-card has-cover wb-play-cat-structure" onClick={() => { setDrill("pic"); setBandTopic(null); setCreateMsg(""); setHw("dict"); }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="wb-play-card-cover" src="/play/hw-pick.webp" alt="" width={720} height={480} />
+                  <span className="wb-play-card-text"><span className="wb-play-card-title">{pc.name}</span><span className="wb-play-card-desc">{pc.sub}</span></span>
+                </button>
+              </li>
+            </ul>
           </div>
         )}
 
@@ -1570,10 +1603,13 @@ export function SpellClient() {
               </>
             ) : picLoad && (
               <>
-                <span aria-hidden style={{ fontSize: 30 }}>🖼️</span>
+                {/* Moving from the first moment (Gadi 2026-10-19: a bar stuck
+                    at 0 for ten seconds looked frozen); the count once a
+                    picture has landed. */}
+                <span aria-hidden className="wb-pic-prep-ico">🖼️</span>
                 <span>{pc.prep}</span>
-                <span className="wb-pic-bar" aria-hidden><span style={{ width: `${Math.round((picLoad.done / Math.max(1, picLoad.total)) * 100)}%` }} /></span>
-                <span dir="ltr" style={{ unicodeBidi: "isolate", fontSize: 13 }}>{picLoad.done} / {picLoad.total}</span>
+                <span className="wb-pic-bar is-busy" aria-hidden><span style={{ width: `${Math.max(12, Math.round((picLoad.done / Math.max(1, picLoad.total)) * 100))}%` }} /></span>
+                {picLoad.done > 0 && <span dir="ltr" style={{ unicodeBidi: "isolate", fontSize: 13 }}>{picLoad.done} / {picLoad.total}</span>}
               </>
             )}
           </div>

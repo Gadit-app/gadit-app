@@ -26,7 +26,9 @@ export type LearnState = {
   lessons: { list: Array<{ id: string; topic: string; title: string; icon: string; d: number; done: boolean }>; next: string | null } | null;
 };
 
-export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple }: {
+export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, tile }: {
+  /** Homework's Learning words grid (2026-10-19): list items of the tiles' grid. */
+  tile?: boolean;
   lang: string;
   /** Homework's course card (Gadi 2026-10-12, the council): the title, the
    *  next lesson, one button and "all lessons". No stats, no list, no
@@ -152,18 +154,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple }: 
   if (!targets.length || !state) return null;
   const name = (l: LearnLang) => (l === "en" ? t.english : t.hebrew);
 
-  // Choosing what to learn: one quiet row, since most players just want to
-  // play (Gadi 2026-10-11: the big card pulled the eye from Kids Mode and
-  // Word Duel, and read like the notebook's language filter).
-  if (!state.lang && step === "view" && hidden) {
-    return (
-      <button type="button" className="wb-learn-reopen" dir={dir} onClick={() => hide(false)}>
-        <span aria-hidden="true">🎒</span> {t.reopen}
-      </button>
-    );
-  }
-  if (step === "pick" || (!state.lang && step === "view")) {
-    return (
+  const pickCard = () => (
       <section className="wb-learn-card is-slim" dir={dir}>
         <span className="wb-learn-icon" aria-hidden="true">🎒</span>
         <div className="wb-learn-text">
@@ -180,32 +171,87 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple }: 
           {state.lang ? (
             <button type="button" className="wb-learn-chip is-soft" disabled={busy} onClick={() => void setup(null, state.reads ?? "little")}>{t.stop}</button>
           ) : (
-            <button type="button" className="wb-learn-chip is-soft" onClick={() => hide(true)}>{t.notNow}</button>
+            <button type="button" className="wb-learn-chip is-soft" onClick={() => { if (tile) setStep("view"); else hide(true); }}>{t.notNow}</button>
           )}
         </div>
       </section>
-    );
-  }
-
+  );
   // Does the child already read the language? (decides pictures and sound first)
-  if (step === "reads" && choice) {
-    return (
+  const readsCard = (c: LearnLang) => (
       <section className="wb-learn-card" dir={dir}>
         <div className="wb-learn-head">
           <span className="wb-learn-icon" aria-hidden="true">📖</span>
           <div className="wb-learn-text">
-            <b>{t.readsQ(name(choice))}</b>
+            <b>{t.readsQ(name(c))}</b>
             <span>{t.readsSub}</span>
           </div>
         </div>
         <div className="wb-learn-chips">
           {(["no", "little", "yes"] as Reads[]).map((r) => (
-            <button key={r} type="button" className="wb-learn-chip" disabled={busy} onClick={() => void setup(choice, r)}>{t.reads[r]}</button>
+            <button key={r} type="button" className="wb-learn-chip" disabled={busy} onClick={() => void setup(c, r)}>{t.reads[r]}</button>
           ))}
         </div>
       </section>
+  );
+
+  // Homework's Learning words tiles (Gadi 2026-10-19): one tile like the
+  // games' tiles (the next lesson on it, a tap opens it), and whatever
+  // opens from it (choosing the language, all the lessons) on a full row
+  // under the tiles. Rendered as list items of the tiles' grid.
+  if (tile) {
+    const L = state.lessons;
+    const next = state.lang ? L?.list.find((l) => l.id === L.next) ?? L?.list[0] : undefined;
+    const panel = step === "pick" ? pickCard() : step === "reads" && choice ? readsCard(choice) : null;
+    return (
+      <>
+        <li>
+          <button type="button" className="wb-play-card has-cover wb-play-cat-notebook" disabled={busy} aria-busy={busy || undefined}
+            onClick={() => { if (next && onLesson) void openLesson(next.id); else setStep(step === "pick" ? "view" : "pick"); }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="wb-play-card-cover" src="/play/hw-lessons.webp" alt="" width={720} height={480} />
+            <span className="wb-play-card-text">
+              <span className="wb-play-card-title">{state.lang ? t.learning(name(state.lang)) : t.question}</span>
+              <span className="wb-play-card-desc">{next ? <>{lc.nextLesson}: {next.icon} {next.title}</> : state.lang ? t.simpleSub : t.questionSub}</span>
+            </span>
+          </button>
+        </li>
+        {(panel || (state.lang && L && L.list.length > 0) || (busy && msg)) && (
+          <li className="wb-hw-tile-row">
+            {panel}
+            {!panel && state.lang && L && L.list.length > 0 && (
+              <button type="button" className="wb-learn-simple-link" onClick={() => setShowAll((v) => !v)}>{showAll ? lc.hideLessons : lc.allLessons}</button>
+            )}
+            {!panel && showAll && L && (
+              <>
+                <div className="wb-learn-lesson-grid">
+                  {L.list.map((l) => (
+                    <button key={l.id} type="button" className={`wb-learn-lesson-chip${l.done ? " is-done" : ""}${l.id === L.next ? " is-next" : ""}`} disabled={busy} onClick={() => void openLesson(l.id)}>
+                      <span aria-hidden="true">{l.done ? "✓" : l.icon}</span> {l.title}
+                    </button>
+                  ))}
+                </div>
+                <button type="button" className="wb-learn-simple-link is-quiet" onClick={() => setStep("pick")}>{t.changeLang}</button>
+              </>
+            )}
+            {busy && msg && <p className="wb-learn-msg">{msg}</p>}
+          </li>
+        )}
+      </>
     );
   }
+
+  // Choosing what to learn: one quiet row, since most players just want to
+  // play (Gadi 2026-10-11: the big card pulled the eye from Kids Mode and
+  // Word Duel, and read like the notebook's language filter).
+  if (!state.lang && step === "view" && hidden) {
+    return (
+      <button type="button" className="wb-learn-reopen" dir={dir} onClick={() => hide(false)}>
+        <span aria-hidden="true">🎒</span> {t.reopen}
+      </button>
+    );
+  }
+  if (step === "pick" || (!state.lang && step === "view")) return pickCard();
+  if (step === "reads" && choice) return readsCard(choice);
 
   // This week's school list.
   if (step === "list" && state.lang) {

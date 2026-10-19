@@ -9,6 +9,12 @@
  * shared by every child and every language, so each word is drawn once
  * (~0.65 cents). Family and schools only (Homework's own gate). A child can
  * draw at most PICK_MONTHLY_NEW new pictures a month; cached ones are free.
+ *
+ * Speed (Gadi 2026-10-19): the lookup takes a set's words and the other
+ * topics' words in one request (one Firestore read for all), and the page
+ * draws the missing ones a few at a time in parallel. The month's count is
+ * reserved in a transaction before drawing (so parallel calls never pass
+ * the limit) and given back when a drawing fails.
  */
 import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
@@ -21,7 +27,8 @@ export const dynamic = "force-dynamic";
 // One picture at low quality takes about 5 to 15 seconds.
 export const maxDuration = 60;
 
-const MAX_WORDS = 30;
+// A set's words plus the other topics' words its rounds may use.
+const MAX_WORDS = 80;
 const PICK_MONTHLY_NEW = 150;
 
 function monthKey(): string {
@@ -63,12 +70,24 @@ export async function POST(req: NextRequest) {
   const word = words[0];
   const topic = picWordTopic(word);
   if (!topic) return NextResponse.json({ error: "not_a_ready_word" }, { status: 400 });
-  const usage = getAdminDb().collection("users").doc(user.userId).collection("imageUsage").doc(`pick-${monthKey()}`);
+  const db = getAdminDb();
+  const usage = db.collection("users").doc(user.userId).collection("imageUsage").doc(`pick-${monthKey()}`);
+  let reserved = false;
   const img = await pickImage(word, topic, {
-    allowNew: async () => (((await usage.get()).get("count") as number | undefined) ?? 0) < PICK_MONTHLY_NEW,
-    onGenerated: async () => { await usage.set({ count: FieldValue.increment(1), updatedAt: new Date().toISOString() }, { merge: true }); },
+    // Reserve one of the month's pictures before drawing it.
+    allowNew: async () => {
+      reserved = await db.runTransaction(async (tx) => {
+        const n = ((await tx.get(usage)).get("count") as number | undefined) ?? 0;
+        if (n >= PICK_MONTHLY_NEW) return false;
+        tx.set(usage, { count: n + 1, updatedAt: new Date().toISOString() }, { merge: true });
+        return true;
+      });
+      return reserved;
+    },
   });
   if (img.status === "error") {
+    // The drawing failed: the reserved picture goes back to the month.
+    if (reserved) await usage.set({ count: FieldValue.increment(-1), updatedAt: new Date().toISOString() }, { merge: true }).catch(() => {});
     console.error("[pick-pictures] draw:", img.error);
     return NextResponse.json({ error: "image_generation_failed" }, { status: 502 });
   }

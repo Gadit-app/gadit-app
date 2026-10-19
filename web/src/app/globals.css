@@ -15002,7 +15002,20 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
 /* Homework: four identical cards, one teal accent (Gadi 2026-10-12). */
 .wb-hw-hub { display: flex; flex-direction: column; gap: 14px; margin-top: 6px; }
 .wb-hw-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-@media (max-width: 600px) { .wb-hw-grid { grid-template-columns: minmax(0, 1fr); } }
+/* Two in a row on a phone, like the games' tiles (Gadi 2026-10-19: one big
+   card under another meant a lot of scrolling). */
+@media (max-width: 600px) { .wb-hw-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } }
+/* Homework's tiles: the games' tiles, with the name on up to two lines (a
+   child must read the whole name) and the band filling the tile. */
+.wordbook .wb-hw-tiles .wb-play-card.has-cover .wb-play-card-text { flex: 1 0 auto; height: auto; min-height: 76px; }
+.wordbook .wb-hw-tiles .wb-play-card.has-cover .wb-play-card-title { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+@media (min-width: 600px) { .wordbook .wb-hw-tiles .wb-play-card.has-cover .wb-play-card-text { min-height: 84px; } }
+.wordbook .wb-hw-tiles .wb-play-card:disabled { cursor: progress; }
+/* What opens from a tile (all the lessons, choosing the language): one full
+   row under the tiles. */
+.wordbook .wb-play-grid li.wb-hw-tile-row { grid-column: 1 / -1; order: 99; flex-direction: column; align-items: center; gap: 10px; }
+.wordbook .wb-hw-tile-row > .wb-learn-card { margin: 0; width: 100%; box-sizing: border-box; }
+.wordbook .wb-hw-tile-row > .wb-learn-lesson-grid { width: 100%; }
 .wb-hw-card {
   display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0;
   text-align: start; font-family: inherit; cursor: pointer; text-decoration: none;
@@ -15149,8 +15162,16 @@ html[data-theme="space"] .wb-learn-simple-link, html[data-theme="space"] .wb-dic
 .wb-pic-prep { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 34px 18px; background: var(--surface, #fff); border: 1px solid var(--hairline, #E5E7EB); border-radius: 18px; text-align: center; color: var(--ink-muted, #6B7280); font-size: 15px; font-weight: 600; }
 .wb-pic-bar { width: 100%; max-width: 280px; height: 8px; border-radius: 999px; background: var(--paper, #F3F4F6); overflow: hidden; }
 .wb-pic-bar > span { display: block; height: 100%; border-radius: inherit; background: #0EA5A5; transition: width .3s; }
+/* Always moving while pictures are drawn (Gadi 2026-10-19): a light sweep
+   runs over the bar and the picture icon breathes. */
+.wb-pic-bar.is-busy { position: relative; }
+.wb-pic-bar.is-busy::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .65), transparent); background-size: 40% 100%; background-repeat: no-repeat; animation: wb-pic-sweep 1.2s linear infinite; }
+.wb-pic-bar.is-busy > span { background: linear-gradient(90deg, #0EA5A5, #2DD4BF); }
+@keyframes wb-pic-sweep { from { background-position: -40% 0; } to { background-position: 140% 0; } }
+.wb-pic-prep-ico { font-size: 30px; display: inline-block; animation: wb-pic-breathe 1.4s ease-in-out infinite; }
+@keyframes wb-pic-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.14); } }
 @media (max-width: 420px) { .wb-pic-opts { gap: 8px; } .wb-pic-opt { border-radius: 14px; } }
-@media (prefers-reduced-motion: reduce) { .wb-pic-opt, .wb-pic-bar > span { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .wb-pic-opt, .wb-pic-bar > span { transition: none; } .wb-pic-bar.is-busy::after { animation-duration: 3s; } .wb-pic-prep-ico { animation: none; } }
 
 /* Testimonials on the landing pages (Gadi 2026-10-12): real words, quiet cards. */
 .gt-quotes { display: flex; flex-direction: column; align-items: center; gap: 10px; }
