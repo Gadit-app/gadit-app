@@ -12,7 +12,7 @@ import Image from "next/image";
  */
 
 export type RealStep = { t: string; b: string; img: string };
-export type RealTool = { kicker: string; title: string; body: string; points: string[]; img: string; img2?: string };
+export type RealTool = { kicker: string; title: string; body: string; points: string[]; img: string; img2?: string; /** Shown after the games band instead of before it. */ afterGames?: boolean };
 /** The Homework showcase (Gadi 2026-10-12): one deep-teal band with the three
  *  homework paths, in the order the child meets them. */
 export type RealHomework = { kicker: string; title: string; body: string; cards: { icon: string; t: string; b: string }[]; points: string[]; img: string; img2: string };
@@ -94,19 +94,20 @@ export const REAL_COPY: Record<string, RealCopy> = {
     },
     tools: [
       {
-        kicker: "הבנת הנקרא",
-        title: "מצלמים דף מהספר ולוחצים על כל מילה כדי לראות מה היא אומרת",
-        body: "מצלמים או מדביקים טקסט ו-Gadit פותח אותו כך שאפשר ללחוץ על כל מילה ולקבל את המשמעות שלה. המילים הקשות מסומנות ומילה שכבר פתחו הופכת לירוקה.",
-        points: ["צילום דף ישר מהמצלמה", "לחיצה על כל מילה", "הסבר של משפט שלם"],
-        img: "read",
-        img2: "read-word",
-      },
-      {
         kicker: "לימוד שפות · תגיד את זה",
         title: "לומדים לדבר בשפה חדשה עם הגייה נכונה",
         body: "כותבים משפט ובוחרים את השפה שלומדים. Gadit מקריא אותו בקול. הילד אומר אותו בעצמו ומקבל כוכבים על ההגייה.",
         points: ["הקראה בקול", "תרגול הגייה עם כוכבים", "הודעה להורה"],
         img: "say",
+      },
+      {
+        kicker: "קריאה עצמאית",
+        title: "קוראים ספר לבד וכל מילה קשה נפתחת בלחיצה",
+        body: "ספר, סיפור או כתבה: מצלמים את הדף ו-Gadit מסמן את המילים הקשות. לוחצים על מילה ומקבלים הסבר בלי לעזוב את הספר. ככה הילד ממשיך לקרוא לבד עד הסוף.",
+        points: ["צילום דף ישר מהמצלמה", "לחיצה על כל מילה", "הסבר של משפט שלם"],
+        img: "read",
+        img2: "read-word",
+        afterGames: true,
       },
     ],
     homework: {
@@ -355,6 +356,8 @@ export const REAL_CSS = `
 .fam-premium .fam-faq-item { border-radius: 20px; box-shadow: var(--pm-soft); border: 0; background: #fff; margin-bottom: 12px; }
 .fam-premium .fam-inline-img img, .fam-premium .fam-final-img { border-radius: 28px; box-shadow: var(--pm-card); overflow: hidden; }
 .fam-premium .fam-list { background: #fff; border-radius: 28px; box-shadow: var(--pm-card); padding: 34px 38px; }
+/* The plan list and the price card the same width, one flow (Gadi 2026-10-19). */
+.fam-premium .fam-stack, .fam-premium .fam-price-card { max-width: 520px; width: 100%; box-sizing: border-box; margin-inline: auto; }
 @media (max-width: 760px) {
   .fam-premium .fam-rtop { padding: 10px 14px; }
   .fam-premium .fam-hero { padding: 40px 18px 64px; }

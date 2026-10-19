@@ -5,7 +5,7 @@ import type { FamI18n } from "./i18n/types";
 import { fillDeep, landingPrices, screensLang } from "@/lib/landing-i18n";
 import { INDIVIDUAL_DISPLAY, INDIVIDUAL_MONTHLY } from "@/lib/individual-prices";
 import { planCopy } from "@/lib/plan-copy";
-import { REAL_COPY, REAL_CSS, PhoneShot, Lines } from "./RealScreens";
+import { REAL_COPY, REAL_CSS, PhoneShot, Lines, type RealTool } from "./RealScreens";
 import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -8552,6 +8552,34 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
 
   const ctaLabel = isOwner ? c.ownerCta : c.heroCta;
 
+  // One feature band (photo of a tool beside its text), reused before and
+  // after the games band.
+  const toolSection = (f: RealTool, i: number) => real && (
+      <section key={`real-${i}`} className={`fam-band ${i % 2 === 0 ? "fam-band-cream" : "fam-band-white"}`}>
+        <div className={`fam-feature ${i % 2 === 1 ? "is-flipped" : ""}`}>
+          <div className="fam-feature-text">
+            <div className="fam-kicker">{f.kicker}</div>
+            <h2 className="fam-h2 fam-h2-start">{f.title}</h2>
+            <p className="fam-body"><Lines text={f.body} /></p>
+            <ul className="fam-real-points">
+              {f.points.map((pt, j) => (
+                <li key={j}>{pt}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="fam-feature-visual">
+            {f.img2 ? (
+              <div className="fam-real-pair">
+                <PhoneShot lang={shotLang} name={f.img} alt={real.shotAlt} />
+                <PhoneShot lang={shotLang} name={f.img2} alt={real.shotAlt} />
+              </div>
+            ) : (
+              <PhoneShot lang={shotLang} name={f.img} alt={real.shotAlt} />
+            )}
+          </div>
+        </div>
+      </section>
+  );
   // Two sections that move with the page order (Gadi 2026-10-19).
   const painSection = (band: "white" | "cream") => (
     <section className={`fam-band fam-band-${band}`}>
@@ -8913,32 +8941,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
 
 
 
-        {real && real.tools.map((f, i) => (
-          <section key={`real-${i}`} className={`fam-band ${i % 2 === 0 ? "fam-band-cream" : "fam-band-white"}`}>
-            <div className={`fam-feature ${i % 2 === 1 ? "is-flipped" : ""}`}>
-              <div className="fam-feature-text">
-                <div className="fam-kicker">{f.kicker}</div>
-                <h2 className="fam-h2 fam-h2-start">{f.title}</h2>
-                <p className="fam-body"><Lines text={f.body} /></p>
-                <ul className="fam-real-points">
-                  {f.points.map((pt, j) => (
-                    <li key={j}>{pt}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className="fam-feature-visual">
-                {f.img2 ? (
-                  <div className="fam-real-pair">
-                    <PhoneShot lang={shotLang} name={f.img} alt={real.shotAlt} />
-                    <PhoneShot lang={shotLang} name={f.img2} alt={real.shotAlt} />
-                  </div>
-                ) : (
-                  <PhoneShot lang={shotLang} name={f.img} alt={real.shotAlt} />
-                )}
-              </div>
-            </div>
-          </section>
-        ))}
+        {real && real.tools.filter((t) => !t.afterGames).map((f, i) => toolSection(f, i))}
 
         {/* Games and sibling duels, on a warm band (Gadi 2026-10-12). */}
         {real?.games && (
@@ -8962,6 +8965,10 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
             </div>
           </section>
         )}
+
+        {/* Reading on its own, after the games (Gadi 2026-10-19): two "photograph"
+            sections in a row read as the same thing. */}
+        {real && real.tools.filter((t) => t.afterGames).map((f, i) => toolSection(f, i + 1))}
 
         {/* 5 · The parent dashboard (Gadi 2026-07-18): the moat. A mockup
              of the real /family progress view so a parent sees they are
@@ -9183,7 +9190,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
         </section>
 
         {/* 9 · Pricing */}
-        <section className="fam-band fam-band-white" id="fam-pricing">
+        <section className="fam-band fam-band-cream" id="fam-pricing">
           <div className="fam-section">
             <div className="fam-kicker">{c.priceKicker}</div>
             <div className="fam-price-card">
@@ -9222,20 +9229,24 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
               <p className="fam-cancel-note"><Lines text={c.cancelNote} /></p>
             </div>
 
-            {!isOwner && (
+            {/* No solo-plan link on the families page (Gadi 2026-10-19: it confuses). */}
+            {!isOwner && !real && (
               <button type="button" className="fam-single-link" onClick={startDeep}>
                 <Lines text={planCopy(lang, "famSingleChild", { price: lang === "he" ? INDIVIDUAL_DISPLAY.ilsMonthly : INDIVIDUAL_DISPLAY.usdMonthly })} />
               </button>
             )}
 
             {/* Guarantee */}
-            <div className="fam-guarantee">
-              <ShieldIcon />
-              <div>
-                <div className="fam-guarantee-t">{c.guaranteeTitle}</div>
-                <div className="fam-guarantee-b">{real ? <Lines text={c.guaranteeBody} /> : c.guaranteeBody}</div>
+            {/* No two-week goal box (Gadi 2026-10-19: unnecessary). */}
+            {!real && (
+              <div className="fam-guarantee">
+                <ShieldIcon />
+                <div>
+                  <div className="fam-guarantee-t">{c.guaranteeTitle}</div>
+                  <div className="fam-guarantee-b">{real ? <Lines text={c.guaranteeBody} /> : c.guaranteeBody}</div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </section>
 
