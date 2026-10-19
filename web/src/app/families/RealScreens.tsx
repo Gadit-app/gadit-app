@@ -315,7 +315,12 @@ export const REAL_CSS = `
 .fam-premium .fam-band { padding: 108px 0; border-top: 0; }
 .fam-premium .fam-band-cream { background: var(--pm-tint); }
 .fam-premium .fam-band-white { background: #fff; }
-.fam-premium .fam-band-purple { background: linear-gradient(160deg, #F5F1FF 0%, #FFFFFF 70%); }
+/* The safety and "who we are" bands on the hero's light green, not lilac
+   (Gadi 2026-10-19: the purple tint belongs to nothing on the page). */
+.fam-premium .fam-band-purple { background: radial-gradient(90% 70% at 85% 0%, rgba(14,165,165,0.10) 0%, rgba(14,165,165,0) 60%), linear-gradient(180deg, #EEF7F6 0%, #FFFFFF 100%); }
+.fam-premium .fam-band-purple .fam-kicker { color: #0B7F7F; }
+.fam-premium .fam-band-purple .fam-safe-line { color: #0B7F7F; }
+.fam-premium .fam-band-purple svg { stroke: #0EA5A5; }
 .fam-premium .fam-h2 { font-size: clamp(30px, 3.4vw, 42px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; color: var(--pm-ink); margin-bottom: 22px; text-wrap: balance; }
 .fam-premium .fam-kicker { margin-bottom: 16px; letter-spacing: 0.08em; font-size: 13px; }
 .fam-premium .fam-body { font-size: 17.5px; line-height: 1.85; color: var(--pm-body); }
