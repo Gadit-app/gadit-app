@@ -4,6 +4,7 @@ import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { NEW_SCHOOLS_PRICE_IDS } from "@/lib/schools-prices";
 import { INDIVIDUAL_PRICE_IDS } from "@/lib/individual-prices";
 import { currencyForCountry } from "@/lib/pricing-currency";
+import { utmMetaFromClient, utmMetaFromUserDoc, type UtmMeta } from "@/lib/utm-meta";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -83,6 +84,21 @@ async function resolveCustomer(uid: string, email: string | undefined): Promise<
   return customer.id;
 }
 
+/** Campaign tag for this checkout: the visitor's last tagged visit, else the
+ *  first-touch fields saved on the user doc at signup. Best-effort: any
+ *  failure returns null and checkout goes on untouched (2026-10-19). */
+async function resolveUtmMeta(uid: string, raw: unknown): Promise<UtmMeta | null> {
+  try {
+    const fromClient = utmMetaFromClient(raw);
+    if (fromClient) return fromClient;
+    const snap = await getAdminDb().collection("users").doc(uid).get();
+    return utmMetaFromUserDoc(snap.data());
+  } catch (e) {
+    console.warn("[subscribe] utm lookup failed (non-blocking):", e);
+    return null;
+  }
+}
+
 type ClientSecretResult = { clientSecret: string; mode: "setup" | "payment" } | null;
 
 function extractClientSecret(sub: Stripe.Subscription): ClientSecretResult {
@@ -109,10 +125,11 @@ export async function POST(req: NextRequest) {
     if (req.cookies.get("gadit_play")?.value === "1") {
       return NextResponse.json({ error: "not_available_in_app" }, { status: 403 });
     }
-    const { priceId, code, lang } = (await req.json()) as {
+    const { priceId, code, lang, utm } = (await req.json()) as {
       priceId?: string;
       code?: string;
       lang?: string;
+      utm?: unknown;
     };
 
     if (!priceId || !paidPriceIds().has(priceId)) {
@@ -159,6 +176,7 @@ export async function POST(req: NextRequest) {
     }
 
     const customer = await resolveCustomer(uid, email);
+    const utmMeta = await resolveUtmMeta(uid, utm);
 
     // Hebrew users are billed in shekels (language-driven, kept as-is). Every
     // paid price carries an ILS currency_option (set 2026-07-16: Family
@@ -220,6 +238,15 @@ export async function POST(req: NextRequest) {
     }
 
     if (reusable) {
+      // The reused sub keeps the campaign of THIS visit (it may have been
+      // created from an earlier, untagged one). Never blocks checkout.
+      if (utmMeta) {
+        try {
+          await stripe.subscriptions.update(reusable.id, { metadata: utmMeta });
+        } catch (e) {
+          console.warn("[subscribe] utm metadata update failed (non-blocking):", e);
+        }
+      }
       const secret = extractClientSecret(reusable);
       if (secret) return NextResponse.json(secret);
     }
@@ -251,6 +278,8 @@ export async function POST(req: NextRequest) {
         ...(email && { email }),
         ...(lang && typeof lang === "string" && { lang: lang.slice(0, 5) }),
         surface: "payment_element",
+        // Campaign attribution (utm_source/medium/campaign/content/term).
+        ...(utmMeta ?? {}),
       },
       expand: SUB_EXPAND,
     });

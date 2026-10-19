@@ -25,6 +25,8 @@ import { detectInAppBrowser } from "./in-app-browser";
 
 const UTM_STORAGE_KEY = "gadit_utm_v1";
 const UTM_TTL_MS = 30 * 86_400_000; // 30 days
+// Last-touch record, read only by checkout (see getCheckoutUtm).
+const UTM_LAST_KEY = "gadit_utm_last_v1";
 
 export type UtmData = {
   source?: string;
@@ -82,6 +84,19 @@ export function captureUtmFromUrl(): void {
       }
     }
 
+    // Last-touch copy for checkout attribution (2026-10-19). Written on
+    // EVERY tagged visit, never cleared at signup, so a trial started
+    // today is credited to today's campaign link even when the person
+    // already had an account or an older first-touch record.
+    if (any) {
+      try {
+        window.localStorage.setItem(
+          UTM_LAST_KEY,
+          JSON.stringify({ ...captured, landingPath: window.location.pathname.slice(0, 200) }),
+        );
+      } catch { /* storage blocked */ }
+    }
+
     // No URL params — try the in-app webview UA fallback so we don't
     // lose the (typical) FB/IG-stripped-the-query case.
     if (!any) {
@@ -128,4 +143,25 @@ export function getStoredUtms(): UtmData | null {
 export function clearStoredUtms(): void {
   if (typeof window === "undefined") return;
   try { window.localStorage.removeItem(UTM_STORAGE_KEY); } catch { /* ignore */ }
+}
+
+/**
+ * The campaign to credit for a checkout (trial start): the most recent
+ * tagged visit within 30 days, else the first-touch record. Sent to
+ * /api/subscribe and /api/create-checkout, which copy it onto the Stripe
+ * subscription metadata (utm_*). Null when the visit was never tagged.
+ */
+export function getCheckoutUtm(): UtmData | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(UTM_LAST_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw) as UtmData;
+      if (parsed && typeof parsed.capturedAt === "number" && Date.now() - parsed.capturedAt <= UTM_TTL_MS) {
+        return parsed;
+      }
+      window.localStorage.removeItem(UTM_LAST_KEY);
+    }
+  } catch { /* storage blocked or bad JSON */ }
+  return getStoredUtms();
 }

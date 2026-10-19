@@ -16,6 +16,7 @@ import { useLang } from "@/lib/lang-context";
 import { isTwa, openInBrowser } from "@/lib/twa";
 import { useHref } from "@/lib/href";
 import { track } from "@/lib/track";
+import { getCheckoutUtm } from "@/lib/utm";
 import {
   SCHOOLS_TIERS,
   schoolsTierForPrice,
@@ -560,7 +561,7 @@ export default function CheckoutClient() {
       const res = await fetch("/api/create-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-        body: JSON.stringify({ priceId: twaPriceId, lang }),
+        body: JSON.stringify({ priceId: twaPriceId, lang, utm: getCheckoutUtm() }),
       });
       const data = (await res.json().catch(() => ({}))) as { url?: string };
       if (!res.ok || !data.url) {
@@ -641,7 +642,7 @@ export default function CheckoutClient() {
           const hosted = await fetch("/api/create-checkout", {
             method: "POST",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-            body: JSON.stringify({ priceId, lang }),
+            body: JSON.stringify({ priceId, lang, utm: getCheckoutUtm() }),
           });
           const hd = (await hosted.json().catch(() => ({}))) as { url?: string };
           if (cancelled) return;
@@ -655,7 +656,8 @@ export default function CheckoutClient() {
         const res = await fetch("/api/subscribe", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-          body: JSON.stringify({ priceId, ...(code && { code }), lang }),
+          // utm: the campaign link this visitor came from (Stripe metadata).
+          body: JSON.stringify({ priceId, ...(code && { code }), lang, utm: getCheckoutUtm() }),
         });
         const data = (await res.json().catch(() => ({}))) as {
           clientSecret?: string;
