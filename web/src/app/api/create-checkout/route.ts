@@ -1,7 +1,8 @@
 import { INDIVIDUAL_PRICE_IDS } from "@/lib/individual-prices";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { getAdminAuth } from "@/lib/firebase-admin";
+import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { utmMetaFromClient, utmMetaFromUserDoc, type UtmMeta } from "@/lib/utm-meta";
 import { isNewSchoolsPrice, NEW_SCHOOLS_PRICE_IDS } from "@/lib/schools-prices";
 import { currencyForCountry } from "@/lib/pricing-currency";
 
@@ -94,7 +95,7 @@ export async function POST(req: NextRequest) {
     if (req.cookies.get("gadit_play")?.value === "1") {
       return NextResponse.json({ error: "not_available_in_app" }, { status: 403 });
     }
-    const { priceId, lang: rawLang } = await req.json();
+    const { priceId, lang: rawLang, utm } = await req.json();
     if (!priceId) return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
     const lang = typeof rawLang === "string" && /^[a-z]{2,3}(-[A-Z]{2})?$/.test(rawLang) ? rawLang : "en";
 
@@ -114,6 +115,19 @@ export async function POST(req: NextRequest) {
     }
     const userId = decoded.uid;
     const userEmail = decoded.email ?? undefined;
+
+    // Campaign attribution (2026-10-19): the visitor's last tagged visit,
+    // else the first-touch fields saved at signup. Copied onto the session
+    // AND the subscription metadata. Best-effort, never blocks checkout.
+    let utmMeta: UtmMeta | null = utmMetaFromClient(utm);
+    if (!utmMeta) {
+      try {
+        const snap = await getAdminDb().collection("users").doc(userId).get();
+        utmMeta = utmMetaFromUserDoc(snap.data());
+      } catch (e) {
+        console.warn("[create-checkout] utm lookup failed (non-blocking):", e);
+      }
+    }
 
     // (Removed) Email-verification gate that was blocking checkout.
     // Firebase's default verification email goes through their generic
@@ -238,9 +252,13 @@ export async function POST(req: NextRequest) {
         userId,
         ...(isFamily && { isFamily: "1" }),
         ...(isSchools && { isSchools: "1" }),
+        ...(utmMeta ?? {}),
       },
+      // Without a trial the subscription still carries the campaign tag.
+      ...(!grantsTrial && utmMeta && { subscription_data: { metadata: utmMeta } }),
       ...(grantsTrial && {
         subscription_data: {
+          ...(utmMeta && { metadata: utmMeta }),
           trial_period_days: TRIAL_DAYS,
           // If user cancels during trial → keep access until trial end (Stripe handles this).
           // If trial ends without payment method (shouldn't happen — Checkout collects card) → cancel.
