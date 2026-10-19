@@ -243,7 +243,7 @@ const CSS2 = `
 @media (max-width: 480px) { .ind:not([lang="he"]) .ind-top-lang button[aria-haspopup] > span { display: none; } }
 .ind-cta-note { margin: 12px 0 0; font-size: 13.5px; line-height: 1.6; color: var(--body); max-width: 460px; }
 .ind-steps-cta { text-align: center; margin-top: 40px; }
-.ind-more { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; max-width: 1060px; margin: 34px auto 0; }
+.ind-more { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 360px)); justify-content: center; gap: 22px; max-width: 1060px; margin: 34px auto 0; }
 .ind-more-card { background: #fff; border-radius: 28px; padding: 26px 22px 30px; box-shadow: var(--card), 0 0 0 1px rgba(15,72,68,0.05); display: grid; gap: 6px; align-content: start; }
 .ind-more-card .ind-phone { max-width: 210px; margin-top: 14px; }
 .ind-yearly-btn { display: block; margin: 6px auto 0; background: none; border: 0; padding: 0; font: inherit; font-size: 15px; color: var(--teal-d); font-weight: 700; text-decoration: underline; cursor: pointer; }

@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "D'autres outils qui vous aident à retenir",
   more: [
     { kicker: "Dites-le", title: "Écoutez une phrase et dites-la vous-même", body: "Gadit lit la phrase à voix haute, et vous obtenez un score selon la façon dont vous l'avez dite.", img: "say" },
-    { kicker: "Comparer des mots", title: "Deux mots proches et la différence entre eux", body: "La différence entre « censé » et « sensé », ou entre deux mots que l'on confond souvent, avec des exemples et l'erreur la plus courante.", img: "compare" },
     { kicker: "Jeux et quiz", title: "Un entraînement court avec vos propres mots", body: "Des quiz et des jeux créés à partir des mots que vous avez cherchés et enregistrés dans votre carnet.", img: "play" },
   ],
   priceKicker: "Prix",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Un carnet pour tous vos mots et un entraînement intelligent",
     "Photographiez une page et touchez n'importe quel mot",
     "Dites-le : dites une phrase et obtenez un score",
-    "Jeux, quiz et comparaison de mots",
+    "Jeux et quiz à partir de vos mots",
   ],
   priceCta: "Commencez votre essai gratuit de 14 jours",
   priceTerms: "14 jours gratuits, puis {monthly} par mois.\nUne carte est demandée, et deux jours avant le prélèvement nous vous envoyons un e-mail de rappel.\nRésiliez à tout moment depuis la page de votre compte, sans contacter personne.",

@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "További eszközök a jobb emlékezéshez",
   more: [
     { kicker: "Mondd ki", title: "Hallgass meg egy mondatot és mondd ki te is", body: "A Gadit felolvassa a mondatot, te pedig pontszámot kapsz arra, ahogyan kimondtad.", img: "say" },
-    { kicker: "Szavak összehasonlítása", title: "Két hasonló szó és a különbség köztük", body: "Az „egyelőre” és az „egyenlőre” közötti különbség, vagy bármely két szóé, amelyet gyakran összekevernek, példákkal és a tipikus hibával.", img: "compare" },
     { kicker: "Játékok és kvízek", title: "Rövid gyakorlás a saját szavaidból", body: "Kvízek és játékok azokból a szavakból, amelyekre rákerestél és elmentettél a füzetedbe.", img: "play" },
   ],
   priceKicker: "Ár",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Füzet az összes szavadnak és okos gyakorlás",
     "Fotózz le egy oldalt, és koppints bármelyik szóra",
     "Mondd ki: mondj ki egy mondatot, és kapj pontszámot",
-    "Játékok, kvízek és szó-összehasonlítások",
+    "Játékok és kvízek a saját szavaidból",
   ],
   priceCta: "Kezdd el a 14 napos ingyenes próbát",
   priceTerms: "14 nap ingyen, utána {monthly} havonta.\nBankkártya szükséges, és két nappal a terhelés előtt emlékeztető e-mailt küldünk.\nBármikor lemondhatod a fiókod oldalán, anélkül hogy bárkit meg kellene keresned.",

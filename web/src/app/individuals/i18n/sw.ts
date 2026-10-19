@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Zana zaidi zinazokusaidia kukumbuka",
   more: [
     { kicker: "Litamke", title: "Sikiliza sentensi kisha uitamke mwenyewe", body: "Gadit husoma sentensi kwa sauti, na unapata alama kwa jinsi ulivyoitamka.", img: "say" },
-    { kicker: "Linganisha maneno", title: "Maneno mawili yanayofanana na tofauti kati yao", body: "Tofauti kati ya affect na effect, au kati ya maneno yoyote mawili ambayo watu huchanganya, pamoja na mifano na kosa la kawaida.", img: "compare" },
     { kicker: "Michezo na maswali", title: "Mazoezi mafupi kutoka kwa maneno yako mwenyewe", body: "Maswali na michezo iliyotengenezwa kutokana na maneno uliyotafuta na kuhifadhi kwenye daftari lako.", img: "play" },
   ],
   priceKicker: "Bei",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Daftari la maneno yako yote na mazoezi mahiri",
     "Piga picha ya ukurasa na gusa neno lolote",
     "Litamke: tamka sentensi na upate alama",
-    "Michezo, maswali na ulinganisho wa maneno",
+    "Michezo na maswali kutoka kwenye maneno yako",
   ],
   priceCta: "Anza jaribio lako la bure la siku 14",
   priceTerms: "Siku 14 bure, kisha {monthly} kwa mwezi.\nKadi inahitajika, na siku mbili kabla ya malipo tunakutumia barua pepe ya kukukumbusha.\nGhairi wakati wowote kwenye ukurasa wa akaunti yako, bila kuwasiliana na mtu yeyote.",

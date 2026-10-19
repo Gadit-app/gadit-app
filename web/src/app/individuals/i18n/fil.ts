@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Iba pang tool na tumutulong sa iyong makaalala",
   more: [
     { kicker: "Sabihin mo", title: "Pakinggan ang isang pangungusap at ikaw naman ang magsabi", body: "Binabasa nang malakas ng Gadit ang pangungusap, at makakakuha ka ng score para sa pagkakasabi mo.", img: "say" },
-    { kicker: "Paghambingin ang mga salita", title: "Dalawang magkahawig na salita at ang pagkakaiba nila", body: "Ang pagkakaiba ng \"ng\" at \"nang\", o ng kahit anong dalawang salitang madalas mapagpalit, na may mga halimbawa at ang karaniwang pagkakamali.", img: "compare" },
     { kicker: "Mga laro at quiz", title: "Maikling practice mula sa sarili mong mga salita", body: "Mga quiz at laro na binuo mula sa mga salitang hinanap mo at sinave sa kwaderno mo.", img: "play" },
   ],
   priceKicker: "Presyo",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Kwaderno para sa lahat ng salita mo at smart practice",
     "Kunan ng litrato ang isang pahina at i-tap ang kahit anong salita",
     "Sabihin mo: sabihin ang isang pangungusap at makakuha ng score",
-    "Mga laro, quiz at paghahambing ng mga salita",
+    "Mga laro at quiz mula sa mga salita mo",
   ],
   priceCta: "Simulan ang 14 na araw na libreng trial",
   priceTerms: "Libre ang 14 na araw, tapos {monthly} kada buwan.\nKailangan ng card, at dalawang araw bago ang singil, padadalhan ka namin ng email na paalala.\nI-cancel anumang oras mula sa account page mo, nang hindi kinakailangang kumontak ng kahit sino.",

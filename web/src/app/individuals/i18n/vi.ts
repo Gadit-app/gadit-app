@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Thêm công cụ giúp bạn ghi nhớ",
   more: [
     { kicker: "Say it", title: "Nghe một câu và tự nói lại", body: "Gadit đọc to câu đó, và bạn nhận được điểm cho cách bạn nói.", img: "say" },
-    { kicker: "So sánh từ", title: "Hai từ giống nhau và sự khác biệt giữa chúng", body: "Sự khác biệt giữa \"bàng quan\" và \"bàng quang\", hay giữa bất kỳ hai từ nào người ta hay nhầm lẫn, kèm ví dụ và lỗi thường gặp.", img: "compare" },
     { kicker: "Trò chơi và câu đố", title: "Luyện tập ngắn với chính từ của bạn", body: "Câu đố và trò chơi được tạo từ những từ bạn đã tra và lưu vào sổ tay.", img: "play" },
   ],
   priceKicker: "Giá",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Sổ tay cho mọi từ của bạn và luyện tập thông minh",
     "Chụp ảnh một trang và chạm vào bất kỳ từ nào",
     "Say it: nói một câu và nhận điểm",
-    "Trò chơi, câu đố và so sánh từ",
+    "Trò chơi và câu đố với những từ của bạn",
   ],
   priceCta: "Bắt đầu 14 ngày dùng thử miễn phí",
   priceTerms: "Miễn phí 14 ngày, sau đó {monthly} mỗi tháng.\nCần có thẻ, và hai ngày trước khi thanh toán, chúng tôi gửi bạn email nhắc nhở.\nHủy bất cứ lúc nào trên trang tài khoản, không cần liên hệ với ai.",

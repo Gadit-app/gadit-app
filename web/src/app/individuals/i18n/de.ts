@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Weitere Werkzeuge zum besseren Merken",
   more: [
     { kicker: "Sag es", title: "Einen Satz hören und selbst sagen", body: "Gadit liest den Satz laut vor, und du bekommst eine Bewertung dafür, wie du ihn gesagt hast.", img: "say" },
-    { kicker: "Wörter vergleichen", title: "Zwei ähnliche Wörter und der Unterschied zwischen ihnen", body: "Der Unterschied zwischen „seit“ und „seid“, oder zwischen zwei beliebigen Wörtern, die oft verwechselt werden, mit Beispielen und dem häufigsten Fehler.", img: "compare" },
     { kicker: "Spiele und Quiz", title: "Kurzes Üben mit deinen eigenen Wörtern", body: "Quiz und Spiele aus den Wörtern, die du nachgeschlagen und in deinem Notizbuch gespeichert hast.", img: "play" },
   ],
   priceKicker: "Preis",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Ein Notizbuch für alle deine Wörter und smartes Üben",
     "Eine Seite fotografieren und auf jedes Wort tippen",
     "Sag es: einen Satz sagen und eine Bewertung bekommen",
-    "Spiele, Quiz und Wortvergleiche",
+    "Spiele und Quiz aus deinen Wörtern",
   ],
   priceCta: "Starte deinen 14-tägigen Gratis-Test",
   priceTerms: "14 Tage gratis, danach {monthly} im Monat.\nEine Karte ist nötig, und zwei Tage vor der Abbuchung schicken wir dir eine Erinnerungs-E-Mail.\nKündige jederzeit auf deiner Kontoseite, ohne jemanden kontaktieren zu müssen.",

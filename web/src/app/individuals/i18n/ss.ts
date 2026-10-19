@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Lamanye emathulusi lakusita ukhumbule",
   more: [
     { kicker: "Kusho", title: "Lalela umusho bese uwusho wena", body: "Gadit ifundza umusho ngekuvakalako, futsi utfola emaphuzu ngendlela lowushito ngayo.", img: "say" },
-    { kicker: "Catsanisa emagama", title: "Emagama lamabili lafanako nemehluko emkhatsini wawo", body: "Umehluko emkhatsini wa-affect na-effect, nobe emkhatsini wanobe ngumaphi emagama lamabili bantfu labawaxubako, netibonelo neliphutsa lelivamile.", img: "compare" },
     { kicker: "Imidlalo nemibuto", title: "Kuticecesha lokufishane ngemagama akho", body: "Imibuto nemidlalo leyakhiwe ngemagama lowaseshile wawagcina encwadzini yakho.", img: "play" },
   ],
   priceKicker: "Intsengo",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Incwadzi yawo onkhe emagama akho nekuticecesha lokuhlakaniphile",
     "Tfwebula likhasi bese ucindzetela nobe nguliphi ligama",
     "Kusho: sho umusho bese utfola emaphuzu",
-    "Imidlalo, imibuto nekucatsanisa emagama",
+    "Imidlalo nemibuto yemagama akho",
   ],
   priceCta: "Cala kulinga kwakho kwamahhala kwemalanga langu-14",
   priceTerms: "Emalanga langu-14 mahhala, bese kuba {monthly} ngenyanga.\nKudzingeka likhadi, futsi emalangeni lamabili ngaphambi kwenkhokhelo sikutfumelela i-imeyili yesikhumbuto.\nKhansela nobe nini ekhasini le-akhawunti yakho, ngaphandle kwekutsintsana nemuntfu.",

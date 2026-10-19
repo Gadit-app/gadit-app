@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Disebediswa tse ding tse o thusang ho hopola",
   more: [
     { kicker: "E bue", title: "Utlwa polelo mme o e bue ka bowena", body: "Gadit e bala polelo ka lentswe le phahameng, mme o fumana dintlha tsa kamoo o e buileng kateng.", img: "say" },
-    { kicker: "Bapisa mantswe", title: "Mantswe a mabedi a tshwanang le phapang pakeng tsa ona", body: "Phapang pakeng tsa affect le effect, kapa pakeng tsa mantswe afe kapa afe a mabedi ao batho ba a ferekanyang, ka mehlala le phoso e tlwaelehileng.", img: "compare" },
     { kicker: "Dipapadi le dikwisi", title: "Boikwetliso bo bokgutshwane ka mantswe a hao", body: "Dikwisi le dipapadi tse entsweng ka mantswe ao o a batlileng wa a boloka bukaneng ya hao.", img: "play" },
   ],
   priceKicker: "Theko",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Bukana ya mantswe a hao ohle le boikwetliso bo bohlale",
     "Nka setshwantsho sa leqephe mme o tobetse lentswe lefe kapa lefe",
     "E bue: bua polelo mme o fumane dintlha",
-    "Dipapadi, dikwisi le ho bapisa mantswe",
+    "Dipapadi le dikwisi tsa mantswe a hao",
   ],
   priceCta: "Qala nako ya hao ya teko ya mahala ya matsatsi a 14",
   priceTerms: "Matsatsi a 14 mahala, ebe {monthly} ka kgwedi.\nHo hlokahala karete, mme matsatsi a mabedi pele ho tefo re o romella imeile ya kgopotso.\nEmisa nako efe kapa efe leqepheng la akhaonte ya hao, ntle le ho ikopanya le motho.",

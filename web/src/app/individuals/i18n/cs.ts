@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Další nástroje pro lepší zapamatování",
   more: [
     { kicker: "Řekni to", title: "Poslechněte si větu a řekněte ji sami", body: "Gadit větu přečte nahlas a vy dostanete hodnocení toho, jak jste ji řekli.", img: "say" },
-    { kicker: "Porovnání slov", title: "Dvě podobná slova a rozdíl mezi nimi", body: "Rozdíl mezi efektní a efektivní, nebo mezi jakýmikoli dvěma slovy, která si lidé pletou, s příklady a častou chybou.", img: "compare" },
     { kicker: "Hry a kvízy", title: "Krátké procvičování z vašich vlastních slov", body: "Kvízy a hry vytvořené ze slov, která vyhledáte a uložíte do sešitu.", img: "play" },
   ],
   priceKicker: "Cena",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Sešit pro všechna vaše slova a chytré procvičování",
     "Vyfoťte stránku a klepněte na libovolné slovo",
     "Řekni to: řekněte větu a získejte hodnocení",
-    "Hry, kvízy a porovnávání slov",
+    "Hry a kvízy z vašich slov",
   ],
   priceCta: "Začněte 14denní zkušební období zdarma",
   priceTerms: "14 dní zdarma, potom {monthly} měsíčně.\nJe potřeba platební karta a dva dny před platbou vám pošleme připomínku e-mailem.\nZrušit můžete kdykoli na stránce svého účtu, bez nutnosti někoho kontaktovat.",

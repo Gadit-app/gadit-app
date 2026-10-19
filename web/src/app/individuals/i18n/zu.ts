@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Amanye amathuluzi akusiza ukhumbule",
   more: [
     { kicker: "Yisho", title: "Zwa umusho bese uwusho wena", body: "I-Gadit ifunda umusho ngokuzwakalayo, bese uthola amaphuzu ngendlela owushilo ngayo.", img: "say" },
-    { kicker: "Qhathanisa amagama", title: "Amagama amabili afanayo nomehluko phakathi kwawo", body: "Umehluko phakathi kuka-affect no-effect, noma phakathi kwanoma yimaphi amagama amabili abantu abawaxubayo, nezibonelo nephutha elivamile.", img: "compare" },
     { kicker: "Imidlalo namakhwizi", title: "Ukuzejwayeza okufushane ngamagama akho", body: "Amakhwizi nemidlalo eyakhiwe ngamagama owabhekile wawagcina encwadini yakho yamanothi.", img: "play" },
   ],
   priceKicker: "Intengo",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Incwadi yamanothi yawo wonke amagama akho nokuzejwayeza okuhlakaniphile",
     "Thwebula ikhasi bese uthepha noma yiliphi igama",
     "Yisho: sho umusho bese uthola amaphuzu",
-    "Imidlalo, amakhwizi nokuqhathanisa amagama",
+    "Imidlalo namakhwizi asuka emagameni akho",
   ],
   priceCta: "Qala ukuzama mahhala izinsuku eziyi-14",
   priceTerms: "Izinsuku eziyi-14 mahhala, bese kuba {monthly} ngenyanga.\nKudingeka ikhadi, futhi ezinsukwini ezimbili ngaphambi kwenkokhelo sikuthumelela i-imeyili yesikhumbuzo.\nKhansela noma nini ekhasini le-akhawunti yakho, ngaphandle kokuxhumana nomuntu.",

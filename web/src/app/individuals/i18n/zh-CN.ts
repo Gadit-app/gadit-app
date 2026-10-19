@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "更多帮你记住的工具",
   more: [
     { kicker: "说一说", title: "听一句话然后自己说出来", body: "Gadit 会把句子读出来，你说完后会得到一个分数。", img: "say" },
-    { kicker: "词语对比", title: "两个相近的词和它们的区别", body: "affect 和 effect 的区别，或者任何两个容易混淆的词，都配有例句和常见错误。", img: "compare" },
     { kicker: "游戏和测验", title: "用你自己的词做简短练习", body: "用你查过并存进生词本的词做成的测验和游戏。", img: "play" },
   ],
   priceKicker: "价格",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "收录你所有词的生词本，以及智能练习",
     "拍下一页，点任何一个词",
     "说一说：说一句话，得到评分",
-    "游戏、测验和词语对比",
+    "用你的词语玩游戏、做测验",
   ],
   priceCta: "开始 14 天免费试用",
   priceTerms: "免费 14 天，之后每月 {monthly}。\n需要绑定银行卡，扣费前两天我们会发邮件提醒你。\n随时可以在账户页面取消，无需联系任何人。",

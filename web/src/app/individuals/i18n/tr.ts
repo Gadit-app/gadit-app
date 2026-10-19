@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Hatırlamana yardım eden daha fazla araç",
   more: [
     { kicker: "Söyle", title: "Bir cümleyi dinle ve kendin söyle", body: "Gadit cümleyi sesli okur, sen de nasıl söylediğine göre bir puan alırsın.", img: "say" },
-    { kicker: "Kelimeleri karşılaştır", title: "Birbirine benzeyen iki kelime ve aralarındaki fark", body: "\"hala\" ile \"hâlâ\" arasındaki fark ya da insanların karıştırdığı herhangi iki kelime arasındaki fark, örneklerle ve sık yapılan hatayla.", img: "compare" },
     { kicker: "Oyunlar ve testler", title: "Kendi kelimelerinle kısa pratik", body: "Aradığın ve defterine kaydettiğin kelimelerden oluşturulan testler ve oyunlar.", img: "play" },
   ],
   priceKicker: "Fiyat",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Tüm kelimelerin için bir defter ve akıllı pratik",
     "Bir sayfanın fotoğrafını çek ve herhangi bir kelimeye dokun",
     "Söyle: bir cümle söyle ve puan al",
-    "Oyunlar, testler ve kelime karşılaştırmaları",
+    "Kelimelerinle oyunlar ve testler",
   ],
   priceCta: "14 günlük ücretsiz denemeni başlat",
   priceTerms: "14 gün ücretsiz, sonra ayda {monthly}.\nKart gerekir ve ödemeden iki gün önce sana hatırlatma e-postası göndeririz.\nİstediğin zaman hesap sayfandan, kimseyle iletişime geçmeden iptal edebilirsin.",

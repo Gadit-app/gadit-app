@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Zwishumiswa zwiṅwe zwine zwa ni thusa u humbula",
   more: [
     { kicker: "Ḽi ambeni", title: "Pfani mutaladzi ni u ambe nga inwi muṋe", body: "Gadit i vhala mutaladzi nga ipfi ḽa nṱha, nahone ni wana maraga a nḓila ye na u amba ngayo.", img: "say" },
-    { kicker: "Vhambedzani maipfi", title: "Maipfi mavhili a fanaho na phambano vhukati haao", body: "Phambano vhukati ha affect na effect, kana vhukati ha maipfi maṅwe na maṅwe mavhili ane vhathu vha a khakhisa, zwi na tsumbo na vhukhakhi vhu ḓivheaho.", img: "compare" },
     { kicker: "Mitambo na mbudziso", title: "Nḓowelo pfufhi nga maipfi aṋu", body: "Mbudziso na mitambo zwo fhaṱwaho nga maipfi e na a ṱoḓa na a vhulunga kha bugu yaṋu.", img: "play" },
   ],
   priceKicker: "Mutengo",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Bugu ya maipfi aṋu oṱhe na nḓowelo ya vhuṱali",
     "Dzhiani tshifanyiso tsha siaṱari ni kwame ipfi ḽiṅwe na ḽiṅwe",
     "Ḽi ambeni: ambani mutaladzi ni wane maraga",
-    "Mitambo, mbudziso na u vhambedza maipfi",
+    "Mitambo na mbudziso dza maipfi aṋu",
   ],
   priceCta: "Thomani tshilingo tshaṋu tsha mahala tsha maḓuvha a 14",
   priceTerms: "Maḓuvha a 14 a mahala, nga murahu {monthly} nga ṅwedzi.\nHu ṱoḓea garaṱa, nahone maḓuvha mavhili phanḓa ha mbadelo ri ni rumela imeiḽi ya u ni humbudza.\nKhanselani tshifhinga tshiṅwe na tshiṅwe kha siaṱari ḽa akhaunthu yaṋu, ni sa kwami muthu.",

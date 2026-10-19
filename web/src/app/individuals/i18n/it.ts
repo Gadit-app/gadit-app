@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Altri strumenti che ti aiutano a ricordare",
   more: [
     { kicker: "Dillo", title: "Ascolta una frase e dilla tu", body: "Gadit legge la frase ad alta voce, e ricevi un punteggio per come l'hai detta.", img: "say" },
-    { kicker: "Confronta parole", title: "Due parole simili e la differenza tra loro", body: "La differenza tra «ha» e «a», o tra due parole qualsiasi che si confondono spesso, con esempi e l'errore più comune.", img: "compare" },
     { kicker: "Giochi e quiz", title: "Esercizi brevi con le tue parole", body: "Quiz e giochi creati con le parole che hai cercato e salvato nel tuo quaderno.", img: "play" },
   ],
   priceKicker: "Prezzo",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Un quaderno per tutte le tue parole ed esercizi intelligenti",
     "Fotografa una pagina e tocca qualsiasi parola",
     "Dillo: di' una frase e ricevi un punteggio",
-    "Giochi, quiz e confronto tra parole",
+    "Giochi e quiz con le tue parole",
   ],
   priceCta: "Inizia la prova gratuita di 14 giorni",
   priceTerms: "14 giorni gratis, poi {monthly} al mese.\nServe una carta, e due giorni prima dell'addebito ti mandiamo un'email di promemoria.\nDisdici quando vuoi dalla pagina del tuo account, senza dover contattare nessuno.",

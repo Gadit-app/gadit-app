@@ -54,7 +54,6 @@ const en: IndCopy = {
   moreTitle: "More tools that help you remember",
   more: [
     { kicker: "Say it", title: "Hear a sentence and say it yourself", body: "Gadit reads the sentence aloud, and you get a score for how you said it.", img: "say" },
-    { kicker: "Compare words", title: "Two similar words and the difference between them", body: "The difference between affect and effect, or between any two words people mix up, with examples and the common mistake.", img: "compare" },
     { kicker: "Games and quizzes", title: "Short practice from your own words", body: "Quizzes and games built from the words you looked up and saved in your notebook.", img: "play" },
   ],
   priceKicker: "Price",
@@ -67,7 +66,7 @@ const en: IndCopy = {
     "A notebook for all your words and smart practice",
     "Photograph a page and tap any word",
     "Say it: say a sentence and get a score",
-    "Games, quizzes and word comparisons",
+    "Games and quizzes from your words",
   ],
   priceCta: "Start your 14-day free trial",
   priceTerms: "14 days free, then {monthly} a month.\nA card is required, and two days before the charge we send you a reminder email.\nCancel any time from your account page, without contacting anyone.",

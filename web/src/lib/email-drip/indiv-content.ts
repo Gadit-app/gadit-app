@@ -47,7 +47,7 @@ export const INDIV_META: IndivEmailMeta[] = [
   M("ind-read", "Individual · 5 · Every Word (a whole page)", 4, "/read"),
   M("ind-compose", "Individual · 6 · Compose a sentence, get feedback", 5, "/"),
   M("ind-say", "Individual · 7 · Say it", 6, "/say"),
-  M("ind-practice", "Individual · 8 · Smart practice, games, compare words", 7, "/notebook"),
+  M("ind-practice", "Individual · 8 · Smart practice and games", 7, "/notebook"),
   M("ind-progress", "Individual · 9 · Your first two weeks in numbers", 10, "/notebook"),
   M("ind-questions", "Individual · 10 · Questions about a word, idioms", 12, "/"),
   M("ind-languages", "Individual · 11 · Any word, explained in your language", 15, "/"),
@@ -63,7 +63,7 @@ export const INDIV_LABEL_HE: Record<string, string> = {
   "ind-read": "5 · כל מילה (דף שלם)",
   "ind-compose": "6 · חברו משפט ומשוב",
   "ind-say": "7 · תגיד את זה",
-  "ind-practice": "8 · תרגול חכם, משחקים, השוואה",
+  "ind-practice": "8 · תרגול חכם ומשחקים",
   "ind-progress": "9 · השבועיים הראשונים במספרים",
   "ind-questions": "10 · שאלות על מילה, ניבים וצירופים",
   "ind-languages": "11 · כל מילה, הסבר בשפה שלכם",
@@ -539,7 +539,7 @@ A real sentence stays much faster.`,
 מילה שחיפשנו פעם אחת נשכחת מהר.
 מילה שחוזרים אליה בזמן הנכון נשארת.
 
-יש לכם שלושה כלים בשביל זה.
+יש לכם שני כלים בשביל זה.
 
 ## תרגול חכם
 במחברת יש כפתור "חזרה על המילים שלי".
@@ -550,10 +550,6 @@ Gadit מציג מילה מהמחברת שלכם, ונזכרים מה היא או
 ב["משחקים"](/play) יש משחקים שנבנים מהמילים שבמחברת שלכם: חידונים, משחק זיכרון, ערבול אותיות, השלמת משפט ועוד.
 כדי להתחיל, צריך לפחות 4 מילים במחברת.
 ובכל מילה, מתחת להגדרה, יש גם כפתור "חידון" לתרגול מהיר של אותה מילה.
-
-## השוואת מילים
-מילים דומות מבלבלות גם דוברים שוטפים, למשל affect ו-effect באנגלית.
-ב["השוואה"](/compare) כותבים שתי מילים, ומקבלים את ההבדל ביניהן, דוגמאות וטעות נפוצה.
 
 ## איך עושים את זה, שלב אחר שלב:
 1. נכנסים ל["מחברת"](/notebook) ולוחצים על "חזרה על המילים שלי".
@@ -572,7 +568,7 @@ Gadit מציג מילה מהמחברת שלכם, ונזכרים מה היא או
 A word you looked up once is soon forgotten.
 A word you come back to at the right time stays.
 
-You have three tools for this.
+You have two tools for this.
 
 ## Smart practice
 The notebook has a "Review my words" button.
@@ -583,10 +579,6 @@ Tap "I knew it" or "I forgot", and Gadit decides when to bring it back: a word y
 In ["Games"](/play) there are games built from the words in your notebook: quizzes, a memory game, letter scramble, fill in the sentence and more.
 You need at least 4 words in your notebook to start.
 And for every word, under the definition, there's also a "Quiz" button for a quick practice of that word.
-
-## Compare words
-Similar words confuse even fluent speakers, for example affect and effect.
-In ["Compare"](/compare) type two words, and get the difference between them, examples and a common mistake.
 
 ## How to do it, step by step:
 1. Open ["Notebook"](/notebook) and tap "Review my words".
@@ -848,7 +840,7 @@ You can also send them [the Gadit for schools page](/schools).`,
 5. "חברו משפט", עם משוב על המשפט שלכם.
 6. [תגיד את זה](/say): משפט בשפה חדשה, בקול.
 7. יותר מ-40 שפות, והסבר בשפה שלכם.
-8. [תרגול חכם](/notebook), [משחקים](/play) ו[השוואת מילים](/compare).
+8. [תרגול חכם](/notebook) ו[משחקים](/play) מהמילים שלכם.
 
 ## החודש הבא
 לא צריך להשתמש בכל הכלים.
@@ -874,7 +866,7 @@ A good moment to sum up everything you have on Gadit.
 5. "Compose a sentence", with feedback on your sentence.
 6. [Say it](/say): a sentence in a new language, out loud.
 7. More than 40 languages, and explanations in your language.
-8. [Smart practice](/notebook), [games](/play) and [comparing words](/compare).
+8. [Smart practice](/notebook) and [games](/play) from your words.
 
 ## The next month
 You don't need to use every tool.

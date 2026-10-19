@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Mais ferramentas que ajudam você a lembrar",
   more: [
     { kicker: "Diga", title: "Ouça uma frase e diga você mesmo", body: "O Gadit lê a frase em voz alta, e você recebe uma nota pelo jeito como disse.", img: "say" },
-    { kicker: "Comparar palavras", title: "Duas palavras parecidas e a diferença entre elas", body: "A diferença entre \"mas\" e \"mais\", ou entre quaisquer duas palavras que as pessoas confundem, com exemplos e o erro mais comum.", img: "compare" },
     { kicker: "Jogos e quizzes", title: "Prática curta com as suas próprias palavras", body: "Quizzes e jogos criados com as palavras que você pesquisou e salvou no seu caderno.", img: "play" },
   ],
   priceKicker: "Preço",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Um caderno para todas as suas palavras e prática inteligente",
     "Fotografe uma página e toque em qualquer palavra",
     "Diga: diga uma frase e receba uma nota",
-    "Jogos, quizzes e comparação de palavras",
+    "Jogos e quizzes com as suas palavras",
   ],
   priceCta: "Comece seu teste grátis de 14 dias",
   priceTerms: "14 dias grátis, depois {monthly} por mês.\nÉ preciso um cartão, e dois dias antes da cobrança enviamos um e-mail de lembrete.\nCancele quando quiser na página da sua conta, sem falar com ninguém.",

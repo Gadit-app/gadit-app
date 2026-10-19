@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Didirisiwa tse dingwe tse di go thusang go gopola",
   more: [
     { kicker: "E bue", title: "Utlwa polelo mme o e bue ka bowena", body: "Gadit e bala polelo ka lentswe, mme o bona maduo a kafa o e buileng ka teng.", img: "say" },
-    { kicker: "Bapisa mafoko", title: "Mafoko a mabedi a a tshwanang le pharologano magareng ga one", body: "Pharologano magareng ga affect le effect, kgotsa magareng ga mafoko afe kana afe a mabedi a batho ba a tlhakatlhakanyang, ka dikai le phoso e e tlwaelegileng.", img: "compare" },
     { kicker: "Metshameko le ditlhatlhobo", title: "Boikatiso jo bokhutshwane ka mafoko a gago", body: "Ditlhatlhobo le metshameko e e agilweng ka mafoko a o a batlileng wa a boloka mo bukaneng ya gago.", img: "play" },
   ],
   priceKicker: "Tlhwatlhwa",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Bukana ya mafoko otlhe a gago le boikatiso jo botlhale",
     "Tsaya setshwantsho sa tsebe mme o tobetse lefoko lefe kana lefe",
     "E bue: bua polelo mme o bone maduo",
-    "Metshameko, ditlhatlhobo le go bapisa mafoko",
+    "Metshameko le ditlhatlhobo tsa mafoko a gago",
   ],
   priceCta: "Simolola teko ya gago ya mahala ya malatsi a le 14",
   priceTerms: "Malatsi a le 14 mahala, morago {monthly} ka kgwedi.\nGo tlhokega karata, mme malatsi a le mabedi pele ga tuelo re go romela imeile ya kgakololo.\nKhansela nako nngwe le nngwe mo tsebeng ya akhaonto ya gago, o sa ikgolaganye le ope.",

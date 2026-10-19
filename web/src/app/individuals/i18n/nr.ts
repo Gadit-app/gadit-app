@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Amanye amathulusi akusiza ukhumbule",
   more: [
     { kicker: "Kutjho", title: "Zwana umutjho bese uwutjho wena", body: "I-Gadit ifunda umutjho ngokuzwakalako, begodu ufumana amaphuzu wendlela owutjho ngayo.", img: "say" },
-    { kicker: "Madanisa amezwi", title: "Amezwi amabili afanako nomehluko phakathi kwawo", body: "Umehluko phakathi kwa-affect no-effect, namkha phakathi kwamezwi amabili nanyana ngimaphi abantu abawahlanganisako, nezibonelo nephutha elijayelekileko.", img: "compare" },
     { kicker: "Imidlalo neenkhwizi", title: "Ukuzilolonga okufitjhani ngamezwi wakho", body: "Iinkhwizi nemidlalo eyakhiwe ngamezwi owafunileko wawabulunga ebhukwini lakho lamezwi.", img: "play" },
   ],
   priceKicker: "Inani",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Ibhuku lamezwi woke amezwi wakho nokuzilolonga okuhlakaniphileko",
     "Thatha isithombe sekhasi bese uthinta ilizwi nanyana ngiliphi",
     "Kutjho: tjho umutjho bese ufumana amaphuzu",
-    "Imidlalo, iinkhwizi nokumadanisa amezwi",
+    "Imidlalo neenkhwizi zamezwi wakho",
   ],
   priceCta: "Thoma ukulinga mahala kwamalanga ali-14",
   priceTerms: "Amalanga ali-14 mahala, ngemva kwalokho {monthly} ngenyanga.\nKutlhogeka ikarada, begodu amalanga amabili ngaphambi kokubhadela sikuthumelela i-imeyili yesikhumbuzo.\nKhansela nanyana kunini ekhasini le-akhawunti yakho, ngaphandle kokuthintana nomuntu.",

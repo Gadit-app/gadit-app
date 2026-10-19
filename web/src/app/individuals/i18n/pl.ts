@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Więcej narzędzi do zapamiętywania",
   more: [
     { kicker: "Powiedz to", title: "Posłuchaj zdania i powtórz je na głos", body: "Gadit czyta zdanie na głos, a ty dostajesz ocenę swojej wypowiedzi.", img: "say" },
-    { kicker: "Porównaj słowa", title: "Dwa podobne słowa i różnica między nimi", body: "Różnica między bynajmniej a przynajmniej, albo między dowolnymi dwoma słowami, które ludzie mylą, z przykładami i typowym błędem.", img: "compare" },
     { kicker: "Gry i quizy", title: "Krótkie ćwiczenia z twoich własnych słów", body: "Quizy i gry stworzone ze słów, które wyszukujesz i zapisujesz w notatniku.", img: "play" },
   ],
   priceKicker: "Cena",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Notatnik na wszystkie twoje słowa i inteligentne ćwiczenia",
     "Sfotografuj stronę i stuknij dowolne słowo",
     "Powiedz to: powiedz zdanie i dostań ocenę",
-    "Gry, quizy i porównywanie słów",
+    "Gry i quizy z twoich słów",
   ],
   priceCta: "Zacznij 14-dniowy bezpłatny okres próbny",
   priceTerms: "14 dni za darmo, potem {monthly} miesięcznie.\nPotrzebna jest karta płatnicza, a dwa dni przed płatnością wyślemy ci przypomnienie e-mailem.\nAnulujesz w każdej chwili na stronie konta, bez kontaktowania się z kimkolwiek.",

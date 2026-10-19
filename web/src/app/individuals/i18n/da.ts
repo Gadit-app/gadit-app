@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Flere værktøjer der hjælper dig med at huske",
   more: [
     { kicker: "Sig det", title: "Hør en sætning og sig den selv", body: "Gadit læser sætningen højt, og du får en score for, hvordan du sagde den.", img: "say" },
-    { kicker: "Sammenlign ord", title: "To ord der ligner hinanden og forskellen på dem", body: "Forskellen på nogle og nogen, eller på to andre ord, som folk blander sammen, med eksempler og den typiske fejl.", img: "compare" },
     { kicker: "Spil og quizzer", title: "Kort øvelse med dine egne ord", body: "Quizzer og spil lavet af de ord, du har slået op og gemt i din notesbog.", img: "play" },
   ],
   priceKicker: "Pris",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "En notesbog til alle dine ord og smart øvelse",
     "Fotografér en side, og tryk på et hvilket som helst ord",
     "Sig det: sig en sætning og få en score",
-    "Spil, quizzer og sammenligning af ord",
+    "Spil og quizzer ud fra dine ord",
   ],
   priceCta: "Start din gratis prøveperiode på 14 dage",
   priceTerms: "14 dage gratis, derefter {monthly} om måneden.\nDer kræves et betalingskort, og to dage før betalingen sender vi dig en påmindelse på e-mail.\nOpsig når som helst fra din kontoside, uden at kontakte nogen.",

@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "更多幫你記住的工具",
   more: [
     { kicker: "說一說", title: "聽一句話然後自己說出來", body: "Gadit 會把句子唸出來，你說完後會得到一個分數。", img: "say" },
-    { kicker: "詞語比較", title: "兩個相近的詞和它們的差別", body: "affect 和 effect 的差別，或任何兩個容易搞混的詞，都附上例句和常見錯誤。", img: "compare" },
     { kicker: "遊戲和測驗", title: "用你自己的詞做簡短練習", body: "用你查過並存進生詞本的詞做成的測驗和遊戲。", img: "play" },
   ],
   priceKicker: "價格",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "收錄你所有詞的生詞本，以及智慧練習",
     "拍下一頁，點任何一個詞",
     "說一說：說一句話，得到評分",
-    "遊戲、測驗和詞語比較",
+    "用你的詞語玩遊戲、做測驗",
   ],
   priceCta: "開始 14 天免費試用",
   priceTerms: "免費 14 天，之後每月 {monthly}。\n需要綁定信用卡，扣款前兩天我們會寄提醒信給你。\n隨時可以在帳號頁面取消，不必聯絡任何人。",

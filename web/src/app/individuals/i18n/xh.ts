@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Ezinye izixhobo ezikuncedayo ukuba ukhumbule",
   more: [
     { kicker: "Yithethe", title: "Mamela isivakalisi uze usithethe wena", body: "I-Gadit ifunda isivakalisi ngokuvakalayo, kwaye ufumana amanqaku ngendlela osithethe ngayo.", img: "say" },
-    { kicker: "Thelekisa amagama", title: "Amagama amabini afanayo nomahluko phakathi kwawo", body: "Umahluko phakathi kuka-affect no-effect, okanye phakathi kwawo nawaphi na amagama amabini abantu abawaxubayo, kunye nemizekelo nempazamo eqhelekileyo.", img: "compare" },
     { kicker: "Imidlalo nemibuzo", title: "Uziqheliso olufutshane ngamagama akho", body: "Imibuzo nemidlalo eyakhiwe ngamagama owakhangeleyo wawagcina kwincwadi yakho.", img: "play" },
   ],
   priceKicker: "Ixabiso",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Incwadi yawo onke amagama akho noziqheliso olukrelekrele",
     "Fota iphepha uze ucofe naliphi na igama",
     "Yithethe: thetha isivakalisi uze ufumane amanqaku",
-    "Imidlalo, imibuzo nokuthelekisa amagama",
+    "Imidlalo nemibuzo yamagama akho",
   ],
   priceCta: "Qalisa ulingo lwakho lwasimahla lweentsuku ezili-14",
   priceTerms: "Iintsuku ezili-14 simahla, emva koko {monthly} ngenyanga.\nKufuneka ikhadi, kwaye kwiintsuku ezimbini ngaphambi kwentlawulo sikuthumelela i-imeyili yesikhumbuzo.\nRhoxisa nangaliphi na ixesha kwiphepha le-akhawunti yakho, ngaphandle kokuqhagamshelana nomntu.",

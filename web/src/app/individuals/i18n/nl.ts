@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Meer tools die je helpen onthouden",
   more: [
     { kicker: "Zeg het", title: "Hoor een zin en zeg hem zelf", body: "Gadit leest de zin voor, en je krijgt een score voor hoe je hem zei.", img: "say" },
-    { kicker: "Woorden vergelijken", title: "Twee woorden die op elkaar lijken en het verschil ertussen", body: "Het verschil tussen effectief en efficiënt, of tussen twee andere woorden die mensen door elkaar halen, met voorbeelden en de veelgemaakte fout.", img: "compare" },
     { kicker: "Spellen en quizzen", title: "Kort oefenen met je eigen woorden", body: "Quizzen en spellen gemaakt van de woorden die je opzocht en in je notitieboek bewaarde.", img: "play" },
   ],
   priceKicker: "Prijs",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Een notitieboek voor al je woorden en slim oefenen",
     "Fotografeer een pagina en tik op elk woord",
     "Zeg het: zeg een zin en krijg een score",
-    "Spellen, quizzen en woorden vergelijken",
+    "Spellen en quizzen met je eigen woorden",
   ],
   priceCta: "Start je gratis proefperiode van 14 dagen",
   priceTerms: "14 dagen gratis, daarna {monthly} per maand.\nEen betaalkaart is nodig, en twee dagen voor de betaling sturen we je een herinnering per e-mail.\nOpzeggen kan altijd via je accountpagina, zonder contact met iemand.",

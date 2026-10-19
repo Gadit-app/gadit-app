@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Meer gereedskap wat jou help onthou",
   more: [
     { kicker: "Sê dit", title: "Hoor 'n sin en sê dit self", body: "Gadit lees die sin hardop, en jy kry 'n telling vir hoe jy dit gesê het.", img: "say" },
-    { kicker: "Vergelyk woorde", title: "Twee soortgelyke woorde en die verskil tussen hulle", body: "Die verskil tussen affect en effect, of tussen enige twee woorde wat mense deurmekaar maak, met voorbeelde en die algemene fout.", img: "compare" },
     { kicker: "Speletjies en vasvrae", title: "Kort oefening uit jou eie woorde", body: "Vasvrae en speletjies wat gebou is uit die woorde wat jy opgesoek en in jou notaboek gestoor het.", img: "play" },
   ],
   priceKicker: "Prys",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "'n Notaboek vir al jou woorde en slim oefening",
     "Fotografeer 'n bladsy en tik op enige woord",
     "Sê dit: sê 'n sin en kry 'n telling",
-    "Speletjies, vasvrae en woordvergelykings",
+    "Speletjies en vasvrae uit jou woorde",
   ],
   priceCta: "Begin jou gratis proeflopie van 14 dae",
   priceTerms: "14 dae gratis, daarna {monthly} per maand.\n'n Kaart word benodig, en twee dae voor die debiet stuur ons vir jou 'n herinnering per e-pos.\nKanselleer enige tyd op jou rekeningblad, sonder om met iemand kontak te maak.",

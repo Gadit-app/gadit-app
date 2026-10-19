@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Didirišwa tše dingwe tše di go thušago go gopola",
   more: [
     { kicker: "E bolele", title: "Kwa lefoko gomme o le bolele ka bowena", body: "Gadit e bala lefoko ka lentšu le legolo, gomme o hwetša dintlha tša ka moo o le boletšego ka gona.", img: "say" },
-    { kicker: "Bapetša mantšu", title: "Mantšu a mabedi a a swanago le phapano magareng ga ona", body: "Phapano magareng ga affect le effect, goba magareng ga mantšu afe goba afe a mabedi ao batho ba a gakantšhago, ka mehlala le phošo ye e tlwaelegilego.", img: "compare" },
     { kicker: "Dipapadi le ditlhahlobo", title: "Tlwaetšo ye kopana ka mantšu a gago", body: "Ditlhahlobo le dipapadi tše di agilwego ka mantšu ao o a nyakilego wa a boloka pukung ya gago ya mantšu.", img: "play" },
   ],
   priceKicker: "Theko",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Puku ya mantšu a gago ka moka le tlwaetšo ye bohlale",
     "Tšea seswantšho sa letlakala o kgotle lentšu lefe goba lefe",
     "E bolele: bolela lefoko gomme o hwetše dintlha",
-    "Dipapadi, ditlhahlobo le go bapetša mantšu",
+    "Dipapadi le ditlhahlobo tša mantšu a gago",
   ],
   priceCta: "Thoma teko ya gago ya mahala ya matšatši a 14",
   priceTerms: "Matšatši a 14 mahala, ke moka {monthly} ka kgwedi.\nGo nyakega karata, gomme matšatši a mabedi pele ga tefo re go romela imeile ya kgopotšo.\nKhansela nako efe goba efe letlakaleng la akhaonto ya gago, o sa ikgokaganye le motho.",

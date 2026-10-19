@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Alat lain yang membantumu mengingat",
   more: [
     { kicker: "Say it", title: "Dengarkan kalimat dan ucapkan sendiri", body: "Gadit membacakan kalimatnya, dan kamu mendapat skor untuk cara kamu mengucapkannya.", img: "say" },
-    { kicker: "Bandingkan kata", title: "Dua kata yang mirip dan perbedaannya", body: "Perbedaan antara efektif dan efisien, atau antara dua kata apa pun yang sering tertukar, dengan contoh dan kesalahan yang umum terjadi.", img: "compare" },
     { kicker: "Permainan dan kuis", title: "Latihan singkat dari kata-katamu sendiri", body: "Kuis dan permainan yang dibuat dari kata-kata yang kamu cari dan simpan di buku catatanmu.", img: "play" },
   ],
   priceKicker: "Harga",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Buku catatan untuk semua katamu dan latihan pintar",
     "Foto halaman dan ketuk kata mana pun",
     "Say it: ucapkan kalimat dan dapatkan skor",
-    "Permainan, kuis, dan perbandingan kata",
+    "Permainan dan kuis dari kata-katamu",
   ],
   priceCta: "Mulai uji coba gratis 14 hari",
   priceTerms: "Gratis 14 hari, lalu {monthly} per bulan.\nKartu diperlukan, dan dua hari sebelum tagihan kami mengirimkan email pengingat.\nBatalkan kapan saja dari halaman akunmu, tanpa perlu menghubungi siapa pun.",

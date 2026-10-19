@@ -50,7 +50,6 @@ const copy: IndCopy = {
   moreTitle: "Switirhisiwa swin'wana leswi mi pfunaka ku tsundzuka",
   more: [
     { kicker: "Swi vule", title: "Yingisani xivulwa kutani mi xi vula hi n'wexe", body: "Gadit yi hlaya xivulwa hi rito ra le henhla, naswona mi kuma tinhlayo ta ndlela leyi mi xi vuleke ha yona.", img: "say" },
-    { kicker: "Pimanisa marito", title: "Marito mambirhi lama fanaka na ku hambana exikarhi ka wona", body: "Ku hambana exikarhi ka affect na effect, kumbe exikarhi ka marito man'wana na man'wana mambirhi lawa vanhu va ma pfilunganyaka, swi ri na swikombiso na xihoxo lexi tolovelekeke.", img: "compare" },
     { kicker: "Mintlangu na mavutiso", title: "Ntoloveto wo koma hi marito ya n'wina", body: "Mavutiso na mintlangu leswi akiweke hi marito lawa mi ma laveke mi ma hlayisa ebukwini ya n'wina ya marito.", img: "play" },
   ],
   priceKicker: "Nxavo",
@@ -63,7 +62,7 @@ const copy: IndCopy = {
     "Buku ya marito ya n'wina hinkwawo na ntoloveto wa vutlhari",
     "Tekani xifaniso xa tluka mi thinta rito rin'wana na rin'wana",
     "Swi vule: vulani xivulwa mi kuma tinhlayo",
-    "Mintlangu, mavutiso na ku pimanisa marito",
+    "Mintlangu na mavutiso ya marito ya n'wina",
   ],
   priceCta: "Sungulani ndzingo wa n'wina wa mahala wa masiku ya 14",
   priceTerms: "Masiku ya 14 mahala, kutani {monthly} hi n'hweti.\nKu laveka khadi, naswona masiku mambirhi emahlweni ka ku hakerisiwa hi mi rhumela imeyili yo mi tsundzuxa.\nKhanselani nkarhi wun'wana na wun'wana eka tluka ra akhawunti ya n'wina, handle ko vulavula na munhu.",
