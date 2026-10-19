@@ -39,6 +39,7 @@ import { SPELL_T_EXTRA, CELEBRATIONS_EXTRA } from "@/lib/spell-i18n";
 import { CURSIVE_FAMILY, PRINT_FAMILY, drawCursiveStart, drawLetterStart, isLatinWord, loadTraceFont, traceStyleCopy } from "@/lib/trace-letters";
 import { misc } from "@/lib/misc-i18n";
 import { ml } from "@/lib/my-lists-i18n";
+import { playNotActive } from "@/lib/play-copy";
 
 // Internal direction ids: "he2en" = native → English, "en2he" = English →
 // native. The "he" in the name is legacy — the non-English side is the
@@ -1110,10 +1111,14 @@ export function SpellClient() {
           <div style={{ textAlign: "center", marginTop: 70 }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>✍️</div>
             <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--ink,#0B1220)", marginBottom: 8 }}>{t("title", lang)}</h1>
-            <p style={{ fontSize: 15, color: "var(--ink-muted,#6B7280)", maxWidth: "42ch", margin: "0 auto 20px" }}>
+            {/* Inside the Play / iOS app: one neutral line, no plan or link. */}
+            <p className="gd-buy" style={{ fontSize: 15, color: "var(--ink-muted,#6B7280)", maxWidth: "42ch", margin: "0 auto 20px" }}>
               {misc("spellGate", lang)}
             </p>
-            <Link href={href("/families")} style={{ display: "inline-block", padding: "12px 24px", borderRadius: 12, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none" }}>
+            <p className="gd-play-only" style={{ fontSize: 15, color: "var(--ink-muted,#6B7280)", maxWidth: "42ch", margin: "0 auto 20px" }}>
+              {playNotActive(lang)}
+            </p>
+            <Link className="gd-buy" href={href("/families")} style={{ display: "inline-block", padding: "12px 24px", borderRadius: 12, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none" }}>
               {misc("seePlans", lang)}
             </Link>
           </div>

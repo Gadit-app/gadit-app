@@ -30,6 +30,20 @@ import { HELP } from "@/lib/help-i18n";
 // it matches what the Privacy / Terms / legal pages already cite.
 const SUPPORT_EMAIL = "support@gadit.app";
 
+// Inside the Play / iOS app (html[data-play="1"]) nothing may talk about
+// prices, plans, trials or upgrading (store rules), so these categories and
+// answers carry .gd-buy and are hidden there. The plain web shows them all.
+const PLAY_HIDDEN_CATEGORIES = new Set(["billing", "partner"]);
+const PLAY_HIDDEN_ITEMS = new Set([
+  "share-account", // plan names + a price
+  "change-email", // Stripe billing portal
+  "kids-not-working", // "requires Clear or Deep... prompt you to upgrade"
+  "voice-fails", // plan names + upgrade prompt
+  "no-image", // plan quotas
+  "save-word", // plan names
+  "what-is-gadit", // plan names
+]);
+
 export function HelpCenter() {
   const { lang, dir } = useLang();
   const c = HELP[lang] ?? HELP.en;
@@ -48,7 +62,7 @@ export function HelpCenter() {
           <section
             key={cat.id}
             id={cat.id}
-            className="wb-help-cat"
+            className={PLAY_HIDDEN_CATEGORIES.has(cat.id) ? "wb-help-cat gd-buy" : "wb-help-cat"}
             aria-labelledby={`wb-help-cat-${cat.id}`}
           >
             <h2 id={`wb-help-cat-${cat.id}`} className="wb-help-cat-title">
@@ -63,7 +77,7 @@ export function HelpCenter() {
                 <details
                   key={item.id}
                   id={`q-${item.id}`}
-                  className="wb-help-item"
+                  className={PLAY_HIDDEN_ITEMS.has(item.id) ? "wb-help-item gd-buy" : "wb-help-item"}
                 >
                   <summary className="wb-help-q">
                     <span className="wb-help-q-text">{item.q}</span>

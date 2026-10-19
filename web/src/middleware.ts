@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { isIosAppUA } from "@/lib/native-app";
 
 /**
  * Language-prefixed URL routing.
@@ -29,7 +30,19 @@ const SUPPORTED_LANGS = new Set(["he", "en", "ar", "ru", "es", "pt", "fr", "de",
 // free trial, untouched — Gadit is web-first, the app is convenience only.
 const PLAY_COOKIE = "gadit_play";
 // Consumer purchase surfaces that must not exist inside the Play app.
-const BLOCKED_IN_PLAY = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew"]);
+// The partner program (commission on sales) is a sales surface too, so it is
+// not offered inside the apps either (iOS App Review 3.1.1, 2026-10-19).
+// /features is laid out by plan (Basic / Clear / Deep / Family, "upgrade in a
+// tap"), a plan comparison in all but name, so it goes too.
+const BLOCKED_IN_PLAY = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew", "partners", "partner", "affiliate", "affiliates", "features"]);
+// Variants of a sales page ("families-v2", a future "pricing-new") are blocked
+// with it: a segment matches when it IS a blocked name or starts with "<name>-".
+function blockedInPlay(segment: string | undefined): boolean {
+  if (!segment) return false;
+  if (BLOCKED_IN_PLAY.has(segment)) return true;
+  for (const name of BLOCKED_IN_PLAY) if (segment.startsWith(name + "-")) return true;
+  return false;
+}
 
 // ── Purchase host: https://gadit.app (no www) ───────────────────────
 // The Play app (TWA) claims ONLY www.gadit.app (twa/twa-manifest.json), so on
@@ -44,7 +57,13 @@ const PAY_HOST = "gadit.app";
 // on this host (2026-10-10).
 const PAY_ROUTES = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew", "account", "auth"]);
 
+// The iOS App Store app (ios-app/, an Expo WebView) is ALWAYS Play mode: Apple
+// App Review 3.1.1 forbids prices, plans and any "buy on the website" inside
+// the app, the same rule the Play TWA follows. Its WebView user agent carries
+// "GaditApp-iOS/<version>" on every request (lib/native-app.ts), so no cookie
+// or ?src=play is needed for it.
 function detectPlay(req: NextRequest): boolean {
+  if (isIosAppUA(req.headers.get("user-agent"))) return true;
   if (req.nextUrl.searchParams.get("src") === "play") return true;
   if ((req.headers.get("referer") || "").startsWith("android-app://")) return true;
   return req.cookies.get(PLAY_COOKIE)?.value === "1";
@@ -52,6 +71,15 @@ function detectPlay(req: NextRequest): boolean {
 
 export function middleware(req: NextRequest) {
   const payHost = (req.headers.get("host") || "").split(":")[0] === PAY_HOST;
+  // The purchase host must never render inside the iOS app (a link to
+  // gadit.app opened in the WebView would show the price pages). Send it to
+  // the same path on www, where Play mode blocks the purchase routes.
+  if (payHost && isIosAppUA(req.headers.get("user-agent"))) {
+    const www = req.nextUrl.clone();
+    www.host = "www.gadit.app";
+    www.port = "";
+    return NextResponse.redirect(www, 307);
+  }
   if (payHost) {
     const segs = req.nextUrl.pathname.split("/").filter(Boolean);
     const routeFirst = segs[0] && SUPPORTED_LANGS.has(segs[0]) ? segs[1] : segs[0];
@@ -108,7 +136,7 @@ function route(req: NextRequest, payHost: boolean): NextResponse {
   if (playMode) {
     const langPrefixed = !!first && SUPPORTED_LANGS.has(first);
     const routeFirst = langPrefixed ? segments[1] : first;
-    if (routeFirst && BLOCKED_IN_PLAY.has(routeFirst)) {
+    if (blockedInPlay(routeFirst)) {
       // A link someone was SENT (WhatsApp, email) opens inside the app on a
       // phone that has it, and used to land on the home page instead (Gadi
       // 2026-10-10: shared landing pages would not open for app users). Only
@@ -116,8 +144,12 @@ function route(req: NextRequest, payHost: boolean): NextResponse {
       // came from outside, so hand it to the purchase host, which the app
       // does not claim and the phone opens in the browser. Nothing is sold
       // inside the app: in-app clicks still go home below.
+      // Never for the iOS app: its WebView would load the purchase host
+      // inside the app. iOS always goes home below.
       const ref = req.headers.get("referer") || "";
-      if (!ref.startsWith("https://www.gadit.app")) {
+      // Only routes the purchase host serves (a variant or the partner area
+      // would bounce straight back to www, a loop): the rest go home.
+      if (!ref.startsWith("https://www.gadit.app") && !isIosAppUA(req.headers.get("user-agent")) && PAY_ROUTES.has(routeFirst!)) {
         const pay = req.nextUrl.clone();
         pay.protocol = "https:";
         pay.host = PAY_HOST;

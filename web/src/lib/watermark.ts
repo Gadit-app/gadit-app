@@ -14,6 +14,7 @@
  */
 
 import { readableImageUrl } from "@/lib/image-proxy-url";
+import { nativeShareFallback } from "@/lib/native-app";
 
 const INK = "#0B0F19";
 const TEAL = "#0EA5A5";
@@ -299,6 +300,9 @@ export async function shareWatermarkedPicture(opts: {
         }
       }
     }
+    // iOS app without navigator.share: the app's share sheet with the
+    // word page link (a file cannot cross the bridge).
+    if (typeof nav.share !== "function" && nativeShareFallback(pageUrl || src, title)) return;
     downloadBlob(blob, file.name);
     return;
   }
@@ -309,6 +313,7 @@ export async function shareWatermarkedPicture(opts: {
       await nav.share({ title, url: src });
       return;
     }
+    if (nativeShareFallback(pageUrl || src, title)) return;
   } catch (e) {
     if (isAbort(e)) return;
   }

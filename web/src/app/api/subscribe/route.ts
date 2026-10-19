@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isIosAppUA } from "@/lib/native-app";
 import Stripe from "stripe";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { NEW_SCHOOLS_PRICE_IDS } from "@/lib/schools-prices";
@@ -121,8 +122,9 @@ const SUB_EXPAND = ["pending_setup_intent", "latest_invoice.confirmation_secret"
 
 export async function POST(req: NextRequest) {
   try {
-    // Google Play consumption-only: no purchase from inside the Play app.
-    if (req.cookies.get("gadit_play")?.value === "1") {
+    // Google Play consumption-only: no purchase from inside the Play app,
+    // nor from the iOS app (App Review 3.1.1, recognised by its user agent).
+    if (req.cookies.get("gadit_play")?.value === "1" || isIosAppUA(req.headers.get("user-agent"))) {
       return NextResponse.json({ error: "not_available_in_app" }, { status: 403 });
     }
     const { priceId, code, lang, utm } = (await req.json()) as {

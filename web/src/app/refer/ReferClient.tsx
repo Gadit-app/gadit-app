@@ -8,6 +8,7 @@ import { useHref } from "@/lib/href";
 import { ShareButton } from "@/components/ShareButton";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import type { Lang } from "@/lib/i18n";
+import { isPlayModeClient } from "@/lib/play-copy";
 
 /**
  * /refer — the member-gets-member invite page. Shows the user's personal
@@ -638,13 +639,18 @@ export function ReferClient() {
       </header>
 
       <main style={{ maxWidth: 620, margin: "0 auto", padding: "48px 22px 96px", fontFamily: fontBody(lang) }}>
-        <p style={{ margin: "0 0 10px", fontSize: 13, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--teal-deep, #0E7490)" }}>
+        {/* Inside the Play / iOS app the invite stays, the reward (a free
+            month when a friend subscribes) does not: .gd-buy / .gd-play-only. */}
+        <p className="gd-buy" style={{ margin: "0 0 10px", fontSize: 13, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--teal-deep, #0E7490)" }}>
           {t.eyebrow}
         </p>
-        <h1 style={{ margin: "0 0 12px", fontSize: "clamp(28px,5vw,40px)", fontWeight: 800, lineHeight: 1.15, color: "var(--ink, #20272E)" }}>
+        <h1 className="gd-buy" style={{ margin: "0 0 12px", fontSize: "clamp(28px,5vw,40px)", fontWeight: 800, lineHeight: 1.15, color: "var(--ink, #20272E)" }}>
           {t.title}
         </h1>
-        <p style={{ margin: "0 0 28px", fontSize: 17, lineHeight: 1.55, color: "var(--ink-muted, #6B7280)", maxWidth: "52ch" }}>
+        <h1 className="gd-play-only" style={{ margin: "0 0 28px", fontSize: "clamp(28px,5vw,40px)", fontWeight: 800, lineHeight: 1.15, color: "var(--ink, #20272E)" }}>
+          {t.eyebrow}
+        </h1>
+        <p className="gd-buy" style={{ margin: "0 0 28px", fontSize: 17, lineHeight: 1.55, color: "var(--ink-muted, #6B7280)", maxWidth: "52ch" }}>
           {t.sub}
         </p>
 
@@ -681,19 +687,19 @@ export function ReferClient() {
                   {copied ? t.copied : t.copy}
                 </button>
                 {data && (
-                  <ShareButton url={data.link} title="Gadit" text={t.sub} shareLabel={t.share} copiedLabel={t.copied} />
+                  <ShareButton url={data.link} title="Gadit" text={isPlayModeClient() ? "" : t.sub} shareLabel={t.share} copiedLabel={t.copied} />
                 )}
               </div>
             </div>
 
             {/* Stats */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+            <div className="gd-buy" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
               <Stat label={t.invited} value={data?.invited ?? 0} />
               <Stat label={t.joined} value={data?.joinedPaid ?? 0} />
               <Stat label={t.months} value={data?.rewardsOwed ?? 0} strong />
             </div>
 
-            <p style={{ marginTop: 18, fontSize: 13, color: "var(--ink-muted, #9CA3AF)", lineHeight: 1.5 }}>
+            <p className="gd-buy" style={{ marginTop: 18, fontSize: 13, color: "var(--ink-muted, #9CA3AF)", lineHeight: 1.5 }}>
               {t.note}
             </p>
           </>

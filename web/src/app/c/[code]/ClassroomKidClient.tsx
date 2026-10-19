@@ -1003,8 +1003,10 @@ export function ClassroomKidClient({ code }: { code: string }) {
 
       {/* Off-hours soft hint — a real bottom footer (margin-top:auto pins it to
           the viewport bottom) so it never floats up with the hero + names. */}
+      {/* .gd-buy: points at the Family sales page, so not inside the Play /
+          iOS app (store rules). */}
       {!data.inSession && (
-        <footer className="wb-classroom-offhours">
+        <footer className="wb-classroom-offhours gd-buy">
           <div className="wb-classroom-offhours-line1">
             {(OFFHOURS_HINT[lang] ?? OFFHOURS_HINT.en).lead}
           </div>

@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isIosAppUA } from "@/lib/native-app";
 import Stripe from "stripe";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
+  // The Stripe portal can change or start a plan: never from inside the iOS
+  // app (App Review 3.1.1). Billing is managed on the website.
+  if (isIosAppUA(req.headers.get("user-agent"))) {
+    return NextResponse.json({ error: "not_available_in_app" }, { status: 403 });
+  }
   try {
     const authHeader = req.headers.get("Authorization") || "";
     const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;

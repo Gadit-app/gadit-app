@@ -15,12 +15,17 @@ import {
   sendPasswordResetEmail,
   signOut,
   getAdditionalUserInfo,
+  signInWithCredential,
+  OAuthProvider,
+  updateProfile,
 } from "firebase/auth";
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, doc, onSnapshot } from "firebase/firestore";
 import { track } from "@/lib/track";
 import { isBlockedSignupEmail } from "@/lib/signup-guard";
+import { nativeAuthAvailable, requestNativeAuth, type NativeAuthProvider } from "@/lib/native-auth";
+import { isIosApp } from "@/lib/native-app";
 
 function getFirebaseAuth() {
   const firebaseConfig = {
@@ -121,6 +126,9 @@ interface AuthContextType {
   avatarId: string | null;
   avatarPhotoUrl: string | null;
   signInWithGoogle: () => Promise<void>;
+  /** Sign in with Apple through the iOS app's native sheet. Only offered
+   *  inside the iOS app (lib/native-auth.ts nativeAuthAvailable("apple")). */
+  signInWithApple: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<void>;
   sendPasswordReset: (email: string, lang?: string) => Promise<void>;
@@ -248,8 +256,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // that this person uses the app: nothing can be bought there, so they
       // get one upgrade email (Gadi 2026-10-06). Covers people who signed in
       // long ago, not only fresh sign-ins.
+      // Never for the iOS app (Apple App Review 3.1.3: information from the
+      // app may not be used to steer that person to buy outside it).
       try {
-        if (u && sessionStorage.getItem("gadit_play_tab") === "1" && sessionStorage.getItem("gadit_play_marked") !== "1") {
+        if (u && !isIosApp() && sessionStorage.getItem("gadit_play_tab") === "1" && sessionStorage.getItem("gadit_play_marked") !== "1") {
           sessionStorage.setItem("gadit_play_marked", "1");
           void notifySignupSafely(u);
         }
@@ -405,7 +415,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const payload: Record<string, unknown> = {};
       if (utm) payload.utm = utm;
       if (lang) payload.lang = lang;
-      try { if (sessionStorage.getItem("gadit_play_tab") === "1") payload.play = true; } catch { /* storage blocked */ }
+      // Android Play app only: the iOS app never triggers the upgrade email.
+      try { if (!isIosApp() && sessionStorage.getItem("gadit_play_tab") === "1") payload.play = true; } catch { /* storage blocked */ }
       // GA client id, so the first real payment (sent server-side from the
       // Stripe webhook) joins this visitor's GA journey.
       const { gaClientId } = await import("./ga");
@@ -467,12 +478,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Post-sign-in side effects, shared by the popup path and the redirect
   // path (getRedirectResult on load). isNewUser disambiguates first-time
   // signup from a returning login so we only notify/track/welcome once.
-  function postGoogleSignIn(cred: import("firebase/auth").UserCredential) {
+  function postGoogleSignIn(cred: import("firebase/auth").UserCredential, method: "google" | "apple" = "google") {
     const extra = getAdditionalUserInfo(cred);
     if (extra?.isNewUser) {
       void notifySignupSafely(cred.user);
       trackAffonsoSignup(cred.user);
-      track("signup_completed", { method: "google" });
+      track("signup_completed", { method });
       afterNewSignup(cred.user, hadPendingRef.current);
     }
     setShowLoginModal(false);
@@ -485,7 +496,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch { /* storage blocked */ }
   }
 
+  // iOS app (App Review 4.8; Google refuses OAuth inside a WebView): the
+  // shell runs the system Apple / Google sheet and hands back ID tokens, and
+  // we sign in to Firebase with them. Same Firebase user as on the web for the
+  // same Google account, and the same post-sign-in logic as the popup path.
+  async function signInWithNative(provider: NativeAuthProvider) {
+    hadPendingRef.current = !!pendingActionRef.current;
+    const r = await requestNativeAuth(provider);
+    const credential =
+      provider === "apple"
+        ? new OAuthProvider("apple.com").credential({ idToken: r.idToken, rawNonce: r.rawNonce })
+        : GoogleAuthProvider.credential(r.idToken, r.accessToken ?? null);
+    const cred = await signInWithCredential(getFirebaseAuth(), credential);
+    // Apple gives the name only on the very first sign-in, and never in the
+    // ID token: keep it as the display name when there is none yet (before
+    // the signup notify, so the welcome email can greet them by name).
+    const name = r.fullName?.trim();
+    if (provider === "apple" && name && !cred.user.displayName?.trim()) {
+      try {
+        await updateProfile(cred.user, { displayName: name });
+      } catch { /* nice-to-have */ }
+    }
+    postGoogleSignIn(cred, provider);
+  }
+
+  async function signInWithApple() {
+    await signInWithNative("apple");
+  }
+
   async function signInWithGoogle() {
+    if (nativeAuthAvailable("google")) {
+      await signInWithNative("google");
+      return;
+    }
     const auth = getFirebaseAuth();
     const provider = new GoogleAuthProvider();
     // Popups don't work in an installed PWA (standalone display mode): the
@@ -611,7 +654,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       user, loading, plan, planReady, pastDue, graceUntil, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl,
       kidsAccess,
       isIndividual: !familyId && !schoolId && isIndividualPriceId(priceId),
-      signInWithGoogle, signInWithEmail, signUpWithEmail, sendPasswordReset, logout,
+      signInWithGoogle, signInWithApple, signInWithEmail, signUpWithEmail, sendPasswordReset, logout,
       showLoginModal, setShowLoginModal,
       loginReason, loginMode, promptLogin,
     }}>

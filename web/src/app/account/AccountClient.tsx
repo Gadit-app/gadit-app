@@ -34,6 +34,7 @@ import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { DeleteAccountModal } from "@/components/design/DeleteAccountModal";
+import { isPlayModeClient } from "@/lib/play-copy";
 import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
 import { useHref } from "@/lib/href";
@@ -603,13 +604,17 @@ export function AccountPage() {
         body: JSON.stringify({ action: "check" }),
       });
       const j = (await res.json().catch(() => ({}))) as { offerEligible?: boolean; error?: string };
+      // Inside the Play / iOS app: no billing portal (it can change plans) and
+      // no "14 more days free" offer, only the plain cancel (store rules).
+      const inApp = isPlayModeClient();
       if (!res.ok) {
         // No sub found etc. — fall back to the billing portal so they're not stuck.
+        if (inApp) { window.alert(miscUi(lang).billingFail); return; }
         await handleManageBilling();
         return;
       }
       setCancelResult(null);
-      setCancelFlow({ offerEligible: !!j.offerEligible });
+      setCancelFlow({ offerEligible: !!j.offerEligible && !inApp });
     } finally {
       setCancelBusy(false);
     }
@@ -852,8 +857,8 @@ export function AccountPage() {
         <Link href={href("/")}>{v2(lang, "navSearch")}</Link>
         <span className="gd-buy">·</span>
         <Link href={href("/pricing")} className="gd-buy">{v2(lang, "navPricing")}</Link>
-        <span>·</span>
-        <Link href={href("/features")}>{v2(lang, "navFeatures")}</Link>
+        <span className="gd-buy">·</span>
+        <Link href={href("/features")} className="gd-buy">{v2(lang, "navFeatures")}</Link>
       </footer>
     </div>
   );
@@ -1039,8 +1044,11 @@ function PlanSection({
               </>
             ) : (
               <>
-                <GhostBtn onClick={onManageBilling}>{v2(lang, "accountManageBilling")}</GhostBtn>
-                <GhostBtn onClick={onChangePlan}>{v2(lang, "accountChangePlan")}</GhostBtn>
+                {/* .gd-buy: the Stripe portal and /pricing can start or change
+                    a plan, so neither is offered inside the Play or iOS app
+                    (App Review 3.1.1); billing is managed on the website. */}
+                <span className="gd-buy"><GhostBtn onClick={onManageBilling}>{v2(lang, "accountManageBilling")}</GhostBtn></span>
+                <span className="gd-buy"><GhostBtn onClick={onChangePlan}>{v2(lang, "accountChangePlan")}</GhostBtn></span>
               </>
             )}
           </div>
@@ -1076,7 +1084,9 @@ function PlanSection({
               Deep-link via #billing hits the right Help Center section
               directly; scroll-margin-top in CSS keeps it below the
               sticky topbar. */}
-          <div style={{ marginTop: 14 }}>
+          {/* .gd-buy: the billing help is hidden inside the Play / iOS app,
+              where its section is hidden too (HelpCenter). */}
+          <div className="gd-buy" style={{ marginTop: 14 }}>
             <Link
               href={href("/contact") + "#billing"}
               style={{

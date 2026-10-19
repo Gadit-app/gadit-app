@@ -48,7 +48,7 @@ import { track } from "@/lib/track";
 
 // Nav keys that lead to a purchase surface — tagged .gd-buy so they are
 // hidden inside the Google Play consumption-only TWA (html[data-play="1"]).
-const BUY_NAV_KEYS = new Set(["pricing", "families", "individuals", "schools"]);
+const BUY_NAV_KEYS = new Set(["pricing", "families", "individuals", "schools", "features"]);
 import { useTheme } from "@/lib/appearance";
 import { DARK_LABEL } from "@/components/design/WbUserMenu";
 

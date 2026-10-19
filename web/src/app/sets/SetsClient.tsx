@@ -412,7 +412,8 @@ function SchoolsOnly({ lang, dir }: { lang: string; dir: "rtl" | "ltr" }) {
           <br />
           {sub2}
         </p>
-        <Link href={href("/schools")} style={{ ...S.presentBtn, display: "inline-flex", width: "auto", padding: "12px 26px", textDecoration: "none" }}>
+        {/* .gd-buy: the schools sales page is not offered inside the Play / iOS app. */}
+        <Link href={href("/schools")} className="gd-buy" style={{ ...S.presentBtn, display: "inline-flex", width: "auto", padding: "12px 26px", textDecoration: "none" }}>
           {cta}
         </Link>
       </main>

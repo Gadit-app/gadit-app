@@ -35,6 +35,7 @@
  */
 
 import { gadCopy } from "@/lib/gadit-button-copy";
+import { nativeShareFallback } from "@/lib/native-app";
 import { useState, useEffect, useMemo, type ReactNode } from "react";
 import { miscUi } from "@/lib/misc-ui-i18n";
 import { useLang } from "@/lib/lang-context";
@@ -903,7 +904,7 @@ function MeaningEntry({
     };
     if (nav.share) {
       nav.share({ title: `Gadit, ${word}`, text, url }).catch(() => undefined);
-    } else {
+    } else if (!nativeShareFallback(url, text)) {
       nav.clipboard?.writeText(url).catch(() => undefined);
     }
   }

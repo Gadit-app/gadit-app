@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { memberColorFor, avatarUrl } from "@/lib/family";
+import { playNotActive } from "@/lib/play-copy";
 
 type Student = {
   grantId: string;
@@ -652,7 +653,9 @@ export function CoachClient() {
           <div style={{ color: "var(--ink-muted)", padding: "24px 0" }}>…</div>
         ) : needsPlan && students && students.length > 0 ? (
           <div style={{ background: "var(--surface, #fff)", border: "1px solid var(--rule)", borderRadius: 16, padding: "20px 20px 18px", display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
-            <div style={{ fontSize: 16, fontWeight: 700, color: "var(--ink)", lineHeight: 1.6 }}>{(NEEDS_PLAN[lang] ?? NEEDS_PLAN.en)[0]}</div>
+            {/* Inside the Play / iOS app: no plan names (store rules). */}
+            <div className="gd-buy" style={{ fontSize: 16, fontWeight: 700, color: "var(--ink)", lineHeight: 1.6 }}>{(NEEDS_PLAN[lang] ?? NEEDS_PLAN.en)[0]}</div>
+            <div className="gd-play-only" style={{ fontSize: 16, fontWeight: 700, color: "var(--ink)", lineHeight: 1.6 }}>{playNotActive(lang)}</div>
             <div style={{ fontSize: 14, color: "var(--ink-muted)" }}>{students.map((s) => s.memberName).join(", ")}</div>
             <a className="gd-buy" href={payUrl(lang === "en" ? "/pricing" : `/${lang}/pricing`)} style={{ background: "#0EA5A5", color: "#fff", borderRadius: 12, padding: "12px 22px", fontSize: 15, fontWeight: 800, textDecoration: "none" }}>{(NEEDS_PLAN[lang] ?? NEEDS_PLAN.en)[1]}</a>
           </div>

@@ -569,11 +569,12 @@ export function HomeFooter() {
   // prefix for every non-English user. Launch QA 2026-07-03.
   const href = useHref();
 
-  const productLinks: Array<{ label: string; href: string }> = [
+  // buy: hidden inside the Play / iOS app (.gd-buy, store rules).
+  const productLinks: Array<{ label: string; href: string; buy?: boolean }> = [
     { label: v2(lang, "footerNotebook"), href: href("/notebook") },
-    { label: v2(lang, "footerPricing"), href: href("/pricing") },
+    { label: v2(lang, "footerPricing"), href: href("/pricing"), buy: true },
     // Partners moved out of the top nav to the footer (Gadi 2026-08-20).
-    { label: v2(lang, "navAffiliates"), href: href("/partners") },
+    { label: v2(lang, "navAffiliates"), href: href("/partners"), buy: true },
   ];
   const legalLinks: Array<{ label: string; href: string }> = [
     { label: v2(lang, "footerPrivacy"), href: href("/privacy") },
@@ -664,7 +665,7 @@ export function HomeFooter() {
             </Eyebrow>
             <ul className="mt-3 space-y-2 gd-font-sans-ui">
               {productLinks.map((it) => (
-                <li key={it.href}>
+                <li key={it.href} className={it.buy ? "gd-buy" : undefined}>
                   <Link
                     href={it.href}
                     className="hover:text-white transition-colors"
@@ -694,7 +695,8 @@ export function HomeFooter() {
               ))}
             </ul>
           </div>
-          <div>
+          {/* Sales decks carry prices: not inside the Play / iOS app. */}
+          <div className="gd-buy">
             <Eyebrow style={{ color: "oklch(0.82 0.008 265)" }}>
               {deckGroupLabel[lang] ?? deckGroupLabel.en}
             </Eyebrow>

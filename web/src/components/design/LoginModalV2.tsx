@@ -16,6 +16,8 @@ import { useHref } from "@/lib/href";
 import { v2 } from "@/lib/i18n-v2";
 import { detectInAppBrowser } from "@/lib/in-app-browser";
 import { loginHelp } from "@/lib/login-help-copy";
+import { useNativeAuthAvailable } from "@/lib/use-native-app";
+import { isNativeAuthCancel } from "@/lib/native-auth";
 
 /** Every failed sign-in is noted (address, error code, page; never the
  *  password) so a locked-out person shows up in /admin/auth-errors before
@@ -40,6 +42,16 @@ function GoogleG() {
       <path fill="#34A853" d="M9 18c2.43 0 4.47-.81 5.96-2.18l-2.92-2.26c-.8.54-1.83.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.34A9 9 0 0 0 9 18z" />
       <path fill="#FBBC05" d="M3.97 10.71A5.41 5.41 0 0 1 3.68 9c0-.59.1-1.17.29-1.71V4.95H.96A9 9 0 0 0 0 9c0 1.45.35 2.83.96 4.05l3.01-2.34z" />
       <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58A9 9 0 0 0 9 0 9 9 0 0 0 .96 4.95l3.01 2.34C4.68 5.17 6.66 3.58 9 3.58z" />
+    </svg>
+  );
+}
+
+// Apple logo for the Sign in with Apple button (Apple HIG: white logo on a
+// black button, same size as the other sign-in buttons).
+function AppleLogo() {
+  return (
+    <svg width="16" height="19" viewBox="0 0 814 1000" aria-hidden="true" fill="currentColor">
+      <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105.6-57-155.5-127C46.7 790.7 0 663 0 541.8c0-194.4 126.4-297.5 250.8-297.5 66.1 0 121.2 43.4 162.7 43.4 39.5 0 101.1-46 176.3-46 28.5 0 130.9 2.6 198.3 99.2zm-234-181.5c31.1-36.9 53.1-88.1 53.1-139.3 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-55.1 83.6-55.1 135.5 0 7.8 1.3 15.6 1.9 18.1 3.2.6 8.4 1.3 13.6 1.3 45.4 0 102.5-30.4 135.5-71.3z" />
     </svg>
   );
 }
@@ -171,6 +183,7 @@ export function LoginModalV2() {
     loginReason,
     loginMode,
     signInWithGoogle,
+    signInWithApple,
     signInWithEmail,
     signUpWithEmail,
     sendPasswordReset,
@@ -209,6 +222,10 @@ export function LoginModalV2() {
   // SSR-safe: stays null until first client render so the server-side
   // markup matches the initial client render. Once detected, it sticks.
   const [inAppName, setInAppName] = useState<string | null>(null);
+  // Inside the Gadit iOS app: Sign in with Apple (App Review 4.8), run by the
+  // app's native sheet, next to Google (also native there). False everywhere
+  // else, so the web and Android never show the Apple button.
+  const appleAvailable = useNativeAuthAvailable("apple");
 
   useEffect(() => {
     setInAppName(detectInAppBrowser());
@@ -318,8 +335,34 @@ export function LoginModalV2() {
     try {
       await signInWithGoogle();
     } catch (err) {
-      logAuthError("", err instanceof Error ? err.message : "google", "google", lang);
-      setErrorKey("loginErrorGoogleFailed");
+      if (isNativeAuthCancel(err)) return; // closed the iOS sheet: nothing to say
+      const msg = err instanceof Error ? err.message : "google";
+      logAuthError("", msg, "google", lang);
+      if (msg.includes("account-exists-with-different-credential")) setErrorKey("loginErrorEmailInUse");
+      else setErrorKey("loginErrorGoogleFailed");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleApple() {
+    if (mode === "signup" && !ageAccepted) {
+      setErrorKey("loginErrorAgeRequired");
+      return;
+    }
+    setBusy(true);
+    setErrorKey("");
+    setLocalError("");
+    try {
+      await signInWithApple();
+    } catch (err) {
+      if (isNativeAuthCancel(err)) return;
+      const msg = err instanceof Error ? err.message : "apple";
+      logAuthError("", msg, "apple", lang);
+      // Same email already registered another way (one account per email):
+      // "Email already in use. Try logging in."
+      if (msg.includes("account-exists-with-different-credential")) setErrorKey("loginErrorEmailInUse");
+      else setLocalError(v2(lang, "loginErrorGoogleFailed").replace("Google", "Apple"));
     } finally {
       setBusy(false);
     }
@@ -499,6 +542,21 @@ export function LoginModalV2() {
           </div>
         ) : (
           <>
+            {appleAvailable && (
+              // Label: the Google button's own string in this language with
+              // the brand swapped ("המשיכו עם Apple", "Continue with Apple"),
+              // so every UI language is covered and the pair reads alike.
+              <button
+                type="button"
+                onClick={handleApple}
+                disabled={busy || (mode === "signup" && !ageAccepted)}
+                className="wb-login-apple"
+                title={mode === "signup" && !ageAccepted ? v2(lang, "loginErrorAgeRequired") : undefined}
+              >
+                <AppleLogo />
+                <span>{v2(lang, "loginContinueWithGoogle").replace("Google", "Apple")}</span>
+              </button>
+            )}
             <button
               type="button"
               onClick={handleGoogle}

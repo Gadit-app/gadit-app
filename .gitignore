@@ -61,3 +61,4 @@ twa/*.apk
 twa/signing-key-info.txt
 **/signing.keystore
 **/*.keystore
+web/scripts/curriculum-za/caps/

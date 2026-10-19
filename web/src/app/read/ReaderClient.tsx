@@ -16,6 +16,7 @@ import { misc } from "@/lib/misc-i18n";
 import { homeworkCopy } from "@/lib/homework-i18n";
 import { notifyActivity } from "@/lib/notify-activity-client";
 import { ReportQuestionButton } from "@/components/play/ReportQuestionButton";
+import { playNotActive } from "@/lib/play-copy";
 
 /**
  * /read — the Reader. Paste or photograph a passage; Gadit lays it out as
@@ -690,7 +691,7 @@ export function ReaderClient() {
         ) : !user ? (
           <Gate title={t.loginTitle} btn={t.loginBtn} onClick={() => promptLogin?.()} />
         ) : plan === "basic" ? (
-          <Gate title={t.upgradeTitle} btn={t.upgradeBtn} href={href("/pricing")} />
+          <Gate title={t.upgradeTitle} btn={t.upgradeBtn} href={href("/pricing")} buy lang={lang} />
         ) : !text ? (
           // Input state: paste or photograph.
           <div>
@@ -826,7 +827,9 @@ export function ReaderClient() {
   );
 }
 
-function Gate({ title, btn, onClick, href }: { title: string; btn: string; onClick?: () => void; href?: string }) {
+// buy: an upgrade gate. Inside the Play / iOS app it shows only a neutral line
+// with no button (store rules; .gd-buy / .gd-play-only, lib/play-copy.ts).
+function Gate({ title, btn, onClick, href, buy, lang }: { title: string; btn: string; onClick?: () => void; href?: string; buy?: boolean; lang?: string }) {
   const inner = (
     <span style={{ display: "inline-block", background: "var(--teal,#0EA5A5)", color: "#fff", borderRadius: 12, padding: "11px 22px", fontSize: 15, fontWeight: 700, cursor: "pointer", textDecoration: "none" }}>
       {btn}
@@ -834,8 +837,9 @@ function Gate({ title, btn, onClick, href }: { title: string; btn: string; onCli
   );
   return (
     <div style={{ background: "var(--card,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 16, padding: 26 }}>
-      <p style={{ margin: "0 0 16px", fontSize: 16, color: "var(--ink,#20272E)" }}>{title}</p>
-      {href ? <Link href={href}>{inner}</Link> : <span onClick={onClick}>{inner}</span>}
+      <p className={buy ? "gd-buy" : undefined} style={{ margin: "0 0 16px", fontSize: 16, color: "var(--ink,#20272E)" }}>{title}</p>
+      {buy && <p className="gd-play-only" style={{ margin: 0, fontSize: 16, color: "var(--ink,#20272E)" }}>{playNotActive(lang ?? "en")}</p>}
+      {href ? <Link href={href} className={buy ? "gd-buy" : undefined}>{inner}</Link> : <span onClick={onClick}>{inner}</span>}
     </div>
   );
 }

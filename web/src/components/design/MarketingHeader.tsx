@@ -88,7 +88,7 @@ function NavLink({
     <Link
       href={href(item.href)}
       onClick={onClick}
-      className="gd-font-sans-ui transition-colors relative"
+      className={`gd-font-sans-ui transition-colors relative${item.href === "/pricing" ? " gd-buy" : ""}`}
       style={{
         fontSize: 13,
         fontWeight: 500,
@@ -313,7 +313,7 @@ export function MarketingHeader() {
               key={item.href}
               href={item.href}
               onClick={() => setMobileOpen(false)}
-              className="gd-font-sans-ui transition-colors"
+              className={`gd-font-sans-ui transition-colors${item.href === "/pricing" ? " gd-buy" : ""}`}
               style={{
                 fontSize: 14,
                 fontWeight: 500,

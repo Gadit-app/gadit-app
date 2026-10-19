@@ -106,10 +106,13 @@ export function PastDueBanner() {
     window.location.href = "/account";
   }
 
+  // .gd-buy: no payment flow inside the Play or iOS app (store rules); the
+  // card is updated on the website, the reminder email still goes out.
   return (
     <div
       dir={dir}
       role="alert"
+      className="gd-buy"
       style={{
         position: "sticky", top: 0, zIndex: 60, width: "100%",
         display: "flex", alignItems: "center", justifyContent: "center", gap: 14, flexWrap: "wrap",

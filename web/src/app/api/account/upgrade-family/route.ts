@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isIosAppUA } from "@/lib/native-app";
 import Stripe from "stripe";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 
@@ -100,6 +101,10 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  // A plan change that charges now: never from inside the iOS app (App Review 3.1.1).
+  if (isIosAppUA(req.headers.get("user-agent"))) {
+    return NextResponse.json({ error: "not_available_in_app" }, { status: 403 });
+  }
   const caller = await resolveCaller(req);
   if (!caller) return NextResponse.json({ error: "login_required" }, { status: 401 });
 

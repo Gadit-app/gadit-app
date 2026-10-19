@@ -6323,6 +6323,28 @@ html[data-theme="dark"] .wordbook .wb-verb-stamp-pos {
   box-shadow: 0 0 0 3px rgba(14, 165, 165, 0.10);
 }
 .wordbook .wb-login-google:disabled { opacity: 0.6; cursor: default; }
+/* Sign in with Apple (iOS app only, LoginModalV2). Apple HIG: solid black,
+   white logo and text, same size and corner radius as the Google button. */
+.wordbook .wb-login-apple {
+  width: 100%;
+  margin-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #000;
+  color: #fff;
+  font-family: var(--wb-he);
+  font-size: 14.5px;
+  font-weight: 500;
+  padding: 11px 14px;
+  min-height: 44px;
+  border-radius: 10px;
+  border: 1px solid #000;
+  cursor: pointer;
+}
+.wordbook .wb-login-apple:disabled { opacity: 0.6; cursor: default; }
+.wordbook .wb-login-apple + .wb-login-google { margin-top: 10px; }
 .wordbook .wb-login-sep {
   display: flex;
   align-items: center;
@@ -14707,6 +14729,9 @@ html[data-theme="royal"] .wb-kid-bg { --skin-bg: radial-gradient(65% 48% at 82% 
    like /pricing and /checkout are already blocked server-side in middleware;
    this hides the entry-point CTAs on the pages that stay accessible. */
 html[data-play="1"] .gd-buy { display: none !important; }
+/* The reverse: shown ONLY in Play mode (the neutral line that replaces an
+   upgrade wall inside the Android and iOS apps, lib/play-copy.ts). */
+html:not([data-play="1"]) .gd-play-only { display: none !important; }
 
 /* Narrow phones (360 to 430px): the signed-out topbar (wordmark + sign-in
    icon + Start pill + Kids toggle + burger + language chip) needs ~440px in

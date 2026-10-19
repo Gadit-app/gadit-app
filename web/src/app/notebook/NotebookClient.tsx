@@ -725,12 +725,17 @@ export function NotebookPage() {
             that saves every word. */}
         {plan === "basic" && planReady && items && (
           <div className="wb-notebook-free" role="note">
-            <span>
-              {items.length >= FREE_NOTEBOOK_MAX
-                ? planCopy(lang, "nbFreeFull", { max: FREE_NOTEBOOK_MAX })
-                : planCopy(lang, "nbFreeCount", { n: items.length, max: FREE_NOTEBOOK_MAX })}
-            </span>
-            <Link href={href("/pricing")} className="wb-notebook-free-cta">{planCopy(lang, "nbFreeCta")}</Link>
+            {/* Inside the Play / iOS app: only the count, no plan name or link
+                (store rules; .gd-buy / .gd-play-only). */}
+            {items.length >= FREE_NOTEBOOK_MAX ? (
+              <>
+                <span className="gd-buy">{planCopy(lang, "nbFreeFull", { max: FREE_NOTEBOOK_MAX })}</span>
+                <span className="gd-play-only">{planCopy(lang, "nbFreeCount", { n: items.length, max: FREE_NOTEBOOK_MAX })}</span>
+              </>
+            ) : (
+              <span>{planCopy(lang, "nbFreeCount", { n: items.length, max: FREE_NOTEBOOK_MAX })}</span>
+            )}
+            <Link href={href("/pricing")} className="wb-notebook-free-cta gd-buy">{planCopy(lang, "nbFreeCta")}</Link>
           </div>
         )}
 
@@ -902,8 +907,8 @@ export function NotebookPage() {
 
       <footer className="wb-home-footer">
         <span>© 2026 Gadit</span>
-        <span>·</span>
-        <Link href={href("/pricing")}>{v2(lang, "navPricing")}</Link>
+        <span className="gd-buy">·</span>
+        <Link href={href("/pricing")} className="gd-buy">{v2(lang, "navPricing")}</Link>
         <span>·</span>
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>

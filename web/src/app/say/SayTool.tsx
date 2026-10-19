@@ -20,6 +20,7 @@ import { useHref } from "@/lib/href";
 import { planCopy } from "@/lib/plan-copy";
 import { TTSButton } from "@/components/design/TTSButton";
 import VoiceInput from "@/components/VoiceInput";
+import { playNotActive } from "@/lib/play-copy";
 
 type Copy = {
   title: string; sub: string; from: string; to: string;
@@ -489,9 +490,11 @@ export function SayTool({ onClose, framed = false }: { onClose?: () => void; fra
         </div>
       ) : !paid ? (
         <div style={{ background: "var(--surface, #fff)", border: "1px solid var(--rule, #E7E7E2)", borderRadius: 16, padding: 28, textAlign: "center" }}>
-          <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>{t.paidTitle}</div>
-          <div style={{ fontSize: 15, opacity: 0.7, marginBottom: 18 }}>{planCopy(lang, "sayPaidBody")}</div>
-          <a href={href("/pricing")} style={{ display: "inline-block", background: "#0EA5A5", color: "#fff", fontWeight: 700, padding: "12px 24px", borderRadius: 999, textDecoration: "none" }}>{t.paidCta}</a>
+          {/* Inside the Play / iOS app: one neutral line, no plan or link. */}
+          <div className="gd-play-only" style={{ fontSize: 16, fontWeight: 600 }}>{playNotActive(lang)}</div>
+          <div className="gd-buy" style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>{t.paidTitle}</div>
+          <div className="gd-buy" style={{ fontSize: 15, opacity: 0.7, marginBottom: 18 }}>{planCopy(lang, "sayPaidBody")}</div>
+          <a className="gd-buy" href={href("/pricing")} style={{ display: "inline-block", background: "#0EA5A5", color: "#fff", fontWeight: 700, padding: "12px 24px", borderRadius: 999, textDecoration: "none" }}>{t.paidCta}</a>
         </div>
       ) : (
         <div className="wb-say-card">

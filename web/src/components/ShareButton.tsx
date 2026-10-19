@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useLang } from "@/lib/lang-context";
 import { buildHref } from "@/lib/href";
+import { nativeShareFallback } from "@/lib/native-app";
 
 /**
  * App-level share button for the topbar. Renders a single icon-only
@@ -94,6 +95,9 @@ export function ShareButton({
       } catch {
         // user cancelled the share sheet — silent
       }
+    } else if (nativeShareFallback(shareUrl, text || undefined)) {
+      // iOS app without navigator.share: the app's own share sheet.
+      return;
     }
     try {
       await nav.clipboard?.writeText(shareUrl);

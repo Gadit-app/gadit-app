@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse, after } from "next/server";
 import { sendMail } from "@/lib/mail";
+import { isIosAppUA } from "@/lib/native-app";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { isDisposableEmail } from "@/lib/email/disposable";
@@ -57,7 +58,8 @@ export async function POST(req: NextRequest) {
       if (body && typeof body === "object" && typeof body.lang === "string" && body.lang.length <= 8) {
         signupLang = body.lang;
       }
-      if (body && typeof body === "object" && body.play === true) fromPlay = true;
+      // Android Play app only: never the iOS app (Apple App Review 3.1.3).
+      if (body && typeof body === "object" && body.play === true && !isIosAppUA(req.headers.get("user-agent"))) fromPlay = true;
       if (body && typeof body === "object" && typeof body.gaClientId === "string" && /^\d{1,12}\.\d{1,12}$/.test(body.gaClientId)) {
         gaClientId = body.gaClientId;
       }

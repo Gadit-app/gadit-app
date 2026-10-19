@@ -99,7 +99,9 @@ export function HelpClient() {
         )}
 
         {GUIDE_SECTIONS.map((sec) => (
-          <section key={sec.titleKey} style={{ marginTop: 30 }}>
+          // "Upgrade & manage plan" (sec.account) shows plans and an Upgrade
+          // button: hidden inside the Play / iOS app (.gd-buy, store rules).
+          <section key={sec.titleKey} className={sec.titleKey === "sec.account" ? "gd-buy" : undefined} style={{ marginTop: 30 }}>
             <h2 style={{ fontSize: 17, fontWeight: 800, textAlign: "center", color: "var(--ink,#0B1220)", margin: "0 0 14px" }}>
               {gt(lang, sec.titleKey)}
             </h2>

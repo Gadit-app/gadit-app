@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isIosAppUA } from "@/lib/native-app";
 import Stripe from "stripe";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { isNewSchoolsPrice } from "@/lib/schools-prices";
@@ -35,6 +36,10 @@ const SCHOOLS_IDS = [
 ].filter(Boolean);
 
 export async function POST(req: NextRequest) {
+  // No payment from inside the iOS app (App Review 3.1.1).
+  if (isIosAppUA(req.headers.get("user-agent"))) {
+    return NextResponse.json({ error: "not_available_in_app" }, { status: 403 });
+  }
   const authHeader = req.headers.get("Authorization") || "";
   const idToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
   if (!idToken) return NextResponse.json({ error: "login_required" }, { status: 401 });

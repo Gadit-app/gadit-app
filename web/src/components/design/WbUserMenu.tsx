@@ -555,10 +555,13 @@ export function WbUserMenu() {
           {/* Partner area is commercial — never shown to a kid. A user who
               is already a partner is sent to their own dashboard; everyone
               else to the /partners landing (Gadi 2026-08-18). */}
+          {/* .gd-buy: the partner program (commission on sales) is not
+              offered inside the Play / iOS app (store rules). */}
           {familyRole !== "kid" && (
             <button
               role="menuitem"
               type="button"
+              className="gd-buy"
               onClick={async () => {
                 setOpen(false);
                 router.push(await resolvePartnerArea(user, href));

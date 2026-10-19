@@ -48,6 +48,7 @@ import {
 } from "@/lib/family";
 import { type RankKey } from "@/lib/gamification";
 import { rankLabel, gameCopy } from "@/lib/gamification-labels";
+import { playNotActive } from "@/lib/play-copy";
 
 const COPY: Record<string, {
   title: string;
@@ -2185,8 +2186,10 @@ export function FamilyClient() {
       <div className="wordbook wb-family-page" dir={dir}>
         <main className="wb-family-main">
           <div className="wb-family-empty-state">
-            <p>{c.notReady}</p>
-            <Link href={href("/pricing")} className="wb-family-cta">
+            {/* Inside the Play / iOS app: one neutral line, no plan or link. */}
+            <p className="gd-buy">{c.notReady}</p>
+            <p className="gd-play-only">{playNotActive(lang)}</p>
+            <Link href={href("/pricing")} className="wb-family-cta gd-buy">
               {c.goPricing}
             </Link>
           </div>

@@ -4505,8 +4505,8 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
 
       <footer className="wb-home-footer">
         <span>© 2026 Gadit</span>
-        <span>·</span>
-        <Link href={href("/pricing")}>{v2(lang, "navPricing")}</Link>
+        <span className="gd-buy">·</span>
+        <Link href={href("/pricing")} className="gd-buy">{v2(lang, "navPricing")}</Link>
         <span>·</span>
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>

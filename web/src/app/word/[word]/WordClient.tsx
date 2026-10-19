@@ -17,6 +17,8 @@
 
 import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import { planCopy } from "@/lib/plan-copy";
+import { nativeShareFallback } from "@/lib/native-app";
+import { playLimitResets, isPlayModeClient } from "@/lib/play-copy";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { parse as parsePartialJson, Allow } from "partial-json";
@@ -742,7 +744,14 @@ function SoftWall({
           lineHeight: 1.55,
         }}
       >
-        {planCopy(lang, isSignup ? "wallAnonBody" : "wallBasicBody")}
+        {/* Inside the Play / iOS app the Basic wall names no plan and links
+            nowhere (store rules): .gd-buy / .gd-play-only, lib/play-copy.ts. */}
+        {isSignup ? planCopy(lang, "wallAnonBody") : (
+          <>
+            <span className="gd-buy">{planCopy(lang, "wallBasicBody")}</span>
+            <span className="gd-play-only">{playLimitResets(lang)}</span>
+          </>
+        )}
       </p>
       {isSignup ? (
         <button
@@ -768,6 +777,7 @@ function SoftWall({
       ) : (
         <Link
           href={href("/pricing")}
+          className="gd-buy"
           style={{
             fontFamily: "var(--wb-sans)",
             display: "inline-block",
@@ -1925,7 +1935,7 @@ export function WordClient({
       if (!res.ok) {
         if (res.status === 402) {
           // Auto (kids) generation must never yank the reader to /pricing.
-          if (!opts?.silent) router.push(href("/pricing"));
+          if (!opts?.silent) goUpgrade("image");
           return;
         }
         // Silent (auto) mode fails quietly — no error card on the page.
@@ -1959,6 +1969,17 @@ export function WordClient({
     }
   }
 
+  // Web: to /pricing. Inside the Play / iOS app nothing is sold, so a locked
+  // tool opens the upgrade card, which there shows only the tool's name and a
+  // neutral line (UpgradeModal + lib/play-copy.ts); with no tool, nothing.
+  function goUpgrade(feature?: import("@/components/UpgradeModal").UpgradeFeature) {
+    if (isPlayModeClient()) {
+      if (feature) setUpgradeTrigger({ feature, tier: feature === "quiz" || feature === "compare" ? "deep" : "clear" });
+      return;
+    }
+    router.push(href("/pricing"));
+  }
+
   function handleUpgrade(tab?: string, tier?: "clear" | "deep") {
     // If we know the feature + tier (locked-tab click flow), show the
     // contextual modal. Otherwise (e.g. SoftWall upgrade button, quota
@@ -1967,7 +1988,7 @@ export function WordClient({
       setUpgradeTrigger({ feature: tab, tier });
       return;
     }
-    router.push(href("/pricing"));
+    goUpgrade();
   }
 
   // Tracks why save failed so we can show the right toast/text.
@@ -2036,7 +2057,7 @@ export function WordClient({
       nav
         .share({ title: `Gadit, ${result?.word ?? ""}`, url })
         .catch(() => undefined);
-    } else {
+    } else if (!nativeShareFallback(url, `Gadit, ${result?.word ?? ""}`)) {
       nav.clipboard?.writeText(url).catch(() => undefined);
     }
   }
@@ -2083,7 +2104,7 @@ export function WordClient({
         return;
       }
       if (plan !== "deep") {
-        router.push(href("/pricing"));
+        goUpgrade("quiz");
         return;
       }
       setGadOpen(true);
@@ -2097,7 +2118,7 @@ export function WordClient({
         return;
       }
       if (plan === "basic") {
-        router.push(href("/pricing"));
+        goUpgrade("compose");
         return;
       }
       setComposeOpen(true);
@@ -2109,7 +2130,7 @@ export function WordClient({
         return;
       }
       if (plan !== "deep") {
-        router.push(href("/pricing"));
+        goUpgrade("quiz");
         return;
       }
       setQuizOpen(true);
@@ -2126,7 +2147,7 @@ export function WordClient({
         return;
       }
       if (plan !== "deep") {
-        router.push(href("/pricing"));
+        goUpgrade("compare");
         return;
       }
       setWordGameOpen(true);
@@ -2141,7 +2162,7 @@ export function WordClient({
         return;
       }
       if (plan === "basic") {
-        router.push(href("/pricing"));
+        goUpgrade("kids");
         return;
       }
       // TODO: open a kids-explanation modal. For now this is a soft

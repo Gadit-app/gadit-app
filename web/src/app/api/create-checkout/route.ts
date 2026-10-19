@@ -1,5 +1,6 @@
 import { INDIVIDUAL_PRICE_IDS } from "@/lib/individual-prices";
 import { NextRequest, NextResponse } from "next/server";
+import { isIosAppUA } from "@/lib/native-app";
 import Stripe from "stripe";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { utmMetaFromClient, utmMetaFromUserDoc, type UtmMeta } from "@/lib/utm-meta";
@@ -91,8 +92,9 @@ function langPrefix(lang: string): string {
 export async function POST(req: NextRequest) {
   try {
     // Google Play consumption-only: no purchase may be initiated from inside
-    // the Play app. Middleware skips /api, so guard here too.
-    if (req.cookies.get("gadit_play")?.value === "1") {
+    // the Play app. Middleware skips /api, so guard here too. The iOS app
+    // (App Review 3.1.1) is recognised by its user agent.
+    if (req.cookies.get("gadit_play")?.value === "1" || isIosAppUA(req.headers.get("user-agent"))) {
       return NextResponse.json({ error: "not_available_in_app" }, { status: 403 });
     }
     const { priceId, lang: rawLang, utm } = await req.json();

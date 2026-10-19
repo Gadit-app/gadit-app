@@ -21,6 +21,7 @@ import { VoiceAssistant } from "@/components/VoiceAssistant";
 import { GuideOverlay } from "@/components/GuideOverlay";
 import { KidRouteGuard } from "@/components/KidRouteGuard";
 import { TwaInit } from "@/components/TwaInit";
+import { NativeAppBridge } from "@/components/NativeAppBridge";
 import { SessionBridge } from "@/components/SessionBridge";
 import { Analytics } from "@vercel/analytics/next";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
@@ -455,11 +456,13 @@ export default async function RootLayout({
               cookie and data-play on; a normal browser tab that inherits the
               cookie clears it, drops data-play, and returns to the page the
               server bounced it from (?from=). Never on the purchase host gadit.app,
-              which is never Play mode (middleware.ts). */}
+              which is never Play mode (middleware.ts). The iOS App Store app
+              (user agent "GaditApp-iOS") is always Play mode, every tab
+              (App Review 3.1.1, lib/native-app.ts). */}
           <script
             dangerouslySetInnerHTML={{
               __html:
-                "try{if(location.hostname!=='gadit.app'){var q=new URLSearchParams(location.search),r=document.referrer||'',d=document.documentElement,c=/(?:^|; )gadit_play=1/.test(document.cookie),s=window.matchMedia&&matchMedia('(display-mode: standalone)').matches;if(q.get('src')==='play'||r.indexOf('android-app://')===0||(c&&s))sessionStorage.setItem('gadit_play_tab','1');if(sessionStorage.getItem('gadit_play_tab')==='1'){d.setAttribute('data-play','1');if(!c)document.cookie='gadit_play=1; path=/; max-age=31536000; samesite=lax';}else if(c){document.cookie='gadit_play=; path=/; max-age=0; samesite=lax';d.removeAttribute('data-play');var f=q.get('from');if(f&&f.charAt(0)==='/'&&f.charAt(1)!=='/')location.replace(f);}}}catch(e){}",
+                "try{if(location.hostname!=='gadit.app'){var q=new URLSearchParams(location.search),r=document.referrer||'',d=document.documentElement,c=/(?:^|; )gadit_play=1/.test(document.cookie),s=window.matchMedia&&matchMedia('(display-mode: standalone)').matches;if(q.get('src')==='play'||r.indexOf('android-app://')===0||(c&&s)||navigator.userAgent.indexOf('GaditApp-iOS')>=0)sessionStorage.setItem('gadit_play_tab','1');if(sessionStorage.getItem('gadit_play_tab')==='1'){d.setAttribute('data-play','1');if(!c)document.cookie='gadit_play=1; path=/; max-age=31536000; samesite=lax';}else if(c){document.cookie='gadit_play=; path=/; max-age=0; samesite=lax';d.removeAttribute('data-play');var f=q.get('from');if(f&&f.charAt(0)==='/'&&f.charAt(1)!=='/')location.replace(f);}}}catch(e){}",
             }}
           />
           <script
@@ -481,6 +484,8 @@ export default async function RootLayout({
                   RefCapture, which is provider-free). */}
               <KidRouteGuard />
               <TwaInit />
+              {/* iOS App Store app: auth state + Expo push token bridge (no-op elsewhere). */}
+              <NativeAppBridge />
               <SessionBridge />
               <PastDueBanner />
               <CoachSessionBanner />

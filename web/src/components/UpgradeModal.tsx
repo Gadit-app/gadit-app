@@ -24,6 +24,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useHref } from "@/lib/href";
 import { track } from "@/lib/track";
+import { playNotActive } from "@/lib/play-copy";
 
 export type UpgradeTier = "clear" | "deep";
 export type UpgradeFeature =
@@ -1171,7 +1172,9 @@ export function UpgradeModal({
           </svg>
         </button>
 
-        <div className="wb-upgrade-tier">
+        {/* Inside the Play / iOS app: no plan name, price or upgrade, only
+            the feature and one neutral line (store rules, lib/play-copy.ts). */}
+        <div className="wb-upgrade-tier gd-buy">
           <span className={`wb-upgrade-tier-badge wb-upgrade-tier-badge-${tier}`}>
             {tierLabel}
           </span>
@@ -1179,7 +1182,8 @@ export function UpgradeModal({
         </div>
 
         <h2 className="wb-upgrade-feature">{featureName}</h2>
-        <p className="wb-upgrade-blurb">{blurb}</p>
+        <p className="wb-upgrade-blurb gd-buy">{blurb}</p>
+        <p className="wb-upgrade-blurb gd-play-only">{playNotActive(lang)}</p>
 
         <div className="wb-upgrade-price gd-buy">
           <strong>{price}</strong>
