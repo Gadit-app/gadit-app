@@ -312,6 +312,11 @@ export const REAL_CSS = `
 .fam-premium .fam-hero { padding: 76px 24px 104px; }
 .fam-premium .fam-h1 { font-size: clamp(40px, 5.2vw, 62px); font-weight: 800; letter-spacing: -0.035em; line-height: 1.06; color: var(--pm-ink); margin-bottom: 22px; }
 .fam-premium .fam-whatis { font-size: 18px; line-height: 1.75; color: var(--pm-body); margin-bottom: 30px; }
+/* Phone, tablet, computer under the hero text, like Yooniz (Gadi 2026-10-19). */
+.fam-premium .fam-devices { list-style: none; padding: 0; margin: -10px 0 28px; display: flex; gap: 28px; justify-content: center; }
+.fam-premium .fam-devices li { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 700; color: #374151; }
+.fam-premium .fam-devices svg { width: 26px; height: 26px; fill: rgba(14,165,165,0.12); stroke: #0B7F7F; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+@media (min-width: 880px) { .fam-premium .fam-devices { justify-content: flex-start; } }
 .fam-premium .fam-band { padding: 108px 0; border-top: 0; }
 .fam-premium .fam-band-cream { background: var(--pm-tint); }
 .fam-premium .fam-band-white { background: #fff; }
