@@ -7,7 +7,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.gadit.app",
@@ -40,6 +42,11 @@
       ],
       "expo-asset"
     ],
-    "owner": "gadibenlavi"
+    "owner": "gadibenlavi",
+    "extra": {
+      "eas": {
+        "projectId": "2fd21d4d-9e7b-47ce-a890-3a0e7f5cb49f"
+      }
+    }
   }
 }
