@@ -8880,9 +8880,8 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                     {i18n?.ui.allCards ?? "לכל היכולות"}
                   </button>
                 )}
-                <div className="fam-chain-turn">
-                  <div className="fam-chain-turn-title">{c.chainTurnTitle}</div>
-                  <p className="fam-chain-turn-body"><Lines text={c.chainTurnBody} /></p>
+                {/* Just the button (Gadi 2026-10-19): the box repeated what the page already says. */}
+                <div style={{ marginTop: 36, textAlign: "center" }}>
                   <button type="button" className="fam-cta" onClick={() => startTrial("chain")}>
                     {ctaLabel}
                   </button>
