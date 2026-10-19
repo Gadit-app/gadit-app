@@ -9,7 +9,7 @@ function ctaUrl(urlKey: string, lang: Lang, word?: string): string {
   const u = `utm_source=email&utm_medium=drip&utm_campaign=${urlKey}`;
   switch (urlKey) {
     case "meanings": return `${BASE}/${lang}/word/${encodeURIComponent(word || "")}?${u}`;
-    case "visual":   return `${BASE}/${lang}?kids=1&${u}`;
+    case "visual":   return `${BASE}/${lang}/families?${u}`; // Kids Mode is a Family feature (2026-10-19)
     case "summary":  return `${BASE}/${lang}/pricing?${u}`;
     default:         return `${BASE}/${lang}?${u}`; // welcome, etymology
   }

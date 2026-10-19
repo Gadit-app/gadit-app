@@ -1,8 +1,10 @@
 import { layoutHe } from "./layout-he";
 
 /**
- * Mail 1 — Welcome (sent on day 0, immediately after signup).
+ * Mail 1: Welcome (sent on day 0, immediately after signup).
  * Source: EMAIL_SEQUENCE_HE.md mail 1, lightly tightened.
+ * Updated 2026-10-19: team voice (no first person singular), plural address,
+ * current free-account facts (10 searches a day, notebook of up to 30 words).
  */
 export function welcomeHe(opts: { displayName?: string; unsubscribeUrl: string }) {
   const name = opts.displayName?.trim() || "";
@@ -10,17 +12,17 @@ export function welcomeHe(opts: { displayName?: string; unsubscribeUrl: string }
 
   const bodyHtml = `
     <p style="margin:0 0 16px;">${greeting}</p>
-    <p style="margin:0 0 16px;">מברך אותך על ההרשמה ל-Gadit.</p>
-    <p style="margin:0 0 16px;">Gadit הוא מילון עם מטרה אחת: להבין מילה עד הסוף. לא רק הגדרה, אלא גם תמונה שממחישה, דוגמאות חיות, כל המשמעויות, מקור המילה, ותרגול שגורם למילה להישאר בראש.</p>
+    <p style="margin:0 0 16px;">ברוכים הבאים ל-Gadit, ותודה שנרשמתם.</p>
+    <p style="margin:0 0 16px;">Gadit הוא מילון עם מטרה אחת: להבין מילה עד הסוף. לא רק הגדרה, אלא גם כל המשמעויות, דוגמאות חיות, ניבים ומקור המילה.</p>
+    <p style="margin:0 0 16px;">בחשבון החינמי שלכם יש 10 חיפושים ביום, ומחברת שבה נשמרות עד 30 מילים.</p>
     <p style="margin:0 0 16px;">כשתופסים מילה במלואה, הרעיון שמאחוריה מתבהר, ואיתו הדרך לחשוב, ללמוד ולקבל החלטות.</p>
-    <p style="margin:0 0 16px;">Gadit היא פלטפורמה חיה שממשיכה לגדול. אם נתקלת בטעות באיזושהי הגדרה, דוגמה או כל חלק אחר, יש כפתור דיווח שכדאי ללחוץ עליו. הצוות ואני קוראים הכול ומתקנים.</p>
+    <p style="margin:0 0 16px;">Gadit היא פלטפורמה חיה שממשיכה לגדול. אם נתקלתם בטעות בהגדרה, בדוגמה או בכל חלק אחר, יש כפתור דיווח שכדאי ללחוץ עליו. הצוות שלנו קורא הכול ומתקן.</p>
     <p style="margin:0 0 16px;">אז שנתחיל?</p>
   `;
 
   const signature = `
-    <p style="margin:0;">שלך,</p>
-    <p style="margin:0;">גדי</p>
-    <p style="margin:0;color:#6B7280;font-size:14px;">מייסד, Gadit</p>
+    <p style="margin:0;">שלכם,</p>
+    <p style="margin:0;">הצוות של Gadit</p>
   `;
 
   return {

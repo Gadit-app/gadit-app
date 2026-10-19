@@ -336,7 +336,7 @@ export async function GET(req: NextRequest) {
           const kids = (await db.collection("users").where("familyId", "==", u.uid).count().get()).data().count - 1;
           if (kids <= 0) {
             const nm = (typeof u.displayName === "string" && u.displayName.trim()) || (typeof d.displayName === "string" && (d.displayName as string).trim()) || "";
-            const cl = he ? "he" : "en";
+            const cl = he ? "he" : CONNECT_CONTENT[generalLang] ? generalLang : "en";
             const built = renderFamilyMail(CONNECT_META, cl, CONNECT_CONTENT[cl], { unsubscribeUrl: buildUnsubUrl(u.uid), firstName: nm.split(/\s+/)[0] || null });
             if (dryRun) {
               results.push({ uid: u.uid, email, mailKey: CONNECT_KEY, status: "skipped", reason: "dryRun" });

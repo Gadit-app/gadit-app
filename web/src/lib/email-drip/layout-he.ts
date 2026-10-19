@@ -57,7 +57,7 @@ export function layoutHe(opts: {
           </tr>` : ""}
           <tr>
             <td style="padding:20px 32px;border-top:1px solid #F3F4F6;font-size:12px;color:#9CA3AF;text-align:center;direction:rtl;line-height:1.6;">
-              קיבלת את המייל הזה כי נרשמת ל-Gadit.<br/>
+              קיבלתם את המייל הזה כי נרשמתם ל-Gadit.<br/>
               <a href="${opts.unsubscribeUrl}" style="color:#9CA3AF;text-decoration:underline;">להסיר הרשמה</a>
               &nbsp;·&nbsp;
               <a href="https://www.gadit.app" style="color:#9CA3AF;text-decoration:underline;">gadit.app</a>
