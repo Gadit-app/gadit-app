@@ -1,25 +1,17 @@
 import type { Metadata } from "next";
-import { pageMetadata } from "@/lib/page-titles";
-import { ComparePage } from "./CompareClient";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 /**
- * /compare — confusable-word comparison screen (Deep tier).
- *
- * Indexed: false. Even though the comparison results are useful
- * content, they're AI-generated on-demand and cached per-pair, so the
- * SEO value is low and we'd rather keep crawl budget on the homepage
- * + pricing.
+ * /compare: RETIRED (Gadi 2026-10-19), the compare-words tool is no longer
+ * part of Gadit. Old links land on the home page, language prefix kept.
  */
-const BASE_METADATA: Metadata = {
-  title: "Compare, Gadit",
+export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-/** Same metadata, with the tab title in the visitor's UI language. */
-export function generateMetadata(): Promise<Metadata> {
-  return pageMetadata("compare", BASE_METADATA);
-}
-
-export default function CompareRoute() {
-  return <ComparePage />;
+export default async function Page() {
+  const h = await headers();
+  const lang = h.get("x-gadit-lang");
+  redirect(lang && lang !== "en" ? `/${lang}` : "/");
 }

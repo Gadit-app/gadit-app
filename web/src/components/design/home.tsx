@@ -570,7 +570,6 @@ export function HomeFooter() {
   const href = useHref();
 
   const productLinks: Array<{ label: string; href: string }> = [
-    { label: v2(lang, "footerCompare"), href: href("/compare") },
     { label: v2(lang, "footerNotebook"), href: href("/notebook") },
     { label: v2(lang, "footerPricing"), href: href("/pricing") },
     // Partners moved out of the top nav to the footer (Gadi 2026-08-20).

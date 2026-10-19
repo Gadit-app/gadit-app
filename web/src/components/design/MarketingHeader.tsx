@@ -58,7 +58,6 @@ const NAV_ITEMS_PUBLIC: NavItem[] = [
 // are real navigation, not feature-promise tiles.
 const NAV_ITEMS_DEEP: NavItem[] = [
   { href: "/", labelKey: "navSearch" },
-  { href: "/compare", labelKey: "navCompare" },
   { href: "/notebook", labelKey: "navNotebook" },
   { href: "/pricing", labelKey: "navPricing" },
 ];

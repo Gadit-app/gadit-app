@@ -306,6 +306,10 @@ export async function GET(req: NextRequest) {
     // the series runs from the Family activation.
     const famActivatedIso = d.familyActivatedAt as string | undefined;
     const famStartIso = (d.familySeriesStart as string | undefined) || famActivatedIso;
+    // A family whose plan ended (canceled, payment failed) stops getting the
+    // onboarding series (Gadi 2026-10-19: a canceled mother still got day 12).
+    const famPaying = d.subscriptionStatus === "active" || d.subscriptionStatus === "trialing" || d.subscriptionStatus === "past_due";
+    if (famStartIso && !famPaying) continue; // ended Family: no series, and not the general signup drip either
     if (famStartIso) {
       const famActivated = Date.parse(famStartIso);
       if (Number.isFinite(famActivated)) {
