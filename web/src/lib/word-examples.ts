@@ -65,6 +65,8 @@ const UI_LANG_NAMES: Record<string, string> = {
 export function uiLangName(uiLang: string): string {
   return UI_LANG_NAMES[uiLang] ?? "English";
 }
+/** A UI language the writers know by name. */
+export const isKnownUiLang = (uiLang: string) => Object.prototype.hasOwnProperty.call(UI_LANG_NAMES, uiLang);
 
 /**
  * Cache key for a (uiLang, word, meaning) example set. Mirrors the

@@ -36,6 +36,7 @@ import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { getWordSet, classroomDef, registerWordSet, isCurriculumSetId, isGemaraSet, setItems, type WordSet, type SetExtras } from "@/lib/word-sets";
+import { isBandSetId } from "@/lib/band-sets";
 import { isPilotTopicId } from "@/lib/pilot-topics";
 import { isSchoolSetId } from "@/lib/school-set-ids";
 import type { ClassroomQuote } from "@/components/classroom/ClassroomStage";
@@ -1049,6 +1050,33 @@ export function WordClient({
   // meaning) plus an auto-generated picture, never the full multi-meaning
   // result, so students see the subject-relevant sense only.
   const classroomMode = present && !!wordSet && setIdx >= 0;
+  // The Ministry's English Band sets have no written definitions: on the
+  // projector each word takes the meaning that fits the set's topic ("fly"
+  // in Animals is the insect), written once per set and language
+  // (lib/band-meanings.ts, Gadi 2026-10-19). The projector waits for it, so
+  // the picture and the examples are made for that meaning; with none it
+  // shows the dictionary's first meaning as before.
+  const isBand = isBandSetId(setId);
+  const bandKey = `${setId}|${lang}`;
+  const [bandReady, setBandReady] = useState("");
+  useEffect(() => {
+    if (!present || !isBand || authLoading || bandReady === bandKey) return;
+    const band = getWordSet(setId);
+    if (!band) return;
+    let alive = true;
+    (async () => {
+      try {
+        const headers: Record<string, string> = user ? { Authorization: `Bearer ${await user.getIdToken()}` } : {};
+        const r = await fetch(`/api/band-set-meanings?id=${encodeURIComponent(setId)}&lang=${encodeURIComponent(lang)}`, { headers });
+        const d = r.ok ? ((await r.json()) as { defs?: Record<string, string> }) : null;
+        if (alive) registerWordSet(band, d?.defs ?? {});
+      } catch { /* the first meaning, as before */ }
+      if (alive) setBandReady(bandKey);
+    })();
+    return () => { alive = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [present, isBand, authLoading, bandKey, user?.uid]);
+  const bandWaiting = classroomMode && isBand && bandReady !== bandKey;
   // Gemara on the projector (phase A): the unit's own definition is all the
   // screen shows, so the general dictionary is not asked (it read Aramaic as
   // modern Hebrew, איתמר as a first name). Other subjects: unchanged.
@@ -1705,11 +1733,11 @@ export function WordClient({
     // Complete result only: mid-stream result.word is a partial prefix
     // ("main" for "main idea"), which drew a generic dictionary picture.
     // imageUrl === null: the unit has no picture for this word (phase A).
-    if (!classroomMode || loading || (!result && !gemaraStage) || imageUrl || imageUrl === null || imageGenerating || !user) return;
+    if (!classroomMode || bandWaiting || loading || (!result && !gemaraStage) || imageUrl || imageUrl === null || imageGenerating || !user) return;
     const def = classroomDef(setId, initialWord, currentM) ?? result?.meanings[0]?.meaning ?? "";
     void handleGenerate({ meaning: def, example: result?.meanings[0]?.examples?.[0] ?? "" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [classroomMode, loading, result, imageUrl, imageGenerating, user, gemaraStage, currentM]);
+  }, [classroomMode, bandWaiting, loading, result, imageUrl, imageGenerating, user, gemaraStage, currentM]);
 
   // Kids Mode: generate a picture for EACH meaning, shown inline under its
   // definition with no "Generate" click. Sequential + silent: the first kid
@@ -1854,7 +1882,7 @@ export function WordClient({
   // meaning so the cache key lines up with the admin warm-set. Best
   // effort: on empty/failure we keep the general define examples.
   useEffect(() => {
-    if (!classroomMode || (!result && !gemaraStage)) {
+    if (!classroomMode || bandWaiting || (!result && !gemaraStage)) {
       setClassroomExamples([]);
       setClassroomQuote(null);
       return;
@@ -1885,7 +1913,7 @@ export function WordClient({
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [classroomMode, initialWord, setId, result, gemaraStage, currentM, isPilotTopicId(setId) || isSchoolSetId(setId) ? user : null]);
+  }, [classroomMode, bandWaiting, initialWord, setId, result, gemaraStage, currentM, isPilotTopicId(setId) || isSchoolSetId(setId) ? user : null]);
 
   // ── Action handlers ───────────────────────────────────────────
   async function handleGenerate(opts?: { meaning?: string; example?: string; silent?: boolean }) {
@@ -2669,7 +2697,11 @@ export function WordClient({
             </button>
           </div>
         )}
-        {classroomMode && wordSet && (result || gemaraStage) ? (
+        {bandWaiting ? (
+          // A Band set's projector waits for its topic meanings (a moment,
+          // once per set), so the class never sees the wrong sense first.
+          null
+        ) : classroomMode && wordSet && (result || gemaraStage) ? (
           <ClassroomStage
             // Gemara: the unit's spelling, not the dictionary's correction.
             word={isGemaraSet(wordSet) || !result ? initialWord : result.word}
