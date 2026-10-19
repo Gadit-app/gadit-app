@@ -31,6 +31,9 @@ export type PartnerStatus = "active" | "suspended";
 
 export interface Partner {
   id: string;              // doc id (random)
+  /** A demo partner for Zoom presentations (DANA25, Gadi 2026-10-19): kept,
+   *  but never counted in the numbers and never paid. */
+  demo?: boolean;
   code: string;            // the referral code that appears in /p/<code>
   name: string;
   email: string;

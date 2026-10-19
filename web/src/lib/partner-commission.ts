@@ -19,6 +19,8 @@ export async function bookPartnerCommission(
   partner: Record<string, unknown> | undefined,
   c: { docId: string; referredUid: string; gross: number; currency: string; yearOne: boolean; paidAtMs: number; note?: string; manual?: boolean },
 ): Promise<{ booked: boolean; amount: number; rate: number; bonus: boolean }> {
+  // A demo partner (Zoom presentations) never earns real commissions (Gadi 2026-10-19).
+  if (partner?.demo === true) return { booked: false, amount: 0, rate: 0, bonus: false };
   const commissionRef = partnerRef.collection("commissions").doc(c.docId);
   if ((await commissionRef.get()).exists) return { booked: false, amount: 0, rate: 0, bonus: false };
 

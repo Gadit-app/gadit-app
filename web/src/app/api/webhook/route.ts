@@ -1054,6 +1054,15 @@ export async function POST(req: NextRequest) {
       // Alert Gadi on an immediate/trial cancellation the scheduled-cancel
       // path never caught (deduped, user-requested only).
       await maybeNotifyDeletedCancel(sub);
+      // An ended subscription leaves no open invoice behind (Gadi 2026-10-19):
+      // when it ends after failed payments, Stripe keeps the last invoice open,
+      // and a customer should never owe on a plan that is gone. Never throws.
+      try {
+        const open = await stripe.invoices.list({ subscription: sub.id, status: "open", limit: 10 });
+        for (const inv of open.data) if (inv.id) await stripe.invoices.voidInvoice(inv.id);
+      } catch (err) {
+        console.warn("[webhook] void open invoices failed (non-blocking):", err);
+      }
       // A Payment-Element sub that never got a card was never activated
       // (nobody's plan came from it), so its deletion — auto-cancel at
       // trial end or manual cleanup — must not downgrade anyone. The

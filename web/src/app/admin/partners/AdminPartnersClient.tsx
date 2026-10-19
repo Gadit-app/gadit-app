@@ -30,6 +30,7 @@ type Row = {
   rateYearOne: number;
   rateLifetime: number;
   status: "active" | "suspended";
+  demo?: boolean;
   lang?: string | null;
   clicks: number;
   signups: number;
@@ -594,6 +595,7 @@ export default function AdminPartnersClient() {
                       {r.tier === "founder" ? t.founder : t.standard}
                     </span>
                     {r.status === "suspended" && <span style={{ ...pill, background: "#FEE2E2", color: "#991B1B" }}>{t.suspended}</span>}
+                    {r.demo && <span style={{ ...pill, background: "#FEF3C7", color: "#92400E" }}>{lang === "he" ? "דמו · לא נספר" : "Demo · not counted"}</span>}
                     <span style={{ ...pill, background: "#F3F4F6", color: "#374151", direction: "ltr" }}>{r.code}</span>
                   </div>
                   <div style={{ fontSize: 12.5, color: "#6B7280", marginTop: 4 }}>{r.email}</div>

@@ -116,6 +116,7 @@ export async function GET(req: NextRequest) {
         rateYearOne: p.rateYearOne ?? DEFAULT_RATE_YEAR_ONE,
         rateLifetime: p.rateLifetime ?? DEFAULT_RATE_LIFETIME,
         status: p.status,
+        demo: p.demo === true,
         lang: p.lang ?? null,
         clicks: p.clicks || 0,
         signups: p.signups || 0,
@@ -128,7 +129,8 @@ export async function GET(req: NextRequest) {
     }),
   );
 
-  partners.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  // Demo partners (Zoom presentations) sink to the bottom, after every real one.
+  partners.sort((a, b) => (a.demo !== b.demo ? (a.demo ? 1 : -1) : a.createdAt < b.createdAt ? 1 : -1));
   // Self-healing suggestion: the next free number is the max of the counter
   // AND one past the highest numeric code already in use. So even if the
   // counter fell behind (e.g. a custom code was typed), the form never
@@ -348,6 +350,8 @@ export async function PATCH(req: NextRequest) {
   }
 
   if (action === "markPaid") {
+    // A demo partner's commissions are not real money.
+    if ((await ref.get()).data()?.demo === true) return NextResponse.json({ error: "demo_partner" }, { status: 400 });
     const now = Date.now();
     const commSnap = await ref.collection("commissions").get();
     const batch = db.batch();
