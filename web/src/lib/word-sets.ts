@@ -1,4 +1,5 @@
 import { SET_DEFS } from "./word-set-defs";
+import { bandWordSet } from "./band-sets";
 
 // Curated themed vocabulary sets for schools (Gadi 2026-08-05, schools
 // council). A teacher opens a set and steps through the words in present
@@ -311,7 +312,8 @@ export function curatedImageHint(word: string): string | undefined {
 }
 
 export function getWordSet(id: string): WordSet | undefined {
-  return WORD_SETS.find((s) => s.id === id) ?? DYNAMIC_SETS[id]?.set;
+  // The Ministry's English Band sets ("moe-band...") are hand-made sets too.
+  return WORD_SETS.find((s) => s.id === id) ?? bandWordSet(id) ?? DYNAMIC_SETS[id]?.set;
 }
 export function subjectLabel(key: string): string {
   return SET_SUBJECTS.find((s) => s.key === key)?.he ?? key;

@@ -7,6 +7,7 @@ import { pilotGate } from "@/lib/pilot-access";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { itemExampleKey } from "@/lib/classroom-keys";
 import { isSchoolSetId } from "@/lib/school-set-ids";
+import { isBandSetId } from "@/lib/band-sets";
 
 /** A Gemara quote stored with a meaning (exampleCache ex_m_ doc, `quote`),
  *  returned only when the record says the expert approved and verified it. */
@@ -59,6 +60,8 @@ async function resolve(params: {
     const set = await loadWordSet(params.setId);
     if (set && !uiLang) uiLang = set.lang;
     if (set && isSchoolSetId(set.id) && set.level === "secondary") audience = "teen";
+    // The Ministry's English Band II list is middle school too.
+    if (set && isBandSetId(set.id) && set.level === "middle") audience = "teen";
     // A meaning of a unit that lists meanings: its own definition and key, and
     // approved (imported) examples only, in every unit (phase C).
     const item = classroomMeaning(params.setId, params.m);

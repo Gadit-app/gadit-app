@@ -3,6 +3,7 @@ import za from "./curriculum-catalog-za.json";
 import arCat from "./curriculum-catalog-ar.json";
 import { WORD_SETS, type WordSet } from "./word-sets";
 import { pilotTopic } from "./pilot-topics";
+import { BAND_WORD_SETS } from "./band-sets";
 
 // The full Israeli school curriculum (Gadi 2026-10-03): every subject and
 // unit from גן to תיכון, state and state-religious, merged from seven
@@ -55,9 +56,12 @@ const STATIC_SUBJECT: Record<string, string> = {
   torah: "bible",
   science: "science-and-technology",
 };
+// The Ministry's English Band lists join them under English (2026-10-12):
+// band1 in elementary, band2 in middle school.
 export function readySetsOf(subject: string, level: string): WordSet[] {
-  if (level !== "elementary") return [];
-  return WORD_SETS.filter((w) => STATIC_SUBJECT[w.subject] === subject);
+  const own = level === "elementary" ? WORD_SETS.filter((w) => STATIC_SUBJECT[w.subject] === subject) : [];
+  const band = subject === "english" ? BAND_WORD_SETS.filter((s) => s.level === level) : [];
+  return [...own, ...band];
 }
 
 /** Words of a foreign-language subject are in that language. */

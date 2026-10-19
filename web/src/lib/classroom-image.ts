@@ -3,6 +3,7 @@ import { getAdminDb, getDefaultBucket } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom, IMAGE_MODEL, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 import { curatedImageHint, getWordSet, isGemaraSet, classroomVisual, normSetWord, type WordSet } from "@/lib/word-sets";
 import { topicLevel } from "@/lib/curriculum-catalog";
+import { bandSetOf } from "@/lib/band-sets";
 import { classroomImageKey, itemImageKey, type ClassroomStyle, type MeaningRef } from "@/lib/classroom-keys";
 import { devDryAi, DRY_IMAGE_URL } from "@/lib/dev-safety";
 
@@ -29,6 +30,9 @@ export { classroomImageKey } from "@/lib/classroom-keys";
 const SITE = "https://www.gadit.app";
 
 export function classroomStyle(set: Pick<WordSet, "id"> & { level?: string }): ClassroomStyle {
+  // The Ministry's English Band lists: Band II is middle school (teen style).
+  const band = bandSetOf(set.id);
+  if (band) return band.band === "band2" ? "teen" : "kids";
   // A school's own set carries its level ("elementary" / "secondary").
   const l = topicLevel(set.id) ?? set.level ?? getWordSet(set.id)?.level;
   if (!l) return "kids"; // the hand-made sets are all elementary

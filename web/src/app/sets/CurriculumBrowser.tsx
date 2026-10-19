@@ -13,6 +13,7 @@ import {
   CATALOG_IDS, catalogView, readySetsOf, subjectIcon, categoryIcon,
   type CatalogId, type CatalogView, type ViewSubject, type ViewTopic,
 } from "@/lib/curriculum-catalog";
+import { BAND_COPY, BAND_TOPIC_ICON, bandSetOf, bandSetName, bandSetTitle, isBandSetId, type BandSet } from "@/lib/band-sets";
 import OurSets from "./OurSets";
 
 /**
@@ -1852,11 +1853,15 @@ function SubjectView({ subject, level, setLevel, openTopic, onBack, onTopic }: {
   const topics = topicsOf(view, subject.key, lv);
   // The hand-made English sets stay available to English (CAPS) schools as
   // ready-made sets under English (Gadi 2026-10-05, Greenwarth's move to CAPS).
-  const ready = view.id === "il-he"
+  const readyAll = view.id === "il-he" || view.id === "il-ar"
     ? readySetsOf(subject.key, lv)
     : view.id === "za-caps" && subject.key === "english-home-language" && lv === "intermediate"
       ? WORD_SETS.filter((w) => w.lang === "en")
       : [];
+  // The Ministry's English Band lists get their own block, by topic (Israeli
+  // catalogs only); the Arabic catalog shows no Hebrew hand-made sets.
+  const ready = view.id === "il-ar" ? [] : readyAll.filter((s) => !isBandSetId(s.id));
+  const band = readyAll.filter((s) => isBandSetId(s.id));
   const cat = view.categories.find((c) => c.key === subject.cat);
   const [filter, setFilter] = useState("");
   const f = norm(filter);
@@ -1895,6 +1900,10 @@ function SubjectView({ subject, level, setLevel, openTopic, onBack, onTopic }: {
             ))}
           </ul>
         </section>
+      )}
+
+      {band.length > 0 && BAND_COPY[view.ui] && (
+        <BandBlock sets={band} level={lv} openTopic={openTopic} onTopic={onTopic} />
       )}
 
       <section className="cb-section">
@@ -1999,6 +2008,76 @@ function ReadyRow({ set, open, onToggle }: { set: WordSet; open: boolean; onTogg
         <div className="cb-topic-body">
           <WordChips set={set} />
           <PresentButton href={href(`/word/${encodeURIComponent(set.words[0])}?present=1&set=${encodeURIComponent(set.id)}`)} n={set.words.length} setId={set.id} />
+        </div>
+      )}
+    </li>
+  );
+}
+
+/** The Ministry of Education's English Band lists (approved 2026-10-12): one
+ *  row per topic, opening to the topic's sets, each with its words and
+ *  "Present to class". Band I in elementary, Band II in middle school.
+ *  Nothing is prepared up front: the projector makes each word's
+ *  definition and picture on the first Present, like every other set. */
+function BandBlock({ sets, level, openTopic, onTopic }: {
+  sets: WordSet[]; level: string; openTopic: string; onTopic: (id: string) => void;
+}) {
+  const { view, T } = useCat();
+  const copy = BAND_COPY[view.ui];
+  const bandKey = level === "middle" ? "band2" : "band1";
+  const groups: { key: string; topic: string; parts: { set: WordSet; band: BandSet }[] }[] = [];
+  for (const set of sets) {
+    const band = bandSetOf(set.id);
+    if (!band) continue;
+    const key = `moe-${band.band}-${band.topic.replace(/\s+/g, "-")}`;
+    const g = groups.find((x) => x.key === key);
+    if (g) g.parts.push({ set, band });
+    else groups.push({ key, topic: band.topic, parts: [{ set, band }] });
+  }
+  return (
+    <section className="cb-section">
+      <h2 className="cb-h2 plain">{copy.teacher}</h2>
+      <p className="cb-band-sub">
+        {copy[bandKey]} · <bdi dir="ltr">{bandKey === "band1" ? "Band I" : "Band II"}</bdi>
+      </p>
+      <ul className="cb-topics">
+        {groups.map((g) => (
+          <BandTopicRow key={g.key} name={bandSetTitle({ ...g.parts[0].band, part: 0 }, view.ui)} icon={BAND_TOPIC_ICON[g.topic] ?? "📘"}
+            n={g.parts.reduce((a, p) => a + p.set.words.length, 0)} parts={g.parts} T={T} ui={view.ui}
+            open={openTopic === g.key} onToggle={() => onTopic(openTopic === g.key ? "" : g.key)} />
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function BandTopicRow({ name, icon, n, parts, T, ui, open, onToggle }: {
+  name: string; icon: string; n: number; parts: { set: WordSet; band: BandSet }[]; T: T; ui: string; open: boolean; onToggle: () => void;
+}) {
+  const href = useHref();
+  // Back from the projector the topic is already open: bring it into view.
+  const li = useRef<HTMLLIElement>(null);
+  const openAtMount = useRef(open);
+  useEffect(() => {
+    if (openAtMount.current) li.current?.scrollIntoView({ block: "center" });
+  }, []);
+  return (
+    <li ref={li} className={"cb-topic" + (open ? " open" : "")}>
+      <button type="button" className="cb-topic-head" onClick={onToggle} aria-expanded={open}>
+        <span className="cb-band-ico" aria-hidden>{icon}</span>
+        <span className="cb-topic-title">{name}</span>
+        <span className="cb-grade">{count(T, n, "words")}</span>
+        <Chevron down={open} />
+      </button>
+      {open && (
+        <div className="cb-topic-body">
+          {parts.map(({ set, band }) => (
+            <div key={set.id} className="cb-band-part">
+              {parts.length > 1 && <div className="cb-band-part-title">{bandSetName(band, ui)}</div>}
+              <WordChips set={set} />
+              <PresentButton href={href(`/word/${encodeURIComponent(set.words[0])}?present=1&set=${encodeURIComponent(set.id)}`)} n={set.words.length} setId={set.id} />
+            </div>
+          ))}
         </div>
       )}
     </li>
@@ -2214,6 +2293,11 @@ const CSS = `
 .cb-topic-head:hover .cb-topic-title{color:var(--c)}
 .cb-topic-title{flex:1;min-width:0;font-weight:700;font-size:15.5px;line-height:1.4}
 .cb-topic-body{padding:0 14px 14px;display:flex;flex-direction:column;gap:12px}
+.cb-band-sub{margin:-8px 0 12px;font-size:14px;font-weight:600;color:var(--ink-muted)}
+.cb-band-ico{width:32px;height:32px;flex-shrink:0;display:grid;place-items:center;font-size:17px;border-radius:10px;background:color-mix(in srgb,var(--c) 9%,#fff)}
+.cb-band-part{display:flex;flex-direction:column;gap:10px}
+.cb-band-part+.cb-band-part{border-top:1px solid var(--rule);padding-top:12px}
+.cb-band-part-title{font-weight:700;font-size:14.5px;color:var(--ink-soft)}
 .cb-chips{display:flex;flex-wrap:wrap;gap:6px}
 .cb-chip{font-size:14px;font-weight:600;color:var(--c);background:color-mix(in srgb,var(--c) 7%,#fff);border:1px solid color-mix(in srgb,var(--c) 18%,#fff);border-radius:9px;padding:5px 10px;text-decoration:none}
 .cb-chip:hover{background:color-mix(in srgb,var(--c) 13%,#fff)}
