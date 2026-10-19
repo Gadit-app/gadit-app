@@ -1146,7 +1146,7 @@ const COPY: Record<string, Copy> = {
     credLine: "מבוסס על 15 שנות ניסיון עם למעלה מ-15,000 הורים, תלמידים ואנשי חינוך",
     credKicker: "מי אנחנו",
     credTitle: "15 שנה בחינוך בכלי אחד לילד",
-    credBody: "Gadit נבנה על ידי צוות עם 15 שנות ניסיון בחינוך, שלימד יותר מ-15,000 לומדים. את מה שראינו עובד שוב ושוב, בכיתה ובבית, הכנסנו לתוך כלי אחד פשוט שהילד יכול להשתמש בו לבד.",
+    credBody: "Gadit נבנה על ידי צוות עם 15 שנות ניסיון בחינוך,\nשלימד יותר מ-15,000 לומדים. את מה שראינו עובד שוב ושוב בכיתה ובבית,\nהכנסנו לתוך כלי אחד פשוט שהילד יכול להשתמש בו לבד.",
     proofTitle: "מחברת מילים · דוגמה",
     proofBig: "12 מילים חדשות השבוע",
     proofWords: ["חלום", "מרהיב", "נחוש"],
@@ -9177,6 +9177,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                     <div className="fam-real-step-text">
                       <span className="fam-real-step-num">{i + 1}</span>
                       <h3 className="fam-real-step-title">{st.t.split("\n").map((t, k) => <span key={k} style={{ display: "block" }}>{t}</span>)}</h3>
+                      {st.s && <p className="fam-real-step-sub">{st.s}</p>}
                     </div>
                     <PhoneShot lang={shotLang} name={st.img} alt={real.shotAlt} />
                   </div>

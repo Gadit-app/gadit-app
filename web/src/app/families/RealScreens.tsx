@@ -11,7 +11,7 @@ import Image from "next/image";
  * keep the previous illustrated sections until their screens are captured.
  */
 
-export type RealStep = { t: string; b: string; img: string };
+export type RealStep = { t: string; b: string; img: string; /** Small line under the title (Gadi 2026-10-19). */ s?: string };
 export type RealTool = { kicker: string; title: string; body: string; points: string[]; img: string; img2?: string; /** Shown after the games band instead of before it. */ afterGames?: boolean };
 /** The Homework showcase (Gadi 2026-10-12): one deep-teal band with the three
  *  homework paths, in the order the child meets them. */
@@ -77,11 +77,11 @@ export const REAL_COPY: Record<string, RealCopy> = {
     howTitle: "חמישה צעדים ואוצר המילים מתחיל לגדול",
     shotAlt: "מסך אמיתי מתוך Gadit",
     steps: [
-      { t: "מוסיפים את\nבני המשפחה", b: "לכל ילד שם, גיל וצבע. זה לוקח פחות מדקה. עד 5 ילדים וגם ההורה השני.", img: "add" },
-      { t: "מחברים את\nהמכשירים של הילדים", b: "הילד נכנס מהטלפון או מהטאבלט שלו עם קוד QR או קוד בן 6 ספרות, בלי סיסמה. אין לו מכשיר משלו? יש מסך משותף לילדים.", img: "pair" },
-      { t: "הילדים מתחילים\nלהבין מילים", b: "כל מילה מוסברת בשפה של ילדים עם תמונה לכל משמעות, דוגמאות ומקור המילה.", img: "word" },
-      { t: "מתרגלים עד שהמילה\nנכנסת לזיכרון", b: "משחקים וחידונים שנבנים מהמילים שהילד עצמו חיפש.", img: "play" },
-      { t: "כל מילה נשמרת\nבמחברת המילים", b: "בלי ללחוץ על כלום. המחברת גדלה מילה אחרי מילה עם רצף ימים ויעד שבועי.", img: "notebook" },
+      { t: "מוסיפים את בני המשפחה", s: "ההורה השני ועד 5 ילדים", b: "לכל ילד שם, גיל וצבע. זה לוקח פחות מדקה. עד 5 ילדים וגם ההורה השני.", img: "add" },
+      { t: "מחברים את המכשירים", s: "טלפון, טאבלט או מחשב", b: "הילד נכנס מהטלפון או מהטאבלט שלו עם קוד QR או קוד בן 6 ספרות, בלי סיסמה. אין לו מכשיר משלו? יש מסך משותף לילדים.", img: "pair" },
+      { t: "הילדים מתחילים להבין", s: "פירושים, דוגמאות ותמונות", b: "כל מילה מוסברת בשפה של ילדים עם תמונה לכל משמעות, דוגמאות ומקור המילה.", img: "word" },
+      { t: "מתרגלים עד שהמילה\nנכנסת לזיכרון", s: "משחקי מילים ותרגולים", b: "משחקים וחידונים שנבנים מהמילים שהילד עצמו חיפש.", img: "play" },
+      { t: "כל מילה נשמרת", s: "אוצר המילים גדל מיום ליום", b: "בלי ללחוץ על כלום. המחברת גדלה מילה אחרי מילה עם רצף ימים ויעד שבועי.", img: "notebook" },
     ],
     dash: {
       kicker: "לוח בקרה להורים",
@@ -199,11 +199,12 @@ export const REAL_COPY: Record<string, RealCopy> = {
 };
 
 /** Landing copy rule (Gadi 2026-09-28): a new sentence never continues on
- *  the same line. Each sentence (and a clause after a colon) gets its own line. */
+ *  the same line. Each sentence (and a clause after a colon) gets its own line.
+ *  A "\n" in the copy forces a break inside a sentence (Gadi 2026-10-19). */
 export function Lines({ text }: { text: string }) {
   // Also the sentence marks of other scripts (2026-10-17): 。！？ (CJK, no space after),
   // । ॥ (Devanagari, Bengali), ። ፧ (Ethiopic), ؟ (Arabic, Persian).
-  const parts = text.split(/(?<=[.?!:؟।॥።፧])\s+|(?<=[。！？])/).filter((t) => t.trim());
+  const parts = text.split(/(?<=[.?!:؟।॥።፧])\s+|(?<=[。！？])|\n/).filter((t) => t.trim());
   return (
     <>
       {parts.map((t, i) => (
@@ -425,6 +426,7 @@ export const REAL_CSS = `
 .fam-premium .fam-real-step:nth-child(even) .fam-real-step-text { order: 0; }
 .fam-premium .fam-real-step-text { padding: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; min-height: 76px; }
 .fam-premium .fam-real-step-title { font-size: 17px; line-height: 1.35; margin: 0; text-align: center; }
+.fam-premium .fam-real-step-sub { font-size: 14px; line-height: 1.45; color: var(--pm-body); margin: 0; text-align: center; }
 .fam-premium .fam-real-step > .fam-phone { max-width: 170px; width: 100%; margin: auto auto 0; }
 .fam-premium .fam-real-step-num { width: 30px; height: 30px; font-size: 15px; }
 @media (min-width: 880px) {
