@@ -1300,7 +1300,7 @@ const COPY: Record<string, Copy> = {
     singleChild: "יש בבית תלמיד אחד? מסלול Deep ב-₪16.90 לחודש. בשלושה שקלים נוספים מצרפים עד 5 ילדים.",
     guaranteeTitle: "היעד לשבועיים: 20 מילים חדשות במחברת",
     guaranteeBody: "בלוח ההורה תראו כמה מילים נוספו, ותחליטו לפני החיוב.",
-    faqTitle: "שאלות של הורים",
+    faqTitle: "שאלות שהורים שואלים",
     faq: [
       {
         q: "מה תקבלו ב-Gadit?",
@@ -8120,16 +8120,17 @@ function MockProfiles({ lang }: { lang: string }) {
 function MockGames({ lang }: { lang: string }) {
   const m = famMock(lang);
   return (
+    // The real game covers from /play, gently floating (Gadi 2026-10-19: more color, the new game look).
     <div className="fam-mock fam-mock-games">
-      <div className="fam-mock-game" style={{ background: "rgba(14,165,165,0.1)" }}>
-        <PuzzleIcon />
+      <div className="fam-mock-game fam-mock-game-a">
+        <img className="fam-mock-game-img" src="/play/twin.webp" alt="" width={720} height={480} loading="lazy" decoding="async" />
         <span>{m.gameTwinTrap}</span>
       </div>
-      <div className="fam-mock-game" style={{ background: "rgba(124,58,237,0.1)" }}>
-        <ClockIcon />
+      <div className="fam-mock-game fam-mock-game-b">
+        <img className="fam-mock-game-img" src="/play/time.webp" alt="" width={720} height={480} loading="lazy" decoding="async" />
         <span>{m.gameTimeTraveler}</span>
       </div>
-      <div className="fam-mock-score">{m.gameStreak}</div>
+      <div className="fam-mock-score"><span>{m.gameStreak}</span></div>
     </div>
   );
 }
@@ -9175,7 +9176,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                   <div key={i} className="fam-real-step">
                     <div className="fam-real-step-text">
                       <span className="fam-real-step-num">{i + 1}</span>
-                      <h3 className="fam-real-step-title">{st.t}</h3>
+                      <h3 className="fam-real-step-title">{st.t.split("\n").map((t, k) => <span key={k} style={{ display: "block" }}>{t}</span>)}</h3>
                     </div>
                     <PhoneShot lang={shotLang} name={st.img} alt={real.shotAlt} />
                   </div>
@@ -9405,24 +9406,6 @@ function PersonIcon() {
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0b7d7d" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <circle cx="12" cy="8" r="4" />
       <path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" />
-    </svg>
-  );
-}
-function PuzzleIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0b7d7d" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <rect x="4" y="4" width="7" height="7" rx="1.5" />
-      <rect x="13" y="4" width="7" height="7" rx="1.5" />
-      <rect x="4" y="13" width="7" height="7" rx="1.5" />
-      <rect x="13" y="13" width="7" height="7" rx="1.5" />
-    </svg>
-  );
-}
-function ClockIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <circle cx="12" cy="12" r="8.5" />
-      <path d="M12 7v5l3 3" />
     </svg>
   );
 }
@@ -10092,19 +10075,27 @@ const FAM_CSS = `
 .fam-mock-games { flex-direction: row; flex-wrap: wrap; }
 .fam-mock-game {
   flex: 1;
-  min-width: 120px;
-  border-radius: 14px;
-  padding: 16px 12px;
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  font-weight: 700; font-size: 13.5px;
+  min-width: 0;
+  border-radius: 16px;
+  padding: 10px 8px 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  font-weight: 700; font-size: 13.5px; text-align: center;
+  animation: famGameFloat 3.6s ease-in-out infinite;
 }
-.fam-mock-score {
-  width: 100%;
-  text-align: center;
-  font-weight: 700;
-  font-size: 13px;
-  color: #b45309;
+.fam-mock-game-a { background: linear-gradient(160deg, rgba(14,165,165,0.16), rgba(14,165,165,0.05)); color: #0B6F6F; }
+.fam-mock-game-b { background: linear-gradient(160deg, rgba(124,58,237,0.16), rgba(124,58,237,0.05)); color: #5B2BB5; animation-delay: -1.8s; }
+.fam-mock-game-img { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 12px; display: block; }
+.fam-mock-score { width: 100%; display: flex; justify-content: center; }
+.fam-mock-score span {
+  display: inline-block;
+  font-weight: 700; font-size: 13px; color: #b45309;
+  background: #FFF4DE; border: 1px solid rgba(245,158,11,0.35);
+  border-radius: 999px; padding: 5px 14px;
+  animation: famStreakPulse 2.4s ease-in-out infinite;
 }
+@keyframes famGameFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes famStreakPulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245,158,11,0); } 50% { transform: scale(1.04); box-shadow: 0 0 0 6px rgba(245,158,11,0.12); } }
+@media (prefers-reduced-motion: reduce) { .fam-mock-game, .fam-mock-score span { animation: none; } }
 .fam-compare {
   background: #fff;
   border: 1px solid rgba(31,41,55,0.1);
@@ -10196,8 +10187,8 @@ const FAM_CSS = `
 .fam-billing-toggle button { display: inline-flex; align-items: center; gap: 6px; }
 .fam-billing-save {
   background: #10B981; color: #fff;
-  font-size: 10.5px; font-weight: 800;
-  padding: 1px 6px; border-radius: 999px;
+  font-size: 11.5px; font-weight: 800;
+  padding: 1px 7px; border-radius: 999px;
   line-height: 1.5;
 }
 /* Follow the page direction so Hebrew reads "19.90 ₪ לחודש" (number on

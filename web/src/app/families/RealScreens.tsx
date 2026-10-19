@@ -77,11 +77,11 @@ export const REAL_COPY: Record<string, RealCopy> = {
     howTitle: "חמישה צעדים ואוצר המילים מתחיל לגדול",
     shotAlt: "מסך אמיתי מתוך Gadit",
     steps: [
-      { t: "מוסיפים את בני המשפחה", b: "לכל ילד שם, גיל וצבע. זה לוקח פחות מדקה. עד 5 ילדים וגם ההורה השני.", img: "add" },
-      { t: "מחברים את המכשירים של הילדים", b: "הילד נכנס מהטלפון או מהטאבלט שלו עם קוד QR או קוד בן 6 ספרות, בלי סיסמה. אין לו מכשיר משלו? יש מסך משותף לילדים.", img: "pair" },
-      { t: "הילדים מתחילים להבין מילים", b: "כל מילה מוסברת בשפה של ילדים עם תמונה לכל משמעות, דוגמאות ומקור המילה.", img: "word" },
-      { t: "מתרגלים עד שהמילה נכנסת לזיכרון", b: "משחקים וחידונים שנבנים מהמילים שהילד עצמו חיפש.", img: "play" },
-      { t: "כל מילה נשמרת במחברת המילים", b: "בלי ללחוץ על כלום. המחברת גדלה מילה אחרי מילה עם רצף ימים ויעד שבועי.", img: "notebook" },
+      { t: "מוסיפים את\nבני המשפחה", b: "לכל ילד שם, גיל וצבע. זה לוקח פחות מדקה. עד 5 ילדים וגם ההורה השני.", img: "add" },
+      { t: "מחברים את\nהמכשירים של הילדים", b: "הילד נכנס מהטלפון או מהטאבלט שלו עם קוד QR או קוד בן 6 ספרות, בלי סיסמה. אין לו מכשיר משלו? יש מסך משותף לילדים.", img: "pair" },
+      { t: "הילדים מתחילים\nלהבין מילים", b: "כל מילה מוסברת בשפה של ילדים עם תמונה לכל משמעות, דוגמאות ומקור המילה.", img: "word" },
+      { t: "מתרגלים עד שהמילה\nנכנסת לזיכרון", b: "משחקים וחידונים שנבנים מהמילים שהילד עצמו חיפש.", img: "play" },
+      { t: "כל מילה נשמרת\nבמחברת המילים", b: "בלי ללחוץ על כלום. המחברת גדלה מילה אחרי מילה עם רצף ימים ויעד שבועי.", img: "notebook" },
     ],
     dash: {
       kicker: "לוח בקרה להורים",
@@ -310,7 +310,7 @@ export const REAL_CSS = `
 }
 .fam-premium .fam-rtop { position: sticky; top: 0; z-index: 60; background: rgba(255,255,255,0.86); backdrop-filter: saturate(160%) blur(12px); -webkit-backdrop-filter: saturate(160%) blur(12px); border-bottom: 1px solid rgba(15,72,68,0.08); padding: 14px 32px; }
 .fam-premium .fam-hero { padding: 76px 24px 104px; }
-.fam-premium .fam-h1 { font-size: clamp(40px, 5.2vw, 62px); font-weight: 800; letter-spacing: -0.035em; line-height: 1.06; color: var(--pm-ink); margin-bottom: 22px; }
+.fam-premium .fam-h1 { font-size: clamp(38px, 5.2vw, 60px); font-weight: 800; letter-spacing: -0.035em; line-height: 1.06; color: var(--pm-ink); margin-bottom: 22px; }
 .fam-premium .fam-whatis { font-size: 18px; line-height: 1.75; color: var(--pm-body); margin-bottom: 30px; }
 /* Phone, tablet, computer under the hero text, like Yooniz (Gadi 2026-10-19). */
 .fam-premium .fam-devices { list-style: none; padding: 0; margin: -10px 0 28px; display: flex; gap: 28px; justify-content: center; }
@@ -352,6 +352,8 @@ export const REAL_CSS = `
 .fam-premium .fam-real-points { margin-top: 22px; gap: 12px; }
 /* summary grid + other cards */
 .fam-premium .fam-how-steps { gap: 22px; margin-top: 34px; }
+/* One card per row on phones: each card its own height, no empty space at the bottom. */
+@media (max-width: 559px) { .fam-premium .fam-how-steps { grid-auto-rows: auto; } }
 .fam-premium .fam-mock { border-radius: 22px; border-color: rgba(15,72,68,0.06); box-shadow: var(--pm-soft); }
 .fam-premium .fam-chain-turn { background: #fff; border-radius: 32px; box-shadow: var(--pm-card); border: 0; padding: 40px 36px; margin-top: 56px; }
 .fam-premium .fam-compare { border-radius: 28px; overflow: hidden; box-shadow: var(--pm-card); border: 0; background: #fff; }
@@ -388,7 +390,7 @@ export const REAL_CSS = `
    the viewport HEIGHT as well as width. */
 @media (min-width: 880px) {
   .fam-premium .fam-hero { min-height: calc(100svh - 68px); display: grid; align-content: center; padding: clamp(20px, 4vh, 48px) 24px clamp(24px, 5vh, 56px); }
-  .fam-premium .fam-h1 { font-size: clamp(34px, min(3.8vw, 7.4vh), 60px); margin-bottom: clamp(12px, 2vh, 20px); }
+  .fam-premium .fam-h1 { font-size: clamp(32px, min(3.8vw, 7.4vh), 58px); margin-bottom: clamp(12px, 2vh, 20px); }
   .fam-premium .fam-whatis { font-size: clamp(15px, min(1.25vw, 2.4vh), 18px); line-height: 1.7; margin-bottom: clamp(16px, 3vh, 28px); }
   .fam-premium .fam-cred-pill { margin-bottom: clamp(10px, 2vh, 18px); font-size: clamp(12px, 1.9vh, 14px); }
   .fam-premium .fam-cta { padding-block: clamp(11px, 1.9vh, 16px); font-size: clamp(15px, 2.3vh, 18px); }
@@ -429,9 +431,28 @@ export const REAL_CSS = `
   .fam-premium .fam-real-step { padding: 22px 14px; }
   .fam-premium .fam-real-step > .fam-phone { max-width: 170px; }
 }
+/* Narrower screens (Gadi 2026-10-19): no sideways scroll, it was not clear.
+   Tablets wrap the cards in centered rows; phones put them one under the other. */
 @media (max-width: 1100px) {
-  .fam-premium .fam-real-steps { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 20px 26px; margin-inline: -20px; scrollbar-width: thin; }
-  .fam-premium .fam-real-step, .fam-premium .fam-real-step:nth-child(even) { flex: 0 0 min(64vw, 220px); scroll-snap-align: center; }
+  .fam-premium .fam-real-steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; overflow: visible; padding: 0; margin-inline: auto; }
+  .fam-premium .fam-real-step, .fam-premium .fam-real-step:nth-child(even) { flex: 0 1 220px; }
+}
+@media (max-width: 560px) {
+  .fam-premium .fam-real-steps { flex-direction: column; align-items: center; }
+  .fam-premium .fam-real-step, .fam-premium .fam-real-step:nth-child(even) { flex: none; width: 100%; max-width: 340px; box-sizing: border-box; }
+  .fam-premium .fam-real-step-text { min-height: 0; }
+  .fam-premium .fam-real-step > .fam-phone { max-width: 210px; }
+}
+/* Phones: the feature cards read centered, like every other section (Gadi 2026-10-19). */
+@media (max-width: 879px) {
+  .fam-premium .fam-feature-text { text-align: center; }
+  .fam-premium .fam-feature-text .fam-kicker, .fam-premium .fam-feature-text .fam-h2-start { text-align: center; }
+  .fam-premium .fam-feature-text .fam-body { margin-inline: auto; }
+  /* The list itself centered, its bullets still in one straight column. */
+  .fam-premium .fam-real-points { width: fit-content; max-width: 100%; margin-inline: auto; justify-items: start; }
+  .fam-premium .fam-real-points li { text-align: start; }
+  .fam-premium .fam-real-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fam-premium .fam-real-pair > * { min-width: 0; }
 }
 
 /* Homework: deep teal, white text, white cards */
@@ -443,7 +464,9 @@ export const REAL_CSS = `
 .fam-hw .fam-hw-head .fam-kicker, .fam-hw .fam-hw-head .fam-h2, .fam-hw .fam-hw-head .fam-body { text-align: center; }
 /* Lines inside a heading keep the heading's own tight line height (a page-wide
    span rule gave them 1.7, Gadi 2026-10-19: too much space between the lines). */
-.fam-page .fam-h1 span, .fam-page .fam-h2 span { line-height: inherit; }
+.fam-page .fam-h1 span, .fam-page .fam-h2 span, .fam-page .fam-real-step-title span { line-height: inherit; }
+/* Hebrew hero headline: heavier Rubik, 2px smaller, like the Yooniz hero (Gadi 2026-10-19). */
+.fam-premium:lang(he) .fam-h1 { font-family: "Rubik Display", var(--font-rubik), "Rubik", system-ui, sans-serif; font-weight: 800; }
 .fam-hw-row { display: grid; grid-template-columns: minmax(0, 520px) auto; justify-content: center; gap: 48px; align-items: center; }
 .fam-hw .fam-kicker { color: #99F6E4; text-align: start; }
 .fam-premium .fam-hw .fam-h2 { color: #fff; }
