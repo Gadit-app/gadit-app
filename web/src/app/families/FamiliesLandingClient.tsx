@@ -1180,7 +1180,7 @@ const COPY: Record<string, Copy> = {
     painBody2: "וזה נוגע בהרבה יותר מציון. ילד שלא מבין מרגיש שהוא לא מספיק טוב, מתוסכל מהלימודים, ומאבד ביטחון. וזה קורה בשקט, בלי שאף אחד יודע להצביע איפה בדיוק נשבר החוט.",
     reframe: "וזה בדיוק המקום שבו Gadit נכנס.",
     puzzleKicker: "מה קורה בראש של הילד",
-    puzzleTitle: "טקסט הוא פאזל, וכל מילה היא חתיכה.",
+    puzzleTitle: "טקסט הוא כמו פאזל\nוכל מילה היא חתיכה.",
     puzzleBody: "כשילד קורא, המוח שלו מרכיב תמונה שלמה מהמילים. מספיק שלושה או ארבעה חורים, והילד כבר לא רואה את התמונה.",
     puzzleBefore: "פסקה עם מילים חסרות",
     puzzleAfter: "עם Gadit, כל חתיכה במקום",
@@ -8604,7 +8604,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
     <section className={`fam-band fam-band-${band}`}>
       <div className="fam-section fam-center">
         <div className="fam-kicker fam-kicker-light">{c.puzzleKicker}</div>
-        <h2 className="fam-h2">{c.puzzleTitle}</h2>
+        <h2 className="fam-h2">{c.puzzleTitle.split("\n").map((t, i) => <span key={i} style={{ display: "block" }}>{t}</span>)}</h2>
         <p className="fam-body fam-body-center">{real ? <Lines text={c.puzzleBody} /> : c.puzzleBody}</p>
         <PuzzleMock lang={lang} beforeLabel={c.puzzleBefore} afterLabel={c.puzzleAfter} />
         <p className="fam-reframe">{real ? <Lines text={c.puzzleLine} /> : c.puzzleLine}</p>
