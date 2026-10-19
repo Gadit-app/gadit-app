@@ -437,10 +437,11 @@ export const REAL_CSS = `
 .fam-premium .fam-hw .fam-h2 { color: #fff; }
 .fam-premium .fam-hw .fam-body { color: rgba(255,255,255,0.88); }
 .fam-hw-cards { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
-.fam-hw-card { display: grid; grid-template-columns: 46px 1fr; gap: 14px; align-items: start; background: #fff; color: #1E293B; border-radius: 20px; padding: 16px 18px; box-shadow: 0 18px 40px -20px rgba(2,30,30,0.55), 0 2px 6px rgba(2,30,30,0.12); }
-.fam-hw-card-icon { width: 46px; height: 46px; border-radius: 14px; background: #E6F6F5; display: grid; place-items: center; font-size: 22px; }
+.fam-hw-card { display: block; background: #fff; color: #1E293B; border-radius: 20px; padding: 16px 18px; box-shadow: 0 18px 40px -20px rgba(2,30,30,0.55), 0 2px 6px rgba(2,30,30,0.12); }
+.fam-hw-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.fam-hw-card-icon { width: 38px; height: 38px; flex: none; border-radius: 12px; background: #E6F6F5; display: grid; place-items: center; font-size: 20px; }
 .fam-hw-card-num { font-size: 12px; font-weight: 800; color: #0B7D7C; letter-spacing: .04em; }
-.fam-hw-card-t { font-size: 18px; font-weight: 800; margin: 2px 0 4px; }
+.fam-hw-card-t { font-size: 18px; font-weight: 800; margin: 0; }
 .fam-hw-card-b { font-size: 14.5px; line-height: 1.65; color: #475569; margin: 0; }
 .fam-hw .fam-real-points li { color: #fff; }
 .fam-hw .fam-real-points li::before { background: #5EEAD4; }

@@ -8892,12 +8892,12 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                 <ol className="fam-hw-cards">
                   {real.homework.cards.map((cd, j) => (
                     <li key={j} className="fam-hw-card">
-                      <span className="fam-hw-card-icon" aria-hidden>{cd.icon}</span>
-                      <div>
-                        <div className="fam-hw-card-num">{j + 1}</div>
+                      {/* No number; the icon sits right beside the title (Gadi 2026-10-19). */}
+                      <div className="fam-hw-card-head">
+                        <span className="fam-hw-card-icon" aria-hidden>{cd.icon}</span>
                         <div className="fam-hw-card-t">{cd.t}</div>
-                        <p className="fam-hw-card-b"><Lines text={cd.b} /></p>
                       </div>
+                      <p className="fam-hw-card-b"><Lines text={cd.b} /></p>
                     </li>
                   ))}
                 </ol>
