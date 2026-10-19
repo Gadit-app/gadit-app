@@ -1,0 +1,30 @@
+{
+  "name": "gadit-ios",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "expo start",
+    "build:ios": "eas build --platform ios --profile production",
+    "submit:ios": "eas submit --platform ios --latest"
+  },
+  "dependencies": {
+    "@react-native-google-signin/google-signin": "^16.1.5",
+    "expo": "^58.0.16",
+    "expo-apple-authentication": "~58.0.2",
+    "expo-asset": "~58.0.17",
+    "expo-constants": "~58.0.12",
+    "expo-crypto": "~58.0.7",
+    "expo-notifications": "~58.1.5",
+    "expo-splash-screen": "~58.0.10",
+    "expo-status-bar": "~58.0.3",
+    "react": "19.3.0",
+    "react-native": "0.88.0",
+    "react-native-safe-area-context": "~5.10.1",
+    "react-native-webview": "14.0.1"
+  },
+  "devDependencies": {
+    "@types/react": "~19.3.0",
+    "typescript": "~6.0.3"
+  }
+}

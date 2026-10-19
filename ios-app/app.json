@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "Gadit",
+    "slug": "gadit",
+    "scheme": "gadit",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gadit.app",
+      "buildNumber": "1",
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSCameraUsageDescription": "Gadit uses the camera so you can photograph a page from a book or your homework and tap any word on it to understand it.",
+        "NSPhotoLibraryUsageDescription": "Gadit lets you choose a photo of a page so you can tap any word on it to understand it.",
+        "NSMicrophoneUsageDescription": "Gadit uses the microphone in Say it, so you can say a sentence out loud and get stars for how well you said it."
+      }
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/icon.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
+          "backgroundColor": "#0EA5A5"
+        }
+      ],
+      "expo-notifications",
+      "expo-apple-authentication",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.11084221528-24flg3qfpkevrackjnag0l6p8iufaplh"
+        }
+      ],
+      "expo-asset"
+    ],
+    "owner": "gadibenlavi"
+  }
+}
