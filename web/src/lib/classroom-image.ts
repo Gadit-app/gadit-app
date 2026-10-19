@@ -263,3 +263,61 @@ export async function generateClassroomImage(opts: {
     return { status: "error", error: String(e).slice(0, 200), cacheKey: cKey };
   }
 }
+
+// ── "Listen and pick the picture" (Homework, approved 2026-10-14) ─────────
+// One picture per English word in the KIDS house style (one simple thing,
+// real colours, no text), shared by every child and every language:
+// imageCache/img_pick_kids_en_<hash>. Made the first time a child plays a
+// topic with that word (~0.65 cents at low quality), never again.
+
+export function pickImageKey(word: string): string {
+  const hash = crypto.createHash("sha256").update(`pick|${word.trim().toLowerCase()}`).digest("hex").slice(0, 24);
+  return `img_pick_kids_en_${hash}`;
+}
+
+/** The cached pictures of these words (no drawing): { word: url }. */
+export async function cachedPickImages(words: string[]): Promise<Record<string, string>> {
+  const out: Record<string, string> = {};
+  if (!words.length) return out;
+  const db = getAdminDb();
+  const snaps = await db.getAll(...words.map((w) => db.collection("imageCache").doc(pickImageKey(w))));
+  snaps.forEach((s, i) => {
+    const url = s.get("url") as string | undefined;
+    if (url) out[words[i]] = url;
+  });
+  return out;
+}
+
+/** The picture of one word: from cache, or drawn now and stored. `topic`
+ *  tells the brief which meaning (the caller checks the word is allowed). */
+export async function pickImage(word: string, topic: string, opts: { allowNew?: () => Promise<boolean>; onGenerated?: () => Promise<void> } = {}): Promise<ClassroomImageResult> {
+  const w = word.trim();
+  const cKey = pickImageKey(w);
+  const ref = getAdminDb().collection("imageCache").doc(cKey);
+  const existing = (await ref.get()).data() as { url?: string } | undefined;
+  if (existing?.url) return { status: "cached", url: existing.url, cacheKey: cKey };
+  if (devDryAi()) {
+    console.info(`[dry-image] ${cKey} pick word=${JSON.stringify(w)} topic=${JSON.stringify(topic)}`);
+    return { status: "generated", url: DRY_IMAGE_URL, cacheKey: cKey };
+  }
+  if (opts.allowNew && !(await opts.allowNew())) return { status: "skipped", reason: "quota", cacheKey: cKey };
+  try {
+    const meaning = `the everyday English word "${w}" from the topic "${topic}", for a picture game for young children who cannot read yet: it must be easy to tell apart from other words of the same topic`;
+    const out = await houseImage(w, meaning, "en", true);
+    void logAiUsage({ feature: "image_pick", model: IMAGE_MODEL, images: 1, imageQuality: "low", costUsd: out.cost });
+    const storagePath = `word-images/${cKey}-${crypto.randomBytes(4).toString("hex")}.png`;
+    const bucket = getDefaultBucket();
+    const file = bucket.file(storagePath);
+    await file.save(Buffer.from(out.b64, "base64"), {
+      contentType: "image/png",
+      metadata: { cacheControl: "public, max-age=31536000, immutable", metadata: { word: w, uiLang: "en", style: "kids", generatedAt: new Date().toISOString() } },
+    });
+    await file.makePublic();
+    const url = `https://storage.googleapis.com/${bucket.name}/${storagePath}`;
+    await ref.set({ url, word: w, uiLang: "en", meaning: topic, style: "kids", kind: "pick", storagePath, createdAt: new Date().toISOString() });
+    if (opts.onGenerated) await opts.onGenerated().catch(() => {});
+    return { status: "generated", url, cacheKey: cKey };
+  } catch (e) {
+    return { status: "error", error: String(e).slice(0, 200), cacheKey: cKey };
+  }
+}

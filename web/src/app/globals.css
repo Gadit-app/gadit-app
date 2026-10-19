@@ -15111,6 +15111,21 @@ html[data-theme="space"] .wb-learn-simple-link, html[data-theme="space"] .wb-dic
 .wb-pick-opt.is-wrong { border-color: #DC2626; background: #FEF2F2; color: #7F1D1D; }
 .wb-pick-ok { font-size: 17px; font-weight: 800; color: #0A7472; }
 .wb-pick .wb-learn-simple-go { max-width: 420px; }
+/* Listen and pick the picture (2026-10-14): three big pictures, no text to read. */
+.wb-pic-opts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; width: 100%; max-width: 560px; }
+.wb-pic-opt { position: relative; aspect-ratio: 1; padding: 0; border-radius: 18px; border: 3px solid var(--hairline, #E5E7EB); background: var(--paper, #F9FAFB); overflow: hidden; cursor: pointer; transition: transform .15s, border-color .15s, opacity .2s; }
+.wb-pic-opt img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wb-pic-opt:hover:not(:disabled) { border-color: #0EA5A5; transform: translateY(-2px); }
+.wb-pic-opt:focus-visible { outline: 3px solid #0A7472; outline-offset: 2px; }
+.wb-pic-opt:disabled { cursor: default; }
+.wb-pic-opt.is-right { border-color: #16A34A; box-shadow: 0 0 0 4px rgba(22, 163, 74, .18); }
+.wb-pic-opt.is-wrong { border-color: #F59E0B; opacity: .6; }
+.wb-pic-opt.is-right::after { content: "✓"; position: absolute; inset-block-start: 6px; inset-inline-end: 6px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: #16A34A; color: #fff; font-size: 17px; font-weight: 800; }
+.wb-pic-prep { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 34px 18px; background: var(--surface, #fff); border: 1px solid var(--hairline, #E5E7EB); border-radius: 18px; text-align: center; color: var(--ink-muted, #6B7280); font-size: 15px; font-weight: 600; }
+.wb-pic-bar { width: 100%; max-width: 280px; height: 8px; border-radius: 999px; background: var(--paper, #F3F4F6); overflow: hidden; }
+.wb-pic-bar > span { display: block; height: 100%; border-radius: inherit; background: #0EA5A5; transition: width .3s; }
+@media (max-width: 420px) { .wb-pic-opts { gap: 8px; } .wb-pic-opt { border-radius: 14px; } }
+@media (prefers-reduced-motion: reduce) { .wb-pic-opt, .wb-pic-bar > span { transition: none; } }
 
 /* Testimonials on the landing pages (Gadi 2026-10-12): real words, quiet cards. */
 .gt-quotes { display: flex; flex-direction: column; align-items: center; gap: 10px; }

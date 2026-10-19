@@ -17,7 +17,8 @@ const MAX_WORDS = 60;
 
 function rank(docId: string): number {
   if (docId.startsWith("img_cls2_kids_")) return 0;
-  if (docId.startsWith("img_cls")) return 1;
+  // The Homework picture game's kids pictures are the same house style.
+  if (docId.startsWith("img_cls") || docId.startsWith("img_pick_kids_")) return 1;
   if (docId.startsWith("img_kids_")) return 2;
   return 3;
 }

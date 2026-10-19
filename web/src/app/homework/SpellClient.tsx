@@ -17,6 +17,8 @@ import { useRouter } from "next/navigation";
 import { homeworkCopy } from "@/lib/homework-i18n";
 import { intakeCopy } from "@/lib/homework-intake-i18n";
 import { dictCopy } from "@/lib/dictation-i18n";
+import { picCopy } from "@/lib/picture-pick-i18n";
+import { PIC_DICT_SET_IDS, isPicBandSet } from "@/lib/picture-pick";
 import { notifyActivity } from "@/lib/notify-activity-client";
 import { BAND_SETS, BAND_COPY, BAND_TOPIC_ICON, bandSetTitle, type BandSet } from "@/lib/band-sets";
 import { HomeworkIntake, type SavedTask } from "@/components/homework/HomeworkIntake";
@@ -404,9 +406,20 @@ export function SpellClient() {
   // hear a word, pick it from three of the same set. Same word sources as
   // dictation; asks once which language is heard.
   const PICK_KEY = "gadit-pick-lang";
-  const [drill, setDrillState] = useState<"spell" | "pick">("spell");
-  const drillRef = useRef<"spell" | "pick">("spell");
-  const setDrill = (d: "spell" | "pick") => { drillRef.current = d; setDrillState(d); };
+  // "pic" (approved 2026-10-14): the same game with three PICTURES instead of
+  // three written words, for children who don't read yet. Ready topics only
+  // (lib/picture-pick.ts); one picture per word, made on first use for everyone.
+  type Drill = "spell" | "pick" | "pic";
+  const [drill, setDrillState] = useState<Drill>("spell");
+  const drillRef = useRef<Drill>("spell");
+  const setDrill = (d: Drill) => { drillRef.current = d; setDrillState(d); };
+  const pc = picCopy(lang);
+  // The pictures of the words being played ({ English word: url }), and the
+  // progress while missing ones are drawn. `picFew`: fewer than three pictures.
+  const [pics, setPics] = useState<Record<string, string>>({});
+  const [picLoad, setPicLoad] = useState<null | { done: number; total: number }>(null);
+  const [picFew, setPicFew] = useState(false);
+  const picRun = useRef(0);
   const [pickLang, setPickLang] = useState<"native" | "en" | null>(null);
   const [picked, setPicked] = useState<string | null>(null);
   const hearRef = useRef<HTMLSpanElement>(null);
@@ -678,6 +691,9 @@ export function SpellClient() {
   const [bandSel, setBandSel] = useState<"band1" | "band2">("band1");
   // Topics first, then that topic's parts (not 70 tiles at once).
   const [bandTopic, setBandTopic] = useState<string | null>(null);
+  // The picture game: Band I topics a picture can tell apart.
+  const bandShown = drill === "pic" ? BAND_SETS.filter(isPicBandSet) : BAND_SETS.filter((b) => b.band === bandSel);
+  const bandShownKey = drill === "pic" ? "band1" : bandSel;
   async function startBand(b: BandSet) {
     if (!user || loadingCat) return;
     setLoadingCat(b.id);
@@ -708,10 +724,14 @@ export function SpellClient() {
     setCreateMsg("");
     try {
       const idToken = await user.getIdToken();
+      // The picture game keeps the topic's own English words (each has its
+      // picture), paired in the child's language and cached per topic.
       const res = await fetch("/api/spell-set", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-        body: JSON.stringify({ topic: s.titleEn, uiLang: lang, nativeLang }),
+        body: JSON.stringify(drillRef.current === "pic"
+          ? { list: s.words.map((w) => w.en).join(", "), uiLang: lang, nativeLang, cacheId: `dict-${s.id}` }
+          : { topic: s.titleEn, uiLang: lang, nativeLang }),
       });
       const data = (await res.json().catch(() => ({}))) as { safe?: boolean; title?: string; words?: WordPair[] };
       if (!res.ok || !data.safe || !Array.isArray(data.words) || data.words.length < 3) {
@@ -719,7 +739,7 @@ export function SpellClient() {
         return;
       }
       // Keep the curated icon + stable id so re-practice + history line up.
-      begin({ id: s.id, icon: s.icon, titleEn: s.titleEn, titleHe: data.title || s.titleEn, words: data.words });
+      begin({ id: s.id, icon: s.icon, titleEn: s.titleEn, titleHe: drillRef.current === "pic" ? getCatTitle(s.id, lang) : data.title || s.titleEn, words: data.words });
     } catch {
       setCreateMsg(t("createErr", lang));
     } finally {
@@ -843,12 +863,23 @@ export function SpellClient() {
     return stableShuffle([ans, ...stableShuffle(others, ans).slice(0, 2)], ans + idx);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [drill, current, set, pickLang, idx]);
+  // The picture game: the right picture and two others of the same topic.
+  const picOptions = useMemo(() => {
+    if (drill !== "pic" || !current || !set) return [] as string[];
+    const ans = current.en.trim();
+    const others = [...new Set(set.words.map((w) => w.en.trim()))].filter((x) => pics[x] && norm(x) !== norm(ans) && pics[x] !== pics[ans]);
+    return stableShuffle([ans, ...stableShuffle(others, ans).slice(0, 2)], ans + idx);
+  }, [drill, current, set, pics, idx]);
   // The word plays by itself on every new question.
   useEffect(() => {
-    if (phase !== "quiz" || drill !== "pick" || !current) return;
+    if (phase !== "quiz" || drill === "spell" || !current) return;
     const tm = setTimeout(() => hearRef.current?.querySelector("button")?.click(), 350);
     return () => clearTimeout(tm);
   }, [phase, drill, current, idx]);
+  // Leaving the game stops drawing the pictures still missing.
+  useEffect(() => {
+    if (phase !== "quiz") picRun.current++;
+  }, [phase]);
   const total = set?.words.length ?? 0;
 
   // Remembered choices on this device.
@@ -869,7 +900,7 @@ export function SpellClient() {
 
   /** Start a set: straight away when the choices are known, else ask once. */
   function begin(s: DictationSet) {
-    if (drillRef.current === "pick") {
+    if (drillRef.current !== "spell") {
       if (pickLang) { start(s); return; }
       setSetupWrite(nativeLang === "he" ? "en" : "native");
       setSetupFor(s);
@@ -884,7 +915,7 @@ export function SpellClient() {
   }
   function confirmSetup() {
     if (!setupFor) return;
-    if (drillRef.current === "pick") {
+    if (drillRef.current !== "spell") {
       setPickLang(setupWrite);
       try { localStorage.setItem(PICK_KEY, setupWrite); } catch { /* this visit only */ }
       const s1 = setupFor;
@@ -911,8 +942,59 @@ export function SpellClient() {
     setWrongEver(new Set());
     setTyped("");
     setResult(null);
+    setPicked(null);
     setPhase("quiz");
+    if (drillRef.current === "pic") void loadPictures(s);
     setTimeout(() => inputRef.current?.focus(), 50);
+  }
+
+  /** The picture game: the topic's pictures from the shared cache, the
+   *  missing ones drawn now (three at a time, once per word for everyone).
+   *  Only words with a picture are played. */
+  async function loadPictures(s: DictationSet) {
+    if (!user) return;
+    const run = ++picRun.current;
+    const words = [...new Set(s.words.map((w) => w.en.trim()).filter(Boolean))];
+    setPics({});
+    setPicFew(false);
+    setQueue([]);
+    setPicLoad({ done: 0, total: words.length });
+    const headers = { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` };
+    let have: Record<string, string> = {};
+    try {
+      const r = await fetch("/api/pick-pictures", { method: "POST", headers, body: JSON.stringify({ words }) });
+      have = ((await r.json().catch(() => ({}))) as { images?: Record<string, string> }).images ?? {};
+    } catch { /* drawn below */ }
+    if (run !== picRun.current) return;
+    const missing = words.filter((w) => !have[w]);
+    let done = words.length - missing.length;
+    setPicLoad({ done, total: words.length });
+    let at = 0;
+    let stop = false;
+    const worker = async () => {
+      while (!stop && run === picRun.current) {
+        const w = missing[at++];
+        if (w === undefined) return;
+        try {
+          const r = await fetch("/api/pick-pictures", { method: "POST", headers, body: JSON.stringify({ words: [w], create: true }) });
+          // The monthly limit or no access: stop asking, play what there is.
+          if (r.status === 429 || r.status === 402 || r.status === 401) stop = true;
+          const url = ((await r.json().catch(() => ({}))) as { images?: Record<string, string> }).images?.[w];
+          if (url) have = { ...have, [w]: url };
+        } catch { /* this word is left out */ }
+        done++;
+        if (run === picRun.current) setPicLoad({ done, total: words.length });
+      }
+    };
+    await Promise.all([worker(), worker(), worker()]);
+    if (run !== picRun.current) return;
+    const playable = s.words.filter((w) => have[w.en.trim()]);
+    setPicLoad(null);
+    if (new Set(playable.map((w) => have[w.en.trim()])).size < 3) { setPicFew(true); return; }
+    setPics(have);
+    setSet({ ...s, words: playable });
+    setQueue([...playable].sort(() => Math.random() - 0.5));
+    setIdx(0);
   }
 
   function check() {
@@ -940,6 +1022,20 @@ export function SpellClient() {
     }
   }
 
+  // The picture game: the option is the picture's English word.
+  function choosePic(en: string) {
+    if (!current || result) return;
+    setPicked(en);
+    if (norm(en) === norm(current.en)) {
+      setResult("correct");
+      setTimeout(() => nextRef.current(), 1100);
+    } else {
+      setResult("wrong");
+      setMisses((m) => [...m, current]);
+      setWrongEver((s) => new Set(s).add(current.en + "|pic"));
+    }
+  }
+
   function next() {
     setResult(null);
     setTyped("");
@@ -958,11 +1054,12 @@ export function SpellClient() {
     } else {
       // "Listen and pick" is not a dictation: not saved under "my dictations",
       // reported to the parent as its own activity.
-      if (drill !== "pick") void saveSet();
+      // The picture game counts as the same "listen and pick" practice.
+      if (drill === "spell") void saveSet();
       setCelebration(randomCelebration(lang));
       setCelebrateId((n) => n + 1);
       setPhase("done");
-      if (drill !== "pick") void notifyParentDictation();
+      if (drill === "spell") void notifyParentDictation();
       else if (set) void notifyActivity(user, { kind: "pick", label: setTitle(set), score: set.words.length - wrongEver.size, total: set.words.length });
     }
   }
@@ -1028,7 +1125,7 @@ export function SpellClient() {
   // The shared tool frame (Gadi 2026-10-11): the top bar stays, the title
   // looks like every other tool's.
   return (
-    <ToolPage active="spell" width={640} title={phase !== "pick" || hw === "hub" ? hc.title : setupFor || hw === "dict" ? (drill === "pick" ? dc.pickName : dc.name) : hw === "add" ? ic.add : hc[hw]} sub={phase === "pick" && hw === "hub" ? hc.sub : undefined}>
+    <ToolPage active="spell" width={640} title={phase !== "pick" || hw === "hub" ? hc.title : setupFor || hw === "dict" ? (drill === "pic" ? pc.name : drill === "pick" ? dc.pickName : dc.name) : hw === "add" ? ic.add : hc[hw]} sub={phase === "pick" && hw === "hub" ? hc.sub : undefined}>
       <div style={{ fontFamily: '"Rubik", system-ui, sans-serif' }}>
         {phase === "pick" && hw === "hub" && (
           <div className="wb-hw-hub">
@@ -1131,7 +1228,7 @@ export function SpellClient() {
         )}
 
         {/* The one dictation setup screen (asked once, then remembered). */}
-        {phase === "pick" && setupFor && drill === "pick" && (
+        {phase === "pick" && setupFor && drill !== "spell" && (
           <div className="wb-dict-setup">
             <div className="wb-hw-intake-q">{dc.hearIn}</div>
             <div className="wb-hw-intake-chips" role="radiogroup" aria-label={dc.hearIn}>
@@ -1142,7 +1239,7 @@ export function SpellClient() {
             <button type="button" className="wb-hw-intake-save" onClick={confirmSetup}>{dc.go}</button>
           </div>
         )}
-        {phase === "pick" && setupFor && drill !== "pick" && (
+        {phase === "pick" && setupFor && drill === "spell" && (
           <div className="wb-dict-setup">
             <div className="wb-hw-intake-q">{dc.writeIn}</div>
             <div className="wb-hw-intake-chips" role="radiogroup" aria-label={dc.writeIn}>
@@ -1192,13 +1289,26 @@ export function SpellClient() {
               </div>
               <button type="button" className="wb-learn-simple-go" onClick={() => { setDrill("pick"); setHw("dict"); }}>{dc.choose}</button>
             </section>
+            {/* The same game with pictures, for children who don't read yet. */}
+            <section className="wb-learn-simple" dir={dir}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="wb-learn-simple-cover" src="/play/hw-pick.webp" alt="" width={720} height={480} />
+              <div className="wb-learn-simple-head">
+                <div className="wb-learn-text">
+                  <b>{pc.name}</b>
+                  <span>{pc.sub}</span>
+                </div>
+              </div>
+              <button type="button" className="wb-learn-simple-go" onClick={() => { setDrill("pic"); setBandTopic(null); setCreateMsg(""); setHw("dict"); }}>{dc.choose}</button>
+            </section>
           </div>
         )}
 
         {/* Dictation, step 1: which words. */}
         {phase === "pick" && !setupFor && hw === "dict" && (
           <>
-            {history.length > 0 && (
+            {/* The picture game is on the ready topics only: no own lists. */}
+            {drill !== "pic" && history.length > 0 && (
               <div style={{ marginTop: 16 }}>
                 <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "0 0 10px" }}>
                   {ml("myPractices", lang)}
@@ -1266,7 +1376,7 @@ export function SpellClient() {
             )}
 
             {/* The child's own list first (Gat, 2026-10-15): it was hidden below every topic. */}
-            <div style={{ marginTop: 16, background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 16, padding: "16px 16px 14px", boxShadow: `0 6px 18px ${TEAL}12` }}>
+            {drill !== "pic" && <div style={{ marginTop: 16, background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 16, padding: "16px 16px 14px", boxShadow: `0 6px 18px ${TEAL}12` }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
                 <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, background: TEAL + "1A", display: "grid", placeItems: "center", fontSize: 18 }}>✨</span>
                 <div>
@@ -1329,11 +1439,12 @@ export function SpellClient() {
                   onChange={(e) => { const f = e.target.files?.[0]; if (f) void fromPhoto(f); e.target.value = ""; }} />
               </div>
               {createMsg && <div style={{ marginTop: 8, fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{createMsg}</div>}
-            </div>
+            </div>}
 
             <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "22px 0 12px" }}>{t("pickCat", lang)}</h2>
+            {drill === "pic" && createMsg && <div style={{ margin: "-4px 0 10px", fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{createMsg}</div>}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12 }}>
-              {DICTATION_SETS.map((s) => (
+              {DICTATION_SETS.filter((s) => drill !== "pic" || PIC_DICT_SET_IDS.has(s.id)).map((s) => (
                 <button key={s.id} type="button" onClick={() => startCategory(s)} disabled={!!loadingCat}
                   style={{
                     display: "flex", alignItems: "center", gap: 12, textAlign: dir === "rtl" ? "right" : "left",
@@ -1353,15 +1464,15 @@ export function SpellClient() {
             {BAND_COPY[lang] && (
               <>
                 <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", color: "var(--teal-deep,#0A7472)", margin: "26px 0 10px" }}><GaditIcon name="topics" size={26} className="wb-h-ico" />{BAND_COPY[lang].title}</h2>
-                <div className="wb-hw-intake-chips" role="radiogroup" aria-label={BAND_COPY[lang].title} style={{ marginBottom: 12 }}>
+                {drill !== "pic" && <div className="wb-hw-intake-chips" role="radiogroup" aria-label={BAND_COPY[lang].title} style={{ marginBottom: 12 }}>
                   {(["band1", "band2"] as const).map((b) => (
                     <button key={b} type="button" role="radio" aria-checked={bandSel === b} className={`wb-hw-chip${bandSel === b ? " is-on" : ""}`} onClick={() => { setBandSel(b); setBandTopic(null); }}>{BAND_COPY[lang][b]}</button>
                   ))}
-                </div>
+                </div>}
                 {!bandTopic && (
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 10 }}>
-                    {[...new Set(BAND_SETS.filter((b) => b.band === bandSel).map((b) => b.topic))].map((tp) => {
-                      const parts = BAND_SETS.filter((b) => b.band === bandSel && b.topic === tp);
+                    {[...new Set(bandShown.map((b) => b.topic))].map((tp) => {
+                      const parts = bandShown.filter((b) => b.topic === tp);
                       const n = parts.reduce((a, b) => a + b.words.length, 0);
                       return (
                         <button key={tp} type="button" disabled={!!loadingCat}
@@ -1382,10 +1493,10 @@ export function SpellClient() {
                   </div>
                 )}
                 {bandTopic && (
-                  <button type="button" className="wb-hw-back" onClick={() => setBandTopic(null)}>{dir === "rtl" ? "→" : "←"} {BAND_COPY[lang][bandSel]}</button>
+                  <button type="button" className="wb-hw-back" onClick={() => setBandTopic(null)}>{dir === "rtl" ? "→" : "←"} {BAND_COPY[lang][bandShownKey]}</button>
                 )}
                 {bandTopic && <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 10 }}>
-                  {BAND_SETS.filter((b) => b.band === bandSel && b.topic === bandTopic).map((b) => (
+                  {bandShown.filter((b) => b.topic === bandTopic).map((b) => (
                     <button key={b.id} type="button" onClick={() => void startBand(b)} disabled={!!loadingCat}
                       style={{
                         display: "flex", alignItems: "center", gap: 10, textAlign: dir === "rtl" ? "right" : "left",
@@ -1444,11 +1555,30 @@ export function SpellClient() {
           </>
         )}
 
+        {/* The picture game while its pictures are made (once per word). */}
+        {phase === "quiz" && !current && drill === "pic" && (picLoad || picFew) && (
+          <div className="wb-pic-prep" style={{ marginTop: 24 }} role="status">
+            {picFew ? (
+              <>
+                <span>{pc.few}</span>
+                <button type="button" className="wb-learn-simple-go" style={{ maxWidth: 320 }} onClick={() => setPhase("pick")}>{t("back", lang)}</button>
+              </>
+            ) : picLoad && (
+              <>
+                <span aria-hidden style={{ fontSize: 30 }}>🖼️</span>
+                <span>{pc.prep}</span>
+                <span className="wb-pic-bar" aria-hidden><span style={{ width: `${Math.round((picLoad.done / Math.max(1, picLoad.total)) * 100)}%` }} /></span>
+                <span dir="ltr" style={{ unicodeBidi: "isolate", fontSize: 13 }}>{picLoad.done} / {picLoad.total}</span>
+              </>
+            )}
+          </div>
+        )}
+
         {phase === "quiz" && current && (
           <div style={{ marginTop: 24 }}>
             <div className="wb-dict-bar">
               <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{idx + 1} / {queue.length}</span>
-              {drill !== "pick" && <span className="wb-dict-modes" role="radiogroup" aria-label={t("modeType", lang)}>
+              {drill === "spell" && <span className="wb-dict-modes" role="radiogroup" aria-label={t("modeType", lang)}>
                 {(["type", "trace"] as const).map((m) => (
                   <button key={m} type="button" role="radio" aria-checked={mode === m} className={`wb-dict-mode${mode === m ? " is-on" : ""}`} onClick={() => setMode(m)}>
                     {m === "type" ? "⌨️" : "✍️"} {t(m === "type" ? "modeType" : "modeTrace", lang)}
@@ -1456,11 +1586,11 @@ export function SpellClient() {
                 ))}
               </span>}
               {set && current && (
-                <ReportQuestionButton where={drill === "pick" ? "homework-pick" : "homework-dictation"} snapshot={() => ({ set: setTitle(set), word: current, dir: qdir, drill })} />
+                <ReportQuestionButton where={drill === "pic" ? "homework-pick-picture" : drill === "pick" ? "homework-pick" : "homework-dictation"} snapshot={() => ({ set: setTitle(set), word: current, dir: qdir, drill, ...(drill === "pic" ? { pictures: picOptions.map((o) => ({ word: o, url: pics[o] })) } : {}) })} />
               )}
               {set && (
                 <button type="button" className="wb-dict-change" onClick={() => {
-                  if (drill === "pick") setSetupWrite(pickLang ?? "en");
+                  if (drill !== "spell") setSetupWrite(pickLang ?? "en");
                   else { setSetupWrite(qdir === "he2en" || qdir === "en2en" ? "en" : "native"); setSetupHear(sameLang ? "same" : "other"); }
                   setSetupFor(set); setPhase("pick");
                 }}>{dc.change}</button>
@@ -1486,7 +1616,29 @@ export function SpellClient() {
             )}
 
             {/* Prompt word + speaker (reads it aloud like a teacher dictating) */}
-            {drill !== "pick" && <div style={{ background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 18, padding: "26px 20px", textAlign: "center" }}>
+            {/* Listen and pick the picture: the word plays, three pictures, no text. */}
+            {drill === "pic" && (
+              <div className="wb-pick">
+                <span ref={hearRef} className="wb-spell-hear"><TTSButton text={pickSide(current)} audioLang={pickAudio} ariaLabel={t("listen", lang)} rate={0.7} /></span>
+                <div className="wb-pic-opts" dir="ltr">
+                  {picOptions.map((o, i) => {
+                    const right = !!result && norm(o) === norm(current.en);
+                    const wrong = result === "wrong" && picked === o;
+                    return (
+                      <button key={o} type="button" disabled={!!result} onClick={() => choosePic(o)} aria-label={String(i + 1)}
+                        className={`wb-pic-opt${right ? " is-right" : ""}${wrong ? " is-wrong" : ""}`}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={pics[o]} alt="" width={240} height={240} draggable={false} />
+                      </button>
+                    );
+                  })}
+                </div>
+                {result === "correct" && <div className="wb-pick-ok">✓ {t("correct", lang)}</div>}
+                {result === "wrong" && <button type="button" className="wb-learn-simple-go" onClick={next}>{dc.cont}</button>}
+              </div>
+            )}
+
+            {drill === "spell" && <div style={{ background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 18, padding: "26px 20px", textAlign: "center" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12 }}>
                 {sameLang ? (
                   // Same-language dictation: hear it, don't see it.
