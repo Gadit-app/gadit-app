@@ -8567,6 +8567,50 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
 
   const ctaLabel = isOwner ? c.ownerCta : c.heroCta;
 
+  // Two sections that move with the page order (Gadi 2026-10-19).
+  const painSection = (band: "white" | "cream") => (
+    <section className={`fam-band fam-band-${band}`}>
+      <div className="fam-section fam-center">
+        <div className="fam-kicker fam-kicker-light">{c.painKicker}</div>
+        {real ? (
+          <>
+            <h2 className="fam-h2">{real.pain.title}</h2>
+            <p className="fam-pain-lead"><Lines text={real.pain.lead} /></p>
+            {real.pain.paras.map((t, i) => (
+              <p key={i} className="fam-body fam-body-center"><Lines text={t} /></p>
+            ))}
+            <p className="fam-body fam-body-center fam-body-strong"><Lines text={real.pain.strong} /></p>
+            <p className="fam-reframe"><Lines text={real.pain.reframe} /></p>
+          </>
+        ) : (
+          <>
+        <h2 className="fam-h2">{c.painTitle}</h2>
+        {!real && (
+        <div className="fam-inline-img">
+          <Image src="/fam/pain.webp" alt="" width={1200} height={900} sizes="(max-width: 760px) 92vw, 600px" />
+        </div>
+        )}
+        <p className="fam-body fam-body-center">{c.painBody1}</p>
+        <p className="fam-body fam-body-center fam-body-strong">{c.painBody2}</p>
+        <p className="fam-reframe">{c.reframe}</p>
+          </>
+        )}
+      </div>
+    </section>
+  );
+  // Puzzle metaphor (Gadi 2026-07-26): text is a puzzle, every word a piece.
+  // Missing words are holes and the child stops seeing the whole picture.
+  const puzzleSection = (band: "white" | "cream") => (
+    <section className={`fam-band fam-band-${band}`}>
+      <div className="fam-section fam-center">
+        <div className="fam-kicker fam-kicker-light">{c.puzzleKicker}</div>
+        <h2 className="fam-h2">{c.puzzleTitle}</h2>
+        <p className="fam-body fam-body-center">{real ? <Lines text={c.puzzleBody} /> : c.puzzleBody}</p>
+        <PuzzleMock lang={lang} beforeLabel={c.puzzleBefore} afterLabel={c.puzzleAfter} />
+        <p className="fam-reframe">{real ? <Lines text={c.puzzleLine} /> : c.puzzleLine}</p>
+      </div>
+    </section>
+  );
   return (
     <div dir={dir} className={`fam-page${real ? " fam-premium" : ""}`} ref={rootRef}>
       <style>{FAM_CSS + REAL_CSS}</style>
@@ -8769,34 +8813,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
              they skip: comprehension quietly breaks, vocabulary stays
              thin, retrieval fails, grades slip. White band gives a clean
              break from the cream hero above. */}
-        <section className="fam-band fam-band-white">
-          <div className="fam-section fam-center">
-            <div className="fam-kicker fam-kicker-light">{c.painKicker}</div>
-            {real ? (
-              <>
-                <h2 className="fam-h2">{real.pain.title}</h2>
-                <p className="fam-pain-lead"><Lines text={real.pain.lead} /></p>
-                {real.pain.paras.map((t, i) => (
-                  <p key={i} className="fam-body fam-body-center"><Lines text={t} /></p>
-                ))}
-                <p className="fam-body fam-body-center fam-body-strong"><Lines text={real.pain.strong} /></p>
-                <p className="fam-reframe"><Lines text={real.pain.reframe} /></p>
-              </>
-            ) : (
-              <>
-            <h2 className="fam-h2">{c.painTitle}</h2>
-            {!real && (
-            <div className="fam-inline-img">
-              <Image src="/fam/pain.webp" alt="" width={1200} height={900} sizes="(max-width: 760px) 92vw, 600px" />
-            </div>
-            )}
-            <p className="fam-body fam-body-center">{c.painBody1}</p>
-            <p className="fam-body fam-body-center fam-body-strong">{c.painBody2}</p>
-            <p className="fam-reframe">{c.reframe}</p>
-              </>
-            )}
-          </div>
-        </section>
+        {real ? puzzleSection("white") : painSection("white")}
 
         {/* Real-screens order (council 2026-10-08): the parent pays and the
              parent dashboard is the moat, so it comes right after the pain,
@@ -8830,6 +8847,10 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                 <div className="gt-quote-inline-band"><InlineTestimonial item={AMIR_LEVI_HE} /></div>
               </section>
             )}
+
+            {/* Order (Gadi 2026-10-19): hero, the puzzle, the parent dashboard,
+                a parent's words, and only then why homework drags on. */}
+            {painSection(lang === "he" ? "cream" : "white")}
 
             <section className="fam-band fam-band-white">
               <div className="fam-section fam-center fam-section-wide">
@@ -8870,21 +8891,10 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
           </>
         )}
 
-        {/* 3 · Puzzle metaphor (Gadi 2026-07-26): text is a puzzle, every
-             word a piece. Missing words are holes and the child stops
-             seeing the whole picture. Before (gaps) → after (filled). */}
-        <section className="fam-band fam-band-cream">
-          <div className="fam-section fam-center">
-            <div className="fam-kicker fam-kicker-light">{c.puzzleKicker}</div>
-            <h2 className="fam-h2">{c.puzzleTitle}</h2>
-            <p className="fam-body fam-body-center">{real ? <Lines text={c.puzzleBody} /> : c.puzzleBody}</p>
-            <PuzzleMock lang={lang} beforeLabel={c.puzzleBefore} afterLabel={c.puzzleAfter} />
-            <p className="fam-reframe">{real ? <Lines text={c.puzzleLine} /> : c.puzzleLine}</p>
-          </div>
-        </section>
+        {!real && puzzleSection("cream")}
 
         {real?.olim && (
-          <section className="fam-band fam-band-white">
+          <section className="fam-band fam-band-cream">
             <div className="fam-section fam-center">
               <div className="fam-kicker">{real.olim.kicker}</div>
               <h2 className="fam-h2">{real.olim.title}</h2>
