@@ -8604,7 +8604,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
     <section className={`fam-band fam-band-${band}${band === "teal" ? " fam-puzzle-band" : ""}`}>
       <div className="fam-section fam-center">
         <div className="fam-kicker fam-kicker-light">{c.puzzleKicker}</div>
-        <h2 className="fam-h2" style={{ lineHeight: 1.2 }}>{c.puzzleTitle.split("\n").map((t, i) => <span key={i} style={{ display: "block" }}>{t}</span>)}</h2>
+        <h2 className="fam-h2">{c.puzzleTitle.split("\n").map((t, i) => <span key={i} style={{ display: "block" }}>{t}</span>)}</h2>
         <p className="fam-body fam-body-center">{real ? <Lines text={c.puzzleBody} /> : c.puzzleBody}</p>
         <PuzzleMock lang={lang} beforeLabel={c.puzzleBefore} afterLabel={c.puzzleAfter} />
         <p className="fam-reframe">{real ? <Lines text={c.puzzleLine} /> : c.puzzleLine}</p>

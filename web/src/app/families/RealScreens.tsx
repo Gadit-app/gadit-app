@@ -424,7 +424,9 @@ export const REAL_CSS = `
    cards and the two phones side by side, the whole group centered. */
 .fam-hw-head { text-align: center; max-width: 720px; margin: 0 auto 34px; }
 .fam-hw .fam-hw-head .fam-kicker, .fam-hw .fam-hw-head .fam-h2, .fam-hw .fam-hw-head .fam-body { text-align: center; }
-.fam-hw .fam-hw-head .fam-h2 { line-height: 1.25; }
+/* Lines inside a heading keep the heading's own tight line height (a page-wide
+   span rule gave them 1.7, Gadi 2026-10-19: too much space between the lines). */
+.fam-page .fam-h1 span, .fam-page .fam-h2 span { line-height: inherit; }
 .fam-hw-row { display: grid; grid-template-columns: minmax(0, 520px) auto; justify-content: center; gap: 48px; align-items: center; }
 .fam-hw .fam-kicker { color: #99F6E4; text-align: start; }
 .fam-premium .fam-hw .fam-h2 { color: #fff; }
@@ -456,9 +458,10 @@ export const REAL_CSS = `
 .fam-games-mascot { width: 72px; height: 72px; display: block; margin-bottom: 10px; }
 
 /* Testimonials: sand band, three cards in a row */
-.fam-premium .fam-band-sand { background: linear-gradient(180deg, #FBF5EA 0%, #FFFFFF 100%); }
+/* Testimonials on the hero's light green, not sand (Gadi 2026-10-19: the yellow is off-brand). */
+.fam-premium .fam-band-sand { background: radial-gradient(90% 70% at 85% 0%, rgba(14,165,165,0.10) 0%, rgba(14,165,165,0) 60%), linear-gradient(180deg, #EEF7F6 0%, #FFFFFF 100%); }
 .fam-band-sand .gt-quotes-grid { align-items: stretch; max-width: 940px; margin-inline: auto; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); }
-.fam-band-sand .gt-quote { border-color: rgba(180,83,9,0.10); box-shadow: 0 2px 6px rgba(60,40,10,0.06), 0 24px 50px -24px rgba(60,40,10,0.35); }
+.fam-band-sand .gt-quote { border-color: rgba(14,116,114,0.10); box-shadow: 0 2px 6px rgba(16,40,60,0.06), 0 24px 50px -24px rgba(16,40,60,0.32); }
 .fam-band-sand .fam-section { max-width: 1080px; }
 
 @media (max-width: 760px) {
