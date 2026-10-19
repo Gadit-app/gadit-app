@@ -480,6 +480,8 @@ export const REAL_CSS = `
 .fam-page .fam-h1 span, .fam-page .fam-h2 span, .fam-page .fam-real-step-title span { line-height: inherit; }
 /* Hebrew hero headline: heavier Rubik, 2px smaller, like the Yooniz hero (Gadi 2026-10-19). */
 .fam-premium:lang(he) .fam-h1 { font-family: "Rubik Display", var(--font-rubik), "Rubik", system-ui, sans-serif; font-weight: 800; }
+/* Languages on Inter: the same heavy headline (Inter is declared 300-600 site-wide). */
+.fam-premium:not(:lang(he)):not(:lang(ar)):not(:lang(fa)):not(:lang(ja)):not(:lang(hi)):not(:lang(am)):not(:lang(zh)):not(:lang(ko)):not(:lang(th)):not(:lang(bn)) .fam-h1 { font-family: "Inter Display", var(--font-inter), "Inter", system-ui, sans-serif; font-weight: 800; }
 .fam-hw-row { display: grid; grid-template-columns: minmax(0, 520px) auto; justify-content: center; gap: 48px; align-items: center; }
 .fam-hw .fam-kicker { color: #99F6E4; text-align: start; }
 .fam-premium .fam-hw .fam-h2 { color: #fff; }

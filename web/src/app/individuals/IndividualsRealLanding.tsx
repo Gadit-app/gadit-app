@@ -261,6 +261,8 @@ const CSS2 = `
 /* Hebrew hero headline: heavier Rubik, 2px smaller, like Yooniz. */
 .ind[lang="he"] .ind-h1 { font-family: "Rubik Display", var(--font-rubik), "Rubik", system-ui, sans-serif; font-size: clamp(36px, 5vw, 60px); }
 @media (min-width: 980px) { .ind[lang="he"] .ind-h1 { font-size: clamp(34px, min(4.2vw, 7.6vh), 60px); } }
+/* Languages on Inter: the same heavy headline (Inter is declared 300-600 site-wide). */
+.ind:not(:lang(he)):not(:lang(ar)):not(:lang(fa)):not(:lang(ja)):not(:lang(hi)):not(:lang(am)):not(:lang(zh)):not(:lang(ko)):not(:lang(th)):not(:lang(bn)) .ind-h1 { font-family: "Inter Display", var(--font-inter), "Inter", system-ui, sans-serif; }
 .ind-h1 span, .ind-h2 span { line-height: inherit; }
 /* The steps: one row of cards, a two-line title and a short line over the whole phone. */
 .ind-steps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; max-width: 1060px; }
