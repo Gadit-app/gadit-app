@@ -8963,10 +8963,12 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
         {real?.homework && (
           <section className="fam-band fam-band-hw">
             <div className="fam-hw">
-              <div>
+              <div className="fam-hw-head">
                 <div className="fam-kicker">{real.homework.kicker}</div>
-                <h2 className="fam-h2 fam-h2-start">{real.homework.title}</h2>
+                <h2 className="fam-h2">{real.homework.title.split("\n").map((t, i) => <span key={i} style={{ display: "block" }}>{t}</span>)}</h2>
                 <p className="fam-body"><Lines text={real.homework.body} /></p>
+              </div>
+              <div className="fam-hw-row">
                 <ol className="fam-hw-cards">
                   {real.homework.cards.map((cd, j) => (
                     <li key={j} className="fam-hw-card">
@@ -8979,13 +8981,10 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                     </li>
                   ))}
                 </ol>
-                <ul className="fam-real-points">
-                  {real.homework.points.map((pt, j) => <li key={j}>{pt}</li>)}
-                </ul>
-              </div>
-              <div className="fam-real-pair">
-                <PhoneShot lang={shotLang} name={real.homework.img} alt={real.shotAlt} />
-                <PhoneShot lang={shotLang} name={real.homework.img2} alt={real.shotAlt} />
+                <div className="fam-real-pair">
+                  <PhoneShot lang={shotLang} name={real.homework.img} alt={real.shotAlt} />
+                  <PhoneShot lang={shotLang} name={real.homework.img2} alt={real.shotAlt} />
+                </div>
               </div>
             </div>
           </section>

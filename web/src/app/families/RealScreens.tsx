@@ -102,10 +102,10 @@ export const REAL_COPY: Record<string, RealCopy> = {
     ],
     homework: {
       kicker: "שיעורי בית",
-      title: "מצלמים את שיעורי הבית, ו-Gadit מכין את הילד",
-      body: "מצלמים, מעלים או מדביקים את דף שיעורי הבית. Gadit מזהה אם זו רשימת מילים, טקסט לקריאה או חומר למבחן. הילד רואה בדיוק מה צריך להכין, ומתחיל בלחיצה.",
+      title: "מצלמים את שיעורי הבית\nו-Gadit מכין את הילד",
+      body: "מצלמים מעלים או מדביקים את דף שיעורי הבית. Gadit מזהה אם זו רשימת מילים או טקסט לקריאה או חומר למבחן. הילד רואה בדיוק מה צריך להכין ומתחיל בלחיצה.",
       cards: [
-        { icon: "🌍", t: "לומדים מילים", b: "הכתבה בכל שפה, גם בעברית. משחק \"הקשיבו ובחרו\" לקטנים. שיעורים באנגלית צעד אחר צעד, ונושאים מוכנים ליסודי ולחטיבת הביניים." },
+        { icon: "🌍", t: "לומדים מילים", b: "הכתבה בכל שפה וגם בעברית. משחק \"הקשיבו ובחרו\" לקטנים. שיעורים באנגלית צעד אחר צעד. נושאים מוכנים ליסודי ולחטיבת הביניים." },
         { icon: "📖", t: "קוראים טקסט", b: "מצלמים דף מהספר ולוחצים על כל מילה. מילה שלא ברורה מקבלת הסבר ותמונה." },
         { icon: "📝", t: "מתכוננים למבחן", b: "מבחן או הכתבה? מוסיפים את המילים ומתרגלים עד היום עצמו. מילה שטעו בה חוזרת עד שהיא נכונה." },
       ],
@@ -410,11 +410,17 @@ export const REAL_CSS = `
 
 /* Homework: deep teal, white text, white cards */
 .fam-premium .fam-band-hw { background: radial-gradient(80% 60% at 90% 0%, rgba(94,234,212,0.22) 0%, rgba(94,234,212,0) 60%), linear-gradient(155deg, #0B5F5E 0%, #0B7D7C 55%, #0EA5A5 100%); color: #fff; }
-.fam-hw { max-width: 1140px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 56px; align-items: center; }
+.fam-hw { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+/* Homework (Gadi 2026-10-19): the heading centered on top, then the three
+   cards and the two phones side by side, the whole group centered. */
+.fam-hw-head { text-align: center; max-width: 720px; margin: 0 auto 34px; }
+.fam-hw .fam-hw-head .fam-kicker, .fam-hw .fam-hw-head .fam-h2, .fam-hw .fam-hw-head .fam-body { text-align: center; }
+.fam-hw .fam-hw-head .fam-h2 { line-height: 1.25; }
+.fam-hw-row { display: grid; grid-template-columns: minmax(0, 520px) auto; justify-content: center; gap: 48px; align-items: center; }
 .fam-hw .fam-kicker { color: #99F6E4; text-align: start; }
 .fam-premium .fam-hw .fam-h2 { color: #fff; }
 .fam-premium .fam-hw .fam-body { color: rgba(255,255,255,0.88); }
-.fam-hw-cards { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 12px; }
+.fam-hw-cards { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
 .fam-hw-card { display: grid; grid-template-columns: 46px 1fr; gap: 14px; align-items: start; background: #fff; color: #1E293B; border-radius: 20px; padding: 16px 18px; box-shadow: 0 18px 40px -20px rgba(2,30,30,0.55), 0 2px 6px rgba(2,30,30,0.12); }
 .fam-hw-card-icon { width: 46px; height: 46px; border-radius: 14px; background: #E6F6F5; display: grid; place-items: center; font-size: 22px; }
 .fam-hw-card-num { font-size: 12px; font-weight: 800; color: #0B7D7C; letter-spacing: .04em; }
@@ -441,7 +447,8 @@ export const REAL_CSS = `
 .fam-band-sand .fam-section { max-width: 1080px; }
 
 @media (max-width: 760px) {
-  .fam-hw { grid-template-columns: 1fr; gap: 30px; padding: 0 16px; }
+  .fam-hw { padding: 0 16px; }
+  .fam-hw-row { grid-template-columns: 1fr; gap: 30px; }
   .fam-hw .fam-h2, .fam-hw .fam-body, .fam-hw .fam-kicker { text-align: center; }
   .fam-hw .fam-real-points { justify-items: center; }
   .fam-games-mascot { margin-inline: auto; }
