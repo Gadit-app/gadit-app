@@ -448,6 +448,13 @@ export const REAL_CSS = `
 
 /* Headings on the teal CTA bands stay white (the premium layer painted them dark). */
 .fam-premium .fam-band-teal .fam-h2-onteal { color: #fff; }
+/* The word cards right after the puzzle (Gadi 2026-10-19): a tinted band so the
+   white cards stand out, every card shown, a real colorful picture. */
+.fam-premium .fam-cards-band { background: linear-gradient(180deg, #E3F3F1 0%, #F1F9F8 100%); }
+.fam-premium .fam-cards-band .fam-mock { background: #fff; border: 1px solid rgba(14,116,114,0.14); box-shadow: 0 2px 6px rgba(16,40,60,0.06), 0 18px 36px -20px rgba(16,40,60,0.30); }
+.fam-premium .fam-cards-band .fam-how-num { background: #0EA5A5; color: #fff; }
+.fam-mock-pic-real { background: none !important; overflow: hidden; padding: 0 !important; }
+.fam-mock-pic-real img { width: 100%; height: 100%; object-fit: cover; display: block; }
 /* The puzzle on the CTA green (Gadi 2026-10-19: a clear break after the hero).
    White text; the two paragraph cards stay white. */
 .fam-premium .fam-puzzle-band .fam-kicker { color: #CCFBF1; }

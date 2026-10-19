@@ -8288,22 +8288,9 @@ function MockPicture({ lang }: { lang: string }) {
       <div className="fam-mock-search">
         <SearchIcon /> <span>{m.dreamWord}</span>
       </div>
-      <div className="fam-ph-pic fam-mock-pic" aria-hidden>
-        {/* A child dreaming — a sleeping face with a dream cloud (moon +
-            stars) above, not just a night sky (Gadi 2026-08-02). */}
-        <svg viewBox="0 0 140 110" style={{ width: "82%", height: "auto" }} fill="none" aria-hidden="true">
-          <circle cx="66" cy="58" r="4" fill="rgba(255,255,255,0.16)" />
-          <circle cx="77" cy="48" r="6" fill="rgba(255,255,255,0.16)" />
-          <ellipse cx="100" cy="34" rx="30" ry="19" fill="rgba(255,255,255,0.18)" />
-          <path d="M104 24a10 10 0 1 0 7 15 8 8 0 0 1-7-15z" fill="#FDE68A" />
-          <circle cx="88" cy="30" r="1.6" fill="#FDE68A" />
-          <circle cx="114" cy="40" r="1.4" fill="#FDE68A" />
-          <ellipse cx="52" cy="95" rx="40" ry="10" fill="rgba(255,255,255,0.16)" />
-          <circle cx="50" cy="74" r="18" fill="#F8FAFC" />
-          <path d="M40 72q4 4 8 0" stroke="#7C3AED" strokeWidth="2.4" strokeLinecap="round" />
-          <path d="M52 72q4 4 8 0" stroke="#7C3AED" strokeWidth="2.4" strokeLinecap="round" />
-          <path d="M44 82q6 5 12 0" stroke="#7C3AED" strokeWidth="2.4" strokeLinecap="round" />
-        </svg>
+      <div className="fam-ph-pic fam-mock-pic fam-mock-pic-real" aria-hidden>
+        {/* A real Gadit kids picture of the word (Gadi 2026-10-19: more color). */}
+        <Image src="/fam/dream-kids.webp" alt="" width={240} height={240} sizes="240px" />
       </div>
       <div className="fam-mock-meaning">
         <div>
@@ -8420,7 +8407,6 @@ const HOW_MOCKS = [
 ];
 // The 4 cards shown first on the real-screens page: definition, picture,
 // notebook, quiz (council 2026-10-08); "לכל היכולות" opens all 8.
-const FEATURED_CARDS = [1, 3, 5, 6];
 
 // Real illustrations (GPT, 2026-07-17, teal paper-cutout style, in
 // /public/fam as compressed WebP). One per feature; the 7th (English
@@ -8468,7 +8454,6 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
   // a discount badge so the saving is visible before they even click it.
   const [billing, setBilling] = useState<"yearly" | "monthly">("monthly");
   // Hebrew real-screens page shows 4 key cards first (council 2026-10-08).
-  const [showAllCards, setShowAllCards] = useState(false);
   const isOwner = !!user && familyId === user.uid;
 
   const viewedRef = useRef(false);
@@ -8819,8 +8804,49 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
              parent dashboard is the moat, so it comes right after the pain,
              then the 4 key "for every word" cards, the puzzle, and the
              immigrant-family section. Other languages keep the old order. */}
+        {/* Order (Gadi 2026-10-19): the puzzle is the problem, the word cards are
+            the answer, then a mother's words, the parent dashboard and why
+            homework drags on. */}
         {real && (
           <>
+            <section className="fam-band fam-band-white fam-cards-band">
+              <div className="fam-section fam-center fam-section-wide">
+                {real.cardsKicker && <div className="fam-kicker">{real.cardsKicker}</div>}
+                <h2 className="fam-h2">{real.cardsTitle ?? c.chainTitle}</h2>
+                <div className="fam-how-steps">
+                  {HOW_MOCKS.map((_, i) => i).map((i, n) => {
+                    const blk = c.howBlocks[i];
+                    const Mock = HOW_MOCKS[i];
+                    if (!blk || !Mock) return null;
+                    return (
+                      <div key={i} className="fam-how-step">
+                        <div className="fam-how-step-head">
+                          <span className="fam-how-num">{n + 1}</span>
+                          <span className="fam-how-text">{blk.t}</span>
+                        </div>
+                        <div className="fam-how-visual">
+                          <Mock lang={lang} />
+                        </div>
+                        <p className="fam-how-body">{blk.b}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+                {/* Just the button (Gadi 2026-10-19): the box repeated what the page already says. */}
+                <div style={{ marginTop: 36, textAlign: "center" }}>
+                  <button type="button" className="fam-cta" onClick={() => startTrial("chain")}>
+                    {ctaLabel}
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            {lang === "he" && (
+              <section className="fam-band fam-band-white">
+                <div className="gt-quote-inline-band"><InlineTestimonial item={FAMILY_TESTIMONIALS_HE[0]} /></div>
+              </section>
+            )}
+
             <section className="fam-band fam-band-cream">
               <div className="fam-feature">
                 <div className="fam-feature-text">
@@ -8842,52 +8868,9 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
               </div>
             </section>
 
-            {lang === "he" && (
-              <section className="fam-band fam-band-sand">
-                <div className="gt-quote-inline-band"><InlineTestimonial item={FAMILY_TESTIMONIALS_HE[0]} /></div>
-              </section>
-            )}
 
-            {/* Order (Gadi 2026-10-19): hero, the puzzle, the parent dashboard,
-                a parent's words, and only then why homework drags on. */}
-            {painSection(lang === "he" ? "cream" : "white")}
+            {painSection("white")}
 
-            <section className="fam-band fam-band-white">
-              <div className="fam-section fam-center fam-section-wide">
-                {real.cardsKicker && <div className="fam-kicker">{real.cardsKicker}</div>}
-                <h2 className="fam-h2">{real.cardsTitle ?? c.chainTitle}</h2>
-                <div className="fam-how-steps">
-                  {(showAllCards ? HOW_MOCKS.map((_, i) => i) : FEATURED_CARDS).map((i, n) => {
-                    const blk = c.howBlocks[i];
-                    const Mock = HOW_MOCKS[i];
-                    if (!blk || !Mock) return null;
-                    return (
-                      <div key={i} className="fam-how-step">
-                        <div className="fam-how-step-head">
-                          <span className="fam-how-num">{n + 1}</span>
-                          <span className="fam-how-text">{blk.t}</span>
-                        </div>
-                        <div className="fam-how-visual">
-                          <Mock lang={lang} />
-                        </div>
-                        <p className="fam-how-body">{blk.b}</p>
-                      </div>
-                    );
-                  })}
-                </div>
-                {!showAllCards && (
-                  <button type="button" className="fam-cta-ghost fam-cards-more" onClick={() => setShowAllCards(true)}>
-                    {i18n?.ui.allCards ?? "לכל היכולות"}
-                  </button>
-                )}
-                {/* Just the button (Gadi 2026-10-19): the box repeated what the page already says. */}
-                <div style={{ marginTop: 36, textAlign: "center" }}>
-                  <button type="button" className="fam-cta" onClick={() => startTrial("chain")}>
-                    {ctaLabel}
-                  </button>
-                </div>
-              </div>
-            </section>
           </>
         )}
 
