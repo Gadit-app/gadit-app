@@ -21,7 +21,7 @@ export type RealCopy = {
   heroPoints: string[];
   /** Credibility pill above the H1 (Yooniz-style hero). */
   credPill: string;
-  /** Under the hero CTA: card required, the reminder email, cancel (council 2026-10-08). */
+  /** Kept in the language files; no longer shown in the hero (Gadi 2026-10-19). */
   ctaNote?: string;
   /** Immigrant families section (council 2026-10-08). */
   olim?: { kicker: string; title: string; body: string };
@@ -50,12 +50,11 @@ export type RealCopy = {
 export const REAL_COPY: Record<string, RealCopy> = {
   he: {
     heroPoints: ["עד 5 ילדים", "תמונה לכל משמעות", "לוח בקרה להורה"],
-    cardsKicker: "מילון לילדים",
+    cardsKicker: "מילון חזותי וחכם שבונה אוצר מילים",
     cardsTitle: "כל מילה מוסברת בגובה העיניים של הילד",
     safeKicker: "בטיחות",
-    safeTitle: "מקום בטוח לילד, בלי פרסומות ובלי צ'אט פתוח",
+    safeTitle: "מקום בטוח לילד בלי פרסומות ובלי צ'אט פתוח",
     credPill: "הצוות של Gadit לימד יותר מ-15,000 לומדים ב-15 שנה",
-    ctaNote: "נדרש כרטיס אשראי, והחיוב הראשון רק בתום 14 הימים. יומיים לפני כן נשלח תזכורת במייל. ביטול בלחיצה, בלי טלפון.",
     olim: {
       kicker: "הסבר בשפת הבית",
       title: "הילד מבין כל מילה גם כשאתם לא יודעים להסביר אותה בעברית",
@@ -88,7 +87,7 @@ export const REAL_COPY: Record<string, RealCopy> = {
       kicker: "לוח בקרה להורים",
       title: "רואים בדיוק אילו מילים הילד כבר מבין",
       body: "בלוח ההורה רואים את כל הילדים במסך אחד: כמה מילים יש במחברת של כל אחד, כמה נוספו השבוע, רצף הימים והמילים האחרונות שחיפש.",
-      points: ["כל הילדים במבט אחד", "מילים חדשות השבוע", "התראה על כל מה שהילד סיים: מילים, משחקים ושיעורי בית", "מיד או בסיכום יומי, ואתם בוחרים על מה"],
+      points: ["כל הילדים במבט אחד", "מילים חדשות השבוע", "התראה על כל מה שהילד סיים: מילים, משחקים ושיעורי בית", "מיד או בסיכום יומי ואתם בוחרים על מה"],
       img: "dashboard",
       img2: "alerts",
     },
@@ -113,13 +112,13 @@ export const REAL_COPY: Record<string, RealCopy> = {
     homework: {
       kicker: "עזרה בשיעורי הבית",
       title: "מצלמים את הטקסט של שיעורי הבית\nו-Gadit עוזר לילד להבין אותו",
-      body: "מצלמים מעלים או מדביקים את דף שיעורי הבית. Gadit מזהה אם זו רשימת מילים או טקסט לקריאה או חומר למבחן. הילד רואה בדיוק מה צריך להכין ומתחיל בלחיצה.",
+      body: "מצלמים, מעלים או מדביקים את דף שיעורי הבית. Gadit מזהה אם זו רשימת מילים או טקסט לקריאה או חומר למבחן. הילד רואה בדיוק מה צריך להכין ומתחיל בלחיצה.",
       cards: [
         { icon: "🌍", t: "לומדים מילים", b: "הכתבה בכל שפה וגם בעברית. משחק \"הקשיבו ובחרו\" לקטנים. שיעורים באנגלית צעד אחר צעד. נושאים מוכנים ליסודי ולחטיבת הביניים." },
         { icon: "📖", t: "קוראים טקסט", b: "מצלמים דף מהספר ולוחצים על כל מילה. מילה שלא ברורה מקבלת הסבר ותמונה." },
         { icon: "📝", t: "מתכוננים למבחן", b: "מבחן או הכתבה? מוסיפים את המילים ומתרגלים עד היום עצמו. מילה שטעו בה חוזרת עד שהיא נכונה." },
       ],
-      points: ["צילום, העלאה או הדבקה", "מה צריך להכין, בכרטיס אחד", "הודעה להורה כשמסיימים"],
+      points: ["צילום, העלאה או הדבקה", "מה צריך להכין בכרטיס אחד", "הודעה להורה כשמסיימים"],
       img: "homework",
       img2: "homework-learn",
     },
@@ -127,7 +126,7 @@ export const REAL_COPY: Record<string, RealCopy> = {
       kicker: "משחקים ותרגול",
       title: "המילים נשארות בזיכרון כי משחקים בהן",
       body: "כל משחק נבנה מהמילים שהילד עצמו חיפש. אפשר לשחק דו-קרב מול אח או אחות, על אותו מכשיר או עם קוד הזמנה. ואתם מקבלים הודעה מי ניצח.",
-      points: ["יעד שבועי ורצף ימים", "דו-קרב בין אחים, או נגד רובוט המילים", "הודעה להורה עם התוצאה"],
+      points: ["יעד שבועי ורצף ימים", "דו-קרב בין אחים או נגד רובוט המילים", "הודעה להורה עם התוצאה"],
       img: "duel",
       img2: "play",
     },
@@ -358,6 +357,13 @@ export const REAL_CSS = `
 .fam-premium .fam-list { background: #fff; border-radius: 28px; box-shadow: var(--pm-card); padding: 34px 38px; }
 /* The plan list and the price card the same width, one flow (Gadi 2026-10-19). */
 .fam-premium .fam-stack, .fam-premium .fam-price-card { max-width: 520px; width: 100%; box-sizing: border-box; margin-inline: auto; }
+/* The plan list and the price as one block: both in the green frame, close together (Gadi 2026-10-19). */
+.fam-premium .fam-stack { border: 2px solid #0EA5A5; }
+.fam-premium .fam-stack-band { padding-bottom: 0 !important; }
+.fam-premium .fam-price-band { padding-top: 20px !important; }
+/* Who we are, as plain text before the plan list (Gadi 2026-10-19). */
+.fam-premium .fam-cred-text { max-width: 640px; margin: 0 auto 64px; text-align: center; }
+.fam-premium .fam-cred-text-lead { font-size: 19px; font-weight: 700; color: #1f2937; margin: 0 0 10px; }
 @media (max-width: 760px) {
   .fam-premium .fam-rtop { padding: 10px 14px; }
   .fam-premium .fam-hero { padding: 40px 18px 64px; }
@@ -459,6 +465,8 @@ export const REAL_CSS = `
 .fam-mock-pic-real img { width: 100%; height: 100%; object-fit: cover; display: block; }
 /* The puzzle on the CTA green (Gadi 2026-10-19: a clear break after the hero).
    White text; the two paragraph cards stay white. */
+/* One kicker color on light bands (the older amber "light" kicker read off-brand). */
+.fam-premium .fam-kicker-light { color: #0B7F7F; }
 .fam-premium .fam-puzzle-band .fam-kicker { color: #CCFBF1; }
 .fam-premium .fam-puzzle-band .fam-h2, .fam-premium .fam-puzzle-band .fam-body, .fam-premium .fam-puzzle-band .fam-reframe { color: #fff; }
 .fam-premium .fam-puzzle-band .fam-puzzle-block { background: #fff; }

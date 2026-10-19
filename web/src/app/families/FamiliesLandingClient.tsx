@@ -1145,7 +1145,7 @@ const COPY: Record<string, Copy> = {
     trustLine: "עד 5 ילדים במשפחה, כל אחד ברמה שלו",
     credLine: "מבוסס על 15 שנות ניסיון עם למעלה מ-15,000 הורים, תלמידים ואנשי חינוך",
     credKicker: "מי אנחנו",
-    credTitle: "15 שנה בחינוך, בכלי אחד לילד",
+    credTitle: "15 שנה בחינוך בכלי אחד לילד",
     credBody: "Gadit נבנה על ידי צוות עם 15 שנות ניסיון בחינוך, שלימד יותר מ-15,000 לומדים. את מה שראינו עובד שוב ושוב, בכיתה ובבית, הכנסנו לתוך כלי אחד פשוט שהילד יכול להשתמש בו לבד.",
     proofTitle: "מחברת מילים · דוגמה",
     proofBig: "12 מילים חדשות השבוע",
@@ -1173,9 +1173,9 @@ const COPY: Record<string, Copy> = {
     ownerCta: "לאזור המשפחה שלכם",
     stats: ["יותר מ-40 שפות ממשק", "תמונה לכל משמעות", "עד 5 ילדים", "ביטול בלחיצה אחת"],
     demoKicker: "התוצאה",
-    demoTitle: "הילד מבין כל מילה, ואוצר המילים שלו גדל כל יום",
+    demoTitle: "הילד מבין כל מילה ואוצר המילים שלו גדל כל יום",
     painKicker: "שיעורי הבית",
-    painTitle: "הילד קורא, אבל לא תמיד באמת מבין",
+    painTitle: "הילד קורא אבל לא תמיד באמת מבין",
     painBody1: "אתם דווקא שמחים כשהילד עוצר ושואל מה זה מילה. הבעיה היא כל המילים שהוא לא עוצר לשאול עליהן. הוא מדלג עליהן, ממשיך לקרוא, והחומר לא נכנס. אוצר המילים נשאר דל, וההבנה נשברת מילה אחרי מילה.",
     painBody2: "וזה נוגע בהרבה יותר מציון. ילד שלא מבין מרגיש שהוא לא מספיק טוב, מתוסכל מהלימודים, ומאבד ביטחון. וזה קורה בשקט, בלי שאף אחד יודע להצביע איפה בדיוק נשבר החוט.",
     reframe: "וזה בדיוק המקום שבו Gadit נכנס.",
@@ -1183,10 +1183,10 @@ const COPY: Record<string, Copy> = {
     puzzleTitle: "טקסט הוא כמו פאזל\nוכל מילה היא חתיכה",
     puzzleBody: "כשילד קורא, המוח שלו מרכיב תמונה שלמה מהמילים. מספיק שלושה או ארבעה חורים, והילד כבר לא רואה את התמונה.",
     puzzleBefore: "פסקה עם מילים חסרות",
-    puzzleAfter: "עם Gadit, כל חתיכה במקום",
-    puzzleLine: "כשכל המילים ברורות, הילד רואה את התמונה השלמה.",
+    puzzleAfter: "עם Gadit כל חתיכה במקום",
+    puzzleLine: "כשכל המילים ברורות הילד רואה את התמונה השלמה",
     chainKicker: "איך זה עובד",
-    chainTitle: "על כל מילה, הילד מקבל את כל זה",
+    chainTitle: "על כל מילה הילד מקבל את כל זה",
     chainSteps: [
       "הילד מקליד מילה שהוא לא מבין",
       "מקבל הסבר בגובה העיניים שלו, תמונה ושלוש דוגמאות",
@@ -1231,7 +1231,7 @@ const COPY: Record<string, Copy> = {
       },
       {
         kicker: "הבנת הקשר",
-        title: "מדביקים משפט, מקבלים את הפירוש הנכון",
+        title: "מדביקים משפט ומקבלים את הפירוש הנכון",
         body: "לרוב המילים יש יותר מפירוש אחד, ושם ילדים הולכים לאיבוד. מדביקים את המשפט מהספר או מדף העבודה, ו-Gadit מסמן בדיוק איזו משמעות מתאימה להקשר הזה.",
       },
       {
@@ -1269,19 +1269,19 @@ const COPY: Record<string, Copy> = {
       { label: "פרסומות וקישורים לכל כיוון", gadit: false, other: true },
       { label: "צ'אט פתוח בלי גבולות", gadit: false, other: true },
     ],
-    safeTitle: "אזור נפרד ונקי, לא שער לשום מקום אחר",
-    safeBody: "Gadit הוא מקום סגור לגמרי: אין צ'אט פתוח, אין פיד, אין פרסומות ואין קישורים החוצה. יש כאן דבר אחד לעשות: להבין מילה, ולחזור ללימודים.",
+    safeTitle: "אזור נפרד ונקי ולא שער לשום מקום אחר",
+    safeBody: "Gadit הוא מקום סגור לגמרי: אין צ'אט פתוח, אין פיד, אין פרסומות ואין קישורים החוצה. יש כאן דבר אחד לעשות: להבין מילה ולחזור ללימודים.",
     safeLine: "מסך אחד שאפשר לתת לילד בראש שקט.",
     stackTitle: "מה מקבלים במסלול המשפחתי",
     stackItems: [
       "חיפושים בלי הגבלה לכל המשפחה",
-      "כל המשמעויות, עם תמונה לכל משמעות",
-      "מצב ילדים לקטנים, והסבר מלא לגדולים",
+      "כל המשמעויות עם תמונה לכל משמעות",
+      "מצב ילדים לקטנים והסבר מלא לגדולים",
       "מחברת אישית ותרגול חכם לכל ילד",
-      "לוח בקרה להורה, עם התראות על כל מה שהילד סיים",
+      "לוח בקרה להורה עם התראות על כל מה שהילד סיים",
       "שיעורי בית: הכתבה בכל שפה, שיעורים והכנה למבחן",
       "צילום דף מהספר ולחיצה על כל מילה",
-      "משחקים, ודו-קרב מילים בין אחים",
+      "משחקים ודו-קרב מילים בין אחים",
       "עד 5 ילדים בפרופילים נפרדים",
       "הסבר ביותר מ-40 שפות",
     ],
@@ -1289,14 +1289,14 @@ const COPY: Record<string, Copy> = {
     priceTitle: "מסלול המשפחה",
     trialBadge: "14 ימי ניסיון חינם",
     yearly: "₪199 לשנה",
-    yearlyNote: "פחות מ-₪17 לחודש לכל המשפחה, וחוסכים קרוב לחודשיים לעומת התשלום החודשי",
-    priceAnchor: "פחות משיעור פרטי אחד בחודש, לכל הילדים בבית",
+    yearlyNote: "פחות מ-₪17 לחודש לכל המשפחה\n(חיסכון של חודשיים לעומת חודשי)",
+    priceAnchor: "פחות משיעור פרטי אחד בחודש לכל הילדים בבית",
     monthly: "₪19.90 לחודש",
     billedYearly: "שנתי",
     billedMonthly: "חודשי",
     yearlySave: "חוסכים ₪39.80",
     priceCta: "התחילו את הניסיון",
-    cancelNote: "החיוב בשקלים, רק בתום 14 הימים. יומיים לפני כן נשלח אליכם תזכורת במייל. מבטלים בלחיצה מדף החשבון, בלי טלפון.",
+    cancelNote: "נדרש כרטיס אשראי. החיוב בשקלים, רק בתום 14 הימים. יומיים לפני כן נשלח אליכם תזכורת במייל. מבטלים בלחיצה מדף החשבון, בלי טלפון.",
     singleChild: "יש בבית תלמיד אחד? מסלול Deep ב-₪16.90 לחודש. בשלושה שקלים נוספים מצרפים עד 5 ילדים.",
     guaranteeTitle: "היעד לשבועיים: 20 מילים חדשות במחברת",
     guaranteeBody: "בלוח ההורה תראו כמה מילים נוספו, ותחליטו לפני החיוב.",
@@ -1319,16 +1319,40 @@ const COPY: Record<string, Copy> = {
         a: "הלב של Gadit הוא ילדים בגיל בית ספר, מכיתה א ועד תיכון. מצב ילדים מסביר בפשטות לקטנים, וההסברים המלאים משרתים גם בני נוער והורים. את החשבון פותח ההורה.",
       },
       {
+        q: "איך זה עוזר בשיעורי הבית ולפני מבחן?",
+        a: "מצלמים את דף שיעורי הבית, ו-Gadit מזהה אם זו רשימת מילים, טקסט לקריאה או חומר למבחן. הילד מקבל הסבר לכל מילה, מתרגל הכתבה בכל שפה, ומתכונן עד יום המבחן. מילה שטעה בה חוזרת עד שהיא נכונה.",
+      },
+      {
+        q: "הילד עוד לא קורא טוב. זה מתאים?",
+        a: "כן. כל מילה, כל הסבר וכל דוגמה אפשר לשמוע בקול, ולכל משמעות יש תמונה. לקטנים יש גם משחק הקשיבו ובחרו: שומעים מילה ובוחרים את התמונה הנכונה.",
+      },
+      {
+        q: "איך שומרים על המוטיבציה של הילד?",
+        a: "כל מילה שהילד מבין מקדמת אותו בדרגות, עם רצף ימים ויעד שבועי. יש לוח מובילים משפחתי, משחקים שנבנים מהמילים שלו, ודו-קרב מילים בין אחים.",
+      },
+      {
+        q: "תקבלו עדכון על מה שהילד עושה?",
+        a: "כן. בלוח ההורה רואים כל מילה שהילד חיפש וכל מה שסיים, ואפשר לקבל התראה בטלפון או במייל כשהוא לומד מילה חדשה. אתם בוחרים מה מעניין אתכם.",
+      },
+      {
         q: "זה עוזר גם באנגלית ובשפות נוספות?",
-        a: "כן. אפשר לחפש מילה באנגלית ולקבל הסבר בעברית פשוטה, עם תמונה ודוגמאות. וזה עובד ביותר מ-40 שפות, כך שהילד יכול לקבל את ההסבר גם בשפה שמדברים אצלכם בבית.",
+        a: "כן. אפשר לחפש מילה באנגלית ולקבל הסבר בעברית פשוטה, עם תמונה ודוגמאות. וזה עובד ביותר מ-40 שפות, כך שהילד יכול לקבל את ההסבר גם בשפה שמדברים אצלכם בבית. ובכלי תגיד את זה שומעים משפט בשפה חדשה, אומרים אותו בעצמכם ומקבלים כוכבים על ההגייה.",
       },
       {
         q: "המחיר באמת בשקלים?",
         a: "כן. החיוב בשקלים, בכרטיס ישראלי רגיל, בלי עמלות המרה ובלי הפתעות: ₪199 לשנה או ₪19.90 לחודש, אחרי 14 ימי הניסיון.",
       },
       {
+        q: "מה ההבדל בין חודשי לשנתי?",
+        a: "זה אותו מסלול בדיוק. בשנתי משלמים ₪199 פעם בשנה וחוסכים ₪39.80 לעומת תשלום של ₪19.90 בכל חודש.",
+      },
+      {
         q: "כמה ילדים אפשר לחבר?",
         a: "עד 5 ילדים במנוי משפחתי אחד, לכל ילד פרופיל, מחברת ותרגול משלו.",
+      },
+      {
+        q: "מה אם לילד אין טלפון משלו?",
+        a: "אין בעיה. הילד יכול להיכנס מהטלפון או מהטאבלט שלו עם קוד QR או קוד בן 6 ספרות, בלי סיסמה. ואם יש מכשיר אחד לכל הבית, יש מסך משותף לילדים: כל ילד בוחר את עצמו ונכנס עם קוד אישי משלו.",
       },
       {
         q: "אפשר לנסות בלי להתחייב?",
@@ -1339,6 +1363,10 @@ const COPY: Record<string, Copy> = {
         a: "בכל דפדפן, בטלפון, בטאבלט ובמחשב, בלי התקנה. באנדרואיד יש גם אפליקציה ב-Google Play.",
       },
       {
+        q: "ההסברים באמת מדויקים?",
+        a: "הצוות של Gadit בנה את ההסברים לפי כללים חינוכיים ברורים: הסבר בגובה העיניים, כל המשמעויות, דוגמאות ומקור המילה. בכל עמוד יש כפתור דיווח, וכל דיווח נבדק ומתוקן.",
+      },
+      {
         q: "איזה מידע נשמר על הילד?",
         a: "השם, הגיל והמילים שחיפש, כדי לבנות את המחברת שלו ואת לוח ההורה. לא מוכרים ולא משתפים מידע על ילדים. אפשר למחוק את החשבון ואת כל הנתונים בכל רגע.",
       },
@@ -1347,8 +1375,8 @@ const COPY: Record<string, Copy> = {
         a: "המילים לא נמחקות. אם תחזרו בהמשך, הכול מחכה לכם.",
       },
     ],
-    finalTitle: "התחילו היום, וראו את אוצר המילים גדל",
-    finalSub: "שבועיים חינם. ביטול בלחיצה. והילד לומד להבין מילים לבד, ואוצר המילים שלו גדל.",
+    finalTitle: "התחילו היום\nוראו את אוצר המילים של הילד שלכם גדל",
+    finalSub: "שבועיים חינם. ביטול בלחיצה. והילד לומד להבין מילים לבד.",
     finalCta: "התחילו 14 ימי ניסיון חינם",
     footerTerms: "תנאים",
     footerPrivacy: "פרטיות",
@@ -8765,7 +8793,6 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
                   {ctaLabel}
                 </button>
               )}
-              {real?.ctaNote && <p className="fam-cta-note"><Lines text={real.ctaNote} /></p>}
               {c.ctaMicro && <div className="fam-cta-micro">{c.ctaMicro}</div>}
               {real ? (
                 <ul className="fam-hero-points">
@@ -9099,13 +9126,17 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
              educators. Kept generic on purpose, no institution named, to
              respect the brand separation. Placed right before the price so
              trust is highest at the ask. */}
+        {/* Real-screens page (Gadi 2026-10-19): it looked like the section under
+            it, so it moved, as plain text, to right before what the plan includes. */}
+        {!real && (
         <section className="fam-band fam-band-purple">
           <div className="fam-section fam-center">
             <div className="fam-kicker">{c.credKicker}</div>
             <h2 className="fam-h2">{c.credTitle}</h2>
-            <p className="fam-body fam-body-center">{real ? <Lines text={c.credBody} /> : c.credBody}</p>
+            <p className="fam-body fam-body-center">{c.credBody}</p>
           </div>
         </section>
+        )}
 
         {/* 8.6 · Real words from families (Gadi 2026-10-12), Hebrew page. */}
         {lang === "he" && (
@@ -9174,9 +9205,16 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
           </div>
         </section>
 
-        {/* 8 · Value stack */}
-        <section className="fam-band fam-band-cream">
+        {/* 8 · Value stack. On the real-screens page it sits right on top of the
+            price card, both in the green frame (Gadi 2026-10-19: they belong together). */}
+        <section className={`fam-band fam-band-cream${real ? " fam-stack-band" : ""}`}>
           <div className="fam-section">
+            {real && (
+              <div className="fam-cred-text">
+                <p className="fam-cred-text-lead">{c.credTitle}</p>
+                <p className="fam-body fam-body-center"><Lines text={c.credBody} /></p>
+              </div>
+            )}
             <h2 className="fam-h2">{c.stackTitle}</h2>
             <ul className="fam-list fam-stack">
               {c.stackItems.map((item, i) => (
@@ -9190,9 +9228,9 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
         </section>
 
         {/* 9 · Pricing */}
-        <section className="fam-band fam-band-cream" id="fam-pricing">
+        <section className={`fam-band fam-band-cream${real ? " fam-price-band" : ""}`} id="fam-pricing">
           <div className="fam-section">
-            <div className="fam-kicker">{c.priceKicker}</div>
+            {!real && <div className="fam-kicker">{c.priceKicker}</div>}
             <div className="fam-price-card">
               <div className="fam-price-badge">{c.trialBadge}</div>
               <h2 className="fam-price-title">{c.priceTitle}</h2>
@@ -9220,7 +9258,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
               </div>
 
               <div className="fam-price-amount">{billing === "yearly" ? c.yearly : c.monthly}</div>
-              {billing === "yearly" && <div className="fam-price-note">{c.yearlyNote}</div>}
+              {billing === "yearly" && <div className="fam-price-note">{c.yearlyNote.split("\n").map((t, i) => <span key={i} style={{ display: "block" }}>{t}</span>)}</div>}
               <div className="fam-price-anchor">{c.priceAnchor}</div>
 
               <button type="button" className="fam-cta fam-cta-wide" onClick={() => startTrial("pricing")}>
@@ -9271,7 +9309,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
             <div className="fam-final-img">
               <Image src="/fam/routine.webp" alt="" width={1200} height={800} sizes="(max-width: 760px) 92vw, 560px" />
             </div>
-            <h2 className="fam-h2 fam-h2-onteal">{c.finalTitle}</h2>
+            <h2 className="fam-h2 fam-h2-onteal">{c.finalTitle.split("\n").map((t, i) => <span key={i} style={{ display: "block" }}>{t}</span>)}</h2>
             <p className="fam-final-sub">{real ? <Lines text={c.finalSub} /> : c.finalSub}</p>
             <button type="button" className="fam-cta fam-cta-inverse" onClick={() => startTrial("final")}>
               {isOwner ? c.ownerCta : c.finalCta}
