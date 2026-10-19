@@ -33,6 +33,7 @@ import { useLang } from "@/lib/lang-context";
 import { gt } from "@/lib/guide-i18n";
 import { useHref } from "@/lib/href";
 import { useTheme } from "@/lib/appearance";
+import { TopRankBadge } from "./KidsGameHeader";
 import { resolvePartnerArea } from "@/lib/partner-nav";
 
 // Per-uid cache of "is this user a registered partner", so the menu doesn't
@@ -301,6 +302,8 @@ export function WbUserMenu() {
         gap: 8,
       }}
     >
+      {/* The grown-up rank, quietly, next to the avatar on every page (Gadi 2026-10-19). */}
+      {planReady && <TopRankBadge lang={lang} dir={dir} />}
       {/* Plan chip, clicking it opens the same menu as clicking the
           avatar, so the entire grouping reads as one control. Hidden
           on very narrow viewports to keep the topbar from wrapping.

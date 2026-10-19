@@ -389,3 +389,87 @@ export function AdultRankLine({
     </>
   );
 }
+
+/**
+ * The rank badge in the top bar (Gadi 2026-10-19): a grown up sees their rank
+ * as a small tree picture next to the avatar on every page, phone and desktop,
+ * quietly. Tapping it opens the ladder. Points come from the notebook (one per
+ * word, ten per word proven in a quiz or a game), cached for a few minutes per
+ * visit so the bar does not refetch on every page.
+ */
+const RANK_CACHE = "gadit-rank-badge";
+const RANK_CACHE_MS = 3 * 60 * 1000;
+export function TopRankBadge({ lang, dir }: { lang: string; dir: "rtl" | "ltr" }) {
+  const { user, familyRole } = useAuth();
+  const [data, setData] = useState<{ dates: string[]; understood: number } | null>(() => {
+    try {
+      const c = JSON.parse(sessionStorage.getItem(RANK_CACHE) || "null") as { at: number; dates: string[]; understood: number } | null;
+      return c && Date.now() - c.at < RANK_CACHE_MS ? { dates: c.dates, understood: c.understood } : null;
+    } catch { return null; }
+  });
+  useEffect(() => {
+    if (!user || familyRole === "kid" || data) return;
+    let off = false;
+    (async () => {
+      try {
+        const r = await fetch("/api/notebook", { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+        if (!r.ok) return;
+        const items = ((await r.json()) as { items?: Array<{ addedAt?: string; understood?: boolean }> }).items ?? [];
+        const next = { dates: items.map((i) => i.addedAt || "").filter(Boolean), understood: items.filter((i) => i.understood).length };
+        if (off) return;
+        setData(next);
+        try { sessionStorage.setItem(RANK_CACHE, JSON.stringify({ at: Date.now(), ...next })); } catch { /* this visit only */ }
+      } catch { /* the badge is a nice-to-have */ }
+    })();
+    return () => { off = true; };
+  }, [user, familyRole, data]);
+  const g = useMemo(() => {
+    if (!data) return null;
+    const now = Date.now();
+    return computeGamification(data.dates, now, toLocalDateStr(new Date(now).toISOString()), data.understood, []);
+  }, [data]);
+  const [open, setOpen] = useState(false);
+  const [celebrateId, setCelebrateId] = useState(0);
+  useEffect(() => {
+    if (!g) return;
+    try {
+      const KEY = "gadit-adult-rank";
+      const prev = window.localStorage.getItem(KEY);
+      window.localStorage.setItem(KEY, String(g.rank.index));
+      if (prev !== null && g.rank.index > Number(prev)) setCelebrateId((x) => x + 1);
+    } catch { /* no celebration */ }
+  }, [g]);
+  if (!user || familyRole === "kid" || !g || !data || data.dates.length === 0) return null;
+  const c = gameCopy(lang);
+  const name = rankLabel(g.rank.key, lang);
+  const toNext = g.rank.next === null ? 0 : Math.max(0, g.rank.next - g.points);
+  const tip = `${c.rankTitle}: ${name}. ${g.rank.next === null ? c.topRank : c.toNext(toNext)}`;
+  return (
+    <>
+      <KidsCelebration runId={celebrateId} />
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        title={tip}
+        aria-label={tip}
+        className="wb-rank-badge"
+        style={{
+          width: 36, height: 36, flexShrink: 0, padding: 0, borderRadius: 999, cursor: "pointer",
+          border: "1.5px solid color-mix(in srgb, #8B5CF6 35%, transparent)",
+          background: "color-mix(in srgb, #8B5CF6 10%, var(--surface, #fff))",
+          display: "inline-flex", alignItems: "center", justifyContent: "center", position: "relative",
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={rankIconSrc(g.rank.key)} alt="" width={30} height={30} style={{ width: 30, height: 30, objectFit: "contain" }} />
+        {/* How far to the next rank, as a thin ring segment under the picture. */}
+        <span aria-hidden="true" style={{ position: "absolute", insetInline: 6, bottom: -3, height: 3, borderRadius: 999, background: "color-mix(in srgb, var(--ink, #111) 12%, transparent)", overflow: "hidden" }}>
+          <span style={{ display: "block", height: "100%", width: `${Math.round(g.rank.progress * 100)}%`, background: "#8B5CF6", borderRadius: 999 }} />
+        </span>
+      </button>
+      {open && (
+        <RanksModal onClose={() => setOpen(false)} points={g.points} currentIndex={g.rank.index} lang={lang} dir={dir} adult />
+      )}
+    </>
+  );
+}
