@@ -369,6 +369,14 @@ export const REAL_CSS = `
 .fam-premium .fam-stack { border: 2px solid #0EA5A5; }
 .fam-premium .fam-stack-band { padding-bottom: 0 !important; }
 .fam-premium .fam-price-band { padding-top: 20px !important; }
+/* Where two bands share one background the paddings stacked into a double gap
+   (Gadi 2026-10-19: same space everywhere). The five steps end on the same tint
+   as the plan list, so the "who we are" text sits the same 64px from the steps
+   as from the plan heading below it; the questions follow the price at one
+   band gap, not two. */
+.fam-premium .fam-band-white:has(.fam-real-steps) { padding-bottom: 0 !important; }
+.fam-premium .fam-stack-band { padding-top: 64px !important; }
+.fam-premium .fam-price-band + .fam-band-cream { padding-top: 0 !important; }
 /* Who we are, as plain text before the plan list (Gadi 2026-10-19). */
 .fam-premium .fam-cred-text { max-width: 640px; margin: 0 auto 64px; text-align: center; }
 .fam-premium .fam-cred-text-lead { font-size: 19px; font-weight: 700; color: #1f2937; margin: 0 0 10px; }
