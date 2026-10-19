@@ -1326,7 +1326,7 @@ export function SpellClient() {
               <li>
                 <button type="button" className="wb-play-card has-cover wb-play-cat-origin" onClick={() => { setDrill("pick"); setHw("dict"); }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className="wb-play-card-cover" src="/play/quiz.webp" alt="" width={720} height={480} />
+                  <img className="wb-play-card-cover" src="/play/hw-pick-word.webp" alt="" width={720} height={480} />
                   <span className="wb-play-card-text"><span className="wb-play-card-title">{dc.pickName}</span><span className="wb-play-card-desc">{dc.pickSub}</span></span>
                 </button>
               </li>
@@ -1617,6 +1617,8 @@ export function SpellClient() {
 
         {phase === "quiz" && current && (
           <div style={{ marginTop: 24 }}>
+            {/* Which topic this is, on top (Gadi 2026-10-19). */}
+            {set && <h2 className="wb-dict-topic"><span aria-hidden>{set.icon}</span> {setTitle(set)}</h2>}
             <div className="wb-dict-bar">
               <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{idx + 1} / {queue.length}</span>
               {drill === "spell" && <span className="wb-dict-modes" role="radiogroup" aria-label={t("modeType", lang)}>
