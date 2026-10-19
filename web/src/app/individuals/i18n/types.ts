@@ -1,4 +1,4 @@
-export type IndStep = { t: string; b: string; img: string };
+export type IndStep = { t: string; b: string; img: string; /** Small line under the title, like the Families steps (Gadi 2026-10-19). */ s?: string };
 export type IndTool = { kicker: string; title: string; body: string; points: string[]; img: string; img2?: string };
 export type IndMiniTool = { kicker: string; title: string; body: string; img: string };
 
@@ -8,6 +8,8 @@ export type IndMiniTool = { kicker: string; title: string; body: string; img: st
 export type IndCopy = {
   topCta: string; credPill: string; h1: string; whatIs: string; heroCta: string; ctaNote: string; howCta: string;
   heroPoints: string[]; shotAlt: string;
+  /** Phone, tablet, computer under the hero text (Gadi 2026-10-19). */
+  devices?: [string, string, string];
   pain: { title: string; lead: string; paras: string[]; reframe: string };
   whoKicker: string; whoTitle: string; who: { t: string; b: string }[];
   howKicker: string; howTitle: string; steps: IndStep[]; stepsCta: string;

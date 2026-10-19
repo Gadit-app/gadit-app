@@ -89,11 +89,19 @@ export function IndividualsRealLanding({ copy = HE, lang = "he" }: { copy?: IndC
               </div>
               <h1 className="ind-h1">{C.h1}</h1>
               <p className="ind-whatis"><Lines text={C.whatIs} /></p>
+              {/* Phone, tablet, computer, like the Families hero (Gadi 2026-10-19). */}
+              {C.devices && (
+                <ul className="ind-devices">
+                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.2" /><path d="M10.5 18.5h3" /></svg><span>{C.devices[0]}</span></li>
+                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="2.5" width="17" height="19" rx="2.2" /><path d="M10.5 18.5h3" /></svg><span>{C.devices[1]}</span></li>
+                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="3.5" width="19" height="13" rx="1.8" /><path d="M8 20.5h8M12 16.5v4" /></svg><span>{C.devices[2]}</span></li>
+                </ul>
+              )}
               <div className="ind-ctas">
                 <button type="button" className="ind-cta" onClick={() => start("hero")}>{C.heroCta}</button>
                 <a href="#how" className="ind-ghost">{C.howCta}</a>
               </div>
-              <p className="ind-cta-note"><Lines text={C.ctaNote} /></p>
+              {/* The card note lives on the price card only (Gadi 2026-10-19). */}
               <ul className="ind-points">{C.heroPoints.map((p) => <li key={p}><Check />{F(p)}</li>)}</ul>
             </div>
             <div className="ind-hero-visual">
@@ -129,12 +137,13 @@ export function IndividualsRealLanding({ copy = HE, lang = "he" }: { copy?: IndC
           <div className="ind-kicker">{C.howKicker}</div>
           <h2 className="ind-h2 ind-center">{C.howTitle}</h2>
           <div className="ind-steps">
+            {/* One row of short titles over whole phones, like the Families steps (Gadi 2026-10-19). */}
             {C.steps.map((s, i) => (
               <div key={s.img} className="ind-step">
                 <div className="ind-step-text">
                   <span className="ind-num">{i + 1}</span>
-                  <h3 className="ind-h3">{s.t}</h3>
-                  <p className="ind-body"><Lines text={s.b} /></p>
+                  <h3 className="ind-step-title">{s.t.split("\n").map((x, k) => <span key={k}>{x}</span>)}</h3>
+                  {s.s ? <p className="ind-step-sub">{s.s}</p> : <p className="ind-body"><Lines text={s.b} /></p>}
                 </div>
                 <Phone name={s.img} lang={lang} alt={C.shotAlt} />
               </div>
@@ -175,9 +184,11 @@ export function IndividualsRealLanding({ copy = HE, lang = "he" }: { copy?: IndC
           </div>
         </section>
 
+        {/* What the plan includes, then the price, both in the green frame and close
+            together, no label above (Gadi 2026-10-19, like the Families page). */}
         <section className="ind-band ind-tint" id="price">
-          <div className="ind-kicker">{C.priceKicker}</div>
           <h2 className="ind-h2 ind-center"><Lines text={C.priceTitle} /></h2>
+          <ul className="ind-includes ind-includes-card">{C.includes.map((p) => <li key={p}><Check />{p}</li>)}</ul>
           <div className="ind-price-card">
             <div className="ind-price-row">
               <span className="ind-price" dir="ltr">{prices.monthly}</span>
@@ -185,7 +196,6 @@ export function IndividualsRealLanding({ copy = HE, lang = "he" }: { copy?: IndC
             </div>
             <button type="button" className="ind-price-year ind-yearly-btn" onClick={() => start("price-yearly", true)}>{F(C.yearlyLine)}</button>
             <div className="ind-both-trial">{C.bothTrial}</div>
-            <ul className="ind-includes">{C.includes.map((p) => <li key={p}><Check />{p}</li>)}</ul>
             <button type="button" className="ind-cta ind-cta-wide" onClick={() => start("price")}>{C.priceCta}</button>
             <p className="ind-terms"><Lines text={F(C.priceTerms)} /></p>
           </div>
@@ -211,7 +221,7 @@ export function IndividualsRealLanding({ copy = HE, lang = "he" }: { copy?: IndC
         </section>
 
         <section className="ind-final">
-          <h2 className="ind-h2 ind-center">{C.finalTitle}</h2>
+          <h2 className="ind-h2 ind-center">{C.finalTitle.split("\n").map((x, k) => <span key={k} style={{ display: "block" }}>{x}</span>)}</h2>
           <p className="ind-body ind-center"><Lines text={C.finalBody} /></p>
           <button type="button" className="ind-cta" onClick={() => start("final")}>{C.finalCta}</button>
         </section>
@@ -242,6 +252,45 @@ const CSS2 = `
 @media (max-width: 860px) {
   .ind-cta-note { margin-inline: auto; text-align: center; }
   .ind-more { grid-template-columns: 1fr; padding-inline: 16px; }
+}
+/* ── Aligned with the Families page (Gadi 2026-10-19) ── */
+.ind-devices { list-style: none; padding: 0; margin: -10px 0 28px; display: flex; gap: 28px; justify-content: center; }
+.ind-devices li { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 700; color: #374151; }
+.ind-devices svg { width: 26px; height: 26px; fill: rgba(14,165,165,0.12); stroke: #0B7F7F; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+@media (min-width: 980px) { .ind-devices { justify-content: flex-start; } }
+/* Hebrew hero headline: heavier Rubik, 2px smaller, like Yooniz. */
+.ind[lang="he"] .ind-h1 { font-family: "Rubik Display", var(--font-rubik), "Rubik", system-ui, sans-serif; font-size: clamp(36px, 5vw, 60px); }
+@media (min-width: 980px) { .ind[lang="he"] .ind-h1 { font-size: clamp(34px, min(4.2vw, 7.6vh), 60px); } }
+.ind-h1 span, .ind-h2 span { line-height: inherit; }
+/* The steps: one row of cards, a two-line title and a short line over the whole phone. */
+.ind-steps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; max-width: 1060px; }
+.ind-step { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 22px 14px; border-radius: 24px; text-align: center; grid-template-columns: none; }
+.ind-step-text { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.ind-step-text .ind-num { margin-bottom: 0; width: 30px; height: 30px; font-size: 15px; }
+.ind-step-title { font-size: 17px; font-weight: 800; line-height: 1.35; margin: 0; text-wrap: balance; }
+.ind-step-title span { display: block; line-height: inherit; }
+.ind-step-sub { font-size: 14px; line-height: 1.45; color: var(--body); margin: 0; }
+.ind-step .ind-phone { max-width: 190px; margin: auto auto 0; }
+@media (max-width: 1100px) {
+  .ind-steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; }
+  .ind-step { flex: 0 1 220px; }
+}
+@media (max-width: 560px) {
+  .ind-steps { flex-direction: column; align-items: center; }
+  .ind-step { flex: none; width: 100%; max-width: 340px; box-sizing: border-box; padding: 22px 14px; }
+  .ind-step .ind-phone { max-width: 210px; }
+}
+/* The plan list and the price: two cards in the green frame, 520px, close together. */
+.ind-includes-card { max-width: 520px; box-sizing: border-box; margin: 30px auto 0; background: #fff; border: 2px solid var(--teal); border-radius: 28px; padding: 26px 30px; box-shadow: var(--card); }
+.ind-price-card { border: 2px solid var(--teal); margin-top: 20px; box-sizing: border-box; }
+/* Phones: the feature cards read centered, the bullet list a centered block. */
+@media (max-width: 860px) {
+  .ind-feature-text, .ind-more-card { text-align: center; }
+  .ind-feature-text .ind-kicker.ind-start, .ind-more-card .ind-kicker.ind-start { text-align: center; }
+  .ind-list { width: fit-content; max-width: 100%; margin-inline: auto; justify-items: start; }
+  .ind-list li { text-align: start; }
+  .ind-feature-visual.is-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ind-feature-visual.is-pair > * { min-width: 0; }
 }
 `;
 

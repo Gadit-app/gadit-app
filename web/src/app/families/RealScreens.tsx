@@ -21,6 +21,8 @@ export type RealCopy = {
   heroPoints: string[];
   /** Credibility pill above the H1 (Yooniz-style hero). */
   credPill: string;
+  /** Phone, tablet, computer under the hero text, like Yooniz (Gadi 2026-10-19). */
+  devices?: [string, string, string];
   /** Kept in the language files; no longer shown in the hero (Gadi 2026-10-19). */
   ctaNote?: string;
   /** Immigrant families section (council 2026-10-08). */
@@ -50,6 +52,7 @@ export type RealCopy = {
 export const REAL_COPY: Record<string, RealCopy> = {
   he: {
     heroPoints: ["עד 5 ילדים", "תמונה לכל משמעות", "לוח בקרה להורה"],
+    devices: ["בטלפון", "בטאבלט", "במחשב"],
     cardsKicker: "מילון חזותי וחכם שבונה אוצר מילים",
     cardsTitle: "כל מילה מוסברת בגובה העיניים של הילד",
     safeKicker: "בטיחות",

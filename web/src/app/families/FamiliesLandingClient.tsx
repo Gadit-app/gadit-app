@@ -8783,11 +8783,11 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
               <h1 className="fam-h1">{hero.h1}</h1>
               <p className="fam-whatis">{real ? <Lines text={c.whatIs} /> : c.whatIs}</p>
               {/* Works everywhere, like the Yooniz hero (Gadi 2026-10-19). */}
-              {lang === "he" && real && (
-                <ul className="fam-devices" aria-label="עובד בכל מכשיר">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.2" /><path d="M10.5 18.5h3" /></svg><span>בטלפון</span></li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="2.5" width="17" height="19" rx="2.2" /><path d="M10.5 18.5h3" /></svg><span>בטאבלט</span></li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="3.5" width="19" height="13" rx="1.8" /><path d="M8 20.5h8M12 16.5v4" /></svg><span>במחשב</span></li>
+              {real?.devices && (
+                <ul className="fam-devices">
+                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.2" /><path d="M10.5 18.5h3" /></svg><span>{real.devices[0]}</span></li>
+                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="2.5" width="17" height="19" rx="2.2" /><path d="M10.5 18.5h3" /></svg><span>{real.devices[1]}</span></li>
+                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="3.5" width="19" height="13" rx="1.8" /><path d="M8 20.5h8M12 16.5v4" /></svg><span>{real.devices[2]}</span></li>
                 </ul>
               )}
               {real ? (
