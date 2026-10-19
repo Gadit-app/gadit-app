@@ -763,8 +763,8 @@ export function NotebookPage() {
           />
         )}
 
-        {/* The rank for grown ups (Gadi 2026-10-18): parents and individual
-            users, quietly here, never on the home page. */}
+        {/* The rank for grown ups (Gadi 2026-10-18, a full card 2026-10-19):
+            parents and Individual subscribers see their rank and the ladder here. */}
         {items && items.length > 0 && user && familyRole !== "kid" && (
           <AdultRankLine
             addedAtDates={items.map((i) => i.addedAt).filter(Boolean)}

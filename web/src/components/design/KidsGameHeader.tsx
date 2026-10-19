@@ -94,6 +94,17 @@ Object.assign(RANKS_COPY, {
 
 function ranksCopy(lang: string) { return RANKS_COPY[lang] ?? RANKS_COPY.en; }
 
+/** The ranks table for a grown up (Gadi 2026-10-19): plural Hebrew, and how
+ *  points are earned. Other languages use the table copy above. */
+const RANKS_COPY_ADULT: Record<string, Partial<(typeof RANKS_COPY)["en"]>> = {
+  en: { title: "Your ranks", sub: (n) => `You've earned ${n} points. Every new word is 1 point, and every word you prove in a quiz or a game is 10.`, you: "You're here" },
+  he: { title: "הדרגות שלכם", sub: (n) => `צברתם ${n} נקודות. כל מילה חדשה שווה נקודה, וכל מילה שהבנתם בחידון או במשחק שווה 10.`, you: "אתם כאן" },
+};
+function ranksCopyFor(lang: string, adult: boolean) {
+  const base = ranksCopy(lang);
+  return adult ? { ...base, ...(RANKS_COPY_ADULT[lang] ?? {}) } : base;
+}
+
 export function KidsGameHeader({
   addedAtDates,
   understoodCount = 0,
@@ -244,10 +255,12 @@ function Bar({ pct, color }: { pct: number; color: string }) {
   );
 }
 
-function RanksModal({ onClose, points, currentIndex, lang, dir }: {
+function RanksModal({ onClose, points, currentIndex, lang, dir, adult = false }: {
   onClose: () => void; points: number; currentIndex: number; lang: string; dir: "rtl" | "ltr";
+  /** A grown up: grown-up wording and no kid skins in the list. */
+  adult?: boolean;
 }) {
-  const rc = ranksCopy(lang);
+  const rc = ranksCopyFor(lang, adult);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     document.addEventListener("keydown", onKey);
@@ -280,7 +293,7 @@ function RanksModal({ onClose, points, currentIndex, lang, dir }: {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 15, fontWeight: 800 }}>{rankLabel(r.key, lang)}</div>
                   <div style={{ fontSize: 12.5, color: "var(--ink-muted)" }}>{r.min}+ {rc.words}</div>
-                  {(() => {
+                  {!adult && (() => {
                     const skins = KID_THEMES.filter((t) => t.unlockAtRank === i);
                     return skins.length ? (
                       <div style={{ fontSize: 12.5, marginTop: 3, display: "flex", gap: 8, flexWrap: "wrap", color: unlocked ? "var(--accent, #0EA5A5)" : "var(--ink-muted)" }}>
@@ -307,10 +320,12 @@ function RanksModal({ onClose, points, currentIndex, lang, dir }: {
 }
 
 /**
- * The rank for a grown up (Gadi 2026-10-18): parents and individual users
- * get their rank too, quietly, in their notebook. Only the rank, never the
- * streak or the weekly goal, and nothing on the home page. Same points and
- * the same tree pictures as the children, so a family compares on one ladder.
+ * The rank for a grown up (Gadi 2026-10-18, made visible 2026-10-19): parents
+ * and Individual subscribers see their rank in the notebook as a full card,
+ * the tree picture, the rank name, a bar to the next rank, and a tap opens the
+ * whole ladder. Moving up a rank gets a celebration, so they know they are
+ * climbing. No streak and no weekly goal (those stay for the children). Same
+ * points and the same pictures as the children, so a family shares one ladder.
  */
 export function AdultRankLine({
   addedAtDates,
@@ -329,22 +344,48 @@ export function AdultRankLine({
     return computeGamification(addedAtDates, now, toLocalDateStr(new Date(now).toISOString()), understoodCount, []);
   }, [addedAtDates, understoodCount]);
   const toNext = g.rank.next === null ? 0 : Math.max(0, g.rank.next - g.points);
+  const [open, setOpen] = useState(false);
+  const [celebrateId, setCelebrateId] = useState(0);
+  // A new rank since the last visit: celebrate once (its own key, so a parent
+  // and a child on one browser do not share it).
+  useEffect(() => {
+    try {
+      const KEY = "gadit-adult-rank";
+      const prev = window.localStorage.getItem(KEY);
+      window.localStorage.setItem(KEY, String(g.rank.index));
+      if (prev !== null && g.rank.index > Number(prev)) setCelebrateId((x) => x + 1);
+    } catch { /* storage blocked: no celebration, no harm */ }
+  }, [g.rank.index]);
+  const PURPLE = "#8B5CF6";
   return (
-    <div
-      dir={dir}
-      style={{
-        display: "flex", alignItems: "center", gap: 12, margin: "4px 0 18px",
-        padding: "10px 14px", borderRadius: 14, border: "1px solid var(--rule, #E5E7EB)",
-        background: "var(--surface, #fff)", maxWidth: 420,
-      }}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={rankIconSrc(g.rank.key)} alt="" width={44} height={44} style={{ width: 44, height: 44, flexShrink: 0, objectFit: "contain" }} />
-      <div style={{ minWidth: 0 }}>
-        <div style={{ fontSize: 12, color: "var(--ink-muted, #6B7280)" }}>{c.rankTitle}</div>
-        <div style={{ fontSize: 15, fontWeight: 800, color: "var(--ink, #111827)" }}>{rankLabel(g.rank.key, lang)}</div>
-        <div style={{ fontSize: 12, color: "var(--ink-muted, #6B7280)" }}>{g.rank.next === null ? c.topRank : c.toNext(toNext)}</div>
-      </div>
-    </div>
+    <>
+      <KidsCelebration runId={celebrateId} />
+      <button
+        type="button"
+        dir={dir}
+        onClick={() => setOpen(true)}
+        className="wb-adult-rank"
+        style={{
+          display: "flex", alignItems: "center", gap: 14, width: "100%", maxWidth: 460, margin: "4px 0 18px",
+          padding: "14px 16px", borderRadius: 18, border: "1px solid color-mix(in srgb, #8B5CF6 28%, var(--rule, #E5E7EB))",
+          background: "linear-gradient(135deg, color-mix(in srgb, #8B5CF6 9%, var(--surface, #fff)), var(--surface, #fff))",
+          boxShadow: "0 8px 22px -14px rgba(76, 29, 149, 0.45)", cursor: "pointer", font: "inherit", color: "inherit",
+          textAlign: dir === "rtl" ? "right" : "left",
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={rankIconSrc(g.rank.key)} alt="" width={60} height={60} style={{ width: 60, height: 60, flexShrink: 0, objectFit: "contain" }} />
+        <div style={{ minWidth: 0, flex: 1, display: "grid", gap: 4 }}>
+          <div style={{ fontSize: 12.5, color: "var(--ink-muted, #6B7280)", fontWeight: 600 }}>{c.rankTitle}</div>
+          <div style={{ fontSize: 17, fontWeight: 800, color: PURPLE, lineHeight: 1.2 }}>{rankLabel(g.rank.key, lang)}</div>
+          <Bar pct={Math.round(g.rank.progress * 100)} color={PURPLE} />
+          <div style={{ fontSize: 12.5, color: "var(--ink-muted, #6B7280)" }}>{g.rank.next === null ? `⭐ ${c.topRank}` : c.toNext(toNext)}</div>
+        </div>
+        <span aria-hidden="true" style={{ fontSize: 20, color: "var(--ink-faint, #9CA3AF)", flexShrink: 0 }}>{dir === "rtl" ? "‹" : "›"}</span>
+      </button>
+      {open && (
+        <RanksModal onClose={() => setOpen(false)} points={g.points} currentIndex={g.rank.index} lang={lang} dir={dir} adult />
+      )}
+    </>
   );
 }
