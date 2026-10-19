@@ -1,6 +1,6 @@
 "use client";
 
-import { Testimonials, InlineTestimonial, AMIR_LEVI_HE, KIDS_TESTIMONIALS_HE, PARENTS_TESTIMONIALS_HE } from "@/components/design/Testimonials";
+import { Testimonials, InlineTestimonial, FAMILY_TESTIMONIALS_HE, KIDS_TESTIMONIALS_HE, PARENTS_TESTIMONIALS_HE } from "@/components/design/Testimonials";
 import type { FamI18n } from "./i18n/types";
 import { fillDeep, landingPrices, screensLang } from "@/lib/landing-i18n";
 import { INDIVIDUAL_DISPLAY, INDIVIDUAL_MONTHLY } from "@/lib/individual-prices";
@@ -8600,8 +8600,8 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
   );
   // Puzzle metaphor (Gadi 2026-07-26): text is a puzzle, every word a piece.
   // Missing words are holes and the child stops seeing the whole picture.
-  const puzzleSection = (band: "white" | "cream") => (
-    <section className={`fam-band fam-band-${band}`}>
+  const puzzleSection = (band: "white" | "cream" | "teal") => (
+    <section className={`fam-band fam-band-${band}${band === "teal" ? " fam-puzzle-band" : ""}`}>
       <div className="fam-section fam-center">
         <div className="fam-kicker fam-kicker-light">{c.puzzleKicker}</div>
         <h2 className="fam-h2">{c.puzzleTitle.split("\n").map((t, i) => <span key={i} style={{ display: "block" }}>{t}</span>)}</h2>
@@ -8813,7 +8813,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
              they skip: comprehension quietly breaks, vocabulary stays
              thin, retrieval fails, grades slip. White band gives a clean
              break from the cream hero above. */}
-        {real ? puzzleSection("white") : painSection("white")}
+        {real ? puzzleSection("teal") : painSection("white")}
 
         {/* Real-screens order (council 2026-10-08): the parent pays and the
              parent dashboard is the moat, so it comes right after the pain,
@@ -8844,7 +8844,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
 
             {lang === "he" && (
               <section className="fam-band fam-band-sand">
-                <div className="gt-quote-inline-band"><InlineTestimonial item={AMIR_LEVI_HE} /></div>
+                <div className="gt-quote-inline-band"><InlineTestimonial item={FAMILY_TESTIMONIALS_HE[0]} /></div>
               </section>
             )}
 
@@ -8854,7 +8854,8 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
 
             <section className="fam-band fam-band-white">
               <div className="fam-section fam-center fam-section-wide">
-                <h2 className="fam-h2">{c.chainTitle}</h2>
+                {real.cardsKicker && <div className="fam-kicker">{real.cardsKicker}</div>}
+                <h2 className="fam-h2">{real.cardsTitle ?? c.chainTitle}</h2>
                 <div className="fam-how-steps">
                   {(showAllCards ? HOW_MOCKS.map((_, i) => i) : FEATURED_CARDS).map((i, n) => {
                     const blk = c.howBlocks[i];
@@ -9153,7 +9154,8 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
         <section className="fam-band fam-band-purple">
           <div className="fam-section fam-center">
             <ShieldBigIcon />
-            <h2 className="fam-h2">{c.safeTitle}</h2>
+            {real?.safeKicker && <div className="fam-kicker fam-kicker-light">{real.safeKicker}</div>}
+            <h2 className="fam-h2">{real?.safeTitle ?? c.safeTitle}</h2>
             <div className="fam-inline-img">
               <Image src="/fam/safe.webp" alt="" width={1200} height={800} sizes="(max-width: 760px) 92vw, 560px" />
             </div>
