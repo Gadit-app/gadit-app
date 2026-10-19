@@ -22,11 +22,11 @@ export const CONNECT_CONTENT: { he: EmailContent; en: EmailContent } = {
 זה הצעד היחיד שחסר, והוא לוקח דקה.
 
 ## איך מחברים
-1. נכנסים ל["בני המשפחה"](/family?tab=members) ולוחצים "הוספת בן משפחה".
-2. כותבים את שם הילד, ומקבלים קישור חיבור.
-3. פותחים את הקישור בטלפון או בטאבלט של הילד, וזהו.
+1. נכנסים ל["בני המשפחה"](/family?tab=members). אם הילד עוד לא ברשימה, לוחצים "הוספת בן משפחה" וממלאים שם, גיל וצבע.
+2. ליד הילד לוחצים "חיבור מכשיר".
+3. בטלפון או בטאבלט של הילד סורקים את קוד ה-QR, או נכנסים ל-[gadit.app/join](https://www.gadit.app/join) ומקלידים את הקוד בן 6 הספרות.
 
-אפשר גם בלי מכשיר נפרד: מדליקים את מצב ילדים בטלפון שלכם, והילד משתמש בו.
+אין לילד מכשיר משלו? ב["בני המשפחה"](/family?tab=members) לוחצים "מסך משותף לילדים", מוסרים לו את המכשיר, והוא לוחץ על עצמו.
 מהרגע הזה הילד מחפש מילים, מתרגל ומשחק, ואתם רואים הכל בלוח ההורים.
 
 נתקעתם? פשוט עונים למייל הזה, ואנחנו עוזרים.`,
@@ -42,12 +42,12 @@ We noticed you haven't connected a child to Gadit yet.
 It's the only step missing, and it takes a minute.
 
 ## How to connect
-1. Open ["Family"](/family?tab=members) and tap "Add a family member".
-2. Type your child's name, and you get a connect link.
-3. Open the link on your child's phone or tablet, and that's it.
+1. Open ["Family members"](/family?tab=members). If your child isn't on the list yet, tap "Add a family member" and fill in a name, age and colour.
+2. Next to your child, tap "Pair device".
+3. On your child's phone or tablet, scan the QR code, or go to [gadit.app/join](https://www.gadit.app/join) and type the 6-digit code.
 
-No separate device? Turn on Kids Mode on your own phone, and your child uses it.
-From then on your child looks up words, practises and plays, and you see it all on the parent board.
+No device of their own? In ["Family members"](/family?tab=members) tap "Shared kids screen", hand them the device, and they tap their own name.
+From then on your child looks up words, practises and plays, and you see it all on the parent dashboard.
 
 Stuck? Just reply to this email and we'll help.`,
     ctaText: "Connect your child",
