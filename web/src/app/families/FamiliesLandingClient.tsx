@@ -8876,15 +8876,40 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
 
         {!real && puzzleSection("cream")}
 
-        {real?.olim && (
-          <section className="fam-band fam-band-cream">
-            <div className="fam-section fam-center">
-              <div className="fam-kicker">{real.olim.kicker}</div>
-              <h2 className="fam-h2">{real.olim.title}</h2>
-              <p className="fam-body fam-body-center"><Lines text={real.olim.body} /></p>
+        {/* Right after why homework drags on (Gadi 2026-10-19). The home-language
+            section is gone: without a picture it did not explain itself. */}
+        {/* Homework showcase (Gadi 2026-10-12): the three paths on one
+             deep-teal band, so the page is not white card after white card. */}
+        {real?.homework && (
+          <section className="fam-band fam-band-hw">
+            <div className="fam-hw">
+              <div className="fam-hw-head">
+                <div className="fam-kicker">{real.homework.kicker}</div>
+                <h2 className="fam-h2">{real.homework.title.split("\n").map((t, i) => <span key={i} style={{ display: "block" }}>{t}</span>)}</h2>
+                <p className="fam-body"><Lines text={real.homework.body} /></p>
+              </div>
+              <div className="fam-hw-row">
+                <ol className="fam-hw-cards">
+                  {real.homework.cards.map((cd, j) => (
+                    <li key={j} className="fam-hw-card">
+                      <span className="fam-hw-card-icon" aria-hidden>{cd.icon}</span>
+                      <div>
+                        <div className="fam-hw-card-num">{j + 1}</div>
+                        <div className="fam-hw-card-t">{cd.t}</div>
+                        <p className="fam-hw-card-b"><Lines text={cd.b} /></p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+                <div className="fam-real-pair">
+                  <PhoneShot lang={shotLang} name={real.homework.img} alt={real.shotAlt} />
+                  <PhoneShot lang={shotLang} name={real.homework.img2} alt={real.shotAlt} />
+                </div>
+              </div>
             </div>
           </section>
         )}
+
 
         {/* 4 · How it works (Gadi 2026-07-28, 5-model synthesis): the old
              negative word→sentence→paragraph chain was redundant with the
@@ -8941,37 +8966,6 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
           </div>
         </section>
 
-        {/* Homework showcase (Gadi 2026-10-12): the three paths on one
-             deep-teal band, so the page is not white card after white card. */}
-        {real?.homework && (
-          <section className="fam-band fam-band-hw">
-            <div className="fam-hw">
-              <div className="fam-hw-head">
-                <div className="fam-kicker">{real.homework.kicker}</div>
-                <h2 className="fam-h2">{real.homework.title.split("\n").map((t, i) => <span key={i} style={{ display: "block" }}>{t}</span>)}</h2>
-                <p className="fam-body"><Lines text={real.homework.body} /></p>
-              </div>
-              <div className="fam-hw-row">
-                <ol className="fam-hw-cards">
-                  {real.homework.cards.map((cd, j) => (
-                    <li key={j} className="fam-hw-card">
-                      <span className="fam-hw-card-icon" aria-hidden>{cd.icon}</span>
-                      <div>
-                        <div className="fam-hw-card-num">{j + 1}</div>
-                        <div className="fam-hw-card-t">{cd.t}</div>
-                        <p className="fam-hw-card-b"><Lines text={cd.b} /></p>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-                <div className="fam-real-pair">
-                  <PhoneShot lang={shotLang} name={real.homework.img} alt={real.shotAlt} />
-                  <PhoneShot lang={shotLang} name={real.homework.img2} alt={real.shotAlt} />
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
 
         {real && real.tools.map((f, i) => (
           <section key={`real-${i}`} className={`fam-band ${i % 2 === 0 ? "fam-band-cream" : "fam-band-white"}`}>
