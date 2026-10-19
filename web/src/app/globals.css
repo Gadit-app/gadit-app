@@ -15013,7 +15013,8 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
 .wordbook .wb-hw-tiles .wb-play-card:disabled { cursor: progress; }
 /* What opens from a tile (all the lessons, choosing the language): one full
    row under the tiles. */
-.wordbook .wb-play-grid li.wb-hw-tile-row { grid-column: 1 / -1; order: 99; flex-direction: column; align-items: center; gap: 10px; }
+.wordbook .wb-play-grid li.wb-hw-tile-row { grid-column: 1 / -1; order: 99; flex-direction: column; align-items: center; gap: 14px; margin-top: 18px; }
+.wordbook .wb-hw-tile-row > .wb-learn-topics { width: 100%; }
 .wordbook .wb-hw-tile-row > .wb-learn-card { margin: 0; width: 100%; box-sizing: border-box; }
 .wordbook .wb-hw-tile-row > .wb-learn-lesson-grid { width: 100%; }
 .wb-hw-card {

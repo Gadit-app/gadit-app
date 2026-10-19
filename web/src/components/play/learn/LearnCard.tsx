@@ -198,6 +198,38 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
   // games' tiles (the next lesson on it, a tap opens it), and whatever
   // opens from it (choosing the language, all the lessons) on a full row
   // under the tiles. Rendered as list items of the tiles' grid.
+  // All lessons grouped by topic (Gadi 2026-10-19: a wall of white chips
+  // looked like a mess): one small card per topic, its parts as numbered
+  // circles, done ones filled, the next one ringed.
+  const lessonTopics = (list: NonNullable<LearnState["lessons"]>["list"], nextId: string | null) => {
+    const groups: Array<{ key: string; label: string; icon: string; items: typeof list }> = [];
+    for (const l of list) {
+      const label = l.title.replace(/\s*\d+$/, "");
+      const key = l.topic || label;
+      let g = groups.find((x) => x.key === key);
+      if (!g) { g = { key, label, icon: l.icon, items: [] }; groups.push(g); }
+      g.items.push(l);
+    }
+    return (
+      <div className="wb-learn-topics">
+        {groups.map((g) => (
+          <div key={g.key} className="wb-learn-topic">
+            <div className="wb-learn-topic-h">
+              <span aria-hidden="true">{g.icon}</span> <span>{g.label}</span>
+              <span className="wb-learn-topic-n" dir="ltr">{g.items.filter((l) => l.done).length}/{g.items.length}</span>
+            </div>
+            <div className="wb-learn-topic-steps">
+              {g.items.map((l, i) => (
+                <button key={l.id} type="button" title={l.title} aria-label={l.title} disabled={busy} onClick={() => void openLesson(l.id)}
+                  className={`wb-learn-step${l.done ? " is-done" : ""}${l.id === nextId ? " is-next" : ""}`}>{l.done ? "✓" : i + 1}</button>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   if (tile) {
     const L = state.lessons;
     const next = state.lang ? L?.list.find((l) => l.id === L.next) ?? L?.list[0] : undefined;
@@ -223,13 +255,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
             )}
             {!panel && showAll && L && (
               <>
-                <div className="wb-learn-lesson-grid">
-                  {L.list.map((l) => (
-                    <button key={l.id} type="button" className={`wb-learn-lesson-chip${l.done ? " is-done" : ""}${l.id === L.next ? " is-next" : ""}`} disabled={busy} onClick={() => void openLesson(l.id)}>
-                      <span aria-hidden="true">{l.done ? "✓" : l.icon}</span> {l.title}
-                    </button>
-                  ))}
-                </div>
+                {lessonTopics(L.list, L.next)}
                 <button type="button" className="wb-learn-simple-link is-quiet" onClick={() => setStep("pick")}>{t.changeLang}</button>
               </>
             )}
@@ -308,13 +334,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
         <button type="button" className="wb-learn-simple-link" onClick={() => setShowAll((v) => !v)}>{showAll ? lc.hideLessons : lc.allLessons}</button>
         {showAll && L && (
           <>
-            <div className="wb-learn-lesson-grid">
-              {L.list.map((l) => (
-                <button key={l.id} type="button" className={`wb-learn-lesson-chip${l.done ? " is-done" : ""}${l.id === L.next ? " is-next" : ""}`} disabled={busy} onClick={() => void openLesson(l.id)}>
-                  <span aria-hidden="true">{l.done ? "✓" : l.icon}</span> {l.title}
-                </button>
-              ))}
-            </div>
+            {lessonTopics(L.list, L.next)}
             <button type="button" className="wb-learn-simple-link is-quiet" onClick={() => setStep("pick")}>{t.changeLang}</button>
           </>
         )}
@@ -356,15 +376,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
               </div>
             )}
             <button type="button" className="wb-learn-chip is-soft" onClick={() => setShowAll((v) => !v)}>{showAll ? lc.hideLessons : lc.allLessons}</button>
-            {showAll && (
-              <div className="wb-learn-lesson-grid">
-                {state.lessons.list.map((l) => (
-                  <button key={l.id} type="button" className={`wb-learn-lesson-chip${l.done ? " is-done" : ""}${l.id === state.lessons!.next ? " is-next" : ""}`} disabled={busy} onClick={() => void openLesson(l.id)}>
-                    <span aria-hidden="true">{l.done ? "✓" : l.icon}</span> {l.title}
-                  </button>
-                ))}
-              </div>
-            )}
+            {showAll && lessonTopics(state.lessons.list, state.lessons!.next)}
           </div>
         );
       })()}
