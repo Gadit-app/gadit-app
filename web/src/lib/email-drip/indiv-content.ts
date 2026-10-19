@@ -15,6 +15,12 @@ import type { FamilyEmailMeta } from "./family-content";
  * {מספרים} / {numbers} = the subscriber's own notebook numbers at send time.
  *
  * Not sent to anyone until Gadi approves (INDIV_SERIES_LIVE).
+ *
+ * 2026-10-19: one Individual plan (no Clear/Deep parts left), Hebrew in the
+ * plural, more than 40 languages, schools as they work now (teacher-only),
+ * the notebook button is "חזרה על המילים שלי", and the first email says how
+ * to sign in on a computer (people who signed up on a phone only saw the
+ * signup page and did not know where to go).
  */
 
 // Live since 2026-10-10 (Gadi approved the texts).
@@ -41,7 +47,7 @@ export const INDIV_META: IndivEmailMeta[] = [
   M("ind-read", "Individual · 5 · Every Word (a whole page)", 4, "/read"),
   M("ind-compose", "Individual · 6 · Compose a sentence, get feedback", 5, "/"),
   M("ind-say", "Individual · 7 · Say it", 6, "/say"),
-  M("ind-practice", "Individual · 8 · Smart practice, games, compare words", 7, "/notebook", ["deep"]),
+  M("ind-practice", "Individual · 8 · Smart practice, games, compare words", 7, "/notebook"),
   M("ind-progress", "Individual · 9 · Your first two weeks in numbers", 10, "/notebook"),
   M("ind-questions", "Individual · 10 · Questions about a word, idioms", 12, "/"),
   M("ind-languages", "Individual · 11 · Any word, explained in your language", 15, "/"),
@@ -57,12 +63,12 @@ export const INDIV_LABEL_HE: Record<string, string> = {
   "ind-read": "5 · כל מילה (דף שלם)",
   "ind-compose": "6 · חברו משפט ומשוב",
   "ind-say": "7 · תגיד את זה",
-  "ind-practice": "8 · תרגול חכם, משחקים, השוואה (לא ל-Clear הוותיק)",
+  "ind-practice": "8 · תרגול חכם, משחקים, השוואה",
   "ind-progress": "9 · השבועיים הראשונים במספרים",
   "ind-questions": "10 · שאלות על מילה, ניבים וצירופים",
-  "ind-languages": "11 · כל מילה, הסבר בשפה שלך",
+  "ind-languages": "11 · כל מילה, הסבר בשפה שלכם",
   "ind-family": "12 · Gadit לכל המשפחה, ולבתי ספר",
-  "ind-month": "13 · כל מה שיש לך, והחודש הבא (אחרון)",
+  "ind-month": "13 · כל מה שיש לכם, והחודש הבא (אחרון)",
 };
 
 const C = (subject: string, body: string, ctaText: string, next: string): EmailContent => ({
@@ -79,7 +85,7 @@ const HOME_SCREEN_HE = `## הוספת Gadit למסך הבית בטלפון
 
 1. נכנסים ל[חנות Google Play](https://play.google.com/store/apps/details?id=com.gadit.app).
 2. מורידים את האפליקציה.
-3. מתחברים עם חשבון Google או עם המייל והסיסמה שיצרת.
+3. מתחברים עם חשבון Google או עם המייל והסיסמה שיצרתם.
 
 **משתמשי אייפון:**
 
@@ -107,7 +113,7 @@ export const INDIV_CONTENT: Record<string, { he: EmailContent; en: EmailContent 
       "היי {שם}, ככה מתחילים עם Gadit",
       `היי {שם},
 
-איזה כיף שהצטרפת ל-Gadit 🎉
+איזה כיף שהצטרפתם ל-Gadit 🎉
 
 ל-Gadit מטרה אחת: להבין כל מילה עד הסוף.
 מילה שמבינים עד הסוף נשארת, ואוצר המילים גדל מילה אחרי מילה.
@@ -115,16 +121,22 @@ export const INDIV_CONTENT: Record<string, { he: EmailContent; en: EmailContent 
 בשבועיים הקרובים יגיע מייל קצר כמעט כל יום.
 בכל מייל כלי אחד, ומשימה קטנה אחת של כמה דקות.
 
+## נכנסים מכל מכשיר
+Gadit עובד בטלפון, בטאבלט ובמחשב, עם אותו חשבון.
+במחשב נכנסים לכתובת **www.gadit.app** ולוחצים למעלה על "התחברות".
+מתחברים באותה דרך שנרשמתם: עם Google, או עם המייל והסיסמה.
+כל המילים והמחברת שלכם מחכות שם.
+
 ${HOME_SCREEN_HE}
 
 ## המילה הראשונה
 1. נכנסים ל[דף הבית של Gadit](/).
-2. מקלידים בתיבה "הקלידו מילה" מילה אחת שפגשת היום: בעבודה, בלימודים, בספר או בחדשות. אפשר בכל שפה.
+2. מקלידים בתיבה "הקלידו מילה" מילה אחת שפגשתם היום: בעבודה, בלימודים, בספר או בחדשות. אפשר בכל שפה.
 3. קוראים את כל המשמעויות שלה, ולא רק את הראשונה.
-4. המילה נשמרת לבד במחברת שלך.
+4. המילה נשמרת לבד במחברת שלכם.
 
 **טיפ מהשטח:**
-כדאי להתחיל ממילה שעד היום רק ניחשת את המשמעות שלה.
+כדאי להתחיל ממילה שעד היום רק ניחשתם את המשמעות שלה.
 דווקא שם מגלים הכי הרבה.`,
       "לחיפוש המילה הראשונה",
       "מחר נדבר על הלב של Gadit: איך מבינים מילה עד הסוף.",
@@ -140,6 +152,12 @@ A word understood like this stays, and your vocabulary grows word by word.
 
 Over the next two weeks a short email will arrive almost every day.
 Each one has one tool, and one small task that takes a few minutes.
+
+## Sign in from any device
+Gadit works on your phone, tablet and computer, with the same account.
+On a computer, go to **www.gadit.app** and click "Sign in" at the top.
+Sign in the same way you signed up: with Google, or with your email and password.
+All your words and your notebook are waiting there.
 
 ${HOME_SCREEN_EN}
 
@@ -188,7 +206,7 @@ That's where you discover the most.`,
 "מקור המילה" הוא הדרך הכי טובה לזכור מילה.
 מילה שיודעים מאיפה היא הגיעה, קשה לשכוח.`,
       "לחיפוש מילה",
-      "מחר נדבר על המחברת: המקום שבו כל מילה שחיפשת נשמרת.",
+      "מחר נדבר על המחברת: המקום שבו כל מילה שחיפשתם נשמרת.",
     ),
     en: C(
       "Hi {name}, here's how to understand a word all the way through",
@@ -226,24 +244,23 @@ A word whose origin you know is hard to forget.`,
 
   "ind-notebook": {
     he: C(
-      "היי {שם}, כל מילה שחיפשת נשמרת במחברת שלך",
+      "היי {שם}, כל מילה שחיפשתם נשמרת במחברת שלכם",
       `היי {שם},
 
 אוצר המילים של אדם יכול לעשות הבדל ענק ביכולת שלו להצליח בחיים.
 
-כל מילה שמחפשים ב-Gadit נכנסת אוטומטית למחברת המילים שלך, עם כל המידע עליה.
-ככה אוצר המילים שלך נבנה במקום אחד, ואפשר לחזור לכל מילה מתי שרוצים.
+כל מילה שמחפשים ב-Gadit נכנסת אוטומטית למחברת המילים שלכם, עם כל המידע עליה.
+ככה אוצר המילים שלכם נבנה במקום אחד, ואפשר לחזור לכל מילה מתי שרוצים.
 
 ## איך עושים את זה, שלב אחר שלב:
 1. נכנסים ל["מחברת"](/notebook) מהתפריט.
-2. רואים את כל המילים שחיפשת.
+2. רואים את כל המילים שחיפשתם.
 3. לוחצים על מילה כדי לפתוח שוב את ההסבר שלה.
-[[deep]]4. לוחצים על "תרגול עכשיו" כדי לתרגל את המילים שלך. על זה נרחיב בעוד כמה ימים.
-[[/deep]]
+4. לוחצים על "חזרה על המילים שלי" כדי לתרגל את המילים שלכם. על זה נרחיב בעוד כמה ימים.
 
 **מומלץ:**
 פעם בשבוע לעבור על המחברת ולבחור שלוש מילים.
-לנסות להסביר כל אחת במילים שלך, בלי להציץ.
+לנסות להסביר כל אחת במילים שלכם, בלי להציץ.
 מילה שקשה להסביר, שווה לפתוח שוב.`,
       "למחברת שלי",
       "מחר נדבר על מילה עם כמה משמעויות, ואיך מקבלים את המשמעות הנכונה לפי המשפט.",
@@ -261,8 +278,7 @@ That way your vocabulary is built in one place, and you can go back to any word 
 1. Open ["Notebook"](/notebook) from the menu.
 2. You'll see every word you've looked up.
 3. Tap a word to open its explanation again.
-[[deep]]4. Tap "Practice now" to practice your words. We'll go into this in a few days.
-[[/deep]]
+4. Tap "Review my words" to practice your words. We'll go into this in a few days.
 
 **Recommended:**
 Once a week, go through the notebook and pick three words.
@@ -366,7 +382,7 @@ One word, two sentences, two meanings.`,
 לפני שקוראים פרק או מאמר, פותחים את "המילים החשובות בקטע" ועוברים עליהן קודם.
 הקריאה אחרי זה הרבה יותר קלה ומהירה.`,
       "לכל מילה",
-      "מחר נדבר על הצעד הבא אחרי שמבינים מילה: להשתמש בה במשפט משלך.",
+      "מחר נדבר על הצעד הבא אחרי שמבינים מילה: להשתמש בה במשפט משלכם.",
     ),
     en: C(
       "Hi {name}, here's how to understand a whole page with ease",
@@ -403,25 +419,25 @@ The reading afterwards is much easier and faster.`,
 
   "ind-compose": {
     he: C(
-      "היי {שם}, מילה שמבינים, משתמשים בה במשפט משלך",
+      "היי {שם}, מילה שמבינים, משתמשים בה במשפט משלכם",
       `היי {שם},
 
 להבין מילה זה הצעד הראשון.
-מילה באמת נשארת כשמשתמשים בה בעצמך.
+מילה באמת נשארת כשמשתמשים בה בעצמכם.
 
 ## חברו משפט
 מתחת לכל משמעות יש כפתור "חברו משפט".
-כותבים משפט משלך עם המילה, ו-Gadit בודק אותו ונותן משוב מיד: על הדקדוק, על הטון, ועל ההתאמה של המילה למשפט.
+כותבים משפט משלכם עם המילה, ו-Gadit בודק אותו ונותן משוב מיד: על הדקדוק, על הטון, ועל ההתאמה של המילה למשפט.
 
 ## איך עושים את זה, שלב אחר שלב:
 1. [מחפשים מילה](/).
 2. מתחת למשמעות שרוצים לתרגל, לוחצים על "חברו משפט".
-3. כותבים משפט משלך, ולוחצים על "בדיקת המשפט".
+3. כותבים משפט משלכם, ולוחצים על "בדיקת המשפט".
 4. מקבלים "מצוין", "כמעט שם" או "לא מדויק", ולפעמים גם "ניסוח מומלץ".
 5. כדי לנסות שוב, לוחצים על "ננסה משפט נוסף".
 
 **טיפ מהשטח:**
-לכתוב משפט על משהו שקרה לך באמת היום.
+לכתוב משפט על משהו שקרה לכם באמת היום.
 משפט אישי נזכר הרבה יותר מהר ממשפט כללי.`,
       "לחיפוש מילה",
       "מחר נדבר על תגיד את זה: איך לומדים להגיד משפט בשפה חדשה, בקול.",
@@ -464,7 +480,7 @@ A personal sentence is remembered much faster than a general one.`,
 זה בדיוק מה ש"תגיד את זה" עושה, בכל שפה שלומדים.
 
 ## תגיד את זה
-כותבים משפט ובוחרים את השפה שלומדים. Gadit מראה איך אומרים אותו בשפה הזאת ומקריא אותו בקול. אחר כך אומרים את המשפט בעצמך, ומקבלים ציון של 1 עד 5 כוכבים על ההגייה.
+כותבים משפט ובוחרים את השפה שלומדים. Gadit מראה איך אומרים אותו בשפה הזאת ומקריא אותו בקול. אחר כך אומרים את המשפט בעצמכם, ומקבלים ציון של 1 עד 5 כוכבים לפי כמה נכון אמרתם אותו.
 
 ## למה זה עובד
 שומעים איך המשפט נשמע באמת, ולא רק איך הוא כתוב.
@@ -481,7 +497,7 @@ A personal sentence is remembered much faster than a general one.`,
 להתחיל ממשפט שבאמת צריך: משהו לפגישה, לשיחת טלפון או לטיול הבא.
 משפט אמיתי נשאר הרבה יותר מהר.`,
       "לתגיד את זה",
-      "[[deep]]מחר נדבר על התרגול: איך המילים שלך נשארות לאורך זמן.[[/deep]][[clear]]במייל הבא נראה מה כבר בנית בשבועיים הראשונים.[[/clear]]",
+      "מחר נדבר על התרגול: איך המילים שלכם נשארות לאורך זמן.",
     ),
     en: C(
       "Hi {name}, here's how to learn to speak a new language, sentence by sentence",
@@ -494,7 +510,7 @@ To speak a new language you need to hear it, say it out loud, and know what alre
 That's exactly what "Say it" does, in any language you're learning.
 
 ## Say it
-Type a sentence and choose the language you're learning. Gadit shows how to say it in that language and reads it out loud. Then you say the sentence yourself and get a score of 1 to 5 stars for pronunciation.
+Type a sentence and choose the language you're learning. Gadit shows how to say it in that language and reads it out loud. Then you say the sentence yourself and get a score of 1 to 5 stars for how well you said it.
 
 ## Why it works
 You hear how the sentence really sounds, not just how it's written.
@@ -511,27 +527,27 @@ Every new try raises the stars, and that's how the confidence to speak is built.
 Start with a sentence you actually need: something for a meeting, a phone call or your next trip.
 A real sentence stays much faster.`,
       "Open Say it",
-      "[[deep]]Tomorrow we'll look at practice: how your words stay with you over time.[[/deep]][[clear]]In the next email we'll see what you've already built in your first two weeks.[[/clear]]",
+      "Tomorrow we'll look at practice: how your words stay with you over time.",
     ),
   },
 
   "ind-practice": {
     he: C(
-      "היי {שם}, ככה המילים שלך נשארות לאורך זמן",
+      "היי {שם}, ככה המילים שלכם נשארות לאורך זמן",
       `היי {שם},
 
 מילה שחיפשנו פעם אחת נשכחת מהר.
 מילה שחוזרים אליה בזמן הנכון נשארת.
 
-יש לך שלושה כלים בשביל זה.
+יש לכם שלושה כלים בשביל זה.
 
 ## תרגול חכם
-במחברת יש כפתור "תרגול עכשיו".
-Gadit מציג מילה מהמחברת שלך, ונזכרים מה היא אומרת לפני שפותחים את ההסבר.
-לוחצים על "ידעתי" או על "שכחתי", ו-Gadit קובע מתי להחזיר אותה: מילה ששכחת תחזור מהר, ומילה שידעת תחזור בעוד כמה ימים.
+במחברת יש כפתור "חזרה על המילים שלי".
+Gadit מציג מילה מהמחברת שלכם, ונזכרים מה היא אומרת לפני שפותחים את ההסבר.
+לוחצים על "ידעתי" או על "שכחתי", ו-Gadit קובע מתי להחזיר אותה: מילה ששכחתם תחזור מהר, ומילה שידעתם תחזור בעוד כמה ימים.
 
 ## משחקים וחידונים
-ב["משחקים"](/play) יש משחקים שנבנים מהמילים שבמחברת שלך: חידונים, משחק זיכרון, ערבול אותיות, השלמת משפט ועוד.
+ב["משחקים"](/play) יש משחקים שנבנים מהמילים שבמחברת שלכם: חידונים, משחק זיכרון, ערבול אותיות, השלמת משפט ועוד.
 כדי להתחיל, צריך לפחות 4 מילים במחברת.
 ובכל מילה, מתחת להגדרה, יש גם כפתור "חידון" לתרגול מהיר של אותה מילה.
 
@@ -540,14 +556,14 @@ Gadit מציג מילה מהמחברת שלך, ונזכרים מה היא אומ
 ב["השוואה"](/compare) כותבים שתי מילים, ומקבלים את ההבדל ביניהן, דוגמאות וטעות נפוצה.
 
 ## איך עושים את זה, שלב אחר שלב:
-1. נכנסים ל["מחברת"](/notebook) ולוחצים על "תרגול עכשיו".
+1. נכנסים ל["מחברת"](/notebook) ולוחצים על "חזרה על המילים שלי".
 2. עוברים על המילים, ולוחצים "ידעתי" או "שכחתי".
 3. בסוף לוחצים על "סיימתי להיום", או נכנסים ל["משחקים"](/play) למשחק אחד.
 
 **טיפ מהשטח:**
 חמש דקות ביום, באותה שעה, עדיפות על שעה פעם בשבוע.`,
-      "לתרגול עכשיו",
-      "במייל הבא נראה מה כבר בנית בשבועיים הראשונים.",
+      "לחזרה על המילים",
+      "במייל הבא נראה מה כבר בניתם בשבועיים הראשונים.",
     ),
     en: C(
       "Hi {name}, here's how your words stay with you over time",
@@ -559,7 +575,7 @@ A word you come back to at the right time stays.
 You have three tools for this.
 
 ## Smart practice
-The notebook has a "Practice now" button.
+The notebook has a "Review my words" button.
 Gadit shows a word from your notebook, and you recall what it means before opening the explanation.
 Tap "I knew it" or "I forgot", and Gadit decides when to bring it back: a word you forgot returns soon, and a word you knew returns in a few days.
 
@@ -573,31 +589,31 @@ Similar words confuse even fluent speakers, for example affect and effect.
 In ["Compare"](/compare) type two words, and get the difference between them, examples and a common mistake.
 
 ## How to do it, step by step:
-1. Open ["Notebook"](/notebook) and tap "Practice now".
+1. Open ["Notebook"](/notebook) and tap "Review my words".
 2. Go through the words and tap "I knew it" or "I forgot".
 3. At the end tap "Done for today", or open ["Games"](/play) for one game.
 
 **A tip from other users:**
 Five minutes a day, at the same time, beats an hour once a week.`,
-      "Practice now",
+      "Review my words",
       "In the next email we'll see what you've already built in your first two weeks.",
     ),
   },
 
   "ind-progress": {
     he: C(
-      "היי {שם}, כמעט שבועיים עם Gadit, הנה מה שכבר בנית",
+      "היי {שם}, כמעט שבועיים עם Gadit, הנה מה שכבר בניתם",
       `היי {שם},
 
-עברו כמעט שבועיים מאז שהצטרפת ל-Gadit.
-זה הזמן לראות מה כבר בנית.
+עברו כמעט שבועיים מאז שהצטרפתם ל-Gadit.
+זה הזמן לראות מה כבר בניתם.
 
 ## מה קרה בשבועיים האלה
 {מספרים}
 
 ## איך ממשיכים מכאן
-1. פותחים את ה["מחברת"](/notebook) ובוחרים מילה אחת שכבר חיפשת.
-2. מנסים להסביר אותה במילים שלך, בלי להציץ.
+1. פותחים את ה["מחברת"](/notebook) ובוחרים מילה אחת שכבר חיפשתם.
+2. מנסים להסביר אותה במילים שלכם, בלי להציץ.
 3. מחפשים מילה חדשה אחת מהיום.
 
 **טיפ מהשטח:** מילה אחת ביום מספיקה. ככה אוצר המילים גדל, מילה אחרי מילה.`,
@@ -662,7 +678,7 @@ It's a good moment to see what you've already built.
 ביטויים הם החלק הכי קשה בשפה חדשה.
 מילים פשוטות כמו "break", "hand" ו-"head" באנגלית פותחות הרבה ביטויים.`,
       "לחיפוש מילה",
-      "במייל הבא נדבר על מילים בכל שפה, עם הסבר בשפה שלך.",
+      "במייל הבא נדבר על מילים בכל שפה, עם הסבר בשפה שלכם.",
     ),
     en: C(
       "Hi {name}, questions about any word, and expressions you can't get from the words alone",
@@ -706,21 +722,21 @@ Simple words like "break", "hand" and "head" open up a lot of them.`,
 
   "ind-languages": {
     he: C(
-      "היי {שם}, מילים בכל שפה, הסבר בשפה שלך",
+      "היי {שם}, מילים בכל שפה, הסבר בשפה שלכם",
       `היי {שם},
 
 הרבה פעמים המילה שצריך להבין היא בשפה אחרת: במייל מהעבודה, במאמר, בסדרה או בשפה שלומדים.
 
-## 33 שפות
-ב-Gadit אפשר לחפש מילה בכל שפה. ההסבר תמיד נכתב בשפת הממשק שבחרת, ואם השפות שונות, מופיע גם תרגום של מילה אחת. Gadit עובד ב-33 שפות.
+## יותר מ-40 שפות
+ב-Gadit אפשר לחפש מילה בכל שפה. ההסבר תמיד נכתב בשפת הממשק שבחרתם, ואם השפות שונות, מופיע גם תרגום של מילה אחת. Gadit עובד ביותר מ-40 שפות.
 
 ## איך עושים את זה, שלב אחר שלב:
 1. בוחרים את שפת הממשק: במחשב, בכפתור השפה בשורה העליונה. בטלפון, בתפריט.
 2. [מחפשים מילה](/) בכל שפה, למשל מילה באנגלית ממייל של העבודה.
-3. ההסבר מגיע בשפה שבחרת.
+3. ההסבר מגיע בשפה שבחרתם.
 
 **טיפ מהשטח:**
-מי שלומד שפה חדשה יכול לחפש בה מילים ולקבל את ההסבר בשפה שלו.
+לומדים שפה חדשה? מחפשים בה מילים ומקבלים את ההסבר בשפה שלכם.
 ככה מבינים את המילה עד הסוף, עם כל המשמעויות והדוגמאות, ולא רק מילה אחת מקבילה.`,
       "לחיפוש מילה בכל שפה",
       "במייל הבא נדבר על Gadit לכל המשפחה, ועל Gadit לבתי ספר.",
@@ -731,8 +747,8 @@ Simple words like "break", "hand" and "head" open up a lot of them.`,
 
 Often the word you need to understand is in another language: in a work email, an article, a series, or a language you're learning.
 
-## 33 languages
-On Gadit you can look up a word in any language. The explanation is always written in the interface language you chose, and when the languages differ, a one-word translation appears too. Gadit works in 33 languages.
+## More than 40 languages
+On Gadit you can look up a word in any language. The explanation is always written in the interface language you chose, and when the languages differ, a one-word translation appears too. Gadit works in more than 40 languages.
 
 ## How to do it, step by step:
 1. Choose the interface language: on a computer, with the language button in the top bar. On a phone, in the menu.
@@ -761,7 +777,7 @@ That way you understand the word all the way through, with every meaning and exa
 1. לכל ילד אזור אישי משלו, עם מחברת שנקראת **אוצר המילים שלי**.
 2. מצב ילדים פועל אצל הילד כברירת מחדל: הסבר פשוט ותמונה לכל משמעות.
 3. משחקים, חידונים ותרגול הכתבה מהמילים שהילד עצמו חיפש.
-4. בלוח ההורה רואים את כל הילדים במסך אחד, ואפשר לקבל התראה על כל מילה שהילד מחפש.
+4. בלוח ההורה רואים את כל הילדים במסך אחד, ואפשר לקבל התראה על כל מה שהילד סיים.
 5. מקום סגור ובטוח: בלי צ'אט, בלי פרסומות ובלי קישורים החוצה.
 
 הילד מתחבר מהמכשיר שלו עם קוד, בלי סיסמה.
@@ -771,9 +787,9 @@ That way you understand the word all the way through, with every meaning and exa
 גם בכיתה, הרבה פעמים מה שעוצר תלמיד זו מילה אחת.
 
 1. המילים החשובות של כל יחידת לימוד, לפי תוכניות הלימודים מגן ועד י״ב, מוכנות להקרנה בכיתה.
-2. חידון ומשחק לכל הכיתה מהמילים של השיעור.
-3. כל תלמיד נכנס עם קוד הכיתה, בלי חשבון, ומקבל הסבר לכל מילה, גם בשפה שלו.
-4. ההנהלה והצוות רואים אילו מילים כל כיתה התקשתה בהן.
+2. המורה מקרין את המילה, וכל הכיתה מבינה אותה יחד: הסבר פשוט, תמונה ודוגמאות.
+3. חידון ומשחק לכל הכיתה מהמילים של השיעור.
+4. ההנהלה מקבלת כל בוקר את המילים שנלמדו בכל כיתה.
 
 **מכירים בית ספר שזה יכול לעזור לו?**
 אפשר להשיב למייל הזה עם שם בית הספר ופרטים של מישהו מהצוות, ואנחנו נמשיך משם.
@@ -794,7 +810,7 @@ One plan for the whole family: up to 5 children, plus the other parent.
 1. Each child gets a space of their own, with a notebook called **My words**.
 2. Kids Mode is on by default for the child: a simple explanation and a picture for every meaning.
 3. Games, quizzes and dictation practice built from the words the child looked up.
-4. The parent board shows all the children on one screen, and you can get an alert for every word your child looks up.
+4. The parent dashboard shows all the children on one screen, and you can get an alert for everything your child finishes.
 5. A closed, safe place: no chat, no ads and no links out.
 
 A child signs in on their own device with a code, no password.
@@ -804,9 +820,9 @@ No device of their own? There's a shared kids screen.
 In class too, what stops a student is often one word.
 
 1. The key words of every unit, by the curriculum from kindergarten to grade 12, ready to project in class.
-2. A quiz and a game for the whole class from the lesson's words.
-3. Every student joins with the class code, no account, and gets an explanation of every word, in their own language too.
-4. The school's leadership and staff see which words each class struggled with.
+2. The teacher projects the word, and the whole class understands it together: a simple explanation, a picture and examples.
+3. A quiz and a game for the whole class from the lesson's words.
+4. Every morning the school's leadership gets the words each class learned.
 
 **Know a school this could help?**
 Reply to this email with the school's name and someone on the staff to talk to, and we'll take it from there.
@@ -818,29 +834,28 @@ You can also send them [the Gadit for schools page](/schools).`,
 
   "ind-month": {
     he: C(
-      "היי {שם}, כל מה שיש לך ב-Gadit, ואיך ממשיכים",
+      "היי {שם}, כל מה שיש לכם ב-Gadit, ואיך ממשיכים",
       `היי {שם},
 
-עבר כמעט חודש מאז שהצטרפת.
-זה הזמן לסכם את כל מה שיש לך ב-Gadit.
+עבר כמעט חודש מאז שהצטרפתם.
+זה הזמן לסכם את כל מה שיש לכם ב-Gadit.
 
 ## כל הכלים, במקום אחד
 1. [חיפוש מילה](/) עד הסוף: כל המשמעויות, תמונה ומקור המילה.
 2. המשמעות הנכונה לפי המשפט.
-3. [מחברת](/notebook) עם כל המילים שחיפשת.
+3. [מחברת](/notebook) עם כל המילים שחיפשתם.
 4. [כל מילה](/read): דף שלם, מילה אחרי מילה.
-5. "חברו משפט", עם משוב על המשפט שלך.
+5. "חברו משפט", עם משוב על המשפט שלכם.
 6. [תגיד את זה](/say): משפט בשפה חדשה, בקול.
-7. 33 שפות, והסבר בשפה שלך.
-[[deep]]8. [תרגול חכם](/notebook), [משחקים](/play) ו[השוואת מילים](/compare).
-[[/deep]]
+7. יותר מ-40 שפות, והסבר בשפה שלכם.
+8. [תרגול חכם](/notebook), [משחקים](/play) ו[השוואת מילים](/compare).
 
 ## החודש הבא
 לא צריך להשתמש בכל הכלים.
-מספיק שניים או שלושה שעובדים טוב בשבילך, והופכים להרגל.
+מספיק שניים או שלושה שעובדים טוב בשבילכם, והופכים להרגל.
 השבוע אפשר לבחור יעד קטן אחד, למשל חמש מילים חדשות.
 
-אוצר המילים שלך ממשיך לגדול, מילה אחרי מילה.`,
+אוצר המילים שלכם ממשיך לגדול, מילה אחרי מילה.`,
       "לחיפוש מילה",
       "",
     ),
@@ -858,9 +873,8 @@ A good moment to sum up everything you have on Gadit.
 4. [Every Word](/read): a whole page, word by word.
 5. "Compose a sentence", with feedback on your sentence.
 6. [Say it](/say): a sentence in a new language, out loud.
-7. 33 languages, and explanations in your language.
-[[deep]]8. [Smart practice](/notebook), [games](/play) and [comparing words](/compare).
-[[/deep]]
+7. More than 40 languages, and explanations in your language.
+8. [Smart practice](/notebook), [games](/play) and [comparing words](/compare).
 
 ## The next month
 You don't need to use every tool.
