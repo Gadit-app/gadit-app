@@ -198,9 +198,10 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
   // games' tiles (the next lesson on it, a tap opens it), and whatever
   // opens from it (choosing the language, all the lessons) on a full row
   // under the tiles. Rendered as list items of the tiles' grid.
-  // All lessons grouped by topic (Gadi 2026-10-19: a wall of white chips
-  // looked like a mess): one small card per topic, its parts as numbered
-  // circles, done ones filled, the next one ringed.
+  // All lessons, one tile per topic (Gadi 2026-10-19: chips, then numbered
+  // circles per part, both read as a mess). Every tile the same size: the
+  // topic's icon, its name and a progress bar. A tap opens the topic's next
+  // part (its first when all are done); the parts themselves are not shown.
   const lessonTopics = (list: NonNullable<LearnState["lessons"]>["list"], nextId: string | null) => {
     const groups: Array<{ key: string; label: string; icon: string; items: typeof list }> = [];
     for (const l of list) {
@@ -212,20 +213,22 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
     }
     return (
       <div className="wb-learn-topics">
-        {groups.map((g) => (
-          <div key={g.key} className="wb-learn-topic">
-            <div className="wb-learn-topic-h">
-              <span aria-hidden="true">{g.icon}</span> <span>{g.label}</span>
-              <span className="wb-learn-topic-n" dir="ltr">{g.items.filter((l) => l.done).length}/{g.items.length}</span>
-            </div>
-            <div className="wb-learn-topic-steps">
-              {g.items.map((l, i) => (
-                <button key={l.id} type="button" title={l.title} aria-label={l.title} disabled={busy} onClick={() => void openLesson(l.id)}
-                  className={`wb-learn-step${l.done ? " is-done" : ""}${l.id === nextId ? " is-next" : ""}`}>{l.done ? "✓" : i + 1}</button>
-              ))}
-            </div>
-          </div>
-        ))}
+        {groups.map((g) => {
+          const done = g.items.filter((l) => l.done).length;
+          const all = done === g.items.length;
+          const target = g.items.find((l) => !l.done) ?? g.items[0];
+          const isNext = g.items.some((l) => l.id === nextId);
+          return (
+            <button key={g.key} type="button" disabled={busy} onClick={() => void openLesson(target.id)}
+              className={`wb-learn-topic${all ? " is-done" : ""}${isNext ? " is-next" : ""}`}>
+              {all && <span className="wb-learn-topic-check" aria-hidden="true">✓</span>}
+              <span className="wb-learn-topic-ico" aria-hidden="true">{g.icon}</span>
+              <span className="wb-learn-topic-name">{g.label}</span>
+              <span className="wb-learn-topic-bar" aria-hidden="true"><span style={{ width: `${Math.round((done / g.items.length) * 100)}%` }} /></span>
+              <span className="wb-learn-topic-n" dir="ltr">{done}/{g.items.length}</span>
+            </button>
+          );
+        })}
       </div>
     );
   };
