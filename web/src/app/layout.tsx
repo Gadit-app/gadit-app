@@ -24,6 +24,7 @@ import { TwaInit } from "@/components/TwaInit";
 import { NativeAppBridge } from "@/components/NativeAppBridge";
 import { SessionBridge } from "@/components/SessionBridge";
 import { Analytics } from "@vercel/analytics/next";
+import { isIosAppUA } from "@/lib/native-app";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import MetaPixel from "@/components/MetaPixel";
 import Script from "next/script";
@@ -425,6 +426,10 @@ export default async function RootLayout({
   // are hidden by CSS from the first server-rendered paint (no flash of a
   // "Subscribe" button), and blocked routes are already redirected upstream.
   const playMode = headersList.get("x-gadit-play") === "1";
+  // The iOS App Store app: no ad or analytics trackers and no install
+  // prompt inside it, so the app does no "tracking" in Apple's sense (no
+  // App Tracking Transparency prompt) and its privacy label stays short.
+  const iosApp = isIosAppUA(headersList.get("user-agent"));
 
   return (
     <html
@@ -494,11 +499,11 @@ export default async function RootLayout({
               {children}
               <VoiceAssistant />
               <GuideOverlay />
-              <InstallPwaPrompt />
+              {!iosApp && <InstallPwaPrompt />}
               {/* GA4 (G-28987K226D). Inside AuthProvider: it waits for the
                   role, and never loads or sends a hit for a child (kid
                   routes, a kid session, Kids Mode). See the component. */}
-              <GoogleAnalytics />
+              {!iosApp && <GoogleAnalytics />}
             </AuthProvider>
           </LangProvider>
           <ServiceWorkerRegister />
@@ -509,7 +514,7 @@ export default async function RootLayout({
               components/MetaPixel.tsx). Never loads on /c/ classroom
               routes: kids on school devices are not ad-tracking
               subjects, by policy and by positioning. */}
-          <MetaPixel />
+          {!iosApp && <MetaPixel />}
           {/* Affonso affiliate-tracking pixel. RESTORED 2026-08-05: the
               embed DASHBOARD was retired (bad API key) and /affiliate now
               redirects to the in-house /partners portal, but Affonso's
@@ -520,13 +525,13 @@ export default async function RootLayout({
               codes that aren't its own, so there is no double-attribution.
               First-party delivery via the /r/* rewrites in next.config.ts
               (defeats ad blockers). Program ID is public. */}
-          <Script
+          {!iosApp && <Script
             src="/r/pixel.js"
             strategy="afterInteractive"
             data-affonso="cmq3oz349000p11r2lloq0xb2"
             data-cookie_duration="60"
             data-api-base="/r"
-          />
+          />}
         </body>
     </html>
   );
