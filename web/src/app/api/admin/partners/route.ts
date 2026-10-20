@@ -17,7 +17,7 @@
  */
 import { bookPartnerCommission } from "@/lib/partner-commission";
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminDb } from "@/lib/firebase-admin";
+import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { sendPartnerWelcome } from "@/lib/partner-email";
 import {
   Partner,
@@ -128,6 +128,22 @@ export async function GET(req: NextRequest) {
       };
     }),
   );
+
+  // The person's own name from their Gadit account (first and last, as set
+  // at signup or in /admin/users), so a partner whose record has no name, or
+  // only an e-mail handle, can still be found by name (Gadi 2026-10-20).
+  const BIDI_MARKS = new Set([0x200e, 0x200f, 0x202a, 0x202b, 0x202c, 0x202d, 0x202e]);
+  const accountNames = new Map<string, string>();
+  const emails = [...new Set(partners.map((p) => (p.email || "").trim().toLowerCase()).filter((e) => e.includes("@")))];
+  for (let i = 0; i < emails.length; i += 100) {
+    try {
+      const res = await getAdminAuth().getUsers(emails.slice(i, i + 100).map((email) => ({ email })));
+      for (const u of res.users) if (u.email && u.displayName?.trim()) accountNames.set(u.email.toLowerCase(), [...u.displayName].filter((ch) => !BIDI_MARKS.has(ch.charCodeAt(0))).join("").trim());
+    } catch (e) {
+      console.warn("[admin/partners] account names lookup failed (non-blocking):", e);
+    }
+  }
+  for (const p of partners) (p as typeof p & { accountName?: string | null }).accountName = accountNames.get((p.email || "").trim().toLowerCase()) ?? null;
 
   // Demo partners (Zoom presentations) sink to the bottom, after every real one.
   partners.sort((a, b) => (a.demo !== b.demo ? (a.demo ? 1 : -1) : a.createdAt < b.createdAt ? 1 : -1));

@@ -25,6 +25,8 @@ type Row = {
   id: string;
   code: string;
   name: string;
+  /** First and last name from the person's Gadit account, when they have one. */
+  accountName?: string | null;
   email: string;
   tier: "standard" | "founder";
   rateYearOne: number;
@@ -444,6 +446,7 @@ export default function AdminPartnersClient() {
     (r) =>
       !q ||
       r.name.toLowerCase().includes(q) ||
+      (r.accountName ?? "").toLowerCase().includes(q) ||
       r.email.toLowerCase().includes(q) ||
       r.code.toLowerCase().includes(q),
   );
@@ -590,7 +593,10 @@ export default function AdminPartnersClient() {
               <div key={r.id} style={card}>
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                    <span style={{ fontSize: 16, fontWeight: 700, color: "#111827" }}>{r.name || r.email}</span>
+                    <span style={{ fontSize: 16, fontWeight: 700, color: "#111827" }}>{r.accountName || r.name || r.email}</span>
+                    {r.name && r.accountName && r.name.trim() !== r.accountName && (
+                      <span style={{ fontSize: 12.5, color: "#6B7280" }}>({r.name})</span>
+                    )}
                     <span style={{ ...pill, ...(r.tier === "founder" ? pillFounder : pillStd) }}>
                       {r.tier === "founder" ? t.founder : t.standard}
                     </span>
