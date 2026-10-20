@@ -665,6 +665,11 @@ export default function CheckoutClient() {
           error?: string;
         };
         if (cancelled) return;
+        // Already has a subscription: show it instead of starting a second one.
+        if (data.error === "already_subscribed") {
+          window.location.replace(href("/account"));
+          return;
+        }
         if (!res.ok || !data.clientSecret || !data.mode) {
           setErrMsg(data.error === "invalid_code" ? c.invalidCode : c.genericError);
           setPhase("error");

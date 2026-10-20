@@ -206,6 +206,24 @@ export async function POST(req: NextRequest) {
       limit: 10,
       expand: SUB_EXPAND.map((e) => `data.${e}`),
     });
+    // Already subscribed with a card (trialing or active): never mint a
+    // second subscription. Opening /checkout again used to create one per
+    // visit, so one family ended up with three card-attached trials, each
+    // about to charge (2026-10-20). Plan changes go through the account
+    // page (upgrade-family / portal), not a new checkout.
+    {
+      const [active, trialing] = await Promise.all([
+        stripe.subscriptions.list({ customer, status: "active", limit: 10 }),
+        discounts ? stripe.subscriptions.list({ customer, status: "trialing", limit: 10 }) : Promise.resolve(existing),
+      ]);
+      const carded = [...trialing.data, ...active.data].find(
+        (s) => (s.status === "active" || !!s.default_payment_method) && !s.cancel_at_period_end,
+      );
+      if (carded) {
+        return NextResponse.json({ error: "already_subscribed", subscriptionId: carded.id }, { status: 409 });
+      }
+    }
+
     // Every card-less trialing sub belonging to this user is an
     // abandoned checkout (payment never completed). One of them may be
     // reusable for the exact plan+currency being requested now; the
