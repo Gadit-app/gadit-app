@@ -25,7 +25,12 @@ import type { SetItem, WordSet } from "@/lib/word-sets";
 
 type ListItem = { m: string; w: string; rev: number; parts: PartId[]; decided: Record<string, string> };
 type Group = { n: number; title: string; ms: string[] };
-type ListData = { title: string; expiresAt: string; name: string; email: string; meanings: ListItem[]; groups?: Group[] };
+type BlindData = { version: string; title: string; intro: string; items: Array<{ key: string; w: string }>; questions: Array<{ key: string; q: string; required?: boolean }> };
+type Answers = Record<string, Record<string, string>>;
+type ListData = { title: string; expiresAt: string; name: string; email: string; meanings: ListItem[]; groups?: Group[];
+  /** A blind pass not submitted yet (2026-10-20): only its questions are sent, no meaning. */
+  blindPending?: boolean; blind?: BlindData; draft?: Answers; draftAt?: string | null;
+  summary?: { version: string; q: string; answer: string } };
 type SavedDecision = { decision: Decision; status: string; notes: string; fixes: Record<string, string>; quoteCheck?: { edition: string; tractate: string; daf: string; amud: string }; at: string; rev: number; historyId?: string };
 /** kind "decision": one of the professional decisions; "question": a short question. */
 type Question = { part?: string; kind: "decision" | "question"; q: string; options?: string[]; rec?: string };
@@ -77,6 +82,7 @@ export function ReviewClient() {
       const d = (await r.json()) as ListData;
       setList(d);
       setState("ready");
+      if (d.blindPending) return;
       // In a review with groups, start at the first group that is not finished yet.
       const g0 = d.groups?.length ? Math.max(0, d.groups.findIndex((g) => g.ms.some((m) => { const x = d.meanings.find((y) => y.m === m); return !!x && !doneOf(x); }))) : 0;
       setGrp((g) => (g >= 0 ? g : g0));
@@ -128,6 +134,13 @@ export function ReviewClient() {
     );
   }
   if (state === "error" || !list) return <Shell><p className="rv-muted">לא הצלחנו לטעון את הבדיקה. נסו לרענן את הדף.</p></Shell>;
+  if (list.blindPending && list.blind) {
+    return (
+      <Shell watermark={list.email}>
+        <BlindForm list={list} blind={list.blind} api={api} onSubmitted={() => { setList(null); setState("loading"); void loadList(); }} />
+      </Shell>
+    );
+  }
 
   const item = list.meanings.find((x) => x.m === sel);
   const groups = list.groups?.length ? list.groups : null;
@@ -223,6 +236,7 @@ export function ReviewClient() {
           )}
         </section>
       )}
+      {list.summary && <SummaryCard key={list.summary.version} summary={list.summary} api={api} />}
       {stage && cur && item && (
         <StagePreview list={{ ...list, meanings: shown }} x={cur.meaning} lv={stageLv && levelText(cur.meaning, stageLv) ? stageLv : ""} onExit={() => setStage(false)} onGo={(m) => { if (m !== sel) { setCur(null); setSel(m); } }} />
       )}
@@ -409,6 +423,85 @@ function PartCard({ part, x, saved, api, onSaved, label, questions = [], history
   );
 }
 
+/** The blind pass: the words and the open questions only. Save and continue, or submit
+ *  once; after the submit the answers can no longer change and the full review opens. */
+function BlindForm({ list, blind, api, onSubmitted }: { list: ListData; blind: BlindData; api: (q: string, init?: RequestInit) => Promise<Response>; onSubmitted: () => void }) {
+  const [vals, setVals] = useState<Answers>(() => Object.fromEntries(blind.items.map((i) => [i.key, Object.fromEntries(blind.questions.map((q) => [q.key, list.draft?.[i.key]?.[q.key] ?? ""]))])));
+  const [busy, setBusy] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const send = async (submit: boolean) => {
+    setBusy(true); setMsg(null);
+    try {
+      const r = await api("", { method: "POST", body: JSON.stringify({ action: "blind", answers: vals, submit }) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        setMsg({ ok: false, text: d.error === "answers_missing" ? "כדי לשלוח צריך לענות על השאלות המסומנות בכל המונחים." : d.error === "already_submitted" ? "התשובות כבר נשלחו." : errorText(String(d.error ?? r.status)) });
+        if (d.error === "already_submitted") onSubmitted();
+        return;
+      }
+      if (submit) { onSubmitted(); return; }
+      setMsg({ ok: true, text: `נשמר, ${new Date(d.at).toLocaleTimeString("he-IL", { timeZone: "Asia/Jerusalem", hour: "2-digit", minute: "2-digit" })}. אפשר להמשיך אחר כך.` });
+    } catch { setMsg({ ok: false, text: errorText("") }); } finally { setBusy(false); setConfirm(false); }
+  };
+  return (
+    <section className="rv-blind">
+      <header className="rv-head">
+        <h1 className="rv-h1">{blind.title || list.title}</h1>
+        <p className="rv-muted">שלום {list.name}. הגישה פתוחה עד {israelTime(list.expiresAt)} (שעון ישראל).</p>
+      </header>
+      {blind.intro && <p className="rv-blind-intro">{blind.intro}</p>}
+      {blind.items.map((i) => (
+        <div key={i.key} className="rv-part" data-blind={i.key}>
+          <div className="rv-part-head"><h3>{i.w}</h3></div>
+          <div className="rv-fields">
+            {blind.questions.map((q) => (
+              <label key={q.key} className="rv-field">
+                <span>{q.q}{q.required ? " *" : ""}</span>
+                <textarea dir="rtl" rows={3} value={vals[i.key][q.key]} onChange={(e) => setVals({ ...vals, [i.key]: { ...vals[i.key], [q.key]: e.target.value } })} />
+              </label>
+            ))}
+          </div>
+        </div>
+      ))}
+      <div className="rv-save">
+        <button type="button" className="rv-btn is-quiet" disabled={busy} onClick={() => void send(false)}>שמירה והמשך אחר כך</button>
+        {!confirm ? <button type="button" className="rv-btn" disabled={busy} onClick={() => setConfirm(true)}>שליחת התשובות</button>
+          : <><span className="rv-muted">אחרי השליחה לא יהיה אפשר לשנות את התשובות, ותיפתח הבדיקה המלאה.</span><button type="button" className="rv-btn" disabled={busy} onClick={() => void send(true)}>{busy ? "שולחים..." : "כן, לשלוח"}</button></>}
+        {msg && <span className={msg.ok ? "rv-ok" : "rv-err"} role="status">{msg.text}</span>}
+      </div>
+    </section>
+  );
+}
+
+/** The review's closing question. Each save is kept; the latest is the current answer. */
+function SummaryCard({ summary, api }: { summary: { version: string; q: string; answer: string }; api: (q: string, init?: RequestInit) => Promise<Response> }) {
+  const [val, setVal] = useState(summary.answer);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const save = async () => {
+    setBusy(true); setMsg(null);
+    try {
+      const r = await api("", { method: "POST", body: JSON.stringify({ action: "summary", answer: val }) });
+      const d = await r.json().catch(() => ({}));
+      setMsg(r.ok ? { ok: true, text: "נשמר." } : { ok: false, text: errorText(String(d.error ?? r.status)) });
+    } catch { setMsg({ ok: false, text: errorText("") }); } finally { setBusy(false); }
+  };
+  return (
+    <section className="rv-part" data-part="summary">
+      <div className="rv-part-head"><h3>שאלת סיכום</h3></div>
+      <label className="rv-field">
+        <span>{summary.q}</span>
+        <textarea dir="rtl" rows={4} value={val} onChange={(e) => setVal(e.target.value)} />
+      </label>
+      <div className="rv-save">
+        <button type="button" className="rv-btn" disabled={busy || !val.trim()} onClick={() => void save()}>{busy ? "שומרים..." : "שמירה"}</button>
+        {msg && <span className={msg.ok ? "rv-ok" : "rv-err"} role="status">{msg.text}</span>}
+      </div>
+    </section>
+  );
+}
+
 function Shell({ children, watermark }: { children: React.ReactNode; watermark?: string }) {
   const href = useHref();
   const wm = watermark
@@ -428,6 +521,8 @@ function Shell({ children, watermark }: { children: React.ReactNode; watermark?:
 }
 
 const CSS = `
+.rv-blind{display:grid;gap:18px}
+.rv-blind-intro{margin:0;font-size:17px;line-height:1.6;background:#fff;border:1px solid #E2EAE8;border-radius:14px;padding:14px 16px}
 .rv-root{min-height:100vh;background:#F6F9F8;color:#0F2E2D}
 .rv-top{display:flex;justify-content:space-between;align-items:center;padding:16px clamp(16px,4vw,40px);border-bottom:1px solid #E2EAE8;background:#fff}
 .rv-main{max-width:920px;margin:0 auto;padding:28px clamp(16px,4vw,32px) 80px;display:grid;gap:18px}

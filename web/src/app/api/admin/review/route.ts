@@ -6,6 +6,8 @@ import { exportReview, reviewRef } from "@/lib/content-review";
  * Admin side of the expert content review (Gemara pilot, 2026-10-15).
  *   GET  ?secret=…&action=status&review=<id>   grants, decisions so far, the last log entries
  *   GET  ?secret=…&action=history&review=<id>[&m=<meaning>]   every history record, oldest first
+ *   GET  ?secret=…&action=blind&review=<id>    the blind pass: submitted answers (as written once)
+ *                                              and drafts not yet submitted; the closing answers
  *   GET  ?secret=…&action=export&review=<id>   the content after the decisions, in the
  *                                              pilot-content.json format (for import-pilot.mjs)
  *   POST ?secret=…  { action: "grant", uid, email, name, review, expiresAt }
@@ -38,6 +40,14 @@ export async function GET(req: NextRequest) {
   if (action === "export") {
     const out = await exportReview(id);
     return out ? NextResponse.json(out) : NextResponse.json({ error: "not_found" }, { status: 404 });
+  }
+  if (action === "blind") {
+    const [subs, drafts, sums] = await Promise.all([reviewRef(id).collection("blindSubmissions").get(), reviewRef(id).collection("blind").get(), reviewRef(id).collection("summaries").get()]);
+    return NextResponse.json({
+      submissions: subs.docs.map((d) => ({ uid: d.id, ...d.data() })),
+      drafts: drafts.docs.filter((d) => !d.get("submittedAt")).map((d) => ({ uid: d.id, ...d.data() })),
+      summaries: sums.docs.map((d) => d.data()).sort((a, b) => String(a.at).localeCompare(String(b.at))),
+    });
   }
   if (action === "history") {
     const m = req.nextUrl.searchParams.get("m") ?? "";

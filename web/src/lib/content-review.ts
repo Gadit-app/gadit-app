@@ -181,4 +181,62 @@ export async function exportReview(reviewId: string) {
   return { content, summary, problems };
 }
 
+/**
+ * A short blind pass before the full review (second expert, 2026-10-20). A review head may
+ * carry `blind`: a few words and a few open questions, with no definitions, proposals or
+ * hints. Until the expert submits it, the review's meanings stay closed to them. Answers
+ * are kept apart from the decisions:
+ *   contentReviews/{id}/blind/{uid}             the expert's draft (save and continue)
+ *   contentReviews/{id}/blindSubmissions/{uid}  the submitted answers, written once with
+ *                                               create(): nothing in the app overwrites it
+ * Reviews without `blind` (the first pilot) are not affected at all.
+ */
+export type Blind = { version: string; title: string; intro: string; items: Array<{ key: string; w: string }>; questions: Array<{ key: string; q: string; required?: boolean }> };
+export const blindOf = (head: Meaning | undefined): (Blind & { hash: string }) | null => {
+  const b = head?.blind as Blind | undefined;
+  if (!b || !b.version || !Array.isArray(b.items) || !b.items.length || !Array.isArray(b.questions) || !b.questions.length) return null;
+  const clean = { version: b.version, title: b.title ?? "", intro: b.intro ?? "", items: b.items.map((i) => ({ key: i.key, w: i.w })), questions: b.questions.map((q) => ({ key: q.key, q: q.q, ...(q.required ? { required: true } : {}) })) };
+  return { ...clean, hash: crypto.createHash("sha256").update(JSON.stringify(canon(clean))).digest("hex") };
+};
+export const MAX_ANSWER = 3000;
+/** Only the known item/question keys, as trimmed text. */
+export function blindAnswers(b: Blind, raw: unknown): Record<string, Record<string, string>> {
+  const r = raw && typeof raw === "object" ? (raw as Record<string, Record<string, unknown>>) : {};
+  return Object.fromEntries(b.items.map((i) => [i.key, Object.fromEntries(b.questions.map((q) => [q.key, typeof r[i.key]?.[q.key] === "string" ? String(r[i.key][q.key]).trim().slice(0, MAX_ANSWER) : ""]))]));
+}
+export const blindMissing = (b: Blind, a: Record<string, Record<string, string>>) => b.items.flatMap((i) => b.questions.filter((q) => q.required && !a[i.key]?.[q.key]).map((q) => `${i.key}.${q.key}`));
+export async function blindSubmission(reviewId: string, uid: string) {
+  const s = await reviewRef(reviewId).collection("blindSubmissions").doc(uid).get();
+  return s.exists ? s.data() : null;
+}
+/** Saves the draft, or submits once: the submission is created in the same transaction that
+ *  checks there is none, so a second submit or a later draft save is refused. */
+export async function saveBlind(reviewId: string, b: Blind & { hash: string }, who: { uid: string; email: string; name: string }, answers: Record<string, Record<string, string>>, submit: boolean) {
+  const sub = reviewRef(reviewId).collection("blindSubmissions").doc(who.uid);
+  const draft = reviewRef(reviewId).collection("blind").doc(who.uid);
+  const at = new Date().toISOString();
+  await db().runTransaction(async (t) => {
+    if ((await t.get(sub)).exists) throw new Error("already_submitted");
+    if (submit) {
+      const record = { reviewId, by: who, version: b.version, questionsHash: b.hash, items: b.items, questions: b.questions, answers, submittedAt: at };
+      t.create(sub, { ...record, answersHash: crypto.createHash("sha256").update(JSON.stringify(canon(answers))).digest("hex") });
+      t.set(draft, { answers, version: b.version, updatedAt: at, submittedAt: at });
+    } else t.set(draft, { answers, version: b.version, updatedAt: at });
+  });
+  return at;
+}
+
+/** One summary question at the end of a review (head.summaryQuestion). Every save is a new
+ *  record, created and never changed; the latest one is the expert's current answer. */
+export const summaryOf = (head: Meaning | undefined): { version: string; q: string } | null => (head?.summaryQuestion?.q && head?.summaryQuestion?.version ? { version: String(head.summaryQuestion.version), q: String(head.summaryQuestion.q) } : null);
+export async function latestSummary(reviewId: string, uid: string) {
+  const s = await reviewRef(reviewId).collection("summaries").where("by.uid", "==", uid).get();
+  return s.docs.map((d) => d.data()).sort((a, b) => String(b.at).localeCompare(String(a.at)))[0] ?? null;
+}
+export async function saveSummary(reviewId: string, sq: { version: string; q: string }, who: { uid: string; email: string; name: string }, answer: string) {
+  const at = new Date().toISOString();
+  await reviewRef(reviewId).collection("summaries").doc().create({ reviewId, by: who, version: sq.version, q: sq.q, answer, at });
+  return at;
+}
+
 export { partOf };

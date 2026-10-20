@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth } from "@/lib/firebase-admin";
-import { openGrant, logReview, reviewRef, reviewMeaning, saveDecision, historyOf, type PartDecision } from "@/lib/content-review";
+import { openGrant, logReview, reviewRef, reviewMeaning, saveDecision, historyOf, blindOf, blindAnswers, blindMissing, blindSubmission, saveBlind, summaryOf, latestSummary, saveSummary, type PartDecision } from "@/lib/content-review";
 import { DECISIONS, STATUS_OF, checkFixes, partOf, partsFor, quoteOf, snapshotOf, type Decision } from "@/lib/review-parts";
 
 /**
@@ -10,6 +10,11 @@ import { DECISIONS, STATUS_OF, checkFixes, partOf, partsFor, quoteOf, snapshotOf
  *   GET  /api/review?view=meaning&m=<id>   one draft meaning, its decisions, the questions
  *                                          for the expert on it and the expert's OWN
  *                                          history records on it (never another's)
+ *   POST /api/review  { action: "blind", answers, submit }   a review with a blind pass
+ *                     (2026-10-20): save the draft, or submit once. Until it is submitted
+ *                     the list answers only with the blind questions, and the meanings,
+ *                     their views and every decision are closed (409 blind_first).
+ *   POST /api/review  { action: "summary", answer }   the review's closing question
  *   POST /api/review  { m, part, decision, notes, fixes, quoteCheck }
  *                     saves the decision and a history record together; there is no
  *                     way here to change or delete a history record.
@@ -45,6 +50,19 @@ export async function GET(req: NextRequest) {
   if (!g) return NO();
   const head = (await reviewRef(g.reviewId).get()).data();
   if (!head) return NO();
+  const blind = blindOf(head);
+  const blindDone = blind ? !!(await blindSubmission(g.reviewId, who.uid)) : true;
+  if (!blindDone) {
+    if (view !== "list") return NextResponse.json({ error: "blind_first" }, { status: 409, headers: PRIVATE });
+    const draft = (await reviewRef(g.reviewId).collection("blind").doc(who.uid).get()).data();
+    await logReview(g.reviewId, { uid: who.uid, email: who.email, action: "blind-view" });
+    // Only the words and the questions: no meaning, definition, proposal or decision.
+    return NextResponse.json({
+      title: head.title, expiresAt: g.expiresAt, name: g.name, email: who.email,
+      blindPending: true, blind: { version: blind!.version, title: blind!.title, intro: blind!.intro, items: blind!.items, questions: blind!.questions },
+      draft: draft?.version === blind!.version ? (draft?.answers ?? {}) : {}, draftAt: draft?.updatedAt ?? null,
+    }, { headers: PRIVATE });
+  }
   if (view === "list") {
     const ds = await reviewRef(g.reviewId).collection("decisions").get();
     const dec = Object.fromEntries(ds.docs.map((d) => [d.id, d.data().parts ?? {}]));
@@ -53,6 +71,7 @@ export async function GET(req: NextRequest) {
       title: head.title, expiresAt: g.expiresAt, name: g.name, email: who.email,
       // Review groups (2026-10-17): absent for a review loaded without them, like the pilot.
       ...(Array.isArray(head.groups) && head.groups.length ? { groups: head.groups } : {}),
+      ...(summaryOf(head) ? { summary: { ...summaryOf(head), answer: (await latestSummary(g.reviewId, who.uid))?.answer ?? "" } } : {}),
       meanings: (head.meanings ?? []).map((x: { m: string; w: string; rev: number; parts: string[] }) => ({
         ...x,
         decided: Object.fromEntries(Object.entries(dec[x.m] ?? {}).filter(([, d]) => (d as PartDecision).rev === x.rev).map(([p, d]) => [p, (d as PartDecision).decision === "clarify" ? "clarify" : (d as PartDecision).status])),
@@ -84,6 +103,37 @@ export async function POST(req: NextRequest) {
   const g = await openGrant(who.uid);
   if (!g) return NO();
   const body = (await req.json().catch(() => null)) as Record<string, unknown> | null;
+  const head = (await reviewRef(g.reviewId).get()).data();
+  const blind = blindOf(head);
+  const blindDone = blind ? !!(await blindSubmission(g.reviewId, who.uid)) : true;
+  if (body?.action === "blind") {
+    if (!blind) return NO();
+    if (blindDone) { await logReview(g.reviewId, { uid: who.uid, email: who.email, action: "refused", error: "already_submitted" }); return NextResponse.json({ error: "already_submitted" }, { status: 409 }); }
+    if (!g.name) return NextResponse.json({ error: "grant_has_no_name" }, { status: 409 });
+    const answers = blindAnswers(blind, body.answers);
+    const submit = body.submit === true;
+    const missing = submit ? blindMissing(blind, answers) : [];
+    if (missing.length) return NextResponse.json({ error: "answers_missing", missing }, { status: 400 });
+    try {
+      const at = await saveBlind(g.reviewId, blind, { uid: who.uid, email: who.email, name: g.name }, answers, submit);
+      await logReview(g.reviewId, { uid: who.uid, email: who.email, action: submit ? "blind-submit" : "blind-save", version: blind.version });
+      return NextResponse.json({ ok: true, submitted: submit, at }, { headers: PRIVATE });
+    } catch (e) {
+      if (/already_submitted|ALREADY_EXISTS/.test(String((e as Error)?.message ?? e))) return NextResponse.json({ error: "already_submitted" }, { status: 409 });
+      throw e;
+    }
+  }
+  if (!blindDone) { await logReview(g.reviewId, { uid: who.uid, email: who.email, action: "refused", error: "blind_first" }); return NextResponse.json({ error: "blind_first" }, { status: 409 }); }
+  if (body?.action === "summary") {
+    const sq = summaryOf(head);
+    if (!sq) return NO();
+    const answer = clean(body.answer, 5000);
+    if (!answer) return NextResponse.json({ error: "empty" }, { status: 400 });
+    if (!g.name) return NextResponse.json({ error: "grant_has_no_name" }, { status: 409 });
+    const at = await saveSummary(g.reviewId, sq, { uid: who.uid, email: who.email, name: g.name }, answer);
+    await logReview(g.reviewId, { uid: who.uid, email: who.email, action: "summary-save", version: sq.version });
+    return NextResponse.json({ ok: true, at }, { headers: PRIVATE });
+  }
   const m = clean(body?.m, 40);
   const part = partOf(clean(body?.part, 20));
   const decision = clean(body?.decision, 10) as Decision;
