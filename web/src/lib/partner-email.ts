@@ -1141,9 +1141,15 @@ export function buildWelcomeEmail(
   // The earned tier and the first paying customer bonus, in money (Gadi 2026-10-18).
   const oc = offerCopy(lang);
   const ov = offerValues(lang, partner.rateYearOne ?? 0.25, partner.rateLifetime ?? 0.1);
+  // The e-mail speaks to ONE partner in Hebrew, in a singular that reads the
+  // same for a man and a woman (Gadi 2026-10-20); the public page keeps the
+  // plural.
+  const heOne = lang === "he"
+    ? { tier: "הבאת {n} לקוחות משלמים? העמלה אחרי השנה הראשונה עולה ל-15% לכל החיים.", bonus: "והלקוח המשלם הראשון שלך עד {date} מביא לך גם בונוס של {bonus}." }
+    : null;
   const offerHtml = [
-    fillOffer(oc.publicTier, ov),
-    firstSaleBonusActive() ? fillOffer(oc.publicBonus, ov) : "",
+    fillOffer(heOne?.tier ?? oc.publicTier, ov),
+    firstSaleBonusActive() ? fillOffer(heOne?.bonus ?? oc.publicBonus, ov) : "",
   ].filter(Boolean).map((line) => `<div style="font-size:14px;color:#374151;margin-top:8px;">${esc(line)}</div>`).join("");
   const dir = rtl ? "rtl" : "ltr";
   const align = rtl ? "right" : "left";
