@@ -19,6 +19,24 @@ import { useEffect, useRef } from "react";
  */
 const CURRENT = process.env.NEXT_PUBLIC_BUILD_ID;
 
+/** Never in the middle of signing up or paying (2026-10-20: on a phone the
+ *  Google popup is its own tab, closing it re-focused the landing tab, a
+ *  deploy had happened meanwhile, the page reloaded and the signup modal
+ *  vanished). Not while the login modal is open, not for ten minutes after
+ *  a Google / Apple sign-in starts, and never on the sales and checkout
+ *  pages, where a visitor is mid-decision; they get the new build on the
+ *  next page they open. */
+const NO_RELOAD_PATHS = /^\/(?:[a-z]{2,3}(?:-[A-Z]{2})?\/)?(?:families|individuals|schools|pricing|checkout|auth|join|partners)(?:\/|$)/;
+function safeToReload(): boolean {
+  try {
+    if (document.querySelector("[data-login-modal]")) return false;
+    const t = Number(sessionStorage.getItem("gadit-auth-flow") || 0);
+    if (t && Date.now() - t < 10 * 60 * 1000) return false;
+    if (NO_RELOAD_PATHS.test(location.pathname)) return false;
+  } catch { /* fall through */ }
+  return true;
+}
+
 export function AutoUpdater() {
   const reloadingRef = useRef(false);
 
@@ -29,6 +47,7 @@ export function AutoUpdater() {
     async function check() {
       if (reloadingRef.current) return;
       if (typeof document !== "undefined" && document.visibilityState !== "visible") return;
+      if (!safeToReload()) return;
       try {
         const res = await fetch("/api/version", { cache: "no-store" });
         if (!res.ok) return;

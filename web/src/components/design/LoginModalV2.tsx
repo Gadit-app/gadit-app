@@ -214,6 +214,16 @@ export function LoginModalV2() {
   // COPPA / GDPR self-attestation — we can't verify age, but we make
   // the user click that they're old enough. Industry-standard minimum.
   const [ageAccepted, setAgeAccepted] = useState(false);
+  // A tap on Google / Apple / sign up before the 18+ box is ticked shows a
+  // red line right under the box and scrolls to it (2026-10-20: the buttons
+  // were disabled, a tap did nothing on a phone, and a college mailing got
+  // 87 clicks and no signup).
+  const [ageNudge, setAgeNudge] = useState(0);
+  const ageRef = useRef<HTMLLabelElement | null>(null);
+  const nudgeAge = () => {
+    setAgeNudge((n) => n + 1);
+    try { ageRef.current?.scrollIntoView({ block: "center", behavior: "smooth" }); } catch { /* fine */ }
+  };
   // Instagram/Facebook/TikTok in-app webview detection. Google's OAuth
   // refuses to authorise embedded user-agents, and the popup is
   // blocked anyway, so a "Continue with Google" button in this context
@@ -327,11 +337,12 @@ export function LoginModalV2() {
 
   async function handleGoogle() {
     if (mode === "signup" && !ageAccepted) {
-      setErrorKey("loginErrorAgeRequired");
+      nudgeAge();
       return;
     }
     setBusy(true);
     setErrorKey("");
+    try { sessionStorage.setItem("gadit-auth-flow", String(Date.now())); } catch { /* fine */ }
     try {
       await signInWithGoogle();
     } catch (err) {
@@ -347,7 +358,7 @@ export function LoginModalV2() {
 
   async function handleApple() {
     if (mode === "signup" && !ageAccepted) {
-      setErrorKey("loginErrorAgeRequired");
+      nudgeAge();
       return;
     }
     setBusy(true);
@@ -381,7 +392,7 @@ export function LoginModalV2() {
     setErrorKey("");
     if (mode === "signup") {
       if (!ageAccepted) {
-        setErrorKey("loginErrorAgeRequired");
+        nudgeAge();
         return;
       }
       const policyErr = validateSignupPassword(password);
@@ -473,6 +484,7 @@ export function LoginModalV2() {
   return (
     <div
       className="wordbook wb-login-backdrop"
+      data-login-modal=""
       onClick={() => setShowLoginModal(false)}
       role="dialog"
       aria-modal="true"
@@ -512,7 +524,8 @@ export function LoginModalV2() {
             depend on it (the Google button + email submit both show
             their disabled state until it's checked). */}
         {mode === "signup" && (
-          <label className="wb-login-age wb-login-age-top">
+          <>
+          <label ref={ageRef} key={ageNudge} className={`wb-login-age wb-login-age-top${ageNudge > 0 && !ageAccepted ? " is-nudge" : ""}`}>
             <input
               type="checkbox"
               checked={ageAccepted}
@@ -529,6 +542,10 @@ export function LoginModalV2() {
               </a>
             </span>
           </label>
+          {ageNudge > 0 && !ageAccepted && (
+            <p className="wb-login-age-msg" role="alert">{v2(lang, "loginErrorAgeRequired")}</p>
+          )}
+          </>
         )}
 
         {inAppName ? (
@@ -549,9 +566,8 @@ export function LoginModalV2() {
               <button
                 type="button"
                 onClick={handleApple}
-                disabled={busy || (mode === "signup" && !ageAccepted)}
+                disabled={busy}
                 className="wb-login-apple"
-                title={mode === "signup" && !ageAccepted ? v2(lang, "loginErrorAgeRequired") : undefined}
               >
                 <AppleLogo />
                 <span>{v2(lang, "loginContinueWithGoogle").replace("Google", "Apple")}</span>
@@ -560,9 +576,8 @@ export function LoginModalV2() {
             <button
               type="button"
               onClick={handleGoogle}
-              disabled={busy || (mode === "signup" && !ageAccepted)}
+              disabled={busy}
               className="wb-login-google"
-              title={mode === "signup" && !ageAccepted ? v2(lang, "loginErrorAgeRequired") : undefined}
             >
               <GoogleG />
               <span>{v2(lang, "loginContinueWithGoogle")}</span>
@@ -649,7 +664,7 @@ export function LoginModalV2() {
               state, including the disable below. */}
           <button
             type="submit"
-            disabled={busy || (mode === "signup" && !ageAccepted)}
+            disabled={busy}
             className="wb-login-submit"
           >
             {busy && <Spinner />}
