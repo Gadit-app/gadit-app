@@ -190,6 +190,23 @@ export function WbUserMenu() {
     })();
   }, [open, user, familyRole]);
 
+  // An expert with an open content review (Gemara pilot, Gadi 2026-10-20)
+  // sees "Content review" in the menu, so the review is one tap away from
+  // their own account. Checked once per visit, the first time the menu opens.
+  const [reviewOpen, setReviewOpen] = useState<boolean>(() => { try { return sessionStorage.getItem("gadit-review-open") === "1"; } catch { return false; } });
+  useEffect(() => {
+    if (!open || !user || familyRole === "kid") return;
+    try { if (sessionStorage.getItem("gadit-review-open") !== null) return; } catch { /* check */ }
+    void (async () => {
+      try {
+        const r = await fetch("/api/review?view=access", { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+        const ok = r.ok && !!(await r.json()).open;
+        setReviewOpen(ok);
+        try { sessionStorage.setItem("gadit-review-open", ok ? "1" : "0"); } catch { /* this visit */ }
+      } catch { /* no link */ }
+    })();
+  }, [open, user, familyRole]);
+
   // Warm the family-switcher cache as soon as we know there's a family, so the
   // menu opens with the members already in place instead of popping them in.
   useEffect(() => {
@@ -477,6 +494,18 @@ export function WbUserMenu() {
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
               {COACH_LINK[lang] ?? COACH_LINK.en}
+            </Link>
+          )}
+          {reviewOpen && (
+            <Link
+              role="menuitem"
+              href={href("/review")}
+              onClick={() => setOpen(false)}
+              style={{ display: "block", padding: "10px 12px", borderRadius: 8, color: "var(--ink, #111827)", textDecoration: "none", fontSize: 14, fontWeight: 600 }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "color-mix(in srgb, var(--ink, #111827) 8%, transparent)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+            >
+              {lang === "he" ? "בדיקת תוכן" : "Content review"}
             </Link>
           )}
           {/* My school menu item appears only for owners of a Schools
