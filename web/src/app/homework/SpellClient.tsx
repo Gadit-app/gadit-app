@@ -188,6 +188,47 @@ function randomCelebration(lang: string): string {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+// "From my notebook" in Listen and pick (Gadi 2026-10-20, asked by Gat for
+// Ziv): the child's own looked-up words, played aloud, picked from three.
+// Words only (no pictures), so it costs nothing and works for any word.
+const NB_COPY: Record<string, [string, string]> = {
+  en: ["From my notebook", "{n} words you looked up"],
+  he: ["מהמחברת שלי", "{n} מילים שחיפשתם"],
+  ar: ["من دفتري", "{n} كلمة بحثتم عنها"],
+  ru: ["Из моей тетради", "Слов, которые вы искали: {n}"],
+  es: ["De mi cuaderno", "{n} palabras que buscaste"],
+  pt: ["Do meu caderno", "{n} palavras que você procurou"],
+  fr: ["De mon carnet", "{n} mots que vous avez cherchés"],
+  de: ["Aus meinem Heft", "{n} Wörter, die ihr nachgeschlagen habt"],
+  cs: ["Z mého sešitu", "Hledaná slova: {n}"],
+  sk: ["Z môjho zošita", "Hľadané slová: {n}"],
+  it: ["Dal mio quaderno", "{n} parole che hai cercato"],
+  ja: ["わたしのノートから", "調べた単語 {n} 個"],
+  hi: ["मेरी कॉपी से", "आपने {n} शब्द खोजे"],
+  am: ["ከማስታወሻዬ", "የፈለጋችኋቸው {n} ቃላት"],
+  uk: ["З мого зошита", "Слів, які ви шукали: {n}"],
+  tr: ["Defterimden", "Aradığınız {n} kelime"],
+  pl: ["Z mojego zeszytu", "Wyszukane słowa: {n}"],
+  fa: ["از دفترم", "{n} واژه که جست‌وجو کردید"],
+  id: ["Dari buku catatanku", "{n} kata yang kamu cari"],
+  nl: ["Uit mijn schrift", "{n} woorden die je opzocht"],
+  el: ["Από το τετράδιό μου", "{n} λέξεις που αναζητήσατε"],
+  zu: ["Encwadini yami", "Amagama angu-{n} owaseshile"],
+  vi: ["Từ sổ tay của tôi", "{n} từ bạn đã tra"],
+  fil: ["Mula sa notebook ko", "{n} salitang hinanap mo"],
+  af: ["Uit my notaboek", "{n} woorde wat jy opgesoek het"],
+  sw: ["Kutoka daftari langu", "Maneno {n} uliyotafuta"],
+  "zh-CN": ["来自我的笔记本", "你查过的 {n} 个词"],
+  "zh-TW": ["來自我的筆記本", "你查過的 {n} 個詞"],
+  ko: ["내 단어장에서", "찾아본 단어 {n}개"],
+  th: ["จากสมุดของฉัน", "คำที่ค้นหา {n} คำ"],
+  bn: ["আমার খাতা থেকে", "তোমার খোঁজা {n}টি শব্দ"],
+  da: ["Fra mit hæfte", "{n} ord, du har slået op"],
+  hu: ["A füzetemből", "{n} szó, amit kerestél"],
+};
+/** The notebook stores the language by its English name ("Hebrew"). */
+const NB_LANG: Record<string, string> = { hebrew: "he", english: "en", arabic: "ar", russian: "ru", spanish: "es", portuguese: "pt", french: "fr", german: "de", czech: "cs", slovak: "sk", italian: "it", japanese: "ja", hindi: "hi", amharic: "am", ukrainian: "uk", turkish: "tr", polish: "pl", persian: "fa", farsi: "fa", indonesian: "id", dutch: "nl", greek: "el", zulu: "zu", vietnamese: "vi", filipino: "fil", tagalog: "fil", afrikaans: "af", swahili: "sw", korean: "ko", thai: "th", bengali: "bn", danish: "da", hungarian: "hu" };
+
 const TEAL = "#0B7F7F"; // white text on it passes AA (#0EA5A5 was 3.0)
 const TEAL_INK = "var(--teal-deep, #0A7472)"; // teal TEXT: follows the kid skins
 
@@ -383,6 +424,9 @@ export function SpellClient() {
   // feature's original market). Gadi 2026-09-19: make dictation work in every
   // language, not only Hebrew↔English.
   const nativeLang = lang === "en" ? "he" : lang;
+  // Listen and pick from the child's own notebook: one set per language the
+  // game can play (the child's language and English), 4+ words each.
+  const [nbSets, setNbSets] = useState<{ side: "native" | "en"; code: string; words: WordPair[] }[]>([]);
   // Language names shown in the VIEWER's language (Hebrew user sees עברית/אנגלית).
   const nativeName = langNameIn(nativeLang, lang);
   const englishName = langNameIn("en", lang);
@@ -907,6 +951,41 @@ export function SpellClient() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (hw !== "dict" || drill !== "pick" || !user) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const r = await fetch("/api/notebook", { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+        if (!r.ok) return;
+        const items = ((await r.json()).items ?? []) as { word?: string; language?: string }[];
+        const by: Record<string, string[]> = {};
+        for (const it of items) {
+          const w = (it.word ?? "").trim();
+          const code = NB_LANG[(it.language ?? "").trim().toLowerCase()];
+          if (!w || !code) continue;
+          const list = (by[code] ??= []);
+          if (!list.includes(w)) list.push(w);
+        }
+        const out: { side: "native" | "en"; code: string; words: WordPair[] }[] = [];
+        for (const [side, code] of [["native", nativeLang], ["en", "en"]] as const) {
+
+          const ws = by[code] ?? [];
+          if (ws.length >= 4) out.push({ side, code, words: ws.map((w) => ({ en: w, he: w })) });
+        }
+        if (!cancelled) setNbSets(out);
+      } catch { /* no notebook card */ }
+    })();
+    return () => { cancelled = true; };
+  }, [hw, drill, user, nativeLang]);
+
+  function startNotebook(nb: { side: "native" | "en"; code: string; words: WordPair[] }) {
+    const words = [...nb.words].sort(() => Math.random() - 0.5).slice(0, 10);
+    const [title] = NB_COPY[lang] ?? NB_COPY.en;
+    setPickLang(nb.side); // this set only: not saved as the device's choice
+    start({ id: `notebook-${nb.code}`, icon: "📒", titleEn: title, titleHe: title, words });
+  }
+
   /** Start a set: straight away when the choices are known, else ask once. */
   function begin(s: DictationSet) {
     if (drillRef.current !== "spell") {
@@ -1412,6 +1491,22 @@ export function SpellClient() {
                 </div>
               </div>
             )}
+
+            {drill === "pick" && nbSets.map((nb) => {
+              const [title, sub] = NB_COPY[lang] ?? NB_COPY.en;
+              let langName = nb.code;
+              try { langName = new Intl.DisplayNames([lang], { type: "language" }).of(nb.code) ?? nb.code; } catch { /* code */ }
+              return (
+                <button key={nb.code} type="button" onClick={() => startNotebook(nb)}
+                  style={{ marginTop: 16, width: "100%", display: "flex", alignItems: "center", gap: 12, textAlign: "start", background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 16, padding: "14px 16px", boxShadow: `0 6px 18px ${TEAL}12`, cursor: "pointer", font: "inherit", color: "inherit" }}>
+                  <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, background: TEAL + "1A", display: "grid", placeItems: "center", fontSize: 18 }} aria-hidden>📒</span>
+                  <span style={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 0 }}>
+                    <span style={{ fontSize: 15.5, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{title}{nbSets.length > 1 ? ` · ${langName}` : ""}</span>
+                    <span style={{ fontSize: 12.5, color: "var(--ink-muted,#6B7280)" }}>{sub.replace("{n}", String(nb.words.length))}</span>
+                  </span>
+                </button>
+              );
+            })}
 
             {/* The child's own list first (Gat, 2026-10-15): it was hidden below every topic. */}
             {drill !== "pic" && <div style={{ marginTop: 16, background: "var(--surface,#fff)", border: `1px solid ${TEAL}55`, borderRadius: 16, padding: "16px 16px 14px", boxShadow: `0 6px 18px ${TEAL}12` }}>
