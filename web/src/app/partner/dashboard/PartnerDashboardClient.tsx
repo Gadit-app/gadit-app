@@ -1713,6 +1713,48 @@ const COPY = {
   },
 };
 
+// "No PayPal yet?" under the payout field (Gadi 2026-10-20, as in the Yooniz
+// partner area), so a partner without an account is not stuck. Hebrew goes to
+// PayPal Israel's account choice page; everyone else to PayPal's sign-up,
+// which opens in the visitor's own country.
+const NO_PAYPAL: Record<string, string> = {
+  en: "No PayPal yet? Open a free account here",
+  he: "עדיין אין לכם PayPal? פותחים חשבון כאן, בלי עלות",
+  ar: "ليس لديك PayPal بعد؟ افتح حساباً مجانياً هنا",
+  ru: "Ещё нет PayPal? Откройте бесплатный аккаунт здесь",
+  es: "¿Aún no tienes PayPal? Abre una cuenta gratis aquí",
+  pt: "Ainda não tem PayPal? Abra uma conta grátis aqui",
+  fr: "Pas encore de compte PayPal ? Ouvrez-en un gratuitement ici",
+  de: "Noch kein PayPal? Hier ein kostenloses Konto eröffnen",
+  cs: "Ještě nemáte PayPal? Založte si zde účet zdarma",
+  sk: "Ešte nemáte PayPal? Založte si tu účet zadarmo",
+  it: "Non hai ancora PayPal? Apri qui un conto gratuito",
+  ja: "PayPal をお持ちでないですか？こちらで無料アカウントを作成できます",
+  hi: "अभी PayPal नहीं है? यहाँ मुफ़्त खाता खोलें",
+  am: "PayPal የለዎትም? እዚህ በነጻ መለያ ይክፈቱ",
+  uk: "Ще немає PayPal? Відкрийте безкоштовний акаунт тут",
+  tr: "Henüz PayPal hesabınız yok mu? Buradan ücretsiz hesap açın",
+  pl: "Nie masz jeszcze PayPal? Załóż tutaj darmowe konto",
+  fa: "هنوز PayPal ندارید؟ اینجا یک حساب رایگان باز کنید",
+  id: "Belum punya PayPal? Buka akun gratis di sini",
+  nl: "Nog geen PayPal? Open hier gratis een account",
+  el: "Δεν έχετε ακόμα PayPal; Ανοίξτε δωρεάν λογαριασμό εδώ",
+  zu: "Awukabi ne-PayPal? Vula i-akhawunti mahhala lapha",
+  vi: "Chưa có PayPal? Mở tài khoản miễn phí tại đây",
+  fil: "Wala ka pang PayPal? Magbukas ng libreng account dito",
+  af: "Nog nie PayPal nie? Maak hier gratis 'n rekening oop",
+  sw: "Bado huna PayPal? Fungua akaunti bila malipo hapa",
+  "zh-CN": "还没有 PayPal？在这里免费开户",
+  "zh-TW": "還沒有 PayPal？在這裡免費開戶",
+  ko: "아직 PayPal이 없으신가요? 여기에서 무료로 계정을 만드세요",
+  th: "ยังไม่มี PayPal ใช่ไหม เปิดบัญชีฟรีได้ที่นี่",
+  bn: "এখনও PayPal নেই? এখানে বিনামূল্যে অ্যাকাউন্ট খুলুন",
+  da: "Ingen PayPal endnu? Opret en gratis konto her",
+  hu: "Még nincs PayPal-fiókja? Nyisson itt ingyen fiókot",
+};
+const PAYPAL_SIGNUP_HE = "https://www.paypal.com/il/webapps/mpp/account-selection";
+const PAYPAL_SIGNUP = "https://www.paypal.com/signup";
+
 const CUR_SYMBOL: Record<string, string> = { ils: "₪", usd: "$", eur: "€", gbp: "£" };
 
 function money(minor: number, currency: string): string {
@@ -2082,6 +2124,10 @@ export function PartnerDashboardClient() {
                     </button>
                   </div>
                   {emailState === "error" && <div style={{ fontSize: 12.5, color: "#B91C1C", marginTop: 8 }}>{m.emailInvalid}</div>}
+                  <a href={lang === "he" ? PAYPAL_SIGNUP_HE : PAYPAL_SIGNUP} target="_blank" rel="noopener noreferrer"
+                    style={{ display: "inline-block", marginTop: 12, padding: "8px 14px", borderRadius: 999, border: "1px solid #CDE8E6", background: "#F4FBFA", color: "#0A7472", fontSize: 13.5, fontWeight: 600, textDecoration: "none" }}>
+                    {NO_PAYPAL[lang] ?? NO_PAYPAL.en}
+                  </a>
                 </div>
 
                 {/* Who signed up through you (masked, privacy-safe §10.6) */}

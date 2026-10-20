@@ -19,13 +19,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { addDoc, collection, getDocs, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { BackLink } from "@/components/BackLink";
 import { db } from "@/lib/firebase";
-import { MemberRole, MEMBER_COLORS, MAX_KIDS_PER_FAMILY, isParentRole } from "@/lib/family";
+import { MemberRole, MEMBER_COLORS, MAX_KIDS_PER_FAMILY, isParentRole, kidLimitFor } from "@/lib/family";
 
 const COPY: Record<string, {
   title: string;
@@ -809,6 +809,7 @@ export function FamilyAddClient() {
   const [colorIndex, setColorIndex] = useState(0);
   const [saving, setSaving] = useState(false);
   const [childCount, setChildCount] = useState<number | null>(null);
+  const [kidLimit, setKidLimit] = useState(MAX_KIDS_PER_FAMILY);
 
   // Snapshot the family's current child count once on mount. This is the
   // gate that prevents the parent from adding a 6th child on the Family
@@ -818,8 +819,12 @@ export function FamilyAddClient() {
     if (!user) return;
     void (async () => {
       try {
-        const snap = await getDocs(collection(db, "families", user.uid, "members"));
+        const [snap, me] = await Promise.all([
+          getDocs(collection(db, "families", user.uid, "members")),
+          getDoc(doc(db, "users", user.uid)).catch(() => null),
+        ]);
         const kids = snap.docs.filter((d) => !isParentRole(d.data().role)).length;
+        setKidLimit(kidLimitFor(me?.data()?.maxKids));
         setChildCount(kids);
       } catch {
         setChildCount(0);
@@ -828,7 +833,7 @@ export function FamilyAddClient() {
   }, [user]);
 
   const atKidCap =
-    role !== null && !isParentRole(role) && childCount !== null && childCount >= MAX_KIDS_PER_FAMILY;
+    role !== null && !isParentRole(role) && childCount !== null && childCount >= kidLimit;
 
   async function addMember() {
     if (!user || !role) return;
@@ -894,7 +899,7 @@ export function FamilyAddClient() {
           <div className="wb-family-add-form">
             {atKidCap && (
               <div className="wb-family-cap-pill" style={{ alignSelf: "stretch" }}>
-                {c.capReached}
+                {c.capReached.replace(String(MAX_KIDS_PER_FAMILY), String(kidLimit))}
               </div>
             )}
             <label className="wb-family-field">

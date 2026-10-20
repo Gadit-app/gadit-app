@@ -22,7 +22,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
-import { syntheticUidFor, isParentRole, MAX_KIDS_PER_FAMILY, type MemberRole } from "@/lib/family";
+import { syntheticUidFor, isParentRole, kidLimitFor, type MemberRole } from "@/lib/family";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -237,7 +237,7 @@ export async function GET(req: NextRequest) {
       // Genuinely new member. The 5-member cap applies to KIDS only.
       if (familyRole === "kid") {
         const kidCount = docs.filter((x) => x.m.role === "boy" || x.m.role === "girl").length;
-        if (kidCount >= MAX_KIDS_PER_FAMILY) {
+        if (kidCount >= kidLimitFor((ownerUserSnap.data() as { maxKids?: unknown } | undefined)?.maxKids)) {
           return page("המשפחה כבר הגיעה למקסימום הילדים בגדית. הסירו ילד קיים כדי להוסיף חדש.");
         }
       }

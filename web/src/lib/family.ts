@@ -131,6 +131,15 @@ export const PAIRING_CODE_TTL_MS = 30 * 60 * 1000;
  *  $6.99 plan across an extended group. */
 export const MAX_KIDS_PER_FAMILY = 5;
 
+/** A family's own child limit: users/{ownerUid}.maxKids, set only by us from
+ *  the server (the users doc is read-only from the browser), for a family
+ *  that needs one more child (Gadi 2026-10-20). Otherwise the plan's 5. */
+export function kidLimitFor(maxKids: unknown): number {
+  return typeof maxKids === "number" && Number.isFinite(maxKids) && maxKids > MAX_KIDS_PER_FAMILY
+    ? Math.min(10, Math.floor(maxKids))
+    : MAX_KIDS_PER_FAMILY;
+}
+
 /** Synthetic uid format used for paired members. familyId === ownerUid. */
 export function syntheticUidFor(familyId: string, memberId: string): string {
   return `${familyId}_${memberId}`;
