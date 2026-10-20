@@ -24,6 +24,17 @@ import { Partner } from "./partners";
  *    Gadi sets the currency-appropriate figure himself (₪ / $).
  */
 
+/** The Individuals link label in the welcome e-mail (the audience, like
+ *  "Families"); languages not listed read the English. */
+const PRODUCT_INDIVIDUALS: Record<string, string> = {
+  en: "Individuals", he: "ליחידים", ar: "الأفراد", es: "Particulares", pt: "Particulares", fr: "Particuliers",
+  de: "Einzelpersonen", it: "Privati", nl: "Particulieren", cs: "Jednotlivci", sk: "Jednotlivci", ru: "Частные лица",
+  uk: "Приватні особи", tr: "Bireyler", pl: "Osoby prywatne", fa: "افراد", id: "Perorangan", el: "Ιδιώτες",
+  hi: "व्यक्तिगत", am: "ለግለሰቦች", ja: "個人", ko: "개인", th: "บุคคลทั่วไป", bn: "ব্যক্তিগত", vi: "Cá nhân",
+  fil: "Indibidwal", af: "Individue", sw: "Watu binafsi", zu: "Abantu ngabanye", "zh-CN": "个人", "zh-TW": "個人",
+  da: "Privatpersoner", hu: "Magánszemélyek",
+};
+
 const SITE = "https://www.gadit.app";
 
 export type WelcomeLangConfig = {
@@ -1116,6 +1127,8 @@ export function buildWelcomeEmail(
   const productLinks = [
     { label: L.productFamilies, url: `${SITE}${linkPrefix}/families/landing?ref=${partner.code}` },
     { label: L.productSchools, url: `${SITE}${linkPrefix}/schools/landing?ref=${partner.code}` },
+    // Individuals last (Gadi 2026-10-20).
+    { label: PRODUCT_INDIVIDUALS[lang] ?? PRODUCT_INDIVIDUALS.en, url: `${SITE}${linkPrefix}/individuals/landing?ref=${partner.code}` },
   ];
   const linksHint = L.linksHint;
   const dash = `${SITE}/partner/dashboard?t=${partner.dashboardToken}`;
