@@ -8,6 +8,7 @@ import { canStepBack } from "@/lib/back-nav";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { SCHOOL_TYPES, CURRICULA, type Curriculum } from "@/lib/school-levels";
+import { SCHOOL_TYPE_NAMES } from "@/lib/school-types-i18n";
 import { WORD_SETS, getWordSet, registerWordSet, setItems, type WordSet, type SetExtras } from "@/lib/word-sets";
 import {
   CATALOG_IDS, catalogView, readySetsOf, subjectIcon, categoryIcon,
@@ -1935,7 +1936,7 @@ function SchoolTypePicker({ T, uiLang, owner, onSet }: {
   const [cur, setCur] = useState<string>(uiLang === "ar" ? "il-ar" : uiLang === "en" ? "za-caps" : "");
   // A type's name in the picker's language (South African types stay English).
   const typeName = (x: (typeof SCHOOL_TYPES)[number]) =>
-    uiLang === "he" && x.curriculum !== "za-caps" ? x.he : uiLang === "ar" && x.ar ? x.ar : x.en;
+    uiLang === "he" && x.curriculum !== "za-caps" ? x.he : uiLang === "ar" && x.ar ? x.ar : SCHOOL_TYPE_NAMES[uiLang]?.[x.key] ?? x.en;
   const [busy, setBusy] = useState("");
   const [err, setErr] = useState(false);
   const pick = async (type: string) => {
