@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
 import { ClassroomStage } from "@/components/classroom/ClassroomStage";
-import { LEVELS, PARTS, diagramBoard, levelText, projectorByLevel, quoteOf, type Decision, type LevelId, type Meaning, type Part, type PartId } from "@/lib/review-parts";
+import { CATEGORIES, LEVELS, PARTS, diagramBoard, levelText, projectorByLevel, quoteOf, type Decision, type LevelId, type Meaning, type Part, type PartId } from "@/lib/review-parts";
 import type { SetItem, WordSet } from "@/lib/word-sets";
 
 /**
@@ -39,6 +39,7 @@ const ERRORS: Array<[RegExp, string]> = [
   [/fix_needs_a_change_or_a_note/, "בתיקון צריך לשנות נוסח או לכתוב הערה."],
   [/dash/, "בלי מקפים ארוכים (– או —). אפשר פסיק או נקודה."],
   [/answer_1_to_4/, "מספר התשובה הנכונה הוא 1, 2, 3 או 4."],
+  [/category_not_allowed/, `הסיווג הוא אחד מאלה: ${CATEGORIES.join(", ")}.`],
   [/empty/, "שדה נוסח לא יכול להישאר ריק."],
   [/too_long/, "אחד השדות ארוך מדי."],
   [/not_found/, "הגישה לבדיקה נסגרה."],
@@ -351,6 +352,10 @@ function PartCard({ part, x, saved, api, onSaved, label, questions = [], history
                 {f.kind === "bool" ? (
                   <select dir="rtl" value={vals[f.key]} onChange={(e) => setVals({ ...vals, [f.key]: e.target.value })}>
                     <option value="true">נכון</option><option value="false">לא נכון</option>
+                  </select>
+                ) : f.kind === "category" ? (
+                  <select dir="rtl" value={vals[f.key]} onChange={(e) => setVals({ ...vals, [f.key]: e.target.value })}>
+                    {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
                 ) : f.long ? (
                   <textarea dir={f.key === "image_hint" ? "ltr" : "rtl"} rows={2} value={vals[f.key]} onChange={(e) => setVals({ ...vals, [f.key]: e.target.value })} />

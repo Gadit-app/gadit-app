@@ -11,7 +11,7 @@ import type { SetDiagram } from "@/lib/word-sets";
 export type Meaning = Record<string, any>;
 
 export type LevelId = "beg" | "adv" | "yes";
-export type PartId = "definition" | "examples" | "quote" | "visual" | "quiz" | "game" | "diagram" | `level_${LevelId}`;
+export type PartId = "definition" | "category" | "function" | "examples" | "quote" | "visual" | "quiz" | "game" | "diagram" | `level_${LevelId}`;
 /** "clarify" (2026-10-18): the expert needs an answer before deciding. It is
  *  not an approval: the part stays a draft, is never publishable, keeps its
  *  history like any decision and leaves the other parts as they are. */
@@ -23,14 +23,29 @@ export type Field = {
   /** null: shown for context, not editable. */
   set: ((x: Meaning, v: string) => void) | null;
   long?: boolean;
-  /** "answer": 1 to 4; "bool": true / false. */
-  kind?: "answer" | "bool";
+  /** "answer": 1 to 4; "bool": true / false; "category": one of CATEGORIES. */
+  kind?: "answer" | "bool" | "category";
   /** A context field that is left out of the screen when it is empty. */
   hideEmpty?: boolean;
 };
 export type Part = { id: PartId; label: string; fields: Field[] };
 
-export const PART_IDS: PartId[] = ["definition", "examples", "quote", "visual", "quiz", "game", "diagram", "level_beg", "level_adv", "level_yes"];
+export const PART_IDS: PartId[] = ["definition", "category", "function", "examples", "quote", "visual", "quiz", "game", "diagram", "level_beg", "level_adv", "level_yes"];
+
+/**
+ * The proposed category of a meaning (second expert review, 2026-10-20): an Aramaic
+ * word (its linguistic meaning), a Talmudic term (a word or phrase with a job in the
+ * flow of the sugya) or a Talmudic concept (a halachic, legal or ideational idea).
+ * A meaning gets the "category" part only when its content carries a `category`
+ * (like the diagram): reviews loaded without one, such as the first pilot, have no
+ * such part and look exactly as before. The category is a proposal for the expert
+ * to decide on; nothing about it is published to students.
+ */
+export const CATEGORIES = ["מילה ארמית", "מונח תלמודי", "מושג תלמודי"] as const;
+const hasCategory = (x: Meaning) => typeof x.category === "string" && x.category.trim() !== "";
+/** A term's job in the sugya, kept apart from its literal meaning: present only on
+ *  meanings whose content has `termFunction` (give-and-take terms). */
+const hasFunction = (x: Meaning) => !!x.termFunction && typeof x.termFunction === "object";
 
 /**
  * Text per learning level (Gadi 2026-10-17). A level has its own part only when
@@ -104,6 +119,15 @@ export const PARTS: Part[] = [
     { key: "forms", label: "כתיבים וקיצורים של אותה משמעות", get: formsText, set: null, hideEmpty: true },
     { key: "related_phrases", label: "צירופים קשורים (לא כתיב של המילה)", get: (x) => (x.relatedPhrases ?? []).join(", "), set: null, hideEmpty: true },
   ] },
+  { id: "category", label: "סיווג המשמעות (הצעה)", fields: [
+    { key: "category", label: `הסיווג המוצע (${CATEGORIES.join(" / ")})`, get: (x) => String(x.category ?? ""), set: (x, v) => { x.category = v; }, kind: "category" },
+    { key: "category_reason", label: "למה הסיווג הזה", get: (x) => String(x.categoryReason ?? ""), set: (x, v) => { x.categoryReason = v; }, long: true },
+  ] },
+  { id: "function", label: "התפקיד בסוגיה", fields: [
+    { key: "function_literal", label: "הפירוש המילולי", get: (x) => String(x.termFunction?.literal ?? ""), set: (x, v) => { x.termFunction = { ...(x.termFunction ?? {}), literal: v }; }, long: true },
+    { key: "function_role", label: "התפקיד המקובל במהלך הסוגיה", get: (x) => String(x.termFunction?.role ?? ""), set: (x, v) => { x.termFunction = { ...(x.termFunction ?? {}), role: v }; }, long: true },
+    { key: "function_example", label: "דוגמה שממחישה את התפקיד", get: (x) => String(x.termFunction?.example ?? ""), set: (x, v) => { x.termFunction = { ...(x.termFunction ?? {}), example: v }; }, long: true },
+  ] },
   { id: "examples", label: "דוגמאות שלנו", fields: [
     { key: "example_ours_1", label: "דוגמה 1", get: (x) => oursOf(x)[0]?.text ?? "", set: setOurs(0), long: true },
     { key: "example_ours_2", label: "דוגמה 2", get: (x) => oursOf(x)[1]?.text ?? "", set: setOurs(1), long: true },
@@ -134,9 +158,12 @@ export const PARTS: Part[] = [
   ...LEVELS.map((l): Part => ({ id: levelPart(l.id), label: l.label, fields: levelFields(l.id) })),
 ];
 export const partOf = (id: string) => PARTS.find((p) => p.id === id);
-/** The parts of one meaning: the diagram only when it has one, a level only when it has its own text. */
+/** The parts of one meaning: the diagram only when it has one, a level only when it has its own text,
+ *  the category and the term's function only when the content carries them. */
 export const partsFor = (x: Meaning) => PARTS.filter((p) => {
   if (p.id === "diagram") return !!dgOf(x);
+  if (p.id === "category") return hasCategory(x);
+  if (p.id === "function") return hasFunction(x);
   const lv = LEVELS.find((l) => levelPart(l.id) === p.id);
   return lv ? !!levelText(x, lv.id) : true;
 });
@@ -172,6 +199,7 @@ export function checkFixes(part: Part, fixes: Record<string, unknown>): string[]
     if (DASH.test(v)) out.push(`dash:${k}`);
     if (f.kind === "answer" && !/^[1-4]$/.test(v)) out.push(`answer_1_to_4:${k}`);
     if (f.kind === "bool" && v !== "true" && v !== "false") out.push(`true_or_false:${k}`);
+    if (f.kind === "category" && !(CATEGORIES as readonly string[]).includes(v)) out.push(`category_not_allowed:${k}`);
   }
   return out;
 }

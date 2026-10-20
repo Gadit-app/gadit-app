@@ -146,8 +146,9 @@ export async function exportReview(reviewId: string) {
     const line: Record<string, string> = {};
     const present = new Set(partsFor(x).map((p) => p.id));
     for (const p of PARTS) {
-      // A level with no text of its own has no part: nothing to export for it.
-      if (p.id.startsWith("level_") && !present.has(p.id)) continue;
+      // A level with no text of its own has no part, nor does a meaning without a
+      // category or a term function: nothing to export for them.
+      if ((p.id.startsWith("level_") || p.id === "category" || p.id === "function") && !present.has(p.id)) continue;
       const d = parts[p.id];
       if (!d) { line[p.id] = x.approvals?.[p.id]?.status ?? (p.id === "diagram" ? "-" : "draft"); continue; }
       if (d.rev !== x.rev) { problems.push(`${x.m}/${p.id}: decided on rev ${d.rev}, the meaning is rev ${x.rev}: left out`); line[p.id] = "stale"; continue; }
