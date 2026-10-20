@@ -342,6 +342,21 @@ export default function AdminUsersClient() {
   // disabled and shows a spinner until the API responds. Set, not
   // boolean, so concurrent deletes don't fight over one flag.
   const [deletingUids, setDeletingUids] = useState<Set<string>>(new Set());
+  // Inline name editing (Gadi 2026-10-20).
+  const [nameEdit, setNameEdit] = useState<{ uid: string; value: string; busy?: boolean; err?: string } | null>(null);
+  async function saveName() {
+    if (!nameEdit || nameEdit.busy) return;
+    setNameEdit({ ...nameEdit, busy: true, err: "" });
+    try {
+      const r = await fetch("/api/admin/users", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ secret, uid: nameEdit.uid, name: nameEdit.value }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.error || String(r.status));
+      setData((d) => d ? { ...d, users: d.users.map((x) => x.uid === nameEdit.uid ? { ...x, displayName: j.displayName ?? null } : x) } : d);
+      setNameEdit(null);
+    } catch (e) {
+      setNameEdit((n) => n ? { ...n, busy: false, err: String((e as Error).message || e) } : n);
+    }
+  }
   const [upgradingUids, setUpgradingUids] = useState<Set<string>>(new Set());
   const t = STRINGS[adminLang];
 
@@ -754,9 +769,30 @@ export default function AdminUsersClient() {
                           Now the data follows the headers correctly:
                           start-aligned in both languages. */}
                       <td style={{ padding: "12px 16px", color: "#111827", textAlign: "start" }}>
-                        {u.displayName && (
-                          <div style={{ fontWeight: 600, color: "#111827", marginBottom: 2 }}>
-                            {u.displayName}
+                        {nameEdit?.uid === u.uid ? (
+                          <form onSubmit={(e) => { e.preventDefault(); void saveName(); }} style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 4, flexWrap: "wrap" }}>
+                            <input autoFocus value={nameEdit.value} maxLength={80} dir={adminLang === "he" ? "rtl" : "ltr"}
+                              onChange={(e) => setNameEdit({ ...nameEdit, value: e.target.value })}
+                              onKeyDown={(e) => { if (e.key === "Escape") setNameEdit(null); }}
+                              placeholder={adminLang === "he" ? "שם מלא" : "Full name"}
+                              style={{ font: "inherit", fontSize: 13, padding: "4px 8px", border: "1px solid #D1D5DB", borderRadius: 6, minWidth: 140 }} />
+                            <button type="submit" disabled={nameEdit.busy} style={{ fontSize: 12, fontWeight: 600, padding: "4px 10px", borderRadius: 6, border: "1px solid #0E8C8A", background: "#0E8C8A", color: "#fff", cursor: "pointer" }}>
+                              {adminLang === "he" ? "שמירה" : "Save"}
+                            </button>
+                            <button type="button" onClick={() => setNameEdit(null)} style={{ fontSize: 12, padding: "4px 8px", borderRadius: 6, border: "1px solid #D1D5DB", background: "#fff", color: "#374151", cursor: "pointer" }}>
+                              {adminLang === "he" ? "ביטול" : "Cancel"}
+                            </button>
+                            {nameEdit.err && <span style={{ fontSize: 12, color: "#B91C1C" }}>{nameEdit.err}</span>}
+                          </form>
+                        ) : (
+                          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
+                            {u.displayName && <span style={{ fontWeight: 600, color: "#111827" }}>{u.displayName}</span>}
+                            <button type="button" onClick={() => setNameEdit({ uid: u.uid, value: u.displayName ?? "" })}
+                              title={adminLang === "he" ? "עריכת שם" : "Edit name"} aria-label={adminLang === "he" ? "עריכת שם" : "Edit name"}
+                              style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 12, color: "#0E8C8A", background: "transparent", border: 0, padding: 0, cursor: "pointer" }}>
+                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>
+                              {!u.displayName && (adminLang === "he" ? "הוספת שם" : "Add name")}
+                            </button>
                           </div>
                         )}
                         <div style={{ fontWeight: u.displayName ? 400 : 500, color: u.displayName ? "#4B5563" : "#111827" }}>

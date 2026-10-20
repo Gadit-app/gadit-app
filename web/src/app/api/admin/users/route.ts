@@ -258,3 +258,28 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({ counts, users: filtered });
 }
+
+/**
+ * PATCH /api/admin/users  { secret, uid, name }
+ * Sets a person's name from the admin users list (Gadi 2026-10-20, like the
+ * Yooniz admin): Firebase Auth displayName plus the users doc, so every
+ * admin page and the greeting in e-mails read the same name. An empty name
+ * clears it.
+ */
+export async function PATCH(req: NextRequest) {
+  const expected = process.env.ADMIN_SECRET;
+  if (!expected) return NextResponse.json({ error: "ADMIN_SECRET env var not configured" }, { status: 503 });
+  let body: { secret?: unknown; uid?: unknown; name?: unknown };
+  try { body = await req.json(); } catch { return NextResponse.json({ error: "bad_json" }, { status: 400 }); }
+  if (body.secret !== expected) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  const uid = typeof body.uid === "string" ? body.uid.trim() : "";
+  const name = typeof body.name === "string" ? body.name.replace(/\s+/g, " ").trim().slice(0, 80) : "";
+  if (!uid) return NextResponse.json({ error: "uid required" }, { status: 400 });
+  try {
+    await getAdminAuth().updateUser(uid, { displayName: name || null });
+    await getAdminDb().collection("users").doc(uid).set({ displayName: name || null, nameSetBy: "admin", nameSetAt: new Date().toISOString() }, { merge: true });
+    return NextResponse.json({ ok: true, displayName: name || null });
+  } catch (e) {
+    return NextResponse.json({ error: "update_failed", details: String(e).slice(0, 200) }, { status: 500 });
+  }
+}
