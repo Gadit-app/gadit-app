@@ -1,3 +1,4 @@
+import { isNotFoundMeaning } from "@/lib/not-a-word";
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { FREE_NOTEBOOK_MAX } from "@/lib/plan-copy";
@@ -50,10 +51,14 @@ export async function GET(req: NextRequest) {
       .limit(500)
       .get();
 
-    const items = snap.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    // A "not found" lookup saved before 2026-10-20 is not a word: never
+    // listed, so the games never offer it.
+    const items = snap.docs
+      .filter((doc) => !isNotFoundMeaning(doc.data().meaning))
+      .map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
     return NextResponse.json({ items });
   } catch (err) {
@@ -73,6 +78,10 @@ export async function POST(req: NextRequest) {
         { error: "word, language, meaning required" },
         { status: 400 }
       );
+    }
+    // Not a word (the dictionary's "not found / did you mean" answer).
+    if (isNotFoundMeaning(meaning)) {
+      return NextResponse.json({ error: "not_a_word" }, { status: 422 });
     }
 
     const authHeader = req.headers.get("Authorization") || "";
@@ -186,7 +195,7 @@ export async function PUT(req: NextRequest) {
       const word = typeof e.word === "string" ? e.word.trim() : "";
       const language = typeof e.language === "string" ? e.language.trim() : "";
       const meaning = typeof e.meaning === "string" ? e.meaning.trim() : "";
-      if (!word || !language || !meaning) { invalid++; continue; }
+      if (!word || !language || !meaning || isNotFoundMeaning(meaning)) { invalid++; continue; }
       const ref = refs[i];
       if (existingIds.has(ref.id)) { skipped++; continue; }
       batch.set(ref, {

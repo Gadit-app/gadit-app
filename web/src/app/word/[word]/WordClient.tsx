@@ -15,6 +15,7 @@
  * modal layered above the result.
  */
 
+import { isNotAWordResult } from "@/lib/not-a-word";
 import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import { planCopy } from "@/lib/plan-copy";
 import { nativeShareFallback } from "@/lib/native-app";
@@ -1824,6 +1825,8 @@ export function WordClient({
   useEffect(() => {
     // Complete result only — mid-stream result.word is a partial prefix.
     if (loading || !result?.word || !user) return;
+    // A typo the dictionary did not find is not saved (lib/not-a-word.ts).
+    if (isNotAWordResult(result)) return;
     if (autoSavedRef.current === result.word) return;
     autoSavedRef.current = result.word;
     (async () => {
