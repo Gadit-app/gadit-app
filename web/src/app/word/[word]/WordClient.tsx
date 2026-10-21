@@ -2832,7 +2832,7 @@ export function WordClient({
           open={gadOpen}
           onClose={() => setGadOpen(false)}
           word={result.word}
-          meaning={result.meanings[0]?.meaning ?? ""}
+          meaning={(kidsMode || familyRole === "kid") && result.meanings[0]?.kidsExplanation?.explanation ? result.meanings[0].kidsExplanation.explanation : result.meanings[0]?.meaning ?? ""}
           language={result.language}
           single
         />
@@ -2843,7 +2843,7 @@ export function WordClient({
           open={quizOpen}
           onClose={() => setQuizOpen(false)}
           word={result.word}
-          meaning={result.meanings[0]?.meaning ?? ""}
+          meaning={(kidsMode || familyRole === "kid") && result.meanings[0]?.kidsExplanation?.explanation ? result.meanings[0].kidsExplanation.explanation : result.meanings[0]?.meaning ?? ""}
           language={result.language}
         />
       )}

@@ -25,6 +25,8 @@
  */
 
 import { WaitText } from "@/components/WaitText";
+import { QText } from "@/components/play/QText";
+import { useKidsMode } from "@/lib/use-kids-mode";
 import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
@@ -80,10 +82,13 @@ function QuizOption({
   text,
   state,
   onClick,
+  skip,
 }: {
   text: string;
   state: OptionState;
   onClick?: () => void;
+  /** The practiced word: shown, never tappable (it would give the answer). */
+  skip?: string[];
 }) {
   const { lang, dir } = useLang();
   const isHe = lang === "he";
@@ -220,7 +225,7 @@ function QuizOption({
             : {}),
         }}
       >
-        {text}
+        <QText text={text} skip={skip} />
       </div>
     </button>
   );
@@ -416,7 +421,10 @@ export function QuizModalV2({
    *  passed quiz can mark it understood + award comprehension points. */
   language?: string;
 }) {
-  const { user, promptLogin } = useAuth();
+  const { user, promptLogin, familyRole } = useAuth();
+  // Kids Mode or a child's account: questions at a child's level (2026-10-21).
+  const [kidsMode] = useKidsMode();
+  const kids = kidsMode || familyRole === "kid";
   const { lang, dir } = useLang();
   const isRtl = dir === "rtl";
   const isHe = lang === "he";
@@ -517,7 +525,7 @@ export function QuizModalV2({
           "Content-Type": "application/json",
           Authorization: `Bearer ${idToken}`,
         },
-        body: JSON.stringify({ word, meaning, uiLang: lang, count: single ? 1 : 4 }),
+        body: JSON.stringify({ word, meaning, uiLang: lang, count: single ? 1 : 4, kids }),
       });
       if (!res.ok) {
         if (res.status === 402) {
@@ -538,7 +546,7 @@ export function QuizModalV2({
     } finally {
       setLoading(false);
     }
-  }, [user, lang, word, meaning, promptLogin, single]);
+  }, [user, lang, word, meaning, promptLogin, single, kids]);
 
   // Kick off the fetch when modal opens
   useEffect(() => {
@@ -821,7 +829,7 @@ export function QuizModalV2({
                   : {}),
               }}
             >
-              {currentQuestion.prompt}
+              <QText text={currentQuestion.prompt} skip={[word]} />
             </div>
 
             {/* Options */}
@@ -838,6 +846,7 @@ export function QuizModalV2({
                   <QuizOption
                     key={i}
                     text={opt}
+                    skip={[word]}
                     state={state}
                     onClick={() => !revealed && setSelectedIdx(i)}
                   />
@@ -883,7 +892,7 @@ export function QuizModalV2({
                     color: "var(--gd-ink-900)",
                   }}
                 >
-                  {currentQuestion.explanation}
+                  <QText text={currentQuestion.explanation} skip={[word]} />
                 </p>
               </div>
             )}

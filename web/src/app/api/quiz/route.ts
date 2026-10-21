@@ -109,7 +109,7 @@ CRITICAL RULES:
 
 export async function POST(req: NextRequest) {
   try {
-    const { word, meaning, uiLang, count } = await req.json();
+    const { word, meaning, uiLang, count, kids } = await req.json();
     // "Gad it!" on the word page asks ONE quick question (Gadi 2026-10-18).
     const single = count === 1;
     if (!word?.trim() || !meaning?.trim()) {
@@ -139,7 +139,13 @@ User's UI language: ${uiLangName}
 
 ${single
   ? "Generate EXACTLY 1 question (this overrides the count above): Type A, the sentence that uses the word correctly in this meaning. Return a questions array with that one item."
-  : "Generate 4 mixed-type questions about THIS specific meaning."}`;
+  : "Generate 4 mixed-type questions about THIS specific meaning."}${kids === true ? `
+
+THE LEARNER IS A CHILD (about 7 to 12). This overrides everything above about tone and level:
+- Every sentence (question, options, explanation) is short, with simple everyday words a child knows, about a child's world: home, family, school, friends, games, animals, food, a day out. No adult settings (work, office, company, mentoring, workload, taxes, politics).
+- Restate the meaning in very simple words, as you would to a child, never the dictionary wording.
+- Wrong options are clearly wrong in a way a child can see (a silly use, an object use for an idea), never a trick and never a misspelling.
+- The explanation is one or two short, warm sentences.` : ""}`;
 
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
