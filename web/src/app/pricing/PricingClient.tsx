@@ -31,6 +31,7 @@ import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { GadVerbStamp } from "@/components/GadVerbStamp";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useAuth } from "@/lib/auth-context";
+import CheckoutResumeBanner from "@/components/CheckoutResumeBanner";
 import { useHref } from "@/lib/href";
 import { SCHOOLS_TIERS, SCHOOLS_TIER_LIST, IL_SCHOOL_PRICES, studentsUpTo, type SchoolsTierKey } from "@/lib/schools-prices";
 
@@ -4748,6 +4749,7 @@ export function PricingPageRoute() {
       </header>
 
       <main className="wb-pricing-main">
+        <CheckoutResumeBanner />
         <div className="wb-pricing-hero">
           <h1 className="wb-pricing-title">{c.heroTitle}</h1>
           <p className="wb-pricing-sub">{c.heroSub}</p>

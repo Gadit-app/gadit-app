@@ -246,7 +246,7 @@ function isPaused(s: Stripe.Subscription): boolean {
 
 /** Does this subscription have a card (or any payment method) on file? A
  *  trialing sub with no card auto-cancels at trial end and never charges. */
-function subHasCard(s: Stripe.Subscription): boolean {
+export function subHasCard(s: Stripe.Subscription): boolean {
   if (s.default_payment_method) return true;
   const cust = s.customer;
   if (cust && typeof cust === "object" && !("deleted" in cust && cust.deleted)) {

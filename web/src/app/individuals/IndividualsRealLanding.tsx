@@ -6,6 +6,7 @@ import { Lines } from "../families/RealScreens";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { useHref } from "@/lib/href";
 import { useAuth } from "@/lib/auth-context";
+import CheckoutResumeBanner from "@/components/CheckoutResumeBanner";
 import { track } from "@/lib/track";
 import { INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY } from "@/lib/individual-prices";
 import { fill, landingDir, landingFont, landingPrices, screensLang } from "@/lib/landing-i18n";
@@ -80,6 +81,7 @@ export function IndividualsRealLanding({ copy = HE, lang = "he" }: { copy?: IndC
       </header>
 
       <main>
+        <CheckoutResumeBanner />
         <section className="ind-hero">
           <div className="ind-hero-grid">
             <div className="ind-hero-text">

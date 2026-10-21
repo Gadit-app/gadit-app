@@ -20,6 +20,7 @@ import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
+import CheckoutResumeBanner from "@/components/CheckoutResumeBanner";
 import { v2 } from "@/lib/i18n-v2";
 
 /**
@@ -8763,6 +8764,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
       )}
 
       <main>
+        <CheckoutResumeBanner />
         {/* 1 · Hero — for a COLD visitor: category first (badge),
              then the promise (h1), then a plain what-it-is line, then
              the product itself on a phone so it is instantly clear

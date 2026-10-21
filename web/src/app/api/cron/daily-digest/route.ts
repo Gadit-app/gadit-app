@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sendMail } from "@/lib/mail";
 import Stripe from "stripe";
-import { getAdminDb } from "@/lib/firebase-admin";
+import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { summarizeStripeRevenue } from "@/lib/admin-revenue";
 import { emailHeaderHtml, EMAIL_BG } from "@/lib/email-brand";
 import { schoolDayReport, ilDay, type SchoolDay } from "@/lib/school-day-report";
 import { isInternalEmail } from "@/lib/internal-accounts";
+import { collectAbandoned, openCheckouts } from "@/lib/checkout-recovery";
 
 /**
  * Daily digest email to Gadi: yesterday's schools (the words each one looked
@@ -98,6 +99,14 @@ export async function GET(req: NextRequest) {
     rev = await summarizeStripeRevenue(stripe);
   } catch { /* revenue best-effort */ }
 
+  // --- Started and didn't finish (abandoned checkouts, lib/checkout-recovery) ---
+  let abandoned: { total: number; family: number; individual: number } | null = null;
+  try {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+    const open = openCheckouts((await collectAbandoned(stripe, db, getAdminAuth())).candidates).filter((c) => !c.internal);
+    abandoned = { total: open.length, family: open.filter((c) => c.plan === "family").length, individual: open.filter((c) => c.plan === "individual").length };
+  } catch (e) { console.error("[daily-digest] abandoned", e); }
+
   // ---- Email layout (Gadi 2026-10-02: easier to scan, a framed card with
   // clear section headings and big numbers, not one block of text). ----
   const num = (v: string) => `<span dir="ltr" style="unicode-bidi:isolate;">${v}</span>`;
@@ -141,6 +150,7 @@ export async function GET(req: NextRequest) {
       ${tile("בניסיון", `${num(String(rev.trialingCount))}<div style="font-size:11.5px;font-weight:500;color:#6B7280;margin-top:2px;">${rev.trialingCardedCount} עם כרטיס</div>`)}
     </tr></table>
     <div style="margin:10px 4px 0;font-size:13px;color:#6B7280;">הכנסה שנתית צפויה: <b style="color:#0B1220;">${num(usd(rev.arrUsd))}</b></div>
+    ${abandoned ? `<div style="margin:6px 4px 0;font-size:13px;color:#6B7280;">התחילו ולא סיימו: <b style="color:#0B1220;">${num(String(abandoned.total))}</b>${abandoned.total ? ` (Family ${num(String(abandoned.family))}, Individual ${num(String(abandoned.individual))})` : ""}</div>` : ""}
     <div style="margin:12px 4px 0;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:700;${failed
       ? "background:#FEF2F2;border:1px solid #FCD4D4;color:#B91C1C;"
       : "background:#ECFDF5;border:1px solid #CDEFE0;color:#0E7A52;"}">

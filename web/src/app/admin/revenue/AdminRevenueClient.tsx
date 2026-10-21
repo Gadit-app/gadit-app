@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useAdminContext } from "../admin-context";
+import AbandonedCheckouts from "./AbandonedCheckouts";
 
 type Tier = "clear" | "deep" | "individual" | "family" | "schools";
 
@@ -293,6 +294,8 @@ export default function AdminRevenueClient() {
               })}
             </div>
           )}
+
+          <AbandonedCheckouts secret={secret} lang={lang} />
 
           <SubscriberTable title={t.activeTitle} rows={data.active} empty={t.emptyActive} t={t} />
           {data.atRisk.length > 0 && (
