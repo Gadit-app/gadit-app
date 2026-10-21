@@ -43,7 +43,10 @@ const STRIPE_FEEDBACK: Record<string, Stripe.SubscriptionCancelParams.Cancellati
   "It was confusing / hard to use": "too_complex",
   "I found another solution": "switched_service",
   "I don't need it right now": "unused",
+  "Something didn't work (a technical problem)": "other",
 };
+const PAUSE_DAYS = 30;
+const PAUSE_ONCE_PER_MS = 365 * 86_400_000;
 
 function hasCard(sub: Stripe.Subscription): boolean {
   if (sub.default_payment_method) return true;
@@ -56,11 +59,12 @@ function hasCard(sub: Stripe.Subscription): boolean {
   return false;
 }
 
-/** The subscription we'd act on: prefer a trialing one, else an active one. */
+/** The subscription we'd act on: trialing, else active, else past_due. */
 function pickSub(subs: Stripe.Subscription[]): Stripe.Subscription | null {
   return (
     subs.find((s) => s.status === "trialing") ??
     subs.find((s) => s.status === "active") ??
+    subs.find((s) => s.status === "past_due") ??
     null
   );
 }
@@ -74,7 +78,7 @@ export async function POST(req: NextRequest) {
 
     const body = (await req.json().catch(() => ({}))) as { action?: string; reason?: unknown; comment?: unknown };
     const { action } = body;
-    if (!action || !["check", "extend", "cancel"].includes(action)) {
+    if (!action || !["check", "extend", "cancel", "pause", "resume"].includes(action)) {
       return NextResponse.json({ error: "bad_action" }, { status: 400 });
     }
 
@@ -99,9 +103,50 @@ export async function POST(req: NextRequest) {
     const alreadyShown = !!userData.retentionOfferShownAt;
     // The council's exact scope: a card-holding trialer, offered once ever.
     const offerEligible = trialing && carded && !alreadyShown;
+    // A month's break instead of cancelling (as in Yooniz): only for a paying
+    // MONTHLY subscriber, once a year, never on a sub already set to end.
+    const pauseUsedMs = (userData.pauseUsedAt as { toMillis?: () => number } | undefined)?.toMillis?.() ?? 0;
+    const pauseEligible =
+      sub.status === "active" &&
+      sub.items.data[0]?.price?.recurring?.interval === "month" &&
+      !sub.cancel_at_period_end &&
+      !sub.pause_collection &&
+      Date.now() - pauseUsedMs > PAUSE_ONCE_PER_MS;
 
     if (action === "check") {
-      return NextResponse.json({ trialing, hasCard: carded, offerEligible });
+      return NextResponse.json({ trialing, hasCard: carded, offerEligible, pauseEligible });
+    }
+
+    if (action === "pause") {
+      if (!pauseEligible) return NextResponse.json({ error: "not_eligible" }, { status: 409 });
+      const resumesAt = Math.floor((Date.now() + PAUSE_DAYS * 86_400_000) / 1000);
+      // "void": the invoices of the paused month are voided, the plan stays.
+      await stripe.subscriptions.update(sub.id, { pause_collection: { behavior: "void", resumes_at: resumesAt } });
+      await userRef.set(
+        { pauseUsedAt: FieldValue.serverTimestamp(), pausedUntil: resumesAt, retentionOfferOutcome: "paused" },
+        { merge: true },
+      );
+      await db.collection("cancellations").add({
+        uid: userInfo.userId,
+        email: (userData.email as string | undefined) ?? null,
+        subscriptionId: sub.id,
+        type: "pause",
+        reason: typeof body.reason === "string" ? body.reason.slice(0, 120) : null,
+        at: FieldValue.serverTimestamp(),
+      });
+      return NextResponse.json({ ok: true, paused: true, resumesAt });
+    }
+
+    if (action === "resume") {
+      // "I cancelled by mistake": undo a scheduled cancellation. The webhook
+      // sees the change and alerts Gadi once.
+      const scheduled = list.data.find(
+        (s) => (s.status === "active" || s.status === "trialing" || s.status === "past_due") && s.cancel_at_period_end,
+      );
+      if (!scheduled) return NextResponse.json({ error: "nothing_to_resume" }, { status: 409 });
+      await stripe.subscriptions.update(scheduled.id, { cancel_at_period_end: false });
+      await userRef.set({ cancelAtPeriodEnd: false, retentionOfferOutcome: "resumed" }, { merge: true });
+      return NextResponse.json({ ok: true, resumed: true });
     }
 
     if (action === "extend") {

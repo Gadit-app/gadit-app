@@ -360,6 +360,38 @@ async function maybeNotifyScheduledCancel(sub: Stripe.Subscription, event: Strip
 }
 
 /**
+ * "I cancelled by mistake": a scheduled cancellation was undone (the account
+ * page's resume button, or the portal). Alerts Gadi once per sub, and clears
+ * the churn flag so a later cancellation alerts again.
+ */
+async function maybeNotifyUncancel(sub: Stripe.Subscription, event: Stripe.Event) {
+  try {
+    const prev = (event.data as { previous_attributes?: Record<string, unknown> }).previous_attributes;
+    if (!prev || prev.cancel_at_period_end !== true || sub.cancel_at_period_end) return;
+    const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+    const userId = await findUserIdByCustomer(customerId);
+    if (!userId) return;
+    const ref = getAdminDb().collection("users").doc(userId);
+    const snap = await ref.get();
+    if (snap.data()?.uncancelNotifiedSub === sub.id) return;
+    const email = (snap.data()?.email as string | undefined) ?? (sub.metadata?.email as string | undefined) ?? null;
+    const notifyTo = process.env.NOTIFY_EMAIL;
+    if (notifyTo) {
+      const res = await sendMail({
+        from: "Gadit <notify@gadit.app>",
+        to: notifyTo,
+        subject: `✅ Cancellation undone: ${email ?? "(no email)"}`,
+        html: `<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;font-size:15px;color:#111827;padding:20px;"><b>${(email ?? "(none)").replace(/</g, "&lt;")}</b> undid a scheduled cancellation. The subscription continues (${sub.status}).</div>`,
+      });
+      if (res.error) console.error("[webhook] notifyUncancel resend error:", res.error);
+    }
+    await ref.set({ uncancelNotifiedSub: sub.id, canceledNotifiedSub: null }, { merge: true });
+  } catch (e) {
+    console.warn("[webhook] maybeNotifyUncancel failed:", e);
+  }
+}
+
+/**
  * Churn alert for an IMMEDIATE cancellation (customer.subscription.deleted):
  * a user who cancels during a trial, or whose sub ends right away, never
  * flips cancel_at_period_end, so maybeNotifyScheduledCancel above never
@@ -1017,6 +1049,7 @@ export async function POST(req: NextRequest) {
       // Payment-Element subs too. One email the moment a real sub is
       // scheduled to cancel.
       await maybeNotifyScheduledCancel(sub, event);
+      await maybeNotifyUncancel(sub, event);
       // Payment-Element subscriptions (metadata.uid) are provisioned
       // here; hosted-checkout ones fall through to the legacy
       // customer-lookup update below.

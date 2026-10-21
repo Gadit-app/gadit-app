@@ -28,6 +28,8 @@ type AdminUserRow = {
   lastSearchAt: string | null;
   stripeCustomerId: string | null;
   subscriptionStatus: string | null;
+  cancelReason?: string | null;
+  cancelComment?: string | null;
   category?: "basic" | "individual" | "family" | "schools";
   familyId?: string | null;
   internal?: boolean;
@@ -275,6 +277,18 @@ function formatAbsoluteTooltip(iso: string | null, lang: AdminLang): string {
     minute: "2-digit",
   });
 }
+
+// Exit-survey reasons (stored in English) as Gadi reads them.
+const CANCEL_REASON_ADMIN_HE: Record<string, string> = {
+  "I didn't want an automatic charge": "לא רצו חיוב אוטומטי",
+  "I didn't use it enough": "לא השתמשו מספיק",
+  "Too expensive for me": "יקר מדי",
+  "It isn't right for my children": "לא מתאים לילדים",
+  "It was confusing / hard to use": "מבלבל או קשה לשימוש",
+  "Something didn't work (a technical problem)": "בעיה טכנית",
+  "I found another solution": "מצאו פתרון אחר",
+  "I don't need it right now": "לא צריכים כרגע",
+};
 
 function planBadge(row: AdminUserRow): { label: string; bg: string; fg: string } {
   // Family and Schools both store plan="deep" (identical feature set);
@@ -809,6 +823,12 @@ export default function AdminUsersClient() {
                         <span style={{ background: badge.bg, color: badge.fg, padding: "2px 8px", borderRadius: 4, fontSize: 12, fontWeight: 600 }}>
                           {badge.label}
                         </span>
+                        {(u.cancelReason || u.cancelComment) && (
+                          <div style={{ marginTop: 4, fontSize: 11, color: "#B45309", maxWidth: 180, marginInline: "auto" }} title={u.cancelComment ?? ""}>
+                            {(adminLang === "he" ? "סיבת ביטול: " : "Cancel reason: ") + (adminLang === "he" ? (CANCEL_REASON_ADMIN_HE[u.cancelReason ?? ""] ?? u.cancelReason ?? "") : (u.cancelReason ?? ""))}
+                            {u.cancelComment && <div style={{ color: "#6B7280", fontStyle: "italic" }}>“{u.cancelComment.slice(0, 80)}”</div>}
+                          </div>
+                        )}
                         {u.internal && (
                           <div style={{ marginTop: 4, fontSize: 11, color: "#6B7280" }} title={adminLang === "he" ? "חשבון שלנו, לא נספר" : "Our own account, not counted"}>
                             {adminLang === "he" ? "פנימי" : "internal"}
