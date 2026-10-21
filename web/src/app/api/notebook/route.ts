@@ -122,7 +122,13 @@ export async function POST(req: NextRequest) {
       timesCorrect: 0,
     });
 
-    return NextResponse.json({ id: wordId, saved: true });
+    // The notebook's new size, so the page can celebrate every 10th word
+    // (Gadi 2026-10-21). Best effort: a failed count never fails the save.
+    let count: number | undefined;
+    try {
+      count = (await db.collection("users").doc(userInfo.userId).collection("notebook").count().get()).data().count;
+    } catch { /* no milestone this time */ }
+    return NextResponse.json({ id: wordId, saved: true, ...(count !== undefined && { count }) });
   } catch (err) {
     console.error("notebook POST error:", err);
     return NextResponse.json(

@@ -16,6 +16,7 @@
  */
 
 import { isNotAWordResult } from "@/lib/not-a-word";
+import { WordMilestone } from "@/components/design/WordMilestone";
 import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import { planCopy } from "@/lib/plan-copy";
 import { nativeShareFallback } from "@/lib/native-app";
@@ -1822,6 +1823,8 @@ export function WordClient({
   // too, up to their notebook limit (Gadi 2026-10-06); the server answers
   // 402 notebook_full past it and nothing else happens.
   const autoSavedRef = useRef<string>("");
+  // The notebook's size after a new word is saved (WordMilestone, every 10th).
+  const [notebookCount, setNotebookCount] = useState<number | null>(null);
   useEffect(() => {
     // Complete result only — mid-stream result.word is a partial prefix.
     if (loading || !result?.word || !user) return;
@@ -1841,7 +1844,11 @@ export function WordClient({
             meaning: result.meanings[0]?.meaning ?? "",
           }),
         });
-        if (res.ok) setIsSaved(true);
+        if (res.ok) {
+          setIsSaved(true);
+          const j = (await res.json().catch(() => ({}))) as { saved?: boolean; count?: number };
+          if (j.saved && typeof j.count === "number") setNotebookCount(j.count);
+        }
       } catch {
         /* best effort — auto-save must never disturb the reading flow */
       }
@@ -2216,6 +2223,7 @@ export function WordClient({
       dir={dir}
       style={classroomCode ? skinStyleVars(classroomSkin) : undefined}
     >
+      <WordMilestone count={notebookCount} lang={lang} fireworks={familyRole === "kid" || kidsMode} />
       {saveFlash && (
         <div
           className={`wb-save-toast ${saveError ? "is-error" : ""}`}

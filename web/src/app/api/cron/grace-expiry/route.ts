@@ -1,4 +1,4 @@
-import { syncFamilyMembersPlan } from "@/lib/family-plan-sync";
+import { auditPaidAccess, syncFamilyMembersPlan } from "@/lib/family-plan-sync";
 import { NextRequest, NextResponse } from "next/server";
 import { isShabbatIL } from "@/lib/shabbat";
 import Stripe from "stripe";
@@ -99,5 +99,21 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  return NextResponse.json({ checked: snap.size, downgraded: downgraded.length, ids: downgraded, reminded: reminded.length, remindedIds: reminded, dryRun });
+  // Paid access that nobody pays for (lib/family-plan-sync.ts).
+  let audit: Awaited<ReturnType<typeof auditPaidAccess>> | null = null;
+  try {
+    audit = await auditPaidAccess(!dryRun);
+    const to = process.env.NOTIFY_EMAIL;
+    if (!dryRun && resend && to && !isShabbatIL() && (audit.unexplained.length || audit.fixedMembers.length)) {
+      const lines = [
+        ...audit.fixedMembers.map((u) => `<li>Family member moved back to Basic (owner not paying): ${u}</li>`),
+        ...audit.unexplained.map((r) => `<li>Paid plan with no payment: ${r.email || r.uid} (plan ${r.plan}, status ${r.status}). Check in /admin/users.</li>`),
+      ];
+      await resend.emails.send({ from: "Gadit <notify@gadit.app>", to, subject: `Gadit: ${lines.length} account(s) with paid access and no payment`, html: `<p>Daily access check:</p><ul>${lines.join("")}</ul>` });
+    }
+  } catch (e) {
+    console.warn("[grace-expiry] paid-access audit failed:", e);
+  }
+
+  return NextResponse.json({ checked: snap.size, downgraded: downgraded.length, ids: downgraded, reminded: reminded.length, remindedIds: reminded, audit, dryRun });
 }
