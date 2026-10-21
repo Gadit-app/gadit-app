@@ -9,10 +9,14 @@
  * with a Hebrew prefix letter or an English ending.
  */
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type SyntheticEvent } from "react";
 import { useLang } from "@/lib/lang-context";
 import { WordPopover } from "@/components/design/WordPopover";
 import { stripLookupDiacritics, tokenizeWords } from "@/lib/tokenize-words";
+
+/** Keeps a click inside a word's popover (a portal) from reaching whatever
+ *  holds the text, e.g. an answer option button. */
+export const stopBubble = (e: SyntheticEvent) => e.stopPropagation();
 
 const norm = (s: string) => stripLookupDiacritics(s).toLowerCase().normalize("NFC");
 
@@ -58,7 +62,7 @@ export function QText({ text, skip = [], wordLang, context }: {
             aria-haspopup="dialog"
             onClick={(e) => { e.stopPropagation(); setOpen({ word: tok.value, anchor: e.currentTarget }); }}
             onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen({ word: tok.value, anchor: e.currentTarget }); }
+              if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); setOpen({ word: tok.value, anchor: e.currentTarget }); }
             }}
           >
             {tok.value}
@@ -66,15 +70,21 @@ export function QText({ text, skip = [], wordLang, context }: {
         ),
       )}
       {open && (
-        <WordPopover
-          word={open.word}
-          anchor={open.anchor}
-          lang={lang}
-          context={context ?? text}
-          wordLang={wordLang}
-          fullInNewTab
-          onClose={() => setOpen(null)}
-        />
+        // The popover and its full-definition sheet are portals, but React
+        // still bubbles their events up THIS tree: without the stop, a tap on
+        // the popover's close or speaker reached a parent option button and
+        // selected the answer (2026-10-21).
+        <span style={{ display: "contents" }} onClick={stopBubble} onPointerDown={stopBubble} onMouseDown={stopBubble}>
+          <WordPopover
+            word={open.word}
+            anchor={open.anchor}
+            lang={lang}
+            context={context ?? text}
+            wordLang={wordLang}
+            fullInNewTab
+            onClose={() => setOpen(null)}
+          />
+        </span>
       )}
     </>
   );

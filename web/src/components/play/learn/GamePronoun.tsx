@@ -11,6 +11,7 @@ import { PlayHeader, type PlayT } from "../GameQuiz";
 import { GameResult } from "../GameResult";
 import { TTSButton } from "@/components/design/TTSButton";
 import { lessonCopy } from "./lesson-i18n";
+import { QText } from "@/components/play/QText";
 
 export function GamePronoun({ items, onExit, lang, t, audioLang }: {
   items: Array<{ phrase: string; answer: string }>;
@@ -67,7 +68,7 @@ export function GamePronoun({ items, onExit, lang, t, audioLang }: {
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow">{c.pronounPrompt}</div>
         <div className="wb-play-prompt wb-play-prompt-word" dir={textDir} lang={audioLang}>
-          {r.phrase}
+          <span><QText text={r.phrase} wordLang={audioLang} /></span>
           <TTSButton text={r.phrase} audioLang={audioLang} useOpenAI ariaLabel={r.phrase} className="wb-word-act-icon wb-play-speak" />
         </div>
       </div>

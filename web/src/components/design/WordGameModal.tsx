@@ -30,6 +30,7 @@ import { createPortal } from "react-dom";
 import { useAuth } from "@/lib/auth-context";
 import { notifyActivity } from "@/lib/notify-activity-client";
 import { useLang } from "@/lib/lang-context";
+import { QText } from "@/components/play/QText";
 
 type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi" | "am" | "uk" | "tr" | "pl" | "fa" | "id" | "nl" | "el" | "zu" | "vi" | "fil" | "af" | "sw" | "zh-CN" | "zh-TW" | "ko" | "th" | "bn" | "da" | "hu";
 
@@ -937,7 +938,7 @@ export function WordGameModal({ open, onClose, word, language, meaning, examples
               <div className="wb-wgm-eyebrow">{c.anagramEyebrow}</div>
               <div className="wb-wgm-hint">
                 <span className="wb-wgm-hint-label">{c.anagramHintLabel}</span>
-                <span className="wb-wgm-hint-text">{meaning}</span>
+                <span className="wb-wgm-hint-text"><QText text={meaning} skip={[word]} /></span>
               </div>
               <div className={`wb-wgm-slots is-${anagramResult}`}>
                 {slotsRow.map(({ i, tile }) => (
@@ -983,7 +984,7 @@ export function WordGameModal({ open, onClose, word, language, meaning, examples
               <div className="wb-wgm-sentence">
                 {fbSentence.split("____").map((part, i, arr) => (
                   <span key={i}>
-                    {part}
+                    <QText text={part} skip={[word]} context={fbSentence} wordLang={detectLangCode(language)} />
                     {i < arr.length - 1 && (
                       <span className={`wb-wgm-blank ${fbPicked !== null ? "is-revealed" : ""}`}>
                         {fbPicked !== null ? word : ""}

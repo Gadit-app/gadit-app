@@ -13,6 +13,7 @@
 import { WaitText, WaitDots } from "@/components/WaitText";
 import { GaditIcon } from "@/components/design/GaditIcon";
 import { ReportQuestionButton } from "@/components/play/ReportQuestionButton";
+import { QText } from "@/components/play/QText";
 import { useRouter } from "next/navigation";
 import { homeworkCopy } from "@/lib/homework-i18n";
 import { intakeCopy } from "@/lib/homework-intake-i18n";
@@ -1701,7 +1702,7 @@ export function SpellClient() {
         {phase === "quiz" && current && (
           <div style={{ marginTop: 24 }}>
             {/* Which topic this is, on top (Gadi 2026-10-19). */}
-            {set && <h2 className="wb-dict-topic"><span aria-hidden>{set.icon}</span> {setTitle(set)}</h2>}
+            {set && <h2 className="wb-dict-topic"><span aria-hidden>{set.icon}</span> <QText text={setTitle(set)} /></h2>}
             <div className="wb-dict-bar">
               <span dir="ltr" style={{ unicodeBidi: "isolate", display: "inline-block" }}>{idx + 1} / {queue.length}</span>
               {drill === "spell" && <span className="wb-dict-modes" role="radiogroup" aria-label={t("modeType", lang)}>
@@ -1731,8 +1732,11 @@ export function SpellClient() {
                     const right = !!result && norm(o) === norm(pickSide(current));
                     const wrong = result === "wrong" && picked === o;
                     return (
-                      <button key={o} type="button" dir="auto" disabled={!!result} onClick={() => choose(o)}
-                        className={`wb-pick-opt${right ? " is-right" : ""}${wrong ? " is-wrong" : ""}`}>{o}</button>
+                      <button key={o} type="button" dir="auto" aria-disabled={!!result || undefined} onClick={() => { if (!result) choose(o); }}
+                        className={`wb-pick-opt${right ? " is-right" : ""}${wrong ? " is-wrong" : ""}`}>
+                        {/* The words are the answer: tappable only once it is revealed. */}
+                        {result ? <QText text={o} wordLang={pickAudio} /> : o}
+                      </button>
                     );
                   })}
                 </div>

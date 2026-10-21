@@ -15,6 +15,7 @@
 import { useMemo, useState } from "react";
 import { useLang } from "@/lib/lang-context";
 import { WordPopover } from "./WordPopover";
+import { stopBubble } from "@/components/play/QText";
 import { SentencePopover } from "./SentencePopover";
 import { tokenizeWords, wordKey } from "@/lib/tokenize-words";
 
@@ -157,15 +158,19 @@ export function ReaderText({ text, reviewed, onReview, hardKeys, understandLabel
         ))}
       </div>
       {popover && (
-        <WordPopover
-          word={popover.word}
-          anchor={popover.anchor}
-          lang={lang}
-          context={popover.context}
-          wordLang={textLang}
-          fullInNewTab
-          onClose={() => setPopover(null)}
-        />
+        // Portal events still bubble up the React tree: keep a tap inside the
+        // popover from reaching what holds the text (an option button, a card).
+        <span style={{ display: "contents" }} onClick={stopBubble} onPointerDown={stopBubble} onMouseDown={stopBubble}>
+          <WordPopover
+            word={popover.word}
+            anchor={popover.anchor}
+            lang={lang}
+            context={popover.context}
+            wordLang={textLang}
+            fullInNewTab
+            onClose={() => setPopover(null)}
+          />
+        </span>
       )}
       {sentPop && (
         <SentencePopover

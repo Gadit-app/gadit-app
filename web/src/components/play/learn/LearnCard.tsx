@@ -8,6 +8,7 @@ import type { LearnItem, LearnLang, Reads } from "@/lib/learn/engine";
 import { learnCopy } from "./learn-i18n";
 import { lessonCopy } from "./lesson-i18n";
 import type { Lesson } from "./LessonPath";
+import { QText } from "@/components/play/QText";
 
 /**
  * "What are you learning now?" on /play (Gadi 2026-10-11; the council's
@@ -331,7 +332,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
         </div>
         {next && onLesson && (
           <>
-            <div className="wb-learn-simple-next"><span>{lc.nextLesson}:</span> <b>{next.icon} {next.title}</b></div>
+            <div className="wb-learn-simple-next"><span>{lc.nextLesson}:</span> <b>{next.icon} <span><QText text={next.title} /></span></b></div>
             <button type="button" className="wb-learn-simple-go" disabled={busy} onClick={() => void openLesson(next.id)}>{started ? t.cont : lc.startBtn}</button>
           </>
         )}
@@ -374,7 +375,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
               <div className="wb-learn-lesson">
                 <div className="wb-learn-text">
                   <span>{lc.nextLesson}</span>
-                  <b>{next.icon} {next.title}</b>
+                  <b>{next.icon} <span><QText text={next.title} /></span></b>
                 </div>
                 <button type="button" className="wb-learn-btn" disabled={busy} onClick={() => void openLesson(next.id)}>{lc.startBtn}</button>
               </div>
@@ -387,7 +388,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
       {state.lesson && onLesson && (
         <div className="wb-learn-lesson">
           <div className="wb-learn-text">
-            <b>📘 {lc.title(state.lesson.topic)}</b>
+            <b>📘 <span><QText text={lc.title(state.lesson.topic)} /></span></b>
             <span>{lc.meta(state.lesson.items.length)}</span>
           </div>
           <button type="button" className="wb-learn-btn" onClick={() => onLesson(state.lesson!)}>{lc.start}</button>

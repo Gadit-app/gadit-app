@@ -2,7 +2,8 @@
 
 import { WaitText, WaitDots } from "@/components/WaitText";
 import { ReportQuestionButton } from "../ReportQuestionButton";
-import { DuelPrompt, duelOpt } from "./DuelPrompt";
+import { DuelPrompt, DuelOptText } from "./DuelPrompt";
+import { QText } from "../QText";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { avatarUrl } from "@/lib/family";
@@ -172,7 +173,7 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
           {ph.kind === "round" && (
             <div className="duel-timer"><span style={{ width: `${Math.max(0, Math.min(100, ((ph.endsAt - now) / ROUND_MS) * 100))}%` }} /></div>
           )}
-          <DuelPrompt prompt={view.question.prompt} options={view.question.options} />
+          <DuelPrompt prompt={view.question.prompt} options={view.question.options} revealed={ph.kind === "reveal"} />
           <div className="duel-options">
             {view.question.options.map((o, i) => {
               const mine = picked?.round === ph.round ? picked.choice : null;
@@ -184,9 +185,10 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
               const theirs = ph.kind === "reveal" && view.reveal?.[other].choice === i;
               return (
                 <button key={i} type="button" className={cls} dir="auto"
-                  disabled={ph.kind !== "round" || mine != null}
-                  onClick={() => ph.kind === "round" && void answer(ph.round, i)}>
-                  <span>{duelOpt(o)}</span>
+                  // Inert, not `disabled`: once revealed the option's words are tappable.
+                  aria-disabled={ph.kind !== "round" || mine != null || undefined}
+                  onClick={() => ph.kind === "round" && mine == null && void answer(ph.round, i)}>
+                  <span><DuelOptText prompt={view.question?.prompt ?? ""} option={o} revealed={ph.kind === "reveal"} /></span>
                   {theirs && otherP && <span className="duel-their" aria-label={otherP.name}><Face p={otherP} /></span>}
                 </button>
               );
@@ -242,8 +244,8 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
                 <tbody>
                   {view.recap.map((r, i) => (
                     <tr key={i}>
-                      <td className="duel-rt-word"><bdi>{r.prompt}</bdi></td>
-                      <td><bdi>{r.answer}</bdi></td>
+                      <td className="duel-rt-word"><bdi><QText text={r.prompt} /></bdi></td>
+                      <td><bdi><QText text={r.answer} context={r.prompt} /></bdi></td>
                       <td>{mark(r, me)}</td>
                       <td>{mark(r, other)}</td>
                     </tr>

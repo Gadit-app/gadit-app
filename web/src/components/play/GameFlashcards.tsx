@@ -615,12 +615,12 @@ export function GameFlashcards({
               // eslint-disable-next-line @next/next/no-img-element
               <img key={card.key} className="wb-flash-pic" src={pic} alt="" />
             )}
-            <span className={meaningFirst ? "wb-flash-meaning" : "wb-flash-word"} dir="auto">{nq(frontText)}</span>
+            <span className={meaningFirst ? "wb-flash-meaning" : "wb-flash-word"} dir="auto">{meaningFirst ? <QText text={nq(frontText)} skip={[card.word.word]} /> : nq(frontText)}</span>
           </span>
           <span className="wb-flash-face wb-flash-back" aria-hidden={!flipped}>
-            <span className={meaningFirst ? "wb-flash-example" : "wb-flash-backword"} dir="auto">{nq(frontText)}</span>
-            <span className={mode === "words" || meaningFirst ? "wb-flash-word" : "wb-flash-meaning"} dir="auto">{nq(backText)}</span>
-            {example && <span className="wb-flash-example" dir="auto">{nq(example)}</span>}
+            <span className={meaningFirst ? "wb-flash-example" : "wb-flash-backword"} dir="auto">{meaningFirst ? <QText text={nq(frontText)} /> : nq(frontText)}</span>
+            <span className={mode === "words" || meaningFirst ? "wb-flash-word" : "wb-flash-meaning"} dir="auto">{mode === "words" || meaningFirst ? nq(backText) : <QText text={nq(backText)} />}</span>
+            {example && <span className="wb-flash-example" dir="auto"><QText text={nq(example)} wordLang={wordLangOf(card.word)} /></span>}
           </span>
         </span>
       </button>

@@ -213,7 +213,7 @@ export function GameBuildAWord({
       {revealed && (
         <>
           <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-            {r.story}
+            <QText text={r.story} wordLang={contentLang} />
           </div>
           <button type="button" className="wb-play-next" onClick={advance}>
             {idx + 1 >= rounds.length ? t.playFinish : t.playNext}

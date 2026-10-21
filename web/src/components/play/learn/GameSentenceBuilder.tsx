@@ -12,6 +12,7 @@ import { PlayHeader, type PlayT } from "../GameQuiz";
 import { GameResult } from "../GameResult";
 import { TTSButton } from "@/components/design/TTSButton";
 import { lessonCopy } from "./lesson-i18n";
+import { QText } from "@/components/play/QText";
 
 type Round = { sentence: string; tiles: Array<{ id: number; w: string }> };
 
@@ -105,7 +106,7 @@ export function GameSentenceBuilder({ sentences, onExit, lang, t, audioLang }: {
         <div className="wb-sb-reveal">
           <div className={verdict === "right" ? "wb-sb-right" : "wb-sb-wrong"}>{verdict === "right" ? c.buildRight : c.buildWrong}</div>
           <div className="wb-sb-answer" dir={textDir} lang={audioLang}>
-            {r.sentence}
+            <span><QText text={r.sentence} wordLang={audioLang} /></span>
             <TTSButton text={r.sentence} audioLang={audioLang} useOpenAI ariaLabel={r.sentence} className="wb-word-act-icon wb-play-speak" />
           </div>
           <button type="button" className="wb-play-next" onClick={next}>{c.nextBtn}</button>

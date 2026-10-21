@@ -95,7 +95,7 @@ export function GameTrueFalse({ pool, onExit, lang, t }: { pool: PlayWord[]; onE
           <div className={correct ? "wb-tf-right" : "wb-tf-wrong"}>{correct ? c.right : c.wrong}</div>
           {!r.isTrue && (
             <div className="wb-tf-real" dir="auto">
-              <span>{c.real}</span> {nq(r.word.meaning)}
+              <span>{c.real}</span> <QText text={nq(r.word.meaning)} />
             </div>
           )}
           <button type="button" className="wb-play-next" onClick={() => { setAnswer(null); setIdx((n) => n + 1); }}>
@@ -116,5 +116,8 @@ const TF_CSS = `
 .wb-tf-right { font-weight: 800; color: #0b7d7d; font-size: 17px; }
 .wb-tf-wrong { font-weight: 800; color: #b45309; font-size: 17px; }
 .wb-tf-real { font-size: 15px; line-height: 1.55; color: var(--wb-ink, #1f2937); max-width: 52ch; }
-.wb-tf-real span { font-weight: 700; color: #6D28D9; }
+.wb-tf-real > span:first-child { font-weight: 700; color: #6D28D9; }
+/* The meaning after the label is tappable words (spans): keep them the text's
+   own colour, also under the skins' ".wb-tf-real span" label colour. */
+html .wb-tf-real > span ~ span:not(:hover):not(:focus-visible) { color: inherit; }
 `;

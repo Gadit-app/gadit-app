@@ -26,6 +26,7 @@ import { FullWordSheet } from "./FullWordSheet";
 import { useLang } from "@/lib/lang-context";
 import { stripLookupDiacritics } from "@/lib/tokenize-words";
 import type { Lang } from "@/lib/i18n";
+import { QText } from "@/components/play/QText";
 
 type KeyWord = { word: string; meaning: string };
 type State =
@@ -501,7 +502,7 @@ export function PassageKeyWords({ text, lang }: { text: string; lang: Lang }) {
       {gist && (
         <div style={{ marginTop: words.length > 0 ? 14 : 0, paddingTop: 14, borderTop: "1px solid var(--hairline,#EEF1F3)" }}>
           <div style={labelRow}>{t.gistLabel}</div>
-          <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55, color: "var(--ink,#20272E)" }}>{gist}</p>
+          <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55, color: "var(--ink,#20272E)" }}><QText text={gist} /></p>
         </div>
       )}
     </div>

@@ -155,12 +155,14 @@ export function GameMeaningLens({
               key={i}
               type="button"
               className={cls}
-              onClick={() => pick(i)}
-              disabled={picked !== null}
+              onClick={() => { if (picked === null) pick(i); }}
+              // Inert, not `disabled`, once answered: a disabled button eats
+              // the clicks of the option's tappable words.
+              aria-disabled={picked !== null || undefined}
               lang={contentLang}
               dir={contentDir}
             >
-              {caseOpt(opt)}
+              <QText text={caseOpt(opt)} skip={[r.word]} wordLang={contentLang} />
             </button>
           );
         })}
@@ -168,7 +170,7 @@ export function GameMeaningLens({
       {picked !== null && (
         <>
           <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-            {r.story}
+            <QText text={r.story} wordLang={contentLang} />
           </div>
           <button type="button" className="wb-play-next" onClick={advance}>
             {idx + 1 >= rounds.length ? t.playFinish : t.playNext}

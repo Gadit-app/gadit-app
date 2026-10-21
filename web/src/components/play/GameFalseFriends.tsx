@@ -125,7 +125,7 @@ export function GameFalseFriends({
           </div>
           <div className="wb-play-friends-arrow" aria-hidden="true">≈</div>
           <div className="wb-play-friends-english" lang={contentLang} dir={contentDir}>
-            {r.englishTwin}
+            {picked !== null ? <QText text={r.englishTwin} wordLang={contentLang} /> : r.englishTwin}
           </div>
         </div>
       </div>
@@ -155,7 +155,7 @@ export function GameFalseFriends({
       {picked !== null && (
         <>
           <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-            {r.story}
+            <QText text={r.story} wordLang={contentLang} />
           </div>
           <button type="button" className="wb-play-next" onClick={advance}>
             {idx + 1 >= rounds.length ? t.playFinish : t.playNext}

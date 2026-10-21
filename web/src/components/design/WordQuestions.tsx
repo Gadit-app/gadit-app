@@ -22,6 +22,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref, wordPath } from "@/lib/href";
 import ReportButton from "@/components/ReportButton";
+import { TappableText } from "@/components/design/TappableText";
 
 type Plan = "basic" | "clear" | "deep" | "anonymous" | string;
 
@@ -436,7 +437,7 @@ export default function WordQuestions({
                 {cells[open]?.error && (
                   <span style={{ color: "#B91C1C" }}>{pick(ERR, lang)}</span>
                 )}
-                {cells[open]?.answer && <span dir="auto">{cells[open]!.answer}</span>}
+                {cells[open]?.answer && <span dir="auto"><TappableText text={cells[open]!.answer!} skipWord={word} /></span>}
               </>
             )}
           </div>

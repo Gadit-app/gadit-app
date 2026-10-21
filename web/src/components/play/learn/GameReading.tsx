@@ -52,7 +52,7 @@ export function GameReading({ reading, onExit, lang, t, audioLang, dirText }: {
       <PlayHeader title={c.readingTitle} progress={`${idx + 1}/${checks.length}`} score={score} onExit={onExit} t={t} />
       <div className="wb-play-question" style={{ textAlign: "start" }}>
         <div className="wb-play-question-eyebrow" style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "center" }}>
-          {reading.title}
+          <span><QText text={reading.title} wordLang={audioLang} /></span>
           <TTSButton text={reading.text} audioLang={audioLang} useOpenAI ariaLabel={reading.title} className="wb-word-act-icon wb-play-speak" />
         </div>
         <p className="wb-play-sentence" dir={dirText} lang={audioLang} style={{ margin: "10px 0 0", lineHeight: 1.8 }}>
@@ -61,7 +61,7 @@ export function GameReading({ reading, onExit, lang, t, audioLang, dirText }: {
       </div>
       <div className="wb-play-question" style={{ marginTop: 14 }}>
         <div className="wb-play-question-eyebrow">{c.readingAsk}</div>
-        <div className="wb-play-prompt wb-play-prompt-sentence" dir={dirText} lang={audioLang}>{ch.s}</div>
+        <div className="wb-play-prompt wb-play-prompt-sentence" dir={dirText} lang={audioLang}><QText text={ch.s} wordLang={audioLang} /></div>
       </div>
       <div className="wb-play-options wb-play-options-pair">
         {[true, false].map((v) => {

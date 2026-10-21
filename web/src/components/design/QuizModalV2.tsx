@@ -140,7 +140,9 @@ function QuizOption({
     <button
       type="button"
       onClick={interactive ? onClick : undefined}
-      disabled={!interactive}
+      // Not `disabled` once answered: a disabled button swallows the clicks of
+      // its children, and the words of an option stay tappable (2026-10-21).
+      aria-disabled={!interactive || undefined}
       className={`flex items-start gap-3 ${isRtl ? "text-right" : ""} w-full transition-all`}
       style={{
         padding: "16px 18px",

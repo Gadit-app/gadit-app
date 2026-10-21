@@ -120,8 +120,9 @@ export function GameMemory({
               key={card.id}
               type="button"
               className={`wb-play-memcard ${open ? "is-open" : ""} ${isMatched ? "is-matched" : ""} wb-play-memcard-${card.kind}`}
-              onClick={() => tryFlip(card)}
-              disabled={isMatched}
+              onClick={() => { if (!isMatched) tryFlip(card); }}
+              // Inert, not `disabled`: a matched card's words are tappable.
+              aria-disabled={isMatched || undefined}
             >
               <span className="wb-play-memcard-back" aria-hidden={open}>
                 {/* Open book (spine + curved pages). The old two-rectangle
@@ -132,7 +133,7 @@ export function GameMemory({
                 </svg>
               </span>
               <span className="wb-play-memcard-face" aria-hidden={!open}>
-                <span className="wb-play-memcard-facetext" dir="auto">{nq(card.text)}</span>
+                <span className="wb-play-memcard-facetext" dir="auto">{isMatched ? <QText text={nq(card.text)} /> : nq(card.text)}</span>
               </span>
             </button>
           );

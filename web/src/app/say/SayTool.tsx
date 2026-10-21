@@ -22,6 +22,7 @@ import { planCopy } from "@/lib/plan-copy";
 import { TTSButton } from "@/components/design/TTSButton";
 import VoiceInput from "@/components/VoiceInput";
 import { playNotActive } from "@/lib/play-copy";
+import { QText } from "@/components/play/QText";
 
 type Copy = {
   title: string; sub: string; from: string; to: string;
@@ -548,7 +549,7 @@ export function SayTool({ onClose, framed = false }: { onClose?: () => void; fra
               </div>
               <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
                 <div dir={dirOf(result.targetLang)} style={{ fontSize: 26, fontWeight: 700, lineHeight: 1.3, flex: 1 }}>
-                  {result.translation}
+                  <QText text={result.translation} wordLang={result.targetLang} />
                 </div>
                 <TTSButton
                   text={result.translation}
@@ -563,7 +564,7 @@ export function SayTool({ onClose, framed = false }: { onClose?: () => void; fra
               )}
               {result.tip && (
                 <div style={{ marginTop: 16, paddingTop: 14, borderTop: "1px solid var(--rule, #E7E7E2)", fontSize: 14, opacity: 0.8 }}>
-                  <span style={{ fontWeight: 700 }}>{t.tip}: </span>{result.tip}
+                  <span style={{ fontWeight: 700 }}>{t.tip}: </span><QText text={result.tip} wordLang={sourceLang} />
                 </div>
               )}
 
@@ -596,7 +597,7 @@ export function SayTool({ onClose, framed = false }: { onClose?: () => void; fra
                       <div style={{ fontWeight: 700, color: c.fg, fontSize: 15 }}><span aria-hidden="true">{c.ic}</span> {c.msg}</div>
                       {pron.tier !== "correct" && (
                         <div style={{ marginTop: 5, fontSize: 14, opacity: 0.85 }}>
-                          {t.heardLabel}: <span dir={dirOf(result.targetLang)} style={{ fontWeight: 600 }}>{pron.heard}</span>
+                          {t.heardLabel}: <span dir={dirOf(result.targetLang)} style={{ fontWeight: 600 }}><QText text={pron.heard} wordLang={result.targetLang} /></span>
                         </div>
                       )}
                     </div>

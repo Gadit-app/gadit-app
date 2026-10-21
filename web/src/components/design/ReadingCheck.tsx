@@ -21,6 +21,7 @@ import { useKidsMode } from "@/lib/use-kids-mode";
 import { notifyActivity } from "@/lib/notify-activity-client";
 import { readingCheckCopy, fillRc } from "@/lib/reading-check-i18n";
 import { stripLookupDiacritics, tokenizeWords, wordKey } from "@/lib/tokenize-words";
+import { QText } from "@/components/play/QText";
 
 type CheckWord = { word: string; sentence: string; options: string[]; answer: number; explain: string };
 type CheckQuestion = { q: string; options: string[]; answer: number };
@@ -59,17 +60,27 @@ const sheet: CSSProperties = {
   boxSizing: "border-box", width: "100%", minWidth: 0,
 };
 
-/** The sentence with the asked word marked. */
+/** The sentence with the asked word marked. Every other word is tappable
+ *  (in the sense of this sentence); the asked word stays plain, it is the
+ *  question. */
 function Sentence({ sentence, word }: { sentence: string; word: string }) {
   const k = wordKey(word);
   const toks = tokenizeWords(sentence);
+  // Runs of plain text between the marked word(s), each one a QText.
+  const parts: Array<{ mark: boolean; text: string }> = [];
+  for (const t of toks) {
+    const mark = t.type === "word" && wordKey(t.value) === k;
+    const last = parts[parts.length - 1];
+    if (!mark && last && !last.mark) last.text += t.value;
+    else parts.push({ mark, text: t.value });
+  }
   return (
     <p dir="auto" style={{ margin: 0, fontSize: 17, lineHeight: 1.7, color: "var(--ink,#20272E)", textAlign: "start", overflowWrap: "anywhere" }}>
-      {toks.map((t, i) =>
-        t.type === "word" && wordKey(t.value) === k ? (
-          <mark key={i} style={{ background: "rgba(14,165,165,0.22)", color: "inherit", fontWeight: 800, borderRadius: 6, padding: "0 3px", boxShadow: "inset 0 -2px 0 var(--teal,#0EA5A5)" }}>{t.value}</mark>
+      {parts.map((p, i) =>
+        p.mark ? (
+          <mark key={i} style={{ background: "rgba(14,165,165,0.22)", color: "inherit", fontWeight: 800, borderRadius: 6, padding: "0 3px", boxShadow: "inset 0 -2px 0 var(--teal,#0EA5A5)" }}>{p.text}</mark>
         ) : (
-          <span key={i}>{t.value}</span>
+          <span key={i}><QText text={p.text} context={sentence} skip={[word]} /></span>
         ),
       )}
     </p>
@@ -242,7 +253,7 @@ export function ReadingCheck({ text, lang, dir, tapped, hard, fromHw, homeHref, 
           </p>
         </>
       ) : (
-        <p style={{ margin: "0 0 14px", fontSize: kids ? 19 : 18, fontWeight: 800, color: "var(--ink,#20272E)", lineHeight: 1.35 }}>{(item as CheckQuestion).q}</p>
+        <p style={{ margin: "0 0 14px", fontSize: kids ? 19 : 18, fontWeight: 800, color: "var(--ink,#20272E)", lineHeight: 1.35 }}><QText text={(item as CheckQuestion).q} /></p>
       )}
 
       <div role="group" style={{ display: "grid", gap: 10 }}>
@@ -253,8 +264,9 @@ export function ReadingCheck({ text, lang, dir, tapped, hard, fromHw, homeHref, 
             <button
               key={i}
               type="button"
-              onClick={() => pick(i)}
-              disabled={answered}
+              onClick={() => { if (!answered) pick(i); }}
+              // Inert, not `disabled`: the option's words stay tappable.
+              aria-disabled={answered || undefined}
               dir={dir}
               aria-pressed={picked === i}
               style={{
@@ -271,7 +283,7 @@ export function ReadingCheck({ text, lang, dir, tapped, hard, fromHw, homeHref, 
               <span aria-hidden="true" style={{ flex: "none", width: 22, textAlign: "center", fontWeight: 800, color: isRight ? "#16A34A" : isWrongPick ? "#DC2626" : "var(--ink-muted,#9CA3AF)" }}>
                 {isRight ? "✓" : isWrongPick ? "✗" : "•"}
               </span>
-              <span style={{ flex: 1, minWidth: 0 }}>{o}</span>
+              <span style={{ flex: 1, minWidth: 0 }}><QText text={o} skip={isWord ? [(item as CheckWord).word] : []} /></span>
             </button>
           );
         })}
@@ -284,7 +296,7 @@ export function ReadingCheck({ text, lang, dir, tapped, hard, fromHw, homeHref, 
             {correct ? c.right : c.wrong}
           </p>
           {isWord && (
-            <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.55, color: "var(--ink,#20272E)" }}>{(item as CheckWord).explain}</p>
+            <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.55, color: "var(--ink,#20272E)" }}><QText text={(item as CheckWord).explain} skip={[(item as CheckWord).word]} /></p>
           )}
           {isWord && saved.has(wordKey((item as CheckWord).word)) && (
             <p style={{ margin: "8px 0 0", fontSize: 13.5, fontWeight: 600, color: "var(--teal-deep,#0E7490)" }}>✓ {c.saved}</p>

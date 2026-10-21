@@ -119,11 +119,15 @@ export function GameFillBlank({
               key={i}
               type="button"
               className={cls}
-              onClick={() => pick(i)}
-              disabled={picked !== null}
+              onClick={() => { if (picked === null) pick(i); }}
+              // Inert, not `disabled`, once answered: a disabled button eats
+              // the clicks of the option's tappable words.
+              aria-disabled={picked !== null || undefined}
               dir="auto"
             >
-              {nq(caseOpt(opt))}
+              {picked !== null
+                ? <QText text={nq(caseOpt(opt))} context={nq(q.sentence.replace("____", opt))} />
+                : nq(caseOpt(opt))}
             </button>
           );
         })}

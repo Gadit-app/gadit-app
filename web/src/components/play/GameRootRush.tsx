@@ -188,19 +188,21 @@ export function GameRootRush({
             key={i}
             type="button"
             className={tileClass(i)}
-            onClick={() => tap(i)}
-            disabled={roundOver || taps.some((t) => t.tileIdx === i)}
+            onClick={() => { if (!(roundOver || taps.some((t) => t.tileIdx === i))) tap(i); }}
+            // Inert, not `disabled`: a disabled button eats the clicks of the
+            // tile's tappable word once the round is over.
+            aria-disabled={roundOver || taps.some((t) => t.tileIdx === i) || undefined}
             lang={contentLang}
             dir={contentDir}
           >
-            {tile.word}
+            {roundOver ? <QText text={tile.word} wordLang={contentLang} /> : tile.word}
           </button>
         ))}
       </div>
       {roundOver && (
         <>
           <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-            {r.story}
+            <QText text={r.story} wordLang={contentLang} />
           </div>
           <button type="button" className="wb-play-next" onClick={advance}>
             {idx + 1 >= rounds.length ? t.playFinish : t.playNext}

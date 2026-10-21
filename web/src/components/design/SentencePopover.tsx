@@ -17,6 +17,7 @@ import { createPortal } from "react-dom";
 import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth-context";
 import type { Lang } from "@/lib/i18n";
+import { QText } from "@/components/play/QText";
 
 type Props = {
   sentence: string;
@@ -107,6 +108,9 @@ export function SentencePopover({ sentence, anchor, lang, onClose }: Props) {
   // Close on outside click + Escape.
   useEffect(() => {
     const onPointer = (e: PointerEvent) => {
+      // A tap inside the word popover (or full-word sheet) opened from a word
+      // of the explanation is not "outside": closing here would unmount it.
+      if ((e.target as Element | null)?.closest?.('[role="dialog"]')) return;
       if (!popRef.current?.contains(e.target as Node) && !anchor.contains(e.target as Node)) onClose();
     };
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -166,7 +170,7 @@ export function SentencePopover({ sentence, anchor, lang, onClose }: Props) {
       </div>
       <div style={{ fontSize: 15, color: "var(--ink, #0B1220)", lineHeight: 1.6 }}>
         {state.status === "loading" ? <WaitText text={c.loading} />
-          : state.status === "ready" ? state.meaning
+          : state.status === "ready" ? <QText text={state.meaning} />
             : state.status === "login" ? c.login
               : c.error}
       </div>

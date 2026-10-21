@@ -29,6 +29,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { Eyebrow } from "./primitives";
+import { QText } from "@/components/play/QText";
 
 type Script = "latin" | "he" | "ar";
 function scriptFor(lang: string): Script {
@@ -322,7 +323,7 @@ function CardBack({
               : {}),
           }}
         >
-          {entry.meaning}
+          <QText text={entry.meaning} />
         </p>
       </div>
 
@@ -358,7 +359,7 @@ function CardBack({
                   borderInlineStart: "2px solid rgba(14,165,165,0.35)",
                 }}
               >
-                {ex}
+                <QText text={ex} />
               </li>
             ))}
           </ul>

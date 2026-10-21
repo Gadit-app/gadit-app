@@ -484,7 +484,7 @@ export function WordHeader({
             <span className="wb-word-translation-lang">
               {LANGUAGES.find((l) => l.code === lang)?.label ?? lang}
             </span>
-            <span className="wb-word-translation-value">{cleanTranslation}</span>
+            <span className="wb-word-translation-value"><TappableText text={cleanTranslation} /></span>
           </div>
         )}
       </div>
@@ -1126,13 +1126,13 @@ function MeaningEntry({
       {openTab === "kids" && meaning.kidsExplanation && (
         <div className="wb-mpanel">
           {meaning.kidsExplanation.intro && (
-            <div className="wb-kids-intro">{meaning.kidsExplanation.intro}</div>
+            <div className="wb-kids-intro"><TappableText text={meaning.kidsExplanation.intro} skipWord={word} /></div>
           )}
-          <div className="wb-kids-body">{meaning.kidsExplanation.explanation}</div>
+          <div className="wb-kids-body"><TappableText text={meaning.kidsExplanation.explanation} skipWord={word} /></div>
           {(meaning.kidsExplanation.examples ?? []).length > 0 && (
             <div className="wb-kids-ex">
               {(meaning.kidsExplanation.examples ?? []).map((ex, j) => (
-                <div className="wb-kids-ex-item" key={j}>{ex}</div>
+                <div className="wb-kids-ex-item" key={j}><span><TappableText text={ex} skipWord={word} /></span></div>
               ))}
             </div>
           )}
@@ -1356,12 +1356,12 @@ export function IdiomsSection({
           return (
             <div className="wb-midiom" key={j}>
               <div className="wb-midiom-text">
-                <span className="wb-midiom-phrase">{id.phrase}</span>
+                <span className="wb-midiom-phrase"><TappableText text={id.phrase} skipWord={word || undefined} /></span>
                 <span className="wb-midiom-sep">, </span>
                 {/* Words inside the meaning are tappable — a child stuck on a
                     hard word in the explanation can tap it for a quick look
                     (Kids Mode passes kids=1 to the popover). */}
-                <span className="wb-midiom-meaning"><TappableText text={effMeaning} /></span>
+                <span className="wb-midiom-meaning"><TappableText text={effMeaning} skipWord={word || undefined} /></span>
               </div>
               {rowTts && (
                 <TTSButton
@@ -1488,13 +1488,13 @@ export function OriginCard({ etymology, onReport, plan = "basic" }: { etymology:
           {hasMeant && (
             <div className="wb-origin-row">
               <div className="wb-origin-label">{v2(lang, "wordOriginOriginallyMeant")}</div>
-              <div className="wb-origin-value">{originalMeaning}</div>
+              <div className="wb-origin-value"><TappableText text={originalMeaning || ""} /></div>
             </div>
           )}
           {hasStory && (
             <div className="wb-origin-row wb-origin-row-story">
               <div className="wb-origin-label">{v2(lang, "wordOriginBackgroundLabel")}</div>
-              <div className="wb-origin-value">{storyText}</div>
+              <div className="wb-origin-value"><TappableText text={storyText || ""} /></div>
             </div>
           )}
         </div>

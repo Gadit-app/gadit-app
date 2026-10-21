@@ -159,11 +159,17 @@ export function GameSpeed({
               key={i}
               type="button"
               className={cls}
-              onClick={() => pick(i)}
-              disabled={picked !== null}
+              onClick={() => { if (picked === null) pick(i); }}
+              // Inert, not `disabled`, once answered: a disabled button eats
+              // the clicks of the option's tappable words.
+              aria-disabled={picked !== null || undefined}
               dir="auto"
             >
-              {nq(caseOpt(opt))}
+              {/* Meanings are tappable (the answer word stays plain); word options only
+                  once answered, since a tapped word would show its meaning. */}
+              {q.promptKind === "word" || picked !== null
+                ? <QText text={nq(caseOpt(opt))} skip={picked === null ? [q.word.word] : []} />
+                : nq(caseOpt(opt))}
             </button>
           );
         })}

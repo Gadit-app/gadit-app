@@ -219,14 +219,14 @@ export function GameShadeSlider({
             <div className="wb-play-shade-canonical-row">
               {r.canonical.map((w, i) => (
                 <span key={i} className="wb-play-shade-canonical-word">
-                  {w}
+                  <QText text={w} wordLang={contentLang} context={r.canonical.join(", ")} />
                   {i < 4 && <span className="wb-play-shade-canonical-sep">→</span>}
                 </span>
               ))}
             </div>
           </div>
           <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-            {r.story}
+            <QText text={r.story} wordLang={contentLang} />
           </div>
           <button type="button" className="wb-play-next" onClick={advance}>
             {idx + 1 >= rounds.length ? t.playFinish : t.playNext}

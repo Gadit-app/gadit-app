@@ -19,6 +19,7 @@ import type { PlayT } from "./GameQuiz";
 import { getDuelLauncher } from "@/lib/duel-launch";
 import { getLessonNext } from "@/lib/lesson-flow";
 import { notifyActivity } from "@/lib/notify-activity-client";
+import { QText } from "./QText";
 
 export type GameResultData = {
   title: string;
@@ -96,7 +97,7 @@ export function GameResult({
               <li key={i}>
                 <span className="wb-play-result-missed-word">{m.word}</span>
                 <span className="wb-play-result-missed-sep">·</span>
-                <span className="wb-play-result-missed-mean">{m.meaning}</span>
+                <span className="wb-play-result-missed-mean"><QText text={m.meaning} /></span>
               </li>
             ))}
           </ul>

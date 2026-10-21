@@ -21,6 +21,7 @@
  * modal scrolls (single scroll context) — no inner scroll pane.
  */
 
+import { QText } from "@/components/play/QText";
 import { WaitText } from "@/components/WaitText";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
@@ -187,7 +188,7 @@ function FeedbackIndicator({
               : {}),
           }}
         >
-          {message}
+          <QText text={message} />
         </p>
       </div>
     </div>
@@ -254,7 +255,7 @@ function ComposeResult({
                 : {}),
             }}
           >
-            {result.suggestion}
+            <QText text={result.suggestion} />
           </blockquote>
         </div>
       )}
@@ -589,7 +590,7 @@ export function ComposeModalV2({
                     >
                       {i + 1}.
                     </span>
-                    {m}
+                    <QText text={m} skip={[word]} />
                   </button>
                 );
               })}

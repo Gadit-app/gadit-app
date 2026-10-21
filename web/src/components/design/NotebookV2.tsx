@@ -30,6 +30,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { Eyebrow } from "./primitives";
+import { QText } from "@/components/play/QText";
 
 type Script = "latin" | "he" | "ar";
 function scriptFor(lang: string): Script {
@@ -289,7 +290,7 @@ function WordCard({
             : {}),
         }}
       >
-        {entry.meaning}
+        <QText text={entry.meaning} />
       </p>
       {/* mastery dots */}
       <div

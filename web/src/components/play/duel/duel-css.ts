@@ -58,11 +58,11 @@ html[data-theme="dark"] .duel, html:is([data-theme="space"],[data-theme="ocean"]
 .duel-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 @media (max-width: 520px) { .duel-options { grid-template-columns: 1fr; } .duel-prompt { font-size: 26px; } }
 .duel-opt { position: relative; min-height: 64px; padding: 12px 16px; border-radius: 16px; border: 2px solid var(--d-line); background: var(--d-surface); font: inherit; font-size: 17px; font-weight: 700; color: inherit; cursor: pointer; text-align: center; overflow-wrap: anywhere; }
-.duel-opt:hover:not(:disabled) { border-color: var(--d-strong); }
+.duel-opt:hover:not(:disabled):not([aria-disabled="true"]) { border-color: var(--d-strong); }
 .duel-opt.is-picked { border-color: var(--d-strong); background: var(--d-tint); }
 .duel-opt.is-right { border-color: var(--d-good-line); background: var(--d-good-bg); }
 .duel-opt.is-wrong { border-color: var(--d-bad-line); background: var(--d-bad-bg); }
-.duel-opt:disabled { cursor: default; }
+.duel-opt:disabled, .duel-opt[aria-disabled="true"] { cursor: default; }
 .duel-their { position: absolute; inset-inline-end: 6px; top: 6px; }
 .duel-their .duel-face { width: 26px; height: 26px; font-size: 13px; }
 .duel-result { margin: 0; text-align: center; font-weight: 800; font-size: 18px; }

@@ -34,6 +34,7 @@ import { listRecentCached } from "@/lib/offline-db";
 import { SPELL_T_EXTRA } from "@/lib/spell-i18n";
 import { misc } from "@/lib/misc-i18n";
 import { ml } from "@/lib/my-lists-i18n";
+import { QText } from "@/components/play/QText";
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
 const LANGS = LANGUAGES;
@@ -842,7 +843,14 @@ export function NotebookPage() {
                       <span className="wb-notebook-card-lang">{wordLangLabel(item.language, lang)}</span>
                     </div>
                     {item.meaning && (
-                      <p className="wb-notebook-card-meaning">{item.meaning}</p>
+                      <p className="wb-notebook-card-meaning">
+                        {/* Every word of the meaning is tappable; the rest of the
+                            card still opens the word page. A tapped word must not
+                            follow the card's <a>, so its default is prevented. */}
+                        <span onClickCapture={(e) => { if ((e.target as Element).closest?.(".wb-q-word")) e.preventDefault(); }}>
+                          <QText text={item.meaning} />
+                        </span>
+                      </p>
                     )}
                     {offline && (
                       <div className="wb-notebook-card-offline" aria-label="Available offline">

@@ -16,6 +16,7 @@
 import { useMemo, useState } from "react";
 import { useLang } from "@/lib/lang-context";
 import { WordPopover } from "./WordPopover";
+import { stopBubble } from "@/components/play/QText";
 import { tokenizeWords } from "@/lib/tokenize-words";
 import type { Lang } from "@/lib/i18n";
 
@@ -59,16 +60,20 @@ export function TappableText({ text, skipWord }: Props) {
         );
       })}
       {popover && (
-        <WordPopover
-          word={popover.word}
-          anchor={popover.anchor}
-          lang={lang}
-          fromWord={skipWord}
-          // The sentence it was tapped in, so the preview gives THAT sense
-          // ("פי" in "פי שניים" is times, not mouth; Gadi 2026-10-18).
-          context={text}
-          onClose={() => setPopover(null)}
-        />
+        // Portal events still bubble up the React tree: keep a tap inside the
+        // popover from reaching what holds the text (an option button, a card).
+        <span style={{ display: "contents" }} onClick={stopBubble} onPointerDown={stopBubble} onMouseDown={stopBubble}>
+          <WordPopover
+            word={popover.word}
+            anchor={popover.anchor}
+            lang={lang}
+            fromWord={skipWord}
+            // The sentence it was tapped in, so the preview gives THAT sense
+            // ("פי" in "פי שניים" is times, not mouth; Gadi 2026-10-18).
+            context={text}
+            onClose={() => setPopover(null)}
+          />
+        </span>
       )}
     </>
   );
