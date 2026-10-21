@@ -244,9 +244,6 @@ export default function AdminRevenueClient() {
               label={t.cardFuture}
               value={`${data.summary.trialingMrrUsd.toFixed(2)}`}
               accent="#F59E0B"
-              sub={data.summary.trialingCardlessCount > 0
-                ? t.cardlessNote(data.summary.trialingCardedCount, data.summary.trialingCardlessCount, `${data.summary.trialingCardlessMrrUsd.toFixed(2)}`)
-                : undefined}
             />
             <BigCard label={t.cardTotal} value={`$${data.summary.totalMrrUsd.toFixed(2)}`} accent="#7C3AED" />
             <BigCard label={t.cardARR} value={`$${data.summary.arrUsd.toFixed(2)}`} accent="#0E7490" />

@@ -18,7 +18,7 @@ type ByTier = { clear: number; deep: number; individual?: number; family: number
 
 // Mirrors api/admin/overview/attention.ts (kept as a local type so this
 // client never imports server code).
-type AttentionKind = "payment" | "scheduled" | "ended" | "unmapped";
+type AttentionKind = "payment" | "scheduled" | "ended" | "unmapped" | "cardless";
 type AttentionPerson = {
   subId: string;
   email: string | null;
@@ -156,6 +156,9 @@ const STRINGS = {
     aScheduled: "Scheduled cancels",
     aEnded: "Ended this week",
     aUnmapped: "Unmapped prices",
+    aCardless: "Started checkout, no card",
+    dCardless: "Started",
+    dCardless2: "Trial would end",
     // who is behind each chip
     noName: "No name",
     emptyList: "No details to show",
@@ -241,6 +244,9 @@ const STRINGS = {
     aScheduled: "ביטולים מתוזמנים",
     aEnded: "הסתיימו השבוע",
     aUnmapped: "מחירים לא ממופים",
+    aCardless: "התחילו תשלום ולא הזינו כרטיס",
+    dCardless: "התחילו",
+    dCardless2: "הניסיון היה מסתיים",
     noName: "ללא שם",
     emptyList: "אין פרטים להצגה",
     openUser: "במנויים",
@@ -324,6 +330,7 @@ export default function AdminOverviewClient() {
         { kind: "scheduled", label: t.aScheduled, count: al.scheduledCancelCount },
         { kind: "ended", label: t.aEnded, count: al.endedThisWeekCount },
         { kind: "unmapped", label: t.aUnmapped, count: al.unmappedPriceCount },
+        { kind: "cardless", label: t.aCardless, count: al.lists?.cardless?.length ?? 0 },
       ] as const).filter((x) => x.count > 0)
     : [];
   const openItem = alertItems.find((a) => a.kind === openKind) ?? null;
@@ -375,9 +382,6 @@ export default function AdminOverviewClient() {
               <div style={{ fontSize: 14, fontWeight: 700, color: TOKENS.amber, marginTop: 2 }} dir="ltr">{perYear(rev.trialingMrrUsd)}</div>
               <div style={{ fontSize: 12, color: TOKENS.inkSoft, marginTop: 5 }}>{t.pendingSub.replace("%n", String(rev.trialingSubscriptions))}</div>
               <div style={{ fontSize: 11, color: TOKENS.inkFaint, marginTop: 1 }} dir="ltr">{tierBreakdown(rev.trialingByTier)}</div>
-              {rev.trialingCardedCount != null && rev.trialingSubscriptions > 0 && (
-                <div style={{ fontSize: 11, color: TOKENS.inkFaint, marginTop: 1 }}>{t.cardSplit.replace("%a", String(rev.trialingCardedCount)).replace("%b", String(rev.trialingCardlessCount ?? 0))}</div>
-              )}
             </div>
             {/* Total — confirmed + pending, the number Gadi asked for */}
             <div style={{ ...cardStyle, padding: "14px 18px", textAlign: "center", borderColor: TOKENS.purpleBright, background: "rgba(124,58,237,0.06)" }}>
@@ -574,6 +578,7 @@ function AttentionRow({ p, kind, t, lang }: { p: AttentionPerson; kind: Attentio
     kind === "payment" ? [t.dPayment, t.dPayment2] :
     kind === "scheduled" ? [t.dScheduled, t.dScheduled2] :
     kind === "ended" ? [t.dEnded, t.dEnded2] :
+    kind === "cardless" ? [t.dCardless, t.dCardless2] :
     [t.dUnmapped, ""];
   const dates = [
     p.date ? `${l1} ${day(p.date)}` : null,

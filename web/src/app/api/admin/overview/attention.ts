@@ -8,7 +8,7 @@ import type { RevenueSubscriber, StripeRevenue } from "@/lib/admin-revenue";
  * accounts are already left out by summarizeStripeRevenue.
  */
 
-export type AttentionKind = "payment" | "scheduled" | "ended" | "unmapped";
+export type AttentionKind = "payment" | "scheduled" | "ended" | "unmapped" | "cardless";
 
 export type AttentionPerson = {
   subId: string;
@@ -68,7 +68,7 @@ const byDateAsc = (a: AttentionPerson, b: AttentionPerson) => (a.date ?? "").loc
 const byDateDesc = (a: AttentionPerson, b: AttentionPerson) => (b.date ?? "").localeCompare(a.date ?? "");
 
 export function buildAttentionLists(
-  rev: Pick<StripeRevenue, "active" | "atRisk" | "recentlyCanceled">,
+  rev: Pick<StripeRevenue, "active" | "atRisk" | "recentlyCanceled" | "cardlessTrials">,
   look: UserLookup,
 ): Record<AttentionKind, AttentionPerson[]> {
   return {
@@ -90,5 +90,8 @@ export function buildAttentionLists(
       .filter((s) => s.unmappedPrice)
       .map((s) => person(s, look, s.signedUpAt, null))
       .sort(byDateDesc),
+    // Opened checkout and never entered a card: when they started, and the
+    // day Stripe drops the trial.
+    cardless: (rev.cardlessTrials ?? []).map((s) => person(s, look, s.signedUpAt, s.trialEnd)).sort(byDateDesc),
   };
 }

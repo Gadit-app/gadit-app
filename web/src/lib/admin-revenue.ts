@@ -132,6 +132,9 @@ export type StripeRevenue = {
   active: RevenueSubscriber[];      // active + past_due + trialing (for the table)
   atRisk: RevenueSubscriber[];
   recentlyCanceled: RevenueSubscriber[];
+  /** Trials with no card (opened /checkout, never entered one): never in any
+   *  revenue number, listed under "needs attention" (Gadi 2026-10-21). */
+  cardlessTrials: RevenueSubscriber[];
   unmappedPriceIds: string[];
 
   asOf: string;
@@ -301,6 +304,7 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
   const active: RevenueSubscriber[] = [];   // active + past_due + trialing (for the table)
   const atRisk: RevenueSubscriber[] = [];
   const recentlyCanceled: RevenueSubscriber[] = [];
+  const cardlessTrials: RevenueSubscriber[] = [];
   const unmappedPriceIds = new Set<string>();
 
   let mrr = 0;
@@ -457,6 +461,7 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
         if (billing !== "unknown") bump(trialBreak, tier, billing, monthlyUsd);
       } else {
         trialingCardlessMrr += monthlyUsd; trialingCardlessCount += 1;
+        cardlessTrials.push(sub);
       }
     } else if (s.status === "unpaid" || s.status === "incomplete") {
       atRisk.push(sub);
@@ -568,6 +573,7 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
     active,
     atRisk,
     recentlyCanceled,
+    cardlessTrials: cardlessTrials.sort((a, b) => (b.signedUpAt ?? "").localeCompare(a.signedUpAt ?? "")),
     unmappedPriceIds: [...unmappedPriceIds],
     asOf: new Date(now).toISOString(),
     businessTz: BUSINESS_TZ,
