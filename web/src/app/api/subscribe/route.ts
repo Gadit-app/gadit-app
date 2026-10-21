@@ -177,6 +177,16 @@ export async function POST(req: NextRequest) {
       discounts = [{ promotion_code: promo.id }];
     }
 
+    // A family member (a child or the second parent) rides on the owner's
+    // subscription and never starts one of their own (2026-10-21: a child's
+    // device opened checkout and left a nameless card-less subscription).
+    {
+      const me = (await getAdminDb().collection("users").doc(uid).get()).data();
+      if (typeof me?.familyId === "string" && me.familyId && me.familyId !== uid) {
+        return NextResponse.json({ error: "already_subscribed", family: true }, { status: 409 });
+      }
+    }
+
     const customer = await resolveCustomer(uid, email);
     const utmMeta = await resolveUtmMeta(uid, utm);
 
