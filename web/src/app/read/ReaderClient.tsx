@@ -13,6 +13,7 @@ import { ReadingCheck } from "@/components/design/ReadingCheck";
 import { GuideButton } from "@/components/GuideButton";
 import { distinctWordCount, tokenizeWords, wordKey } from "@/lib/tokenize-words";
 import { readingCheckCopy } from "@/lib/reading-check-i18n";
+import { notifyActivity } from "@/lib/notify-activity-client";
 import { type Lang } from "@/lib/i18n";
 import { misc } from "@/lib/misc-i18n";
 import { homeworkCopy } from "@/lib/homework-i18n";
@@ -857,7 +858,10 @@ export function ReaderClient() {
             </div>
             {/* Done reading: check the words and the content (everyone, not
                 only from Homework). The way back to Homework comes after it. */}
-            <div style={{ display: "flex", justifyContent: "center", marginTop: 18 }}>
+            {/* Two ways out (Gadi 2026-10-21): the check is offered, never
+                forced. "Done reading" ends without it (back to Homework, the
+                parent still hears about the reading, or a new text). */}
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, flexWrap: "wrap", marginTop: 18 }}>
               <button
                 type="button"
                 onClick={startCheck}
@@ -865,6 +869,18 @@ export function ReaderClient() {
               >
                 {rc.start}
               </button>
+              {fromHw ? (
+                <Link href={href("/homework")}
+                  onClick={() => void notifyActivity(user, { kind: "read", label: text.trim().split(/\s+/).slice(0, 6).join(" ") })}
+                  style={{ background: "var(--card,#fff)", color: "var(--teal-deep,#0E7490)", border: "1.5px solid var(--teal,#0EA5A5)", borderRadius: 14, padding: "12px 22px", fontSize: 15.5, fontWeight: 700, textDecoration: "none", fontFamily: "inherit", maxWidth: "100%" }}>
+                  {hc.doneRead}
+                </Link>
+              ) : (
+                <button type="button" onClick={resetText}
+                  style={{ background: "var(--card,#fff)", color: "var(--teal-deep,#0E7490)", border: "1.5px solid var(--teal,#0EA5A5)", borderRadius: 14, padding: "12px 22px", fontSize: 15.5, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", maxWidth: "100%" }}>
+                  {hc.doneRead}
+                </button>
+              )}
             </div>
             {/* "Found a mistake?" here too (Gadi 2026-10-17): the key words, the
                 gist and any open explanation go with the report. */}
