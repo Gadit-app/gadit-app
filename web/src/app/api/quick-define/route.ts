@@ -93,7 +93,7 @@ async function generatePreview(
   context?: string,
   feature = "quick_define",
   kids = false,
-): Promise<{ meaning: string; example: string } | null> {
+): Promise<{ meaning: string; example: string; translation: string } | null> {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return null;
   const langName = UI_LANG_NAMES[langCode] ?? "English";
@@ -106,8 +106,8 @@ async function generatePreview(
   // passage), define the word AS USED IN THIS SENTENCE — that is Gadit's whole
   // promise, the RIGHT meaning for the context, not the generic first one.
   const systemPrompt = context
-    ? `You are a fast dictionary. Define the given word AS IT IS USED IN THE PROVIDED SENTENCE: choose the sense that fits this exact context and IGNORE the word's other meanings. Return STRICT JSON: {"meaning":"15-25 word definition of the word in THIS context","example":"one short sentence using the word in the SAME sense"}. Write BOTH fields in ${langName}.${kidsClause} Keep the word itself in its original script. No markdown, no extra keys, no preamble.`
-    : `You are a fast dictionary. For the given word, return STRICT JSON: {"meaning":"15-25 word definition","example":"one short sentence using the word"}. Write BOTH fields in ${langName}.${kidsClause} Keep the word itself in its original script if multilingual. No markdown, no extra keys, no preamble.`;
+    ? `You are a fast dictionary. Define the given word AS IT IS USED IN THE PROVIDED SENTENCE: choose the sense that fits this exact context and IGNORE the word's other meanings. Return STRICT JSON: {"meaning":"15-25 word definition of the word in THIS context","example":"one short sentence using the word in the SAME sense","translation":"ONLY if the word is NOT in ${langName}: its equivalent in ${langName} as used in this sentence, one word or a very short phrase in the matching form (English 'hesitated' for Hebrew = 'היסס'); empty string when the word is already in ${langName}"}. Write meaning and example in ${langName}.${kidsClause} Keep the word itself in its original script. No markdown, no extra keys, no preamble.`
+    : `You are a fast dictionary. For the given word, return STRICT JSON: {"meaning":"15-25 word definition","example":"one short sentence using the word","translation":"ONLY if the word is NOT in ${langName}: its most common equivalent in ${langName}, one word or a very short phrase; empty string when the word is already in ${langName}"}. Write meaning and example in ${langName}.${kidsClause} Keep the word itself in its original script if multilingual. No markdown, no extra keys, no preamble.`;
   const userMsg = context ? `Word: ${word}\nSentence: ${context}` : `Word: ${word}`;
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -135,10 +135,13 @@ async function generatePreview(
     void logAiUsage({ feature, model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
     const raw = data.choices?.[0]?.message?.content ?? "";
     if (!raw) return null;
-    const parsed = JSON.parse(raw) as { meaning?: string; example?: string };
+    const parsed = JSON.parse(raw) as { meaning?: string; example?: string; translation?: string };
+    const tr = typeof parsed.translation === "string" ? parsed.translation.trim().slice(0, 60) : "";
     return {
       meaning: typeof parsed.meaning === "string" ? parsed.meaning : "",
       example: typeof parsed.example === "string" ? parsed.example : "",
+      // Never echo the word back as its own "translation".
+      translation: tr && tr.toLowerCase() !== word.toLowerCase() ? tr : "",
     };
   } catch (e) {
     console.warn("[quick-define] live generation failed:", e);
@@ -159,25 +162,25 @@ async function cachedPreview(
   context: string | undefined,
   feature: string,
   kids = false,
-): Promise<{ meaning: string; example: string } | null> {
+): Promise<{ meaning: string; example: string; translation: string } | null> {
   const db = getAdminDb();
   const key = crypto
     .createHash("sha256")
-    .update(`pv1:${kids ? "k:" : ""}${lang}:${word.toLowerCase()}:${context ?? ""}`)
+    .update(`pv2:${kids ? "k:" : ""}${lang}:${word.toLowerCase()}:${context ?? ""}`)
     .digest("hex")
     .slice(0, 40);
   const ref = db.collection("previewCache").doc(key);
   try {
     const snap = await ref.get();
     if (snap.exists) {
-      const d = snap.data() as { meaning?: string; example?: string } | undefined;
-      if (d && (d.meaning || d.example)) return { meaning: d.meaning ?? "", example: d.example ?? "" };
+      const d = snap.data() as { meaning?: string; example?: string; translation?: string } | undefined;
+      if (d && (d.meaning || d.example)) return { meaning: d.meaning ?? "", example: d.example ?? "", translation: d.translation ?? "" };
     }
   } catch { /* cache read best-effort */ }
   const preview = await generatePreview(word, lang, context, feature, kids);
   if (preview && (preview.meaning || preview.example)) {
     try {
-      await ref.set({ word, lang, context: context ?? "", meaning: preview.meaning, example: preview.example, at: new Date().toISOString() });
+      await ref.set({ word, lang, context: context ?? "", meaning: preview.meaning, example: preview.example, translation: preview.translation, at: new Date().toISOString() });
     } catch { /* cache write best-effort */ }
     return preview;
   }
@@ -210,7 +213,7 @@ export async function GET(req: NextRequest) {
     const preview = await cachedPreview(word, lang, context, "reader_word_tap", kids);
     if (preview && (preview.meaning || preview.example)) {
       return NextResponse.json(
-        { word, language: "", meaning: preview.meaning, example: preview.example, hasMore: false, generated: true, contextual: true },
+        { word, language: "", meaning: preview.meaning, example: preview.example, translation: preview.translation, hasMore: false, generated: true, contextual: true },
         { headers: { "Cache-Control": "public, max-age=600" } },
       );
     }
@@ -243,7 +246,7 @@ export async function GET(req: NextRequest) {
     const preview = await cachedPreview(word, lang, undefined, "quick_define_kids", true);
     if (preview && (preview.meaning || preview.example)) {
       return NextResponse.json(
-        { word, language: "", meaning: preview.meaning, example: preview.example, hasMore: false, generated: true },
+        { word, language: "", meaning: preview.meaning, example: preview.example, translation: preview.translation, hasMore: false, generated: true },
         { headers: { "Cache-Control": "public, max-age=300" } },
       );
     }
@@ -281,6 +284,7 @@ export async function GET(req: NextRequest) {
             word,
             language: "",
             meaning: preview.meaning,
+            translation: preview.translation,
             example: preview.example,
             hasMore: false,
             generated: true,
@@ -301,6 +305,7 @@ export async function GET(req: NextRequest) {
           word?: string;
           language?: string;
           meanings?: Array<{ meaning?: string; examples?: string[] }>;
+          translation?: string | null;
         }
       | undefined;
     const meanings = Array.isArray(data?.meanings) ? data!.meanings : [];
@@ -317,6 +322,7 @@ export async function GET(req: NextRequest) {
         language: data?.language ?? "",
         meaning: firstMeaning,
         example: firstExample,
+        translation: typeof data?.translation === "string" ? data.translation : "",
         hasMore: meanings.length > 1,
       },
       {

@@ -51,7 +51,7 @@ type Props = {
 
 type QuickDef =
   | { status: "loading" }
-  | { status: "ready"; meaning: string; example: string; language: string }
+  | { status: "ready"; meaning: string; example: string; language: string; translation?: string }
   | { status: "not-cached" }
   | { status: "error" };
 
@@ -173,12 +173,13 @@ export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTa
           setDef({ status: "error" });
           return;
         }
-        const json = (await res.json()) as { meaning?: string; example?: string; language?: string };
+        const json = (await res.json()) as { meaning?: string; example?: string; language?: string; translation?: string };
         setDef({
           status: "ready",
           meaning: json.meaning ?? "",
           example: json.example ?? "",
           language: json.language ?? "",
+          translation: json.translation ?? "",
         });
       } catch {
         if (!cancelled) setDef({ status: "error" });
@@ -282,6 +283,13 @@ export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTa
           {/* Hear the word pronounced in its OWN language (feature: listen to
               any word inside a reader passage). Web Speech, free. */}
           <TTSButton text={word} audioLang={wordLang} ariaLabel={LISTEN[lang] ?? LISTEN.en} />
+          {/* A word in another language: its equivalent in the reader's
+              language right beside it ("hesitated 🔊 היסס", Gadi 2026-10-21). */}
+          {def.status === "ready" && def.translation && (
+            <span dir="auto" style={{ fontSize: 17, fontWeight: 700, color: "var(--teal-deep, #0A7472)", overflowWrap: "anywhere" }}>
+              {def.translation}
+            </span>
+          )}
         </div>
         {/* Explicit close, so tapping a word and getting back to the text is one
             obvious tap (not only an outside-click), especially on touch. */}
