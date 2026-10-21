@@ -9,12 +9,13 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { ReaderText } from "@/components/design/ReaderText";
 import { PassageKeyWords } from "@/components/design/PassageKeyWords";
+import { ReadingCheck } from "@/components/design/ReadingCheck";
 import { GuideButton } from "@/components/GuideButton";
-import { distinctWordCount, wordKey } from "@/lib/tokenize-words";
+import { distinctWordCount, tokenizeWords, wordKey } from "@/lib/tokenize-words";
+import { readingCheckCopy } from "@/lib/reading-check-i18n";
 import { type Lang } from "@/lib/i18n";
 import { misc } from "@/lib/misc-i18n";
 import { homeworkCopy } from "@/lib/homework-i18n";
-import { notifyActivity } from "@/lib/notify-activity-client";
 import { ReportQuestionButton } from "@/components/play/ReportQuestionButton";
 import { playNotActive } from "@/lib/play-copy";
 
@@ -471,6 +472,34 @@ export function ReaderClient() {
     return () => { cancelled = true; };
   }, [text, user, lang]);
 
+  // The reading check ("done reading, let's check", Gadi 2026-10-20): the
+  // words the child tapped plus a few hard ones they did not, then questions
+  // on the content. Null while reading.
+  const [check, setCheck] = useState<{ tapped: string[]; hard: string[]; n: number } | null>(null);
+  const rc = readingCheckCopy(lang);
+
+  function startCheck() {
+    // Each distinct word once, as it first appears in the text.
+    const forms = new Map<string, string>();
+    for (const tk of tokenizeWords(text)) {
+      if (tk.type !== "word") continue;
+      const k = wordKey(tk.value);
+      if (!forms.has(k)) forms.set(k, tk.value);
+    }
+    const order = [...forms.keys()];
+    const tappedKeys = order.filter((k) => reviewed.has(k));
+    // More than 8 tapped: the hard ones first, then in reading order.
+    const tapped = [...tappedKeys.filter((k) => hardKeys.has(k)), ...tappedKeys.filter((k) => !hardKeys.has(k))].slice(0, 8);
+    const hard = order.filter((k) => hardKeys.has(k) && !reviewed.has(k)).slice(0, 3);
+    setCheck({ tapped: tapped.map((k) => forms.get(k)!), hard: hard.map((k) => forms.get(k)!), n: Date.now() });
+    try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch { /* ignore */ }
+  }
+
+  function endCheck() {
+    setCheck(null);
+    try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch { /* ignore */ }
+  }
+
   function markReviewed(word: string) {
     const key = wordKey(word);
     setReviewed((prev) => {
@@ -490,6 +519,7 @@ export function ReaderClient() {
   }
 
   function resetText() {
+    setCheck(null);
     setText("");
     setDraft("");
     setReviewed(new Set());
@@ -773,6 +803,20 @@ export function ReaderClient() {
               <p style={{ marginTop: 12, color: "#B91C1C", fontSize: 14 }}>{t.ocrError}</p>
             )}
           </div>
+        ) : check ? (
+          // The reading check, in place of the text.
+          <ReadingCheck
+            key={check.n}
+            text={text}
+            lang={lang}
+            dir={dir}
+            tapped={check.tapped}
+            hard={check.hard}
+            fromHw={fromHw}
+            homeHref={href("/homework")}
+            homeLabel={hc.home}
+            onReadAgain={endCheck}
+          />
         ) : (
           // Reading state.
           <div>
@@ -811,15 +855,22 @@ export function ReaderClient() {
                 <ReaderText text={text} reviewed={reviewed} onReview={markReviewed} hardKeys={hardKeys} understandLabel={t.understandSentence ?? READER_COPY.en.understandSentence} />
               </div>
             </div>
+            {/* Done reading: check the words and the content (everyone, not
+                only from Homework). The way back to Homework comes after it. */}
+            <div style={{ display: "flex", justifyContent: "center", marginTop: 18 }}>
+              <button
+                type="button"
+                onClick={startCheck}
+                style={{ background: "var(--teal,#0EA5A5)", color: "#fff", border: "none", borderRadius: 14, padding: "14px 26px", fontSize: 16.5, fontWeight: 800, cursor: "pointer", fontFamily: "inherit", maxWidth: "100%" }}
+              >
+                {rc.start}
+              </button>
+            </div>
             {/* "Found a mistake?" here too (Gadi 2026-10-17): the key words, the
                 gist and any open explanation go with the report. */}
             <div style={{ display: "flex", justifyContent: "center", marginTop: 14 }}>
               <ReportQuestionButton where="read" snapshot={() => ({ text: (document.querySelector("main")?.innerText || "").slice(0, 3000) })} />
             </div>
-            {fromHw && (
-              <Link href={href("/homework")} className="wb-hw-done"
-                onClick={() => void notifyActivity(user, { kind: "read", label: text.trim().split(/\s+/).slice(0, 6).join(" ") })}>{hc.doneRead}</Link>
-            )}
           </div>
         )}
       </div>

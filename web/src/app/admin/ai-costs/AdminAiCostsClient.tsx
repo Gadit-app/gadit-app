@@ -67,6 +67,7 @@ const FEATURE_LABELS: Record<string, { he: string; en: string; note?: { he: stri
   spell_set_list: { he: "רשימת כתיב", en: "Spelling list" },
   play_pairs: { he: "משחק זוגות", en: "Pairs game" },
   passage_words: { he: "מילים מטקסט", en: "Passage words" },
+  reading_check: { he: "בדיקת הבנה אחרי קריאה", en: "Reading check" },
   image_classroom: { he: "תמונה (כיתה)", en: "Image (classroom)" },
   image_pick: { he: "תמונה (הקשיבו ובחרו תמונה)", en: "Image (listen and pick the picture)", note: { he: "פעם אחת לכל מילה", en: "once per word" } },
   curriculum_set: { he: "סט מתוכנית לימודים", en: "Curriculum set" },
