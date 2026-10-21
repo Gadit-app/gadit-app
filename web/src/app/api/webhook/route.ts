@@ -1,3 +1,4 @@
+import { syncFamilyMembersPlan } from "@/lib/family-plan-sync";
 import { isIndividualPriceId } from "@/lib/individual-prices";
 import { NextRequest, NextResponse } from "next/server";
 import { sendMail } from "@/lib/mail";
@@ -526,7 +527,9 @@ async function applyPlanToUser(
     { merge: true }
   );
   console.log(`[webhook] user ${userId} -> plan=${plan}`);
+  await syncFamilyMembersPlan(userId, plan);
 }
+
 
 async function findUserIdByCustomer(customerId: string): Promise<string | null> {
   const db = getAdminDb();

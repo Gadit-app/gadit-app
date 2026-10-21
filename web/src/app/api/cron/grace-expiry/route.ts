@@ -1,3 +1,4 @@
+import { syncFamilyMembersPlan } from "@/lib/family-plan-sync";
 import { NextRequest, NextResponse } from "next/server";
 import { isShabbatIL } from "@/lib/shabbat";
 import Stripe from "stripe";
@@ -93,6 +94,7 @@ export async function GET(req: NextRequest) {
           { plan: "basic", graceExpiredAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
           { merge: true }
         );
+        await syncFamilyMembersPlan(doc.id, "basic");
       }
     }
   }

@@ -1,3 +1,4 @@
+import { syncFamilyMembersPlan } from "@/lib/family-plan-sync";
 import { isIndividualPriceId } from "@/lib/individual-prices";
 import { isNewSchoolsPrice } from "@/lib/schools-prices";
 import { NextRequest, NextResponse } from "next/server";
@@ -222,6 +223,7 @@ export async function POST(req: NextRequest) {
           { plan: "basic", subscriptionStatus: "canceled", updatedAt: new Date().toISOString() },
           { merge: true },
         );
+        await syncFamilyMembersPlan(doc.id, "basic");
       }
     }
   }

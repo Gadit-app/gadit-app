@@ -283,7 +283,12 @@ function planBadge(row: AdminUserRow): { label: string; bg: string; fg: string }
   // Four categories (Gadi 2026-10-10): the legacy Clear and Deep plans are
   // both Individual.
   if (row.category === "schools" || (!row.category && row.isSchool)) return { label: "Schools", bg: "#FEF3C7", fg: "#92400E" };
-  if (row.category === "family" || (!row.category && row.isFamily)) return { label: "Family",  bg: "#DBEAFE", fg: "#1D4ED8" };
+  if (row.category === "family" || (!row.category && row.isFamily)) {
+    // An owner whose subscription ended keeps the family (and its data), but
+    // is not a paying Family any more (Gadi 2026-10-21).
+    const ended = row.plan === "basic" && !["active", "trialing", "past_due"].includes(String(row.subscriptionStatus ?? ""));
+    return ended ? { label: "Family · ended", bg: "#F3F4F6", fg: "#6B7280" } : { label: "Family",  bg: "#DBEAFE", fg: "#1D4ED8" };
+  }
   if (row.plan === "deep" || row.plan === "clear") return { label: "Individual", bg: "#EDE9FE", fg: "#5B21B6" };
   return { label: "Basic", bg: "#F3F4F6", fg: "#4B5563" };
 }
