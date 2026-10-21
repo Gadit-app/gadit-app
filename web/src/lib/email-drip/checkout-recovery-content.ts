@@ -1,17 +1,24 @@
-import { renderEmailHtmlV2, mdLiteToHtml, applyName } from "./render";
-import { isIndividualPriceId, INDIVIDUAL_YEARLY } from "@/lib/individual-prices";
+import { renderEmailHtmlV2, mdLiteToHtml, applyName, type EmailContent } from "./render";
+import { isIndividualPriceId, INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY } from "@/lib/individual-prices";
+import { planCopy } from "@/lib/plan-copy";
 
 /**
  * Copy of the abandoned-checkout recovery emails (Gadi 2026-10-21): three
- * mails to someone who opened /checkout and never entered a card. Hebrew and
- * English are written; every other language falls back to English until its
- * table is added (one more key in RECOVERY_CONTENT, nothing else changes).
+ * mails to someone who opened /checkout and never entered a card. These are
+ * the CODE DEFAULTS in Hebrew and English. The admin email editor (series
+ * "Checkout recovery") edits them per language; a saved override in
+ * emailTemplates/{key} wins (email-templates-store.ts), and a language with
+ * no translation saved there gets the English email. The cron sends the
+ * effective content, so whatever is saved in the editor is what goes out.
  *
  * Body is the markdown-lite of the drip emails (render.ts): blank line = new
  * paragraph, "- " lines = a list (shown here as bullets), **bold**.
- * Placeholders: {שם}/{name} first name (drops cleanly when unknown), {plan}
- * the plan name ("Gadit Family"), {price} the price after the trial. A line
- * holding {price} is removed when the price is unknown (legacy plans).
+ * Placeholders (shown literally in the editor, filled by the sender):
+ * {שם}/{name} first name (drops cleanly when unknown), {plan} the plan name
+ * ("Gadit Family"), {price} the price after the trial ("₪19.90 לחודש"). A
+ * line holding {price} is removed when the price is unknown (legacy plans).
+ * The button always links to the person's own checkout (recoveryCheckoutUrl);
+ * only its text is editable.
  *
  * Facts used (verified in code 2026-10-21): 14-day trial with no charge
  * today (subscribe/route.ts), a billing reminder email before the trial
@@ -32,7 +39,7 @@ type LangContent = {
   e3: Mail;
 };
 
-export const RECOVERY_CONTENT: Record<string, LangContent> = {
+const BY_LANG: Record<"he" | "en", LangContent> = {
   he: {
     e1: {
       subject: "שמרנו לכם את המקום ב-Gadit",
@@ -139,8 +146,45 @@ Your {plan} signup is still saved. If something got in the way, just reply to th
   },
 };
 
-export function recoveryContentLang(lang: string): string {
-  return RECOVERY_CONTENT[lang] ? lang : "en";
+/** Editor / store keys, one per email. E2 has a Family and an Individual
+ *  version (the Family one speaks about the kids). */
+export type RecoveryKey = "rec-e1" | "rec-e2-family" | "rec-e2-indiv" | "rec-e3";
+const FIELD: Record<RecoveryKey, keyof LangContent> = { "rec-e1": "e1", "rec-e2-family": "e2Family", "rec-e2-indiv": "e2Individual", "rec-e3": "e3" };
+
+/** Rows of the editor's "Checkout recovery" series. hours = when it goes out. */
+export const RECOVERY_META: { key: RecoveryKey; label: string; labelHe: string; hours: number; step: RecoveryStep; plan?: RecoveryPlan }[] = [
+  { key: "rec-e1", label: "E1 · after 1 hour", labelHe: "מייל 1 · אחרי שעה", hours: 1, step: 1 },
+  { key: "rec-e2-family", label: "E2 Family · after 24 hours", labelHe: "מייל 2 Family · אחרי 24 שעות", hours: 24, step: 2, plan: "family" },
+  { key: "rec-e2-indiv", label: "E2 Individual · after 24 hours", labelHe: "מייל 2 Individual · אחרי 24 שעות", hours: 24, step: 2, plan: "individual" },
+  { key: "rec-e3", label: "E3 · after 72 hours", labelHe: "מייל 3 · אחרי 72 שעות", hours: 72, step: 3 },
+];
+
+function toContent(m: Mail): EmailContent {
+  return {
+    subject: m.subject,
+    heading: "",
+    body: m.body,
+    ctaText: m.cta,
+    next: m.next,
+    // The reply line already invites questions; no second closing line.
+    closing: "",
+    ...(m.signature ? { signature: m.signature } : {}),
+    helpText: "",
+  };
+}
+
+/** Code defaults in the editor's shape (he + en), keyed like the store. */
+export const RECOVERY_CONTENT = Object.fromEntries(
+  RECOVERY_META.map((m) => [m.key, { he: toContent(BY_LANG.he[FIELD[m.key]]), en: toContent(BY_LANG.en[FIELD[m.key]]) }]),
+) as Record<RecoveryKey, { he: EmailContent; en: EmailContent }>;
+
+export function isRecoveryKey(key: string | null | undefined): key is RecoveryKey {
+  return !!key && key in FIELD;
+}
+
+/** Which email of the series a person gets at a step. */
+export function recoveryKeyFor(step: RecoveryStep, plan: RecoveryPlan): RecoveryKey {
+  return step === 1 ? "rec-e1" : step === 3 ? "rec-e3" : plan === "family" ? "rec-e2-family" : "rec-e2-indiv";
 }
 
 /** "family" / "individual" / "other" (legacy Clear or Deep) from a price id. */
@@ -155,7 +199,8 @@ export function recoveryPlanName(plan: RecoveryPlan): string {
 }
 
 /** Price after the trial, in the currency the subscription was created in
- *  (Hebrew checkouts are billed in shekels). Null for legacy plans. */
+ *  (Hebrew checkouts are billed in shekels), with the cycle word in the
+ *  email's language. Null for legacy plans. */
 export function recoveryPriceLine(priceId: string, currency: string, lang: string): string | null {
   const plan = recoveryPlanOf(priceId);
   if (plan === "other") return null;
@@ -165,9 +210,7 @@ export function recoveryPriceLine(priceId: string, currency: string, lang: strin
     plan === "family"
       ? yearly ? (ils ? "₪199" : "$59") : (ils ? "₪19.90" : "$5.99")
       : yearly ? (ils ? "₪149" : "$39.99") : (ils ? "₪14.90" : "$3.99");
-  const he = recoveryContentLang(lang) === "he";
-  const per = yearly ? (he ? "לשנה" : "a year") : (he ? "לחודש" : "a month");
-  return `${amount} ${per}`;
+  return `${amount} ${planCopy(lang, yearly ? "remCycleYear" : "remCycleMonth")}`;
 }
 
 /** The link in every recovery email: straight back to the same plan's
@@ -179,43 +222,50 @@ export function recoveryCheckoutUrl(lang: string, priceId: string, step: Recover
   return `https://gadit.app/${lang || "en"}/checkout?price=${encodeURIComponent(priceId)}&utm_source=recovery&utm_medium=${medium}&utm_campaign=checkout_recovery&utm_content=${content}`;
 }
 
-export function buildRecoveryEmail(opts: {
-  step: RecoveryStep;
-  lang: string;
-  priceId: string;
-  currency: string;
-  firstName: string | null;
-  unsubscribeUrl: string;
-}): { subject: string; html: string; contentLang: string } {
-  const cl = recoveryContentLang(opts.lang);
-  const C = RECOVERY_CONTENT[cl];
+/**
+ * Render one recovery email from its (effective) content. `lang` is the
+ * language the content is in (sets direction); `linkLang` the buyer's own
+ * language for the checkout link. Used by the cron, and by the editor's
+ * preview and test send with sample values.
+ */
+export function renderRecoveryMail(
+  c: EmailContent,
+  opts: { lang: string; linkLang?: string; step: RecoveryStep; priceId: string; currency: string; firstName: string | null; unsubscribeUrl: string },
+): { subject: string; html: string } {
   const plan = recoveryPlanOf(opts.priceId);
-  const mail = opts.step === 1 ? C.e1 : opts.step === 3 ? C.e3 : plan === "family" ? C.e2Family : C.e2Individual;
-  const price = recoveryPriceLine(opts.priceId, opts.currency, cl);
+  const price = recoveryPriceLine(opts.priceId, opts.currency, opts.lang);
   const fill = (s: string) => {
-    let out = applyName(s, opts.firstName).replace(/\{plan\}/g, recoveryPlanName(plan));
-    out = price ? out.replace(/\{price\}/g, price) : out.split("\n").filter((l) => !l.includes("{price}")).join("\n");
-    return out;
+    const out = applyName(s, opts.firstName).replace(/\{plan\}/g, recoveryPlanName(plan));
+    return price ? out.replace(/\{price\}/g, price) : out.split("\n").filter((l) => !l.includes("{price}")).join("\n");
   };
   // The "- " lines render as an ordered list in mdLite; these are bullets.
-  const bodyHtml = mdLiteToHtml(cl, fill(mail.body)).replace(/<ol /g, "<ul ").replace(/<\/ol>/g, "</ul>");
-  const base = cl === "en" ? "https://www.gadit.app" : `https://www.gadit.app/${cl}`;
+  const bodyHtml = mdLiteToHtml(opts.lang, fill(c.body)).replace(/<ol /g, "<ul ").replace(/<\/ol>/g, "</ul>");
+  const base = opts.lang === "en" ? "https://www.gadit.app" : `https://www.gadit.app/${opts.lang}`;
   return {
-    contentLang: cl,
-    subject: fill(mail.subject),
+    subject: fill(c.subject),
     html: renderEmailHtmlV2({
-      he: cl === "he",
-      lang: cl,
+      he: opts.lang === "he",
+      lang: opts.lang,
       bodyHtml,
-      ctaText: mail.cta,
-      ctaUrl: recoveryCheckoutUrl(opts.lang, opts.priceId, opts.step),
-      next: fill(mail.next),
-      // The reply line already invites questions; no second closing line.
-      closing: "",
-      ...(mail.signature ? { signature: mail.signature } : {}),
-      helpText: "",
+      ctaText: c.ctaText,
+      ctaUrl: recoveryCheckoutUrl(opts.linkLang ?? opts.lang, opts.priceId, opts.step),
+      next: fill(c.next ?? ""),
+      closing: c.closing,
+      signature: c.signature,
+      helpText: c.helpText,
       helpUrl: `${base}/help`,
       unsubscribeUrl: opts.unsubscribeUrl,
     }),
   };
+}
+
+/** Sample values for the editor's preview and test send: Family monthly
+ *  (Individual monthly for the Individual E2), in shekels for Hebrew. */
+export function sampleRecoveryMail(key: RecoveryKey, lang: string, c: EmailContent): { subject: string; html: string } {
+  const meta = RECOVERY_META.find((m) => m.key === key)!;
+  const priceId = meta.plan === "individual" ? INDIVIDUAL_MONTHLY : (process.env.STRIPE_PRICE_FAMILY_MONTHLY ?? "price_1TtwJfRprLKxF6OiXHbu2cae");
+  return renderRecoveryMail(c, {
+    lang, step: meta.step, priceId, currency: lang === "he" ? "ils" : "usd",
+    firstName: lang === "he" ? "דנה" : "Dana", unsubscribeUrl: "https://www.gadit.app/",
+  });
 }

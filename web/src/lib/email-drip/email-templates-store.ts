@@ -2,9 +2,11 @@ import { getAdminDb } from "@/lib/firebase-admin";
 import { v2Defaults, type EmailContent } from "./render";
 import { FAMILY_CONTENT } from "./family-content";
 import { INDIV_CONTENT } from "./indiv-content";
+import { RECOVERY_CONTENT } from "./checkout-recovery-content";
 
-// Every editable series shares one store: Family + individual Clear/Deep.
-const CONTENT: Record<string, { he: EmailContent; en: EmailContent }> = { ...FAMILY_CONTENT, ...INDIV_CONTENT };
+// Every editable series shares one store: Family + individual Clear/Deep +
+// checkout recovery (2026-10-21).
+const CONTENT: Record<string, { he: EmailContent; en: EmailContent }> = { ...FAMILY_CONTENT, ...INDIV_CONTENT, ...RECOVERY_CONTENT };
 
 /**
  * Firestore overrides for the editable emails. A doc at

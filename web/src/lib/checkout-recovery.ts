@@ -4,7 +4,9 @@ import type { Firestore, DocumentData } from "firebase-admin/firestore";
 import { subHasCard } from "@/lib/admin-revenue";
 import { isInternalEmail } from "@/lib/internal-accounts";
 import { isShabbatIL } from "@/lib/shabbat";
-import { buildRecoveryEmail, recoveryPlanOf, type RecoveryPlan, type RecoveryStep } from "@/lib/email-drip/checkout-recovery-content";
+import { renderRecoveryMail, recoveryKeyFor, recoveryPlanOf, type RecoveryKey, type RecoveryPlan, type RecoveryStep } from "@/lib/email-drip/checkout-recovery-content";
+import { getEffectiveContent, hasLang } from "@/lib/email-drip/email-templates-store";
+import type { EmailContent } from "@/lib/email-drip/render";
 
 /**
  * Abandoned-checkout recovery (Gadi 2026-10-21), shared by the cron
@@ -22,6 +24,8 @@ import { buildRecoveryEmail, recoveryPlanOf, type RecoveryPlan, type RecoverySte
  * Ledger: checkoutRecovery/{subId} { uid, email, lang, priceId, plan,
  * createdMs, e1At, e2At, e3At (ms), convertedAt / closedAt, open }.
  * Kill switch: emailConfig/checkoutRecovery.enabled must be true to send.
+ * Copy: the admin email editor's "Checkout recovery" series; the cron sends
+ * the effective content (code default + saved override, per language).
  */
 
 const H = 3_600_000;
@@ -304,6 +308,14 @@ export type RunReport = {
 };
 
 type SendFn = (m: { to: string; subject: string; html: string }) => Promise<{ ok: true } | { ok: false; reason: string }>;
+type ContentFn = (key: RecoveryKey, lang: string) => Promise<{ content: EmailContent; lang: string }>;
+
+/** The email as saved in the editor: the person's language if it has a
+ *  translation there (Hebrew and English always do), else English. */
+export const effectiveRecoveryContent: ContentFn = async (key, lang) => {
+  const useLang = lang === "he" || lang === "en" ? lang : (await hasLang(key, lang)) ? lang : "en";
+  return { content: await getEffectiveContent(key, useLang), lang: useLang };
+};
 
 /** One cron run. Sends only when enabled, not a dry run and not Shabbat. */
 export async function runCheckoutRecovery(opts: {
@@ -315,6 +327,8 @@ export async function runCheckoutRecovery(opts: {
   unsubUrl: (uid: string) => string;
   now?: number;
   sendCap?: number;
+  /** Content source; defaults to the editor store (effective content). */
+  loadContent?: ContentFn;
 }): Promise<RunReport> {
   const now = opts.now ?? Date.now();
   const { db } = opts;
@@ -324,6 +338,13 @@ export async function runCheckoutRecovery(opts: {
   const cap = opts.sendCap ?? 40;
 
   const { candidates, scanned } = await collectAbandoned(opts.stripe, db, opts.auth, now);
+  const load = opts.loadContent ?? effectiveRecoveryContent;
+  const contentCache = new Map<string, Promise<{ content: EmailContent; lang: string }>>();
+  const contentFor = (key: RecoveryKey, lang: string) => {
+    const k = `${key}|${lang}`;
+    if (!contentCache.has(k)) contentCache.set(k, load(key, lang));
+    return contentCache.get(k)!;
+  };
   const report: RunReport = {
     ok: true, dryRun: opts.dryRun, enabled, shabbat, scanned,
     open: openCheckouts(candidates).filter((c) => !c.internal).length,
@@ -333,7 +354,11 @@ export async function runCheckoutRecovery(opts: {
 
   for (const c of candidates) {
     if (!c.due || !c.email) continue;
-    const built = buildRecoveryEmail({ step: c.due, lang: c.lang, priceId: c.priceId, currency: c.currency, firstName: c.firstName, unsubscribeUrl: opts.unsubUrl(c.uid) });
+    const eff = await contentFor(recoveryKeyFor(c.due, c.plan), c.lang);
+    const built = renderRecoveryMail(eff.content, {
+      lang: eff.lang, linkLang: c.lang, step: c.due, priceId: c.priceId, currency: c.currency,
+      firstName: c.firstName, unsubscribeUrl: opts.unsubUrl(c.uid),
+    });
     const url = built.html.match(/href="(https:\/\/gadit\.app\/[^"]+)"/)?.[1] ?? "";
     if (!live || report.sent.length >= cap) {
       report.wouldSend.push({ subId: c.subId, uid: c.uid, email: c.email, name: c.name, lang: c.lang, plan: c.plan, step: c.due, subject: built.subject, ageHours: c.ageHours, url: url.replace(/&amp;/g, "&") });

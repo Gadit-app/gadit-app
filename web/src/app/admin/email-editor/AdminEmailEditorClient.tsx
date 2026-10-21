@@ -16,9 +16,9 @@ function langName(code: string, inLang: string): string {
   try { return new Intl.DisplayNames([inLang], { type: "language" }).of(DISPLAY_CODE[code] ?? code) ?? code; } catch { return code; }
 }
 type EmailRow = { key: string; label: string; labelHe?: string; dayOffset: number; plans?: string[] };
-// Family, the individual Clear/Deep series (Gadi 2026-10-06), and the
-// read-only signup series.
-type Series = "family" | "indiv" | "signup";
+// Family, the individual Clear/Deep series (Gadi 2026-10-06), checkout
+// recovery (2026-10-21) and the read-only signup series.
+type Series = "family" | "indiv" | "recovery" | "signup";
 type RoMail = { subject: string; html: string };
 
 const EMPTY: Content = { subject: "", heading: "", body: "", ctaText: "" };
@@ -31,6 +31,9 @@ export function AdminEmailEditorClient() {
   const [emails, setEmails] = useState<EmailRow[]>([]);
   const [signup, setSignup] = useState<EmailRow[]>([]);
   const [indiv, setIndiv] = useState<EmailRow[]>([]);
+  const [recovery, setRecovery] = useState<EmailRow[]>([]);
+  // Checkout recovery is a draft until emailConfig/checkoutRecovery.enabled.
+  const [recoveryOn, setRecoveryOn] = useState(false);
   const [series, setSeries] = useState<Series>("family");
   // The Clear/Deep series is previewed and test-sent as one plan at a time.
   const [plan, setPlan] = useState<"clear" | "deep">("deep");
@@ -59,6 +62,8 @@ export function AdminEmailEditorClient() {
         setEmails(d.emails ?? []);
         setSignup(d.signup ?? []);
         setIndiv(d.indiv ?? []);
+        setRecovery(d.recovery ?? []);
+        setRecoveryOn(d.recoveryEnabled === true);
         if (d.emails?.[0]) setKey(d.emails[0].key);
         // Test sends go to Gadi's own inbox by default (server env, never in
         // this public repo); the field stays editable.
@@ -92,7 +97,7 @@ export function AdminEmailEditorClient() {
     if (s === series) return;
     setSeries(s);
     if (s === "signup" && tab !== "he" && tab !== "en") setTab("he"); // the signup series is he/en only
-    const first = (s === "signup" ? signup : s === "indiv" ? indiv : emails)[0];
+    const first = (s === "signup" ? signup : s === "indiv" ? indiv : s === "recovery" ? recovery : emails)[0];
     setKey(first?.key ?? "");
     setPreview(""); setStatus("");
   }
@@ -178,7 +183,7 @@ export function AdminEmailEditorClient() {
   const isOther = tab !== "he" && tab !== "en";
   const label: React.CSSProperties = { fontSize: 12, fontWeight: 700, color: "#6B7280", margin: "14px 0 4px", display: "block" };
   const input: React.CSSProperties = { width: "100%", padding: "9px 11px", borderRadius: 8, border: "1px solid #D1D5DB", fontSize: 14, fontFamily: "inherit", boxSizing: "border-box" };
-  const list = isSignup ? signup : series === "indiv" ? indiv : emails;
+  const list = isSignup ? signup : series === "indiv" ? indiv : series === "recovery" ? recovery : emails;
   const curRow = list.find((e) => e.key === key);
   const previewHtml = preview || (isSignup ? ro?.html ?? "" : "");
 
@@ -187,19 +192,24 @@ export function AdminEmailEditorClient() {
       <h1 style={{ fontSize: 22, fontWeight: 800, margin: "0 0 4px" }}>{he ? "עריכת מיילים" : "Email editor"}</h1>
       <p style={{ fontSize: 13, color: "#6B7280", margin: "0 0 12px" }}>
         {he
-          ? "עריכת סדרות המיילים: Family, Individual והרשמה. שינויים נשמרים ודורסים את ברירת המחדל. ## לכותרת, שורות עם 1. או - לצעדים, **מודגש**, [טקסט](/family?tab=members) לקישור למסך באתר. סדרת ההרשמה לצפייה ובדיקה בלבד (עריכה בקוד)."
-          : "Edit the email series: Family, Individual and Signup. Changes override the default. Use ## for a heading, 1. or - for steps, **bold**, [text](/family?tab=members) for a link to a screen. The signup series is view + test only (edited in code)."}
+          ? "עריכת סדרות המיילים: Family, Individual, השלמת הרשמה והרשמה. שינויים נשמרים ודורסים את ברירת המחדל. ## לכותרת, שורות עם 1. או - לצעדים, **מודגש**, [טקסט](/family?tab=members) לקישור למסך באתר. סדרת ההרשמה לצפייה ובדיקה בלבד (עריכה בקוד)."
+          : "Edit the email series: Family, Individual, Checkout recovery and Signup. Changes override the default. Use ## for a heading, 1. or - for steps, **bold**, [text](/family?tab=members) for a link to a screen. The signup series is view + test only (edited in code)."}
       </p>
 
       {/* Series switch */}
       <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
-        {(["family", "indiv", "signup"] as const).map((s) => (
+        {(["family", "indiv", "recovery", "signup"] as const).map((s) => (
           <button key={s} type="button" onClick={() => pickSeries(s)}
             style={{
               padding: "6px 16px", borderRadius: 999, cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: "inherit",
               border: "none", background: series === s ? "#0EA5A5" : "#F3F4F6", color: series === s ? "#fff" : "#374151",
             }}>
-            {s === "family" ? (he ? "סדרת משפחה" : "Family series") : s === "indiv" ? (he ? "סדרת Individual" : "Individual series") : (he ? "סדרת הרשמה" : "Signup series")}
+            {s === "family" ? (he ? "סדרת משפחה" : "Family series") : s === "indiv" ? (he ? "סדרת Individual" : "Individual series") : s === "recovery" ? (he ? "סדרת השלמת הרשמה" : "Checkout recovery") : (he ? "סדרת הרשמה" : "Signup series")}
+            {s === "recovery" && !recoveryOn && (
+              <span style={{ marginInlineStart: 6, padding: "1px 7px", borderRadius: 999, fontSize: 11, background: series === s ? "rgba(255,255,255,0.25)" : "#FFEDD5", color: series === s ? "#fff" : "#9A3412" }}>
+                {he ? "טיוטה · כבוי" : "draft · off"}
+              </span>
+            )}
           </button>
         ))}
       </div>
@@ -241,6 +251,22 @@ export function AdminEmailEditorClient() {
           <span style={{ fontSize: 12, color: "#9CA3AF" }}>
             {he ? "שורה בין [[clear]] ל-[[/clear]] יוצאת רק למנויי Clear, ובין [[deep]] ל-[[/deep]] רק ל-Deep." : "A line between [[clear]] and [[/clear]] goes to Clear only, between [[deep]] and [[/deep]] to Deep only."}
           </span>
+        </div>
+      )}
+
+      {/* Checkout recovery: what the placeholders mean, and whether it sends. */}
+      {series === "recovery" && (
+        <div style={{ marginBottom: 12, fontSize: 12.5, lineHeight: 1.6 }}>
+          <div style={{ display: "inline-block", padding: "6px 10px", borderRadius: 8, marginBottom: 6, fontWeight: 700, background: recoveryOn ? "#ECFDF5" : "#FFF7ED", color: recoveryOn ? "#0E7A52" : "#9A3412" }}>
+            {recoveryOn
+              ? (he ? "פעיל: המיילים נשלחים עם הנוסח השמור כאן" : "On: emails go out with the text saved here")
+              : (he ? "טיוטה · כבוי: שום מייל לא נשלח עד שמפעילים את emailConfig/checkoutRecovery.enabled" : "Draft · off: nothing is sent until emailConfig/checkoutRecovery.enabled is turned on")}
+          </div>
+          <div style={{ color: "#6B7280" }}>
+            {he
+              ? "{שם} שם פרטי · {plan} שם המסלול (Gadit Family / Gadit Individual) · {price} המחיר אחרי הניסיון (שורה עם {price} יורדת כשאין מחיר) · הכפתור מוביל תמיד לדף התשלום של האדם עצמו, עורכים רק את הטקסט שלו"
+              : "{name} first name · {plan} plan name (Gadit Family / Gadit Individual) · {price} price after the trial (a line with {price} is dropped when there is none) · the button always opens the person's own checkout, only its text is edited here"}
+          </div>
         </div>
       )}
 

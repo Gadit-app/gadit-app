@@ -10,6 +10,9 @@ import { getOverride, getEffectiveContent, saveOverride, resetOverride, hasLang 
 import { isFamilyLang } from "@/lib/email-drip/family-i18n";
 import { getDripForLang, buildUnsubUrl } from "@/lib/email-drip/registry";
 import { sendDripEmail } from "@/lib/email-drip/send";
+import { RECOVERY_META, isRecoveryKey, sampleRecoveryMail } from "@/lib/email-drip/checkout-recovery-content";
+import { recoveryEnabled } from "@/lib/checkout-recovery";
+import { getAdminDb } from "@/lib/firebase-admin";
 
 export const runtime = "nodejs";
 
@@ -68,6 +71,10 @@ export async function GET(req: NextRequest) {
       defaultTestTo: process.env.NOTIFY_EMAIL ?? "",
       signup: SIGNUP_STEPS.map((s) => ({ key: `signup:${s.step}`, label: s.label, labelHe: s.labelHe, dayOffset: s.dayOffset })),
       indiv: INDIV_META.map((m) => ({ key: m.key, label: m.label, labelHe: INDIV_LABEL_HE[m.key] ?? m.label, dayOffset: m.dayOffset, plans: m.plans })),
+      // Checkout recovery (2026-10-21): editable like Family; a draft until
+      // emailConfig/checkoutRecovery.enabled is true (the cron sends nothing).
+      recovery: RECOVERY_META.map((m) => ({ key: m.key, label: m.label, labelHe: m.labelHe, dayOffset: 0, hours: m.hours })),
+      recoveryEnabled: await recoveryEnabled(getAdminDb()),
     });
   }
 
@@ -79,7 +86,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ key, readonly: true, subject: r.subject, html: r.html });
   }
 
-  if (!ALL_META.find((m) => m.key === key)) {
+  if (!ALL_META.find((m) => m.key === key) && !isRecoveryKey(key)) {
     return NextResponse.json({ error: "unknown key" }, { status: 404 });
   }
   const ov = await getOverride(key);
@@ -105,7 +112,7 @@ export async function POST(req: NextRequest) {
     | { action?: string; key?: string; lang?: string; content?: EmailContent; to?: string; plan?: string }
     | null;
   const isSignup = !!body?.key?.startsWith("signup:");
-  const known = !!body?.key && (isSignup ? !!renderSignup(body.key.slice(7), true) : !!ALL_META.find((m) => m.key === body!.key));
+  const known = !!body?.key && (isSignup ? !!renderSignup(body.key.slice(7), true) : !!ALL_META.find((m) => m.key === body!.key) || isRecoveryKey(body.key));
   if (!body?.action || !body.key || !known) {
     return NextResponse.json({ error: "bad_request" }, { status: 400 });
   }
@@ -118,6 +125,9 @@ export async function POST(req: NextRequest) {
     if (isSignup) return renderSignup(body!.key!.slice(7), he);
     const c = body!.content;
     if (!c) return null;
+    // Checkout recovery: sample name, plan, price and checkout link filled
+    // in exactly as the cron does for a real person.
+    if (isRecoveryKey(body!.key)) return sampleRecoveryMail(body!.key, lang, c);
     // Same sample name as the preview body, so a test subject never shows a raw {שם}.
     const plan: IndivPlan | undefined = body!.plan === "clear" || body!.plan === "deep" ? body!.plan : undefined;
     return { subject: applyName(c.subject, he ? "דנה" : "Dana"), html: renderPreview(body!.key!, lang, c, plan) };
