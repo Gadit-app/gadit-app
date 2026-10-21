@@ -12,6 +12,7 @@
  * kid switching between contexts feels at home.
  */
 
+import { WaitDots } from "@/components/WaitText";
 import { useEffect, useMemo, useState } from "react";
 import { miscUi } from "@/lib/misc-ui-i18n";
 import { skinStyleVars, readStashedSkin } from "@/lib/school-skin";
@@ -590,7 +591,7 @@ export function ClassroomNotebookClient({ code }: { code: string }) {
         </h1>
 
         {state.kind === "loading" && (
-          <div className="wb-classroom-notebook-skeleton" aria-hidden="true" />
+          <div className="wb-classroom-notebook-skeleton gd-wait-center" aria-hidden="true"><WaitDots className="gd-wait-big" /></div>
         )}
 
         {state.kind === "error" && (

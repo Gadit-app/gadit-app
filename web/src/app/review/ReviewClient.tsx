@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
@@ -114,7 +115,7 @@ export function ReviewClient() {
     setList((l) => (l ? { ...l, meanings: l.meanings.map((x) => (x.m === m ? { ...x, decided: { ...x.decided, [part]: d.decision === "clarify" ? "clarify" : d.status } } : x)) } : l));
   };
 
-  if (loading || (user && state === "loading")) return <Shell><p className="rv-muted">טוענים...</p></Shell>;
+  if (loading || (user && state === "loading")) return <Shell><p className="rv-muted"><WaitText text="טוענים..." live /></p></Shell>;
   if (!user) {
     return (
       <Shell>
@@ -194,7 +195,7 @@ export function ReviewClient() {
           );
         })}
       </nav>
-      {!cur || cur.meaning.m !== sel ? <p className="rv-muted">טוענים...</p> : (
+      {!cur || cur.meaning.m !== sel ? <p className="rv-muted"><WaitText text="טוענים..." live /></p> : (
         <section className="rv-meaning">
           <div className="rv-meaning-head">
             <h2>{cur.meaning.w}</h2>
@@ -399,7 +400,7 @@ function PartCard({ part, x, saved, api, onSaved, label, questions = [], history
             <textarea dir="rtl" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} />
           </label>
           <div className="rv-save">
-            <button type="button" className="rv-btn" disabled={!decision || busy} onClick={() => void save()}>{busy ? "שומרים..." : "שמירה"}</button>
+            <button type="button" className="rv-btn" disabled={!decision || busy} onClick={() => void save()}>{busy ? <WaitText text="שומרים..." /> : "שמירה"}</button>
             {msg && <span className={msg.ok ? "rv-ok" : "rv-err"} role="status">{msg.text}</span>}
           </div>
           {history.length > 0 && (
@@ -467,7 +468,7 @@ function BlindForm({ list, blind, api, onSubmitted }: { list: ListData; blind: B
       <div className="rv-save">
         <button type="button" className="rv-btn is-quiet" disabled={busy} onClick={() => void send(false)}>שמירה והמשך אחר כך</button>
         {!confirm ? <button type="button" className="rv-btn" disabled={busy} onClick={() => setConfirm(true)}>שליחת התשובות</button>
-          : <><span className="rv-muted">אחרי השליחה לא יהיה אפשר לשנות את התשובות, ותיפתח הבדיקה המלאה.</span><button type="button" className="rv-btn" disabled={busy} onClick={() => void send(true)}>{busy ? "שולחים..." : "כן, לשלוח"}</button></>}
+          : <><span className="rv-muted">אחרי השליחה לא יהיה אפשר לשנות את התשובות, ותיפתח הבדיקה המלאה.</span><button type="button" className="rv-btn" disabled={busy} onClick={() => void send(true)}>{busy ? <WaitText text="שולחים..." /> : "כן, לשלוח"}</button></>}
         {msg && <span className={msg.ok ? "rv-ok" : "rv-err"} role="status">{msg.text}</span>}
       </div>
     </section>
@@ -495,7 +496,7 @@ function SummaryCard({ summary, api }: { summary: { version: string; q: string; 
         <textarea dir="rtl" rows={4} value={val} onChange={(e) => setVal(e.target.value)} />
       </label>
       <div className="rv-save">
-        <button type="button" className="rv-btn" disabled={busy || !val.trim()} onClick={() => void save()}>{busy ? "שומרים..." : "שמירה"}</button>
+        <button type="button" className="rv-btn" disabled={busy || !val.trim()} onClick={() => void save()}>{busy ? <WaitText text="שומרים..." /> : "שמירה"}</button>
         {msg && <span className={msg.ok ? "rv-ok" : "rv-err"} role="status">{msg.text}</span>}
       </div>
     </section>

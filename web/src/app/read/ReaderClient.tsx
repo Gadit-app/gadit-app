@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { GaditIcon } from "@/components/design/GaditIcon";
 import { ToolPage } from "@/components/design/ToolPage";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
@@ -725,7 +726,7 @@ export function ReaderClient() {
           </Link>
         )}
         {authLoading || (user && !planReady) ? (
-          <div style={{ color: "var(--ink-muted,#6B7280)" }}>{t.loading}</div>
+          <div style={{ color: "var(--ink-muted,#6B7280)" }}><WaitText text={t.loading} live /></div>
         ) : !user ? (
           <Gate title={t.loginTitle} btn={t.loginBtn} onClick={() => promptLogin?.()} />
         ) : plan === "basic" ? (
@@ -745,7 +746,7 @@ export function ReaderClient() {
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 14, alignItems: "center", justifyContent: "space-between" }}>
               {/* Two distinct upload actions so it's obvious which is which. */}
               {ocrState === "reading" ? (
-                <div style={{ ...ghostBtn, opacity: 0.7, cursor: "default" }}>{t.reading}</div>
+                <div style={{ ...ghostBtn, opacity: 0.7, cursor: "default" }}><WaitText text={t.reading} live /></div>
               ) : (
                 <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
                   <button type="button" onClick={openCamera} style={ghostBtn}>

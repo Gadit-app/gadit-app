@@ -18,6 +18,7 @@
  *   5. Delete account — small low-prominence link under a dashed rule.
  */
 
+import { WaitText } from "@/components/WaitText";
 import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import RETENTION_I18N from "@/lib/retention-i18n.json";
 import { planCopy } from "@/lib/plan-copy";
@@ -802,7 +803,7 @@ export function AccountPage() {
         {loading ? (
           <SectionCard>
             <div style={{ textAlign: "center", padding: "32px 0", color: "var(--ink-muted)" }}>
-              {v2(lang, "srLoading")}
+              <WaitText text={v2(lang, "srLoading")} live />
             </div>
           </SectionCard>
         ) : errorMsg || !data ? (
@@ -1225,7 +1226,7 @@ function OfflinePackSection({
               }}
             >
               {packState === "downloading"
-                ? v2(lang, "offlineDownloadingPack")
+                ? <WaitText text={v2(lang, "offlineDownloadingPack")} />
                 : v2(lang, "offlineDownloadPack")}
             </button>
           )}

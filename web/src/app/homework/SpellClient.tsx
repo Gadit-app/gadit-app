@@ -10,6 +10,7 @@
  * dictations). Finger-trace mode is a planned phase 2.
  */
 
+import { WaitText, WaitDots } from "@/components/WaitText";
 import { GaditIcon } from "@/components/design/GaditIcon";
 import { ReportQuestionButton } from "@/components/play/ReportQuestionButton";
 import { toLocalDateStr } from "@/lib/gamification";
@@ -1538,7 +1539,7 @@ export function SpellClient() {
                 />
                 <button type="button" onClick={createSet} disabled={creating || topic.trim().length < 2}
                   style={{ flex: "none", padding: "11px 16px", borderRadius: 11, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating || topic.trim().length < 2 ? 0.6 : 1 }}>
-                  {creating ? t("creating", lang) : t("generate", lang)}
+                  {creating ? <WaitText text={t("creating", lang)} /> : t("generate", lang)}
                 </button>
               </div>
               <div style={{ marginTop: 14, fontSize: 13, fontWeight: 700, color: "var(--ink-muted,#6B7280)" }}>{ml("orPaste", lang)}</div>
@@ -1554,7 +1555,7 @@ export function SpellClient() {
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
                 <button type="button" onClick={() => void createFromList()} disabled={creating || listText.trim().length < 2}
                   style={{ padding: "10px 16px", borderRadius: 11, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating || listText.trim().length < 2 ? 0.6 : 1 }}>
-                  {creating ? t("creating", lang) : ml("makeList", lang)}
+                  {creating ? <WaitText text={t("creating", lang)} /> : ml("makeList", lang)}
                 </button>
                 {canCamera && (
                 <button type="button" onClick={() => listCamRef.current?.click()} disabled={creating}
@@ -1571,11 +1572,11 @@ export function SpellClient() {
                 <input ref={upRef} type="file" accept="image/*" hidden
                   onChange={(e) => { const f = e.target.files?.[0]; if (f) void fromPhoto(f); e.target.value = ""; }} />
               </div>
-              {createMsg && <div style={{ marginTop: 8, fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{createMsg}</div>}
+              {createMsg && <div style={{ marginTop: 8, fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{creating ? <WaitText text={createMsg} live /> : createMsg}</div>}
             </div>}
 
             <h2 style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--teal-deep,#0A7472)", margin: "22px 0 12px" }}>{t("pickCat", lang)}</h2>
-            {drill === "pic" && createMsg && <div style={{ margin: "-4px 0 10px", fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{createMsg}</div>}
+            {drill === "pic" && createMsg && <div style={{ margin: "-4px 0 10px", fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{creating ? <WaitText text={createMsg} live /> : createMsg}</div>}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12 }}>
               {DICTATION_SETS.filter((s) => drill !== "pic" || PIC_DICT_SET_IDS.has(s.id)).map((s) => (
                 <button key={s.id} type="button" onClick={() => startCategory(s)} disabled={!!loadingCat}
@@ -1585,7 +1586,7 @@ export function SpellClient() {
                     padding: "14px 15px", cursor: loadingCat ? "default" : "pointer", fontFamily: "inherit",
                     opacity: loadingCat && loadingCat !== s.id ? 0.5 : 1,
                   }}>
-                  <span style={{ width: 40, height: 40, flex: "none", borderRadius: 12, display: "grid", placeItems: "center", fontSize: 20, background: TEAL + "1A" }}>{loadingCat === s.id ? "⏳" : s.icon}</span>
+                  <span style={{ width: 40, height: 40, flex: "none", borderRadius: 12, display: "grid", placeItems: "center", fontSize: 20, background: TEAL + "1A" }}>{loadingCat === s.id ? <WaitDots /> : s.icon}</span>
                   <span>
                     <span style={{ display: "block", fontSize: 15, fontWeight: 700, color: "var(--ink,#0B1220)" }}>{getCatTitle(s.id, lang)}</span>
                     <span style={{ display: "block", fontSize: 12, color: "var(--ink-muted,#6B7280)" }}>{s.words.length} {misc("words", lang)}</span>
@@ -1615,7 +1616,7 @@ export function SpellClient() {
                             background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 14,
                             padding: "11px 12px", cursor: loadingCat ? "default" : "pointer", fontFamily: "inherit",
                           }}>
-                          <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, display: "grid", placeItems: "center", fontSize: 17, background: TEAL + "1A" }}>{parts.length === 1 && loadingCat === parts[0].id ? "⏳" : BAND_TOPIC_ICON[tp] ?? "📘"}</span>
+                          <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, display: "grid", placeItems: "center", fontSize: 17, background: TEAL + "1A" }}>{parts.length === 1 && loadingCat === parts[0].id ? <WaitDots /> : BAND_TOPIC_ICON[tp] ?? "📘"}</span>
                           <span>
                             <span style={{ display: "block", fontSize: 14, fontWeight: 700, color: "var(--ink,#0B1220)" }}>{bandSetTitle({ ...parts[0], part: 0 }, lang)}</span>
                             <span style={{ display: "block", fontSize: 12, color: "var(--ink-muted,#6B7280)" }}>{n} {misc("words", lang)}</span>
@@ -1637,7 +1638,7 @@ export function SpellClient() {
                         padding: "11px 12px", cursor: loadingCat ? "default" : "pointer", fontFamily: "inherit",
                         opacity: loadingCat && loadingCat !== b.id ? 0.5 : 1,
                       }}>
-                      <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, display: "grid", placeItems: "center", fontSize: 17, background: TEAL + "1A" }}>{loadingCat === b.id ? "⏳" : BAND_TOPIC_ICON[b.topic] ?? "📘"}</span>
+                      <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, display: "grid", placeItems: "center", fontSize: 17, background: TEAL + "1A" }}>{loadingCat === b.id ? <WaitDots /> : BAND_TOPIC_ICON[b.topic] ?? "📘"}</span>
                       <span>
                         <span style={{ display: "block", fontSize: 14, fontWeight: 700, color: "var(--ink,#0B1220)" }}>{bandSetTitle(b, lang)}</span>
                         <span style={{ display: "block", fontSize: 12, color: "var(--ink-muted,#6B7280)" }}>{b.words.length} {misc("words", lang)}</span>
@@ -1674,7 +1675,7 @@ export function SpellClient() {
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
                 <button type="button" onClick={() => void createFromList()} disabled={creating || listText.trim().length < 2}
                   style={{ padding: "10px 18px", borderRadius: 11, border: "none", background: TEAL, color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating || listText.trim().length < 2 ? 0.6 : 1 }}>
-                  {creating ? t("creating", lang) : t("pasteBtn", lang)}
+                  {creating ? <WaitText text={t("creating", lang)} /> : t("pasteBtn", lang)}
                 </button>
                 <button type="button" onClick={() => photoRef.current?.click()} disabled={creating}
                   style={{ padding: "10px 16px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL_INK, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
@@ -1684,7 +1685,7 @@ export function SpellClient() {
                   onChange={(e) => { const f = e.target.files?.[0]; if (f) void fromPhoto(f); e.target.value = ""; }} />
               </div>
             </div>
-            {createMsg && <div style={{ marginTop: 8, fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{createMsg}</div>}
+            {createMsg && <div style={{ marginTop: 8, fontSize: 13, color: "var(--ink-muted,#6B7280)" }}>{creating ? <WaitText text={createMsg} live /> : createMsg}</div>}
           </>
         )}
 
@@ -1702,7 +1703,7 @@ export function SpellClient() {
                     at 0 for ten seconds looked frozen); the count once a
                     picture has landed. */}
                 <span aria-hidden className="wb-pic-prep-ico">🖼️</span>
-                <span>{pc.prep}</span>
+                <span><WaitText text={pc.prep} /></span>
                 <span className="wb-pic-bar is-busy" aria-hidden><span style={{ width: `${Math.max(12, Math.round((picLoad.done / Math.max(1, picLoad.total)) * 100))}%` }} /></span>
                 {picLoad.done > 0 && <span dir="ltr" style={{ unicodeBidi: "isolate", fontSize: 13 }}>{picLoad.done} / {picLoad.total}</span>}
               </>

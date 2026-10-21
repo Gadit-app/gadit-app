@@ -16,6 +16,7 @@
  * classroom computer should see exactly one job-to-be-done: type a word.
  */
 
+import { WaitDots } from "@/components/WaitText";
 import { useEffect, useRef, useState } from "react";
 import { ClassProgressChip, type ClassProgress } from "@/components/design/ClassMilestone";
 import Link from "next/link";
@@ -811,7 +812,7 @@ export function ClassroomKidClient({ code }: { code: string }) {
   if (state.kind === "loading") {
     return (
       <div className="wordbook wb-school-page" dir={dir} style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-        &nbsp;
+        <WaitDots className="gd-wait-big" />
       </div>
     );
   }

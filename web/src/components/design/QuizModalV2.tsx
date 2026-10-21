@@ -24,6 +24,7 @@
  * tint) / dim (post-reveal, non-correct, non-wrong).
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
@@ -659,7 +660,7 @@ export function QuizModalV2({
           >
             <Spinner />
             <span style={{ marginInlineStart: 12 }}>
-              {v2(lang, "quizLoading")}
+              <WaitText text={v2(lang, "quizLoading")} />
             </span>
           </div>
         )}

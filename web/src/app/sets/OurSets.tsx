@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useHref } from "@/lib/href";
@@ -60,7 +61,7 @@ export default function OurSets() {
   const [editor, setEditor] = useState<Editor | null>(null);
   const [confirmDel, setConfirmDel] = useState("");
   const [busy, setBusy] = useState<Busy>("");
-  const [msg, setMsg] = useState<{ text: string; bad?: boolean } | null>(null);
+  const [msg, setMsg] = useState<{ text: string; bad?: boolean; wait?: boolean } | null>(null);
   const [topicOpen, setTopicOpen] = useState(false);
   const [topic, setTopic] = useState("");
   const photoRef = useRef<HTMLInputElement>(null);
@@ -115,7 +116,7 @@ export default function OurSets() {
   async function fromPhoto(file: File) {
     if (busy) return;
     setBusy("photo");
-    setMsg({ text: c.reading });
+    setMsg({ text: c.reading, wait: true });
     try {
       // The same page reader as the homework photo.
       const fd = new FormData();
@@ -134,7 +135,7 @@ export default function OurSets() {
     const t = topic.trim();
     if (busy || t.length < 2) return;
     setBusy("topic");
-    setMsg({ text: c.finding });
+    setMsg({ text: c.finding, wait: true });
     try {
       if (await suggest("topic", t)) setTopic("");
       else setMsg({ text: c.noWords, bad: true });
@@ -270,11 +271,11 @@ export default function OurSets() {
             </div>
           )}
 
-          {msg && <p className={"os-msg" + (msg.bad ? " bad" : "")} role={msg.bad ? "alert" : "status"}>{msg.text}</p>}
+          {msg && <p className={"os-msg" + (msg.bad ? " bad" : "")} role={msg.bad ? "alert" : "status"}>{msg.wait && busy ? <WaitText text={msg.text} /> : msg.text}</p>}
 
           <div className="os-actions">
             <button type="button" className="os-save" disabled={!!busy} onClick={() => void save()}>
-              {busy === "save" ? <span className="os-spin light" aria-hidden /> : null} {busy === "save" ? c.savingDefs : c.save}
+              {busy === "save" ? <span className="os-spin light" aria-hidden /> : null} {busy === "save" ? <WaitText text={c.savingDefs} /> : c.save}
             </button>
             <button type="button" className="os-cancel" disabled={busy === "save"} onClick={closeEditor}>{c.cancel}</button>
           </div>

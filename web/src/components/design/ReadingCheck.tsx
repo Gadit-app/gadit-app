@@ -13,6 +13,7 @@
  * One call to /api/reading-check builds the whole check (cached server side).
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
@@ -140,7 +141,7 @@ export function ReadingCheck({ text, lang, dir, tapped, hard, fromHw, homeHref, 
   if (phase === "loading") {
     return (
       <div style={sheet} aria-live="polite">
-        <p style={{ margin: 0, fontSize: 16, color: "var(--ink-muted,#6B7280)" }}>{c.preparing}</p>
+        <p style={{ margin: 0, fontSize: 16, color: "var(--ink-muted,#6B7280)" }}><WaitText text={c.preparing} /></p>
       </div>
     );
   }

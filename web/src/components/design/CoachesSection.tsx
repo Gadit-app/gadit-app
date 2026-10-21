@@ -6,6 +6,7 @@
  * grants, and can revoke any of them. Self-contained: fetches the family's
  * children (via switch-member) and the grants (via /api/family/coach).
  */
+import { WaitText } from "@/components/WaitText";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
@@ -297,7 +298,7 @@ export function CoachesSection() {
           type="button" onClick={add} disabled={busy}
           style={{ background: "#0EA5A5", color: "#fff", border: "none", borderRadius: 12, padding: "11px 20px", fontSize: 15, fontWeight: 700, cursor: busy ? "default" : "pointer", opacity: busy ? 0.6 : 1, fontFamily: "inherit" }}
         >
-          {busy ? c.adding : c.add}
+          {busy ? <WaitText text={c.adding} /> : c.add}
         </button>
       </div>
       {error && <div style={{ color: "#DC2626", fontSize: 13, marginBottom: 8 }}>{error}</div>}

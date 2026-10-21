@@ -7,6 +7,7 @@
  * tax invoice. Payment is annual, by bank transfer / PO. Hebrew only.
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import { Lines } from "../families/RealScreens";
 
@@ -167,7 +168,7 @@ export function SchoolOrderForm() {
           padding: "12px 20px", borderRadius: 10, cursor: state === "sending" ? "default" : "pointer",
         }}
       >
-        {state === "sending" ? "שולחים..." : kind === "pilot" ? "שלחו בקשה לפיילוט" : "שלחו הזמנה"}
+        {state === "sending" ? <WaitText text="שולחים..." /> : kind === "pilot" ? "שלחו בקשה לפיילוט" : "שלחו הזמנה"}
       </button>
     </form>
   );

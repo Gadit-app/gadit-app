@@ -11,6 +11,7 @@
  * sentence -> the sentence's meaning. Gadi 2026-09-03.
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { useLang } from "@/lib/lang-context";
@@ -164,7 +165,7 @@ export function SentencePopover({ sentence, anchor, lang, onClose }: Props) {
         </button>
       </div>
       <div style={{ fontSize: 15, color: "var(--ink, #0B1220)", lineHeight: 1.6 }}>
-        {state.status === "loading" ? c.loading
+        {state.status === "loading" ? <WaitText text={c.loading} />
           : state.status === "ready" ? state.meaning
             : state.status === "login" ? c.login
               : c.error}

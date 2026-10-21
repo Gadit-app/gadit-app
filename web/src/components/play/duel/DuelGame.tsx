@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText, WaitDots } from "@/components/WaitText";
 import { ReportQuestionButton } from "../ReportQuestionButton";
 import { DuelPrompt, duelOpt } from "./DuelPrompt";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -104,7 +105,7 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
       </div>
     );
   }
-  if (!view) return <div className="duel" dir={dir}><style>{DUEL_CSS}</style><p className="duel-msg">…</p></div>;
+  if (!view) return <div className="duel" dir={dir}><style>{DUEL_CSS}</style><p className="duel-msg"><WaitDots className="gd-wait-big" /></p></div>;
 
   const now = Date.now() + offset.current;
   const me: Seat = view.you;
@@ -151,7 +152,7 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
             }}>{copied ? t.copied : t.copyLink}</button>
             <a className="duel-btn is-soft" href={`https://wa.me/?text=${encodeURIComponent(t.shareText(view.code, link))}`} target="_blank" rel="noreferrer">{t.shareWhatsapp}</a>
           </div>
-          <p className="duel-wait">{t.waitingOpponent}</p>
+          <p className="duel-wait"><WaitText text={t.waitingOpponent} live /></p>
         </div>
       )}
 
@@ -191,7 +192,7 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
               );
             })}
           </div>
-          {ph.kind === "round" && picked?.round === ph.round && <p className="duel-wait">{t.waitingForThem}</p>}
+          {ph.kind === "round" && picked?.round === ph.round && <p className="duel-wait"><WaitText text={t.waitingForThem} live /></p>}
           {ph.kind === "reveal" && view.reveal && (
             <p className={`duel-result ${view.reveal[me].points > 0 ? "is-good" : "is-bad"}`}>
               {view.reveal[me].choice == null ? t.noAnswer : view.reveal[me].points > 0 ? `${t.correct} +${view.reveal[me].points}` : t.wrong}
@@ -286,7 +287,7 @@ function PlayerChip({ p, label, score, mine, status, t }: {
       <div className="duel-chip-text">
         <span className="duel-chip-name" dir="auto">{label}</span>
         {p.kind !== "person" && <span className="duel-tag">{p.kind === "bot" ? t.tagBot : t.tagRecorded}</span>}
-        {status && <span className="duel-chip-status">{status}</span>}
+        {status && <span className="duel-chip-status">{status === t.opponentThinking ? <WaitText text={status} /> : status}</span>}
       </div>
       <span className="duel-score">{score}</span>
     </div>

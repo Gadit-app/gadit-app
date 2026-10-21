@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { useState } from "react";
 import type { User } from "firebase/auth";
 
@@ -305,7 +306,7 @@ export function DeleteAccountModal({
             disabled={!emailOk || busy}
             style={{ flex: 1, padding: "12px", borderRadius: 11, border: "none", background: emailOk && !busy ? "#DC2626" : "#FCA5A5", color: "#fff", fontWeight: 800, fontSize: 14, cursor: emailOk && !busy ? "pointer" : "default", fontFamily: "inherit" }}
           >
-            {busy ? c.deleting : c.del}
+            {busy ? <WaitText text={c.deleting} /> : c.del}
           </button>
         </div>
       </div>

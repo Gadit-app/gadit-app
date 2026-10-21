@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText, WaitDots } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
@@ -655,7 +656,7 @@ export function ReferClient() {
         </p>
 
         {authLoading ? (
-          <div style={{ color: "var(--ink-muted, #6B7280)" }}>{t.loading}</div>
+          <div style={{ color: "var(--ink-muted, #6B7280)" }}><WaitText text={t.loading} live /></div>
         ) : !user ? (
           <div style={{ background: "var(--card, #fff)", border: "1px solid var(--hairline, #E5E7EB)", borderRadius: 16, padding: 24 }}>
             <p style={{ margin: "0 0 16px", fontSize: 16, color: "var(--ink, #20272E)" }}>{t.loginTitle}</p>
@@ -676,7 +677,7 @@ export function ReferClient() {
               </div>
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
                 <div dir="ltr" style={{ flex: "1 1 260px", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontFamily: "ui-monospace, monospace", fontSize: 15, background: "var(--paper, #F9FAFB)", border: "1px solid var(--hairline, #E5E7EB)", borderRadius: 10, padding: "11px 14px", color: "var(--ink, #20272E)" }}>
-                  {data ? data.link : "…"}
+                  {data ? data.link : <WaitDots />}
                 </div>
                 <button
                   type="button"

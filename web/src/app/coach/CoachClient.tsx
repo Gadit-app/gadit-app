@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText, WaitDots } from "@/components/WaitText";
 import { payUrl } from "@/lib/pay-url";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
@@ -650,7 +651,7 @@ export function CoachClient() {
             {c.signin}
           </button>
         ) : loading ? (
-          <div style={{ color: "var(--ink-muted)", padding: "24px 0" }}>…</div>
+          <div style={{ color: "var(--ink-muted)", padding: "24px 0" }}><WaitDots className="gd-wait-big" /></div>
         ) : needsPlan && students && students.length > 0 ? (
           <div style={{ background: "var(--surface, #fff)", border: "1px solid var(--rule)", borderRadius: 16, padding: "20px 20px 18px", display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
             {/* Inside the Play / iOS app: no plan names (store rules). */}
@@ -678,7 +679,7 @@ export function CoachClient() {
                     disabled={!!entering}
                     style={{ background: "#0EA5A5", color: "#fff", border: "none", borderRadius: 999, padding: "10px 20px", fontSize: 15, fontWeight: 700, cursor: entering ? "default" : "pointer", opacity: entering && entering !== s.grantId ? 0.5 : 1, fontFamily: "inherit", flexShrink: 0 }}
                   >
-                    {entering === s.grantId ? c.entering : c.enter}
+                    {entering === s.grantId ? <WaitText text={c.entering} /> : c.enter}
                   </button>}
                 </div>
               );

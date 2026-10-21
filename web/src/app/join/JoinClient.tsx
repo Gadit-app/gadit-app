@@ -13,6 +13,7 @@
  * with their own notebook + history.
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signInWithCustomToken } from "firebase/auth";
@@ -593,7 +594,7 @@ export function JoinClient() {
 
         <div className="wb-family-pair-card">
           {status === "success" ? (
-            <div className="wb-family-join-success">{c.success}</div>
+            <div className="wb-family-join-success"><WaitText text={c.success} live /></div>
           ) : (
             <>
               <label className="wb-family-field" style={{ width: "100%" }}>
@@ -617,7 +618,7 @@ export function JoinClient() {
                 onClick={() => submit(code)}
                 disabled={status === "joining" || code.length !== 6}
               >
-                {status === "joining" ? c.joining : c.submit}
+                {status === "joining" ? <WaitText text={c.joining} /> : c.submit}
               </button>
             </>
           )}

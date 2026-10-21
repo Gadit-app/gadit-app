@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useState, useMemo } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
@@ -237,7 +238,7 @@ export default function ReportButton({
                     disabled={submitting || selected.size === 0}
                     className="btn-primary flex-1 py-2.5 text-sm rounded-xl disabled:opacity-50"
                   >
-                    {submitting ? t.reportSubmitting : t.reportSubmit}
+                    {submitting ? <WaitText text={t.reportSubmitting} /> : t.reportSubmit}
                   </button>
                 </div>
               </>

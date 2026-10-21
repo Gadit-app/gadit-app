@@ -18,6 +18,7 @@
  * landing page; for v1 they just use the main app.)
  */
 
+import { WaitText, WaitDots } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import { familyUi } from "@/lib/family-ui-i18n";
 import Link from "next/link";
@@ -2156,7 +2157,7 @@ export function FamilyClient() {
   }, [user]);
 
   if (loading) {
-    return <div className="wordbook wb-family-page" dir={dir}>&nbsp;</div>;
+    return <div className="wordbook wb-family-page" dir={dir}><div className="gd-wait-page"><WaitDots className="gd-wait-big" /></div></div>;
   }
 
   // Not signed in on this host (e.g. bought on gadit.app, opened an email
@@ -2177,7 +2178,7 @@ export function FamilyClient() {
   }
 
   if (!familyChecked) {
-    return <div className="wordbook wb-family-page" dir={dir}>&nbsp;</div>;
+    return <div className="wordbook wb-family-page" dir={dir}><div className="gd-wait-page"><WaitDots className="gd-wait-big" /></div></div>;
   }
 
   // No family doc = no Family subscription. Soft redirect with a message.
@@ -2338,7 +2339,7 @@ export function FamilyClient() {
               <div style={{ display: "flex", flexDirection: "column", gap: 6, alignItems: "start" }}>
                 <label style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 12px", borderRadius: 9, border: "1px solid rgba(14,165,165,0.4)", background: "rgba(14,165,165,0.06)", color: "#0E7490", fontWeight: 700, fontSize: 13, cursor: editPhotoBusy ? "default" : "pointer", fontFamily: "inherit", opacity: editPhotoBusy ? 0.6 : 1 }}>
                   {editPhotoBusy
-                    ? familyUi(lang).loading
+                    ? <WaitText text={familyUi(lang).loading} />
                     : editPhoto
                       ? familyUi(lang).changePhoto
                       : familyUi(lang).addPhoto}
@@ -2408,7 +2409,7 @@ export function FamilyClient() {
                 {familyUi(lang).cancel}
               </button>
               <button type="button" onClick={saveMember} disabled={editSaving} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "none", background: "#0EA5A5", color: "#fff", fontWeight: 800, fontSize: 14, cursor: "pointer", fontFamily: "inherit", opacity: editSaving ? 0.6 : 1 }}>
-                {editSaving ? "…" : familyUi(lang).save}
+                {editSaving ? <WaitDots /> : familyUi(lang).save}
               </button>
             </div>
           </div>

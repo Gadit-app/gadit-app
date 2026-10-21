@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitDots } from "@/components/WaitText";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
@@ -80,7 +81,7 @@ export function DuelJoinClient({ code }: { code: string }) {
           {user && state === "invite" && (
             <div className="duel-row"><button type="button" className="duel-btn" disabled={busy} onClick={() => void join()}>{t.joinCta}</button></div>
           )}
-          {user && state === "loading" && <p className="duel-wait">…</p>}
+          {user && state === "loading" && <p className="duel-wait"><WaitDots className="gd-wait-big" /></p>}
           {state === "error" && <p className="duel-note">{error}</p>}
         </div>
       </div>

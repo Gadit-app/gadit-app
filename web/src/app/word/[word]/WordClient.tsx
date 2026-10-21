@@ -15,6 +15,7 @@
  * modal layered above the result.
  */
 
+import { WaitDots } from "@/components/WaitText";
 import { isNotAWordResult } from "@/lib/not-a-word";
 import { WordMilestone } from "@/components/design/WordMilestone";
 import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
@@ -2643,7 +2644,7 @@ export function WordClient({
 
           {loading && !result && (
             <div style={{ paddingTop: 24 }}>
-              <div className="wb-skeleton" style={{ height: 120 }} />
+              <div className="wb-skeleton gd-wait-center" style={{ height: 120 }}><WaitDots className="gd-wait-big" /></div>
               <div className="wb-skeleton" style={{ height: 220 }} />
               <div className="wb-skeleton" style={{ height: 160 }} />
             </div>

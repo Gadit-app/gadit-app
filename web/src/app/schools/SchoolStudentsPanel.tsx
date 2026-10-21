@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
@@ -876,7 +877,7 @@ export function SchoolStudentsPanel({ lang }: { lang: string }) {
     return sorted;
   }, [rows, sort, filter]);
 
-  if (loading) return <p style={{ color: "#78716C", fontSize: 15 }}>{t.loading}</p>;
+  if (loading) return <p style={{ color: "#78716C", fontSize: 15 }}><WaitText text={t.loading} live /></p>;
   if (error || !rows) return <p style={{ color: "#B45309", fontSize: 15 }}>{t.error}</p>;
   if (rows.length === 0) {
     return (

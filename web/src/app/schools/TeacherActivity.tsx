@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 
@@ -382,7 +383,7 @@ export function TeacherActivity({ lang }: { lang: string }) {
   }, [user]);
 
   if (err) return null;
-  if (!data) return <p className="ta-muted">{c.loading}</p>;
+  if (!data) return <p className="ta-muted"><WaitText text={c.loading} live /></p>;
   const t = data.totals;
   const maxW = Math.max(1, ...data.weeks.map((w) => w.words));
 

@@ -22,6 +22,7 @@
  * field — for now we render "unlimited" placeholder text.
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { useHref } from "@/lib/href";
@@ -827,7 +828,7 @@ export function AccountV2() {
         >
           {/* Use sr-loading for now; an account-specific spinner string
               is overkill. */}
-          {v2(lang, "srLoading")}
+          <WaitText text={v2(lang, "srLoading")} live />
         </span>
       </div>
     );

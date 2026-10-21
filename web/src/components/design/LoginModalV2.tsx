@@ -9,6 +9,7 @@
  * gradients. Matches the home / pricing / features chrome.
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
@@ -668,7 +669,7 @@ export function LoginModalV2() {
             className="wb-login-submit"
           >
             {busy && <Spinner />}
-            {v2(lang, submitKey)}
+            {busy ? <WaitText text={v2(lang, submitKey)} /> : v2(lang, submitKey)}
           </button>
         </form>
 

@@ -12,6 +12,7 @@
  * positioning isn't constrained by the parent's overflow.
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { createPortal } from "react-dom";
@@ -320,7 +321,7 @@ export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTa
         }}
       >
         {def.status === "loading"
-          ? c.loading
+          ? <WaitText text={c.loading} />
           : def.status === "ready"
             ? def.meaning || c.noPreview
             : c.noPreview}

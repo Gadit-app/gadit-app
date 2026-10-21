@@ -21,6 +21,7 @@
  * modal scrolls (single scroll context) — no inner scroll pane.
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
@@ -678,7 +679,7 @@ export function ComposeModalV2({
               }}
             >
               {busy && <Spinner />}
-              {busy ? v2(lang, "composeChecking") : v2(lang, "composeSubmit")}
+              {busy ? <WaitText text={v2(lang, "composeChecking")} /> : v2(lang, "composeSubmit")}
             </button>
           </div>
         </form>

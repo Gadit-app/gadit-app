@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
@@ -881,7 +882,7 @@ export function PrincipalOverview({ lang }: { lang: string }) {
     } catch { /* clipboard blocked; no-op */ }
   }
 
-  if (loading) return <p style={{ color: "#78716C", fontSize: 15 }}>{t.loading}</p>;
+  if (loading) return <p style={{ color: "#78716C", fontSize: 15 }}><WaitText text={t.loading} live /></p>;
   if (error || !data) return <p style={{ color: "#B45309", fontSize: 15 }}>{t.error}</p>;
 
   if (data.classroomCount === 0) {

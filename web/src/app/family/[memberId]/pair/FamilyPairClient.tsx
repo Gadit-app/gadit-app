@@ -15,6 +15,7 @@
  *     a real-time subscription on the member doc and offers to return.
  */
 
+import { WaitText, WaitDots } from "@/components/WaitText";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -1000,7 +1001,7 @@ export function FamilyPairClient() {
   }
 
   if (loading || !user) {
-    return <div className="wordbook wb-family-page" dir={dir}>&nbsp;</div>;
+    return <div className="wordbook wb-family-page" dir={dir}><div className="gd-wait-page"><WaitDots className="gd-wait-big" /></div></div>;
   }
 
   // Success state — the member just paired their device.
@@ -1079,7 +1080,7 @@ export function FamilyPairClient() {
             onClick={generateCode}
             disabled={generating}
           >
-            {generating ? c.generating : c.newCode}
+            {generating ? <WaitText text={c.generating} /> : c.newCode}
           </button>
         </div>
       </main>

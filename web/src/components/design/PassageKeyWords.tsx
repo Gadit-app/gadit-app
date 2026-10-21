@@ -17,6 +17,7 @@
  * fallback for the rest until a batch translation lands. Gadi 2026-09-09.
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
@@ -455,7 +456,7 @@ export function PassageKeyWords({ text, lang }: { text: string; lang: Lang }) {
   if (state.status === "loading") {
     return (
       <div style={{ ...panel, marginBottom: 18, color: "var(--ink-muted,#6B7280)", fontSize: 14 }}>
-        {t.loading}
+        <WaitText text={t.loading} live />
       </div>
     );
   }

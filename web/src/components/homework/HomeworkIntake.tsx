@@ -11,6 +11,7 @@
  * /api/spell-set, workbook pages become a lesson through /api/learn, and the
  * task itself is stored by /api/homework-task.
  */
+import { WaitText } from "@/components/WaitText";
 import { GaditIcon } from "@/components/design/GaditIcon";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
@@ -192,7 +193,7 @@ export function HomeworkIntake({ lang, dir, nativeLang, learnLang, initialFiles,
       </div>
       <textarea id="hw-intake-text" className="wb-hw-intake-text" rows={6} dir={dir} value={text} placeholder={c.pastePh}
         onChange={(e) => { const v = e.target.value; setText(v); if (!kind && v.trim().length > 3) setKind(guessKind(v, pages)); }} />
-      {msg && <p className="wb-hw-intake-msg" role="status">{msg}</p>}
+      {msg && <p className="wb-hw-intake-msg" role="status">{busy ? <WaitText text={msg} /> : msg}</p>}
       {text.trim().length > 3 && kind && (
         <>
           <div className="wb-hw-intake-q">{c.what}</div>
@@ -216,7 +217,7 @@ export function HomeworkIntake({ lang, dir, nativeLang, learnLang, initialFiles,
           )}
           <div className="wb-hw-intake-row">
             <button type="button" className="wb-hw-intake-save" disabled={busy || (when === "other" && kind !== "text" && !other)} onClick={() => void save()}>
-              {busy ? c.saving : c.save}
+              {busy ? <WaitText text={c.saving} /> : c.save}
             </button>
             <button type="button" className="wb-hw-chip" disabled={busy} onClick={onCancel}>{c.cancel}</button>
           </div>

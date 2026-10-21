@@ -15343,3 +15343,39 @@ html[data-theme="dark"] .wordbook .wb-word-sentence-input::placeholder { color: 
 @keyframes wbMilestoneOut { to { opacity: 0; transform: translate(-50%, 16px); } }
 @keyframes wbMilestonePop { 0%, 100% { transform: scale(1) rotate(0); } 50% { transform: scale(1.3) rotate(-12deg); } }
 @media (prefers-reduced-motion: reduce) { .wb-word-milestone, .wb-word-milestone-ico { animation: none; } }
+
+/* ── Waiting dots (components/WaitText.tsx): three dots that keep moving
+   after any "Reading the file…" style copy, so a wait is never silent.
+   currentColor fits every button and skin; reduced motion = static dots. ── */
+.gd-wait-tail { white-space: nowrap; }
+.gd-wait-dots {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 0.16em;
+  margin-inline-start: 0.18em;
+  vertical-align: baseline;
+  line-height: 1;
+}
+.gd-wait-dot {
+  display: inline-block;
+  width: 0.24em;
+  height: 0.24em;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.35;
+  animation: gd-wait-bounce 1.2s ease-in-out infinite;
+}
+.gd-wait-dot:nth-child(2) { animation-delay: 0.15s; }
+.gd-wait-dot:nth-child(3) { animation-delay: 0.3s; }
+@keyframes gd-wait-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.35; }
+  30% { transform: translateY(-0.32em); opacity: 1; }
+}
+/* A standalone indicator (no text): bigger dots, centered in a skeleton. */
+.gd-wait-dots.gd-wait-big { font-size: 28px; margin-inline-start: 0; }
+.gd-wait-center { display: grid; place-items: center; }
+/* A whole page that is still loading: the dots sit near the top, centered. */
+.gd-wait-page { display: grid; place-items: center; padding: 72px 16px; color: var(--ink-muted, #6B7280); }
+@media (prefers-reduced-motion: reduce) {
+  .gd-wait-dot { animation: none; opacity: 0.85; }
+}

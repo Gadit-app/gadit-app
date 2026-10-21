@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
@@ -577,7 +578,7 @@ export function RenewClient() {
     <main dir={getLangDir(lang)} style={{ minHeight: "70vh", display: "grid", placeItems: "center", padding: "40px 16px" }}>
       <div style={{ maxWidth: 440, width: "100%", textAlign: "center", display: "flex", flexDirection: "column", gap: 18, alignItems: "center" }}>
         <h1 style={{ fontSize: 26, margin: 0 }}>{t.title}</h1>
-        {(phase === "loading" || phase === "working") && <p style={{ margin: 0, color: "#5C6270" }}>{t.working}</p>}
+        {(phase === "loading" || phase === "working") && <p style={{ margin: 0, color: "#5C6270" }}><WaitText text={t.working} live /></p>}
         {phase === "need-auth" && (
           <>
             <p style={{ margin: 0, color: "#5C6270", lineHeight: 1.6 }}>{t.signInBody}</p>

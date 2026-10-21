@@ -30,6 +30,7 @@
  *     somethingElse        → other
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { useAuth } from "@/lib/auth-context";
@@ -512,7 +513,7 @@ export function ReportModalV2({
               }}
             >
               {isSubmitting && <Spinner />}
-              {isSubmitting ? v2(lang, "reportSending") : v2(lang, "reportSend")}
+              {isSubmitting ? <WaitText text={v2(lang, "reportSending")} /> : v2(lang, "reportSend")}
             </button>
           </>
         )}

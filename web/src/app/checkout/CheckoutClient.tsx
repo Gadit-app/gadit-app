@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY, INDIVIDUAL_DISPLAY } from "@/lib/individual-prices";
 import { miscUi } from "@/lib/misc-ui-i18n";
 import { useEffect, useRef, useState } from "react";
@@ -846,7 +847,7 @@ export default function CheckoutClient() {
               style={{ display: "block", width: "100%", background: "#0EA5A5", color: "#fff", padding: "14px 30px", borderRadius: 12, border: "none", fontWeight: 700, fontSize: 15.5, fontFamily: "inherit", cursor: twaBusy ? "default" : "pointer", opacity: twaBusy ? 0.6 : 1 }}
             >
               {twaBusy
-                ? c.processing
+                ? <WaitText text={c.processing} />
                 : miscUi(lang).openPayPage}
             </button>
             {twaErr && (
@@ -966,7 +967,7 @@ export default function CheckoutClient() {
                 ) : null}
               </div>
 
-              {phase !== "form" && !errMsg && <p style={styles.muted}>{c.loading}</p>}
+              {phase !== "form" && !errMsg && <p style={styles.muted}><WaitText text={c.loading} live /></p>}
 
               <div ref={mountRef} style={{ minHeight: phase === "form" ? 200 : 0 }} />
 
@@ -987,7 +988,7 @@ export default function CheckoutClient() {
                   disabled={!elementReady || submitting}
                   onClick={onPay}
                 >
-                  {submitting ? c.processing : c.payButton}
+                  {submitting ? <WaitText text={c.processing} /> : c.payButton}
                 </button>
               )}
 

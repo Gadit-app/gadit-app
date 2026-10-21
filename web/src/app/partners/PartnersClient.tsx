@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { fillOffer, offerCopy, offerValues } from "@/lib/partner-offer-copy";
 import { firstSaleBonusActive } from "@/lib/partners";
 import { planCopy } from "@/lib/plan-copy";
@@ -2475,7 +2476,7 @@ export function PartnersClient() {
               </select>
               {state === "error" && <div style={S.formErr}>{errMsg}</div>}
               <button type="submit" style={S.formCta} disabled={state === "sending"}>
-                {state === "sending" ? t.formSending : t.formCta}
+                {state === "sending" ? <WaitText text={t.formSending} /> : t.formCta}
               </button>
             </form>
           )}

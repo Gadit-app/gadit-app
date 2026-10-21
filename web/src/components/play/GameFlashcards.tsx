@@ -25,6 +25,7 @@
  * school list is there next time in both games.
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { PlayWord } from "@/lib/play-engine";
 import { shuffle, SESSION_SIZE } from "@/lib/play-engine";
@@ -455,7 +456,7 @@ export function GameFlashcards({
                 {saved.map((s) => (
                   <button key={s.setId} type="button" className="wb-flash-src" onClick={() => void openSaved(s.setId)} disabled={!!busy}>
                     <span className="wb-flash-src-icon" aria-hidden>{s.icon || "📝"}</span>
-                    <span className="wb-flash-src-title" dir="auto">{busy === s.setId ? pc.creating : s.title || "📝"}</span>
+                    <span className="wb-flash-src-title" dir="auto">{busy === s.setId ? <WaitText text={pc.creating} /> : s.title || "📝"}</span>
                   </button>
                 ))}
               </div>
@@ -468,7 +469,7 @@ export function GameFlashcards({
                 {DICTATION_SETS.map((s) => (
                   <button key={s.id} type="button" className="wb-flash-src" onClick={() => pickTopic(s)} disabled={!!busy}>
                     <span className="wb-flash-src-icon" aria-hidden>{s.icon}</span>
-                    <span className="wb-flash-src-title">{busy === s.id ? pc.creating : getCatTitle(s.id, lang)}</span>
+                    <span className="wb-flash-src-title">{busy === s.id ? <WaitText text={pc.creating} /> : getCatTitle(s.id, lang)}</span>
                   </button>
                 ))}
               </div>
@@ -479,7 +480,7 @@ export function GameFlashcards({
                 <label className="wb-flash-make-title" htmlFor="wb-flash-topic">{pc.ownTopic}</label>
                 <div className="wb-flash-make-row">
                   <input id="wb-flash-topic" className="wb-flash-input" value={ownTopic} onChange={(e) => setOwnTopic(e.target.value)} placeholder={pc.ownTopicPh} maxLength={40} dir={fieldDir} />
-                  <button type="submit" className="wb-flash-make-btn" disabled={ownTopic.trim().length < 2 || !!busy}>{busy === "topic" ? pc.creating : pc.make}</button>
+                  <button type="submit" className="wb-flash-make-btn" disabled={ownTopic.trim().length < 2 || !!busy}>{busy === "topic" ? <WaitText text={pc.creating} /> : pc.make}</button>
                 </div>
               </form>
               <form
@@ -490,9 +491,9 @@ export function GameFlashcards({
                 <div className="wb-flash-make-sub">{pc.pasteSub}</div>
                 <textarea id="wb-flash-list" className="wb-flash-input wb-flash-textarea" value={listText} onChange={(e) => setListText(e.target.value)} placeholder={pc.pastePh} maxLength={800} rows={5} dir={fieldDir} />
                 <div className="wb-flash-make-row">
-                  <button type="submit" className="wb-flash-make-btn" disabled={listText.trim().length < 2 || !!busy}>{busy === "list" ? pc.creating : pc.pasteBtn}</button>
+                  <button type="submit" className="wb-flash-make-btn" disabled={listText.trim().length < 2 || !!busy}>{busy === "list" ? <WaitText text={pc.creating} /> : pc.pasteBtn}</button>
                   <button type="button" className="wb-flash-make-btn is-ghost" onClick={() => photoRef.current?.click()} disabled={!!busy}>
-                    <span aria-hidden>📷</span> {busy === "photo" ? photoMsg : photoT("photoBtn", lang)}
+                    <span aria-hidden>📷</span> {busy === "photo" ? <WaitText text={photoMsg} /> : photoT("photoBtn", lang)}
                   </button>
                   <input ref={photoRef} type="file" accept="image/*" hidden
                     onChange={(e) => { const fl = e.target.files?.[0]; if (fl) void fromPhoto(fl); e.target.value = ""; }} />
@@ -510,7 +511,7 @@ export function GameFlashcards({
     return (
       <div className="wb-play-stage">
         <PlayHeader title={title} progress="" score={0} onExit={onExit} t={t} />
-        <div className="wb-play-question"><div className="wb-play-question-eyebrow">{f.loading}</div></div>
+        <div className="wb-play-question"><div className="wb-play-question-eyebrow"><WaitText text={f.loading} live /></div></div>
       </div>
     );
   }

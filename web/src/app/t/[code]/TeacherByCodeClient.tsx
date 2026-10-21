@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
@@ -826,7 +827,7 @@ export function TeacherByCodeClient({ code }: { code: string }) {
         </Link>
 
         {loading ? (
-          <p style={{ color: "#78716C", fontSize: 15 }}>{t.loading}</p>
+          <p style={{ color: "#78716C", fontSize: 15 }}><WaitText text={t.loading} live /></p>
         ) : error || !data ? (
           <p style={{ color: "#B45309", fontSize: 15 }}>{t.notFound}</p>
         ) : (

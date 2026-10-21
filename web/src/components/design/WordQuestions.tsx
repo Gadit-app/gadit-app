@@ -15,6 +15,7 @@
  * API call is made for it.
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
@@ -430,7 +431,7 @@ export default function WordQuestions({
             ) : (
               <>
                 {cells[open]?.loading && (
-                  <span style={{ color: "var(--ink-muted,#6B7280)" }}>{pick(LOADING, lang)}</span>
+                  <span style={{ color: "var(--ink-muted,#6B7280)" }}><WaitText text={pick(LOADING, lang)} live /></span>
                 )}
                 {cells[open]?.error && (
                   <span style={{ color: "#B91C1C" }}>{pick(ERR, lang)}</span>

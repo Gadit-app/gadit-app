@@ -16,6 +16,7 @@
  *     (same flow as kids, role claim differs).
  */
 
+import { WaitText, WaitDots } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -861,7 +862,7 @@ export function FamilyAddClient() {
   }
 
   if (loading || !user) {
-    return <div className="wordbook wb-family-page" dir={dir}>&nbsp;</div>;
+    return <div className="wordbook wb-family-page" dir={dir}><div className="gd-wait-page"><WaitDots className="gd-wait-big" /></div></div>;
   }
 
   return (
@@ -962,7 +963,7 @@ export function FamilyAddClient() {
                 onClick={addMember}
                 disabled={saving || atKidCap}
               >
-                {saving ? c.adding : c.add}
+                {saving ? <WaitText text={c.adding} /> : c.add}
               </button>
             </div>
           </div>

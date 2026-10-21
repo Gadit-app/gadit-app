@@ -10,6 +10,7 @@
  * Pass `onClose` to show a close (X) button (modal use).
  */
 
+import { WaitText } from "@/components/WaitText";
 import { SAY_NAV } from "@/components/design/WbShellChrome";
 import { toLocalDateStr } from "@/lib/gamification";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -538,7 +539,7 @@ export function SayTool({ onClose, framed = false }: { onClose?: () => void; fra
           </div>
 
           <button type="button" className="wb-say-go" onClick={submit} disabled={busy || !text.trim()}>
-            {busy ? t.loading : t.button}
+            {busy ? <WaitText text={t.loading} /> : t.button}
           </button>
           </div>
         </div>

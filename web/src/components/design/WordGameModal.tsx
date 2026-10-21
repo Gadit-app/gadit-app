@@ -24,6 +24,7 @@
  * /play engine's rule that long words don't anagram well).
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useMemo, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useAuth } from "@/lib/auth-context";
@@ -918,7 +919,7 @@ export function WordGameModal({ open, onClose, word, language, meaning, examples
 
         <main className="wb-wgm-body">
           {stage === "loading" && (
-            <div className="wb-wgm-loading">{c.loading}</div>
+            <div className="wb-wgm-loading"><WaitText text={c.loading} live /></div>
           )}
 
           {stage === "anagram" && anagramEligible && (

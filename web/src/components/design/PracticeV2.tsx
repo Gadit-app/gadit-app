@@ -20,6 +20,7 @@
  *     SM-2 doubling (max 90d), reset to 1d on incorrect.
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useHref } from "@/lib/href";
@@ -831,7 +832,7 @@ export function PracticeV2() {
         <span
           style={{ fontFamily: "var(--wb-sans)", fontSize: 14, color: "var(--ink-muted, #6B7280)" }}
         >
-          {v2(lang, "srLoading")}
+          <WaitText text={v2(lang, "srLoading")} live />
         </span>
       </div>
     );

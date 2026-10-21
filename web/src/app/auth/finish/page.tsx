@@ -7,6 +7,7 @@
  * a mail app that trims it), the visitor types it once.
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import { isSignInWithEmailLink, signInWithEmailLink, signInWithCustomToken } from "firebase/auth";
 import { auth } from "@/lib/firebase";
@@ -56,7 +57,7 @@ export default function AuthFinish() {
     <main dir={dir} style={{ minHeight: "70vh", display: "grid", placeItems: "center", padding: "40px 16px", fontFamily: "inherit" }}>
       <div style={{ maxWidth: 420, width: "100%", textAlign: "center", display: "grid", gap: 14 }}>
         <div style={{ fontSize: 30, fontWeight: 800, direction: "ltr" }}>Gad<span style={{ color: "#0EA5A5", fontStyle: "italic" }}>it</span></div>
-        {state === "working" && <p style={{ fontSize: 18, margin: 0 }}>{c.signingIn}</p>}
+        {state === "working" && <p style={{ fontSize: 18, margin: 0 }}><WaitText text={c.signingIn} live /></p>}
         {state === "ask" && (
           <form onSubmit={(e) => { e.preventDefault(); if (email.trim()) void finish(email); }} style={{ display: "grid", gap: 10 }}>
             <label htmlFor="finish-email" style={{ fontSize: 16 }}>{c.askEmail}</label>

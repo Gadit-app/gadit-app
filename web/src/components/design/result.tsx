@@ -34,6 +34,7 @@
  *     design). IdiomsCard export is kept as a no-op for legacy callers.
  */
 
+import { WaitText, WaitDots } from "@/components/WaitText";
 import { gadCopy } from "@/lib/gadit-button-copy";
 import { nativeShareFallback } from "@/lib/native-app";
 import { useState, useEffect, useMemo, type ReactNode } from "react";
@@ -1003,7 +1004,7 @@ function MeaningEntry({
       )}
       {showKids && !kidsImageUrl && kidsImageLoading && (
         <div className="wb-mkids-image wb-mkids-image-loading" aria-hidden="true">
-          <div className="wb-mkids-skeleton" />
+          <div className="wb-mkids-skeleton gd-wait-center"><WaitDots className="gd-wait-big" /></div>
         </div>
       )}
 
@@ -1106,7 +1107,7 @@ function MeaningEntry({
                   <circle cx="22" cy="22" r="18" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="28 84" />
                 </svg>
               </div>
-              <div className="wb-image-loading-label">{v2(lang, "imageGeneratingLabel")}</div>
+              <div className="wb-image-loading-label"><WaitText text={v2(lang, "imageGeneratingLabel")} /></div>
               <div className="wb-image-loading-hint">{v2(lang, "imageGeneratingHint")}</div>
             </div>
           ) : (
@@ -1564,7 +1565,7 @@ export function VisualCard({
           onClick={isLocked ? () => onUpgrade?.("image", "clear") : onGenerate}
           disabled={generating}
         >
-          <PlusIcon /> {generating ? "…" : v2(lang, "generateLabel")}
+          <PlusIcon /> {generating ? <WaitDots /> : v2(lang, "generateLabel")}
         </button>
       </div>
     </div>

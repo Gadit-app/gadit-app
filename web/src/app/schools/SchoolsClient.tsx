@@ -20,6 +20,7 @@
  * counts per classroom.
  */
 
+import { WaitText, WaitDots } from "@/components/WaitText";
 import { useEffect, useRef, useState } from "react";
 import { miscUi } from "@/lib/misc-ui-i18n";
 import Link from "next/link";
@@ -2859,7 +2860,7 @@ export function SchoolsClient() {
   }, [user]);
 
   if (loading || !schoolChecked) {
-    return <div className="wordbook wb-school-page" dir={dir}>&nbsp;</div>;
+    return <div className="wordbook wb-school-page" dir={dir}><div className="gd-wait-page"><WaitDots className="gd-wait-big" /></div></div>;
   }
 
   if (!user) {
@@ -3228,13 +3229,13 @@ export function SchoolsClient() {
                 now lives only inside the Settings tab, where a tagline is
                 out of place. The click-to-edit name + logo are the point. */}
             {nameSaving && (
-              <div className="wb-school-sub" style={{ marginTop: 4, fontSize: 12 }}>{c.saving}</div>
+              <div className="wb-school-sub" style={{ marginTop: 4, fontSize: 12 }}><WaitText text={c.saving} live /></div>
             )}
           </div>
         </header>
 
         {logoUploading && (
-          <div className="wb-school-sub" style={{ marginBottom: 12 }}>{c.logoUploading}</div>
+          <div className="wb-school-sub" style={{ marginBottom: 12 }}><WaitText text={c.logoUploading} live /></div>
         )}
         {logoError && (
           <div className="wb-school-sub" style={{ color: "#B91C1C", marginBottom: 12 }}>{logoError}</div>
@@ -3352,7 +3353,7 @@ export function SchoolsClient() {
                 >
                   {a.reset}
                 </button>
-                {skinSaving && <span className="wb-school-sub" style={{ fontSize: 12 }}>{a.saving}</span>}
+                {skinSaving && <span className="wb-school-sub" style={{ fontSize: 12 }}><WaitText text={a.saving} live /></span>}
               </div>
               {skinAutoNote && (
                 <div className="wb-school-sub" style={{ color: "#B91C1C", fontSize: 12, marginTop: 8 }}>{skinAutoNote}</div>
@@ -4015,7 +4016,7 @@ export function SchoolsClient() {
                   opacity: !newClassroomName.trim() ? 0.5 : 1,
                 }}
               >
-                {creating ? c.creating : c.addClassroom}
+                {creating ? <WaitText text={c.creating} /> : c.addClassroom}
               </button>
               <button
                 type="button"

@@ -7,6 +7,7 @@
  * and gives a one-click way to update the card (Stripe billing portal via
  * /api/portal). Renders nothing for everyone else. Gadi 2026-08-31.
  */
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
@@ -133,7 +134,7 @@ export function PastDueBanner() {
           fontFamily: "inherit", opacity: busy ? 0.7 : 1, whiteSpace: "nowrap",
         }}
       >
-        {busy ? c.busy : c.cta}
+        {busy ? <WaitText text={c.busy} /> : c.cta}
       </button>
     </div>
   );

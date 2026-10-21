@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
@@ -207,7 +208,7 @@ export function FamilyProfileSwitcher({ onSwitch }: { onSwitch?: () => void }) {
             {tag}
           </span>
         )}
-        {linked && <span style={{ fontSize: 12, color: "var(--ink-soft, #9CA3AF)" }}>{t.switching}</span>}
+        {linked && <span style={{ fontSize: 12, color: "var(--ink-soft, #9CA3AF)" }}><WaitText text={t.switching} /></span>}
       </button>
     );
   }

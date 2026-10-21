@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { GaditIcon, type GaditIconName } from "@/components/design/GaditIcon";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
@@ -167,7 +168,7 @@ export function DuelHub({ pool, lang, dir, onExit, initialCode, preset, games }:
             <ModeCard icon="invite" title={t.optInvite} desc={t.optInviteDesc} disabled={busy} onClick={() => void startWith("invite", "preset")} />
             <ModeCard icon="bot" title={t.optBot} desc={t.optBotDesc} disabled={busy} onClick={() => void startWith("bot", "preset")} />
           </div>
-          {busy && <p className="duel-wait">{t.creating}</p>}
+          {busy && <p className="duel-wait"><WaitText text={t.creating} live /></p>}
           {msg && <p className="duel-note">{msg}</p>}
         </div>
       )}
@@ -209,7 +210,7 @@ export function DuelHub({ pool, lang, dir, onExit, initialCode, preset, games }:
               </div>
             </>
           )}
-          {busy && <p className="duel-wait">{t.creating}</p>}
+          {busy && <p className="duel-wait"><WaitText text={t.creating} live /></p>}
           {msg && <p className="duel-note">{msg}</p>}
         </div>
       )}
@@ -229,7 +230,7 @@ export function DuelHub({ pool, lang, dir, onExit, initialCode, preset, games }:
 
       {screen.kind === "searching" && (
         <div className="duel-card">
-          <h2 className="duel-h">{t.searching}</h2>
+          <h2 className="duel-h"><WaitText text={t.searching} live /></h2>
           <p className="duel-sub">{t.searchingSub}</p>
           <div className="duel-count" aria-hidden="true">🌍</div>
           <div className="duel-row"><button type="button" className="duel-btn is-soft" onClick={() => stopSearch(screen.ticket)}>{t.cancel}</button></div>

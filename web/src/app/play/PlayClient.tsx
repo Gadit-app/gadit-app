@@ -12,6 +12,7 @@
  * GameResult, which calls back to onExit → returns here to "menu").
  */
 
+import { WaitDots } from "@/components/WaitText";
 import { GaditIcon } from "@/components/design/GaditIcon";
 import { ml } from "@/lib/my-lists-i18n";
 import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
@@ -4172,7 +4173,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
   if (stage.kind === "menu" && lessonPending) {
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-        <div className="wb-play-loading">…</div>
+        <div className="wb-play-loading"><WaitDots className="gd-wait-big" /></div>
       </div>
     );
   }
@@ -4366,7 +4367,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
         </div>
 
         {pool === null && !fetchError && (
-          <div className="wb-play-loading">…</div>
+          <div className="wb-play-loading"><WaitDots className="gd-wait-big" /></div>
         )}
 
         {fetchError && (

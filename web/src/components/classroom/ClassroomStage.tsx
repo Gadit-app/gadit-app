@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { KidsCelebration } from "@/components/design/KidsCelebration";
 import { TTSButton } from "@/components/design/TTSButton";
@@ -1258,7 +1259,7 @@ function StageInner({
               // eslint-disable-next-line @next/next/no-img-element
               <img src={imageUrl} alt={word} />
             ) : (
-              <div className="cs-pic-wait" aria-busy="true"><span className="cs-spin" />{c.preparingPic}</div>
+              <div className="cs-pic-wait" aria-busy="true"><span className="cs-spin" /><WaitText text={c.preparingPic} /></div>
             )}
           </figure>
         )}
@@ -1294,7 +1295,7 @@ function StageInner({
           {(panel === "quiz" || panel === "game") && actState !== "ready" && (
             <div className="cs-card cs-center">
               {actState === "loading" ? (
-                <><span className="cs-spin big" /><div className="cs-muted">{c.preparing}</div></>
+                <><span className="cs-spin big" /><div className="cs-muted"><WaitText text={c.preparing} live /></div></>
               ) : (
                 <><div className="cs-muted">{c.failed}</div><button type="button" className="cs-btn" onClick={() => void loadActivity()}>{c.retry}</button></>
               )}

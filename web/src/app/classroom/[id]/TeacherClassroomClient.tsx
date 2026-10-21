@@ -19,6 +19,7 @@
  * this page is safe to ship without a DPDP/COPPA compliance review.
  */
 
+import { WaitDots } from "@/components/WaitText";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -1523,7 +1524,7 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
   const recentToShow = useMemo(() => searches.slice(0, 50), [searches]);
 
   if (loading) {
-    return <div className="wordbook wb-school-page" dir={dir}>&nbsp;</div>;
+    return <div className="wordbook wb-school-page" dir={dir}><div className="gd-wait-page"><WaitDots className="gd-wait-big" /></div></div>;
   }
   if (!user) {
     router.replace(href("/pricing"));
@@ -1534,7 +1535,7 @@ export function TeacherClassroomClient({ classroomId }: { classroomId: string })
     return null;
   }
   if (!classroomChecked) {
-    return <div className="wordbook wb-school-page" dir={dir}>&nbsp;</div>;
+    return <div className="wordbook wb-school-page" dir={dir}><div className="gd-wait-page"><WaitDots className="gd-wait-big" /></div></div>;
   }
   if (!classroom) {
     return (

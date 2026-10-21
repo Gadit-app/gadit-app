@@ -9,6 +9,7 @@
  * meaning summary; the card whole-area links to /word/<word>.
  */
 
+import { WaitDots } from "@/components/WaitText";
 import { GaditIcon } from "@/components/design/GaditIcon";
 import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import { wordLangLabel } from "@/components/design/result";
@@ -740,7 +741,7 @@ export function NotebookPage() {
         )}
 
         {items === null && !fetchError && (
-          <div className="wb-notebook-loading">…</div>
+          <div className="wb-notebook-loading"><WaitDots className="gd-wait-big" /></div>
         )}
 
         {fetchError && (

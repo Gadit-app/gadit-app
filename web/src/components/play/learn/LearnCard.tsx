@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { GaditIcon } from "@/components/design/GaditIcon";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
@@ -262,7 +263,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
                 <button type="button" className="wb-learn-simple-link is-quiet" onClick={() => setStep("pick")}>{t.changeLang}</button>
               </>
             )}
-            {busy && msg && <p className="wb-learn-msg">{msg}</p>}
+            {busy && msg && <p className="wb-learn-msg"><WaitText text={msg} live /></p>}
           </li>
         )}
       </>
@@ -304,7 +305,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
             <input id="learn-test-date" type="date" value={testDate} onChange={(e) => setTestDate(e.target.value)} />
           </label>
         </div>
-        {msg && <p className="wb-learn-msg">{msg}</p>}
+        {msg && <p className="wb-learn-msg">{busy ? <WaitText text={msg} live /> : msg}</p>}
         <div className="wb-learn-row">
           <button type="button" className="wb-learn-btn" disabled={busy || text.trim().length < 3} onClick={() => void saveList()}>{t.listSave}</button>
           <button type="button" className="wb-learn-chip is-soft" onClick={() => { setStep("view"); setMsg(""); }}>{t.cancel}</button>
@@ -341,7 +342,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
             <button type="button" className="wb-learn-simple-link is-quiet" onClick={() => setStep("pick")}>{t.changeLang}</button>
           </>
         )}
-        {busy && msg && <p className="wb-learn-msg">{msg}</p>}
+        {busy && msg && <p className="wb-learn-msg"><WaitText text={msg} live /></p>}
       </section>
     );
   }
@@ -400,7 +401,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
         <button type="button" className="wb-learn-chip" onClick={() => { setStep("list"); setMsg(""); }}>📝 {s?.list ? t.listReplace : t.listAdd}</button>
         {s?.list && <button type="button" className="wb-learn-chip is-soft" disabled={busy} onClick={async () => { setBusy(true); try { await post({ action: "clearList" }); await load(); } finally { setBusy(false); } }}>{t.listClear}</button>}
       </div>
-      {busy && msg && <p className="wb-learn-msg">{msg}</p>}
+      {busy && msg && <p className="wb-learn-msg"><WaitText text={msg} live /></p>}
       {!busy && msg && step === "view" && <p className="wb-learn-msg">{msg}</p>}
     </section>
   );

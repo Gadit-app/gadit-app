@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { EarningsCalculator } from "./EarningsCalculator";
@@ -1923,7 +1924,7 @@ export function PartnerDashboardClient() {
       </div>
 
       <div style={S.shell}>
-        {state === "loading" && <div style={S.muted}>{t.loading}</div>}
+        {state === "loading" && <div style={S.muted}><WaitText text={t.loading} live /></div>}
         {state === "error" && <div style={S.errorBox}>{t.notFound}</div>}
 
         {state === "ready" && stats && (
@@ -2120,7 +2121,7 @@ export function PartnerDashboardClient() {
                     <button type="button" onClick={savePayoutEmail}
                       disabled={emailState === "saving" || payoutEmail.trim() === savedEmail}
                       style={{ ...S.copyBtn, opacity: (emailState === "saving" || payoutEmail.trim() === savedEmail) ? 0.5 : 1 }}>
-                      {emailState === "saved" ? m.savedBtn : m.saveBtn}
+                      {emailState === "saved" ? m.savedBtn : emailState === "saving" ? <WaitText text={m.saveBtn} /> : m.saveBtn}
                     </button>
                   </div>
                   {emailState === "error" && <div style={{ fontSize: 12.5, color: "#B91C1C", marginTop: 8 }}>{m.emailInvalid}</div>}

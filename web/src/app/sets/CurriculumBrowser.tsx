@@ -1,5 +1,6 @@
 "use client";
 
+import { WaitText } from "@/components/WaitText";
 import Link from "next/link";
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -2131,7 +2132,7 @@ function TopicRow({ t, open, onToggle }: { t: ViewTopic; open: boolean; onToggle
           ) : failed ? (
             <p className="cb-note">{T.fail}</p>
           ) : (
-            <p className="cb-note"><span className="cb-spin" aria-hidden /> {T.loading}</p>
+            <p className="cb-note"><span className="cb-spin" aria-hidden /> <WaitText text={T.loading} live /></p>
           )}
         </div>
       )}
