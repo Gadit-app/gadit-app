@@ -18,7 +18,7 @@ function langName(code: string, inLang: string): string {
 type EmailRow = { key: string; label: string; labelHe?: string; dayOffset: number; plans?: string[] };
 // Family, the individual Clear/Deep series (Gadi 2026-10-06), checkout
 // recovery (2026-10-21) and the read-only signup series.
-type Series = "family" | "indiv" | "recovery" | "signup";
+type Series = "family" | "indiv" | "recovery" | "activation" | "signup";
 type RoMail = { subject: string; html: string };
 
 const EMPTY: Content = { subject: "", heading: "", body: "", ctaText: "" };
@@ -34,6 +34,9 @@ export function AdminEmailEditorClient() {
   const [recovery, setRecovery] = useState<EmailRow[]>([]);
   // Checkout recovery is a draft until emailConfig/checkoutRecovery.enabled.
   const [recoveryOn, setRecoveryOn] = useState(false);
+  // Activation nudges (2026-10-21): a draft until emailConfig/activation.enabled.
+  const [activation, setActivation] = useState<EmailRow[]>([]);
+  const [activationOn, setActivationOn] = useState(false);
   const [series, setSeries] = useState<Series>("family");
   // The Clear/Deep series is previewed and test-sent as one plan at a time.
   const [plan, setPlan] = useState<"clear" | "deep">("deep");
@@ -64,6 +67,8 @@ export function AdminEmailEditorClient() {
         setIndiv(d.indiv ?? []);
         setRecovery(d.recovery ?? []);
         setRecoveryOn(d.recoveryEnabled === true);
+        setActivation(d.activation ?? []);
+        setActivationOn(d.activationEnabled === true);
         if (d.emails?.[0]) setKey(d.emails[0].key);
         // Test sends go to Gadi's own inbox by default (server env, never in
         // this public repo); the field stays editable.
@@ -97,7 +102,7 @@ export function AdminEmailEditorClient() {
     if (s === series) return;
     setSeries(s);
     if (s === "signup" && tab !== "he" && tab !== "en") setTab("he"); // the signup series is he/en only
-    const first = (s === "signup" ? signup : s === "indiv" ? indiv : s === "recovery" ? recovery : emails)[0];
+    const first = (s === "signup" ? signup : s === "indiv" ? indiv : s === "recovery" ? recovery : s === "activation" ? activation : emails)[0];
     setKey(first?.key ?? "");
     setPreview(""); setStatus("");
   }
@@ -183,7 +188,7 @@ export function AdminEmailEditorClient() {
   const isOther = tab !== "he" && tab !== "en";
   const label: React.CSSProperties = { fontSize: 12, fontWeight: 700, color: "#6B7280", margin: "14px 0 4px", display: "block" };
   const input: React.CSSProperties = { width: "100%", padding: "9px 11px", borderRadius: 8, border: "1px solid #D1D5DB", fontSize: 14, fontFamily: "inherit", boxSizing: "border-box" };
-  const list = isSignup ? signup : series === "indiv" ? indiv : series === "recovery" ? recovery : emails;
+  const list = isSignup ? signup : series === "indiv" ? indiv : series === "recovery" ? recovery : series === "activation" ? activation : emails;
   const curRow = list.find((e) => e.key === key);
   const previewHtml = preview || (isSignup ? ro?.html ?? "" : "");
 
@@ -198,14 +203,14 @@ export function AdminEmailEditorClient() {
 
       {/* Series switch */}
       <div style={{ display: "flex", gap: 6, marginBottom: 14 }}>
-        {(["family", "indiv", "recovery", "signup"] as const).map((s) => (
+        {(["family", "indiv", "recovery", "activation", "signup"] as const).map((s) => (
           <button key={s} type="button" onClick={() => pickSeries(s)}
             style={{
               padding: "6px 16px", borderRadius: 999, cursor: "pointer", fontSize: 13, fontWeight: 700, fontFamily: "inherit",
               border: "none", background: series === s ? "#0EA5A5" : "#F3F4F6", color: series === s ? "#fff" : "#374151",
             }}>
-            {s === "family" ? (he ? "סדרת משפחה" : "Family series") : s === "indiv" ? (he ? "סדרת Individual" : "Individual series") : s === "recovery" ? (he ? "סדרת השלמת הרשמה" : "Checkout recovery") : (he ? "סדרת הרשמה" : "Signup series")}
-            {s === "recovery" && !recoveryOn && (
+            {s === "family" ? (he ? "סדרת משפחה" : "Family series") : s === "indiv" ? (he ? "סדרת Individual" : "Individual series") : s === "recovery" ? (he ? "סדרת השלמת הרשמה" : "Checkout recovery") : s === "activation" ? (he ? "סדרת הפעלה" : "Activation") : (he ? "סדרת הרשמה" : "Signup series")}
+            {((s === "recovery" && !recoveryOn) || (s === "activation" && !activationOn)) && (
               <span style={{ marginInlineStart: 6, padding: "1px 7px", borderRadius: 999, fontSize: 11, background: series === s ? "rgba(255,255,255,0.25)" : "#FFEDD5", color: series === s ? "#fff" : "#9A3412" }}>
                 {he ? "טיוטה · כבוי" : "draft · off"}
               </span>
@@ -251,6 +256,22 @@ export function AdminEmailEditorClient() {
           <span style={{ fontSize: 12, color: "#9CA3AF" }}>
             {he ? "שורה בין [[clear]] ל-[[/clear]] יוצאת רק למנויי Clear, ובין [[deep]] ל-[[/deep]] רק ל-Deep." : "A line between [[clear]] and [[/clear]] goes to Clear only, between [[deep]] and [[/deep]] to Deep only."}
           </span>
+        </div>
+      )}
+
+      {/* Activation: when each email goes, and whether it sends. */}
+      {series === "activation" && (
+        <div style={{ marginBottom: 12, fontSize: 12.5, lineHeight: 1.6 }}>
+          <div style={{ display: "inline-block", padding: "6px 10px", borderRadius: 8, marginBottom: 6, fontWeight: 700, background: activationOn ? "#ECFDF5" : "#FFF7ED", color: activationOn ? "#0E7A52" : "#9A3412" }}>
+            {activationOn
+              ? (he ? "פעיל: המיילים האוטומטיים נשלחים עם הנוסח השמור כאן" : "On: the automatic emails go out with the text saved here")
+              : (he ? "טיוטה · כבוי: שום מייל אוטומטי לא נשלח עד שמפעילים את emailConfig/activation.enabled" : "Draft · off: no automatic email is sent until emailConfig/activation.enabled is turned on")}
+          </div>
+          <div style={{ color: "#6B7280" }}>
+            {he
+              ? "{שם} שם פרטי · המילה הראשונה: יום 1 ויום 3 בניסיון, רק כשאף אחד בחשבון עוד לא חיפש מילה · הוסיפו ילד: 48 שעות בחשבון Family בלי ילד · מנוי שקט: נשלח ידנית בלבד · הכפתור מוביל לחיפוש, או להוספת ילד"
+              : "{name} first name · First word: trial day 1 and day 3, only while nobody in the account has looked up a word · Add a child: 48 hours into a Family account with no child · Quiet subscriber: sent by hand only · the button opens the search, or add a child"}
+          </div>
         </div>
       )}
 

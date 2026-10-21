@@ -3,6 +3,7 @@ import { CONNECT_KEY, CONNECT_META, CONNECT_CONTENT } from "@/lib/email-drip/fam
 import { renderFamilyMail } from "@/lib/email-drip/family-drip";
 import { familyChildrenSummary } from "@/lib/email-drip/family-summary";
 import { isShabbatIL } from "@/lib/shabbat";
+import { activationEnabled, activationDue, sendActivation } from "@/lib/activation";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import type { UserRecord } from "firebase-admin/auth";
@@ -124,6 +125,8 @@ export async function GET(req: NextRequest) {
 
   // ---------- 3) Per-user: decide which (if any) drip mail to send ----------
   const results: SendResult[] = [];
+  // Activation nudges (first word, add a child): off until Gadi approves the text.
+  const activationOn = await activationEnabled(db);
 
   // Per-run real-send cap: one cron run never sends more than this many live
   // emails, so a backlog or a bug can't fan out to the whole list at once.
@@ -208,6 +211,25 @@ export async function GET(req: NextRequest) {
         }
       }
       continue;
+    }
+
+    // ── Activation (Gadi 2026-10-21) ─────────────────────────────
+    // A new subscriber who has not looked up a word on trial day 1 / day 3,
+    // or a Family 48 hours in with no child, gets one nudge with one button.
+    // Takes this user's slot for the day.
+    if (activationOn) {
+      const due = await activationDue(db, u.uid, d, now);
+      if (due) {
+        if (dryRun) {
+          results.push({ uid: u.uid, email, mailKey: due.key, status: "skipped", reason: "dryRun" });
+        } else {
+          const nm = (typeof u.displayName === "string" && u.displayName.trim()) || (typeof d.displayName === "string" && (d.displayName as string).trim()) || "";
+          const r = await sendActivation(db, { uid: u.uid, email, d, key: due.key, target: due.target, firstName: nm.split(/\s+/)[0] || null, scheduled: true });
+          if (r.ok) realSends++;
+          results.push({ uid: u.uid, email, mailKey: due.key, status: r.ok ? "sent" : "failed", ...(r.ok ? {} : { reason: r.reason }) });
+        }
+        continue;
+      }
     }
 
     // ── School pilot onboarding (Gadi 2026-10-10) ───────────────
