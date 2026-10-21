@@ -12,7 +12,7 @@
 
 import { WaitText } from "@/components/WaitText";
 import { SAY_NAV } from "@/components/design/WbShellChrome";
-import { toLocalDateStr } from "@/lib/gamification";
+import { notifyActivity } from "@/lib/notify-activity-client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 import { useLang } from "@/lib/lang-context";
@@ -396,16 +396,8 @@ export function SayTool({ onClose, framed = false }: { onClose?: () => void; fra
     const key = `${result.targetLang}|${result.translation}`;
     if (notifiedSayRef.current === key) return;
     notifiedSayRef.current = key;
-    (async () => {
-      try {
-        const idToken = await user.getIdToken();
-        await fetch("/api/family/notify-activity", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-          body: JSON.stringify({ kind: "say", label: result.translation, score: pron.stars, total: 5, day: toLocalDateStr(new Date().toISOString()) }),
-        });
-      } catch { /* best-effort */ }
-    })();
+    // Also a completed practice for the rank (2026-10-21).
+    void notifyActivity(user, { kind: "say", label: result.translation, score: pron.stars, total: 5 });
   }, [pron, result, user]);
 
   const autoPlayedRef = useRef<string>("");

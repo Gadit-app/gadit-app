@@ -13,7 +13,6 @@
 import { WaitText, WaitDots } from "@/components/WaitText";
 import { GaditIcon } from "@/components/design/GaditIcon";
 import { ReportQuestionButton } from "@/components/play/ReportQuestionButton";
-import { toLocalDateStr } from "@/lib/gamification";
 import { useRouter } from "next/navigation";
 import { homeworkCopy } from "@/lib/homework-i18n";
 import { intakeCopy } from "@/lib/homework-intake-i18n";
@@ -820,20 +819,8 @@ export function SpellClient() {
   // Silent no-op for non-kids — the endpoint decides. Gadi 2026-09-19.
   async function notifyParentDictation() {
     if (!user || !set) return;
-    try {
-      const idToken = await user.getIdToken();
-      await fetch("/api/family/notify-activity", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-        body: JSON.stringify({
-          kind: "spell",
-          day: toLocalDateStr(new Date().toISOString()),
-          label: setTitle(set),
-          score: set.words.length - wrongEver.size,
-          total: set.words.length,
-        }),
-      });
-    } catch { /* best-effort */ }
+    // Also a completed practice for the rank (2026-10-21).
+    await notifyActivity(user, { kind: "spell", label: setTitle(set), score: set.words.length - wrongEver.size, total: set.words.length });
   }
 
   // Open a previously practiced set from the history list.

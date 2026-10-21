@@ -1,4 +1,6 @@
 import { kidOf, recordKidActivity } from "@/lib/kid-activity";
+import { recordPractice } from "@/lib/rank-points";
+import { practiceDayFrom, recordPracticeDay } from "@/lib/practice-days";
 import { NextRequest, NextResponse } from "next/server";
 import type { DecodedIdToken } from "firebase-admin/auth";
 import { FieldValue } from "firebase-admin/firestore";
@@ -294,6 +296,18 @@ async function tellParents(d: DuelDoc, now: number) {
   }
 }
 
+/** A finished duel is a completed practice for each person who played in it
+ *  (Gadi 2026-10-21, lib/rank-points: 10 points, at most 10 a day). */
+async function countPractice(d: DuelDoc, now: number) {
+  const day = practiceDayFrom(undefined, now);
+  for (const s of ["a", "b"] as Seat[]) {
+    const p = d.players[s];
+    if (!p || p.kind !== "person" || !(d.answers[s] ?? []).some(Boolean)) continue;
+    await recordPracticeDay(p.uid, day).catch(() => {});
+    await recordPractice(p.uid, day);
+  }
+}
+
 function seatOf(d: DuelDoc, uid: string): Seat | null {
   if (d.players.a.uid === uid) return "a";
   if (d.players.b?.uid === uid) return "b";
@@ -394,6 +408,7 @@ export async function GET(req: NextRequest) {
     if (claimed) {
       await recordStats(d, now).catch(() => { /* the table is a bonus, never a failure */ });
       void tellParents(d, now).catch(() => { /* an alert is a bonus, never a failure */ });
+      void countPractice(d, now).catch(() => { /* points are a bonus, never a failure */ });
       void archive(d, now).catch(() => { /* a recorded opponent is a bonus, never a failure */ });
     }
   }

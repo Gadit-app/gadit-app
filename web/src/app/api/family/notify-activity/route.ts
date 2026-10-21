@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth } from "@/lib/firebase-admin";
 import { kidOf, recordKidActivity } from "@/lib/kid-activity";
 import { practiceDayFrom, recordPracticeDay } from "@/lib/practice-days";
+import { recordPractice } from "@/lib/rank-points";
 
 /**
  * Called by the client when a CHILD finishes a learning ACTIVITY that isn't a
@@ -13,7 +14,12 @@ import { practiceDayFrom, recordPracticeDay } from "@/lib/practice-days";
  * (Gadi 2026-09-19). Mirrors notify-search: non-kids / non-family are a silent
  * no-op, and any error is swallowed so it never disrupts the child's flow.
  *
- *   POST { kind: "spell" | "say" | "pick" | "lesson" | "game" | "read", label, score?, total? }
+ * Since 2026-10-21 every finished activity is also a COMPLETED PRACTICE for
+ * the rank, for anyone signed in (a kid's own uid, an adult's own uid):
+ * 10 points, at most 10 practices a local day (lib/rank-points.ts).
+ *
+ *   POST { kind: "spell" | "say" | "pick" | "lesson" | "game" | "read", label, score?, total?, day? }
+ *   → { ok, practice?: { counted } }
  */
 export async function POST(req: NextRequest) {
   try {
@@ -38,14 +44,17 @@ export async function POST(req: NextRequest) {
     const score = typeof body?.score === "number" ? Math.max(0, Math.floor(body.score)) : undefined;
     const total = typeof body?.total === "number" ? Math.max(0, Math.floor(body.total)) : undefined;
 
-    // A practice day for the streak, for anyone signed in.
-    await recordPracticeDay(uid, practiceDayFrom(body?.day)).catch(() => {});
+    // A practice day for the streak and a completed practice for the rank,
+    // for anyone signed in.
+    const day = practiceDayFrom(body?.day);
+    await recordPracticeDay(uid, day).catch(() => {});
+    const practice = await recordPractice(uid, day).catch(() => ({ counted: false }));
 
     const kid = await kidOf(uid);
-    if (!kid) return NextResponse.json({ ok: true, skipped: "not_kid" });
+    if (!kid) return NextResponse.json({ ok: true, practice, skipped: "not_kid" });
     await recordKidActivity(kid, kind, { label, score, total });
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, practice });
   } catch (e) {
     console.error("[notify-activity] error:", e);
     return NextResponse.json({ ok: true, skipped: "error" });

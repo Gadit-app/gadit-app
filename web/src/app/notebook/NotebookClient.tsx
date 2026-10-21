@@ -763,7 +763,6 @@ export function NotebookPage() {
         {items && items.length > 0 && familyRole === "kid" && (
           <KidsGameHeader
             addedAtDates={items.map((i) => i.addedAt).filter(Boolean)}
-            understoodCount={items.filter((i) => i.understood).length}
             lang={lang}
             dir={dir}
           />
@@ -774,7 +773,6 @@ export function NotebookPage() {
         {items && items.length > 0 && user && familyRole !== "kid" && (
           <AdultRankLine
             addedAtDates={items.map((i) => i.addedAt).filter(Boolean)}
-            understoodCount={items.filter((i) => i.understood).length}
             lang={lang}
             dir={dir}
           />

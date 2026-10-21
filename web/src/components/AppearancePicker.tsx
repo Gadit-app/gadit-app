@@ -25,7 +25,8 @@ import {
   themeName,
   type ThemeMeta,
 } from "@/lib/appearance";
-import { RANKS, rankFor, POINTS } from "@/lib/gamification";
+import { RANKS } from "@/lib/gamification";
+import { useServerRank } from "@/lib/use-rank-state";
 import { rankLabel } from "@/lib/gamification-labels";
 
 // Store micro-copy (en + he, English fallback — matches the existing picker
@@ -75,17 +76,11 @@ const STORE_COPY: Record<string, { balance: string; buy: string; owned: string; 
 };
 function storeCopy(lang: string) { return STORE_COPY[lang] ?? STORE_COPY.en; }
 
-// Session cache of the kid's earned rank index. The KidsGameHeader writes it
-// on every compute; the picker reads it here (or fetches once if absent, e.g.
-// on the word page where no header is mounted). Shared key.
-const RANK_CACHE = "gadit-kid-rankindex";
-
 export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "adult" }) {
   const { lang } = useLang();
   const { user } = useAuth();
   const [theme, setTheme] = useTheme();
   const [open, setOpen] = useState(false);
-  const [rankIndex, setRankIndex] = useState(0);
   const ref = useRef<HTMLDivElement | null>(null);
   const copy = storeCopy(lang);
 
@@ -98,32 +93,11 @@ export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "a
 
   const current = THEMES.find((t) => t.id === theme) ?? THEMES[0];
 
-  // Resolve the kid's earned rank so we know which skins are unlocked.
-  useEffect(() => {
-    if (scope !== "kid") return;
-    try {
-      const cached = sessionStorage.getItem(RANK_CACHE);
-      if (cached != null) { setRankIndex(Number(cached) || 0); return; }
-    } catch { /* sessionStorage blocked */ }
-    if (!user) return;
-    let cancelled = false;
-    (async () => {
-      try {
-        const idToken = await user.getIdToken();
-        const res = await fetch("/api/notebook", { headers: { Authorization: `Bearer ${idToken}` } });
-        if (!res.ok) return;
-        const data = (await res.json()) as { items?: Array<{ understood?: boolean }> };
-        const items = data.items ?? [];
-        const points = items.length + items.filter((i) => i.understood).length * POINTS.understood;
-        const idx = rankFor(points).index;
-        if (!cancelled) {
-          setRankIndex(idx);
-          try { sessionStorage.setItem(RANK_CACHE, String(idx)); } catch { /* ignore */ }
-        }
-      } catch { /* gamification gating is best-effort */ }
-    })();
-    return () => { cancelled = true; };
-  }, [scope, user]);
+  // The kid's rank as the server computes it (/api/rank: new words +
+  // completed practices, never below the rank floor), so the unlocked skins
+  // match the rank the child sees.
+  const serverRank = useServerRank(user, scope === "kid");
+  const rankIndex = serverRank?.rankIndex ?? 0;
 
   useEffect(() => {
     if (!open) return;

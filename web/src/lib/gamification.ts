@@ -8,7 +8,8 @@
  *      and the streak stays "alive" if the last activity was today or
  *      yesterday. Child-safe: no punishment/anxiety for one skipped day.
  *   2. Weekly goal   — distinct new words in the last 7 days vs a target.
- *   3. Explorer rank — distinct words collected maps to a named rank.
+ *   3. Explorer rank — points (new words + completed practice) map to a
+ *      named rank that never goes down (see computeGamification).
  *
  * This module is PURE (no i18n, no I/O) so both the client notebook page
  * and the server family-progress endpoint can share it. Each surface maps
@@ -29,35 +30,66 @@ export type RankKey =
   // weeks (Gadi 2026-08: the old ladder ended at 300 and ran out too fast).
   | "champion" | "sage" | "virtuoso" | "legend" | "wizard" | "grandmaster";
 
-/** Thresholds for each rank. Ranks grow on the child's *understood* words once
- *  the comprehension ledger is wired (LLM council 2026-08: reward understanding,
- *  not raw searches); until then rankFor is metric-agnostic and takes whatever
- *  count the caller passes (currently distinct words). Re-searching the same
- *  word never inflates a rank. */
+/** Thresholds for each rank, in POINTS (see computeGamification). Re-spaced
+ *  2026-10-21 (Gadi) when completed practice started to earn points: an
+ *  easier first step, then a smooth rise to the same top. Re-searching the
+ *  same word never inflates a rank. A rank once reached is never lost
+ *  (users/{uid}.rankFloor, see lib/rank-points.ts). */
 export const RANKS: { key: RankKey; min: number }[] = [
   { key: "scout", min: 0 },
-  { key: "explorer", min: 10 },
-  { key: "tracker", min: 30 },
-  { key: "ranger", min: 75 },
-  { key: "guide", min: 150 },
-  { key: "master", min: 300 },
-  { key: "champion", min: 450 },
-  { key: "sage", min: 650 },
-  { key: "virtuoso", min: 900 },
-  { key: "legend", min: 1200 },
-  { key: "wizard", min: 1600 },
+  { key: "explorer", min: 20 },
+  { key: "tracker", min: 60 },
+  { key: "ranger", min: 120 },
+  { key: "guide", min: 200 },
+  { key: "master", min: 320 },
+  { key: "champion", min: 480 },
+  { key: "sage", min: 700 },
+  { key: "virtuoso", min: 950 },
+  { key: "legend", min: 1250 },
+  { key: "wizard", min: 1650 },
   { key: "grandmaster", min: 2200 },
 ];
 
 /**
- * Points model for the unlock economy (LLM council 2026-08, approved by Gadi).
- * Comprehension is a MULTIPLIER, not a gate: looking a word up earns a little,
- * proving you understood it (a correct quiz/game on that word) earns a lot.
- * Points buy NEW cosmetics; the 5 existing skins stay free. Parent/Yooniz
- * "gift points" live in a SEPARATE, capped wallet (see GIFT_WEEKLY_CAP) and
- * never count toward ranks or the parent dashboard's mastery metric.
+ * Points model for ranks (Gadi 2026-10-21, replaces the 2026-08 "understood
+ * word = 10" model, which almost never fired): every distinct notebook word
+ * is POINTS.seen, every COMPLETED PRACTICE (a finished dictation, "say it",
+ * listen-and-pick, lesson, game, reading check, word-page quiz or word game,
+ * reported through /api/family/notify-activity) is POINTS.practice, at most
+ * PRACTICE_DAILY_CAP practices per local day so nobody can farm it. The
+ * "understood" flag on a notebook word stays, but no longer earns rank points.
+ * Parent/Yooniz "gift points" live in a SEPARATE, capped wallet (see
+ * GIFT_WEEKLY_CAP) and never count toward ranks.
  */
-export const POINTS = { seen: 1, understood: 10 } as const;
+export const POINTS = { seen: 1, practice: 10 } as const;
+/** Completed practices that count per user per local day. */
+export const PRACTICE_DAILY_CAP = 10;
+
+/** Practices that count, from users/{uid}.practiceCount ({ "YYYY-MM-DD": n }),
+ *  each day capped at PRACTICE_DAILY_CAP. */
+export function countedPractices(counts: unknown): number {
+  if (!counts || typeof counts !== "object") return 0;
+  let n = 0;
+  for (const [day, v] of Object.entries(counts as Record<string, unknown>)) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || typeof v !== "number" || !Number.isFinite(v)) continue;
+    n += Math.max(0, Math.min(PRACTICE_DAILY_CAP, Math.floor(v)));
+  }
+  return n;
+}
+
+export function rankPoints(words: number, practices: number): number {
+  return Math.max(0, words) * POINTS.seen + Math.max(0, practices) * POINTS.practice;
+}
+
+export function isRankKey(v: unknown): v is RankKey {
+  return typeof v === "string" && RANKS.some((r) => r.key === v);
+}
+
+/** Index of a rank key in RANKS, -1 for anything else. */
+export function rankIndexOf(key: unknown): number {
+  return RANKS.findIndex((r) => r.key === key);
+}
+
 /** Weekly ceiling on parent/Yooniz gift points, so bonuses stay a treat and
  *  can't launder raw-count into the earned economy. */
 export const GIFT_WEEKLY_CAP = 50;
@@ -82,17 +114,22 @@ export type RankInfo = {
   progress: number;
 };
 
-export function rankFor(distinct: number): RankInfo {
+/** The rank for a points total. `floor` is the highest rank ever reached
+ *  (users/{uid}.rankFloor): the rank shown is never below it, so nobody goes
+ *  down when the thresholds or the points model change. */
+export function rankFor(points: number, floor?: RankKey | null): RankInfo {
   let idx = 0;
   for (let i = 0; i < RANKS.length; i++) {
-    if (distinct >= RANKS[i].min) idx = i;
+    if (points >= RANKS[i].min) idx = i;
   }
+  const floorIdx = rankIndexOf(floor);
+  if (floorIdx > idx) idx = floorIdx;
   const cur = RANKS[idx];
   const nextThreshold = idx < RANKS.length - 1 ? RANKS[idx + 1].min : null;
   const progress =
     nextThreshold === null
       ? 1
-      : Math.max(0, Math.min(1, (distinct - cur.min) / (nextThreshold - cur.min)));
+      : Math.max(0, Math.min(1, (points - cur.min) / (nextThreshold - cur.min)));
   return { key: cur.key, index: idx, min: cur.min, next: nextThreshold, progress };
 }
 
@@ -215,35 +252,41 @@ export function computeGoal(isoDates: string[], nowMs: number): number {
 /**
  * Everything a surface needs, computed from a list of notebook addedAt dates.
  *
- * Rank is driven by EARNED POINTS, not raw word count (kids gamification v2,
- * council 2026-08): every saved word is worth POINTS.seen, and proving you
- * understood it (a passed quiz/game, tracked by `understood` on the notebook
- * doc) adds POINTS.understood. So comprehension is a multiplier on rank
- * progress, not a gate. `understoodCount` is how many of these words are
- * understood; pass 0 (the default) for surfaces that don't yet track it and
- * ranks fall back to one point per word. Streak + weekly goal stay on raw
- * activity dates, unchanged.
+ * Rank is driven by POINTS (Gadi 2026-10-21): one per distinct notebook word
+ * plus POINTS.practice per counted completed practice (`practices`, already
+ * capped per day, see countedPractices). The server is the source of truth
+ * for `practices` and `rankFloor` (lib/rank-points.ts, /api/rank); a client
+ * that has not loaded them yet passes 0 / null. Streak + weekly goal stay on
+ * raw activity dates, unchanged.
  */
 export function computeGamification(
   addedAtIsoDates: string[],
   nowMs: number,
   todayStr: string,
-  understoodCount = 0,
-  /** Local days with a finished game, lesson, dictation, reading or "say
-   *  it" (users/{uid}.practiceDays). One streak = days practised (Gadi
-   *  2026-10-12). */
-  practiceDays: string[] = [],
-): { distinct: number; understood: number; points: number; rank: RankInfo; streak: number; weekly: number; weeklyGoal: number } {
-  const distinct = addedAtIsoDates.length;
-  const understood = Math.max(0, Math.min(distinct, understoodCount));
-  const points = distinct * POINTS.seen + understood * POINTS.understood;
+  opts: {
+    /** Counted completed practices (server: countedPractices). */
+    practices?: number;
+    /** Local days with a finished game, lesson, dictation, reading or "say
+     *  it" (users/{uid}.practiceDays). One streak = days practised (Gadi
+     *  2026-10-12). */
+    practiceDays?: string[];
+    /** Highest rank ever reached (users/{uid}.rankFloor). */
+    rankFloor?: RankKey | null;
+    /** Distinct words when the caller knows a better count than the dates
+     *  list (the server's full notebook vs a client's first page). */
+    words?: number;
+  } = {},
+): { distinct: number; practices: number; points: number; rank: RankInfo; streak: number; weekly: number; weeklyGoal: number } {
+  const distinct = typeof opts.words === "number" ? Math.max(0, opts.words) : addedAtIsoDates.length;
+  const practices = Math.max(0, opts.practices ?? 0);
+  const points = rankPoints(distinct, practices);
   const localDates = addedAtIsoDates.map(toLocalDateStr).filter(Boolean);
   return {
     distinct,
-    understood,
+    practices,
     points,
-    rank: rankFor(points),
-    streak: computeStreak([...localDates, ...practiceDays], todayStr),
+    rank: rankFor(points, opts.rankFloor),
+    streak: computeStreak([...localDates, ...(opts.practiceDays ?? [])], todayStr),
     weekly: weeklyCount(addedAtIsoDates, nowMs),
     weeklyGoal: computeGoal(addedAtIsoDates, nowMs),
   };

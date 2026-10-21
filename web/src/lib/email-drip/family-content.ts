@@ -716,7 +716,7 @@ Every word a child looks up is a question they had in mind. With alerts on, you 
 
 ## איך זה עובד, שלב אחר שלב:
 1. כל מילה שנשמרת במחברת שווה נקודה אחת.
-2. מילה שהילד מוכיח שהבין, בחידון או במשחק, שווה 10 נקודות.
+2. כל תרגול שהילד מסיים (משחק, הכתבה, שיעור או קריאה) שווה 10 נקודות.
 3. הנקודות מעלות את הילד בדרגות.
 4. בדרגות מסוימות נפתח סקין חדש.
 
@@ -739,7 +739,7 @@ The weekly goal starts at 5 new words and adjusts itself to your child's pace. T
 
 ## How it works, step by step:
 1. Every word saved to the notebook is worth one point.
-2. A word your child proves they understand, in a quiz or a game, is worth 10 points.
+2. Every practice your child finishes (a game, a dictation, a lesson or a reading) is worth 10 points.
 3. Points move your child up the ranks.
 4. Certain ranks unlock a new skin.
 

@@ -28,6 +28,7 @@ import { WaitText } from "@/components/WaitText";
 import { useEffect, useMemo, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useAuth } from "@/lib/auth-context";
+import { notifyActivity } from "@/lib/notify-activity-client";
 import { useLang } from "@/lib/lang-context";
 
 type Lang = "he" | "en" | "ar" | "ru" | "es" | "pt" | "fr" | "de" | "cs" | "sk" | "it" | "ja" | "hi" | "am" | "uk" | "tr" | "pl" | "fa" | "id" | "nl" | "el" | "zu" | "vi" | "fil" | "af" | "sw" | "zh-CN" | "zh-TW" | "ko" | "th" | "bn" | "da" | "hu";
@@ -795,6 +796,15 @@ export function WordGameModal({ open, onClose, word, language, meaning, examples
     if (fillblankEligible && (distractors?.length ?? 0) >= 3) n++;
     totalRounds.current = Math.max(n, 1);
   }, [stage, anagramEligible, fillblankEligible, distractors]);
+
+  // Reaching "result" is a finished game: a completed practice for the rank,
+  // whatever the score (Gadi 2026-10-21; 10 points, at most 10 a day, counted
+  // on the server). Also tells a child's parent, like any game.
+  useEffect(() => {
+    if (stage !== "result" || !user) return;
+    void notifyActivity(user, { kind: "game", label: word || "", score, total: totalRounds.current || 1 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stage]);
 
   // Kids gamification v2: reaching "result" having done well on THIS word's
   // games proves comprehension, so mark it understood + award points (same

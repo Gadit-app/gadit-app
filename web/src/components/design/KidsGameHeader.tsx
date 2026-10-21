@@ -3,6 +3,7 @@
 import { GaditIcon } from "./GaditIcon";
 import { useEffect, useMemo, useState } from "react";
 import { computeGamification, toLocalDateStr, RANKS } from "@/lib/gamification";
+import { useServerRank, type ServerRank } from "@/lib/use-rank-state";
 import { gameCopy, rankLabel } from "@/lib/gamification-labels";
 import { rankIconSrc } from "@/lib/rank-icons";
 import { KID_THEMES, themeName } from "@/lib/appearance";
@@ -44,107 +45,94 @@ function streakProgress(streak: number): number {
 // Small local copy for the ranks table (he + en, en fallback) so a new
 // surface doesn't force a full gamification-labels sweep.
 const RANKS_COPY: Record<string, { title: string; sub: (n: number) => string; words: string; you: string; locked: string; close: string }> = {
-  en: { title: "Your ranks", sub: (n) => `You've earned ${n} points. Understand words to earn more and climb.`, words: "points", you: "You're here", locked: "Locked", close: "Close" },
-  he: { title: "הדרגות שלך", sub: (n) => `צברת ${n} נקודות. תבין מילים כדי לצבור עוד ולעלות.`, words: "נקודות", you: "כאן את/ה", locked: "נעול", close: "סגירה" },
+  en: { title: "Your ranks", sub: (n) => `You've earned ${n} points. New word = 1 point · Finished practice = 10 points`, words: "points", you: "You're here", locked: "Locked", close: "Close" },
+  he: { title: "הדרגות שלכם", sub: (n) => `צברתם ${n} נקודות. מילה חדשה = נקודה · תרגול שסיימתם = 10 נקודות`, words: "נקודות", you: "אתם כאן", locked: "נעול", close: "סגירה" },
 };
 
 // Ranks-table modal copy for the other 31 languages (was en+he only),
 // added 2026-08-22 so the ranks modal is native everywhere.
 Object.assign(RANKS_COPY, {
-  "ar": { title: "رتبك", sub: (n) => "لقد جمعت " + n + " نقطة. افهم الكلمات لتجمع المزيد وتتقدم.", words: "نقطة", you: "أنت هنا", locked: "مقفل", close: "إغلاق" },
-  "ru": { title: "Твои ранги", sub: (n) => "Ты набрал " + n + " очков. Понимай слова, чтобы набрать больше и подняться выше.", words: "очков", you: "Ты здесь", locked: "Закрыто", close: "Закрыть" },
-  "es": { title: "Tus rangos", sub: (n) => "Has ganado " + n + " puntos. Entiende palabras para ganar más y subir.", words: "puntos", you: "Estás aquí", locked: "Bloqueado", close: "Cerrar" },
-  "pt": { title: "Seus níveis", sub: (n) => "Você ganhou " + n + " pontos. Entenda palavras para ganhar mais e subir.", words: "pontos", you: "Você está aqui", locked: "Bloqueado", close: "Fechar" },
-  "fr": { title: "Tes rangs", sub: (n) => "Tu as gagné " + n + " points. Comprends des mots pour en gagner plus et grimper.", words: "points", you: "Tu es ici", locked: "Verrouillé", close: "Fermer" },
-  "de": { title: "Deine Ränge", sub: (n) => "Du hast " + n + " Punkte gesammelt. Verstehe Wörter, um mehr zu sammeln und aufzusteigen.", words: "Punkte", you: "Du bist hier", locked: "Gesperrt", close: "Schließen" },
-  "cs": { title: "Tvoje hodnosti", sub: (n) => "Získal jsi " + n + " bodů. Rozuměj slovům, ať získáš víc a postoupíš výš.", words: "bodů", you: "Tady jsi", locked: "Zamčeno", close: "Zavřít" },
-  "sk": { title: "Tvoje hodnosti", sub: (n) => "Získal si " + n + " bodov. Rozumej slovám, aby si získal viac a postúpil vyššie.", words: "bodov", you: "Tu si", locked: "Zamknuté", close: "Zavrieť" },
-  "it": { title: "I tuoi gradi", sub: (n) => "Hai guadagnato " + n + " punti. Capisci le parole per guadagnarne di più e salire.", words: "punti", you: "Sei qui", locked: "Bloccato", close: "Chiudi" },
-  "ja": { title: "あなたのランク", sub: (n) => "" + n + "ポイントを獲得しました。言葉を理解してもっと集めて、上を目指そう。", words: "ポイント", you: "ここだよ", locked: "ロック中", close: "閉じる" },
-  "hi": { title: "तुम्हारे रैंक", sub: (n) => "तुमने " + n + " अंक कमाए हैं। और कमाने और ऊपर चढ़ने के लिए शब्दों को समझो।", words: "अंक", you: "तुम यहाँ हो", locked: "बंद", close: "बंद करें" },
-  "am": { title: "ደረጃዎችህ", sub: (n) => "" + n + " ነጥብ አግኝተሃል። ተጨማሪ ለማግኘት እና ወደ ላይ ለመውጣት ቃላትን ተረዳ።", words: "ነጥብ", you: "እዚህ ነህ", locked: "ተቆልፏል", close: "ዝጋ" },
-  "uk": { title: "Твої ранги", sub: (n) => "Ти набрав " + n + " балів. Розумій слова, щоб набрати більше й піднятися вище.", words: "балів", you: "Ти тут", locked: "Закрито", close: "Закрити" },
-  "tr": { title: "Rütbelerin", sub: (n) => "" + n + " puan kazandın. Daha fazla kazanmak ve yükselmek için kelimeleri anla.", words: "puan", you: "Buradasın", locked: "Kilitli", close: "Kapat" },
-  "pl": { title: "Twoje rangi", sub: (n) => "Zdobyłeś " + n + " punktów. Rozumiej słowa, aby zdobyć więcej i awansować.", words: "punktów", you: "Tu jesteś", locked: "Zablokowane", close: "Zamknij" },
-  "fa": { title: "رتبه‌های تو", sub: (n) => "تو " + n + " امتیاز گرفتی. کلمه‌ها را بفهم تا بیشتر بگیری و بالاتر بروی.", words: "امتیاز", you: "تو اینجایی", locked: "قفل", close: "بستن" },
-  "id": { title: "Peringkatmu", sub: (n) => "Kamu sudah mengumpulkan " + n + " poin. Pahami kata untuk mengumpulkan lebih banyak dan naik.", words: "poin", you: "Kamu di sini", locked: "Terkunci", close: "Tutup" },
-  "nl": { title: "Jouw rangen", sub: (n) => "Je hebt " + n + " punten verdiend. Begrijp woorden om er meer te verdienen en te stijgen.", words: "punten", you: "Jij bent hier", locked: "Vergrendeld", close: "Sluiten" },
-  "el": { title: "Οι βαθμοί σου", sub: (n) => "Κέρδισες " + n + " πόντους. Κατάλαβε λέξεις για να κερδίσεις κι άλλους και να ανέβεις.", words: "πόντοι", you: "Εδώ είσαι", locked: "Κλειδωμένο", close: "Κλείσιμο" },
-  "zu": { title: "Amazinga akho", sub: (n) => "Uthole amaphuzu angu-" + n + ". Qonda amagama ukuze uthole amaningi futhi ukhuphuke.", words: "amaphuzu", you: "Ulapha", locked: "Kukhiyiwe", close: "Vala" },
-  xh: { title: "Amanqanaba akho", sub: (n) => "Uzuze amanqaku angama-" + n + ". Qonda amagama ukuze uzuze amanye uze unyuke inqanaba.", words: "amanqaku", you: "Ulapha", locked: "Kutshixiwe", close: "Vala" },
-  nso: { title: "Maemo a gago", sub: (n) => "O hweditše dintlha tše " + n + ". Kwešiša mantšu gore o hwetše tše dintši gomme o hlatloge.", words: "dintlha", you: "O mo", locked: "E notletšwe", close: "Tswalela" },
-  tn: { title: "Maemo a gago", sub: (n) => "O kunne dintlha di le " + n + ". Tlhaloganya mafoko go bona tse dingwe le go tlhatloga.", words: "dintlha", you: "O fano", locked: "E notletswe", close: "Tswala" },
-  st: { title: "Maemo a hao", sub: (n) => "O fumane dintlha tse " + n + ". Utlwisisa mantswe hore o fumane tse ding mme o nyolohe.", words: "dintlha", you: "O mona", locked: "E notletswe", close: "Kwala" },
-  ts: { title: "Swiyimo swa wena", sub: (n) => "U kume tinhlayo ta " + n + ". Twisisa marito leswaku u kuma to tala u tlhela u tlakuka.", words: "tinhlayo", you: "U laha", locked: "Yi lotleriwile", close: "Pfala" },
-  ss: { title: "Tikhundla takho", sub: (n) => "Utfole emaphuzu langu-" + n + ". Condza emagama kute utfole lamanyenti futsi ukhuphuke.", words: "emaphuzu", you: "Ulapha", locked: "Kuvaliwe", close: "Vala" },
-  ve: { title: "Vhuimo haṋu", sub: (n) => "No wana maraga a " + n + ". Pfesesani maipfi uri ni wane manzhi nahone ni gonye.", words: "maraga", you: "Ni fhano", locked: "Zwo valwa", close: "Valani" },
-  nr: { title: "Amazinga wakho", sub: (n) => "Uthole amaphuzu ali-" + n + ". Zwisisa amezwi bona uthole amanengi begodu ukhuphuke.", words: "amaphuzu", you: "Ulapha", locked: "Kukhiyiwe", close: "Vala" },
-  "af": { title: "Jou range", sub: (n) => "Jy het " + n + " punte verdien. Verstaan woorde om meer te verdien en te klim.", words: "punte", you: "Jy is hier", locked: "Gesluit", close: "Maak toe" },
-  "bn": { title: "তোমার র‍্যাঙ্ক", sub: (n) => "তুমি " + n + " পয়েন্ট পেয়েছ। আরও পেতে আর উপরে উঠতে শব্দ বোঝো।", words: "পয়েন্ট", you: "তুমি এখানে", locked: "লক করা", close: "বন্ধ করো" },
-  "da": { title: "Dine niveauer", sub: (n) => "Du har tjent " + n + " point. Forstå ord for at tjene flere og rykke op.", words: "point", you: "Du er her", locked: "Låst", close: "Luk" },
-  "fil": { title: "Mga ranggo mo", sub: (n) => "Nakakuha ka na ng " + n + " puntos. Unawain ang mga salita para makakuha pa at umakyat.", words: "puntos", you: "Nandito ka", locked: "Naka-lock", close: "Isara" },
-  "hu": { title: "A rangjaid", sub: (n) => "" + n + " pontot gyűjtöttél. Értsd meg a szavakat, hogy többet gyűjts és feljebb juss.", words: "pont", you: "Itt vagy", locked: "Zárolva", close: "Bezárás" },
-  "ko": { title: "내 랭크", sub: (n) => "" + n + "점을 모았어요. 단어를 이해해서 더 모으고 위로 올라가요.", words: "점", you: "여기예요", locked: "잠김", close: "닫기" },
-  "sw": { title: "Vyeo vyako", sub: (n) => "Umepata pointi " + n + ". Elewa maneno ili upate zaidi na upande juu.", words: "pointi", you: "Uko hapa", locked: "Imefungwa", close: "Funga" },
-  "th": { title: "อันดับของคุณ", sub: (n) => "คุณได้ " + n + " คะแนนแล้ว เข้าใจคำศัพท์เพื่อรับเพิ่มและไต่อันดับขึ้นไป", words: "คะแนน", you: "คุณอยู่นี่", locked: "ล็อก", close: "ปิด" },
-  "vi": { title: "Cấp bậc của bạn", sub: (n) => "Bạn đã kiếm được " + n + " điểm. Hiểu từ để kiếm thêm và leo lên cao.", words: "điểm", you: "Bạn ở đây", locked: "Đã khóa", close: "Đóng" },
-  "zh-CN": { title: "你的段位", sub: (n) => "你已获得 " + n + " 分。理解词语，赚取更多分数，向上攀登。", words: "分", you: "你在这里", locked: "未解锁", close: "关闭" },
-  "zh-TW": { title: "你的段位", sub: (n) => "你已獲得 " + n + " 分。理解詞語，賺取更多分數，往上攀登。", words: "分", you: "你在這裡", locked: "未解鎖", close: "關閉" },
+  "ar": { title: "رتبك", sub: (n) => `جمعتم ${n} نقطة. كلمة جديدة = نقطة · تمرين أنهيتموه = 10 نقاط`, words: "نقطة", you: "أنت هنا", locked: "مقفل", close: "إغلاق" },
+  "ru": { title: "Твои ранги", sub: (n) => `Вы набрали ${n} очков. Новое слово = 1 очко · Законченная тренировка = 10 очков`, words: "очков", you: "Ты здесь", locked: "Закрыто", close: "Закрыть" },
+  "es": { title: "Tus rangos", sub: (n) => `Han ganado ${n} puntos. Palabra nueva = 1 punto · Práctica terminada = 10 puntos`, words: "puntos", you: "Estás aquí", locked: "Bloqueado", close: "Cerrar" },
+  "pt": { title: "Seus níveis", sub: (n) => `Vocês ganharam ${n} pontos. Palavra nova = 1 ponto · Prática concluída = 10 pontos`, words: "pontos", you: "Você está aqui", locked: "Bloqueado", close: "Fechar" },
+  "fr": { title: "Tes rangs", sub: (n) => `Vous avez gagné ${n} points. Nouveau mot = 1 point · Exercice terminé = 10 points`, words: "points", you: "Tu es ici", locked: "Verrouillé", close: "Fermer" },
+  "de": { title: "Deine Ränge", sub: (n) => `Ihr habt ${n} Punkte gesammelt. Neues Wort = 1 Punkt · Fertige Übung = 10 Punkte`, words: "Punkte", you: "Du bist hier", locked: "Gesperrt", close: "Schließen" },
+  "cs": { title: "Tvoje hodnosti", sub: (n) => `Získali jste ${n} bodů. Nové slovo = 1 bod · Dokončené cvičení = 10 bodů`, words: "bodů", you: "Tady jsi", locked: "Zamčeno", close: "Zavřít" },
+  "sk": { title: "Tvoje hodnosti", sub: (n) => `Získali ste ${n} bodov. Nové slovo = 1 bod · Dokončené cvičenie = 10 bodov`, words: "bodov", you: "Tu si", locked: "Zamknuté", close: "Zavrieť" },
+  "it": { title: "I tuoi gradi", sub: (n) => `Avete guadagnato ${n} punti. Parola nuova = 1 punto · Esercizio finito = 10 punti`, words: "punti", you: "Sei qui", locked: "Bloccato", close: "Chiudi" },
+  "ja": { title: "あなたのランク", sub: (n) => `${n}ポイント獲得しました。新しい言葉 = 1ポイント · 終えた練習 = 10ポイント`, words: "ポイント", you: "ここだよ", locked: "ロック中", close: "閉じる" },
+  "hi": { title: "तुम्हारे रैंक", sub: (n) => `आपने ${n} अंक कमाए हैं। नया शब्द = 1 अंक · पूरा किया अभ्यास = 10 अंक`, words: "अंक", you: "तुम यहाँ हो", locked: "बंद", close: "बंद करें" },
+  "am": { title: "ደረጃዎችህ", sub: (n) => `${n} ነጥብ አግኝታችኋል። አዲስ ቃል = 1 ነጥብ · የጨረሳችሁት ልምምድ = 10 ነጥብ`, words: "ነጥብ", you: "እዚህ ነህ", locked: "ተቆልፏል", close: "ዝጋ" },
+  "uk": { title: "Твої ранги", sub: (n) => `Ви набрали ${n} балів. Нове слово = 1 бал · Завершене тренування = 10 балів`, words: "балів", you: "Ти тут", locked: "Закрито", close: "Закрити" },
+  "tr": { title: "Rütbelerin", sub: (n) => `${n} puan kazandınız. Yeni kelime = 1 puan · Bitirilen alıştırma = 10 puan`, words: "puan", you: "Buradasın", locked: "Kilitli", close: "Kapat" },
+  "pl": { title: "Twoje rangi", sub: (n) => `Zdobyliście ${n} punktów. Nowe słowo = 1 punkt · Ukończone ćwiczenie = 10 punktów`, words: "punktów", you: "Tu jesteś", locked: "Zablokowane", close: "Zamknij" },
+  "fa": { title: "رتبه‌های تو", sub: (n) => `شما ${n} امتیاز گرفتید. کلمه‌ی جدید = 1 امتیاز · تمرینی که تمام کردید = 10 امتیاز`, words: "امتیاز", you: "تو اینجایی", locked: "قفل", close: "بستن" },
+  "id": { title: "Peringkatmu", sub: (n) => `Kalian sudah mengumpulkan ${n} poin. Kata baru = 1 poin · Latihan selesai = 10 poin`, words: "poin", you: "Kamu di sini", locked: "Terkunci", close: "Tutup" },
+  "nl": { title: "Jouw rangen", sub: (n) => `Jullie hebben ${n} punten verdiend. Nieuw woord = 1 punt · Afgeronde oefening = 10 punten`, words: "punten", you: "Jij bent hier", locked: "Vergrendeld", close: "Sluiten" },
+  "el": { title: "Οι βαθμοί σου", sub: (n) => `Κερδίσατε ${n} πόντους. Νέα λέξη = 1 πόντος · Ολοκληρωμένη εξάσκηση = 10 πόντοι`, words: "πόντοι", you: "Εδώ είσαι", locked: "Κλειδωμένο", close: "Κλείσιμο" },
+  "zu": { title: "Amazinga akho", sub: (n) => `Nithole amaphuzu angu-${n}. Igama elisha = iphuzu 1 · Ukuzilolonga enikuqedile = amaphuzu angu-10`, words: "amaphuzu", you: "Ulapha", locked: "Kukhiyiwe", close: "Vala" },
+  xh: { title: "Amanqanaba akho", sub: (n) => `Nizuze amanqaku angama-${n}. Igama elitsha = inqaku eli-1 · Umthambo eniwugqibileyo = amanqaku ali-10`, words: "amanqaku", you: "Ulapha", locked: "Kutshixiwe", close: "Vala" },
+  nso: { title: "Maemo a gago", sub: (n) => `Le hweditše dintlha tše ${n}. Lentšu le lefsa = ntlha e 1 · Tlwaetšo ye le e feditšego = dintlha tše 10`, words: "dintlha", you: "O mo", locked: "E notletšwe", close: "Tswalela" },
+  tn: { title: "Maemo a gago", sub: (n) => `Lo kgobokantse dintlha di le ${n}. Lefoko le lesha = ntlha e le 1 · Katiso e lo e weditseng = dintlha di le 10`, words: "dintlha", you: "O fano", locked: "E notletswe", close: "Tswala" },
+  st: { title: "Maemo a hao", sub: (n) => `Le fumane dintlha tse ${n}. Lentswe le letjha = ntlha e 1 · Boikwetliso boo le bo qetileng = dintlha tse 10`, words: "dintlha", you: "O mona", locked: "E notletswe", close: "Kwala" },
+  ts: { title: "Swiyimo swa wena", sub: (n) => `Mi kume tinhlayo ta ${n}. Rito lerintshwa = nhlayo ya 1 · Ndzetelo leyi mi yi heteke = tinhlayo ta 10`, words: "tinhlayo", you: "U laha", locked: "Yi lotleriwile", close: "Pfala" },
+  ss: { title: "Tikhundla takho", sub: (n) => `Nitfole emaphuzu langu-${n}. Ligama lelisha = liphuzu la-1 · Kuzijwayeta lenikucedzile = emaphuzu la-10`, words: "emaphuzu", you: "Ulapha", locked: "Kuvaliwe", close: "Vala" },
+  ve: { title: "Vhuimo haṋu", sub: (n) => `No wana maraga a ${n}. Ipfi ḽiswa = ḽiraga 1 · Nḓowedzo ye na i fhedza = maraga a 10`, words: "maraga", you: "Ni fhano", locked: "Zwo valwa", close: "Valani" },
+  nr: { title: "Amazinga wakho", sub: (n) => `Nithole amaphuzu ali-${n}. Ilimi elitjha = iphuzu eli-1 · Ukuzilolonga enikuqedileko = amaphuzu ali-10`, words: "amaphuzu", you: "Ulapha", locked: "Kukhiyiwe", close: "Vala" },
+  "af": { title: "Jou range", sub: (n) => `Julle het ${n} punte verdien. Nuwe woord = 1 punt · Voltooide oefening = 10 punte`, words: "punte", you: "Jy is hier", locked: "Gesluit", close: "Maak toe" },
+  "bn": { title: "তোমার র‍্যাঙ্ক", sub: (n) => `আপনারা ${n} পয়েন্ট পেয়েছেন। নতুন শব্দ = 1 পয়েন্ট · শেষ করা অনুশীলন = 10 পয়েন্ট`, words: "পয়েন্ট", you: "তুমি এখানে", locked: "লক করা", close: "বন্ধ করো" },
+  "da": { title: "Dine niveauer", sub: (n) => `I har tjent ${n} point. Nyt ord = 1 point · Færdig øvelse = 10 point`, words: "point", you: "Du er her", locked: "Låst", close: "Luk" },
+  "fil": { title: "Mga ranggo mo", sub: (n) => `Nakakuha na kayo ng ${n} puntos. Bagong salita = 1 puntos · Natapos na pagsasanay = 10 puntos`, words: "puntos", you: "Nandito ka", locked: "Naka-lock", close: "Isara" },
+  "hu": { title: "A rangjaid", sub: (n) => `${n} pontot gyűjtöttetek. Új szó = 1 pont · Befejezett gyakorlás = 10 pont`, words: "pont", you: "Itt vagy", locked: "Zárolva", close: "Bezárás" },
+  "ko": { title: "내 랭크", sub: (n) => `${n}점을 모았어요. 새 단어 = 1점 · 끝낸 연습 = 10점`, words: "점", you: "여기예요", locked: "잠김", close: "닫기" },
+  "sw": { title: "Vyeo vyako", sub: (n) => `Mmepata pointi ${n}. Neno jipya = pointi 1 · Zoezi mlilomaliza = pointi 10`, words: "pointi", you: "Uko hapa", locked: "Imefungwa", close: "Funga" },
+  "th": { title: "อันดับของคุณ", sub: (n) => `คุณได้ ${n} คะแนนแล้ว คำใหม่ = 1 คะแนน · แบบฝึกที่ทำจบ = 10 คะแนน`, words: "คะแนน", you: "คุณอยู่นี่", locked: "ล็อก", close: "ปิด" },
+  "vi": { title: "Cấp bậc của bạn", sub: (n) => `Các bạn đã kiếm được ${n} điểm. Từ mới = 1 điểm · Bài luyện đã xong = 10 điểm`, words: "điểm", you: "Bạn ở đây", locked: "Đã khóa", close: "Đóng" },
+  "zh-CN": { title: "你的段位", sub: (n) => `您已获得 ${n} 分。新词 = 1 分 · 完成的练习 = 10 分`, words: "分", you: "你在这里", locked: "未解锁", close: "关闭" },
+  "zh-TW": { title: "你的段位", sub: (n) => `您已獲得 ${n} 分。新詞 = 1 分 · 完成的練習 = 10 分`, words: "分", you: "你在這裡", locked: "未解鎖", close: "關閉" },
 } satisfies Record<string, { title: string; sub: (n: number) => string; words: string; you: string; locked: string; close: string }>);
 
 function ranksCopy(lang: string) { return RANKS_COPY[lang] ?? RANKS_COPY.en; }
 
-/** The ranks table for a grown up (Gadi 2026-10-19): plural Hebrew, and how
- *  points are earned. Other languages use the table copy above. */
+/** The ranks table for a grown up (Gadi 2026-10-19): grown-up wording. The
+ *  "how points are earned" line is one line for everyone since 2026-10-21
+ *  (RANKS_COPY.sub). Other languages use the table copy above. */
 const RANKS_COPY_ADULT: Record<string, Partial<(typeof RANKS_COPY)["en"]>> = {
-  en: { title: "Your ranks", sub: (n) => `You've earned ${n} points. Every new word is 1 point, and every word you prove in a quiz or a game is 10.`, you: "You're here" },
-  he: { title: "הדרגות שלכם", sub: (n) => `צברתם ${n} נקודות. כל מילה חדשה שווה נקודה, וכל מילה שהבנתם בחידון או במשחק שווה 10.`, you: "אתם כאן" },
+  en: { title: "Your ranks", you: "You're here" },
+  he: { title: "הדרגות שלכם", you: "אתם כאן" },
 };
 function ranksCopyFor(lang: string, adult: boolean) {
   const base = ranksCopy(lang);
   return adult ? { ...base, ...(RANKS_COPY_ADULT[lang] ?? {}) } : base;
 }
 
+/** Points and rank from the SERVER (/api/rank: new words + completed
+ *  practices, never below the rank floor) once loaded; until then the local
+ *  words alone, so the tile is never empty. A word added on this page since
+ *  the server answered still counts (max of the two word counts). */
+function gameFrom(addedAtDates: string[], server: ServerRank | null) {
+  const now = Date.now();
+  return computeGamification(addedAtDates, now, toLocalDateStr(new Date(now).toISOString()), server
+    ? { words: Math.max(server.words, addedAtDates.length), practices: server.practices, practiceDays: server.days, rankFloor: server.rankFloor }
+    : {});
+}
+
 export function KidsGameHeader({
   addedAtDates,
-  understoodCount = 0,
   lang,
   dir,
 }: {
   addedAtDates: string[];
-  /** How many of these words the child has proven they understand (passed a
-   *  quiz/game). Drives the rank via earned points; 0 falls back to one point
-   *  per word. See computeGamification. */
-  understoodCount?: number;
   lang: string;
   dir: "rtl" | "ltr";
 }) {
   // Practice days (games, lessons, homework, reading, "say it") also keep
-  // the streak alive (Gadi 2026-10-12). Seeded from the session so the
-  // number does not jump on every page.
+  // the streak alive (Gadi 2026-10-12); practices also earn rank points
+  // (2026-10-21). Both come from the server.
   const { user } = useAuth();
-  const [practiceDays, setPracticeDays] = useState<string[]>(() => {
-    try { return JSON.parse(sessionStorage.getItem("gadit-practice-days") || "[]") as string[]; } catch { return []; }
-  });
-  useEffect(() => {
-    if (!user) return;
-    let off = false;
-    (async () => {
-      try {
-        const r = await fetch("/api/practice-days", { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
-        const j = (await r.json()) as { days?: string[] };
-        if (off || !Array.isArray(j.days)) return;
-        setPracticeDays(j.days);
-        try { sessionStorage.setItem("gadit-practice-days", JSON.stringify(j.days)); } catch { /* ignore */ }
-      } catch { /* the streak still counts word days */ }
-    })();
-    return () => { off = true; };
-  }, [user]);
-  const g = useMemo(() => {
-    const now = Date.now();
-    const todayStr = toLocalDateStr(new Date(now).toISOString());
-    return computeGamification(addedAtDates, now, todayStr, understoodCount, practiceDays);
-  }, [addedAtDates, understoodCount, practiceDays]);
+  const server = useServerRank(user);
+  const g = useMemo(() => gameFrom(addedAtDates, server), [addedAtDates, server]);
 
   const [celebrateId, setCelebrateId] = useState(0);
   const [ranksOpen, setRanksOpen] = useState(false);
@@ -279,7 +267,8 @@ function RanksModal({ onClose, points, currentIndex, lang, dir, adult = false }:
         <div style={{ fontSize: 14, color: "var(--ink-soft)", marginBottom: 16 }}>{rc.sub(points)}</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {RANKS.map((r, i) => {
-            const unlocked = points >= r.min;
+            // At or below the rank shown (the rank floor keeps it) or reached.
+            const unlocked = i <= currentIndex || points >= r.min;
             const isCurrent = i === currentIndex;
             return (
               <div key={r.key} style={{
@@ -329,20 +318,17 @@ function RanksModal({ onClose, points, currentIndex, lang, dir, adult = false }:
  */
 export function AdultRankLine({
   addedAtDates,
-  understoodCount = 0,
   lang,
   dir,
 }: {
   addedAtDates: string[];
-  understoodCount?: number;
   lang: string;
   dir: "rtl" | "ltr";
 }) {
   const c = gameCopy(lang);
-  const g = useMemo(() => {
-    const now = Date.now();
-    return computeGamification(addedAtDates, now, toLocalDateStr(new Date(now).toISOString()), understoodCount, []);
-  }, [addedAtDates, understoodCount]);
+  const { user } = useAuth();
+  const server = useServerRank(user);
+  const g = useMemo(() => gameFrom(addedAtDates, server), [addedAtDates, server]);
   const toNext = g.rank.next === null ? 0 : Math.max(0, g.rank.next - g.points);
   const [open, setOpen] = useState(false);
   const [celebrateId, setCelebrateId] = useState(0);
@@ -393,41 +379,14 @@ export function AdultRankLine({
 /**
  * The rank badge in the top bar (Gadi 2026-10-19): a grown up sees their rank
  * as a small tree picture next to the avatar on every page, phone and desktop,
- * quietly. Tapping it opens the ladder. Points come from the notebook (one per
- * word, ten per word proven in a quiz or a game), cached for a few minutes per
- * visit so the bar does not refetch on every page.
+ * quietly. Tapping it opens the ladder. Points come from the server
+ * (/api/rank: one per word, ten per completed practice), cached for a few
+ * minutes per visit so the bar does not refetch on every page.
  */
-const RANK_CACHE = "gadit-rank-badge";
-const RANK_CACHE_MS = 3 * 60 * 1000;
 export function TopRankBadge({ lang, dir }: { lang: string; dir: "rtl" | "ltr" }) {
   const { user, familyRole } = useAuth();
-  const [data, setData] = useState<{ dates: string[]; understood: number } | null>(() => {
-    try {
-      const c = JSON.parse(sessionStorage.getItem(RANK_CACHE) || "null") as { at: number; dates: string[]; understood: number } | null;
-      return c && Date.now() - c.at < RANK_CACHE_MS ? { dates: c.dates, understood: c.understood } : null;
-    } catch { return null; }
-  });
-  useEffect(() => {
-    if (!user || familyRole === "kid" || data) return;
-    let off = false;
-    (async () => {
-      try {
-        const r = await fetch("/api/notebook", { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
-        if (!r.ok) return;
-        const items = ((await r.json()) as { items?: Array<{ addedAt?: string; understood?: boolean }> }).items ?? [];
-        const next = { dates: items.map((i) => i.addedAt || "").filter(Boolean), understood: items.filter((i) => i.understood).length };
-        if (off) return;
-        setData(next);
-        try { sessionStorage.setItem(RANK_CACHE, JSON.stringify({ at: Date.now(), ...next })); } catch { /* this visit only */ }
-      } catch { /* the badge is a nice-to-have */ }
-    })();
-    return () => { off = true; };
-  }, [user, familyRole, data]);
-  const g = useMemo(() => {
-    if (!data) return null;
-    const now = Date.now();
-    return computeGamification(data.dates, now, toLocalDateStr(new Date(now).toISOString()), data.understood, []);
-  }, [data]);
+  const server = useServerRank(user, !!user && familyRole !== "kid");
+  const g = useMemo(() => (server ? gameFrom([], server) : null), [server]);
   const [open, setOpen] = useState(false);
   const [celebrateId, setCelebrateId] = useState(0);
   useEffect(() => {
@@ -439,7 +398,7 @@ export function TopRankBadge({ lang, dir }: { lang: string; dir: "rtl" | "ltr" }
       if (prev !== null && g.rank.index > Number(prev)) setCelebrateId((x) => x + 1);
     } catch { /* no celebration */ }
   }, [g]);
-  if (!user || familyRole === "kid" || !g || !data || data.dates.length === 0) return null;
+  if (!user || familyRole === "kid" || !g || !server || server.words === 0) return null;
   const c = gameCopy(lang);
   const name = rankLabel(g.rank.key, lang);
   const toNext = g.rank.next === null ? 0 : Math.max(0, g.rank.next - g.points);

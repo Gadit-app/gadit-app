@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readPracticeDays } from "@/lib/practice-days";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
-import { computeGamification, toLocalDateStr, type RankKey } from "@/lib/gamification";
+import { type RankKey } from "@/lib/gamification";
+import { getRankState } from "@/lib/rank-points";
 
 /**
  * Family progress dashboard data.
@@ -118,19 +118,12 @@ export async function GET(req: NextRequest) {
           if (!uid) return base;
           base.learning = await learningOf(uid).catch(() => null);
 
-          const notebook = db.collection("users").doc(uid).collection("notebook");
           try {
-            // Read every word's addedAt (+ word) once, so we can derive the
-            // streak (needs all dates) without extra round-trips. Cheap at
-            // family scale (at most a few hundred words per child).
-            const snap = await notebook.select("addedAt", "word").get();
-            const rows = snap.docs
-              .map((d) => ({ word: (d.data().word as string) || "", addedAt: (d.data().addedAt as string) || "" }))
-              .filter((r) => r.addedAt);
-            const addedAt = rows.map((r) => r.addedAt);
-            const now = Date.now();
-            const g = computeGamification(addedAt, now, toLocalDateStr(new Date(now).toISOString()), 0, await readPracticeDays(uid).catch(() => []));
-            const recent = rows
+            // Words, practices, streak and rank from the one server helper
+            // (lib/rank-points), so the dashboard shows the rank the child sees.
+            const st = await getRankState(uid);
+            const rows = st.rows;
+            const recent = [...rows]
               .sort((a, b) => b.addedAt.localeCompare(a.addedAt))
               .slice(0, 6)
               .map((r) => r.word)
@@ -138,11 +131,11 @@ export async function GET(req: NextRequest) {
             return {
               ...base,
               linked: true,
-              total: g.distinct,
-              thisWeek: addedAt.filter((iso) => iso >= cutoffIso).length,
+              total: st.words,
+              thisWeek: rows.filter((r) => r.addedAt >= cutoffIso).length,
               recent,
-              streak: g.streak,
-              rankKey: g.rank.key,
+              streak: st.streak,
+              rankKey: st.rank.key,
             };
           } catch (e) {
             console.error(`[family/progress] notebook read failed for ${uid}:`, e);

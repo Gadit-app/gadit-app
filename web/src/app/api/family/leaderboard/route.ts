@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
-import { computeGamification, toLocalDateStr, type RankKey } from "@/lib/gamification";
+import { type RankKey } from "@/lib/gamification";
+import { getRankState } from "@/lib/rank-points";
 
 /**
  * Family leaderboard (Gadi 2026-10-17): who in the family looked up the most
@@ -14,8 +15,9 @@ import { computeGamification, toLocalDateStr, type RankKey } from "@/lib/gamific
  * Words bulk-added by the offline pack (source "popular-pack") were never
  * looked up and are left out of both counts.
  *
- * Rank: the same points the child sees on their own header (one point per
- * notebook word, plus POINTS.understood per understood word).
+ * Rank: the same rank the member sees on their own header, from the one
+ * server helper (lib/rank-points: new words + completed practices, never
+ * below the member's rank floor).
  *
  * Auth: Bearer ID token of any member of the family (the owner, a paired
  * parent or a child). The family is the caller's own (families/{uid} for the
@@ -87,7 +89,6 @@ export async function GET(req: NextRequest) {
 
     const now = Date.now();
     const cutoffMs = now - WEEK_MS;
-    const todayStr = toLocalDateStr(new Date(now).toISOString());
 
     const rows = await Promise.all(
       members
@@ -107,24 +108,14 @@ export async function GET(req: NextRequest) {
             rankKey: "scout",
           };
           try {
-            const snap = await db
-              .collection("users").doc(memberUid).collection("notebook")
-              .select("addedAt", "source", "understood")
-              .get();
-            const all: string[] = [];
-            let understood = 0;
-            for (const d of snap.docs) {
-              const x = d.data() as { addedAt?: string; source?: string; understood?: boolean };
-              const at = typeof x.addedAt === "string" ? x.addedAt : "";
-              if (!at) continue;
-              all.push(at);
-              if (x.understood === true) understood++;
+            const st = await getRankState(memberUid, now);
+            for (const x of st.rows) {
               if (x.source === "popular-pack") continue;
               row.allTime++;
-              const t = Date.parse(at);
+              const t = Date.parse(x.addedAt);
               if (!Number.isNaN(t) && t >= cutoffMs) row.week++;
             }
-            row.rankKey = computeGamification(all, now, todayStr, understood).rank.key;
+            row.rankKey = st.rank.key;
           } catch (e) {
             console.error(`[family/leaderboard] notebook read failed for ${memberUid}:`, e);
           }

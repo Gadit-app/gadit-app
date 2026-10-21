@@ -1,24 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
-import { FieldValue } from "firebase-admin/firestore";
-import { POINTS } from "@/lib/gamification";
+import { getRankState } from "@/lib/rank-points";
 import { creditYoonizLearning } from "@/lib/yooniz-learning";
 
 /**
- * Mark a notebook word as UNDERSTOOD and award comprehension points
- * (kids gamification v2, LLM council 2026-08). Called by the quiz / word-game
- * success handlers when the child answers correctly on the CURRENT word.
+ * Mark a notebook word as UNDERSTOOD (kids gamification v2, LLM council
+ * 2026-08). Called by the quiz / word-game success handlers when the child
+ * answers correctly on the CURRENT word. Fires ONCE per word (understoodAt is
+ * set the first time).
  *
- * Comprehension is a multiplier, not a gate: looking a word up already earned
- * a little on save; proving understanding here earns POINTS.understood. This
- * only fires ONCE per word (understoodAt is set the first time), so a child
- * can't farm the same word for points. Points go to the EARNED wallet
- * (users/{uid}.points) which drives ranks + the parent dashboard; parent/
- * Yooniz gift points live in a separate capped wallet elsewhere.
+ * Since 2026-10-21 (Gadi) an understood word earns NO rank points: the rank
+ * counts new words and completed practices (lib/rank-points.ts), and the
+ * finished quiz/game itself is the practice. `points` in the answer is that
+ * same server rank total, so it never contradicts what the rank shows.
  *
  *   POST { word, language, source?: "quiz" | "game" }
  *   Auth: Firebase ID token (Bearer). Paid plans only (Family kids = deep).
- *   → { understood, awarded, points } | { alreadyUnderstood, points } | { skipped }
+ *   → { understood, awarded: 0, points } | { alreadyUnderstood, points } | { skipped }
  */
 export const maxDuration = 20;
 
@@ -55,7 +53,6 @@ export async function POST(req: NextRequest) {
   const uid = userInfo.userId;
   const wordId = makeWordId(language, word);
   const wordRef = db.collection("users").doc(uid).collection("notebook").doc(wordId);
-  const userRef = db.collection("users").doc(uid);
 
   try {
     const result = await db.runTransaction(async (tx) => {
@@ -66,20 +63,19 @@ export async function POST(req: NextRequest) {
       if (snap.data()?.understood === true) return { status: "already" as const };
       const now = new Date().toISOString();
       tx.update(wordRef, { understood: true, understoodAt: now });
-      tx.set(userRef, { points: FieldValue.increment(POINTS.understood) }, { merge: true });
       return { status: "awarded" as const, now };
     });
 
     if (result.status === "skipped") return NextResponse.json({ skipped: "not_in_notebook" });
 
-    // Read the fresh points total for the client (cheap single read).
-    const points = (await userRef.get()).data()?.points ?? 0;
+    // The rank points total, from the one server helper every surface uses.
+    const points = await getRankState(uid).then((r) => r.points).catch(() => null);
 
     if (result.status === "already") return NextResponse.json({ alreadyUnderstood: true, points });
 
     // Append-only ledger entry (audit trail + future "word world" feed).
     await db.collection("users").doc(uid).collection("ledger").add({
-      delta: POINTS.understood,
+      delta: 0, // no rank points since 2026-10-21
       reason: "understood",
       source,
       word,
@@ -92,7 +88,7 @@ export async function POST(req: NextRequest) {
     // families not linked/opted-in, never blocks or fails this response.
     await creditYoonizLearning(uid);
 
-    return NextResponse.json({ understood: true, awarded: POINTS.understood, points });
+    return NextResponse.json({ understood: true, awarded: 0, points });
   } catch (err) {
     console.error("[notebook/understood] failed:", err);
     return NextResponse.json({ error: "internal_error" }, { status: 500 });
