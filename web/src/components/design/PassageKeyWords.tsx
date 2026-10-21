@@ -22,6 +22,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
+import { FullWordSheet } from "./FullWordSheet";
+import { useLang } from "@/lib/lang-context";
 import { stripLookupDiacritics } from "@/lib/tokenize-words";
 import type { Lang } from "@/lib/i18n";
 
@@ -414,8 +416,10 @@ function copy(lang: string): Copy {
 export function PassageKeyWords({ text, lang }: { text: string; lang: Lang }) {
   const { user } = useAuth();
   const href = useHref();
+  const { dir } = useLang();
   const t = copy(lang);
   const [state, setState] = useState<State>({ status: "idle" });
+  const [sheetUrl, setSheetUrl] = useState<string | null>(null);
 
   async function run() {
     if (state.status === "loading") return;
@@ -464,6 +468,8 @@ export function PassageKeyWords({ text, lang }: { text: string; lang: Lang }) {
   // Ready.
   const { gist, words } = state;
   return (
+    <>
+    {sheetUrl && <FullWordSheet url={sheetUrl} lang={lang} dir={dir} onClose={() => setSheetUrl(null)} />}
     <div style={{ ...panel, marginBottom: 18 }}>
       {words.length > 0 ? (
         <>
@@ -473,8 +479,12 @@ export function PassageKeyWords({ text, lang }: { text: string; lang: Lang }) {
               <Link
                 key={i}
                 href={href(`/word/${encodeURIComponent(stripLookupDiacritics(w.word))}`)}
-                target="_blank"
-                rel="noopener noreferrer"
+                onClick={(e) => {
+                  // Over the text with a Back button, never a new tab (2026-10-21).
+                  if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+                  e.preventDefault();
+                  setSheetUrl(href(`/word/${encodeURIComponent(stripLookupDiacritics(w.word))}`));
+                }}
                 style={chip}
               >
                 <span style={{ fontWeight: 700, color: "var(--ink,#20272E)" }}>{w.word}</span>
@@ -495,6 +505,7 @@ export function PassageKeyWords({ text, lang }: { text: string; lang: Lang }) {
         </div>
       )}
     </div>
+    </>
   );
 }
 

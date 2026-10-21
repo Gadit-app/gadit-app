@@ -544,6 +544,7 @@ const TYPO_BANNER_COPY: Record<string, TypoCopy> = {
   hu: { s1: "Találatok erre: ", s2: "", q1: "Keresés inkább erre: ", q2: "" },
 };
 
+const BACK_COPY_PLAIN: Record<string, string> = { en: "Back", he: "חזרה", ar: "رجوع", ru: "Назад", es: "Volver", pt: "Voltar", fr: "Retour", de: "Zurück", cs: "Zpět", sk: "Späť", it: "Indietro", ja: "戻る", hi: "वापस", am: "ተመለስ", uk: "Назад", tr: "Geri", pl: "Wróć", fa: "بازگشت", id: "Kembali", nl: "Terug", el: "Πίσω", zu: "Buyela", xh: "Buyela", nso: "Boela", tn: "Boela", st: "Kgutlela", ts: "Tlhelela", ss: "Buyela", ve: "Humela", nr: "Buyela", vi: "Quay lại", fil: "Bumalik", af: "Terug", sw: "Rudi", "zh-CN": "返回", "zh-TW": "返回", ko: "돌아가기", th: "กลับ", bn: "ফিরে যান", da: "Tilbage", hu: "Vissza" };
 const BACK_TO_COPY: Record<string, string> = {
   en: "Back to ",
   he: "חזרה אל ",
@@ -965,6 +966,9 @@ export function WordClient({
   // top of the result so the user can return to the original
   // definition they were reading without losing their place.
   const backWord = searchParams?.get("back")?.trim() || "";
+  // Came from another screen (the notebook, 2026-10-21): a Back chip to it.
+  // Only a path on this site, never an outside address.
+  const fromPath = (() => { const f = searchParams?.get("from") || ""; return f.startsWith("/") && !f.startsWith("//") ? f : ""; })();
   // ?cls=<CODE> set by the /c/<CODE> kid landing page. When present,
   // this search came from a classroom — fire-and-forget log it to the
   // classroom's search log so the teacher can see what their class
@@ -2680,6 +2684,14 @@ export function WordClient({
             the destination knows where the reader came from). Clicking
             returns to the original word's page. Hidden in the normal
             search flow when there's no back context. */}
+        {result && fromPath && !backWord && (
+          <div className="wb-back-chip-wrap">
+            <BackLink href={fromPath} className="wb-back-chip">
+              <span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span>
+              <span>{pick(BACK_COPY_PLAIN, lang)}</span>
+            </BackLink>
+          </div>
+        )}
         {result && backWord && backWord.toLowerCase() !== result.word.toLowerCase() && (
           <div className="wb-back-chip-wrap">
             <BackLink href={href(`/word/${encodeURIComponent(backWord)}`)} className="wb-back-chip">

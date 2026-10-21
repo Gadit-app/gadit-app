@@ -834,7 +834,7 @@ export function NotebookPage() {
               return (
                 <li key={item.id} className="wb-notebook-card" style={{ position: "relative" }}>
                   <Link
-                    href={href(`/word/${encodeURIComponent(item.word)}`)}
+                    href={href(`/word/${encodeURIComponent(item.word)}?from=${encodeURIComponent(href("/notebook"))}`)}
                     className="wb-notebook-card-link"
                   >
                     <div className="wb-notebook-card-head">

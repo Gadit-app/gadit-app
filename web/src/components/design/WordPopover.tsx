@@ -22,6 +22,7 @@ import { useKidsMode } from "@/lib/use-kids-mode";
 import { stripLookupDiacritics } from "@/lib/tokenize-words";
 import type { Lang } from "@/lib/i18n";
 import { TTSButton } from "./TTSButton";
+import { FullWordSheet } from "./FullWordSheet";
 
 type Props = {
   /** The word the user tapped. Used to look up the quick definition
@@ -144,6 +145,11 @@ export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTa
   const [kidsOn] = useKidsMode();
   const [def, setDef] = useState<QuickDef>({ status: "loading" });
   const popRef = useRef<HTMLDivElement | null>(null);
+  // The full definition over the screen (FullWordSheet). While it is open the
+  // popover's own outside-click / Escape closing is paused.
+  const [sheetUrl, setSheetUrl] = useState<string | null>(null);
+  const sheetOpenRef = useRef(false);
+  sheetOpenRef.current = sheetUrl !== null;
 
   // Vowel points (Hebrew niqqud, Arabic tashkeel) are display-only — the cache
   // and word pages are keyed by the plain word. Strip them for every LOOKUP
@@ -192,11 +198,13 @@ export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTa
   // Close on outside click + Escape
   useEffect(() => {
     const onPointer = (e: PointerEvent) => {
+      if (sheetOpenRef.current) return;
       if (!popRef.current?.contains(e.target as Node) && !anchor.contains(e.target as Node)) {
         onClose();
       }
     };
     const onKey = (e: KeyboardEvent) => {
+      if (sheetOpenRef.current) return;
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("pointerdown", onPointer);
@@ -239,6 +247,10 @@ export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTa
 
   // Portal target — defer until mounted in the browser
   if (typeof window === "undefined") return null;
+
+  if (sheetUrl) {
+    return <FullWordSheet url={sheetUrl} lang={lang} dir={dir} onClose={() => { setSheetUrl(null); onClose(); }} />;
+  }
 
   return createPortal(
     <div
@@ -350,8 +362,16 @@ export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTa
             ? href(`/word/${encodeURIComponent(lookupWord)}?back=${encodeURIComponent(fromWord)}`)
             : href(`/word/${encodeURIComponent(lookupWord)}`)
         }
-        {...(fullInNewTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-        onClick={onClose}
+        onClick={(e) => {
+          // Inside a text, homework or a game the full definition opens over
+          // the screen with a Back button (FullWordSheet), never a new tab.
+          if (fullInNewTab && !e.metaKey && !e.ctrlKey && !e.shiftKey && e.button === 0) {
+            e.preventDefault();
+            setSheetUrl(href(`/word/${encodeURIComponent(lookupWord)}`));
+            return;
+          }
+          onClose();
+        }}
         style={{
           display: "inline-flex",
           alignItems: "center",

@@ -413,7 +413,7 @@ export default function WordQuestions({
                 {opposites.map((opp) => (
                   <Link
                     key={"opp-" + opp}
-                    href={href(wordPath(opp))}
+                    href={href(wordPath(opp, `back=${encodeURIComponent(word)}`))}
                     style={{
                       display: "inline-flex", alignItems: "center", gap: 7,
                       fontSize: 14, fontWeight: 700, padding: "7px 13px", borderRadius: 999,

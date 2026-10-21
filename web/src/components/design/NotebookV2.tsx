@@ -788,7 +788,7 @@ export function NotebookV2() {
   }
 
   function handleWordClick(entry: DerivedItem) {
-    router.push(`/word/${encodeURIComponent(entry.word)}`);
+    router.push(`/word/${encodeURIComponent(entry.word)}?from=${encodeURIComponent("/notebook")}`);
   }
 
   return (

@@ -15379,3 +15379,11 @@ html[data-theme="dark"] .wordbook .wb-word-sentence-input::placeholder { color: 
 @media (prefers-reduced-motion: reduce) {
   .gd-wait-dot { animation: none; opacity: 0.85; }
 }
+
+/* A word's full definition over the current screen (FullWordSheet, 2026-10-21). */
+.gd-word-sheet { position: fixed; inset: 0; z-index: 1200; display: flex; flex-direction: column; background: var(--paper, #F9FAFB); animation: gdSheetUp 220ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+.gd-word-sheet-bar { flex: none; display: flex; align-items: center; padding: calc(10px + env(safe-area-inset-top, 0px)) 14px 10px; background: var(--card, #fff); border-bottom: 1px solid var(--hairline, #E5E7EB); }
+.gd-word-sheet-back { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 16px; font-weight: 800; color: #fff; background: var(--teal, #0EA5A5); border: 0; border-radius: 12px; padding: 10px 18px; cursor: pointer; }
+.gd-word-sheet-frame { flex: 1; width: 100%; border: 0; background: var(--paper, #F9FAFB); }
+@keyframes gdSheetUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .gd-word-sheet { animation: none; } }
