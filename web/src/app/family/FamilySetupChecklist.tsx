@@ -1,28 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
 import Link from "next/link";
 import { useHref } from "@/lib/href";
+import { useAuth } from "@/lib/auth-context";
+import { useLang } from "@/lib/lang-context";
+import { useKidsMode } from "@/lib/use-kids-mode";
+import { useIsIosApp } from "@/lib/use-native-app";
+import { isTwa } from "@/lib/twa";
+import { QText } from "@/components/play/QText";
 import { isParentRole, type FamilyMember } from "@/lib/family";
 
 /**
- * First-steps checklist for a brand-new Family owner. Gadi 2026-08-03: on
- * signup a parent should see a short, unmistakable list of the first things
- * to do — (1) connect the second parent, (2) connect the kids, (3) save
- * Gadit to the home screen. The Family welcome email links straight here.
- *
- * Completion is auto-detected from the roster (a second parent exists, a
- * child exists) and, for the home-screen step, from display-mode +
- * localStorage. The card hides itself once all three are done or the owner
- * dismisses it, so it never nags a set-up family.
+ * First-steps checklist for a new Family owner. Started 2026-08-03 on the
+ * /family page (second parent, kids, home screen); since 2026-10-21 it also
+ * sits on the search home and pushes real use (first word, first game). See
+ * the component below for who sees it and when.
  */
 
-const DISMISS_KEY = "gadit_family_checklist_dismissed_v1";
+// v2: the list changed (usage steps added), so an old dismissal of the
+// three-step setup list does not hide the new one. Stored per account.
+const DISMISS_KEY = "gadit_first_steps_dismissed_v2";
 const HOMESCREEN_KEY = "gadit_family_homescreen_done_v1";
 
 type Copy = {
   title: string;
-  subtitle: string;
   step1: string;
   step1sub: string;
   step2: string;
@@ -40,7 +42,6 @@ type Copy = {
 const COPY: Record<string, Copy> = {
   he: {
     title: "צעדים ראשונים",
-    subtitle: "שלושה דברים קטנים כדי שכל המשפחה תהיה מוכנה.",
     step1: "לחבר את ההורה השני",
     step1sub: "כדי שגם ההורה השני יראה את ההתקדמות של הילדים.",
     step2: "לחבר את הילדים",
@@ -56,7 +57,6 @@ const COPY: Record<string, Copy> = {
   },
   en: {
     title: "First steps",
-    subtitle: "Three small things to get the whole family set up.",
     step1: "Connect the second parent",
     step1sub: "So both parents can follow the kids' progress.",
     step2: "Connect the kids",
@@ -72,7 +72,6 @@ const COPY: Record<string, Copy> = {
   },
   zu: {
     title: "Izinyathelo zokuqala",
-    subtitle: "Izinto ezintathu ezincane zokulungiselela wonke umndeni.",
     step1: "Xhuma umzali wesibili",
     step1sub: "Ukuze bobabili abazali balandele inqubekela phambili yezingane.",
     step2: "Xhuma izingane",
@@ -88,7 +87,6 @@ const COPY: Record<string, Copy> = {
   },
   xh: {
     title: "Amanyathelo okuqala",
-    subtitle: "Izinto ezintathu ezincinci zokulungiselela usapho lonke.",
     step1: "Dibanisa umzali wesibini",
     step1sub: "Ukuze bobabini abazali balandele inkqubela yabantwana.",
     step2: "Dibanisa abantwana",
@@ -104,7 +102,6 @@ const COPY: Record<string, Copy> = {
   },
   nso: {
     title: "Dikgato tša mathomo",
-    subtitle: "Dilo tše tharo tše nnyane go lokišetša lapa ka moka.",
     step1: "Kopanya motswadi wa bobedi",
     step1sub: "Gore batswadi ka bobedi ba kgone go latela tšwelopele ya bana.",
     step2: "Kopanya bana",
@@ -120,7 +117,6 @@ const COPY: Record<string, Copy> = {
   },
   tn: {
     title: "Dikgato tsa ntlha",
-    subtitle: "Dilo di le tharo tse dinnye go baakanyetsa lelapa lotlhe.",
     step1: "Golaganya motsadi wa bobedi",
     step1sub: "Gore batsadi ka bobedi ba kgone go latela kgatelopele ya bana.",
     step2: "Golaganya bana",
@@ -136,7 +132,6 @@ const COPY: Record<string, Copy> = {
   },
   st: {
     title: "Mehato ya pele",
-    subtitle: "Dintho tse tharo tse nyenyane ho lokisetsa lelapa lohle.",
     step1: "Hokela motswadi wa bobedi",
     step1sub: "Hore batswadi ka bobedi ba latele tswelopele ya bana.",
     step2: "Hokela bana",
@@ -152,7 +147,6 @@ const COPY: Record<string, Copy> = {
   },
   ts: {
     title: "Magoza yo sungula",
-    subtitle: "Swilo swinharhu swintsongo leswaku ndyangu hinkwawo wu lunghiseleriwa.",
     step1: "Hlanganisa mutswari wa vumbirhi",
     step1sub: "Leswaku vatswari havambirhi va kota ku landzelela ku ya emahlweni ka vana.",
     step2: "Hlanganisa vana",
@@ -168,7 +162,6 @@ const COPY: Record<string, Copy> = {
   },
   ss: {
     title: "Tinyatselo tekucala",
-    subtitle: "Tintfo letintsatfu letincane kute umndeni wonkhe ulungiswe.",
     step1: "Xhuma umtali wesibili",
     step1sub: "Kute bobabili batali balandzele inchubekelembili yebantfwana.",
     step2: "Xhuma bantfwana",
@@ -184,7 +177,6 @@ const COPY: Record<string, Copy> = {
   },
   ve: {
     title: "Zwiṱepe zwa u thoma",
-    subtitle: "Zwithu zwiṱuku zwiraru uri muṱa woṱhe u lugele.",
     step1: "Ṱumanyani mubebi wa vhuvhili",
     step1sub: "Uri vhabebi vhoṱhe vha kone u tevhela mvelaphanḓa ya vhana.",
     step2: "Ṱumanyani vhana",
@@ -200,7 +192,6 @@ const COPY: Record<string, Copy> = {
   },
   nr: {
     title: "Amagadango wokuthoma",
-    subtitle: "Izinto ezincani ezintathu zokulungiselela umndeni woke.",
     step1: "Hlanganisa umbelethi wesibili",
     step1sub: "Bona ababelethi boke bobabili balandele ukuthuthuka kwabantwana.",
     step2: "Hlanganisa abantwana",
@@ -216,7 +207,6 @@ const COPY: Record<string, Copy> = {
   },
   el: {
     title: "Πρώτα βήματα",
-    subtitle: "Τρία μικρά πράγματα για να ετοιμαστεί όλη η οικογένεια.",
     step1: "Σύνδεσε τον δεύτερο γονέα",
     step1sub: "Ώστε και οι δύο γονείς να παρακολουθούν την πρόοδο των παιδιών.",
     step2: "Σύνδεσε τα παιδιά",
@@ -232,7 +222,6 @@ const COPY: Record<string, Copy> = {
   },
   ar: {
     title: "الخطوات الأولى",
-    subtitle: "ثلاثة أمور صغيرة لتجهيز العائلة بالكامل.",
     step1: "ربط الوالد الثاني",
     step1sub: "ليتابع كلا الوالدين تقدم الأطفال.",
     step2: "ربط الأطفال",
@@ -248,7 +237,6 @@ const COPY: Record<string, Copy> = {
   },
   ru: {
     title: "Первые шаги",
-    subtitle: "Три небольших действия, чтобы настроить всю семью.",
     step1: "Подключить второго родителя",
     step1sub: "Чтобы оба родителя видели прогресс детей.",
     step2: "Подключить детей",
@@ -264,7 +252,6 @@ const COPY: Record<string, Copy> = {
   },
   es: {
     title: "Primeros pasos",
-    subtitle: "Tres pequeñas cosas para dejar lista a toda la familia.",
     step1: "Conecta al segundo progenitor",
     step1sub: "Para que ambos padres puedan seguir el progreso de los niños.",
     step2: "Conecta a los niños",
@@ -280,7 +267,6 @@ const COPY: Record<string, Copy> = {
   },
   pt: {
     title: "Primeiros passos",
-    subtitle: "Três pequenas coisas para deixar toda a família pronta.",
     step1: "Conecte o segundo responsável",
     step1sub: "Para que ambos os pais possam acompanhar o progresso das crianças.",
     step2: "Conecte as crianças",
@@ -296,7 +282,6 @@ const COPY: Record<string, Copy> = {
   },
   fr: {
     title: "Premiers pas",
-    subtitle: "Trois petites choses pour que toute la famille soit prête.",
     step1: "Connecter le second parent",
     step1sub: "Pour que les deux parents suivent les progrès des enfants.",
     step2: "Connecter les enfants",
@@ -312,7 +297,6 @@ const COPY: Record<string, Copy> = {
   },
   de: {
     title: "Erste Schritte",
-    subtitle: "Drei kleine Dinge, damit die ganze Familie startklar ist.",
     step1: "Zweiten Elternteil verbinden",
     step1sub: "Damit beide Eltern den Fortschritt der Kinder verfolgen können.",
     step2: "Die Kinder verbinden",
@@ -328,7 +312,6 @@ const COPY: Record<string, Copy> = {
   },
   cs: {
     title: "První kroky",
-    subtitle: "Tři malé věci, aby byla celá rodina připravená.",
     step1: "Připojte druhého rodiče",
     step1sub: "Aby oba rodiče mohli sledovat pokrok dětí.",
     step2: "Připojte děti",
@@ -344,7 +327,6 @@ const COPY: Record<string, Copy> = {
   },
   sk: {
     title: "Prvé kroky",
-    subtitle: "Tri malé veci, aby bola celá rodina pripravená.",
     step1: "Pripojte druhého rodiča",
     step1sub: "Aby obaja rodičia mohli sledovať pokrok detí.",
     step2: "Pripojte deti",
@@ -360,7 +342,6 @@ const COPY: Record<string, Copy> = {
   },
   it: {
     title: "Primi passi",
-    subtitle: "Tre piccole cose per preparare tutta la famiglia.",
     step1: "Collega il secondo genitore",
     step1sub: "Così entrambi i genitori possono seguire i progressi dei bambini.",
     step2: "Collega i bambini",
@@ -376,7 +357,6 @@ const COPY: Record<string, Copy> = {
   },
   ja: {
     title: "はじめの一歩",
-    subtitle: "家族全員の準備を整えるための3つの小さなステップ。",
     step1: "2人目の保護者をつなげる",
     step1sub: "両親がお子さんの学習の進み具合を見られるように。",
     step2: "お子さんをつなげる",
@@ -392,7 +372,6 @@ const COPY: Record<string, Copy> = {
   },
   hi: {
     title: "पहले कदम",
-    subtitle: "पूरे परिवार को तैयार करने के लिए तीन छोटी चीज़ें।",
     step1: "दूसरे अभिभावक को जोड़ें",
     step1sub: "ताकि दोनों माता-पिता बच्चों की प्रगति देख सकें।",
     step2: "बच्चों को जोड़ें",
@@ -408,7 +387,6 @@ const COPY: Record<string, Copy> = {
   },
   am: {
     title: "የመጀመሪያ እርምጃዎች",
-    subtitle: "ሙሉ ቤተሰብን ለማዘጋጀት ሦስት ትንንሽ ነገሮች።",
     step1: "ሁለተኛውን ወላጅ አገናኝ",
     step1sub: "ሁለቱም ወላጆች የልጆቹን እድገት እንዲከታተሉ።",
     step2: "ልጆቹን አገናኝ",
@@ -424,7 +402,6 @@ const COPY: Record<string, Copy> = {
   },
   uk: {
     title: "Перші кроки",
-    subtitle: "Три невеликі дії, щоб налаштувати всю родину.",
     step1: "Підключіть другого з батьків",
     step1sub: "Щоб обоє батьків бачили прогрес дітей.",
     step2: "Підключіть дітей",
@@ -440,7 +417,6 @@ const COPY: Record<string, Copy> = {
   },
   tr: {
     title: "İlk adımlar",
-    subtitle: "Tüm ailenin hazır olması için üç küçük şey.",
     step1: "İkinci ebeveyni bağla",
     step1sub: "Böylece her iki ebeveyn de çocukların ilerlemesini takip edebilir.",
     step2: "Çocukları bağla",
@@ -456,7 +432,6 @@ const COPY: Record<string, Copy> = {
   },
   pl: {
     title: "Pierwsze kroki",
-    subtitle: "Trzy małe rzeczy, aby przygotować całą rodzinę.",
     step1: "Połącz drugiego rodzica",
     step1sub: "Aby oboje rodzice mogli śledzić postępy dzieci.",
     step2: "Połącz dzieci",
@@ -472,7 +447,6 @@ const COPY: Record<string, Copy> = {
   },
   fa: {
     title: "گام‌های اول",
-    subtitle: "سه کار کوچک تا کل خانواده آماده شود.",
     step1: "والد دوم را متصل کنید",
     step1sub: "تا هر دو والد بتوانند پیشرفت بچه‌ها را دنبال کنند.",
     step2: "بچه‌ها را متصل کنید",
@@ -488,7 +462,6 @@ const COPY: Record<string, Copy> = {
   },
   id: {
     title: "Langkah pertama",
-    subtitle: "Tiga hal kecil untuk menyiapkan seluruh keluarga.",
     step1: "Hubungkan orang tua kedua",
     step1sub: "Agar kedua orang tua dapat mengikuti perkembangan anak-anak.",
     step2: "Hubungkan anak-anak",
@@ -504,7 +477,6 @@ const COPY: Record<string, Copy> = {
   },
   nl: {
     title: "Eerste stappen",
-    subtitle: "Drie kleine dingen om het hele gezin klaar te zetten.",
     step1: "Verbind de tweede ouder",
     step1sub: "Zodat beide ouders de voortgang van de kinderen kunnen volgen.",
     step2: "Verbind de kinderen",
@@ -520,7 +492,6 @@ const COPY: Record<string, Copy> = {
   },
   vi: {
     title: "Những bước đầu tiên",
-    subtitle: "Ba việc nhỏ để cả gia đình sẵn sàng.",
     step1: "Kết nối phụ huynh thứ hai",
     step1sub: "Để cả hai phụ huynh cùng theo dõi sự tiến bộ của các con.",
     step2: "Kết nối các con",
@@ -536,7 +507,6 @@ const COPY: Record<string, Copy> = {
   },
   fil: {
     title: "Mga unang hakbang",
-    subtitle: "Tatlong maliliit na bagay para maihanda ang buong pamilya.",
     step1: "Ikonekta ang pangalawang magulang",
     step1sub: "Para masubaybayan ng dalawang magulang ang pag-unlad ng mga bata.",
     step2: "Ikonekta ang mga bata",
@@ -552,7 +522,6 @@ const COPY: Record<string, Copy> = {
   },
   af: {
     title: "Eerste stappe",
-    subtitle: "Drie klein dingetjies om die hele gesin gereed te kry.",
     step1: "Koppel die tweede ouer",
     step1sub: "Sodat albei ouers die kinders se vordering kan volg.",
     step2: "Koppel die kinders",
@@ -568,7 +537,6 @@ const COPY: Record<string, Copy> = {
   },
   sw: {
     title: "Hatua za kwanza",
-    subtitle: "Mambo matatu madogo ya kuandaa familia nzima.",
     step1: "Unganisha mzazi wa pili",
     step1sub: "Ili wazazi wote wawili wafuatilie maendeleo ya watoto.",
     step2: "Unganisha watoto",
@@ -584,7 +552,6 @@ const COPY: Record<string, Copy> = {
   },
   "zh-CN": {
     title: "入门步骤",
-    subtitle: "三件小事，让全家准备就绪。",
     step1: "连接另一位家长",
     step1sub: "让两位家长都能关注孩子的进步。",
     step2: "连接孩子",
@@ -600,7 +567,6 @@ const COPY: Record<string, Copy> = {
   },
   "zh-TW": {
     title: "入門步驟",
-    subtitle: "三件小事，讓全家準備就緒。",
     step1: "連結另一位家長",
     step1sub: "讓兩位家長都能關注孩子的進步。",
     step2: "連結孩子",
@@ -616,7 +582,6 @@ const COPY: Record<string, Copy> = {
   },
   ko: {
     title: "첫 단계",
-    subtitle: "온 가족이 준비를 마치는 작은 세 가지.",
     step1: "다른 부모 연결하기",
     step1sub: "두 부모 모두 아이들의 성장을 함께 볼 수 있어요.",
     step2: "아이들 연결하기",
@@ -632,7 +597,6 @@ const COPY: Record<string, Copy> = {
   },
   th: {
     title: "ขั้นตอนแรก",
-    subtitle: "สามเรื่องเล็ก ๆ เพื่อให้ทั้งครอบครัวพร้อมใช้งาน",
     step1: "เชื่อมต่อผู้ปกครองคนที่สอง",
     step1sub: "เพื่อให้ผู้ปกครองทั้งสองคนติดตามพัฒนาการของลูก ๆ ได้",
     step2: "เชื่อมต่อลูก ๆ",
@@ -648,7 +612,6 @@ const COPY: Record<string, Copy> = {
   },
   bn: {
     title: "প্রথম ধাপ",
-    subtitle: "পুরো পরিবারকে প্রস্তুত করতে তিনটি ছোট কাজ।",
     step1: "দ্বিতীয় অভিভাবককে যুক্ত করা",
     step1sub: "যাতে দুই অভিভাবকই সন্তানদের অগ্রগতি দেখতে পারেন।",
     step2: "সন্তানদের যুক্ত করা",
@@ -664,7 +627,6 @@ const COPY: Record<string, Copy> = {
   },
   da: {
     title: "Første skridt",
-    subtitle: "Tre små ting, så hele familien er klar.",
     step1: "Forbind den anden forælder",
     step1sub: "Så begge forældre kan følge børnenes fremskridt.",
     step2: "Forbind børnene",
@@ -680,7 +642,6 @@ const COPY: Record<string, Copy> = {
   },
   hu: {
     title: "Első lépések",
-    subtitle: "Három apróság, hogy az egész család készen álljon.",
     step1: "A második szülő csatlakoztatása",
     step1sub: "Hogy mindkét szülő követhesse a gyerekek fejlődését.",
     step2: "A gyerekek csatlakoztatása",
@@ -696,6 +657,65 @@ const COPY: Record<string, Copy> = {
   },
 };
 
+/** Copy for the usage steps added 2026-10-21 (first word, first game), the
+ *  new subtitle, the "optional" tag and the progress line. Every UI
+ *  language; `{n}` and `{total}` are filled in. */
+type More = {
+  sub: string;
+  word: string;
+  wordSub: string;
+  wordCta: string;
+  game: string;
+  gameSub: string;
+  gameCta: string;
+  optional: string;
+  progress: string;
+};
+
+const MORE: Record<string, More> = {
+  he: { sub: "כמה צעדים קטנים, וכל המשפחה מתחילה ללמוד מילים חדשות.", word: "לחפש מילה ראשונה", wordSub: "הקלידו מילה כלשהי, בכל שפה, ותראו את כל המשמעויות שלה.", wordCta: "חיפוש", game: "לשחק משחק ראשון", gameSub: "משחק מילים קצר, לילדים או לכם.", gameCta: "לשחק", optional: "לא חובה", progress: "{n} מתוך {total}" },
+  en: { sub: "A few small steps and the whole family starts learning new words.", word: "Look up a first word", wordSub: "Type any word, in any language, and see all its meanings.", wordCta: "Search", game: "Play a first game", gameSub: "A short word game, for the kids or for you.", gameCta: "Play", optional: "Optional", progress: "{n} of {total}" },
+  ar: { sub: "بضع خطوات صغيرة، وتبدأ العائلة كلها بتعلّم كلمات جديدة.", word: "البحث عن أول كلمة", wordSub: "اكتبوا أي كلمة، بأي لغة، وشاهدوا كل معانيها.", wordCta: "بحث", game: "لعب أول لعبة", gameSub: "لعبة كلمات قصيرة، للأطفال أو لكم.", gameCta: "لعب", optional: "اختياري", progress: "{n} من {total}" },
+  ru: { sub: "Несколько небольших шагов, и вся семья начинает учить новые слова.", word: "Найти первое слово", wordSub: "Введите любое слово на любом языке и посмотрите все его значения.", wordCta: "Искать", game: "Сыграть в первую игру", gameSub: "Короткая игра со словами, для детей или для вас.", gameCta: "Играть", optional: "Необязательно", progress: "{n} из {total}" },
+  es: { sub: "Unos pocos pasos pequeños y toda la familia empieza a aprender palabras nuevas.", word: "Busca una primera palabra", wordSub: "Escribe cualquier palabra, en cualquier idioma, y mira todos sus significados.", wordCta: "Buscar", game: "Juega un primer juego", gameSub: "Un juego corto de palabras, para los niños o para ti.", gameCta: "Jugar", optional: "Opcional", progress: "{n} de {total}" },
+  pt: { sub: "Alguns pequenos passos e toda a família começa a aprender palavras novas.", word: "Pesquise a primeira palavra", wordSub: "Digite qualquer palavra, em qualquer idioma, e veja todos os seus significados.", wordCta: "Pesquisar", game: "Jogue o primeiro jogo", gameSub: "Um jogo curto de palavras, para as crianças ou para você.", gameCta: "Jogar", optional: "Opcional", progress: "{n} de {total}" },
+  fr: { sub: "Quelques petites étapes et toute la famille commence à apprendre de nouveaux mots.", word: "Chercher un premier mot", wordSub: "Tapez n'importe quel mot, dans n'importe quelle langue, et voyez tous ses sens.", wordCta: "Chercher", game: "Jouer à un premier jeu", gameSub: "Un petit jeu de mots, pour les enfants ou pour vous.", gameCta: "Jouer", optional: "Facultatif", progress: "{n} sur {total}" },
+  de: { sub: "Ein paar kleine Schritte, und die ganze Familie lernt neue Wörter.", word: "Ein erstes Wort nachschlagen", wordSub: "Gib ein beliebiges Wort in einer beliebigen Sprache ein und sieh alle seine Bedeutungen.", wordCta: "Suchen", game: "Ein erstes Spiel spielen", gameSub: "Ein kurzes Wortspiel, für die Kinder oder für dich.", gameCta: "Spielen", optional: "Optional", progress: "{n} von {total}" },
+  cs: { sub: "Pár malých kroků a celá rodina se začne učit nová slova.", word: "Vyhledejte první slovo", wordSub: "Napište jakékoli slovo v jakémkoli jazyce a uvidíte všechny jeho významy.", wordCta: "Hledat", game: "Zahrajte si první hru", gameSub: "Krátká slovní hra pro děti nebo pro vás.", gameCta: "Hrát", optional: "Nepovinné", progress: "{n} z {total}" },
+  sk: { sub: "Pár malých krokov a celá rodina sa začne učiť nové slová.", word: "Vyhľadajte prvé slovo", wordSub: "Napíšte akékoľvek slovo v akomkoľvek jazyku a uvidíte všetky jeho významy.", wordCta: "Hľadať", game: "Zahrajte si prvú hru", gameSub: "Krátka slovná hra pre deti alebo pre vás.", gameCta: "Hrať", optional: "Nepovinné", progress: "{n} z {total}" },
+  it: { sub: "Pochi piccoli passi e tutta la famiglia inizia a imparare parole nuove.", word: "Cerca una prima parola", wordSub: "Scrivi una parola qualsiasi, in qualsiasi lingua, e vedi tutti i suoi significati.", wordCta: "Cerca", game: "Gioca a un primo gioco", gameSub: "Un breve gioco di parole, per i bambini o per te.", gameCta: "Gioca", optional: "Facoltativo", progress: "{n} di {total}" },
+  ja: { sub: "いくつかの小さなステップで、家族みんなが新しい言葉を学び始めます。", word: "最初の言葉を調べる", wordSub: "どんな言語のどんな言葉でも入力して、すべての意味を見てみましょう。", wordCta: "検索", game: "最初のゲームで遊ぶ", gameSub: "短い言葉のゲーム。お子さんとでも、ご自身でも。", gameCta: "遊ぶ", optional: "任意", progress: "{n} / {total}" },
+  hi: { sub: "कुछ छोटे कदम, और पूरा परिवार नए शब्द सीखना शुरू कर देता है।", word: "पहला शब्द खोजें", wordSub: "किसी भी भाषा में कोई भी शब्द लिखें और उसके सभी अर्थ देखें।", wordCta: "खोजें", game: "पहला खेल खेलें", gameSub: "शब्दों का एक छोटा खेल, बच्चों के लिए या आपके लिए।", gameCta: "खेलें", optional: "वैकल्पिक", progress: "{total} में से {n}" },
+  am: { sub: "ጥቂት ትንንሽ እርምጃዎች፣ እና መላው ቤተሰብ አዳዲስ ቃላትን መማር ይጀምራል።", word: "የመጀመሪያ ቃል ፈልግ", wordSub: "በማንኛውም ቋንቋ ማንኛውንም ቃል ጻፍ እና ሁሉንም ትርጉሞቹን እይ።", wordCta: "ፈልግ", game: "የመጀመሪያ ጨዋታ ተጫወት", gameSub: "አጭር የቃላት ጨዋታ፣ ለልጆች ወይም ለአንተ።", gameCta: "ተጫወት", optional: "አማራጭ", progress: "{n} / {total}" },
+  uk: { sub: "Кілька невеликих кроків, і вся родина починає вчити нові слова.", word: "Знайдіть перше слово", wordSub: "Введіть будь-яке слово будь-якою мовою і перегляньте всі його значення.", wordCta: "Шукати", game: "Зіграйте в першу гру", gameSub: "Коротка гра зі словами, для дітей або для вас.", gameCta: "Грати", optional: "Необов'язково", progress: "{n} з {total}" },
+  tr: { sub: "Birkaç küçük adım ve tüm aile yeni kelimeler öğrenmeye başlar.", word: "İlk kelimeni ara", wordSub: "Herhangi bir dilde herhangi bir kelime yaz ve tüm anlamlarını gör.", wordCta: "Ara", game: "İlk oyununu oyna", gameSub: "Kısa bir kelime oyunu, çocuklar ya da senin için.", gameCta: "Oyna", optional: "İsteğe bağlı", progress: "{n} / {total}" },
+  pl: { sub: "Kilka małych kroków i cała rodzina zaczyna uczyć się nowych słów.", word: "Wyszukaj pierwsze słowo", wordSub: "Wpisz dowolne słowo w dowolnym języku i zobacz wszystkie jego znaczenia.", wordCta: "Szukaj", game: "Zagraj w pierwszą grę", gameSub: "Krótka gra słowna, dla dzieci albo dla Ciebie.", gameCta: "Graj", optional: "Opcjonalnie", progress: "{n} z {total}" },
+  fa: { sub: "چند گام کوچک، و کل خانواده یادگیری واژه‌های تازه را شروع می‌کند.", word: "اولین واژه را جستجو کنید", wordSub: "هر واژه‌ای را به هر زبانی بنویسید و همه معناهایش را ببینید.", wordCta: "جستجو", game: "اولین بازی را انجام دهید", gameSub: "یک بازی کوتاه با واژه‌ها، برای بچه‌ها یا برای خودتان.", gameCta: "بازی", optional: "اختیاری", progress: "{n} از {total}" },
+  id: { sub: "Beberapa langkah kecil, dan seluruh keluarga mulai belajar kata-kata baru.", word: "Cari kata pertama", wordSub: "Ketik kata apa saja, dalam bahasa apa saja, dan lihat semua artinya.", wordCta: "Cari", game: "Mainkan permainan pertama", gameSub: "Permainan kata yang singkat, untuk anak-anak atau untuk Anda.", gameCta: "Main", optional: "Opsional", progress: "{n} dari {total}" },
+  nl: { sub: "Een paar kleine stappen en het hele gezin leert nieuwe woorden.", word: "Zoek een eerste woord op", wordSub: "Typ een woord, in welke taal dan ook, en zie al zijn betekenissen.", wordCta: "Zoeken", game: "Speel een eerste spel", gameSub: "Een kort woordspel, voor de kinderen of voor jou.", gameCta: "Spelen", optional: "Optioneel", progress: "{n} van {total}" },
+  el: { sub: "Λίγα μικρά βήματα και όλη η οικογένεια αρχίζει να μαθαίνει νέες λέξεις.", word: "Αναζήτησε μια πρώτη λέξη", wordSub: "Γράψε οποιαδήποτε λέξη, σε οποιαδήποτε γλώσσα, και δες όλες τις σημασίες της.", wordCta: "Αναζήτηση", game: "Παίξε ένα πρώτο παιχνίδι", gameSub: "Ένα σύντομο παιχνίδι λέξεων, για τα παιδιά ή για σένα.", gameCta: "Παίξε", optional: "Προαιρετικό", progress: "{n} από {total}" },
+  zu: { sub: "Izinyathelo ezimbalwa ezincane, bese wonke umndeni uqala ukufunda amagama amasha.", word: "Sesha igama lokuqala", wordSub: "Bhala noma yiliphi igama, nganoma yiluphi ulimi, ubone zonke izincazelo zalo.", wordCta: "Sesha", game: "Dlala umdlalo wokuqala", gameSub: "Umdlalo omfushane wamagama, wezingane noma wakho.", gameCta: "Dlala", optional: "Akuphoqelekile", progress: "{n} / {total}" },
+  xh: { sub: "Amanyathelo ambalwa amancinci, kwaye usapho lonke luqala ukufunda amagama amatsha.", word: "Khangela igama lokuqala", wordSub: "Bhala nalo naliphi na igama, ngalo naluphi na ulwimi, ubone zonke iintsingiselo zalo.", wordCta: "Khangela", game: "Dlala umdlalo wokuqala", gameSub: "Umdlalo omfutshane wamagama, wabantwana okanye wakho.", gameCta: "Dlala", optional: "Ayinyanzelekanga", progress: "{n} / {total}" },
+  nso: { sub: "Dikgato tše mmalwa tše nnyane, gomme lapa ka moka le thoma go ithuta mantšu a mafsa.", word: "Nyaka lentšu la mathomo", wordSub: "Ngwala lentšu lefe goba lefe, ka polelo efe goba efe, o bone ditlhalošo tša lona ka moka.", wordCta: "Nyaka", game: "Bapala papadi ya mathomo", gameSub: "Papadi ye kopana ya mantšu, ya bana goba ya gago.", gameCta: "Bapala", optional: "Ga se gapeletšo", progress: "{n} / {total}" },
+  tn: { sub: "Dikgato di le mmalwa tse dinnye, mme lelapa lotlhe le simolola go ithuta mafoko a masha.", word: "Batla lefoko la ntlha", wordSub: "Kwala lefoko lefe kana lefe, ka puo efe kana efe, o bone dikaelo tsotlhe tsa lone.", wordCta: "Batla", game: "Tshameka motshameko wa ntlha", gameSub: "Motshameko o mokhutshwane wa mafoko, wa bana kgotsa wa gago.", gameCta: "Tshameka", optional: "Ga go a patelediwa", progress: "{n} / {total}" },
+  st: { sub: "Mehato e mmalwa e menyenyane, mme lelapa lohle le qala ho ithuta mantswe a matjha.", word: "Batla lentswe la pele", wordSub: "Ngola lentswe lefe kapa lefe, ka puo efe kapa efe, o bone meelelo yohle ya lona.", wordCta: "Batla", game: "Bapala papadi ya pele", gameSub: "Papadi e kgutshwane ya mantswe, ya bana kapa ya hao.", gameCta: "Bapala", optional: "Ha se qobello", progress: "{n} / {total}" },
+  ts: { sub: "Magoza ma nga ri mangani yo tsongo, kutani ndyangu hinkwawo wu sungula ku dyondza marito lamantshwa.", word: "Lavisisa rito ro sungula", wordSub: "Tsala rito rin'wana na rin'wana, hi ririmi rin'wana na rin'wana, mi vona tinhlamuselo ta rona hinkwato.", wordCta: "Lavisisa", game: "Tlanga ntlangu wo sungula", gameSub: "Ntlangu wo koma wa marito, wa vana kumbe wa n'wina.", gameCta: "Tlanga", optional: "A swi bohi", progress: "{n} / {total}" },
+  ss: { sub: "Tinyatselo letimbalwa letincane, bese umndeni wonkhe ucala kufundza emagama lamasha.", word: "Funa ligama lekucala", wordSub: "Bhala nome nguliphi ligama, nganoma nguluphi lulwimi, ubone tonkhe tinchazelo talo.", wordCta: "Funa", game: "Dlala umdlalo wekucala", gameSub: "Umdlalo lomfisha wemagama, webantfwana nome wakho.", gameCta: "Dlala", optional: "Akuphoco", progress: "{n} / {total}" },
+  ve: { sub: "Zwiṱepe zwiṱuku zwi si gathi, nahone muṱa woṱhe u thoma u guda maipfi maswa.", word: "Ṱoḓani ipfi ḽa u thoma", wordSub: "Ṅwalani ipfi ḽiṅwe na ḽiṅwe, nga luambo luṅwe na luṅwe, ni vhone ṱhalutshedzo dzaḽo dzoṱhe.", wordCta: "Ṱoḓani", game: "Tambani mutambo wa u thoma", gameSub: "Mutambo mupfufhi wa maipfi, wa vhana kana waṋu.", gameCta: "Tambani", optional: "A zwi kombetshedzwi", progress: "{n} / {total}" },
+  nr: { sub: "Amagadango amambalwa amancani, begodu umndeni woke uthoma ukufunda amagama amatjha.", word: "Funa igama lokuthoma", wordSub: "Tlola nanyana ngiliphi igama, ngelimi nanyana ngiliphi, ubone zoke iinhlathululo zalo.", wordCta: "Funa", game: "Dlala umdlalo wokuthoma", gameSub: "Umdlalo omfitjhani wamagama, wabantwana namkha wakho.", gameCta: "Dlala", optional: "Akukateleleki", progress: "{n} / {total}" },
+  vi: { sub: "Vài bước nhỏ, và cả gia đình bắt đầu học từ mới.", word: "Tra từ đầu tiên", wordSub: "Gõ bất kỳ từ nào, bằng bất kỳ ngôn ngữ nào, và xem tất cả nghĩa của nó.", wordCta: "Tra từ", game: "Chơi trò chơi đầu tiên", gameSub: "Một trò chơi chữ ngắn, cho các con hoặc cho bạn.", gameCta: "Chơi", optional: "Không bắt buộc", progress: "{n}/{total}" },
+  fil: { sub: "Ilang maliliit na hakbang at ang buong pamilya ay magsisimulang matuto ng mga bagong salita.", word: "Maghanap ng unang salita", wordSub: "Mag-type ng kahit anong salita, sa kahit anong wika, at tingnan ang lahat ng kahulugan nito.", wordCta: "Hanapin", game: "Maglaro ng unang laro", gameSub: "Isang maikling laro ng mga salita, para sa mga bata o para sa iyo.", gameCta: "Maglaro", optional: "Opsyonal", progress: "{n} sa {total}" },
+  af: { sub: "'n Paar klein stappies en die hele gesin begin nuwe woorde leer.", word: "Soek 'n eerste woord", wordSub: "Tik enige woord, in enige taal, en sien al sy betekenisse.", wordCta: "Soek", game: "Speel 'n eerste speletjie", gameSub: "'n Kort woordspeletjie, vir die kinders of vir jou.", gameCta: "Speel", optional: "Opsioneel", progress: "{n} van {total}" },
+  sw: { sub: "Hatua chache ndogo, na familia nzima inaanza kujifunza maneno mapya.", word: "Tafuta neno la kwanza", wordSub: "Andika neno lolote, kwa lugha yoyote, uone maana zake zote.", wordCta: "Tafuta", game: "Cheza mchezo wa kwanza", gameSub: "Mchezo mfupi wa maneno, kwa watoto au kwako.", gameCta: "Cheza", optional: "Si lazima", progress: "{n} kati ya {total}" },
+  "zh-CN": { sub: "几个小步骤，全家就开始学习新词。", word: "查第一个词", wordSub: "输入任意语言的任意一个词，看看它的所有意思。", wordCta: "搜索", game: "玩第一个游戏", gameSub: "一个简短的单词游戏，孩子或您都可以玩。", gameCta: "开始玩", optional: "可选", progress: "{n} / {total}" },
+  "zh-TW": { sub: "幾個小步驟，全家就開始學習新詞。", word: "查第一個詞", wordSub: "輸入任何語言的任何一個詞，看看它的所有意思。", wordCta: "搜尋", game: "玩第一個遊戲", gameSub: "一個簡短的單字遊戲，孩子或您都可以玩。", gameCta: "開始玩", optional: "可選", progress: "{n} / {total}" },
+  ko: { sub: "몇 가지 작은 단계로 온 가족이 새 단어를 배우기 시작해요.", word: "첫 단어 찾아보기", wordSub: "어떤 언어로든 단어를 입력하면 모든 뜻을 볼 수 있어요.", wordCta: "검색", game: "첫 게임 해보기", gameSub: "아이들도, 부모님도 할 수 있는 짧은 단어 게임이에요.", gameCta: "게임하기", optional: "선택", progress: "{n} / {total}" },
+  th: { sub: "เพียงไม่กี่ขั้นตอนเล็ก ๆ ทั้งครอบครัวก็เริ่มเรียนรู้คำใหม่ ๆ", word: "ค้นหาคำแรก", wordSub: "พิมพ์คำใดก็ได้ ในภาษาใดก็ได้ แล้วดูความหมายทั้งหมดของคำนั้น", wordCta: "ค้นหา", game: "เล่นเกมแรก", gameSub: "เกมคำศัพท์สั้น ๆ สำหรับลูก ๆ หรือสำหรับคุณ", gameCta: "เล่น", optional: "ไม่บังคับ", progress: "{n} จาก {total}" },
+  bn: { sub: "কয়েকটি ছোট ধাপ, আর পুরো পরিবার নতুন শব্দ শিখতে শুরু করে।", word: "প্রথম শব্দ খোঁজা", wordSub: "যেকোনো ভাষায় যেকোনো শব্দ লিখুন এবং তার সব অর্থ দেখুন।", wordCta: "খুঁজুন", game: "প্রথম খেলা খেলা", gameSub: "শব্দের একটি ছোট খেলা, সন্তানদের জন্য বা আপনার জন্য।", gameCta: "খেলুন", optional: "ঐচ্ছিক", progress: "{total}টির মধ্যে {n}টি" },
+  da: { sub: "Et par små skridt, og hele familien begynder at lære nye ord.", word: "Slå et første ord op", wordSub: "Skriv et hvilket som helst ord, på et hvilket som helst sprog, og se alle dets betydninger.", wordCta: "Søg", game: "Spil et første spil", gameSub: "Et kort ordspil, for børnene eller for dig.", gameCta: "Spil", optional: "Valgfrit", progress: "{n} af {total}" },
+  hu: { sub: "Néhány apró lépés, és az egész család új szavakat kezd tanulni.", word: "Az első szó megkeresése", wordSub: "Írj be bármilyen szót, bármilyen nyelven, és nézd meg az összes jelentését.", wordCta: "Keresés", game: "Az első játék kipróbálása", gameSub: "Egy rövid szójáték, a gyerekeknek vagy neked.", gameCta: "Játék", optional: "Nem kötelező", progress: "{n} / {total}" },
+};
+
 function CheckCircle({ done, n }: { done: boolean; n: number }) {
   if (done) {
     return (
@@ -709,138 +729,263 @@ function CheckCircle({ done, n }: { done: boolean; n: number }) {
   return <span className="fam-chk-circle" aria-hidden>{n}</span>;
 }
 
+type FirstStepsData =
+  | { eligible: false }
+  | {
+      eligible: true;
+      inWindow: boolean;
+      startMs: number | null;
+      steps: { child: boolean; word: boolean; game: boolean; secondParent: boolean };
+    };
+
+const isChildRole = (r: string) => r === "boy" || r === "girl";
+
+/** Shared-device Kids Mode session (the /kids switcher). */
+function kidsSessionOn(): boolean {
+  try {
+    return sessionStorage.getItem("gadit-kids-mode") === "1";
+  } catch {
+    return false;
+  }
+}
+
+const noopSubscribe = () => () => {};
+
+function readFlag(key: string): boolean {
+  try {
+    return localStorage.getItem(key) === "1";
+  } catch {
+    return false;
+  }
+}
+
+/** Installed as an app (home-screen PWA or the Android app), or marked done
+ *  on this device earlier. The iOS app is checked with its own hook. */
+function homeScreenSaved(): boolean {
+  const standalone =
+    window.matchMedia?.("(display-mode: standalone)").matches ||
+    (window.navigator as unknown as { standalone?: boolean }).standalone === true;
+  return standalone || isTwa() || readFlag(HOMESCREEN_KEY);
+}
+
+/**
+ * FIRST STEPS card for a new Family owner (Gadi 2026-08-03, rebuilt
+ * 2026-10-21 to push real use: 20 of 63 paying families had never added a
+ * child, 18 subscribers had never looked up a word).
+ *
+ * Shown ONLY to the Family owner on a paid plan: never to a kid, a paired
+ * parent, a coach, Kids Mode, a school or an individual. The server
+ * (/api/family/first-steps) re-checks the owner and reads the steps from
+ * real data. Steps, in order: add a child, look up a first word, play a
+ * first game, keep Gadit on the home screen (device-local, as before), and
+ * last, optional, the second parent. "2 of 4" counts the required four.
+ *
+ *   placement "home":   the search home, during the first 14 days of the
+ *                       plan; "first word" focuses the search box.
+ *   placement "family": the /family dashboard, while steps remain; the
+ *                       roster comes live from the page (`members`).
+ *
+ * Hides itself once the four required steps are done, or when dismissed
+ * (per account, on this device). Never mentions prices or the plan.
+ */
 export function FamilySetupChecklist({
+  placement,
   members,
-  lang,
+  lang: langProp,
+  onFirstWord,
 }: {
-  members: FamilyMember[];
-  lang: string;
+  placement: "home" | "family";
+  /** Live roster from the /family page; the server's answer is used otherwise. */
+  members?: FamilyMember[];
+  lang?: string;
+  /** Home page: focus the search box. Without it the step links home. */
+  onFirstWord?: () => void;
 }) {
   const href = useHref();
+  const { lang: ctxLang } = useLang();
+  const lang = langProp ?? ctxLang;
   const t = COPY[lang] ?? COPY.en;
+  const m = MORE[lang] ?? MORE.en;
+  const { user, planReady, plan, familyId, familyRole, schoolId } = useAuth();
+  const [kidsToggleOn] = useKidsMode();
+  const isIosApp = useIsIosApp();
 
-  const [dismissed, setDismissed] = useState(false);
-  const [homeDone, setHomeDone] = useState(false);
+  const uid = user?.uid ?? "";
+  const ownerOnClient =
+    !!user && planReady && familyId === uid && familyRole === null && !schoolId && (plan === "clear" || plan === "deep");
+
+  // The server's answer, kept with the uid it belongs to, so a switch of
+  // account on this device never shows the previous account's steps.
+  const [loaded, setLoaded] = useState<{ uid: string; data: FirstStepsData } | null>(null);
+  const [dismissedNow, setDismissedNow] = useState(false);
+  const [homeMarked, setHomeMarked] = useState(false);
   const [showHomeHelp, setShowHomeHelp] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
+  // Browser-only facts, read without an effect (server render: false).
+  const kidsSession = useSyncExternalStore(noopSubscribe, kidsSessionOn, () => false);
+  const homeFromDevice = useSyncExternalStore(noopSubscribe, homeScreenSaved, () => false);
+  const dismissedStored = useSyncExternalStore(noopSubscribe, () => readFlag(`${DISMISS_KEY}:${uid}`), () => false);
 
   useEffect(() => {
-    setHydrated(true);
-    if (typeof window === "undefined") return;
-    if (localStorage.getItem(DISMISS_KEY) === "1") setDismissed(true);
-    // Installed-as-app counts as "saved to home screen" automatically.
-    const standalone =
-      window.matchMedia?.("(display-mode: standalone)").matches ||
-      (window.navigator as unknown as { standalone?: boolean }).standalone === true;
-    if (standalone || localStorage.getItem(HOMESCREEN_KEY) === "1") setHomeDone(true);
-  }, []);
+    if (!ownerOnClient || !user) return;
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const idToken = await user.getIdToken();
+        const res = await fetch("/api/family/first-steps", { headers: { Authorization: `Bearer ${idToken}` }, cache: "no-store" });
+        if (!res.ok) return;
+        const json = (await res.json()) as FirstStepsData;
+        if (!cancelled) setLoaded({ uid: user.uid, data: json });
+      } catch { /* the card is a nudge; stay silent */ }
+    };
+    void load();
+    // Back from a word page or a game in another tab: tick the step.
+    const onVisible = () => { if (document.visibilityState === "visible") void load(); };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => { cancelled = true; document.removeEventListener("visibilitychange", onVisible); };
+  }, [ownerOnClient, user]);
 
-  const parents = members.filter((m) => isParentRole(m.role));
-  const children = members.filter((m) => !isParentRole(m.role));
+  const data = loaded && loaded.uid === uid ? loaded.data : null;
+  if (!ownerOnClient || dismissedNow || dismissedStored || kidsToggleOn || kidsSession) return null;
+  if (!data || !data.eligible) return null;
+  if (placement === "home" && !data.inWindow) return null;
 
-  const step1done = parents.length > 1; // owner + a second parent
-  const step2done = children.length > 0;
-  const step3done = homeDone;
-  const allDone = step1done && step2done && step3done;
+  const child = members ? members.some((x) => isChildRole(x.role)) : data.steps.child;
+  const secondParent = members ? members.filter((x) => isParentRole(x.role)).length > 1 : data.steps.secondParent;
+  const word = data.steps.word;
+  const game = data.steps.game;
+  const home = homeMarked || homeFromDevice || isIosApp;
 
-  // Avoid a hydration flash: render nothing until we've read localStorage.
-  if (!hydrated || dismissed || allDone) return null;
+  const required = [child, word, game, home];
+  const doneCount = required.filter(Boolean).length;
+  if (doneCount === required.length) return null;
 
   const markHomeDone = () => {
-    setHomeDone(true);
+    setHomeMarked(true);
     setShowHomeHelp(false);
-    if (typeof window !== "undefined") localStorage.setItem(HOMESCREEN_KEY, "1");
+    try { localStorage.setItem(HOMESCREEN_KEY, "1"); } catch { /* blocked */ }
   };
   const dismiss = () => {
-    setDismissed(true);
-    if (typeof window !== "undefined") localStorage.setItem(DISMISS_KEY, "1");
+    setDismissedNow(true);
+    try { localStorage.setItem(`${DISMISS_KEY}:${uid}`, "1"); } catch { /* blocked */ }
   };
+  const progress = m.progress.replace("{n}", String(doneCount)).replace("{total}", String(required.length));
 
   return (
-    <div className="fam-chk">
+    <section className={`fam-chk fam-chk--${placement}`} aria-label={t.title}>
       <style>{CHK_CSS}</style>
       <div className="fam-chk-head">
-        <div>
+        <div className="fam-chk-headtext">
           <h2 className="fam-chk-title">{t.title}</h2>
-          <p className="fam-chk-sub">{t.subtitle}</p>
+          <p className="fam-chk-sub"><QText text={m.sub} wordLang={lang} /></p>
         </div>
         <button type="button" className="fam-chk-dismiss" onClick={dismiss}>{t.dismiss}</button>
       </div>
+      <div className="fam-chk-progress">
+        <span className="fam-chk-progress-text">{progress}</span>
+        <span className="fam-chk-bar" aria-hidden>
+          <span style={{ width: `${(doneCount / required.length) * 100}%` }} />
+        </span>
+      </div>
 
       <ul className="fam-chk-list">
-        {/* Step 1 — second parent */}
-        <li className={`fam-chk-item ${step1done ? "is-done" : ""}`}>
-          <CheckCircle done={step1done} n={1} />
-          <div className="fam-chk-body">
-            <span className="fam-chk-label">{t.step1}</span>
-            <span className="fam-chk-itemsub">{step1done ? t.done : t.step1sub}</span>
-          </div>
-          {!step1done && (
-            <Link href={href("/family/add")} className="fam-chk-cta">{t.add}</Link>
-          )}
-        </li>
+        <Step n={1} done={child} label={t.step2} sub={t.step2sub} doneText={t.done} lang={lang}
+          cta={<Link href={href("/family/add")} className="fam-chk-cta">{t.add}</Link>} />
 
-        {/* Step 2 — kids */}
-        <li className={`fam-chk-item ${step2done ? "is-done" : ""}`}>
-          <CheckCircle done={step2done} n={2} />
-          <div className="fam-chk-body">
-            <span className="fam-chk-label">{t.step2}</span>
-            <span className="fam-chk-itemsub">{step2done ? t.done : t.step2sub}</span>
-          </div>
-          {!step2done && (
-            <Link href={href("/family/add")} className="fam-chk-cta">{t.add}</Link>
-          )}
-        </li>
+        <Step n={2} done={word} label={m.word} sub={m.wordSub} doneText={t.done} lang={lang}
+          cta={onFirstWord
+            ? <button type="button" className="fam-chk-cta" onClick={onFirstWord}>{m.wordCta}</button>
+            : <Link href={href("/")} className="fam-chk-cta">{m.wordCta}</Link>} />
 
-        {/* Step 3 — home screen */}
-        <li className={`fam-chk-item ${step3done ? "is-done" : ""}`}>
-          <CheckCircle done={step3done} n={3} />
-          <div className="fam-chk-body">
-            <span className="fam-chk-label">{t.step3}</span>
-            <span className="fam-chk-itemsub">{step3done ? t.done : t.step3sub}</span>
-            {showHomeHelp && !step3done && (
-              <span className="fam-chk-help">{t.homeHelp}</span>
-            )}
-          </div>
-          {!step3done && (
-            showHomeHelp ? (
-              <button type="button" className="fam-chk-cta" onClick={markHomeDone}>{t.markDone}</button>
-            ) : (
-              <button type="button" className="fam-chk-cta fam-chk-cta-ghost" onClick={() => setShowHomeHelp(true)}>{t.cta}</button>
-            )
-          )}
-        </li>
+        <Step n={3} done={game} label={m.game} sub={m.gameSub} doneText={t.done} lang={lang}
+          cta={<Link href={href("/play")} className="fam-chk-cta">{m.gameCta}</Link>} />
+
+        <Step n={4} done={home} label={t.step3} sub={t.step3sub} doneText={t.done} lang={lang}
+          help={showHomeHelp && !home ? t.homeHelp : null}
+          cta={showHomeHelp
+            ? <button type="button" className="fam-chk-cta" onClick={markHomeDone}>{t.markDone}</button>
+            : <button type="button" className="fam-chk-cta fam-chk-cta-ghost" onClick={() => setShowHomeHelp(true)}>{t.cta}</button>} />
+
+        <Step n={5} done={secondParent} label={t.step1} sub={t.step1sub} doneText={t.done} lang={lang} optional={m.optional}
+          cta={<Link href={href("/family/add")} className="fam-chk-cta fam-chk-cta-ghost">{t.add}</Link>} />
       </ul>
-    </div>
+    </section>
+  );
+}
+
+function Step({ n, done, label, sub, doneText, lang, cta, help, optional }: {
+  n: number;
+  done: boolean;
+  label: string;
+  sub: string;
+  doneText: string;
+  lang: string;
+  cta: ReactNode;
+  help?: string | null;
+  optional?: string;
+}) {
+  return (
+    <li className={`fam-chk-item ${done ? "is-done" : ""}${optional ? " is-optional" : ""}`}>
+      <CheckCircle done={done} n={n} />
+      <div className="fam-chk-body">
+        <span className="fam-chk-label">
+          {label}
+          {optional && <span className="fam-chk-opt">{optional}</span>}
+        </span>
+        <span className="fam-chk-itemsub">{done ? doneText : <QText text={sub} wordLang={lang} />}</span>
+        {help && <span className="fam-chk-help"><QText text={help} wordLang={lang} /></span>}
+      </div>
+      {!done && cta}
+    </li>
   );
 }
 
 const CHK_CSS = `
 .fam-chk {
-  background: #fff;
-  border: 1px solid #E6E9EC;
+  background: var(--card, #fff);
+  border: 1px solid var(--hairline, #E6E9EC);
   border-radius: 18px;
   padding: 20px 22px;
   margin-bottom: 22px;
   box-shadow: 0 1px 2px rgba(16,24,40,.04);
+  text-align: start;
+  width: 100%;
+  box-sizing: border-box;
 }
-.fam-chk-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:14px; }
-.fam-chk-title { margin:0; font-size:17px; font-weight:700; color:#0F172A; }
-.fam-chk-sub { margin:3px 0 0; font-size:13.5px; color:#64748B; line-height:1.4; }
+.fam-chk--home { margin: 26px 0 0; }
+.fam-chk-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:10px; }
+.fam-chk-headtext { min-width:0; }
+.fam-chk-title { margin:0; font-size:17px; font-weight:700; color:var(--ink, #0F172A); line-height:1.25; }
+.fam-chk-sub { margin:3px 0 0; font-size:13.5px; color:#64748B; line-height:1.45; }
 .fam-chk-dismiss { flex-shrink:0; background:none; border:none; color:#94A3B8; font-size:12.5px; font-weight:600; cursor:pointer; padding:2px 4px; }
 .fam-chk-dismiss:hover { color:#64748B; }
+.fam-chk-progress { display:flex; align-items:center; gap:10px; margin:0 0 14px; }
+.fam-chk-progress-text { flex-shrink:0; font-size:12.5px; font-weight:650; color:#0E7C74; font-variant-numeric: tabular-nums; }
+.fam-chk-bar { flex:1; height:6px; border-radius:999px; background:#E6FBF8; overflow:hidden; }
+.fam-chk-bar > span { display:block; height:100%; border-radius:999px; background:#0EA5A5; transition: width .3s ease; }
 .fam-chk-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
 .fam-chk-item { display:flex; align-items:center; gap:13px; padding:12px 14px; border:1px solid #EEF1F4; border-radius:13px; background:#FBFCFD; transition:background .15s, border-color .15s; }
 .fam-chk-item.is-done { background:#F0FDFA; border-color:#CCF3EF; }
 .fam-chk-circle { flex-shrink:0; width:26px; height:26px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#0EA5A5; background:#E6FBF8; box-shadow: inset 0 0 0 1.5px #B7EEE8; }
 .fam-chk-circle.is-done { color:#fff; background:#0EA5A5; box-shadow:none; }
+.fam-chk-item.is-optional:not(.is-done) .fam-chk-circle { color:#94A3B8; background:#F1F5F9; box-shadow: inset 0 0 0 1.5px #E2E8F0; }
 .fam-chk-body { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
-.fam-chk-label { font-size:14.5px; font-weight:650; color:#0F172A; }
+.fam-chk-label { display:flex; flex-wrap:wrap; align-items:center; column-gap:7px; row-gap:3px; font-size:14.5px; font-weight:650; color:var(--ink, #0F172A); line-height:1.3; }
+.fam-chk-opt { display:inline-block; padding:1px 7px; border-radius:999px; background:#F1F5F9; color:#64748B; font-size:11px; font-weight:600; vertical-align:2px; }
 .fam-chk-item.is-done .fam-chk-label { color:#0E7C74; }
 .fam-chk-itemsub { font-size:12.5px; color:#64748B; line-height:1.4; }
 .fam-chk-help { font-size:12.5px; color:#475569; line-height:1.45; margin-top:6px; background:#F1F5F9; border-radius:9px; padding:8px 10px; }
-.fam-chk-cta { flex-shrink:0; background:#0EA5A5; color:#fff; border:none; border-radius:9px; padding:8px 15px; font-size:13px; font-weight:650; cursor:pointer; text-decoration:none; white-space:nowrap; }
+.fam-chk-cta { flex-shrink:0; background:#0EA5A5; color:#fff; border:none; border-radius:9px; padding:8px 15px; font-size:13px; font-weight:650; cursor:pointer; text-decoration:none; white-space:nowrap; font-family:inherit; }
 .fam-chk-cta:hover { background:#0C9088; }
-.fam-chk-cta-ghost { background:#fff; color:#0E7C74; box-shadow: inset 0 0 0 1.5px #B7EEE8; }
+.fam-chk-cta-ghost { background:var(--card, #fff); color:#0E7C74; box-shadow: inset 0 0 0 1.5px #B7EEE8; }
 .fam-chk-cta-ghost:hover { background:#F0FDFA; }
+@media (max-width: 480px) {
+  .fam-chk { padding:16px 14px; border-radius:16px; }
+  .fam-chk-item { gap:10px; padding:11px 11px; }
+  .fam-chk-cta { padding:8px 12px; }
+}
+html[data-theme="dark"] .fam-chk-item { background:rgba(255,255,255,.03); border-color:rgba(255,255,255,.08); }
+html[data-theme="dark"] .fam-chk-item.is-done { background:rgba(14,165,165,.10); border-color:rgba(14,165,165,.28); }
+html[data-theme="dark"] .fam-chk-sub, html[data-theme="dark"] .fam-chk-itemsub { color:#94A3B8; }
+html[data-theme="dark"] .fam-chk-help, html[data-theme="dark"] .fam-chk-opt { background:rgba(255,255,255,.06); color:#CBD5E1; }
+html[data-theme="dark"] .fam-chk-item.is-done .fam-chk-label, html[data-theme="dark"] .fam-chk-progress-text { color:#5EEAD4; }
 `;

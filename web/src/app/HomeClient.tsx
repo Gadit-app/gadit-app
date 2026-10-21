@@ -36,6 +36,9 @@ import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
 const AppearancePicker = nextDynamic(() => import("@/components/AppearancePicker").then((m) => m.AppearancePicker), { ssr: false });
 const KidsGameHeader = nextDynamic(() => import("@/components/design/KidsGameHeader").then((m) => m.KidsGameHeader), { ssr: false });
 const UpgradeModal = nextDynamic(() => import("@/components/UpgradeModal").then((m) => m.UpgradeModal), { ssr: false });
+// First-steps card for a new Family owner (Gadi 2026-10-21); its 41-language
+// copy loads only for a signed-in family, never on the anonymous homepage.
+const FamilySetupChecklist = nextDynamic(() => import("./family/FamilySetupChecklist").then((m) => m.FamilySetupChecklist), { ssr: false });
 
 // Single source of truth: the shared LANGUAGES registry, so the homepage
 // switcher never drifts behind newly-added UI languages (it used to be a
@@ -223,7 +226,7 @@ function SearchIcon({ size = 16 }: { size?: number }) {
 
 export function HomePage() {
   const { lang, dir, setLang } = useLang();
-  const { user, plan, schoolId, promptLogin, familyRole } = useAuth();
+  const { user, plan, schoolId, promptLogin, familyRole, familyId } = useAuth();
   const router = useRouter();
   const href = useHref();
   const [query, setQuery] = useState("");
@@ -427,6 +430,22 @@ export function HomePage() {
             <div className="wb-home-game">
               <KidsGameHeader addedAtDates={kidDates} lang={lang} dir={dir} />
             </div>
+          )}
+
+          {/* New Family owner: first steps (add a child, first word, first
+              game, home screen). The card checks owner + plan itself and
+              renders nothing for anyone else. */}
+          {user && familyId === user.uid && !familyRole && !schoolId && (
+            <FamilySetupChecklist
+              placement="home"
+              lang={lang}
+              onFirstWord={() => {
+                const el = inputRef.current;
+                if (!el) return;
+                el.scrollIntoView({ behavior: "smooth", block: "center" });
+                el.focus();
+              }}
+            />
           )}
         </div>
       </main>

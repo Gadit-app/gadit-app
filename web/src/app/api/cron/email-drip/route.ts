@@ -4,6 +4,7 @@ import { renderFamilyMail } from "@/lib/email-drip/family-drip";
 import { familyChildrenSummary } from "@/lib/email-drip/family-summary";
 import { isShabbatIL } from "@/lib/shabbat";
 import { activationEnabled, activationDue, sendActivation } from "@/lib/activation";
+import { weeklyReportEnabled, weeklyReportDue, sendWeeklyReport, buildWeeklyReport, WEEKLY_REPORT_KEY } from "@/lib/email-drip/weekly-report";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import type { UserRecord } from "firebase-admin/auth";
@@ -127,6 +128,8 @@ export async function GET(req: NextRequest) {
   const results: SendResult[] = [];
   // Activation nudges (first word, add a child): off until Gadi approves the text.
   const activationOn = await activationEnabled(db);
+  // Weekly parent report (Sundays, Israel date): off until Gadi approves it.
+  const weeklyOn = await weeklyReportEnabled(db);
 
   // Per-run real-send cap: one cron run never sends more than this many live
   // emails, so a backlog or a bug can't fan out to the whole list at once.
@@ -145,6 +148,8 @@ export async function GET(req: NextRequest) {
     const email = u.email;
     if (!email) continue;
     const d = userDocs.get(u.uid) ?? {};
+    // One email per person per day: set when the billing reminder below went out.
+    let mailedToday = false;
 
     // Billing reminder two days before a free trial is charged (Gadi
     // 2026-10-06). Transactional, so it is checked before the marketing
@@ -164,6 +169,7 @@ export async function GET(req: NextRequest) {
           const r = await sendDripEmail({ to: email, subject: built.subject, html: built.html, scheduled: true });
           if (r.ok) {
             realSends++;
+            mailedToday = true;
             await db.collection("users").doc(u.uid).set({ trialReminderFor: d.trialEnd, trialReminderAt: FieldValue.serverTimestamp() }, { merge: true });
             results.push({ uid: u.uid, email, mailKey: "trial-reminder", status: "sent" });
           } else {
@@ -191,6 +197,33 @@ export async function GET(req: NextRequest) {
           : "en";
 
     const he = lang === "he"; // binary, used only by the family drip below
+
+    // ── Weekly parent report (Gadi 2026-10-21) ──────────────────────
+    // Sunday runs only (Israel date), once per Family per ISO week, to the
+    // paying owner (familyId === uid) whose family has a child. Takes this
+    // user's slot for the day; a family with no child goes on to the rest.
+    if (weeklyOn && !mailedToday && weeklyReportDue(u.uid, email, d, now)) {
+      const nm = (typeof u.displayName === "string" && u.displayName.trim()) || (typeof d.displayName === "string" && (d.displayName as string).trim()) || "";
+      const firstName = nm.split(/\s+/)[0] || null;
+      if (dryRun) {
+        const built = await buildWeeklyReport({ ownerUid: u.uid, d, firstName });
+        if (built) {
+          results.push({ uid: u.uid, email, mailKey: WEEKLY_REPORT_KEY, status: "skipped", reason: "dryRun" });
+          continue;
+        }
+      } else {
+        const r = await sendWeeklyReport(db, { uid: u.uid, email, d, firstName, now });
+        if (r.ok) {
+          realSends++;
+          results.push({ uid: u.uid, email, mailKey: WEEKLY_REPORT_KEY, status: "sent" });
+          continue;
+        }
+        if (!r.skipped) {
+          results.push({ uid: u.uid, email, mailKey: WEEKLY_REPORT_KEY, status: "failed", reason: r.reason });
+          continue;
+        }
+      }
+    }
 
     // A free user from the Play app gets ONE upgrade email (nothing can be
     // bought in the app). Takes this user's slot for the day.

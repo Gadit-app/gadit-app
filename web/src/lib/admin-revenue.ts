@@ -208,15 +208,25 @@ function monthsInInterval(price: Stripe.Price | undefined): number {
   }
 }
 
-/** Loose narrowing of subscription-level coupons without `any`. */
+/** Loose narrowing of subscription-level coupons without `any`. On the
+ *  current Stripe API the coupon sits at discounts[].source.coupon (the old
+ *  sub.discount.coupon is gone), which the list calls must expand
+ *  ("data.discounts.source.coupon"); found 2026-10-21, when every discount
+ *  was being ignored and a $49.99 coupon plan counted as $59. */
 export function couponsOn(sub: Stripe.Subscription): Stripe.Coupon[] {
   const out: Stripe.Coupon[] = [];
+  const seen = new Set<string>();
   const s = sub as unknown as { discount?: unknown; discounts?: unknown };
-  const push = (d: unknown) => {
-    if (d && typeof d === "object" && "coupon" in d) {
-      const c = (d as { coupon?: unknown }).coupon;
-      if (c && typeof c === "object" && "id" in c) out.push(c as Stripe.Coupon);
+  const add = (c: unknown) => {
+    if (c && typeof c === "object" && "id" in c) {
+      const id = String((c as { id: unknown }).id);
+      if (!seen.has(id)) { seen.add(id); out.push(c as Stripe.Coupon); }
     }
+  };
+  const push = (d: unknown) => {
+    if (!d || typeof d !== "object") return;
+    const dd = d as { coupon?: unknown; source?: { coupon?: unknown } };
+    add(dd.source?.coupon ?? dd.coupon);
   };
   push(s.discount);
   if (Array.isArray(s.discounts)) for (const d of s.discounts) push(d);
@@ -288,7 +298,7 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
     const page = await stripe.subscriptions.list({
       status: "all",
       limit: 100,
-      expand: ["data.customer"],
+      expand: ["data.customer", "data.discounts.source.coupon"],
       ...(startingAfter ? { starting_after: startingAfter } : {}),
     });
     subs.push(...page.data);

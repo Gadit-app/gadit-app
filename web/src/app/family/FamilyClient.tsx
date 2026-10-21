@@ -2478,7 +2478,7 @@ export function FamilyClient() {
               )}
               {/* First-steps checklist — hides itself once the family is
                   set up or the owner dismisses it. */}
-              <FamilySetupChecklist members={members} lang={lang} />
+              <FamilySetupChecklist placement="family" members={members} lang={lang} />
               {!progressLoaded ? (
                 <div className="fam-dash-grid">
                   {Array.from({ length: children.length > 0 ? children.length : 2 }).map((_, i) => (

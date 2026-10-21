@@ -101,7 +101,7 @@ export async function GET(req: NextRequest) {
   let startingAfter: string | undefined;
   do {
     const page = await stripe.subscriptions.list({
-      status: "all", limit: 100, expand: ["data.customer"],
+      status: "all", limit: 100, expand: ["data.customer", "data.discounts.source.coupon"],
       ...(startingAfter ? { starting_after: startingAfter } : {}),
     });
     subs.push(...page.data);
