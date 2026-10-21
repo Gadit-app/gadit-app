@@ -444,13 +444,20 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
     } else if (s.status === "trialing") {
       const carded = subHasCard(s);
       sub.hasCard = carded;
-      active.push(sub);
-      trialingCount += 1;
-      trialingByTier[tier] += 1;
-      trialingMrr += monthlyUsd;
-      if (carded) { trialingCardedMrr += monthlyUsd; trialingCardedCount += 1; }
-      else { trialingCardlessMrr += monthlyUsd; trialingCardlessCount += 1; }
-      if (billing !== "unknown") bump(trialBreak, tier, billing, monthlyUsd);
+      // A trial with no card can never pay (Stripe cancels it at trial end),
+      // so it is not part of the forecast at all (Gadi 2026-10-21: six
+      // abandoned checkouts inflated the "full forecast" by about $30). Only
+      // its count is kept, for the "without card" line.
+      if (carded) {
+        active.push(sub);
+        trialingCount += 1;
+        trialingByTier[tier] += 1;
+        trialingMrr += monthlyUsd;
+        trialingCardedMrr += monthlyUsd; trialingCardedCount += 1;
+        if (billing !== "unknown") bump(trialBreak, tier, billing, monthlyUsd);
+      } else {
+        trialingCardlessMrr += monthlyUsd; trialingCardlessCount += 1;
+      }
     } else if (s.status === "unpaid" || s.status === "incomplete") {
       atRisk.push(sub);
     } else if (s.status === "canceled") {
