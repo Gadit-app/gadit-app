@@ -34,7 +34,7 @@ import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
-import { DeleteAccountModal } from "@/components/design/DeleteAccountModal";
+import { DeleteAccountModal, REASONS as EXIT_REASONS } from "@/components/design/DeleteAccountModal";
 import { isPlayModeClient } from "@/lib/play-copy";
 import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
@@ -457,7 +457,7 @@ export function AccountPage() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   // Cancellation save-flow. `cancelFlow` null = closed; else it carries whether
   // the one-time save offer (14-day trial extension) is eligible for this user.
-  const [cancelFlow, setCancelFlow] = useState<null | { offerEligible: boolean }>(null);
+  const [cancelFlow, setCancelFlow] = useState<null | { offerEligible: boolean; trialing: boolean }>(null);
   const [cancelBusy, setCancelBusy] = useState(false);
   const [cancelResult, setCancelResult] = useState<null | "extended" | "canceled">(null);
   // How many word definitions the user has cached for offline use.
@@ -604,7 +604,7 @@ export function AccountPage() {
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
         body: JSON.stringify({ action: "check" }),
       });
-      const j = (await res.json().catch(() => ({}))) as { offerEligible?: boolean; error?: string };
+      const j = (await res.json().catch(() => ({}))) as { offerEligible?: boolean; trialing?: boolean; error?: string };
       // Inside the Play / iOS app: no billing portal (it can change plans) and
       // no "14 more days free" offer, only the plain cancel (store rules).
       const inApp = isPlayModeClient();
@@ -615,13 +615,13 @@ export function AccountPage() {
         return;
       }
       setCancelResult(null);
-      setCancelFlow({ offerEligible: !!j.offerEligible && !inApp });
+      setCancelFlow({ offerEligible: !!j.offerEligible && !inApp, trialing: !!j.trialing });
     } finally {
       setCancelBusy(false);
     }
   }
 
-  async function handleRetentionAction(action: "extend" | "cancel") {
+  async function handleRetentionAction(action: "extend" | "cancel", exit?: { reason: string; comment: string }) {
     if (!user) return;
     setCancelBusy(true);
     try {
@@ -629,7 +629,7 @@ export function AccountPage() {
       const res = await fetch("/api/retention", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-        body: JSON.stringify({ action }),
+        body: JSON.stringify({ action, ...(exit && { reason: exit.reason || null, comment: exit.comment || null }) }),
       });
       if (res.ok) {
         setCancelResult(action === "extend" ? "extended" : "canceled");
@@ -702,10 +702,11 @@ export function AccountPage() {
           lang={lang}
           dir={dir}
           offerEligible={cancelFlow.offerEligible}
+          trialing={cancelFlow.trialing}
           busy={cancelBusy}
           result={cancelResult}
           onExtend={() => handleRetentionAction("extend")}
-          onConfirmCancel={() => handleRetentionAction("cancel")}
+          onConfirmCancel={(exit) => handleRetentionAction("cancel", exit)}
           onClose={() => { setCancelFlow(null); setCancelResult(null); }}
         />
       )}
@@ -1466,29 +1467,62 @@ function RETENTION_COPY(lang: Lang): RetentionCopy {
   return (RETENTION_I18N as Record<string, RetentionCopy>)[lang] ?? RETENTION_I18N.en;
 }
 
+// Exit-survey reasons for a cancellation: the account-deletion survey's five
+// (canonical English stored, labels per language) plus two that only make
+// sense here. Hebrew speaks as the family ("we"), per the plural rule.
+const CANCEL_REASON_ORDER: Array<{ en: string; key?: "reasonAutoCharge" | "reasonNotForKids" }> = [
+  { en: "I didn't want an automatic charge", key: "reasonAutoCharge" },
+  { en: "I didn't use it enough" },
+  { en: "Too expensive for me" },
+  { en: "It isn't right for my children", key: "reasonNotForKids" },
+  { en: "It was confusing / hard to use" },
+  { en: "I found another solution" },
+  { en: "I don't need it right now" },
+];
+const CANCEL_REASON_HE: Record<string, string> = {
+  "I didn't use it enough": "לא השתמשנו בזה מספיק",
+  "Too expensive for me": "יקר מדי בשבילנו",
+  "It was confusing / hard to use": "היה מבלבל או קשה לשימוש",
+  "I found another solution": "מצאנו פתרון אחר",
+  "I don't need it right now": "לא צריכים את זה כרגע",
+};
+function cancelReasonLabel(lang: Lang, r: { en: string; key?: "reasonAutoCharge" | "reasonNotForKids" }, c: RetentionCopy): string {
+  if (r.key) return c[r.key];
+  if (lang === "he" && CANCEL_REASON_HE[r.en]) return CANCEL_REASON_HE[r.en];
+  const row = EXIT_REASONS.find((x) => x.en === r.en);
+  return (row && (row[lang] ?? row.en)) || r.en;
+}
+
 function RetentionModal({
-  lang, dir, offerEligible, busy, result, onExtend, onConfirmCancel, onClose,
+  lang, dir, offerEligible, trialing, busy, result, onExtend, onConfirmCancel, onClose,
 }: {
   lang: Lang;
   dir: "rtl" | "ltr";
   offerEligible: boolean;
+  trialing: boolean;
   busy: boolean;
   result: "extended" | "canceled" | null;
   onExtend: () => void;
-  onConfirmCancel: () => void;
+  onConfirmCancel: (exit: { reason: string; comment: string }) => void;
   onClose: () => void;
 }) {
   const c = RETENTION_COPY(lang);
   const done = result !== null;
+  // The one-time offer comes first; declining it leads to the reasons step,
+  // it no longer cancels on the spot.
+  const [step, setStep] = useState<"offer" | "confirm">(offerEligible ? "offer" : "confirm");
+  const [reason, setReason] = useState("");
+  const [comment, setComment] = useState("");
+  const onOffer = !done && step === "offer";
 
   const title = result === "extended" ? c.extendedTitle
     : result === "canceled" ? c.canceledTitle
-    : offerEligible ? c.offerTitle
+    : onOffer ? c.offerTitle
     : c.confirmTitle;
   const body = result === "extended" ? c.extendedBody
-    : result === "canceled" ? c.canceledBody
-    : offerEligible ? c.offerBody
-    : c.confirmBody;
+    : result === "canceled" ? (trialing ? c.trialCanceledBody : c.canceledBody)
+    : onOffer ? c.offerBody
+    : (trialing ? c.trialConfirmBody : c.confirmBody);
 
   const primary: React.CSSProperties = {
     padding: "11px 18px", borderRadius: 12, border: "none", cursor: busy ? "default" : "pointer",
@@ -1502,6 +1536,11 @@ function RetentionModal({
   };
   const danger: React.CSSProperties = {
     ...ghost, color: "#B91C1C", border: "1px solid #FECACA", background: "#FEF2F2",
+  };
+  const radioRow: React.CSSProperties = {
+    display: "flex", alignItems: "center", gap: 10, padding: "9px 11px", borderRadius: 10,
+    border: "1px solid var(--hairline, #E5E7EB)", cursor: "pointer", fontSize: 14,
+    color: "var(--ink)", fontFamily: fontBody(lang),
   };
 
   return (
@@ -1517,6 +1556,7 @@ function RetentionModal({
         onClick={(e) => e.stopPropagation()}
         style={{
           background: "var(--paper, #fff)", borderRadius: 18, padding: 28, maxWidth: 460, width: "100%",
+          maxHeight: "90vh", overflowY: "auto",
           boxShadow: "0 20px 60px rgba(0,0,0,0.25)", border: "1px solid var(--hairline, #E5E7EB)",
         }}
       >
@@ -1526,17 +1566,42 @@ function RetentionModal({
         <p style={{ margin: "0 0 22px", fontFamily: fontBody(lang), fontSize: 15, lineHeight: 1.55, color: "var(--ink-muted, #6B7280)" }}>
           {body}
         </p>
+        {!done && step === "confirm" && (
+          <>
+            <div style={{ fontFamily: fontBody(lang), fontSize: 13, fontWeight: 700, color: "var(--ink)", marginBottom: 8 }}>{c.reasonsLabel}</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 14 }}>
+              {CANCEL_REASON_ORDER.map((r) => {
+                const active = reason === r.en;
+                return (
+                  <label key={r.en} style={{ ...radioRow, borderColor: active ? "var(--teal, #0EA5A5)" : "var(--hairline, #E5E7EB)", background: active ? "rgba(14,165,165,0.08)" : "transparent" }}>
+                    <input type="radio" name="cancel-reason" checked={active} onChange={() => setReason(r.en)} style={{ accentColor: "#0EA5A5", width: 16, height: 16, flexShrink: 0 }} />
+                    <span>{cancelReasonLabel(lang, r, c)}</span>
+                  </label>
+                );
+              })}
+            </div>
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder={c.notePlaceholder}
+              dir={dir}
+              rows={3}
+              maxLength={1000}
+              style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: "1px solid var(--hairline, #E5E7EB)", background: "transparent", color: "var(--ink)", fontSize: 14, fontFamily: fontBody(lang), resize: "vertical", boxSizing: "border-box", marginBottom: 20 }}
+            />
+          </>
+        )}
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>
           {done ? (
             <button type="button" style={primary} onClick={onClose}>{c.closeBtn}</button>
-          ) : offerEligible ? (
+          ) : onOffer ? (
             <>
-              <button type="button" style={ghost} disabled={busy} onClick={onConfirmCancel}>{c.offerDecline}</button>
+              <button type="button" style={ghost} disabled={busy} onClick={() => setStep("confirm")}>{c.offerDecline}</button>
               <button type="button" style={primary} disabled={busy} onClick={onExtend}>{c.offerAccept}</button>
             </>
           ) : (
             <>
-              <button type="button" style={danger} disabled={busy} onClick={onConfirmCancel}>{c.confirmCancelBtn}</button>
+              <button type="button" style={danger} disabled={busy} onClick={() => onConfirmCancel({ reason, comment: comment.trim() })}>{c.confirmCancelBtn}</button>
               <button type="button" style={primary} disabled={busy} onClick={onClose}>{c.keepBtn}</button>
             </>
           )}

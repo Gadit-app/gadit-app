@@ -14,7 +14,13 @@
   "canceledTitle": "Subscription canceled",
   "canceledBody": "You keep access until the end of the period you already paid for. Changed your mind? You can resume from this page any time before then.",
   "closeBtn": "Close",
-  "loadErr": "Could not load account data."
+  "loadErr": "Could not load account data.",
+  "reasonsLabel": "What made you cancel? (optional)",
+  "notePlaceholder": "Anything else you'd like to tell us? (optional)",
+  "trialConfirmBody": "This ends the free trial now and moves the account to the free plan. You can subscribe again anytime.",
+  "trialCanceledBody": "The trial has ended. The account is on the free plan, and you can subscribe again from this page anytime.",
+  "reasonAutoCharge": "I didn't want an automatic charge",
+  "reasonNotForKids": "It isn't right for my children"
  },
  "he": {
   "cancelLink": "ביטול המנוי",
@@ -31,7 +37,13 @@
   "canceledTitle": "המנוי בוטל",
   "canceledBody": "הגישה נשמרת עד סוף התקופה ששילמתם עליה. שיניתם את דעתכם? אפשר לחדש מהעמוד הזה בכל רגע לפני כן.",
   "closeBtn": "סגירה",
-  "loadErr": "לא הצלחנו לטעון את פרטי החשבון."
+  "loadErr": "לא הצלחנו לטעון את פרטי החשבון.",
+  "reasonsLabel": "מה גרם לכם לבטל? (לא חובה)",
+  "notePlaceholder": "רוצים לספר לנו עוד משהו? (לא חובה)",
+  "trialConfirmBody": "הביטול מסיים עכשיו את תקופת הניסיון, והחשבון עובר לתוכנית החינמית. אפשר להירשם שוב בכל רגע.",
+  "trialCanceledBody": "תקופת הניסיון הסתיימה. החשבון בתוכנית החינמית, ואפשר להירשם שוב מהעמוד הזה בכל רגע.",
+  "reasonAutoCharge": "לא רצינו חיוב אוטומטי",
+  "reasonNotForKids": "לא מתאים לילדים שלנו"
  },
  "ar": {
   "cancelLink": "إلغاء الاشتراك",
@@ -48,7 +60,13 @@
   "canceledTitle": "تم إلغاء الاشتراك",
   "canceledBody": "يبقى لديك وصول حتى نهاية الفترة التي دفعت مقابلها. غيّرت رأيك؟ يمكنك استئناف الاشتراك من هذه الصفحة في أي وقت قبل ذلك.",
   "closeBtn": "إغلاق",
-  "loadErr": "تعذّر تحميل بيانات الحساب."
+  "loadErr": "تعذّر تحميل بيانات الحساب.",
+  "reasonsLabel": "ما سبب الإلغاء؟ (اختياري)",
+  "notePlaceholder": "هل تودّ إخبارنا بشيء آخر؟ (اختياري)",
+  "trialConfirmBody": "يُنهي هذا الفترة التجريبية المجانية الآن وينقل الحساب إلى الخطة المجانية. يمكنك الاشتراك مجددًا في أي وقت.",
+  "trialCanceledBody": "انتهت الفترة التجريبية. الحساب على الخطة المجانية، ويمكنك الاشتراك مجددًا من هذه الصفحة في أي وقت.",
+  "reasonAutoCharge": "لم أرغب في خصم تلقائي",
+  "reasonNotForKids": "لا يناسب أطفالي"
  },
  "ru": {
   "cancelLink": "Отменить подписку",
@@ -65,7 +83,13 @@
   "canceledTitle": "Подписка отменена",
   "canceledBody": "Доступ сохранится до конца уже оплаченного периода. Передумали? До этого момента вы можете возобновить подписку на этой странице в любое время.",
   "closeBtn": "Закрыть",
-  "loadErr": "Не удалось загрузить данные аккаунта."
+  "loadErr": "Не удалось загрузить данные аккаунта.",
+  "reasonsLabel": "Почему вы отменяете? (необязательно)",
+  "notePlaceholder": "Хотите рассказать нам что-то ещё? (необязательно)",
+  "trialConfirmBody": "Пробный период закончится сразу, и аккаунт перейдёт на бесплатный план. Оформить подписку снова можно в любой момент.",
+  "trialCanceledBody": "Пробный период закончился. Аккаунт на бесплатном плане, оформить подписку снова можно на этой странице в любой момент.",
+  "reasonAutoCharge": "Не хотел(а) автоматического списания",
+  "reasonNotForKids": "Не подходит моим детям"
  },
  "es": {
   "cancelLink": "Cancelar suscripción",
@@ -82,7 +106,13 @@
   "canceledTitle": "Suscripción cancelada",
   "canceledBody": "Mantienes el acceso hasta el final del periodo que ya pagaste. ¿Cambiaste de idea? Puedes reactivarla desde esta página en cualquier momento antes de esa fecha.",
   "closeBtn": "Cerrar",
-  "loadErr": "No se pudieron cargar los datos de la cuenta."
+  "loadErr": "No se pudieron cargar los datos de la cuenta.",
+  "reasonsLabel": "¿Qué te hizo cancelar? (opcional)",
+  "notePlaceholder": "¿Algo más que quieras contarnos? (opcional)",
+  "trialConfirmBody": "Esto termina la prueba gratuita ahora y pasa la cuenta al plan gratuito. Puedes volver a suscribirte cuando quieras.",
+  "trialCanceledBody": "La prueba terminó. La cuenta está en el plan gratuito y puedes volver a suscribirte desde esta página cuando quieras.",
+  "reasonAutoCharge": "No quería un cobro automático",
+  "reasonNotForKids": "No es adecuado para mis hijos"
  },
  "pt": {
   "cancelLink": "Cancelar assinatura",
@@ -99,7 +129,13 @@
   "canceledTitle": "Assinatura cancelada",
   "canceledBody": "Você mantém o acesso até o fim do período que já pagou. Mudou de ideia? Pode reativar por esta página a qualquer momento antes disso.",
   "closeBtn": "Fechar",
-  "loadErr": "Não foi possível carregar os dados da conta."
+  "loadErr": "Não foi possível carregar os dados da conta.",
+  "reasonsLabel": "O que fez você cancelar? (opcional)",
+  "notePlaceholder": "Mais alguma coisa que queira nos contar? (opcional)",
+  "trialConfirmBody": "Isso encerra o teste grátis agora e passa a conta para o plano gratuito. Você pode assinar de novo quando quiser.",
+  "trialCanceledBody": "O teste terminou. A conta está no plano gratuito, e você pode assinar de novo nesta página quando quiser.",
+  "reasonAutoCharge": "Não queria uma cobrança automática",
+  "reasonNotForKids": "Não é adequado para os meus filhos"
  },
  "fr": {
   "cancelLink": "Résilier l'abonnement",
@@ -116,7 +152,13 @@
   "canceledTitle": "Abonnement résilié",
   "canceledBody": "Vous gardez l'accès jusqu'à la fin de la période déjà payée. Vous avez changé d'avis ? Vous pouvez le réactiver depuis cette page à tout moment d'ici là.",
   "closeBtn": "Fermer",
-  "loadErr": "Impossible de charger les données du compte."
+  "loadErr": "Impossible de charger les données du compte.",
+  "reasonsLabel": "Pourquoi résiliez-vous ? (facultatif)",
+  "notePlaceholder": "Autre chose à nous dire ? (facultatif)",
+  "trialConfirmBody": "L'essai gratuit se termine maintenant et le compte passe à l'offre gratuite. Vous pouvez vous réabonner à tout moment.",
+  "trialCanceledBody": "L'essai est terminé. Le compte est sur l'offre gratuite, et vous pouvez vous réabonner depuis cette page à tout moment.",
+  "reasonAutoCharge": "Je ne voulais pas de prélèvement automatique",
+  "reasonNotForKids": "Ce n'est pas adapté à mes enfants"
  },
  "de": {
   "cancelLink": "Abo kündigen",
@@ -133,7 +175,13 @@
   "canceledTitle": "Abo gekündigt",
   "canceledBody": "Du behältst den Zugang bis zum Ende des bereits bezahlten Zeitraums. Doch anders entschieden? Bis dahin kannst du jederzeit auf dieser Seite fortsetzen.",
   "closeBtn": "Schließen",
-  "loadErr": "Kontodaten konnten nicht geladen werden."
+  "loadErr": "Kontodaten konnten nicht geladen werden.",
+  "reasonsLabel": "Warum kündigen Sie? (optional)",
+  "notePlaceholder": "Möchten Sie uns noch etwas sagen? (optional)",
+  "trialConfirmBody": "Damit endet die kostenlose Testphase sofort, und das Konto wechselt in den kostenlosen Plan. Sie können jederzeit wieder abonnieren.",
+  "trialCanceledBody": "Die Testphase ist beendet. Das Konto ist im kostenlosen Plan, und Sie können auf dieser Seite jederzeit wieder abonnieren.",
+  "reasonAutoCharge": "Ich wollte keine automatische Abbuchung",
+  "reasonNotForKids": "Es passt nicht zu meinen Kindern"
  },
  "cs": {
   "cancelLink": "Zrušit předplatné",
@@ -150,7 +198,13 @@
   "canceledTitle": "Předplatné zrušeno",
   "canceledBody": "Přístup vám zůstane do konce již zaplaceného období. Rozmysleli jste si to? Do té doby můžete předplatné kdykoli obnovit na této stránce.",
   "closeBtn": "Zavřít",
-  "loadErr": "Údaje o účtu se nepodařilo načíst."
+  "loadErr": "Údaje o účtu se nepodařilo načíst.",
+  "reasonsLabel": "Proč rušíte předplatné? (nepovinné)",
+  "notePlaceholder": "Chcete nám ještě něco říct? (nepovinné)",
+  "trialConfirmBody": "Tím zkušební období hned skončí a účet přejde na bezplatný tarif. Předplatit si můžete znovu kdykoli.",
+  "trialCanceledBody": "Zkušební období skončilo. Účet je na bezplatném tarifu a předplatit si můžete znovu na této stránce kdykoli.",
+  "reasonAutoCharge": "Nechtěl(a) jsem automatickou platbu",
+  "reasonNotForKids": "Nehodí se to pro moje děti"
  },
  "sk": {
   "cancelLink": "Zrušiť predplatné",
@@ -167,7 +221,13 @@
   "canceledTitle": "Predplatné zrušené",
   "canceledBody": "Prístup vám zostane do konca už zaplateného obdobia. Rozmysleli ste si to? Dovtedy môžete predplatné kedykoľvek obnoviť na tejto stránke.",
   "closeBtn": "Zavrieť",
-  "loadErr": "Údaje o účte sa nepodarilo načítať."
+  "loadErr": "Údaje o účte sa nepodarilo načítať.",
+  "reasonsLabel": "Prečo rušíte predplatné? (nepovinné)",
+  "notePlaceholder": "Chcete nám ešte niečo povedať? (nepovinné)",
+  "trialConfirmBody": "Tým skúšobné obdobie hneď skončí a účet prejde na bezplatný plán. Predplatiť si môžete znova kedykoľvek.",
+  "trialCanceledBody": "Skúšobné obdobie skončilo. Účet je na bezplatnom pláne a predplatiť si môžete znova na tejto stránke kedykoľvek.",
+  "reasonAutoCharge": "Nechcel(a) som automatickú platbu",
+  "reasonNotForKids": "Nehodí sa to pre moje deti"
  },
  "it": {
   "cancelLink": "Annulla abbonamento",
@@ -184,7 +244,13 @@
   "canceledTitle": "Abbonamento annullato",
   "canceledBody": "Mantieni l'accesso fino alla fine del periodo già pagato. Hai cambiato idea? Fino ad allora puoi riattivarlo da questa pagina in qualsiasi momento.",
   "closeBtn": "Chiudi",
-  "loadErr": "Impossibile caricare i dati dell'account."
+  "loadErr": "Impossibile caricare i dati dell'account.",
+  "reasonsLabel": "Perché annulli? (facoltativo)",
+  "notePlaceholder": "Vuoi dirci altro? (facoltativo)",
+  "trialConfirmBody": "La prova gratuita termina subito e l'account passa al piano gratuito. Puoi abbonarti di nuovo quando vuoi.",
+  "trialCanceledBody": "La prova è terminata. L'account è sul piano gratuito e puoi abbonarti di nuovo da questa pagina quando vuoi.",
+  "reasonAutoCharge": "Non volevo un addebito automatico",
+  "reasonNotForKids": "Non è adatto ai miei figli"
  },
  "ja": {
   "cancelLink": "サブスクリプションを解約",
@@ -201,7 +267,13 @@
   "canceledTitle": "サブスクリプションを解約しました",
   "canceledBody": "お支払い済みの期間が終わるまで、引き続きご利用いただけます。気が変わった場合は、それまでいつでもこのページから再開できます。",
   "closeBtn": "閉じる",
-  "loadErr": "アカウント情報を読み込めませんでした。"
+  "loadErr": "アカウント情報を読み込めませんでした。",
+  "reasonsLabel": "解約の理由を教えてください(任意)",
+  "notePlaceholder": "ほかに伝えたいことはありますか?(任意)",
+  "trialConfirmBody": "無料体験はすぐに終了し、アカウントは無料プランに切り替わります。いつでも再登録できます。",
+  "trialCanceledBody": "無料体験は終了しました。アカウントは無料プランです。このページからいつでも再登録できます。",
+  "reasonAutoCharge": "自動で課金されたくなかった",
+  "reasonNotForKids": "子どもに合わなかった"
  },
  "hi": {
   "cancelLink": "सदस्यता रद्द करें",
@@ -218,7 +290,13 @@
   "canceledTitle": "सदस्यता रद्द हो गई",
   "canceledBody": "जिस अवधि का भुगतान आप कर चुके हैं, उसके अंत तक आपकी पहुँच बनी रहेगी। मन बदल गया? उससे पहले आप कभी भी इसी पेज से सदस्यता फिर से शुरू कर सकते हैं।",
   "closeBtn": "बंद करें",
-  "loadErr": "खाते की जानकारी लोड नहीं हो सकी।"
+  "loadErr": "खाते की जानकारी लोड नहीं हो सकी।",
+  "reasonsLabel": "आप क्यों रद्द कर रहे हैं? (वैकल्पिक)",
+  "notePlaceholder": "क्या आप हमें कुछ और बताना चाहेंगे? (वैकल्पिक)",
+  "trialConfirmBody": "इससे मुफ़्त ट्रायल अभी खत्म हो जाएगा और खाता मुफ़्त प्लान पर आ जाएगा। आप कभी भी फिर से सदस्यता ले सकते हैं।",
+  "trialCanceledBody": "ट्रायल खत्म हो गया है। खाता मुफ़्त प्लान पर है, और आप इस पेज से कभी भी फिर से सदस्यता ले सकते हैं।",
+  "reasonAutoCharge": "मैं अपने आप कटने वाला भुगतान नहीं चाहता था",
+  "reasonNotForKids": "यह मेरे बच्चों के लिए सही नहीं है"
  },
  "am": {
   "cancelLink": "የደንበኝነት ምዝገባን ይሰርዙ",
@@ -235,7 +313,13 @@
   "canceledTitle": "ምዝገባው ተሰርዟል",
   "canceledBody": "አስቀድመው እስከከፈሉበት ጊዜ መጨረሻ ድረስ መዳረሻ ይኖርዎታል። ሃሳብዎን ቀይረዋል? ከዚያ በፊት በማንኛውም ጊዜ ከዚህ ገጽ ምዝገባውን መቀጠል ይችላሉ።",
   "closeBtn": "ዝጋ",
-  "loadErr": "የመለያ መረጃ መጫን አልተቻለም።"
+  "loadErr": "የመለያ መረጃ መጫን አልተቻለም።",
+  "reasonsLabel": "ለምን ይሰርዛሉ? (አማራጭ)",
+  "notePlaceholder": "ሌላ ሊነግሩን የሚፈልጉት ነገር አለ? (አማራጭ)",
+  "trialConfirmBody": "ይህ ነጻ ሙከራውን አሁኑኑ ያበቃል፣ መለያውም ወደ ነጻ ዕቅድ ይዛወራል። በማንኛውም ጊዜ እንደገና መመዝገብ ይችላሉ።",
+  "trialCanceledBody": "ሙከራው አብቅቷል። መለያው በነጻ ዕቅድ ላይ ነው፣ ከዚህ ገጽ በማንኛውም ጊዜ እንደገና መመዝገብ ይችላሉ።",
+  "reasonAutoCharge": "ራስ-ሰር ክፍያ አልፈለግኩም",
+  "reasonNotForKids": "ለልጆቼ አይስማማም"
  },
  "uk": {
   "cancelLink": "Скасувати підписку",
@@ -252,7 +336,13 @@
   "canceledTitle": "Підписку скасовано",
   "canceledBody": "Доступ зберігається до кінця вже оплаченого періоду. Передумали? До того часу ви можете будь-коли відновити підписку на цій сторінці.",
   "closeBtn": "Закрити",
-  "loadErr": "Не вдалося завантажити дані облікового запису."
+  "loadErr": "Не вдалося завантажити дані облікового запису.",
+  "reasonsLabel": "Чому ви скасовуєте? (необов'язково)",
+  "notePlaceholder": "Хочете розповісти нам ще щось? (необов'язково)",
+  "trialConfirmBody": "Пробний період завершиться одразу, а акаунт перейде на безкоштовний план. Оформити підписку знову можна будь-коли.",
+  "trialCanceledBody": "Пробний період завершився. Акаунт на безкоштовному плані, оформити підписку знову можна на цій сторінці будь-коли.",
+  "reasonAutoCharge": "Не хотів(ла) автоматичного списання",
+  "reasonNotForKids": "Не підходить моїм дітям"
  },
  "tr": {
   "cancelLink": "Aboneliği iptal et",
@@ -269,7 +359,13 @@
   "canceledTitle": "Abonelik iptal edildi",
   "canceledBody": "Ödemesini yaptığınız dönemin sonuna kadar erişiminiz devam eder. Fikrinizi mi değiştirdiniz? O zamana kadar bu sayfadan istediğiniz an aboneliği sürdürebilirsiniz.",
   "closeBtn": "Kapat",
-  "loadErr": "Hesap bilgileri yüklenemedi."
+  "loadErr": "Hesap bilgileri yüklenemedi.",
+  "reasonsLabel": "Neden iptal ediyorsunuz? (isteğe bağlı)",
+  "notePlaceholder": "Bize söylemek istediğiniz başka bir şey var mı? (isteğe bağlı)",
+  "trialConfirmBody": "Bu, ücretsiz denemeyi hemen bitirir ve hesabı ücretsiz plana geçirir. İstediğiniz zaman yeniden abone olabilirsiniz.",
+  "trialCanceledBody": "Deneme sona erdi. Hesap ücretsiz planda, bu sayfadan istediğiniz zaman yeniden abone olabilirsiniz.",
+  "reasonAutoCharge": "Otomatik ödeme istemedim",
+  "reasonNotForKids": "Çocuklarıma uygun değil"
  },
  "pl": {
   "cancelLink": "Anuluj subskrypcję",
@@ -286,7 +382,13 @@
   "canceledTitle": "Subskrypcja anulowana",
   "canceledBody": "Dostęp zachowujesz do końca już opłaconego okresu. Zmienisz zdanie? Do tego czasu możesz w każdej chwili wznowić subskrypcję na tej stronie.",
   "closeBtn": "Zamknij",
-  "loadErr": "Nie udało się wczytać danych konta."
+  "loadErr": "Nie udało się wczytać danych konta.",
+  "reasonsLabel": "Dlaczego anulujesz? (opcjonalnie)",
+  "notePlaceholder": "Chcesz nam jeszcze coś powiedzieć? (opcjonalnie)",
+  "trialConfirmBody": "To od razu kończy darmowy okres próbny, a konto przechodzi na plan bezpłatny. Subskrypcję możesz wznowić w każdej chwili.",
+  "trialCanceledBody": "Okres próbny się zakończył. Konto jest na planie bezpłatnym, a subskrypcję możesz wznowić na tej stronie w każdej chwili.",
+  "reasonAutoCharge": "Nie chciałem(-am) automatycznej płatności",
+  "reasonNotForKids": "To nie pasuje do moich dzieci"
  },
  "fa": {
   "cancelLink": "لغو اشتراک",
@@ -303,7 +405,13 @@
   "canceledTitle": "اشتراک لغو شد",
   "canceledBody": "تا پایان دوره‌ای که هزینه‌اش را پرداخته‌اید، دسترسی شما باقی می‌ماند. نظرتان عوض شد؟ تا آن زمان هر وقت بخواهید می‌توانید از همین صفحه اشتراک را از سر بگیرید.",
   "closeBtn": "بستن",
-  "loadErr": "بارگیری اطلاعات حساب ممکن نشد."
+  "loadErr": "بارگیری اطلاعات حساب ممکن نشد.",
+  "reasonsLabel": "چرا لغو می‌کنید؟ (اختیاری)",
+  "notePlaceholder": "چیز دیگری هست که بخواهید به ما بگویید؟ (اختیاری)",
+  "trialConfirmBody": "با این کار دوره‌ی آزمایشی رایگان همین حالا تمام می‌شود و حساب به طرح رایگان منتقل می‌شود. هر زمان بخواهید می‌توانید دوباره مشترک شوید.",
+  "trialCanceledBody": "دوره‌ی آزمایشی تمام شد. حساب در طرح رایگان است و هر زمان بخواهید می‌توانید از همین صفحه دوباره مشترک شوید.",
+  "reasonAutoCharge": "نمی‌خواستم پرداخت خودکار داشته باشم",
+  "reasonNotForKids": "برای فرزندانم مناسب نیست"
  },
  "id": {
   "cancelLink": "Batalkan langganan",
@@ -320,7 +428,13 @@
   "canceledTitle": "Langganan dibatalkan",
   "canceledBody": "Anda tetap punya akses sampai akhir periode yang sudah dibayar. Berubah pikiran? Anda bisa melanjutkan langganan dari halaman ini kapan saja sebelum itu.",
   "closeBtn": "Tutup",
-  "loadErr": "Tidak dapat memuat data akun."
+  "loadErr": "Tidak dapat memuat data akun.",
+  "reasonsLabel": "Kenapa Anda membatalkan? (opsional)",
+  "notePlaceholder": "Ada hal lain yang ingin disampaikan? (opsional)",
+  "trialConfirmBody": "Ini langsung mengakhiri uji coba gratis dan memindahkan akun ke paket gratis. Anda bisa berlangganan lagi kapan saja.",
+  "trialCanceledBody": "Uji coba sudah berakhir. Akun ada di paket gratis, dan Anda bisa berlangganan lagi dari halaman ini kapan saja.",
+  "reasonAutoCharge": "Saya tidak mau ditagih otomatis",
+  "reasonNotForKids": "Tidak cocok untuk anak-anak saya"
  },
  "nl": {
   "cancelLink": "Abonnement opzeggen",
@@ -337,7 +451,13 @@
   "canceledTitle": "Abonnement opgezegd",
   "canceledBody": "Je houdt toegang tot het einde van de periode die je al hebt betaald. Toch van gedachten veranderd? Tot die tijd kun je je abonnement altijd op deze pagina hervatten.",
   "closeBtn": "Sluiten",
-  "loadErr": "Accountgegevens konden niet worden geladen."
+  "loadErr": "Accountgegevens konden niet worden geladen.",
+  "reasonsLabel": "Waarom zeg je op? (optioneel)",
+  "notePlaceholder": "Wil je ons nog iets vertellen? (optioneel)",
+  "trialConfirmBody": "Hiermee stopt de gratis proefperiode meteen en gaat het account naar het gratis abonnement. Je kunt altijd opnieuw abonneren.",
+  "trialCanceledBody": "De proefperiode is beëindigd. Het account staat op het gratis abonnement en je kunt via deze pagina altijd opnieuw abonneren.",
+  "reasonAutoCharge": "Ik wilde geen automatische afschrijving",
+  "reasonNotForKids": "Het past niet bij mijn kinderen"
  },
  "el": {
   "cancelLink": "Ακύρωση συνδρομής",
@@ -354,7 +474,13 @@
   "canceledTitle": "Η συνδρομή ακυρώθηκε",
   "canceledBody": "Διατηρείτε την πρόσβαση μέχρι το τέλος της περιόδου που έχετε ήδη πληρώσει. Αλλάξατε γνώμη; Μέχρι τότε μπορείτε να συνεχίσετε τη συνδρομή από αυτή τη σελίδα όποτε θέλετε.",
   "closeBtn": "Κλείσιμο",
-  "loadErr": "Δεν ήταν δυνατή η φόρτωση των στοιχείων του λογαριασμού."
+  "loadErr": "Δεν ήταν δυνατή η φόρτωση των στοιχείων του λογαριασμού.",
+  "reasonsLabel": "Γιατί ακυρώνετε; (προαιρετικό)",
+  "notePlaceholder": "Θέλετε να μας πείτε κάτι ακόμα; (προαιρετικό)",
+  "trialConfirmBody": "Η δωρεάν δοκιμή λήγει αμέσως και ο λογαριασμός περνά στο δωρεάν πρόγραμμα. Μπορείτε να εγγραφείτε ξανά οποτεδήποτε.",
+  "trialCanceledBody": "Η δοκιμή έληξε. Ο λογαριασμός είναι στο δωρεάν πρόγραμμα και μπορείτε να εγγραφείτε ξανά από αυτή τη σελίδα οποτεδήποτε.",
+  "reasonAutoCharge": "Δεν ήθελα αυτόματη χρέωση",
+  "reasonNotForKids": "Δεν ταιριάζει στα παιδιά μου"
  },
  "zu": {
   "cancelLink": "Khansela ukubhalisa",
@@ -371,7 +497,13 @@
   "canceledTitle": "Ukubhalisa kukhanseliwe",
   "canceledBody": "Uqhubeka nokufinyelela kuze kuphele isikhathi osuvele usikhokhele. Ushintshe umqondo? Ungaqala kabusha kuleli khasi noma nini ngaphambi kwalokho.",
   "closeBtn": "Vala",
-  "loadErr": "Asikwazanga ukulayisha imininingwane ye-akhawunti."
+  "loadErr": "Asikwazanga ukulayisha imininingwane ye-akhawunti.",
+  "reasonsLabel": "Yini ekwenza ukuthi ukhansele? (akuphoqelekile)",
+  "notePlaceholder": "Ingabe kukhona okunye ofuna ukusitshela khona? (akuphoqelekile)",
+  "trialConfirmBody": "Lokhu kuqeda isivivinyo samahhala manje futhi i-akhawunti idlulele ohlelweni lwamahhala. Ungabhalisa futhi noma nini.",
+  "trialCanceledBody": "Isivivinyo siphelile. I-akhawunti isohlelweni lwamahhala, futhi ungabhalisa futhi kuleli khasi noma nini.",
+  "reasonAutoCharge": "Bengingafuni ukukhokhiswa ngokuzenzakalelayo",
+  "reasonNotForKids": "Akufanele izingane zami"
  },
  "xh": {
   "cancelLink": "Rhoxisa umrhumo",
@@ -388,7 +520,13 @@
   "canceledTitle": "Umrhumo urhoxisiwe",
   "canceledBody": "Uqhubeka nokufikelela de kuphele ixesha osele ulihlawulele. Utshintshe ingqondo? Unokuqalisa kwakhona kweli phepha nanini na ngaphambi koko.",
   "closeBtn": "Vala",
-  "loadErr": "Asikwazanga ukulayisha iinkcukacha zeakhawunti."
+  "loadErr": "Asikwazanga ukulayisha iinkcukacha zeakhawunti.",
+  "reasonsLabel": "Yintoni ekwenza ukuba urhoxise? (asinyanzelekanga)",
+  "notePlaceholder": "Ingaba kukho enye into ofuna ukusixelela yona? (asinyanzelekanga)",
+  "trialConfirmBody": "Oku kuphelisa uvavanyo lwasimahla ngoku kwaye iakhawunti idlulele kwisicwangciso sasimahla. Ungabhalisa kwakhona nanini na.",
+  "trialCanceledBody": "Uvavanyo luphelile. Iakhawunti ikwisicwangciso sasimahla, kwaye ungabhalisa kwakhona kweli phepha nanini na.",
+  "reasonAutoCharge": "Bendingafuni ukuhlawuliswa ngokuzenzekelayo",
+  "reasonNotForKids": "Ayilunganga kubantwana bam"
  },
  "nso": {
   "cancelLink": "Khansela peeletšo",
@@ -405,7 +543,13 @@
   "canceledTitle": "Peeletšo e khanseditšwe",
   "canceledBody": "O dula o na le phihlelelo go fihla mafelelong a nako yeo o šetšego o e lefetše. O fetošitše kgopolo? O ka e tšwetša pele gape go tšwa letlakaleng le nako efe goba efe pele ga fao.",
   "closeBtn": "Tswalela",
-  "loadErr": "Re paletšwe ke go laiša tshedimošo ya akhaonto."
+  "loadErr": "Re paletšwe ke go laiša tshedimošo ya akhaonto.",
+  "reasonsLabel": "Ke eng se se go dirago gore o khansele? (ga go gapeletšwe)",
+  "notePlaceholder": "Na go na le se sengwe seo o ratago go re botša sona? (ga go gapeletšwe)",
+  "trialConfirmBody": "Se se fetša teko ya mahala gona bjale gomme akhaonte e ya leanong la mahala. O ka ingwadiša gape nako efe goba efe.",
+  "trialCanceledBody": "Teko e fedile. Akhaonte e leanong la mahala, gomme o ka ingwadiša gape go tšwa letlakaleng le nako efe goba efe.",
+  "reasonAutoCharge": "Ke be ke sa nyake tefo ya go itiragalela",
+  "reasonNotForKids": "Ga e swanele bana ba ka"
  },
  "tn": {
   "cancelLink": "Khansela ikwadiso",
@@ -422,7 +566,13 @@
   "canceledTitle": "Ikwadiso e khanseletswe",
   "canceledBody": "O nna le phitlhelelo go fitlha bofelo jwa nako e o setseng o e duetse. O fetotse mogopolo? O ka tswelela gape go tswa mo tsebeng e nako nngwe le nngwe pele ga foo.",
   "closeBtn": "Tswala",
-  "loadErr": "Ga re a kgona go laisa tshedimosetso ya akhaonto."
+  "loadErr": "Ga re a kgona go laisa tshedimosetso ya akhaonto.",
+  "reasonsLabel": "Ke eng se se go dirang gore o khansele? (ga go patelediwe)",
+  "notePlaceholder": "A go na le sengwe se sengwe se o batlang go re bolelela sone? (ga go patelediwe)",
+  "trialConfirmBody": "Se se fetsa teko ya mahala jaanong mme akhaonto e fetogela mo leanong la mahala. O ka ikwadisa gape nako nngwe le nngwe.",
+  "trialCanceledBody": "Teko e fedile. Akhaonto e mo leanong la mahala, mme o ka ikwadisa gape mo tsebeng e nako nngwe le nngwe.",
+  "reasonAutoCharge": "Ke ne ke sa batle go duediswa ka bonako",
+  "reasonNotForKids": "Ga e a tshwanela bana ba me"
  },
  "st": {
   "cancelLink": "Emisa ngodiso",
@@ -439,7 +589,13 @@
   "canceledTitle": "Ngodiso e emisitswe",
   "canceledBody": "O dula o na le phihlello ho fihlela qetellong ya nako eo o seng o e lefetse. O fetotse mohopolo? O ka e tswela pele leqepheng lena nako efe kapa efe pele ho moo.",
   "closeBtn": "Kwala",
-  "loadErr": "Ha re a kgona ho bula dintlha tsa akhaonte."
+  "loadErr": "Ha re a kgona ho bula dintlha tsa akhaonte.",
+  "reasonsLabel": "Ke eng e etsang hore o hlakole? (ha ho qobellwe)",
+  "notePlaceholder": "Na ho na le ntho e nngwe eo o batlang ho re bolella yona? (ha ho qobellwe)",
+  "trialConfirmBody": "Sena se fedisa teko ya mahala hona jwale mme akhaonto e fetohela moralong wa mahala. O ka ngolisa hape neng kapa neng.",
+  "trialCanceledBody": "Teko e fedile. Akhaonto e moralong wa mahala, mme o ka ngolisa hape leqepheng lena neng kapa neng.",
+  "reasonAutoCharge": "Ke ne ke sa batle ho lefiswa ka boiketsetso",
+  "reasonNotForKids": "Ha e a lokela bana ba ka"
  },
  "ts": {
   "cancelLink": "Khansela mbhaliso",
@@ -456,7 +612,13 @@
   "canceledTitle": "Mbhaliso wu khanseriwile",
   "canceledBody": "Mi ya emahlweni mi ri na mfikelelo ku fikela emakumu ka nkarhi lowu mi se mi wu hakeleke. Xana mi cincile miehleketo? Mi nga sungula nakambe eka tluka leri nkarhi wun'wana na wun'wana emahlweni ka kona.",
   "closeBtn": "Pfala",
-  "loadErr": "A hi swi kotanga ku layicha vuxokoxoko bya akhawunti."
+  "loadErr": "A hi swi kotanga ku layicha vuxokoxoko bya akhawunti.",
+  "reasonsLabel": "Hi yini leswi endlaka leswaku u khansela? (a swi bohi)",
+  "notePlaceholder": "Xana ku na swin'wana leswi u lavaka ku hi byela swona? (a swi bohi)",
+  "trialConfirmBody": "Leswi swi heta ndzingo wa mahala sweswi naswona akhawunti yi ya eka pulani ya mahala. U nga tsarisa nakambe nkarhi wun'wana ni wun'wana.",
+  "trialCanceledBody": "Ndzingo wu herile. Akhawunti yi le ka pulani ya mahala, naswona u nga tsarisa nakambe eka tluka leri nkarhi wun'wana ni wun'wana.",
+  "reasonAutoCharge": "A ndzi nga lavi ku hakelisiwa hi ku tiendlekela",
+  "reasonNotForKids": "A yi fanelanga vana va mina"
  },
  "ss": {
   "cancelLink": "Khansela kubhalisa",
@@ -473,7 +635,13 @@
   "canceledTitle": "Kubhalisa kukhanseliwe",
   "canceledBody": "Uchubeka nekungena kuze kuphele sikhatsi losewusikhokhele. Ushintje umcondvo? Ungaphindze ucale kulelikhasi nobe nini ngaphambi kwaloko.",
   "closeBtn": "Vala",
-  "loadErr": "Asikhonanga kulayisha imininingwane ye-akhawunti."
+  "loadErr": "Asikhonanga kulayisha imininingwane ye-akhawunti.",
+  "reasonsLabel": "Yini lekwenta ukhansele? (akuphoceleleki)",
+  "notePlaceholder": "Kukhona lokunye lofuna kusitjela kona? (akuphoceleleki)",
+  "trialConfirmBody": "Loku kucedza kuhlolwa kwemahhala nyalo futsi i-akhawunti iya ehlelweni lwemahhala. Ungabhalisa futsi nanoma nini.",
+  "trialCanceledBody": "Kuhlolwa sekuphelile. I-akhawunti isehlelweni lwemahhala, futsi ungabhalisa futsi kulelikhasi nanoma nini.",
+  "reasonAutoCharge": "Bengingafuni kukhokhiswa ngekutentekela",
+  "reasonNotForKids": "Akufaneli bantfwana bami"
  },
  "ve": {
   "cancelLink": "Khanselani ṅwaliso",
@@ -490,7 +658,13 @@
   "canceledTitle": "Ṅwaliso wo khanselwa",
   "canceledBody": "Ni ḓo dzula ni tshi dzhena u swika magumoni a tshifhinga tshe na tshi badela. No shandukisa muhumbulo? Ni nga thoma hafhu u bva kha siaṱari iḽi tshifhinga tshiṅwe na tshiṅwe phanḓa ha zwenezwo.",
   "closeBtn": "Valani",
-  "loadErr": "A zwo ngo konadzea u hwala zwidodombedzwa zwa akhaunthu."
+  "loadErr": "A zwo ngo konadzea u hwala zwidodombedzwa zwa akhaunthu.",
+  "reasonsLabel": "Ndi mini zwi ni itaho uri ni khansele? (a zwi kombetshedzwi)",
+  "notePlaceholder": "Hu na zwiṅwe zwine na ṱoḓa u ri vhudza? (a zwi kombetshedzwi)",
+  "trialConfirmBody": "Hezwi zwi fhedza tshilingo tsha mahala zwino nahone akhaunthu i ya kha pulane ya mahala. Ni nga ḓiṅwalisa hafhu tshifhinga tshiṅwe na tshiṅwe.",
+  "trialCanceledBody": "Tshilingo tsho fhela. Akhaunthu i kha pulane ya mahala, nahone ni nga ḓiṅwalisa hafhu kha ino siaṱari tshifhinga tshiṅwe na tshiṅwe.",
+  "reasonAutoCharge": "Ndo vha ndi sa ṱoḓi u badeliswa nga u ḓiitela",
+  "reasonNotForKids": "A i fanelani na vhana vhanga"
  },
  "nr": {
   "cancelLink": "Khansela ukubhalisela",
@@ -507,7 +681,13 @@
   "canceledTitle": "Ukubhalisela kukhanselwe",
   "canceledBody": "Ugcina ukungena bekube kuphela isikhathi osele usibhadele. Utjhentjhe umkhumbulo? Ungathoma godu ekhasini leli nanyana kunini ngaphambi kwalokho.",
   "closeBtn": "Vala",
-  "loadErr": "Asikghonanga ukulayitha imininingwana ye-akhawunti."
+  "loadErr": "Asikghonanga ukulayitha imininingwana ye-akhawunti.",
+  "reasonsLabel": "Yini ekwenza bona ukhansele? (akukateleleki)",
+  "notePlaceholder": "Kghona okhunye ofuna ukusitjela khona? (akukateleleki)",
+  "trialConfirmBody": "Lokhu kuqeda ukuhlolwa kwamahhala nje begodu i-akhawunti iya ehlelweni lwamahhala. Ungatlola godu nanyana kunini.",
+  "trialCanceledBody": "Ukuhlolwa kuphelile. I-akhawunti isehlelweni lwamahhala, begodu ungatlola godu kileli kghasi nanyana kunini.",
+  "reasonAutoCharge": "Bengingafuni ukubhadeliswa ngokuzenzakalela",
+  "reasonNotForKids": "Akukafaneli abantwana bami"
  },
  "vi": {
   "cancelLink": "Hủy gói đăng ký",
@@ -524,7 +704,13 @@
   "canceledTitle": "Đã hủy gói đăng ký",
   "canceledBody": "Bạn vẫn có quyền truy cập đến hết kỳ đã thanh toán. Đổi ý? Trước thời điểm đó, bạn có thể tiếp tục gói ngay trên trang này bất cứ lúc nào.",
   "closeBtn": "Đóng",
-  "loadErr": "Không thể tải dữ liệu tài khoản."
+  "loadErr": "Không thể tải dữ liệu tài khoản.",
+  "reasonsLabel": "Vì sao bạn hủy? (không bắt buộc)",
+  "notePlaceholder": "Bạn có muốn nói thêm điều gì không? (không bắt buộc)",
+  "trialConfirmBody": "Thao tác này kết thúc dùng thử miễn phí ngay và chuyển tài khoản sang gói miễn phí. Bạn có thể đăng ký lại bất cứ lúc nào.",
+  "trialCanceledBody": "Thời gian dùng thử đã kết thúc. Tài khoản đang ở gói miễn phí, và bạn có thể đăng ký lại từ trang này bất cứ lúc nào.",
+  "reasonAutoCharge": "Tôi không muốn bị trừ tiền tự động",
+  "reasonNotForKids": "Không phù hợp với con tôi"
  },
  "fil": {
   "cancelLink": "Kanselahin ang subscription",
@@ -541,7 +727,13 @@
   "canceledTitle": "Nakansela na ang subscription",
   "canceledBody": "May access ka pa hanggang sa katapusan ng period na nabayaran mo na. Nagbago ang isip mo? Puwede mo itong ituloy ulit mula sa page na ito anumang oras bago iyon.",
   "closeBtn": "Isara",
-  "loadErr": "Hindi ma-load ang data ng account."
+  "loadErr": "Hindi ma-load ang data ng account.",
+  "reasonsLabel": "Bakit ka nagkakansela? (opsyonal)",
+  "notePlaceholder": "May gusto ka pa bang sabihin sa amin? (opsyonal)",
+  "trialConfirmBody": "Tatapusin nito agad ang libreng trial at ililipat ang account sa libreng plan. Puwede kang mag-subscribe ulit kahit kailan.",
+  "trialCanceledBody": "Tapos na ang trial. Nasa libreng plan ang account, at puwede kang mag-subscribe ulit mula sa page na ito kahit kailan.",
+  "reasonAutoCharge": "Ayaw ko ng awtomatikong singil",
+  "reasonNotForKids": "Hindi ito angkop sa mga anak ko"
  },
  "af": {
   "cancelLink": "Kanselleer intekening",
@@ -558,7 +750,13 @@
   "canceledTitle": "Intekening gekanselleer",
   "canceledBody": "Jy behou toegang tot die einde van die tydperk waarvoor jy reeds betaal het. Van plan verander? Jy kan enige tyd voor dan op hierdie bladsy hervat.",
   "closeBtn": "Maak toe",
-  "loadErr": "Kon nie rekeningdata laai nie."
+  "loadErr": "Kon nie rekeningdata laai nie.",
+  "reasonsLabel": "Hoekom kanselleer jy? (opsioneel)",
+  "notePlaceholder": "Wil jy ons nog iets vertel? (opsioneel)",
+  "trialConfirmBody": "Dit beëindig die gratis proeftydperk nou en skuif die rekening na die gratis plan. Jy kan enige tyd weer inteken.",
+  "trialCanceledBody": "Die proeftydperk is verby. Die rekening is op die gratis plan, en jy kan enige tyd weer op hierdie bladsy inteken.",
+  "reasonAutoCharge": "Ek wou nie 'n outomatiese debiet hê nie",
+  "reasonNotForKids": "Dit pas nie by my kinders nie"
  },
  "sw": {
   "cancelLink": "Ghairi usajili",
@@ -575,7 +773,13 @@
   "canceledTitle": "Usajili umeghairiwa",
   "canceledBody": "Utaendelea kupata ufikiaji hadi mwisho wa kipindi ulicholipia tayari. Umebadili mawazo? Unaweza kuurejesha kutoka ukurasa huu wakati wowote kabla ya hapo.",
   "closeBtn": "Funga",
-  "loadErr": "Imeshindwa kupakia data ya akaunti."
+  "loadErr": "Imeshindwa kupakia data ya akaunti.",
+  "reasonsLabel": "Kwa nini unaghairi? (si lazima)",
+  "notePlaceholder": "Kuna jambo lingine ungependa kutuambia? (si lazima)",
+  "trialConfirmBody": "Hii inamaliza jaribio la bure sasa na kuhamisha akaunti kwenye mpango wa bure. Unaweza kujiunga tena wakati wowote.",
+  "trialCanceledBody": "Jaribio limeisha. Akaunti iko kwenye mpango wa bure, na unaweza kujiunga tena kutoka ukurasa huu wakati wowote.",
+  "reasonAutoCharge": "Sikutaka kukatwa pesa kiotomatiki",
+  "reasonNotForKids": "Haufai kwa watoto wangu"
  },
  "zh-CN": {
   "cancelLink": "取消订阅",
@@ -592,7 +796,13 @@
   "canceledTitle": "订阅已取消",
   "canceledBody": "在已付费的周期结束前，你仍可继续使用。改变主意了？在此之前，你可以随时在本页面恢复订阅。",
   "closeBtn": "关闭",
-  "loadErr": "无法加载账户数据。"
+  "loadErr": "无法加载账户数据。",
+  "reasonsLabel": "您为什么取消?(选填)",
+  "notePlaceholder": "还有什么想告诉我们的吗?(选填)",
+  "trialConfirmBody": "这会立即结束免费试用,账户转为免费方案。您随时可以重新订阅。",
+  "trialCanceledBody": "试用已结束。账户现为免费方案,您随时可以在此页面重新订阅。",
+  "reasonAutoCharge": "我不想被自动扣费",
+  "reasonNotForKids": "不适合我的孩子"
  },
  "zh-TW": {
   "cancelLink": "取消訂閱",
@@ -609,7 +819,13 @@
   "canceledTitle": "訂閱已取消",
   "canceledBody": "在已付費的週期結束前，你仍可繼續使用。改變心意了嗎？在那之前，你隨時可以從這個頁面恢復訂閱。",
   "closeBtn": "關閉",
-  "loadErr": "無法載入帳戶資料。"
+  "loadErr": "無法載入帳戶資料。",
+  "reasonsLabel": "您為什麼取消?(選填)",
+  "notePlaceholder": "還有什麼想告訴我們的嗎?(選填)",
+  "trialConfirmBody": "這會立即結束免費試用,帳戶轉為免費方案。您隨時可以重新訂閱。",
+  "trialCanceledBody": "試用已結束。帳戶現為免費方案,您隨時可以在此頁面重新訂閱。",
+  "reasonAutoCharge": "我不想被自動扣款",
+  "reasonNotForKids": "不適合我的孩子"
  },
  "ko": {
   "cancelLink": "구독 취소",
@@ -626,7 +842,13 @@
   "canceledTitle": "구독이 취소됐어요",
   "canceledBody": "이미 결제한 기간이 끝날 때까지 계속 이용할 수 있어요. 마음이 바뀌었나요? 그 전에는 언제든 이 페이지에서 구독을 다시 시작할 수 있어요.",
   "closeBtn": "닫기",
-  "loadErr": "계정 정보를 불러오지 못했어요."
+  "loadErr": "계정 정보를 불러오지 못했어요.",
+  "reasonsLabel": "취소하시는 이유가 무엇인가요? (선택)",
+  "notePlaceholder": "더 하고 싶은 말씀이 있나요? (선택)",
+  "trialConfirmBody": "무료 체험이 바로 종료되고 계정이 무료 플랜으로 전환됩니다. 언제든 다시 구독할 수 있어요.",
+  "trialCanceledBody": "체험이 종료되었습니다. 계정은 무료 플랜이며, 이 페이지에서 언제든 다시 구독할 수 있어요.",
+  "reasonAutoCharge": "자동 결제를 원하지 않았어요",
+  "reasonNotForKids": "우리 아이들에게 맞지 않아요"
  },
  "th": {
   "cancelLink": "ยกเลิกการสมัครสมาชิก",
@@ -643,7 +865,13 @@
   "canceledTitle": "ยกเลิกการสมัครสมาชิกแล้ว",
   "canceledBody": "คุณยังใช้งานได้จนถึงสิ้นรอบที่ชำระเงินไว้แล้ว เปลี่ยนใจหรือเปล่า คุณกลับมาใช้ต่อได้จากหน้านี้ทุกเมื่อก่อนถึงวันนั้น",
   "closeBtn": "ปิด",
-  "loadErr": "โหลดข้อมูลบัญชีไม่สำเร็จ"
+  "loadErr": "โหลดข้อมูลบัญชีไม่สำเร็จ",
+  "reasonsLabel": "ทำไมถึงยกเลิก? (ไม่บังคับ)",
+  "notePlaceholder": "มีอะไรอยากบอกเราเพิ่มไหม? (ไม่บังคับ)",
+  "trialConfirmBody": "การยกเลิกจะจบช่วงทดลองใช้ฟรีทันที และบัญชีจะย้ายไปแผนฟรี สมัครใหม่ได้ทุกเมื่อ",
+  "trialCanceledBody": "ช่วงทดลองใช้สิ้นสุดแล้ว บัญชีอยู่ในแผนฟรี และสมัครใหม่ได้จากหน้านี้ทุกเมื่อ",
+  "reasonAutoCharge": "ไม่อยากให้ตัดเงินอัตโนมัติ",
+  "reasonNotForKids": "ไม่เหมาะกับลูกของฉัน"
  },
  "bn": {
   "cancelLink": "সাবস্ক্রিপশন বাতিল করুন",
@@ -660,7 +888,13 @@
   "canceledTitle": "সাবস্ক্রিপশন বাতিল হয়েছে",
   "canceledBody": "যে মেয়াদের জন্য আপনি ইতিমধ্যে পেমেন্ট করেছেন, তার শেষ পর্যন্ত অ্যাক্সেস থাকবে। মত বদলেছেন? তার আগে যেকোনো সময় এই পেজ থেকে আবার চালু করতে পারবেন।",
   "closeBtn": "বন্ধ করুন",
-  "loadErr": "অ্যাকাউন্টের তথ্য লোড করা যায়নি।"
+  "loadErr": "অ্যাকাউন্টের তথ্য লোড করা যায়নি।",
+  "reasonsLabel": "কেন বাতিল করছেন? (ঐচ্ছিক)",
+  "notePlaceholder": "আমাদের আর কিছু বলতে চান? (ঐচ্ছিক)",
+  "trialConfirmBody": "এতে বিনামূল্যের ট্রায়াল এখনই শেষ হবে এবং অ্যাকাউন্ট বিনামূল্যের প্ল্যানে চলে যাবে। যেকোনো সময় আবার সাবস্ক্রাইব করতে পারবেন।",
+  "trialCanceledBody": "ট্রায়াল শেষ হয়েছে। অ্যাকাউন্ট বিনামূল্যের প্ল্যানে আছে, এবং এই পেজ থেকে যেকোনো সময় আবার সাবস্ক্রাইব করতে পারবেন।",
+  "reasonAutoCharge": "আমি স্বয়ংক্রিয় চার্জ চাইনি",
+  "reasonNotForKids": "এটা আমার সন্তানদের জন্য উপযুক্ত নয়"
  },
  "da": {
   "cancelLink": "Opsig abonnement",
@@ -677,7 +911,13 @@
   "canceledTitle": "Abonnementet er opsagt",
   "canceledBody": "Du beholder adgangen indtil udgangen af den periode, du allerede har betalt for. Har du fortrudt? Du kan genoptage det fra denne side når som helst inden da.",
   "closeBtn": "Luk",
-  "loadErr": "Kunne ikke indlæse kontooplysninger."
+  "loadErr": "Kunne ikke indlæse kontooplysninger.",
+  "reasonsLabel": "Hvorfor opsiger du? (valgfrit)",
+  "notePlaceholder": "Er der andet, du vil fortælle os? (valgfrit)",
+  "trialConfirmBody": "Det afslutter den gratis prøveperiode nu og flytter kontoen til den gratis plan. Du kan abonnere igen når som helst.",
+  "trialCanceledBody": "Prøveperioden er slut. Kontoen er på den gratis plan, og du kan abonnere igen fra denne side når som helst.",
+  "reasonAutoCharge": "Jeg ville ikke have en automatisk betaling",
+  "reasonNotForKids": "Det passer ikke til mine børn"
  },
  "hu": {
   "cancelLink": "Előfizetés lemondása",
@@ -694,6 +934,12 @@
   "canceledTitle": "Előfizetés lemondva",
   "canceledBody": "A már kifizetett időszak végéig megmarad a hozzáférésed. Meggondoltad magad? Addig bármikor folytathatod az előfizetést ezen az oldalon.",
   "closeBtn": "Bezárás",
-  "loadErr": "Nem sikerült betölteni a fiókadatokat."
+  "loadErr": "Nem sikerült betölteni a fiókadatokat.",
+  "reasonsLabel": "Miért mondod le? (nem kötelező)",
+  "notePlaceholder": "Szeretnél még valamit mondani nekünk? (nem kötelező)",
+  "trialConfirmBody": "Ezzel az ingyenes próbaidőszak azonnal véget ér, és a fiók az ingyenes csomagra vált. Bármikor újra előfizethetsz.",
+  "trialCanceledBody": "A próbaidőszak véget ért. A fiók az ingyenes csomagon van, és erről az oldalról bármikor újra előfizethetsz.",
+  "reasonAutoCharge": "Nem akartam automatikus terhelést",
+  "reasonNotForKids": "Nem illik a gyerekeimhez"
  }
 }

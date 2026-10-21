@@ -268,7 +268,7 @@ async function sendFamilyWelcome(uid: string, email: string | null) {
  * to cancel (a user clicked cancel during trial or while active). Amber,
  * distinct from the teal "new subscription" alert. Non-blocking.
  */
-async function notifyCancellation(tier: string, email: string | null, status: string, endsText: string) {
+async function notifyCancellation(tier: string, email: string | null, status: string, endsText: string, reason: string | null = null) {
   try {
     const resendKey = process.env.RESEND_API_KEY;
     const notifyTo = process.env.NOTIFY_EMAIL;
@@ -289,6 +289,7 @@ async function notifyCancellation(tier: string, email: string | null, status: st
         <tr><td style="padding:8px 0;color:#6B7280;">Email</td><td style="padding:8px 0;font-weight:500;">${(email ?? "(none)").replace(/</g, "&lt;")}</td></tr>
         <tr><td style="padding:8px 0;color:#6B7280;">Was</td><td style="padding:8px 0;">${status}</td></tr>
         <tr><td style="padding:8px 0;color:#6B7280;">Access until</td><td style="padding:8px 0;">${endsText}</td></tr>
+        <tr><td style="padding:8px 0;color:#6B7280;">Reason</td><td style="padding:8px 0;font-weight:600;">${(reason ?? "(not given)").replace(/</g, "&lt;")}</td></tr>
         <tr><td style="padding:8px 0;color:#6B7280;">When</td><td style="padding:8px 0;">${when} (Israel time)</td></tr>
       </table>
       <div style="margin-top:24px;padding-top:24px;border-top:1px solid #F3F4F6;text-align:center;">
@@ -351,7 +352,7 @@ async function maybeNotifyScheduledCancel(sub: Stripe.Subscription, event: Strip
     const endsText = endsTs
       ? new Date(endsTs * 1000).toLocaleDateString("en-IL", { timeZone: "Asia/Jerusalem", day: "2-digit", month: "short", year: "numeric" })
       : "period end";
-    await notifyCancellation(tier, email, sub.status, endsText);
+    await notifyCancellation(tier, email, sub.status, endsText, sub.cancellation_details?.comment ?? null);
     await ref.set({ canceledNotifiedSub: sub.id }, { merge: true });
   } catch (e) {
     console.warn("[webhook] maybeNotifyScheduledCancel failed:", e);
@@ -393,7 +394,7 @@ async function maybeNotifyDeletedCancel(sub: Stripe.Subscription) {
       ? "Clear"
       : "Deep";
     const email = (snap.data()?.email as string | undefined) ?? (sub.metadata?.email as string | undefined) ?? null;
-    await notifyCancellation(tier, email, "canceled", "immediately");
+    await notifyCancellation(tier, email, "canceled", "immediately", sub.cancellation_details?.comment ?? null);
     await ref.set({ canceledNotifiedSub: sub.id }, { merge: true });
   } catch (e) {
     console.warn("[webhook] maybeNotifyDeletedCancel failed:", e);

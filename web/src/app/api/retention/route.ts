@@ -27,11 +27,23 @@ import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
  * Actions (POST { action }):
  *   "check"  -> { trialing, hasCard, offerEligible }  (UI decides what to show)
  *   "extend" -> extend trial_end by 14 days, mark the offer used. { ok, trialEnd }
- *   "cancel" -> cancel_at_period_end = true (keeps access through the period). { ok }
+ *   "cancel" -> { reason?, comment? }: a trial ends now, a paid sub at period end. { ok, endedNow }
  */
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const EXTENSION_DAYS = 14;
+
+// The exit-survey reasons (canonical English, see REASONS in
+// DeleteAccountModal + the two cancel-only ones) mapped to Stripe's feedback.
+const STRIPE_FEEDBACK: Record<string, Stripe.SubscriptionCancelParams.CancellationDetails.Feedback> = {
+  "I didn't want an automatic charge": "other",
+  "I didn't use it enough": "unused",
+  "Too expensive for me": "too_expensive",
+  "It isn't right for my children": "missing_features",
+  "It was confusing / hard to use": "too_complex",
+  "I found another solution": "switched_service",
+  "I don't need it right now": "unused",
+};
 
 function hasCard(sub: Stripe.Subscription): boolean {
   if (sub.default_payment_method) return true;
@@ -60,7 +72,8 @@ export async function POST(req: NextRequest) {
     const userInfo = await verifyUserAndGetPlan(idToken);
     if (!userInfo) return NextResponse.json({ error: "login_required" }, { status: 401 });
 
-    const { action } = (await req.json().catch(() => ({}))) as { action?: string };
+    const body = (await req.json().catch(() => ({}))) as { action?: string; reason?: unknown; comment?: unknown };
+    const { action } = body;
     if (!action || !["check", "extend", "cancel"].includes(action)) {
       return NextResponse.json({ error: "bad_action" }, { status: 400 });
     }
@@ -117,18 +130,47 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // action === "cancel": end at period end so they keep the access they paid
-    // for (or the trial they're on). Records that the offer path was used up so
-    // it never reappears — a customer who cancels shouldn't be re-pitched.
-    await stripe.subscriptions.update(sub.id, { cancel_at_period_end: true });
+    // action === "cancel". A paying subscriber keeps the access they paid for
+    // until the period ends. A free trial ends NOW (Gadi 2026-10-21: someone
+    // who cancels a trial does not keep 14 free days of Family): the sub is
+    // deleted, and the webhook moves the account (and its family) to free.
+    // The exit reason goes to Stripe's cancellation_details too, so the churn
+    // alert e-mail carries it. Records that the offer path was used up so it
+    // never reappears: a customer who cancels shouldn't be re-pitched.
+    const reason = typeof body.reason === "string" ? body.reason.trim().slice(0, 120) : "";
+    const comment = typeof body.comment === "string" ? body.comment.trim().slice(0, 1000) : "";
+    const cancellation_details: Stripe.SubscriptionCancelParams.CancellationDetails = {
+      feedback: STRIPE_FEEDBACK[reason] ?? (reason ? "other" : undefined),
+      comment: [reason && `Reason: ${reason}`, comment && `Note: ${comment}`].filter(Boolean).join(" | ") || undefined,
+    };
+    const endsNow = trialing;
+    if (endsNow) {
+      await stripe.subscriptions.cancel(sub.id, { cancellation_details });
+    } else {
+      await stripe.subscriptions.update(sub.id, { cancel_at_period_end: true, cancellation_details });
+    }
     await userRef.set(
       {
         retentionOfferShownAt: FieldValue.serverTimestamp(),
         retentionOfferOutcome: "canceled",
+        cancelReason: reason || null,
+        cancelComment: comment || null,
+        cancelReasonAt: FieldValue.serverTimestamp(),
       },
       { merge: true },
     );
-    return NextResponse.json({ ok: true, canceled: true });
+    await db.collection("cancellations").add({
+      uid: userInfo.userId,
+      email: (userData.email as string | undefined) ?? null,
+      subscriptionId: sub.id,
+      priceId: sub.items.data[0]?.price?.id ?? null,
+      status: sub.status,
+      endedNow: endsNow,
+      reason: reason || null,
+      comment: comment || null,
+      at: FieldValue.serverTimestamp(),
+    });
+    return NextResponse.json({ ok: true, canceled: true, endedNow: endsNow });
   } catch (err) {
     console.error("[retention] error:", err);
     return NextResponse.json({ error: "internal_error" }, { status: 500 });
