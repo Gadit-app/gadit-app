@@ -75,4 +75,53 @@ Choose right away or one daily summary, and what to hear about, in the [parent b
       "Open Homework",
     ),
   },
+  {
+    // Reading check (2026-10-21 launch, 18fa83e3 + c7dc8325): for every
+    // paying subscriber, since /read is in every paid plan.
+    id: "2026-10-reading-check",
+    audience: "paying",
+    ctaPath: "/read",
+    he: C(
+      "חדש ב-Gadit: בודקים שהבנו את מה שקראנו",
+      `היי {שם},
+
+הוספנו ל-Gadit דרך חדשה לקרוא: **בדיקת הבנה אחרי הקריאה**.
+
+## איך זה עובד
+1. פותחים את **קריאה**, ומצלמים עמוד מהספר או מהחוברת, או מדביקים טקסט.
+2. קוראים, ולוחצים על כל מילה שלא ברורה. הפירוש נפתח מיד, ובמילה משפה אחרת מופיע גם התרגום.
+3. בסוף לוחצים **"בואו נבדוק שהבנו את המילים"**.
+
+## מה הבדיקה עושה
+Gadit שואל על המילים שלחצתם עליהן ועל עוד כמה מילים קשות מהטקסט: מה פירוש המילה כאן, במשפט הזה.
+אחר כך מגיעות 3 עד 5 שאלות קצרות על מה שקראתם.
+המילים שלא היו ברורות נשמרות במחברת, ונכנסות לתרגול ולמשחקים.
+
+**לילדים:** הבדיקה בנויה כך שהילד יכול לעשות אותה לבד. כשהוא מסיים קריאה משיעורי הבית, מגיעה אליכם הודעה.
+
+לא רוצים בדיקה עכשיו? לוחצים "סיימנו לקרוא", והקריאה נשמרת כרגיל.`,
+      "לקריאה",
+    ),
+    en: C(
+      "New in Gadit: check you understood what you read",
+      `Hi {name},
+
+We added a new way to read in Gadit: **a comprehension check after reading**.
+
+## How it works
+1. Open **Read**, and photograph a page from a book or workbook, or paste a text.
+2. Read, and tap any word that isn't clear. The meaning opens right away, and a word from another language also shows its translation.
+3. At the end, tap **"Let's check I understood the words"**.
+
+## What the check does
+Gadit asks about the words you tapped and a few more hard words from the text: what does the word mean here, in this sentence.
+Then come 3 to 5 short questions about what you read.
+The words that weren't clear are saved to the notebook, and go into practice and games.
+
+**For kids:** the check is built so a child can do it alone. When your child finishes a reading from homework, you get a message.
+
+Not in the mood for a check? Tap "Done reading", and the reading is saved as usual.`,
+      "Open Read",
+    ),
+  },
 ];
