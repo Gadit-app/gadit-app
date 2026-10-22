@@ -41,9 +41,11 @@ export async function POST(req: NextRequest) {
 
   let words: string[] = [];
   let generate = false;
+  const hints: Record<string, string> = {};
   try {
-    const b = (await req.json()) as { words?: unknown; generate?: unknown };
+    const b = (await req.json()) as { words?: unknown; generate?: unknown; hints?: unknown };
     generate = b.generate === true;
+    if (b.hints && typeof b.hints === "object") for (const [k, v] of Object.entries(b.hints as Record<string, unknown>)) if (typeof v === "string") hints[k] = v;
     if (Array.isArray(b.words)) {
       words = [...new Set(b.words.filter((w): w is string => typeof w === "string").map((w) => w.trim()).filter((w) => w && w.length <= 80))].slice(0, MAX_WORDS);
     }
@@ -88,7 +90,7 @@ export async function POST(req: NextRequest) {
         let used = cur.day === day ? cur.n ?? 0 : 0;
         const todo = missing.slice(0, Math.max(0, GEN_PER_DAY - used));
         for (let i = 0; i < todo.length; i += 3) {
-          const res = await Promise.all(todo.slice(i, i + 3).map((w) => pickImage(w, "everyday words").catch(() => null)));
+          const res = await Promise.all(todo.slice(i, i + 3).map((w) => pickImage(w, "everyday words", { hint: hints[w] }).catch(() => null)));
           used += res.filter((r) => r?.status === "generated").length;
         }
         await ref.set({ flashPicGen: { day, n: used } }, { merge: true });

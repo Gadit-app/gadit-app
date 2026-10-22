@@ -290,7 +290,7 @@ export async function cachedPickImages(words: string[]): Promise<Record<string, 
 
 /** The picture of one word: from cache, or drawn now and stored. `topic`
  *  tells the brief which meaning (the caller checks the word is allowed). */
-export async function pickImage(word: string, topic: string, opts: { allowNew?: () => Promise<boolean>; onGenerated?: () => Promise<void> } = {}): Promise<ClassroomImageResult> {
+export async function pickImage(word: string, topic: string, opts: { allowNew?: () => Promise<boolean>; onGenerated?: () => Promise<void>; hint?: string } = {}): Promise<ClassroomImageResult> {
   const w = word.trim();
   const cKey = pickImageKey(w);
   const ref = getAdminDb().collection("imageCache").doc(cKey);
@@ -302,7 +302,13 @@ export async function pickImage(word: string, topic: string, opts: { allowNew?: 
   }
   if (opts.allowNew && !(await opts.allowNew())) return { status: "skipped", reason: "quota", cacheKey: cKey };
   try {
-    const meaning = `the everyday English word "${w}" from the topic "${topic}", for a picture game for young children who cannot read yet: it must be easy to tell apart from other words of the same topic`;
+    // A hint (the meaning saved with the word, or its translation on a
+    // flash card) picks the right sense: "band" is a music band, not a rubber
+    // band, when the card says להקה (Gadi 2026-10-22).
+    const hint = (opts.hint ?? "").trim().slice(0, 160);
+    const meaning = hint
+      ? `the English word "${w}" in this exact sense: ${hint}. For a picture card for young children: show that sense only`
+      : `the everyday English word "${w}" from the topic "${topic}", for a picture game for young children who cannot read yet: it must be easy to tell apart from other words of the same topic`;
     const out = await houseImage(w, meaning, "en", true);
     void logAiUsage({ feature: "image_pick", model: IMAGE_MODEL, images: 1, imageQuality: "low", costUsd: out.cost });
     const storagePath = `word-images/${cKey}-${crypto.randomBytes(4).toString("hex")}.png`;

@@ -380,6 +380,12 @@ export function GameFlashcards({
   useEffect(() => {
     if (!user || first.length === 0) return;
     const words = first.flatMap((c) => [c.word.word, ...(c.pair ? [c.pair.pair] : []), ...(c.word.picWord ? [c.word.picWord] : [])]);
+    // The other side of each card tells the drawing which sense is meant.
+    const hints: Record<string, string> = {};
+    for (const c of first) {
+      if (c.pair && c.pair.pairLang === "English") hints[c.pair.pair] = c.word.word;
+      else if (/^english$/i.test(c.word.language) && (c.pair?.pair || c.word.meaning)) hints[c.word.word] = c.pair?.pair || c.word.meaning;
+    }
     let cancelled = false;
     (async () => {
       try {
@@ -387,7 +393,7 @@ export function GameFlashcards({
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
           // Missing English pictures are drawn on the server meanwhile.
-          body: JSON.stringify({ words, generate: true }),
+          body: JSON.stringify({ words, generate: true, hints }),
         });
         const data = res.ok ? ((await res.json()) as { images?: Record<string, string> }) : {};
         if (!cancelled && data.images) {
