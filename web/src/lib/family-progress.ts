@@ -62,6 +62,32 @@ async function learningOf(uid: string): Promise<ChildProgress["learning"]> {
   };
 }
 
+/**
+ * Words each account LOOKED UP in the last 7 days, from the activity log
+ * (Gadi 2026-10-22: an active family's report showed 0 because only words
+ * saved to the notebook counted). One query for the whole week, filtered in
+ * memory (no composite index needed), cached for 10 minutes so the Sunday
+ * cron reads it once for every family.
+ */
+let weekLookupsCache: { at: number; byUid: Map<string, string[]> } | null = null;
+async function weekLookups(): Promise<Map<string, string[]>> {
+  if (weekLookupsCache && Date.now() - weekLookupsCache.at < 10 * 60_000) return weekLookupsCache.byUid;
+  const since = Date.now() - WEEK_MS;
+  const snap = await getAdminDb().collection("activityLog").where("atMs", ">=", since).select("uid", "word", "kind", "atMs").get();
+  const rows = snap.docs
+    .map((d) => d.data() as { uid?: string; word?: string; kind?: string; atMs?: number })
+    .filter((x) => x.uid && x.word && (x.kind ?? "word") === "word")
+    .sort((a, b) => (b.atMs ?? 0) - (a.atMs ?? 0));
+  const byUid = new Map<string, string[]>();
+  for (const x of rows) {
+    const list = byUid.get(x.uid!) ?? [];
+    list.push(String(x.word).trim());
+    byUid.set(x.uid!, list);
+  }
+  weekLookupsCache = { at: Date.now(), byUid };
+  return byUid;
+}
+
 /** Every non-parent member of families/{ownerUid}, in the order they were added. */
 export async function loadFamilyProgress(ownerUid: string): Promise<FamilyProgress<ChildProgressFull>> {
   const db = getAdminDb();
@@ -73,6 +99,7 @@ export async function loadFamilyProgress(ownerUid: string): Promise<FamilyProgre
     .get();
 
   const cutoffIso = new Date(Date.now() - WEEK_MS).toISOString();
+  const lookups = await weekLookups().catch(() => new Map<string, string[]>());
 
   type MemberDoc = {
     id: string;
@@ -114,10 +141,12 @@ export async function loadFamilyProgress(ownerUid: string): Promise<FamilyProgre
             .map((r) => r.word)
             .filter(Boolean);
           const week = sorted.filter((r) => r.addedAt >= cutoffIso);
+          // This week's new words: the ones saved to the notebook, then the
+          // ones only looked up, each word once.
           const seen = new Set<string>();
           const weekList: string[] = [];
-          for (const r of week) {
-            const w = r.word.trim();
+          for (const w0 of [...week.map((r) => r.word), ...(lookups.get(uid) ?? [])]) {
+            const w = (w0 ?? "").trim();
             if (!w || seen.has(w.toLowerCase())) continue;
             seen.add(w.toLowerCase());
             weekList.push(w);
@@ -126,7 +155,7 @@ export async function loadFamilyProgress(ownerUid: string): Promise<FamilyProgre
             ...base,
             linked: true,
             total: st.words,
-            thisWeek: week.length,
+            thisWeek: weekList.length,
             recent,
             streak: st.streak,
             rankKey: st.rank.key,

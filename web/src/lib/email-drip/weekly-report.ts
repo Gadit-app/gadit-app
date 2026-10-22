@@ -144,8 +144,8 @@ const HE: Copy = {
   subjectQuiet: (one) => (one ? `רעיון קטן לשבוע של ${one.name.trim()} ב-Gadit` : "רעיון קטן לשבוע של הילדים ב-Gadit"),
   greeting: "היי {שם},",
   introActive: (one) => (one ? `הנה הסיכום השבועי של ${one.name.trim()} ב-Gadit.` : "הנה הסיכום השבועי של הילדים שלכם ב-Gadit."),
-  introQuiet: (one) => (one ? `שבוע חדש מתחיל, והנה רעיון קטן לפתוח אותו יחד עם ${one.name.trim()}.` : "שבוע חדש מתחיל, והנה רעיון קטן לפתוח אותו יחד עם הילדים."),
-  together: (n) => (n === 1 ? "יחד נוספה השבוע מילה חדשה אחת למחברות." : `יחד נוספו השבוע ${n} מילים חדשות למחברות.`),
+  introQuiet: (one) => (one ? `הנה רעיון קטן לשבוע הזה עם ${one.name.trim()}.` : "הנה רעיון קטן לשבוע הזה עם הילדים."),
+  together: (n) => (n === 1 ? "השבוע הילדים למדו מילה חדשה אחת." : `השבוע הילדים למדו ${n} מילים חדשות.`),
   childName: (c) => c.name.trim() || g(c, "הילד", "הילדה"),
   newLabel: (n) => (n === 1 ? "מילה חדשה השבוע" : "מילים חדשות השבוע"),
   wordsLabel: "המילים:",
@@ -156,16 +156,16 @@ const HE: Copy = {
     const l = c.learning;
     if (!l || !l.learnedWeek) return "";
     const lang = l.lang === "en" ? "אנגלית" : "עברית";
-    return l.learnedWeek === 1 ? `בלימוד ${lang}: מילה אחת נלמדה עד הסוף השבוע` : `בלימוד ${lang}: ${l.learnedWeek} מילים נלמדו עד הסוף השבוע`;
+    return l.learnedWeek === 1 ? `לימוד ${lang}: מילה אחת נלמדה היטב השבוע` : `לימוד ${lang}: ${l.learnedWeek} מילים נלמדו היטב השבוע`;
   },
   idea: "רעיון לשבוע הזה:",
-  ideaGame: (c) => `5 דקות עם משחק מהמילים של ${HE.childName(c)}. המילים שכבר ${g(c, "שמר", "שמרה")} מחכות שם.`,
-  ideaFirst: (c) => `5 דקות עם משחק קצר, ואחר כך מחפשים יחד מילה אחת מהספר או משיעורי הבית. היא תישמר במחברת של ${HE.childName(c)}.`,
-  ideaConnect: (c) => `כדי לראות כאן מה ${HE.childName(c)} ${g(c, "לומד", "לומדת")}, מחברים ${g(c, "לו מכשיר משלו", "לה מכשיר משלה")} או משתמשים במצב ילדים במכשיר שלכם.`,
+  ideaGame: (c) => `משחק של 5 דקות עם המילים ש${HE.childName(c)} כבר ${g(c, "שמר", "שמרה")}.`,
+  ideaFirst: (c) => `מחפשים יחד מילה אחת מהספר או משיעורי הבית. היא נשמרת במחברת של ${HE.childName(c)}.`,
+  ideaConnect: (c) => `מחברים ל${HE.childName(c)} מכשיר ${g(c, "משלו", "משלה")}, או משתמשים במצב ילדים במכשיר שלכם. ככה תראו כאן מה ${g(c, "הוא לומד", "היא לומדת")}.`,
   playCta: "למשחקים",
   connectCta: "לחיבור",
-  outroActive: "רעיון לשיחה: בחרו מילה אחת מהרשימה ושאלו בארוחת הערב מה היא אומרת. כל מילה שחוזרים אליה נשארת.",
-  outroQuiet: "מספיקות כמה דקות ביום. כל מילה שנשמרת במחברת נכנסת למשחקים, וככה אוצר המילים גדל.",
+  outroActive: "רעיון: בחרו מילה אחת מהרשימה, ושאלו את הילדים בארוחת הערב מה היא אומרת.",
+  outroQuiet: "מספיקות כמה דקות ביום. כל מילה שנשמרת במחברת נכנסת למשחקים.",
   cta: "ללוח ההורים",
   next: "צריכים עזרה? אפשר פשוט להשיב למייל הזה.",
 };
@@ -175,8 +175,8 @@ const EN: Copy = {
   subjectQuiet: (one) => (one ? `A small idea for ${one.name.trim()}'s week on Gadit` : "A small idea for your kids' week on Gadit"),
   greeting: "Hi {name},",
   introActive: (one) => (one ? `Here is ${one.name.trim()}'s weekly summary on Gadit.` : "Here is your kids' weekly summary on Gadit."),
-  introQuiet: (one) => (one ? `A new week is starting, and here is a small idea to open it together with ${one.name.trim()}.` : "A new week is starting, and here is a small idea to open it together with your kids."),
-  together: (n) => (n === 1 ? "Together, 1 new word went into the notebooks this week." : `Together, ${n} new words went into the notebooks this week.`),
+  introQuiet: (one) => (one ? `Here is a small idea for this week with ${one.name.trim()}.` : "Here is a small idea for this week with your kids."),
+  together: (n) => (n === 1 ? "This week your kids learned 1 new word." : `This week your kids learned ${n} new words.`),
   childName: (c) => c.name.trim() || "Your child",
   newLabel: (n) => (n === 1 ? "new word this week" : "new words this week"),
   wordsLabel: "The words:",
@@ -190,13 +190,13 @@ const EN: Copy = {
     return l.learnedWeek === 1 ? `Learning ${lang}: 1 word fully learned this week` : `Learning ${lang}: ${l.learnedWeek} words fully learned this week`;
   },
   idea: "An idea for this week:",
-  ideaGame: (c) => `5 minutes with a game made from ${possEn(c)} own words. The words already saved are waiting there.`,
-  ideaFirst: (c) => `5 minutes with a short game, then look up one word together from a book or homework. It is saved to ${possEn(c)} notebook.`,
+  ideaGame: (c) => `A 5-minute game with the words ${c.name.trim() || "your child"} already saved.`,
+  ideaFirst: (c) => `Look up one word together from a book or homework. It is saved to ${possEn(c)} notebook.`,
   ideaConnect: (c) => `To see here what ${c.name.trim() || "your child"} is learning, connect a device of their own or use Kids Mode on your device.`,
   playCta: "Open the games",
   connectCta: "Connect",
-  outroActive: "An idea for the dinner table: pick one word from the list and ask what it means. Every word you come back to stays.",
-  outroQuiet: "A few minutes a day is enough. Every word saved to the notebook goes into the games, and that is how a vocabulary grows.",
+  outroActive: "An idea: pick one word from the list and ask your kids at dinner what it means.",
+  outroQuiet: "A few minutes a day is enough. Every word saved to the notebook goes into the games.",
   cta: "Open the parent dashboard",
   next: "Need help? Just reply to this email.",
 };
