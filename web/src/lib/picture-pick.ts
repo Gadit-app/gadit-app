@@ -30,9 +30,12 @@ for (const s of DICTATION_SETS) {
   if (!PIC_DICT_SET_IDS.has(s.id)) continue;
   for (const w of s.words) if (!PIC_WORDS.has(key(w.en))) PIC_WORDS.set(key(w.en), s.titleEn);
 }
+// Words from the Ministry's Band I list that never get a picture in a
+// children's game (Gadi 2026-10-22).
+const NOT_FOR_KIDS = new Set(["wine", "beer"]);
 for (const b of BAND_SETS) {
   if (!isPicBandSet(b)) continue;
-  for (const w of b.words) if (!PIC_WORDS.has(key(w))) PIC_WORDS.set(key(w), b.topic);
+  for (const w of b.words) if (!NOT_FOR_KIDS.has(key(w)) && !PIC_WORDS.has(key(w))) PIC_WORDS.set(key(w), b.topic);
 }
 
 /** The topic of a word a picture may be made for, else undefined. */

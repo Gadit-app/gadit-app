@@ -244,7 +244,12 @@ export async function POST(req: NextRequest) {
   // cache-key change, so every prior cached MP3 effectively becomes
   // stale; common words re-cache within hours of normal traffic.
   const model = "gpt-4o-mini-tts";
-  const hash = contentHash(text, voice, model, AUDIO_FORMAT);
+  // A single word said on its own (games, dictation, word cards) is easy to
+  // swallow: "boat" came out like "bow" (Gadi 2026-10-22). Single words get
+  // their own instructions and their own cache key ("|word1"), so they are
+  // regenerated once, clearly, with the full vowel and the final sound.
+  const singleWord = !/\s/.test(text.trim()) && text.trim().length <= 24;
+  const hash = contentHash(singleWord ? `${text}|word1` : text, voice, model, AUDIO_FORMAT);
   const cachePath = `tts-cache/${hash}.${AUDIO_EXT}`;
 
   // Check Firebase Storage cache
@@ -288,10 +293,13 @@ export async function POST(req: NextRequest) {
     // language; the model uses the input text's natural pacing
     // (commas, periods, dashes) to phrase, so we don't try to
     // micromanage prosody here.
-    const ttsInstructions =
-      "Speak naturally and warmly, like a thoughtful friend reading a dictionary entry aloud. " +
-      "Clear, calm, conversational tone — not robotic, not announcer-style. " +
-      "Pronounce every word accurately in the source language, including any non-English words.";
+    const ttsInstructions = singleWord
+      ? "Say this one word on its own for a child who is learning it. Speak slowly and very clearly, " +
+        "with a standard neutral accent, and pronounce every sound fully, including the full vowel and the last consonant " +
+        "(for example boat ends in a clear t, and is never said like bow). Say only the word, once, with no other words."
+      : "Speak naturally and warmly, like a thoughtful friend reading a dictionary entry aloud. " +
+        "Clear, calm, conversational tone — not robotic, not announcer-style. " +
+        "Pronounce every word accurately in the source language, including any non-English words.";
     const ttsResp = await fetch("https://api.openai.com/v1/audio/speech", {
       method: "POST",
       headers: {
