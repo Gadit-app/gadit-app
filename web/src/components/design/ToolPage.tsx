@@ -70,6 +70,8 @@ export function ToolPage({ active, title, titleExtra, sub, width = 880, children
           <div className="wb-tool-hero">
             <h1 className="wb-tool-title">
               {(active === "notebook" || active === "spell" || active === "read" || active === "say" || active === "play") && <GaditIcon name={active} size={48} className="wb-title-icon is-3d" />}
+              {/* Practice: the check and pencil (the backpack is for Homework). */}
+              {active === "practice" && <GaditIcon name="test" size={48} className="wb-title-icon is-3d" />}
               {title}
               {titleExtra}
             </h1>

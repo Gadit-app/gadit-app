@@ -45,6 +45,7 @@ import { isPwaInstalledOrDone } from "@/components/InstallPwaPrompt";
 import { requestInstallOpen } from "@/lib/install-bus";
 import { isInAppBrowser } from "@/lib/in-app-browser";
 import { track } from "@/lib/track";
+import { practiceNav } from "@/lib/practice-i18n";
 
 // Nav keys that lead to a purchase surface — tagged .gd-buy so they are
 // hidden inside the Google Play consumption-only TWA (html[data-play="1"]).
@@ -111,6 +112,7 @@ export type NavKey =
   | "say"
   | "read"
   | "spell"
+  | "practice"
   | "individuals"
   | "schools"
   | "families"
@@ -336,7 +338,11 @@ function useNavLinks(): NavLink[] {
         { key: "notebook", href: href("/notebook"), label: v2(lang, "navNotebook") },
         // Homework is for children only (Gadi 2026-10-12): a grown-up sees
         // it only while Kids Mode is on, i.e. a child is at the screen.
-        ...(deep && kidsAccess && kidsMode ? [{ key: "spell" as const, href: href("/homework"), label: SPELL_NAV[lang] ?? SPELL_NAV.en }] : []),
+        // In its place a grown-up has Practice (Gadi 2026-10-22): reading
+        // with a comprehension check, test prep, dictation, a language.
+        ...(deep && kidsAccess && kidsMode
+          ? [{ key: "spell" as const, href: href("/homework"), label: SPELL_NAV[lang] ?? SPELL_NAV.en }]
+          : deep ? [{ key: "practice" as const, href: href("/exercises"), label: practiceNav(lang) }] : []),
         ...(deep ? [{ key: "read" as const, href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en }] : []),
         { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
         ...(deep ? [{ key: "play" as const, href: href("/play"), label: v2(lang, "navPlay") }] : []),

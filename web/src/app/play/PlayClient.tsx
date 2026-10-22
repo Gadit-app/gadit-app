@@ -4196,7 +4196,8 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
           // "learning words" when it came from there, else the Homework page.
           let from: string | null = null;
           try { from = new URLSearchParams(window.location.search).get("from"); } catch { /* the Homework page */ }
-          router.push(href(from === "learn" ? "/homework?v=learn" : "/homework"));
+          // A grown-up's Practice (Gadi 2026-10-22) goes back to its language card.
+          router.push(href(from === "practice" ? "/exercises?v=learn" : from === "learn" ? "/homework?v=learn" : "/homework"));
         }} />
       </div>
     );

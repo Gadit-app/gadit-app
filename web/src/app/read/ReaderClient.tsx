@@ -18,6 +18,7 @@ import { notifyActivity } from "@/lib/notify-activity-client";
 import { type Lang } from "@/lib/i18n";
 import { misc } from "@/lib/misc-i18n";
 import { homeworkCopy } from "@/lib/homework-i18n";
+import { practiceCopy } from "@/lib/practice-i18n";
 import { ReportQuestionButton } from "@/components/play/ReportQuestionButton";
 import { playNotActive } from "@/lib/play-copy";
 
@@ -398,12 +399,22 @@ export function ReaderClient() {
   // Opened from Homework ("Reading a text", Gadi 2026-10-12): the same
   // reader, with the Homework tab lit, a way back and a "done reading" button.
   // Grown-ups open /read on its own and see none of this.
-  const hc = homeworkCopy(lang);
-  const [fromHw, setFromHw] = useState(false);
+  // Opened from a grown-up's Practice (Gadi 2026-10-22): the same frame,
+  // with the Practice tab lit and the way back to Practice.
+  const hwCopy = homeworkCopy(lang);
+  const pr = practiceCopy(lang);
+  const [from, setFrom] = useState<"homework" | "practice" | null>(null);
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from the address
-    try { setFromHw(new URLSearchParams(window.location.search).get("from") === "homework"); } catch { /* plain reader */ }
+    try {
+      const f = new URLSearchParams(window.location.search).get("from");
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from the address
+      setFrom(f === "homework" || f === "practice" ? f : null);
+    } catch { /* plain reader */ }
   }, []);
+  const fromHw = from !== null;
+  const fromPractice = from === "practice";
+  const hc = fromPractice ? { ...hwCopy, read: pr.read, home: pr.home } : hwCopy;
+  const homePath = fromPractice ? "/exercises" : "/homework";
 
   const [draft, setDraft] = useState("");
   // Restore the open passage from the session so a refresh, or opening a word's
@@ -718,10 +729,10 @@ export function ReaderClient() {
 
   return (
     // The shared tool frame (Gadi 2026-10-11): same bar, same centred title.
-    <ToolPage active={fromHw ? "spell" : "read"} width={760} title={fromHw ? hc.read : t.title} titleExtra={<GuideButton guide="reader" size={24} />} sub={t.sub}>
+    <ToolPage active={fromPractice ? "practice" : fromHw ? "spell" : "read"} width={760} title={fromHw ? hc.read : t.title} titleExtra={<GuideButton guide="reader" size={24} />} sub={t.sub}>
       <div style={{ fontFamily: fontBody(lang) }}>
         {fromHw && (
-          <Link href={href("/homework")} className="wb-hw-back">
+          <Link href={href(homePath)} className="wb-hw-back">
             {dir === "rtl" ? "→" : "←"} {hc.home}
           </Link>
         )}
@@ -822,7 +833,7 @@ export function ReaderClient() {
             tapped={check.tapped}
             hard={check.hard}
             fromHw={fromHw}
-            homeHref={href("/homework")}
+            homeHref={href(homePath)}
             homeLabel={hc.home}
             onReadAgain={endCheck}
           />
@@ -878,7 +889,7 @@ export function ReaderClient() {
                 {rc.start}
               </button>
               {fromHw ? (
-                <Link href={href("/homework")}
+                <Link href={href(homePath)}
                   onClick={() => void notifyActivity(user, { kind: "read", label: text.trim().split(/\s+/).slice(0, 6).join(" ") })}
                   style={{ background: "var(--card,#fff)", color: "var(--teal-deep,#0E7490)", border: "1.5px solid var(--teal,#0EA5A5)", borderRadius: 14, padding: "12px 22px", fontSize: 15.5, fontWeight: 700, textDecoration: "none", fontFamily: "inherit", maxWidth: "100%" }}>
                   {hc.doneRead}

@@ -15225,6 +15225,13 @@ html[data-theme="space"] .wb-learn-simple-link, html[data-theme="space"] .wb-dic
 .wordbook .wb-hw-grid > .wb-play-card { height: 100%; }
 .wordbook .wb-hw-grid > .wb-play-card.has-cover .wb-play-card-text { height: auto; min-height: 76px; flex: 1 1 auto; }
 .wordbook .wb-hw-grid > .wb-play-card.has-cover .wb-play-card-desc { -webkit-line-clamp: 3; }
+/* Practice, the grown-up's four cards (Gadi 2026-10-22): two in a row on a
+   phone, four on a computer (two when only two cards), up to five lines. */
+.wordbook .wb-hw-grid.wb-pr-grid > .wb-play-card.has-cover .wb-play-card-desc { -webkit-line-clamp: 5; }
+@media (min-width: 601px) { .wb-hw-grid.wb-pr-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .wb-hw-grid.wb-pr-grid.is-four { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+/* Practice's language card: the one course tile, centred, its choices under it. */
+.wordbook .wb-play-grid.wb-pr-learn { grid-template-columns: minmax(0, 340px); justify-content: center; }
 a.wb-play-card { text-decoration: none; }
 .wb-learn-simple:has(> .wb-learn-simple-cover) { padding-top: 0; overflow: hidden; }
 .wb-learn-simple-cover { display: block; max-width: none; width: calc(100% + 36px); margin: 0 -18px 2px; height: 150px; object-fit: contain; background: #F3F8F7; border-bottom: 1px solid var(--hairline, #E5E7EB); }

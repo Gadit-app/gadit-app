@@ -16,6 +16,9 @@ import { ReportQuestionButton } from "@/components/play/ReportQuestionButton";
 import { QText } from "@/components/play/QText";
 import { useRouter } from "next/navigation";
 import { homeworkCopy } from "@/lib/homework-i18n";
+import { practiceCopy, PRACTICE_DICTATION_FOR_INDIVIDUAL } from "@/lib/practice-i18n";
+import { learnCopy } from "@/components/play/learn/learn-i18n";
+import { useKidsMode } from "@/lib/use-kids-mode";
 import { intakeCopy } from "@/lib/homework-intake-i18n";
 import { dictCopy } from "@/lib/dictation-i18n";
 import { picCopy } from "@/lib/picture-pick-i18n";
@@ -407,18 +410,38 @@ function TraceCanvas({ word: given, rtl, clearLabel, cursive = false }: { word: 
   );
 }
 
-export function SpellClient() {
+/**
+ * area "practice" (Gadi 2026-10-22): the same page as a grown-up's
+ * Practice at /exercises. Four cards (reading with a comprehension check,
+ * getting ready for a test, dictation, learning a language) in place of the
+ * child's three, adult copy, no "to do" strip or "add homework", and the
+ * sections open straight from the cards. A child (a kid profile, or Kids
+ * Mode on) is sent to Homework instead.
+ */
+export function SpellClient({ area = "homework" }: { area?: "homework" | "practice" } = {}) {
   const { lang, dir } = useLang();
+  const adult = area === "practice";
+  const pr = practiceCopy(lang);
   const hc = homeworkCopy(lang);
   const ic = intakeCopy(lang);
   const dc = dictCopy(lang);
   const href = useHref();
   const router = useRouter();
-  const { user, plan, planReady, kidsAccess, loading: authLoading } = useAuth();
+  const { user, plan, planReady, kidsAccess, familyRole, loading: authLoading } = useAuth();
   // Dictation is a Family tool (Gadi 2026-09-19, narrowed 2026-10-06): the
   // Family plan, schools, and the older standalone Deep plan. Not the
   // Individual plan, not Clear, not Basic.
-  const hasAccess = plan === "deep" && kidsAccess;
+  // Practice is every Deep account (Individual too); its dictation and test
+  // cards follow the Family rule unless practice-i18n.ts says otherwise.
+  const hasAccess = adult ? plan === "deep" : plan === "deep" && kidsAccess;
+  const listTools = !adult || kidsAccess || PRACTICE_DICTATION_FOR_INDIVIDUAL;
+  const navKey = adult ? ("practice" as const) : ("spell" as const);
+  // A child keeps Homework: a kid profile, or Kids Mode on, lands there.
+  const [kidsMode] = useKidsMode();
+  useEffect(() => {
+    if (!adult || authLoading || !planReady) return;
+    if (familyRole === "kid" || (kidsAccess && kidsMode)) router.replace(href("/homework") + window.location.search);
+  }, [adult, authLoading, planReady, familyRole, kidsAccess, kidsMode, router, href]);
 
   // The non-English side of every pair = the learner's own language. English
   // UI users have no obvious "other" language, so they practice Hebrew (the
@@ -543,8 +566,16 @@ export function SpellClient() {
     e.target.value = "";
     if (f.length) { setIntakeFiles(f); setHw("add"); }
   };
+  // Practice has no "to do" strip and no "add homework", and its list
+  // sections are Family tools: an address that opens one of them without
+  // access (?v=test, ?v=dict, ?v=add) shows the cards.
   useEffect(() => {
-    if (!user) return;
+    if (!adult) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the address asked for a section this account does not have
+    if (hw === "add" || (!listTools && (hw === "test" || hw === "dict"))) setHwState("hub");
+  }, [adult, hw, listTools]);
+  useEffect(() => {
+    if (!user || adult) return;
     let alive = true;
     void (async () => {
       const headers = { Authorization: `Bearer ${await user.getIdToken()}` };
@@ -565,7 +596,7 @@ export function SpellClient() {
       } catch { /* no strip */ }
     })();
     return () => { alive = false; };
-  }, [user, lang]);
+  }, [user, lang, adult]);
 
   // Open the saved task: a list starts its dictation, a text opens in the
   // reader inside Homework, workbook pages play their lesson.
@@ -1196,11 +1227,11 @@ export function SpellClient() {
   // Sign-in is still being restored: a quiet frame, never the sign-in
   // prompt (Gadi 2026-10-12: it flashed for signed-in users).
   if (authLoading) {
-    return <ToolPage active="spell" width={640}><div style={{ minHeight: 240 }} /></ToolPage>;
+    return <ToolPage active={navKey} width={640}><div style={{ minHeight: 240 }} /></ToolPage>;
   }
   if (!user) {
     return (
-      <ToolPage active="spell" width={640}>
+      <ToolPage active={navKey} width={640}>
         <div>
           <div style={{ textAlign: "center", marginTop: 80 }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>✍️</div>
@@ -1215,19 +1246,19 @@ export function SpellClient() {
   // subscriber never sees the gate flash, then send non-Deep users to pricing.
   if (planReady && !hasAccess) {
     return (
-      <ToolPage active="spell" width={640}>
+      <ToolPage active={navKey} width={640}>
         <div>
           <div style={{ textAlign: "center", marginTop: 70 }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>✍️</div>
-            <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--ink,#0B1220)", marginBottom: 8 }}>{t("title", lang)}</h1>
+            <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--ink,#0B1220)", marginBottom: 8 }}>{adult ? pr.nav : t("title", lang)}</h1>
             {/* Inside the Play / iOS app: one neutral line, no plan or link. */}
             <p className="gd-buy" style={{ fontSize: 15, color: "var(--ink-muted,#6B7280)", maxWidth: "42ch", margin: "0 auto 20px" }}>
-              {misc("spellGate", lang)}
+              {adult ? pr.gate : misc("spellGate", lang)}
             </p>
             <p className="gd-play-only" style={{ fontSize: 15, color: "var(--ink-muted,#6B7280)", maxWidth: "42ch", margin: "0 auto 20px" }}>
               {playNotActive(lang)}
             </p>
-            <Link className="gd-buy" href={href("/families")} style={{ display: "inline-block", padding: "12px 24px", borderRadius: 12, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none" }}>
+            <Link className="gd-buy" href={href(adult ? "/pricing" : "/families")} style={{ display: "inline-block", padding: "12px 24px", borderRadius: 12, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none" }}>
               {misc("seePlans", lang)}
             </Link>
           </div>
@@ -1240,9 +1271,40 @@ export function SpellClient() {
   // looks like every other tool's.
   return (
     // Learning words is a grid of tiles as wide as the games' grid (four in a row).
-    <ToolPage active="spell" width={phase === "pick" && !setupFor && hw === "learn" ? 880 : 640} title={phase !== "pick" || hw === "hub" ? hc.title : setupFor || hw === "dict" ? (drill === "pic" ? pc.name : drill === "pick" ? dc.pickName : dc.name) : hw === "add" ? ic.add : hc[hw]} sub={phase === "pick" && hw === "hub" ? hc.sub : undefined}>
+    <ToolPage active={navKey} width={phase === "pick" && !setupFor && ((hw === "learn" && !adult) || (hw === "hub" && adult && listTools)) ? 880 : 640} title={phase !== "pick" || hw === "hub" ? (adult ? pr.nav : hc.title) : setupFor || hw === "dict" ? (drill === "pic" ? pc.name : drill === "pick" ? dc.pickName : adult ? pr.dict : dc.name) : hw === "add" ? ic.add : adult ? (hw === "learn" ? pr.lang : pr.test) : hc[hw]} sub={phase === "pick" && hw === "hub" ? (adult ? pr.sub : hc.sub) : undefined}>
       <div style={{ fontFamily: '"Rubik", system-ui, sans-serif' }}>
-        {phase === "pick" && hw === "hub" && (
+        {phase === "pick" && hw === "hub" && adult && (
+          <div className="wb-hw-hub">
+            {/* Practice (Gadi 2026-10-22): the four cards, in his order. */}
+            <div className={`wb-hw-grid wb-hw-tiles wb-pr-grid${listTools ? " is-four" : ""}`}>
+              <Link href={href("/read?from=practice")} className="wb-play-card has-cover wb-play-cat-precision">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="wb-play-card-cover" src="/play/hw-read.webp" alt="" width={720} height={480} />
+                <span className="wb-play-card-text"><span className="wb-play-card-title">{pr.read}</span><span className="wb-play-card-desc">{pr.readD}</span></span>
+              </Link>
+              {listTools && (
+                <button type="button" className="wb-play-card has-cover wb-play-cat-origin" onClick={() => setHw("test")}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="wb-play-card-cover" src="/play/hw-test.webp" alt="" width={720} height={480} />
+                  <span className="wb-play-card-text"><span className="wb-play-card-title">{pr.test}</span><span className="wb-play-card-desc">{pr.testD}</span></span>
+                </button>
+              )}
+              {listTools && (
+                <button type="button" className="wb-play-card has-cover wb-play-cat-structure" onClick={() => { setDrill("spell"); setHw("dict"); }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="wb-play-card-cover" src="/play/hw-dict.webp" alt="" width={720} height={480} />
+                  <span className="wb-play-card-text"><span className="wb-play-card-title">{pr.dict}</span><span className="wb-play-card-desc">{pr.dictD}</span></span>
+                </button>
+              )}
+              <button type="button" className="wb-play-card has-cover wb-play-cat-notebook" onClick={() => setHw("learn")}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="wb-play-card-cover" src="/play/hw-lessons.webp" alt="" width={720} height={480} />
+                <span className="wb-play-card-text"><span className="wb-play-card-title">{pr.lang}</span><span className="wb-play-card-desc">{pr.langD}</span></span>
+              </button>
+            </div>
+          </div>
+        )}
+        {phase === "pick" && hw === "hub" && !adult && (
           <div className="wb-hw-hub">
             {task && (
               <div className="wb-hw-tonight">
@@ -1321,14 +1383,16 @@ export function SpellClient() {
             words" to Learning words, every section to the Homework page. */}
         {(phase !== "pick" || hw !== "hub" || setupFor) && (() => {
           // The section the child is in, by name (for the exercise and setup).
-          const here = hw === "hub" ? hc.back : hw === "dict" ? dc.pick : hw === "test" ? hc.test : hw === "learn" ? hc.learn : hc.back;
+          const all = adult ? pr.back : hc.back;
+          const here = hw === "hub" ? all : hw === "dict" ? dc.pick : hw === "test" ? (adult ? pr.test : hc.test) : hw === "learn" ? (adult ? pr.lang : hc.learn) : all;
+          // In Practice, dictation opens from its own card: back goes to the cards.
           const back = phase !== "pick"
             ? { label: here, go: () => setPhase("pick") }
             : setupFor
             ? { label: here, go: () => setSetupFor(null) }
-            : hw === "dict"
+            : hw === "dict" && !adult
               ? { label: hc.learn, go: () => setHw("learn") }
-              : { label: hc.back, go: () => setHw("hub") };
+              : { label: all, go: () => setHw("hub") };
           return (
             <button type="button" className="wb-hw-back" onClick={back.go}>
               {dir === "rtl" ? "→" : "←"} {back.label}
@@ -1382,8 +1446,10 @@ export function SpellClient() {
         {phase === "pick" && !setupFor && hw === "learn" && (
           <div className="wb-learn-home">
             <style>{LEARN_CSS}</style>
-            <ul className="wb-play-grid wb-hw-tiles">
-              <LearnCard tile lang={lang} dir={dir} refreshKey={0} onState={() => {}} onLesson={(l) => router.push(href(`/play?lesson=${encodeURIComponent(l.id ?? "photo")}&from=learn`))} />
+            <ul className={`wb-play-grid wb-hw-tiles${adult ? " wb-pr-learn" : ""}`}>
+              <LearnCard tile lang={lang} dir={dir} refreshKey={0} onState={() => {}} onLesson={(l) => router.push(href(`/play?lesson=${encodeURIComponent(l.id ?? "photo")}&from=${adult ? "practice" : "learn"}`))} />
+              {/* Practice: the language course only (dictation has its own card). */}
+              {!adult && <>
               <li>
                 <button type="button" className="wb-play-card has-cover wb-play-cat-precision" onClick={() => { setDrill("spell"); setHw("dict"); }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1406,6 +1472,7 @@ export function SpellClient() {
                   <span className="wb-play-card-text"><span className="wb-play-card-title">{pc.name}</span><span className="wb-play-card-desc">{pc.sub}</span></span>
                 </button>
               </li>
+              </>}
             </ul>
           </div>
         )}
@@ -1647,14 +1714,14 @@ export function SpellClient() {
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
                 <span style={{ width: 34, height: 34, flex: "none", borderRadius: 10, background: "#EEF2F3", display: "grid", placeItems: "center", fontSize: 18 }}>📝</span>
                 <div>
-                  <div style={{ fontSize: 15.5, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{t("pasteTitle", lang)}</div>
+                  <div style={{ fontSize: 15.5, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{adult ? learnCopy(lang).listTitle : t("pasteTitle", lang)}</div>
                   <div style={{ fontSize: 12.5, color: "var(--ink-muted,#6B7280)" }}>{t("pasteSub", lang)}</div>
                 </div>
               </div>
               <textarea
                 value={listText}
                 onChange={(e) => { setListText(e.target.value); setCreateMsg(""); }}
-                placeholder={t("pastePlaceholder", lang)}
+                placeholder={adult ? learnCopy(lang).listPlaceholder : t("pastePlaceholder", lang)}
                 dir={dir === "rtl" ? "rtl" : "auto"}
                 rows={4}
                 maxLength={800}
@@ -1667,7 +1734,7 @@ export function SpellClient() {
                 </button>
                 <button type="button" onClick={() => photoRef.current?.click()} disabled={creating}
                   style={{ padding: "10px 16px", borderRadius: 11, border: `1.5px solid ${TEAL}`, background: "transparent", color: TEAL_INK, fontSize: 14, fontWeight: 700, cursor: "pointer", opacity: creating ? 0.6 : 1 }}>
-                  📷 {t("photoBtn", lang)}
+                  📷 {adult ? learnCopy(lang).photo : t("photoBtn", lang)}
                 </button>
                 <input ref={photoRef} type="file" accept="image/*" hidden
                   onChange={(e) => { const f = e.target.files?.[0]; if (f) void fromPhoto(f); e.target.value = ""; }} />
