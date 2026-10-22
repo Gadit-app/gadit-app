@@ -5,6 +5,7 @@ import { dropSoundAlikeMeanings } from "@/lib/homophones-he";
 import { NextRequest, NextResponse, after } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
+import { saveLookupToNotebook } from "@/lib/notebook-save";
 import { logAiUsage, usageFrom, TEXT_MODEL, TEXT_MODEL_FAST, SMART_MODEL, FALLBACK_MODEL, costWithCache } from "@/lib/ai-cost";
 import { adminBudgetExceeded, hardCapReached, ADMIN_DAILY_CAP } from "@/lib/ai-budget";
 import { alertEngineDown } from "@/lib/engine-alert";
@@ -1717,6 +1718,9 @@ export async function POST(req: NextRequest) {
             await setCachedResult(cacheKey, await fixEtymology(cached, word, uiLangName, { force: true }));
           });
         }
+        // Every finished lookup goes to the notebook, even when the person
+        // leaves before the page saves it (Gadi 2026-10-22).
+        if (userInfo && !userInfo.impersonating) after(() => saveLookupToNotebook(userInfo.userId, userInfo.plan, served as Parameters<typeof saveLookupToNotebook>[2]).catch(() => {}));
         // Cached response — send as a single SSE event so the client can use one code path
         const payload = { ...served, fromCache: true };
         const body = `data: ${JSON.stringify({ type: "done", result: payload })}\n\n`;
@@ -2033,9 +2037,14 @@ export async function POST(req: NextRequest) {
             // after the stream closed, so a paid generation was lost and
             // bought again on the next search (found 2026-10-06).
             const cacheWrite = setCachedResult(cacheKey, acceptedResult);
+            // Inside the stream: awaited with the cache write, before close.
+            const nbSave = userInfo && !userInfo.impersonating && !isRefresh
+              ? saveLookupToNotebook(userInfo.userId, userInfo.plan, acceptedResult as Parameters<typeof saveLookupToNotebook>[2]).catch(() => "skipped")
+              : null;
             const doneEvent = `data: ${JSON.stringify({ type: "done", result: acceptedResult })}\n\n`;
             safeEnqueue(encoder.encode(doneEvent));
             await cacheWrite;
+            if (nbSave) await nbSave;
           } else {
             // All main retries failed validation. Three-step salvage,
             // each step more aggressive than the last:
@@ -2088,9 +2097,13 @@ export async function POST(req: NextRequest) {
 
             if (salvaged) {
               const salvagedWrite = setCachedResult(cacheKey, salvaged);
+              const nbSave2 = userInfo && !userInfo.impersonating && !isRefresh
+                ? saveLookupToNotebook(userInfo.userId, userInfo.plan, salvaged as Parameters<typeof saveLookupToNotebook>[2]).catch(() => "skipped")
+                : null;
               const doneEvent = `data: ${JSON.stringify({ type: "done", result: salvaged })}\n\n`;
               safeEnqueue(encoder.encode(doneEvent));
               await salvagedWrite;
+              if (nbSave2) await nbSave2;
             } else {
               console.error("All attempts (1 streamed + 2 retries + etymology fallback + sanitise) failed, surfacing error");
               const errorEvent = `data: ${JSON.stringify({ type: "error", message: "We hit a temporary generation glitch. Please try again." })}\n\n`;

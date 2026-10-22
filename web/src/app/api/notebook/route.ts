@@ -2,6 +2,7 @@ import { isNotFoundMeaning } from "@/lib/not-a-word";
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { FREE_NOTEBOOK_MAX } from "@/lib/plan-copy";
+import { makeWordId } from "@/lib/notebook-save";
 
 /**
  * Word notebook. Paid plans unlimited; free accounts up to FREE_NOTEBOOK_MAX
@@ -20,18 +21,6 @@ import { FREE_NOTEBOOK_MAX } from "@/lib/plan-copy";
  *   timesReviewed: number           — total review attempts
  *   timesCorrect: number            — count of "I knew it" answers
  */
-
-function makeWordId(language: string, word: string): string {
-  // Firestore doc IDs cannot contain "/", but we keep it simple and just
-  // strip whitespace and lowercase. Two-language words don't collide because
-  // we prefix with the language.
-  const safe = `${language}_${word}`
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "_")
-    .replace(/[^\p{L}\p{N}_]/gu, ""); // keep only letters/numbers/underscore from any script
-  return safe.slice(0, 200) || "untitled";
-}
 
 export async function GET(req: NextRequest) {
   try {
