@@ -30,7 +30,10 @@ import { buildUnsubUrl } from "@/lib/email-drip/registry";
  * And the same numbers for the month before, for the comparison.
  *
  * Copy: Hebrew for Israeli curricula, English for the rest (schoolLang, as
- * the school pilot series). Never prices, pausing or cancelling.
+ * the school pilot series), unless the school's own UI language (the owner
+ * account's users/{schoolId}.uiLang) is one the report is translated into:
+ * Arabic (Arab state schools in Israel), Afrikaans or isiZulu (South Africa)
+ * (2026-10-22, schoolReportLang). Never prices, pausing or cancelling.
  * Ledger: schools/{id}.monthlyReportSent = "YYYY-MM" (the month reported).
  * Switch: emailConfig/schoolMonthlyReport.enabled (off until Gadi approves).
  * A school can be left out with schools/{id}.monthlyReport.enabled === false;
@@ -46,6 +49,19 @@ export async function schoolMonthlyReportEnabled(db: Firestore): Promise<boolean
   } catch {
     return false;
   }
+}
+
+/** Languages the report is written in. */
+export type SchoolReportLang = "he" | "en" | "ar" | "af" | "zu";
+const REPORT_LANGS: readonly string[] = ["he", "en", "ar", "af", "zu"];
+export const isSchoolReportLang = (l: unknown): l is SchoolReportLang => typeof l === "string" && REPORT_LANGS.includes(l);
+
+/** The report's language: the curriculum rule (schoolLang: Hebrew for
+ *  Israeli curricula, else English), unless the school's UI language is
+ *  another language the report is translated into (ar, af, zu). */
+export function schoolReportLang(curriculum: string | undefined, uiLang: unknown): SchoolReportLang {
+  if (isSchoolReportLang(uiLang) && uiLang !== "he" && uiLang !== "en") return uiLang;
+  return schoolLang(curriculum || undefined);
 }
 
 // ── Months ─────────────────────────────────────────────────────────────
@@ -89,7 +105,7 @@ export type SchoolMonthReport = {
   curriculum: string;
   levels: string[];
   tz: string;
-  lang: "he" | "en";
+  lang: SchoolReportLang;
   /** The daily digest's recipient. */
   to: string | null;
   isDemo: boolean;
@@ -243,7 +259,7 @@ export async function schoolMonthReport(db: Firestore, schoolId: string, month: 
   const previous = numbers(prev);
   const curriculum = String(s.curriculum ?? "");
   const levels = Array.isArray(s.levels) ? (s.levels as unknown[]).filter((x): x is string => typeof x === "string") : [];
-  const lang: "he" | "en" = opts.lang === "he" || opts.lang === "en" ? opts.lang : schoolLang(curriculum || undefined);
+  const lang: SchoolReportLang = isSchoolReportLang(opts.lang) ? opts.lang : schoolReportLang(curriculum, owner.get("uiLang"));
   const ownerEmail = (owner.get("email") as string | undefined) ?? null;
   const to = typeof s.contactEmail === "string" && s.contactEmail.trim() ? s.contactEmail.trim() : null;
   const everProjected = new Set(projections.docs.map((p) => String(p.get("setId") ?? "")));
@@ -297,7 +313,7 @@ const ZA_SETS = zaSets as Record<string, { words: string[] }>;
 
 async function suggestIdea(
   db: Firestore,
-  p: { curriculum: string; levels: string[]; lang: "he" | "en"; forMonth: string; exclude: Set<string>; current: MonthNumbers; previous: MonthNumbers },
+  p: { curriculum: string; levels: string[]; lang: SchoolReportLang; forMonth: string; exclude: Set<string>; current: MonthNumbers; previous: MonthNumbers },
 ): Promise<Idea | null> {
   const cat = p.curriculum === "il-he" || p.curriculum === "il-ar" || p.curriculum === "za-caps" ? (p.curriculum as CatalogId) : null;
   if (!cat) return null;
@@ -350,8 +366,11 @@ async function suggestIdea(
     } catch { /* no words shown */ }
   }
 
-  const subjectName = cat === "za-caps" ? zaSubjectName(pick.s) : cat === "il-ar" ? arSubject(pick.s)?.he ?? pick.s : curSubject(pick.s)?.he ?? pick.s;
-  const grade = cat === "za-caps" ? (pick.g ? `Grade ${pick.g}` : "") : gradeLabel(pick.g);
+  const subjectName =
+    cat === "za-caps" ? zaSubjectName(pick.s)
+    : cat === "il-ar" ? (p.lang === "he" ? arSubject(pick.s)?.he : arSubject(pick.s)?.ar) ?? pick.s
+    : curSubject(pick.s)?.he ?? pick.s;
+  const grade = cat === "za-caps" ? (pick.g ? COPY[p.lang].zaGrade(pick.g) : "") : p.lang === "ar" ? gradeLabelAr(pick.g) : gradeLabel(pick.g);
   const title = cat === "il-ar" && p.lang === "he" ? pick.th || pick.t : pick.t;
   return {
     setId: pick.id,
@@ -369,7 +388,25 @@ async function suggestIdea(
 const SITE = "https://www.gadit.app";
 const MONTHS_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const MONTHS_HE = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];
-const monthName = (m: string, he: boolean) => (he ? MONTHS_HE : MONTHS_EN)[+m.slice(5, 7) - 1];
+// Arabic: the Levantine month names used by Arab schools in Israel.
+const MONTHS_AR = ["كانون الثاني", "شباط", "آذار", "نيسان", "أيار", "حزيران", "تموز", "آب", "أيلول", "تشرين الأول", "تشرين الثاني", "كانون الأول"];
+const MONTHS_AF = ["Januarie", "Februarie", "Maart", "April", "Mei", "Junie", "Julie", "Augustus", "September", "Oktober", "November", "Desember"];
+const MONTHS_ZU = ["Januwari", "Februwari", "Mashi", "Ephreli", "Meyi", "Juni", "Julayi", "Agasti", "Septemba", "Okthoba", "Novemba", "Disemba"];
+const MONTHS: Record<SchoolReportLang, string[]> = { en: MONTHS_EN, he: MONTHS_HE, ar: MONTHS_AR, af: MONTHS_AF, zu: MONTHS_ZU };
+const monthName = (m: string, lang: SchoolReportLang) => MONTHS[lang][+m.slice(5, 7) - 1];
+const RTL = new Set<SchoolReportLang>(["he", "ar"]);
+
+/** An Israeli grade ("ג", "ג-ד", "גן") in Arabic, with Western digits as the
+ *  Arab state schools write them; a range in words ("3 إلى 4"). */
+const HE_GRADE: Record<string, number> = { "א": 1, "ב": 2, "ג": 3, "ד": 4, "ה": 5, "ו": 6, "ז": 7, "ח": 8, "ט": 9, "י": 10, "יא": 11, "יב": 12 };
+function gradeLabelAr(g: string): string {
+  const s = (g || "").replace(/['"׳״]/g, "").trim();
+  if (!s) return "";
+  if (s.includes("גן")) return "الروضة";
+  const [a, b] = s.split("-").map((x) => HE_GRADE[x.trim()]);
+  if (!a) return "";
+  return b ? `الصفوف ${a} إلى ${b}` : `الصف ${a}`;
+}
 
 function esc(s: string): string {
   return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c] as string);
@@ -380,12 +417,14 @@ function textHtml(s: string, rtl: boolean): string {
   const e = esc(s);
   return rtl ? e.replace(/[A-Za-z0-9][A-Za-z0-9']*(?:[ .&/][A-Za-z0-9']+)*/g, (m) => `<span dir="ltr">${m}</span>`) : e;
 }
-function link(lang: "he" | "en", path: string, content: string): string {
+function link(lang: SchoolReportLang, path: string, content: string): string {
   const base = lang === "en" ? SITE : `${SITE}/${lang}`;
   const sep = path.includes("?") ? "&" : "?";
   return `${base}${path}${sep}utm_source=school-monthly&utm_medium=email&utm_campaign=school-monthly&utm_content=${content}`;
 }
-const fmt = (n: number, he: boolean) => n.toLocaleString(he ? "he-IL" : "en-US");
+// Western digits everywhere (Arabic too); South Africa groups with a space.
+const LOCALE: Record<SchoolReportLang, string> = { he: "he-IL", en: "en-US", ar: "en-US", af: "af-ZA", zu: "en-ZA" };
+const fmt = (n: number, lang: SchoolReportLang) => n.toLocaleString(LOCALE[lang]);
 /** Hebrew "in <name>": a hyphen before a Latin or digit start (ב-Greenwarth). */
 const heIn = (name: string) => (/^ה[֐-׿]/.test(name) ? `ב${name.slice(1)}` : /^[֐-׿]/.test(name) ? `ב${name}` : `ב-${name}`);
 
@@ -419,6 +458,8 @@ type Copy = {
   ideaOwnLink: string;
   cta: string;
   optOut: string;
+  /** A South African grade ("Grade 5") in this language. */
+  zaGrade: (g: string) => string;
 };
 
 const EN: Copy = {
@@ -432,15 +473,15 @@ const EN: Copy = {
   firstMonth: (month) => `${month} was your first month on Gadit, so there is nothing to compare with yet.`,
   nothingBefore: (prev) => `There was no use in ${prev} to compare with.`,
   row: (label, now, before, prev) => {
-    if (now === before) return `${label}: ${fmt(now, false)}, the same as ${prev}`;
-    if (!before) return `${label}: ${fmt(now, false)} (none in ${prev})`;
-    return `${label}: ${fmt(now, false)}, ${now > before ? "up" : "down"} from ${fmt(before, false)} in ${prev}`;
+    if (now === before) return `${label}: ${fmt(now, "en")}, the same as ${prev}`;
+    if (!before) return `${label}: ${fmt(now, "en")} (none in ${prev})`;
+    return `${label}: ${fmt(now, "en")}, ${now > before ? "up" : "down"} from ${fmt(before, "en")} in ${prev}`;
   },
   labels: { lookups: "Lookups", words: "Different words", days: "Days of use", projected: "Words projected in class" },
   top: "The 10 most looked-up words",
   noWords: "No words were looked up this month.",
   byClass: "By class",
-  classRow: (name, teacher, n) => `${name || "A class"}${teacher ? ` (${teacher})` : ""}: ${fmt(n, false)} ${n === 1 ? "lookup" : "lookups"}`,
+  classRow: (name, teacher, n) => `${name || "A class"}${teacher ? ` (${teacher})` : ""}: ${fmt(n, "en")} ${n === 1 ? "lookup" : "lookups"}`,
   inClass: "In class with Gadit",
   projected: (w, s) => `Projected on the board: ${w} ${w === 1 ? "word" : "words"} from ${s} word ${s === 1 ? "set" : "sets"}.`,
   fromSets: "The sets:",
@@ -455,6 +496,7 @@ const EN: Copy = {
   ideaOwnLink: "Open the word sets",
   cta: "Open the school dashboard",
   optOut: "This report comes once a month, on the 1st.",
+  zaGrade: (g) => `Grade ${g}`,
 };
 
 const HE: Copy = {
@@ -468,15 +510,15 @@ const HE: Copy = {
   firstMonth: (month) => `${month} היה החודש הראשון שלכם ב-Gadit, אז עוד אין למה להשוות.`,
   nothingBefore: (prev) => `ב${prev} לא היה שימוש, אז אין למה להשוות.`,
   row: (label, now, before, prev) => {
-    if (now === before) return `${label}: ${fmt(now, true)}, כמו ב${prev}`;
-    if (!before) return `${label}: ${fmt(now, true)} (ב${prev}: אין)`;
-    return `${label}: ${fmt(now, true)}, ${now > before ? "עלייה" : "ירידה"} מ-${fmt(before, true)} ב${prev}`;
+    if (now === before) return `${label}: ${fmt(now, "he")}, כמו ב${prev}`;
+    if (!before) return `${label}: ${fmt(now, "he")} (ב${prev}: אין)`;
+    return `${label}: ${fmt(now, "he")}, ${now > before ? "עלייה" : "ירידה"} מ-${fmt(before, "he")} ב${prev}`;
   },
   labels: { lookups: "חיפושי מילים", words: "מילים שונות", days: "ימי שימוש", projected: "מילים שהוקרנו בכיתה" },
   top: "10 המילים שחיפשו הכי הרבה",
   noWords: "החודש לא חיפשו מילים.",
   byClass: "לפי כיתה",
-  classRow: (name, teacher, n) => `${name || "כיתה"}${teacher ? ` (${teacher})` : ""}: ${n === 1 ? "חיפוש אחד" : `${fmt(n, true)} חיפושים`}`,
+  classRow: (name, teacher, n) => `${name || "כיתה"}${teacher ? ` (${teacher})` : ""}: ${n === 1 ? "חיפוש אחד" : `${fmt(n, "he")} חיפושים`}`,
   inClass: "מה עשיתם עם Gadit בכיתה",
   projected: (w, s) => `הקרנתם על הלוח ${w === 1 ? "מילה אחת" : `${w} מילים`} ${s === 1 ? "מקבוצת מילים אחת" : `מ-${s} קבוצות מילים`}.`,
   fromSets: "הקבוצות:",
@@ -496,19 +538,137 @@ const HE: Copy = {
   ideaOwnLink: "לקבוצות המילים",
   cta: "ללוח הבקרה של בית הספר",
   optOut: "הסיכום הזה מגיע פעם בחודש, ב-1 לחודש.",
+  zaGrade: (g) => `כיתה ${g}`,
 };
+
+// Arabic (2026-10-22): polite plural to the school staff; counts are written
+// as "label: number" so no noun has to agree with a number.
+const AR: Copy = {
+  subject: (name, month, partial) => (partial ? `${name} على Gadit: ${month} حتى اليوم` : `${name} على Gadit: ملخّص شهر ${month}`),
+  hello: "مرحبًا،",
+  intro: (name, month, partial) => (partial ? `إليكم ملخّص شهر ${month} حتى اليوم في ${name}، على Gadit.` : `إليكم ملخّص شهر ${month} في ${name}، على Gadit.`),
+  oneLine: (month, partial) => (partial ? `${month} حتى اليوم` : `${month} في لمحة`),
+  tiles: ["عمليات البحث عن كلمات", "كلمات مختلفة", "أيام الاستخدام"],
+  inClasses: (n) => (n === 1 ? "في صفّ واحد." : `عدد الصفوف: ${n}.`),
+  compare: (prev) => `مقارنةً بشهر ${prev}`,
+  firstMonth: (month) => `كان ${month} شهركم الأول على Gadit، لذلك لا يوجد بعد ما نقارن به.`,
+  nothingBefore: (prev) => `لم يكن هناك استخدام في ${prev}، لذلك لا يوجد ما نقارن به.`,
+  row: (label, now, before, prev) => {
+    if (now === before) return `${label}: ${fmt(now, "ar")}، كما في ${prev}`;
+    if (!before) return `${label}: ${fmt(now, "ar")} (في ${prev}: لا شيء)`;
+    return `${label}: ${fmt(now, "ar")}، ${now > before ? "ارتفاع" : "انخفاض"} من ${fmt(before, "ar")} في ${prev}`;
+  },
+  labels: { lookups: "عمليات البحث عن كلمات", words: "كلمات مختلفة", days: "أيام الاستخدام", projected: "كلمات عُرضت في الصف" },
+  top: "الكلمات العشر الأكثر بحثًا",
+  noWords: "لم يُبحث عن أي كلمة هذا الشهر.",
+  byClass: "حسب الصف",
+  classRow: (name, teacher, n) => `${name || "صفّ"}${teacher ? ` (${teacher})` : ""}: ${n === 1 ? "عملية بحث واحدة" : `عمليات البحث: ${fmt(n, "ar")}`}`,
+  inClass: "ماذا فعلتم مع Gadit في الصف",
+  projected: (w, s) => `عرضتم على اللوح كلمات من مجموعات الكلمات. عدد الكلمات: ${w}، وعدد المجموعات: ${s}.`,
+  fromSets: "المجموعات:",
+  quizzes: (q, g) => [q ? `المسابقات الصفّية: ${q}` : "", g ? `الألعاب الصفّية: ${g}` : ""].filter(Boolean).join("، ") + ".",
+  noClass: "لم تُعرض هذا الشهر مجموعات كلمات في الصف. فتح مجموعة على اللوح يتمّ بنقرة واحدة، ولكل كلمة صورة وتعريف وأمثلة.",
+  idea: (month) => `فكرة لشهر ${month}`,
+  ideaUnit: (i) => `${[i.subject, i.grade].filter(Boolean).join("، ")}: ${i.title}.`,
+  ideaWords: "الكلمات المفتاحية:",
+  ideaHow: "اعرضوا الكلمات في بداية الدرس، واختتموا بمسابقة للصف.",
+  ideaLink: "إلى مجموعة الكلمات",
+  ideaOwn: (w) => `أنشئوا مجموعة كلمات خاصة بكم من أبرز كلمات هذا الشهر (${w.join("، ")})، وشغّلوا عليها مسابقة للصف.`,
+  ideaOwnLink: "إلى مجموعات الكلمات",
+  cta: "إلى لوحة تحكّم المدرسة",
+  optOut: "يصلكم هذا الملخّص مرة في الشهر، في اليوم الأول منه.",
+  zaGrade: (g) => `الصف ${g}`,
+};
+
+// Afrikaans (2026-10-22): "u" to the school, as in formal school letters.
+const AF: Copy = {
+  subject: (name, month, partial) => (partial ? `${name} op Gadit: ${month} tot dusver` : `${name} op Gadit: u verslag vir ${month}`),
+  hello: "Goeie dag,",
+  intro: (name, month, partial) => (partial ? `Hier is die opsomming van ${month} tot dusver vir ${name} op Gadit.` : `Hier is die opsomming van ${month} vir ${name} op Gadit.`),
+  oneLine: (month, partial) => (partial ? `${month} tot dusver` : `${month} in een oogopslag`),
+  tiles: ["opsoeke", "verskillende woorde", "gebruiksdae"],
+  inClasses: (n) => (n === 1 ? "In 1 klas." : `In ${n} klasse.`),
+  compare: (prev) => `In vergelyking met ${prev}`,
+  firstMonth: (month) => `${month} was u eerste maand op Gadit, so daar is nog niks om mee te vergelyk nie.`,
+  nothingBefore: (prev) => `Daar was geen gebruik in ${prev} om mee te vergelyk nie.`,
+  row: (label, now, before, prev) => {
+    if (now === before) return `${label}: ${fmt(now, "af")}, dieselfde as in ${prev}`;
+    if (!before) return `${label}: ${fmt(now, "af")} (niks in ${prev} nie)`;
+    return `${label}: ${fmt(now, "af")}, ${now > before ? "meer" : "minder"} as ${fmt(before, "af")} in ${prev}`;
+  },
+  labels: { lookups: "Opsoeke", words: "Verskillende woorde", days: "Gebruiksdae", projected: "Woorde in die klas geprojekteer" },
+  top: "Die 10 woorde wat die meeste opgesoek is",
+  noWords: "Geen woorde is hierdie maand opgesoek nie.",
+  byClass: "Per klas",
+  classRow: (name, teacher, n) => `${name || "’n Klas"}${teacher ? ` (${teacher})` : ""}: ${fmt(n, "af")} ${n === 1 ? "opsoek" : "opsoeke"}`,
+  inClass: "In die klas met Gadit",
+  projected: (w, s) => `Op die bord geprojekteer: ${w} ${w === 1 ? "woord" : "woorde"} uit ${s} ${s === 1 ? "woordstel" : "woordstelle"}.`,
+  fromSets: "Die stelle:",
+  quizzes: (q, g) => [q ? `${q} ${q === 1 ? "klasvasvra" : "klasvasvrae"}` : "", g ? `${g} ${g === 1 ? "klasspeletjie" : "klasspeletjies"}` : ""].filter(Boolean).join(" en ") + ".",
+  noClass: "Geen woordstelle is hierdie maand in die klas geprojekteer nie. Dit kos net een klik om ’n stel op die bord oop te maak, en elke woord het ’n prent, ’n definisie en voorbeelde.",
+  idea: (month) => `’n Idee vir ${month}`,
+  ideaUnit: (i) => `${[i.grade, i.subject].filter(Boolean).join(" ")}${i.term ? `, kwartaal ${i.term}` : ""}: ${i.title}.`,
+  ideaWords: "Sleutelwoorde:",
+  ideaHow: "Projekteer die woorde aan die begin van die les, en sluit af met die klasvasvra.",
+  ideaLink: "Maak hierdie woordstel oop",
+  ideaOwn: (w) => `Maak u eie woordstel van hierdie maand se topwoorde (${w.join(", ")}) en hou die klasvasvra daaroor.`,
+  ideaOwnLink: "Maak die woordstelle oop",
+  cta: "Maak die skoolpaneelbord oop",
+  optOut: "Hierdie verslag kom een keer per maand, op die 1ste van die maand.",
+  zaGrade: (g) => `Graad ${g}`,
+};
+
+// isiZulu (2026-10-22): plural "ni-" to the school staff; counts as "label: number".
+const ZU: Copy = {
+  subject: (name, month, partial) => (partial ? `${name} kwa-Gadit: u-${month} kuze kube manje` : `${name} kwa-Gadit: umbiko wenyanga ka-${month}`),
+  hello: "Sanibonani,",
+  intro: (name, month, partial) => (partial ? `Nawu umbiko ka-${month} kuze kube manje, we-${name} kwa-Gadit.` : `Nawu umbiko wenyanga ka-${month}, we-${name} kwa-Gadit.`),
+  oneLine: (month, partial) => (partial ? `U-${month} kuze kube manje` : `U-${month} kafushane`),
+  tiles: ["ukusesha", "amagama ahlukene", "izinsuku zokusebenzisa"],
+  inClasses: (n) => (n === 1 ? "Ekilasini elilodwa." : `Amakilasi: ${n}.`),
+  compare: (prev) => `Uma kuqhathaniswa no-${prev}`,
+  firstMonth: (month) => `U-${month} ubeyinyanga yenu yokuqala kwa-Gadit, ngakho akukabi khona okungaqhathaniswa nakho.`,
+  nothingBefore: (prev) => `Akubanga khona ukusetshenziswa ngo-${prev}, ngakho akukho okungaqhathaniswa nakho.`,
+  row: (label, now, before, prev) => {
+    if (now === before) return `${label}: ${fmt(now, "zu")}, njengango-${prev}`;
+    if (!before) return `${label}: ${fmt(now, "zu")} (ngo-${prev}: lutho)`;
+    return `${label}: ${fmt(now, "zu")}, ${now > before ? "kukhuphukile" : "kwehlile"} kusuka ku-${fmt(before, "zu")} ngo-${prev}`;
+  },
+  labels: { lookups: "Ukusesha", words: "Amagama ahlukene", days: "Izinsuku zokusebenzisa", projected: "Amagama aboniswe ekilasini" },
+  top: "Amagama ayi-10 aseshwe kakhulu",
+  noWords: "Awekho amagama aseshiwe kule nyanga.",
+  byClass: "Ngekilasi",
+  classRow: (name, teacher, n) => `${name || "Ikilasi"}${teacher ? ` (${teacher})` : ""}: ukusesha ${fmt(n, "zu")}`,
+  inClass: "Ekilasini ne-Gadit",
+  projected: (w, s) => `Kuboniswe ebhodini amagama avela kumaqoqo amagama. Amagama: ${w}, amaqoqo: ${s}.`,
+  fromSets: "Amaqoqo:",
+  quizzes: (q, g) => [q ? `Ama-quiz ekilasi: ${q}` : "", g ? `Imidlalo yekilasi: ${g}` : ""].filter(Boolean).join(", ") + ".",
+  noClass: "Awekho amaqoqo amagama aboniswe ekilasini kule nyanga. Ukuvula iqoqo ebhodini kuthatha ukuchofoza okukodwa, futhi igama ngalinye linesithombe, incazelo nezibonelo.",
+  idea: (month) => `Isiphakamiso sika-${month}`,
+  ideaUnit: (i) => `${[i.grade, i.subject].filter(Boolean).join(" ")}${i.term ? `, ithemu ${i.term}` : ""}: ${i.title}.`,
+  ideaWords: "Amagama abalulekile:",
+  ideaHow: "Bonisani amagama ekuqaleni kwesifundo, bese niqeda nge-quiz yekilasi.",
+  ideaLink: "Vula leli qoqo lamagama",
+  ideaOwn: (w) => `Yenzani iqoqo lenu lamagama ngamagama aseshwe kakhulu kule nyanga (${w.join(", ")}), bese nenza i-quiz yekilasi ngalo.`,
+  ideaOwnLink: "Vula amaqoqo amagama",
+  cta: "Vula ideshibhodi yesikole",
+  optOut: "Lo mbiko ufika kanye ngenyanga, ngosuku lokuqala lwenyanga.",
+  zaGrade: (g) => `Ibanga ${g}`,
+};
+
+const COPY: Record<SchoolReportLang, Copy> = { en: EN, he: HE, ar: AR, af: AF, zu: ZU };
 
 /** Pure renderer (cron and admin preview). */
 export function renderSchoolMonthReport(r: SchoolMonthReport, opts: { unsubscribeUrl: string }): { subject: string; html: string; text: string } {
-  const he = r.lang === "he";
-  const C = he ? HE : EN;
+  const C = COPY[r.lang] ?? EN;
+  const he = RTL.has(r.lang); // right-to-left (he, ar)
   const dir = he ? "rtl" : "ltr";
   const align = he ? "right" : "left";
   const cur = r.current;
   const prv = r.previous;
-  const month = monthName(cur.month, he);
-  const prevName = monthName(prv.month, he);
-  const nextName = monthName(nextMonthKey(cur.month), he);
+  const month = monthName(cur.month, r.lang);
+  const prevName = monthName(prv.month, r.lang);
+  const nextName = monthName(nextMonthKey(cur.month), r.lang);
   const t = (s: string) => textHtml(s, he);
 
   const P = (html: string, extra = "") => `<p dir="${dir}" style="text-align:${align};font-size:15px;line-height:1.7;margin:0 0 12px;color:#374151;${extra}">${html}</p>`;
@@ -522,7 +682,7 @@ export function renderSchoolMonthReport(r: SchoolMonthReport, opts: { unsubscrib
 
   // 1. The month in one line.
   const tile = (n: number, label: string) =>
-    `<td width="33%" style="padding:12px 6px;text-align:center;vertical-align:top;"><div style="font-size:28px;font-weight:700;color:#0E7490;line-height:1.1;">${fmt(n, he)}</div><div style="font-size:13px;color:#6B7280;margin-top:4px;">${esc(label)}</div></td>`;
+    `<td width="33%" style="padding:12px 6px;text-align:center;vertical-align:top;"><div style="font-size:28px;font-weight:700;color:#0E7490;line-height:1.1;">${fmt(n, r.lang)}</div><div style="font-size:13px;color:#6B7280;margin-top:4px;">${esc(label)}</div></td>`;
   parts.push(H(C.oneLine(month, r.partial)));
   parts.push(
     `<table role="presentation" dir="${dir}" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F6FAF9;border:1px solid #E1EAE7;border-radius:12px;margin:0 0 8px;"><tr>${tile(cur.lookups, C.tiles[0])}${tile(cur.distinctWords, C.tiles[1])}${tile(cur.activeDays, C.tiles[2])}</tr></table>`,

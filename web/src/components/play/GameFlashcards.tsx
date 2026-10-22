@@ -26,7 +26,7 @@
  */
 
 import { WaitText } from "@/components/WaitText";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { PlayWord } from "@/lib/play-engine";
 import { shuffle, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
@@ -198,6 +198,8 @@ export function GameFlashcards({
   focusWord,
   mode = "words",
   skipPicker = false,
+  preReader = false,
+  wordFlag,
 }: {
   pool: PlayWord[];
   onExit: () => void;
@@ -207,6 +209,13 @@ export function GameFlashcards({
   mode?: FlashMode;
   /** Learning mode: play the given words straight away (no source picker). */
   skipPicker?: boolean;
+  /** A lesson for a child who doesn't read the language yet (2026-10-22):
+   *  the front is the picture and the sound, not the written word (a word
+   *  with no picture yet still shows the word). Always word first. */
+  preReader?: boolean;
+  /** Something to show under a flipped card for its word, e.g. "wrong
+   *  translation?" on a Hebrew-as-a-second-language lesson. */
+  wordFlag?: (word: PlayWord) => ReactNode;
 }) {
   const f = flashCopy(lang);
   const title = mode === "words" ? f.wordsTitle : f.defsTitle;
@@ -431,7 +440,7 @@ export function GameFlashcards({
   const [showPics, setShowPics] = useState(() => { try { return localStorage.getItem("gadit-flash-pics") !== "0"; } catch { return true; } });
   const togglePics = () => setShowPics((v) => { try { localStorage.setItem("gadit-flash-pics", v ? "0" : "1"); } catch { /* private mode */ } return !v; });
   const anyPics = first.some((c) => !!picOf(c));
-  const deckHasPics = showPics && anyPics;
+  const deckHasPics = (showPics || preReader) && anyPics;
   const [i, setI] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [reverse, setReverse] = useState(false);
@@ -439,6 +448,13 @@ export function GameFlashcards({
   const dc = DIR_COPY[lang] ?? DIR_COPY.en;
   const [known, setKnown] = useState(0);
   const [missed, setMissed] = useState<Card[]>([]);
+  // A child who doesn't read yet hears each new card by itself.
+  const sayRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!preReader || !deck || i >= deck.length) return;
+    const tm = setTimeout(() => sayRef.current?.querySelector("button")?.click(), 450);
+    return () => clearTimeout(tm);
+  }, [preReader, deck, i]);
 
   // A set someone made (or reopened) is saved with their dictation sets at
   // the end, so it's waiting next time here and in /spell.
@@ -585,12 +601,12 @@ export function GameFlashcards({
   // A learning session or a lesson brings its own words, not the notebook.
   const sourceLabel = picked ? f.srcTopic(picked.title) : skipPicker ? "" : f.srcMine;
   const pair = card.pair;
-  const meaningFirst = mode === "meanings" && (defDir === "meaning" || (defDir === "mix" && !!card.alt));
+  const meaningFirst = !preReader && mode === "meanings" && (defDir === "meaning" || (defDir === "mix" && !!card.alt));
   const frontText = meaningFirst ? card.word.meaning : mode === "words" && pair && reverse ? pair.pair : card.word.word;
   const backText = meaningFirst ? card.word.word : mode === "words" && pair ? (reverse ? card.word.word : pair.pair) : card.word.meaning;
   const askLang = mode === "words" && pair ? langLabel(reverse ? wordLangName : pair.pairLang, lang) : "";
   const example = mode === "meanings" && !meaningFirst ? card.word.examples?.[0] : undefined;
-  const pic = showPics ? picOf(card) : undefined;
+  const pic = showPics || preReader ? picOf(card) : undefined;
   // The speaker reads the side on screen, in its own language (Gat's mother,
   // 2026-10-22: an English card was read out in Hebrew).
   const shownIsPair = mode === "words" && !!pair && (flipped ? !reverse : reverse);
@@ -608,7 +624,7 @@ export function GameFlashcards({
         {mode === "words" && !flipped && (
           <button type="button" className="wb-flash-swap" onClick={() => setReverse((r) => !r)}>{f.swap}</button>
         )}
-        {mode === "meanings" && !flipped && (
+        {mode === "meanings" && !flipped && !preReader && (
           <div className="wb-flash-dirs" role="radiogroup">
             {(["mix", "word", "meaning"] as DefDir[]).map((d) => (
               <button key={d} type="button" role="radio" aria-checked={defDir === d} className={`wb-flash-dir${defDir === d ? " is-on" : ""}`} onClick={() => setDefDir(d)}>
@@ -617,7 +633,7 @@ export function GameFlashcards({
             ))}
           </div>
         )}
-        {anyPics && (
+        {anyPics && !preReader && (
           <button type="button" className={`wb-flash-pictoggle${showPics ? " is-on" : ""}`} aria-pressed={showPics} onClick={togglePics}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
               <rect x="3" y="4" width="18" height="16" rx="3" /><circle cx="9" cy="10" r="2" /><path d="m21 16-5-5-9 9" />
@@ -634,7 +650,7 @@ export function GameFlashcards({
         aria-pressed={flipped}
       >
         <span className="wb-flash-inner">
-          <span className={`wb-flash-face wb-flash-front${pic ? " has-pic" : ""}`} aria-hidden={flipped}>
+          <span className={`wb-flash-face wb-flash-front${pic ? " has-pic" : ""}${preReader && pic ? " is-pre" : ""}`} aria-hidden={flipped}>
             {card.repeat && <span className="wb-flash-again">{f.again}</span>}
             {pic && (
               // key: a fresh element per card, so the previous card's picture is
@@ -642,7 +658,8 @@ export function GameFlashcards({
               // eslint-disable-next-line @next/next/no-img-element
               <img key={card.key} className="wb-flash-pic" src={pic} alt="" />
             )}
-            <span className={meaningFirst ? "wb-flash-meaning" : "wb-flash-word"} dir="auto">{meaningFirst ? <QText text={nq(frontText)} skip={[card.word.word]} /> : nq(frontText)}</span>
+            {/* Pre-reader: the picture is the word (the sound plays with it). */}
+            {!(preReader && pic) && <span className={meaningFirst ? "wb-flash-meaning" : "wb-flash-word"} dir="auto">{meaningFirst ? <QText text={nq(frontText)} skip={[card.word.word]} /> : nq(frontText)}</span>}
           </span>
           <span className="wb-flash-face wb-flash-back" aria-hidden={!flipped}>
             <span className={meaningFirst ? "wb-flash-example" : "wb-flash-backword"} dir="auto">{meaningFirst ? <QText text={nq(frontText)} /> : nq(frontText)}</span>
@@ -653,13 +670,14 @@ export function GameFlashcards({
       </button>
       {/* Hear the word, outside the card so a tap never flips it (Gadi 2026-10-11). */}
       {/* Not before the flip when the word is the answer: hearing it would give it away (Gadi 2026-10-17). */}
-      {!(meaningFirst && !flipped) && <div className="wb-flash-say"><TTSButton key={sayText} text={sayText} audioLang={sayLang} useOpenAI ariaLabel={sayText} className="wb-word-act-icon wb-play-speak" /></div>}
+      {!(meaningFirst && !flipped) && <div ref={sayRef} className="wb-flash-say"><TTSButton key={sayText} text={sayText} audioLang={sayLang} useOpenAI ariaLabel={sayText} className="wb-word-act-icon wb-play-speak" /></div>}
       {flipped && (
         <div className="wb-flash-actions">
           <button type="button" className="wb-flash-btn wb-flash-no" onClick={() => answer(false)}>{f.notYet}</button>
           <button type="button" className="wb-flash-btn wb-flash-yes" onClick={() => answer(true)}>{f.knew}</button>
         </div>
       )}
+      {flipped && wordFlag && <div key={card.key} className="wb-flash-flag">{wordFlag(card.word)}</div>}
     </div>
   );
 }
@@ -690,6 +708,8 @@ export const FLASH_CSS = `
 .wb-flash-front.has-pic .wb-flash-meaning { margin-block: auto; }
 .wb-flash-front.has-pic .wb-flash-meaning { padding-inline: 20px; font-size: clamp(15px, 4vw, 18px); }
 .wb-flash-front.has-pic .wb-flash-again { z-index: 1; }
+.wb-flash-flag { display: flex; justify-content: center; margin-top: 14px; }
+.wb-flash-front.has-pic.is-pre { justify-content: center; padding: 0; }
 .wb-flash-pictoggle { display: inline-flex; align-items: center; gap: 6px; margin: 10px auto 0; font: inherit; font-size: 13px; font-weight: 700; color: #475569; background: rgba(15,23,42,0.06); border: 0; border-radius: 999px; padding: 6px 14px; cursor: pointer; }
 .wb-flash-pictoggle.is-on { color: #086868; background: rgba(14,165,165,0.10); }
 .wb-flash-pictoggle:focus-visible { outline: 2px solid #0EA5A5; outline-offset: 2px; }

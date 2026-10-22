@@ -17,7 +17,7 @@
 
 import { payifyUrl } from "@/lib/pay-url";
 import { emailHeaderHtml, emailSignatureHtml, EMAIL_BG, EMAIL_CARD_MAX } from "../email-brand";
-import { FAMILY_FIXED, RTL_LANGS, isFamilyLang } from "./family-i18n";
+import { RTL_LANGS, fixedFor } from "./family-i18n";
 
 /** The email's language: `true`/`false` are the old Hebrew/English flag,
  *  a string is any UI language (Gadi 2026-10-05, family series in all 33). */
@@ -46,15 +46,19 @@ export type EmailContent = {
 /** What the v2 email says when a field was never edited, per language. */
 export function v2Defaults(l: LangArg): { closing: string; signature: string; helpText: string } {
   const { lang } = loc(l);
-  return FAMILY_FIXED[isFamilyLang(lang) ? lang : "en"];
+  return fixedFor(lang);
 }
 
 /** Fill {שם} / {name} with the parent's first name; without a name the
- *  placeholder (and the space before it) simply drops: "היי {שם}," → "היי,". */
+ *  placeholder (and the space before it) simply drops: "היי {שם}," → "היי,".
+ *  A comma right before it (", " or "、") and a Japanese / Korean honorific
+ *  right after it drop with it: "Здравствуйте, {name}!" → "Здравствуйте!",
+ *  "こんにちは、{name}さん。" → "こんにちは。", "안녕하세요 {name}님," →
+ *  "안녕하세요," (2026-10-22). */
 export function applyName(s: string, firstName?: string | null): string {
   const n = (firstName ?? "").trim();
   if (n) return s.replace(/\{(?:שם|name)\}/g, n);
-  return s.replace(/ ?\{(?:שם|name)\}/g, "");
+  return s.replace(/(?:,? |、)?\{(?:שם|name)\}(?:さん|様|님)?/g, "");
 }
 
 const SITE = "https://www.gadit.app";
@@ -226,7 +230,7 @@ export function renderEmailHtmlV2(opts: {
 }): string {
   const L = loc(opts.lang ?? opts.he);
   const he = L.rtl; // direction below; texts come from the language
-  const F = FAMILY_FIXED[isFamilyLang(L.lang) ? L.lang : "en"];
+  const F = fixedFor(L.lang);
   const D = v2Defaults(L.lang);
   const closing = (opts.closing ?? D.closing).trim();
   const signature = (opts.signature ?? D.signature).trim();

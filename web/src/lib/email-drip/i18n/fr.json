@@ -1,0 +1,116 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Nous avons gardé votre place sur Gadit",
+      "body": "Bonjour {name},\n\nVous avez commencé votre inscription à {plan}, et elle s'est arrêtée juste avant la fin.\n\nNous avons tout gardé pour vous, et vous pouvez reprendre exactement là où vous en étiez.\n\n- 14 jours gratuits, et rien n'est débité aujourd'hui\n- Après l'essai : {price}\n- Nous vous enverrons un rappel par e-mail avant la fin de l'essai\n- Vous pouvez annuler à tout moment depuis la page de votre compte, en deux clics",
+      "cta": "Terminer l'inscription",
+      "next": "Une question ? Répondez simplement à cet e-mail, nous vous aiderons."
+    },
+    "rec-e2-family": {
+      "subject": "Ce que vos enfants trouvent sur Gadit",
+      "body": "Bonjour {name},\n\nNous voulions vous dire en quelques mots ce qui attend vos enfants sur Gadit :\n\nChaque mot qu'ils rencontrent, dans un livre, dans les devoirs ou dans une conversation, devient un mot qu'ils comprennent vraiment.\n\n- Une explication au niveau de votre enfant, avec une image pour chaque sens\n- Des jeux et des exercices créés à partir de leurs propres mots\n- De l'aide pour les devoirs\n- Un tableau des parents qui vous montre les progrès de chaque enfant\n\nVotre inscription à {plan} est enregistrée, il ne reste que la dernière étape.",
+      "cta": "Terminer l'inscription",
+      "next": "Rien n'est débité aujourd'hui, et vous pouvez annuler à tout moment depuis la page de votre compte."
+    },
+    "rec-e2-indiv": {
+      "subject": "Ce qui vous attend sur Gadit",
+      "body": "Bonjour {name},\n\nNous voulions vous dire en quelques mots ce qui vous attend sur Gadit :\n\nChaque mot, dans un livre, au travail ou dans une conversation, devient un mot que vous comprenez jusqu'au bout.\n\n- Tous les sens du mot, avec une image pour chacun\n- Des jeux et des exercices créés à partir de vos propres mots\n- Un carnet de mots personnel qui garde tout ce que vous avez appris\n\nVotre inscription à {plan} est enregistrée, il ne reste que la dernière étape.",
+      "cta": "Terminer l'inscription",
+      "next": "Rien n'est débité aujourd'hui, et vous pouvez annuler à tout moment depuis la page de votre compte."
+    },
+    "rec-e3": {
+      "subject": "Un souci pendant l'inscription ? Dites-le-nous",
+      "body": "Bonjour {name},\n\nVotre inscription à {plan} est toujours enregistrée.\n\nSi quelque chose vous retient, répondez simplement à cet e-mail, nous vous aiderons.",
+      "cta": "Terminer l'inscription",
+      "next": "",
+      "signature": "L'équipe Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Le premier mot de vos enfants sur Gadit",
+      "body": "Bonjour {name},\n\nLa meilleure façon de commencer : asseyez-vous cinq minutes avec votre enfant et cherchez ensemble un mot qu'il a rencontré aujourd'hui, dans un livre, dans les devoirs ou dans une conversation.\n\n- Tapez le mot dans la barre de recherche\n- Découvrez une explication au niveau de votre enfant, avec une image pour chaque sens\n- Enregistrez-le dans le carnet, et de là il rejoint ses jeux\n\nUn mot aujourd'hui, et votre enfant commence déjà à se construire son propre vocabulaire.",
+      "cta": "Chercher le premier mot",
+      "next": "Besoin d'aide ? Répondez simplement à cet e-mail."
+    },
+    "act-first-word-indiv": {
+      "subject": "Votre premier mot sur Gadit",
+      "body": "Bonjour {name},\n\nLa meilleure façon de commencer : cherchez un mot que vous avez rencontré aujourd'hui, dans un livre, au travail ou dans une conversation.\n\n- Tous ses sens, avec une image pour chacun\n- L'origine du mot\n- Enregistrez-le dans votre carnet et entraînez-vous avec de petits jeux\n\nUn mot aujourd'hui, et votre vocabulaire grandit déjà.",
+      "cta": "Chercher le premier mot",
+      "next": "Besoin d'aide ? Répondez simplement à cet e-mail."
+    },
+    "act-first-word-2": {
+      "subject": "Un mot, cinq minutes",
+      "body": "Bonjour {name},\n\nUne petite idée pour aujourd'hui : choisissez un mot dans un livre, dans les devoirs ou dans l'actualité, et cherchez-le sur Gadit.\n\nEn une minute, vous voyez tous ses sens, avec une image et des exemples, et il est enregistré dans le carnet pour s'entraîner.\n\nC'est ainsi qu'un vocabulaire grandit : un mot à la fois.",
+      "cta": "Chercher un mot maintenant",
+      "next": "Besoin d'aide ? Répondez simplement à cet e-mail."
+    },
+    "act-add-child": {
+      "subject": "Encore une étape : ajoutez votre enfant",
+      "body": "Bonjour {name},\n\nGadit Family est conçu pour vos enfants, et aucun enfant n'a encore été ajouté au compte. Cela prend une minute :\n\n- Tapez le prénom de votre enfant et choisissez un personnage\n- Connectez son propre appareil sans mot de passe, ou utilisez le mode Enfants sur votre appareil\n- Ensuite, chaque mot qu'il cherche est enregistré pour lui, et vous suivez ses progrès sur le tableau des parents",
+      "cta": "Ajouter un enfant",
+      "next": "Besoin d'aide ? Répondez simplement à cet e-mail."
+    },
+    "act-return-family": {
+      "subject": "Un petit départ sur Gadit, pensé pour vous",
+      "body": "Bonjour {name},\n\nNous voulons que vos enfants profitent de tout ce que Gadit peut leur apporter. Voici trois petites étapes pour commencer cette semaine :\n\n- Ajoutez un enfant au compte, si ce n'est pas encore fait (une minute)\n- Cherchez ensemble un mot dans un livre ou dans les devoirs\n- Ouvrez les jeux, créés à partir des mots que votre enfant a enregistrés",
+      "cta": "Commencer maintenant",
+      "next": "Vous voulez qu'on vous montre comment ça marche ? Répondez à cet e-mail et nous organiserons un court appel de 10 minutes."
+    },
+    "act-return-indiv": {
+      "subject": "Un petit départ sur Gadit, pensé pour vous",
+      "body": "Bonjour {name},\n\nNous voulons que vous profitiez de tout ce que Gadit peut vous apporter. Voici trois petites étapes pour commencer cette semaine :\n\n- Cherchez un mot que vous avez rencontré aujourd'hui\n- Enregistrez-le dans votre carnet\n- Entraînez-vous sur vos mots avec de petits jeux",
+      "cta": "Chercher un mot",
+      "next": "Vous voulez qu'on vous montre comment ça marche ? Répondez à cet e-mail et nous organiserons un court appel de 10 minutes."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "Ce que {child} a appris sur Gadit cette semaine",
+    "subjectActiveMany": "Ce que vos enfants ont appris sur Gadit cette semaine",
+    "subjectQuietOne": "Une petite idée pour la semaine de {child} sur Gadit",
+    "subjectQuietMany": "Une petite idée pour la semaine de vos enfants sur Gadit",
+    "greeting": "Bonjour {name},",
+    "introActiveOne": "Voici le résumé de la semaine de {child} sur Gadit.",
+    "introActiveMany": "Voici le résumé de la semaine de vos enfants sur Gadit.",
+    "introQuietOne": "Voici une petite idée pour cette semaine avec {child}.",
+    "introQuietMany": "Voici une petite idée pour cette semaine avec vos enfants.",
+    "together": {
+      "one": "Cette semaine, vos enfants ont appris {n} nouveau mot.",
+      "other": "Cette semaine, vos enfants ont appris {n} nouveaux mots."
+    },
+    "childFallback": "Votre enfant",
+    "newLabel": {
+      "one": "nouveau mot cette semaine",
+      "other": "nouveaux mots cette semaine"
+    },
+    "wordsLabel": "Les mots :",
+    "more": {
+      "one": "et {n} de plus",
+      "other": "et {n} de plus"
+    },
+    "total": {
+      "one": "Dans le carnet : {n} mot",
+      "other": "Dans le carnet : {n} mots"
+    },
+    "streak": {
+      "one": "Série de {n} jour",
+      "other": "Série de {n} jours"
+    },
+    "learned": {
+      "one": "{lang} : {n} mot bien acquis cette semaine",
+      "other": "{lang} : {n} mots bien acquis cette semaine"
+    },
+    "langEn": "Anglais",
+    "langHe": "Hébreu",
+    "idea": "Une idée pour cette semaine :",
+    "ideaGame": "Un jeu de 5 minutes avec les mots déjà enregistrés dans le carnet.",
+    "ideaFirst": "Chercher ensemble un mot dans un livre ou dans les devoirs. Il est enregistré dans le carnet.",
+    "ideaConnect": "Pour voir ici ce que votre enfant apprend, connectez son propre appareil ou utilisez le mode Enfants sur votre appareil.",
+    "playCta": "Ouvrir les jeux",
+    "connectCta": "Connecter",
+    "outroActive": "Une idée : choisissez un mot de la liste et demandez à vos enfants au dîner ce qu'il veut dire.",
+    "outroQuiet": "Quelques minutes par jour suffisent. Chaque mot enregistré dans le carnet rejoint les jeux.",
+    "cta": "Ouvrir le tableau des parents",
+    "next": "Besoin d'aide ? Répondez simplement à cet e-mail."
+  }
+}

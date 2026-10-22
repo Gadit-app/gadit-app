@@ -1,0 +1,123 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Re go boloketse lefelo la gago mo Gadit",
+      "body": "Dumela {name},\n\nO simolotse go ikwadisetsa {plan} mme wa emisa pele fela o fetsa.\n\nRe go boloketse sengwe le sengwe, mme o ka tswelela gone fa o emisitseng teng.\n\n- Malatsi a le 14 ka mahala, mme ga go duedisiwe sepe gompieno\n- Morago ga teko: {price}\n- Re tla go romelela segopotso ka imeile pele teko e fela\n- O ka khansela nako nngwe le nngwe mo tsebeng ya gago ya akhaonto, ka go tobetsa gabedi",
+      "cta": "Fetsa go ikwadisa",
+      "next": "Go na le sengwe se se sa tlhaloganyesegeng? Araba fela imeile e, mme re tla go thusa."
+    },
+    "rec-e2-family": {
+      "subject": "Se bana ba gago ba se bonang mo Gadit",
+      "body": "Dumela {name},\n\nRe ne re batla go go bolelela ka bokhutshwane se se emetseng bana ba gago mo Gadit:\n\nLefoko lengwe le lengwe le ba kopanang le lone, mo bukeng, mo tirong ya gae kgotsa mo puisanong, le fetoga lefoko le ba le tlhaloganyang tota.\n\n- Tlhaloso e e lekaneng ngwana wa gago, e na le setshwantsho sa tlhaloso nngwe le nngwe\n- Metshameko le boikatiso tse di dirilweng ka mafoko a bone\n- Thuso ka tiro ya gae\n- Lebota la batsadi le le go bontshang kgatelopele ya ngwana mongwe le mongwe\n\nIkwadiso ya gago ya {plan} e bolokilwe, mme go setse fela kgato ya bofelo.",
+      "cta": "Fetsa go ikwadisa",
+      "next": "Ga go duedisiwe sepe gompieno, mme o ka khansela nako nngwe le nngwe mo tsebeng ya gago ya akhaonto."
+    },
+    "rec-e2-indiv": {
+      "subject": "Se se go emetseng mo Gadit",
+      "body": "Dumela {name},\n\nRe ne re batla go go bolelela ka bokhutshwane se se go emetseng mo Gadit:\n\nLefoko lengwe le lengwe, mo bukeng, kwa tirong kgotsa mo puisanong, le fetoga lefoko le o le tlhaloganyang ka botlalo.\n\n- Ditlhaloso tsotlhe tsa lefoko, ka setshwantsho sa nngwe le nngwe\n- Metshameko le boikatiso tse di dirilweng ka mafoko a gago\n- Bukana ya gago ya mafoko e e bolokang sengwe le sengwe se o se ithutileng\n\nIkwadiso ya gago ya {plan} e bolokilwe, mme go setse fela kgato ya bofelo.",
+      "cta": "Fetsa go ikwadisa",
+      "next": "Ga go duedisiwe sepe gompieno, mme o ka khansela nako nngwe le nngwe mo tsebeng ya gago ya akhaonto."
+    },
+    "rec-e3": {
+      "subject": "A go na le sengwe se se go kgoreleditseng? Re bolelele",
+      "body": "Dumela {name},\n\nIkwadiso ya gago ya {plan} e sa ntse e bolokilwe.\n\nFa go na le sengwe se se go thibelang, araba fela imeile e, mme re tla go thusa.",
+      "cta": "Fetsa go ikwadisa",
+      "next": "",
+      "signature": "Setlhopha sa Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Lefoko la ntlha la bana ba gago mo Gadit",
+      "body": "Dumela {name},\n\nTsela e e gaisang ya go simolola: nna le ngwana wa gago metsotso e le tlhano, lo batle lefoko le le lengwe le a kopaneng le lone gompieno, mo bukeng, mo tirong ya gae kgotsa mo puisanong.\n\n- Kwala lefoko mo lefelong la go batla\n- Bona tlhaloso e e lekaneng ngwana wa gago, e na le setshwantsho sa tlhaloso nngwe le nngwe\n- Le boloke mo bukaneng ya mafoko, mme go tswa foo le tsena mo metshamekong ya gagwe\n\nLefoko le le lengwe gompieno, mme ngwana wa gago o setse a simolola go aga kitso ya gagwe ya mafoko.",
+      "cta": "Batla lefoko la ntlha",
+      "next": "O tlhoka thuso? Araba fela imeile e."
+    },
+    "act-first-word-indiv": {
+      "subject": "Lefoko la gago la ntlha mo Gadit",
+      "body": "Dumela {name},\n\nTsela e e gaisang ya go simolola: batla lefoko le le lengwe le o kopaneng le lone gompieno, mo bukeng, kwa tirong kgotsa mo puisanong.\n\n- Ditlhaloso tsotlhe tsa lone, ka setshwantsho sa nngwe le nngwe\n- Kwa lefoko le tswang teng\n- Le boloke mo bukaneng ya gago ya mafoko mme o ikatise ka lone mo metshamekong e mekhutshwane\n\nLefoko le le lengwe gompieno, mme kitso ya gago ya mafoko e setse e gola.",
+      "cta": "Batla lefoko la ntlha",
+      "next": "O tlhoka thuso? Araba fela imeile e."
+    },
+    "act-first-word-2": {
+      "subject": "Lefoko le le lengwe, metsotso e le tlhano",
+      "body": "Dumela {name},\n\nKakanyo e nnye ya gompieno: tlhopha lefoko le le lengwe mo bukeng, mo tirong ya gae kgotsa mo dikgannyeng, mme o le batle mo Gadit.\n\nMo motsotsong fela o bona ditlhaloso tsotlhe tsa lone, ka setshwantsho le dikai, mme le bolokwa mo bukaneng ya mafoko gore o ikatise.\n\nKe ka tsela e kitso ya mafoko e golang ka teng: lefoko le le lengwe ka nako.",
+      "cta": "Batla lefoko jaanong",
+      "next": "O tlhoka thuso? Araba fela imeile e."
+    },
+    "act-add-child": {
+      "subject": "Kgato e nngwe gape: oketsa ngwana wa gago",
+      "body": "Dumela {name},\n\nGadit Family e diretswe bana ba gago, mme ga go ise go okediwe ngwana ope mo akhaontong. Go tsaya motsotso:\n\n- Kwala leina la ngwana wa gago mme o tlhophe setshwantshwana\n- Golaganya sedirisiwa sa gagwe kwa ntle ga lefoko la sephiri, kgotsa o dirise Mokgwa wa bana mo sedirisiweng sa gago\n- Go tswa foo lefoko lengwe le lengwe le a le batlang le a bolokwa, mme o bona kgatelopele mo lebotong la batsadi",
+      "cta": "Oketsa ngwana",
+      "next": "O tlhoka thuso? Araba fela imeile e."
+    },
+    "act-return-family": {
+      "subject": "Tshimologo e khutshwane mo Gadit, e e go diretsweng",
+      "body": "Dumela {name},\n\nRe batla go netefatsa gore bana ba gago ba bona sengwe le sengwe se Gadit e ka ba se nayang. Dikgato tse tharo tse dikhutshwane tsa go simolola beke eno ke tse:\n\n- Oketsa ngwana mo akhaontong, fa o ise o dire jalo (motsotso o le mongwe)\n- Batlang lefoko le le lengwe mmogo mo bukeng kgotsa mo tirong ya gae\n- Bula metshameko, e e dirilweng ka mafoko a ngwana wa gago a a bolokileng",
+      "cta": "Simolola jaanong",
+      "next": "A o batla gore re go bontshe kafa e dirang ka teng? Araba imeile e, mme re tla rulaganya mogala o mokhutshwane wa metsotso e le 10."
+    },
+    "act-return-indiv": {
+      "subject": "Tshimologo e khutshwane mo Gadit, e e go diretsweng",
+      "body": "Dumela {name},\n\nRe batla go netefatsa gore o bona sengwe le sengwe se Gadit e ka go se nayang. Dikgato tse tharo tse dikhutshwane tsa go simolola beke eno ke tse:\n\n- Batla lefoko le le lengwe le o kopaneng le lone gompieno\n- Le boloke mo bukaneng ya gago ya mafoko\n- Ikatise mafoko a gago ka metshameko e mekhutshwane",
+      "cta": "Batla lefoko",
+      "next": "A o batla gore re go bontshe kafa e dirang ka teng? Araba imeile e, mme re tla rulaganya mogala o mokhutshwane wa metsotso e le 10."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "{child}: se a se ithutileng mo Gadit beke eno",
+    "subjectActiveMany": "Se bana ba gago ba se ithutileng mo Gadit beke eno",
+    "subjectQuietOne": "{child}: kakanyo e nnye ya beke mo Gadit",
+    "subjectQuietMany": "Kakanyo e nnye ya beke ya bana ba gago mo Gadit",
+    "greeting": "Dumela {name},",
+    "introActiveOne": "Kakaretso ya beke ya {child} mo Gadit ke e.",
+    "introActiveMany": "Kakaretso ya beke ya bana ba gago mo Gadit ke e.",
+    "introQuietOne": "Kakanyo e nnye ya beke eno le {child} ke e.",
+    "introQuietMany": "Kakanyo e nnye ya beke eno le bana ba gago ke e.",
+    "together": {
+      "one": "Beke eno bana ba gago ba ithutile lefoko le lesha le le {n}.",
+      "other": "Beke eno bana ba gago ba ithutile mafoko a masha a le {n}."
+    },
+    "childFallback": "Ngwana wa gago",
+    "newLabel": {
+      "one": "lefoko le lesha beke eno",
+      "other": "mafoko a masha beke eno"
+    },
+    "wordsLabel": "Mafoko:",
+    "more": {
+      "one": "le le lengwe gape",
+      "other": "le a mangwe a le {n}"
+    },
+    "total": {
+      "one": "Mo bukaneng ya mafoko: lefoko le le {n}",
+      "other": "Mo bukaneng ya mafoko: mafoko a le {n}"
+    },
+    "streak": {
+      "one": "Tatelano ya letsatsi le le {n}",
+      "other": "Tatelano ya malatsi a le {n}"
+    },
+    "learned": {
+      "one": "Go ithuta {lang}: lefoko le le {n} le ithutilwe ka botlalo beke eno",
+      "other": "Go ithuta {lang}: mafoko a le {n} a ithutilwe ka botlalo beke eno"
+    },
+    "langEn": "Sekgoa",
+    "langHe": "Seheberu",
+    "idea": "Kakanyo ya beke eno:",
+    "ideaGame": "Motshameko wa metsotso e le 5 ka mafoko a a setseng a bolokilwe mo bukaneng ya mafoko.",
+    "ideaFirst": "Batlang lefoko le le lengwe mmogo mo bukeng kgotsa mo tirong ya gae. Le bolokwa mo bukaneng ya mafoko.",
+    "ideaConnect": "Go bona fa se ngwana a se ithutang, golaganya sedirisiwa sa gagwe kgotsa o dirise Mokgwa wa bana mo sedirisiweng sa gago.",
+    "playCta": "Bula metshameko",
+    "connectCta": "Golaganya",
+    "outroActive": "Kakanyo: tlhopha lefoko le le lengwe mo lenaneng mme o botse bana ba gago ka nako ya dijo tsa maitseboa gore le raya eng.",
+    "outroQuiet": "Metsotso e le mmalwa ka letsatsi e lekane. Lefoko lengwe le lengwe le le bolokwang mo bukaneng ya mafoko le tsena mo metshamekong.",
+    "cta": "Bula lebota la batsadi",
+    "next": "O tlhoka thuso? Araba fela imeile e."
+  },
+  "fixed": {
+    "unsub": "Itlose mo lenaneong",
+    "tagline": "Lefoko lengwe le lengwe, le tlhaloganngwe",
+    "closing": "Re teng go araba potso nngwe le nngwe kgotsa go thusa.",
+    "signature": "Setlhopha sa Gadit",
+    "helpText": "Dikaelo tsotlhe"
+  }
+}

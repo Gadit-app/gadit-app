@@ -31,14 +31,8 @@ const DAY = 86_400_000;
 const INTERVAL_DAYS = [0, 1, 2, 4, 8, 16];
 export const LEARNED_BOX = 3;
 
-/** Which languages a kid can learn, by the language of the app. English
- *  is open to every UI language but English itself (Gadi 2026-10-18);
- *  Hebrew as a second language stays with Arabic, Russian and English. */
-export function learnTargets(uiLang: string): LearnLang[] {
-  if (uiLang === "ar" || uiLang === "ru") return ["en", "he"];
-  if (uiLang === "en") return ["he"];
-  return ["en"];
-}
+/** Which languages a kid can learn, by the language of the app (lib/learn/targets). */
+export { learnTargets } from "./targets";
 
 /** The bank for a target language, translated into the kid's language.
  *  English: he/ar/ru live on the bank rows, the other UI languages in

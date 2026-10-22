@@ -1,0 +1,98 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Megtartottuk a helyed a Gaditban",
+      "body": "Szia {name},\n\nElkezdted a regisztrációt a {plan} csomagra, és közvetlenül a vége előtt abbahagytad.\n\nMindent elmentettünk neked, és pontosan ott folytathatod, ahol abbahagytad.\n\n- 14 nap ingyen, és ma semmit sem terhelünk a kártyádra\n- A próbaidőszak után: {price}\n- A próbaidőszak vége előtt e-mailben emlékeztetünk\n- Bármikor lemondhatod a fiókod oldalán, két kattintással",
+      "cta": "Regisztráció befejezése",
+      "next": "Valami nem világos? Csak válaszolj erre az e-mailre, és segítünk."
+    },
+    "rec-e2-family": {
+      "subject": "Ezt kapják a gyerekeid a Gaditban",
+      "body": "Szia {name},\n\nRöviden el szerettük volna mondani, mi vár a gyerekeidre a Gaditban:\n\nMinden szó, amellyel találkoznak, egy könyvben, a házi feladatban vagy beszélgetés közben, olyan szóvá válik, amelyet igazán értenek.\n\n- Magyarázat a gyereked szintjén, minden jelentéshez egy képpel\n- Játékok és gyakorlás a saját szavaikból\n- Segítség a házi feladathoz\n- Szülői irányítópult, amely megmutatja minden gyerek fejlődését\n\nA {plan} regisztrációd el van mentve, már csak az utolsó lépés van hátra.",
+      "cta": "Regisztráció befejezése",
+      "next": "Ma semmit sem terhelünk, és bármikor lemondhatod a fiókod oldalán."
+    },
+    "rec-e2-indiv": {
+      "subject": "Ez vár rád a Gaditban",
+      "body": "Szia {name},\n\nRöviden el szerettük volna mondani, mi vár rád a Gaditban:\n\nMinden szó, egy könyvben, a munkahelyen vagy beszélgetés közben, olyan szóvá válik, amelyet teljesen megértesz.\n\n- A szó minden jelentése, mindegyikhez egy képpel\n- Játékok és gyakorlás a saját szavaidból\n- Személyes szófüzet, amely megőriz mindent, amit megtanultál\n\nA {plan} regisztrációd el van mentve, már csak az utolsó lépés van hátra.",
+      "cta": "Regisztráció befejezése",
+      "next": "Ma semmit sem terhelünk, és bármikor lemondhatod a fiókod oldalán."
+    },
+    "rec-e3": {
+      "subject": "Közbejött valami? Írd meg nekünk",
+      "body": "Szia {name},\n\nA {plan} regisztrációd még mindig el van mentve.\n\nHa valami visszatart, csak válaszolj erre az e-mailre, és segítünk.",
+      "cta": "Regisztráció befejezése",
+      "next": "",
+      "signature": "A Gadit csapata"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "A gyerekeid első szava a Gaditban",
+      "body": "Szia {name},\n\nA legjobb kezdés: ülj le öt percre a gyerekeddel, és keressetek meg egy szót, amellyel ma találkozott egy könyvben, a házi feladatban vagy beszélgetés közben.\n\n- Írd be a szót a keresőbe\n- Nézd meg a magyarázatot a gyereked szintjén, minden jelentéshez egy képpel\n- Mentsd el a füzetbe, onnan pedig bekerül a játékaiba\n\nMa egyetlen szó, és a gyereked máris építi a saját szókincsét.",
+      "cta": "Az első szó keresése",
+      "next": "Segítség kell? Csak válaszolj erre az e-mailre."
+    },
+    "act-first-word-indiv": {
+      "subject": "Az első szavad a Gaditban",
+      "body": "Szia {name},\n\nA legjobb kezdés: keress meg egy szót, amellyel ma találkoztál egy könyvben, a munkahelyen vagy beszélgetés közben.\n\n- Minden jelentése, mindegyikhez egy képpel\n- Honnan ered a szó\n- Mentsd el a füzetedbe, és gyakorold rövid játékokban\n\nMa egyetlen szó, és a szókincsed máris bővül.",
+      "cta": "Az első szó keresése",
+      "next": "Segítség kell? Csak válaszolj erre az e-mailre."
+    },
+    "act-first-word-2": {
+      "subject": "Egy szó, öt perc",
+      "body": "Szia {name},\n\nEgy kis ötlet mára: válassz egy szót egy könyvből, a házi feladatból vagy a hírekből, és keresd meg a Gaditban.\n\nEgy perc alatt látod minden jelentését, képpel és példákkal, és a szó a gyakorláshoz bekerül a füzetbe.\n\nÍgy bővül a szókincs: szóról szóra.",
+      "cta": "Keress egy szót most",
+      "next": "Segítség kell? Csak válaszolj erre az e-mailre."
+    },
+    "act-add-child": {
+      "subject": "Még egy lépés: add hozzá a gyerekedet",
+      "body": "Szia {name},\n\nA Gadit Family a gyerekeid köré épül, de a fiókhoz még nincs hozzáadva egy gyerek sem. Egy percet vesz igénybe:\n\n- Írd be a gyereked nevét, és válassz egy karaktert\n- Csatlakoztasd a gyereked saját eszközét jelszó nélkül, vagy használd a Gyerekmódot a saját eszközödön\n- Ettől kezdve minden szó, amit megkeres, elmentődik neki, te pedig a szülői irányítópulton látod a fejlődését",
+      "cta": "Gyerek hozzáadása",
+      "next": "Segítség kell? Csak válaszolj erre az e-mailre."
+    },
+    "act-return-family": {
+      "subject": "Rövid kezdés a Gaditban, neked szabva",
+      "body": "Szia {name},\n\nSzeretnénk, ha a gyerekeid mindent megkapnának, amit a Gadit adni tud. Íme három rövid lépés, hogy ezen a héten elkezdhessétek:\n\n- Adj hozzá egy gyereket a fiókhoz, ha még nem tetted meg (egy perc)\n- Keressetek meg együtt egy szót egy könyvből vagy a házi feladatból\n- Nyisd meg a játékokat, amelyek a gyereked által elmentett szavakból készülnek",
+      "cta": "Kezdjük el most",
+      "next": "Megmutassuk, hogyan működik? Válaszolj erre az e-mailre, és megbeszélünk egy rövid, 10 perces hívást."
+    },
+    "act-return-indiv": {
+      "subject": "Rövid kezdés a Gaditban, neked szabva",
+      "body": "Szia {name},\n\nSzeretnénk, ha mindent megkapnál, amit a Gadit adni tud. Íme három rövid lépés, hogy ezen a héten elkezdhesd:\n\n- Keress meg egy szót, amellyel ma találkoztál\n- Mentsd el a füzetedbe\n- Gyakorold a szavaidat rövid játékokban",
+      "cta": "Keress egy szót",
+      "next": "Megmutassuk, hogyan működik? Válaszolj erre az e-mailre, és megbeszélünk egy rövid, 10 perces hívást."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "Ezt tanulta {child} a Gaditban ezen a héten",
+    "subjectActiveMany": "Ezt tanulták a gyerekeid a Gaditban ezen a héten",
+    "subjectQuietOne": "{child}: egy kis ötlet erre a hétre a Gaditban",
+    "subjectQuietMany": "Egy kis ötlet a gyerekeid hetére a Gaditban",
+    "greeting": "Szia {name},",
+    "introActiveOne": "{child}: itt a heti összefoglaló a Gaditból.",
+    "introActiveMany": "Itt a gyerekeid heti összefoglalója a Gaditból.",
+    "introQuietOne": "{child}: itt egy kis ötlet, amit ezen a héten együtt kipróbálhattok.",
+    "introQuietMany": "Itt egy kis ötlet, amit ezen a héten a gyerekeiddel kipróbálhatsz.",
+    "together": { "one": "Ezen a héten a gyerekeid {n} új szót tanultak.", "other": "Ezen a héten a gyerekeid {n} új szót tanultak." },
+    "childFallback": "A gyereked",
+    "newLabel": { "one": "új szó ezen a héten", "other": "új szó ezen a héten" },
+    "wordsLabel": "A szavak:",
+    "more": { "one": "és még {n}", "other": "és még {n}" },
+    "total": { "one": "A füzetben: {n} szó", "other": "A füzetben: {n} szó" },
+    "streak": { "one": "{n} napos sorozat", "other": "{n} napos sorozat" },
+    "learned": { "one": "{lang}: ezen a héten {n} szó teljesen megtanulva", "other": "{lang}: ezen a héten {n} szó teljesen megtanulva" },
+    "langEn": "Angol",
+    "langHe": "Héber",
+    "idea": "Ötlet erre a hétre:",
+    "ideaGame": "Egy 5 perces játék a füzetbe már elmentett szavakkal.",
+    "ideaFirst": "Keressetek meg együtt egy szót egy könyvből vagy a házi feladatból. Bekerül a füzetbe.",
+    "ideaConnect": "Hogy itt lásd, mit tanul a gyereked, csatlakoztasd a saját eszközét, vagy használd a Gyerekmódot a saját eszközödön.",
+    "playCta": "Játékok megnyitása",
+    "connectCta": "Csatlakoztatás",
+    "outroActive": "Egy ötlet: válassz egy szót a listából, és vacsoránál kérdezd meg a gyerekeidet, mit jelent.",
+    "outroQuiet": "Napi néhány perc is elég. Minden szó, amely a füzetbe kerül, a játékokba is bekerül.",
+    "cta": "Szülői irányítópult megnyitása",
+    "next": "Segítség kell? Csak válaszolj erre az e-mailre."
+  }
+}

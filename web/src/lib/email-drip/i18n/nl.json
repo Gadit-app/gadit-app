@@ -1,0 +1,116 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "We hebben je plek bij Gadit bewaard",
+      "body": "Hoi {name},\n\nJe was begonnen met je aanmelding voor {plan} en stopte vlak voor het einde.\n\nWe hebben alles voor je bewaard, en je kunt precies verdergaan waar je was gebleven.\n\n- 14 dagen gratis, en vandaag wordt er niets afgeschreven\n- Na de proefperiode: {price}\n- We sturen je een herinnering per e-mail voordat de proefperiode afloopt\n- Je kunt altijd opzeggen via je accountpagina, met twee klikken",
+      "cta": "Aanmelding afronden",
+      "next": "Iets onduidelijk? Beantwoord gewoon deze e-mail, dan helpen we je."
+    },
+    "rec-e2-family": {
+      "subject": "Wat je kinderen krijgen met Gadit",
+      "body": "Hoi {name},\n\nWe willen je graag kort vertellen wat je kinderen bij Gadit te wachten staat:\n\nElk woord dat ze tegenkomen, in een boek, in hun huiswerk of in een gesprek, wordt een woord dat ze echt begrijpen.\n\n- Uitleg op het niveau van je kind, met een afbeelding bij elke betekenis\n- Spellen en oefeningen met hun eigen woorden\n- Hulp bij het huiswerk\n- Een ouderdashboard dat je de voortgang van elk kind laat zien\n\nJe aanmelding voor {plan} is bewaard, alleen de laatste stap ontbreekt nog.",
+      "cta": "Aanmelding afronden",
+      "next": "Vandaag wordt er niets afgeschreven, en je kunt altijd opzeggen via je accountpagina."
+    },
+    "rec-e2-indiv": {
+      "subject": "Wat je bij Gadit te wachten staat",
+      "body": "Hoi {name},\n\nWe willen je graag kort vertellen wat je bij Gadit te wachten staat:\n\nElk woord, in een boek, op je werk of in een gesprek, wordt een woord dat je tot op de bodem begrijpt.\n\n- Alle betekenissen van het woord, met een afbeelding bij elke betekenis\n- Spellen en oefeningen met je eigen woorden\n- Een persoonlijk woordennotitieboek dat alles bewaart wat je hebt geleerd\n\nJe aanmelding voor {plan} is bewaard, alleen de laatste stap ontbreekt nog.",
+      "cta": "Aanmelding afronden",
+      "next": "Vandaag wordt er niets afgeschreven, en je kunt altijd opzeggen via je accountpagina."
+    },
+    "rec-e3": {
+      "subject": "Zat er iets in de weg? Laat het ons weten",
+      "body": "Hoi {name},\n\nJe aanmelding voor {plan} is nog steeds bewaard.\n\nHoudt iets je tegen? Beantwoord gewoon deze e-mail, dan helpen we je.",
+      "cta": "Aanmelding afronden",
+      "next": "",
+      "signature": "Het Gadit-team"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Het eerste woord van je kinderen op Gadit",
+      "body": "Hoi {name},\n\nDe beste manier om te beginnen: ga vijf minuten met je kind zitten en zoek samen een woord op dat je kind vandaag tegenkwam, in een boek, in het huiswerk of in een gesprek.\n\n- Typ het woord in de zoekbalk\n- Bekijk uitleg op het niveau van je kind, met een afbeelding bij elke betekenis\n- Bewaar het in het notitieboek, van daaruit gaat het naar de spellen van je kind\n\nEén woord vandaag, en je kind bouwt al aan een eigen woordenschat.",
+      "cta": "Zoek het eerste woord op",
+      "next": "Hulp nodig? Beantwoord gewoon deze e-mail."
+    },
+    "act-first-word-indiv": {
+      "subject": "Je eerste woord op Gadit",
+      "body": "Hoi {name},\n\nDe beste manier om te beginnen: zoek een woord op dat je vandaag tegenkwam, in een boek, op je werk of in een gesprek.\n\n- Alle betekenissen, met een afbeelding bij elke betekenis\n- Waar het woord vandaan komt\n- Bewaar het in je notitieboek en oefen het in korte spellen\n\nEén woord vandaag, en je woordenschat groeit al.",
+      "cta": "Zoek het eerste woord op",
+      "next": "Hulp nodig? Beantwoord gewoon deze e-mail."
+    },
+    "act-first-word-2": {
+      "subject": "Eén woord, vijf minuten",
+      "body": "Hoi {name},\n\nEen klein idee voor vandaag: kies een woord uit een boek, uit het huiswerk of uit het nieuws, en zoek het op in Gadit.\n\nIn een minuut zie je alle betekenissen, met een afbeelding en voorbeelden, en het woord wordt bewaard in het notitieboek om te oefenen.\n\nZo groeit een woordenschat: woord voor woord.",
+      "cta": "Zoek nu een woord op",
+      "next": "Hulp nodig? Beantwoord gewoon deze e-mail."
+    },
+    "act-add-child": {
+      "subject": "Nog één stap: voeg je kind toe",
+      "body": "Hoi {name},\n\nGadit Family draait om je kinderen, en er is nog geen kind aan het account toegevoegd. Het kost een minuut:\n\n- Typ de naam van je kind en kies een figuurtje\n- Koppel een eigen apparaat van je kind zonder wachtwoord, of gebruik de Kindermodus op je eigen apparaat\n- Vanaf dan wordt elk woord dat je kind opzoekt bewaard, en zie je de voortgang op het ouderdashboard",
+      "cta": "Kind toevoegen",
+      "next": "Hulp nodig? Beantwoord gewoon deze e-mail."
+    },
+    "act-return-family": {
+      "subject": "Een korte start op Gadit, speciaal voor jou",
+      "body": "Hoi {name},\n\nWe willen zorgen dat je kinderen alles krijgen wat Gadit ze kan geven. Hier zijn drie korte stappen om deze week te beginnen:\n\n- Voeg een kind toe aan het account, als je dat nog niet hebt gedaan (een minuut)\n- Zoek samen een woord op uit een boek of het huiswerk\n- Open de spellen, die gemaakt zijn van de woorden die je kind heeft bewaard",
+      "cta": "Begin nu",
+      "next": "Zullen we je laten zien hoe het werkt? Beantwoord deze e-mail en we plannen een kort gesprek van 10 minuten."
+    },
+    "act-return-indiv": {
+      "subject": "Een korte start op Gadit, speciaal voor jou",
+      "body": "Hoi {name},\n\nWe willen zorgen dat je alles krijgt wat Gadit je kan geven. Hier zijn drie korte stappen om deze week te beginnen:\n\n- Zoek een woord op dat je vandaag tegenkwam\n- Bewaar het in je notitieboek\n- Oefen je woorden in korte spellen",
+      "cta": "Zoek een woord op",
+      "next": "Zullen we je laten zien hoe het werkt? Beantwoord deze e-mail en we plannen een kort gesprek van 10 minuten."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "Wat {child} deze week op Gadit heeft geleerd",
+    "subjectActiveMany": "Wat je kinderen deze week op Gadit hebben geleerd",
+    "subjectQuietOne": "Een klein idee voor de week van {child} op Gadit",
+    "subjectQuietMany": "Een klein idee voor de week van je kinderen op Gadit",
+    "greeting": "Hoi {name},",
+    "introActiveOne": "Hier is het weekoverzicht van {child} op Gadit.",
+    "introActiveMany": "Hier is het weekoverzicht van je kinderen op Gadit.",
+    "introQuietOne": "Hier is een klein idee voor deze week met {child}.",
+    "introQuietMany": "Hier is een klein idee voor deze week met je kinderen.",
+    "together": {
+      "one": "Deze week hebben je kinderen {n} nieuw woord geleerd.",
+      "other": "Deze week hebben je kinderen {n} nieuwe woorden geleerd."
+    },
+    "childFallback": "Je kind",
+    "newLabel": {
+      "one": "nieuw woord deze week",
+      "other": "nieuwe woorden deze week"
+    },
+    "wordsLabel": "De woorden:",
+    "more": {
+      "one": "en nog {n}",
+      "other": "en nog {n}"
+    },
+    "total": {
+      "one": "In het notitieboek: {n} woord",
+      "other": "In het notitieboek: {n} woorden"
+    },
+    "streak": {
+      "one": "{n} dag op rij",
+      "other": "{n} dagen op rij"
+    },
+    "learned": {
+      "one": "{lang}: deze week {n} woord helemaal geleerd",
+      "other": "{lang}: deze week {n} woorden helemaal geleerd"
+    },
+    "langEn": "Engels",
+    "langHe": "Hebreeuws",
+    "idea": "Een idee voor deze week:",
+    "ideaGame": "Een spel van 5 minuten met de woorden die al in het notitieboek staan.",
+    "ideaFirst": "Samen een woord opzoeken uit een boek of het huiswerk. Het wordt bewaard in het notitieboek.",
+    "ideaConnect": "Wil je hier zien wat je kind leert? Koppel een eigen apparaat van je kind of gebruik de Kindermodus op je eigen apparaat.",
+    "playCta": "Open de spellen",
+    "connectCta": "Koppelen",
+    "outroActive": "Een idee: kies een woord uit de lijst en vraag je kinderen aan tafel wat het betekent.",
+    "outroQuiet": "Een paar minuten per dag is genoeg. Elk woord in het notitieboek komt terug in de spellen.",
+    "cta": "Open het ouderdashboard",
+    "next": "Hulp nodig? Beantwoord gewoon deze e-mail."
+  }
+}

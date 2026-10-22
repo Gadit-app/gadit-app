@@ -75,6 +75,7 @@ const STRINGS = {
     tabCurriculum: "Curriculum",
     tabLegacySets: "Hand-made sets",
     tabReports: "Content reports",
+    tabLearnReports: "Learning words",
     backToApp: "Back to app",
     signOut: "Sign out",
     langToggle: "עברית",
@@ -130,6 +131,7 @@ const STRINGS = {
     tabCurriculum: "תוכנית הלימודים",
     tabLegacySets: "סטים ידניים",
     tabReports: "דיווחים על תוכן",
+    tabLearnReports: "מילים בלימוד שפה",
     backToApp: "חזרה לאפליקציה",
     signOut: "התנתק",
     langToggle: "English",
@@ -179,6 +181,7 @@ const NAV_GROUPS: NavGroup[] = [
   ] },
   { labelKey: "gSupport", icon: <IconFlag />, tabs: [
     { href: "/admin/reports", labelKey: "tabReports" },
+    { href: "/admin/learn-reports", labelKey: "tabLearnReports" },
     { href: "/admin/auth-errors", labelKey: "authErrors" },
   ] },
 ];

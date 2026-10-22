@@ -1,0 +1,123 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Sikugcinele indawo yakho kwi-Gadit",
+      "body": "Molo {name},\n\nUqalile ukubhalisela i-{plan}, wema phambi nje kokuba ugqibe.\n\nSikugcinele yonke into, kwaye ungaqhubeka kanye apho ume khona.\n\n- Iintsuku ezili-14 simahla, kwaye akukho nto ihlawuliswayo namhlanje\n- Emva kovavanyo: {price}\n- Siza kukuthumelela isikhumbuzo nge-imeyile phambi kokuba uvavanyo luphele\n- Unokurhoxisa nanini na kwiphepha lakho leakhawunti, ngokucofa kabini",
+      "cta": "Gqibezela ukubhalisa",
+      "next": "Ikhona into engacacanga? Phendula nje le imeyile, siza kukunceda."
+    },
+    "rec-e2-family": {
+      "subject": "Oko abantwana bakho bakufumanayo kwi-Gadit",
+      "body": "Molo {name},\n\nBesifuna ukukuxelela ngokufutshane into elindele abantwana bakho kwi-Gadit:\n\nIgama ngalinye abadibana nalo, encwadini, kumsebenzi wasekhaya okanye encokolweni, liba ligama abaliqonda ngokwenene.\n\n- Inkcazelo ekwinqanaba lomntwana wakho, enomfanekiso kwintsingiselo nganye\n- Imidlalo nokuziqhelisa okwenziwe ngamagama abo\n- Uncedo kumsebenzi wasekhaya\n- Ibhodi yomzali ekubonisa inkqubela yomntwana ngamnye\n\nUkubhalisa kwakho kwi-{plan} kugciniwe, kwaye kusele inyathelo lokugqibela kuphela.",
+      "cta": "Gqibezela ukubhalisa",
+      "next": "Akukho nto ihlawuliswayo namhlanje, kwaye ungarhoxisa nanini na kwiphepha lakho leakhawunti."
+    },
+    "rec-e2-indiv": {
+      "subject": "Oko kukulindeleyo kwi-Gadit",
+      "body": "Molo {name},\n\nBesifuna ukukuxelela ngokufutshane into ekulindeleyo kwi-Gadit:\n\nIgama ngalinye, encwadini, emsebenzini okanye encokolweni, liba ligama oliqonda ngokupheleleyo.\n\n- Zonke iintsingiselo zegama, ngomfanekiso kwintsingiselo nganye\n- Imidlalo nokuziqhelisa okwenziwe ngamagama akho\n- Incwadi yakho yamagama egcina yonke into oyifundileyo\n\nUkubhalisa kwakho kwi-{plan} kugciniwe, kwaye kusele inyathelo lokugqibela kuphela.",
+      "cta": "Gqibezela ukubhalisa",
+      "next": "Akukho nto ihlawuliswayo namhlanje, kwaye ungarhoxisa nanini na kwiphepha lakho leakhawunti."
+    },
+    "rec-e3": {
+      "subject": "Ingaba ikhona into ekuthintileyo? Sixelele",
+      "body": "Molo {name},\n\nUkubhalisa kwakho kwi-{plan} kusagciniwe.\n\nUkuba ikhona into ekubambezelayo, phendula nje le imeyile, siza kukunceda.",
+      "cta": "Gqibezela ukubhalisa",
+      "next": "",
+      "signature": "Iqela le-Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Igama lokuqala labantwana bakho kwi-Gadit",
+      "body": "Molo {name},\n\nEyona ndlela ilungileyo yokuqalisa: hlala nomntwana wakho imizuzu emihlanu, nikhangele igama elinye adibene nalo namhlanje, encwadini, kumsebenzi wasekhaya okanye encokolweni.\n\n- Chwetheza igama kwindawo yokukhangela\n- Bona inkcazelo ekwinqanaba lomntwana wakho, enomfanekiso kwintsingiselo nganye\n- Ligcine encwadini yamagama, kwaye ukusukela apho lingena kwimidlalo yakhe\n\nIgama elinye namhlanje, kwaye umntwana wakho sele eqalisa ukwakha isigama sakhe.",
+      "cta": "Khangela igama lokuqala",
+      "next": "Ufuna uncedo? Phendula nje le imeyile."
+    },
+    "act-first-word-indiv": {
+      "subject": "Igama lakho lokuqala kwi-Gadit",
+      "body": "Molo {name},\n\nEyona ndlela ilungileyo yokuqalisa: khangela igama elinye odibene nalo namhlanje, encwadini, emsebenzini okanye encokolweni.\n\n- Zonke iintsingiselo zalo, ngomfanekiso kwintsingiselo nganye\n- Apho igama livela khona\n- Ligcine encwadini yakho yamagama uze uziqhelise ngalo kwimidlalo emifutshane\n\nIgama elinye namhlanje, kwaye isigama sakho sele sikhula.",
+      "cta": "Khangela igama lokuqala",
+      "next": "Ufuna uncedo? Phendula nje le imeyile."
+    },
+    "act-first-word-2": {
+      "subject": "Igama elinye, imizuzu emihlanu",
+      "body": "Molo {name},\n\nIngcamango encinci yanamhlanje: khetha igama elinye encwadini, kumsebenzi wasekhaya okanye kwiindaba, uze ulikhangele kwi-Gadit.\n\nKumzuzu nje ubona zonke iintsingiselo zalo, ngomfanekiso nemizekelo, kwaye ligcinwa encwadini yamagama ukuze uziqhelise.\n\nYiyo le ndlela isigama esikhula ngayo: igama elinye ngexesha.",
+      "cta": "Khangela igama ngoku",
+      "next": "Ufuna uncedo? Phendula nje le imeyile."
+    },
+    "act-add-child": {
+      "subject": "Elinye inyathelo: yongeza umntwana wakho",
+      "body": "Molo {name},\n\nI-Gadit Family yakhelwe abantwana bakho, kodwa akukabikho mntwana wongeziweyo kwiakhawunti. Kuthatha umzuzu:\n\n- Chwetheza igama lomntwana wakho uze ukhethe umlinganiswa\n- Dibanisa isixhobo sakhe ngaphandle kwephasiwedi, okanye usebenzise iMo yabantwana kwisixhobo sakho\n- Ukusukela ngoko igama ngalinye alikhangelayo liyagcinwa, kwaye ubona inkqubela kwibhodi yomzali",
+      "cta": "Yongeza umntwana",
+      "next": "Ufuna uncedo? Phendula nje le imeyile."
+    },
+    "act-return-family": {
+      "subject": "Isiqalo esifutshane kwi-Gadit, esenzelwe wena",
+      "body": "Molo {name},\n\nSifuna ukuqinisekisa ukuba abantwana bakho bafumana yonke into i-Gadit enokubanika yona. Nanga amanyathelo amathathu amafutshane okuqalisa kule veki:\n\n- Yongeza umntwana kwiakhawunti, ukuba awukakwenzi (umzuzu omnye)\n- Khangelani kunye igama elinye encwadini okanye kumsebenzi wasekhaya\n- Vula imidlalo, eyenziwe ngamagama agcinwe ngumntwana wakho",
+      "cta": "Qalisa ngoku",
+      "next": "Ufuna sikubonise ukuba isebenza njani? Phendula le imeyile, kwaye siza kulungiselela umnxeba omfutshane wemizuzu eli-10."
+    },
+    "act-return-indiv": {
+      "subject": "Isiqalo esifutshane kwi-Gadit, esenzelwe wena",
+      "body": "Molo {name},\n\nSifuna ukuqinisekisa ukuba ufumana yonke into i-Gadit enokukunika yona. Nanga amanyathelo amathathu amafutshane okuqalisa kule veki:\n\n- Khangela igama elinye odibene nalo namhlanje\n- Ligcine encwadini yakho yamagama\n- Ziqhelise amagama akho kwimidlalo emifutshane",
+      "cta": "Khangela igama",
+      "next": "Ufuna sikubonise ukuba isebenza njani? Phendula le imeyile, kwaye siza kulungiselela umnxeba omfutshane wemizuzu eli-10."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "{child}: oko akufundileyo kwi-Gadit kule veki",
+    "subjectActiveMany": "Oko abantwana bakho bakufundileyo kwi-Gadit kule veki",
+    "subjectQuietOne": "{child}: ingcamango encinci yeveki kwi-Gadit",
+    "subjectQuietMany": "Ingcamango encinci yeveki yabantwana bakho kwi-Gadit",
+    "greeting": "Molo {name},",
+    "introActiveOne": "Nasi isishwankathelo seveki sika-{child} kwi-Gadit.",
+    "introActiveMany": "Nasi isishwankathelo seveki sabantwana bakho kwi-Gadit.",
+    "introQuietOne": "Nantsi ingcamango encinci yale veki no-{child}.",
+    "introQuietMany": "Nantsi ingcamango encinci yale veki nabantwana bakho.",
+    "together": {
+      "one": "Kule veki abantwana bakho bafunde igama elitsha eli-{n}.",
+      "other": "Kule veki abantwana bakho bafunde amagama amatsha angama-{n}."
+    },
+    "childFallback": "Umntwana wakho",
+    "newLabel": {
+      "one": "igama elitsha kule veki",
+      "other": "amagama amatsha kule veki"
+    },
+    "wordsLabel": "Amagama:",
+    "more": {
+      "one": "nelinye eli-{n}",
+      "other": "namanye angama-{n}"
+    },
+    "total": {
+      "one": "Encwadini yamagama: igama eli-{n}",
+      "other": "Encwadini yamagama: amagama angama-{n}"
+    },
+    "streak": {
+      "one": "Uthotho losuku olu-{n}",
+      "other": "Uthotho lweentsuku ezi-{n}"
+    },
+    "learned": {
+      "one": "Ukufunda {lang}: igama eli-{n} lifundwe ngokupheleleyo kule veki",
+      "other": "Ukufunda {lang}: amagama angama-{n} afundwe ngokupheleleyo kule veki"
+    },
+    "langEn": "isiNgesi",
+    "langHe": "isiHebhere",
+    "idea": "Ingcamango yale veki:",
+    "ideaGame": "Umdlalo wemizuzu emihlanu ngamagama asele egciniwe encwadini yamagama.",
+    "ideaFirst": "Khangelani kunye igama elinye encwadini okanye kumsebenzi wasekhaya. Ligcinwa encwadini yamagama.",
+    "ideaConnect": "Ukuze ubone apha oko umntwana akufundayo, dibanisa isixhobo sakhe okanye usebenzise iMo yabantwana kwisixhobo sakho.",
+    "playCta": "Vula imidlalo",
+    "connectCta": "Dibanisa",
+    "outroActive": "Ingcamango: khetha igama elinye kuluhlu uze ubuze abantwana bakho ngexesha lesidlo sangokuhlwa ukuba lithetha ntoni.",
+    "outroQuiet": "Imizuzu embalwa ngosuku yanele. Igama ngalinye eligcinwe encwadini yamagama lingena kwimidlalo.",
+    "cta": "Vula ibhodi yomzali",
+    "next": "Ufuna uncedo? Phendula nje le imeyile."
+  },
+  "fixed": {
+    "unsub": "Zikhuphe kuluhlu",
+    "tagline": "Lonke igama, liqondakele",
+    "closing": "Sikhona nakuwuphi na umbuzo okanye xa ufuna uncedo.",
+    "signature": "Iqela le-Gadit",
+    "helpText": "Zonke izikhokelo"
+  }
+}

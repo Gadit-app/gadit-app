@@ -4,6 +4,8 @@ import { loadFamilyProgress, type ChildProgressFull } from "@/lib/family-progres
 import { activationLang } from "@/lib/activation";
 import { isInternalEmail } from "@/lib/internal-accounts";
 import { renderEmailHtmlV2, mdLiteToHtml, applyName } from "./render";
+import { RTL_LANGS } from "./family-i18n";
+import { EMAIL_I18N, plural, fill, type WeeklyStrings } from "./i18n";
 import { sendDripEmail } from "./send";
 import { buildUnsubUrl } from "./registry";
 
@@ -23,8 +25,11 @@ import { buildUnsubUrl } from "./registry";
  * Sent by the daily drip cron on Sunday runs (Israel date), once per family
  * per ISO week. Ledger: users/{ownerUid}.weeklyReportSent = "YYYY-Www".
  * Switch: emailConfig/weeklyReport.enabled (off until Gadi approves).
- * Copy: Hebrew and English in code; every other language gets the English
- * email (LTR), with links in the family's own language.
+ * Copy: Hebrew and English in code (with the child's gender in Hebrew);
+ * every other UI language from i18n/<lang>.json (2026-10-22, gender-neutral,
+ * plural forms by Intl.PluralRules), English when a language has none.
+ * Direction follows the language used (rtl for he, ar, fa); links are in
+ * the family's own language.
  */
 
 export const WEEKLY_REPORT_CONFIG_DOC = "emailConfig/weeklyReport";
@@ -201,6 +206,58 @@ const EN: Copy = {
   next: "Need help? Just reply to this email.",
 };
 
+/** The copy of any other UI language, from its translated strings. Neutral
+ *  (no gender); the idea lines sit in a card headed by the child's name. */
+function copyFrom(lang: string, s: WeeklyStrings): Copy {
+  const child = (one: ReportChild) => ({ child: one.name.trim() });
+  return {
+    subjectActive: (one) => (one ? fill(s.subjectActiveOne, child(one)) : s.subjectActiveMany),
+    subjectQuiet: (one) => (one ? fill(s.subjectQuietOne, child(one)) : s.subjectQuietMany),
+    greeting: s.greeting,
+    introActive: (one) => (one ? fill(s.introActiveOne, child(one)) : s.introActiveMany),
+    introQuiet: (one) => (one ? fill(s.introQuietOne, child(one)) : s.introQuietMany),
+    together: (n) => plural(lang, s.together, n),
+    childName: (c) => c.name.trim() || s.childFallback,
+    newLabel: (n) => plural(lang, s.newLabel, n),
+    wordsLabel: s.wordsLabel,
+    more: (n) => plural(lang, s.more, n),
+    total: (n) => plural(lang, s.total, n),
+    streak: (n) => plural(lang, s.streak, n),
+    learned: (c) => {
+      const l = c.learning;
+      if (!l || !l.learnedWeek) return "";
+      return plural(lang, s.learned, l.learnedWeek, { lang: l.lang === "en" ? s.langEn : s.langHe });
+    },
+    idea: s.idea,
+    ideaGame: () => s.ideaGame,
+    ideaFirst: () => s.ideaFirst,
+    ideaConnect: () => s.ideaConnect,
+    playCta: s.playCta,
+    connectCta: s.connectCta,
+    outroActive: s.outroActive,
+    outroQuiet: s.outroQuiet,
+    cta: s.cta,
+    next: s.next,
+  };
+}
+
+/** The language the report is written in: Hebrew, English, or a UI
+ *  language with a translation; anything else reads the English report. */
+export function weeklyCopyLang(lang: string | null | undefined): string {
+  if (lang === "he") return "he";
+  return lang && EMAIL_I18N[lang]?.weekly ? lang : "en";
+}
+
+const COPY_CACHE = new Map<string, Copy>();
+function copyFor(lang: string): Copy {
+  if (lang === "he") return HE;
+  const s = EMAIL_I18N[lang]?.weekly;
+  if (!s) return EN;
+  let c = COPY_CACHE.get(lang);
+  if (!c) COPY_CACHE.set(lang, (c = copyFrom(lang, s)));
+  return c;
+}
+
 function childCard(c: ReportChild, C: Copy, rtl: boolean, linkLang: string): string {
   const dir = rtl ? "rtl" : "ltr";
   const align = rtl ? "right" : "left";
@@ -246,14 +303,15 @@ function childCard(c: ReportChild, C: Copy, rtl: boolean, linkLang: string): str
 }
 
 /** Pure renderer (cron, admin preview, sample). `lang` is the copy language
- *  ("he" or "en"); `linkLang` is the family's own UI language for the links. */
+ *  (he, en, or a translated UI language; any other reads English);
+ *  `linkLang` is the family's own UI language for the links. */
 export function renderWeeklyReport(
   kids: ReportChild[],
   opts: { lang: string; linkLang?: string; firstName: string | null; unsubscribeUrl: string },
 ): { subject: string; html: string; text: string } {
-  const he = opts.lang === "he";
-  const C = he ? HE : EN;
-  const contentLang = he ? "he" : "en";
+  const contentLang = weeklyCopyLang(opts.lang);
+  const C = contentLang === "en" ? EN : copyFor(contentLang);
+  const he = RTL_LANGS.has(contentLang); // right-to-left (he, ar, fa)
   const linkLang = opts.linkLang || contentLang;
   const active = kids.filter((k) => k.thisWeek > 0);
   // One named child: the subject and intro use the name; otherwise "the kids".
@@ -297,11 +355,12 @@ export async function loadReportChildren(ownerUid: string): Promise<ChildProgres
   return p.children.filter((c) => c.role === "boy" || c.role === "girl");
 }
 
-/** Copy language for a family: Hebrew or English (every other UI language
- *  reads the English email); links keep the family's own UI language. */
-export function weeklyReportLangs(d: DocumentData, override?: string | null): { lang: "he" | "en"; linkLang: string } {
+/** Copy language for a family: its UI language when the report is written
+ *  in it (he, en and the translated ones), else English; links keep the
+ *  family's own UI language. */
+export function weeklyReportLangs(d: DocumentData, override?: string | null): { lang: string; linkLang: string } {
   const ui = override || activationLang(d);
-  return { lang: ui === "he" ? "he" : "en", linkLang: ui };
+  return { lang: weeklyCopyLang(ui), linkLang: ui };
 }
 
 /** Build the report for one owner; null when the family has no child. */

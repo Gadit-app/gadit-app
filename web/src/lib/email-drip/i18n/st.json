@@ -1,0 +1,123 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Re o boloketse sebaka sa hao ho Gadit",
+      "body": "Dumela {name},\n\nO qadile ho ingodisetsa {plan} mme wa kgaotsa pele feela o qeta.\n\nRe o boloketse tsohle, mme o ka tswela pele hantle moo o kgaoditseng teng.\n\n- Matsatsi a 14 mahala, mme ha ho lefiswe letho kajeno\n- Ka mora nako ya teko: {price}\n- Re tla o romella kgopotso ka imeile pele nako ya teko e fela\n- O ka emisa nako efe kapa efe leqepheng la hao la akhaonte, ka ho tobetsa habedi",
+      "cta": "Qeta ho ingodisa",
+      "next": "Ho na le ho sa hlakang? Araba feela imeile ena, mme re tla o thusa."
+    },
+    "rec-e2-family": {
+      "subject": "Seo bana ba hao ba se fumanang ho Gadit",
+      "body": "Dumela {name},\n\nRe ne re batla ho o bolella ka bokgutshwane seo se emetseng bana ba hao ho Gadit:\n\nLentswe le leng le le leng leo ba kopanang le lona, bukeng, mosebetsing wa hae kapa moqoqong, le fetoha lentswe leo ba le utlwisisang ka nnete.\n\n- Tlhaloso e lekaneng ngwana wa hao, e nang le setshwantsho bakeng sa moelelo o mong le o mong\n- Dipapadi le boikwetliso tse entsweng ka mantswe a bona\n- Thuso ka mosebetsi wa hae\n- Leqephe la taolo la motswadi le o bontshang tswelopele ya ngwana e mong le e mong\n\nNgodiso ya hao ya {plan} e bolokilwe, mme ho setse feela mohato wa ho qetela.",
+      "cta": "Qeta ho ingodisa",
+      "next": "Ha ho lefiswe letho kajeno, mme o ka emisa nako efe kapa efe leqepheng la hao la akhaonte."
+    },
+    "rec-e2-indiv": {
+      "subject": "Seo se o emetseng ho Gadit",
+      "body": "Dumela {name},\n\nRe ne re batla ho o bolella ka bokgutshwane seo se o emetseng ho Gadit:\n\nLentswe le leng le le leng, bukeng, mosebetsing kapa moqoqong, le fetoha lentswe leo o le utlwisisang ka botlalo.\n\n- Meelelo yohle ya lentswe, ka setshwantsho bakeng sa o mong le o mong\n- Dipapadi le boikwetliso tse entsweng ka mantswe a hao\n- Bukana ya hao ya mantswe e bolokang tsohle tseo o ithutileng tsona\n\nNgodiso ya hao ya {plan} e bolokilwe, mme ho setse feela mohato wa ho qetela.",
+      "cta": "Qeta ho ingodisa",
+      "next": "Ha ho lefiswe letho kajeno, mme o ka emisa nako efe kapa efe leqepheng la hao la akhaonte."
+    },
+    "rec-e3": {
+      "subject": "Na ho na le se o sitisitseng? Re bolelle",
+      "body": "Dumela {name},\n\nNgodiso ya hao ya {plan} e ntse e bolokilwe.\n\nHaeba ho na le se o thibelang, araba feela imeile ena, mme re tla o thusa.",
+      "cta": "Qeta ho ingodisa",
+      "next": "",
+      "signature": "Sehlopha sa Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Lentswe la pele la bana ba hao ho Gadit",
+      "body": "Dumela {name},\n\nTsela e molemohadi ya ho qala: dula le ngwana wa hao metsotso e mehlano, le batle lentswe le le leng leo a kopaneng le lona kajeno, bukeng, mosebetsing wa hae kapa moqoqong.\n\n- Ngola lentswe sebakeng sa ho batla\n- Bona tlhaloso e lekaneng ngwana wa hao, e nang le setshwantsho bakeng sa moelelo o mong le o mong\n- Le boloke bukaneng ya mantswe, mme ho tloha moo le kena dipapading tsa hae\n\nLentswe le le leng kajeno, mme ngwana wa hao o se a qala ho aha tsebo ya hae ya mantswe.",
+      "cta": "Batla lentswe la pele",
+      "next": "O hloka thuso? Araba feela imeile ena."
+    },
+    "act-first-word-indiv": {
+      "subject": "Lentswe la hao la pele ho Gadit",
+      "body": "Dumela {name},\n\nTsela e molemohadi ya ho qala: batla lentswe le le leng leo o kopaneng le lona kajeno, bukeng, mosebetsing kapa moqoqong.\n\n- Meelelo yohle ya lona, ka setshwantsho bakeng sa o mong le o mong\n- Moo lentswe le tswang teng\n- Le boloke bukaneng ya hao ya mantswe mme o ikwetlise ka lona ka dipapadi tse kgutshwane\n\nLentswe le le leng kajeno, mme tsebo ya hao ya mantswe e se e ntse e hola.",
+      "cta": "Batla lentswe la pele",
+      "next": "O hloka thuso? Araba feela imeile ena."
+    },
+    "act-first-word-2": {
+      "subject": "Lentswe le le leng, metsotso e mehlano",
+      "body": "Dumela {name},\n\nMohopolo o monyane wa kajeno: kgetha lentswe le le leng bukeng, mosebetsing wa hae kapa ditabeng, mme o le batle ho Gadit.\n\nKa motsotso feela o bona meelelo yohle ya lona, ka setshwantsho le mehlala, mme le bolokwa bukaneng ya mantswe hore o ikwetlise.\n\nKe ka tsela ena tsebo ya mantswe e holang ka yona: lentswe le le leng ka nako.",
+      "cta": "Batla lentswe hona jwale",
+      "next": "O hloka thuso? Araba feela imeile ena."
+    },
+    "act-add-child": {
+      "subject": "Mohato o mong hape: eketsa ngwana wa hao",
+      "body": "Dumela {name},\n\nGadit Family e etseditswe bana ba hao, mme ha ho so be le ngwana ya ekeditsweng akhaonteng. Ho nka motsotso:\n\n- Ngola lebitso la ngwana wa hao mme o kgethe sebapali\n- Hokela sesebediswa sa hae ntle le phasewete, kapa o sebedise Mokgwa wa bana sesebedisweng sa hao\n- Ho tloha moo lentswe le leng le le leng leo a le batlang le a bolokwa, mme o bona tswelopele leqepheng la taolo la motswadi",
+      "cta": "Eketsa ngwana",
+      "next": "O hloka thuso? Araba feela imeile ena."
+    },
+    "act-return-family": {
+      "subject": "Qalo e kgutshwane ho Gadit, e o etseditsweng",
+      "body": "Dumela {name},\n\nRe batla ho netefatsa hore bana ba hao ba fumana tsohle tseo Gadit e ka ba fang tsona. Mehato e meraro e kgutshwane ya ho qala bekeng ena ke ena:\n\n- Eketsa ngwana akhaonteng, haeba o so ka o etsa jwalo (motsotso o le mong)\n- Batlang lentswe le le leng mmoho bukeng kapa mosebetsing wa hae\n- Bula dipapadi, tse entsweng ka mantswe ao ngwana wa hao a a bolokileng",
+      "cta": "Qala hona jwale",
+      "next": "O batla hore re o bontshe hore e sebetsa jwang? Araba imeile ena, mme re tla hlophisa mohala o mokgutshwane wa metsotso e 10."
+    },
+    "act-return-indiv": {
+      "subject": "Qalo e kgutshwane ho Gadit, e o etseditsweng",
+      "body": "Dumela {name},\n\nRe batla ho netefatsa hore o fumana tsohle tseo Gadit e ka o fang tsona. Mehato e meraro e kgutshwane ya ho qala bekeng ena ke ena:\n\n- Batla lentswe le le leng leo o kopaneng le lona kajeno\n- Le boloke bukaneng ya hao ya mantswe\n- Ikwetlise mantswe a hao ka dipapadi tse kgutshwane",
+      "cta": "Batla lentswe",
+      "next": "O batla hore re o bontshe hore e sebetsa jwang? Araba imeile ena, mme re tla hlophisa mohala o mokgutshwane wa metsotso e 10."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "{child}: seo a ithutileng sona ho Gadit bekeng ena",
+    "subjectActiveMany": "Seo bana ba hao ba ithutileng sona ho Gadit bekeng ena",
+    "subjectQuietOne": "{child}: mohopolo o monyane wa beke ho Gadit",
+    "subjectQuietMany": "Mohopolo o monyane wa beke ya bana ba hao ho Gadit",
+    "greeting": "Dumela {name},",
+    "introActiveOne": "Kakaretso ya beke ya {child} ho Gadit ke ena.",
+    "introActiveMany": "Kakaretso ya beke ya bana ba hao ho Gadit ke ena.",
+    "introQuietOne": "Mohopolo o monyane wa beke ena le {child} ke ona.",
+    "introQuietMany": "Mohopolo o monyane wa beke ena le bana ba hao ke ona.",
+    "together": {
+      "one": "Bekeng ena bana ba hao ba ithutile lentswe le letjha le {n}.",
+      "other": "Bekeng ena bana ba hao ba ithutile mantswe a matjha a {n}."
+    },
+    "childFallback": "Ngwana wa hao",
+    "newLabel": {
+      "one": "lentswe le letjha bekeng ena",
+      "other": "mantswe a matjha bekeng ena"
+    },
+    "wordsLabel": "Mantswe:",
+    "more": {
+      "one": "le le leng hape",
+      "other": "le a mang a {n}"
+    },
+    "total": {
+      "one": "Bukaneng ya mantswe: lentswe le {n}",
+      "other": "Bukaneng ya mantswe: mantswe a {n}"
+    },
+    "streak": {
+      "one": "Letsatsi le {n} ka tatellano",
+      "other": "Matsatsi a {n} ka tatellano"
+    },
+    "learned": {
+      "one": "Ho ithuta {lang}: lentswe le {n} le ithutilwe ka botlalo bekeng ena",
+      "other": "Ho ithuta {lang}: mantswe a {n} a ithutilwe ka botlalo bekeng ena"
+    },
+    "langEn": "Senyesemane",
+    "langHe": "Seheberu",
+    "idea": "Mohopolo wa beke ena:",
+    "ideaGame": "Papadi ya metsotso e 5 ka mantswe a seng a bolokilwe bukaneng ya mantswe.",
+    "ideaFirst": "Batlang lentswe le le leng mmoho bukeng kapa mosebetsing wa hae. Le bolokwa bukaneng ya mantswe.",
+    "ideaConnect": "Ho bona mona seo ngwana a ithutang sona, hokela sesebediswa sa hae kapa o sebedise Mokgwa wa bana sesebedisweng sa hao.",
+    "playCta": "Bula dipapadi",
+    "connectCta": "Hokela",
+    "outroActive": "Mohopolo: kgetha lentswe le le leng lethathamong mme o botse bana ba hao nakong ya dijo tsa mantsiboya hore le bolela eng.",
+    "outroQuiet": "Metsotso e seng mekae ka letsatsi e a lekana. Lentswe le leng le le leng le bolokwang bukaneng ya mantswe le kena dipapading.",
+    "cta": "Bula leqephe la taolo la motswadi",
+    "next": "O hloka thuso? Araba feela imeile ena."
+  },
+  "fixed": {
+    "unsub": "Itlose lenaneong",
+    "tagline": "Lentswe le leng le le leng, le utlwisisehile",
+    "closing": "Re teng bakeng sa potso efe kapa efe kapa thuso.",
+    "signature": "Sehlopha sa Gadit",
+    "helpText": "Ditataiso tsohle"
+  }
+}

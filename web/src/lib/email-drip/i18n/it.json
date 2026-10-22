@@ -1,0 +1,116 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Ti abbiamo tenuto il posto su Gadit",
+      "body": "Ciao {name},\n\nHai iniziato l'iscrizione a {plan}, che si è fermata proprio prima della fine.\n\nAbbiamo salvato tutto per te, e puoi riprendere esattamente da dove avevi lasciato.\n\n- 14 giorni gratis, e oggi non ti viene addebitato nulla\n- Dopo la prova: {price}\n- Ti invieremo un promemoria via email prima che la prova finisca\n- Puoi annullare in qualsiasi momento dalla pagina del tuo account, con due clic",
+      "cta": "Completa l'iscrizione",
+      "next": "Qualcosa non è chiaro? Rispondi a questa email e ti aiutiamo."
+    },
+    "rec-e2-family": {
+      "subject": "Cosa trovano i tuoi figli su Gadit",
+      "body": "Ciao {name},\n\nVolevamo raccontarti in breve cosa aspetta i tuoi figli su Gadit:\n\nOgni parola che incontrano, in un libro, nei compiti o in una conversazione, diventa una parola che capiscono davvero.\n\n- Una spiegazione al livello di tuo figlio, con un'immagine per ogni significato\n- Giochi ed esercizi creati con le loro parole\n- Aiuto con i compiti\n- Una bacheca per i genitori che ti mostra i progressi di ogni figlio\n\nLa tua iscrizione a {plan} è salvata, e manca solo l'ultimo passo.",
+      "cta": "Completa l'iscrizione",
+      "next": "Oggi non ti viene addebitato nulla, e puoi annullare in qualsiasi momento dalla pagina del tuo account."
+    },
+    "rec-e2-indiv": {
+      "subject": "Cosa ti aspetta su Gadit",
+      "body": "Ciao {name},\n\nVolevamo raccontarti in breve cosa ti aspetta su Gadit:\n\nOgni parola, in un libro, al lavoro o in una conversazione, diventa una parola che capisci fino in fondo.\n\n- Tutti i significati della parola, con un'immagine per ognuno\n- Giochi ed esercizi creati con le tue parole\n- Un quaderno di parole personale che conserva tutto quello che hai imparato\n\nLa tua iscrizione a {plan} è salvata, e manca solo l'ultimo passo.",
+      "cta": "Completa l'iscrizione",
+      "next": "Oggi non ti viene addebitato nulla, e puoi annullare in qualsiasi momento dalla pagina del tuo account."
+    },
+    "rec-e3": {
+      "subject": "C'è stato un intoppo? Raccontacelo",
+      "body": "Ciao {name},\n\nLa tua iscrizione a {plan} è ancora salvata.\n\nSe qualcosa ti trattiene, rispondi a questa email e ti aiutiamo.",
+      "cta": "Completa l'iscrizione",
+      "next": "",
+      "signature": "Il team di Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "La prima parola dei tuoi figli su Gadit",
+      "body": "Ciao {name},\n\nIl modo migliore per iniziare: siediti cinque minuti con tuo figlio e cercate insieme una parola che ha incontrato oggi, in un libro, nei compiti o in una conversazione.\n\n- Scrivi la parola nella barra di ricerca\n- Guarda una spiegazione al livello di tuo figlio, con un'immagine per ogni significato\n- Salvala nel quaderno, e da lì entra nei suoi giochi\n\nUna parola oggi, e tuo figlio sta già costruendo un vocabolario tutto suo.",
+      "cta": "Cerca la prima parola",
+      "next": "Serve aiuto? Rispondi a questa email."
+    },
+    "act-first-word-indiv": {
+      "subject": "La tua prima parola su Gadit",
+      "body": "Ciao {name},\n\nIl modo migliore per iniziare: cerca una parola che hai incontrato oggi, in un libro, al lavoro o in una conversazione.\n\n- Tutti i suoi significati, con un'immagine per ognuno\n- Da dove viene la parola\n- Salvala nel tuo quaderno ed esercitati con brevi giochi\n\nUna parola oggi, e il tuo vocabolario sta già crescendo.",
+      "cta": "Cerca la prima parola",
+      "next": "Serve aiuto? Rispondi a questa email."
+    },
+    "act-first-word-2": {
+      "subject": "Una parola, cinque minuti",
+      "body": "Ciao {name},\n\nUna piccola idea per oggi: scegli una parola da un libro, dai compiti o dalle notizie, e cercala su Gadit.\n\nIn un minuto vedi tutti i suoi significati, con un'immagine ed esempi, e la parola viene salvata nel quaderno per esercitarsi.\n\nÈ così che cresce un vocabolario: una parola alla volta.",
+      "cta": "Cerca una parola ora",
+      "next": "Serve aiuto? Rispondi a questa email."
+    },
+    "act-add-child": {
+      "subject": "Ancora un passo: aggiungi tuo figlio",
+      "body": "Ciao {name},\n\nGadit Family è pensato per i tuoi figli, e nell'account non è ancora stato aggiunto nessun bambino. Basta un minuto:\n\n- Scrivi il nome di tuo figlio e scegli un personaggio\n- Collega un suo dispositivo senza password, oppure usa la modalità Bambini sul tuo dispositivo\n- Da quel momento ogni parola che cerca viene salvata per lui, e tu vedi i progressi sulla bacheca per i genitori",
+      "cta": "Aggiungi un bambino",
+      "next": "Serve aiuto? Rispondi a questa email."
+    },
+    "act-return-family": {
+      "subject": "Un inizio breve su Gadit, pensato per te",
+      "body": "Ciao {name},\n\nVogliamo che i tuoi figli ricevano tutto quello che Gadit può dare loro. Ecco tre piccoli passi per iniziare questa settimana:\n\n- Aggiungi un bambino all'account, se non l'hai ancora fatto (un minuto)\n- Cercate insieme una parola da un libro o dai compiti\n- Apri i giochi, creati con le parole che tuo figlio ha salvato",
+      "cta": "Inizia ora",
+      "next": "Vuoi che ti mostriamo come funziona? Rispondi a questa email e fissiamo una breve chiamata di 10 minuti."
+    },
+    "act-return-indiv": {
+      "subject": "Un inizio breve su Gadit, pensato per te",
+      "body": "Ciao {name},\n\nVogliamo che tu riceva tutto quello che Gadit può darti. Ecco tre piccoli passi per iniziare questa settimana:\n\n- Cerca una parola che hai incontrato oggi\n- Salvala nel tuo quaderno\n- Esercitati con le tue parole in brevi giochi",
+      "cta": "Cerca una parola",
+      "next": "Vuoi che ti mostriamo come funziona? Rispondi a questa email e fissiamo una breve chiamata di 10 minuti."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "Cosa ha imparato {child} su Gadit questa settimana",
+    "subjectActiveMany": "Cosa hanno imparato i tuoi figli su Gadit questa settimana",
+    "subjectQuietOne": "Una piccola idea per la settimana di {child} su Gadit",
+    "subjectQuietMany": "Una piccola idea per la settimana dei tuoi figli su Gadit",
+    "greeting": "Ciao {name},",
+    "introActiveOne": "Ecco il riepilogo settimanale di {child} su Gadit.",
+    "introActiveMany": "Ecco il riepilogo settimanale dei tuoi figli su Gadit.",
+    "introQuietOne": "Ecco una piccola idea per questa settimana con {child}.",
+    "introQuietMany": "Ecco una piccola idea per questa settimana con i tuoi figli.",
+    "together": {
+      "one": "Questa settimana i tuoi figli hanno imparato {n} parola nuova.",
+      "other": "Questa settimana i tuoi figli hanno imparato {n} parole nuove."
+    },
+    "childFallback": "Tuo figlio",
+    "newLabel": {
+      "one": "parola nuova questa settimana",
+      "other": "parole nuove questa settimana"
+    },
+    "wordsLabel": "Le parole:",
+    "more": {
+      "one": "e un'altra",
+      "other": "e altre {n}"
+    },
+    "total": {
+      "one": "Nel quaderno: {n} parola",
+      "other": "Nel quaderno: {n} parole"
+    },
+    "streak": {
+      "one": "{n} giorno di fila",
+      "other": "{n} giorni di fila"
+    },
+    "learned": {
+      "one": "{lang}: {n} parola imparata a fondo questa settimana",
+      "other": "{lang}: {n} parole imparate a fondo questa settimana"
+    },
+    "langEn": "Inglese",
+    "langHe": "Ebraico",
+    "idea": "Un'idea per questa settimana:",
+    "ideaGame": "Un gioco di 5 minuti con le parole già salvate nel quaderno.",
+    "ideaFirst": "Cercare insieme una parola da un libro o dai compiti. Viene salvata nel quaderno.",
+    "ideaConnect": "Per vedere qui cosa sta imparando tuo figlio, collega un suo dispositivo oppure usa la modalità Bambini sul tuo dispositivo.",
+    "playCta": "Apri i giochi",
+    "connectCta": "Collega",
+    "outroActive": "Un'idea: scegli una parola dalla lista e chiedi ai tuoi figli a cena cosa significa.",
+    "outroQuiet": "Bastano pochi minuti al giorno. Ogni parola salvata nel quaderno entra nei giochi.",
+    "cta": "Apri la bacheca per i genitori",
+    "next": "Serve aiuto? Rispondi a questa email."
+  }
+}

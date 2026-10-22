@@ -1,0 +1,98 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Gadit'teki yerinizi sizin için ayırdık",
+      "body": "Merhaba {name},\n\n{plan} için kayıt olmaya başladınız ve sona çok yaklaşmışken durdunuz.\n\nHer şeyi sizin için kaydettik, kaldığınız yerden devam edebilirsiniz.\n\n- 14 gün ücretsiz, bugün hiçbir ücret alınmaz\n- Deneme süresinden sonra: {price}\n- Deneme süresi bitmeden size e-postayla bir hatırlatma göndereceğiz\n- Hesap sayfanızdan istediğiniz zaman, iki tıklamayla iptal edebilirsiniz",
+      "cta": "Kaydı tamamla",
+      "next": "Anlaşılmayan bir şey mi var? Bu e-postayı yanıtlamanız yeterli, yardımcı olalım."
+    },
+    "rec-e2-family": {
+      "subject": "Çocuklarınız Gadit'te neler kazanıyor",
+      "body": "Merhaba {name},\n\nGadit'te çocuklarınızı nelerin beklediğini kısaca anlatmak istedik:\n\nKitapta, ödevde ya da sohbette karşılaştıkları her kelime, gerçekten anladıkları bir kelimeye dönüşür.\n\n- Çocuğunuzun seviyesine uygun açıklama, her anlam için bir resimle\n- Kendi kelimelerinden hazırlanan oyunlar ve alıştırmalar\n- Ödevlerde yardım\n- Her çocuğun ilerlemesini gösteren bir ebeveyn paneli\n\n{plan} kaydınız saklı, yalnızca son adım kaldı.",
+      "cta": "Kaydı tamamla",
+      "next": "Bugün hiçbir ücret alınmaz ve hesap sayfanızdan istediğiniz zaman iptal edebilirsiniz."
+    },
+    "rec-e2-indiv": {
+      "subject": "Gadit'te sizi neler bekliyor",
+      "body": "Merhaba {name},\n\nGadit'te sizi nelerin beklediğini kısaca anlatmak istedik:\n\nKitapta, işte ya da sohbette karşılaştığınız her kelime, sonuna kadar anladığınız bir kelimeye dönüşür.\n\n- Kelimenin tüm anlamları, her biri için bir resimle\n- Kendi kelimelerinizden hazırlanan oyunlar ve alıştırmalar\n- Öğrendiğiniz her şeyi saklayan kişisel bir kelime defteri\n\n{plan} kaydınız saklı, yalnızca son adım kaldı.",
+      "cta": "Kaydı tamamla",
+      "next": "Bugün hiçbir ücret alınmaz ve hesap sayfanızdan istediğiniz zaman iptal edebilirsiniz."
+    },
+    "rec-e3": {
+      "subject": "Bir şey mi engel oldu? Bize anlatın",
+      "body": "Merhaba {name},\n\n{plan} kaydınız hâlâ saklı.\n\nSizi durduran bir şey varsa bu e-postayı yanıtlamanız yeterli, yardımcı olalım.",
+      "cta": "Kaydı tamamla",
+      "next": "",
+      "signature": "Gadit ekibi"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Çocuklarınızın Gadit'teki ilk kelimesi",
+      "body": "Merhaba {name},\n\nBaşlamanın en iyi yolu: çocuğunuzla beş dakika oturun ve bugün kitapta, ödevde ya da sohbette karşılaştığı bir kelimeyi birlikte arayın.\n\n- Kelimeyi arama kutusuna yazın\n- Çocuğunuzun seviyesine uygun açıklamayı görün, her anlam için bir resimle\n- Kelimeyi deftere kaydedin, oradan çocuğunuzun oyunlarına geçer\n\nBugün tek bir kelimeyle çocuğunuz kendi kelime dağarcığını kurmaya başlıyor.",
+      "cta": "İlk kelimeyi ara",
+      "next": "Yardıma mı ihtiyacınız var? Bu e-postayı yanıtlamanız yeterli."
+    },
+    "act-first-word-indiv": {
+      "subject": "Gadit'teki ilk kelimeniz",
+      "body": "Merhaba {name},\n\nBaşlamanın en iyi yolu: bugün kitapta, işte ya da sohbette karşılaştığınız bir kelimeyi arayın.\n\n- Kelimenin tüm anlamları, her biri için bir resimle\n- Kelimenin nereden geldiği\n- Kelimeyi defterinize kaydedin ve kısa oyunlarla pekiştirin\n\nBugün tek bir kelimeyle kelime dağarcığınız büyümeye başlıyor.",
+      "cta": "İlk kelimeyi ara",
+      "next": "Yardıma mı ihtiyacınız var? Bu e-postayı yanıtlamanız yeterli."
+    },
+    "act-first-word-2": {
+      "subject": "Bir kelime, beş dakika",
+      "body": "Merhaba {name},\n\nBugün için küçük bir fikir: bir kitaptan, ödevden ya da haberlerden bir kelime seçin ve Gadit'te arayın.\n\nBir dakika içinde kelimenin tüm anlamlarını resim ve örneklerle görürsünüz, kelime de alıştırma için deftere kaydedilir.\n\nKelime dağarcığı böyle büyür: her seferinde bir kelime.",
+      "cta": "Şimdi bir kelime ara",
+      "next": "Yardıma mı ihtiyacınız var? Bu e-postayı yanıtlamanız yeterli."
+    },
+    "act-add-child": {
+      "subject": "Bir adım daha: çocuğunuzu ekleyin",
+      "body": "Merhaba {name},\n\nGadit Family çocuklarınız için tasarlandı, ancak hesaba henüz hiç çocuk eklenmedi. Yalnızca bir dakikanızı alır:\n\n- Çocuğunuzun adını yazın ve bir karakter seçin\n- Çocuğunuzun kendi cihazını şifresiz bağlayın ya da kendi cihazınızda Çocuk modunu kullanın\n- Bundan sonra çocuğunuzun aradığı her kelime onun için kaydedilir, siz de ilerlemeyi ebeveyn panelinde görürsünüz",
+      "cta": "Çocuk ekle",
+      "next": "Yardıma mı ihtiyacınız var? Bu e-postayı yanıtlamanız yeterli."
+    },
+    "act-return-family": {
+      "subject": "Gadit'te kısa bir başlangıç, sizin için",
+      "body": "Merhaba {name},\n\nÇocuklarınızın Gadit'in sunduğu her şeyden yararlanmasını istiyoruz. Bu hafta başlamak için üç kısa adım:\n\n- Henüz eklemediyseniz hesaba bir çocuk ekleyin (bir dakika)\n- Bir kitaptan ya da ödevden birlikte bir kelime arayın\n- Çocuğunuzun kaydettiği kelimelerden hazırlanan oyunları açın",
+      "cta": "Hemen başla",
+      "next": "Nasıl çalıştığını size gösterelim mi? Bu e-postayı yanıtlayın, 10 dakikalık kısa bir görüşme ayarlayalım."
+    },
+    "act-return-indiv": {
+      "subject": "Gadit'te kısa bir başlangıç, sizin için",
+      "body": "Merhaba {name},\n\nGadit'in sunduğu her şeyden yararlanmanızı istiyoruz. Bu hafta başlamak için üç kısa adım:\n\n- Bugün karşılaştığınız bir kelimeyi arayın\n- Kelimeyi defterinize kaydedin\n- Kelimelerinizi kısa oyunlarla pekiştirin",
+      "cta": "Bir kelime ara",
+      "next": "Nasıl çalıştığını size gösterelim mi? Bu e-postayı yanıtlayın, 10 dakikalık kısa bir görüşme ayarlayalım."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "{child} bu hafta Gadit'te neler öğrendi",
+    "subjectActiveMany": "Çocuklarınız bu hafta Gadit'te neler öğrendi",
+    "subjectQuietOne": "{child} için bu hafta Gadit'te küçük bir fikir",
+    "subjectQuietMany": "Çocuklarınız için bu hafta Gadit'te küçük bir fikir",
+    "greeting": "Merhaba {name},",
+    "introActiveOne": "İşte {child} için bu haftanın Gadit özeti.",
+    "introActiveMany": "İşte çocuklarınız için bu haftanın Gadit özeti.",
+    "introQuietOne": "İşte bu hafta {child} ile yapabileceğiniz küçük bir fikir.",
+    "introQuietMany": "İşte bu hafta çocuklarınızla yapabileceğiniz küçük bir fikir.",
+    "together": { "one": "Bu hafta çocuklarınız {n} yeni kelime öğrendi.", "other": "Bu hafta çocuklarınız {n} yeni kelime öğrendi." },
+    "childFallback": "Çocuğunuz",
+    "newLabel": { "one": "yeni kelime bu hafta", "other": "yeni kelime bu hafta" },
+    "wordsLabel": "Kelimeler:",
+    "more": { "one": "ve {n} kelime daha", "other": "ve {n} kelime daha" },
+    "total": { "one": "Defterde: {n} kelime", "other": "Defterde: {n} kelime" },
+    "streak": { "one": "{n} günlük seri", "other": "{n} günlük seri" },
+    "learned": { "one": "{lang}: bu hafta {n} kelime tamamen öğrenildi", "other": "{lang}: bu hafta {n} kelime tamamen öğrenildi" },
+    "langEn": "İngilizce",
+    "langHe": "İbranice",
+    "idea": "Bu haftanın fikri:",
+    "ideaGame": "Defterde kayıtlı kelimelerle 5 dakikalık bir oyun.",
+    "ideaFirst": "Bir kitaptan ya da ödevden birlikte bir kelime arayın. Kelime deftere kaydedilir.",
+    "ideaConnect": "Çocuğunuzun neler öğrendiğini burada görmek için çocuğunuzun kendi cihazını bağlayın ya da kendi cihazınızda Çocuk modunu kullanın.",
+    "playCta": "Oyunları aç",
+    "connectCta": "Bağla",
+    "outroActive": "Bir fikir: listeden bir kelime seçin ve akşam yemeğinde çocuklarınıza ne anlama geldiğini sorun.",
+    "outroQuiet": "Günde birkaç dakika yeterli. Deftere kaydedilen her kelime oyunlara geçer.",
+    "cta": "Ebeveyn panelini aç",
+    "next": "Yardıma mı ihtiyacınız var? Bu e-postayı yanıtlamanız yeterli."
+  }
+}

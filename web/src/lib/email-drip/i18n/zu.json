@@ -1,0 +1,116 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Sikugcinele indawo yakho kwa-Gadit",
+      "body": "Sawubona {name},\n\nUqale ukubhalisela i-{plan}, wama ngaphambi nje kokuthi uqede.\n\nSikugcinele konke, futhi ungaqhubeka khona kanye lapho ume khona.\n\n- Izinsuku ezingu-14 mahhala, futhi akukho okukhokhiswayo namuhla\n- Ngemva kwesivivinyo: {price}\n- Sizokuthumelela isikhumbuzo nge-imeyili ngaphambi kokuthi isivivinyo siphele\n- Ungakhansela noma nini ekhasini lakho le-akhawunti, ngokuchofoza kabili",
+      "cta": "Qedela ukubhalisa",
+      "next": "Kukhona okungacacile? Vele uphendule le imeyili, sizokusiza."
+    },
+    "rec-e2-family": {
+      "subject": "Lokho izingane zakho ezikutholayo kwa-Gadit",
+      "body": "Sawubona {name},\n\nBesifuna ukukutshela kafushane ukuthi yini elinde izingane zakho kwa-Gadit:\n\nIgama ngalinye ezihlangana nalo, encwadini, emsebenzini wasekhaya noma engxoxweni, liba yigama eziliqonda ngempela.\n\n- Incazelo esezingeni lengane yakho, enesithombe sencazelo ngayinye\n- Imidlalo nokuzijwayeza okwenziwe ngamagama azo\n- Usizo ngomsebenzi wasekhaya\n- Ideshibhodi yomzali ekukhombisa intuthuko yengane ngayinye\n\nUkubhalisela kwakho i-{plan} kugciniwe, futhi kusele isinyathelo sokugcina kuphela.",
+      "cta": "Qedela ukubhalisa",
+      "next": "Akukho okukhokhiswayo namuhla, futhi ungakhansela noma nini ekhasini lakho le-akhawunti."
+    },
+    "rec-e2-indiv": {
+      "subject": "Okukulindile kwa-Gadit",
+      "body": "Sawubona {name},\n\nBesifuna ukukutshela kafushane ukuthi yini ekulindile kwa-Gadit:\n\nIgama ngalinye, encwadini, emsebenzini noma engxoxweni, liba yigama oliqonda ngokuphelele.\n\n- Zonke izincazelo zegama, ngesithombe sencazelo ngayinye\n- Imidlalo nokuzijwayeza okwenziwe ngamagama akho\n- Incwadi yakho yamagama egcina konke okufundile\n\nUkubhalisela kwakho i-{plan} kugciniwe, futhi kusele isinyathelo sokugcina kuphela.",
+      "cta": "Qedela ukubhalisa",
+      "next": "Akukho okukhokhiswayo namuhla, futhi ungakhansela noma nini ekhasini lakho le-akhawunti."
+    },
+    "rec-e3": {
+      "subject": "Kukhona okukuvimbile? Sitshele",
+      "body": "Sawubona {name},\n\nUkubhalisela kwakho i-{plan} kusagciniwe.\n\nUma kukhona okukubambezelayo, vele uphendule le imeyili, sizokusiza.",
+      "cta": "Qedela ukubhalisa",
+      "next": "",
+      "signature": "Ithimba lakwa-Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Igama lokuqala lezingane zakho kwa-Gadit",
+      "body": "Sawubona {name},\n\nIndlela engcono kakhulu yokuqala: hlala nengane yakho imizuzu emihlanu, nisesha igama elilodwa ehlangene nalo namuhla, encwadini, emsebenzini wasekhaya noma engxoxweni.\n\n- Thayipha igama endaweni yokusesha\n- Bona incazelo esezingeni lengane yakho, enesithombe sencazelo ngayinye\n- Ligcine encwadini yamagama, bese lingena emidlalweni yayo\n\nIgama elilodwa namuhla, futhi ingane yakho isivele yakha isilulumagama sayo.",
+      "cta": "Sesha igama lokuqala",
+      "next": "Udinga usizo? Vele uphendule le imeyili."
+    },
+    "act-first-word-indiv": {
+      "subject": "Igama lakho lokuqala kwa-Gadit",
+      "body": "Sawubona {name},\n\nIndlela engcono kakhulu yokuqala: sesha igama elilodwa ohlangene nalo namuhla, encwadini, emsebenzini noma engxoxweni.\n\n- Zonke izincazelo zalo, ngesithombe sencazelo ngayinye\n- Ukuthi igama livelaphi\n- Ligcine encwadini yakho yamagama bese uzijwayeza ngalo emidlalweni emifushane\n\nIgama elilodwa namuhla, futhi isilulumagama sakho sesiyakhula.",
+      "cta": "Sesha igama lokuqala",
+      "next": "Udinga usizo? Vele uphendule le imeyili."
+    },
+    "act-first-word-2": {
+      "subject": "Igama elilodwa, imizuzu emihlanu",
+      "body": "Sawubona {name},\n\nUmbono omncane wanamuhla: khetha igama elilodwa encwadini, emsebenzini wasekhaya noma ezindabeni, bese ulisesha kwa-Gadit.\n\nNgomzuzu nje ubona zonke izincazelo zalo, ngesithombe nezibonelo, futhi ligcinwa encwadini yamagama ukuze uzijwayeze.\n\nYile ndlela isilulumagama esikhula ngayo: igama elilodwa ngesikhathi.",
+      "cta": "Sesha igama manje",
+      "next": "Udinga usizo? Vele uphendule le imeyili."
+    },
+    "act-add-child": {
+      "subject": "Esinye isinyathelo: engeza ingane yakho",
+      "body": "Sawubona {name},\n\nI-Gadit Family yakhelwe izingane zakho, kodwa ayikho ingane esengezwe ku-akhawunti okwamanje. Kuthatha umzuzu:\n\n- Thayipha igama lengane yakho bese ukhetha umlingiswa\n- Xhuma idivayisi yayo ngaphandle kwephasiwedi, noma usebenzise Imodi yezingane kudivayisi yakho\n- Kusukela lapho, igama ngalinye eliseshwa yingane yakho liyagcinwa, futhi ubona intuthuko kudeshibhodi yomzali",
+      "cta": "Engeza ingane",
+      "next": "Udinga usizo? Vele uphendule le imeyili."
+    },
+    "act-return-family": {
+      "subject": "Isiqalo esifushane kwa-Gadit, esenzelwe wena",
+      "body": "Sawubona {name},\n\nSifuna ukuqinisekisa ukuthi izingane zakho zithola konke i-Gadit engazinika khona. Nazi izinyathelo ezintathu ezimfushane zokuqala kuleli sonto:\n\n- Engeza ingane ku-akhawunti, uma ungakakwenzi (umzuzu owodwa)\n- Seshani ndawonye igama elilodwa encwadini noma emsebenzini wasekhaya\n- Vula imidlalo, eyenziwe ngamagama agcinwe yingane yakho",
+      "cta": "Qala manje",
+      "next": "Ufuna sikukhombise ukuthi isebenza kanjani? Phendula le imeyili, sizohlela ucingo olufushane lwemizuzu eyi-10."
+    },
+    "act-return-indiv": {
+      "subject": "Isiqalo esifushane kwa-Gadit, esenzelwe wena",
+      "body": "Sawubona {name},\n\nSifuna ukuqinisekisa ukuthi uthola konke i-Gadit engakunika khona. Nazi izinyathelo ezintathu ezimfushane zokuqala kuleli sonto:\n\n- Sesha igama elilodwa ohlangene nalo namuhla\n- Ligcine encwadini yakho yamagama\n- Zijwayeze amagama akho emidlalweni emifushane",
+      "cta": "Sesha igama",
+      "next": "Ufuna sikukhombise ukuthi isebenza kanjani? Phendula le imeyili, sizohlela ucingo olufushane lwemizuzu eyi-10."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "{child}: lokho akufundile kwa-Gadit kuleli sonto",
+    "subjectActiveMany": "Lokho izingane zakho ezikufundile kwa-Gadit kuleli sonto",
+    "subjectQuietOne": "{child}: umbono omncane wesonto kwa-Gadit",
+    "subjectQuietMany": "Umbono omncane wesonto lezingane zakho kwa-Gadit",
+    "greeting": "Sawubona {name},",
+    "introActiveOne": "Nasi isifinyezo sesonto sika-{child} kwa-Gadit.",
+    "introActiveMany": "Nasi isifinyezo sesonto sezingane zakho kwa-Gadit.",
+    "introQuietOne": "Nanku umbono omncane walesi sonto no-{child}.",
+    "introQuietMany": "Nanku umbono omncane walesi sonto nezingane zakho.",
+    "together": {
+      "one": "Kuleli sonto izingane zakho zifunde igama elisha elingu-{n}.",
+      "other": "Kuleli sonto izingane zakho zifunde amagama amasha angu-{n}."
+    },
+    "childFallback": "Ingane yakho",
+    "newLabel": {
+      "one": "igama elisha kuleli sonto",
+      "other": "amagama amasha kuleli sonto"
+    },
+    "wordsLabel": "Amagama:",
+    "more": {
+      "one": "nelinye elingu-{n}",
+      "other": "namanye angu-{n}"
+    },
+    "total": {
+      "one": "Encwadini yamagama: igama elingu-{n}",
+      "other": "Encwadini yamagama: amagama angu-{n}"
+    },
+    "streak": {
+      "one": "Usuku olungu-{n} ngokulandelana",
+      "other": "Izinsuku ezingu-{n} ngokulandelana"
+    },
+    "learned": {
+      "one": "Ukufunda {lang}: igama elingu-{n} lifundwe kahle kuleli sonto",
+      "other": "Ukufunda {lang}: amagama angu-{n} afundwe kahle kuleli sonto"
+    },
+    "langEn": "isiNgisi",
+    "langHe": "isiHeberu",
+    "idea": "Umbono walesi sonto:",
+    "ideaGame": "Umdlalo wemizuzu emihlanu namagama asegciniwe encwadini yamagama.",
+    "ideaFirst": "Seshani ndawonye igama elilodwa encwadini noma emsebenzini wasekhaya. Ligcinwa encwadini yamagama.",
+    "ideaConnect": "Ukuze ubone lapha ukuthi ingane ifundani, xhuma idivayisi yayo noma usebenzise Imodi yezingane kudivayisi yakho.",
+    "playCta": "Vula imidlalo",
+    "connectCta": "Xhuma",
+    "outroActive": "Umbono: khetha igama elilodwa ohlwini bese ubuza izingane zakho ngesikhathi sokudla kwakusihlwa ukuthi lisho ukuthini.",
+    "outroQuiet": "Imizuzu embalwa ngosuku yanele. Igama ngalinye eligcinwa encwadini yamagama lingena emidlalweni.",
+    "cta": "Vula ideshibhodi yomzali",
+    "next": "Udinga usizo? Vele uphendule le imeyili."
+  }
+}

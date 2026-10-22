@@ -1,15 +1,18 @@
 import { renderEmailHtmlV2, mdLiteToHtml, applyName, type EmailContent } from "./render";
 import { isIndividualPriceId, INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY } from "@/lib/individual-prices";
 import { planCopy } from "@/lib/plan-copy";
+import { EMAIL_I18N } from "./i18n";
 
 /**
  * Copy of the abandoned-checkout recovery emails (Gadi 2026-10-21): three
  * mails to someone who opened /checkout and never entered a card. These are
- * the CODE DEFAULTS in Hebrew and English. The admin email editor (series
+ * the CODE DEFAULTS in Hebrew and English; every other UI language has a
+ * code translation in i18n/<lang>.json (2026-10-22, translated from Gadi's
+ * edited Hebrew in emailTemplates/rec-*.he). The admin email editor (series
  * "Checkout recovery") edits them per language; a saved override in
- * emailTemplates/{key} wins (email-templates-store.ts), and a language with
- * no translation saved there gets the English email. The cron sends the
- * effective content, so whatever is saved in the editor is what goes out.
+ * emailTemplates/{key} wins (email-templates-store.ts), then the code
+ * translation, then English. The cron sends the effective content, so
+ * whatever is saved in the editor is what goes out.
  *
  * Body is the markdown-lite of the drip emails (render.ts): blank line = new
  * paragraph, "- " lines = a list (shown here as bullets), **bold**.
@@ -97,7 +100,9 @@ const BY_LANG: Record<"he" | "en", LangContent> = {
       subject: "We saved your spot at Gadit",
       body: `Hi {name},
 
-You started signing up for {plan} and stopped just before the end. We saved everything, so you can pick up right where you left off.
+You started signing up for {plan} and stopped just before the end.
+
+We saved everything for you, and you can pick up right where you left off.
 
 - 14 days free, and nothing is charged today
 - After the trial: {price}
@@ -110,13 +115,16 @@ You started signing up for {plan} and stopped just before the end. We saved ever
       subject: "What your kids get with Gadit",
       body: `Hi {name},
 
-A quick word on what is waiting for your kids. Every word they meet, in a book, in homework or in conversation, becomes a word they truly understand.
+We wanted to tell you briefly what is waiting for your kids at Gadit:
+
+Every word they meet, in a book, in homework or in conversation, becomes a word they truly understand.
 
 - An explanation at your child's level, with a picture for every meaning
 - Games and practice made from their own words
+- Help with homework
 - A parent dashboard that shows you each child's progress
 
-Your {plan} signup is saved, only the last step is left.`,
+Your {plan} signup is saved, and only the last step is left.`,
       cta: "Finish signing up",
       next: "Nothing is charged today, and you can cancel anytime from your account page.",
     },
@@ -124,13 +132,15 @@ Your {plan} signup is saved, only the last step is left.`,
       subject: "What is waiting for you at Gadit",
       body: `Hi {name},
 
-A quick word on what is waiting for you. Every word you meet, in a book, at work or in conversation, becomes a word you truly understand.
+We wanted to tell you briefly what is waiting for you at Gadit:
+
+Every word, in a book, at work or in conversation, becomes a word you understand all the way.
 
 - Every meaning of the word, with a picture for each one
 - Games and practice made from your own words
 - A personal word notebook that keeps everything you learned
 
-Your {plan} signup is saved, only the last step is left.`,
+Your {plan} signup is saved, and only the last step is left.`,
       cta: "Finish signing up",
       next: "Nothing is charged today, and you can cancel anytime from your account page.",
     },
@@ -138,7 +148,9 @@ Your {plan} signup is saved, only the last step is left.`,
       subject: "Did something get in the way? Tell us",
       body: `Hi {name},
 
-Your {plan} signup is still saved. If something got in the way, just reply to this email and we'll help.`,
+Your {plan} signup is still saved.
+
+If something is holding you back, just reply to this email and we'll help.`,
       cta: "Finish signing up",
       next: "",
       signature: "The Gadit team",
@@ -177,6 +189,17 @@ function toContent(m: Mail): EmailContent {
 export const RECOVERY_CONTENT = Object.fromEntries(
   RECOVERY_META.map((m) => [m.key, { he: toContent(BY_LANG.he[FIELD[m.key]]), en: toContent(BY_LANG.en[FIELD[m.key]]) }]),
 ) as Record<RecoveryKey, { he: EmailContent; en: EmailContent }>;
+
+/** Code translations into every other UI language (i18n/<lang>.json, made
+ *  2026-10-22 from Gadi's edited Hebrew), keyed like the store: key → lang. */
+export const RECOVERY_I18N = Object.fromEntries(
+  RECOVERY_META.map((m) => [
+    m.key,
+    Object.fromEntries(
+      Object.entries(EMAIL_I18N).flatMap(([lang, t]) => (t.recovery[m.key] ? [[lang, toContent(t.recovery[m.key])]] : [])),
+    ),
+  ]),
+) as Record<RecoveryKey, Partial<Record<string, EmailContent>>>;
 
 export function isRecoveryKey(key: string | null | undefined): key is RecoveryKey {
   return !!key && key in FIELD;

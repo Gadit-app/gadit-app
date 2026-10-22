@@ -1,0 +1,123 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Re go bolokeletše sebaka sa gago go Gadit",
+      "body": "Thobela {name},\n\nO thomile go ingwadišetša {plan} gomme wa ema pejana ga ge o fetša.\n\nRe go bolokeletše tšohle, gomme o ka tšwela pele go tloga fela moo o emego gona.\n\n- Matšatši a 14 ka mahala, gomme ga go lefišwe selo lehono\n- Ka morago ga teko: {price}\n- Re tla go romela kgopotšo ka imeile pele teko e fela\n- O ka khansela nako efe goba efe letlakaleng la gago la akhaonto, ka go kgotla gabedi",
+      "cta": "Fetša go ingwadiša",
+      "next": "Go na le se se sa kwagalego? Araba fela imeile ye, re tla go thuša."
+    },
+    "rec-e2-family": {
+      "subject": "Seo bana ba gago ba se hwetšago go Gadit",
+      "body": "Thobela {name},\n\nRe be re nyaka go go botša ka boripana seo se letetšego bana ba gago go Gadit:\n\nLentšu le lengwe le le lengwe leo ba kopanago le lona, pukung, mošomong wa gae goba poledišanong, le fetoga lentšu leo ba le kwešišago ka nnete.\n\n- Tlhalošo yeo e lekanetšego ngwana wa gago, ka seswantšho sa tlhalošo ye nngwe le ye nngwe\n- Dipapadi le tlwaetšo tšeo di dirilwego ka mantšu a bona\n- Thušo ka mošomo wa gae\n- Letlakala la taolo la motswadi leo le go bontšhago tšwelopele ya ngwana yo mongwe le yo mongwe\n\nGo ingwadiša ga gago go {plan} go bolokilwe, gomme go šetše fela kgato ya mafelelo.",
+      "cta": "Fetša go ingwadiša",
+      "next": "Ga go lefišwe selo lehono, gomme o ka khansela nako efe goba efe letlakaleng la gago la akhaonto."
+    },
+    "rec-e2-indiv": {
+      "subject": "Seo se go letetšego go Gadit",
+      "body": "Thobela {name},\n\nRe be re nyaka go go botša ka boripana seo se go letetšego go Gadit:\n\nLentšu le lengwe le le lengwe, pukung, mošomong goba poledišanong, le fetoga lentšu leo o le kwešišago ka botlalo.\n\n- Ditlhalošo ka moka tša lentšu, ka seswantšho sa ye nngwe le ye nngwe\n- Dipapadi le tlwaetšo tšeo di dirilwego ka mantšu a gago\n- Puku ya gago ya mantšu yeo e bolokago tšohle tšeo o ithutilego tšona\n\nGo ingwadiša ga gago go {plan} go bolokilwe, gomme go šetše fela kgato ya mafelelo.",
+      "cta": "Fetša go ingwadiša",
+      "next": "Ga go lefišwe selo lehono, gomme o ka khansela nako efe goba efe letlakaleng la gago la akhaonto."
+    },
+    "rec-e3": {
+      "subject": "Na go na le se se go šitišitšego? Re botše",
+      "body": "Thobela {name},\n\nGo ingwadiša ga gago go {plan} go sa bolokilwe.\n\nGe go na le se se go thibelago, araba fela imeile ye, re tla go thuša.",
+      "cta": "Fetša go ingwadiša",
+      "next": "",
+      "signature": "Sehlopha sa Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Lentšu la mathomo la bana ba gago go Gadit",
+      "body": "Thobela {name},\n\nTsela ye kaone ya go thoma: dula le ngwana wa gago metsotso ye mehlano, le nyake lentšu le tee leo a kopanego le lona lehono, pukung, mošomong wa gae goba poledišanong.\n\n- Tlanya lentšu lefelong la go nyaka\n- Bona tlhalošo yeo e lekanetšego ngwana wa gago, ka seswantšho sa tlhalošo ye nngwe le ye nngwe\n- Le boloke pukung ya mantšu, gomme go tloga moo le tsena dipapading tša gagwe\n\nLentšu le tee lehono, gomme ngwana wa gago o šetše a thoma go aga tsebo ya gagwe ya mantšu.",
+      "cta": "Nyaka lentšu la mathomo",
+      "next": "O hloka thušo? Araba fela imeile ye."
+    },
+    "act-first-word-indiv": {
+      "subject": "Lentšu la gago la mathomo go Gadit",
+      "body": "Thobela {name},\n\nTsela ye kaone ya go thoma: nyaka lentšu le tee leo o kopanego le lona lehono, pukung, mošomong goba poledišanong.\n\n- Ditlhalošo ka moka tša lona, ka seswantšho sa ye nngwe le ye nngwe\n- Moo lentšu le tšwago gona\n- Le boloke pukung ya gago ya mantšu gomme o itlwaetše ka lona ka dipapadi tše kopana\n\nLentšu le tee lehono, gomme tsebo ya gago ya mantšu e šetše e gola.",
+      "cta": "Nyaka lentšu la mathomo",
+      "next": "O hloka thušo? Araba fela imeile ye."
+    },
+    "act-first-word-2": {
+      "subject": "Lentšu le tee, metsotso ye mehlano",
+      "body": "Thobela {name},\n\nKgopolo ye nnyane ya lehono: kgetha lentšu le tee pukung, mošomong wa gae goba ditabeng, gomme o le nyake go Gadit.\n\nKa motsotso fela o bona ditlhalošo ka moka tša lona, ka seswantšho le mehlala, gomme le bolokwa pukung ya mantšu gore o itlwaetše.\n\nKe ka tsela ye tsebo ya mantšu e golago ka gona: lentšu le tee ka nako.",
+      "cta": "Nyaka lentšu bjale",
+      "next": "O hloka thušo? Araba fela imeile ye."
+    },
+    "act-add-child": {
+      "subject": "Kgato e tee gape: oketša ngwana wa gago",
+      "body": "Thobela {name},\n\nGadit Family e agetšwe bana ba gago, gomme go fihla bjale ga go na ngwana yo a okeditšwego akhaontong. Go tšea motsotso:\n\n- Tlanya leina la ngwana wa gago gomme o kgethe sebapadi\n- Kopanya sedirišwa sa gagwe ntle le phasewete, goba o šomiše Mokgwa wa bana sedirišweng sa gago\n- Go tloga fao lentšu le lengwe le le lengwe leo a le nyakago le a bolokwa, gomme o bona tšwelopele letlakaleng la taolo la motswadi",
+      "cta": "Oketša ngwana",
+      "next": "O hloka thušo? Araba fela imeile ye."
+    },
+    "act-return-family": {
+      "subject": "Mathomo a makopana go Gadit, a dirilwego bakeng sa gago",
+      "body": "Thobela {name},\n\nRe nyaka go netefatša gore bana ba gago ba hwetša tšohle tšeo Gadit e ka ba fago tšona. Dikgato tše tharo tše kopana tša go thoma beke ye ke tše:\n\n- Oketša ngwana akhaontong, ge o sešo wa dira bjalo (motsotso o tee)\n- Nyakang lentšu le tee mmogo pukung goba mošomong wa gae\n- Bula dipapadi, tšeo di dirilwego ka mantšu ao ngwana wa gago a a bolokilego",
+      "cta": "Thoma bjale",
+      "next": "O nyaka gore re go bontšhe ka moo e šomago ka gona? Araba imeile ye, gomme re tla beakanya mogala wo mokopana wa metsotso ye 10."
+    },
+    "act-return-indiv": {
+      "subject": "Mathomo a makopana go Gadit, a dirilwego bakeng sa gago",
+      "body": "Thobela {name},\n\nRe nyaka go netefatša gore o hwetša tšohle tšeo Gadit e ka go fago tšona. Dikgato tše tharo tše kopana tša go thoma beke ye ke tše:\n\n- Nyaka lentšu le tee leo o kopanego le lona lehono\n- Le boloke pukung ya gago ya mantšu\n- Itlwaetše mantšu a gago ka dipapadi tše kopana",
+      "cta": "Nyaka lentšu",
+      "next": "O nyaka gore re go bontšhe ka moo e šomago ka gona? Araba imeile ye, gomme re tla beakanya mogala wo mokopana wa metsotso ye 10."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "{child}: seo a ithutilego sona go Gadit beke ye",
+    "subjectActiveMany": "Seo bana ba gago ba ithutilego sona go Gadit beke ye",
+    "subjectQuietOne": "{child}: kgopolo ye nnyane ya beke go Gadit",
+    "subjectQuietMany": "Kgopolo ye nnyane ya beke ya bana ba gago go Gadit",
+    "greeting": "Thobela {name},",
+    "introActiveOne": "Kakaretšo ya beke ya {child} go Gadit ke ye.",
+    "introActiveMany": "Kakaretšo ya beke ya bana ba gago go Gadit ke ye.",
+    "introQuietOne": "Kgopolo ye nnyane ya beke ye le {child} ke ye.",
+    "introQuietMany": "Kgopolo ye nnyane ya beke ye le bana ba gago ke ye.",
+    "together": {
+      "one": "Beke ye bana ba gago ba ithutile lentšu le lefsa le {n}.",
+      "other": "Beke ye bana ba gago ba ithutile mantšu a mafsa a {n}."
+    },
+    "childFallback": "Ngwana wa gago",
+    "newLabel": {
+      "one": "lentšu le lefsa beke ye",
+      "other": "mantšu a mafsa beke ye"
+    },
+    "wordsLabel": "Mantšu:",
+    "more": {
+      "one": "le le lengwe gape",
+      "other": "le a mangwe a {n}"
+    },
+    "total": {
+      "one": "Pukung ya mantšu: lentšu le {n}",
+      "other": "Pukung ya mantšu: mantšu a {n}"
+    },
+    "streak": {
+      "one": "Letšatši le {n} ka go latelana",
+      "other": "Matšatši a {n} ka go latelana"
+    },
+    "learned": {
+      "one": "Go ithuta {lang}: lentšu le {n} le ithutilwe ka botlalo beke ye",
+      "other": "Go ithuta {lang}: mantšu a {n} a ithutilwe ka botlalo beke ye"
+    },
+    "langEn": "Seisemane",
+    "langHe": "Seheberu",
+    "idea": "Kgopolo ya beke ye:",
+    "ideaGame": "Papadi ya metsotso ye 5 ka mantšu ao a šetšego a bolokilwe pukung ya mantšu.",
+    "ideaFirst": "Nyakang lentšu le tee mmogo pukung goba mošomong wa gae. Le bolokwa pukung ya mantšu.",
+    "ideaConnect": "Gore o bone mo seo ngwana a ithutago sona, kopanya sedirišwa sa gagwe goba o šomiše Mokgwa wa bana sedirišweng sa gago.",
+    "playCta": "Bula dipapadi",
+    "connectCta": "Kopanya",
+    "outroActive": "Kgopolo: kgetha lentšu le tee lenaneong gomme o botšiše bana ba gago ka nako ya dijo tša mantšiboa gore le ra go reng.",
+    "outroQuiet": "Metsotso e se mekae ka letšatši e lekane. Lentšu le lengwe le le lengwe leo le bolokilwego pukung ya mantšu le tsena dipapading.",
+    "cta": "Bula letlakala la taolo la motswadi",
+    "next": "O hloka thušo? Araba fela imeile ye."
+  },
+  "fixed": {
+    "unsub": "Itloše lenaneong",
+    "tagline": "Lentšu le lengwe le le lengwe, le kwešišwa",
+    "closing": "Re gona bakeng sa potšišo efe goba efe goba thušo.",
+    "signature": "Sehlopha sa Gadit",
+    "helpText": "Ditlhahlo ka moka"
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Zachowaliśmy dla ciebie miejsce w Gadit",
+      "body": "Cześć {name}!\n\nTwoja rejestracja do {plan} zatrzymała się tuż przed ostatnim krokiem.\n\nWszystko zachowaliśmy, więc możesz dokończyć dokładnie od tego miejsca.\n\n- 14 dni za darmo, a dziś nic nie zostanie pobrane\n- Po okresie próbnym: {price}\n- Przed końcem okresu próbnego wyślemy ci przypomnienie e-mailem\n- Możesz anulować w każdej chwili na stronie konta, dwoma kliknięciami",
+      "cta": "Dokończ rejestrację",
+      "next": "Coś jest niejasne? Po prostu odpowiedz na tego maila, a pomożemy."
+    },
+    "rec-e2-family": {
+      "subject": "Co twoje dzieci dostaną w Gadit",
+      "body": "Cześć {name}!\n\nChcieliśmy krótko opowiedzieć, co czeka na twoje dzieci w Gadit:\n\nKażde słowo, które spotykają w książce, w zadaniu domowym czy w rozmowie, staje się słowem, które naprawdę rozumieją.\n\n- Wyjaśnienie na poziomie twojego dziecka, z obrazkiem do każdego znaczenia\n- Gry i ćwiczenia z ich własnych słów\n- Pomoc w zadaniach domowych\n- Panel rodzica, który pokazuje postępy każdego dziecka\n\nTwoja rejestracja do {plan} jest zapisana, został tylko ostatni krok.",
+      "cta": "Dokończ rejestrację",
+      "next": "Dziś nic nie zostanie pobrane, a anulować możesz w każdej chwili na stronie konta."
+    },
+    "rec-e2-indiv": {
+      "subject": "Co czeka na ciebie w Gadit",
+      "body": "Cześć {name}!\n\nChcieliśmy krótko opowiedzieć, co czeka na ciebie w Gadit:\n\nKażde słowo z książki, z pracy czy z rozmowy staje się słowem, które rozumiesz do końca.\n\n- Wszystkie znaczenia słowa, z obrazkiem do każdego\n- Gry i ćwiczenia z twoich własnych słów\n- Osobisty zeszyt słów, w którym zostaje wszystko, czego się uczysz\n\nTwoja rejestracja do {plan} jest zapisana, został tylko ostatni krok.",
+      "cta": "Dokończ rejestrację",
+      "next": "Dziś nic nie zostanie pobrane, a anulować możesz w każdej chwili na stronie konta."
+    },
+    "rec-e3": {
+      "subject": "Coś stanęło na przeszkodzie? Napisz do nas",
+      "body": "Cześć {name}!\n\nTwoja rejestracja do {plan} wciąż jest zapisana.\n\nJeśli coś cię powstrzymuje, po prostu odpowiedz na tego maila, a pomożemy.",
+      "cta": "Dokończ rejestrację",
+      "next": "",
+      "signature": "Zespół Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Pierwsze słowo twoich dzieci w Gadit",
+      "body": "Cześć {name}!\n\nNajlepszy sposób na początek: usiądź z dzieckiem na pięć minut i wyszukajcie razem jedno słowo, na które dziecko trafiło dziś w książce, w zadaniu domowym albo w rozmowie.\n\n- Wpisz słowo w wyszukiwarkę\n- Zobacz wyjaśnienie na poziomie twojego dziecka, z obrazkiem do każdego znaczenia\n- Zapisz słowo w zeszycie, a stamtąd trafi ono do gier dziecka\n\nJedno słowo dziś i twoje dziecko już buduje własny zasób słów.",
+      "cta": "Wyszukaj pierwsze słowo",
+      "next": "Potrzebujesz pomocy? Po prostu odpowiedz na tego maila."
+    },
+    "act-first-word-indiv": {
+      "subject": "Twoje pierwsze słowo w Gadit",
+      "body": "Cześć {name}!\n\nNajlepszy sposób na początek: wyszukaj jedno słowo, które pojawiło się dziś w książce, w pracy albo w rozmowie.\n\n- Wszystkie jego znaczenia, z obrazkiem do każdego\n- Skąd to słowo pochodzi\n- Zapisz je w zeszycie i ćwicz w krótkich grach\n\nJedno słowo dziś i twój zasób słów już rośnie.",
+      "cta": "Wyszukaj pierwsze słowo",
+      "next": "Potrzebujesz pomocy? Po prostu odpowiedz na tego maila."
+    },
+    "act-first-word-2": {
+      "subject": "Jedno słowo, pięć minut",
+      "body": "Cześć {name}!\n\nMały pomysł na dziś: wybierz jedno słowo z książki, z zadania domowego albo z wiadomości i wyszukaj je w Gadit.\n\nW minutę zobaczysz wszystkie jego znaczenia, z obrazkiem i przykładami, a słowo zapisze się w zeszycie do ćwiczeń.\n\nTak właśnie rośnie zasób słów: słowo po słowie.",
+      "cta": "Wyszukaj słowo teraz",
+      "next": "Potrzebujesz pomocy? Po prostu odpowiedz na tego maila."
+    },
+    "act-add-child": {
+      "subject": "Jeszcze jeden krok: dodaj dziecko",
+      "body": "Cześć {name}!\n\nW Gadit Family wszystko kręci się wokół twoich dzieci, a na koncie nie ma jeszcze żadnego dziecka. To zajmie minutę:\n\n- Wpisz imię dziecka i wybierz postać\n- Połącz jego własne urządzenie bez hasła albo włącz Tryb dla dzieci na swoim urządzeniu\n- Od tej chwili każde słowo, którego dziecko szuka, zapisuje się dla niego, a ty widzisz postępy w panelu rodzica",
+      "cta": "Dodaj dziecko",
+      "next": "Potrzebujesz pomocy? Po prostu odpowiedz na tego maila."
+    },
+    "act-return-family": {
+      "subject": "Krótki start w Gadit, specjalnie dla ciebie",
+      "body": "Cześć {name}!\n\nChcemy, żeby twoje dzieci dostały wszystko, co może dać Gadit. Oto trzy krótkie kroki na start w tym tygodniu:\n\n- Dodaj dziecko do konta, jeśli jeszcze go tam nie ma (jedna minuta)\n- Wyszukajcie razem jedno słowo z książki albo z zadania domowego\n- Otwórz gry, które powstają ze słów zapisanych przez dziecko",
+      "cta": "Zacznij teraz",
+      "next": "Chcesz, żebyśmy pokazali, jak to działa? Odpowiedz na tego maila, a umówimy krótką, 10-minutową rozmowę."
+    },
+    "act-return-indiv": {
+      "subject": "Krótki start w Gadit, specjalnie dla ciebie",
+      "body": "Cześć {name}!\n\nChcemy, żeby wszystko, co oferuje Gadit, naprawdę ci służyło. Oto trzy krótkie kroki na start w tym tygodniu:\n\n- Wyszukaj jedno słowo, które pojawiło się dziś na twojej drodze\n- Zapisz je w zeszycie\n- Ćwicz swoje słowa w krótkich grach",
+      "cta": "Wyszukaj słowo",
+      "next": "Chcesz, żebyśmy pokazali, jak to działa? Odpowiedz na tego maila, a umówimy krótką, 10-minutową rozmowę."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "{child}: nowe słowa z tego tygodnia w Gadit",
+    "subjectActiveMany": "Czego twoje dzieci nauczyły się w tym tygodniu w Gadit",
+    "subjectQuietOne": "{child}: mały pomysł na ten tydzień w Gadit",
+    "subjectQuietMany": "Mały pomysł na ten tydzień w Gadit dla twoich dzieci",
+    "greeting": "Cześć {name}!",
+    "introActiveOne": "{child}: oto podsumowanie tygodnia w Gadit.",
+    "introActiveMany": "Oto podsumowanie tygodnia twoich dzieci w Gadit.",
+    "introQuietOne": "Ty i {child}: mały pomysł na ten tydzień.",
+    "introQuietMany": "Oto mały pomysł na ten tydzień dla ciebie i twoich dzieci.",
+    "together": {
+      "one": "W tym tygodniu twoje dzieci poznały {n} nowe słowo.",
+      "few": "W tym tygodniu twoje dzieci poznały {n} nowe słowa.",
+      "many": "W tym tygodniu twoje dzieci poznały {n} nowych słów.",
+      "other": "W tym tygodniu twoje dzieci poznały {n} nowego słowa."
+    },
+    "childFallback": "Twoje dziecko",
+    "newLabel": {
+      "one": "nowe słowo w tym tygodniu",
+      "few": "nowe słowa w tym tygodniu",
+      "many": "nowych słów w tym tygodniu",
+      "other": "nowego słowa w tym tygodniu"
+    },
+    "wordsLabel": "Słowa:",
+    "more": {
+      "one": "i jeszcze {n}",
+      "few": "i jeszcze {n}",
+      "many": "i jeszcze {n}",
+      "other": "i jeszcze {n}"
+    },
+    "total": {
+      "one": "W zeszycie: {n} słowo",
+      "few": "W zeszycie: {n} słowa",
+      "many": "W zeszycie: {n} słów",
+      "other": "W zeszycie: {n} słowa"
+    },
+    "streak": {
+      "one": "{n} dzień z rzędu",
+      "few": "{n} dni z rzędu",
+      "many": "{n} dni z rzędu",
+      "other": "{n} dnia z rzędu"
+    },
+    "learned": {
+      "one": "{lang}: słowa w pełni opanowane w tym tygodniu: {n}",
+      "few": "{lang}: słowa w pełni opanowane w tym tygodniu: {n}",
+      "many": "{lang}: słowa w pełni opanowane w tym tygodniu: {n}",
+      "other": "{lang}: słowa w pełni opanowane w tym tygodniu: {n}"
+    },
+    "langEn": "Angielski",
+    "langHe": "Hebrajski",
+    "idea": "Pomysł na ten tydzień:",
+    "ideaGame": "5-minutowa gra ze słowami, które są już zapisane w zeszycie.",
+    "ideaFirst": "Wyszukajcie razem jedno słowo z książki albo z zadania domowego. Zapisze się w zeszycie.",
+    "ideaConnect": "Żeby widzieć tutaj, czego uczy się dziecko, połącz jego własne urządzenie albo włącz Tryb dla dzieci na swoim urządzeniu.",
+    "playCta": "Otwórz gry",
+    "connectCta": "Połącz",
+    "outroActive": "Pomysł: wybierz jedno słowo z listy i zapytaj dzieci przy kolacji, co znaczy.",
+    "outroQuiet": "Wystarczy kilka minut dziennie. Każde słowo zapisane w zeszycie trafia do gier.",
+    "cta": "Otwórz panel rodzica",
+    "next": "Potrzebujesz pomocy? Po prostu odpowiedz na tego maila."
+  }
+}

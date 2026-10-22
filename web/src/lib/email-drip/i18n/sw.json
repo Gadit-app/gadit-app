@@ -1,0 +1,98 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Tumekuhifadhia nafasi yako kwenye Gadit",
+      "body": "Habari {name},\n\nUlianza kujisajili kwa {plan} na ukasimama kabla tu ya kumaliza.\n\nTumekuhifadhia kila kitu, na unaweza kuendelea hapo hapo ulipoishia.\n\n- Siku 14 bila malipo, na hutozwi chochote leo\n- Baada ya kipindi cha majaribio: {price}\n- Tutakutumia barua pepe ya kukukumbusha kabla kipindi cha majaribio hakijaisha\n- Ghairi wakati wowote kwenye ukurasa wa akaunti yako, kwa kubofya mara mbili tu",
+      "cta": "Maliza kujisajili",
+      "next": "Kuna jambo lisilo wazi? Jibu tu barua pepe hii, nasi tutakusaidia."
+    },
+    "rec-e2-family": {
+      "subject": "Watoto wako wanachopata kwenye Gadit",
+      "body": "Habari {name},\n\nTulitaka kukueleza kwa ufupi kile kinachowasubiri watoto wako kwenye Gadit:\n\nKila neno wanalokutana nalo, kwenye kitabu, kwenye kazi za nyumbani au kwenye mazungumzo, linakuwa neno wanaloelewa kweli.\n\n- Maelezo kulingana na kiwango cha mtoto wako, na picha kwa kila maana\n- Michezo na mazoezi kutoka kwa maneno yao wenyewe\n- Msaada wa kazi za nyumbani\n- Dashibodi ya mzazi inayokuonyesha maendeleo ya kila mtoto\n\nUsajili wako wa {plan} umehifadhiwa, imebaki hatua ya mwisho tu.",
+      "cta": "Maliza kujisajili",
+      "next": "Hutozwi chochote leo, na unaweza kughairi wakati wowote kwenye ukurasa wa akaunti yako."
+    },
+    "rec-e2-indiv": {
+      "subject": "Kinachokusubiri kwenye Gadit",
+      "body": "Habari {name},\n\nTulitaka kukueleza kwa ufupi kile kinachokusubiri kwenye Gadit:\n\nKila neno, kwenye kitabu, kazini au kwenye mazungumzo, linakuwa neno unaloelewa kikamilifu.\n\n- Maana zote za neno, na picha kwa kila moja\n- Michezo na mazoezi kutoka kwa maneno yako mwenyewe\n- Daftari lako binafsi la maneno linalohifadhi kila kitu ulichojifunza\n\nUsajili wako wa {plan} umehifadhiwa, imebaki hatua ya mwisho tu.",
+      "cta": "Maliza kujisajili",
+      "next": "Hutozwi chochote leo, na unaweza kughairi wakati wowote kwenye ukurasa wa akaunti yako."
+    },
+    "rec-e3": {
+      "subject": "Kuna kitu kilichokuzuia? Tuambie",
+      "body": "Habari {name},\n\nUsajili wako wa {plan} bado umehifadhiwa.\n\nIkiwa kuna kitu kinachokuzuia, jibu tu barua pepe hii, nasi tutakusaidia.",
+      "cta": "Maliza kujisajili",
+      "next": "",
+      "signature": "Timu ya Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Neno la kwanza la watoto wako kwenye Gadit",
+      "body": "Habari {name},\n\nNjia bora ya kuanza: kaa na mtoto wako kwa dakika tano, na mtafute pamoja neno moja alilokutana nalo leo, kwenye kitabu, kwenye kazi za nyumbani au kwenye mazungumzo.\n\n- Andika neno kwenye sehemu ya kutafuta\n- Ona maelezo kulingana na kiwango cha mtoto wako, na picha kwa kila maana\n- Lihifadhi kwenye daftari, na kutoka hapo linaingia kwenye michezo yake\n\nNeno moja leo, na mtoto wako tayari anaanza kujenga msamiati wake mwenyewe.",
+      "cta": "Tafuta neno la kwanza",
+      "next": "Unahitaji msaada? Jibu tu barua pepe hii."
+    },
+    "act-first-word-indiv": {
+      "subject": "Neno lako la kwanza kwenye Gadit",
+      "body": "Habari {name},\n\nNjia bora ya kuanza: tafuta neno moja ulilokutana nalo leo, kwenye kitabu, kazini au kwenye mazungumzo.\n\n- Maana zake zote, na picha kwa kila moja\n- Mahali neno hilo lilipotoka\n- Lihifadhi kwenye daftari lako na ulifanyie mazoezi kwa michezo mifupi\n\nNeno moja leo, na msamiati wako tayari unakua.",
+      "cta": "Tafuta neno la kwanza",
+      "next": "Unahitaji msaada? Jibu tu barua pepe hii."
+    },
+    "act-first-word-2": {
+      "subject": "Neno moja, dakika tano",
+      "body": "Habari {name},\n\nWazo dogo la leo: chagua neno moja kutoka kwenye kitabu, kazi za nyumbani au habari, kisha ulitafute kwenye Gadit.\n\nKwa dakika moja unaona maana zake zote, pamoja na picha na mifano, na linahifadhiwa kwenye daftari kwa ajili ya mazoezi.\n\nHivyo ndivyo msamiati unavyokua: neno moja baada ya jingine.",
+      "cta": "Tafuta neno sasa",
+      "next": "Unahitaji msaada? Jibu tu barua pepe hii."
+    },
+    "act-add-child": {
+      "subject": "Hatua moja zaidi: ongeza mtoto wako",
+      "body": "Habari {name},\n\nGadit Family imejengwa kwa ajili ya watoto wako, na bado hakuna mtoto aliyeongezwa kwenye akaunti. Inachukua dakika moja tu:\n\n- Andika jina la mtoto wako na uchague mhusika\n- Unganisha kifaa chake mwenyewe bila nenosiri, au tumia Hali ya watoto kwenye kifaa chako\n- Kuanzia hapo kila neno analotafuta linahifadhiwa kwa ajili yake, na wewe unaona maendeleo kwenye dashibodi ya mzazi",
+      "cta": "Ongeza mtoto",
+      "next": "Unahitaji msaada? Jibu tu barua pepe hii."
+    },
+    "act-return-family": {
+      "subject": "Mwanzo mfupi kwenye Gadit, kwa ajili yako",
+      "body": "Habari {name},\n\nTunataka kuhakikisha watoto wako wanapata kila kitu ambacho Gadit inaweza kuwapa. Hizi ni hatua tatu fupi za kuanza wiki hii:\n\n- Ongeza mtoto kwenye akaunti, kama bado hujafanya hivyo (dakika moja)\n- Tafuteni pamoja neno moja kutoka kwenye kitabu au kazi za nyumbani\n- Fungua michezo, iliyotengenezwa kutoka kwa maneno ambayo mtoto wako amehifadhi",
+      "cta": "Anza sasa",
+      "next": "Ungependa tukuonyeshe jinsi inavyofanya kazi? Jibu barua pepe hii, nasi tutapanga simu fupi ya dakika 10."
+    },
+    "act-return-indiv": {
+      "subject": "Mwanzo mfupi kwenye Gadit, kwa ajili yako",
+      "body": "Habari {name},\n\nTunataka kuhakikisha unapata kila kitu ambacho Gadit inaweza kukupa. Hizi ni hatua tatu fupi za kuanza wiki hii:\n\n- Tafuta neno moja ulilokutana nalo leo\n- Lihifadhi kwenye daftari lako\n- Fanyia mazoezi maneno yako kwa michezo mifupi",
+      "cta": "Tafuta neno",
+      "next": "Ungependa tukuonyeshe jinsi inavyofanya kazi? Jibu barua pepe hii, nasi tutapanga simu fupi ya dakika 10."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "Alichojifunza {child} kwenye Gadit wiki hii",
+    "subjectActiveMany": "Walichojifunza watoto wako kwenye Gadit wiki hii",
+    "subjectQuietOne": "Wazo dogo kwa wiki ya {child} kwenye Gadit",
+    "subjectQuietMany": "Wazo dogo kwa wiki ya watoto wako kwenye Gadit",
+    "greeting": "Habari {name},",
+    "introActiveOne": "Huu hapa muhtasari wa wiki wa {child} kwenye Gadit.",
+    "introActiveMany": "Huu hapa muhtasari wa wiki wa watoto wako kwenye Gadit.",
+    "introQuietOne": "Hili hapa wazo dogo la wiki hii pamoja na {child}.",
+    "introQuietMany": "Hili hapa wazo dogo la wiki hii pamoja na watoto wako.",
+    "together": { "one": "Wiki hii watoto wako wamejifunza neno {n} jipya.", "other": "Wiki hii watoto wako wamejifunza maneno {n} mapya." },
+    "childFallback": "Mtoto wako",
+    "newLabel": { "one": "neno jipya wiki hii", "other": "maneno mapya wiki hii" },
+    "wordsLabel": "Maneno:",
+    "more": { "one": "na {n} zaidi", "other": "na {n} zaidi" },
+    "total": { "one": "Kwenye daftari: neno {n}", "other": "Kwenye daftari: maneno {n}" },
+    "streak": { "one": "Siku {n} mfululizo", "other": "Siku {n} mfululizo" },
+    "learned": { "one": "Kujifunza {lang}: neno {n} limejifunzwa kikamilifu wiki hii", "other": "Kujifunza {lang}: maneno {n} yamejifunzwa kikamilifu wiki hii" },
+    "langEn": "Kiingereza",
+    "langHe": "Kiebrania",
+    "idea": "Wazo la wiki hii:",
+    "ideaGame": "Mchezo wa dakika 5 kwa maneno ambayo tayari yamehifadhiwa kwenye daftari.",
+    "ideaFirst": "Tafuteni pamoja neno moja kutoka kwenye kitabu au kazi za nyumbani. Linahifadhiwa kwenye daftari.",
+    "ideaConnect": "Ili kuona hapa kile mtoto wako anachojifunza, unganisha kifaa chake mwenyewe au tumia Hali ya watoto kwenye kifaa chako.",
+    "playCta": "Fungua michezo",
+    "connectCta": "Unganisha",
+    "outroActive": "Wazo: chagua neno moja kutoka kwenye orodha, na wakati wa chakula cha jioni uwaulize watoto wako lina maana gani.",
+    "outroQuiet": "Dakika chache kwa siku zinatosha. Kila neno linalohifadhiwa kwenye daftari linaingia kwenye michezo.",
+    "cta": "Fungua dashibodi ya mzazi",
+    "next": "Unahitaji msaada? Jibu tu barua pepe hii."
+  }
+}

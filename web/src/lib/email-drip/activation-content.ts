@@ -1,4 +1,5 @@
 import { renderEmailHtmlV2, mdLiteToHtml, applyName, type EmailContent } from "./render";
+import { EMAIL_I18N } from "./i18n";
 
 /**
  * Activation emails (Gadi 2026-10-21, the subscriber-health plan): they push
@@ -6,7 +7,8 @@ import { renderEmailHtmlV2, mdLiteToHtml, applyName, type EmailContent } from ".
  * never mention pausing, refunds or cancelling (that lives only in the
  * cancel flow). Code defaults in Hebrew and English; the admin email editor
  * (series "Activation") edits them, a saved override in emailTemplates/{key}
- * wins, and a language with no translation gets the English email.
+ * wins, then the code translation (i18n/<lang>.json, every other UI
+ * language, 2026-10-22), then English.
  *
  * Automatic (cron, while emailConfig/activation.enabled is true):
  *   act-first-word-*  trial day 1, nobody in the account searched a word yet
@@ -204,6 +206,16 @@ function toContent(m: Mail): EmailContent {
 export const ACTIVATION_CONTENT = Object.fromEntries(
   ACTIVATION_META.map((m) => [m.key, { he: toContent(BY_LANG.he[m.key]), en: toContent(BY_LANG.en[m.key]) }]),
 ) as Record<ActivationKey, { he: EmailContent; en: EmailContent }>;
+
+/** Code translations into every other UI language, keyed like the store: key → lang. */
+export const ACTIVATION_I18N = Object.fromEntries(
+  ACTIVATION_META.map((m) => [
+    m.key,
+    Object.fromEntries(
+      Object.entries(EMAIL_I18N).flatMap(([lang, t]) => (t.activation[m.key] ? [[lang, toContent(t.activation[m.key])]] : [])),
+    ),
+  ]),
+) as Record<ActivationKey, Partial<Record<string, EmailContent>>>;
 
 export function isActivationKey(key: string | null | undefined): key is ActivationKey {
   return !!key && key in BY_LANG.he;

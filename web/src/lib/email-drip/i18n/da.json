@@ -1,0 +1,116 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Vi har gemt din plads hos Gadit",
+      "body": "Hej {name},\n\nDu var begyndt at tilmelde dig {plan} og stoppede lige før slutningen.\n\nVi har gemt det hele for dig, og du kan fortsætte præcis, hvor du slap.\n\n- 14 dage gratis, og der bliver ikke trukket noget i dag\n- Efter prøveperioden: {price}\n- Vi sender dig en påmindelse på mail, før prøveperioden slutter\n- Du kan opsige når som helst fra din kontoside, med to klik",
+      "cta": "Gør tilmeldingen færdig",
+      "next": "Er noget uklart? Svar bare på denne mail, så hjælper vi."
+    },
+    "rec-e2-family": {
+      "subject": "Det får dine børn med Gadit",
+      "body": "Hej {name},\n\nVi vil gerne kort fortælle dig, hvad der venter dine børn hos Gadit:\n\nHvert ord, de møder, i en bog, i lektierne eller i en samtale, bliver til et ord, de virkelig forstår.\n\n- En forklaring på dit barns niveau, med et billede til hver betydning\n- Spil og øvelser lavet af deres egne ord\n- Hjælp til lektierne\n- En forældreoversigt, der viser dig hvert barns fremskridt\n\nDin tilmelding til {plan} er gemt, og kun det sidste trin mangler.",
+      "cta": "Gør tilmeldingen færdig",
+      "next": "Der bliver ikke trukket noget i dag, og du kan opsige når som helst fra din kontoside."
+    },
+    "rec-e2-indiv": {
+      "subject": "Det venter dig hos Gadit",
+      "body": "Hej {name},\n\nVi vil gerne kort fortælle dig, hvad der venter dig hos Gadit:\n\nHvert ord, i en bog, på arbejdet eller i en samtale, bliver til et ord, du forstår helt til bunds.\n\n- Alle ordets betydninger, med et billede til hver\n- Spil og øvelser lavet af dine egne ord\n- En personlig ordnotesbog, der gemmer alt, hvad du har lært\n\nDin tilmelding til {plan} er gemt, og kun det sidste trin mangler.",
+      "cta": "Gør tilmeldingen færdig",
+      "next": "Der bliver ikke trukket noget i dag, og du kan opsige når som helst fra din kontoside."
+    },
+    "rec-e3": {
+      "subject": "Kom der noget i vejen? Fortæl os det",
+      "body": "Hej {name},\n\nDin tilmelding til {plan} er stadig gemt.\n\nHvis noget holder dig tilbage, så svar bare på denne mail, så hjælper vi.",
+      "cta": "Gør tilmeldingen færdig",
+      "next": "",
+      "signature": "Teamet bag Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Dine børns første ord på Gadit",
+      "body": "Hej {name},\n\nDen bedste måde at starte på: Sæt dig fem minutter sammen med dit barn, og slå et ord op, som barnet mødte i dag, i en bog, i lektierne eller i en samtale.\n\n- Skriv ordet i søgefeltet\n- Se en forklaring på dit barns niveau, med et billede til hver betydning\n- Gem det i notesbogen, og derfra kommer det med i barnets spil\n\nÉt ord i dag, og dit barn er allerede i gang med at bygge sit eget ordforråd.",
+      "cta": "Slå det første ord op",
+      "next": "Brug for hjælp? Svar bare på denne mail."
+    },
+    "act-first-word-indiv": {
+      "subject": "Dit første ord på Gadit",
+      "body": "Hej {name},\n\nDen bedste måde at starte på: Slå et ord op, som du mødte i dag, i en bog, på arbejdet eller i en samtale.\n\n- Alle dets betydninger, med et billede til hver\n- Hvor ordet kommer fra\n- Gem det i din notesbog, og øv det i korte spil\n\nÉt ord i dag, og dit ordforråd vokser allerede.",
+      "cta": "Slå det første ord op",
+      "next": "Brug for hjælp? Svar bare på denne mail."
+    },
+    "act-first-word-2": {
+      "subject": "Ét ord, fem minutter",
+      "body": "Hej {name},\n\nEn lille idé til i dag: Vælg et ord fra en bog, fra lektierne eller fra nyhederne, og slå det op på Gadit.\n\nPå et minut ser du alle dets betydninger, med et billede og eksempler, og det bliver gemt i notesbogen, så du kan øve det.\n\nSådan vokser et ordforråd: ét ord ad gangen.",
+      "cta": "Slå et ord op nu",
+      "next": "Brug for hjælp? Svar bare på denne mail."
+    },
+    "act-add-child": {
+      "subject": "Ét trin mere: tilføj dit barn",
+      "body": "Hej {name},\n\nGadit Family er bygget op om dine børn, og der er endnu ikke tilføjet et barn til kontoen. Det tager et minut:\n\n- Skriv dit barns navn, og vælg en figur\n- Forbind barnets egen enhed uden adgangskode, eller brug Børnetilstand på din enhed\n- Derefter bliver hvert ord, barnet slår op, gemt til barnet, og du ser fremskridtet i forældreoversigten",
+      "cta": "Tilføj et barn",
+      "next": "Brug for hjælp? Svar bare på denne mail."
+    },
+    "act-return-family": {
+      "subject": "En kort start på Gadit, lavet til dig",
+      "body": "Hej {name},\n\nVi vil gerne sikre, at dine børn får alt det, Gadit kan give dem. Her er tre korte trin til at komme i gang i denne uge:\n\n- Tilføj et barn til kontoen, hvis du ikke har gjort det endnu (et minut)\n- Slå et ord op sammen fra en bog eller lektierne\n- Åbn spillene, som er lavet af de ord, dit barn har gemt",
+      "cta": "Start nu",
+      "next": "Vil du have, at vi viser dig, hvordan det virker? Svar på denne mail, så aftaler vi et kort opkald på 10 minutter."
+    },
+    "act-return-indiv": {
+      "subject": "En kort start på Gadit, lavet til dig",
+      "body": "Hej {name},\n\nVi vil gerne sikre, at du får alt det, Gadit kan give dig. Her er tre korte trin til at komme i gang i denne uge:\n\n- Slå et ord op, som du mødte i dag\n- Gem det i din notesbog\n- Øv dine ord i korte spil",
+      "cta": "Slå et ord op",
+      "next": "Vil du have, at vi viser dig, hvordan det virker? Svar på denne mail, så aftaler vi et kort opkald på 10 minutter."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "Det har {child} lært på Gadit i denne uge",
+    "subjectActiveMany": "Det har dine børn lært på Gadit i denne uge",
+    "subjectQuietOne": "En lille idé til ugen med {child} på Gadit",
+    "subjectQuietMany": "En lille idé til ugen med dine børn på Gadit",
+    "greeting": "Hej {name},",
+    "introActiveOne": "Her er ugens opsummering for {child} på Gadit.",
+    "introActiveMany": "Her er ugens opsummering for dine børn på Gadit.",
+    "introQuietOne": "Her er en lille idé til denne uge med {child}.",
+    "introQuietMany": "Her er en lille idé til denne uge med dine børn.",
+    "together": {
+      "one": "I denne uge har dine børn lært {n} nyt ord.",
+      "other": "I denne uge har dine børn lært {n} nye ord."
+    },
+    "childFallback": "Dit barn",
+    "newLabel": {
+      "one": "nyt ord i denne uge",
+      "other": "nye ord i denne uge"
+    },
+    "wordsLabel": "Ordene:",
+    "more": {
+      "one": "og {n} til",
+      "other": "og {n} til"
+    },
+    "total": {
+      "one": "I notesbogen: {n} ord",
+      "other": "I notesbogen: {n} ord"
+    },
+    "streak": {
+      "one": "{n} dag i træk",
+      "other": "{n} dage i træk"
+    },
+    "learned": {
+      "one": "{lang}: {n} ord helt lært i denne uge",
+      "other": "{lang}: {n} ord helt lært i denne uge"
+    },
+    "langEn": "Engelsk",
+    "langHe": "Hebraisk",
+    "idea": "En idé til denne uge:",
+    "ideaGame": "Et spil på 5 minutter med de ord, der allerede er gemt i notesbogen.",
+    "ideaFirst": "Slå et ord op sammen fra en bog eller lektierne. Det bliver gemt i notesbogen.",
+    "ideaConnect": "For at se her, hvad dit barn lærer, skal du forbinde barnets egen enhed eller bruge Børnetilstand på din enhed.",
+    "playCta": "Åbn spillene",
+    "connectCta": "Forbind",
+    "outroActive": "En idé: Vælg et ord fra listen, og spørg dine børn ved aftensmaden, hvad det betyder.",
+    "outroQuiet": "Et par minutter om dagen er nok. Hvert ord, der bliver gemt i notesbogen, kommer med i spillene.",
+    "cta": "Åbn forældreoversigten",
+    "next": "Brug for hjælp? Svar bare på denne mail."
+  }
+}

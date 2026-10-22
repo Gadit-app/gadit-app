@@ -1,0 +1,128 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Podržali sme vám miesto v Gadit",
+      "body": "Dobrý deň, {name},\n\nvaša registrácia do {plan} sa zastavila tesne pred koncom.\n\nVšetko sme vám uložili, takže stačí nadviazať presne tam, kde to skončilo.\n\n- 14 dní zadarmo, dnes sa nič neplatí\n- Po skúšobnom období: {price}\n- Pred koncom skúšobného obdobia vám pošleme pripomienku e-mailom\n- Zrušiť môžete kedykoľvek na stránke účtu, dvoma kliknutiami",
+      "cta": "Dokončiť registráciu",
+      "next": "Niečo nie je jasné? Stačí odpovedať na tento e-mail a pomôžeme vám."
+    },
+    "rec-e2-family": {
+      "subject": "Čo vaše deti v Gadit čaká",
+      "body": "Dobrý deň, {name},\n\nchceli sme vám krátko povedať, čo vaše deti v Gadit čaká:\n\nKaždé slovo, ktoré stretnú v knihe, v domácej úlohe alebo v rozhovore, sa stane slovom, ktorému naozaj rozumejú.\n\n- Vysvetlenie na úrovni vášho dieťaťa, s obrázkom ku každému významu\n- Hry a precvičovanie z ich vlastných slov\n- Pomoc s domácimi úlohami\n- Rodičovský prehľad, kde vidíte pokrok každého dieťaťa\n\nVaša registrácia do {plan} je uložená a zostáva už len posledný krok.",
+      "cta": "Dokončiť registráciu",
+      "next": "Dnes sa nič neplatí a zrušiť môžete kedykoľvek na stránke účtu."
+    },
+    "rec-e2-indiv": {
+      "subject": "Čo vás v Gadit čaká",
+      "body": "Dobrý deň, {name},\n\nchceli sme vám krátko povedať, čo vás v Gadit čaká:\n\nKaždé slovo z knihy, z práce alebo z rozhovoru sa stane slovom, ktorému porozumiete až do konca.\n\n- Všetky významy slova, s obrázkom ku každému\n- Hry a precvičovanie z vašich vlastných slov\n- Osobný zošit slov, ktorý uchová všetko, čo sa naučíte\n\nVaša registrácia do {plan} je uložená a zostáva už len posledný krok.",
+      "cta": "Dokončiť registráciu",
+      "next": "Dnes sa nič neplatí a zrušiť môžete kedykoľvek na stránke účtu."
+    },
+    "rec-e3": {
+      "subject": "Niečo vás zdržalo? Napíšte nám",
+      "body": "Dobrý deň, {name},\n\nvaša registrácia do {plan} je stále uložená.\n\nAk vás niečo brzdí, stačí odpovedať na tento e-mail a pomôžeme vám.",
+      "cta": "Dokončiť registráciu",
+      "next": "",
+      "signature": "Tím Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Prvé slovo vašich detí v Gadit",
+      "body": "Dobrý deň, {name},\n\nnajlepší začiatok: sadnite si s dieťaťom na päť minút a vyhľadajte jedno slovo, na ktoré dnes narazilo v knihe, v domácej úlohe alebo v rozhovore.\n\n- Napíšte slovo do vyhľadávania\n- Pozrite si vysvetlenie na úrovni vášho dieťaťa, s obrázkom ku každému významu\n- Uložte slovo do zošita a odtiaľ sa dostane do hier dieťaťa\n\nJedno slovo dnes a vaše dieťa si už buduje vlastnú slovnú zásobu.",
+      "cta": "Vyhľadať prvé slovo",
+      "next": "Potrebujete pomoc? Stačí odpovedať na tento e-mail."
+    },
+    "act-first-word-indiv": {
+      "subject": "Vaše prvé slovo v Gadit",
+      "body": "Dobrý deň, {name},\n\nnajlepší začiatok: vyhľadajte jedno slovo, ktoré vám dnes prišlo do cesty v knihe, v práci alebo v rozhovore.\n\n- Všetky jeho významy, s obrázkom ku každému\n- Odkiaľ to slovo pochádza\n- Uložte si ho do zošita a precvičujte v krátkych hrách\n\nJedno slovo dnes a vaša slovná zásoba už rastie.",
+      "cta": "Vyhľadať prvé slovo",
+      "next": "Potrebujete pomoc? Stačí odpovedať na tento e-mail."
+    },
+    "act-first-word-2": {
+      "subject": "Jedno slovo, päť minút",
+      "body": "Dobrý deň, {name},\n\nmalý nápad na dnes: vyberte jedno slovo z knihy, z domácej úlohy alebo zo správ a vyhľadajte ho v Gadit.\n\nZa minútu uvidíte všetky jeho významy, s obrázkom a príkladmi, a slovo sa uloží do zošita na precvičovanie.\n\nTak rastie slovná zásoba: slovo po slove.",
+      "cta": "Vyhľadať slovo",
+      "next": "Potrebujete pomoc? Stačí odpovedať na tento e-mail."
+    },
+    "act-add-child": {
+      "subject": "Ešte jeden krok: pridajte dieťa",
+      "body": "Dobrý deň, {name},\n\nv Gadit Family sa všetko točí okolo vašich detí, ale v účte zatiaľ nie je žiadne dieťa. Zaberie to minútu:\n\n- Napíšte meno dieťaťa a vyberte postavičku\n- Pripojte jeho vlastné zariadenie bez hesla, alebo na svojom zariadení zapnite Detský režim\n- Od tej chvíle sa každé slovo, ktoré dieťa vyhľadá, uloží preň a vy vidíte pokrok v rodičovskom prehľade",
+      "cta": "Pridať dieťa",
+      "next": "Potrebujete pomoc? Stačí odpovedať na tento e-mail."
+    },
+    "act-return-family": {
+      "subject": "Krátky štart v Gadit, pripravený pre vás",
+      "body": "Dobrý deň, {name},\n\nchceme, aby vaše deti dostali všetko, čo im Gadit môže dať. Tu sú tri krátke kroky, ako začať tento týždeň:\n\n- Pridajte dieťa do účtu, ak tam ešte nie je (jedna minúta)\n- Vyhľadajte spolu jedno slovo z knihy alebo z domácej úlohy\n- Otvorte hry, ktoré vznikajú zo slov, ktoré si dieťa uložilo",
+      "cta": "Začať",
+      "next": "Chcete, aby sme vám ukázali, ako to funguje? Odpovedzte na tento e-mail a dohodneme krátky 10-minútový hovor."
+    },
+    "act-return-indiv": {
+      "subject": "Krátky štart v Gadit, pripravený pre vás",
+      "body": "Dobrý deň, {name},\n\nchceme, aby vám Gadit dal všetko, čo vie. Tu sú tri krátke kroky, ako začať tento týždeň:\n\n- Vyhľadajte jedno slovo, ktoré vám dnes prišlo do cesty\n- Uložte si ho do zošita\n- Precvičujte svoje slová v krátkych hrách",
+      "cta": "Vyhľadať slovo",
+      "next": "Chcete, aby sme vám ukázali, ako to funguje? Odpovedzte na tento e-mail a dohodneme krátky 10-minútový hovor."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "{child}: nové slová z tohto týždňa v Gadit",
+    "subjectActiveMany": "Čo sa vaše deti tento týždeň naučili v Gadit",
+    "subjectQuietOne": "{child}: malý nápad na tento týždeň v Gadit",
+    "subjectQuietMany": "Malý nápad na týždeň v Gadit pre vaše deti",
+    "greeting": "Dobrý deň, {name},",
+    "introActiveOne": "{child}: tu je týždenné zhrnutie v Gadit.",
+    "introActiveMany": "Tu je týždenné zhrnutie vašich detí v Gadit.",
+    "introQuietOne": "Vy a {child}: malý nápad na tento týždeň.",
+    "introQuietMany": "Tu je malý nápad na tento týždeň pre vás a vaše deti.",
+    "together": {
+      "one": "Tento týždeň sa vaše deti naučili {n} nové slovo.",
+      "few": "Tento týždeň sa vaše deti naučili {n} nové slová.",
+      "many": "Tento týždeň sa vaše deti naučili {n} nového slova.",
+      "other": "Tento týždeň sa vaše deti naučili {n} nových slov."
+    },
+    "childFallback": "Vaše dieťa",
+    "newLabel": {
+      "one": "nové slovo tento týždeň",
+      "few": "nové slová tento týždeň",
+      "many": "nového slova tento týždeň",
+      "other": "nových slov tento týždeň"
+    },
+    "wordsLabel": "Slová:",
+    "more": {
+      "one": "a ešte {n}",
+      "few": "a ešte {n}",
+      "many": "a ešte {n}",
+      "other": "a ešte {n}"
+    },
+    "total": {
+      "one": "V zošite: {n} slovo",
+      "few": "V zošite: {n} slová",
+      "many": "V zošite: {n} slova",
+      "other": "V zošite: {n} slov"
+    },
+    "streak": {
+      "one": "{n} deň po sebe",
+      "few": "{n} dni po sebe",
+      "many": "{n} dňa po sebe",
+      "other": "{n} dní po sebe"
+    },
+    "learned": {
+      "one": "{lang}: úplne naučené slová tento týždeň: {n}",
+      "few": "{lang}: úplne naučené slová tento týždeň: {n}",
+      "many": "{lang}: úplne naučené slová tento týždeň: {n}",
+      "other": "{lang}: úplne naučené slová tento týždeň: {n}"
+    },
+    "langEn": "Angličtina",
+    "langHe": "Hebrejčina",
+    "idea": "Nápad na tento týždeň:",
+    "ideaGame": "Päťminútová hra so slovami, ktoré sú už uložené v zošite.",
+    "ideaFirst": "Vyhľadajte spolu jedno slovo z knihy alebo z domácej úlohy. Uloží sa do zošita.",
+    "ideaConnect": "Chcete tu vidieť, čo sa dieťa učí? Pripojte jeho vlastné zariadenie, alebo na svojom zariadení zapnite Detský režim.",
+    "playCta": "Otvoriť hry",
+    "connectCta": "Pripojiť",
+    "outroActive": "Nápad: vyberte zo zoznamu jedno slovo a opýtajte sa detí pri večeri, čo znamená.",
+    "outroQuiet": "Stačí pár minút denne. Každé slovo uložené do zošita sa dostane do hier.",
+    "cta": "Otvoriť rodičovský prehľad",
+    "next": "Potrebujete pomoc? Stačí odpovedať na tento e-mail."
+  }
+}

@@ -17,6 +17,9 @@ import { GameTrueFalse } from "../GameTrueFalse";
 import { GamePronoun } from "./GamePronoun";
 import { GameSentenceBuilder } from "./GameSentenceBuilder";
 import { GameReading } from "./GameReading";
+import { GamePicturePick } from "./GamePicturePick";
+import { LearnWordFlag } from "./LearnWordFlag";
+import { picCopy } from "@/lib/picture-pick-i18n";
 import { setLessonNext } from "@/lib/lesson-flow";
 import { lessonCopy } from "./lesson-i18n";
 // The banks themselves, not bankFor: the fill-in step needs only the words
@@ -35,14 +38,18 @@ export type Lesson = {
   reading?: { title: string; text: string; checks: Array<{ s: string; yes: boolean }> } | null;
 };
 
-type StepId = "cards" | "match" | "fill" | "truefalse" | "reading" | "pronoun" | "build";
+type StepId = "cards" | "pictures" | "match" | "fill" | "truefalse" | "reading" | "pronoun" | "build";
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-export function LessonPath({ lesson, learnLang, lang, t, onExit, onDone }: {
+export function LessonPath({ lesson, learnLang, preReader, lang, t, onExit, onDone }: {
   lesson: Lesson;
   /** The language being learned ("en" or "he"). */
   learnLang: string;
+  /** "Not yet" to "do they already read it?" (2026-10-22): the lesson is
+   *  pictures and sound, the word cards with the picture instead of the
+   *  written word, then "listen and pick the picture". No reading steps. */
+  preReader?: boolean;
   /** The UI language. */
   lang: string;
   t: PlayT;
@@ -75,6 +82,7 @@ export function LessonPath({ lesson, learnLang, lang, t, onExit, onDone }: {
   }, [lesson, learnLang]);
 
   const steps = useMemo<StepId[]>(() => {
+    if (preReader) return ["cards", "pictures"];
     const out: StepId[] = ["cards", "match"];
     if (pool.filter((p) => p.examples.length > 0).length >= 4) out.push("fill");
     out.push("truefalse");
@@ -82,16 +90,16 @@ export function LessonPath({ lesson, learnLang, lang, t, onExit, onDone }: {
     if (lesson.pronouns.length >= 4) out.push("pronoun");
     if (lesson.sentences.length >= 4) out.push("build");
     return out;
-  }, [pool, lesson]);
+  }, [pool, lesson, preReader]);
 
   const [i, setI] = useState(0);
   const done = i >= steps.length;
   useEffect(() => { if (done) onDone?.(); }, [done]); // eslint-disable-line react-hooks/exhaustive-deps
   // The results screen of each game offers the next step.
   useEffect(() => {
-    setLessonNext(!done && i + 1 < steps.length ? c.next(c.steps[steps[i + 1]]) : !done ? c.doneTitle : null);
+    setLessonNext(!done && i + 1 < steps.length ? c.next(steps[i + 1] === "pictures" ? picCopy(lang).name : c.steps[steps[i + 1] as Exclude<StepId, "pictures">]) : !done ? c.doneTitle : null);
     return () => setLessonNext(null);
-  }, [i, done, steps, c]);
+  }, [i, done, steps, c, lang]);
 
   if (done) {
     return (
@@ -105,12 +113,21 @@ export function LessonPath({ lesson, learnLang, lang, t, onExit, onDone }: {
   }
 
   const step = steps[i];
+  const stepName = (s: StepId) => (s === "pictures" ? picCopy(lang).name : c.steps[s]);
+  // Hebrew as a second language: its translations were written by hand, so
+  // each word card has "wrong translation?" (2026-10-22).
+  const flag = learnLang === "he"
+    ? (w: PlayWord) => {
+        const x = lesson.items.find((it) => it.w === w.word);
+        return x ? <LearnWordFlag item={x} learnLang={learnLang} lang={lang} lessonId={lesson.id} topic={lesson.topic} /> : null;
+      }
+    : undefined;
   const next = () => setI((x) => x + 1);
   const props = { pool, onExit: next, lang, t };
   return (
     <div>
       <div className="wb-lesson-steps" role="list" aria-label={c.title(lesson.topic)}>
-        <span className="wb-lesson-step-label">{c.stepOf(i + 1, steps.length)} · {c.steps[step]}</span>
+        <span className="wb-lesson-step-label">{c.stepOf(i + 1, steps.length)} · {stepName(step)}</span>
         <span className="wb-lesson-dots" aria-hidden="true">
           {steps.map((s, k) => <span key={s} className={k < i ? "is-done" : k === i ? "is-on" : ""} />)}
         </span>
@@ -118,7 +135,8 @@ export function LessonPath({ lesson, learnLang, lang, t, onExit, onDone }: {
       </div>
       <style>{LESSON_CSS}</style>
       <div key={step}>
-        {step === "cards" && <GameFlashcards {...props} mode="meanings" skipPicker />}
+        {step === "cards" && <GameFlashcards {...props} mode="meanings" skipPicker preReader={preReader} wordFlag={flag} />}
+        {step === "pictures" && <GamePicturePick items={lesson.items} learnLang={learnLang} lang={lang} t={t} title={picCopy(lang).name} onExit={next} />}
         {step === "match" && <GameQuiz {...props} />}
         {step === "fill" && <GameFillBlank {...props} distractorWords={otherWords} />}
         {step === "truefalse" && <GameTrueFalse {...props} />}

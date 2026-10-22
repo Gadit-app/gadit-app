@@ -3581,7 +3581,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
   const href = useHref();
   const t = COPY[lang] ?? COPY.en;
 
-  type Stage = { kind: "menu" } | { kind: "lesson"; lesson: Lesson; learnLang: string } | { kind: "playing"; game: GameId } | { kind: "duel"; code?: string; preset?: { title: string; questions: DuelQuestion[] } };
+  type Stage = { kind: "menu" } | { kind: "lesson"; lesson: Lesson; learnLang: string; preReader?: boolean } | { kind: "playing"; game: GameId } | { kind: "duel"; code?: string; preset?: { title: string; questions: DuelQuestion[] } };
   const [stage, setStage] = useState<Stage>({ kind: "menu" });
   const [lessonPending, setLessonPending] = useState(openingLesson);
   // "Practice this word" from the notebook (Gadi 2026-10-09):
@@ -3829,7 +3829,9 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
         const j = await r.json();
         const l = j.lesson as Lesson | undefined;
         const ll = (j.lang ?? j.profile?.lang) as string | undefined;
-        if (l && ll) setStage({ kind: "lesson", lesson: l, learnLang: ll });
+        // "Not yet" to "do they already read it?": pictures and sound (2026-10-22).
+        const preReader = (j.reads ?? j.profile?.reads) === "no";
+        if (l && ll) setStage({ kind: "lesson", lesson: l, learnLang: ll, preReader });
       } catch { /* stays on the menu */ }
       setLessonPending(false);
     })();
@@ -4190,7 +4192,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
     };
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-        <LessonPath lesson={stage.lesson} learnLang={stage.learnLang} lang={lang} t={t} onDone={() => void markDone()} onExit={() => {
+        <LessonPath lesson={stage.lesson} learnLang={stage.learnLang} preReader={stage.preReader} lang={lang} t={t} onDone={() => void markDone()} onExit={() => {
           void flushLearn();
           // Back to where the lesson was opened (Gadi 2026-10-12, navigation QA):
           // "learning words" when it came from there, else the Homework page.

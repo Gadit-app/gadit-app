@@ -1,0 +1,123 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Hi mi hlayiserile ndhawu ya n'wina eka Gadit",
+      "body": "Avuxeni {name},\n\nMi sungule ku tsarisela {plan} kutani mi yima mi ri kusuhi ni ku hetisa.\n\nHi mi hlayiserile hinkwaswo, naswona mi nga ya emahlweni kun'we laha mi yimeke kona.\n\n- Masiku ya 14 mahala, naswona a ku hakerisiwi nchumu namuntlha\n- Endzhaku ka ndzingo: {price}\n- Hi ta mi rhumela xitsundzuxo hi imeyili emahlweni ka loko ndzingo wu hela\n- Mi nga khansela nkarhi wun'wana na wun'wana eka tluka ra n'wina ra akhawunti, hi ku thinta kambirhi",
+      "cta": "Hetisani ku tsarisa",
+      "next": "Ku na leswi nga twisisekiki? Hlamulani imeyili leyi ntsena, hi ta mi pfuna."
+    },
+    "rec-e2-family": {
+      "subject": "Leswi vana va n'wina va swi kumaka eka Gadit",
+      "body": "Avuxeni {name},\n\nHi lave ku mi byela hi ku komisa leswi swi rindzeleke vana va n'wina eka Gadit:\n\nRito rin'wana na rin'wana leri va hlanganaka na rona, ebukwini, entirhweni wa le kaya kumbe embulavulweni, ri hundzuka rito leri va ri twisisaka hakunene.\n\n- Nhlamuselo leyi faneleke n'wana wa n'wina, na xifaniso eka nhlamuselo yin'wana na yin'wana\n- Mintlangu na ntoloveto leswi endliweke hi marito ya vona\n- Mpfuno hi ntirho wa le kaya\n- Dashibodo ya vatswari leyi mi kombaka nhluvuko wa n'wana un'wana na un'wana\n\nKu tsarisa ka n'wina eka {plan} ku hlayisiwile, naswona ku sele goza ro hetelela ntsena.",
+      "cta": "Hetisani ku tsarisa",
+      "next": "A ku hakerisiwi nchumu namuntlha, naswona mi nga khansela nkarhi wun'wana na wun'wana eka tluka ra n'wina ra akhawunti."
+    },
+    "rec-e2-indiv": {
+      "subject": "Leswi swi mi rindzeleke eka Gadit",
+      "body": "Avuxeni {name},\n\nHi lave ku mi byela hi ku komisa leswi swi mi rindzeleke eka Gadit:\n\nRito rin'wana na rin'wana, ebukwini, entirhweni kumbe embulavulweni, ri hundzuka rito leri mi ri twisisaka hi ku helela.\n\n- Tinhlamuselo hinkwato ta rito, na xifaniso eka yin'wana na yin'wana\n- Mintlangu na ntoloveto leswi endliweke hi marito ya n'wina\n- Buku ya n'wina ya marito leyi hlayisaka hinkwaswo leswi mi swi dyondzeke\n\nKu tsarisa ka n'wina eka {plan} ku hlayisiwile, naswona ku sele goza ro hetelela ntsena.",
+      "cta": "Hetisani ku tsarisa",
+      "next": "A ku hakerisiwi nchumu namuntlha, naswona mi nga khansela nkarhi wun'wana na wun'wana eka tluka ra n'wina ra akhawunti."
+    },
+    "rec-e3": {
+      "subject": "Xana ku na leswi swi mi siveleke? Hi byeleni",
+      "body": "Avuxeni {name},\n\nKu tsarisa ka n'wina eka {plan} ka ha hlayisiwile.\n\nLoko ku ri na leswi swi mi sivelaka, hlamulani imeyili leyi ntsena, hi ta mi pfuna.",
+      "cta": "Hetisani ku tsarisa",
+      "next": "",
+      "signature": "Ntlawa wa Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Rito ro sungula ra vana va n'wina eka Gadit",
+      "body": "Avuxeni {name},\n\nNdlela leyinene yo sungula: tshamani na n'wana wa n'wina timinete ta ntlhanu, mi lava rito rin'we leri a hlanganeke na rona namuntlha, ebukwini, entirhweni wa le kaya kumbe embulavulweni.\n\n- Tsalani rito endhawini yo lava\n- Vonani nhlamuselo leyi faneleke n'wana wa n'wina, na xifaniso eka nhlamuselo yin'wana na yin'wana\n- Ri hlayiseni ebukwini ya marito, kutani ku suka kwalaho ri nghena eka mintlangu ya yena\n\nRito rin'we namuntlha, naswona n'wana wa n'wina u se a sungula ku aka vutivi bya yena bya marito.",
+      "cta": "Lavani rito ro sungula",
+      "next": "Mi lava mpfuno? Hlamulani imeyili leyi ntsena."
+    },
+    "act-first-word-indiv": {
+      "subject": "Rito ra n'wina ro sungula eka Gadit",
+      "body": "Avuxeni {name},\n\nNdlela leyinene yo sungula: lavani rito rin'we leri mi hlanganeke na rona namuntlha, ebukwini, entirhweni kumbe embulavulweni.\n\n- Tinhlamuselo hinkwato ta rona, na xifaniso eka yin'wana na yin'wana\n- Laha rito ri humaka kona\n- Ri hlayiseni ebukwini ya n'wina ya marito kutani mi ri titoloveta hi mintlangu yo koma\n\nRito rin'we namuntlha, naswona vutivi bya n'wina bya marito byi se byi kula.",
+      "cta": "Lavani rito ro sungula",
+      "next": "Mi lava mpfuno? Hlamulani imeyili leyi ntsena."
+    },
+    "act-first-word-2": {
+      "subject": "Rito rin'we, timinete ta ntlhanu",
+      "body": "Avuxeni {name},\n\nXiringanyeto xitsongo xa namuntlha: hlawulani rito rin'we ebukwini, entirhweni wa le kaya kumbe eka mahungu, kutani mi ri lava eka Gadit.\n\nHi minete ntsena mi vona tinhlamuselo hinkwato ta rona, na xifaniso na swikombiso, naswona ri hlayisiwa ebukwini ya marito leswaku mi titoloveta.\n\nHi leswi vutivi bya marito byi kulaka ha kona: rito rin'we hi nkarhi.",
+      "cta": "Lavani rito sweswi",
+      "next": "Mi lava mpfuno? Hlamulani imeyili leyi ntsena."
+    },
+    "act-add-child": {
+      "subject": "Goza rin'we nakambe: engetelani n'wana wa n'wina",
+      "body": "Avuxeni {name},\n\nGadit Family yi endleriwe vana va n'wina, kambe a ku si engeteriwa n'wana eka akhawunti. Swi teka minete:\n\n- Tsalani vito ra n'wana wa n'wina kutani mi hlawula munhu wa xitori\n- Hlanganisani xitirhisiwa xa yena handle ka phasiwedi, kumbe mi tirhisa Xiyimo xa vana eka xitirhisiwa xa n'wina\n- Ku suka kwalaho rito rin'wana na rin'wana leri a ri lavaka ra hlayisiwa, naswona mi vona nhluvuko eka dashibodo ya vatswari",
+      "cta": "Engetelani n'wana",
+      "next": "Mi lava mpfuno? Hlamulani imeyili leyi ntsena."
+    },
+    "act-return-family": {
+      "subject": "Masungulo yo koma eka Gadit, lama mi endleriweke",
+      "body": "Avuxeni {name},\n\nHi lava ku tiyisisa leswaku vana va n'wina va kuma hinkwaswo leswi Gadit yi nga va nyikaka swona. Hi lawa magoza manharhu yo koma yo sungula vhiki leri:\n\n- Engetelani n'wana eka akhawunti, loko mi nga si swi endla (minete yin'we)\n- Lavani rito rin'we swin'we ebukwini kumbe entirhweni wa le kaya\n- Pfulani mintlangu, leyi endliweke hi marito lawa n'wana wa n'wina a ma hlayiseke",
+      "cta": "Sungulani sweswi",
+      "next": "Mi lava leswaku hi mi komba ndlela leyi yi tirhaka ha yona? Hlamulani imeyili leyi, kutani hi ta lunghiselela riqingho ro koma ra timinete ta 10."
+    },
+    "act-return-indiv": {
+      "subject": "Masungulo yo koma eka Gadit, lama mi endleriweke",
+      "body": "Avuxeni {name},\n\nHi lava ku tiyisisa leswaku mi kuma hinkwaswo leswi Gadit yi nga mi nyikaka swona. Hi lawa magoza manharhu yo koma yo sungula vhiki leri:\n\n- Lavani rito rin'we leri mi hlanganeke na rona namuntlha\n- Ri hlayiseni ebukwini ya n'wina ya marito\n- Titolovetani marito ya n'wina hi mintlangu yo koma",
+      "cta": "Lavani rito",
+      "next": "Mi lava leswaku hi mi komba ndlela leyi yi tirhaka ha yona? Hlamulani imeyili leyi, kutani hi ta lunghiselela riqingho ro koma ra timinete ta 10."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "{child}: leswi a swi dyondzeke eka Gadit vhiki leri",
+    "subjectActiveMany": "Leswi vana va n'wina va swi dyondzeke eka Gadit vhiki leri",
+    "subjectQuietOne": "{child}: xiringanyeto xitsongo xa vhiki eka Gadit",
+    "subjectQuietMany": "Xiringanyeto xitsongo xa vhiki ra vana va n'wina eka Gadit",
+    "greeting": "Avuxeni {name},",
+    "introActiveOne": "Hi lowu nkatsakanyo wa vhiki wa {child} eka Gadit.",
+    "introActiveMany": "Hi lowu nkatsakanyo wa vhiki wa vana va n'wina eka Gadit.",
+    "introQuietOne": "Hi lexi xiringanyeto xitsongo xa vhiki leri na {child}.",
+    "introQuietMany": "Hi lexi xiringanyeto xitsongo xa vhiki leri na vana va n'wina.",
+    "together": {
+      "one": "Vhiki leri vana va n'wina va dyondze rito lerintshwa ra {n}.",
+      "other": "Vhiki leri vana va n'wina va dyondze marito lamantshwa ya {n}."
+    },
+    "childFallback": "N'wana wa n'wina",
+    "newLabel": {
+      "one": "rito lerintshwa vhiki leri",
+      "other": "marito lamantshwa vhiki leri"
+    },
+    "wordsLabel": "Marito:",
+    "more": {
+      "one": "na rin'wana rin'we",
+      "other": "na man'wana ya {n}"
+    },
+    "total": {
+      "one": "Ebukwini ya marito: rito ra {n}",
+      "other": "Ebukwini ya marito: marito ya {n}"
+    },
+    "streak": {
+      "one": "Siku ra {n} hi ku landzelelana",
+      "other": "Masiku ya {n} hi ku landzelelana"
+    },
+    "learned": {
+      "one": "Ku dyondza {lang}: rito ra {n} ri dyondziwile hi ku helela vhiki leri",
+      "other": "Ku dyondza {lang}: marito ya {n} ma dyondziwile hi ku helela vhiki leri"
+    },
+    "langEn": "Xinghezi",
+    "langHe": "Xiheberu",
+    "idea": "Xiringanyeto xa vhiki leri:",
+    "ideaGame": "Ntlangu wa timinete ta 5 hi marito lama se ma hlayisiweke ebukwini ya marito.",
+    "ideaFirst": "Lavani rito rin'we swin'we ebukwini kumbe entirhweni wa le kaya. Ri hlayisiwa ebukwini ya marito.",
+    "ideaConnect": "Leswaku mi vona laha leswi n'wana a swi dyondzaka, hlanganisani xitirhisiwa xa yena kumbe mi tirhisa Xiyimo xa vana eka xitirhisiwa xa n'wina.",
+    "playCta": "Pfulani mintlangu",
+    "connectCta": "Hlanganisani",
+    "outroActive": "Xiringanyeto: hlawulani rito rin'we eka nxaxamelo kutani mi vutisa vana va n'wina hi nkarhi wa swakudya swa nimadyambu leswaku ri vula yini.",
+    "outroQuiet": "Timinete ti nga ri tingani hi siku ti ringanile. Rito rin'wana na rin'wana leri hlayisiweke ebukwini ya marito ri nghena eka mintlangu.",
+    "cta": "Pfulani dashibodo ya vatswari",
+    "next": "Mi lava mpfuno? Hlamulani imeyili leyi ntsena."
+  },
+  "fixed": {
+    "unsub": "Tisuseni eka nxaxamelo",
+    "tagline": "Rito rin'wana na rin'wana, ri twisisiwa",
+    "closing": "Hi kona eka xivutiso xin'wana na xin'wana kumbe mpfuno.",
+    "signature": "Ntlawa wa Gadit",
+    "helpText": "Swiletelo hinkwaswo"
+  }
+}

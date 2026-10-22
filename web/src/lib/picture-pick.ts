@@ -191,6 +191,26 @@ const ANCHORS = [
   "cat", "chair", "car", "apple", "hat", "pencil", "dog", "bed", "bus", "banana", "shoe", "clock",
   "elephant", "cake", "boat", "dress", "ruler", "rabbit", "door", "bicycle", "egg", "fish", "window", "train",
 ];
+export const PIC_ANCHORS: readonly string[] = ANCHORS;
+
+/** Learning-mode lessons for a child who doesn't read yet (2026-10-22): the
+ *  two other pictures for a lesson word. The ready topics' rules first
+ *  (picDistractors); a word outside them (hello, happy, under) gets anchors,
+ *  single well-told-apart things, never from the word's own lesson topic
+ *  (`sameTopic`, English words) and never confusable with it. A colour, a
+ *  number, a body part, an action or a shape gets no anchors (an apple is
+ *  red, a cat has ears). */
+export function lessonPicDistractors(target: string, withPicture: string[], salt: string, sameTopic: Set<string>): string[] {
+  const t = key(target);
+  const first = picDistractors(t, withPicture, salt);
+  if (first.length >= 2) return first;
+  const k = kindOf(t);
+  if (k && OWN_TOPIC_ONLY.has(k)) return first;
+  const have = new Set(withPicture.map(key));
+  const extra = seeded(ANCHORS.filter((a) => have.has(a) && a !== t && !first.includes(a) && !sameTopic.has(a)
+    && !CONF.get(t)?.has(a) && !CONF.get(a)?.has(t)), salt);
+  return [...first, ...extra].slice(0, 2);
+}
 
 /** Other topics' words worth looking up for the words of a set: the
  *  anchors first, then the rest in a stable order. */

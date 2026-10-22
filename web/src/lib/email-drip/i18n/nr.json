@@ -1,0 +1,123 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Sikubulungele indawo yakho ku-Gadit",
+      "body": "Lotjha {name},\n\nUthome ukubhalisela i-{plan}, wema ngaphambi kobana uqede.\n\nSikubulungele koke, begodu ungaragela phambili khona lapho ume khona.\n\n- Amalanga ali-14 mahala, begodu akukho okubhadeliswako namhlanje\n- Ngemva kokulinga: {price}\n- Sizakuthumelela isikhumbuzo nge-imeyili ngaphambi kobana ukulinga kuphele\n- Ungakhansela nanyana kunini ekhasini lakho le-akhawunti, ngokuthinta kabili",
+      "cta": "Qeda ukubhalisa",
+      "next": "Kukhona okungakhanyi? Phendula nje i-imeyili le, sizakusiza."
+    },
+    "rec-e2-family": {
+      "subject": "Lokho abantwana bakho abakuthola ku-Gadit",
+      "body": "Lotjha {name},\n\nBesifuna ukukutjela kafitjhani bona yini elindele abantwana bakho ku-Gadit:\n\nIlizwi ngalinye abahlangana nalo, ebhukwini, emsebenzini wekhaya namkha ekukhulumeni, liba lilizwi abalizwisisa kwamambala.\n\n- Ihlathululo esezingeni lomntwana wakho, enesithombe sehlathululo ngayinye\n- Imidlalo nokuzilolonga okwenziwe ngamezwi wabo\n- Isizo ngomsebenzi wekhaya\n- Ideshibhodi yababelethi ekutjengisa ituthuko yomntwana ngamunye\n\nUkubhalisela kwakho i-{plan} kubulungiwe, begodu kusele igadango lokugcina kwaphela.",
+      "cta": "Qeda ukubhalisa",
+      "next": "Akukho okubhadeliswako namhlanje, begodu ungakhansela nanyana kunini ekhasini lakho le-akhawunti."
+    },
+    "rec-e2-indiv": {
+      "subject": "Lokho okulindele wena ku-Gadit",
+      "body": "Lotjha {name},\n\nBesifuna ukukutjela kafitjhani bona yini ekulindeleko ku-Gadit:\n\nIlizwi ngalinye, ebhukwini, emsebenzini namkha ekukhulumeni, liba lilizwi olizwisisa ngokupheleleko.\n\n- Zoke iinhlathululo zelizwi, ngesithombe sehlathululo ngayinye\n- Imidlalo nokuzilolonga okwenziwe ngamezwi wakho\n- Ibhuku lakho lamezwi elibulunga koke okufundileko\n\nUkubhalisela kwakho i-{plan} kubulungiwe, begodu kusele igadango lokugcina kwaphela.",
+      "cta": "Qeda ukubhalisa",
+      "next": "Akukho okubhadeliswako namhlanje, begodu ungakhansela nanyana kunini ekhasini lakho le-akhawunti."
+    },
+    "rec-e3": {
+      "subject": "Kukhona okukuthikazileko? Sitjele",
+      "body": "Lotjha {name},\n\nUkubhalisela kwakho i-{plan} kusabulungiwe.\n\nNange kukhona okukubambako, phendula nje i-imeyili le, sizakusiza.",
+      "cta": "Qeda ukubhalisa",
+      "next": "",
+      "signature": "Ithimba le-Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Ilizwi lokuthoma labantwana bakho ku-Gadit",
+      "body": "Lotjha {name},\n\nIndlela engcono khulu yokuthoma: hlala nomntwana wakho imizuzu emihlanu, nifune ilizwi linye ahlangane nalo namhlanje, ebhukwini, emsebenzini wekhaya namkha ekukhulumeni.\n\n- Tlola ilizwi endaweni yokufuna\n- Bona ihlathululo esezingeni lomntwana wakho, enesithombe sehlathululo ngayinye\n- Libulunge ebhukwini lamezwi, begodu ukusukela lapho lingena emidlalweni yakhe\n\nIlizwi linye namhlanje, begodu umntwana wakho sele athoma ukwakha amezwi wakhe.",
+      "cta": "Funa ilizwi lokuthoma",
+      "next": "Utlhoga isizo? Phendula nje i-imeyili le."
+    },
+    "act-first-word-indiv": {
+      "subject": "Ilizwi lakho lokuthoma ku-Gadit",
+      "body": "Lotjha {name},\n\nIndlela engcono khulu yokuthoma: funa ilizwi linye ohlangane nalo namhlanje, ebhukwini, emsebenzini namkha ekukhulumeni.\n\n- Zoke iinhlathululo zalo, ngesithombe sehlathululo ngayinye\n- Lapho ilizwi livela khona\n- Libulunge ebhukwini lakho lamezwi bese uzilolonga ngalo emidlalweni emifitjhani\n\nIlizwi linye namhlanje, begodu amezwi wakho sele akhula.",
+      "cta": "Funa ilizwi lokuthoma",
+      "next": "Utlhoga isizo? Phendula nje i-imeyili le."
+    },
+    "act-first-word-2": {
+      "subject": "Ilizwi linye, imizuzu emihlanu",
+      "body": "Lotjha {name},\n\nUmbono omncani wanamhlanje: khetha ilizwi linye ebhukwini, emsebenzini wekhaya namkha ezindabeni, bese ulifuna ku-Gadit.\n\nNgomzuzu nje ubona zoke iinhlathululo zalo, ngesithombe nezibonelo, begodu libulungwa ebhukwini lamezwi bona uzilolonge.\n\nKungendlela le amezwi akhula ngayo: ilizwi linye ngesikhathi.",
+      "cta": "Funa ilizwi nje",
+      "next": "Utlhoga isizo? Phendula nje i-imeyili le."
+    },
+    "act-add-child": {
+      "subject": "Elinye igadango: engeza umntwana wakho",
+      "body": "Lotjha {name},\n\nI-Gadit Family yakhelwe abantwana bakho, kodwana akukabi khona umntwana owengezwe ku-akhawunti. Kuthatha umzuzu:\n\n- Tlola ibizo lomntwana wakho bese ukhetha umlingiswa\n- Hlanganisa idivayisi yakhe ngaphandle kwephasiwedi, namkha usebenzise iModi yabantwana kudivayisi yakho\n- Ukusukela lapho ilizwi ngalinye alifunako liyabulungwa, begodu ubona ituthuko edeshibhodini yababelethi",
+      "cta": "Engeza umntwana",
+      "next": "Utlhoga isizo? Phendula nje i-imeyili le."
+    },
+    "act-return-family": {
+      "subject": "Ukuthoma okufitjhani ku-Gadit, okwenzelwe wena",
+      "body": "Lotjha {name},\n\nSifuna ukuqinisekisa bona abantwana bakho bathola koke i-Gadit engabanikela khona. Nanga amagadango amathathu afitjhani wokuthoma iveke le:\n\n- Engeza umntwana ku-akhawunti, nange ungakakwenzi (umzuzu munye)\n- Funani ilizwi linye ndawonye ebhukwini namkha emsebenzini wekhaya\n- Vula imidlalo, eyenziwe ngamezwi abulungwe ngumntwana wakho",
+      "cta": "Thoma nje",
+      "next": "Ufuna sikutjengise bona isebenza njani? Phendula i-imeyili le, begodu sizakuhlela ikulumiswano efitjhani yefowuni yemizuzu eli-10."
+    },
+    "act-return-indiv": {
+      "subject": "Ukuthoma okufitjhani ku-Gadit, okwenzelwe wena",
+      "body": "Lotjha {name},\n\nSifuna ukuqinisekisa bona uthola koke i-Gadit engakunikela khona. Nanga amagadango amathathu afitjhani wokuthoma iveke le:\n\n- Funa ilizwi linye ohlangane nalo namhlanje\n- Libulunge ebhukwini lakho lamezwi\n- Zilolonge ngamezwi wakho emidlalweni emifitjhani",
+      "cta": "Funa ilizwi",
+      "next": "Ufuna sikutjengise bona isebenza njani? Phendula i-imeyili le, begodu sizakuhlela ikulumiswano efitjhani yefowuni yemizuzu eli-10."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "{child}: lokho akufundileko ku-Gadit iveke le",
+    "subjectActiveMany": "Lokho abantwana bakho abakufundileko ku-Gadit iveke le",
+    "subjectQuietOne": "{child}: umbono omncani weveke ku-Gadit",
+    "subjectQuietMany": "Umbono omncani weveke yabantwana bakho ku-Gadit",
+    "greeting": "Lotjha {name},",
+    "introActiveOne": "{child}: nasi isifinyezo seveke ku-Gadit.",
+    "introActiveMany": "Nasi isifinyezo seveke sabantwana bakho ku-Gadit.",
+    "introQuietOne": "Nanku umbono omncani weveke le no-{child}.",
+    "introQuietMany": "Nanku umbono omncani weveke le nabantwana bakho.",
+    "together": {
+      "one": "Iveke le abantwana bakho bafunde ilizwi elitjha eli-{n}.",
+      "other": "Iveke le abantwana bakho bafunde amezwi amatjha ali-{n}."
+    },
+    "childFallback": "Umntwana wakho",
+    "newLabel": {
+      "one": "ilizwi elitjha iveke le",
+      "other": "amezwi amatjha iveke le"
+    },
+    "wordsLabel": "Amezwi:",
+    "more": {
+      "one": "nelinye eli-{n}",
+      "other": "namanye ali-{n}"
+    },
+    "total": {
+      "one": "Ebhukwini lamezwi: ilizwi eli-{n}",
+      "other": "Ebhukwini lamezwi: amezwi ali-{n}"
+    },
+    "streak": {
+      "one": "Ilanga eli-{n} ngokulandelana",
+      "other": "Amalanga ali-{n} ngokulandelana"
+    },
+    "learned": {
+      "one": "Ukufunda {lang}: ilizwi eli-{n} lifundwe kuhle iveke le",
+      "other": "Ukufunda {lang}: amezwi ali-{n} afundwe kuhle iveke le"
+    },
+    "langEn": "isiNgisi",
+    "langHe": "isiHebheru",
+    "idea": "Umbono weveke le:",
+    "ideaGame": "Umdlalo wemizuzu emihlanu ngamezwi sele abulungiwe ebhukwini lamezwi.",
+    "ideaFirst": "Funani ilizwi linye ndawonye ebhukwini namkha emsebenzini wekhaya. Libulungwa ebhukwini lamezwi.",
+    "ideaConnect": "Bona ubone lapha lokho umntwana akufundako, hlanganisa idivayisi yakhe namkha usebenzise iModi yabantwana kudivayisi yakho.",
+    "playCta": "Vula imidlalo",
+    "connectCta": "Hlanganisa",
+    "outroActive": "Umbono: khetha ilizwi linye erhelweni bese ubuza abantwana bakho ngesikhathi sokudla kwantambama bona litjho ukuthini.",
+    "outroQuiet": "Imizuzu embalwa ngelanga yanele. Ilizwi ngalinye elibulungwa ebhukwini lamezwi lingena emidlalweni.",
+    "cta": "Vula ideshibhodi yababelethi",
+    "next": "Utlhoga isizo? Phendula nje i-imeyili le."
+  },
+  "fixed": {
+    "unsub": "Zikhuphe erhelweni",
+    "tagline": "Ilizwi ngalinye, lizwisisekile",
+    "closing": "Sikhona nanyana ngimuphi umbuzo namkha isizo.",
+    "signature": "Ithimba le-Gadit",
+    "helpText": "Zoke iinkhombandlela"
+  }
+}

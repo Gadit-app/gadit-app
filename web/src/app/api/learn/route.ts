@@ -6,6 +6,8 @@ import {
   type LearnItem, type LearnLang, type Reads, type WordState,
 } from "@/lib/learn/engine";
 import { lessonData, lessonList } from "@/lib/learn/lessons";
+import { LANG_NAME, listTranslateMessages, parseList } from "@/lib/learn/list";
+import { setupLearn } from "@/lib/learn/setup";
 
 /**
  * Learning mode (Gadi 2026-10-11): "what are you learning now?" for a kid
@@ -80,7 +82,8 @@ export async function GET(req: NextRequest) {
   if (lessonId) {
     const l = isLearnLang(qLang) ? qLang : doc?.lang;
     const data = l ? lessonData(l, ui, lessonId) : null;
-    return data ? NextResponse.json({ lesson: data, lang: l }) : NextResponse.json({ error: "not_found" }, { status: 404 });
+    // reads "no": the lesson plays as pictures and sound (pre-reader mode).
+    return data ? NextResponse.json({ lesson: data, lang: l, reads: doc?.reads ?? null }) : NextResponse.json({ error: "not_found" }, { status: 404 });
   }
   const lang = isLearnLang(qLang) ? qLang : doc?.lang ?? null;
   const targets = learnTargets(ui);
@@ -120,43 +123,9 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({ profile: { lang, reads: doc?.reads ?? null }, targets, pool, stats, lesson, lessons });
 }
 
-/** Words of a pasted or photographed list: one per line, or separated by
- *  commas. "word - translation" keeps the parent's translation. */
-function parseList(text: string): Array<{ w: string; t?: string }> {
-  const out: Array<{ w: string; t?: string }> = [];
-  const seen = new Set<string>();
-  for (const raw of text.split(/[\n\r,;•·\t]+/)) {
-    const line = raw.replace(/^\s*[\d]+[.)]\s*/, "").trim();
-    if (!line || line.length > 60) continue;
-    const m = line.match(/^(.+?)\s*[-=:–]\s*(.+)$/);
-    const w = (m ? m[1] : line).trim();
-    const t = m ? m[2].trim() : undefined;
-    const k = w.toLowerCase();
-    if (!w || seen.has(k) || !/\p{L}/u.test(w)) continue;
-    seen.add(k);
-    out.push({ w, t });
-    if (out.length >= 40) break;
-  }
-  return out;
-}
-
-/** The child's UI language, as the translation prompts name it (every UI
- *  language since learning English opened to all of them, 2026-10-18). */
-const LANG_NAME: Record<string, string> = {
-  he: "Hebrew", ar: "Arabic", ru: "Russian", en: "English", es: "Spanish", pt: "Portuguese", fr: "French",
-  de: "German", cs: "Czech", sk: "Slovak", it: "Italian", ja: "Japanese (kana first, as for a child)", hi: "Hindi",
-  am: "Amharic", uk: "Ukrainian", tr: "Turkish", pl: "Polish", fa: "Persian (Farsi)", id: "Indonesian", nl: "Dutch",
-  el: "Greek", zu: "isiZulu", xh: "isiXhosa", nso: "Sepedi (Northern Sotho)", tn: "Setswana", st: "Sesotho (Southern Sotho)",
-  ts: "Xitsonga", ss: "siSwati", ve: "Tshivenda", nr: "South African isiNdebele", vi: "Vietnamese", fil: "Filipino",
-  af: "Afrikaans", sw: "Swahili", "zh-CN": "Simplified Chinese", "zh-TW": "Traditional Chinese (Taiwan)", ko: "Korean",
-  th: "Thai", bn: "Bengali", da: "Danish", hu: "Hungarian",
-};
-
 /** Translate the list words we don't have, in one small call. */
 async function translateMissing(words: string[], lang: LearnLang, ui: string): Promise<Record<string, { t: string; nq?: string }>> {
   if (!words.length || !process.env.OPENAI_API_KEY) return {};
-  const to = LANG_NAME[ui] ?? "English";
-  const from = lang === "en" ? "English" : "Hebrew";
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
@@ -164,10 +133,7 @@ async function translateMissing(words: string[], lang: LearnLang, ui: string): P
       model: TEXT_MODEL_FAST,
       temperature: 0,
       response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: `You translate a child's school vocabulary list (${from} words) into ${to}. For each word give the most common, child-appropriate translation, one word or a very short phrase, no explanations.${lang === "he" ? " Also give the Hebrew word with full, correct niqqud as \"nq\"." : ""} Reply as JSON: {"items":[{"w":"<word as given>","t":"<translation>"${lang === "he" ? ',"nq":"<word with niqqud>"' : ""}}]}.` },
-        { role: "user", content: words.join("\n") },
-      ],
+      messages: listTranslateMessages(words, lang, ui),
     }),
   });
   if (!res.ok) return {};
@@ -272,11 +238,7 @@ export async function POST(req: NextRequest) {
   if (action === "setup") {
     const lang = isLearnLang(body.lang) ? body.lang : null;
     const reads: Reads = body.reads === "no" || body.reads === "yes" ? body.reads : "little";
-    const doc = ((await ref.get()).get("learn") as LearnDoc | undefined) ?? {};
-    const d = { ...(doc.d ?? {}) };
-    // Where the hidden pointer starts: a child who reads starts a step up.
-    if (lang && d[lang] == null) d[lang] = reads === "yes" ? 2 : reads === "little" ? 1.5 : 1;
-    await ref.set({ learn: { ...doc, lang, reads, d } }, { merge: true });
+    await setupLearn(ref, lang, reads);
     return NextResponse.json({ ok: true });
   }
 

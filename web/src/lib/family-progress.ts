@@ -32,6 +32,10 @@ export type ChildProgress = {
   rankKey: RankKey;
   /** Learning mode (Gadi 2026-10-11): real numbers only, never a level. */
   learning?: { lang: "en" | "he"; learnedWeek: number; learnedTotal: number; reinforce: number; list: { total: number; ready: number; testDate: string | null } | null } | null;
+  /** The learning setting itself (2026-10-22), so the parent can see and
+   *  change it: the language (null = off), "do they already read it?", and
+   *  the child's app language when known (it decides which languages fit). */
+  learnSetup?: { lang: "en" | "he" | null; reads: "no" | "little" | "yes" | null; ui: string | null };
 };
 
 /** A child plus the words added in the last 7 days (newest first, distinct),
@@ -41,25 +45,29 @@ export type ChildProgressFull = ChildProgress & { weekList: string[] };
 export type FamilyProgress<C extends ChildProgress = ChildProgress> = { children: C[]; totalWords: number; weekWords: number };
 
 /** A child's learning-mode numbers, or null when not learning a language. */
-async function learningOf(uid: string): Promise<ChildProgress["learning"]> {
+async function learningOf(uid: string): Promise<{ learning: ChildProgress["learning"]; setup: NonNullable<ChildProgress["learnSetup"]> }> {
   const db = getAdminDb();
-  const learn = (await db.collection("users").doc(uid).get()).get("learn") as
-    { lang?: "en" | "he" | null; list?: { lang: string; items: Array<{ w: string }>; testDate?: string | null; at: number } | null } | undefined;
+  const userSnap = await db.collection("users").doc(uid).get();
+  const learn = userSnap.get("learn") as
+    { lang?: "en" | "he" | null; reads?: "no" | "little" | "yes"; list?: { lang: string; items: Array<{ w: string }>; testDate?: string | null; at: number } | null } | undefined;
   const lang = learn?.lang;
-  if (lang !== "en" && lang !== "he") return null;
+  const ui = (userSnap.get("uiLang") as string | undefined) ?? null;
+  const reads = learn?.reads === "no" || learn?.reads === "little" || learn?.reads === "yes" ? learn.reads : null;
+  const setup = { lang: lang === "en" || lang === "he" ? lang : null, reads, ui };
+  if (lang !== "en" && lang !== "he") return { learning: null, setup };
   const snap = await db.collection("users").doc(uid).collection("learnWords").where("lang", "==", lang).get();
   const now = Date.now();
   const rows = snap.docs.map((d) => d.data() as { box?: number; wrong?: number; learnedAt?: number; w?: string });
   const byWord = new Map(rows.map((r) => [String(r.w ?? "").toLowerCase(), r]));
   const l = learn?.list && learn.list.lang === lang ? learn.list : null;
   const listOn = !!l && (l.testDate ? now <= Date.parse(`${l.testDate}T23:59:59+03:00`) + 86_400_000 : now - l.at < 14 * 86_400_000);
-  return {
+  return { setup, learning: {
     lang,
     learnedWeek: rows.filter((r) => (r.learnedAt ?? 0) >= now - WEEK_MS).length,
     learnedTotal: rows.filter((r) => (r.box ?? 0) >= 3).length,
     reinforce: rows.filter((r) => (r.box ?? 0) < 3 && (r.wrong ?? 0) > 0).length,
     list: listOn && l ? { total: l.items.length, ready: l.items.filter((x) => (byWord.get(x.w.toLowerCase())?.box ?? 0) >= 2).length, testDate: l.testDate ?? null } : null,
-  };
+  } };
 }
 
 /**
@@ -129,7 +137,9 @@ export async function loadFamilyProgress(ownerUid: string): Promise<FamilyProgre
         };
         const uid = m.userId;
         if (!uid) return base;
-        base.learning = await learningOf(uid).catch(() => null);
+        const lr = await learningOf(uid).catch(() => null);
+        base.learning = lr?.learning ?? null;
+        if (lr) base.learnSetup = lr.setup;
 
         try {
           // Words, practices, streak and rank from the one server helper

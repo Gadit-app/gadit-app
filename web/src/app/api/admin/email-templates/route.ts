@@ -6,7 +6,7 @@ import { INDIV_META, INDIV_LABEL_HE, type IndivPlan } from "@/lib/email-drip/ind
 const ALL_META = [...FAMILY_META, ...INDIV_META];
 import { applyName, type EmailContent } from "@/lib/email-drip/render";
 import { renderFamilyMail } from "@/lib/email-drip/family-drip";
-import { getOverride, getEffectiveContent, saveOverride, resetOverride, hasLang } from "@/lib/email-drip/email-templates-store";
+import { getOverride, getEffectiveContent, saveOverride, resetOverride, hasLang, hasOverride } from "@/lib/email-drip/email-templates-store";
 import { isFamilyLang } from "@/lib/email-drip/family-i18n";
 import { getDripForLang, buildUnsubUrl } from "@/lib/email-drip/registry";
 import { sendDripEmail } from "@/lib/email-drip/send";
@@ -101,7 +101,7 @@ export async function GET(req: NextRequest) {
   // email to start from when it isn't translated yet.
   const other = req.nextUrl.searchParams.get("lang") ?? "";
   const extra = isFamilyLang(other) && other !== "he" && other !== "en"
-    ? { [other]: { content: await getEffectiveContent(key, other), overridden: await hasLang(key, other), translated: await hasLang(key, other) } }
+    ? { [other]: { content: await getEffectiveContent(key, other), overridden: await hasOverride(key, other), translated: await hasLang(key, other) } }
     : {};
   return NextResponse.json({
     key,

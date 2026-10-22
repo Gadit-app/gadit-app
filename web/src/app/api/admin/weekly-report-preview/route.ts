@@ -9,6 +9,7 @@ import {
   weeklyReportEnabled,
   isoWeekIL,
   isSundayIL,
+  weeklyCopyLang,
 } from "@/lib/email-drip/weekly-report";
 
 /**
@@ -16,8 +17,8 @@ import {
  *
  * The weekly parent report for one Family owner, as HTML, with that family's
  * real numbers (the same as their parent dashboard). Without `email`, a
- * sample family. `lang` overrides the owner's language (he / en; any other
- * reads the English email). With `to`, the rendered email is also sent to
+ * sample family. `lang` overrides the owner's language (he, en or any
+ * translated UI language; one without a translation reads the English email). With `to`, the rendered email is also sent to
  * that test address only (never to the owner), marked [TEST] in the subject.
  * Nothing is written to the owner's ledger (Gadi 2026-10-21).
  */
@@ -63,7 +64,7 @@ export async function GET(req: NextRequest) {
       `switch=${(await weeklyReportEnabled(db)) ? "on" : "off"}`,
     ].join("\n");
   } else {
-    const l = lang === "he" ? "he" : "en";
+    const l = weeklyCopyLang(lang);
     const r = renderWeeklyReport(sampleReportChildren(l), { lang: l, firstName: l === "he" ? "דנה" : "Dana", unsubscribeUrl: "https://www.gadit.app/" });
     subject = r.subject;
     html = r.html;

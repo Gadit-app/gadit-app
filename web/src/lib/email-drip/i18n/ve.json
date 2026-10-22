@@ -1,0 +1,123 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Ro ni vhulungela fhethu haṋu kha Gadit",
+      "body": "Ndaa {name},\n\nNo thoma u ḓiṅwalisela {plan} fhedzi na ima ni sa athu fhedza.\n\nRo ni vhulungela zwoṱhe, nahone ni nga bvela phanḓa u bva hune na ima hone.\n\n- Maḓuvha a 14 mahala, nahone a hu na tshine tsha badeliswa ṋamusi\n- Nga murahu ha tshilingo: {price}\n- Ri ḓo ni rumela tsivhudzo nga imeiḽi phanḓa ha musi tshilingo tshi tshi fhela\n- Ni nga khansela tshifhinga tshiṅwe na tshiṅwe kha siaṱari ḽaṋu ḽa akhaunthu, nga u kwama kavhili",
+      "cta": "Fhedzani u ḓiṅwalisa",
+      "next": "Hu na zwi sa pfeseseiho? Fhindulani fhedzi imeiḽi iyi, ri ḓo ni thusa."
+    },
+    "rec-e2-family": {
+      "subject": "Zwine vhana vhaṋu vha zwi wana kha Gadit",
+      "body": "Ndaa {name},\n\nRo vha ri tshi ṱoḓa u ni vhudza nga u pfufhifhadza zwine zwa khou lindela vhana vhaṋu kha Gadit:\n\nIpfi ḽiṅwe na ḽiṅwe ḽine vha ḽi wana, kha bugu, kha mushumo wa hayani kana kha nyambedzano, ḽi vha ipfi ḽine vha ḽi pfesesa vhukuma.\n\n- Ṱhalutshedzo yo teaho ṅwana waṋu, i na tshifanyiso kha ndeme iṅwe na iṅwe\n- Mitambo na nḓowelo zwo itwaho nga maipfi avho\n- Thuso kha mushumo wa hayani\n- Tshikirini tsha vhabebi tshine tsha ni sumbedza mvelaphanḓa ya ṅwana muṅwe na muṅwe\n\nṄwaliso waṋu wa {plan} wo vhulungwa, nahone ho sala fhedzi tshiga tsha u fhedza.",
+      "cta": "Fhedzani u ḓiṅwalisa",
+      "next": "A hu na tshine tsha badeliswa ṋamusi, nahone ni nga khansela tshifhinga tshiṅwe na tshiṅwe kha siaṱari ḽaṋu ḽa akhaunthu."
+    },
+    "rec-e2-indiv": {
+      "subject": "Zwine zwa khou ni lindela kha Gadit",
+      "body": "Ndaa {name},\n\nRo vha ri tshi ṱoḓa u ni vhudza nga u pfufhifhadza zwine zwa khou ni lindela kha Gadit:\n\nIpfi ḽiṅwe na ḽiṅwe, kha bugu, mushumoni kana kha nyambedzano, ḽi vha ipfi ḽine na ḽi pfesesa nga vhuḓalo.\n\n- Ndeme dzoṱhe dza ipfi, na tshifanyiso kha iṅwe na iṅwe\n- Mitambo na nḓowelo zwo itwaho nga maipfi aṋu\n- Bugu yaṋu ya maipfi ine ya vhulunga zwoṱhe zwe na zwi guda\n\nṄwaliso waṋu wa {plan} wo vhulungwa, nahone ho sala fhedzi tshiga tsha u fhedza.",
+      "cta": "Fhedzani u ḓiṅwalisa",
+      "next": "A hu na tshine tsha badeliswa ṋamusi, nahone ni nga khansela tshifhinga tshiṅwe na tshiṅwe kha siaṱari ḽaṋu ḽa akhaunthu."
+    },
+    "rec-e3": {
+      "subject": "Hu na zwo ni thithisaho? Ri vhudzeni",
+      "body": "Ndaa {name},\n\nṄwaliso waṋu wa {plan} wo vhulungwa na zwino.\n\nArali hu na zwine zwa khou ni thithisa, fhindulani fhedzi imeiḽi iyi, ri ḓo ni thusa.",
+      "cta": "Fhedzani u ḓiṅwalisa",
+      "next": "",
+      "signature": "Tshigwada tsha Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Ipfi ḽa u thoma ḽa vhana vhaṋu kha Gadit",
+      "body": "Ndaa {name},\n\nNḓila ya khwine ya u thoma: dzulani na ṅwana waṋu mimunithi ya ṱhanu, ni ṱoḓe ipfi ḽithihi ḽe a ḽi wana ṋamusi, kha bugu, kha mushumo wa hayani kana kha nyambedzano.\n\n- Ṅwalani ipfi fhethu ha u ṱoḓa\n- Vhonani ṱhalutshedzo yo teaho ṅwana waṋu, i na tshifanyiso kha ndeme iṅwe na iṅwe\n- Ḽi vhulungeni kha bugu ya maipfi, nahone u bva henefho ḽi dzhena kha mitambo yawe\n\nIpfi ḽithihi ṋamusi, nahone ṅwana waṋu o no thoma u fhaṱa maipfi awe.",
+      "cta": "Ṱoḓani ipfi ḽa u thoma",
+      "next": "Ni ṱoḓa thuso? Fhindulani fhedzi imeiḽi iyi."
+    },
+    "act-first-word-indiv": {
+      "subject": "Ipfi ḽaṋu ḽa u thoma kha Gadit",
+      "body": "Ndaa {name},\n\nNḓila ya khwine ya u thoma: ṱoḓani ipfi ḽithihi ḽe na ḽi wana ṋamusi, kha bugu, mushumoni kana kha nyambedzano.\n\n- Ndeme dzoṱhe dzaḽo, na tshifanyiso kha iṅwe na iṅwe\n- Hune ipfi ḽa bva hone\n- Ḽi vhulungeni kha bugu yaṋu ya maipfi ni ḽi ḓowele nga mitambo mipfufhi\n\nIpfi ḽithihi ṋamusi, nahone maipfi aṋu o no thoma u engedzea.",
+      "cta": "Ṱoḓani ipfi ḽa u thoma",
+      "next": "Ni ṱoḓa thuso? Fhindulani fhedzi imeiḽi iyi."
+    },
+    "act-first-word-2": {
+      "subject": "Ipfi ḽithihi, mimunithi ya ṱhanu",
+      "body": "Ndaa {name},\n\nMuhumbulo muṱuku wa ṋamusi: khethani ipfi ḽithihi kha bugu, kha mushumo wa hayani kana kha mafhungo, ni ḽi ṱoḓe kha Gadit.\n\nNga minithi fhedzi ni vhona ndeme dzoṱhe dzaḽo, na tshifanyiso na tsumbo, nahone ḽi vhulungwa kha bugu ya maipfi uri ni ḓowele.\n\nNdi zwone maipfi ane a engedzea ngazwo: ipfi ḽithihi nga tshifhinga.",
+      "cta": "Ṱoḓani ipfi zwino",
+      "next": "Ni ṱoḓa thuso? Fhindulani fhedzi imeiḽi iyi."
+    },
+    "act-add-child": {
+      "subject": "Tshiga tshiṅwe hafhu: engedzani ṅwana waṋu",
+      "body": "Ndaa {name},\n\nGadit Family yo itelwa vhana vhaṋu, fhedzi a hu athu u engedzwa ṅwana kha akhaunthu. Zwi dzhia minithi:\n\n- Ṅwalani dzina ḽa ṅwana waṋu ni khethe tshifanyiso tsha muthu wa tshiṱori\n- Ṱumanyani tshishumiswa tshawe hu si na phasiwedi, kana ni shumise Tshiimo tsha vhana kha tshishumiswa tshaṋu\n- U bva henefho ipfi ḽiṅwe na ḽiṅwe ḽine a ḽi ṱoḓa ḽi a vhulungwa, nahone ni vhona mvelaphanḓa kha tshikirini tsha vhabebi",
+      "cta": "Engedzani ṅwana",
+      "next": "Ni ṱoḓa thuso? Fhindulani fhedzi imeiḽi iyi."
+    },
+    "act-return-family": {
+      "subject": "Mathomo mapfufhi kha Gadit, o ni itelwaho",
+      "body": "Ndaa {name},\n\nRi ṱoḓa u vha na vhungoho ha uri vhana vhaṋu vha wana zwoṱhe zwine Gadit ya nga vha ṋea zwone. Hezwi ndi zwiga zwiraru zwipfufhi zwa u thoma vhege iyi:\n\n- Engedzani ṅwana kha akhaunthu, arali ni sa athu u zwi ita (minithi nthihi)\n- Ṱoḓani ipfi ḽithihi nga u ṱanganela kha bugu kana kha mushumo wa hayani\n- Vulani mitambo, ye ya itwa nga maipfi e ṅwana waṋu a a vhulunga",
+      "cta": "Thomani zwino",
+      "next": "Ni ṱoḓa ri ni sumbedze uri zwi shuma hani? Fhindulani imeiḽi iyi, nahone ri ḓo dzudzanya u ni founela lwa mimunithi ya 10."
+    },
+    "act-return-indiv": {
+      "subject": "Mathomo mapfufhi kha Gadit, o ni itelwaho",
+      "body": "Ndaa {name},\n\nRi ṱoḓa u vha na vhungoho ha uri ni wana zwoṱhe zwine Gadit ya nga ni ṋea zwone. Hezwi ndi zwiga zwiraru zwipfufhi zwa u thoma vhege iyi:\n\n- Ṱoḓani ipfi ḽithihi ḽe na ḽi wana ṋamusi\n- Ḽi vhulungeni kha bugu yaṋu ya maipfi\n- Ḓowelani maipfi aṋu nga mitambo mipfufhi",
+      "cta": "Ṱoḓani ipfi",
+      "next": "Ni ṱoḓa ri ni sumbedze uri zwi shuma hani? Fhindulani imeiḽi iyi, nahone ri ḓo dzudzanya u ni founela lwa mimunithi ya 10."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "{child}: zwe a zwi guda kha Gadit vhege iyi",
+    "subjectActiveMany": "Zwe vhana vhaṋu vha zwi guda kha Gadit vhege iyi",
+    "subjectQuietOne": "{child}: muhumbulo muṱuku wa vhege kha Gadit",
+    "subjectQuietMany": "Muhumbulo muṱuku wa vhege ya vhana vhaṋu kha Gadit",
+    "greeting": "Ndaa {name},",
+    "introActiveOne": "Aya ndi manweledzo a vhege a {child} kha Gadit.",
+    "introActiveMany": "Aya ndi manweledzo a vhege a vhana vhaṋu kha Gadit.",
+    "introQuietOne": "Hoyu ndi muhumbulo muṱuku wa vhege iyi na {child}.",
+    "introQuietMany": "Hoyu ndi muhumbulo muṱuku wa vhege iyi na vhana vhaṋu.",
+    "together": {
+      "one": "Vhege iyi vhana vhaṋu vho guda ipfi ḽiswa ḽa {n}.",
+      "other": "Vhege iyi vhana vhaṋu vho guda maipfi maswa a {n}."
+    },
+    "childFallback": "Ṅwana waṋu",
+    "newLabel": {
+      "one": "ipfi ḽiswa vhege iyi",
+      "other": "maipfi maswa vhege iyi"
+    },
+    "wordsLabel": "Maipfi:",
+    "more": {
+      "one": "na ḽiṅwe ḽithihi",
+      "other": "na maṅwe a {n}"
+    },
+    "total": {
+      "one": "Kha bugu ya maipfi: ipfi ḽa {n}",
+      "other": "Kha bugu ya maipfi: maipfi a {n}"
+    },
+    "streak": {
+      "one": "Ḓuvha ḽa {n} nga u tevhekana",
+      "other": "Maḓuvha a {n} nga u tevhekana"
+    },
+    "learned": {
+      "one": "U guda {lang}: ipfi ḽa {n} ḽo gudiwa nga vhuḓalo vhege iyi",
+      "other": "U guda {lang}: maipfi a {n} o gudiwa nga vhuḓalo vhege iyi"
+    },
+    "langEn": "Luisimane",
+    "langHe": "Luheberu",
+    "idea": "Muhumbulo wa vhege iyi:",
+    "ideaGame": "Mutambo wa mimunithi ya 5 nga maipfi o no vhulungwaho kha bugu ya maipfi.",
+    "ideaFirst": "Ṱoḓani ipfi ḽithihi nga u ṱanganela kha bugu kana kha mushumo wa hayani. Ḽi vhulungwa kha bugu ya maipfi.",
+    "ideaConnect": "U itela u vhona fhano zwine ṅwana a khou zwi guda, ṱumanyani tshishumiswa tshawe kana ni shumise Tshiimo tsha vhana kha tshishumiswa tshaṋu.",
+    "playCta": "Vulani mitambo",
+    "connectCta": "Ṱumanyani",
+    "outroActive": "Muhumbulo: khethani ipfi ḽithihi kha mutevhe ni vhudzise vhana vhaṋu nga tshifhinga tsha zwiḽiwa zwa madekwana uri ḽi amba mini.",
+    "outroQuiet": "Mimunithi i si gathi nga ḓuvha i a lingana. Ipfi ḽiṅwe na ḽiṅwe ḽo vhulungwaho kha bugu ya maipfi ḽi dzhena kha mitambo.",
+    "cta": "Vulani tshikirini tsha vhabebi",
+    "next": "Ni ṱoḓa thuso? Fhindulani fhedzi imeiḽi iyi."
+  },
+  "fixed": {
+    "unsub": "Ḓibviseni kha mutevhe",
+    "tagline": "Ipfi ḽiṅwe na ḽiṅwe, ḽo pfesesea",
+    "closing": "Ri hone kha mbudziso iṅwe na iṅwe kana thuso.",
+    "signature": "Tshigwada tsha Gadit",
+    "helpText": "Vhulivhisi hoṱhe"
+  }
+}

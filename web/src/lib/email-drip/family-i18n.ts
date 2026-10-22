@@ -44,3 +44,23 @@ export const FAMILY_FIXED: Record<FamilyLang, FamilyFixed> = {
   "da": {"unsub":"Afmeld","tagline":"Forstå hvert ord helt til bunds","closing":"Vi er her, hvis du har spørgsmål eller brug for hjælp.","signature":"Teamet bag Gadit","helpText":"Alle guides"},
   "hu": {"unsub":"Leiratkozás","tagline":"Érts meg minden szót igazán.","closing":"Ha kérdésed van, vagy segítség kell, itt vagyunk.","signature":"A Gadit csapata","helpText":"Összes útmutató"},
 };
+
+// The eight South African UI languages (2026-10-15) have no Family series
+// translation, but the lifecycle emails (checkout recovery, activation, weekly
+// report: i18n/<lang>.json) are translated into them (2026-10-22): their
+// fixed strings, so the footer and signature match the email.
+export const EXTRA_FIXED: Record<string, FamilyFixed> = {
+  "xh": {"unsub":"Zikhuphe kuluhlu","tagline":"Lonke igama, liqondakele","closing":"Sikhona nakuwuphi na umbuzo okanye xa ufuna uncedo.","signature":"Iqela le-Gadit","helpText":"Zonke izikhokelo"},
+  "nso": {"unsub":"Itloše lenaneong","tagline":"Lentšu le lengwe le le lengwe, le kwešišwa","closing":"Re gona bakeng sa potšišo efe goba efe goba thušo.","signature":"Sehlopha sa Gadit","helpText":"Ditlhahlo ka moka"},
+  "tn": {"unsub":"Itlose mo lenaneong","tagline":"Lefoko lengwe le lengwe, le tlhaloganngwe","closing":"Re teng go araba potso nngwe le nngwe kgotsa go thusa.","signature":"Setlhopha sa Gadit","helpText":"Dikaelo tsotlhe"},
+  "st": {"unsub":"Itlose lenaneong","tagline":"Lentswe le leng le le leng, le utlwisisehile","closing":"Re teng bakeng sa potso efe kapa efe kapa thuso.","signature":"Sehlopha sa Gadit","helpText":"Ditataiso tsohle"},
+  "ts": {"unsub":"Tisuseni eka nxaxamelo","tagline":"Rito rin'wana na rin'wana, ri twisisiwa","closing":"Hi kona eka xivutiso xin'wana na xin'wana kumbe mpfuno.","signature":"Ntlawa wa Gadit","helpText":"Swiletelo hinkwaswo"},
+  "ss": {"unsub":"Tikhiphe ohlwini","tagline":"Ligama ngalinye, licondzakele","closing":"Sikhona kunobe ngumuphi umbuto nobe nawudzinga lusito.","signature":"Licembu le-Gadit","helpText":"Yonkhe imihlahlandlela"},
+  "ve": {"unsub":"Ḓibviseni kha mutevhe","tagline":"Ipfi ḽiṅwe na ḽiṅwe, ḽo pfesesea","closing":"Ri hone kha mbudziso iṅwe na iṅwe kana thuso.","signature":"Tshigwada tsha Gadit","helpText":"Vhulivhisi hoṱhe"},
+  "nr": {"unsub":"Zikhuphe erhelweni","tagline":"Ilizwi ngalinye, lizwisisekile","closing":"Sikhona nanyana ngimuphi umbuzo namkha isizo.","signature":"Ithimba le-Gadit","helpText":"Zoke iinkhombandlela"},
+};
+
+/** The fixed email strings of any UI language (English when it has none). */
+export function fixedFor(lang: string): FamilyFixed {
+  return isFamilyLang(lang) ? FAMILY_FIXED[lang] : EXTRA_FIXED[lang] ?? FAMILY_FIXED.en;
+}

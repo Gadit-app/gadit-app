@@ -1,0 +1,123 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Sikugcinele indzawo yakho ku-Gadit",
+      "body": "Sawubona {name},\n\nUcale kubhalisela i-{plan}, wema ngaphambi nje kwekutsi uphetse.\n\nSikugcinele konkhe, futsi ungachubeka khona lapho ugcine khona.\n\n- Emalanga langu-14 mahhala, futsi akukho lokukhokhiswako lamuhla\n- Ngemuva kwekulinga: {price}\n- Sitakutfumelela sikhumbuto nge-imeyili ngaphambi kwekutsi kulinga kuphele\n- Ungakhansela nobe nini elikhasini lakho le-akhawunti, ngekuchofota kabili",
+      "cta": "Phetsa kubhalisa",
+      "next": "Kukhona lokungacaci? Vele uphendvule le-imeyili, sitakusita."
+    },
+    "rec-e2-family": {
+      "subject": "Loko bantfwana bakho labakutfolako ku-Gadit",
+      "body": "Sawubona {name},\n\nBesifuna kukutjela kafisha kutsi yini lelindze bantfwana bakho ku-Gadit:\n\nLigama ngalinye labahlangana nalo, encwadzini, emsebentini wasekhaya nobe enkhulumeni, liba ligama labalicondza ngempela.\n\n- Inchazelo lesezingeni lemntfwana wakho, inesitfombe senchazelo ngayinye\n- Imidlalo nekuticecesha lokwentiwe ngemagama abo\n- Lusito ngemsebenti wasekhaya\n- Libhodi lemtali lelikukhombisa kutfutfuka kwemntfwana ngamunye\n\nKubhalisa kwakho ku-{plan} kugciniwe, futsi kusele sinyatselo sekugcina kuphela.",
+      "cta": "Phetsa kubhalisa",
+      "next": "Akukho lokukhokhiswako lamuhla, futsi ungakhansela nobe nini elikhasini lakho le-akhawunti."
+    },
+    "rec-e2-indiv": {
+      "subject": "Loko lokukulindzile ku-Gadit",
+      "body": "Sawubona {name},\n\nBesifuna kukutjela kafisha kutsi yini lekulindzile ku-Gadit:\n\nLigama ngalinye, encwadzini, emsebentini nobe enkhulumeni, liba ligama lolicondza ngalokuphelele.\n\n- Tonkhe tinchazelo teligama, ngesitfombe senchazelo ngayinye\n- Imidlalo nekuticecesha lokwentiwe ngemagama akho\n- Incwadzi yakho yemagama legcina konkhe lokufundzile\n\nKubhalisa kwakho ku-{plan} kugciniwe, futsi kusele sinyatselo sekugcina kuphela.",
+      "cta": "Phetsa kubhalisa",
+      "next": "Akukho lokukhokhiswako lamuhla, futsi ungakhansela nobe nini elikhasini lakho le-akhawunti."
+    },
+    "rec-e3": {
+      "subject": "Kukhona lokukuvimbile? Sitjele",
+      "body": "Sawubona {name},\n\nKubhalisa kwakho ku-{plan} kusagciniwe.\n\nNangabe kukhona lokukuvimbako, vele uphendvule le-imeyili, sitakusita.",
+      "cta": "Phetsa kubhalisa",
+      "next": "",
+      "signature": "Licembu le-Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Ligama lekucala lebantfwana bakho ku-Gadit",
+      "body": "Sawubona {name},\n\nIndlela lencono kakhulu yekucala: hlala nemntfwana wakho imizuzu lemihlanu, nisesha ligama linye lahlangene nalo lamuhla, encwadzini, emsebentini wasekhaya nobe enkhulumeni.\n\n- Bhala ligama endzaweni yekusesha\n- Bona inchazelo lesezingeni lemntfwana wakho, inesitfombe senchazelo ngayinye\n- Ligcine encwadzini yemagama, bese lingena emidlalweni yakhe\n\nLigama linye lamuhla, futsi umntfwana wakho sewucala kwakha lwati lwakhe lwemagama.",
+      "cta": "Sesha ligama lekucala",
+      "next": "Udzinga lusito? Vele uphendvule le-imeyili."
+    },
+    "act-first-word-indiv": {
+      "subject": "Ligama lakho lekucala ku-Gadit",
+      "body": "Sawubona {name},\n\nIndlela lencono kakhulu yekucala: sesha ligama linye lohlangene nalo lamuhla, encwadzini, emsebentini nobe enkhulumeni.\n\n- Tonkhe tinchazelo talo, ngesitfombe senchazelo ngayinye\n- Kutsi ligama livelaphi\n- Ligcine encwadzini yakho yemagama bese uticecesha ngalo emidlalweni lemifisha\n\nLigama linye lamuhla, futsi lwati lwakho lwemagama selukhula.",
+      "cta": "Sesha ligama lekucala",
+      "next": "Udzinga lusito? Vele uphendvule le-imeyili."
+    },
+    "act-first-word-2": {
+      "subject": "Ligama linye, imizuzu lemihlanu",
+      "body": "Sawubona {name},\n\nUmbono lomncane walamuhla: khetsa ligama linye encwadzini, emsebentini wasekhaya nobe etindzabeni, bese uyalisesha ku-Gadit.\n\nNgemzuzu nje ubona tonkhe tinchazelo talo, ngesitfombe netibonelo, futsi ligcinwa encwadzini yemagama kute uticeceshe.\n\nNgiyo le ndlela lwati lwemagama lolukhula ngayo: ligama linye ngesikhatsi.",
+      "cta": "Sesha ligama nyalo",
+      "next": "Udzinga lusito? Vele uphendvule le-imeyili."
+    },
+    "act-add-child": {
+      "subject": "Lesinye sinyatselo: engeta umntfwana wakho",
+      "body": "Sawubona {name},\n\nI-Gadit Family yakhelwe bantfwana bakho, kodvwa akukabi khona umntfwana lowengetiwe ku-akhawunti. Kutsatsa umzuzu:\n\n- Bhala ligama lemntfwana wakho bese ukhetsa umlingisi\n- Xhuma lithuluzi lakhe ngaphandle kwelipasiwedi, nobe usebentise Simo sebantfwana kulithuluzi lakho\n- Kusukela lapho ligama ngalinye leliseshwa ngumntfwana wakho liyagcinwa, futsi ubona kutfutfuka elibhodini lemtali",
+      "cta": "Engeta umntfwana",
+      "next": "Udzinga lusito? Vele uphendvule le-imeyili."
+    },
+    "act-return-family": {
+      "subject": "Kucala lokufishane ku-Gadit, lokwentelwe wena",
+      "body": "Sawubona {name},\n\nSifuna kucinisekisa kutsi bantfwana bakho batfola konkhe i-Gadit lengabanika kona. Nati tinyatselo letintsatfu letifishane tekucala leliviki:\n\n- Engeta umntfwana ku-akhawunti, nangabe ungakakwenti (umzuzu munye)\n- Seshani ndzawonye ligama linye encwadzini nobe emsebentini wasekhaya\n- Vula imidlalo, leyentiwe ngemagama lagcinwe ngumntfwana wakho",
+      "cta": "Cala nyalo",
+      "next": "Ufuna sikukhombise kutsi isebenta njani? Phendvula le-imeyili, futsi sitakuhlelela lucingo lolufishane lwemizuzu lengu-10."
+    },
+    "act-return-indiv": {
+      "subject": "Kucala lokufishane ku-Gadit, lokwentelwe wena",
+      "body": "Sawubona {name},\n\nSifuna kucinisekisa kutsi utfola konkhe i-Gadit lengakunika kona. Nati tinyatselo letintsatfu letifishane tekucala leliviki:\n\n- Sesha ligama linye lohlangene nalo lamuhla\n- Ligcine encwadzini yakho yemagama\n- Ticeceshe ngemagama akho emidlalweni lemifisha",
+      "cta": "Sesha ligama",
+      "next": "Ufuna sikukhombise kutsi isebenta njani? Phendvula le-imeyili, futsi sitakuhlelela lucingo lolufishane lwemizuzu lengu-10."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "{child}: loko lakufundzile ku-Gadit kuleliviki",
+    "subjectActiveMany": "Loko bantfwana bakho labakufundzile ku-Gadit kuleliviki",
+    "subjectQuietOne": "{child}: umbono lomncane weliviki ku-Gadit",
+    "subjectQuietMany": "Umbono lomncane weliviki lebantfwana bakho ku-Gadit",
+    "greeting": "Sawubona {name},",
+    "introActiveOne": "{child}: nasi sifinyeto seliviki ku-Gadit.",
+    "introActiveMany": "Nasi sifinyeto seliviki sebantfwana bakho ku-Gadit.",
+    "introQuietOne": "Nangu umbono lomncane waleliviki na-{child}.",
+    "introQuietMany": "Nangu umbono lomncane waleliviki nebantfwana bakho.",
+    "together": {
+      "one": "Kuleliviki bantfwana bakho bafundze ligama lelisha lelingu-{n}.",
+      "other": "Kuleliviki bantfwana bakho bafundze emagama lamasha langu-{n}."
+    },
+    "childFallback": "Umntfwana wakho",
+    "newLabel": {
+      "one": "ligama lelisha kuleliviki",
+      "other": "emagama lamasha kuleliviki"
+    },
+    "wordsLabel": "Emagama:",
+    "more": {
+      "one": "nalelinye lelingu-{n}",
+      "other": "nalamanye langu-{n}"
+    },
+    "total": {
+      "one": "Encwadzini yemagama: ligama lelingu-{n}",
+      "other": "Encwadzini yemagama: emagama langu-{n}"
+    },
+    "streak": {
+      "one": "Lilanga lelingu-{n} ngekulandzelana",
+      "other": "Emalanga langu-{n} ngekulandzelana"
+    },
+    "learned": {
+      "one": "Kufundza {lang}: ligama lelingu-{n} lifundziwe kahle kuleliviki",
+      "other": "Kufundza {lang}: emagama langu-{n} afundziwe kahle kuleliviki"
+    },
+    "langEn": "siNgisi",
+    "langHe": "siHebheru",
+    "idea": "Umbono waleliviki:",
+    "ideaGame": "Umdlalo wemizuzu lemihlanu nemagama lasavele agciniwe encwadzini yemagama.",
+    "ideaFirst": "Seshani ndzawonye ligama linye encwadzini nobe emsebentini wasekhaya. Ligcinwa encwadzini yemagama.",
+    "ideaConnect": "Kute ubone lapha loko umntfwana lakufundzako, xhuma lithuluzi lakhe nobe usebentise Simo sebantfwana kulithuluzi lakho.",
+    "playCta": "Vula imidlalo",
+    "connectCta": "Xhuma",
+    "outroActive": "Umbono: khetsa ligama linye ohlwini bese ubuta bantfwana bakho ngesikhatsi sekudla kwakusihlwa kutsi lisho kutsini.",
+    "outroQuiet": "Imizuzu lembalwa ngelilanga yenele. Ligama ngalinye leligcinwa encwadzini yemagama lingena emidlalweni.",
+    "cta": "Vula libhodi lemtali",
+    "next": "Udzinga lusito? Vele uphendvule le-imeyili."
+  },
+  "fixed": {
+    "unsub": "Tikhiphe ohlwini",
+    "tagline": "Ligama ngalinye, licondzakele",
+    "closing": "Sikhona kunobe ngumuphi umbuto nobe nawudzinga lusito.",
+    "signature": "Licembu le-Gadit",
+    "helpText": "Yonkhe imihlahlandlela"
+  }
+}

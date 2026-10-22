@@ -1,0 +1,98 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Bọn mình đã giữ chỗ cho bạn tại Gadit",
+      "body": "Chào {name},\n\nBạn đã bắt đầu đăng ký {plan} và dừng lại ngay trước bước cuối.\n\nBọn mình đã lưu lại mọi thứ, bạn có thể tiếp tục đúng từ chỗ đã dừng.\n\n- 14 ngày miễn phí, hôm nay không bị tính phí\n- Sau thời gian dùng thử: {price}\n- Bọn mình sẽ gửi email nhắc bạn trước khi thời gian dùng thử kết thúc\n- Hủy bất cứ lúc nào từ trang tài khoản, chỉ với hai cú nhấp",
+      "cta": "Hoàn tất đăng ký",
+      "next": "Có gì chưa rõ? Chỉ cần trả lời email này, bọn mình sẽ giúp."
+    },
+    "rec-e2-family": {
+      "subject": "Con bạn sẽ có gì với Gadit",
+      "body": "Chào {name},\n\nBọn mình muốn kể ngắn gọn những gì đang chờ các con của bạn ở Gadit:\n\nMỗi từ các con gặp, trong sách, trong bài tập về nhà hay khi trò chuyện, đều trở thành một từ các con thật sự hiểu.\n\n- Giải thích theo trình độ của con, có hình cho từng nghĩa\n- Trò chơi và bài luyện tập từ chính những từ của con\n- Hỗ trợ làm bài tập về nhà\n- Bảng điều khiển phụ huynh, cho bạn thấy tiến bộ của từng con\n\nĐăng ký {plan} của bạn đã được lưu, chỉ còn bước cuối cùng.",
+      "cta": "Hoàn tất đăng ký",
+      "next": "Hôm nay không bị tính phí, và bạn có thể hủy bất cứ lúc nào từ trang tài khoản."
+    },
+    "rec-e2-indiv": {
+      "subject": "Điều gì đang chờ bạn ở Gadit",
+      "body": "Chào {name},\n\nBọn mình muốn kể ngắn gọn những gì đang chờ bạn ở Gadit:\n\nMỗi từ, trong sách, ở nơi làm việc hay khi trò chuyện, đều trở thành một từ bạn hiểu trọn vẹn.\n\n- Mọi nghĩa của từ, mỗi nghĩa có một hình minh họa\n- Trò chơi và bài luyện tập từ chính những từ của bạn\n- Sổ tay từ vựng cá nhân, lưu lại mọi thứ bạn đã học\n\nĐăng ký {plan} của bạn đã được lưu, chỉ còn bước cuối cùng.",
+      "cta": "Hoàn tất đăng ký",
+      "next": "Hôm nay không bị tính phí, và bạn có thể hủy bất cứ lúc nào từ trang tài khoản."
+    },
+    "rec-e3": {
+      "subject": "Có điều gì cản trở bạn? Hãy cho bọn mình biết",
+      "body": "Chào {name},\n\nĐăng ký {plan} của bạn vẫn đang được lưu.\n\nNếu có điều gì khiến bạn còn băn khoăn, chỉ cần trả lời email này, bọn mình sẽ giúp.",
+      "cta": "Hoàn tất đăng ký",
+      "next": "",
+      "signature": "Đội ngũ Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Từ đầu tiên của con trên Gadit",
+      "body": "Chào {name},\n\nCách bắt đầu tốt nhất: ngồi cùng con năm phút và tra một từ con gặp hôm nay, trong sách, trong bài tập về nhà hay khi trò chuyện.\n\n- Gõ từ vào ô tìm kiếm\n- Xem phần giải thích theo trình độ của con, có hình cho từng nghĩa\n- Lưu vào sổ tay, và từ đó sẽ có trong các trò chơi của con\n\nMột từ hôm nay, và con bạn đã bắt đầu xây vốn từ của riêng mình.",
+      "cta": "Tra từ đầu tiên",
+      "next": "Cần giúp đỡ? Chỉ cần trả lời email này."
+    },
+    "act-first-word-indiv": {
+      "subject": "Từ đầu tiên của bạn trên Gadit",
+      "body": "Chào {name},\n\nCách bắt đầu tốt nhất: tra một từ bạn gặp hôm nay, trong sách, ở nơi làm việc hay khi trò chuyện.\n\n- Mọi nghĩa của từ, mỗi nghĩa có một hình minh họa\n- Từ này bắt nguồn từ đâu\n- Lưu vào sổ tay và luyện tập bằng những trò chơi ngắn\n\nMột từ hôm nay, và vốn từ của bạn đã bắt đầu lớn lên.",
+      "cta": "Tra từ đầu tiên",
+      "next": "Cần giúp đỡ? Chỉ cần trả lời email này."
+    },
+    "act-first-word-2": {
+      "subject": "Một từ, năm phút",
+      "body": "Chào {name},\n\nMột gợi ý nhỏ cho hôm nay: chọn một từ trong sách, bài tập về nhà hoặc tin tức, rồi tra nó trên Gadit.\n\nChỉ trong một phút, bạn thấy mọi nghĩa của từ, có hình và ví dụ, và từ được lưu vào sổ tay để luyện tập.\n\nVốn từ lớn lên như thế đấy: mỗi lần một từ.",
+      "cta": "Tra một từ ngay",
+      "next": "Cần giúp đỡ? Chỉ cần trả lời email này."
+    },
+    "act-add-child": {
+      "subject": "Thêm một bước nữa: thêm con của bạn",
+      "body": "Chào {name},\n\nGadit Family được xây dựng xoay quanh các con, nhưng tài khoản của bạn chưa có bé nào. Chỉ mất một phút:\n\n- Nhập tên con và chọn một nhân vật\n- Kết nối thiết bị riêng của con mà không cần mật khẩu, hoặc dùng Chế độ trẻ em trên thiết bị của bạn\n- Từ đó, mọi từ con tra đều được lưu cho con, và bạn xem tiến bộ trên bảng điều khiển phụ huynh",
+      "cta": "Thêm con",
+      "next": "Cần giúp đỡ? Chỉ cần trả lời email này."
+    },
+    "act-return-family": {
+      "subject": "Khởi đầu ngắn với Gadit, dành riêng cho bạn",
+      "body": "Chào {name},\n\nBọn mình muốn chắc rằng các con nhận được mọi điều Gadit có thể mang lại. Đây là ba bước ngắn để bắt đầu trong tuần này:\n\n- Thêm con vào tài khoản, nếu bạn chưa thêm (một phút)\n- Cùng con tra một từ trong sách hoặc bài tập về nhà\n- Mở các trò chơi, được tạo từ những từ con đã lưu",
+      "cta": "Bắt đầu ngay",
+      "next": "Bạn muốn bọn mình chỉ cách dùng? Trả lời email này, bọn mình sẽ hẹn một cuộc gọi ngắn 10 phút."
+    },
+    "act-return-indiv": {
+      "subject": "Khởi đầu ngắn với Gadit, dành riêng cho bạn",
+      "body": "Chào {name},\n\nBọn mình muốn chắc rằng bạn nhận được mọi điều Gadit có thể mang lại. Đây là ba bước ngắn để bắt đầu trong tuần này:\n\n- Tra một từ bạn gặp hôm nay\n- Lưu nó vào sổ tay\n- Luyện các từ của bạn bằng những trò chơi ngắn",
+      "cta": "Tra một từ",
+      "next": "Bạn muốn bọn mình chỉ cách dùng? Trả lời email này, bọn mình sẽ hẹn một cuộc gọi ngắn 10 phút."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "{child} đã học được gì trên Gadit tuần này",
+    "subjectActiveMany": "Các con đã học được gì trên Gadit tuần này",
+    "subjectQuietOne": "Một gợi ý nhỏ cho tuần của {child} trên Gadit",
+    "subjectQuietMany": "Một gợi ý nhỏ cho tuần của các con trên Gadit",
+    "greeting": "Chào {name},",
+    "introActiveOne": "Đây là bản tóm tắt tuần này của {child} trên Gadit.",
+    "introActiveMany": "Đây là bản tóm tắt tuần này của các con trên Gadit.",
+    "introQuietOne": "Đây là một gợi ý nhỏ cho tuần này cùng {child}.",
+    "introQuietMany": "Đây là một gợi ý nhỏ cho tuần này cùng các con.",
+    "together": { "other": "Tuần này các con đã học {n} từ mới." },
+    "childFallback": "Con bạn",
+    "newLabel": { "other": "từ mới tuần này" },
+    "wordsLabel": "Các từ:",
+    "more": { "other": "và {n} từ nữa" },
+    "total": { "other": "Trong sổ tay: {n} từ" },
+    "streak": { "other": "Chuỗi {n} ngày liên tiếp" },
+    "learned": { "other": "Học {lang}: tuần này đã thuộc hẳn {n} từ" },
+    "langEn": "tiếng Anh",
+    "langHe": "tiếng Do Thái",
+    "idea": "Gợi ý cho tuần này:",
+    "ideaGame": "Một trò chơi 5 phút với những từ đã lưu trong sổ tay.",
+    "ideaFirst": "Cùng tra một từ trong sách hoặc bài tập về nhà. Từ đó sẽ được lưu vào sổ tay.",
+    "ideaConnect": "Để xem ở đây con đang học gì, hãy kết nối thiết bị riêng của con hoặc dùng Chế độ trẻ em trên thiết bị của bạn.",
+    "playCta": "Mở trò chơi",
+    "connectCta": "Kết nối",
+    "outroActive": "Một gợi ý: chọn một từ trong danh sách và hỏi các con nghĩa của nó trong bữa tối.",
+    "outroQuiet": "Mỗi ngày vài phút là đủ. Mỗi từ lưu vào sổ tay đều có mặt trong các trò chơi.",
+    "cta": "Mở bảng điều khiển phụ huynh",
+    "next": "Cần giúp đỡ? Chỉ cần trả lời email này."
+  }
+}

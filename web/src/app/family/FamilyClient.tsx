@@ -51,6 +51,7 @@ import {
 import { type RankKey } from "@/lib/gamification";
 import { rankLabel, gameCopy } from "@/lib/gamification-labels";
 import { playNotActive } from "@/lib/play-copy";
+import { ChildLearnSetting, type LearnSetup } from "./ChildLearnSetting";
 
 const COPY: Record<string, {
   title: string;
@@ -829,6 +830,8 @@ type ChildProgress = {
   streak: number;
   rankKey: RankKey;
   learning?: { lang: "en" | "he"; learnedWeek: number; learnedTotal: number; reinforce: number; list: { total: number; ready: number; testDate: string | null } | null } | null;
+  /** The learning setting the parent can change (2026-10-22). */
+  learnSetup?: LearnSetup;
 };
 
 const PROGRESS_COPY: Record<string, {
@@ -1380,7 +1383,7 @@ const PROGRESS_COPY: Record<string, {
 };
 
 
-function ProgressCard({ c, t, lang }: { c: ChildProgress; t: (typeof PROGRESS_COPY)["en"]; lang: string }) {
+function ProgressCard({ c, t, lang, onLearnSaved }: { c: ChildProgress; t: (typeof PROGRESS_COPY)["en"]; lang: string; onLearnSaved?: () => void }) {
   const href = useHref();
   const color = memberColorFor({ colorIndex: c.colorIndex });
   const initial = (c.name || "?").trim().charAt(0).toUpperCase() || "?";
@@ -1442,6 +1445,8 @@ function ProgressCard({ c, t, lang }: { c: ChildProgress; t: (typeof PROGRESS_CO
           </div>
         );
       })()}
+      {/* The parent sets learning mode for the child too (2026-10-22). */}
+      {c.linked && c.learnSetup && <ChildLearnSetting memberId={c.memberId} setup={c.learnSetup} lang={lang} onSaved={onLearnSaved} />}
     </div>
   );
 }
@@ -2061,6 +2066,8 @@ export function FamilyClient() {
   const [familyChecked, setFamilyChecked] = useState(false);
   const [progress, setProgress] = useState<{ children: ChildProgress[]; totalWords: number; weekWords: number } | null>(null);
   const [progressLoaded, setProgressLoaded] = useState(false);
+  // Bumped after the parent changes a child's learning setting: reload the numbers.
+  const [progressTick, setProgressTick] = useState(0);
   // Tab lives in the URL (?tab=members) so a refresh (or an auto-update
   // reload) returns to the same screen instead of resetting to "home".
   const [tab, setTab] = useState<FamTab>(() => {
@@ -2123,7 +2130,7 @@ export function FamilyClient() {
       }
     })();
     return () => { cancelled = true; };
-  }, [user, family, members.length]);
+  }, [user, family, members.length, progressTick]);
 
   // Subscribe to families/{ownerUid} doc + its members subcollection.
   useEffect(() => {
@@ -2526,7 +2533,7 @@ export function FamilyClient() {
                   <h2 className="fam-shell-h2">{nav.homeTitle}</h2>
                   <div className="fam-dash-grid">
                     {progress.children.map((cp) => (
-                      <ProgressCard key={cp.memberId} c={cp} t={pt} lang={lang} />
+                      <ProgressCard key={cp.memberId} c={cp} t={pt} lang={lang} onLearnSaved={() => setProgressTick((n) => n + 1)} />
                     ))}
                   </div>
                 </>
@@ -3987,6 +3994,16 @@ const FAM_DASH_CSS = `
 .fam-dash-learn { margin-top: 14px; padding: 10px 12px; border-radius: 12px; background: #FFF8E8; display: grid; gap: 3px; font-size: 13.5px; color: #4A5A55; }
 .fam-dash-learn b { font-size: 14.5px; color: #172320; }
 .fam-dash-learn .is-list { color: #8A5A00; font-weight: 700; }
+.fam-dash-learnset { margin-top: 12px; padding: 10px 12px; border-radius: 12px; border: 1px solid #EFE3C8; background: #FFFCF5; display: grid; gap: 8px; font-size: 13.5px; color: #4A5A55; }
+.fam-dash-learnset-h { font-size: 14.5px; font-weight: 700; color: #172320; }
+.fam-dash-learnset-q { font-weight: 700; color: #172320; }
+.fam-dash-learnset-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.fam-dash-learnset-chip { font: inherit; font-size: 13.5px; font-weight: 700; min-height: 36px; padding: 6px 14px; border-radius: 999px; border: 1.5px solid #D9CFB8; background: #fff; color: #172320; cursor: pointer; }
+.fam-dash-learnset-chip.is-on { background: #0B7F7F; border-color: #0B7F7F; color: #fff; }
+.fam-dash-learnset-chip:disabled { cursor: default; opacity: .7; }
+.fam-dash-learnset-chip:focus-visible { outline: 2px solid #0A7472; outline-offset: 2px; }
+.fam-dash-learnset-note { font-size: 12.5px; color: #6B7280; line-height: 1.5; }
+.fam-dash-learnset-msg { font-size: 13px; font-weight: 700; color: #0A7472; }
 .fam-dash-recent-label { font-size: 12px; color: var(--ink-faint); font-weight: 700; margin-bottom: 8px; }
 .fam-dash-chips { display: flex; flex-wrap: wrap; gap: 7px; }
 .fam-dash-chip {

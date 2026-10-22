@@ -1,0 +1,98 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Tempatmu di Gadit sudah kami simpan",
+      "body": "Hai {name},\n\nKamu sudah mulai mendaftar {plan} dan berhenti tepat sebelum selesai.\n\nSemuanya sudah kami simpan, dan kamu bisa melanjutkan tepat dari tempat kamu berhenti.\n\n- Gratis 14 hari, dan tidak ada tagihan hari ini\n- Setelah masa uji coba: {price}\n- Kami akan mengirim pengingat lewat email sebelum masa uji coba berakhir\n- Batalkan kapan saja dari halaman akun, cukup dua klik",
+      "cta": "Selesaikan pendaftaran",
+      "next": "Ada yang kurang jelas? Balas saja email ini, kami siap membantu."
+    },
+    "rec-e2-family": {
+      "subject": "Yang didapat anak-anakmu di Gadit",
+      "body": "Hai {name},\n\nKami ingin bercerita singkat tentang apa yang menunggu anak-anakmu di Gadit:\n\nSetiap kata yang mereka temui, di buku, di PR, atau dalam percakapan, menjadi kata yang benar-benar mereka pahami.\n\n- Penjelasan sesuai tingkat anakmu, dengan gambar untuk setiap arti\n- Game dan latihan dari kata-kata mereka sendiri\n- Bantuan untuk PR\n- Dasbor orang tua yang menunjukkan perkembangan setiap anak\n\nPendaftaran {plan} kamu sudah tersimpan, tinggal langkah terakhir.",
+      "cta": "Selesaikan pendaftaran",
+      "next": "Tidak ada tagihan hari ini, dan kamu bisa membatalkan kapan saja dari halaman akun."
+    },
+    "rec-e2-indiv": {
+      "subject": "Yang menunggumu di Gadit",
+      "body": "Hai {name},\n\nKami ingin bercerita singkat tentang apa yang menunggumu di Gadit:\n\nSetiap kata, di buku, di tempat kerja, atau dalam percakapan, menjadi kata yang kamu pahami sampai tuntas.\n\n- Semua arti kata, dengan gambar untuk setiap arti\n- Game dan latihan dari kata-katamu sendiri\n- Buku kata pribadi yang menyimpan semua yang sudah kamu pelajari\n\nPendaftaran {plan} kamu sudah tersimpan, tinggal langkah terakhir.",
+      "cta": "Selesaikan pendaftaran",
+      "next": "Tidak ada tagihan hari ini, dan kamu bisa membatalkan kapan saja dari halaman akun."
+    },
+    "rec-e3": {
+      "subject": "Ada yang menghalangi? Ceritakan pada kami",
+      "body": "Hai {name},\n\nPendaftaran {plan} kamu masih tersimpan.\n\nKalau ada yang menghambatmu, balas saja email ini dan kami akan membantu.",
+      "cta": "Selesaikan pendaftaran",
+      "next": "",
+      "signature": "Tim Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Kata pertama anak-anakmu di Gadit",
+      "body": "Hai {name},\n\nCara terbaik untuk mulai: duduklah bersama anakmu selama lima menit dan cari satu kata yang ia temui hari ini, di buku, di PR, atau dalam percakapan.\n\n- Ketik katanya di kolom pencarian\n- Lihat penjelasan sesuai tingkat anakmu, dengan gambar untuk setiap arti\n- Simpan ke buku kata, dan dari sana kata itu masuk ke game-nya\n\nSatu kata hari ini, dan anakmu sudah mulai membangun kosakatanya sendiri.",
+      "cta": "Cari kata pertama",
+      "next": "Butuh bantuan? Balas saja email ini."
+    },
+    "act-first-word-indiv": {
+      "subject": "Kata pertamamu di Gadit",
+      "body": "Hai {name},\n\nCara terbaik untuk mulai: cari satu kata yang kamu temui hari ini, di buku, di tempat kerja, atau dalam percakapan.\n\n- Semua artinya, dengan gambar untuk setiap arti\n- Asal-usul kata itu\n- Simpan ke buku katamu dan latih lewat game singkat\n\nSatu kata hari ini, dan kosakatamu sudah bertambah.",
+      "cta": "Cari kata pertama",
+      "next": "Butuh bantuan? Balas saja email ini."
+    },
+    "act-first-word-2": {
+      "subject": "Satu kata, lima menit",
+      "body": "Hai {name},\n\nIde kecil untuk hari ini: pilih satu kata dari buku, PR, atau berita, lalu cari di Gadit.\n\nDalam semenit kamu bisa melihat semua artinya, dengan gambar dan contoh, dan kata itu tersimpan di buku kata untuk latihan.\n\nBegitulah kosakata tumbuh: satu kata demi satu kata.",
+      "cta": "Cari kata sekarang",
+      "next": "Butuh bantuan? Balas saja email ini."
+    },
+    "act-add-child": {
+      "subject": "Satu langkah lagi: tambahkan anakmu",
+      "body": "Hai {name},\n\nGadit Family dibuat untuk anak-anakmu, tapi belum ada anak yang ditambahkan ke akun. Caranya cuma semenit:\n\n- Ketik nama anakmu dan pilih karakter\n- Hubungkan perangkat milik anak tanpa kata sandi, atau gunakan Mode anak di perangkatmu\n- Sejak itu, setiap kata yang ia cari tersimpan untuknya, dan kamu bisa melihat perkembangannya di dasbor orang tua",
+      "cta": "Tambahkan anak",
+      "next": "Butuh bantuan? Balas saja email ini."
+    },
+    "act-return-family": {
+      "subject": "Awal singkat di Gadit, khusus untukmu",
+      "body": "Hai {name},\n\nKami ingin memastikan anak-anakmu mendapat semua yang bisa diberikan Gadit. Ini tiga langkah singkat untuk mulai minggu ini:\n\n- Tambahkan anak ke akun, kalau belum (satu menit)\n- Cari satu kata bersama dari buku atau PR\n- Buka game-nya, yang dibuat dari kata-kata yang disimpan anakmu",
+      "cta": "Mulai sekarang",
+      "next": "Mau kami tunjukkan cara kerjanya? Balas email ini dan kami atur panggilan singkat 10 menit."
+    },
+    "act-return-indiv": {
+      "subject": "Awal singkat di Gadit, khusus untukmu",
+      "body": "Hai {name},\n\nKami ingin memastikan kamu mendapat semua yang bisa diberikan Gadit. Ini tiga langkah singkat untuk mulai minggu ini:\n\n- Cari satu kata yang kamu temui hari ini\n- Simpan ke buku katamu\n- Latih kata-katamu lewat game singkat",
+      "cta": "Cari kata",
+      "next": "Mau kami tunjukkan cara kerjanya? Balas email ini dan kami atur panggilan singkat 10 menit."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "Yang dipelajari {child} di Gadit minggu ini",
+    "subjectActiveMany": "Yang dipelajari anak-anakmu di Gadit minggu ini",
+    "subjectQuietOne": "Ide kecil untuk minggu {child} di Gadit",
+    "subjectQuietMany": "Ide kecil untuk minggu anak-anakmu di Gadit",
+    "greeting": "Hai {name},",
+    "introActiveOne": "Ini ringkasan mingguan {child} di Gadit.",
+    "introActiveMany": "Ini ringkasan mingguan anak-anakmu di Gadit.",
+    "introQuietOne": "Ini ide kecil untuk minggu ini bersama {child}.",
+    "introQuietMany": "Ini ide kecil untuk minggu ini bersama anak-anakmu.",
+    "together": { "other": "Minggu ini anak-anakmu mempelajari {n} kata baru." },
+    "childFallback": "Anakmu",
+    "newLabel": { "other": "kata baru minggu ini" },
+    "wordsLabel": "Kata-katanya:",
+    "more": { "other": "dan {n} lagi" },
+    "total": { "other": "Di buku kata: {n} kata" },
+    "streak": { "other": "{n} hari berturut-turut" },
+    "learned": { "other": "Belajar {lang}: {n} kata benar-benar dikuasai minggu ini" },
+    "langEn": "bahasa Inggris",
+    "langHe": "bahasa Ibrani",
+    "idea": "Ide untuk minggu ini:",
+    "ideaGame": "Game 5 menit dengan kata-kata yang sudah tersimpan di buku kata.",
+    "ideaFirst": "Cari satu kata bersama dari buku atau PR. Kata itu tersimpan di buku kata.",
+    "ideaConnect": "Untuk melihat di sini apa yang sedang dipelajari anakmu, hubungkan perangkat milik anak atau gunakan Mode anak di perangkatmu.",
+    "playCta": "Buka game",
+    "connectCta": "Hubungkan",
+    "outroActive": "Satu ide: pilih satu kata dari daftar dan tanyakan artinya pada anak-anak saat makan malam.",
+    "outroQuiet": "Beberapa menit sehari sudah cukup. Setiap kata yang disimpan di buku kata masuk ke game.",
+    "cta": "Buka dasbor orang tua",
+    "next": "Butuh bantuan? Balas saja email ini."
+  }
+}

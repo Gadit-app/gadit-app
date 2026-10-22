@@ -11,6 +11,11 @@
  * cards with no picture), up to 12 English words with no picture yet are
  * drawn after the answer, in the house style (lib/classroom-image pickImage,
  * ~0.65 cents each), at most 40 a day per person; the next deck has them.
+ *
+ * With { pick: true } (a lesson's "listen and pick the picture" for a child
+ * who doesn't read yet, 2026-10-22): house-style pictures only, the picture
+ * game's own (img_pick_kids_, drawn to be told apart) first, so the three
+ * pictures of a round look alike in style. Never generates.
  */
 import { NextRequest, NextResponse, after } from "next/server";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
@@ -24,6 +29,13 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const MAX_WORDS = 60;
+
+/** The picture game's order: its own pictures first; older styles left out. */
+function pickRank(docId: string): number {
+  if (docId.startsWith("img_pick_kids_")) return 0;
+  if (docId.startsWith("img_cls2_kids_")) return 1;
+  return docId.startsWith("img_cls") ? 2 : 99;
+}
 
 function rank(docId: string): number {
   if (docId.startsWith("img_cls2_kids_")) return 0;
@@ -41,10 +53,12 @@ export async function POST(req: NextRequest) {
 
   let words: string[] = [];
   let generate = false;
+  let pick = false;
   const hints: Record<string, string> = {};
   try {
     const b = (await req.json()) as { words?: unknown; generate?: unknown; hints?: unknown };
     generate = b.generate === true;
+    pick = (b as { pick?: unknown }).pick === true;
     if (b.hints && typeof b.hints === "object") for (const [k, v] of Object.entries(b.hints as Record<string, unknown>)) if (typeof v === "string") hints[k] = v;
     if (Array.isArray(b.words)) {
       words = [...new Set(b.words.filter((w): w is string => typeof w === "string").map((w) => w.trim()).filter((w) => w && w.length <= 80))].slice(0, MAX_WORDS);
@@ -66,7 +80,8 @@ export async function POST(req: NextRequest) {
         const x = d.data() as { word?: string; url?: string };
         if (!x.url || !x.word) continue;
         const k = x.word.trim().toLowerCase();
-        const r = rank(d.id);
+        const r = pick ? pickRank(d.id) : rank(d.id);
+        if (r === 99) continue;
         const cur = best.get(k);
         if (!cur || r < cur.r) best.set(k, { url: x.url, r });
       }
@@ -80,7 +95,7 @@ export async function POST(req: NextRequest) {
     if (hit) images[w] = hit.url;
   }
   // Draw the missing English pictures after answering (never for anonymous).
-  if (generate) {
+  if (generate && !pick) {
     const missing = [...new Set(words.filter((w) => !images[w] && ENGLISH_WORD.test(w)).map((w) => w.trim()))].slice(0, GEN_PER_CALL);
     if (missing.length) {
       after(async () => {

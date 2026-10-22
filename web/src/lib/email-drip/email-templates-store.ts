@@ -2,12 +2,22 @@ import { getAdminDb } from "@/lib/firebase-admin";
 import { v2Defaults, type EmailContent } from "./render";
 import { FAMILY_CONTENT } from "./family-content";
 import { INDIV_CONTENT } from "./indiv-content";
-import { RECOVERY_CONTENT } from "./checkout-recovery-content";
-import { ACTIVATION_CONTENT } from "./activation-content";
+import { RECOVERY_CONTENT, RECOVERY_I18N } from "./checkout-recovery-content";
+import { ACTIVATION_CONTENT, ACTIVATION_I18N } from "./activation-content";
 
 // Every editable series shares one store: Family + individual Clear/Deep +
 // checkout recovery and activation (2026-10-21).
 const CONTENT: Record<string, { he: EmailContent; en: EmailContent }> = { ...FAMILY_CONTENT, ...INDIV_CONTENT, ...RECOVERY_CONTENT, ...ACTIVATION_CONTENT };
+
+// Code translations into the other UI languages (2026-10-22): recovery and
+// activation, from email-drip/i18n/<lang>.json. The default for a language
+// before anyone saves a translation in the editor.
+const CODE_I18N: Record<string, Partial<Record<string, EmailContent>>> = { ...RECOVERY_I18N, ...ACTIVATION_I18N };
+
+/** The code translation of an email into a language (not he / en), if any. */
+export function codeTranslation(key: string, lang: string): EmailContent | undefined {
+  return CODE_I18N[key]?.[lang];
+}
 
 /**
  * Firestore overrides for the editable emails. A doc at
@@ -39,15 +49,19 @@ export async function getOverride(key: string): Promise<StoredTemplate | null> {
 }
 
 /** Code default merged with any saved override → the effective content.
- *  `he` true/false is Hebrew/English; a language code picks that language,
- *  and a language with no translation yet gets the English email. */
+ *  `he` true/false is Hebrew/English; a language code picks that language.
+ *  Any other language, per field: the translation saved in the editor
+ *  (Firestore), then the code translation (i18n/<lang>.json), then English.
+ *  A language with neither gets the English email (with its English edits). */
 export async function getEffectiveContent(key: string, he: boolean | string): Promise<EmailContent> {
   const lang = he === true ? "he" : he === false ? "en" : he;
   const def = CONTENT[key];
   const ov = await getOverride(key);
-  const own = lang !== "he" && lang !== "en" ? block(ov, lang) : undefined;
-  const useLang = lang === "he" ? "he" : own ? lang : "en";
-  const base = useLang === "he" ? def.he : def.en;
+  const other = lang !== "he" && lang !== "en";
+  const own = other ? block(ov, lang) : undefined;
+  const code = other ? codeTranslation(key, lang) : undefined;
+  const useLang = lang === "he" ? "he" : own || code ? lang : "en";
+  const base = useLang === "he" ? def.he : code ?? def.en;
   const o = useLang === "he" || useLang === "en" ? block(ov, useLang) : own;
   const D = v2Defaults(useLang);
   return {
@@ -62,9 +76,17 @@ export async function getEffectiveContent(key: string, he: boolean | string): Pr
   };
 }
 
-/** Has this email been translated into `lang` (he/en always count)? */
+/** Has this email been translated into `lang` (he/en always count), in the
+ *  editor (Firestore) or in code? Senders render in `lang` when true (the
+ *  direction follows it), else in English. */
 export async function hasLang(key: string, lang: string): Promise<boolean> {
   if (lang === "he" || lang === "en") return true;
+  if (codeTranslation(key, lang)) return true;
+  return !!block(await getOverride(key), lang);
+}
+
+/** Is a translation into `lang` saved in the editor (Firestore)? */
+export async function hasOverride(key: string, lang: string): Promise<boolean> {
   return !!block(await getOverride(key), lang);
 }
 

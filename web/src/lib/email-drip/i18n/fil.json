@@ -1,0 +1,98 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Naka-save ang puwesto mo sa Gadit",
+      "body": "Hi {name},\n\nNagsimula kang mag-sign up para sa {plan} at huminto ka bago ito natapos.\n\nNai-save namin ang lahat para sa iyo, at puwede mong ituloy mula mismo sa kung saan ka huminto.\n\n- 14 na araw na libre, at walang sisingilin ngayon\n- Pagkatapos ng trial: {price}\n- Padadalhan ka namin ng paalala sa email bago matapos ang trial\n- Puwede kang magkansela anumang oras mula sa page ng account mo, sa dalawang click lang",
+      "cta": "Tapusin ang pag-sign up",
+      "next": "May hindi malinaw? Mag-reply ka lang sa email na ito at tutulungan ka namin."
+    },
+    "rec-e2-family": {
+      "subject": "Ano ang makukuha ng mga anak mo sa Gadit",
+      "body": "Hi {name},\n\nGusto lang naming ikuwento nang maikli kung ano ang naghihintay sa mga anak mo sa Gadit:\n\nBawat salitang nakikita nila, sa libro, sa homework o sa usapan, ay nagiging salitang talagang naiintindihan nila.\n\n- Paliwanag na angkop sa antas ng anak mo, may larawan sa bawat kahulugan\n- Mga laro at practice mula sa sarili nilang mga salita\n- Tulong sa homework\n- Dashboard ng magulang na nagpapakita ng progreso ng bawat anak\n\nNaka-save ang pag-sign up mo sa {plan}, at ang huling hakbang na lang ang natitira.",
+      "cta": "Tapusin ang pag-sign up",
+      "next": "Walang sisingilin ngayon, at puwede kang magkansela anumang oras mula sa page ng account mo."
+    },
+    "rec-e2-indiv": {
+      "subject": "Ano ang naghihintay sa iyo sa Gadit",
+      "body": "Hi {name},\n\nGusto lang naming ikuwento nang maikli kung ano ang naghihintay sa iyo sa Gadit:\n\nBawat salita, sa libro, sa trabaho o sa usapan, ay nagiging salitang lubos mong naiintindihan.\n\n- Lahat ng kahulugan ng salita, may larawan sa bawat isa\n- Mga laro at practice mula sa sarili mong mga salita\n- Personal na kwaderno ng salita na nag-iipon ng lahat ng natutunan mo\n\nNaka-save ang pag-sign up mo sa {plan}, at ang huling hakbang na lang ang natitira.",
+      "cta": "Tapusin ang pag-sign up",
+      "next": "Walang sisingilin ngayon, at puwede kang magkansela anumang oras mula sa page ng account mo."
+    },
+    "rec-e3": {
+      "subject": "May humadlang ba? Sabihin mo sa amin",
+      "body": "Hi {name},\n\nNaka-save pa rin ang pag-sign up mo sa {plan}.\n\nKung may pumipigil sa iyo, mag-reply ka lang sa email na ito at tutulungan ka namin.",
+      "cta": "Tapusin ang pag-sign up",
+      "next": "",
+      "signature": "Ang team ng Gadit"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Ang unang salita ng mga anak mo sa Gadit",
+      "body": "Hi {name},\n\nAng pinakamagandang simula: umupo kasama ang anak mo nang limang minuto at hanapin ang isang salitang nakita niya ngayong araw, sa libro, sa homework o sa usapan.\n\n- I-type ang salita sa search\n- Tingnan ang paliwanag na angkop sa antas ng anak mo, may larawan sa bawat kahulugan\n- I-save ito sa kwaderno, at mula roon ay mapupunta ito sa mga laro niya\n\nIsang salita ngayon, at nagsisimula na ang anak mo na buuin ang sarili niyang bokabularyo.",
+      "cta": "Hanapin ang unang salita",
+      "next": "Kailangan ng tulong? Mag-reply ka lang sa email na ito."
+    },
+    "act-first-word-indiv": {
+      "subject": "Ang una mong salita sa Gadit",
+      "body": "Hi {name},\n\nAng pinakamagandang simula: hanapin ang isang salitang nakita mo ngayong araw, sa libro, sa trabaho o sa usapan.\n\n- Lahat ng kahulugan nito, may larawan sa bawat isa\n- Kung saan nagmula ang salita\n- I-save ito sa kwaderno mo at i-practice sa maiikling laro\n\nIsang salita ngayon, at lumalawak na ang bokabularyo mo.",
+      "cta": "Hanapin ang unang salita",
+      "next": "Kailangan ng tulong? Mag-reply ka lang sa email na ito."
+    },
+    "act-first-word-2": {
+      "subject": "Isang salita, limang minuto",
+      "body": "Hi {name},\n\nIsang maliit na ideya para ngayong araw: pumili ng isang salita mula sa libro, sa homework o sa balita, at hanapin ito sa Gadit.\n\nSa loob ng isang minuto, makikita mo ang lahat ng kahulugan nito, may larawan at mga halimbawa, at naka-save ito sa kwaderno para sa practice.\n\nGanyan lumalawak ang bokabularyo: isang salita sa bawat pagkakataon.",
+      "cta": "Maghanap ng salita ngayon",
+      "next": "Kailangan ng tulong? Mag-reply ka lang sa email na ito."
+    },
+    "act-add-child": {
+      "subject": "Isa pang hakbang: idagdag ang anak mo",
+      "body": "Hi {name},\n\nGinawa ang Gadit Family para sa mga anak mo, pero wala pang anak na naidagdag sa account. Isang minuto lang ito:\n\n- I-type ang pangalan ng anak mo at pumili ng character\n- Ikonekta ang sarili niyang device nang walang password, o gamitin ang Kids mode sa device mo\n- Mula noon, bawat salitang hahanapin niya ay naka-save para sa kanya, at makikita mo ang progreso sa dashboard ng magulang",
+      "cta": "Magdagdag ng anak",
+      "next": "Kailangan ng tulong? Mag-reply ka lang sa email na ito."
+    },
+    "act-return-family": {
+      "subject": "Isang maikling simula sa Gadit, para sa iyo",
+      "body": "Hi {name},\n\nGusto naming siguraduhin na makukuha ng mga anak mo ang lahat ng maibibigay ng Gadit. Narito ang tatlong maikling hakbang para magsimula ngayong linggo:\n\n- Magdagdag ng anak sa account, kung hindi mo pa nagagawa (isang minuto)\n- Maghanap nang magkasama ng isang salita mula sa libro o homework\n- Buksan ang mga laro, na gawa mula sa mga salitang na-save ng anak mo",
+      "cta": "Magsimula na",
+      "next": "Gusto mo bang ipakita namin kung paano ito gumagana? Mag-reply sa email na ito at mag-aayos kami ng maikling 10 minutong tawag."
+    },
+    "act-return-indiv": {
+      "subject": "Isang maikling simula sa Gadit, para sa iyo",
+      "body": "Hi {name},\n\nGusto naming siguraduhin na makukuha mo ang lahat ng maibibigay ng Gadit. Narito ang tatlong maikling hakbang para magsimula ngayong linggo:\n\n- Hanapin ang isang salitang nakita mo ngayong araw\n- I-save ito sa kwaderno mo\n- I-practice ang mga salita mo sa maiikling laro",
+      "cta": "Maghanap ng salita",
+      "next": "Gusto mo bang ipakita namin kung paano ito gumagana? Mag-reply sa email na ito at mag-aayos kami ng maikling 10 minutong tawag."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "Ang natutunan ni {child} sa Gadit ngayong linggo",
+    "subjectActiveMany": "Ang natutunan ng mga anak mo sa Gadit ngayong linggo",
+    "subjectQuietOne": "Isang maliit na ideya para sa linggo ni {child} sa Gadit",
+    "subjectQuietMany": "Isang maliit na ideya para sa linggo ng mga anak mo sa Gadit",
+    "greeting": "Hi {name},",
+    "introActiveOne": "Narito ang lingguhang buod ni {child} sa Gadit.",
+    "introActiveMany": "Narito ang lingguhang buod ng mga anak mo sa Gadit.",
+    "introQuietOne": "Narito ang isang maliit na ideya para ngayong linggo kasama si {child}.",
+    "introQuietMany": "Narito ang isang maliit na ideya para ngayong linggo kasama ang mga anak mo.",
+    "together": { "one": "Ngayong linggo, natuto ang mga anak mo ng {n} bagong salita.", "other": "Ngayong linggo, natuto ang mga anak mo ng {n} bagong salita." },
+    "childFallback": "Ang anak mo",
+    "newLabel": { "one": "bagong salita ngayong linggo", "other": "bagong salita ngayong linggo" },
+    "wordsLabel": "Ang mga salita:",
+    "more": { "one": "at {n} pa", "other": "at {n} pa" },
+    "total": { "one": "Sa kwaderno: {n} salita", "other": "Sa kwaderno: {n} salita" },
+    "streak": { "one": "{n} araw na sunod-sunod", "other": "{n} araw na sunod-sunod" },
+    "learned": { "one": "Pag-aaral ng {lang}: {n} salitang lubos na natutunan ngayong linggo", "other": "Pag-aaral ng {lang}: {n} salitang lubos na natutunan ngayong linggo" },
+    "langEn": "Ingles",
+    "langHe": "Hebreo",
+    "idea": "Ideya para ngayong linggo:",
+    "ideaGame": "Isang 5 minutong laro gamit ang mga salitang naka-save na sa kwaderno.",
+    "ideaFirst": "Maghanap nang magkasama ng isang salita mula sa libro o homework. Mase-save ito sa kwaderno.",
+    "ideaConnect": "Para makita rito kung ano ang natututunan ng anak mo, ikonekta ang sarili niyang device o gamitin ang Kids mode sa device mo.",
+    "playCta": "Buksan ang mga laro",
+    "connectCta": "Ikonekta",
+    "outroActive": "Isang ideya: pumili ng isang salita sa listahan at tanungin ang mga anak mo sa hapunan kung ano ang ibig sabihin nito.",
+    "outroQuiet": "Sapat na ang ilang minuto bawat araw. Bawat salitang naka-save sa kwaderno ay napupunta sa mga laro.",
+    "cta": "Buksan ang dashboard ng magulang",
+    "next": "Kailangan ng tulong? Mag-reply ka lang sa email na ito."
+  }
+}

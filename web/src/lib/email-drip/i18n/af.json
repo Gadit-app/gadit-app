@@ -1,0 +1,116 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Ons het jou plek by Gadit gehou",
+      "body": "Hallo {name},\n\nJy het begin inteken vir {plan} en net voor die einde gestop.\n\nOns het alles vir jou gestoor, en jy kan net daar aangaan waar jy opgehou het.\n\n- 14 dae gratis, en niks word vandag gehef nie\n- Ná die proeftydperk: {price}\n- Ons stuur vir jou 'n herinnering per e-pos voordat die proeftydperk eindig\n- Kanselleer enige tyd op jou rekeningbladsy, met twee klikke",
+      "cta": "Voltooi jou intekening",
+      "next": "Iets onduidelik? Antwoord net op hierdie e-pos, en ons help jou."
+    },
+    "rec-e2-family": {
+      "subject": "Wat jou kinders by Gadit kry",
+      "body": "Hallo {name},\n\nOns wil jou kortliks vertel wat by Gadit vir jou kinders wag:\n\nElke woord wat hulle teëkom, in 'n boek, in huiswerk of in 'n gesprek, word 'n woord wat hulle regtig verstaan.\n\n- 'n Verduideliking op jou kind se vlak, met 'n prent vir elke betekenis\n- Speletjies en oefening uit hul eie woorde\n- Hulp met huiswerk\n- 'n Ouerpaneel wat jou elke kind se vordering wys\n\nJou intekening vir {plan} is gestoor, en net die laaste stap bly oor.",
+      "cta": "Voltooi jou intekening",
+      "next": "Niks word vandag gehef nie, en jy kan enige tyd op jou rekeningbladsy kanselleer."
+    },
+    "rec-e2-indiv": {
+      "subject": "Wat by Gadit vir jou wag",
+      "body": "Hallo {name},\n\nOns wil jou kortliks vertel wat by Gadit vir jou wag:\n\nElke woord, in 'n boek, by die werk of in 'n gesprek, word 'n woord wat jy heeltemal verstaan.\n\n- Elke betekenis van die woord, met 'n prent vir elkeen\n- Speletjies en oefening uit jou eie woorde\n- 'n Persoonlike woordeboekie wat alles bewaar wat jy geleer het\n\nJou intekening vir {plan} is gestoor, en net die laaste stap bly oor.",
+      "cta": "Voltooi jou intekening",
+      "next": "Niks word vandag gehef nie, en jy kan enige tyd op jou rekeningbladsy kanselleer."
+    },
+    "rec-e3": {
+      "subject": "Het iets in die pad gekom? Sê vir ons",
+      "body": "Hallo {name},\n\nJou intekening vir {plan} is steeds gestoor.\n\nAs iets jou terughou, antwoord net op hierdie e-pos, en ons help jou.",
+      "cta": "Voltooi jou intekening",
+      "next": "",
+      "signature": "Die Gadit-span"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Jou kinders se eerste woord op Gadit",
+      "body": "Hallo {name},\n\nDie beste manier om te begin: sit vyf minute saam met jou kind en soek een woord op wat vandag opgeduik het, in 'n boek, in huiswerk of in 'n gesprek.\n\n- Tik die woord in die soekblokkie\n- Sien 'n verduideliking op jou kind se vlak, met 'n prent vir elke betekenis\n- Stoor dit in die woordeboekie, en van daar gaan dit in die speletjies in\n\nEen woord vandag, en jou kind bou al aan 'n eie woordeskat.",
+      "cta": "Soek die eerste woord op",
+      "next": "Hulp nodig? Antwoord net op hierdie e-pos."
+    },
+    "act-first-word-indiv": {
+      "subject": "Jou eerste woord op Gadit",
+      "body": "Hallo {name},\n\nDie beste manier om te begin: soek een woord op wat jy vandag teëgekom het, in 'n boek, by die werk of in 'n gesprek.\n\n- Elke betekenis daarvan, met 'n prent vir elkeen\n- Waar die woord vandaan kom\n- Stoor dit in jou woordeboekie en oefen dit in kort speletjies\n\nEen woord vandag, en jou woordeskat groei reeds.",
+      "cta": "Soek die eerste woord op",
+      "next": "Hulp nodig? Antwoord net op hierdie e-pos."
+    },
+    "act-first-word-2": {
+      "subject": "Een woord, vyf minute",
+      "body": "Hallo {name},\n\n'n Klein idee vir vandag: kies een woord uit 'n boek, uit huiswerk of uit die nuus, en soek dit op Gadit op.\n\nBinne 'n minuut sien jy elke betekenis daarvan, met 'n prent en voorbeelde, en dit word in die woordeboekie gestoor sodat jy kan oefen.\n\nSo groei 'n woordeskat: een woord op 'n slag.",
+      "cta": "Soek nou 'n woord op",
+      "next": "Hulp nodig? Antwoord net op hierdie e-pos."
+    },
+    "act-add-child": {
+      "subject": "Nog een stap: voeg jou kind by",
+      "body": "Hallo {name},\n\nGadit Family is rondom jou kinders gebou, en nog geen kind is by die rekening gevoeg nie. Dit neem 'n minuut:\n\n- Tik jou kind se naam in en kies 'n karakter\n- Koppel jou kind se eie toestel sonder 'n wagwoord, of gebruik Kindermodus op jou toestel\n- Van dan af word elke woord wat jou kind opsoek gestoor, en jy sien die vordering op die ouerpaneel",
+      "cta": "Voeg 'n kind by",
+      "next": "Hulp nodig? Antwoord net op hierdie e-pos."
+    },
+    "act-return-family": {
+      "subject": "'n Kort begin op Gadit, net vir jou",
+      "body": "Hallo {name},\n\nOns wil seker maak dat jou kinders alles kry wat Gadit hulle kan gee. Hier is drie kort stappe om hierdie week te begin:\n\n- Voeg 'n kind by die rekening, as jy dit nog nie gedoen het nie (een minuut)\n- Soek saam een woord op uit 'n boek of huiswerk\n- Maak die speletjies oop, wat gemaak is van die woorde wat jou kind gestoor het",
+      "cta": "Begin nou",
+      "next": "Wil jy hê ons moet jou wys hoe dit werk? Antwoord op hierdie e-pos, en ons reël 'n kort oproep van 10 minute."
+    },
+    "act-return-indiv": {
+      "subject": "'n Kort begin op Gadit, net vir jou",
+      "body": "Hallo {name},\n\nOns wil seker maak dat jy alles kry wat Gadit jou kan gee. Hier is drie kort stappe om hierdie week te begin:\n\n- Soek een woord op wat jy vandag teëgekom het\n- Stoor dit in jou woordeboekie\n- Oefen jou woorde in kort speletjies",
+      "cta": "Soek 'n woord op",
+      "next": "Wil jy hê ons moet jou wys hoe dit werk? Antwoord op hierdie e-pos, en ons reël 'n kort oproep van 10 minute."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "Wat {child} hierdie week op Gadit geleer het",
+    "subjectActiveMany": "Wat jou kinders hierdie week op Gadit geleer het",
+    "subjectQuietOne": "'n Klein idee vir {child} se week op Gadit",
+    "subjectQuietMany": "'n Klein idee vir jou kinders se week op Gadit",
+    "greeting": "Hallo {name},",
+    "introActiveOne": "Hier is {child} se weeklikse opsomming op Gadit.",
+    "introActiveMany": "Hier is jou kinders se weeklikse opsomming op Gadit.",
+    "introQuietOne": "Hier is 'n klein idee vir hierdie week saam met {child}.",
+    "introQuietMany": "Hier is 'n klein idee vir hierdie week saam met jou kinders.",
+    "together": {
+      "one": "Hierdie week het jou kinders {n} nuwe woord geleer.",
+      "other": "Hierdie week het jou kinders {n} nuwe woorde geleer."
+    },
+    "childFallback": "Jou kind",
+    "newLabel": {
+      "one": "nuwe woord hierdie week",
+      "other": "nuwe woorde hierdie week"
+    },
+    "wordsLabel": "Die woorde:",
+    "more": {
+      "one": "en nog {n}",
+      "other": "en nog {n}"
+    },
+    "total": {
+      "one": "In die woordeboekie: {n} woord",
+      "other": "In die woordeboekie: {n} woorde"
+    },
+    "streak": {
+      "one": "'n Reeks van {n} dag",
+      "other": "'n Reeks van {n} dae"
+    },
+    "learned": {
+      "one": "Leer {lang}: {n} woord hierdie week ten volle aangeleer",
+      "other": "Leer {lang}: {n} woorde hierdie week ten volle aangeleer"
+    },
+    "langEn": "Engels",
+    "langHe": "Hebreeus",
+    "idea": "'n Idee vir hierdie week:",
+    "ideaGame": "'n Speletjie van 5 minute met die woorde wat reeds in die woordeboekie gestoor is.",
+    "ideaFirst": "Soek saam een woord op uit 'n boek of huiswerk. Dit word in die woordeboekie gestoor.",
+    "ideaConnect": "Om hier te sien wat jou kind leer, koppel jou kind se eie toestel of gebruik Kindermodus op jou toestel.",
+    "playCta": "Maak die speletjies oop",
+    "connectCta": "Koppel",
+    "outroActive": "'n Idee: kies een woord uit die lys en vra jou kinders by aandete wat dit beteken.",
+    "outroQuiet": "'n Paar minute per dag is genoeg. Elke woord wat in die woordeboekie gestoor word, gaan in die speletjies in.",
+    "cta": "Maak die ouerpaneel oop",
+    "next": "Hulp nodig? Antwoord net op hierdie e-pos."
+  }
+}

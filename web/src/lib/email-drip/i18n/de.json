@@ -1,0 +1,116 @@
+{
+  "recovery": {
+    "rec-e1": {
+      "subject": "Wir haben deinen Platz bei Gadit freigehalten",
+      "body": "Hallo {name},\n\ndu hast mit der Anmeldung für {plan} begonnen und kurz vor dem Ende aufgehört.\n\nWir haben alles für dich gespeichert, und du kannst genau dort weitermachen, wo du aufgehört hast.\n\n- 14 Tage kostenlos, und heute wird nichts abgebucht\n- Nach der Testphase: {price}\n- Vor dem Ende der Testphase schicken wir dir eine Erinnerung per E-Mail\n- Jederzeit kündbar auf deiner Kontoseite, mit zwei Klicks",
+      "cta": "Anmeldung abschließen",
+      "next": "Ist etwas unklar? Antworte einfach auf diese E-Mail, wir helfen dir."
+    },
+    "rec-e2-family": {
+      "subject": "Das bekommen deine Kinder mit Gadit",
+      "body": "Hallo {name},\n\nwir möchten dir kurz erzählen, was deine Kinder bei Gadit erwartet:\n\nJedes Wort, das ihnen begegnet, in einem Buch, bei den Hausaufgaben oder im Gespräch, wird zu einem Wort, das sie wirklich verstehen.\n\n- Eine Erklärung auf dem Niveau deines Kindes, mit einem Bild für jede Bedeutung\n- Spiele und Übungen aus ihren eigenen Wörtern\n- Hilfe bei den Hausaufgaben\n- Eine Elternübersicht, die dir den Fortschritt jedes Kindes zeigt\n\nDeine Anmeldung für {plan} ist gespeichert, es fehlt nur noch der letzte Schritt.",
+      "cta": "Anmeldung abschließen",
+      "next": "Heute wird nichts abgebucht, und du kannst jederzeit auf deiner Kontoseite kündigen."
+    },
+    "rec-e2-indiv": {
+      "subject": "Das erwartet dich bei Gadit",
+      "body": "Hallo {name},\n\nwir möchten dir kurz erzählen, was dich bei Gadit erwartet:\n\nJedes Wort, in einem Buch, bei der Arbeit oder im Gespräch, wird zu einem Wort, das du ganz und gar verstehst.\n\n- Alle Bedeutungen des Wortes, mit einem Bild für jede\n- Spiele und Übungen aus deinen eigenen Wörtern\n- Ein persönliches Wörter-Notizbuch, das alles festhält, was du gelernt hast\n\nDeine Anmeldung für {plan} ist gespeichert, es fehlt nur noch der letzte Schritt.",
+      "cta": "Anmeldung abschließen",
+      "next": "Heute wird nichts abgebucht, und du kannst jederzeit auf deiner Kontoseite kündigen."
+    },
+    "rec-e3": {
+      "subject": "Ist etwas dazwischengekommen? Sag es uns",
+      "body": "Hallo {name},\n\ndeine Anmeldung für {plan} ist noch gespeichert.\n\nWenn dich etwas aufhält, antworte einfach auf diese E-Mail, wir helfen dir.",
+      "cta": "Anmeldung abschließen",
+      "next": "",
+      "signature": "Das Gadit-Team"
+    }
+  },
+  "activation": {
+    "act-first-word-family": {
+      "subject": "Das erste Wort deiner Kinder bei Gadit",
+      "body": "Hallo {name},\n\nder beste Start: Setz dich fünf Minuten mit deinem Kind hin und schlagt zusammen ein Wort nach, das ihm heute begegnet ist, in einem Buch, bei den Hausaufgaben oder im Gespräch.\n\n- Gib das Wort in die Suche ein\n- Sieh dir eine Erklärung auf dem Niveau deines Kindes an, mit einem Bild für jede Bedeutung\n- Speichere es im Notizbuch, von dort kommt es in seine Spiele\n\nEin Wort heute, und dein Kind baut schon seinen eigenen Wortschatz auf.",
+      "cta": "Das erste Wort nachschlagen",
+      "next": "Brauchst du Hilfe? Antworte einfach auf diese E-Mail."
+    },
+    "act-first-word-indiv": {
+      "subject": "Dein erstes Wort bei Gadit",
+      "body": "Hallo {name},\n\nder beste Start: Schlag ein Wort nach, das dir heute begegnet ist, in einem Buch, bei der Arbeit oder im Gespräch.\n\n- Alle seine Bedeutungen, mit einem Bild für jede\n- Woher das Wort kommt\n- Speichere es in deinem Notizbuch und übe es in kurzen Spielen\n\nEin Wort heute, und dein Wortschatz wächst schon.",
+      "cta": "Das erste Wort nachschlagen",
+      "next": "Brauchst du Hilfe? Antworte einfach auf diese E-Mail."
+    },
+    "act-first-word-2": {
+      "subject": "Ein Wort, fünf Minuten",
+      "body": "Hallo {name},\n\neine kleine Idee für heute: Such dir ein Wort aus einem Buch, aus den Hausaufgaben oder aus den Nachrichten aus und schlag es bei Gadit nach.\n\nIn einer Minute siehst du alle seine Bedeutungen, mit Bild und Beispielen, und es wird zum Üben im Notizbuch gespeichert.\n\nSo wächst ein Wortschatz: ein Wort nach dem anderen.",
+      "cta": "Jetzt ein Wort nachschlagen",
+      "next": "Brauchst du Hilfe? Antworte einfach auf diese E-Mail."
+    },
+    "act-add-child": {
+      "subject": "Noch ein Schritt: Füge dein Kind hinzu",
+      "body": "Hallo {name},\n\nGadit Family ist für deine Kinder gemacht, und im Konto ist noch kein Kind angelegt. Das dauert eine Minute:\n\n- Gib den Namen deines Kindes ein und wähle eine Figur\n- Verbinde ein eigenes Gerät deines Kindes ohne Passwort oder nutze den Kindermodus auf deinem Gerät\n- Ab dann wird jedes nachgeschlagene Wort für dein Kind gespeichert, und du siehst den Fortschritt in der Elternübersicht",
+      "cta": "Kind hinzufügen",
+      "next": "Brauchst du Hilfe? Antworte einfach auf diese E-Mail."
+    },
+    "act-return-family": {
+      "subject": "Ein kurzer Start bei Gadit, für dich gemacht",
+      "body": "Hallo {name},\n\nwir möchten sicherstellen, dass deine Kinder alles bekommen, was Gadit ihnen geben kann. Hier sind drei kurze Schritte für den Start diese Woche:\n\n- Füge ein Kind zum Konto hinzu, falls noch nicht geschehen (eine Minute)\n- Schlagt gemeinsam ein Wort aus einem Buch oder den Hausaufgaben nach\n- Öffne die Spiele, die aus den Wörtern entstehen, die dein Kind gespeichert hat",
+      "cta": "Jetzt starten",
+      "next": "Sollen wir dir zeigen, wie es funktioniert? Antworte auf diese E-Mail, und wir vereinbaren ein kurzes Gespräch von 10 Minuten."
+    },
+    "act-return-indiv": {
+      "subject": "Ein kurzer Start bei Gadit, für dich gemacht",
+      "body": "Hallo {name},\n\nwir möchten sicherstellen, dass du alles bekommst, was Gadit dir geben kann. Hier sind drei kurze Schritte für den Start diese Woche:\n\n- Schlag ein Wort nach, das dir heute begegnet ist\n- Speichere es in deinem Notizbuch\n- Übe deine Wörter in kurzen Spielen",
+      "cta": "Ein Wort nachschlagen",
+      "next": "Sollen wir dir zeigen, wie es funktioniert? Antworte auf diese E-Mail, und wir vereinbaren ein kurzes Gespräch von 10 Minuten."
+    }
+  },
+  "weekly": {
+    "subjectActiveOne": "Was {child} diese Woche bei Gadit gelernt hat",
+    "subjectActiveMany": "Was deine Kinder diese Woche bei Gadit gelernt haben",
+    "subjectQuietOne": "Eine kleine Idee für die Woche von {child} bei Gadit",
+    "subjectQuietMany": "Eine kleine Idee für die Woche deiner Kinder bei Gadit",
+    "greeting": "Hallo {name},",
+    "introActiveOne": "hier ist die Wochenübersicht von {child} bei Gadit.",
+    "introActiveMany": "hier ist die Wochenübersicht deiner Kinder bei Gadit.",
+    "introQuietOne": "hier ist eine kleine Idee für diese Woche mit {child}.",
+    "introQuietMany": "hier ist eine kleine Idee für diese Woche mit deinen Kindern.",
+    "together": {
+      "one": "Diese Woche haben deine Kinder {n} neues Wort gelernt.",
+      "other": "Diese Woche haben deine Kinder {n} neue Wörter gelernt."
+    },
+    "childFallback": "Dein Kind",
+    "newLabel": {
+      "one": "neues Wort diese Woche",
+      "other": "neue Wörter diese Woche"
+    },
+    "wordsLabel": "Die Wörter:",
+    "more": {
+      "one": "und {n} weiteres",
+      "other": "und {n} weitere"
+    },
+    "total": {
+      "one": "Im Notizbuch: {n} Wort",
+      "other": "Im Notizbuch: {n} Wörter"
+    },
+    "streak": {
+      "one": "{n} Tag in Folge",
+      "other": "{n} Tage in Folge"
+    },
+    "learned": {
+      "one": "{lang}: {n} Wort diese Woche richtig gelernt",
+      "other": "{lang}: {n} Wörter diese Woche richtig gelernt"
+    },
+    "langEn": "Englisch",
+    "langHe": "Hebräisch",
+    "idea": "Eine Idee für diese Woche:",
+    "ideaGame": "Ein 5-Minuten-Spiel mit den Wörtern, die schon im Notizbuch gespeichert sind.",
+    "ideaFirst": "Gemeinsam ein Wort aus einem Buch oder den Hausaufgaben nachschlagen. Es wird im Notizbuch gespeichert.",
+    "ideaConnect": "Um hier zu sehen, was dein Kind lernt, verbinde ein eigenes Gerät deines Kindes oder nutze den Kindermodus auf deinem Gerät.",
+    "playCta": "Spiele öffnen",
+    "connectCta": "Verbinden",
+    "outroActive": "Eine Idee: Such dir ein Wort aus der Liste aus und frag deine Kinder beim Abendessen, was es bedeutet.",
+    "outroQuiet": "Ein paar Minuten am Tag reichen. Jedes Wort, das im Notizbuch gespeichert wird, kommt in die Spiele.",
+    "cta": "Elternübersicht öffnen",
+    "next": "Brauchst du Hilfe? Antworte einfach auf diese E-Mail."
+  }
+}
