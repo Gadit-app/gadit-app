@@ -52,6 +52,8 @@ export async function GET(req: NextRequest) {
     const subscriber = isPayingStatus(status) || status === "trialing";
     if (!subscriber) continue;
     if (a.audience === "family" && d.familyId !== doc.id) continue;
+    // Individual subscribers: no family account (owner or member), no school.
+    if (a.audience === "individual" && (d.familyId || d.schoolId || d.plan !== "deep")) continue; // legacy Clear has no Practice
     if (d.dripUnsubscribed === true || d.emailSuppressed === true) continue;
     let email = typeof d.email === "string" ? d.email : null;
     let name = typeof d.displayName === "string" ? d.displayName : "";

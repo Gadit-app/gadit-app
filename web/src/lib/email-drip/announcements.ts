@@ -11,7 +11,7 @@ import type { EmailContent } from "./render";
 export type Announcement = {
   id: string;
   /** Who gets it: family subscribers, or every paying subscriber. */
-  audience: "family" | "paying";
+  audience: "family" | "paying" | "individual";
   ctaPath: string;
   he: EmailContent;
   en: EmailContent;
@@ -76,40 +76,43 @@ Choose right away or one daily summary, and what to hear about, in the [parent b
     ),
   },
   {
-    // Reading check (2026-10-21 launch, 18fa83e3 + c7dc8325): for every
-    // paying subscriber, since /read is in every paid plan.
+    // Reading check (2026-10-21 launch, 18fa83e3 + c7dc8325), Family
+    // version: where the child finds it and where the parent does.
     id: "2026-10-reading-check",
-    audience: "paying",
+    audience: "family",
     ctaPath: "/read",
-    he: C(
-      "חדש ב-Gadit: בודקים שהבנו את מה שקראנו",
-      `היי {שם},
+    he: C("חדש ב-Gadit: בודקים שהבנו את מה שקראנו", `היי {שם},
 
-הוספנו ל-Gadit דרך חדשה לקרוא: **בדיקת הבנה אחרי הקריאה**.
+הוספנו ל-Gadit בדיקת הבנה אחרי קריאה: קוראים טקסט, לוחצים על כל מילה שלא ברורה, ובסוף Gadit בודק שהבנתם.
+
+## איפה זה נמצא
+**אצל הילד** (בפרופיל של הילד, או כשמצב ילדים פועל): בתפריט העליון, **שיעורי בית** ואז **קוראים טקסט**.
+**אצלכם, ההורים:** בתפריט העליון, **תרגולים** ואז **קריאה עם בדיקת הבנה**.
+ואצל כולם זה נמצא גם ב**כל מילה** בתפריט העליון.
 
 ## איך זה עובד
-1. פותחים את **קריאה**, ומצלמים עמוד מהספר או מהחוברת, או מדביקים טקסט.
+1. מצלמים עמוד מהספר או מהחוברת, או מדביקים טקסט.
 2. קוראים, ולוחצים על כל מילה שלא ברורה. הפירוש נפתח מיד, ובמילה משפה אחרת מופיע גם התרגום.
 3. בסוף לוחצים **"בואו נבדוק שהבנו את המילים"**.
 
 ## מה הבדיקה עושה
-Gadit שואל על המילים שלחצתם עליהן ועל עוד כמה מילים קשות מהטקסט: מה פירוש המילה כאן, במשפט הזה.
+Gadit שואל על המילים שלחצתם עליהן, ועל עוד כמה מילים קשות מהטקסט: מה פירוש המילה כאן, במשפט הזה.
 אחר כך מגיעות 3 עד 5 שאלות קצרות על מה שקראתם.
 המילים שלא היו ברורות נשמרות במחברת, ונכנסות לתרגול ולמשחקים.
 
-**לילדים:** הבדיקה בנויה כך שהילד יכול לעשות אותה לבד. כשהוא מסיים קריאה משיעורי הבית, מגיעה אליכם הודעה.
+הילד יכול לעשות את זה לבד. כשהוא מסיים קריאה משיעורי הבית, מגיעה אליכם הודעה.
+לא רוצים בדיקה הפעם? לוחצים "סיימנו לקרוא", והקריאה נשמרת כרגיל.`, "לבדיקת הקריאה"),
+    en: C("New in Gadit: check you understood what you read", `Hi {name},
 
-לא רוצים בדיקה עכשיו? לוחצים "סיימנו לקרוא", והקריאה נשמרת כרגיל.`,
-      "לקריאה",
-    ),
-    en: C(
-      "New in Gadit: check you understood what you read",
-      `Hi {name},
+We added a comprehension check after reading to Gadit: read a text, tap any word that isn't clear, and at the end Gadit checks you understood.
 
-We added a new way to read in Gadit: **a comprehension check after reading**.
+## Where to find it
+**For your child** (on the child's profile, or while Kids Mode is on): in the top menu, **Homework**, then **Reading a text**.
+**For you, the parents:** in the top menu, **Practice**, then **Reading comprehension**.
+And for everyone it is also in **Every Word** in the top menu.
 
 ## How it works
-1. Open **Read**, and photograph a page from a book or workbook, or paste a text.
+1. Photograph a page from a book or workbook, or paste a text.
 2. Read, and tap any word that isn't clear. The meaning opens right away, and a word from another language also shows its translation.
 3. At the end, tap **"Let's check I understood the words"**.
 
@@ -118,10 +121,53 @@ Gadit asks about the words you tapped and a few more hard words from the text: w
 Then come 3 to 5 short questions about what you read.
 The words that weren't clear are saved to the notebook, and go into practice and games.
 
-**For kids:** the check is built so a child can do it alone. When your child finishes a reading from homework, you get a message.
+A child can do it alone. When your child finishes a reading from homework, you get a message.
+Not in the mood for a check this time? Tap "Done reading", and the reading is saved as usual.`, "Open the reading check"),
+  },
+  {
+    // The same launch for Individual subscribers: Practice (2026-10-22).
+    id: "2026-10-reading-check-indiv",
+    audience: "individual",
+    ctaPath: "/exercises",
+    he: C("חדש ב-Gadit: בודקים שהבנו את מה שקראנו", `היי {שם},
 
-Not in the mood for a check? Tap "Done reading", and the reading is saved as usual.`,
-      "Open Read",
-    ),
+הוספנו ל-Gadit בדיקת הבנה אחרי קריאה: קוראים טקסט, לוחצים על כל מילה שלא ברורה, ובסוף Gadit בודק שהבנתם.
+
+## איפה זה נמצא
+בתפריט העליון, **תרגולים** ואז **קריאה עם בדיקת הבנה**.
+זה נמצא גם ב**כל מילה** בתפריט העליון.
+
+## איך זה עובד
+1. מצלמים עמוד מספר, ממאמר או מכל מסמך, או מדביקים טקסט.
+2. קוראים, ולוחצים על כל מילה שלא ברורה. הפירוש נפתח מיד, ובמילה משפה אחרת מופיע גם התרגום.
+3. בסוף לוחצים **"בואו נבדוק שהבנו את המילים"**.
+
+## מה הבדיקה עושה
+Gadit שואל על המילים שלחצתם עליהן, ועל עוד כמה מילים קשות מהטקסט: מה פירוש המילה כאן, במשפט הזה.
+אחר כך מגיעות 3 עד 5 שאלות קצרות על מה שקראתם.
+המילים שלא היו ברורות נשמרות במחברת שלכם, ונכנסות לתרגול ולמשחקים.
+
+ב**תרגולים** מחכים לכם עוד שלושה תרגולים: הכנה למבחן, הכתבה ולימוד שפה.
+לא רוצים בדיקה הפעם? לוחצים "סיימנו לקרוא", והקריאה נשמרת כרגיל.`, "לתרגולים"),
+    en: C("New in Gadit: check you understood what you read", `Hi {name},
+
+We added a comprehension check after reading to Gadit: read a text, tap any word that isn't clear, and at the end Gadit checks you understood.
+
+## Where to find it
+In the top menu, **Practice**, then **Reading comprehension**.
+It is also in **Every Word** in the top menu.
+
+## How it works
+1. Photograph a page from a book, an article or any document, or paste a text.
+2. Read, and tap any word that isn't clear. The meaning opens right away, and a word from another language also shows its translation.
+3. At the end, tap **"Let's check I understood the words"**.
+
+## What the check does
+Gadit asks about the words you tapped and a few more hard words from the text: what does the word mean here, in this sentence.
+Then come 3 to 5 short questions about what you read.
+The words that weren't clear are saved to your notebook, and go into practice and games.
+
+Three more practices are waiting in **Practice**: test prep, dictation and learning a language.
+Not in the mood for a check this time? Tap "Done reading", and the reading is saved as usual.`, "Open Practice"),
   },
 ];
