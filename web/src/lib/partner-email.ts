@@ -1,4 +1,5 @@
 import "server-only";
+import { PAY_ORIGIN } from "@/lib/pay-url";
 import { fillOffer, offerCopy, offerValues } from "@/lib/partner-offer-copy";
 import { firstSaleBonusActive } from "@/lib/partners";
 import { sendMail } from "@/lib/mail";
@@ -1131,7 +1132,9 @@ export function buildWelcomeEmail(
     { label: PRODUCT_INDIVIDUALS[lang] ?? PRODUCT_INDIVIDUALS.en, url: `${SITE}${linkPrefix}/individuals/landing?ref=${partner.code}` },
   ];
   const linksHint = L.linksHint;
-  const dash = `${SITE}/partner/dashboard?t=${partner.dashboardToken}`;
+  // The purchase host: a phone with the app installed opens www links in the
+  // app, where the partner area cannot open (Maayan, 2026-10-22).
+  const dash = `${PAY_ORIGIN}/partner/dashboard?t=${partner.dashboardToken}`;
   // {year1} = the PARTNER's first-year commission from one Family-plan
   // customer, NOT the customer's spend (Gadi 2026-08-02: the text says
   // "worth to YOU"). Basis: Family monthly annualized (₪19.90×12 ≈ 240,

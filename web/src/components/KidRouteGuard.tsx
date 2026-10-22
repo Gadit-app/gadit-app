@@ -47,8 +47,14 @@ export function KidRouteGuard() {
     // it resolves, so acting earlier would decide on a stale role.
     if (loading || !planReady || familyRole !== "kid") return;
     const segs = pathname.split("/").filter(Boolean);
-    const first = segs.length && LANGS.has(segs[0]) ? segs[1] : segs[0];
-    if (first && BLOCKED.has(first)) {
+    const i = segs.length && LANGS.has(segs[0]) ? 1 : 0;
+    const first = segs[i];
+    // A partner's dashboard link carries its own secret (?t=): a parent
+    // switched into a child profile who opens a partner's link must see it
+    // (Gadi 2026-10-22). A child never has that link; /partners signup and
+    // a bare /partner stay blocked.
+    const partnerLink = first === "partner" && segs[i + 1] === "dashboard" && new URLSearchParams(window.location.search).has("t");
+    if (first && BLOCKED.has(first) && !partnerLink) {
       router.replace(href("/"));
     }
   }, [familyRole, loading, planReady, pathname, router, href]);

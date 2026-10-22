@@ -12,6 +12,7 @@
  * start on the default rates (25% / 10%); founder rates are set by hand in
  * /admin/partners.
  */
+import { PAY_ORIGIN } from "@/lib/pay-url";
 import { NextRequest, NextResponse } from "next/server";
 import { sendMail } from "@/lib/mail";
 import { getAdminDb } from "@/lib/firebase-admin";
@@ -57,7 +58,7 @@ export async function POST(req: NextRequest) {
       await sendPartnerWelcome(p, lang);
       return NextResponse.json({
         code: p.code,
-        dashboardUrl: `${SITE}/partner/dashboard?t=${p.dashboardToken}`,
+        dashboardUrl: `${PAY_ORIGIN}/partner/dashboard?t=${p.dashboardToken}`,
         existing: true,
       });
     }
@@ -113,7 +114,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       code,
-      dashboardUrl: `${SITE}/partner/dashboard?t=${dashboardToken}`,
+      dashboardUrl: `${PAY_ORIGIN}/partner/dashboard?t=${dashboardToken}`,
     });
   } catch (err) {
     console.error("[/api/partner/signup] error:", err);

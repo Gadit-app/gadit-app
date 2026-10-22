@@ -55,7 +55,10 @@ function blockedInPlay(segment: string | undefined): boolean {
 const PAY_HOST = "gadit.app";
 // "auth": the emailed sign-in link and the session bridge must also work
 // on this host (2026-10-10).
-const PAY_ROUTES = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew", "account", "auth"]);
+// "partner" / "partners": a partner opening their dashboard link on a phone
+// with the app installed landed on the app's home page (Maayan, 2026-10-22);
+// the partner area is not allowed inside the app, so it lives here too.
+const PAY_ROUTES = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew", "account", "auth", "partner", "partners"]);
 
 // The iOS App Store app (ios-app/, an Expo WebView) is ALWAYS Play mode: Apple
 // App Review 3.1.1 forbids prices, plans and any "buy on the website" inside

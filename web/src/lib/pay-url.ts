@@ -12,7 +12,7 @@ export function payUrl(path: string): string {
   return PAY_ORIGIN + (path.startsWith("/") ? path : `/${path}`);
 }
 
-const PAY_ROUTES = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew", "account"]);
+const PAY_ROUTES = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew", "account", "partner", "partners"]);
 const LANG_SEG = /^[a-z]{2,3}(?:-[A-Z]{2})?$/;
 
 /** A www.gadit.app link to a purchase page, moved to the purchase host; any

@@ -123,7 +123,7 @@ export async function GET(req: NextRequest) {
         payingCustomers: payingUids.size,
         commissionCount: commSnap.size,
         earnings, // owed = each currency's `released`
-        dashboardUrl: `https://www.gadit.app/partner/dashboard?t=${p.dashboardToken}`,
+        dashboardUrl: `https://gadit.app/partner/dashboard?t=${p.dashboardToken}`,
         createdAt: p.createdAt,
       };
     }),
