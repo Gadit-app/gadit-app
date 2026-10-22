@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sendMail } from "@/lib/mail";
 import { getAdminDb } from "@/lib/firebase-admin";
+import { localParts, schoolTimezone } from "@/lib/school-day-report";
+import { prevMonthKey, schoolMonthlyReportEnabled, sendSchoolMonthReport } from "@/lib/school-month-report";
 
 /**
  * Daily school summary. Runs hourly from a Vercel cron; each school fires once
@@ -14,6 +16,15 @@ import { getAdminDb } from "@/lib/firebase-admin";
  * Auth: Vercel cron `Authorization: Bearer <CRON_SECRET>`, or a manual run with
  * `?secret=<ADMIN_SECRET>&dryRun=1` (and optional `&force=1` to ignore the
  * hour/already-sent guards for testing).
+ *
+ * The same run sends the MONTHLY school report (lib/school-month-report.ts):
+ * on the 1st of the month (school's local date), at the school's digest hour,
+ * about the month that just ended, once per school per month (ledger
+ * schools/{id}.monthlyReportSent = "YYYY-MM"), only while
+ * emailConfig/schoolMonthlyReport.enabled === true. It does not depend on the
+ * daily digest being on, and `force` never sends it (use the admin preview,
+ * /api/admin/school-month-report-preview, to test). A dry run lists who would
+ * get it on this run without sending or writing anything.
  */
 
 export const maxDuration = 300;
@@ -26,25 +37,6 @@ function authorized(req: NextRequest): boolean {
 }
 
 const DEFAULT_HOUR = 15;
-const DEFAULT_TZ = "Asia/Jerusalem";
-
-// Hour (0-23) and Y-M-D in a given IANA timezone, right now.
-function localParts(tz: string): { hour: number; dateKey: string } {
-  try {
-    const p = new Intl.DateTimeFormat("en-CA", {
-      timeZone: tz, hour12: false, hour: "2-digit", year: "numeric", month: "2-digit", day: "2-digit",
-    }).formatToParts(new Date());
-    const get = (t: string) => p.find((x) => x.type === t)?.value ?? "";
-    let hour = parseInt(get("hour"), 10);
-    if (hour === 24) hour = 0;
-    return { hour, dateKey: `${get("year")}-${get("month")}-${get("day")}` };
-  } catch {
-    const p = new Intl.DateTimeFormat("en-CA", { timeZone: DEFAULT_TZ, hour12: false, hour: "2-digit", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
-    const get = (t: string) => p.find((x) => x.type === t)?.value ?? "";
-    return { hour: parseInt(get("hour"), 10) % 24, dateKey: `${get("year")}-${get("month")}-${get("day")}` };
-  }
-}
-
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 
 async function sendDigestEmail(to: string, schoolName: string, words: { word: string; count: number }[], students: string[], total: number) {
@@ -80,6 +72,8 @@ export async function GET(req: NextRequest) {
 
   const schoolsSnap = await db.collection("schools").get();
   let checked = 0, sent = 0, totalWords = 0;
+  const monthlyOn = await schoolMonthlyReportEnabled(db);
+  const monthly: Array<{ school: string; month: string; result: string }> = [];
 
   for (const schoolDoc of schoolsSnap.docs) {
     const s = schoolDoc.data() as {
@@ -89,12 +83,34 @@ export async function GET(req: NextRequest) {
       curriculum?: string;
       timezone?: string;
       lastDigestDate?: string;
+      monthlyReportSent?: string;
     };
+
+    // Monthly report: the 1st of the month at the digest hour, demo schools never.
+    if (monthlyOn && (s as { isDemo?: boolean }).isDemo !== true) {
+      const mHour = typeof s.dailyDigest?.hour === "number" ? s.dailyDigest.hour : DEFAULT_HOUR;
+      const { hour: mNow, dateKey: mDate } = localParts(schoolTimezone(s));
+      const month = prevMonthKey(mDate.slice(0, 7));
+      if (mDate.endsWith("-01") && mNow === mHour && s.monthlyReportSent !== month) {
+        if (dryRun) {
+          monthly.push({ school: schoolDoc.id, month, result: "due (dry run)" });
+        } else {
+          try {
+            const r = await sendSchoolMonthReport(db, schoolDoc, month);
+            monthly.push({ school: schoolDoc.id, month, result: r.ok ? (r.sent ? "sent" : `skipped: ${r.reason}`) : `failed: ${r.reason}` });
+          } catch (e) {
+            console.error("[school-digest] monthly report error:", e);
+            monthly.push({ school: schoolDoc.id, month, result: `failed: ${String(e)}` });
+          }
+        }
+      }
+    }
+
     if (s.dailyDigest?.enabled === false) continue; // opt-out only
     // A demo school never gets the digest (Gadi 2026-10-17: they were mailing @gadit.app every day).
     if ((s as { isDemo?: boolean }).isDemo) continue;
     const hour = typeof s.dailyDigest?.hour === "number" ? s.dailyDigest.hour : DEFAULT_HOUR;
-    const tz = s.activeHours?.timezone || s.timezone || (s.curriculum?.startsWith("za-") ? "Africa/Johannesburg" : "") || DEFAULT_TZ;
+    const tz = schoolTimezone(s);
     const { hour: nowHour, dateKey } = localParts(tz);
     if (!force && nowHour !== hour) continue;
     if (!force && s.lastDigestDate === dateKey) continue; // already sent today
@@ -128,5 +144,5 @@ export async function GET(req: NextRequest) {
     totalWords += total;
   }
 
-  return NextResponse.json({ ok: true, dryRun, force, checked, sent, totalWords });
+  return NextResponse.json({ ok: true, dryRun, force, checked, sent, totalWords, monthly: { switch: monthlyOn ? "on" : "off", results: monthly } });
 }

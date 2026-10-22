@@ -32,6 +32,7 @@ import { DuelPermission } from "@/components/play/duel/DuelPermission";
 import { learnCopy } from "@/components/play/learn/learn-i18n";
 import { LANGUAGES } from "@/lib/i18n";
 import { FamilySetupChecklist } from "./FamilySetupChecklist";
+import { ageLabelFor } from "./add/FamilyAddClient";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { CoachesSection } from "@/components/design/CoachesSection";
 import { FamilyLeaderboard } from "@/components/design/FamilyLeaderboard";
@@ -2090,6 +2091,9 @@ export function FamilyClient() {
   const [editPhotoBusy, setEditPhotoBusy] = useState(false);
   // Picked illustrated avatar id ("" = none). A real photo still wins over it.
   const [editAvatarId, setEditAvatarId] = useState<string>("");
+  // A child's age, editable after adding (Gadi 2026-10-22: a grandmother
+  // could not fix a grandchild's age). "" = not set.
+  const [editAge, setEditAge] = useState<string>("");
 
   const isWelcome = search.get("welcome") === "1";
   const pt = PROGRESS_COPY[lang] ?? PROGRESS_COPY.en;
@@ -2232,6 +2236,7 @@ export function FamilyClient() {
         setEditRole(m.role);
         setEditPhoto(m.avatarPhotoUrl || "");
         setEditAvatarId(m.avatarId || "");
+        setEditAge(typeof (m as { age?: unknown }).age === "number" ? String((m as { age?: number }).age) : "");
         setEditOpen(true);
       }}
       editLabel={familyUi(lang).edit}
@@ -2255,6 +2260,10 @@ export function FamilyClient() {
         // (~10-20KB) sits comfortably inside the 1MB Firestore doc limit.
         avatarPhotoUrl: editPhoto || null,
         avatarId: editAvatarId || null,
+        // Only a child has an age (3 to 18); clearing the field removes it.
+        ...(!isParentRole(editRole)
+          ? { age: editAge.trim() ? Math.max(3, Math.min(18, parseInt(editAge, 10) || 0)) || null : null }
+          : {}),
       });
       setEditOpen(false);
     } catch (e) {
@@ -2392,6 +2401,21 @@ export function FamilyClient() {
               placeholder={familyUi(lang).name}
               style={{ width: "100%", padding: "10px 12px", borderRadius: 10, border: "1px solid rgba(17,24,39,0.18)", fontSize: 15, fontFamily: "inherit", marginBottom: 12, boxSizing: "border-box" }}
             />
+            {!isParentRole(editRole) && (
+              <label style={{ display: "block", marginBottom: 12 }}>
+                <span style={{ display: "block", fontSize: 13, fontWeight: 700, color: "var(--ink-soft)", marginBottom: 4 }}>{ageLabelFor(lang)}</span>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={3}
+                  max={18}
+                  value={editAge}
+                  onChange={(e) => setEditAge(e.target.value)}
+                  dir="ltr"
+                  style={{ width: 120, padding: "10px 12px", borderRadius: 10, border: "1px solid rgba(17,24,39,0.18)", fontSize: 15, fontFamily: "inherit", boxSizing: "border-box", background: "var(--surface)", color: "var(--ink)" }}
+                />
+              </label>
+            )}
             <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
               {(isParentRole(editRole) ? (["father", "mother"] as const) : (["boy", "girl"] as const)).map((r) => (
                 <button

@@ -797,6 +797,11 @@ const ROLE_DEFS: Array<{ role: MemberRole; iconViewBox: string; iconPath: string
   { role: "girl", iconViewBox: "0 0 24 24", iconPath: "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M8.5 10v.5 M15.5 10v.5 M8.5 14.5c1.2 1.2 5 1.2 7 0 M5 4l4 4 M19 4l-4 4" },
 ];
 
+/** The "Age (optional)" label in every UI language (the member edit uses it too). */
+export function ageLabelFor(lang: string): string {
+  return COPY[lang]?.ageLabel ?? COPY.en.ageLabel ?? "Age (optional)";
+}
+
 export function FamilyAddClient() {
   const { user, loading } = useAuth();
   const { lang, dir } = useLang();
@@ -925,7 +930,6 @@ export function FamilyAddClient() {
                   max={18}
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
-                  placeholder="8"
                   className="wb-family-field-input"
                   style={{ maxWidth: 120 }}
                 />
