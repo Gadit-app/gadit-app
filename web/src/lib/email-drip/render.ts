@@ -134,6 +134,10 @@ export function mdLiteToHtml(he: LangArg, body: string): string {
       const rest = lines.slice(1);
       if (rest.length && rest.every((l) => STEP_RE.test(l))) {
         out.push(OL(he, rest.map((l) => inline(he, l.replace(STEP_RE, "$1")))));
+      } else if (rest.length > 1 && !STEP_RE.test(rest[0]) && rest.slice(1).every((l) => STEP_RE.test(l))) {
+        // Heading, then a title line, then steps (Gadi 2026-10-22).
+        out.push(P(he, inline(he, rest[0])));
+        out.push(OL(he, rest.slice(1).map((l) => inline(he, l.replace(STEP_RE, "$1")))));
       } else if (rest.join(" ").trim()) {
         out.push(P(he, inline(he, rest.join(" "))));
       }
