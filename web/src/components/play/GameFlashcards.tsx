@@ -386,7 +386,8 @@ export function GameFlashcards({
         const res = await fetch("/api/play/images", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
-          body: JSON.stringify({ words }),
+          // Missing English pictures are drawn on the server meanwhile.
+          body: JSON.stringify({ words, generate: true }),
         });
         const data = res.ok ? ((await res.json()) as { images?: Record<string, string> }) : {};
         if (!cancelled && data.images) {
@@ -394,6 +395,21 @@ export function GameFlashcards({
           // picture (and never shows the previous one while it loads).
           for (const u of Object.values(data.images)) { const im = new Image(); im.src = u; }
           setPics(data.images);
+        }
+        // Pictures drawn just now show up later in the same deck.
+        if (!cancelled && Object.keys(data.images ?? {}).length < words.length) {
+          await new Promise((r) => setTimeout(r, 30_000));
+          if (cancelled) return;
+          const again = await fetch("/api/play/images", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
+            body: JSON.stringify({ words }),
+          });
+          const more = again.ok ? ((await again.json()) as { images?: Record<string, string> }) : {};
+          if (!cancelled && more.images) {
+            for (const u of Object.values(more.images)) { const im = new Image(); im.src = u; }
+            setPics((prev) => ({ ...more.images, ...prev }));
+          }
         }
       } catch { /* cards work without pictures */ }
     })();
@@ -569,6 +585,11 @@ export function GameFlashcards({
   const askLang = mode === "words" && pair ? langLabel(reverse ? wordLangName : pair.pairLang, lang) : "";
   const example = mode === "meanings" && !meaningFirst ? card.word.examples?.[0] : undefined;
   const pic = showPics ? picOf(card) : undefined;
+  // The speaker reads the side on screen, in its own language (Gat's mother,
+  // 2026-10-22: an English card was read out in Hebrew).
+  const shownIsPair = mode === "words" && !!pair && (flipped ? !reverse : reverse);
+  const sayText = shownIsPair && pair ? pair.pair : card.word.word;
+  const sayLang = shownIsPair && pair ? wordLangOf({ word: pair.pair, language: pair.pairLang } as Parameters<typeof wordLangOf>[0]) : wordLangOf(card.word);
   const ask = flipped ? f.tapBack : mode === "words" ? (askLang ? f.sayIn(askLang) : f.tapToFlip) : meaningFirst ? dc.askWord : dc.askMeaning;
 
   return (
@@ -626,7 +647,7 @@ export function GameFlashcards({
       </button>
       {/* Hear the word, outside the card so a tap never flips it (Gadi 2026-10-11). */}
       {/* Not before the flip when the word is the answer: hearing it would give it away (Gadi 2026-10-17). */}
-      {!(meaningFirst && !flipped) && <div className="wb-flash-say"><TTSButton text={card.word.word} audioLang={wordLangOf(card.word)} useOpenAI ariaLabel={card.word.word} className="wb-word-act-icon wb-play-speak" /></div>}
+      {!(meaningFirst && !flipped) && <div className="wb-flash-say"><TTSButton key={sayText} text={sayText} audioLang={sayLang} useOpenAI ariaLabel={sayText} className="wb-word-act-icon wb-play-speak" /></div>}
       {flipped && (
         <div className="wb-flash-actions">
           <button type="button" className="wb-flash-btn wb-flash-no" onClick={() => answer(false)}>{f.notYet}</button>
