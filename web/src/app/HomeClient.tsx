@@ -39,6 +39,7 @@ const UpgradeModal = nextDynamic(() => import("@/components/UpgradeModal").then(
 // First-steps card for a new Family owner (Gadi 2026-10-21); its 41-language
 // copy loads only for a signed-in family, never on the anonymous homepage.
 const FamilySetupChecklist = nextDynamic(() => import("./family/FamilySetupChecklist").then((m) => m.FamilySetupChecklist), { ssr: false });
+const WhatsNewReadingCheck = nextDynamic(() => import("@/components/WhatsNewReadingCheck").then((m) => m.WhatsNewReadingCheck), { ssr: false });
 
 // Single source of truth: the shared LANGUAGES registry, so the homepage
 // switcher never drifts behind newly-added UI languages (it used to be a
@@ -435,6 +436,8 @@ export function HomePage() {
           {/* New Family owner: first steps (add a child, first word, first
               game, home screen). The card checks owner + plan itself and
               renders nothing for anyone else. */}
+          {/* "What's new" for the reading check (23.10 to 6.11, once). */}
+          {user && !schoolId && <WhatsNewReadingCheck lang={lang} />}
           {user && familyId === user.uid && !familyRole && !schoolId && (
             <FamilySetupChecklist
               placement="home"

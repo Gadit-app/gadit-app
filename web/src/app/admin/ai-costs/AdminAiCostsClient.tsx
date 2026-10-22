@@ -47,7 +47,7 @@ const FEATURE_LABELS: Record<string, { he: string; en: string; note?: { he: stri
   image: { he: "תמונה", en: "Image", note: { he: "gpt-image-2.5-flare", en: "gpt-image-2.5-flare" } },
   image_kids: { he: "תמונה (מצב ילדים)", en: "Image (Kids Mode)", note: { he: "מטמון נפרד = חיוב כפול לאותה מילה", en: "separate cache = double bill per word" } },
   image_brief: { he: "תיאור לתמונה", en: "Image brief" },
-  tashkeel_arabic: { he: "ניקוד ערבי", en: "Arabic tashkeel", note: { he: "gpt-4o", en: "gpt-4o" } },
+  tashkeel_arabic: { he: "ניקוד ערבי", en: "Arabic tashkeel", note: { he: "gpt-5.4", en: "gpt-5.4" } },
   backfill_gloss: { he: "השלמת תרגום", en: "Gloss backfill" },
   etymology_fallback: { he: "אטימולוגיה (גיבוי)", en: "Etymology fallback", note: { he: "מקור המילה נשלח שוב", en: "origin re-asked" } },
   quick_define_kids: { he: "תצוגה מקדימה (ילדים)", en: "Quick preview (Kids)" },
