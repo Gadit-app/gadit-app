@@ -139,6 +139,14 @@ export function mdLiteToHtml(he: LangArg, body: string): string {
       }
       continue;
     }
+    // A title line with numbered steps right under it ("**אצל הילד:**" then
+    // "1. ..." "2. ..."): the title as its own line, the steps as a list
+    // (Gadi 2026-10-22: the steps ran into the title as one paragraph).
+    if (lines.length > 1 && !STEP_RE.test(lines[0]) && lines.slice(1).every((l) => STEP_RE.test(l))) {
+      out.push(P(he, inline(he, lines[0])));
+      out.push(OL(he, lines.slice(1).map((l) => inline(he, l.replace(STEP_RE, "$1")))));
+      continue;
+    }
     // A paragraph that opens with a bold label ("**טיפ מהשטח:**", "**מומלץ:**",
     // "**המחשה:**") puts the label on its own line and the text under it
     // (Gadi 2026-10-04), and each sentence of that text on a line of its own
