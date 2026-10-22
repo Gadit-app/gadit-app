@@ -104,6 +104,11 @@ export type SchoolMonthReport = {
   current: MonthNumbers;
   previous: MonthNumbers;
   idea: Idea | null;
+  /** The "in class" and "idea for next month" sections (projected sets,
+   *  class quizzes). Off per school with monthlyReport.classroomTips === false,
+   *  e.g. Greenwarth: no board or projector, each child works at their own
+   *  pace (Gadi 2026-10-22). */
+  classroomTips: boolean;
 };
 
 type Bucket = {
@@ -262,6 +267,7 @@ export async function schoolMonthReport(db: Firestore, schoolId: string, month: 
     current,
     previous,
     idea,
+    classroomTips: (s.monthlyReport as { classroomTips?: boolean } | undefined)?.classroomTips !== false,
   };
 }
 
@@ -548,9 +554,11 @@ export function renderSchoolMonthReport(r: SchoolMonthReport, opts: { unsubscrib
     parts.push(`<ul dir="${dir}" style="margin:0 0 8px;padding-${align}:20px;text-align:${align};font-size:15px;line-height:1.7;color:#374151;">${cur.classes.map((c) => `<li style="margin-bottom:4px;">${t(C.classRow(c.name, c.teacher, c.lookups))}</li>`).join("")}</ul>`);
   }
 
-  // 5. The teacher in class.
-  parts.push(H(C.inClass));
-  if (cur.projectedWords.length || cur.quizzes || cur.games) {
+  // 5. The teacher in class (skipped for a school without class projection).
+  if (r.classroomTips) parts.push(H(C.inClass));
+  if (!r.classroomTips) {
+    /* no "in class" section */
+  } else if (cur.projectedWords.length || cur.quizzes || cur.games) {
     const inner: string[] = [];
     if (cur.projectedWords.length) {
       inner.push(`<div style="font-size:15px;line-height:1.7;color:#374151;margin:0 0 8px;">${t(C.projected(cur.projectedWords.length, Math.max(1, cur.projectedSets.filter((x) => x.words).length)))}</div>`);
@@ -564,9 +572,11 @@ export function renderSchoolMonthReport(r: SchoolMonthReport, opts: { unsubscrib
   }
 
   // 6. One idea for next month.
-  parts.push(H(C.idea(nextName)));
+  if (r.classroomTips) parts.push(H(C.idea(nextName)));
   const own = cur.topWords.slice(0, 5).map((w) => w.word);
-  if (r.idea) {
+  if (!r.classroomTips) {
+    /* no class idea either */
+  } else if (r.idea) {
     const i = r.idea;
     const inner = [
       `<div style="font-size:15px;line-height:1.7;color:#111827;font-weight:600;margin:0 0 8px;">${t(C.ideaUnit(i))}</div>`,
