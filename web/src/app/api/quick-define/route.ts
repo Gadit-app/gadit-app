@@ -32,9 +32,6 @@ import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 
 export const maxDuration = 30;
 
-const SUPPORTED_LANGS = new Set([
-  "he", "en", "ar", "ru", "es", "pt", "fr", "de", "cs", "sk", "it", "ja", "hi", "am",
-]);
 
 const UI_LANG_NAMES: Record<string, string> = {
   he: "Hebrew",
@@ -79,6 +76,10 @@ const UI_LANG_NAMES: Record<string, string> = {
   ve: "Venda (Tshivenda)",
   nr: "South Ndebele (isiNdebele)",
 };
+
+// Every UI language (it was 14, so reader taps in the other 27 came back 400).
+// The query value is matched case-blind and mapped back to its code ("zh-cn" -> "zh-CN").
+const LANG_BY_LOWER = new Map(Object.keys(UI_LANG_NAMES).map((c) => [c.toLowerCase(), c]));
 
 // On-the-fly micro-definition for popovers when the cache misses.
 // Uses gpt-4o-mini (cheap, fast) and asks for nothing more than a
@@ -190,7 +191,7 @@ async function cachedPreview(
 export async function GET(req: NextRequest) {
   const url = req.nextUrl;
   const word = (url.searchParams.get("word") ?? "").trim();
-  const lang = (url.searchParams.get("lang") ?? "").trim().toLowerCase();
+  const lang = LANG_BY_LOWER.get((url.searchParams.get("lang") ?? "").trim().toLowerCase()) ?? "";
   // Context sentence (the Reader passes the phrase around the tapped word).
   const context = (url.searchParams.get("context") ?? "").trim().slice(0, 300);
   // Kids Mode: the popover must answer in child-friendly language too.
@@ -199,7 +200,7 @@ export async function GET(req: NextRequest) {
   if (!word) {
     return NextResponse.json({ error: "word_required" }, { status: 400 });
   }
-  if (!SUPPORTED_LANGS.has(lang)) {
+  if (!lang) {
     return NextResponse.json({ error: "invalid_lang" }, { status: 400 });
   }
 

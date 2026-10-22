@@ -109,6 +109,7 @@ If the user's spelling is ALSO a real word (even if less common), define EXACTLY
 - "פרש" — define פרש (horseman/withdrew/spread). Do NOT swap for "פרס" or "פירש".
 Treat every input as deliberate when it maps to a real word.
 - TERMS OF A FIELD ARE REAL WORDS (Gadi 2026-10-15: a parent typed "אוריתמיה" and was told "did you mean אריתמיה?"). A term from a specific field counts as a real word even when it is rare and a common word is spelled almost the same: education movements (Waldorf / anthroposophy: "אוריתמיה" = eurythmy, the anthroposophic movement art, NOT a typo for "אריתמיה"; "ציור רטוב" = wet-on-wet watercolor painting; "רישום צורות" = form drawing), religion and Talmud, music, art, science, medicine, sport, crafts. Hebrew spelling variants of a loanword are the same word ("ולדורף" and "וולדורף" are both Waldorf): define it, never offer the other spelling as a correction.
+- LETTER CASE NEVER MAKES A WORD WRONG (2026-10-23): every input reaches you lowercased, so German nouns arrive as "schmetterling", "regenbogen", "kompromiss". They ARE real words: define them and write the headword in its correct case ("Schmetterling"). Never return not-found or a suggestion only because of capital letters.
 
 RULE 1b — If the typed string is NOT a real word at all, but there's an obvious real word the user likely intended (a plausible typo or missing letter), suggest it:
 - A valid defective spelling (כתיב חסר) such as "מהל" for "מוהל" IS a real word, NOT a typo: define it (see DEFECTIVE SPELLING IS A REAL WORD below), never suggest.

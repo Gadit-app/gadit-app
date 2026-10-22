@@ -112,8 +112,10 @@ export function PracticePage() {
       <main
         style={{
           display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "center",
+          // A column: the "found a mistake?" button goes under the card, not beside it (it pushed the card off a 390 px phone).
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-start",
           padding: "clamp(24px, 4vw, 48px) clamp(16px, 3vw, 40px) clamp(56px, 8vw, 90px)",
           minHeight: "calc(100dvh - 200px)",
         }}

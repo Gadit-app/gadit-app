@@ -15,9 +15,18 @@ import { INDIVIDUAL_DISPLAY } from "@/lib/individual-prices";
 export const LANDING_RTL = new Set(["he", "ar", "fa"]);
 export const landingDir = (lang: string): "rtl" | "ltr" => (LANDING_RTL.has(lang) ? "rtl" : "ltr");
 
-/** The screens shown on a page: Hebrew pages show the Hebrew app; every other
- *  language shows the English app for now (Gadi 2026-10-17). */
-export const screensLang = (lang: string) => (lang === "he" ? "he" : "en");
+/** Languages whose own app screens are captured for all three landing pages
+ *  (public/{fam,ind,sch}/screens/<lang>/, the same 27 names as en). Native
+ *  screens per language (Gadi 2026-10-22); a language not listed yet shows
+ *  the English screens. */
+export const NATIVE_SCREEN_LANGS: ReadonlySet<string> = new Set([
+  "he", "es", "fr", "ru", "af", "am", "ar", "bn", "cs", "da", "de", "el", "fa", "fil", "hi", "hu", "id", "it", "ja", "ko",
+  "nl", "nr", "nso", "pl", "pt", "sk", "ss", "st", "sw", "th", "tn", "tr", "ts", "uk", "ve", "vi", "xh", "zh-CN", "zh-TW", "zu",
+]);
+
+/** The screens shown on a page: the page's own language when its screens are
+ *  captured, otherwise the English app. */
+export const screensLang = (lang: string) => (NATIVE_SCREEN_LANGS.has(lang) ? lang : "en");
 
 /** The font stack of a language (the same stacks as globals.css). */
 export function landingFont(lang: string): string {
