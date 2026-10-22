@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { toWebp } from "@/lib/image-webp";
 import { getAdminDb, getDefaultBucket } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom, IMAGE_MODEL, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 import { curatedImageHint, getWordSet, isGemaraSet, classroomVisual, normSetWord, type WordSet } from "@/lib/word-sets";
@@ -60,7 +61,7 @@ export function isSensitiveTerm(word: string): boolean {
 }
 const GEMARA_SAFE = "This is for a Talmud lesson in a religious school: respectful and modest, no people in intimate situations, no violence, no blood, no weapons aimed at anyone, no religious figures drawn as faces. Show the idea through symbolic objects (an open Talmud volume, scrolls, scales, a study table, two facing books).";
 
-const KIDS = "Gadit house style for children: a soft modern 3D render like a premium animated film, smooth matte rounded shapes, warm soft global illumination with gentle shadows. A small scene with real depth: the idea itself is the hero, large, sharp and in the center of the frame; a calm, softly blurred, uncluttered warm off-white background. Simple enough for a young child to name it at once, like a picture-book page (Gadi 2026-10-17): a concrete thing is shown as ONE of it, whole and easy to recognize, in its real natural colors (hair is brown, black, blond or red; a tooth is white). Arrows, several objects or highlights only when the meaning itself is a movement, a direction, a change or an amount. Nothing else around it: no side objects, no small icons in circles, no extra props that compete with the idea. A body part is shown on a natural-looking child, with ONE soft highlight or ONE arrow on exactly that part. A greeting or polite phrase is the everyday moment people say it. The soft Gadit palette (teal, mint, warm amber, soft coral) is for the background and props, never for things that have their own real color.";
+const KIDS = "Gadit house style for children: a soft modern 3D render like a premium animated film, smooth matte rounded shapes, warm soft global illumination with gentle shadows. A small scene with real depth: the idea itself is the hero, large, sharp and in the center of the frame; a calm, softly blurred, uncluttered warm off-white background. Simple enough for a young child to name it at once, like a picture-book page (Gadi 2026-10-17): a concrete thing is shown as ONE of it, whole and easy to recognize, in its real natural colors (hair is brown, black, blond or red; a tooth is white). Arrows, several objects or highlights only when the meaning itself is a movement, a direction, a change or an amount. Nothing else around it: no side objects, no small icons in circles, no extra props that compete with the idea. A body part is shown on a natural-looking child, with ONE soft highlight or ONE arrow on exactly that part. A greeting or polite phrase is the everyday moment people say it. The soft Gadit palette (teal, mint, warm amber, soft coral) is for the background and props, never for things that have their own real color. This is NEVER a photograph and never photorealistic: everything, food and objects included, is a stylized 3D illustration with soft rounded matte shapes and simplified smooth textures, like one frame of the same animated film, never a glossy product photo on a plain white studio backdrop.";
 const KID_CHILD = "The child in the scene is EXACTLY the boy from the reference image: same face, same short brown hair, same teal t-shirt, natural slim proportions. Use the reference only for how the boy looks: he is busy doing the action in the description, a supporting part of the scene, never standing idle at the side, and the idea itself stays the large hero.";
 const TEEN = "Gadit house style: a clean modern soft 3D render, smooth matte rounded shapes like premium app icons, soft global illumination and gentle shadows. The idea itself is the hero, large, sharp and centered, on a calm plain warm off-white background, with soft glowing cues on what matters. Palette only teal, mint, warm amber and soft coral. People, when needed, are stylized friendly 3D teenagers.";
 const LETTERS = "Keep EVERY letter, dot and vowel mark in the reference image EXACTLY as drawn: same shapes, same order, same positions, nothing added, removed or changed. Turn them into big, chunky, smooth, matte 3D letters in teal and mint.";
@@ -247,11 +248,11 @@ export async function generateClassroomImage(opts: {
     const out = await render(prompt.replace(/\s+/g, " "), refs, quality);
     void logAiUsage({ feature: "image_classroom", model: IMAGE_MODEL, images: 1, imageQuality: quality, costUsd: out.cost, admin: opts.admin === true });
 
-    const storagePath = `word-images/${cKey}-${crypto.randomBytes(4).toString("hex")}.png`;
+    const storagePath = `word-images/${cKey}-${crypto.randomBytes(4).toString("hex")}.webp`;
     const bucket = getDefaultBucket();
     const file = bucket.file(storagePath);
-    await file.save(Buffer.from(out.b64, "base64"), {
-      contentType: "image/png",
+    await file.save(await toWebp(Buffer.from(out.b64, "base64")), {
+      contentType: "image/webp",
       metadata: { cacheControl: "public, max-age=31536000, immutable", metadata: { word, uiLang: lang, style, generatedAt: new Date().toISOString() } },
     });
     await file.makePublic();
@@ -290,12 +291,13 @@ export async function cachedPickImages(words: string[]): Promise<Record<string, 
 
 /** The picture of one word: from cache, or drawn now and stored. `topic`
  *  tells the brief which meaning (the caller checks the word is allowed). */
-export async function pickImage(word: string, topic: string, opts: { allowNew?: () => Promise<boolean>; onGenerated?: () => Promise<void>; hint?: string } = {}): Promise<ClassroomImageResult> {
+export async function pickImage(word: string, topic: string, opts: { allowNew?: () => Promise<boolean>; onGenerated?: () => Promise<void>; hint?: string; force?: boolean } = {}): Promise<ClassroomImageResult> {
   const w = word.trim();
   const cKey = pickImageKey(w);
   const ref = getAdminDb().collection("imageCache").doc(cKey);
   const existing = (await ref.get()).data() as { url?: string } | undefined;
-  if (existing?.url) return { status: "cached", url: existing.url, cacheKey: cKey };
+  // force: redraw in the current house style (the admin warm-pick redraw).
+  if (existing?.url && !opts.force) return { status: "cached", url: existing.url, cacheKey: cKey };
   if (devDryAi()) {
     console.info(`[dry-image] ${cKey} pick word=${JSON.stringify(w)} topic=${JSON.stringify(topic)}`);
     return { status: "generated", url: DRY_IMAGE_URL, cacheKey: cKey };
@@ -311,11 +313,11 @@ export async function pickImage(word: string, topic: string, opts: { allowNew?: 
       : `the everyday English word "${w}" from the topic "${topic}", for a picture game for young children who cannot read yet: it must be easy to tell apart from other words of the same topic`;
     const out = await houseImage(w, meaning, "en", true);
     void logAiUsage({ feature: "image_pick", model: IMAGE_MODEL, images: 1, imageQuality: "low", costUsd: out.cost });
-    const storagePath = `word-images/${cKey}-${crypto.randomBytes(4).toString("hex")}.png`;
+    const storagePath = `word-images/${cKey}-${crypto.randomBytes(4).toString("hex")}.webp`;
     const bucket = getDefaultBucket();
     const file = bucket.file(storagePath);
-    await file.save(Buffer.from(out.b64, "base64"), {
-      contentType: "image/png",
+    await file.save(await toWebp(Buffer.from(out.b64, "base64")), {
+      contentType: "image/webp",
       metadata: { cacheControl: "public, max-age=31536000, immutable", metadata: { word: w, uiLang: "en", style: "kids", generatedAt: new Date().toISOString() } },
     });
     await file.makePublic();

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { toWebp } from "@/lib/image-webp";
 import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom, IMAGE_MODEL, TEXT_MODEL_FAST } from "@/lib/ai-cost";
@@ -375,11 +376,11 @@ export async function POST(req: NextRequest) {
     // (after a cache bust) kept showing the OLD bytes in browsers/CDN.
     // A fresh path per generation gives a fresh URL, so regenerated images
     // actually appear.
-    const storagePath = `word-images/${cKey}-${crypto.randomBytes(4).toString("hex")}.png`;
+    const storagePath = `word-images/${cKey}-${crypto.randomBytes(4).toString("hex")}.webp`;
     const bucket = getDefaultBucket();
     const file = bucket.file(storagePath);
-    await file.save(buffer, {
-      contentType: "image/png",
+    await file.save(await toWebp(buffer), {
+      contentType: "image/webp",
       metadata: {
         cacheControl: "public, max-age=31536000, immutable",
         metadata: {

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { toWebp } from "@/lib/image-webp";
 import crypto from "node:crypto";
 import { getAdminDb, getDefaultBucket } from "@/lib/firebase-admin";
 import { logAiUsage, IMAGE_MODEL } from "@/lib/ai-cost";
@@ -55,11 +56,11 @@ async function renderKidsImage(word: string, meaning: string, lang: string): Pro
   void logAiUsage({ feature: "image_kids", model: IMAGE_MODEL, images: 1, imageQuality: "low", plan: "deep", admin: true });
 
   const cKey = cacheKey(word, meaning, lang, true);
-  const storagePath = `word-images/${cKey}-${crypto.randomBytes(4).toString("hex")}.png`;
+  const storagePath = `word-images/${cKey}-${crypto.randomBytes(4).toString("hex")}.webp`;
   const bucket = getDefaultBucket();
   const file = bucket.file(storagePath);
-  await file.save(buffer, {
-    contentType: "image/png",
+  await file.save(await toWebp(buffer), {
+    contentType: "image/webp",
     metadata: { cacheControl: "public, max-age=31536000, immutable", metadata: { word, uiLang: lang, generatedAt: new Date().toISOString(), warmed: "1" } },
   });
   await file.makePublic();
