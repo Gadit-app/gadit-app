@@ -12,22 +12,36 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { ToolIcon } from "@/components/design/ToolIcon";
+import { homeworkCopy } from "@/lib/homework-i18n";
 
-const COPY: Record<string, { tonight: (t: string) => string; go: string }> = {
-  he: { tonight: (t) => `התרגול של הערב: ${t}`, go: "לשיעורי הבית" },
-  en: { tonight: (t) => `Tonight's practice: ${t}`, go: "Go to Homework" },
-  ar: { tonight: (t) => `تدريب الليلة: ${t}`, go: "إلى الواجبات" },
-  ru: { tonight: (t) => `Практика на вечер: ${t}`, go: "К домашке" },
+// "Tonight's practice: <topic>" in every UI language; the button is the
+// Homework section's own title (homework-i18n), so the two always match.
+const TONIGHT: Record<string, string> = {
+  he: "התרגול של הערב", en: "Tonight's practice", ar: "تدريب الليلة", ru: "Практика на вечер",
+  es: "La práctica de esta noche", pt: "A prática de hoje à noite", fr: "L'entraînement de ce soir", de: "Heute Abend üben",
+  cs: "Dnešní večerní procvičování", sk: "Dnešné večerné precvičovanie", it: "L'esercizio di stasera", ja: "今夜の練習",
+  hi: "आज शाम का अभ्यास", am: "የዛሬ ምሽት ልምምድ", uk: "Вправа на вечір", tr: "Bu akşamın çalışması",
+  pl: "Dzisiejsze ćwiczenie", fa: "تمرین امشب", id: "Latihan malam ini", nl: "De oefening van vanavond",
+  el: "Η εξάσκηση της βραδιάς", zu: "Umsebenzi wakusihlwa", vi: "Bài luyện tối nay", fil: "Pagsasanay ngayong gabi",
+  af: "Vanaand se oefening", sw: "Mazoezi ya leo jioni", "zh-CN": "今晚的练习", "zh-TW": "今晚的練習",
+  ko: "오늘 저녁 연습", th: "แบบฝึกของคืนนี้", bn: "আজ সন্ধ্যার অনুশীলন", da: "Aftenens øvelse",
+  hu: "A ma esti gyakorlás", xh: "Umsebenzi wangokuhlwa", nso: "Thuto ya bošego bja lehono", tn: "Boithapolo jwa maitseboa a gompieno",
+  st: "Boikwetliso ba bosiu bona", ts: "Ntirho wa namuntlha nimadyambu", ss: "Kuticeceshisa kwanalokushona", ve: "Ndowendo ya madekwana a ṋamusi",
+  nr: "Ukuzibandula kwanamhlanjesi",
 };
+// The four first languages keep their own "go to" wording.
+const GO: Record<string, string> = { he: "לשיעורי הבית", en: "Go to Homework", ar: "إلى الواجبات", ru: "К домашке" };
+
 
 export function HomeworkStrip() {
   const { user } = useAuth();
   const { lang, dir } = useLang();
   const href = useHref();
   const [title, setTitle] = useState<string | null>(null);
-  const c = COPY[lang];
+  const label = TONIGHT[lang] ?? TONIGHT.en;
+  const go = GO[lang] ?? homeworkCopy(lang).title;
   useEffect(() => {
-    if (!user || !c) return;
+    if (!user) return;
     let alive = true;
     void (async () => {
       try {
@@ -40,13 +54,13 @@ export function HomeworkStrip() {
       } catch { /* no strip */ }
     })();
     return () => { alive = false; };
-  }, [user, lang, c]);
-  if (!c || !title) return null;
+  }, [user, lang]);
+  if (!title) return null;
   return (
     <Link href={href("/homework")} className="wb-homework-strip" dir={dir}>
       <ToolIcon id="spell" size={22} />
-      <span className="wb-homework-strip-text">{c.tonight(title)}</span>
-      <span className="wb-homework-strip-go">{c.go}</span>
+      <span className="wb-homework-strip-text">{label}: {title}</span>
+      <span className="wb-homework-strip-go">{go}</span>
     </Link>
   );
 }

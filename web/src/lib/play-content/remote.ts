@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Native content for the curated games in the 29 languages beyond
+ * Native content for the curated games in the 38 languages beyond
  * he/en/ar/ru (Gadi 2026-10-11: every question in the player's own
  * language). The rounds ship as /play-content/<lang>/<game>.json and are
  * registered into each game's table before the game starts, so the pick
