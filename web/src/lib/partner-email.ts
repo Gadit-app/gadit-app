@@ -1244,6 +1244,12 @@ export async function sendPartnerWelcome(partner: WelcomePartner, lang: string) 
     const cfg = await loadWelcomeConfig();
     const { subject, html } = buildWelcomeEmail(partner, lang, cfg);
     await sendMail({ from: "Gadit <notify@gadit.app>", to: partner.email, subject, html });
+    // Record it on the partner, so "did they ever get the welcome?" has an answer
+    // (Resend keeps only about 30 days of history). Gadi 2026-10-23.
+    try {
+      const snap = await getAdminDb().collection("partners").where("code", "==", partner.code).limit(1).get();
+      if (!snap.empty) await snap.docs[0].ref.update({ welcomeSentAt: new Date().toISOString() });
+    } catch { /* best-effort */ }
   } catch (e) {
     console.warn("[partner-email] welcome send failed (non-blocking):", e);
   }

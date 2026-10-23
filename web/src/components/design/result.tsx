@@ -1260,9 +1260,13 @@ export function IdiomsSection({
   wordLang,
   onReport,
   plan = "basic",
+  streaming = false,
 }: {
   meanings: Meaning[];
   generalIdioms?: Idiom[];
+  /** While the definition still streams in, `word` is half written ("kom"
+   *  before "kompromiss"), so the idiom fetch waits for the full word. */
+  streaming?: boolean;
   /** The headword + its language, so the dedicated idiom endpoint can enrich
    *  the sparse define idioms with a reliable, complete set. */
   word?: string;
@@ -1300,7 +1304,7 @@ export function IdiomsSection({
   const [fetched, setFetched] = useState<Idiom[] | null>(null);
   useEffect(() => {
     let cancelled = false;
-    if (!user || !word) return;
+    if (!user || !word || streaming) return;
     (async () => {
       try {
         const idToken = await user.getIdToken();
@@ -1315,7 +1319,7 @@ export function IdiomsSection({
       } catch { /* keep the define idioms */ }
     })();
     return () => { cancelled = true; };
-  }, [user, word, lang, wordLang]);
+  }, [user, word, lang, wordLang, streaming]);
 
   // Prefer the dedicated set when it arrives non-empty; otherwise define's.
   const all = fetched && fetched.length > 0 ? fetched : defineIdioms;
@@ -1866,6 +1870,7 @@ export function ResultView({
         wordLang={result.language}
         onReport={onReport}
         plan={plan}
+        streaming={streaming}
       />
 
       <OriginCard etymology={result.etymology} onReport={onReport} plan={plan} />

@@ -24,6 +24,37 @@ export function stripLookupDiacritics(word: string): string {
   return word.replace(LOOKUP_DIACRITICS, "");
 }
 
+// Chinese, Japanese, Thai, Lao, Khmer and Burmese write without spaces, so a
+// whole sentence came back as one "word" and no single word could be tapped
+// (2026-10-23). Those runs are split with the browser's own dictionary-based
+// word segmenter. A one-character Chinese word (书 = book) stays tappable;
+// a lone kana or Thai character does not.
+const NO_SPACE_SCRIPT = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Thai}\p{Script=Lao}\p{Script=Khmer}\p{Script=Myanmar}]/u;
+const HAN = /\p{Script=Han}/u;
+const segmenters = new Map<string, Intl.Segmenter | null>();
+function segmenterFor(word: string): Intl.Segmenter | null {
+  const loc = /[\p{Script=Hiragana}\p{Script=Katakana}]/u.test(word) ? "ja"
+    : /\p{Script=Thai}/u.test(word) ? "th"
+    : /\p{Script=Lao}/u.test(word) ? "lo"
+    : /\p{Script=Khmer}/u.test(word) ? "km"
+    : /\p{Script=Myanmar}/u.test(word) ? "my" : "zh";
+  if (!segmenters.has(loc)) {
+    let sg: Intl.Segmenter | null = null;
+    try { if (typeof Intl !== "undefined" && "Segmenter" in Intl) sg = new Intl.Segmenter(loc, { granularity: "word" }); } catch { sg = null; }
+    segmenters.set(loc, sg);
+  }
+  return segmenters.get(loc) ?? null;
+}
+function pushSegmented(out: WordToken[], run: string) {
+  const sg = segmenterFor(run);
+  if (!sg) { out.push({ type: run.length >= 2 ? "word" : "other", value: run }); return; }
+  for (const seg of sg.segment(run)) {
+    const v = seg.segment;
+    const tappable = seg.isWordLike && /\p{L}/u.test(v) && (v.length >= 2 || HAN.test(v));
+    out.push({ type: tappable ? "word" : "other", value: v });
+  }
+}
+
 export function tokenizeWords(text: string): WordToken[] {
   const out: WordToken[] = [];
   // \p{M} keeps combining marks (Hebrew niqqud, Arabic tashkeel, Indic matras)
@@ -36,6 +67,7 @@ export function tokenizeWords(text: string): WordToken[] {
   while ((m = re.exec(text))) {
     const word = m[1];
     if (word) {
+      if (NO_SPACE_SCRIPT.test(word)) { pushSegmented(out, word); continue; }
       if (word.length >= 2) out.push({ type: "word", value: word });
       else out.push({ type: "other", value: word });
       continue;
