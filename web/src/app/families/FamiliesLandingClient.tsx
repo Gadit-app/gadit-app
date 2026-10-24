@@ -1,5 +1,6 @@
 "use client";
 
+import { usePricing } from "@/lib/use-pricing";
 import { Testimonials, InlineTestimonial, FAMILY_TESTIMONIALS_HE, KIDS_TESTIMONIALS_HE, PARENTS_TESTIMONIALS_HE } from "@/components/design/Testimonials";
 import type { FamI18n } from "./i18n/types";
 import { fillDeep, landingPrices, screensLang } from "@/lib/landing-i18n";
@@ -8464,7 +8465,9 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
   // Every language (2026-10-17): a page given its copy file (i18n/<lang>.ts,
   // the /families/landing-intl review page) renders the real-screens page in
   // that language, with the English screens and the language's prices.
-  const prices = landingPrices(lang);
+  // The visitor's country block (R in South Africa), same as /pricing.
+  const px = usePricing();
+  const prices = landingPrices(lang, px);
   const c = i18n ? fillDeep(i18n.copy, prices) : ((COPY as Record<string, Copy>)[lang] ?? COPY.en);
   // Real app screens: Hebrew first (captured from the Hebrew demo family).
   // English copy is ready in REAL_COPY.en but waits for an English demo

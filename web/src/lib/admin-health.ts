@@ -93,7 +93,7 @@ const DAY = 86_400_000;
 const LIVE = ["active", "trialing", "past_due"];
 
 // Fallback rates (USD per unit), the same locked table as admin-revenue.ts.
-const FALLBACK_USD_PER: Record<string, number> = { usd: 1, ils: 0.323, eur: 1.08, gbp: 1.27 };
+const FALLBACK_USD_PER: Record<string, number> = { usd: 1, ils: 0.323, eur: 1.08, gbp: 1.27, zar: 0.055 };
 
 async function loadFx(): Promise<{ usdPer: Record<string, number>; ilsPerUsd: number; source: "live" | "fallback" }> {
   try {

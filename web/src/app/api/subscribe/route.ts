@@ -4,7 +4,7 @@ import Stripe from "stripe";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { NEW_SCHOOLS_PRICE_IDS } from "@/lib/schools-prices";
 import { INDIVIDUAL_PRICE_IDS } from "@/lib/individual-prices";
-import { currencyForCountry } from "@/lib/pricing-currency";
+import { chargeCurrency } from "@/lib/pricing-currency";
 import { utmMetaFromClient, utmMetaFromUserDoc, type UtmMeta } from "@/lib/utm-meta";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -198,8 +198,9 @@ export async function POST(req: NextRequest) {
     // country currency engine pins the charge currency (usd-only today, so
     // undefined = the price's default USD; adding a market localizes it in
     // step with the pricing page). See lib/pricing-currency.ts.
-    const engineCur = currencyForCountry(req.headers.get("x-vercel-ip-country"));
-    const currency = lang === "he" ? "ils" : engineCur !== "usd" ? engineCur : undefined;
+    // chargeCurrency only pins a local currency (zar) on the Individual and
+    // Family prices, the ones carrying that currency_option (2026-10-24).
+    const currency = chargeCurrency(req.headers.get("x-vercel-ip-country"), priceId, lang);
 
     // Reuse an abandoned in-progress subscription for the same price
     // (every page load would otherwise mint a new incomplete/trialing

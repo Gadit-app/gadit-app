@@ -13,6 +13,7 @@ import {
   type StripeElementLocale,
 } from "@stripe/stripe-js";
 import { useAuth } from "@/lib/auth-context";
+import { usePricing } from "@/lib/use-pricing";
 import { useLang } from "@/lib/lang-context";
 import { isTwa, openInBrowser } from "@/lib/twa";
 import { useHref } from "@/lib/href";
@@ -516,6 +517,19 @@ export default function CheckoutClient() {
   const code = params.get("code") ?? "";
   const { user, loading, promptLogin } = useAuth();
   const { lang, dir } = useLang();
+  // The country price block (USD, or R in South Africa), same source as
+  // /pricing and the Stripe charge (lib/pricing-currency.ts).
+  const px = usePricing();
+  const shownAmount = (t: TierInfo): string => {
+    if (lang === "he") return t.amountIls;
+    if (px.currency !== "usd") {
+      if (t.name === "Individual") return t.cycle === "yearly" ? px.individualYearly : px.individualMonthly;
+      if (t.name === "Family") return t.cycle === "yearly" ? px.familyYearly : px.familyMonthly;
+    }
+    return t.amount;
+  };
+  const shownCurrency = (t: TierInfo | null): string =>
+    lang === "he" ? "ILS" : t && (t.name === "Individual" || t.name === "Family") ? px.currency.toUpperCase() : "USD";
   const href = useHref();
   const c = (COPY as Record<string, typeof COPY.en>)[lang] ?? COPY.en;
   const tier = tierForPrice(priceId);
@@ -708,11 +722,11 @@ export default function CheckoutClient() {
           // Value + currency for GA's begin_checkout: the amount this person is
           // shown (shekels in Hebrew, dollars elsewhere).
           const t = tierForPrice(priceId);
-          const shown = t ? (lang === "he" ? t.amountIls : t.amount) : "";
+          const shown = t ? shownAmount(t) : "";
           const value = Number(shown.replace(/[^0-9.]/g, "")) || undefined;
           track("checkout_started", {
             priceId, surface: "payment_element", lang,
-            plan: t?.name, value, currency: lang === "he" ? "ILS" : "USD",
+            plan: t?.name, value, currency: shownCurrency(t),
           });
         }
       } catch (err) {
@@ -776,7 +790,7 @@ export default function CheckoutClient() {
     const twaTier = tierForPrice(twaPriceId);
     const twaOtherId = twaTier ? counterpartPrice(twaTier) : null;
     const twaOtherTier = twaOtherId ? tierForPrice(twaOtherId) : null;
-    const amt = (t: TierInfo) => (lang === "he" ? t.amountIls : t.amount);
+    const amt = (t: TierInfo) => shownAmount(t);
     const cycleOpt = (label: string, sub: string, active: boolean, ribbon: string | null, onClick: () => void) => (
       <button type="button" onClick={onClick} style={{ position: "relative", flex: 1, padding: ribbon ? "18px 8px 10px" : "10px 8px", borderRadius: 10, border: active ? "2px solid #0EA5A5" : "1px solid #D1D5DB", background: active ? "rgba(14,165,165,0.06)" : "#fff", cursor: active ? "default" : "pointer", fontFamily: "inherit" }}>
         {ribbon && (
@@ -912,7 +926,7 @@ export default function CheckoutClient() {
                   const yearlyT = tier.cycle === "yearly" ? tier : otherTier;
                   const monthlyId = tier.cycle === "monthly" ? priceId : otherId;
                   const yearlyId = tier.cycle === "yearly" ? priceId : otherId;
-                  const amt = (t: TierInfo) => (lang === "he" ? t.amountIls : t.amount);
+                  const amt = (t: TierInfo) => shownAmount(t);
                   const opt = (label: string, sub: string, active: boolean, ribbon: string | null, onClick: () => void) => (
                     <button type="button" onClick={onClick} style={{ position: "relative", flex: 1, padding: ribbon ? "18px 8px 10px" : "10px 8px", borderRadius: 10, border: active ? "2px solid #0EA5A5" : "1px solid #D1D5DB", background: active ? "rgba(14,165,165,0.06)" : "#fff", cursor: active ? "default" : "pointer", fontFamily: "inherit" }}>
                       {ribbon && (
@@ -935,7 +949,7 @@ export default function CheckoutClient() {
                 <div style={styles.summaryRow}>
                   <span style={styles.muted}>{c.afterTrial}</span>
                   <span style={styles.amount}>
-                    {lang === "he" ? tier.amountIls : tier.amount} {cycleLabel}
+                    {shownAmount(tier)} {cycleLabel}
                   </span>
                 </div>
                 {code && phase === "form" ? (

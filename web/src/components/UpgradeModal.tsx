@@ -18,6 +18,7 @@
  * callback (signature widened in result.tsx to pass tab + tier).
  */
 
+import { usePricing } from "@/lib/use-pricing";
 import { planCopy } from "@/lib/plan-copy";
 import { INDIVIDUAL_DISPLAY } from "@/lib/individual-prices";
 import { useEffect } from "react";
@@ -1106,6 +1107,7 @@ export function UpgradeModal({
 }) {
   const router = useRouter();
   const href = useHref();
+  const px = usePricing();
 
   // ESC closes
   useEffect(() => {
@@ -1146,7 +1148,8 @@ export function UpgradeModal({
   const tierLabel = fam ? "Family" : "Individual";
   const tierIs = planCopy(lang, fam ? "modalIsFam" : "modalIsInd");
   const he = lang === "he";
-  const amount = fam ? (he ? "₪19.90" : "$5.99") : he ? INDIVIDUAL_DISPLAY.ilsMonthly : INDIVIDUAL_DISPLAY.usdMonthly;
+  // Not Hebrew: the country block (USD, or R in South Africa).
+  const amount = fam ? (he ? "₪19.90" : px.familyMonthly) : he ? INDIVIDUAL_DISPLAY.ilsMonthly : px.individualMonthly;
   const price = planCopy(lang, "modalPerMonth", { price: amount });
 
   return (

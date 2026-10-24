@@ -8,8 +8,8 @@
  * country -> currency -> a fixed price block, used for BOTH the displayed price
  * and the Stripe `currency` we pin on checkout, so page == cart, always.
  *
- * SHIPPING STATE: usd only is LIVE. Everyone sees USD (zero behaviour change).
- * The engine is fully wired so adding a market is pure data.
+ * SHIPPING STATE: usd + zar (South Africa, 2026-10-24, Gadi approved R69/R690
+ * Family and R49/R490 Individual). Hebrew UI keeps ILS by language.
  *
  * OPERATIONAL CONTRACT to add a currency (do BOTH together, same amounts):
  *   1. Add `currency_options` for it on every Stripe Price (monthly + yearly,
@@ -34,14 +34,19 @@ export type PriceBlock = {
   deepYearly: string;
   familyMonthly: string;
   familyYearly: string;
+  individualMonthly: string;
+  individualYearly: string;
   // Approx per-month figure shown under the yearly price.
   clearYearlyPerMo: string;
   deepYearlyPerMo: string;
+  familyYearlyPerMo: string;
+  individualYearlyPerMo: string;
   // Numeric major-unit amounts, for analytics / the Meta pixel (currency-aware).
   n: {
     clearMonthly: number; clearYearly: number;
     deepMonthly: number; deepYearly: number;
     familyMonthly: number; familyYearly: number;
+    individualMonthly: number; individualYearly: number;
   };
 };
 
@@ -56,13 +61,58 @@ export const PRICE_DISPLAY: Record<string, PriceBlock> = {
     deepYearly: "$49.99",
     familyMonthly: "$5.99",
     familyYearly: "$59",
+    individualMonthly: "$3.99",
+    individualYearly: "$39.99",
     clearYearlyPerMo: "$2.49",
     deepYearlyPerMo: "$4.16",
-    n: { clearMonthly: 2.99, clearYearly: 29.99, deepMonthly: 4.99, deepYearly: 49.99, familyMonthly: 5.99, familyYearly: 59 },
+    familyYearlyPerMo: "$4.92",
+    individualYearlyPerMo: "$3.33",
+    n: { clearMonthly: 2.99, clearYearly: 29.99, deepMonthly: 4.99, deepYearly: 49.99, familyMonthly: 5.99, familyYearly: 59, individualMonthly: 3.99, individualYearly: 39.99 },
   },
-  // Add currencies here as markets go live, e.g.:
-  // eur: { currency: "eur", symbol: "€", clearMonthly: "€2.99", ... },
+  // South Africa (PPP, about 0.7 of FX, like Yooniz's R89). Only Individual and
+  // Family carry a zar currency_option; the legacy Clear/Deep fields repeat USD
+  // because those prices stay USD-only (chargeCurrency never pins zar on them).
+  zar: {
+    currency: "zar",
+    symbol: "R",
+    clearMonthly: "$2.99",
+    clearYearly: "$29.99",
+    deepMonthly: "$4.99",
+    deepYearly: "$49.99",
+    familyMonthly: "R69",
+    familyYearly: "R690",
+    individualMonthly: "R49",
+    individualYearly: "R490",
+    clearYearlyPerMo: "$2.49",
+    deepYearlyPerMo: "$4.16",
+    familyYearlyPerMo: "R57.50",
+    individualYearlyPerMo: "R40.83",
+    n: { clearMonthly: 2.99, clearYearly: 29.99, deepMonthly: 4.99, deepYearly: 49.99, familyMonthly: 69, familyYearly: 690, individualMonthly: 49, individualYearly: 490 },
+  },
 };
+
+/** The prices that carry the local currency_options (Individual + Family).
+ *  Every other price (Schools, legacy Clear/Deep) is USD (+ ILS) only, so a
+ *  local currency must never be pinned on them: Stripe would answer 400. */
+export const LOCALIZED_PRICE_IDS = new Set<string>([
+  "price_1UNUEtRprLKxF6OiwgeDZzy6", // Individual monthly
+  "price_1UNUEtRprLKxF6OiBx1F54bW", // Individual yearly
+  "price_1TtwJfRprLKxF6OiXHbu2cae", // Family monthly
+  "price_1TtwJgRprLKxF6OiIU47RCSC", // Family yearly
+  ...[process.env.STRIPE_PRICE_FAMILY_MONTHLY, process.env.STRIPE_PRICE_FAMILY_YEARLY].filter((x): x is string => !!x),
+]);
+
+/**
+ * The currency to pin on a Stripe charge, or undefined for the price's default
+ * USD. Hebrew UI pays in shekels (every paid price has an ILS option); otherwise
+ * the country's currency, but only on a localized price.
+ */
+export function chargeCurrency(country: string | null | undefined, priceId: string, lang?: string): string | undefined {
+  if (lang === "he") return "ils";
+  const cur = currencyForCountry(country);
+  if (cur === "usd" || !LOCALIZED_PRICE_IDS.has(priceId)) return undefined;
+  return cur;
+}
 
 // Generous country -> currency map. Listing a currency here does NOT activate
 // it; it only takes effect once that currency has a PRICE_DISPLAY block (and a
@@ -75,6 +125,7 @@ export const COUNTRY_CURRENCY: Record<string, string> = {
   // Other priority markets (add blocks + Stripe options to activate)
   GB: "gbp",
   IL: "ils",
+  ZA: "zar",
   BR: "brl", IN: "inr", PH: "php", MX: "mxn", ID: "idr", TR: "try",
   CA: "cad", AU: "aud", JP: "jpy", CH: "chf", PL: "pln", SE: "sek",
   // everything else -> usd via fallback

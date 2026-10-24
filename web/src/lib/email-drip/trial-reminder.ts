@@ -38,13 +38,29 @@ function planName(d: FirebaseFirestore.DocumentData): string {
 
 /** Amount and cycle of the subscriber's price, in the currency they pay
  *  (Hebrew accounts are billed in shekels through the price's ILS option). */
-async function priceLine(priceId: string, lang: string): Promise<{ amount: string; cycle: string } | null> {
+async function priceLine(priceId: string, lang: string, subscriptionId?: string): Promise<{ amount: string; cycle: string } | null> {
   try {
     const p = await stripe.prices.retrieve(priceId, { expand: ["currency_options"] });
-    const ils = lang === "he" ? p.currency_options?.ils?.unit_amount : null;
-    const cents = ils ?? p.unit_amount;
+    // The currency the subscription was created in (R in South Africa since
+    // 2026-10-24); without it, the old rule: shekels for Hebrew, else default.
+    let subCur: string | null = null;
+    if (subscriptionId) {
+      try { subCur = (await stripe.subscriptions.retrieve(subscriptionId)).currency; } catch { subCur = null; }
+    }
+    let cents: number | null | undefined;
+    let currency: string;
+    if (subCur && subCur !== p.currency && p.currency_options?.[subCur]?.unit_amount != null) {
+      cents = p.currency_options[subCur].unit_amount;
+      currency = subCur.toUpperCase();
+    } else if (subCur) {
+      cents = p.unit_amount;
+      currency = p.currency.toUpperCase();
+    } else {
+      const ils = lang === "he" ? p.currency_options?.ils?.unit_amount : null;
+      cents = ils ?? p.unit_amount;
+      currency = ils != null ? "ILS" : p.currency.toUpperCase();
+    }
     if (cents == null) return null;
-    const currency = ils != null ? "ILS" : p.currency.toUpperCase();
     const locale = lang === "he" ? "he-IL" : lang;
     let amount: string;
     try {
@@ -71,7 +87,7 @@ export async function buildTrialReminder(
   firstName: string | null,
 ): Promise<{ subject: string; html: string } | null> {
   if (typeof d.priceId !== "string") return null;
-  const pl = await priceLine(d.priceId, lang);
+  const pl = await priceLine(d.priceId, lang, typeof d.subscriptionId === "string" ? d.subscriptionId : undefined);
   if (!pl) return null;
   const date = formatDate(d.trialEnd * 1000, lang);
   const fill = (s: string) =>

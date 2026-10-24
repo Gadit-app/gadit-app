@@ -5,7 +5,7 @@ import Stripe from "stripe";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { utmMetaFromClient, utmMetaFromUserDoc, type UtmMeta } from "@/lib/utm-meta";
 import { isNewSchoolsPrice, NEW_SCHOOLS_PRICE_IDS } from "@/lib/schools-prices";
-import { currencyForCountry } from "@/lib/pricing-currency";
+import { chargeCurrency } from "@/lib/pricing-currency";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -221,7 +221,9 @@ export async function POST(req: NextRequest) {
     // this is usd for everyone and no `currency` is set (Stripe uses the
     // price's default USD). Adding a market makes page and cart localize from
     // one source. See lib/pricing-currency.ts.
-    const cur = currencyForCountry(req.headers.get("x-vercel-ip-country"));
+    // Only on a localized price (Individual/Family); a school in South Africa
+    // keeps the USD-only Schools price (pinning zar there would be a 400).
+    const cur = chargeCurrency(req.headers.get("x-vercel-ip-country"), priceId) ?? "usd";
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",

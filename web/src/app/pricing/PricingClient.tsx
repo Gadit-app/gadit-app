@@ -4767,14 +4767,15 @@ export function PricingPageRoute() {
           const he = lang === "he";
           const yearly = billing === "yearly";
           const period = yearly ? c.yr : c.mo;
+          // Not Hebrew: the country block (USD, or R in South Africa).
           const indPrice = he
             ? (yearly ? INDIVIDUAL_DISPLAY.ilsYearly : INDIVIDUAL_DISPLAY.ilsMonthly)
-            : (yearly ? INDIVIDUAL_DISPLAY.usdYearly : INDIVIDUAL_DISPLAY.usdMonthly);
+            : (yearly ? px.individualYearly : px.individualMonthly);
           const famPrice = he ? (yearly ? "₪199" : "₪19.90") : (yearly ? familyYearly : familyMonthly);
           const famYearNum = he ? 199 : px.n.familyYearly;
           const perMonth = (v: string) => planCopy(lang, "prYearlyPerMonth", { price: v });
-          const indPerMonth = he ? INDIVIDUAL_DISPLAY.ilsYearlyPerMonth : INDIVIDUAL_DISPLAY.usdYearlyPerMonth;
-          const famPerMonth = `${he ? "₪" : "$"}${(famYearNum / 12).toFixed(2)}`;
+          const indPerMonth = he ? INDIVIDUAL_DISPLAY.ilsYearlyPerMonth : px.individualYearlyPerMo;
+          const famPerMonth = he ? `₪${(famYearNum / 12).toFixed(2)}` : px.familyYearlyPerMo;
           const basicSub = planCopy(lang, "prBasicSub");
           const indSub = yearly ? `${perMonth(indPerMonth)} · ${planCopy(lang, "prIndSub")}` : planCopy(lang, "prIndSub");
           const famSub = yearly ? `${perMonth(famPerMonth)} · ${planCopy(lang, "prFamSub")}` : planCopy(lang, "prFamSub");
@@ -4820,7 +4821,7 @@ export function PricingPageRoute() {
                   <div className="wb-pc-cell wb-pc-corner">{billingToggle}</div>
                   <div className="wb-pc-cell wb-pc-col wb-pc-t-basic">
                     <div className="wb-pc-name">{c.tierBasic.name}</div>
-                    <div className="wb-pc-price">{he ? "₪0" : "$0"}</div>
+                    <div className="wb-pc-price">{he ? "₪0" : `${px.symbol}0`}</div>
                     <div className="wb-pc-sub">{basicSub}</div>
                     <button type="button" className="wb-pc-cta" onClick={clickBasic}>{planCopy(lang, "prBasicCta")}</button>
                   </div>
@@ -4850,7 +4851,7 @@ export function PricingPageRoute() {
 
               {/* MOBILE: stacked cards. */}
               <div className="wb-pricing-grid">
-                <TierCard id="basic" name={c.tierBasic.name} tagline={c.tierBasic.tagline} price={he ? "₪0" : "$0"} period="" subPrice={basicSub}
+                <TierCard id="basic" name={c.tierBasic.name} tagline={c.tierBasic.tagline} price={he ? "₪0" : `${px.symbol}0`} period="" subPrice={basicSub}
                   features={list("b")} cta={planCopy(lang, "prBasicCta")} onCta={clickBasic} />
                 <TierCard id="clear" name="Individual" tagline={planCopy(lang, "prIndSub")} price={indPrice} period={period} subPrice={indSub}
                   features={list("i")} cta={planCopy(lang, "prTrialCta")} ctaSub={terms(indPrice)} onCta={clickIndividual} />

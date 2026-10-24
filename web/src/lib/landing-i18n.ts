@@ -1,3 +1,4 @@
+import type { PriceBlock } from "@/lib/pricing-currency";
 /**
  * Shared helpers for the real-screens landing pages in every language
  * (Gadi 2026-10-17): Individuals, Families and Schools were built in Hebrew
@@ -46,9 +47,21 @@ export function landingFont(lang: string): string {
   }
 }
 
-/** The consumer prices a page shows in a language. */
-export function landingPrices(lang: string) {
+/** The consumer prices a page shows: Hebrew in shekels; otherwise the visitor's
+ *  country block from usePricing() (USD, or R in South Africa, 2026-10-24). */
+export function landingPrices(lang: string, px?: PriceBlock) {
   const he = lang === "he";
+  if (!he && px && px.currency !== "usd") {
+    const fmt = (n: number) => `${px.symbol}${Number.isInteger(n) ? n : n.toFixed(2)}`;
+    return {
+      monthly: px.individualMonthly,
+      yearly: px.individualYearly,
+      familyMonthly: px.familyMonthly,
+      familyYearly: px.familyYearly,
+      familyUnder: fmt(Math.ceil(px.n.familyYearly / 12)),
+      familySave: fmt(Math.round((px.n.familyMonthly * 12 - px.n.familyYearly) * 100) / 100),
+    };
+  }
   return {
     monthly: he ? INDIVIDUAL_DISPLAY.ilsMonthly : INDIVIDUAL_DISPLAY.usdMonthly,
     yearly: he ? INDIVIDUAL_DISPLAY.ilsYearly : INDIVIDUAL_DISPLAY.usdYearly,

@@ -1709,7 +1709,7 @@ function GadItButton({ lang, word, language, paid, onLocked }: { lang: string; w
   const c = gadCopy(lang);
   const { user } = useAuth();
   const [state, setState] = useState<"idle" | "busy" | "done" | "already">("idle");
-  const label = c.button.replace(/^[¡]\s*/, "").replace(/\s*[!！]\s*$/, "");
+  const label = c.button;
   async function tap() {
     if (!user || !paid) { onLocked(); return; }
     if (state !== "idle") return;
@@ -1740,7 +1740,7 @@ function GadItButton({ lang, word, language, paid, onLocked }: { lang: string; w
         aria-label={`${label} ${GAD_TAP_HINT[lang] ?? GAD_TAP_HINT.en}`}
         style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, width: "100%", minHeight: 56, borderRadius: 16, border: "none", background: done ? "#0F9E6E" : "#0B7F7F", color: "#fff", fontSize: 19, fontWeight: 800, cursor: done ? "default" : "pointer", fontFamily: "inherit", boxShadow: "0 2px 6px rgba(11,127,127,.25)", opacity: state === "busy" ? 0.75 : 1 }}
       >
-        <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{done ? c.success.replace(/\s*[!！]\s*$/, "") : label}</span>
+        <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{done ? c.success : label}</span>
         <span aria-hidden="true">✓</span>
       </button>
       <div style={{ textAlign: "center", fontSize: 12.5, color: "var(--ink-muted, #6B7280)", marginTop: 6 }}>
@@ -1841,10 +1841,10 @@ export function ResultView({
       {/* Saving is automatic now (no buttons), so say it once it happened
           (Gadi 2026-10-24): notebook for everyone signed in, offline too
           for paying plans (their words are kept on the device). */}
-      {isSaved && !streaming && (plan === "clear" || plan === "deep") && (
+      {isSaved && !streaming && (
         <p className="wb-saved-note" dir={dir}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
-          <span>{meaningPracticeCopy(lang).saved}</span>
+          <span>{plan === "clear" || plan === "deep" ? meaningPracticeCopy(lang).saved : meaningPracticeCopy(lang).savedFree}</span>
         </p>
       )}
 

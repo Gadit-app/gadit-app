@@ -1,4 +1,5 @@
 import { renderEmailHtmlV2, mdLiteToHtml, applyName, type EmailContent } from "./render";
+import { PRICE_DISPLAY } from "@/lib/pricing-currency";
 import { isIndividualPriceId, INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY } from "@/lib/individual-prices";
 import { planCopy } from "@/lib/plan-copy";
 import { EMAIL_I18N } from "./i18n";
@@ -229,8 +230,13 @@ export function recoveryPriceLine(priceId: string, currency: string, lang: strin
   if (plan === "other") return null;
   const yearly = priceId === process.env.STRIPE_PRICE_FAMILY_YEARLY || priceId === INDIVIDUAL_YEARLY;
   const ils = currency.toLowerCase() === "ils";
-  const amount =
-    plan === "family"
+  // A local currency block (R in South Africa, 2026-10-24).
+  const local = !ils && currency.toLowerCase() !== "usd" ? PRICE_DISPLAY[currency.toLowerCase()] : undefined;
+  const amount = local
+    ? plan === "family"
+      ? yearly ? local.familyYearly : local.familyMonthly
+      : yearly ? local.individualYearly : local.individualMonthly
+    : plan === "family"
       ? yearly ? (ils ? "₪199" : "$59") : (ils ? "₪19.90" : "$5.99")
       : yearly ? (ils ? "₪149" : "$39.99") : (ils ? "₪14.90" : "$3.99");
   return `${amount} ${planCopy(lang, yearly ? "remCycleYear" : "remCycleMonth")}`;

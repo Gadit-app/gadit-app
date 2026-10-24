@@ -1,5 +1,6 @@
 "use client";
 
+import { usePricing } from "@/lib/use-pricing";
 import Image from "next/image";
 import Link from "next/link";
 import { Lines } from "../families/RealScreens";
@@ -52,7 +53,9 @@ function Check() {
 
 export function IndividualsRealLanding({ copy = HE, lang = "he" }: { copy?: IndCopy; lang?: string }) {
   const C = copy;
-  const prices = landingPrices(lang);
+  // The visitor's country block (R in South Africa), same as /pricing.
+  const px = usePricing();
+  const prices = landingPrices(lang, px);
   const F = (s: string) => fill(s, prices);
   const href = useHref();
   const { promptLogin } = useAuth();

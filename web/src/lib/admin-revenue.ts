@@ -148,6 +148,7 @@ const FX_TO_USD: Record<string, number> = {
   ils: 0.27,   // ~1/3.7
   eur: 1.08,
   gbp: 1.27,
+  zar: 0.055,  // ~1/18 (South Africa, 2026-10-24)
 };
 function toUsd(amount: number, currency: string): number {
   return amount * (FX_TO_USD[currency.toLowerCase()] ?? 1);
