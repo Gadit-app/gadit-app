@@ -15,6 +15,7 @@
  *     a real-time subscription on the member doc and offers to return.
  */
 
+import { relinkCopy } from "@/lib/family-relink-i18n";
 import { WaitText, WaitDots } from "@/components/WaitText";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -973,6 +974,8 @@ export function FamilyPairClient() {
     return () => clearInterval(t);
   }, []);
 
+  const [relink, setRelink] = useState(false);
+
   async function generateCode() {
     if (!user) return;
     setGenerating(true);
@@ -987,6 +990,7 @@ export function FamilyPairClient() {
       const data = await res.json();
       if (data.code) {
         setCode(data.code);
+        setRelink(data.relink === true);
         // Base the countdown on the CLIENT clock, not the server's absolute
         // expiresAt: a device whose clock runs ahead was showing "expired"
         // the instant the code was generated (Sheli, 2026-07-30). The server
@@ -1030,6 +1034,7 @@ export function FamilyPairClient() {
         <header className="wb-family-header">
           <h1 className="wb-family-title">{c.title}</h1>
           <p className="wb-family-sub">{c.sub}</p>
+          {relink && <p className="wb-family-sub" style={{ color: "var(--teal-deep, #0B8A8A)", fontWeight: 600 }}>✓ {relinkCopy(lang).relinkNote}</p>}
         </header>
 
         <div className="wb-family-pair-card">

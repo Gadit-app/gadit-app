@@ -89,7 +89,10 @@ export async function POST(req: NextRequest) {
       createdAt: Date.now(),
     });
 
-    return NextResponse.json({ code, expiresAt });
+    // Connected before (its own account exists): reconnecting brings back
+    // all its words, so the pairing screen says so (Gadi 2026-10-24).
+    const relink = (await db.collection("users").doc(`${ownerUid}_${memberId}`).get()).exists;
+    return NextResponse.json({ code, expiresAt, relink });
   } catch (err) {
     console.error("[/api/family/pair/create] error:", err);
     return NextResponse.json({ error: "internal_error" }, { status: 500 });

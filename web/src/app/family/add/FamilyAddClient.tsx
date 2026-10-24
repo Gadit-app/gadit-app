@@ -16,6 +16,7 @@
  *     (same flow as kids, role claim differs).
  */
 
+import { relinkCopy } from "@/lib/family-relink-i18n";
 import { WaitText, WaitDots } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -816,6 +817,10 @@ export function FamilyAddClient() {
   const [saving, setSaving] = useState(false);
   const [childCount, setChildCount] = useState<number | null>(null);
   const [kidLimit, setKidLimit] = useState(MAX_KIDS_PER_FAMILY);
+  // Existing members, to catch a child added again under the same name
+  // (Gadi 2026-10-24): offer to reconnect the existing profile instead.
+  const [existing, setExisting] = useState<Array<{ id: string; name: string }>>([]);
+  const [dup, setDup] = useState<{ id: string; name: string } | null>(null);
 
   // Snapshot the family's current child count once on mount. This is the
   // gate that prevents the parent from adding a 6th child on the Family
@@ -830,6 +835,7 @@ export function FamilyAddClient() {
           getDoc(doc(db, "users", user.uid)).catch(() => null),
         ]);
         const kids = snap.docs.filter((d) => !isParentRole(d.data().role)).length;
+        setExisting(snap.docs.filter((d) => !d.data().isOwner).map((d) => ({ id: d.id, name: String(d.data().name ?? "").trim() })));
         setKidLimit(kidLimitFor(me?.data()?.maxKids));
         setChildCount(kids);
       } catch {
@@ -841,9 +847,11 @@ export function FamilyAddClient() {
   const atKidCap =
     role !== null && !isParentRole(role) && childCount !== null && childCount >= kidLimit;
 
-  async function addMember() {
+  async function addMember(force = false) {
     if (!user || !role) return;
     if (atKidCap) return;
+    const same = name.trim() && existing.find((m) => m.name && m.name.toLowerCase() === name.trim().toLowerCase());
+    if (same && !force) { setDup(same); return; }
     setSaving(true);
     try {
       // Age is only meaningful for a child, and it's optional. Stored so we
@@ -913,7 +921,7 @@ export function FamilyAddClient() {
               <input
                 type="text"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => { setName(e.target.value); setDup(null); }}
                 placeholder={c.namePlaceholder}
                 autoFocus
                 className="wb-family-field-input"
@@ -952,6 +960,17 @@ export function FamilyAddClient() {
               </div>
             </div>
 
+            {dup && (
+              <div role="alert" style={{ border: "1px solid var(--teal, #0EA5A5)", background: "rgba(14,165,165,0.08)", borderRadius: 14, padding: "14px 16px", margin: "6px 0 14px" }}>
+                <div style={{ fontWeight: 800, marginBottom: 4 }}>{relinkCopy(lang).dupTitle.replace("{name}", dup.name)}</div>
+                <div style={{ fontSize: 14.5, marginBottom: 12, color: "var(--ink-soft, #4B5563)" }}>{relinkCopy(lang).dupBody}</div>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                  <button type="button" className="wb-family-cta" onClick={() => router.push(href(`/family/${dup.id}/pair`))}>{relinkCopy(lang).dupReconnect}</button>
+                  <button type="button" className="wb-family-cta-ghost" onClick={() => { setDup(null); void addMember(true); }}>{relinkCopy(lang).dupAddAnyway}</button>
+                </div>
+              </div>
+            )}
+
             <div className="wb-family-form-actions">
               <button
                 type="button"
@@ -964,7 +983,7 @@ export function FamilyAddClient() {
               <button
                 type="button"
                 className="wb-family-cta"
-                onClick={addMember}
+                onClick={() => void addMember()}
                 disabled={saving || atKidCap}
               >
                 {saving ? <WaitText text={c.adding} /> : c.add}
