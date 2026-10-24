@@ -149,6 +149,9 @@ const FX_TO_USD: Record<string, number> = {
   eur: 1.08,
   gbp: 1.27,
   zar: 0.055,  // ~1/18 (South Africa, 2026-10-24)
+  // Local prices 2026-10-24 (approx. USD per unit):
+  chf: 1.13, aud: 0.65, cad: 0.72, aed: 0.272, sar: 0.267,
+  mxn: 0.052, try: 0.024, ron: 0.22, uah: 0.024,
 };
 function toUsd(amount: number, currency: string): number {
   return amount * (FX_TO_USD[currency.toLowerCase()] ?? 1);

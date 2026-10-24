@@ -51,8 +51,7 @@ export type PriceBlock = {
 };
 
 // LIVE currencies only. Start with usd; add more per the operational contract.
-export const PRICE_DISPLAY: Record<string, PriceBlock> = {
-  usd: {
+const USD_BASE: PriceBlock = {
     currency: "usd",
     symbol: "$",
     clearMonthly: "$2.99",
@@ -68,7 +67,10 @@ export const PRICE_DISPLAY: Record<string, PriceBlock> = {
     familyYearlyPerMo: "$4.92",
     individualYearlyPerMo: "$3.33",
     n: { clearMonthly: 2.99, clearYearly: 29.99, deepMonthly: 4.99, deepYearly: 49.99, familyMonthly: 5.99, familyYearly: 59, individualMonthly: 3.99, individualYearly: 39.99 },
-  },
+  };
+
+export const PRICE_DISPLAY: Record<string, PriceBlock> = {
+  usd: USD_BASE,
   // South Africa (PPP, about 0.7 of FX, like Yooniz's R89). Only Individual and
   // Family carry a zar currency_option; the legacy Clear/Deep fields repeat USD
   // because those prices stay USD-only (chargeCurrency never pins zar on them).
@@ -89,7 +91,24 @@ export const PRICE_DISPLAY: Record<string, PriceBlock> = {
     individualYearlyPerMo: "R40.83",
     n: { clearMonthly: 2.99, clearYearly: 29.99, deepMonthly: 4.99, deepYearly: 49.99, familyMonthly: 69, familyYearly: 690, individualMonthly: 49, individualYearly: 490 },
   },
+  // Switzerland (Gadi 2026-10-24): about 75% of Yooniz's CHF 12.90, room for
+  // a distributor's commission.
+  chf: local("chf", "CHF ", (n) => `CHF ${Number.isInteger(n) ? n : n.toFixed(2)}`, 6.9, 69, 9.9, 99),
 };
+
+/** A local block from the four amounts (major units); the legacy Clear/Deep
+ *  fields repeat USD because those prices never carry a local option. */
+function local(currency: string, symbol: string, f: (n: number) => string, im: number, iy: number, fm: number, fy: number): PriceBlock {
+  const u = USD_BASE;
+  return {
+    currency, symbol,
+    clearMonthly: u.clearMonthly, clearYearly: u.clearYearly, deepMonthly: u.deepMonthly, deepYearly: u.deepYearly,
+    clearYearlyPerMo: u.clearYearlyPerMo, deepYearlyPerMo: u.deepYearlyPerMo,
+    familyMonthly: f(fm), familyYearly: f(fy), individualMonthly: f(im), individualYearly: f(iy),
+    familyYearlyPerMo: f(Math.round((fy / 12) * 100) / 100), individualYearlyPerMo: f(Math.round((iy / 12) * 100) / 100),
+    n: { ...u.n, familyMonthly: fm, familyYearly: fy, individualMonthly: im, individualYearly: iy },
+  };
+}
 
 /** The prices that carry the local currency_options (Individual + Family).
  *  Every other price (Schools, legacy Clear/Deep) is USD (+ ILS) only, so a
@@ -127,7 +146,7 @@ export const COUNTRY_CURRENCY: Record<string, string> = {
   IL: "ils",
   ZA: "zar",
   BR: "brl", IN: "inr", PH: "php", MX: "mxn", ID: "idr", TR: "try",
-  CA: "cad", AU: "aud", JP: "jpy", CH: "chf", PL: "pln", SE: "sek",
+  CA: "cad", AU: "aud", JP: "jpy", CH: "chf", LI: "chf", PL: "pln", SE: "sek",
   // everything else -> usd via fallback
 };
 
