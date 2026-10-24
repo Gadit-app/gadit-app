@@ -4821,7 +4821,7 @@ export function PricingPageRoute() {
                   <div className="wb-pc-cell wb-pc-corner">{billingToggle}</div>
                   <div className="wb-pc-cell wb-pc-col wb-pc-t-basic">
                     <div className="wb-pc-name">{c.tierBasic.name}</div>
-                    <div className="wb-pc-price">{he ? "₪0" : `${px.symbol}0`}</div>
+                    <div className="wb-pc-price">{he ? "₪0" : px.zero}</div>
                     <div className="wb-pc-sub">{basicSub}</div>
                     <button type="button" className="wb-pc-cta" onClick={clickBasic}>{planCopy(lang, "prBasicCta")}</button>
                   </div>
@@ -4851,7 +4851,7 @@ export function PricingPageRoute() {
 
               {/* MOBILE: stacked cards. */}
               <div className="wb-pricing-grid">
-                <TierCard id="basic" name={c.tierBasic.name} tagline={c.tierBasic.tagline} price={he ? "₪0" : `${px.symbol}0`} period="" subPrice={basicSub}
+                <TierCard id="basic" name={c.tierBasic.name} tagline={c.tierBasic.tagline} price={he ? "₪0" : px.zero} period="" subPrice={basicSub}
                   features={list("b")} cta={planCopy(lang, "prBasicCta")} onCta={clickBasic} />
                 <TierCard id="clear" name="Individual" tagline={planCopy(lang, "prIndSub")} price={indPrice} period={period} subPrice={indSub}
                   features={list("i")} cta={planCopy(lang, "prTrialCta")} ctaSub={terms(indPrice)} onCta={clickIndividual} />

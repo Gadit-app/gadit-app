@@ -52,14 +52,13 @@ export function landingFont(lang: string): string {
 export function landingPrices(lang: string, px?: PriceBlock) {
   const he = lang === "he";
   if (!he && px && px.currency !== "usd") {
-    const fmt = (n: number) => `${px.symbol}${Number.isInteger(n) ? n : n.toFixed(2)}`;
     return {
       monthly: px.individualMonthly,
       yearly: px.individualYearly,
       familyMonthly: px.familyMonthly,
       familyYearly: px.familyYearly,
-      familyUnder: fmt(Math.ceil(px.n.familyYearly / 12)),
-      familySave: fmt(Math.round((px.n.familyMonthly * 12 - px.n.familyYearly) * 100) / 100),
+      familyUnder: px.familyUnder,
+      familySave: px.familySave,
     };
   }
   return {

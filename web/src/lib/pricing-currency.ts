@@ -41,6 +41,11 @@ export type PriceBlock = {
   deepYearlyPerMo: string;
   familyYearlyPerMo: string;
   individualYearlyPerMo: string;
+  // Landing-page figures: "less than X a month" on the yearly Family plan, the
+  // yearly saving, and the free plan's price, already in this currency's format.
+  familyUnder: string;
+  familySave: string;
+  zero: string;
   // Numeric major-unit amounts, for analytics / the Meta pixel (currency-aware).
   n: {
     clearMonthly: number; clearYearly: number;
@@ -66,6 +71,9 @@ const USD_BASE: PriceBlock = {
     deepYearlyPerMo: "$4.16",
     familyYearlyPerMo: "$4.92",
     individualYearlyPerMo: "$3.33",
+    familyUnder: "$5",
+    familySave: "$12.88",
+    zero: "$0",
     n: { clearMonthly: 2.99, clearYearly: 29.99, deepMonthly: 4.99, deepYearly: 49.99, familyMonthly: 5.99, familyYearly: 59, individualMonthly: 3.99, individualYearly: 39.99 },
   };
 
@@ -89,12 +97,34 @@ export const PRICE_DISPLAY: Record<string, PriceBlock> = {
     deepYearlyPerMo: "$4.16",
     familyYearlyPerMo: "R57.50",
     individualYearlyPerMo: "R40.83",
+    familyUnder: "R58",
+    familySave: "R138",
+    zero: "R0",
     n: { clearMonthly: 2.99, clearYearly: 29.99, deepMonthly: 4.99, deepYearly: 49.99, familyMonthly: 69, familyYearly: 690, individualMonthly: 49, individualYearly: 490 },
   },
   // Switzerland (Gadi 2026-10-24): about 75% of Yooniz's CHF 12.90, room for
   // a distributor's commission.
-  chf: local("chf", "CHF ", (n) => `CHF ${Number.isInteger(n) ? n : n.toFixed(2)}`, 6.9, 69, 9.9, 99),
+  chf: local("chf", "CHF ", pre("CHF "), 6.9, 69, 9.9, 99),
+  // The rest of the approved table (Gadi 2026-10-24). FX = currency conversion,
+  // PPP = purchasing power.
+  eur: local("eur", "€", pre("€"), 3.49, 34.99, 5.49, 54.99),          // FX
+  gbp: local("gbp", "£", pre("£"), 3.49, 34.99, 4.99, 49.99),          // FX, natural price points
+  aud: local("aud", "A$", pre("A$"), 5.99, 59.99, 8.99, 89),           // FX
+  cad: local("cad", "C$", pre("C$"), 5.49, 54.99, 7.99, 79),           // FX
+  aed: local("aed", "AED ", pre("AED "), 14.99, 149, 21.99, 219),      // FX (USD peg)
+  sar: local("sar", "SAR ", pre("SAR "), 14.99, 149, 21.99, 219),      // FX (USD peg)
+  mxn: local("mxn", "MX$", pre("MX$"), 49, 489, 79, 789),              // PPP
+  try: local("try", "₺", pre("₺"), 89, 890, 129, 1290),                // PPP, review every quarter
+  ron: local("ron", "lei", post(" lei"), 14.99, 149.99, 22.99, 229.99), // mild PPP
+  uah: local("uah", "₴", pre("₴"), 89, 890, 129, 1290),                // PPP
 };
+
+/** Number in a currency: whole numbers without decimals, thousands with a comma. */
+function num(n: number): string {
+  return Number.isInteger(n) ? n.toLocaleString("en-US") : n.toFixed(2);
+}
+function pre(sym: string) { return (n: number) => `${sym}${num(n)}`; }
+function post(sym: string) { return (n: number) => `${num(n)}${sym}`; }
 
 /** A local block from the four amounts (major units); the legacy Clear/Deep
  *  fields repeat USD because those prices never carry a local option. */
@@ -106,6 +136,7 @@ function local(currency: string, symbol: string, f: (n: number) => string, im: n
     clearYearlyPerMo: u.clearYearlyPerMo, deepYearlyPerMo: u.deepYearlyPerMo,
     familyMonthly: f(fm), familyYearly: f(fy), individualMonthly: f(im), individualYearly: f(iy),
     familyYearlyPerMo: f(Math.round((fy / 12) * 100) / 100), individualYearlyPerMo: f(Math.round((iy / 12) * 100) / 100),
+    familyUnder: f(Math.ceil(fy / 12)), familySave: f(Math.round((fm * 12 - fy) * 100) / 100), zero: f(0),
     n: { ...u.n, familyMonthly: fm, familyYearly: fy, individualMonthly: im, individualYearly: iy },
   };
 }
@@ -141,12 +172,14 @@ export const COUNTRY_CURRENCY: Record<string, string> = {
   AT: "eur", BE: "eur", CY: "eur", DE: "eur", EE: "eur", ES: "eur", FI: "eur",
   FR: "eur", GR: "eur", HR: "eur", IE: "eur", IT: "eur", LT: "eur", LU: "eur",
   LV: "eur", MT: "eur", NL: "eur", PT: "eur", SI: "eur", SK: "eur",
+  AD: "eur", MC: "eur", SM: "eur", VA: "eur", ME: "eur", XK: "eur",
   // Other priority markets (add blocks + Stripe options to activate)
   GB: "gbp",
   IL: "ils",
   ZA: "zar",
   BR: "brl", IN: "inr", PH: "php", MX: "mxn", ID: "idr", TR: "try",
   CA: "cad", AU: "aud", JP: "jpy", CH: "chf", LI: "chf", PL: "pln", SE: "sek",
+  AE: "aed", SA: "sar", RO: "ron", UA: "uah",
   // everything else -> usd via fallback
 };
 
