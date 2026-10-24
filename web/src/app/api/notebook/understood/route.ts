@@ -14,7 +14,9 @@ import { creditYoonizLearning } from "@/lib/yooniz-learning";
  * finished quiz/game itself is the practice. `points` in the answer is that
  * same server rank total, so it never contradicts what the rank shows.
  *
- *   POST { word, language, source?: "quiz" | "game" }
+ *   POST { word, language, source?: "quiz" | "game" | "self" }
+ *   "self" = the reader tapped "Gad it" on the word page (Gadi 2026-10-24: no
+ *   question any more, the tap itself says "I understood").
  *   Auth: Firebase ID token (Bearer). Paid plans only (Family kids = deep).
  *   → { understood, awarded: 0, points } | { alreadyUnderstood, points } | { skipped }
  */
@@ -43,7 +45,7 @@ export async function POST(req: NextRequest) {
     const b = (await req.json()) as { word?: string; language?: string; source?: string };
     word = (b.word ?? "").trim();
     language = (b.language ?? "").trim();
-    if (b.source === "game" || b.source === "quiz") source = b.source;
+    if (b.source === "game" || b.source === "quiz" || b.source === "self") source = b.source;
   } catch {
     return NextResponse.json({ error: "bad_body" }, { status: 400 });
   }
@@ -86,7 +88,9 @@ export async function POST(req: NextRequest) {
     // Direction B of the Yooniz bridge: credit "learning Yoon" in the kid's
     // linked Yooniz family. Best-effort + bounded; a no-op for non-kids or
     // families not linked/opted-in, never blocks or fails this response.
-    await creditYoonizLearning(uid);
+    // A self-reported "Gad it" tap earns no Yooniz learning credit: only a
+    // passed quiz or game does, so a child cannot tap their way to screen time.
+    if (source !== "self") await creditYoonizLearning(uid);
 
     return NextResponse.json({ understood: true, awarded: 0, points });
   } catch (err) {

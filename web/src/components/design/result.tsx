@@ -37,7 +37,7 @@
 import { WaitText, WaitDots } from "@/components/WaitText";
 import { MeaningPractice } from "./MeaningPractice";
 import { meaningPracticeCopy } from "@/lib/meaning-practice-i18n";
-import { gadCopy } from "@/lib/gadit-button-copy";
+import { gadCopy, GAD_TAP_HINT } from "@/lib/gadit-button-copy";
 import { nativeShareFallback } from "@/lib/native-app";
 import { useState, useEffect, useMemo, type ReactNode } from "react";
 import { miscUi } from "@/lib/misc-ui-i18n";
@@ -1701,20 +1701,51 @@ function ActionBar({
 // detached and visually noisy on cream paper.
 
 // ─── ResultView (page composition) ─────────────────────────────
-function GadItButton({ lang, onClick }: { lang: string; onClick: () => void }) {
+// "Gad it" (Gadi 2026-10-24): at the END of the page, after the word origin.
+// No question any more: the tap itself says "I understood" and marks the word
+// as understood in the notebook. A plan without a notebook gets the
+// login/upgrade path through onLocked.
+function GadItButton({ lang, word, language, paid, onLocked }: { lang: string; word: string; language: string; paid: boolean; onLocked: () => void }) {
   const c = gadCopy(lang);
+  const { user } = useAuth();
+  const [state, setState] = useState<"idle" | "busy" | "done" | "already">("idle");
+  const label = c.button.replace(/^[¡]\s*/, "").replace(/\s*[!！]\s*$/, "");
+  async function tap() {
+    if (!user || !paid) { onLocked(); return; }
+    if (state !== "idle") return;
+    setState("busy");
+    const send = async () => {
+      const r = await fetch("/api/notebook/understood", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
+        body: JSON.stringify({ word, language, source: "self" }),
+      });
+      return (await r.json().catch(() => ({}))) as { understood?: boolean; alreadyUnderstood?: boolean; skipped?: string };
+    };
+    try {
+      let j = await send();
+      // The automatic notebook save may still be on its way: one retry.
+      if (j.skipped) { await new Promise((ok) => setTimeout(ok, 1500)); j = await send(); }
+      setState(j.alreadyUnderstood ? "already" : j.understood ? "done" : "idle");
+      try { sessionStorage.removeItem("gadit-kid-rankindex"); } catch { /* ignore */ }
+    } catch { setState("idle"); }
+  }
+  const done = state === "done" || state === "already";
   return (
-    <div style={{ margin: "18px 20px 6px" }}>
+    <div style={{ margin: "22px 20px 8px" }}>
       <button
         type="button"
-        onClick={onClick}
-        aria-label={`${c.button} ${c.hint}`}
-        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, width: "100%", minHeight: 56, borderRadius: 16, border: "none", background: "#0B7F7F", color: "#fff", fontSize: 19, fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 2px 6px rgba(11,127,127,.25)" }}
+        onClick={tap}
+        disabled={state === "busy"}
+        aria-label={`${label} ${GAD_TAP_HINT[lang] ?? GAD_TAP_HINT.en}`}
+        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, width: "100%", minHeight: 56, borderRadius: 16, border: "none", background: done ? "#0F9E6E" : "#0B7F7F", color: "#fff", fontSize: 19, fontWeight: 800, cursor: done ? "default" : "pointer", fontFamily: "inherit", boxShadow: "0 2px 6px rgba(11,127,127,.25)", opacity: state === "busy" ? 0.75 : 1 }}
       >
+        <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{done ? c.success.replace(/\s*[!！]\s*$/, "") : label}</span>
         <span aria-hidden="true">✓</span>
-        <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{c.button}</span>
       </button>
-      <div style={{ textAlign: "center", fontSize: 12.5, color: "var(--ink-muted, #6B7280)", marginTop: 6 }}>{c.hint}</div>
+      <div style={{ textAlign: "center", fontSize: 12.5, color: "var(--ink-muted, #6B7280)", marginTop: 6 }}>
+        {state === "done" ? c.doneSub : state === "already" ? c.alreadySub : (GAD_TAP_HINT[lang] ?? GAD_TAP_HINT.en)}
+      </div>
     </div>
   );
 }
@@ -1810,10 +1841,10 @@ export function ResultView({
       {/* Saving is automatic now (no buttons), so say it once it happened
           (Gadi 2026-10-24): notebook for everyone signed in, offline too
           for paying plans (their words are kept on the device). */}
-      {isSaved && !streaming && (
+      {isSaved && !streaming && (plan === "clear" || plan === "deep") && (
         <p className="wb-saved-note" dir={dir}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
-          <span>{plan === "clear" || plan === "deep" ? meaningPracticeCopy(lang).saved : meaningPracticeCopy(lang).savedFree}</span>
+          <span>{meaningPracticeCopy(lang).saved}</span>
         </p>
       )}
 
@@ -1873,13 +1904,6 @@ export function ResultView({
         kidsImagesLoading={kidsImagesLoading}
       />
 
-      {/* "Gad it!" (Gadi 2026-10-18): after reading, one quick question; a
-          correct answer marks the word understood. Not for an anonymous
-          classroom kid (no notebook) and not while the text is still coming. */}
-      {onAction && !streaming && !classroomInSession && (result.meanings?.length ?? 0) > 0 && (
-        <GadItButton lang={lang} onClick={() => onAction("gadit")} />
-      )}
-
       <IdiomsSection
         meanings={result.meanings ?? []}
         generalIdioms={result.generalIdioms}
@@ -1891,6 +1915,16 @@ export function ResultView({
       />
 
       <OriginCard etymology={result.etymology} onReport={onReport} plan={plan} />
+
+      {onAction && !streaming && !classroomInSession && (result.meanings?.length ?? 0) > 0 && (
+        <GadItButton
+          lang={lang}
+          word={result.word}
+          language={result.language}
+          paid={plan === "clear" || plan === "deep"}
+          onLocked={() => onAction("gadit")}
+        />
+      )}
 
       <WordQuestions
         word={result.word}
