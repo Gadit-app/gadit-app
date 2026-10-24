@@ -10,7 +10,7 @@
 export type RelinkCopy = { relinkNote: string; dupTitle: string; dupBody: string; dupReconnect: string; dupAddAnyway: string };
 
 export const RELINK_COPY: Record<string, RelinkCopy> = {
-  he: { relinkNote: "חיבור מחדש מחזיר את כל המילים וההתקדמות.", dupTitle: "{name} כבר נמצא במשפחה", dupBody: "לחבר מחדש את הפרופיל הקיים? כל המילים וההתקדמות נשמרים.", dupReconnect: "לחבר מחדש", dupAddAnyway: "להוסיף פרופיל חדש בכל זאת" },
+  he: { relinkNote: "חיבור מחדש מחזיר את כל המילים וההתקדמות.", dupTitle: "{name} כבר במשפחה", dupBody: "לחבר מחדש את הפרופיל הקיים? כל המילים וההתקדמות נשמרים.", dupReconnect: "לחבר מחדש", dupAddAnyway: "להוסיף פרופיל חדש בכל זאת" },
   en: { relinkNote: "Reconnecting brings back all the words and progress.", dupTitle: "{name} is already in the family", dupBody: "Reconnect the existing profile? All the words and progress are kept.", dupReconnect: "Reconnect", dupAddAnyway: "Add a new profile anyway" },
   ar: { relinkNote: "إعادة الربط تُعيد كل الكلمات والتقدّم.", dupTitle: "{name} موجود بالفعل في العائلة", dupBody: "هل تريدون إعادة ربط الملف الموجود؟ كل الكلمات والتقدّم محفوظة.", dupReconnect: "إعادة الربط", dupAddAnyway: "إضافة ملف جديد على أي حال" },
   ru: { relinkNote: "Повторное подключение вернёт все слова и прогресс.", dupTitle: "{name} уже есть в семье", dupBody: "Подключить существующий профиль заново? Все слова и прогресс сохранены.", dupReconnect: "Подключить заново", dupAddAnyway: "Всё равно добавить новый профиль" },

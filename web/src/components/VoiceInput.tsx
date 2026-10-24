@@ -56,6 +56,14 @@ export default function VoiceInput({
       setErrorMsg("Microphone not supported in this browser");
       return;
     }
+    // The level meter's AudioContext is created right here, inside the tap,
+    // before any await: Safari on iPhone starts a context made later
+    // "suspended", and a suspended meter would hear only silence.
+    let ctx: AudioContext | null = null;
+    try {
+      const AC = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (AC) { ctx = new AC(); void ctx.resume().catch(() => {}); }
+    } catch { ctx = null; }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
@@ -72,9 +80,10 @@ export default function VoiceInput({
       recorder.start();
       cancelRef.current = false;
       setState("recording");
-      startVad(stream);
+      startVad(stream, ctx);
     } catch (e) {
       console.error("getUserMedia failed:", e);
+      ctx?.close().catch(() => {});
       setState("error");
       setErrorMsg("Mic permission denied");
     }
@@ -83,11 +92,10 @@ export default function VoiceInput({
   // Voice-activity watch: learn the room's noise for the first moments, then
   // stop 1.3 s after speech ends. No speech within 7 s cancels quietly; 45 s is
   // the hard limit.
-  function startVad(stream: MediaStream) {
+  function startVad(stream: MediaStream, ctx: AudioContext | null) {
     try {
-      const AC = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-      if (!AC) return;
-      const ctx = new AC();
+      if (!ctx) return;
+      void ctx.resume().catch(() => {});
       const src = ctx.createMediaStreamSource(stream);
       const an = ctx.createAnalyser();
       an.fftSize = 1024;
@@ -108,11 +116,16 @@ export default function VoiceInput({
         peak = Math.max(peak, rms);
         setLevel(Math.min(1, rms * 12));
         if (loud) { spoke = true; lastLoud = now; }
+        if (now - t0 > 45000) { stopRecording(); return; }
         if (spoke && now - lastLoud > 1300) stopRecording();
         // Nothing said in 7 s: a truly silent take is dropped; a quiet voice
         // that never crossed the bar is still sent for transcription.
-        else if (!spoke && now - t0 > 7000) { cancelRef.current = peak < 0.008; stopRecording(); }
-        else if (now - t0 > 45000) stopRecording();
+        else if (!spoke && now - t0 > 7000) {
+          // A meter that never ran (still suspended) proves nothing: keep the
+          // take and let the tap-to-stop finish it instead of dropping it.
+          if (ctx.state !== "running") return;
+          cancelRef.current = peak < 0.008; stopRecording();
+        }
       }, 100);
       vadRef.current = { ctx, timer };
     } catch { /* no auto-stop: the tap-to-stop still works */ }
