@@ -6,6 +6,7 @@ import Link from "next/link";
 import { EarningsCalculator } from "./EarningsCalculator";
 import { fillOffer, offerCopy, offerValues } from "@/lib/partner-offer-copy";
 import { useLang } from "@/lib/lang-context";
+import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { useHref } from "@/lib/href";
 import { BackLink } from "@/components/BackLink";
 import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
@@ -1919,7 +1920,12 @@ export function PartnerDashboardClient() {
           <Link href={href("/")} style={S.wordmark} translate="no">
             Gad<span style={{ color: "#0EA5A5", fontStyle: "italic", fontWeight: 600 }}>it</span>
           </Link>
-          <BackLink href={href("/")} style={S.topBack}>{t.back} →</BackLink>
+          {/* Language picker (Gadi 2026-10-24): a partner can switch the whole
+              dashboard, e.g. Hebrew to English; the ?t= link is kept. */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <LangSwitcher variant="muted" />
+            <BackLink href={href("/")} style={S.topBack}>{t.back} →</BackLink>
+          </div>
         </div>
       </div>
 
