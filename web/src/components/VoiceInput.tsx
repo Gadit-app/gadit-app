@@ -28,6 +28,11 @@ export default function VoiceInput({
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<BlobPart[]>([]);
   const streamRef = useRef<MediaStream | null>(null);
+  // Hands-free stop (Gadi 2026-10-24): one tap starts, and the recording ends
+  // by itself once the speaker goes quiet, like the phone keyboards do.
+  const vadRef = useRef<{ ctx: AudioContext; timer: number } | null>(null);
+  const cancelRef = useRef(false);
+  const [level, setLevel] = useState(0);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -38,6 +43,7 @@ export default function VoiceInput({
         } catch {}
       }
       streamRef.current?.getTracks().forEach((t) => t.stop());
+      stopVad();
     };
   }, []);
 
@@ -64,7 +70,9 @@ export default function VoiceInput({
       };
       recorder.onstop = handleStop;
       recorder.start();
+      cancelRef.current = false;
       setState("recording");
+      startVad(stream);
     } catch (e) {
       console.error("getUserMedia failed:", e);
       setState("error");
@@ -72,7 +80,55 @@ export default function VoiceInput({
     }
   }
 
+  // Voice-activity watch: learn the room's noise for the first moments, then
+  // stop 1.3 s after speech ends. No speech within 7 s cancels quietly; 45 s is
+  // the hard limit.
+  function startVad(stream: MediaStream) {
+    try {
+      const AC = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!AC) return;
+      const ctx = new AC();
+      const src = ctx.createMediaStreamSource(stream);
+      const an = ctx.createAnalyser();
+      an.fftSize = 1024;
+      src.connect(an);
+      const buf = new Float32Array(an.fftSize);
+      const t0 = performance.now();
+      let floor = 0, floorN = 0, spoke = false, lastLoud = t0, peak = 0;
+      const timer = window.setInterval(() => {
+        an.getFloatTimeDomainData(buf);
+        let sum = 0;
+        for (let i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
+        const rms = Math.sqrt(sum / buf.length);
+        const now = performance.now();
+        if (now - t0 < 350) { floor += rms; floorN++; return; }
+        const base = floorN ? floor / floorN : 0.005;
+        // Capped, so speech that starts at once cannot raise the bar out of reach.
+        const loud = rms > Math.max(0.015, Math.min(base * 2.8, 0.045));
+        peak = Math.max(peak, rms);
+        setLevel(Math.min(1, rms * 12));
+        if (loud) { spoke = true; lastLoud = now; }
+        if (spoke && now - lastLoud > 1300) stopRecording();
+        // Nothing said in 7 s: a truly silent take is dropped; a quiet voice
+        // that never crossed the bar is still sent for transcription.
+        else if (!spoke && now - t0 > 7000) { cancelRef.current = peak < 0.008; stopRecording(); }
+        else if (now - t0 > 45000) stopRecording();
+      }, 100);
+      vadRef.current = { ctx, timer };
+    } catch { /* no auto-stop: the tap-to-stop still works */ }
+  }
+
+  function stopVad() {
+    const v = vadRef.current;
+    vadRef.current = null;
+    setLevel(0);
+    if (!v) return;
+    window.clearInterval(v.timer);
+    v.ctx.close().catch(() => {});
+  }
+
   function stopRecording() {
+    stopVad();
     const recorder = mediaRecorderRef.current;
     if (recorder && recorder.state !== "inactive") {
       recorder.stop();
@@ -80,9 +136,11 @@ export default function VoiceInput({
   }
 
   async function handleStop() {
-    setState("transcribing");
+    stopVad();
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
+    if (cancelRef.current) { cancelRef.current = false; setState("idle"); return; }
+    setState("transcribing");
     try {
       const blobType = mediaRecorderRef.current?.mimeType || "audio/webm";
       const blob = new Blob(chunksRef.current, { type: blobType });
@@ -131,7 +189,7 @@ export default function VoiceInput({
   // Visuals per state
   let bg = "transparent";
   let color = "rgb(100 116 139)";
-  let border = "none";
+  const border = "none";
   if (state === "recording") {
     bg = "rgb(239 68 68)"; // red, visually distinct, classic recording cue
     color = "white";
@@ -181,8 +239,8 @@ export default function VoiceInput({
       type="button"
       onClick={onClick}
       disabled={state === "transcribing"}
-      className={`${sizeClass} rounded-full flex items-center justify-center shrink-0 transition-all ${hoverClass} disabled:opacity-60 disabled:cursor-wait ${state === "recording" ? "animate-pulse" : ""}`}
-      style={{ background: bg, color, border }}
+      className={`${sizeClass} rounded-full flex items-center justify-center shrink-0 transition-colors ${hoverClass} disabled:opacity-60 disabled:cursor-wait`}
+      style={{ background: bg, color, border, ...(state === "recording" ? { boxShadow: `0 0 0 ${3 + Math.round(level * 9)}px rgb(239 68 68 / 0.22)`, transition: "box-shadow 90ms linear" } : {}) }}
       title={errorMsg || title || "Voice input"}
       aria-label="Voice input"
     >

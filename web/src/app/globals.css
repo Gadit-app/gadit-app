@@ -15394,3 +15394,41 @@ html[data-theme="dark"] .wordbook .wb-word-sentence-input::placeholder { color: 
 .gd-word-sheet-frame { flex: 1; width: 100%; border: 0; background: var(--paper, #F9FAFB); }
 @keyframes gdSheetUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .gd-word-sheet { animation: none; } }
+
+/* Under each meaning's examples: "More example sentences" and "Write a
+   sentence of your own..." as quiet text links; the sentence box opens in
+   place (Gadi 2026-10-24). */
+.wordbook .wb-mpractice { margin: -4px 0 14px; display: flex; flex-direction: column; gap: 10px; }
+.wordbook .wb-mpractice-links { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.wordbook .wb-mlink {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: 0; padding: 4px 0; cursor: pointer;
+  font: inherit; font-size: 14px; font-weight: 600; color: var(--teal-deep, #0B8A8A);
+  text-align: start;
+}
+.wordbook .wb-mlink:hover, .wordbook .wb-mlink.is-open { text-decoration: underline; text-underline-offset: 3px; }
+.wordbook .wb-mlink:disabled { opacity: .6; cursor: wait; }
+.wordbook .wb-mcompose {
+  border: 1px solid var(--hairline, #dfe7e5); border-radius: 14px;
+  padding: 12px; background: var(--paper, #f6faf9);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.wordbook .wb-mcompose-field { display: flex; align-items: flex-start; gap: 8px; }
+.wordbook .wb-mcompose-field textarea {
+  flex: 1; min-width: 0; resize: vertical; min-height: 64px;
+  border: 1px solid var(--hairline, #dfe7e5); border-radius: 10px;
+  padding: 10px 12px; font: inherit; font-size: 15px; line-height: 1.5;
+  background: var(--card, #fff); color: var(--ink, #1a1a1a);
+}
+.wordbook .wb-mcompose-field textarea:focus { outline: 2px solid var(--teal, #14b8a6); outline-offset: 0; }
+.wordbook .wb-mcompose-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.wordbook .wb-mcompose-check {
+  background: var(--teal-deep, #0B8A8A); color: #fff; border: 0; border-radius: 999px;
+  padding: 9px 18px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+.wordbook .wb-mcompose-check:disabled { opacity: .7; cursor: wait; }
+.wordbook .wb-mcompose-err { margin: 0; font-size: 13.5px; color: #b42318; }
+.wordbook .wb-mcompose-result { display: flex; flex-direction: column; gap: 8px; }
+.wordbook .wb-mcompose-suggest { border-inline-start: 3px solid var(--teal, #14b8a6); padding-inline-start: 10px; }
+.wordbook .wb-mcompose-suggest span { font-size: 12px; font-weight: 700; color: var(--ink-soft, #555); }
+.wordbook .wb-mcompose-suggest p { margin: 2px 0 0; font-size: 15px; color: var(--ink, #1a1a1a); }

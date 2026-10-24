@@ -35,6 +35,7 @@
  */
 
 import { WaitText, WaitDots } from "@/components/WaitText";
+import { MeaningPractice } from "./MeaningPractice";
 import { gadCopy } from "@/lib/gadit-button-copy";
 import { nativeShareFallback } from "@/lib/native-app";
 import { useState, useEffect, useMemo, type ReactNode } from "react";
@@ -755,7 +756,9 @@ const TAB_LABELS: Record<string, Record<TabId, string>> = {
 // renders one row per tier so the Clear-tier features (teal) stay
 // together and the Deep-tier features (purple) stay together. Read
 // CLEAR_TAB_IDS + DEEP_TAB_IDS instead of a single flat list.
-const CLEAR_TAB_IDS: TabId[] = ["image", "kids", "compose", "save", "pin"];
+// Save and offline are automatic now and compose is the text link under the
+// examples (MeaningPractice), so the row keeps image + kids (Gadi 2026-10-24).
+const CLEAR_TAB_IDS: TabId[] = ["image", "kids"];
 const DEEP_TAB_IDS:  TabId[] = ["quiz", "compare"];
 const TAB_IDS: TabId[] = [...CLEAR_TAB_IDS, ...DEEP_TAB_IDS];
 
@@ -832,6 +835,10 @@ function MeaningEntry({
   // Lightbox state — opens when the user taps the generated image
   // inside this meaning's image tab.
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  // "More example sentences" (MeaningPractice) append here, per mode.
+  const [extraExamples, setExtraExamples] = useState<{ kids: boolean; list: string[] }>({ kids: false, list: [] });
+  const shownExtra = extraExamples.kids === showKids ? extraExamples.list : [];
+  const allExamples = [...(effectiveExamples ?? []), ...shownExtra];
 
   // Local renderer so the two tier-grouped tab rows (Clear + Deep)
   // can share the same chip JSX without duplicating it.
@@ -1008,9 +1015,9 @@ function MeaningEntry({
         </div>
       )}
 
-      {(effectiveExamples ?? []).length > 0 && (
+      {allExamples.length > 0 && (
         <div className="wb-mexamples">
-          {(effectiveExamples ?? []).map((ex, j) => (
+          {allExamples.map((ex, j) => (
             <div className="wb-mexample" key={j}>
               {/* The example row is a flex container with a 10px gap so
                   the leading bullet pseudo-element sits cleanly against
@@ -1022,6 +1029,18 @@ function MeaningEntry({
             </div>
           ))}
         </div>
+      )}
+
+      {!streaming && !classroomInSession && (
+        <MeaningPractice
+          word={word}
+          meaning={effectiveMeaning}
+          examples={allExamples}
+          paid={plan === "clear" || plan === "deep"}
+          kids={showKids}
+          onMoreExamples={(more) => setExtraExamples((cur) => ({ kids: showKids, list: [...(cur.kids === showKids ? cur.list : []), ...more] }))}
+          onUpgrade={() => onUpgrade?.("compose", "clear")}
+        />
       )}
 
       {/* Opposite moved OUT of the meaning card (Gadi 2026-09-14) — it was
@@ -1044,7 +1063,7 @@ function MeaningEntry({
           inline-flex; on mobile they stack into two distinct rows so
           a parent can read the tier at a glance from the colour of
           the row, not just the chip. */}
-      <div className="wb-mtabs wb-mtabs-tier">
+      {!showKids && <div className="wb-mtabs wb-mtabs-tier">
         {CLEAR_TAB_IDS
           // Kids Mode hides BOTH the "kids' explanation" tab (already the
           // main definition) AND the manual "image" tab: every meaning
@@ -1054,7 +1073,7 @@ function MeaningEntry({
           .filter((id) => !(id === "save" && !onSave))
           .filter((id) => !(id === "pin" && !onPin))
           .map((id) => renderTab(id))}
-      </div>
+      </div>}
       <div className="wb-mtabs wb-mtabs-tier">
         {DEEP_TAB_IDS.map((id) => renderTab(id))}
       </div>

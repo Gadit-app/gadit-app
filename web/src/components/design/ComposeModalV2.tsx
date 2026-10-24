@@ -67,7 +67,7 @@ function Spinner() {
 
 // ─── FeedbackIndicator ──────────────────────────────────────────
 // One indicator row tinted by status. Used inside the result card.
-function FeedbackIndicator({
+export function FeedbackIndicator({
   status,
   message,
 }: {

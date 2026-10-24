@@ -56,6 +56,7 @@ const FEATURE_LABELS: Record<string, { he: string; en: string; note?: { he: stri
   tts_he_fallback: { he: "הקראה בעברית, גיבוי", en: "Hebrew read-aloud, fallback", note: { he: "כש-Gemini לא זמין", en: "when Gemini is unavailable" } },
   transcribe: { he: "הקלדה בקול", en: "Voice input", note: { he: "תמלול", en: "speech to text" } },
   check_sentence: { he: "בדיקת משפט", en: "Sentence check" },
+  more_examples: { he: "עוד משפטים לדוגמה", en: "More examples" },
   compare_words: { he: "השוואת מילים", en: "Compare words" },
   ocr: { he: "סריקת טקסט", en: "Text scan", note: { he: "צילום לטקסט", en: "photo to text" } },
   quiz: { he: "חידון אישי", en: "Personal quiz" },
