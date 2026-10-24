@@ -1661,7 +1661,6 @@ function RetentionModal({
           ) : step === "trial" ? (
             <>
               <button type="button" style={danger} disabled={busy} onClick={() => setStep("reasons")}>{c.cancelAnywayBtn}</button>
-              <button type="button" style={ghost} disabled={busy} onClick={() => onRenewalOff({ reason: AUTO_CHARGE_REASON, comment: "" })}>{c.renewalBtn}</button>
               <button type="button" style={primary} disabled={busy} onClick={onClose}>{c.keepTrialBtn}</button>
             </>
           ) : step === "support" ? (
