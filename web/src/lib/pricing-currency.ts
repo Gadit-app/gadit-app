@@ -114,9 +114,9 @@ export const PRICE_DISPLAY: Record<string, PriceBlock> = {
   aed: local("aed", "AED ", pre("AED "), 14.99, 149, 21.99, 219),      // FX (USD peg)
   sar: local("sar", "SAR ", pre("SAR "), 14.99, 149, 21.99, 219),      // FX (USD peg)
   mxn: local("mxn", "MX$", pre("MX$"), 49, 489, 79, 789),              // PPP
-  try: local("try", "₺", pre("₺"), 89, 890, 129, 1290),                // PPP, review every quarter
+  try: local("try", "₺", pre("₺"), 119, 1190, 129, 1290),              // PPP, review every quarter; Individual raised 24.10 (heavy users lost money at ₺89)
   ron: local("ron", "lei", post(" lei"), 14.99, 149.99, 22.99, 229.99), // mild PPP
-  uah: local("uah", "₴", pre("₴"), 89, 890, 129, 1290),                // PPP
+  uah: local("uah", "₴", pre("₴"), 119, 1190, 129, 1290),              // PPP; Individual raised 24.10
 };
 
 /** Number in a currency: whole numbers without decimals, thousands with a comma. */
@@ -145,8 +145,10 @@ function local(currency: string, symbol: string, f: (n: number) => string, im: n
  *  Every other price (Schools, legacy Clear/Deep) is USD (+ ILS) only, so a
  *  local currency must never be pinned on them: Stripe would answer 400. */
 export const LOCALIZED_PRICE_IDS = new Set<string>([
-  "price_1UNUEtRprLKxF6OiwgeDZzy6", // Individual monthly
-  "price_1UNUEtRprLKxF6OiBx1F54bW", // Individual yearly
+  "price_1UU4EQRprLKxF6OiJPaeN6l9", // Individual monthly (current)
+  "price_1UU4ESRprLKxF6OiLrUd8MP0", // Individual yearly (current)
+  "price_1UNUEtRprLKxF6OiwgeDZzy6", // Individual monthly (first pair)
+  "price_1UNUEtRprLKxF6OiBx1F54bW", // Individual yearly (first pair)
   "price_1TtwJfRprLKxF6OiXHbu2cae", // Family monthly
   "price_1TtwJgRprLKxF6OiIU47RCSC", // Family yearly
   ...[process.env.STRIPE_PRICE_FAMILY_MONTHLY, process.env.STRIPE_PRICE_FAMILY_YEARLY].filter((x): x is string => !!x),

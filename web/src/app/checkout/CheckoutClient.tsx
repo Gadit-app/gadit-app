@@ -1,7 +1,7 @@
 "use client";
 
 import { WaitText } from "@/components/WaitText";
-import { INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY, INDIVIDUAL_DISPLAY } from "@/lib/individual-prices";
+import { INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY, INDIVIDUAL_MONTHLY_V1, INDIVIDUAL_YEARLY_V1, INDIVIDUAL_DISPLAY } from "@/lib/individual-prices";
 import { miscUi } from "@/lib/misc-ui-i18n";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -91,6 +91,8 @@ function tierForPrice(priceId: string): TierInfo | null {
   const map: Array<[string | undefined, TierInfo]> = [
     [INDIVIDUAL_MONTHLY, { name: "Individual", cycle: "monthly", amount: INDIVIDUAL_DISPLAY.usdMonthly, amountIls: INDIVIDUAL_DISPLAY.ilsMonthly, kind: "deep" }],
     [INDIVIDUAL_YEARLY, { name: "Individual", cycle: "yearly", amount: INDIVIDUAL_DISPLAY.usdYearly, amountIls: INDIVIDUAL_DISPLAY.ilsYearly, kind: "deep" }],
+    [INDIVIDUAL_MONTHLY_V1, { name: "Individual", cycle: "monthly", amount: INDIVIDUAL_DISPLAY.usdMonthly, amountIls: INDIVIDUAL_DISPLAY.ilsMonthly, kind: "deep" }],
+    [INDIVIDUAL_YEARLY_V1, { name: "Individual", cycle: "yearly", amount: INDIVIDUAL_DISPLAY.usdYearly, amountIls: INDIVIDUAL_DISPLAY.ilsYearly, kind: "deep" }],
     [process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_MONTHLY, { name: "Clear", cycle: "monthly", amount: "$2.99", amountIls: "₪9.90", kind: "clear" }],
     [process.env.NEXT_PUBLIC_STRIPE_PRICE_CLEAR_YEARLY, { name: "Clear", cycle: "yearly", amount: "$29.99", amountIls: "₪99", kind: "clear" }],
     [process.env.NEXT_PUBLIC_STRIPE_PRICE_DEEP_MONTHLY, { name: "Deep", cycle: "monthly", amount: "$4.99", amountIls: "₪16.90", kind: "deep" }],

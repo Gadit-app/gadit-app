@@ -1,6 +1,6 @@
 import { renderEmailHtmlV2, mdLiteToHtml, applyName, type EmailContent } from "./render";
 import { PRICE_DISPLAY } from "@/lib/pricing-currency";
-import { isIndividualPriceId, INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY } from "@/lib/individual-prices";
+import { isIndividualPriceId, INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY_IDS } from "@/lib/individual-prices";
 import { planCopy } from "@/lib/plan-copy";
 import { EMAIL_I18N } from "./i18n";
 
@@ -228,7 +228,7 @@ export function recoveryPlanName(plan: RecoveryPlan): string {
 export function recoveryPriceLine(priceId: string, currency: string, lang: string): string | null {
   const plan = recoveryPlanOf(priceId);
   if (plan === "other") return null;
-  const yearly = priceId === process.env.STRIPE_PRICE_FAMILY_YEARLY || priceId === INDIVIDUAL_YEARLY;
+  const yearly = priceId === process.env.STRIPE_PRICE_FAMILY_YEARLY || INDIVIDUAL_YEARLY_IDS.includes(priceId);
   const ils = currency.toLowerCase() === "ils";
   // A local currency block (R in South Africa, 2026-10-24).
   const local = !ils && currency.toLowerCase() !== "usd" ? PRICE_DISPLAY[currency.toLowerCase()] : undefined;

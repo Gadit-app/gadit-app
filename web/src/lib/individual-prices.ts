@@ -9,9 +9,16 @@
  * Existing Clear and Deep subscribers keep their prices (grandfathered).
  * Stripe price IDs are public, so they live here like the Schools tiers.
  */
-export const INDIVIDUAL_MONTHLY = "price_1UNUEtRprLKxF6OiwgeDZzy6";
-export const INDIVIDUAL_YEARLY = "price_1UNUEtRprLKxF6OiBx1F54bW";
-export const INDIVIDUAL_PRICE_IDS = [INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY];
+// Current prices (2026-10-24): same amounts in every currency as the first
+// pair, except Turkey and Ukraine at ₺119/₺1,190 and ₴119/₴1,190 (Stripe cannot
+// change an existing currency amount, so these are new prices). The first pair
+// stays recognized for anyone already on it.
+export const INDIVIDUAL_MONTHLY = "price_1UU4EQRprLKxF6OiJPaeN6l9";
+export const INDIVIDUAL_YEARLY = "price_1UU4ESRprLKxF6OiLrUd8MP0";
+export const INDIVIDUAL_MONTHLY_V1 = "price_1UNUEtRprLKxF6OiwgeDZzy6";
+export const INDIVIDUAL_YEARLY_V1 = "price_1UNUEtRprLKxF6OiBx1F54bW";
+export const INDIVIDUAL_PRICE_IDS = [INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY, INDIVIDUAL_MONTHLY_V1, INDIVIDUAL_YEARLY_V1];
+export const INDIVIDUAL_YEARLY_IDS = [INDIVIDUAL_YEARLY, INDIVIDUAL_YEARLY_V1];
 
 export const INDIVIDUAL_DISPLAY = {
   usdMonthly: "$3.99",
