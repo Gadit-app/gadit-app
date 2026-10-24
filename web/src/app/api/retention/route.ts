@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     const userInfo = await verifyUserAndGetPlan(idToken);
     if (!userInfo) return NextResponse.json({ error: "login_required" }, { status: 401 });
 
-    const body = (await req.json().catch(() => ({}))) as { action?: string; reason?: unknown; comment?: unknown };
+    const body = (await req.json().catch(() => ({}))) as { action?: string; reason?: unknown; comment?: unknown; renewalOff?: unknown };
     const { action } = body;
     if (!action || !["check", "extend", "cancel", "pause", "resume"].includes(action)) {
       return NextResponse.json({ error: "bad_action" }, { status: 400 });
@@ -188,7 +188,12 @@ export async function POST(req: NextRequest) {
       feedback: STRIPE_FEEDBACK[reason] ?? (reason ? "other" : undefined),
       comment: [reason && `Reason: ${reason}`, comment && `Note: ${comment}`].filter(Boolean).join(" | ") || undefined,
     };
-    const endsNow = trialing;
+    // "Turn off renewal only" (Gadi 2026-10-24, after a parent cancelled 3
+    // minutes in because she feared the automatic charge): a trial keeps
+    // running to its end and is simply never charged. Any other trial cancel
+    // still ends now (the 2026-10-21 rule).
+    const renewalOff = trialing && body.renewalOff === true;
+    const endsNow = trialing && !renewalOff;
     if (endsNow) {
       await stripe.subscriptions.cancel(sub.id, { cancellation_details });
     } else {
@@ -211,11 +216,13 @@ export async function POST(req: NextRequest) {
       priceId: sub.items.data[0]?.price?.id ?? null,
       status: sub.status,
       endedNow: endsNow,
+      ...(renewalOff ? { type: "renewal_off" } : {}),
       reason: reason || null,
       comment: comment || null,
       at: FieldValue.serverTimestamp(),
     });
-    return NextResponse.json({ ok: true, canceled: true, endedNow: endsNow });
+    if (renewalOff) await userRef.set({ cancelAtPeriodEnd: true }, { merge: true });
+    return NextResponse.json({ ok: true, canceled: true, endedNow: endsNow, renewalOff });
   } catch (err) {
     console.error("[retention] error:", err);
     return NextResponse.json({ error: "internal_error" }, { status: 500 });

@@ -23,6 +23,8 @@ const H = 3600_000;
 export function trialReminderDue(d: FirebaseFirestore.DocumentData, now: number): boolean {
   if (d.subscriptionStatus !== "trialing") return false;
   if (d.schoolId) return false; // schools buy by order form and tax invoice
+  // Renewal turned off: nothing will be charged, so no "you'll be charged" mail.
+  if (d.cancelAtPeriodEnd === true) return false;
   const end = typeof d.trialEnd === "number" ? d.trialEnd * 1000 : NaN;
   if (!Number.isFinite(end)) return false;
   if (d.trialReminderFor === d.trialEnd) return false;

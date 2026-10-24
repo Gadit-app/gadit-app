@@ -459,7 +459,7 @@ export function AccountPage() {
   // the one-time save offer (14-day trial extension) is eligible for this user.
   const [cancelFlow, setCancelFlow] = useState<null | { offerEligible: boolean; trialing: boolean; pauseEligible: boolean }>(null);
   const [cancelBusy, setCancelBusy] = useState(false);
-  const [cancelResult, setCancelResult] = useState<null | "extended" | "canceled" | "paused">(null);
+  const [cancelResult, setCancelResult] = useState<null | "extended" | "canceled" | "paused" | "renewalOff">(null);
   const [resumed, setResumed] = useState(false);
   // How many word definitions the user has cached for offline use.
   // Only meaningful for Clear/Deep — Basic never writes to the cache.
@@ -622,7 +622,7 @@ export function AccountPage() {
     }
   }
 
-  async function handleRetentionAction(action: "extend" | "cancel" | "pause" | "resume", exit?: { reason: string; comment: string }) {
+  async function handleRetentionAction(action: "extend" | "cancel" | "pause" | "resume" | "renewalOff", exit?: { reason: string; comment: string }) {
     if (!user) return;
     setCancelBusy(true);
     try {
@@ -630,11 +630,12 @@ export function AccountPage() {
       const res = await fetch("/api/retention", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
-        body: JSON.stringify({ action, ...(exit && { reason: exit.reason || null, comment: exit.comment || null }) }),
+        // "renewalOff" is a trial cancel that keeps the trial running (2026-10-24).
+        body: JSON.stringify({ action: action === "renewalOff" ? "cancel" : action, ...(action === "renewalOff" && { renewalOff: true }), ...(exit && { reason: exit.reason || null, comment: exit.comment || null }) }),
       });
       if (res.ok) {
         if (action === "resume") setResumed(true);
-        else setCancelResult(action === "extend" ? "extended" : action === "pause" ? "paused" : "canceled");
+        else setCancelResult(action === "extend" ? "extended" : action === "pause" ? "paused" : action === "renewalOff" ? "renewalOff" : "canceled");
         // Refresh the account data so the plan card reflects the new state.
         try {
           const d = await fetch("/api/account", { headers: { Authorization: `Bearer ${idToken}` } });
@@ -711,6 +712,7 @@ export function AccountPage() {
           onExtend={() => handleRetentionAction("extend")}
           onConfirmCancel={(exit) => handleRetentionAction("cancel", exit)}
           onPause={(exit) => handleRetentionAction("pause", exit)}
+          onRenewalOff={(exit) => handleRetentionAction("renewalOff", exit)}
           onClose={() => { setCancelFlow(null); setCancelResult(null); }}
         />
       )}
@@ -1493,8 +1495,9 @@ function RETENTION_COPY(lang: Lang): RetentionCopy {
 // ("we"), per the plural rule.
 type ReasonKey = "reasonAutoCharge" | "reasonNotForKids" | "reasonTechnical";
 const TECHNICAL_REASON = "Something didn't work (a technical problem)";
+const AUTO_CHARGE_REASON = "I didn't want an automatic charge";
 const CANCEL_REASON_ORDER: Array<{ en: string; key?: ReasonKey }> = [
-  { en: "I didn't want an automatic charge", key: "reasonAutoCharge" },
+  { en: AUTO_CHARGE_REASON, key: "reasonAutoCharge" },
   { en: "I didn't use it enough" },
   { en: "Too expensive for me" },
   { en: "It isn't right for my children", key: "reasonNotForKids" },
@@ -1525,7 +1528,7 @@ function cancelReasonLabel(lang: Lang, r: { en: string; key?: ReasonKey }, c: Re
  * A trial cancellation ends the trial now; a paid one runs to period end.
  */
 function RetentionModal({
-  lang, dir, offerEligible, trialing, pauseEligible, busy, result, onExtend, onConfirmCancel, onPause, onClose,
+  lang, dir, offerEligible, trialing, pauseEligible, busy, result, onExtend, onConfirmCancel, onPause, onRenewalOff, onClose,
 }: {
   lang: Lang;
   dir: "rtl" | "ltr";
@@ -1533,27 +1536,33 @@ function RetentionModal({
   trialing: boolean;
   pauseEligible: boolean;
   busy: boolean;
-  result: "extended" | "canceled" | "paused" | null;
+  result: "extended" | "canceled" | "paused" | "renewalOff" | null;
   onExtend: () => void;
   onConfirmCancel: (exit: { reason: string; comment: string }) => void;
   onPause: (exit: { reason: string; comment: string }) => void;
+  onRenewalOff: (exit: { reason: string; comment: string }) => void;
   onClose: () => void;
 }) {
   const c = RETENTION_COPY(lang);
   const done = result !== null;
-  const [step, setStep] = useState<"trial" | "reasons" | "support" | "pause">(trialing ? "trial" : "reasons");
+  const [step, setStep] = useState<"trial" | "reasons" | "support" | "pause" | "renewal">(trialing ? "trial" : "reasons");
   const [reason, setReason] = useState("");
   const [comment, setComment] = useState("");
   const exit = () => ({ reason, comment: comment.trim() });
   const canPause = !trialing && pauseEligible;
   // Where "cancel anyway" leads from the support screen, and the reasons step.
   const afterSupport = () => (canPause ? setStep("pause") : onConfirmCancel(exit()));
-  const afterReasons = () => (reason === TECHNICAL_REASON ? setStep("support") : afterSupport());
-  const reasonsLeadOn = reason === TECHNICAL_REASON || canPause;
+  // A trial cancelled for fear of the automatic charge gets "turn off renewal,
+  // the trial keeps running" instead (Gadi 2026-10-24).
+  const autoChargeReason = trialing && reason === AUTO_CHARGE_REASON;
+  const afterReasons = () => (autoChargeReason ? setStep("renewal") : reason === TECHNICAL_REASON ? setStep("support") : afterSupport());
+  const reasonsLeadOn = reason === TECHNICAL_REASON || canPause || autoChargeReason;
 
   const title = result === "extended" ? c.extendedTitle
     : result === "canceled" ? c.canceledTitle
     : result === "paused" ? c.pausedTitle
+    : result === "renewalOff" ? c.renewalDoneTitle
+    : step === "renewal" ? c.renewalTitle
     : step === "trial" ? c.trialTitle
     : step === "support" ? c.supportTitle
     : step === "pause" ? c.pauseTitle
@@ -1561,6 +1570,8 @@ function RetentionModal({
   const body = result === "extended" ? c.extendedBody
     : result === "canceled" ? (trialing ? c.trialCanceledBody : c.canceledBody)
     : result === "paused" ? c.pausedBody
+    : result === "renewalOff" ? c.renewalDoneBody
+    : step === "renewal" ? c.renewalBody
     : step === "trial" ? c.trialBody
     : step === "support" ? c.supportBody
     : step === "pause" ? c.pauseBody
@@ -1642,9 +1653,15 @@ function RetentionModal({
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>
           {done ? (
             <button type="button" style={primary} onClick={onClose}>{c.closeBtn}</button>
+          ) : step === "renewal" ? (
+            <>
+              <button type="button" style={danger} disabled={busy} onClick={() => onConfirmCancel(exit())}>{c.cancelAnywayBtn}</button>
+              <button type="button" style={primary} disabled={busy} onClick={() => onRenewalOff(exit())}>{c.renewalBtn}</button>
+            </>
           ) : step === "trial" ? (
             <>
               <button type="button" style={danger} disabled={busy} onClick={() => setStep("reasons")}>{c.cancelAnywayBtn}</button>
+              <button type="button" style={ghost} disabled={busy} onClick={() => onRenewalOff({ reason: AUTO_CHARGE_REASON, comment: "" })}>{c.renewalBtn}</button>
               <button type="button" style={primary} disabled={busy} onClick={onClose}>{c.keepTrialBtn}</button>
             </>
           ) : step === "support" ? (
