@@ -115,23 +115,29 @@ export function MeaningPractice({
 
       {open && paid && (
         <div className="wb-mcompose">
+          <button type="button" className="wb-mcompose-close" onClick={() => setOpen(false)} aria-label={v2(lang, "loginCloseAria")}>
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
+          </button>
+          {/* The microphone sits INSIDE the field, at its end (left in RTL). */}
           <div className="wb-mcompose-field">
             <textarea
               ref={taRef}
               value={draft}
               dir={dir}
               rows={2}
-              placeholder={v2(lang, "composePlaceholder")}
+              placeholder={copy.placeholder}
               onChange={(e) => { setDraft(e.target.value); setErr(""); }}
               disabled={busy}
             />
-            <VoiceInput
-              uiLang={lang}
-              enabled
-              size="sm"
-              getIdToken={async () => (user ? user.getIdToken() : null)}
-              onResult={(t) => { setDraft((d) => (d.trim() ? `${d.trim()} ${t}` : t)); setErr(""); setResult(null); }}
-            />
+            <span className="wb-mcompose-mic">
+              <VoiceInput
+                uiLang={lang}
+                enabled
+                size="sm"
+                getIdToken={async () => (user ? user.getIdToken() : null)}
+                onResult={(t) => { setDraft((d) => (d.trim() ? `${d.trim()} ${t}` : t)); setErr(""); setResult(null); }}
+              />
+            </span>
           </div>
           <div className="wb-mcompose-actions">
             <button type="button" className="wb-mcompose-check" onClick={check} disabled={busy}>

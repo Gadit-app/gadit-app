@@ -36,6 +36,7 @@
 
 import { WaitText, WaitDots } from "@/components/WaitText";
 import { MeaningPractice } from "./MeaningPractice";
+import { meaningPracticeCopy } from "@/lib/meaning-practice-i18n";
 import { gadCopy } from "@/lib/gadit-button-copy";
 import { nativeShareFallback } from "@/lib/native-app";
 import { useState, useEffect, useMemo, type ReactNode } from "react";
@@ -861,7 +862,7 @@ function MeaningEntry({
         key={id}
         type="button"
         className={classes}
-        data-tier={tierForTab(id)}
+        data-tier="clear"
         onClick={() => handleTabClick(id)}
         aria-pressed={isOpen || showSavedState || showPinnedState}
         title={label}
@@ -1057,25 +1058,12 @@ function MeaningEntry({
           since the kids-friendly content IS now the main definition
           shown above. Showing the tab would be redundant and confusing
           ("explain like a kid" → already done). */}
-      {/* Tabs split by tier (Gadi 2026-06-20), Clear features render
-          on row 1 (teal), Deep features on row 2 (purple). On a wide
-          desktop the two rows sit on one line because each row is
-          inline-flex; on mobile they stack into two distinct rows so
-          a parent can read the tier at a glance from the colour of
-          the row, not just the chip. */}
-      {!showKids && <div className="wb-mtabs wb-mtabs-tier">
-        {CLEAR_TAB_IDS
-          // Kids Mode hides BOTH the "kids' explanation" tab (already the
-          // main definition) AND the manual "image" tab: every meaning
-          // now auto-shows its own picture, so the manual action is
-          // redundant and used to produce a second, duplicate image.
-          .filter((id) => !(showKids && (id === "kids" || id === "image")))
-          .filter((id) => !(id === "save" && !onSave))
-          .filter((id) => !(id === "pin" && !onPin))
-          .map((id) => renderTab(id))}
-      </div>}
+      {/* One row, one colour (Gadi 2026-10-24): the Clear/Deep tiers are
+          gone, so image, kids, quiz and games sit together in teal. */}
       <div className="wb-mtabs wb-mtabs-tier">
-        {DEEP_TAB_IDS.map((id) => renderTab(id))}
+        {[...CLEAR_TAB_IDS, ...DEEP_TAB_IDS]
+          .filter((id) => !(showKids && (id === "kids" || id === "image")))
+          .map((id) => renderTab(id))}
       </div>
 
       {/* Inline content panel */}
@@ -1818,6 +1806,16 @@ export function ResultView({
         niqqudOn={niqqudOn}
         onToggleNiqqud={onToggleNiqqud}
       />
+
+      {/* Saving is automatic now (no buttons), so say it once it happened
+          (Gadi 2026-10-24): notebook for everyone signed in, offline too
+          for paying plans (their words are kept on the device). */}
+      {isSaved && !streaming && (
+        <p className="wb-saved-note" dir={dir}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+          <span>{plan === "clear" || plan === "deep" ? meaningPracticeCopy(lang).saved : meaningPracticeCopy(lang).savedFree}</span>
+        </p>
+      )}
 
       {/* Spelling correction — when the model auto-corrected a typo, show the
           learner what they typed vs the correct spelling (the headword above).
