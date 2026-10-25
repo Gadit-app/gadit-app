@@ -940,7 +940,7 @@ function PlanSection({
   const { lang } = useLang();
   const href = useHref();
   const plan = data.plan;
-  const { isIndividual } = useAuth();
+  const { isIndividual, familyId, schoolId } = useAuth();
 
   // Help-link text for the "Need help with billing?" deep-link to
   // /contact#billing. We add this for paying users because that's
@@ -957,10 +957,12 @@ function PlanSection({
   // state confused first-time signed-in users into thinking something
   // was wrong; now we always show the plan name with a context-appropriate
   // CTA below.
-  const tierName = isIndividual ? "Individual" : plan === "deep" ? "Deep" : plan === "clear" ? "Clear" : "Basic";
+  // Family and Schools both store plan="deep": show the real plan, the same
+  // rule as the header chip (WbUserMenu tierStyle). Deep no longer exists.
+  const tierName = familyId ? "Family" : schoolId ? "Schools" : isIndividual ? "Individual" : plan === "deep" ? "Deep" : plan === "clear" ? "Clear" : "Basic";
 
-  const tColor = tierColor(plan);
-  const tBg = tierBg(plan);
+  const tColor = familyId ? "#1D4ED8" : schoolId ? "#92400E" : tierColor(plan);
+  const tBg = familyId ? "#DBEAFE" : schoolId ? "#FEF3C7" : tierBg(plan);
 
   return (
     <section>
@@ -1020,7 +1022,9 @@ function PlanSection({
               fontFamily: fontBody(lang),
             }}
           >
-            {isIndividual ? planCopy(lang, "prIndSub")
+            {familyId ? planCopy(lang, "prFamSub")
+              : schoolId ? ""
+              : isIndividual ? planCopy(lang, "prIndSub")
               : plan === "deep"  ? v2(lang, "tierDeepPitch")
               : plan === "clear" ? v2(lang, "tierClearPitch")
               :                    v2(lang, "tierBasicPitch")}
@@ -1274,7 +1278,8 @@ function Meter({
     : isUnlimited
     ? Math.min(100, (used / 500) * 100)
     : Math.min(100, (used / limit!) * 100);
-  const accent = tierColor(plan);
+  const { familyId, schoolId } = useAuth();
+  const accent = familyId ? "#1D4ED8" : schoolId ? "#92400E" : tierColor(plan);
 
   return (
     <div style={{ marginBottom: 20 }}>
