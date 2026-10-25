@@ -712,10 +712,12 @@ export function LoginModalV2() {
             child can pair with the 6-digit code where the session will persist
             (see JOIN_FAMILY_CTA note above). */}
         <div className="wb-login-toggle" style={{ marginTop: 4 }}>
+          {/* A real button, not a grey footnote (Gadi 2026-10-25: a parent did
+              not see it and thought there was no way to enter a code). */}
           <a
             href={href("/join")}
             onClick={() => setShowLoginModal(false)}
-            style={{ fontSize: 13, color: "var(--ink-muted, #6B7280)" }}
+            style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, fontSize: 14.5, fontWeight: 700, color: "var(--teal-deep, #0B8A8A)", border: "1.5px solid var(--teal, #0EA5A5)", borderRadius: 999, padding: "9px 18px", textDecoration: "none", background: "transparent" }}
           >
             {JOIN_FAMILY_CTA[lang] ?? JOIN_FAMILY_CTA.en}
           </a>

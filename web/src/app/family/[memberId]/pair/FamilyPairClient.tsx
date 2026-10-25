@@ -1047,6 +1047,8 @@ export function FamilyPairClient() {
                 <div className="wb-family-qr-frame" dir="ltr">
                   <QRCodeSVG value={qrUrl} size={200} bgColor="#FFFFFF" fgColor="#0F172A" level="M" />
                 </div>
+                {/* iPhone home-screen icons do not share Safari's sign-in (Shani, 2026-10-25). */}
+                <p className="wb-pair-option-hint" style={{ marginTop: 10 }}>{relinkCopy(lang).iphoneNote}</p>
               </div>
 
               <div className="wb-pair-or"><span>{c.orDivider}</span></div>

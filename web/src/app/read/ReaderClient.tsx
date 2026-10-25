@@ -1,5 +1,6 @@
 "use client";
 
+import { AppIntentPing } from "@/components/AppIntentPing";
 import { WaitText } from "@/components/WaitText";
 import { GaditIcon } from "@/components/design/GaditIcon";
 import { ToolPage } from "@/components/design/ToolPage";
@@ -925,6 +926,7 @@ function Gate({ title, btn, onClick, href, buy, lang }: { title: string; btn: st
     <div style={{ background: "var(--card,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 16, padding: 26 }}>
       <p className={buy ? "gd-buy" : undefined} style={{ margin: "0 0 16px", fontSize: 16, color: "var(--ink,#20272E)" }}>{title}</p>
       {buy && <p className="gd-play-only" style={{ margin: 0, fontSize: 16, color: "var(--ink,#20272E)" }}>{playNotActive(lang ?? "en")}</p>}
+      {buy && <AppIntentPing feature="reader" />}
       {href ? <Link href={href} className={buy ? "gd-buy" : undefined}>{inner}</Link> : <span onClick={onClick}>{inner}</span>}
     </div>
   );

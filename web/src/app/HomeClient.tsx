@@ -8,6 +8,9 @@
  * No marketing fluff, no animated chrome, no V2 navy.
  */
 
+import { isIosApp } from "@/lib/native-app";
+import { isPlayModeClient } from "@/lib/play-copy";
+import { relinkCopy } from "@/lib/family-relink-i18n";
 import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import { planCopy } from "@/lib/plan-copy";
 import { useEffect, useRef, useState } from "react";
@@ -227,7 +230,17 @@ function SearchIcon({ size = 16 }: { size?: number }) {
 
 export function HomePage() {
   const { lang, dir, setLang } = useLang();
-  const { user, plan, schoolId, promptLogin, familyRole, familyId } = useAuth();
+  const { user, loading: authLoading, plan, schoolId, promptLogin, familyRole, familyId } = useAuth();
+  // Opened from an app or a home-screen icon (Play, iPhone app, saved web app):
+  // a child's device usually lands here signed out, so the "enter a code from
+  // a parent" entry is shown big under the search (Gadi 2026-10-25, Shani).
+  const [appMode, setAppMode] = useState(false);
+  useEffect(() => {
+    try {
+      const standalone = window.matchMedia?.("(display-mode: standalone)").matches || (navigator as unknown as { standalone?: boolean }).standalone === true;
+      setAppMode(Boolean(standalone || isPlayModeClient() || isIosApp()));
+    } catch { /* keep false */ }
+  }, []);
   const router = useRouter();
   const href = useHref();
   const [query, setQuery] = useState("");
@@ -424,6 +437,13 @@ export function HomePage() {
               />
             </div>
           </form>
+
+          {!authLoading && !user && appMode && (
+            <a href={href("/join")} className="wb-home-join" dir={dir}>
+              <span className="wb-home-join-title">{relinkCopy(lang).joinTitle}</span>
+              <span className="wb-home-join-btn">{relinkCopy(lang).joinBtn}</span>
+            </a>
+          )}
 
           {/* Kid's own progress, right under the search — their streak,
               weekly goal and explorer rank the moment they open the app. */}

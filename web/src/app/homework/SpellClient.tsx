@@ -10,6 +10,7 @@
  * dictations). Finger-trace mode is a planned phase 2.
  */
 
+import { AppIntentPing } from "@/components/AppIntentPing";
 import { WaitText, WaitDots } from "@/components/WaitText";
 import { GaditIcon } from "@/components/design/GaditIcon";
 import { ReportQuestionButton } from "@/components/play/ReportQuestionButton";
@@ -1258,6 +1259,7 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
             <p className="gd-play-only" style={{ fontSize: 15, color: "var(--ink-muted,#6B7280)", maxWidth: "42ch", margin: "0 auto 20px" }}>
               {playNotActive(lang)}
             </p>
+            <AppIntentPing feature="dictation" />
             <Link className="gd-buy" href={href(adult ? "/pricing" : "/families")} style={{ display: "inline-block", padding: "12px 24px", borderRadius: 12, background: TEAL, color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none" }}>
               {misc("seePlans", lang)}
             </Link>

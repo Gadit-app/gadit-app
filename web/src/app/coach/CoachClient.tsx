@@ -1,5 +1,6 @@
 "use client";
 
+import { AppIntentPing } from "@/components/AppIntentPing";
 import { WaitText, WaitDots } from "@/components/WaitText";
 import { payUrl } from "@/lib/pay-url";
 import { useCallback, useEffect, useState } from "react";
@@ -657,6 +658,7 @@ export function CoachClient() {
             {/* Inside the Play / iOS app: no plan names (store rules). */}
             <div className="gd-buy" style={{ fontSize: 16, fontWeight: 700, color: "var(--ink)", lineHeight: 1.6 }}>{(NEEDS_PLAN[lang] ?? NEEDS_PLAN.en)[0]}</div>
             <div className="gd-play-only" style={{ fontSize: 16, fontWeight: 700, color: "var(--ink)", lineHeight: 1.6 }}>{playNotActive(lang)}</div>
+            <AppIntentPing feature="coach" />
             <div style={{ fontSize: 14, color: "var(--ink-muted)" }}>{students.map((s) => s.memberName).join(", ")}</div>
             <a className="gd-buy" href={payUrl(lang === "en" ? "/pricing" : `/${lang}/pricing`)} style={{ background: "#0EA5A5", color: "#fff", borderRadius: 12, padding: "12px 22px", fontSize: 15, fontWeight: 800, textDecoration: "none" }}>{(NEEDS_PLAN[lang] ?? NEEDS_PLAN.en)[1]}</a>
           </div>

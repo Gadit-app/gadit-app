@@ -18,6 +18,7 @@
  * landing page; for v1 they just use the main app.)
  */
 
+import { AppIntentPing } from "@/components/AppIntentPing";
 import { WaitText, WaitDots } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import { familyUi } from "@/lib/family-ui-i18n";
@@ -2201,6 +2202,7 @@ export function FamilyClient() {
             {/* Inside the Play / iOS app: one neutral line, no plan or link. */}
             <p className="gd-buy">{c.notReady}</p>
             <p className="gd-play-only">{playNotActive(lang)}</p>
+            <AppIntentPing feature="family" />
             <Link href={href("/pricing")} className="wb-family-cta gd-buy">
               {c.goPricing}
             </Link>

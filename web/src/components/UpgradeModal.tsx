@@ -18,6 +18,7 @@
  * callback (signature widened in result.tsx to pass tab + tier).
  */
 
+import { AppIntentPing } from "@/components/AppIntentPing";
 import { usePricing } from "@/lib/use-pricing";
 import { planCopy } from "@/lib/plan-copy";
 import { INDIVIDUAL_DISPLAY } from "@/lib/individual-prices";
@@ -1187,6 +1188,7 @@ export function UpgradeModal({
         <h2 className="wb-upgrade-feature">{featureName}</h2>
         <p className="wb-upgrade-blurb gd-buy">{blurb}</p>
         <p className="wb-upgrade-blurb gd-play-only">{playNotActive(lang)}</p>
+        <AppIntentPing feature={String(feature)} />
 
         <div className="wb-upgrade-price gd-buy">
           <strong>{price}</strong>

@@ -8,7 +8,7 @@ import type { RevenueSubscriber, StripeRevenue } from "@/lib/admin-revenue";
  * accounts are already left out by summarizeStripeRevenue.
  */
 
-export type AttentionKind = "payment" | "scheduled" | "ended" | "unmapped" | "cardless";
+export type AttentionKind = "payment" | "scheduled" | "ended" | "unmapped" | "cardless" | "appUpgrade";
 
 export type AttentionPerson = {
   subId: string;
@@ -70,7 +70,7 @@ const byDateDesc = (a: AttentionPerson, b: AttentionPerson) => (b.date ?? "").lo
 export function buildAttentionLists(
   rev: Pick<StripeRevenue, "active" | "atRisk" | "recentlyCanceled" | "cardlessTrials">,
   look: UserLookup,
-): Record<AttentionKind, AttentionPerson[]> {
+): Record<Exclude<AttentionKind, "appUpgrade">, AttentionPerson[]> {
   return {
     // past_due / unpaid / incomplete: the charge that failed opened the
     // current period, so that is the date; the period end is when access stops.
@@ -94,4 +94,29 @@ export function buildAttentionLists(
     // day Stripe drops the trial.
     cardless: (rev.cardlessTrials ?? []).map((s) => person(s, look, s.signedUpAt, s.trialEnd)).sort(byDateDesc),
   };
+}
+
+/** Free users who hit something locked inside the Play or iOS app in the last
+ *  30 days (api/app-intent, Gadi 2026-10-25): they cannot buy in the app, so
+ *  they may need a hand. status = the platform, reason = what they tapped. */
+export async function buildAppUpgradeList(db: FirebaseFirestore.Firestore): Promise<AttentionPerson[]> {
+  const since = Date.now() - 30 * 86_400_000;
+  const snap = await db.collection("users").where("appUpgradeIntent.lastAt", ">=", since).get();
+  const out: AttentionPerson[] = [];
+  for (const d of snap.docs) {
+    const x = d.data();
+    const paying = x.subscriptionStatus === "active" || x.subscriptionStatus === "trialing" || x.subscriptionStatus === "past_due";
+    if (paying || x.familyId || x.schoolId) continue;
+    const i = x.appUpgradeIntent ?? {};
+    out.push({
+      subId: d.id, email: x.email ?? null, name: x.displayName ?? x.name ?? null, uid: d.id, country: x.country ?? null,
+      tier: "Basic", billing: "", amount: null, currency: "", monthlyUsd: 0,
+      status: i.platform === "ios" ? "iOS app" : "Play app",
+      date: i.lastAt ? new Date(i.lastAt).toISOString() : null,
+      date2: i.firstAt && i.firstAt !== i.lastAt ? new Date(i.firstAt).toISOString() : null,
+      reason: Array.isArray(i.features) ? i.features.join(", ") : null,
+      stripeCustomerId: x.stripeCustomerId ?? null, priceId: null,
+    });
+  }
+  return out.sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
 }

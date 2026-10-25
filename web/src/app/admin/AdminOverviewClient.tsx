@@ -18,7 +18,7 @@ type ByTier = { clear: number; deep: number; individual?: number; family: number
 
 // Mirrors api/admin/overview/attention.ts (kept as a local type so this
 // client never imports server code).
-type AttentionKind = "payment" | "scheduled" | "ended" | "unmapped" | "cardless";
+type AttentionKind = "payment" | "scheduled" | "ended" | "unmapped" | "cardless" | "appUpgrade";
 type AttentionPerson = {
   subId: string;
   email: string | null;
@@ -157,6 +157,9 @@ const STRINGS = {
     aEnded: "Ended this week",
     aUnmapped: "Unmapped prices",
     aCardless: "Started checkout, no card",
+    aAppUpgrade: "Tried to upgrade inside the app",
+    dAppUpgrade: "Last tried",
+    dAppUpgrade2: "First tried",
     dCardless: "Started",
     dCardless2: "Trial would end",
     // who is behind each chip
@@ -245,6 +248,9 @@ const STRINGS = {
     aEnded: "הסתיימו השבוע",
     aUnmapped: "מחירים לא ממופים",
     aCardless: "התחילו תשלום ולא הזינו כרטיס",
+    aAppUpgrade: "ניסו לשדרג מתוך האפליקציה",
+    dAppUpgrade: "לאחרונה",
+    dAppUpgrade2: "לראשונה",
     dCardless: "התחילו",
     dCardless2: "הניסיון היה מסתיים",
     noName: "ללא שם",
@@ -331,6 +337,7 @@ export default function AdminOverviewClient() {
         { kind: "ended", label: t.aEnded, count: al.endedThisWeekCount },
         { kind: "unmapped", label: t.aUnmapped, count: al.unmappedPriceCount },
         { kind: "cardless", label: t.aCardless, count: al.lists?.cardless?.length ?? 0 },
+        { kind: "appUpgrade", label: t.aAppUpgrade, count: al.lists?.appUpgrade?.length ?? 0 },
       ] as const).filter((x) => x.count > 0)
     : [];
   const openItem = alertItems.find((a) => a.kind === openKind) ?? null;
@@ -579,6 +586,7 @@ function AttentionRow({ p, kind, t, lang }: { p: AttentionPerson; kind: Attentio
     kind === "scheduled" ? [t.dScheduled, t.dScheduled2] :
     kind === "ended" ? [t.dEnded, t.dEnded2] :
     kind === "cardless" ? [t.dCardless, t.dCardless2] :
+    kind === "appUpgrade" ? [t.dAppUpgrade, t.dAppUpgrade2] :
     [t.dUnmapped, ""];
   const dates = [
     p.date ? `${l1} ${day(p.date)}` : null,

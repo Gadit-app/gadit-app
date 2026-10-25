@@ -4,7 +4,7 @@ import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { summarizeStripeRevenue } from "@/lib/admin-revenue";
 import { customerCategory, internalUids, isPayingStatus, type CustomerCategory } from "@/lib/internal-accounts";
 import type { UserRecord } from "firebase-admin/auth";
-import { buildAttentionLists, type UserLookup } from "./attention";
+import { buildAttentionLists, type UserLookup, buildAppUpgradeList } from "./attention";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -252,7 +252,7 @@ export async function GET(req: NextRequest) {
         status: s.status,
       })),
       // Who is behind each chip (opened inline on the Overview).
-      lists: buildAttentionLists(rev, look),
+      lists: { ...buildAttentionLists(rev, look), appUpgrade: await buildAppUpgradeList(getAdminDb()).catch(() => []) },
     },
     businessTz: rev.businessTz,
     activity: {

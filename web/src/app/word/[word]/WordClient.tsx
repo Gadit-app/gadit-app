@@ -15,6 +15,7 @@
  * modal layered above the result.
  */
 
+import { AppIntentPing } from "@/components/AppIntentPing";
 import { WaitDots } from "@/components/WaitText";
 import { isNotAWordResult } from "@/lib/not-a-word";
 import { WordMilestone } from "@/components/design/WordMilestone";
@@ -755,6 +756,7 @@ function SoftWall({
           <>
             <span className="gd-buy">{planCopy(lang, "wallBasicBody")}</span>
             <span className="gd-play-only">{playLimitResets(lang)}</span>
+            <AppIntentPing feature="search-limit" />
           </>
         )}
       </p>
