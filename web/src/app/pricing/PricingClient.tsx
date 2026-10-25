@@ -4832,7 +4832,6 @@ export function PricingPageRoute() {
                     <button type="button" className="wb-pc-cta" onClick={clickIndividual}>{planCopy(lang, "prTrialCta")}</button>
                   </div>
                   <div className="wb-pc-cell wb-pc-col wb-pc-t-deep is-pop">
-                    <div className="wb-pc-badge">{planCopy(lang, "prFamBadge")}</div>
                     <div className="wb-pc-name">Family</div>
                     <div className="wb-pc-price" dir="ltr">{famPrice}<span className="wb-pc-period">{period}</span></div>
                     <div className="wb-pc-sub">{famSub}</div>
