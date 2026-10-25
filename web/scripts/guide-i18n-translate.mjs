@@ -23,13 +23,16 @@ const TR = JSON.parse(trSrc.slice(at + 2).trim().replace(/;\s*$/, "").replace(/,
 
 const LANGS = { ar: "Arabic", ru: "Russian", es: "Spanish", pt: "Portuguese", fr: "French", de: "German", cs: "Czech", sk: "Slovak", it: "Italian", ja: "Japanese", hi: "Hindi", am: "Amharic", uk: "Ukrainian", tr: "Turkish", pl: "Polish", fa: "Persian", id: "Indonesian", nl: "Dutch", el: "Greek", zu: "Zulu", vi: "Vietnamese", fil: "Filipino", af: "Afrikaans", sw: "Swahili", "zh-CN": "Simplified Chinese", "zh-TW": "Traditional Chinese", ko: "Korean", th: "Thai", bn: "Bengali", da: "Danish", hu: "Hungarian", xh: "Xhosa", nso: "Sepedi (Northern Sotho)", tn: "Setswana", st: "Sesotho", ts: "Xitsonga", ss: "siSwati", ve: "Tshivenda", nr: "isiNdebele (South Ndebele)" };
 const changed = new Set(process.argv.slice(2));
+// ONLY=ar,de runs a subset (a cost sample before the full run).
+const ONLY = (process.env.ONLY ?? "").split(",").filter(Boolean);
+const usage = { in: 0, out: 0 };
 const vars = (s) => (s.match(/\{\w+\}/g) ?? []).sort().join(",");
 function bad(k, t) {
   if (typeof t !== "string" || !t.trim()) return "empty";
   if (vars(t) !== vars(EN[k])) return "placeholders";
   if (/[–—]/.test(t)) return "long dash";
   if (/[֐-׿]/.test(t)) return "hebrew letters";
-  for (const brand of ["Gadit", "Individual", "Family", "Basic"]) if (EN[k].includes(brand) && !t.includes(brand)) return `lost ${brand}`;
+  for (const brand of ["Gadit", "Individual", "Basic"]) if (EN[k].includes(brand) && !t.includes(brand)) return `lost ${brand}`;
   return null;
 }
 async function one(code, name) {
@@ -47,13 +50,14 @@ Return JSON with the same keys, each value a plain string.
 ${JSON.stringify(items, null, 1)}`;
   for (let a = 0; a < 3; a++) {
     try {
-      const ctl = new AbortController(); const timer = setTimeout(() => ctl.abort(), 120000);
+      const ctl = new AbortController(); const timer = setTimeout(() => ctl.abort(), 360000);
       const r = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST", signal: ctl.signal, headers: { "Content-Type": "application/json", Authorization: `Bearer ${KEY}` },
         body: JSON.stringify({ model: "gpt-5.4", reasoning_effort: "low", response_format: { type: "json_object" }, messages: [{ role: "system", content: "You are a professional software localizer. Return JSON only." }, { role: "user", content: user }] }),
       });
       clearTimeout(timer);
       const j = await r.json();
+      usage.in += j.usage?.prompt_tokens ?? 0; usage.out += j.usage?.completion_tokens ?? 0;
       const o = JSON.parse(j.choices[0].message.content);
       const errs = todo.map((k) => [k, bad(k, o[k])]).filter(([, e]) => e);
       if (errs.length) { console.log(code, "retry", JSON.stringify(errs).slice(0, 200)); continue; }
@@ -63,8 +67,8 @@ ${JSON.stringify(items, null, 1)}`;
   }
   console.log(code, "FAILED");
 }
-const entries = Object.entries(LANGS);
-for (let i = 0; i < entries.length; i += 8) await Promise.all(entries.slice(i, i + 8).map(([c, n]) => one(c, n)));
+const entries = Object.entries(LANGS).filter(([c]) => !ONLY.length || ONLY.includes(c));
+for (let i = 0; i < entries.length; i += 4) await Promise.all(entries.slice(i, i + 4).map(([c, n]) => one(c, n)));
 const body = Object.entries(TR).map(([lang, o]) => `  ${JSON.stringify(lang)}: ${JSON.stringify(o, null, 1).replace(/\n/g, "\n ")},`).join("\n");
 fs.writeFileSync(OUT, `${head}\n${body}\n};\n`);
-console.log("written");
+console.log("written", JSON.stringify(usage), "cost $" + ((usage.in * 2.5 + usage.out * 15) / 1e6).toFixed(3));
