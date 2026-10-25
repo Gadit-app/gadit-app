@@ -137,7 +137,7 @@ export function WalkthroughPlayer({
               top: step.tap.y,
               width: 34,
               height: 34,
-              marginInlineStart: -17,
+              marginLeft: -17,
               marginTop: -17,
               borderRadius: "50%",
               background: "rgba(14,165,165,0.35)",
