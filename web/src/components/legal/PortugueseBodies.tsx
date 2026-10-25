@@ -34,7 +34,8 @@ export function PrivacyBodyPt() {
         Coletamos automaticamente informações técnicas básicas, como endereço IP, tipo de navegador, tipo de
         dispositivo, URL de origem e páginas visualizadas. Isso é usado para segurança, monitoramento de desempenho
         e análises agregadas. As análises são fornecidas pela Vercel e são anonimizadas no ponto de coleta (nenhum
-        identificador pessoal é armazenado).
+        identificador pessoal é armazenado). Nas nossas páginas de marketing, cadastro e pagamento, também usamos
+        ferramentas de publicidade e análise, descritas na Seção 3.
       </p>
       <h3>Informações de pagamento</h3>
       <p>
@@ -75,6 +76,14 @@ export function PrivacyBodyPt() {
         </li>
         <li>
           <strong>Vercel</strong>: hospeda e entrega o site, e fornece análises anonimizadas e medição de desempenho.
+        </li>
+        <li>
+          <strong>Publicidade e análise</strong>: Meta (Meta Pixel), Google Analytics e TikTok (TikTok Pixel e Events
+          API) medem as visitas e os resultados dos nossos anúncios. Eles usam cookies e tecnologias semelhantes nas
+          nossas páginas de marketing, cadastro e pagamento. Quando você se cadastra ou paga, podemos enviar a esses
+          serviços um endereço de e-mail e um ID de conta com hash (criptografados de forma irreversível), junto com
+          seu endereço IP e dados do seu navegador, apenas para medir nossos anúncios. Nunca enviamos a eles nenhuma
+          informação sobre crianças, e essas ferramentas não funcionam nas telas que as crianças usam.
         </li>
       </ul>
 

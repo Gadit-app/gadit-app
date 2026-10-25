@@ -37,7 +37,8 @@ export function PrivacyBodyNr(): ReactElement {
         Sibuthelela ngokuzenzakalelako ilwazi elisisekelo lobuthekinoloji elifana nekheli le-IP, uhlobo lwebhrawuza,
         uhlobo lwedivayisi, i-URL ekuthumele lapha, namakhasi obukileko. Lokhu kusetjenziselwa ukuvikeleka, ukuqaphela
         ukusebenza, kanye neembalo ezihlanganisiweko. Iimbalo zinikelwa yi-Vercel begodu zenziwa zingatjengisi umuntu
-        khona lapho zibuthelelwa khona (akukho okutjengisa umuntu okugcinwako).
+        khona lapho zibuthelelwa khona (akukho okutjengisa umuntu okugcinwako). Emakhasini wethu wokuthengisa,
+        wokubhalisa nawokubhadela sisebenzisa namathulusi wokukhangisa neembalo, ahlathululwe eSigabeni 3.
       </p>
       <h3>Ilwazi lokubhadela</h3>
       <p>
@@ -79,6 +80,15 @@ export function PrivacyBodyNr(): ReactElement {
         <li>
           <strong>Vercel</strong>, ibamba begodu ihambisa iwebhusayidi, begodu inikela iimbalo ezingatjengisi umuntu
           nokulinganiswa kokusebenza.
+        </li>
+        <li>
+          <strong>Ukukhangisa neembalo</strong>, i-Meta (Meta Pixel), i-Google Analytics ne-TikTok (TikTok Pixel
+          ne-Events API) zilinganisa ukuvakatjhela kanye nemiphumela yeenkhangiso zethu. Zisebenzisa ama-cookie kanye
+          namathekinoloji afanako emakhasini wethu wokuthengisa, wokubhalisa nawokubhadela. Nawubhalisa namkha
+          nawubhadela, singathumela kilezi zinsiza ikheli le-imeyili kanye ne-ID ye-akhawunti kufihlwe ngekhowudi
+          yendlela yinye (hash), kanye nekheli lakho le-IP nemininingwana yebhrawuza yakho, kwaphela ukulinganisa
+          iinkhangiso zethu. Asizithumeleli nanini ilwazi nalinye ngabantwana, begodu amathulusi la awasebenzi
+          eenkrinini abantwana abazisebenzisako.
         </li>
       </ul>
 

@@ -1,4 +1,5 @@
 import { INDIVIDUAL_PRICE_IDS } from "@/lib/individual-prices";
+import { tiktokContextFromRequest, tiktokEventsEnabled } from "@/lib/tiktok-events";
 import { NextRequest, NextResponse } from "next/server";
 import { isIosAppUA } from "@/lib/native-app";
 import Stripe from "stripe";
@@ -225,6 +226,12 @@ export async function POST(req: NextRequest) {
     // keeps the USD-only Schools price (pinning zar there would be a 400).
     const cur = chargeCurrency(req.headers.get("x-vercel-ip-country"), priceId) ?? "usd";
 
+    // TikTok: the browser facts at checkout, read back by the Stripe webhook
+    // for StartTrial / Purchase (lib/tiktok-events.ts). Best-effort.
+    if (tiktokEventsEnabled()) {
+      const ttCtx = tiktokContextFromRequest(req);
+      if (Object.keys(ttCtx).length) await getAdminDb().collection("users").doc(userId).set({ tiktokCtx: ttCtx }, { merge: true }).catch(() => {});
+    }
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       // Google Play Subscriptions policy requires the currency on the offer

@@ -38,7 +38,8 @@ export function PrivacyBodyXh(): ReactElement {
         Siqokelela ngokuzenzekelayo ulwazi olusisiseko lobugcisa olufana nedilesi ye-IP, uhlobo lwebhrawuza, uhlobo
         lwesixhobo, i-URL ekuthumeleyo, namaphepha owajongileyo. Oku kusetyenziselwa ukhuseleko, ukubeka iliso
         ekusebenzeni, kunye nohlalutyo oludibeneyo. Uhlalutyo lunikezelwa yi-Vercel kwaye lwenziwa lungachazi mntu
-        kwindawo yokuqokelela (akukho zichongi zobuqu zigcinwayo).
+        kwindawo yokuqokelela (akukho zichongi zobuqu zigcinwayo). Kumaphepha ethu entengiso, okubhalisa nokuhlawula
+        sikwasebenzisa izixhobo zentengiso nohlalutyo, ezichazwe kwiCandelo 3.
       </p>
       <h3>Ulwazi lokuhlawula</h3>
       <p>
@@ -81,6 +82,15 @@ export function PrivacyBodyXh(): ReactElement {
         <li>
           <strong>Vercel</strong>: ibamba kwaye inikezele iwebhusayithi, kwaye ibonelela ngohlalutyo olungachazi
           mntu kunye nokulinganiswa kokusebenza.
+        </li>
+        <li>
+          <strong>Intengiso nohlalutyo</strong>: I-Meta (Meta Pixel), i-Google Analytics ne-TikTok (TikTok Pixel
+          ne-Events API) zilinganisa utyelelo kunye neziphumo zeentengiso zethu. Zisebenzisa ii-cookie kunye
+          nobuchwepheshe obufanayo kumaphepha ethu entengiso, okubhalisa nokuhlawula. Xa ubhalisa okanye uhlawula,
+          sinokuthumela kwezi nkonzo idilesi ye-imeyile kunye ne-ID ye-akhawunti efihliwe ngendlela enye (hash), kunye
+          nedilesi yakho ye-IP neenkcukacha zebhrawuza yakho, kuphela ukulinganisa iintengiso zethu. Asize
+          sizithumelele naluphi na ulwazi malunga nabantwana, kwaye ezi zixhobo azisebenzi kwizikrini ezisetyenziswa
+          ngabantwana.
         </li>
       </ul>
 

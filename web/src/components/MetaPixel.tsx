@@ -1,42 +1,32 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/lib/auth-context";
+import { useKidsMode } from "@/lib/use-kids-mode";
+import { adsAllowed, isPlansPath, setAdsRoleIsKid } from "@/lib/ad-scope";
 
 /**
- * Meta (Facebook) Pixel — base code + SPA route tracking.
+ * Meta (Facebook) Pixel: base code + SPA page views.
  *
- * Created 2026-07-13 for the first paid campaigns (dataset "Gadit",
- * created in the LLC's Business Manager). The pixel ID is public by
- * design (it ships in every page's HTML), so it lives here as a
- * constant rather than an env var.
+ * Created 2026-07-13 for the first paid campaigns (dataset "Gadit", LLC
+ * Business Manager). The pixel ID is public by design.
  *
- * Kid-safety carve-out: classroom routes (/c/<CODE>, with or without
- * a language prefix) never load the pixel and never emit events.
- * Those pages are used by children on shared school devices; tracking
- * them would contradict the product's whole child-safety positioning
- * (and COPPA). The check runs both at mount (no base code on direct
- * kid-page loads) and per-event (no events after SPA navigation into
- * a kid route).
+ * Scope (Gadi 2026-10-25, lib/ad-scope.ts): the pixel loads and sends ONLY on
+ * acquisition pages (landing pages, pricing, checkout and its success page,
+ * sign-in completion), never inside the logged-in app and never for a child
+ * (kid profile or Kids Mode). Meta's automatic SPA page views and automatic
+ * events are switched off, so leaving an acquisition page stops all hits;
+ * every event goes through fbqTrack, which checks the same gate.
  *
- * Standard-event wiring lives in lib/track.ts — every product event
- * that maps to a Meta standard event (CompleteRegistration,
- * InitiateCheckout, StartTrial) is forwarded from there, so there is
- * exactly one place funnel events are named.
+ * Standard-event wiring lives in lib/track.ts (CompleteRegistration,
+ * InitiateCheckout, StartTrial), one naming point for the funnel.
  */
 
 export const META_PIXEL_ID = "885853537404576";
 
-function isKidRoute(path: string): boolean {
-  return /^\/(?:[a-z]{2}\/)?c(?:\/|$)/.test(path);
-}
-
-function isWordRoute(path: string): boolean {
-  return /^\/(?:[a-z]{2}\/)?word\//.test(path);
-}
-
-type FbqFn = (...args: unknown[]) => void;
+type FbqFn = ((...args: unknown[]) => void) & { disablePushState?: boolean };
 
 function getFbq(): FbqFn | null {
   if (typeof window === "undefined") return null;
@@ -45,15 +35,13 @@ function getFbq(): FbqFn | null {
 }
 
 // Events fired before the pixel script finishes loading are queued and
-// flushed from the Script onLoad callback. (We can't pre-create Meta's
-// fbq stub ourselves: the official snippet bails out if window.fbq
-// already exists and the real library would never load.)
+// flushed once the stub exists. (Meta's snippet bails out if window.fbq
+// already exists, so we can't pre-create the stub ourselves.)
 let pendingEvents: Array<[string, Record<string, unknown> | undefined]> = [];
 
 export function fbqTrack(event: string, params?: Record<string, unknown>) {
   try {
-    if (typeof window === "undefined") return;
-    if (isKidRoute(window.location.pathname)) return;
+    if (typeof window === "undefined" || !adsAllowed()) return;
     const fbq = getFbq();
     if (fbq) {
       fbq("track", event, params ?? {});
@@ -70,58 +58,50 @@ function flushPending() {
   if (!fbq) return;
   for (const [event, params] of pendingEvents) {
     try {
-      fbq("track", event, params ?? {});
+      if (adsAllowed()) fbq("track", event, params ?? {});
     } catch {}
   }
   pendingEvents = [];
 }
 
 export default function MetaPixel() {
-  const pathname = usePathname();
-  const initialPath = useRef<string | null>(null);
-  if (initialPath.current === null) initialPath.current = pathname;
+  const pathname = usePathname() || "/";
+  const { user, loading, planReady, familyRole } = useAuth();
+  const [kidsOn] = useKidsMode();
+  const [load, setLoad] = useState(false);
+  const lastPath = useRef<string | null>(null);
+  setAdsRoleIsKid(familyRole === "kid");
+  const decided = !loading && (!user || planReady);
 
-  // Flush queued events once the stub exists. onLoad doesn't fire for
-  // inline <Script> children, so a short poll is the reliable option:
-  // the stub appears the moment the inline snippet runs (independent
-  // of the network fetch of fbevents.js, which the stub queues for).
+  // Load once the visitor is known to be an adult on an acquisition page.
   useEffect(() => {
-    if (getFbq()) {
-      flushPending();
-      return;
-    }
-    const timer = setInterval(() => {
-      if (getFbq()) {
-        flushPending();
-        clearInterval(timer);
-      }
-    }, 500);
+    if (!decided || load) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- a one-way latch (the pixel, once loaded, stays loaded)
+    if (adsAllowed(pathname)) setLoad(true);
+  }, [decided, load, pathname, kidsOn, familyRole]);
+
+  // Flush queued events once the stub exists.
+  useEffect(() => {
+    if (!load) return;
+    if (getFbq()) { flushPending(); return; }
+    const timer = setInterval(() => { if (getFbq()) { flushPending(); clearInterval(timer); } }, 500);
     const stop = setTimeout(() => clearInterval(timer), 10_000);
-    return () => {
-      clearInterval(timer);
-      clearTimeout(stop);
-    };
-  }, []);
+    return () => { clearInterval(timer); clearTimeout(stop); };
+  }, [load]);
 
-  // SPA navigations: the base snippet only covers the first page.
+  // Page views on SPA navigation, acquisition pages only (the base code sends
+  // the first one). ViewContent on the pages that list the plans.
   useEffect(() => {
-    if (pathname === initialPath.current) return;
-    if (isKidRoute(pathname)) return;
-    getFbq()?.("track", "PageView");
-  }, [pathname]);
+    if (!load) return;
+    const first = lastPath.current === null;
+    if (lastPath.current === pathname) return;
+    lastPath.current = pathname;
+    if (!adsAllowed(pathname)) return;
+    if (!first) getFbq()?.("track", "PageView");
+    if (isPlansPath(pathname)) fbqTrack("ViewContent", { content_category: "plans", content_name: pathname });
+  }, [load, pathname]);
 
-  // ViewContent on word pages — the "someone actually consumed the
-  // product" signal Meta optimizes toward, fired on first load and on
-  // client-side navigation alike.
-  useEffect(() => {
-    if (!isWordRoute(pathname)) return;
-    const word = decodeURIComponent(pathname.split("/").pop() ?? "");
-    fbqTrack("ViewContent", { content_name: word, content_category: "word" });
-  }, [pathname]);
-
-  // Direct landings on kid classroom pages get no pixel at all.
-  if (isKidRoute(pathname)) return null;
-
+  if (!load) return null;
   return (
     <Script id="meta-pixel" strategy="afterInteractive">
       {`!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -129,6 +109,8 @@ n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
 n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
 document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq.disablePushState = true;
+fbq('set', 'autoConfig', false, '${META_PIXEL_ID}');
 fbq('init', '${META_PIXEL_ID}');
 fbq('track', 'PageView');`}
     </Script>

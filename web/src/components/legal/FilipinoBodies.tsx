@@ -37,7 +37,8 @@ export function PrivacyBodyFil(): ReactElement {
         Awtomatiko naming kinokolekta ang pangunahing teknikal na impormasyon gaya ng IP address, uri ng browser, uri ng
         device, referring URL, at mga pahinang tiningnan. Ginagamit ito para sa seguridad, pagsubaybay sa performance, at
         pinagsama-samang analytics. Ang analytics ay ibinibigay ng Vercel at ginagawang anonymous sa mismong punto ng
-        pagkolekta (walang personal na identifier na iniimbak).
+        pagkolekta (walang personal na identifier na iniimbak). Sa aming mga pahina ng marketing, pag-sign up, at
+        pagbabayad, gumagamit din kami ng mga tool para sa advertising at analytics, na inilalarawan sa Seksyon 3.
       </p>
       <h3>Impormasyon sa pagbabayad</h3>
       <p>
@@ -80,6 +81,15 @@ export function PrivacyBodyFil(): ReactElement {
         <li>
           <strong>Vercel</strong>: nagho-host at naghahatid ng website, at nagbibigay ng anonymous na analytics at
           pagsukat ng performance.
+        </li>
+        <li>
+          <strong>Pag-aanunsyo at analytics</strong>: Sinusukat ng Meta (Meta Pixel), Google Analytics, at TikTok
+          (TikTok Pixel at Events API) ang mga pagbisita at ang mga resulta ng aming mga ad. Gumagamit sila ng cookies
+          at mga katulad na teknolohiya sa aming mga pahina ng marketing, pag-sign up, at pagbabayad. Kapag kayo ay
+          nag-sign up o nagbayad, maaari naming ipadala sa mga serbisyong ito ang isang hashed (one-way na
+          naka-encrypt) na email address at account ID, kasama ang inyong IP address at mga detalye ng browser, para
+          lamang sukatin ang aming mga ad. Hindi kailanman kami nagpapadala sa kanila ng anumang impormasyon tungkol
+          sa mga bata, at hindi tumatakbo ang mga tool na ito sa mga screen na ginagamit ng mga bata.
         </li>
       </ul>
 

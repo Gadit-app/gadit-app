@@ -1,5 +1,6 @@
 "use client";
 
+import { ttqTrack, ttqPlanContents } from "@/lib/tiktok-pixel";
 import { WaitText } from "@/components/WaitText";
 import { INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY, INDIVIDUAL_MONTHLY_V1, INDIVIDUAL_YEARLY_V1, INDIVIDUAL_DISPLAY } from "@/lib/individual-prices";
 import { miscUi } from "@/lib/misc-ui-i18n";
@@ -650,6 +651,11 @@ export default function CheckoutClient() {
   useEffect(() => {
     if (loading || !user || !tier || startedRef.current) return;
     startedRef.current = true;
+    // TikTok AddToCart: a signed-in adult chose a plan and reached checkout.
+    {
+      const shown = shownAmount(tier);
+      ttqTrack("AddToCart", ttqPlanContents(tier.name.toLowerCase(), Number(shown.replace(/[^0-9.]/g, "")) || undefined, shownCurrency(tier)), `cart_${user.uid}`);
+    }
 
     let cancelled = false;
     (async () => {
@@ -735,6 +741,7 @@ export default function CheckoutClient() {
             priceId, surface: "payment_element", lang,
             plan: t?.name, value, currency: shownCurrency(t),
           });
+          ttqTrack("InitiateCheckout", ttqPlanContents((t?.name ?? "plan").toLowerCase(), value, shownCurrency(t)), `checkout_${user.uid}_${priceId}`);
         }
       } catch (err) {
         console.error("[checkout] init failed:", err);

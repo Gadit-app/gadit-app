@@ -27,6 +27,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { isIosAppUA } from "@/lib/native-app";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import MetaPixel from "@/components/MetaPixel";
+import TikTokPixel from "@/components/TikTokPixel";
 import Script from "next/script";
 
 // Fonts are SELF-HOSTED from /public/fonts via ./fonts.css (downloaded once
@@ -504,17 +505,18 @@ export default async function RootLayout({
                   role, and never loads or sends a hit for a child (kid
                   routes, a kid session, Kids Mode). See the component. */}
               {!iosApp && <GoogleAnalytics />}
+              {/* TikTok Pixel: adult pages only (landing, pricing, checkout,
+                  partners), never for a child or in Kids Mode. */}
+              {!iosApp && <TikTokPixel />}
+              {/* Meta Pixel: same scope (lib/ad-scope.ts), inside the auth
+                  provider so it knows a kid profile from a parent. */}
+              {!iosApp && <MetaPixel />}
             </AuthProvider>
           </LangProvider>
           <ServiceWorkerRegister />
           <AutoUpdater />
           <RefCapture />
           <Analytics />
-          {/* Meta Pixel — base code + funnel standard events (see
-              components/MetaPixel.tsx). Never loads on /c/ classroom
-              routes: kids on school devices are not ad-tracking
-              subjects, by policy and by positioning. */}
-          {!iosApp && <MetaPixel />}
           {/* Affonso affiliate-tracking pixel. RESTORED 2026-08-05: the
               embed DASHBOARD was retired (bad API key) and /affiliate now
               redirects to the in-house /partners portal, but Affonso's

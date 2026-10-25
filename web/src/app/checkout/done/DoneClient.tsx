@@ -1,5 +1,7 @@
 "use client";
 
+import { useAuth } from "@/lib/auth-context";
+import { ttqTrack } from "@/lib/tiktok-pixel";
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -213,6 +215,16 @@ export default function DoneClient() {
   // handles the outcome either way).
   const status = params.get("redirect_status") ?? "";
   const ok = status === "succeeded" || status === "processing";
+
+  // TikTok StartTrial once the account is known, deduped with the webhook's
+  // server copy (same event_id trial_<uid>).
+  const { user: ttUser } = useAuth();
+  const ttSent = useRef(false);
+  useEffect(() => {
+    if (!ok || !ttUser || ttSent.current) return;
+    ttSent.current = true;
+    ttqTrack("StartTrial", { content_name: "gadit_trial" }, `trial_${ttUser.uid}`);
+  }, [ok, ttUser]);
 
   const trackedRef = useRef(false);
   useEffect(() => {

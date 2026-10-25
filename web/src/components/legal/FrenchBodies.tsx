@@ -37,7 +37,8 @@ export function PrivacyBodyFr() {
         de navigateur, le type d&rsquo;appareil, l&rsquo;URL de provenance et les pages consultées. Ces données
         sont utilisées à des fins de sécurité, de suivi des performances et d&rsquo;analyses agrégées. Les analyses
         sont fournies par Vercel et sont anonymisées au point de collecte (aucun identifiant personnel n&rsquo;est
-        stocké).
+        stocké). Sur nos pages marketing, d&rsquo;inscription et de paiement, nous utilisons également des outils de
+        publicité et de mesure d&rsquo;audience, décrits à la Section 3.
       </p>
       <h3>Informations de paiement</h3>
       <p>
@@ -81,6 +82,15 @@ export function PrivacyBodyFr() {
         <li>
           <strong>Vercel</strong>, héberge et sert le site web et fournit des analyses anonymisées et la mesure
           des performances.
+        </li>
+        <li>
+          <strong>Publicité et mesure d&rsquo;audience</strong>, Meta (Meta Pixel), Google Analytics et TikTok (TikTok
+          Pixel et Events API) mesurent les visites et les résultats de nos publicités. Ils utilisent des cookies et
+          des technologies similaires sur nos pages marketing, d&rsquo;inscription et de paiement. Lorsque vous vous
+          inscrivez ou payez, nous pouvons transmettre à ces services une adresse e-mail et un identifiant de compte
+          hachés (chiffrés de manière irréversible), ainsi que votre adresse IP et des informations sur votre
+          navigateur, uniquement pour mesurer nos publicités. Nous ne leur transmettons jamais aucune information
+          concernant les enfants, et ces outils ne fonctionnent pas sur les écrans utilisés par les enfants.
         </li>
       </ul>
 

@@ -36,7 +36,8 @@ export function PrivacyBodyVi(): ReactElement {
         Chúng tôi tự động thu thập thông tin kỹ thuật cơ bản như địa chỉ IP, loại trình duyệt, loại thiết bị, URL giới
         thiệu và các trang đã xem. Thông tin này được sử dụng cho mục đích bảo mật, giám sát hiệu suất và phân tích tổng
         hợp. Dịch vụ phân tích do Vercel cung cấp và được ẩn danh hóa ngay tại điểm thu thập (không lưu trữ thông tin định
-        danh cá nhân nào).
+        danh cá nhân nào). Trên các trang tiếp thị, đăng ký và thanh toán, chúng tôi cũng sử dụng các công cụ quảng
+        cáo và phân tích, được mô tả tại Mục 3.
       </p>
       <h3>Thông tin thanh toán</h3>
       <p>
@@ -79,6 +80,15 @@ export function PrivacyBodyVi(): ReactElement {
         <li>
           <strong>Vercel</strong>: lưu trữ và phân phối trang web, đồng thời cung cấp phân tích ẩn danh và đo lường
           hiệu suất.
+        </li>
+        <li>
+          <strong>Quảng cáo và phân tích</strong>: Meta (Meta Pixel), Google Analytics và TikTok (TikTok Pixel và
+          Events API) đo lường lượt truy cập và kết quả quảng cáo của chúng tôi. Các dịch vụ này sử dụng cookie và các
+          công nghệ tương tự trên các trang tiếp thị, đăng ký và thanh toán của chúng tôi. Khi bạn đăng ký hoặc thanh
+          toán, chúng tôi có thể gửi cho các dịch vụ này địa chỉ email và ID tài khoản đã được băm (mã hóa một chiều),
+          cùng với địa chỉ IP và thông tin trình duyệt của bạn, chỉ để đo lường quảng cáo của chúng tôi. Chúng tôi
+          không bao giờ gửi cho họ bất kỳ thông tin nào về trẻ em, và các công cụ này không chạy trên những màn hình
+          mà trẻ em sử dụng.
         </li>
       </ul>
 

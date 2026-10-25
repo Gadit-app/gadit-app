@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "How Gadit collects, uses, and protects your information.",
 };
 
-const LAST_UPDATED = "April 23, 2026";
+const LAST_UPDATED = "October 25, 2026";
 
 const EnglishBody = () => (
   <>
@@ -42,7 +42,8 @@ const EnglishBody = () => (
     <p>
       We automatically collect basic technical information such as IP address, browser type, device type, referring
       URL, and pages viewed. This is used for security, performance monitoring, and aggregate analytics. Analytics
-      are provided by Vercel and are anonymized at the collection point (no personal identifiers are stored).
+      are provided by Vercel and are anonymized at the collection point (no personal identifiers are stored). On our
+      marketing, sign-up and payment pages we also use advertising and analytics tools, described in section 3.
     </p>
     <h3>Payment information</h3>
     <p>
@@ -83,6 +84,14 @@ const EnglishBody = () => (
       <li>
         <strong>Vercel</strong>, hosts and serves the website, and provides anonymized analytics and performance
         measurement.
+      </li>
+      <li>
+        <strong>Advertising and analytics</strong>: Meta (Meta Pixel), Google Analytics and TikTok (TikTok Pixel and
+        Events API) measure visits and the results of our ads. They use cookies and similar technologies on our
+        marketing, sign-up and payment pages. When you sign up or pay, we may send these services a hashed (one-way
+        encrypted) email address and account ID, together with your IP address and browser details, only to measure
+        our ads. We never send them any information about children, and these tools do not run on the screens children
+        use.
       </li>
     </ul>
 
@@ -177,7 +186,8 @@ const HebrewBody = () => (
     <p>
       אנחנו אוספים אוטומטית מידע טכני בסיסי כמו כתובת IP, סוג דפדפן, סוג מכשיר, כתובת מפנה, ודפים שנצפו. המידע
       משמש לאבטחה, ניטור ביצועים, ואנליטיקה מצטברת. שירותי האנליטיקה ניתנים על ידי Vercel והם אנונימיים בנקודת
-      האיסוף (לא נשמרים מזהים אישיים).
+      האיסוף (לא נשמרים מזהים אישיים). בדפי השיווק, ההרשמה והתשלום שלנו אנחנו משתמשים גם בכלי פרסום ומדידה, שמתוארים
+      בסעיף 3.
     </p>
     <h3>מידע על תשלומים</h3>
     <p>
@@ -215,6 +225,13 @@ const HebrewBody = () => (
       </li>
       <li>
         <strong>Vercel</strong>, מארח את האתר ומספק אנליטיקה ומדידת ביצועים אנונימית.
+      </li>
+      <li>
+        <strong>פרסום ומדידה</strong>: Meta (Meta Pixel), Google Analytics ו-TikTok (TikTok Pixel ו-Events API) מודדים
+        ביקורים ואת התוצאות של הפרסומות שלנו. הם משתמשים בעוגיות (cookies) ובטכנולוגיות דומות בדפי השיווק, ההרשמה
+        והתשלום שלנו. כשאתם נרשמים או משלמים, ייתכן שנשלח לשירותים האלה כתובת דוא״ל ומזהה חשבון מוצפנים בהצפנה
+        חד-כיוונית (hash), יחד עם כתובת ה-IP ופרטי הדפדפן, רק כדי למדוד את הפרסומות שלנו. אנחנו אף פעם לא שולחים להם
+        מידע על ילדים, והכלים האלה לא פועלים במסכים שילדים משתמשים בהם.
       </li>
     </ul>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { readKidsMode } from "./use-kids-mode";
+import { adsAllowed, setAdsRoleIsKid } from "./ad-scope";
 
 /**
  * GA4 helpers shared by the GoogleAnalytics component and lib/track.ts (kept
@@ -16,20 +16,14 @@ export function isKidPath(path: string): boolean {
   return KID_PATH.test(path);
 }
 
-// Module-level so non-React callers (lib/track.ts, the history guard) can ask.
-let roleIsKid = false;
+// One gate for every pixel (lib/ad-scope.ts): acquisition pages only, never a child.
 export function setGaRoleIsKid(kid: boolean) {
-  roleIsKid = kid;
+  setAdsRoleIsKid(kid);
 }
 
-/** True when a GA hit may be sent right now (never for a child). */
+/** True when a GA hit may be sent right now. */
 export function gaAllowed(): boolean {
-  if (typeof window === "undefined") return false;
-  try {
-    return !roleIsKid && !readKidsMode() && !isKidPath(window.location.pathname);
-  } catch {
-    return false;
-  }
+  return adsAllowed();
 }
 
 type GtagFn = (...args: unknown[]) => void;

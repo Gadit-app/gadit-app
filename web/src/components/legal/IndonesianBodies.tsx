@@ -36,7 +36,8 @@ export function PrivacyBodyId(): ReactElement {
         Kami secara otomatis mengumpulkan informasi teknis dasar seperti alamat IP, jenis browser, jenis perangkat, URL
         perujuk, dan halaman yang dilihat. Informasi ini digunakan untuk keamanan, pemantauan kinerja, dan analitik
         agregat. Analitik disediakan oleh Vercel dan dianonimkan pada titik pengumpulan (tidak ada pengenal pribadi yang
-        disimpan).
+        disimpan). Di halaman pemasaran, pendaftaran, dan pembayaran kami, kami juga menggunakan alat iklan dan
+        analitik, yang dijelaskan di Bagian 3.
       </p>
       <h3>Informasi pembayaran</h3>
       <p>
@@ -79,6 +80,15 @@ export function PrivacyBodyId(): ReactElement {
         <li>
           <strong>Vercel</strong>: menghosting dan menyajikan situs web, serta menyediakan analitik anonim dan
           pengukuran kinerja.
+        </li>
+        <li>
+          <strong>Iklan dan analitik</strong>: Meta (Meta Pixel), Google Analytics, dan TikTok (TikTok Pixel dan
+          Events API) mengukur kunjungan dan hasil iklan kami. Layanan ini menggunakan cookie dan teknologi serupa di
+          halaman pemasaran, pendaftaran, dan pembayaran kami. Saat Anda mendaftar atau membayar, kami dapat
+          mengirimkan kepada layanan ini alamat email dan ID akun yang telah di-hash (dienkripsi satu arah), bersama
+          dengan alamat IP dan detail browser Anda, semata-mata untuk mengukur iklan kami. Kami tidak pernah
+          mengirimkan informasi apa pun tentang anak-anak kepada mereka, dan alat-alat ini tidak berjalan di layar
+          yang digunakan anak-anak.
         </li>
       </ul>
 

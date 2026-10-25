@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { sendMail } from "@/lib/mail";
 import { emailHeaderHtml, EMAIL_BG, EMAIL_CARD_MAX } from "@/lib/email-brand";
 import crypto from "node:crypto";
+import { sendTikTokEvent, stripeAmountToValue, tiktokEventsEnabled, type TikTokContext } from "@/lib/tiktok-events";
 import Stripe from "stripe";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb } from "@/lib/firebase-admin";
@@ -758,6 +759,7 @@ async function activateFromSubscriptionMetadata(sub: Stripe.Subscription): Promi
     // by the time we reach activation that trial has ended, so this is a
     // trial-to-paid conversion rather than a fresh paid signup.
     await notifyPaidActivation(uid, tier, email, { fromTrial: !!sub.trial_end, sub });
+    await sendTikTokStartTrial(uid, email, sub, tier);
     // A coach-track graduate becomes a founder partner (not schools: an institution).
     if (!schools) await autoEnrollPartner(uid, email);
   }
@@ -945,6 +947,55 @@ async function sendGaPurchase(invoice: Stripe.Invoice) {
   }
 }
 
+/**
+ * TikTok Events API (lib/tiktok-events.ts), server side of the funnel:
+ *   StartTrial `trial_<uid>` when a trial starts with a card (the browser sends
+ *   the same id from /checkout/done), and Purchase `purchase_<invoiceId>` on
+ *   the FIRST real payment only. Uses the browser facts saved at checkout
+ *   (users.tiktokCtx). Adults only: these are the payer's own accounts.
+ *   No-op without TIKTOK_EVENTS_API_TOKEN; never throws.
+ */
+async function sendTikTokStartTrial(uid: string, email: string | null, sub: Stripe.Subscription | null | undefined, tier: string) {
+  try {
+    if (!tiktokEventsEnabled() || !sub || sub.status !== "trialing") return;
+    const u = (await getAdminDb().collection("users").doc(uid).get()).data() ?? {};
+    const price = sub.items.data[0]?.price;
+    const cur = (sub.currency || price?.currency || "usd").toLowerCase();
+    const opt = (price as unknown as { currency_options?: Record<string, { unit_amount?: number | null }> } | undefined)?.currency_options;
+    const cents = price ? (cur === price.currency ? price.unit_amount : opt?.[cur]?.unit_amount ?? null) : null;
+    const value = cents != null ? stripeAmountToValue(cents, cur) : undefined;
+    await sendTikTokEvent({
+      event: "StartTrial", eventId: `trial_${uid}`, uid, email: email ?? (u.email as string | undefined),
+      ctx: (u.tiktokCtx as TikTokContext | undefined) ?? undefined,
+      properties: { content_type: "product", contents: [{ content_id: tier.toLowerCase(), content_name: `Gadit ${tier}`, quantity: 1 }], ...(value ? { value, currency: cur.toUpperCase() } : {}) },
+    });
+  } catch (e) { console.warn("[webhook] TikTok StartTrial failed (non-blocking):", e); }
+}
+
+async function sendTikTokPurchase(invoice: Stripe.Invoice) {
+  try {
+    if (!tiktokEventsEnabled()) return;
+    const gross = invoice.amount_paid ?? 0;
+    if (gross <= 0) return; // a trial / $0 invoice is not a purchase
+    const customerId = typeof invoice.customer === "string" ? invoice.customer : invoice.customer?.id;
+    if (!customerId) return;
+    const uid = await findUserIdByCustomer(customerId);
+    if (!uid) return;
+    const ref = getAdminDb().collection("users").doc(uid);
+    const u = (await ref.get()).data() ?? {};
+    if (u.tiktokPurchaseSent === true) return; // the first real payment only
+    const cur = (invoice.currency || "usd").toLowerCase();
+    const line = invoice.lines?.data?.[0];
+    const ok = await sendTikTokEvent({
+      event: "Purchase", eventId: `purchase_${invoice.id}`, uid,
+      email: (invoice.customer_email || (u.email as string) || "").trim() || undefined,
+      ctx: (u.tiktokCtx as TikTokContext | undefined) ?? undefined,
+      properties: { content_type: "product", contents: [{ content_id: line?.pricing?.price_details?.price ?? "gadit", content_name: line?.description ?? "Gadit subscription", quantity: 1 }], value: stripeAmountToValue(gross, cur), currency: cur.toUpperCase() },
+    });
+    if (ok) await ref.set({ tiktokPurchaseSent: true }, { merge: true });
+  } catch (e) { console.warn("[webhook] TikTok Purchase failed (non-blocking):", e); }
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
@@ -1033,6 +1084,7 @@ export async function POST(req: NextRequest) {
       if (plan !== "basic") {
         const tier = family ? "Family" : schools ? "Schools" : isIndividualPriceId(priceId) ? "Individual" : plan === "clear" ? "Clear" : "Deep";
         await notifyPaidActivation(userId, tier, customerEmail, { fromTrial: !!trialEnd, sub });
+        await sendTikTokStartTrial(userId, customerEmail, sub, tier);
         if (!schools) await autoEnrollPartner(userId, customerEmail, [session.customer_details?.phone]);
       }
       if (family) { await stampFamilyActivated(userId); await sendFamilyWelcome(userId, customerEmail); }
@@ -1124,6 +1176,7 @@ export async function POST(req: NextRequest) {
       await creditReferralConversion(invoice);
       await sendCapiPurchase(invoice);
       await sendGaPurchase(invoice);
+      await sendTikTokPurchase(invoice);
     }
 
     if (event.type === "invoice.payment_failed") {

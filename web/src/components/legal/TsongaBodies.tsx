@@ -38,7 +38,8 @@ export function PrivacyBodyTs(): ReactElement {
         burawuza, muxaka wa xitirhisiwa, URL leyi mi rhumeleke laha, ni matluka lawa mi ma languteke. Leswi swi
         tirhisiwa eka vuhlayiseki, ku languta matirhelo, ni tinhlayo leti hlanganisiweke. Tinhlayo ti nyikiwa hi
         Vercel naswona ti endliwa leswaku ti nga kombi munhu hi ku hatlisa laha ti hlengeletiwaka kona (a ku hlayisiwi
-        swikombiso swa munhu).
+        swikombiso swa munhu). Eka matluka ya hina ya vuxavisi, ya ku tsarisa ni ya ku hakela hi tlhela hi tirhisa
+        switirhisiwa swa ku navetisa ni swa tinhlayo, leswi hlamuseriweke eka Xiyenge xa 3.
       </p>
       <h3>Vuxokoxoko bya ku hakela</h3>
       <p>
@@ -82,6 +83,15 @@ export function PrivacyBodyTs(): ReactElement {
         <li>
           <strong>Vercel</strong>, yi hlayisa ni ku phakela websayiti, naswona yi nyika tinhlayo leti nga kombiki
           munhu ni ku pima matirhelo.
+        </li>
+        <li>
+          <strong>Ku navetisa ni tinhlayo</strong>, Meta (Meta Pixel), Google Analytics na TikTok (TikTok Pixel na
+          Events API) swi pima ku endzela ni mbuyelo wa swinavetiso swa hina. Swi tirhisa tikhukhi (cookies) ni
+          thekinoloji leyi fanaka eka matluka ya hina ya vuxavisi, ya ku tsarisa ni ya ku hakela. Loko mi tsarisa
+          kumbe mi hakela, hi nga rhumela eka vukorhokeri lebyi adirese ya imeyili ni ID ya akhawunti leswi khodiweke
+          hi ndlela ya tlhelo rin’we (hash), swin’we ni adirese ya n’wina ya IP ni vuxokoxoko bya burawuza ya n’wina,
+          ntsena ku pima swinavetiso swa hina. A hi rhumeli nikatsongo vuxokoxoko byihi na byihi hi vana, naswona
+          switirhisiwa leswi a swi tirhi eka tikirini leti vana va ti tirhisaka.
         </li>
       </ul>
 

@@ -37,7 +37,9 @@ export function PrivacyBodyVe(): ReactElement {
         Ri kuvhanganya nga u ḓiitela mafhungo a mutheo a thekhinikhala a ngaho aḓirese ya IP, lushaka lwa buraweza,
         lushaka lwa tshishumiswa, URL yo ni rumelaho fhano, na masiaṱari e na a sedza. Hezwi zwi shumiswa kha
         tsireledzo, u sedza kushumele, na mbalo dzo ṱanganyiswaho. Mbalo dzi ṋetshedzwa nga Vercel nahone dzi itwa uri
-        dzi sa sumbedze muthu hu hone hune dza kuvhanganyelwa hone (a hu vhulungwi zwiṱalusi zwa muthu).
+        dzi sa sumbedze muthu hu hone hune dza kuvhanganyelwa hone (a hu vhulungwi zwiṱalusi zwa muthu). Kha masiaṱari
+        ashu a u rengisa, a u ṅwalisa na a mbadelo ri dovha ra shumisa zwishumiswa zwa u ḓivhadza na zwa mbalo, zwo
+        ṱalutshedzwaho kha Khethekanyo ya 3.
       </p>
       <h3>Mafhungo a mbadelo</h3>
       <p>
@@ -79,6 +81,15 @@ export function PrivacyBodyVe(): ReactElement {
         <li>
           <strong>Vercel</strong>, i fara na u ṋetshedza webusaithi, nahone i ṋetshedza mbalo dzi sa sumbedzi muthu na
           u kala kushumele.
+        </li>
+        <li>
+          <strong>U ḓivhadza na mbalo</strong>, Meta (Meta Pixel), Google Analytics na TikTok (TikTok Pixel na Events
+          API) zwi kala madalo na mvelelo dza nḓivhadzo dzashu. Zwi shumisa dzikhukhi (cookies) na thekhinolodzhi dzi
+          fanaho kha masiaṱari ashu a u rengisa, a u ṅwalisa na a mbadelo. Musi ni tshi ṅwalisa kana ni tshi badela,
+          ri nga rumela kha tshumelo idzi aḓirese ya imeiḽi na ID ya akhaunthu zwo khouḓiwaho nga nḓila ya thungo
+          nthihi (hash), khathihi na aḓirese yaṋu ya IP na zwidodombedzwa zwa buraweza yaṋu, fhedzi u kala nḓivhadzo
+          dzashu. A ri vhuyi ra dzi rumela mafhungo naa ḽithihi nga ha vhana, nahone zwishumiswa izwi a zwi shumi kha
+          zwikirini zwine vhana vha zwi shumisa.
         </li>
       </ul>
 

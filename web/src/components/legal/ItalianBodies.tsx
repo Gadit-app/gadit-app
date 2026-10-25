@@ -37,7 +37,9 @@ export function PrivacyBodyIt(): ReactElement {
         Raccogliamo automaticamente informazioni tecniche di base quali l’indirizzo IP, il tipo di browser, il tipo di
         dispositivo, l’URL di provenienza e le pagine visualizzate. Tali informazioni sono utilizzate per la sicurezza,
         il monitoraggio delle prestazioni e le analisi statistiche aggregate. Le analisi sono fornite da Vercel e sono
-        rese anonime al momento della raccolta (non viene conservato alcun identificativo personale).
+        rese anonime al momento della raccolta (non viene conservato alcun identificativo personale). Nelle nostre
+        pagine di marketing, di registrazione e di pagamento utilizziamo anche strumenti pubblicitari e di analisi,
+        descritti nella Sezione 3.
       </p>
       <h3>Informazioni di pagamento</h3>
       <p>
@@ -80,6 +82,15 @@ export function PrivacyBodyIt(): ReactElement {
         <li>
           <strong>Vercel</strong>: ospita e distribuisce il sito web e fornisce analisi anonimizzate e misurazioni delle
           prestazioni.
+        </li>
+        <li>
+          <strong>Pubblicità e analisi</strong>: Meta (Meta Pixel), Google Analytics e TikTok (TikTok Pixel ed Events
+          API) misurano le visite e i risultati delle nostre pubblicità. Utilizzano cookie e tecnologie simili nelle
+          nostre pagine di marketing, di registrazione e di pagamento. Quando Lei si registra o effettua un pagamento,
+          potremmo inviare a questi servizi un indirizzo email e un ID account sottoposti a hash (cifratura
+          unidirezionale), insieme al Suo indirizzo IP e ai dettagli del Suo browser, esclusivamente per misurare le
+          nostre pubblicità. Non inviamo mai loro alcuna informazione sui bambini, e questi strumenti non sono attivi
+          nelle schermate utilizzate dai bambini.
         </li>
       </ul>
 

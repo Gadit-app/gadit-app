@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse, after } from "next/server";
+import { sendTikTokEvent, tiktokContextFromRequest, tiktokEventsEnabled } from "@/lib/tiktok-events";
 import { sendMail } from "@/lib/mail";
 import { isIosAppUA } from "@/lib/native-app";
 import { FieldValue } from "firebase-admin/firestore";
@@ -225,6 +226,20 @@ export async function POST(req: NextRequest) {
 
     // Look up the Firebase Auth metadata for richer detail in the email.
     const authUser = await getAdminAuth().getUser(uid);
+
+    // TikTok Events API: CompleteRegistration for a genuinely NEW adult account
+    // (created in the last day; this route is also pinged once per app session
+    // by older accounts). Same event_id as the browser pixel. The browser facts
+    // are kept for the later StartTrial / Purchase sent from the Stripe webhook.
+    // A child's device never reaches here (family_device above).
+    if (email && tiktokEventsEnabled()) {
+      const created = Date.parse(authUser.metadata.creationTime || "") || 0;
+      const ctx = tiktokContextFromRequest(req);
+      if (Object.keys(ctx).length) await userRef.set({ tiktokCtx: ctx }, { merge: true }).catch(() => {});
+      if (created && Date.now() - created < 24 * 3600_000) {
+        after(() => sendTikTokEvent({ event: "CompleteRegistration", eventId: `reg_${uid}`, uid, email, ctx, properties: { content_name: "gadit_signup" } }));
+      }
+    }
     const providers = authUser.providerData.map((p) =>
       p.providerId.replace(".com", "").replace("password", "email"),
     );

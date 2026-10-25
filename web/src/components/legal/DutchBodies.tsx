@@ -37,7 +37,8 @@ export function PrivacyBodyNl(): ReactElement {
         Wij verzamelen automatisch technische basisinformatie zoals IP-adres, browsertype, apparaattype, verwijzende
         URL en bekeken pagina&rsquo;s. Deze informatie wordt gebruikt voor beveiliging, prestatiebewaking en
         geaggregeerde analyses. De analyses worden geleverd door Vercel en worden op het moment van verzameling
-        geanonimiseerd (er worden geen persoonlijke identificatiegegevens opgeslagen).
+        geanonimiseerd (er worden geen persoonlijke identificatiegegevens opgeslagen). Op onze marketing-, aanmeld- en
+        betaalpagina&rsquo;s gebruiken wij ook advertentie- en analysetools, die in Artikel 3 worden beschreven.
       </p>
       <h3>Betalingsinformatie</h3>
       <p>
@@ -80,6 +81,14 @@ export function PrivacyBodyNl(): ReactElement {
         <li>
           <strong>Vercel</strong>: host en levert de website, en verzorgt geanonimiseerde analyses en
           prestatiemetingen.
+        </li>
+        <li>
+          <strong>Advertenties en analyse</strong>: Meta (Meta Pixel), Google Analytics en TikTok (TikTok Pixel en
+          Events API) meten bezoeken en de resultaten van onze advertenties. Zij gebruiken cookies en vergelijkbare
+          technologieën op onze marketing-, aanmeld- en betaalpagina&rsquo;s. Wanneer u zich aanmeldt of betaalt,
+          kunnen wij deze diensten een gehasht (eenrichtingsversleuteld) e-mailadres en account-ID sturen, samen met
+          uw IP-adres en browsergegevens, uitsluitend om onze advertenties te meten. Wij sturen hun nooit informatie
+          over kinderen, en deze tools draaien niet op de schermen die kinderen gebruiken.
         </li>
       </ul>
 

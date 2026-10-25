@@ -35,7 +35,8 @@ export function PrivacyBodySw(): ReactElement {
         Tunakusanya kiotomatiki taarifa za msingi za kiufundi kama vile anwani ya IP, aina ya kivinjari, aina ya kifaa,
         URL iliyokuelekeza, na kurasa zilizotazamwa. Taarifa hizi hutumika kwa usalama, ufuatiliaji wa utendaji, na
         uchanganuzi wa jumla. Uchanganuzi hutolewa na Vercel na hufanywa kuwa bila utambulisho mahali pa ukusanyaji
-        (hakuna vitambulisho binafsi vinavyohifadhiwa).
+        (hakuna vitambulisho binafsi vinavyohifadhiwa). Kwenye kurasa zetu za masoko, usajili na malipo pia tunatumia
+        zana za matangazo na uchanganuzi, zilizoelezwa katika Kifungu cha 3.
       </p>
       <h3>Taarifa za malipo</h3>
       <p>
@@ -76,6 +77,14 @@ export function PrivacyBodySw(): ReactElement {
         <li>
           <strong>Vercel</strong>: hupangisha na kuhudumia tovuti, na hutoa uchanganuzi usio na utambulisho na upimaji wa
           utendaji.
+        </li>
+        <li>
+          <strong>Matangazo na uchanganuzi</strong>: Meta (Meta Pixel), Google Analytics na TikTok (TikTok Pixel na
+          Events API) hupima ziara na matokeo ya matangazo yetu. Hutumia vidakuzi (cookies) na teknolojia zinazofanana
+          kwenye kurasa zetu za masoko, usajili na malipo. Unapojisajili au kulipa, tunaweza kutuma kwa huduma hizi
+          anwani ya barua pepe na kitambulisho cha akaunti vilivyosimbwa kwa njia moja (hash), pamoja na anwani yako
+          ya IP na maelezo ya kivinjari chako, kwa ajili ya kupima matangazo yetu tu. Hatuzitumii kamwe taarifa yoyote
+          kuhusu watoto, na zana hizi haziendeshwi kwenye skrini zinazotumiwa na watoto.
         </li>
       </ul>
 

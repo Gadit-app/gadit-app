@@ -37,7 +37,9 @@ export function PrivacyBodyTn(): ReactElement {
         Re kokoanya ka boyone tshedimosetso ya motheo ya setegeniki jaaka aterese ya IP, mofuta wa sebatli (browser),
         mofuta wa sedirisiwa, URL e e go romileng, le ditsebe tse o di lebileng. Se se dirisetswa pabalesego, go
         tlhokomela tiragatso, le tshekatsheko ya dipalopalo tse di kopantsweng. Tshekatsheko e neelwa ke Vercel mme e
-        dirwa gore e se supe motho mo nakong ya go kokoanngwa (ga go na ditshupo tsa motho tse di bolokwang).
+        dirwa gore e se supe motho mo nakong ya go kokoanngwa (ga go na ditshupo tsa motho tse di bolokwang). Mo
+        ditsebeng tsa rona tsa papatso, tsa ikwadiso le tsa tuelo re dirisa gape didirisiwa tsa papatso le
+        tshekatsheko, tse di tlhalositsweng mo Karolong 3.
       </p>
       <h3>Tshedimosetso ya tuelo</h3>
       <p>
@@ -80,6 +82,15 @@ export function PrivacyBodyTn(): ReactElement {
         <li>
           <strong>Vercel</strong>, e tshwara le go tlamela webosaete, mme e neela tshekatsheko e e sa supeng motho le
           tekanyo ya tiragatso.
+        </li>
+        <li>
+          <strong>Papatso le tshekatsheko</strong>, Meta (Meta Pixel), Google Analytics le TikTok (TikTok Pixel le
+          Events API) di lekanya diketelo le dipoelo tsa dipapatso tsa rona. Di dirisa dikhukhi (cookies) le
+          thekenoloji e e tshwanang mo ditsebeng tsa rona tsa papatso, tsa ikwadiso le tsa tuelo. Fa o ikwadisa kgotsa
+          o duela, re ka romela ditirelo tse aterese ya imeile le ID ya akhaonto tse di khoutilweng ka tsela ya
+          lehlakore le le lengwe (hash), mmogo le aterese ya gago ya IP le dintlha tsa sebatli sa gago, fela go
+          lekanya dipapatso tsa rona. Ga re ke re di romelela tshedimosetso epe ka bana, mme didirisiwa tse ga di dire
+          mo disekirining tse bana ba di dirisang.
         </li>
       </ul>
 

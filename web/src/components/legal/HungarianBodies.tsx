@@ -36,7 +36,8 @@ export function PrivacyBodyHu(): ReactElement {
         Automatikusan gyűjtünk alapvető technikai információkat, például IP-címet, böngészőtípust, eszköztípust,
         hivatkozó URL-t és a megtekintett oldalakat. Ezeket biztonsági célokra, teljesítményfigyelésre és összesített
         analitikára használjuk. Az analitikát a Vercel biztosítja, és az adatokat már a gyűjtés helyén anonimizáljuk
-        (személyes azonosítókat nem tárolunk).
+        (személyes azonosítókat nem tárolunk). Marketing-, regisztrációs és fizetési oldalainkon hirdetési és
+        analitikai eszközöket is használunk, amelyeket a 3. pont ismertet.
       </p>
       <h3>Fizetési információk</h3>
       <p>
@@ -78,6 +79,15 @@ export function PrivacyBodyHu(): ReactElement {
         <li>
           <strong>Vercel</strong>: tárhelyet biztosít a weboldalnak és kiszolgálja azt, valamint anonimizált analitikát
           és teljesítménymérést nyújt.
+        </li>
+        <li>
+          <strong>Hirdetések és analitika</strong>: A Meta (Meta Pixel), a Google Analytics és a TikTok (TikTok Pixel
+          és Events API) a látogatásokat és hirdetéseink eredményeit méri. Marketing-, regisztrációs és fizetési
+          oldalainkon sütiket (cookie-kat) és hasonló technológiákat használnak. Amikor Ön regisztrál vagy fizet,
+          ezeknek a szolgáltatásoknak elküldhetünk egy hash-elt (egyirányú titkosítással kódolt) e-mail-címet és
+          fiókazonosítót, az Ön IP-címével és böngészőjének adataival együtt, kizárólag hirdetéseink mérése céljából.
+          Soha nem küldünk nekik semmilyen információt gyermekekről, és ezek az eszközök nem futnak azokon a
+          képernyőkön, amelyeket gyermekek használnak.
         </li>
       </ul>
 

@@ -38,6 +38,8 @@ export function PrivacyBodySt(): ReactElement {
         (browser), mofuta wa sesebediswa, URL e o romileng, le maqephe ao o a shebileng. Sena se sebediswa bakeng sa
         tshireletso, ho hlokomela tshebetso, le tlhahlobo ya dipalopalo tse kopantsweng. Tlhahlobo e fanwa ke Vercel
         mme e etswa hore e se tsebahatse motho nakong ya ho bokellwa (ha ho na ditshupo tsa motho tse bolokwang).
+        Maqepheng a rona a papatso, a ngodiso le a tefo re boetse re sebedisa disebediswa tsa papatso le tlhahlobo,
+        tse hlalositsweng Karolong ya 3.
       </p>
       <h3>Tlhahisoleseding ya tefo</h3>
       <p>
@@ -80,6 +82,15 @@ export function PrivacyBodySt(): ReactElement {
         <li>
           <strong>Vercel</strong>, e bolokela le ho fana ka websaete, mme e fana ka tlhahlobo e sa tsebahatseng motho
           le tekanyo ya tshebetso.
+        </li>
+        <li>
+          <strong>Papatso le tlhahlobo</strong>, Meta (Meta Pixel), Google Analytics le TikTok (TikTok Pixel le Events
+          API) di lekanya diketelo le diphetho tsa dipapatso tsa rona. Di sebedisa dikhuki (cookies) le theknoloji e
+          tshwanang maqepheng a rona a papatso, a ngodiso le a tefo. Ha o ngodisa kapa o lefa, re ka romela
+          ditshebeletso tsena aterese ya imeile le ID ya akhaonto tse kgoutilweng ka tsela ya lehlakore le le leng
+          (hash), hammoho le aterese ya hao ya IP le dintlha tsa sebadi sa hao, feela ho lekanya dipapatso tsa rona.
+          Ha ho mohla re di romellang tlhahisoleseding efe kapa efe ka bana, mme disebediswa tsena ha di sebetse
+          diskrineng tseo bana ba di sebedisang.
         </li>
       </ul>
 

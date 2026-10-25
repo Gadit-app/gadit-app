@@ -37,7 +37,8 @@ export function PrivacyBodySs(): ReactElement {
         Sicoca ngalokutentekela umniningwane wetheknoloji lowisisekelo lonjenge likheli le-IP, luhlobo lwesiphequluli
         (browser), luhlobo lwelithuluzi, i-URL lekuletse lapha, kanye nemakhasi lowabukile. Loku kusetjentiselwa
         kuphepha, kucapha kusebenta, kanye netibalo letihlanganisiwe. Tibalo tinikwa ngu-Vercel futsi tentiwa
-        tingavezi muntfu khona lapho ticocwa khona (akugcinwa lutfo loluveta umuntfu).
+        tingavezi muntfu khona lapho ticocwa khona (akugcinwa lutfo loluveta umuntfu). Emakhasini etfu ekukhangisa,
+        ekubhalisa nekukhokha siphindze sisebentise emathuluzi ekukhangisa netibalo, lachazwe eSigabeni 3.
       </p>
       <h3>Umniningwane wekukhokha</h3>
       <p>
@@ -81,6 +82,15 @@ export function PrivacyBodySs(): ReactElement {
         <li>
           <strong>Vercel</strong>, ibamba futsi ihambise iwebhusayithi, futsi iniketa tibalo letingavezi muntfu
           nekukalwa kwekusebenta.
+        </li>
+        <li>
+          <strong>Kukhangisa netibalo</strong>, i-Meta (Meta Pixel), i-Google Analytics ne-TikTok (TikTok Pixel
+          ne-Events API) kukala kuvakasha kanye nemiphumela yetikhangiso tetfu. Kusebentisa ema-cookie kanye
+          netheknoloji lefanako emakhasini etfu ekukhangisa, ekubhalisa nekukhokha. Nawubhalisa nome nawukhokha,
+          singatfumela kulamasevisi likheli le-imeyili kanye ne-ID ye-akhawunti letifihlwe ngendlela yinye (hash),
+          kanye nelikheli lakho le-IP nemniningwane yesiphequluli sakho, kuphela kute sikale tikhangiso tetfu. Asikaze
+          sitfumele kuwo umniningwane nome ngumuphi ngebantfwana, futsi lamathuluzi akasebenti etikrinini
+          letisetjentiswa bantfwana.
         </li>
       </ul>
 

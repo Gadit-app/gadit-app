@@ -36,7 +36,8 @@ export function PrivacyBodyTr(): ReactElement {
         IP adresi, tarayıcı türü, cihaz türü, yönlendiren URL ve görüntülenen sayfalar gibi temel teknik bilgileri
         otomatik olarak toplarız. Bu bilgiler güvenlik, performans izleme ve toplu analiz amacıyla kullanılır. Analiz
         hizmetleri Vercel tarafından sağlanır ve toplama noktasında anonimleştirilir (hiçbir kişisel tanımlayıcı
-        saklanmaz).
+        saklanmaz). Pazarlama, kayıt ve ödeme sayfalarımızda, 3. Bölüm’de açıklanan reklam ve analiz araçlarını da
+        kullanırız.
       </p>
       <h3>Ödeme bilgileri</h3>
       <p>
@@ -77,6 +78,15 @@ export function PrivacyBodyTr(): ReactElement {
         <li>
           <strong>Vercel</strong>: web sitesini barındırır ve sunar; anonimleştirilmiş analiz ve performans ölçümü
           sağlar.
+        </li>
+        <li>
+          <strong>Reklam ve analiz</strong>: Meta (Meta Pixel), Google Analytics ve TikTok (TikTok Pixel ve Events
+          API), ziyaretleri ve reklamlarımızın sonuçlarını ölçer. Bu hizmetler, pazarlama, kayıt ve ödeme
+          sayfalarımızda çerezler (cookies) ve benzer teknolojiler kullanır. Kaydolduğunuzda veya ödeme yaptığınızda,
+          yalnızca reklamlarımızı ölçmek amacıyla bu hizmetlere karma (hash) uygulanmış (tek yönlü şifrelenmiş) bir
+          e-posta adresi ve hesap kimliğini, IP adresiniz ve tarayıcı bilgilerinizle birlikte gönderebiliriz. Bu
+          hizmetlere çocuklarla ilgili hiçbir bilgiyi asla göndermeyiz ve bu araçlar çocukların kullandığı ekranlarda
+          çalışmaz.
         </li>
       </ul>
 

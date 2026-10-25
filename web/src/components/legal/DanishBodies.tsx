@@ -37,7 +37,8 @@ export function PrivacyBodyDa(): ReactElement {
         Vi indsamler automatisk grundlæggende tekniske oplysninger såsom IP-adresse, browsertype, enhedstype,
         henvisende URL og viste sider. Dette bruges til sikkerhed, overvågning af ydeevne og aggregerede analyser.
         Analyserne leveres af Vercel og anonymiseres allerede ved indsamlingen (der gemmes ingen personlige
-        identifikatorer).
+        identifikatorer). På vores marketing-, tilmeldings- og betalingssider bruger vi også annoncerings- og
+        analyseværktøjer, som er beskrevet i afsnit 3.
       </p>
       <h3>Betalingsoplysninger</h3>
       <p>
@@ -79,6 +80,14 @@ export function PrivacyBodyDa(): ReactElement {
         <li>
           <strong>Vercel</strong>: hoster og leverer webstedet og stiller anonymiserede analyser og målinger af
           ydeevne til rådighed.
+        </li>
+        <li>
+          <strong>Annoncering og analyse</strong>: Meta (Meta Pixel), Google Analytics og TikTok (TikTok Pixel og
+          Events API) måler besøg og resultaterne af vores annoncer. De bruger cookies og lignende teknologier på
+          vores marketing-, tilmeldings- og betalingssider. Når du tilmelder dig eller betaler, kan vi sende disse
+          tjenester en hashet (envejskrypteret) e-mailadresse og konto-ID sammen med din IP-adresse og oplysninger om
+          din browser, udelukkende for at måle vores annoncer. Vi sender dem aldrig oplysninger om børn, og disse
+          værktøjer kører ikke på de skærme, som børn bruger.
         </li>
       </ul>
 

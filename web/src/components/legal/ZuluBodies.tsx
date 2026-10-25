@@ -38,7 +38,8 @@ export function PrivacyBodyZu(): ReactElement {
         Siqoqa ngokuzenzakalelayo ulwazi lobuchwepheshe oluyisisekelo olufana nekheli le-IP, uhlobo lwesiphequluli,
         uhlobo lwedivayisi, i-URL ekudlulisele, namakhasi obukile. Lokhu kusetshenziselwa ukuphepha, ukuqapha
         ukusebenza, kanye nokuhlaziya okuhlanganisiwe. Ukuhlaziya kunikezwa yi-Vercel futhi kwenziwa kungaziwa
-        ngubani lapho kuqoqwa khona (azikho izihlonzi zomuntu siqu ezigcinwayo).
+        ngubani lapho kuqoqwa khona (azikho izihlonzi zomuntu siqu ezigcinwayo). Emakhasini ethu okumaketha,
+        okubhalisa nokukhokha siphinde sisebenzise amathuluzi okukhangisa nokuhlaziya, achazwe eSigabeni 3.
       </p>
       <h3>Ulwazi lokukhokha</h3>
       <p>
@@ -81,6 +82,15 @@ export function PrivacyBodyZu(): ReactElement {
         <li>
           <strong>Vercel</strong>: ibamba futhi ihlinzeke iwebhusayithi, futhi inikeza ukuhlaziya okungaziwa ngubani
           kanye nokukala ukusebenza.
+        </li>
+        <li>
+          <strong>Ukukhangisa nokuhlaziya</strong>: I-Meta (Meta Pixel), i-Google Analytics ne-TikTok (TikTok Pixel
+          ne-Events API) zikala ukuvakasha kanye nemiphumela yezikhangiso zethu. Zisebenzisa ama-cookie nobuchwepheshe
+          obufanayo emakhasini ethu okumaketha, okubhalisa nokukhokha. Uma ubhalisa noma ukhokha, singathumela kulezi
+          zinsiza ikheli le-imeyili kanye ne-ID ye-akhawunti efihliwe ngendlela eya ohlangothini olulodwa (hash),
+          kanye nekheli lakho le-IP nemininingwane yesiphequluli sakho, kuphela ukuze sikale izikhangiso zethu.
+          Asisoze sazithumelela noma yiluphi ulwazi mayelana nezingane, futhi lawa mathuluzi awasebenzi ezikrinini
+          ezisetshenziswa izingane.
         </li>
       </ul>
 

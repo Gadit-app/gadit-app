@@ -38,7 +38,8 @@ export function PrivacyBodyNso(): ReactElement {
         sefetleki (browser), mohuta wa sedirišwa, URL yeo e go romilego, le matlakala ao o a lebeletšego. Se se
         šomišetšwa polokego, go hlokomela tshepedišo, le tshekatsheko ya dipalopalo tše di kopantšwego. Tshekatsheko e
         abja ke Vercel gomme e dirwa gore e se tsebiše motho nakong ya ge e kgoboketšwa (ga go dintlha tša go tsebiša
-        motho tšeo di bolokwago).
+        motho tšeo di bolokwago). Matlakaleng a rena a papatšo, a ngwadišo le a tefo re šomiša gape le didirišwa tša
+        papatšo le tshekatsheko, tšeo di hlalošitšwego go Karolo ya 3.
       </p>
       <h3>Tshedimošo ya tefo</h3>
       <p>
@@ -81,6 +82,15 @@ export function PrivacyBodyNso(): ReactElement {
         <li>
           <strong>Vercel</strong>, e swara le go abela weposaete, gomme e aba tshekatsheko ye e sa tsebišego motho le
           go lekanya tshepedišo.
+        </li>
+        <li>
+          <strong>Papatšo le tshekatsheko</strong>, Meta (Meta Pixel), Google Analytics le TikTok (TikTok Pixel le
+          Events API) di lekanya diketelo le dipoelo tša dipapatšo tša rena. Di šomiša dikhuki (cookies) le
+          theknolotši ye e swanago matlakaleng a rena a papatšo, a ngwadišo le a tefo. Ge o ngwadiša goba o lefa, re
+          ka romela ditirelo tše aterese ya imeile le ID ya akhaonto tšeo di khoutilwego ka tsela ya lehlakore le tee
+          (hash), gotee le aterese ya gago ya IP le dintlha tša sefetleki sa gago, fela go lekanya dipapatšo tša rena.
+          Ga re ke re di romele tshedimošo efe goba efe ka ga bana, gomme didirišwa tše ga di šome dikrineng tšeo bana
+          ba di šomišago.
         </li>
       </ul>
 

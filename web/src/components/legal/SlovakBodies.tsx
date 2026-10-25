@@ -37,7 +37,8 @@ export function PrivacyBodySk(): ReactElement {
         Automaticky zhromažďujeme základné technické informácie, ako je IP adresa, typ prehliadača, typ zariadenia,
         odkazujúca URL adresa a zobrazené stránky. Tieto informácie slúžia na zaistenie bezpečnosti, monitorovanie
         výkonu a súhrnnú analytiku. Analytiku poskytuje spoločnosť Vercel a údaje sa anonymizujú už v mieste zberu
-        (neukladajú sa žiadne osobné identifikátory).
+        (neukladajú sa žiadne osobné identifikátory). Na našich marketingových, registračných a platobných stránkach
+        používame aj reklamné a analytické nástroje opísané v oddiele 3.
       </p>
       <h3>Platobné informácie</h3>
       <p>
@@ -78,6 +79,14 @@ export function PrivacyBodySk(): ReactElement {
         <li>
           <strong>Vercel</strong>: hosťuje a prevádzkuje webovú stránku a poskytuje anonymizovanú analytiku a meranie
           výkonu.
+        </li>
+        <li>
+          <strong>Reklama a analytika</strong>: Meta (Meta Pixel), Google Analytics a TikTok (TikTok Pixel a Events
+          API) merajú návštevy a výsledky našich reklám. Na našich marketingových, registračných a platobných
+          stránkach používajú súbory cookie a podobné technológie. Keď sa zaregistrujete alebo zaplatíte, môžeme týmto
+          službám odoslať hašovanú (jednosmerne zašifrovanú) e-mailovú adresu a ID účtu spolu s vašou IP adresou a
+          údajmi o prehliadači, a to iba na účely merania našich reklám. Nikdy im neposielame žiadne informácie o
+          deťoch a tieto nástroje nebežia na obrazovkách, ktoré používajú deti.
         </li>
       </ul>
 

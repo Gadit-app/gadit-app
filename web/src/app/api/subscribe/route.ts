@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { tiktokContextFromRequest, tiktokEventsEnabled } from "@/lib/tiktok-events";
 import { isIosAppUA } from "@/lib/native-app";
 import Stripe from "stripe";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
@@ -187,6 +188,12 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // TikTok: the browser facts at checkout, read back by the Stripe webhook
+    // for StartTrial / Purchase (lib/tiktok-events.ts). Best-effort.
+    if (tiktokEventsEnabled()) {
+      const ttCtx = tiktokContextFromRequest(req);
+      if (Object.keys(ttCtx).length) await getAdminDb().collection("users").doc(uid).set({ tiktokCtx: ttCtx }, { merge: true }).catch(() => {});
+    }
     const customer = await resolveCustomer(uid, email);
     const utmMeta = await resolveUtmMeta(uid, utm);
 

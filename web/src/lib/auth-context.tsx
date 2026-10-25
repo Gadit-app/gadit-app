@@ -1,4 +1,5 @@
 "use client";
+import { ttqTrack } from "@/lib/tiktok-pixel";
 import { AudienceQuestion } from "@/components/AudienceQuestion";
 import { isIndividualPriceId } from "@/lib/individual-prices";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
@@ -484,6 +485,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       void notifySignupSafely(cred.user);
       trackAffonsoSignup(cred.user);
       track("signup_completed", { method });
+      ttqTrack("CompleteRegistration", { content_name: "gadit_signup" }, `reg_${cred.user.uid}`);
       afterNewSignup(cred.user, hadPendingRef.current);
     }
     setShowLoginModal(false);
@@ -593,6 +595,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     void notifySignupSafely(cred.user);
     trackAffonsoSignup(cred.user);
     track("signup_completed", { method: "email" });
+    ttqTrack("CompleteRegistration", { content_name: "gadit_signup" }, `reg_${cred.user.uid}`);
     setShowLoginModal(false);
     afterNewSignup(cred.user, hadPending);
   }
