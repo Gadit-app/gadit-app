@@ -130,7 +130,7 @@ export function HomeHero() {
 // soft wall.
 export function HomeSearch() {
   const { lang, dir } = useLang();
-  const { user } = useAuth();
+  const { user, plan } = useAuth();
   const router = useRouter();
   const isRtl = dir === "rtl";
   const [query, setQuery] = useState("");
@@ -245,7 +245,7 @@ export function HomeSearch() {
             uiLang={lang}
             getIdToken={getIdToken}
             onResult={handleVoiceResult}
-            enabled={true}
+            enabled={plan === "clear" || plan === "deep"}
             size="sm"
             title={v2(lang, "voiceInputTitle")}
           />

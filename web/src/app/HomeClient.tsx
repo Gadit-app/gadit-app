@@ -392,7 +392,7 @@ export function HomePage() {
                     setQuery(text);
                     go(text);
                   }}
-                  enabled={true}
+                  enabled={plan === "clear" || plan === "deep"}
                   title={v2(lang, "voiceInputTitle")}
                   size="sm"
                 />

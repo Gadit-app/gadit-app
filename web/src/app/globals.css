@@ -15454,3 +15454,6 @@ html[data-theme="dark"] .wordbook .wb-word-sentence-input::placeholder { color: 
 }
 .wordbook .wb-home-join-title { font-weight: 700; font-size: 15.5px; }
 .wordbook .wb-home-join-btn { background: var(--teal-deep, #0B8A8A); color: #fff; border-radius: 999px; padding: 8px 18px; font-weight: 800; font-size: 14.5px; white-space: nowrap; }
+
+/* The search mic is for paid plans only; its empty slot takes no room (Gadi 2026-10-25). */
+.wordbook .wb-home-search-mic:empty, .wordbook .wb-word-searchbar-mic:empty { display: none; }

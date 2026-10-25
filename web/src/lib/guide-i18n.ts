@@ -236,7 +236,7 @@ const G: Dict = {
 
   // ── frame labels: Play and Word Duel (PlayClient, DuelHub, DuelGame, DuelStats) ──
   "ui.wordGames": { en: "Word Games", he: "משחקי מילים" },
-  "ui.fromNotebook": { en: "From your notebook", he: "מהמחברת שלך" },
+  "ui.fromNotebook": { en: "From your notebook", he: "מהמחברת שלכם" },
   "ui.gWordCards": { en: "Word cards", he: "כרטיסיות מילים" },
   "ui.gTrueFalse": { en: "True or false?", he: "נכון או לא?" },
   "ui.gQuiz": { en: "Definition Quiz", he: "חידון הגדרות" },

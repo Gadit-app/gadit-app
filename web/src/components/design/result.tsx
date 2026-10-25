@@ -41,6 +41,8 @@ import { gadCopy, GAD_TAP_HINT } from "@/lib/gadit-button-copy";
 import { nativeShareFallback } from "@/lib/native-app";
 import { useState, useEffect, useMemo, type ReactNode } from "react";
 import { miscUi } from "@/lib/misc-ui-i18n";
+import { planCopy, FREE_NOTEBOOK_MAX } from "@/lib/plan-copy";
+import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth-context";
 import { v2 } from "@/lib/i18n-v2";
@@ -1757,6 +1759,7 @@ export function ResultView({
   imageUrl,
   imageGenerating = false,
   isSaved = false,
+  notebookFull = false,
   savedAgo,
   onSave,
   onShare,
@@ -1787,6 +1790,8 @@ export function ResultView({
   imageUrl?: string;
   imageGenerating?: boolean;
   isSaved?: boolean;
+  /** A free notebook already holds FREE_NOTEBOOK_MAX words, so this one was not saved. */
+  notebookFull?: boolean;
   savedAgo?: string;
   onSave?: () => void;
   onShare?: () => void;
@@ -1845,6 +1850,19 @@ export function ResultView({
         <p className="wb-saved-note" dir={dir}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
           <span>{plan === "clear" || plan === "deep" ? meaningPracticeCopy(lang).saved : meaningPracticeCopy(lang).savedFree}</span>
+        </p>
+      )}
+
+      {/* A full free notebook stopped saving: say so instead of saving
+          silently nothing (Gadi 2026-10-25). Inside the store apps only the
+          count, no plan name or link (.gd-buy / .gd-play-only). */}
+      {notebookFull && !isSaved && !streaming && (
+        <p className="wb-saved-note" dir={dir}>
+          <span className="gd-buy">
+            {planCopy(lang, "nbFreeFull", { max: FREE_NOTEBOOK_MAX })}{" "}
+            <Link href={href("/pricing")} style={{ color: "inherit", fontWeight: 700 }}>{planCopy(lang, "nbFreeCta")}</Link>
+          </span>
+          <span className="gd-play-only">{planCopy(lang, "nbFreeCount", { n: FREE_NOTEBOOK_MAX, max: FREE_NOTEBOOK_MAX })}</span>
         </p>
       )}
 

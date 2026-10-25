@@ -137,7 +137,7 @@ const COPY: Record<string, PlayT> = {
     artistTitle: "אמן אטימולוגיה",
     artistDesc: "תרגום מילולי של שורש עתיק. מה המילה המודרנית?",
     artistPrompt: "השורש העתיק הזה נתן לנו איזו מילה מודרנית?",
-    catNotebook: "מהמחברת שלך",
+    catNotebook: "מהמחברת שלכם",
     catOrigin: "מקור והיסטוריה",
     catPrecision: "דיוק במילים",
     catStructure: "מבנה ומשמעות",

@@ -1832,6 +1832,7 @@ export function WordClient({
   const autoSavedRef = useRef<string>("");
   // The notebook's size after a new word is saved (WordMilestone, every 10th).
   const [notebookCount, setNotebookCount] = useState<number | null>(null);
+  const [notebookFull, setNotebookFull] = useState(false);
   useEffect(() => {
     // Complete result only — mid-stream result.word is a partial prefix.
     if (loading || !result?.word || !user) return;
@@ -1853,8 +1854,11 @@ export function WordClient({
         });
         if (res.ok) {
           setIsSaved(true);
+          setNotebookFull(false);
           const j = (await res.json().catch(() => ({}))) as { saved?: boolean; count?: number };
           if (j.saved && typeof j.count === "number") setNotebookCount(j.count);
+        } else if (res.status === 402) {
+          setNotebookFull(true);
         }
       } catch {
         /* best effort — auto-save must never disturb the reading flow */
@@ -2558,7 +2562,7 @@ export function WordClient({
                 : "";
                   router.push(href(wordPath(text.trim(), clsParam)));
                 }}
-                enabled={true}
+                enabled={authPlan === "clear" || authPlan === "deep"}
                 title={v2(lang, "voiceInputTitle")}
                 size="sm"
               />
@@ -2779,6 +2783,7 @@ export function WordClient({
             kidsImages={kidsImages}
             kidsImagesLoading={kidsImgLoading}
             isSaved={isSaved}
+            notebookFull={notebookFull}
             onSave={handleSave}
             onShare={handleShare}
             isPinned={isPinned}
