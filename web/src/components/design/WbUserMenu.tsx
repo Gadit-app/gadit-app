@@ -34,6 +34,7 @@ import { gt } from "@/lib/guide-i18n";
 import { useHref } from "@/lib/href";
 import { useTheme } from "@/lib/appearance";
 import { TopRankBadge } from "./KidsGameHeader";
+import { useKidsMode } from "@/lib/use-kids-mode";
 import { resolvePartnerArea } from "@/lib/partner-nav";
 
 // Per-uid cache of "is this user a registered partner", so the menu doesn't
@@ -174,6 +175,7 @@ export function WbUserMenu() {
   const router = useRouter();
   const href = useHref();
   const [open, setOpen] = useState(false);
+  const [kidsOn] = useKidsMode();
   // A coach (anyone a parent added by email) sees "My students" in the
   // menu. Checked once per visit, the first time the menu opens.
   const [coachN, setCoachN] = useState<number>(() => { try { return Number(sessionStorage.getItem("gadit-coach-n") ?? "0") || 0; } catch { return 0; } });
@@ -319,6 +321,14 @@ export function WbUserMenu() {
         gap: 8,
       }}
     >
+      {/* Support: a small "?" to the guides on every signed-in page, for the
+          grown-ups (Gadi 2026-10-25). Same round button as Share. */}
+      {planReady && familyRole !== "kid" && !kidsOn && (
+        <Link href={href("/help")} className="wb-shell-share" aria-label={gt(lang, "help.title")} title={gt(lang, "help.title")}
+          style={{ textDecoration: "none", fontSize: 16, fontWeight: 700, lineHeight: 1 }}>
+          ?
+        </Link>
+      )}
       {/* The grown-up rank, quietly, next to the avatar on every page (Gadi 2026-10-19). */}
       {planReady && <TopRankBadge lang={lang} dir={dir} />}
       {/* Plan chip, clicking it opens the same menu as clicking the
