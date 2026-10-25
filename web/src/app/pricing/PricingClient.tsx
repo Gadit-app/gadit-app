@@ -4786,18 +4786,22 @@ export function PricingPageRoute() {
           const rows: Array<{ l: string; b: Cell; i: Cell; f: Cell }> = [
             { l: planCopy(lang, "prRowSearches"), b: planCopy(lang, "prSearchesBasic"), i: planCopy(lang, "prUnlimited"), f: planCopy(lang, "prUnlimited") },
             { l: planCopy(lang, "prRowCore"), b: true, i: true, f: true },
+            { l: planCopy(lang, "prRowContext"), b: true, i: true, f: true },
             { l: planCopy(lang, "prRowNotebook"), b: planCopy(lang, "prNotebookBasic"), i: true, f: true },
             { l: planCopy(lang, "prRowImages"), b: false, i: true, f: true },
-            { l: planCopy(lang, "prRowContext"), b: false, i: true, f: true },
+            { l: planCopy(lang, "prRowMore"), b: false, i: true, f: true },
+            { l: planCopy(lang, "prRowCompose"), b: false, i: true, f: true },
             { l: planCopy(lang, "prRowRead"), b: false, i: true, f: true },
             { l: planCopy(lang, "prRowSay"), b: false, i: true, f: true },
-            { l: planCopy(lang, "prRowCompose"), b: false, i: true, f: true },
+            { l: planCopy(lang, "prRowVoice"), b: false, i: true, f: true },
+            { l: planCopy(lang, "prRowOffline"), b: false, i: true, f: true },
             { l: planCopy(lang, "prRowPractice"), b: false, i: true, f: true },
-            { l: planCopy(lang, "prRowCompare"), b: false, i: true, f: true },
+            { l: planCopy(lang, "prRowStudy"), b: false, i: true, f: true },
             { l: planCopy(lang, "prRowKids"), b: false, i: false, f: true },
             { l: planCopy(lang, "prRowChildren"), b: false, i: false, f: true },
+            { l: planCopy(lang, "prRowHomework"), b: false, i: false, f: true },
             { l: planCopy(lang, "prRowParent"), b: false, i: false, f: true },
-            { l: planCopy(lang, "prRowDictation"), b: false, i: false, f: true },
+            { l: planCopy(lang, "prRowKidsFun"), b: false, i: false, f: true },
           ];
           const dash = <span className="wb-pc-dash">·</span>;
           const cell = (v: Cell, strong = false) =>

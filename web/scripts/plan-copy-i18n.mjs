@@ -23,7 +23,7 @@ function block(name) {
 }
 const EN = block("en");
 const HE = block("he");
-const LANGS = { ar: "Arabic", ru: "Russian", es: "Spanish", pt: "Portuguese", fr: "French", de: "German", cs: "Czech", sk: "Slovak", it: "Italian", ja: "Japanese", hi: "Hindi", am: "Amharic", uk: "Ukrainian", tr: "Turkish", pl: "Polish", fa: "Persian", id: "Indonesian", nl: "Dutch", el: "Greek", zu: "Zulu", vi: "Vietnamese", fil: "Filipino", af: "Afrikaans", sw: "Swahili", "zh-CN": "Simplified Chinese", "zh-TW": "Traditional Chinese", ko: "Korean", th: "Thai", bn: "Bengali", da: "Danish", hu: "Hungarian" };
+const LANGS = { ar: "Arabic", ru: "Russian", es: "Spanish", pt: "Portuguese", fr: "French", de: "German", cs: "Czech", sk: "Slovak", it: "Italian", ja: "Japanese", hi: "Hindi", am: "Amharic", uk: "Ukrainian", tr: "Turkish", pl: "Polish", fa: "Persian", id: "Indonesian", nl: "Dutch", el: "Greek", zu: "Zulu", vi: "Vietnamese", fil: "Filipino", af: "Afrikaans", sw: "Swahili", "zh-CN": "Simplified Chinese", "zh-TW": "Traditional Chinese", ko: "Korean", th: "Thai", bn: "Bengali", da: "Danish", hu: "Hungarian", xh: "Xhosa", nso: "Sepedi (Northern Sotho)", tn: "Setswana", st: "Sesotho", ts: "Xitsonga", ss: "siSwati", ve: "Tshivenda", nr: "isiNdebele (South Ndebele)" };
 const OUT = path.join(HERE, "../src/lib/plan-copy-i18n.json");
 const out = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, "utf8")) : {};
 const hash = (s) => crypto.createHash("sha1").update(s).digest("hex").slice(0, 8);
