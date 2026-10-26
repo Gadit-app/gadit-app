@@ -54,7 +54,17 @@ const LANG_HINT: Record<string, string> = {
 // Those go to gpt-4o-transcribe with the language named in the prompt, which
 // heard "Sawubona, mama. Unjani?" exactly in a test.
 const WHISPER_LANGS = new Set(["af", "ar", "hy", "az", "be", "bs", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "gl", "de", "el", "he", "hi", "hu", "is", "id", "it", "ja", "kn", "kk", "ko", "lv", "lt", "mk", "ms", "mr", "mi", "ne", "no", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "tl", "ta", "th", "tr", "uk", "ur", "vi", "cy"]);
+// Whisper-supported, but gpt-4o-transcribe heard them clearly better in the
+// Say it check of every language (2026-10-26).
+const PREFER_4O = new Set(["fa", "af"]);
+// Whisper writes Mandarin in traditional characters by default; a short prompt
+// in the right script keeps simplified for zh-CN (it scored 2 stars before).
+const WHISPER_PROMPT: Record<string, string> = {
+  "zh-CN": "以下是普通话的句子，用简体中文书写。",
+  "zh-TW": "以下是國語的句子，用繁體中文書寫。",
+};
 const LANG_NAME: Record<string, string> = {
+  fa: "Persian (Farsi)", af: "Afrikaans",
   zu: "isiZulu (Zulu)", xh: "isiXhosa (Xhosa)", nso: "Sepedi (Northern Sotho)", tn: "Setswana (Tswana)", st: "Sesotho (Southern Sotho)",
   ts: "Xitsonga (Tsonga)", ss: "siSwati (Swati)", ve: "Tshivenda (Venda)", nr: "isiNdebele (South Ndebele)", am: "Amharic", bn: "Bengali",
 };
@@ -104,13 +114,15 @@ export async function POST(req: NextRequest) {
       ? "ogg"
       : "webm";
     upstreamForm.append("file", audioFile, `audio.${ext}`);
-    const viaWhisper = !langHint || WHISPER_LANGS.has(langHint);
+    const viaWhisper = !langHint || (WHISPER_LANGS.has(langHint) && !PREFER_4O.has(langHint));
     const model = viaWhisper ? "whisper-1" : "gpt-4o-transcribe";
     upstreamForm.append("model", model);
     if (viaWhisper) {
       // verbose_json adds the audio duration, which prices the call.
       upstreamForm.append("response_format", "verbose_json");
       if (langHint) upstreamForm.append("language", langHint);
+      const wp = typeof uiLangRaw === "string" ? WHISPER_PROMPT[uiLangRaw] : undefined;
+      if (wp) upstreamForm.append("prompt", wp);
     } else {
       upstreamForm.append("response_format", "json");
       upstreamForm.append("prompt", `The speaker is speaking ${LANG_NAME[langHint!] ?? langHint}. Transcribe exactly what is said, in that language and its usual spelling.`);
