@@ -17,7 +17,7 @@ import { useLang } from "@/lib/lang-context";
 import { WordPopover } from "./WordPopover";
 import { stopBubble } from "@/components/play/QText";
 import { SentencePopover } from "./SentencePopover";
-import { tokenizeWords, wordKey } from "@/lib/tokenize-words";
+import { tokenizeWords, wordKey, UNSURE_MARK } from "@/lib/tokenize-words";
 
 type Props = {
   text: string;
@@ -31,6 +31,8 @@ type Props = {
   /** Localized tooltip + aria-label for the per-sentence "understand" control
    *  (from the Reader's copy table); English fallback. */
   understandLabel?: string;
+  /** aria-label of a word the photo reader could not read (⟦?⟧). */
+  unsureLabel?: string;
 };
 
 /** Detect the passage's dominant script so TTS speaks each word in the text's
@@ -78,13 +80,45 @@ function toSentences(tokens: Tok[]): Sentence[] {
   tokens.forEach((tok, gi) => {
     cur.push({ tok, gi });
     if (tok.type === "word") words += 1;
-    else if (SENTENCE_END.test(tok.value) || tok.value.includes("\n")) flush();
+    // The "?" of an unread-word mark is not the end of a sentence.
+    else if (SENTENCE_END.test(tok.value.split(UNSURE_MARK).join("")) || tok.value.includes("\n")) flush();
   });
   flush();
   return out;
 }
 
-export function ReaderText({ text, reviewed, onReview, hardKeys, understandLabel = "Understand this sentence" }: Props) {
+/** Plain text, with every unread-word mark (⟦?⟧ from /api/ocr) shown as a
+ *  highlighted "?" that is never a tappable word (Gadi 2026-10-26). */
+function OtherText({ value, label }: { value: string; label: string }) {
+  if (!value.includes(UNSURE_MARK)) return <>{value}</>;
+  const parts = value.split(UNSURE_MARK);
+  return (
+    <>
+      {parts.map((p, i) => (
+        <span key={i}>
+          {p}
+          {i < parts.length - 1 && (
+            <span
+              className="wb-reader-unsure"
+              role="img"
+              aria-label={label}
+              title={label}
+              style={{
+                display: "inline-block", minWidth: "1.4em", padding: "0 5px", margin: "0 1px",
+                borderRadius: 6, background: "#FEF3C7", border: "1px solid #F59E0B",
+                color: "#92400E", fontWeight: 800, textAlign: "center", lineHeight: 1.35,
+              }}
+            >
+              ?
+            </span>
+          )}
+        </span>
+      ))}
+    </>
+  );
+}
+
+export function ReaderText({ text, reviewed, onReview, hardKeys, understandLabel = "Understand this sentence", unsureLabel = "Unclear word" }: Props) {
   const { lang } = useLang();
   const tokens = useMemo(() => tokenizeWords(text), [text]);
   const textLang = useMemo(() => detectTextLang(text), [text]);
@@ -111,7 +145,7 @@ export function ReaderText({ text, reviewed, onReview, hardKeys, understandLabel
         {sentences.map((s, si) => (
           <span key={si}>
             {s.toks.map(({ tok, gi }) => {
-              if (tok.type === "other") return <span key={gi}>{tok.value}</span>;
+              if (tok.type === "other") return <span key={gi}><OtherText value={tok.value} label={unsureLabel} /></span>;
               const wk = wordKey(tok.value);
               const done = reviewed.has(wk);
               const hard = !done && !!hardKeys?.has(wk);

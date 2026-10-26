@@ -8,6 +8,11 @@
  * so we don't make every "a"/"1"/Hebrew prefix letter tappable.
  */
 
+/** What /api/ocr writes in place of a word it could not read in a photo (it
+ *  never guesses one). Not letters, so it is never a tappable word; the
+ *  Reader shows it as a highlighted "?" (Gadi 2026-10-26). */
+export const UNSURE_MARK = "⟦?⟧";
+
 export type WordToken =
   | { type: "word"; value: string }
   | { type: "other"; value: string };

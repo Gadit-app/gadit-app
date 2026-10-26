@@ -9,9 +9,11 @@ import { logAiUsage, usageFrom, TEXT_MODEL } from "@/lib/ai-cost";
  *
  * Auth: signed-in, paid tiers only (the model call costs money) — same gate as
  * /api/transcribe. Input: multipart form with an `image` file (JPEG/PNG/WEBP/
- * HEIC) OR a `application/pdf`. Output: { text }.
+ * HEIC) OR a `application/pdf`. Output: { text, legible, unsure }: words the
+ * model could not read come back as ⟦?⟧ (never a guessed word), `unsure` counts
+ * them, `legible` is "good" | "poor" | "unreadable" (then `text` is empty).
  *
- * Both go to gpt-4o: images as an `image_url` part, PDFs as a `file` part
+ * Both go to TEXT_MODEL in one transcription call: images as an `image_url` part, PDFs as a `file` part
  * (OpenAI reads the PDF directly, handling BOTH text-based and scanned PDFs —
  * no local rasterization/canvas dependency needed). Mirrors the codebase's
  * OpenAI fetch pattern.
@@ -32,6 +34,9 @@ const OCR_SYSTEM =
   "modernize, or normalize spelling, and do NOT add, drop, or reorder any " +
   "letter. If a word looks unusual, still transcribe the exact letters you see " +
   "rather than guessing a more common word. " +
+  "NEVER GUESS: if you cannot read a word with certainty from the letters " +
+  "themselves, write ⟦?⟧ in its place instead of a likely-looking word. Do not " +
+  "use the meaning of the sentence to fill in a word you cannot see. " +
   "For HEBREW: transcribe the exact consonants only and do NOT include niqqud " +
   "(vowel points) — the niqqud is added separately. Be especially careful with " +
   "the mater lectionis letters yod (י) and vav (ו): do not insert an extra yod " +
@@ -40,9 +45,34 @@ const OCR_SYSTEM =
   "example keep נגיף as נגיף, not ניגף). " +
   "For a multi-page document, transcribe every page in reading order, separated " +
   "by a blank line. Preserve line breaks and paragraph breaks. Do not translate, " +
-  "summarize, correct, explain, apologize, or add any commentary. Return ONLY " +
-  "the transcribed text. If there is genuinely no readable text, return an " +
-  "empty string (never a sentence explaining that you cannot read it).";
+  "summarize, correct, explain, apologize, or add any commentary. " +
+  "Reply with JSON only, in this shape: " +
+  '{"text": "<the transcribed text>", "legible": "good" | "poor" | "unreadable"}. ' +
+  '"legible" judges the image: "good" when every word could be read with ' +
+  'certainty, "poor" when some words could not (they are the ⟦?⟧ marks), ' +
+  '"unreadable" when the image is too blurry, dark or small to read the text. ' +
+  'If there is genuinely no readable text, return {"text": "", "legible": "unreadable"} ' +
+  "(never a sentence explaining that you cannot read it).";
+
+/** The mark the model writes in place of a word it cannot read (Gadi
+ *  2026-10-26: a blurry photo made it invent 12 plausible words instead). */
+const UNSURE = "⟦?⟧";
+
+type Legible = "good" | "poor" | "unreadable";
+
+/** Read the model's JSON reply. Anything that is not the expected JSON is
+ *  treated as the plain transcription (the behavior before the JSON shape). */
+function parseOcrReply(raw: string): { text: string; legible: Legible } {
+  const body = raw.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+  try {
+    const j = JSON.parse(body) as { text?: unknown; legible?: unknown };
+    if (j && typeof j === "object" && typeof j.text === "string") {
+      const l = String(j.legible ?? "").toLowerCase();
+      return { text: j.text, legible: l === "poor" || l === "unreadable" ? l : "good" };
+    }
+  } catch { /* not JSON: fall through */ }
+  return { text: raw, legible: "good" };
+}
 
 /**
  * A sideways or upside-down photo makes the model guess words instead of
@@ -148,6 +178,8 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         model: TEXT_MODEL,
         temperature: 0,
+        // One call returns the text AND how legible the photo was.
+        response_format: { type: "json_object" },
         messages: [
           { role: "system", content: OCR_SYSTEM },
           { role: "user", content: userContent },
@@ -163,7 +195,9 @@ export async function POST(req: NextRequest) {
 
     const data = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
     { const u = usageFrom(data); void logAiUsage({ feature: "ocr", model: TEXT_MODEL, tokensIn: u.tokensIn, tokensOut: u.tokensOut, plan: userInfo.plan }); }
-    let text = (data.choices?.[0]?.message?.content ?? "").trim();
+    const parsed = parseOcrReply(data.choices?.[0]?.message?.content ?? "");
+    let text = parsed.text.trim();
+    let legible: Legible = parsed.legible;
     // A blank/black frame makes the model reply with a refusal ("I'm sorry, I
     // can't transcribe…") instead of empty. Treat that as no text so the client
     // shows a real error rather than loading the apology as the passage.
@@ -176,7 +210,15 @@ export async function POST(req: NextRequest) {
     ) {
       text = "";
     }
-    return NextResponse.json({ text });
+    // Words the model could not read are marked, never guessed. Count them;
+    // a text that is mostly marks (or has no letters left) is unreadable, and
+    // then no text goes back at all, so no caller builds words from it.
+    const unsure = text.split(UNSURE).length - 1;
+    const words = (text.replaceAll(UNSURE, " ").match(/\p{L}[\p{L}\p{M}'’-]*/gu) ?? []).length;
+    if (legible === "unreadable" || !words || unsure >= words) text = "";
+    if (!text) legible = "unreadable";
+    else if (unsure > 0 && legible === "good") legible = "poor";
+    return NextResponse.json({ text, legible, unsure: text ? unsure : 0 });
   } catch (e) {
     console.error("[ocr] error:", e);
     return NextResponse.json({ error: "internal_error" }, { status: 500 });
