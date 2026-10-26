@@ -2093,6 +2093,23 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+/* The flag buttons sit at the card's edge, so a centered label reached past
+   the screen and made the word page wider than a phone (Gadi 2026-10-26).
+   The label now opens toward the inside of the card, and touch screens,
+   which never hover, don't lay it out at all. */
+.wordbook .wb-flag-tip::after {
+  left: auto;
+  inset-inline-end: 0;
+  transform: translateY(4px);
+}
+.wordbook .wb-flag-tip:hover::after,
+.wordbook .wb-flag-tip:focus-visible::after {
+  transform: translateY(0);
+}
+@media (hover: none) {
+  .wordbook .wb-flag-tip::after,
+  .wordbook .wb-flag-tip::before { display: none; }
+}
 /* Per-meaning listen button — same square pill as share so the two
    actions read as a pair. Pulses while audio is playing. */
 .wordbook .wb-mcard-listen {
