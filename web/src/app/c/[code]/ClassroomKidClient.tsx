@@ -24,7 +24,8 @@ import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
 import { useHref, wordPath } from "@/lib/href";
 import { LANGUAGES, langNameIn } from "@/lib/i18n";
-import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
+import { toggleLangGroup } from "@/lib/lang-groups";
+import { LangSearchList } from "@/components/LangSearch";
 import { KidsModeToggle } from "@/components/KidsModeToggle";
 import { useKidsMode } from "@/lib/use-kids-mode";
 import VoiceInput from "@/components/VoiceInput";
@@ -1046,7 +1047,6 @@ function ClassroomLangSwitch() {
     return () => document.removeEventListener("mousedown", onClick);
   }, [open]);
   const active = CLASSROOM_LANGS.find((l) => l.code === lang) ?? CLASSROOM_LANGS[1];
-  const langRows = useLangRows(lang);
   return (
     <div ref={wrapRef} className="wb-classroom-lang">
       <button
@@ -1063,7 +1063,8 @@ function ClassroomLangSwitch() {
       </button>
       {open && (
         <ul className="wb-classroom-lang-menu" role="listbox">
-          {langRows.map((l) => (
+          <LangSearchList lang={lang} onPick={(c) => { setLang(c); setOpen(false); }} onClose={() => setOpen(false)}>
+          {(langRows) => langRows.map((l) => (
             <li key={l.code}>
               <button
                 type="button"
@@ -1085,6 +1086,7 @@ function ClassroomLangSwitch() {
               </button>
             </li>
           ))}
+          </LangSearchList>
         </ul>
       )}
     </div>

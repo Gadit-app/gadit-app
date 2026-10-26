@@ -19,8 +19,9 @@ import { INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY, INDIVIDUAL_DISPLAY } from "@/lib
 import { planCopy } from "@/lib/plan-copy";
 import { useEffect, useRef, useState } from "react";
 import { usePricing } from "@/lib/use-pricing";
-import { LANGUAGES, type Lang } from "@/lib/i18n";
-import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
+import { LANGUAGES, type Lang, langNameIn } from "@/lib/i18n";
+import { toggleLangGroup } from "@/lib/lang-groups";
+import { LangSearchList } from "@/components/LangSearch";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
@@ -290,7 +291,6 @@ function LangSwitch() {
     };
   }, [open]);
   const active = LANGS.find((l) => l.code === lang) ?? LANGS[0];
-  const langRows = useLangRows(lang);
   return (
     <div ref={wrapRef} className="wb-lang-chip-wrap">
       <button
@@ -311,7 +311,8 @@ function LangSwitch() {
       </button>
       {open && (
         <ul className="wb-lang-menu" role="listbox">
-          {langRows.map((l) => (
+          <LangSearchList lang={lang} onPick={(c) => { setLang(c); setOpen(false); }} onClose={() => setOpen(false)}>
+          {(langRows) => langRows.map((l) => (
             <li key={l.code}>
               <button
                 type="button"
@@ -320,10 +321,11 @@ function LangSwitch() {
                 className={l.code === lang ? "is-active" : ""}
                 onClick={() => { if (toggleLangGroup(l.code)) return; setLang(l.code); setOpen(false); }}
               >
-                <img className="wb-lang-flag" src={`https://flagcdn.com/40x30/${l.flag}.png`} srcSet={`https://flagcdn.com/80x60/${l.flag}.png 2x`} width="20" height="15" alt="" loading="lazy" />{l.label}
+                <img className="wb-lang-flag" src={`https://flagcdn.com/40x30/${l.flag}.png`} srcSet={`https://flagcdn.com/80x60/${l.flag}.png 2x`} width="20" height="15" alt="" loading="lazy" /><span style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1.2, verticalAlign: "middle" }}><span>{langNameIn(l.code, lang)}</span>{langNameIn(l.code, lang) !== l.label && <span dir={l.dir} style={{ fontSize: 11, opacity: 0.5, unicodeBidi: "isolate" }}>{l.label}</span>}</span>
               </button>
             </li>
           ))}
+          </LangSearchList>
         </ul>
       )}
     </div>

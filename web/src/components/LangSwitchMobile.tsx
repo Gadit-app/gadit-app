@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/lib/lang-context";
 import { useAuth } from "@/lib/auth-context";
 import { LANGUAGES, langNameIn, getLangDir, type Lang } from "@/lib/i18n";
-import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
+import { toggleLangGroup } from "@/lib/lang-groups";
+import { LangSearchList } from "@/components/LangSearch";
 
 /**
  * Compact language switcher meant for the mobile topbar.
@@ -57,8 +58,6 @@ export function LangSwitchMobile() {
 
   const active = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0];
 
-  const langRows = useLangRows(lang);
-
   // Signed-in users get the language picker inside the burger menu (keeps the
   // crowded family/kid topbar from overflowing). Anonymous visitors — whose
   // topbar is sparse and who may have landed in the wrong locale — keep this
@@ -91,7 +90,8 @@ export function LangSwitchMobile() {
       </button>
       {open && (
         <ul className="wb-shell-lang-mobile-menu" role="listbox" aria-label="Language">
-          {langRows.map((l) => (
+          <LangSearchList lang={lang} onPick={(c) => { setLang(c); setOpen(false); }}>
+          {(langRows) => langRows.map((l) => (
             <li key={l.code}>
               <button
                 type="button"
@@ -126,6 +126,7 @@ export function LangSwitchMobile() {
               </button>
             </li>
           ))}
+          </LangSearchList>
         </ul>
       )}
     </div>

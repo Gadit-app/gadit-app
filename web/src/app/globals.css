@@ -12295,3 +12295,90 @@ html[data-theme="dark"] .wordbook .wb-word-sentence-input::placeholder { color: 
   .wordbook .wb-subj-btn { width: 100%; }
 }
 /* ── end Key words by subject ── */
+
+/* ── Language picker search (LangSearch.tsx, 2026-10-26) ──
+   The field at the top of every language list. Colours come from the list it
+   sits in (currentColor and the list's own background), so it matches each
+   picker in light and dark without its own palette. Sticky: it stays at the
+   top while the list scrolls. */
+.lang-search {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: block;
+  list-style: none;
+  margin: 0 0 4px;
+  padding: 0 0 4px;
+  background: inherit;
+}
+/* Lists with inner padding: the stuck field sits one padding below the top
+   edge, so rows would show through above it. This strip covers that band. */
+.lang-search::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 100%;
+  height: 6px;
+  background: inherit;
+}
+.lang-search-icon {
+  position: absolute;
+  inset-inline-start: 10px;
+  top: calc(50% - 2px);
+  transform: translateY(-50%);
+  opacity: 0.45;
+  pointer-events: none;
+}
+.lang-search-input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  height: 34px;
+  margin: 0;
+  padding-block: 0;
+  padding-inline: 32px 10px;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: inherit;
+  /* Mid-grey with alpha: reads on light and dark lists alike. */
+  background: rgba(128, 128, 128, 0.07);
+  border: 1px solid rgba(128, 128, 128, 0.32);
+  border-radius: 8px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.lang-search-sizer {
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  white-space: nowrap;
+  padding-inline: 34px 32px; /* the input padding, plus room for the browser clear button */
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.lang-search-input::placeholder { color: currentColor; opacity: 0.5; }
+.lang-search-input:focus {
+  border-color: var(--teal, #0E7490);
+  box-shadow: 0 0 0 3px rgba(14, 165, 165, 0.16);
+}
+.lang-search-input::-webkit-search-decoration { -webkit-appearance: none; }
+.lang-search-input::-webkit-search-cancel-button { cursor: pointer; }
+/* Phones: 16px or iOS zooms the page in on focus. */
+@media (hover: none), (pointer: coarse) {
+  .lang-search-input { font-size: 16px; height: 38px; }
+  .lang-search-sizer { font-size: 16px; }
+}
+.lang-search-empty {
+  display: block;
+  list-style: none;
+  padding: 10px 12px;
+  font-size: 13px;
+  opacity: 0.6;
+  text-align: start;
+}
+/* ── end Language picker search ── */

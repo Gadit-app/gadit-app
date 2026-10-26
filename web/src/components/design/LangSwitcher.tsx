@@ -23,7 +23,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/lib/lang-context";
 import { LANGUAGES, langNameIn, getLangDir, type Lang } from "@/lib/i18n";
-import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
+import { toggleLangGroup } from "@/lib/lang-groups";
+import { LangSearchList } from "@/components/LangSearch";
 
 type Variant = "dark" | "muted";
 type Placement = "bottom" | "top";
@@ -59,8 +60,6 @@ export function LangSwitcher({
   }, [open]);
 
   const active = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0];
-
-  const langRows = useLangRows(lang);
 
   const triggerStyle =
     variant === "dark"
@@ -162,7 +161,8 @@ export function LangSwitcher({
             WebkitOverflowScrolling: "touch",
           }}
         >
-          {langRows.map((l) => {
+          <LangSearchList lang={lang} item="div" onPick={(c) => { setLang(c); setOpen(false); }}>
+          {(langRows) => langRows.map((l) => {
             const selected = l.code === lang;
             return (
               <button
@@ -231,6 +231,7 @@ export function LangSwitcher({
               </button>
             );
           })}
+          </LangSearchList>
         </div>
       )}
     </div>
