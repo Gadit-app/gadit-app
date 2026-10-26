@@ -71,6 +71,24 @@ const KIDS_LINE: Record<SubjectsLang, string> = {
   de: "Deine Kinder sehen den Reiter auch in ihrem eigenen Profil.",
 };
 
+/** German for parents: the family series addresses them with "Sie"
+ *  (emailTemplates fam2-*), the Individual series with "du". */
+const DE_SIE = {
+  middle: L(
+    "## Jedes Fach mit seinen wichtigsten Wörtern",
+    "Mathematik, Chemie, Physik, Biologie, Geschichte und Geografie.",
+    "Wählen Sie ein Fach, Jüngere oder Ältere, dann ein Thema, zum Beispiel \"Stoffe und ihre Eigenschaften\" in Chemie.",
+    "Sie bekommen die wichtigsten Wörter des Themas, jedes so erklärt, wie das Fach es braucht.",
+    "## Nur die Bedeutung, die zum Fach passt",
+    "Eine \"Zelle\" in Biologie ist keine Gefängniszelle, und \"Strom\" in Physik ist kein Fluss.",
+    "Ein Tipp auf ein Wort öffnet eine ganze Erklärung mit Beispielen, nur in der Bedeutung des Fachs.",
+    "Jedes Wort lässt sich auch anhören.",
+  ),
+  practise: L("## Üben vor der Prüfung", "Ein Knopf legt alle Wörter des Themas ins Notizbuch.", "Dort üben Ihre Kinder sie in den Spielen, bis sie sitzen."),
+  kids: "Ihre Kinder sehen den Reiter auch in ihrem eigenen Profil.",
+  try_free: L("## Kostenlos ausprobieren", "Die Schlüsselwörter nach Fach gehören zu den Abos Individual und Family.", "Beide starten mit 14 Tagen kostenlos, und Sie können jederzeit kündigen."),
+};
+
 const SUBJECT_SERIES: Record<SubjectsLang, string> = {
   he: "המילים החשובות של כל מקצוע, במקום אחד",
   en: "Every subject's key words, in one place",
