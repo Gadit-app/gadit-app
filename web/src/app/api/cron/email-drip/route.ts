@@ -19,6 +19,8 @@ import { playUpgradeDue, buildPlayUpgrade } from "@/lib/email-drip/play-upgrade"
 import { loginReminderDue, buildLoginReminder } from "@/lib/email-drip/login-reminder";
 import { SCHOOL_DRIP, SCHOOL_SERIES_LIVE, SCHOOL_SERIES_FROM, schoolLang, buildSchoolMail } from "@/lib/email-drip/school-drip";
 import { isInternalEmail } from "@/lib/internal-accounts";
+import { seriesGateSkips } from "@/lib/email-drip/series-gates";
+import { announcedOnIlDay } from "@/lib/email-drip/announce-send";
 
 /**
  * Daily drip cron. Vercel Cron hits this at 07:00 UTC (10:00 IL DST).
@@ -185,6 +187,14 @@ export async function GET(req: NextRequest) {
     // Skip addresses we've flagged as junk (disposable domain, hard bounce).
     // Mailing them bounces and hurts sender reputation for real users.
     if (d.emailSuppressed === true) continue;
+
+    // A "what's new" announcement (cron/announcements) already reached this
+    // person today (Israel date): one email per person per day, the rest of
+    // the drip waits for tomorrow (2026-10-26).
+    if (announcedOnIlDay(d, now)) {
+      results.push({ uid: u.uid, email, mailKey: "-", status: "skipped", reason: "announcement_today" });
+      continue;
+    }
 
     // Language gate. We only ship Hebrew drip today. English coming next.
     // Fall back to the user's UI language preference if stored on doc;
@@ -384,6 +394,23 @@ export async function GET(req: NextRequest) {
           for (const m of famStale) famSent[m.key] = true;
         }
 
+        // The family's own UI language when this email is translated into
+        // it, else English (Hebrew families keep Hebrew).
+        const famLang = he ? "he" : generalLang;
+
+        // Emails only some families get (fam2-subjects: he / en / de only,
+        // not after the announcement, never out of order): skip-mark them so
+        // the series goes on without them (lib/email-drip/series-gates.ts).
+        const famGated = seriesGateSkips(FAMILY_DRIP, famSent, famDayN, famLang, d);
+        if (famGated.length) {
+          if (!dryRun) {
+            const patch: Record<string, unknown> = {};
+            for (const g of famGated) patch[g.key] = { skippedAt: FieldValue.serverTimestamp(), reason: g.reason };
+            await db.collection("users").doc(u.uid).set({ familyDripSent: patch }, { merge: true });
+          }
+          for (const g of famGated) famSent[g.key] = true;
+        }
+
         // Rescue (Gadi 2026-10-12): no child connected by day 2 of the series
         // gets one short "connect your child" email, once, instead of that
         // day's series email. A family with a child connected never gets it.
@@ -425,9 +452,6 @@ export async function GET(req: NextRequest) {
             (typeof d.name === "string" && (d.name as string).trim()) ||
             "";
           const firstName = famName.split(/\s+/)[0] || null;
-          // The family's own UI language when this email is translated into
-          // it, else English (Hebrew families keep Hebrew).
-          const famLang = he ? "he" : generalLang;
           // The "first two weeks" email carries each child's own numbers.
           const childrenSummary = famCand.key === "fam2-progress"
             ? await familyChildrenSummary((d.familyId as string | undefined) || u.uid, famLang)
@@ -481,6 +505,18 @@ export async function GET(req: NextRequest) {
         await db.collection("users").doc(u.uid).set({ indivDripSent: patch }, { merge: true });
         for (const m of stale) sent[m.key] = true;
       }
+      const indivLang = he ? "he" : generalLang;
+      // Emails only some subscribers get (ind-subjects: he / en / de only,
+      // not after the announcement, never out of order): skip-marked.
+      const gated = seriesGateSkips(mine, sent, dayN, indivLang, d);
+      if (gated.length) {
+        if (!dryRun) {
+          const patch: Record<string, unknown> = {};
+          for (const g of gated) patch[g.key] = { skippedAt: FieldValue.serverTimestamp(), reason: g.reason };
+          await db.collection("users").doc(u.uid).set({ indivDripSent: patch }, { merge: true });
+        }
+        for (const g of gated) sent[g.key] = true;
+      }
       let cand: (typeof INDIV_DRIP)[number] | null = null;
       for (const m of mine) {
         if (m.dayOffset > dayN || sent[m.key] || dayN - m.dayOffset > STALE_DAYS) continue;
@@ -492,7 +528,6 @@ export async function GET(req: NextRequest) {
           (typeof d.displayName === "string" && (d.displayName as string).trim()) ||
           "";
         const firstName = fullName.split(/\s+/)[0] || null;
-        const indivLang = he ? "he" : generalLang;
         const numbers = cand.key === "ind-progress" ? await indivNumbersSummary(u.uid, indivLang) : undefined;
         const built = await cand.build({ lang: indivLang, plan: indivPlan, unsubscribeUrl: buildUnsubUrl(u.uid), firstName, numbers });
         if (dryRun) {

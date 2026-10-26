@@ -4,19 +4,39 @@
  * rest exist). One entry per launch; /api/admin/announce sends it once per
  * subscriber, in the same layout as the series, respecting unsubscribe and
  * Shabbat (scheduled send). Hebrew and English; other languages read the
- * English until a translation is added under `t`.
+ * English until a translation is added under `t` (or are skipped, `langs`).
+ *
+ * Sending: by hand from /api/admin/announce (dry run, test, send=1), or on
+ * its own (2026-10-26) by /api/cron/announcements once `approved` is true and
+ * `sendAt` has passed (lib/email-drip/announce-send.ts).
  */
 import type { EmailContent } from "./render";
+import { SUBJECTS_LANGS, SUBJECTS_SERIES_KEYS, subjectsAnnouncement, subjectsAnnouncementBasic } from "./subjects-content";
 
 export type Announcement = {
   id: string;
-  /** Who gets it: family subscribers, or every paying subscriber. */
-  audience: "family" | "paying" | "individual";
+  /** Who gets it (lib/email-drip/announce-send.ts, inAudience):
+   *  - family: owners of a Family subscription (active, past_due, trialing);
+   *  - individual: Individual subscribers on Deep (no family, no school);
+   *  - paying: Family owners + Individual subscribers (Clear or Deep);
+   *  - basic: signed-up adults with an email and no paid or trial plan
+   *    (never a kid, a family member, a school account or an iOS app user). */
+  audience: "family" | "paying" | "individual" | "basic";
   ctaPath: string;
   he: EmailContent;
   en: EmailContent;
   /** Optional translations by UI language. */
   t?: Record<string, EmailContent>;
+  /** Only users whose UI language is listed; everyone else is skipped
+   *  ("skip_lang"), never sent the English. Absent = every language. */
+  langs?: readonly string[];
+  /** Automatic send (cron): not before this ISO date-time. */
+  sendAt?: string;
+  /** Automatic send only once Gadi approved the test emails. */
+  approved?: boolean;
+  /** Skip a user whose onboarding series already sent one of these mail keys
+   *  (familyDripSent / indivDripSent): they heard the news there. */
+  skipIfSeriesSent?: string[];
 };
 
 const C = (subject: string, body: string, ctaText: string): EmailContent => ({ subject, heading: "", body, ctaText, next: "" });
@@ -94,5 +114,31 @@ Choose right away or one daily summary, and what to hear about, in the [parent b
     ctaPath: "/read",
     he: { subject: "חדש ב-Gadit: בודקים שהבנתם את מה שקראתם", heading: "", body: "היי {שם},\n\nחדש ב-Gadit: **בדיקת הבנה אחרי קריאה**.\n\nקוראים טקסט, לוחצים על כל מילה שלא מובנת כמו שצריך, ובסוף Gadit בודק שבאמת הבנתם.\n\n## איך זה עובד\n1. מצלמים עמוד מספר, ממאמר או מכל מסמך, או מדביקים טקסט.\n2. קוראים, ולוחצים על כל מילה שלא ברורה. הפירוש נפתח מיד (במילה משפה אחרת מופיע גם התרגום).\n3. בסוף לוחצים **\"בדיקת הבנה של מילים\"**.\n\n## מה קורה בבדיקה\nGadit שואל על המילים שלחצתם עליהן, ועל עוד כמה מילים קשות מהטקסט.\n\nלא מה המילה אומרת באופן כללי, אלא **בהקשר של המשפט שקראתם בטקסט**.\n\nאחר כך מגיעות 3 עד 5 שאלות קצרות על מה שקראתם.\n\nהמילים שלא היו ברורות נשמרות במחברת שלכם, ונכנסות לתרגול ולמשחקים.\n\nרוצים הפעם רק לקרוא, בלי בדיקה? לוחצים **\"סיימנו לקרוא\"**, והקריאה נשמרת כרגיל.\n\n## איפה זה נמצא\n1. בתפריט העליון לוחצים על **תרגולים**.\n2. בוחרים **קריאה עם בדיקת הבנה**.\n\nאפשר גם ללחוץ על **כל מילה** בתפריט העליון.\n\nב**תרגולים** מחכים לכם עוד שלושה תרגולים: הכנה למבחן, הכתבה ולימוד שפה.", ctaText: "לנסות עכשיו", next: "יש שאלה? פשוט עונים למייל הזה, אנחנו כאן.", closing: "", signature: "גדי והצוות של Gadit" },
     en: { subject: "New in Gadit: check you understood what you read", heading: "", body: "Hi {name},\n\nNew in Gadit: **a comprehension check after reading**.\n\nRead, tap any word that isn't clear, and at the end Gadit checks you really understood.\n\n## How it works\n1. Photograph a page from a book, an article or any document, or paste a text.\n2. Read, and tap any word that isn't clear. The meaning opens right away, and a word from another language also shows its translation.\n3. At the end, tap **\"Let's check I understood the words\"**.\n\n## What happens in the check\nGadit asks about the words you tapped, and a few more hard words from the text.\n\nNot what the word means in general, but **what it means here, in this sentence**.\n\nThen come 3 to 5 short questions about what you read.\n\nThe words that weren't clear are saved to your notebook, and go into practice and games.\n\nJust want to read this time, without a check? Tap **\"Done reading\"**, and the reading is saved as usual.\n\n## Where to find it\n1. In the top menu, tap **Practice**.\n2. Choose **Reading comprehension**.\n\nYou can also tap **Every Word** in the top menu.\n\nThree more practices are waiting in **Practice**: test prep, dictation and learning a language.", ctaText: "Try it now", next: "Any question? Just reply to this email, we're here.", closing: "", signature: "Gadi and the Gadit team" },
+  },
+  {
+    // Key words by subject (2026-10-26 launch), subscribers. The tab exists
+    // only in the he / en / de interface: nobody else gets this email.
+    id: "2026-10-subjects",
+    audience: "paying",
+    ctaPath: "/subjects",
+    he: subjectsAnnouncement("he"),
+    en: subjectsAnnouncement("en"),
+    t: { de: subjectsAnnouncement("de") },
+    langs: SUBJECTS_LANGS,
+    sendAt: "2026-10-29T07:00:00+02:00",
+    approved: false,
+    skipIfSeriesSent: [SUBJECTS_SERIES_KEYS.family, SUBJECTS_SERIES_KEYS.individual],
+  },
+  {
+    // The same launch for Basic accounts, with a 14-day trial close.
+    id: "2026-10-subjects-basic",
+    audience: "basic",
+    ctaPath: "/pricing",
+    he: subjectsAnnouncementBasic("he"),
+    en: subjectsAnnouncementBasic("en"),
+    t: { de: subjectsAnnouncementBasic("de") },
+    langs: SUBJECTS_LANGS,
+    sendAt: "2026-10-29T07:00:00+02:00",
+    approved: false,
   },
 ];

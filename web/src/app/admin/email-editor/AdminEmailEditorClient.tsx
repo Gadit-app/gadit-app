@@ -15,7 +15,8 @@ const DISPLAY_CODE: Record<string, string> = { "zh-CN": "zh-Hans", "zh-TW": "zh-
 function langName(code: string, inLang: string): string {
   try { return new Intl.DisplayNames([inLang], { type: "language" }).of(DISPLAY_CODE[code] ?? code) ?? code; } catch { return code; }
 }
-type EmailRow = { key: string; label: string; labelHe?: string; dayOffset: number; plans?: string[] };
+// langs: an email that goes only to these languages (others skip it, never get the English).
+type EmailRow = { key: string; label: string; labelHe?: string; dayOffset: number; plans?: string[]; langs?: string[] };
 // Family, the individual Clear/Deep series (Gadi 2026-10-06), checkout
 // recovery (2026-10-21) and the read-only signup series.
 type Series = "family" | "indiv" | "recovery" | "activation" | "signup";
@@ -316,7 +317,9 @@ export function AdminEmailEditorClient() {
         {!isSignup && (
           <span style={{ marginInlineStart: "auto", fontSize: 12, color: cur?.overridden ? "#0EA5A5" : "#9CA3AF", alignSelf: "center" }}>
             {isOther
-              ? cur?.translated ? (he ? "מתורגם" : "translated") : (he ? "עוד לא תורגם: מוצג הנוסח באנגלית, ומי שבשפה הזו מקבל אותו באנגלית" : "not translated yet: showing the English email, which people in this language receive")
+              ? curRow?.langs && !curRow.langs.includes(tab)
+                ? (he ? `המייל הזה יוצא רק בשפות ${curRow.langs.join(", ")}: מי שבשפה הזו לא מקבל אותו בכלל` : `This email goes only in ${curRow.langs.join(", ")}: people in this language don't get it at all`)
+                : cur?.translated ? (he ? "מתורגם" : "translated") : (he ? "עוד לא תורגם: מוצג הנוסח באנגלית, ומי שבשפה הזו מקבל אותו באנגלית" : "not translated yet: showing the English email, which people in this language receive")
               : cur?.overridden ? (he ? "מותאם אישית" : "customised") : (he ? "ברירת מחדל" : "default")}
           </span>
         )}

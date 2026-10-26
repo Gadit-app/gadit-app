@@ -4,6 +4,7 @@ import { FAMILY_CONTENT } from "./family-content";
 import { INDIV_CONTENT } from "./indiv-content";
 import { RECOVERY_CONTENT, RECOVERY_I18N } from "./checkout-recovery-content";
 import { ACTIVATION_CONTENT, ACTIVATION_I18N } from "./activation-content";
+import { SUBJECTS_SERIES_I18N } from "./subjects-content";
 
 // Every editable series shares one store: Family + individual Clear/Deep +
 // checkout recovery and activation (2026-10-21).
@@ -11,8 +12,9 @@ const CONTENT: Record<string, { he: EmailContent; en: EmailContent }> = { ...FAM
 
 // Code translations into the other UI languages (2026-10-22): recovery and
 // activation, from email-drip/i18n/<lang>.json. The default for a language
-// before anyone saves a translation in the editor.
-const CODE_I18N: Record<string, Partial<Record<string, EmailContent>>> = { ...RECOVERY_I18N, ...ACTIVATION_I18N };
+// before anyone saves a translation in the editor. The two "key words by
+// subject" series emails carry German in code (2026-10-26).
+const CODE_I18N: Record<string, Partial<Record<string, EmailContent>>> = { ...RECOVERY_I18N, ...ACTIVATION_I18N, ...SUBJECTS_SERIES_I18N };
 
 /** The code translation of an email into a language (not he / en), if any. */
 export function codeTranslation(key: string, lang: string): EmailContent | undefined {

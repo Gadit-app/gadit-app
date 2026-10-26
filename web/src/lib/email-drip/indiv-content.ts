@@ -1,5 +1,6 @@
 import type { EmailContent } from "./render";
 import type { FamilyEmailMeta } from "./family-content";
+import { SUBJECTS_LANGS, subjectsSeries } from "./subjects-content";
 
 /**
  * Onboarding series for the Individual plan (and the older Clear and Deep
@@ -48,6 +49,8 @@ export const INDIV_META: IndivEmailMeta[] = [
   M("ind-compose", "Individual · 6 · Compose a sentence, get feedback", 5, "/"),
   M("ind-say", "Individual · 7 · Say it", 6, "/say"),
   M("ind-practice", "Individual · 8 · Smart practice and games", 7, "/notebook"),
+  // Key words by subject (2026-10-26): the tab exists only in he / en / de.
+  { ...M("ind-subjects", "Individual · 8b · Key words by subject", 9, "/subjects"), langs: SUBJECTS_LANGS, skipIfAnnounced: "2026-10-subjects", strictOrder: true },
   M("ind-progress", "Individual · 9 · Your first two weeks in numbers", 10, "/notebook"),
   M("ind-questions", "Individual · 10 · Questions about a word, idioms", 12, "/"),
   M("ind-languages", "Individual · 11 · Any word, explained in your language", 15, "/"),
@@ -64,6 +67,7 @@ export const INDIV_LABEL_HE: Record<string, string> = {
   "ind-compose": "6 · חברו משפט ומשוב",
   "ind-say": "7 · תגיד את זה",
   "ind-practice": "8 · תרגול חכם ומשחקים",
+  "ind-subjects": "8b · מילות מפתח במקצועות (רק עברית, אנגלית, גרמנית)",
   "ind-progress": "9 · השבועיים הראשונים במספרים",
   "ind-questions": "10 · שאלות על מילה, ניבים וצירופים",
   "ind-languages": "11 · כל מילה, הסבר בשפה שלכם",
@@ -108,6 +112,9 @@ const HOME_SCREEN_EN = `## Add Gadit to your phone's home screen
 3. Tap "Add to Home Screen".`;
 
 export const INDIV_CONTENT: Record<string, { he: EmailContent; en: EmailContent }> = {
+  // German: code translation in subjects-content.ts (SUBJECTS_SERIES_I18N).
+  "ind-subjects": { he: subjectsSeries("he", false), en: subjectsSeries("en", false) },
+
   "ind-start": {
     he: C(
       "היי {שם}, ככה מתחילים עם Gadit",
@@ -559,7 +566,7 @@ Gadit מציג מילה מהמחברת שלכם, ונזכרים מה היא או
 **טיפ מהשטח:**
 חמש דקות ביום, באותה שעה, עדיפות על שעה פעם בשבוע.`,
       "לחזרה על המילים",
-      "במייל הבא נראה מה כבר בניתם בשבועיים הראשונים.",
+      "במייל הבא: המילים החשובות של כל מקצוע, במקום אחד.",
     ),
     en: C(
       "Hi {name}, here's how your words stay with you over time",
@@ -588,7 +595,7 @@ And for every word, under the definition, there's also a "Quiz" button for a qui
 **A tip from other users:**
 Five minutes a day, at the same time, beats an hour once a week.`,
       "Review my words",
-      "In the next email we'll see what you've already built in your first two weeks.",
+      "In the next email: every subject's key words, in one place.",
     ),
   },
 

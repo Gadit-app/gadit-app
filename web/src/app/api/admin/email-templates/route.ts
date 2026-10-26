@@ -69,10 +69,10 @@ export async function GET(req: NextRequest) {
 
   if (!key) {
     return NextResponse.json({
-      emails: FAMILY_META.map((m) => ({ key: m.key, label: m.label, labelHe: FAMILY_LABEL_HE[m.key] ?? m.label, dayOffset: m.dayOffset })),
+      emails: FAMILY_META.map((m) => ({ key: m.key, label: m.label, labelHe: FAMILY_LABEL_HE[m.key] ?? m.label, dayOffset: m.dayOffset, ...(m.langs ? { langs: m.langs } : {}) })),
       defaultTestTo: process.env.NOTIFY_EMAIL ?? "",
       signup: SIGNUP_STEPS.map((s) => ({ key: `signup:${s.step}`, label: s.label, labelHe: s.labelHe, dayOffset: s.dayOffset })),
-      indiv: INDIV_META.map((m) => ({ key: m.key, label: m.label, labelHe: INDIV_LABEL_HE[m.key] ?? m.label, dayOffset: m.dayOffset, plans: m.plans })),
+      indiv: INDIV_META.map((m) => ({ key: m.key, label: m.label, labelHe: INDIV_LABEL_HE[m.key] ?? m.label, dayOffset: m.dayOffset, plans: m.plans, ...(m.langs ? { langs: m.langs } : {}) })),
       // Checkout recovery (2026-10-21): editable like Family; a draft until
       // emailConfig/checkoutRecovery.enabled is true (the cron sends nothing).
       recovery: RECOVERY_META.map((m) => ({ key: m.key, label: m.label, labelHe: m.labelHe, dayOffset: 0, hours: m.hours })),

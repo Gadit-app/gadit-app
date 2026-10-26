@@ -20,6 +20,10 @@ import { fillNumbers, sampleNumbersSummary } from "./indiv-summary";
 export type FamilyDripMail = {
   key: string;
   dayOffset: number;
+  /** Gates for an email that only some families get (lib/email-drip/series-gates.ts). */
+  langs?: readonly string[];
+  skipIfAnnounced?: string;
+  strictOrder?: boolean;
   /** `lang` (any UI language) wins over `he`; untranslated → English. */
   build(opts: { he: boolean; lang?: string; unsubscribeUrl: string; firstName?: string | null; childrenSummary?: string }): Promise<{ subject: string; html: string }>;
 };
@@ -82,9 +86,14 @@ export function renderFamilyMail(
 export const FAMILY_DRIP: FamilyDripMail[] = FAMILY_META.map((m) => ({
   key: m.key,
   dayOffset: m.dayOffset,
+  langs: m.langs,
+  skipIfAnnounced: m.skipIfAnnounced,
+  strictOrder: m.strictOrder,
   async build({ he, lang, unsubscribeUrl, firstName, childrenSummary }) {
-    // A language with no translation of this email gets it in English.
+    // A language with no translation of this email gets it in English;
+    // an email limited to some languages never does (the cron skips it).
     const want = lang ?? (he ? "he" : "en");
+    if (m.langs && !m.langs.includes(want)) throw new Error(`${m.key}: not sent in ${want}`);
     const use = (await hasLang(m.key, want)) ? want : "en";
     const c = await getEffectiveContent(m.key, use);
     return renderFamilyMail(m, use, c, { unsubscribeUrl, firstName, childrenSummary });

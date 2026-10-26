@@ -1,4 +1,5 @@
 import type { EmailContent } from "./render";
+import { SUBJECTS_LANGS, subjectsSeries } from "./subjects-content";
 
 /**
  * Single source of truth for the editable Family onboarding emails.
@@ -36,6 +37,15 @@ export type FamilyEmailMeta = {
   /** Yooniz-style layout (renderEmailHtmlV2): greeting in the body, bridge
    *  line to the next email, team signature, no eyebrow/foot. */
   v2?: boolean;
+  /** Only to people whose series language is listed; anyone else has the
+   *  email skip-marked (the series goes on), never sent the English. */
+  langs?: readonly string[];
+  /** Skip-marked when this announcement (users.announcementsSent) already
+   *  brought the same news. */
+  skipIfAnnounced?: string;
+  /** Skip-marked when a LATER email of the series was already sent or
+   *  skipped: an email added mid-way never arrives out of order. */
+  strictOrder?: boolean;
 };
 
 const M = (key: string, label: string, dayOffset: number, ctaPath = "/family", ctaUrlTab = ""): FamilyEmailMeta => ({
@@ -62,6 +72,8 @@ export const FAMILY_META: FamilyEmailMeta[] = [
   M("fam2-ranks", "Family · 7 · Ranks, streaks, weekly goal", 6, "/family"),
   M("fam2-context", "Family · 8 · The right meaning from the sentence", 7, "/"),
   M("fam2-say", "Family · 9 · Say it", 8, "/say"),
+  // Key words by subject (2026-10-26): the tab exists only in he / en / de.
+  { ...M("fam2-subjects", "Family · 9b · Key words by subject", 9, "/subjects"), langs: SUBJECTS_LANGS, skipIfAnnounced: "2026-10-subjects", strictOrder: true },
   M("fam2-progress", "Family · 10 · The child's first two weeks in numbers", 10, "/family"),
   M("fam2-questions", "Family · 11 · Questions about a word, idioms", 12, "/"),
   M("fam2-languages", "Family · 12 · Any word, explained in your language", 15, "/"),
@@ -81,6 +93,7 @@ export const FAMILY_LABEL_HE: Record<string, string> = {
   "fam2-ranks": "7 · דרגות, רצף ויעד שבועי",
   "fam2-context": "8 · המשמעות הנכונה לפי המשפט",
   "fam2-say": "9 · תגיד את זה",
+  "fam2-subjects": "9b · מילות מפתח במקצועות (רק עברית, אנגלית, גרמנית)",
   "fam2-progress": "10 · השבועיים הראשונים של הילד במספרים",
   "fam2-questions": "11 · שאלות על מילה, ניבים וצירופים",
   "fam2-languages": "12 · כל מילה, הסבר בשפה שלך",
@@ -97,6 +110,9 @@ const C = (subject: string, body: string, ctaText: string, next: string): EmailC
 });
 
 export const FAMILY_CONTENT: Record<string, { he: EmailContent; en: EmailContent }> = {
+  // German: code translation in subjects-content.ts (SUBJECTS_SERIES_I18N).
+  "fam2-subjects": { he: subjectsSeries("he", true), en: subjectsSeries("en", true) },
+
   // {ילדים} / {children} is filled at send time with each child's numbers
   // (lib/email-drip/family-summary.ts). Gadi 2026-10-06.
   "fam2-progress": {
@@ -621,7 +637,7 @@ When your child finishes a dictation, a lesson or a game, you get a message. Cho
 
 **טיפ מהשטח:** להתחיל ממשפט שהילד צריך באמת, למשל משהו שרוצים להגיד למורה או לחבר. משפט אמיתי נשאר הרבה יותר מהר.`,
       "לתגיד את זה",
-      "מחר נדבר על לוח ההורה, שבו רואים את אוצר המילים גדל.",
+      "במייל הבא: המילים החשובות של כל מקצוע, במקום אחד.",
     ),
     en: C(
       "Hi {name}, here's how to practice saying a sentence in a new language",
@@ -641,7 +657,7 @@ Type a sentence and choose the language you're learning. Gadit shows how to say 
 
 **A tip from other families:** start with a sentence your child actually needs, like something to say to a teacher or a friend. A real sentence stays much faster.`,
       "Open Say it",
-      "Tomorrow we'll look at the parent board, where you watch the vocabulary grow.",
+      "In the next email: every subject's key words, in one place.",
     ),
   },
 

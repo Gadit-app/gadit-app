@@ -12,6 +12,10 @@ export type IndivDripMail = {
   key: string;
   dayOffset: number;
   plans: IndivPlan[];
+  /** Gates for an email that only some subscribers get (lib/email-drip/series-gates.ts). */
+  langs?: readonly string[];
+  skipIfAnnounced?: string;
+  strictOrder?: boolean;
   build(opts: { lang: string; plan: IndivPlan; unsubscribeUrl: string; firstName?: string | null; numbers?: string }): Promise<{ subject: string; html: string }>;
 };
 
@@ -19,8 +23,13 @@ export const INDIV_DRIP: IndivDripMail[] = INDIV_META.map((m) => ({
   key: m.key,
   dayOffset: m.dayOffset,
   plans: m.plans,
+  langs: m.langs,
+  skipIfAnnounced: m.skipIfAnnounced,
+  strictOrder: m.strictOrder,
   async build({ lang, plan, unsubscribeUrl, firstName, numbers }) {
-    // A language with no translation of this email gets it in English.
+    // A language with no translation of this email gets it in English;
+    // an email limited to some languages never does (the cron skips it).
+    if (m.langs && !m.langs.includes(lang)) throw new Error(`${m.key}: not sent in ${lang}`);
     const use = (await hasLang(m.key, lang)) ? lang : "en";
     const c = await getEffectiveContent(m.key, use);
     return renderFamilyMail(m, use, c, { unsubscribeUrl, firstName, plan, numbers });
