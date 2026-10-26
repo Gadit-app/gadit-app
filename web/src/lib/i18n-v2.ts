@@ -16,8 +16,8 @@
  * Usage:
  *   import { v2 } from "@/lib/i18n-v2";
  *   v2(lang, "homeHeadlineLine1");          // string
- *   v2(lang, "meaningN", 1);                // template "Meaning 1"
- *   v2(lang, "doMoreWith", word);           // template
+ *   v2(lang, "quizQuestionNofM", 2, 5);    // template "Question 2 of 5"
+ *   v2(lang, "composeTitleTemplate", word); // template
  */
 
 import type { Lang } from "./i18n";
@@ -33,10 +33,7 @@ export interface V2Strings {
   // ── Home: search ────────────────────────────────────────────
   searchPlaceholderHome: string;
   voiceInputTitle: string;
-  addContext: string;
   explain: string;
-  contextHint: string;
-  tryLabel: string;
 
   // ── Home: value props ───────────────────────────────────────
   valuePropsEyebrow: string;
@@ -61,12 +58,10 @@ export interface V2Strings {
   // ── Home: tier strip ────────────────────────────────────────
   pricingEyebrow: string;
   pricingTeaserTitle: string;
-  trustMicrocopy: string;
 
   // ── Home: footer ────────────────────────────────────────────
   footerProductGroup: string;
   footerLegalGroup: string;
-  footerCompare: string;
   footerNotebook: string;
   footerPricing: string;
   footerPrivacy: string;
@@ -83,7 +78,6 @@ export interface V2Strings {
   verbStampDef: string;
   // Signed-in primary navigation (in MarketingHeader)
   navSearch: string;
-  navCompare: string;
   navNotebook: string;
   navPricing: string;
   navSchools: string;
@@ -97,7 +91,6 @@ export interface V2Strings {
   kidsModeLabel: string;
   kidsModeTooltipOff: string;
   kidsModeTooltipOn: string;
-  kidsModeBasicGate: string;
 
   // Floating welcome toast shown briefly after a brand-new signup so
   // the user has a clear "yes, your account is ready" signal instead
@@ -222,40 +215,14 @@ export interface V2Strings {
   quizBackToWord: string;
   quizReviewMistakes: string;
 
-  // ── Compare Page (Screen 7) ─────────────────────────────────
-  compareEyebrow: string;
-  compareTitle: string;
-  compareSubtitle: string;
-  compareWord1Label: string;
-  compareWord2Label: string;
-  compareWord1Placeholder: string;
-  compareWord2Placeholder: string;
-  compareCta: string;
-  compareLoading: string;
-  compareEmpty: string;
-  compareDifferenceLabel: string;
-  compareExamplesLabel: string;
-  compareCommonMistakeLabel: string;
-  // Error keys
-  compareErrNotARealWord: string;
-  compareErrDifferentLanguages: string;
-  compareErrSameWord: string;
-  compareErrGeneric: string;
-
   // ── Notebook (Screen 8) ─────────────────────────────────────
   notebookEyebrow: string;
   notebookTitle: string;
   notebookSubtitle: string;
-  /** template: "127 words explored", number is the only arg.
-   *  Kept for backward compat; new layouts prefer the split
-   *  numeral + notebookWordsExplored label pair. */
-  notebookCounterTemplate: Template1;
   /** Plain label that follows a giant numeral, e.g. "words explored"
    *  rendered under "127". Used in the Notebook hero counter. */
   notebookWordsExplored: string;
   notebookPracticeNow: string;
-  /** template: "5 due today", number is the only arg */
-  notebookDueTodayTemplate: Template1;
   notebookListView: string;
   notebookGalaxyView: string;
   notebookEmptyTitle: string;
@@ -274,7 +241,6 @@ export interface V2Strings {
   srWordNofMTemplate: (n: number, m: number) => string;
   srSkip: string;
   srClickToReveal: string;
-  srTapToReveal: string;
   srPrimaryMeaningLabel: string;
   srExamplesLabel: string;
   srIForgot: string;
@@ -324,7 +290,6 @@ export interface V2Strings {
   // Account section
   accountSectionLabel: string;
   accountEmailLabel: string;
-  accountChangeEmail: string;
   accountSignOut: string;
   accountDeleteAccount: string;
 
@@ -350,41 +315,13 @@ export interface V2Strings {
   reportCatSomethingElse: string;
 
   // ── Result V2: shared labels ────────────────────────────────
-  origin: string;
-  historyNote: string;
-  throughTime: string;
-  forKids: string;
-  commonExpressions: string;
-  idiomsWithMeaning: string;
-  meaningN: Template1;
-  notJustPrimary: string;
-  takeItFurther: string;
-  doMoreWith: Template1;
-  saveToNotebookHint: string;
   generateImage: string;
-  generatingImage: string;
-  generateImageHint: string;
-  composeSentence: string;
-  composeSentenceHint: string;
-  practiceWord: string;
-  practiceWordHint: string;
-  unlockWithClear: string;
-  upgradeToClear: string;
-  clearUnlocksThis: string;
   // Soft wall — shown when an anonymous visitor or basic user has hit
   // their daily quota. Two variants: anon (encourage signup, free)
   // and basic (encourage upgrade to Clear, paid).
   softWallAnonTitle: string;
-  softWallAnonBody: string;
   softWallSignupCta: string;
   softWallBasicTitle: string;
-  softWallBasicBody: string;
-  // Soft banner above the result on search 4-5 of a 5-search anon
-  // window. Tells them the limit is approaching, encourages signup.
-  softBannerSearchesLeft: (n: number) => string;
-  visualizeThisWord: string;
-  visualBlurb: string;
-  visualBlurbLocked: string;
   reportLabel: string;
 
   // ── Wordbook redesign (locked April 2026) ──────────────────
@@ -403,24 +340,17 @@ export interface V2Strings {
   imageGeneratingHint: string;
   imageOpenFullAria: string;
   kidsComingSoon: string;
-  compareComingSoon: string;
   shareDefinitionAria: string;
   // Action tile titles (single-line, no subtitles)
   actionCompose: string;
   actionCompare: string;
-  // Word Book save states
   // Listen / TTS
   listenToWord: string;
   // Offline pin/download
-  offlinePin: string;
-  offlinePinTitle: string;
-  offlinePinnedTitle: string;
   offlineDownloadPack: string;
   offlineDownloadingPack: string;
   offlinePackHeader: string;
   offlinePackDescription: string;
-  // Visual empty state
-  visualEmptyLabel: string;
   // Progress signal — "Saved · 2 days ago"
   savedAgoTemplate: Template1;
   // Aria
@@ -436,11 +366,7 @@ const uk: V2Strings = {
 
   searchPlaceholderHome: "Введи слово",
   voiceInputTitle: "Продиктуй слово",
-  addContext: "Додати контекст",
   explain: "Пояснити",
-  contextHint:
-    "Щось читаєш? Встав речення, щоб уточнити значення.",
-  tryLabel: "Спробуй",
 
   valuePropsEyebrow: "Що Gadit робить інакше",
   valuePropsTitle: "Більше ніж визначення, спосіб жити зі словом.",
@@ -466,12 +392,9 @@ const uk: V2Strings = {
 
   pricingEyebrow: "Ціни",
   pricingTeaserTitle: "Три рівні. Усі зі справжнім вмістом.",
-  trustMicrocopy:
-    "Скасуй будь-коли · 14-денний пробний період на Clear щомісяця · Без оплати до кінця пробного періоду",
 
   footerProductGroup: "Продукт",
   footerLegalGroup: "Правова інформація",
-  footerCompare: "Порівняти",
   footerNotebook: "Зошит",
   footerPricing: "Ціни",
   footerPrivacy: "Конфіденційність",
@@ -484,7 +407,6 @@ const uk: V2Strings = {
   startFree: "Почати безкоштовно",
   verbStampDef: "повністю зрозуміти слово",
   navSearch: "Пошук",
-  navCompare: "Порівняти",
   navNotebook: "Зошит",
   navPricing: "Ціни",
   navSchools: "Школи",
@@ -495,7 +417,6 @@ const uk: V2Strings = {
   kidsModeLabel: "Діти",
   kidsModeTooltipOff: "Торкнися, щоб пояснювати кожне слово так, як пояснив би дитині батько.",
   kidsModeTooltipOn: "Дитячий режим увімкнено, кожне визначення писатиметься для дитини. Торкнися, щоб вимкнути.",
-  kidsModeBasicGate: "Дитячий режим доступний у Clear. Перейди на вищий рівень, щоб користуватися ним.",
 
   signupWelcomeTitle: "Ласкаво просимо до Gadit!",
   signupWelcomeBody: "Твій акаунт готовий. Почни з пошуку будь-якого слова.",
@@ -624,36 +545,13 @@ const uk: V2Strings = {
   quizBackToWord: "Назад до слова",
   quizReviewMistakes: "Переглянути ті, що я пропустив",
 
-  // Compare Page (Screen 7)
-  compareEyebrow: "Порівняти",
-  compareTitle: "Розрізняй схожі слова",
-  compareSubtitle:
-    "affect vs effect, אומנות vs אמנות, principle vs principal, слова, на яких спотикаються навіть носії мови.",
-  compareWord1Label: "Слово 1",
-  compareWord2Label: "Слово 2",
-  compareWord1Placeholder: "affect",
-  compareWord2Placeholder: "effect",
-  compareCta: "Порівняти",
-  compareLoading: "Порівнюємо…",
-  compareEmpty: "Введи два слова, щоб порівняти їх",
-  compareDifferenceLabel: "Відмінність",
-  compareExamplesLabel: "Приклади",
-  compareCommonMistakeLabel: "Поширена помилка",
-  compareErrNotARealWord: "Ми не впізнаємо одне з цих слів.",
-  compareErrDifferentLanguages:
-    "Здається, ці два слова різними мовами, спробуй пару однією мовою.",
-  compareErrSameWord: "Схоже, це те саме слово, спробуй два різні.",
-  compareErrGeneric: "Порівняння зараз недоступне.",
-
   // Notebook (Screen 8)
   notebookEyebrow: "Зошит",
   notebookTitle: "Твій всесвіт слів",
   notebookSubtitle:
     "Кожне слово, яке ти дослідив, збережене, впорядковане, зростає.",
-  notebookCounterTemplate: (n) => `${n} слів досліджено`,
   notebookWordsExplored: "слів досліджено",
   notebookPracticeNow: "Повторити мої слова",
-  notebookDueTodayTemplate: (n) => `${n} на сьогодні`,
   notebookListView: "Список",
   notebookGalaxyView: "Галактика",
   notebookEmptyTitle: "Твій зошит порожній",
@@ -670,7 +568,6 @@ const uk: V2Strings = {
   srWordNofMTemplate: (n, m) => `Слово ${n} з ${m}`,
   srSkip: "Пропустити",
   srClickToReveal: "Клацни будь-де, щоб показати",
-  srTapToReveal: "Торкнися, щоб показати",
   srPrimaryMeaningLabel: "Основне значення",
   srExamplesLabel: "Приклади",
   srIForgot: "Я забув",
@@ -714,7 +611,6 @@ const uk: V2Strings = {
   accountNearingLimit: "Наближаєшся до ліміту цього місяця.",
   accountSectionLabel: "Акаунт",
   accountEmailLabel: "Електронна пошта",
-  accountChangeEmail: "Змінити пошту",
   accountSignOut: "Вийти",
   accountDeleteAccount: "Видалити акаунт",
 
@@ -738,43 +634,10 @@ const uk: V2Strings = {
   reportCatCompareResult: "Проблема з результатом порівняння",
   reportCatSomethingElse: "Щось інше",
 
-  origin: "Походження",
-  historyNote: "Історична нотатка",
-  throughTime: "Крізь час",
-  forKids: "Для дітей",
-  commonExpressions: "Поширені вислови",
-  idiomsWithMeaning: "Ідіоми з цим значенням",
-  meaningN: (n) => `Значення ${n}`,
-  notJustPrimary: "Не лише основне",
-  takeItFurther: "Розвивай далі",
-  doMoreWith: (w) => `Зроби більше зі словом ${w}`,
-  saveToNotebookHint: "Повернися до нього пізніше, впорядкованого, доступного для пошуку.",
   generateImage: "Згенерувати образ",
-  generatingImage: "Генерація…",
-  generateImageHint: "Яскравий образ, створений ШІ, саме для цього слова.",
-  composeSentence: "Скласти речення",
-  composeSentenceHint: "Напиши власне, а Gadit перевірить тон і доречність.",
-  practiceWord: "Практикувати це слово",
-  practiceWordHint: "Коротка вікторина, налаштована під те, як ти вчишся.",
-  unlockWithClear: "Розблокувати з Clear",
-  upgradeToClear: "Перейти на Clear",
   softWallAnonTitle: "Ти вичерпав безкоштовні пошуки",
-  softWallAnonBody:
-    "Зареєструйся безкоштовно, щоб шукати до 20 слів на день, з повними визначеннями, прикладами, ідіомами та походженням слова.",
   softWallSignupCta: "Зареєструйся, це безкоштовно",
   softWallBasicTitle: "Ти досяг сьогоднішнього ліміту",
-  softWallBasicBody:
-    "Безкоштовні акаунти отримують 20 пошуків на день. Ліміт скидається завтра, або перейди на Clear для необмеженого пошуку плюс образи, дитячий режим і зворотний зв'язок з граматики.",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "Залишився 1 безкоштовний пошук на сьогодні, зареєструйся безкоштовно, щоб мати 20 на день."
-      : `Залишилося безкоштовних пошуків на сьогодні: ${n}, зареєструйся безкоштовно, щоб мати 20 на день.`,
-  clearUnlocksThis: "Clear це розблоковує",
-  visualizeThisWord: "Візуалізувати",
-  visualBlurb:
-    "Один яскравий образ, створений Gadit, візуальний якір для відчуття цього слова.",
-  visualBlurbLocked:
-    "Створи яскравий, неповторний образ для цього слова, розуміння через зір.",
   reportLabel: "Повідомити про помилку",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -787,7 +650,6 @@ const uk: V2Strings = {
   imageGeneratingHint: "Зазвичай це триває від 10 до 15 секунд.",
   imageOpenFullAria: "Відкрити образ на повний розмір",
   kidsComingSoon: "Пояснення для дітей незабаром.",
-  compareComingSoon: "Словесні ігри незабаром.",
   shareDefinitionAria: "Поділитися цим визначенням",
   meaningsEyebrow: "Визначення",
   wordOriginLanguage: "Мова",
@@ -795,14 +657,10 @@ const uk: V2Strings = {
   actionCompose: "Скласти речення",
   actionCompare: "Порівняти слова",
   listenToWord: "Послухати",
-  offlinePin: "Зберегти офлайн",
-  offlinePinTitle: "Зберегти це слово для офлайн-навчання",
-  offlinePinnedTitle: "Збережено, доступно без WiFi",
   offlineDownloadPack: "Завантажити офлайн-набір",
   offlineDownloadingPack: "Завантаження…",
   offlinePackHeader: "Офлайн-набір",
   offlinePackDescription: "Додає до твого зошита найпопулярніші слова твоєю мовою і зберігає їх доступними без WiFi для офлайн-навчання.",
-  visualEmptyLabel: "Для цього слова буде намальовано образ",
   savedAgoTemplate: (t) => `Збережено · ${t}`,
   shareLabel: "Поділитися",
   backLabel: "Назад",
@@ -816,11 +674,7 @@ const tr: V2Strings = {
 
   searchPlaceholderHome: "Bir kelime yaz",
   voiceInputTitle: "Bir kelime söyle",
-  addContext: "Bağlam ekle",
   explain: "Açıkla",
-  contextHint:
-    "Bir şey mi okuyorsun? Anlamı netleştirmek için cümleyi yapıştır.",
-  tryLabel: "Dene",
 
   valuePropsEyebrow: "Gadit neyi farklı yapıyor",
   valuePropsTitle: "Bir tanımdan fazlası, bir kelimeyle yaşamanın yolu.",
@@ -846,12 +700,9 @@ const tr: V2Strings = {
 
   pricingEyebrow: "Fiyatlandırma",
   pricingTeaserTitle: "Üç kademe. Hepsi gerçek içerikle.",
-  trustMicrocopy:
-    "İstediğin zaman iptal et · Clear aylıkta 14 günlük deneme · Deneme bitene kadar ücret yok",
 
   footerProductGroup: "Ürün",
   footerLegalGroup: "Yasal",
-  footerCompare: "Karşılaştır",
   footerNotebook: "Defter",
   footerPricing: "Fiyatlandırma",
   footerPrivacy: "Gizlilik",
@@ -864,7 +715,6 @@ const tr: V2Strings = {
   startFree: "Ücretsiz başla",
   verbStampDef: "bir kelimeyi tümüyle anlamak",
   navSearch: "Ara",
-  navCompare: "Karşılaştır",
   navNotebook: "Defter",
   navPricing: "Fiyatlandırma",
   navSchools: "Okullar",
@@ -875,7 +725,6 @@ const tr: V2Strings = {
   kidsModeLabel: "Çocuklar",
   kidsModeTooltipOff: "Her kelimeyi bir ebeveynin çocuğuna anlatacağı gibi açıklamak için dokun.",
   kidsModeTooltipOn: "Çocuk modu açık, her tanım bir çocuk için yazılacak. Kapatmak için dokun.",
-  kidsModeBasicGate: "Çocuk modu bir Clear özelliğidir. Kullanmak için yükselt.",
 
   signupWelcomeTitle: "Gadit'e hoş geldin!",
   signupWelcomeBody: "Hesabın hazır. Herhangi bir kelimeyi arayarak başla.",
@@ -1004,36 +853,13 @@ const tr: V2Strings = {
   quizBackToWord: "Kelimeye dön",
   quizReviewMistakes: "Kaçırdıklarımı gözden geçir",
 
-  // Compare Page (Screen 7)
-  compareEyebrow: "Karşılaştır",
-  compareTitle: "Benzer kelimeleri ayırt et",
-  compareSubtitle:
-    "affect vs effect, אומנות vs אמנות, principle vs principal, ana dili konuşanları bile yanıltan kelimeler.",
-  compareWord1Label: "1. kelime",
-  compareWord2Label: "2. kelime",
-  compareWord1Placeholder: "affect",
-  compareWord2Placeholder: "effect",
-  compareCta: "Karşılaştır",
-  compareLoading: "Karşılaştırılıyor…",
-  compareEmpty: "Karşılaştırmak için iki kelime gir",
-  compareDifferenceLabel: "Fark",
-  compareExamplesLabel: "Örnekler",
-  compareCommonMistakeLabel: "Yaygın hata",
-  compareErrNotARealWord: "Bu kelimelerden birini tanımıyoruz.",
-  compareErrDifferentLanguages:
-    "Bu iki kelime farklı dillerde gibi görünüyor, eşleşen bir çift dene.",
-  compareErrSameWord: "Bunlar aynı kelime gibi görünüyor, iki farklı kelime dene.",
-  compareErrGeneric: "Karşılaştırma şu anda kullanılamıyor.",
-
   // Notebook (Screen 8)
   notebookEyebrow: "Defter",
   notebookTitle: "Kelime evrenin",
   notebookSubtitle:
     "Keşfettiğin her kelime, saklanmış, düzenlenmiş, büyüyor.",
-  notebookCounterTemplate: (n) => `${n} kelime keşfedildi`,
   notebookWordsExplored: "kelime keşfedildi",
   notebookPracticeNow: "Kelimelerimi tekrar et",
-  notebookDueTodayTemplate: (n) => `Bugün ${n} tanesi zamanı geldi`,
   notebookListView: "Liste",
   notebookGalaxyView: "Galaksi",
   notebookEmptyTitle: "Defterin boş",
@@ -1050,7 +876,6 @@ const tr: V2Strings = {
   srWordNofMTemplate: (n, m) => `Kelime ${n} / ${m}`,
   srSkip: "Atla",
   srClickToReveal: "Göstermek için herhangi bir yere tıkla",
-  srTapToReveal: "Göstermek için dokun",
   srPrimaryMeaningLabel: "Ana anlam",
   srExamplesLabel: "Örnekler",
   srIForgot: "Unuttum",
@@ -1094,7 +919,6 @@ const tr: V2Strings = {
   accountNearingLimit: "Bu ayın sınırına yaklaşıyorsun.",
   accountSectionLabel: "Hesap",
   accountEmailLabel: "E-posta",
-  accountChangeEmail: "E-postayı değiştir",
   accountSignOut: "Çıkış yap",
   accountDeleteAccount: "Hesabı sil",
 
@@ -1118,43 +942,10 @@ const tr: V2Strings = {
   reportCatCompareResult: "Karşılaştırma sonucu sorunu",
   reportCatSomethingElse: "Başka bir şey",
 
-  origin: "Köken",
-  historyNote: "Tarih notu",
-  throughTime: "Zaman içinde",
-  forKids: "Çocuklar için",
-  commonExpressions: "Yaygın ifadeler",
-  idiomsWithMeaning: "Bu anlama sahip deyimler",
-  meaningN: (n) => `Anlam ${n}`,
-  notJustPrimary: "Yalnızca ana anlam değil",
-  takeItFurther: "Daha ileri götür",
-  doMoreWith: (w) => `${w} ile daha fazlasını yap`,
-  saveToNotebookHint: "Sonra ona dön, düzenli, aranabilir.",
   generateImage: "Görsel üret",
-  generatingImage: "Üretiliyor…",
-  generateImageHint: "Sadece bu kelime için yapay zekayla yapılmış capcanlı bir görsel.",
-  composeSentence: "Bir cümle yaz",
-  composeSentenceHint: "Kendininkini yaz, Gadit ton ve uyum için gözden geçirsin.",
-  practiceWord: "Bu kelimeyle alıştırma yap",
-  practiceWordHint: "Nasıl öğrendiğine göre ayarlanmış kısa bir test.",
-  unlockWithClear: "Clear ile aç",
-  upgradeToClear: "Clear'a yükselt",
   softWallAnonTitle: "Ücretsiz aramalarını kullandın",
-  softWallAnonBody:
-    "Günde 20 kelimeye kadar aramak için ücretsiz kaydol, tam tanımlar, örnekler, deyimler ve kelime kökeniyle.",
   softWallSignupCta: "Kaydol, ücretsiz",
   softWallBasicTitle: "Bugünkü sınıra ulaştın",
-  softWallBasicBody:
-    "Ücretsiz hesaplar günde 20 arama alır. Sınır yarın sıfırlanır ya da sınırsız arama, görseller, çocuk modu ve dil bilgisi geri bildirimi için Clear'a yükselt.",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "Bugün 1 ücretsiz arama kaldı, günde 20 almak için ücretsiz kaydol."
-      : `Bugün ${n} ücretsiz arama kaldı, günde 20 almak için ücretsiz kaydol.`,
-  clearUnlocksThis: "Clear bunu açar",
-  visualizeThisWord: "Görselleştir",
-  visualBlurb:
-    "Gadit tarafından üretilmiş tek bir capcanlı görsel, bu kelimenin nasıl hissettirdiğine dair görsel bir çıpa.",
-  visualBlurbLocked:
-    "Bu kelime için capcanlı, eşsiz bir görsel üret, görerek anla.",
   reportLabel: "Bir hata bildir",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -1167,7 +958,6 @@ const tr: V2Strings = {
   imageGeneratingHint: "Bu genellikle 10 ila 15 saniye sürer.",
   imageOpenFullAria: "Görseli tam boyutta aç",
   kidsComingSoon: "Çocuklara özel açıklama çok yakında.",
-  compareComingSoon: "Kelime oyunları çok yakında.",
   shareDefinitionAria: "Bu tanımı paylaş",
   meaningsEyebrow: "Tanımlar",
   wordOriginLanguage: "Dil",
@@ -1175,14 +965,10 @@ const tr: V2Strings = {
   actionCompose: "Bir cümle yaz",
   actionCompare: "Kelimeleri karşılaştır",
   listenToWord: "Dinle",
-  offlinePin: "Çevrimdışı kaydet",
-  offlinePinTitle: "Bu kelimeyi çevrimdışı çalışma için kaydet",
-  offlinePinnedTitle: "Kaydedildi, WiFi olmadan kullanılabilir",
   offlineDownloadPack: "Çevrimdışı paketi indir",
   offlineDownloadingPack: "İndiriliyor…",
   offlinePackHeader: "Çevrimdışı paket",
   offlinePackDescription: "Dilindeki en çok aranan kelimeleri Defterine ekler ve çevrimdışı çalışma için WiFi olmadan kullanılabilir tutar.",
-  visualEmptyLabel: "Bu kelime için bir görsel çizilecek",
   savedAgoTemplate: (t) => `Kaydedildi · ${t}`,
   shareLabel: "Paylaş",
   backLabel: "Geri",
@@ -1196,11 +982,7 @@ const pl: V2Strings = {
 
   searchPlaceholderHome: "Wpisz słowo",
   voiceInputTitle: "Podyktuj słowo",
-  addContext: "Dodaj kontekst",
   explain: "Wyjaśnij",
-  contextHint:
-    "Czytasz coś? Wklej zdanie, aby doprecyzować znaczenie.",
-  tryLabel: "Spróbuj",
 
   valuePropsEyebrow: "Co Gadit robi inaczej",
   valuePropsTitle: "Więcej niż definicja, sposób na życie ze słowem.",
@@ -1226,12 +1008,9 @@ const pl: V2Strings = {
 
   pricingEyebrow: "Cennik",
   pricingTeaserTitle: "Trzy poziomy. Wszystkie z prawdziwą treścią.",
-  trustMicrocopy:
-    "Anuluj w każdej chwili · 14 dni próbne na miesięcznym Clear · Brak opłat do końca okresu próbnego",
 
   footerProductGroup: "Produkt",
   footerLegalGroup: "Informacje prawne",
-  footerCompare: "Porównaj",
   footerNotebook: "Notatnik",
   footerPricing: "Cennik",
   footerPrivacy: "Prywatność",
@@ -1244,7 +1023,6 @@ const pl: V2Strings = {
   startFree: "Zacznij za darmo",
   verbStampDef: "zrozumieć słowo, w pełni",
   navSearch: "Szukaj",
-  navCompare: "Porównaj",
   navNotebook: "Notatnik",
   navPricing: "Cennik",
   navSchools: "Szkoły",
@@ -1255,7 +1033,6 @@ const pl: V2Strings = {
   kidsModeLabel: "Dzieci",
   kidsModeTooltipOff: "Dotknij, aby wyjaśnić każde słowo tak, jak rodzic wyjaśniłby je dziecku.",
   kidsModeTooltipOn: "Tryb dla dzieci jest włączony, każda definicja będzie napisana dla dziecka. Dotknij, aby wyłączyć.",
-  kidsModeBasicGate: "Tryb dla dzieci to funkcja Clear. Ulepsz plan, aby z niej korzystać.",
 
   signupWelcomeTitle: "Witaj w Gadit!",
   signupWelcomeBody: "Twoje konto jest gotowe. Zacznij od wyszukania dowolnego słowa.",
@@ -1384,36 +1161,13 @@ const pl: V2Strings = {
   quizBackToWord: "Powrót do słowa",
   quizReviewMistakes: "Przejrzyj te, które pominąłem",
 
-  // Compare Page (Screen 7)
-  compareEyebrow: "Porównaj",
-  compareTitle: "Rozróżniaj podobne słowa",
-  compareSubtitle:
-    "affect vs effect, אומנות vs אמנות, principle vs principal, słowa, które zwodzą nawet rodzimych użytkowników.",
-  compareWord1Label: "Słowo 1",
-  compareWord2Label: "Słowo 2",
-  compareWord1Placeholder: "affect",
-  compareWord2Placeholder: "effect",
-  compareCta: "Porównaj",
-  compareLoading: "Porównywanie…",
-  compareEmpty: "Wpisz dwa słowa, aby je porównać",
-  compareDifferenceLabel: "Różnica",
-  compareExamplesLabel: "Przykłady",
-  compareCommonMistakeLabel: "Częsty błąd",
-  compareErrNotARealWord: "Nie rozpoznajemy jednego z tych słów.",
-  compareErrDifferentLanguages:
-    "Te dwa słowa wydają się być w różnych językach, spróbuj dopasowanej pary.",
-  compareErrSameWord: "Te wyglądają na to samo słowo, spróbuj dwóch różnych.",
-  compareErrGeneric: "Porównywanie jest teraz niedostępne.",
-
   // Notebook (Screen 8)
   notebookEyebrow: "Notatnik",
   notebookTitle: "Twój wszechświat słów",
   notebookSubtitle:
     "Każde słowo, które zgłębiłeś, zachowane, uporządkowane, rosnące.",
-  notebookCounterTemplate: (n) => `${n} zgłębionych słów`,
   notebookWordsExplored: "zgłębionych słów",
   notebookPracticeNow: "Powtórz moje słowa",
-  notebookDueTodayTemplate: (n) => `${n} do powtórki dziś`,
   notebookListView: "Lista",
   notebookGalaxyView: "Galaktyka",
   notebookEmptyTitle: "Twój notatnik jest pusty",
@@ -1430,7 +1184,6 @@ const pl: V2Strings = {
   srWordNofMTemplate: (n, m) => `Słowo ${n} z ${m}`,
   srSkip: "Pomiń",
   srClickToReveal: "Kliknij gdziekolwiek, aby odsłonić",
-  srTapToReveal: "Dotknij, aby odsłonić",
   srPrimaryMeaningLabel: "Główne znaczenie",
   srExamplesLabel: "Przykłady",
   srIForgot: "Zapomniałem",
@@ -1474,7 +1227,6 @@ const pl: V2Strings = {
   accountNearingLimit: "Zbliżasz się do limitu na ten miesiąc.",
   accountSectionLabel: "Konto",
   accountEmailLabel: "E-mail",
-  accountChangeEmail: "Zmień e-mail",
   accountSignOut: "Wyloguj się",
   accountDeleteAccount: "Usuń konto",
 
@@ -1498,43 +1250,10 @@ const pl: V2Strings = {
   reportCatCompareResult: "Problem z wynikiem porównania",
   reportCatSomethingElse: "Coś innego",
 
-  origin: "Pochodzenie",
-  historyNote: "Notka historyczna",
-  throughTime: "W biegu czasu",
-  forKids: "Dla dzieci",
-  commonExpressions: "Częste wyrażenia",
-  idiomsWithMeaning: "Idiomy z tym znaczeniem",
-  meaningN: (n) => `Znaczenie ${n}`,
-  notJustPrimary: "Nie tylko to główne",
-  takeItFurther: "Pójdź dalej",
-  doMoreWith: (w) => `Zrób więcej ze słowem ${w}`,
-  saveToNotebookHint: "Wróć do niego później, uporządkowanego, przeszukiwalnego.",
   generateImage: "Wygeneruj obraz",
-  generatingImage: "Generowanie…",
-  generateImageHint: "Wyrazista wizualizacja stworzona przez AI, właśnie dla tego słowa.",
-  composeSentence: "Ułóż zdanie",
-  composeSentenceHint: "Napisz własne, a Gadit sprawdzi ton i dopasowanie.",
-  practiceWord: "Ćwicz to słowo",
-  practiceWordHint: "Krótki quiz dostrojony do tego, jak się uczysz.",
-  unlockWithClear: "Odblokuj z Clear",
-  upgradeToClear: "Ulepsz do Clear",
   softWallAnonTitle: "Wykorzystałeś swoje darmowe wyszukiwania",
-  softWallAnonBody:
-    "Zarejestruj się za darmo, aby wyszukiwać do 20 słów dziennie, z pełnymi definicjami, przykładami, idiomami i pochodzeniem słowa.",
   softWallSignupCta: "Zarejestruj się, to za darmo",
   softWallBasicTitle: "Osiągnąłeś dzisiejszy limit",
-  softWallBasicBody:
-    "Darmowe konta mają 20 wyszukiwań dziennie. Limit resetuje się jutro, albo ulepsz do Clear, aby uzyskać nieograniczone wyszukiwania oraz obrazy, tryb dla dzieci i informację zwrotną o gramatyce.",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "1 darmowe wyszukiwanie zostało na dziś, zarejestruj się za darmo, aby mieć 20 dziennie."
-      : `${n} darmowych wyszukiwań zostało na dziś, zarejestruj się za darmo, aby mieć 20 dziennie.`,
-  clearUnlocksThis: "Clear to odblokowuje",
-  visualizeThisWord: "Zwizualizuj",
-  visualBlurb:
-    "Jeden wyrazisty obraz, wygenerowany przez Gadit, wizualna kotwica dla tego, jak to słowo działa.",
-  visualBlurbLocked:
-    "Wygeneruj wyrazisty, jedyny w swoim rodzaju obraz dla tego słowa, zrozumienie przez wzrok.",
   reportLabel: "Zgłoś błąd",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -1547,7 +1266,6 @@ const pl: V2Strings = {
   imageGeneratingHint: "Zwykle trwa to od 10 do 15 sekund.",
   imageOpenFullAria: "Otwórz obraz w pełnym rozmiarze",
   kidsComingSoon: "Wyjaśnienie dla dzieci już wkrótce.",
-  compareComingSoon: "Gry słowne już wkrótce.",
   shareDefinitionAria: "Udostępnij tę definicję",
   meaningsEyebrow: "Definicje",
   wordOriginLanguage: "Język",
@@ -1555,14 +1273,10 @@ const pl: V2Strings = {
   actionCompose: "Ułóż zdanie",
   actionCompare: "Porównaj słowa",
   listenToWord: "Posłuchaj",
-  offlinePin: "Zapisz offline",
-  offlinePinTitle: "Zapisz to słowo do nauki offline",
-  offlinePinnedTitle: "Zapisano, dostępne bez WiFi",
   offlineDownloadPack: "Pobierz pakiet offline",
   offlineDownloadingPack: "Pobieranie…",
   offlinePackHeader: "Pakiet offline",
   offlinePackDescription: "Dodaje najczęściej wyszukiwane słowa w twoim języku do notatnika i zachowuje je dostępne bez WiFi do nauki offline.",
-  visualEmptyLabel: "Dla tego słowa zostanie narysowany obraz",
   savedAgoTemplate: (t) => `Zapisano · ${t}`,
   shareLabel: "Udostępnij",
   backLabel: "Wstecz",
@@ -1576,11 +1290,7 @@ const fa: V2Strings = {
 
   searchPlaceholderHome: "یک واژه بنویس",
   voiceInputTitle: "واژه را بگو",
-  addContext: "افزودن بافت",
   explain: "توضیح بده",
-  contextHint:
-    "چیزی می‌خوانی؟ جمله را بچسبان تا معنای درست روشن شود.",
-  tryLabel: "امتحان کن",
 
   valuePropsEyebrow: "کار متفاوت Gadit",
   valuePropsTitle: "فراتر از یک تعریف، راهی برای زندگی با یک واژه.",
@@ -1606,12 +1316,9 @@ const fa: V2Strings = {
 
   pricingEyebrow: "قیمت‌گذاری",
   pricingTeaserTitle: "سه سطح. همه با محتوای واقعی.",
-  trustMicrocopy:
-    "لغو در هر زمان · دوره آزمایشی ۱۴ روزه در پلن Clear ماهانه · بدون هزینه تا پایان دوره آزمایشی",
 
   footerProductGroup: "محصول",
   footerLegalGroup: "قانونی",
-  footerCompare: "مقایسه",
   footerNotebook: "دفترچه",
   footerPricing: "قیمت‌گذاری",
   footerPrivacy: "حریم خصوصی",
@@ -1624,7 +1331,6 @@ const fa: V2Strings = {
   startFree: "شروع رایگان",
   verbStampDef: "درک کامل یک واژه",
   navSearch: "جستجو",
-  navCompare: "مقایسه",
   navNotebook: "دفترچه",
   navPricing: "قیمت‌گذاری",
   navSchools: "مدرسه‌ها",
@@ -1635,7 +1341,6 @@ const fa: V2Strings = {
   kidsModeLabel: "کودکان",
   kidsModeTooltipOff: "بزن تا هر واژه همان‌طور که یک والد به کودک توضیح می‌دهد بیان شود.",
   kidsModeTooltipOn: "حالت کودکان روشن است، هر تعریف برای یک کودک نوشته می‌شود. برای خاموش کردن بزن.",
-  kidsModeBasicGate: "حالت کودکان یک ویژگی Clear است. برای استفاده ارتقا بده.",
 
   signupWelcomeTitle: "به Gadit خوش آمدی!",
   signupWelcomeBody: "حسابت آماده است. با جستجوی هر واژه‌ای شروع کن.",
@@ -1764,36 +1469,13 @@ const fa: V2Strings = {
   quizBackToWord: "بازگشت به واژه",
   quizReviewMistakes: "مروری بر آن‌هایی که اشتباه کردم",
 
-  // Compare Page (Screen 7)
-  compareEyebrow: "مقایسه",
-  compareTitle: "واژه‌های مشابه را از هم تشخیص بده",
-  compareSubtitle:
-    "affect در برابر effect، אומנות در برابر אמנות، principle در برابر principal، واژه‌هایی که حتی زبان‌مادری‌ها را هم به دام می‌اندازند.",
-  compareWord1Label: "واژه ۱",
-  compareWord2Label: "واژه ۲",
-  compareWord1Placeholder: "affect",
-  compareWord2Placeholder: "effect",
-  compareCta: "مقایسه",
-  compareLoading: "در حال مقایسه…",
-  compareEmpty: "دو واژه را برای مقایسه وارد کن",
-  compareDifferenceLabel: "تفاوت",
-  compareExamplesLabel: "مثال‌ها",
-  compareCommonMistakeLabel: "اشتباه رایج",
-  compareErrNotARealWord: "یکی از آن واژه‌ها را نمی‌شناسیم.",
-  compareErrDifferentLanguages:
-    "به نظر می‌رسد این دو واژه به دو زبان متفاوت هستند، یک جفت هم‌زبان امتحان کن.",
-  compareErrSameWord: "این‌ها انگار یک واژه‌اند، دو واژه متفاوت امتحان کن.",
-  compareErrGeneric: "مقایسه هم‌اکنون در دسترس نیست.",
-
   // Notebook (Screen 8)
   notebookEyebrow: "دفترچه",
   notebookTitle: "کهکشان واژه‌های تو",
   notebookSubtitle:
     "هر واژه‌ای که کاوش کرده‌ای، نگه‌داشته، سامان‌یافته، در حال رشد.",
-  notebookCounterTemplate: (n) => `${n} واژه کاوش‌شده`,
   notebookWordsExplored: "واژه کاوش‌شده",
   notebookPracticeNow: "مرور کلمه‌های من",
-  notebookDueTodayTemplate: (n) => `${n} برای امروز`,
   notebookListView: "فهرست",
   notebookGalaxyView: "کهکشان",
   notebookEmptyTitle: "دفترچه‌ات خالی است",
@@ -1810,7 +1492,6 @@ const fa: V2Strings = {
   srWordNofMTemplate: (n, m) => `واژه ${n} از ${m}`,
   srSkip: "رد کن",
   srClickToReveal: "برای آشکار شدن، هر جا کلیک کن",
-  srTapToReveal: "برای آشکار شدن بزن",
   srPrimaryMeaningLabel: "معنای اصلی",
   srExamplesLabel: "مثال‌ها",
   srIForgot: "فراموش کردم",
@@ -1854,7 +1535,6 @@ const fa: V2Strings = {
   accountNearingLimit: "به سقف این ماه نزدیک می‌شوی.",
   accountSectionLabel: "حساب",
   accountEmailLabel: "ایمیل",
-  accountChangeEmail: "تغییر ایمیل",
   accountSignOut: "خروج",
   accountDeleteAccount: "حذف حساب",
 
@@ -1878,43 +1558,10 @@ const fa: V2Strings = {
   reportCatCompareResult: "مشکل در نتیجه مقایسه",
   reportCatSomethingElse: "چیز دیگری",
 
-  origin: "خاستگاه",
-  historyNote: "یادداشت تاریخی",
-  throughTime: "در گذر زمان",
-  forKids: "برای کودکان",
-  commonExpressions: "عبارت‌های رایج",
-  idiomsWithMeaning: "اصطلاح‌ها با این معنا",
-  meaningN: (n) => `معنای ${n}`,
-  notJustPrimary: "نه فقط معنای اصلی",
-  takeItFurther: "پیش‌تر برو",
-  doMoreWith: (w) => `با ${w} بیشتر کار کن`,
-  saveToNotebookHint: "بعداً به آن برگرد، سامان‌یافته، قابل جستجو.",
   generateImage: "ساخت تصویر",
-  generatingImage: "در حال ساختن…",
-  generateImageHint: "یک تصویر زنده ساخته‌شده با هوش مصنوعی، فقط برای این واژه.",
-  composeSentence: "یک جمله بنویس",
-  composeSentenceHint: "خودت بنویس، Gadit آن را از نظر لحن و تناسب بازبینی می‌کند.",
-  practiceWord: "این واژه را تمرین کن",
-  practiceWordHint: "یک آزمون کوتاه هماهنگ با شیوه یادگیری تو.",
-  unlockWithClear: "با Clear باز کن",
-  upgradeToClear: "ارتقا به Clear",
   softWallAnonTitle: "جستجوهای رایگانت را استفاده کردی",
-  softWallAnonBody:
-    "رایگان ثبت‌نام کن تا روزانه تا ۲۰ واژه جستجو کنی، با تعریف‌های کامل، مثال‌ها، اصطلاح‌ها و خاستگاه واژه.",
   softWallSignupCta: "ثبت‌نام کن، رایگان است",
   softWallBasicTitle: "به سقف امروز رسیدی",
-  softWallBasicBody:
-    "حساب‌های رایگان روزانه ۲۰ جستجو دارند. سقف فردا بازنشانی می‌شود، یا به Clear ارتقا بده تا جستجوی نامحدود به‌همراه تصویرها، حالت کودکان و بازخورد دستور زبان داشته باشی.",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "۱ جستجوی رایگان امروز باقی مانده، رایگان ثبت‌نام کن تا روزی ۲۰ تا بگیری."
-      : `${n} جستجوی رایگان امروز باقی مانده، رایگان ثبت‌نام کن تا روزی ۲۰ تا بگیری.`,
-  clearUnlocksThis: "Clear این را باز می‌کند",
-  visualizeThisWord: "تصویرسازی",
-  visualBlurb:
-    "یک تصویر زنده، ساخته Gadit، لنگری دیداری برای حس این واژه.",
-  visualBlurbLocked:
-    "یک تصویر زنده و یگانه برای این واژه بساز، درک از راه دیدن.",
   reportLabel: "گزارش خطا",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -1927,7 +1574,6 @@ const fa: V2Strings = {
   imageGeneratingHint: "این معمولاً ۱۰ تا ۱۵ ثانیه طول می‌کشد.",
   imageOpenFullAria: "باز کردن تصویر در اندازه کامل",
   kidsComingSoon: "توضیح کودکانه به‌زودی می‌آید.",
-  compareComingSoon: "بازی‌های واژه به‌زودی می‌آید.",
   shareDefinitionAria: "این تعریف را هم‌رسان کن",
   meaningsEyebrow: "تعریف‌ها",
   wordOriginLanguage: "زبان",
@@ -1935,14 +1581,10 @@ const fa: V2Strings = {
   actionCompose: "یک جمله بنویس",
   actionCompare: "مقایسه واژه‌ها",
   listenToWord: "گوش بده",
-  offlinePin: "ذخیره برای آفلاین",
-  offlinePinTitle: "این واژه را برای مطالعه آفلاین ذخیره کن",
-  offlinePinnedTitle: "ذخیره شد، بدون WiFi در دسترس است",
   offlineDownloadPack: "دانلود بسته آفلاین",
   offlineDownloadingPack: "در حال دانلود…",
   offlinePackHeader: "بسته آفلاین",
   offlinePackDescription: "پرجستجوترین واژه‌های زبانت را به دفترچه‌ات می‌افزاید و آن‌ها را بدون WiFi برای مطالعه آفلاین در دسترس نگه می‌دارد.",
-  visualEmptyLabel: "برای این واژه یک تصویر کشیده خواهد شد",
   savedAgoTemplate: (t) => `ذخیره‌شده · ${t}`,
   shareLabel: "هم‌رسانی",
   backLabel: "بازگشت",
@@ -1956,11 +1598,7 @@ const id: V2Strings = {
 
   searchPlaceholderHome: "Ketik sebuah kata",
   voiceInputTitle: "Ucapkan sebuah kata",
-  addContext: "Tambahkan konteks",
   explain: "Jelaskan",
-  contextHint:
-    "Sedang membaca sesuatu? Tempel kalimatnya untuk memperjelas maknanya.",
-  tryLabel: "Coba",
 
   valuePropsEyebrow: "Apa yang membuat Gadit berbeda",
   valuePropsTitle: "Lebih dari sekadar definisi, cara untuk hidup dengan sebuah kata.",
@@ -1986,12 +1624,9 @@ const id: V2Strings = {
 
   pricingEyebrow: "Harga",
   pricingTeaserTitle: "Tiga tingkat. Semua dengan konten sungguhan.",
-  trustMicrocopy:
-    "Batalkan kapan saja · Uji coba 14 hari di Clear bulanan · Tanpa biaya sampai uji coba berakhir",
 
   footerProductGroup: "Produk",
   footerLegalGroup: "Legal",
-  footerCompare: "Bandingkan",
   footerNotebook: "Buku Catatan",
   footerPricing: "Harga",
   footerPrivacy: "Privasi",
@@ -2004,7 +1639,6 @@ const id: V2Strings = {
   startFree: "Mulai gratis",
   verbStampDef: "memahami sebuah kata, sepenuhnya",
   navSearch: "Cari",
-  navCompare: "Bandingkan",
   navNotebook: "Buku Catatan",
   navPricing: "Harga",
   navSchools: "Sekolah",
@@ -2015,7 +1649,6 @@ const id: V2Strings = {
   kidsModeLabel: "Anak",
   kidsModeTooltipOff: "Ketuk untuk menjelaskan setiap kata seperti orang tua kepada anaknya.",
   kidsModeTooltipOn: "Mode anak menyala, setiap definisi akan ditulis untuk seorang anak. Ketuk untuk mematikan.",
-  kidsModeBasicGate: "Mode anak adalah fitur Clear. Tingkatkan untuk menggunakannya.",
 
   signupWelcomeTitle: "Selamat datang di Gadit!",
   signupWelcomeBody: "Akunmu sudah siap. Mulailah dengan mencari kata apa pun.",
@@ -2144,36 +1777,13 @@ const id: V2Strings = {
   quizBackToWord: "Kembali ke kata",
   quizReviewMistakes: "Tinjau yang saya lewatkan",
 
-  // Compare Page (Screen 7)
-  compareEyebrow: "Bandingkan",
-  compareTitle: "Bedakan kata-kata serupa",
-  compareSubtitle:
-    "affect vs effect, אומנות vs אמנות, principle vs principal, kata-kata yang mengecoh bahkan penutur asli.",
-  compareWord1Label: "Kata 1",
-  compareWord2Label: "Kata 2",
-  compareWord1Placeholder: "affect",
-  compareWord2Placeholder: "effect",
-  compareCta: "Bandingkan",
-  compareLoading: "Membandingkan…",
-  compareEmpty: "Masukkan dua kata untuk membandingkannya",
-  compareDifferenceLabel: "Perbedaannya",
-  compareExamplesLabel: "Contoh",
-  compareCommonMistakeLabel: "Kesalahan umum",
-  compareErrNotARealWord: "Kami tidak mengenali salah satu kata itu.",
-  compareErrDifferentLanguages:
-    "Kedua kata ini tampaknya dalam bahasa yang berbeda, coba pasangan yang cocok.",
-  compareErrSameWord: "Ini tampak seperti kata yang sama, coba dua kata yang berbeda.",
-  compareErrGeneric: "Perbandingan tidak tersedia saat ini.",
-
   // Notebook (Screen 8)
   notebookEyebrow: "Buku Catatan",
   notebookTitle: "Semesta katamu",
   notebookSubtitle:
     "Setiap kata yang kamu jelajahi, disimpan, ditata, bertumbuh.",
-  notebookCounterTemplate: (n) => `${n} kata dijelajahi`,
   notebookWordsExplored: "kata dijelajahi",
   notebookPracticeNow: "Ulangi kata-kataku",
-  notebookDueTodayTemplate: (n) => `${n} jatuh tempo hari ini`,
   notebookListView: "Daftar",
   notebookGalaxyView: "Galaksi",
   notebookEmptyTitle: "Buku catatanmu kosong",
@@ -2190,7 +1800,6 @@ const id: V2Strings = {
   srWordNofMTemplate: (n, m) => `Kata ${n} dari ${m}`,
   srSkip: "Lewati",
   srClickToReveal: "Klik di mana saja untuk menampilkan",
-  srTapToReveal: "Ketuk untuk menampilkan",
   srPrimaryMeaningLabel: "Makna utama",
   srExamplesLabel: "Contoh",
   srIForgot: "Saya lupa",
@@ -2234,7 +1843,6 @@ const id: V2Strings = {
   accountNearingLimit: "Mendekati batas bulan ini.",
   accountSectionLabel: "Akun",
   accountEmailLabel: "Email",
-  accountChangeEmail: "Ganti email",
   accountSignOut: "Keluar",
   accountDeleteAccount: "Hapus akun",
 
@@ -2258,43 +1866,10 @@ const id: V2Strings = {
   reportCatCompareResult: "Masalah hasil perbandingan",
   reportCatSomethingElse: "Hal lain",
 
-  origin: "Asal-usul",
-  historyNote: "Catatan sejarah",
-  throughTime: "Sepanjang waktu",
-  forKids: "Untuk anak",
-  commonExpressions: "Ungkapan umum",
-  idiomsWithMeaning: "Idiom dengan makna ini",
-  meaningN: (n) => `Makna ${n}`,
-  notJustPrimary: "Bukan hanya yang utama",
-  takeItFurther: "Lanjutkan lebih jauh",
-  doMoreWith: (w) => `Lakukan lebih banyak dengan ${w}`,
-  saveToNotebookHint: "Kembalilah nanti, tertata, bisa dicari.",
   generateImage: "Buat gambar",
-  generatingImage: "Membuat…",
-  generateImageHint: "Visual buatan AI yang hidup, khusus untuk kata ini.",
-  composeSentence: "Susun kalimat",
-  composeSentenceHint: "Tulis milikmu sendiri, Gadit meninjau nada dan kesesuaian.",
-  practiceWord: "Latih kata ini",
-  practiceWordHint: "Kuis singkat yang disesuaikan dengan cara belajarmu.",
-  unlockWithClear: "Buka dengan Clear",
-  upgradeToClear: "Tingkatkan ke Clear",
   softWallAnonTitle: "Kamu sudah menggunakan pencarian gratismu",
-  softWallAnonBody:
-    "Daftar gratis untuk mencari hingga 20 kata sehari, dengan definisi lengkap, contoh, idiom dan asal-usul kata.",
   softWallSignupCta: "Daftar, gratis",
   softWallBasicTitle: "Kamu sudah mencapai batas hari ini",
-  softWallBasicBody:
-    "Akun gratis mendapat 20 pencarian per hari. Batasnya diatur ulang besok, atau tingkatkan ke Clear untuk pencarian tak terbatas plus gambar, mode anak, dan umpan balik tata bahasa.",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "1 pencarian gratis tersisa hari ini, daftar gratis untuk mendapat 20 sehari."
-      : `${n} pencarian gratis tersisa hari ini, daftar gratis untuk mendapat 20 sehari.`,
-  clearUnlocksThis: "Clear membuka ini",
-  visualizeThisWord: "Visualisasikan",
-  visualBlurb:
-    "Satu gambar yang hidup, dibuat oleh Gadit, jangkar visual untuk merasakan kata ini.",
-  visualBlurbLocked:
-    "Buat gambar yang hidup dan unik untuk kata ini, memahami lewat penglihatan.",
   reportLabel: "Laporkan kesalahan",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -2307,7 +1882,6 @@ const id: V2Strings = {
   imageGeneratingHint: "Ini biasanya memakan 10 sampai 15 detik.",
   imageOpenFullAria: "Buka gambar ukuran penuh",
   kidsComingSoon: "Penjelasan untuk anak segera hadir.",
-  compareComingSoon: "Permainan kata segera hadir.",
   shareDefinitionAria: "Bagikan definisi ini",
   meaningsEyebrow: "Definisi",
   wordOriginLanguage: "Bahasa",
@@ -2315,14 +1889,10 @@ const id: V2Strings = {
   actionCompose: "Susun kalimat",
   actionCompare: "Bandingkan kata",
   listenToWord: "Dengarkan",
-  offlinePin: "Simpan offline",
-  offlinePinTitle: "Simpan kata ini untuk belajar offline",
-  offlinePinnedTitle: "Disimpan, tersedia tanpa WiFi",
   offlineDownloadPack: "Unduh paket offline",
   offlineDownloadingPack: "Mengunduh…",
   offlinePackHeader: "Paket offline",
   offlinePackDescription: "Menambahkan kata-kata yang paling banyak dicari dalam bahasamu ke Buku Catatanmu, dan menjaganya tetap tersedia tanpa WiFi untuk belajar offline.",
-  visualEmptyLabel: "Sebuah gambar akan digambar untuk kata ini",
   savedAgoTemplate: (t) => `Disimpan · ${t}`,
   shareLabel: "Bagikan",
   backLabel: "Kembali",
@@ -2336,11 +1906,7 @@ const nl: V2Strings = {
 
   searchPlaceholderHome: "Typ een woord",
   voiceInputTitle: "Spreek een woord in",
-  addContext: "Context toevoegen",
   explain: "Uitleggen",
-  contextHint:
-    "Iets aan het lezen? Plak de zin om de betekenis te verduidelijken.",
-  tryLabel: "Probeer",
 
   valuePropsEyebrow: "Wat Gadit anders doet",
   valuePropsTitle: "Meer dan een definitie, een manier om met een woord te leven.",
@@ -2366,12 +1932,9 @@ const nl: V2Strings = {
 
   pricingEyebrow: "Prijzen",
   pricingTeaserTitle: "Drie niveaus. Allemaal met echte inhoud.",
-  trustMicrocopy:
-    "Altijd opzegbaar · 14 dagen proberen bij Clear maandelijks · Geen kosten tot de proefperiode eindigt",
 
   footerProductGroup: "Product",
   footerLegalGroup: "Juridisch",
-  footerCompare: "Vergelijken",
   footerNotebook: "Notitieboek",
   footerPricing: "Prijzen",
   footerPrivacy: "Privacy",
@@ -2384,7 +1947,6 @@ const nl: V2Strings = {
   startFree: "Gratis beginnen",
   verbStampDef: "een woord volledig begrijpen",
   navSearch: "Zoeken",
-  navCompare: "Vergelijken",
   navNotebook: "Notitieboek",
   navPricing: "Prijzen",
   navSchools: "Scholen",
@@ -2395,7 +1957,6 @@ const nl: V2Strings = {
   kidsModeLabel: "Kinderen",
   kidsModeTooltipOff: "Tik om elk woord uit te leggen zoals een ouder dat aan een kind zou doen.",
   kidsModeTooltipOn: "Kindermodus staat aan, elke definitie wordt voor een kind geschreven. Tik om uit te zetten.",
-  kidsModeBasicGate: "Kindermodus is een Clear-functie. Upgrade om het te gebruiken.",
 
   signupWelcomeTitle: "Welkom bij Gadit!",
   signupWelcomeBody: "Je account is klaar. Begin met het zoeken van een woord.",
@@ -2524,36 +2085,13 @@ const nl: V2Strings = {
   quizBackToWord: "Terug naar woord",
   quizReviewMistakes: "Bekijk de fouten die ik maakte",
 
-  // Compare Page (Screen 7)
-  compareEyebrow: "Vergelijken",
-  compareTitle: "Vergelijkbare woorden uit elkaar houden",
-  compareSubtitle:
-    "affect vs effect, אומנות vs אמנות, principle vs principal, de woorden waar zelfs moedertaalsprekers over struikelen.",
-  compareWord1Label: "Woord 1",
-  compareWord2Label: "Woord 2",
-  compareWord1Placeholder: "affect",
-  compareWord2Placeholder: "effect",
-  compareCta: "Vergelijken",
-  compareLoading: "Bezig met vergelijken…",
-  compareEmpty: "Voer twee woorden in om ze te vergelijken",
-  compareDifferenceLabel: "Het verschil",
-  compareExamplesLabel: "Voorbeelden",
-  compareCommonMistakeLabel: "Veelgemaakte fout",
-  compareErrNotARealWord: "We herkennen een van die woorden niet.",
-  compareErrDifferentLanguages:
-    "Deze twee woorden lijken in verschillende talen te zijn, probeer een passend paar.",
-  compareErrSameWord: "Deze lijken hetzelfde woord te zijn, probeer twee verschillende.",
-  compareErrGeneric: "Vergelijken is momenteel niet beschikbaar.",
-
   // Notebook (Screen 8)
   notebookEyebrow: "Notitieboek",
   notebookTitle: "Jouw universum van woorden",
   notebookSubtitle:
     "Elk woord dat je hebt ontdekt, bewaard, geordend, groeiend.",
-  notebookCounterTemplate: (n) => `${n} woorden ontdekt`,
   notebookWordsExplored: "woorden ontdekt",
   notebookPracticeNow: "Mijn woorden herhalen",
-  notebookDueTodayTemplate: (n) => `${n} vandaag aan de beurt`,
   notebookListView: "Lijst",
   notebookGalaxyView: "Melkweg",
   notebookEmptyTitle: "Je notitieboek is leeg",
@@ -2570,7 +2108,6 @@ const nl: V2Strings = {
   srWordNofMTemplate: (n, m) => `Woord ${n} van ${m}`,
   srSkip: "Overslaan",
   srClickToReveal: "Klik ergens om te onthullen",
-  srTapToReveal: "Tik om te onthullen",
   srPrimaryMeaningLabel: "Hoofdbetekenis",
   srExamplesLabel: "Voorbeelden",
   srIForgot: "Ik was het vergeten",
@@ -2614,7 +2151,6 @@ const nl: V2Strings = {
   accountNearingLimit: "Je nadert de limiet van deze maand.",
   accountSectionLabel: "Account",
   accountEmailLabel: "E-mail",
-  accountChangeEmail: "E-mail wijzigen",
   accountSignOut: "Uitloggen",
   accountDeleteAccount: "Account verwijderen",
 
@@ -2638,43 +2174,10 @@ const nl: V2Strings = {
   reportCatCompareResult: "Probleem met vergelijkingsresultaat",
   reportCatSomethingElse: "Iets anders",
 
-  origin: "Herkomst",
-  historyNote: "Historische notitie",
-  throughTime: "Door de tijd heen",
-  forKids: "Voor kinderen",
-  commonExpressions: "Veelgebruikte uitdrukkingen",
-  idiomsWithMeaning: "Uitdrukkingen met deze betekenis",
-  meaningN: (n) => `Betekenis ${n}`,
-  notJustPrimary: "Niet alleen de hoofdbetekenis",
-  takeItFurther: "Ga verder",
-  doMoreWith: (w) => `Doe meer met ${w}`,
-  saveToNotebookHint: "Kom er later op terug, geordend, doorzoekbaar.",
   generateImage: "Beeld genereren",
-  generatingImage: "Bezig met genereren…",
-  generateImageHint: "Een levendig door AI gemaakt beeld, speciaal voor dit woord.",
-  composeSentence: "Een zin schrijven",
-  composeSentenceHint: "Schrijf je eigen zin, Gadit bekijkt toon en gebruik.",
-  practiceWord: "Dit woord oefenen",
-  practiceWordHint: "Een korte quiz afgestemd op hoe jij leert.",
-  unlockWithClear: "Ontgrendel met Clear",
-  upgradeToClear: "Upgrade naar Clear",
   softWallAnonTitle: "Je hebt je gratis zoekopdrachten gebruikt",
-  softWallAnonBody:
-    "Registreer je gratis om tot 20 woorden per dag te zoeken, met volledige definities, voorbeelden, uitdrukkingen en woordherkomst.",
   softWallSignupCta: "Registreer je, het is gratis",
   softWallBasicTitle: "Je hebt de limiet van vandaag bereikt",
-  softWallBasicBody:
-    "Gratis accounts krijgen 20 zoekopdrachten per dag. De limiet wordt morgen gereset, of upgrade naar Clear voor onbeperkt zoeken plus beelden, kindermodus en grammaticafeedback.",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "Nog 1 gratis zoekopdracht vandaag, registreer je gratis voor 20 per dag."
-      : `Nog ${n} gratis zoekopdrachten vandaag, registreer je gratis voor 20 per dag.`,
-  clearUnlocksThis: "Clear ontgrendelt dit",
-  visualizeThisWord: "Verbeelden",
-  visualBlurb:
-    "Eén levendig beeld, gegenereerd door Gadit, een visueel anker voor hoe dit woord aanvoelt.",
-  visualBlurbLocked:
-    "Genereer een levendig, uniek beeld voor dit woord, begrijpen door te zien.",
   reportLabel: "Een fout melden",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -2687,7 +2190,6 @@ const nl: V2Strings = {
   imageGeneratingHint: "Dit duurt meestal 10 tot 15 seconden.",
   imageOpenFullAria: "Beeld op volledige grootte openen",
   kidsComingSoon: "Uitleg voor kinderen komt binnenkort.",
-  compareComingSoon: "Woordspellen komen binnenkort.",
   shareDefinitionAria: "Deel deze definitie",
   meaningsEyebrow: "Definities",
   wordOriginLanguage: "Taal",
@@ -2695,14 +2197,10 @@ const nl: V2Strings = {
   actionCompose: "Een zin schrijven",
   actionCompare: "Woorden vergelijken",
   listenToWord: "Luisteren",
-  offlinePin: "Offline opslaan",
-  offlinePinTitle: "Bewaar dit woord om offline te studeren",
-  offlinePinnedTitle: "Opgeslagen, beschikbaar zonder wifi",
   offlineDownloadPack: "Offline pakket downloaden",
   offlineDownloadingPack: "Bezig met downloaden…",
   offlinePackHeader: "Offline pakket",
   offlinePackDescription: "Voegt de meest gezochte woorden in je taal toe aan je notitieboek en houdt ze beschikbaar zonder wifi om offline te studeren.",
-  visualEmptyLabel: "Er wordt een beeld voor dit woord getekend",
   savedAgoTemplate: (t) => `Opgeslagen · ${t}`,
   shareLabel: "Delen",
   backLabel: "Terug",
@@ -2716,11 +2214,7 @@ const en: V2Strings = {
 
   searchPlaceholderHome: "Type a word",
   voiceInputTitle: "Dictate a word",
-  addContext: "Add context",
   explain: "Explain",
-  contextHint:
-    "Reading something? Paste the sentence to disambiguate meaning.",
-  tryLabel: "Try",
 
   valuePropsEyebrow: "What Gadit does differently",
   valuePropsTitle: "More than a definition, a way to live with a word.",
@@ -2746,12 +2240,9 @@ const en: V2Strings = {
 
   pricingEyebrow: "Pricing",
   pricingTeaserTitle: "Three tiers. All with real content.",
-  trustMicrocopy:
-    "Cancel anytime · 14-day trial on Clear monthly · No charge until trial ends",
 
   footerProductGroup: "Product",
   footerLegalGroup: "Legal",
-  footerCompare: "Compare",
   footerNotebook: "Notebook",
   footerPricing: "Pricing",
   footerPrivacy: "Privacy",
@@ -2764,7 +2255,6 @@ const en: V2Strings = {
   startFree: "Start free",
   verbStampDef: "to understand a word, fully",
   navSearch: "Search",
-  navCompare: "Compare",
   navNotebook: "Notebook",
   navPricing: "Pricing",
   navSchools: "Schools",
@@ -2775,7 +2265,6 @@ const en: V2Strings = {
   kidsModeLabel: "Kids",
   kidsModeTooltipOff: "Tap to explain every word like a parent would to a child.",
   kidsModeTooltipOn: "Kids mode is on, every definition will be written for a child. Tap to turn off.",
-  kidsModeBasicGate: "Kids mode is a Clear feature. Upgrade to use it.",
 
   signupWelcomeTitle: "Welcome to Gadit!",
   signupWelcomeBody: "Your account is ready. Start by searching any word.",
@@ -2904,36 +2393,13 @@ const en: V2Strings = {
   quizBackToWord: "Back to word",
   quizReviewMistakes: "Review the ones I missed",
 
-  // Compare Page (Screen 7)
-  compareEyebrow: "Compare",
-  compareTitle: "Tell similar words apart",
-  compareSubtitle:
-    "affect vs effect, אומנות vs אמנות, principle vs principal, the words that catch even native speakers.",
-  compareWord1Label: "Word 1",
-  compareWord2Label: "Word 2",
-  compareWord1Placeholder: "affect",
-  compareWord2Placeholder: "effect",
-  compareCta: "Compare",
-  compareLoading: "Comparing…",
-  compareEmpty: "Enter two words to compare them",
-  compareDifferenceLabel: "The difference",
-  compareExamplesLabel: "Examples",
-  compareCommonMistakeLabel: "Common mistake",
-  compareErrNotARealWord: "We don't recognize one of those words.",
-  compareErrDifferentLanguages:
-    "These two words seem to be in different languages, try a matched pair.",
-  compareErrSameWord: "These look like the same word, try two different ones.",
-  compareErrGeneric: "Compare unavailable right now.",
-
   // Notebook (Screen 8)
   notebookEyebrow: "Notebook",
   notebookTitle: "Your universe of words",
   notebookSubtitle:
     "Every word you've explored, kept, organized, growing.",
-  notebookCounterTemplate: (n) => `${n} words explored`,
   notebookWordsExplored: "words explored",
   notebookPracticeNow: "Review my words",
-  notebookDueTodayTemplate: (n) => `${n} due today`,
   notebookListView: "List",
   notebookGalaxyView: "Galaxy",
   notebookEmptyTitle: "Your notebook is empty",
@@ -2950,7 +2416,6 @@ const en: V2Strings = {
   srWordNofMTemplate: (n, m) => `Word ${n} of ${m}`,
   srSkip: "Skip",
   srClickToReveal: "Click anywhere to reveal",
-  srTapToReveal: "Tap to reveal",
   srPrimaryMeaningLabel: "Primary meaning",
   srExamplesLabel: "Examples",
   srIForgot: "I forgot",
@@ -2994,7 +2459,6 @@ const en: V2Strings = {
   accountNearingLimit: "Approaching this month's limit.",
   accountSectionLabel: "Account",
   accountEmailLabel: "Email",
-  accountChangeEmail: "Change email",
   accountSignOut: "Sign out",
   accountDeleteAccount: "Delete account",
 
@@ -3018,43 +2482,10 @@ const en: V2Strings = {
   reportCatCompareResult: "Compare result issue",
   reportCatSomethingElse: "Something else",
 
-  origin: "Origin",
-  historyNote: "History note",
-  throughTime: "Through time",
-  forKids: "For kids",
-  commonExpressions: "Common expressions",
-  idiomsWithMeaning: "Idioms with this meaning",
-  meaningN: (n) => `Meaning ${n}`,
-  notJustPrimary: "Not just the primary one",
-  takeItFurther: "Take it further",
-  doMoreWith: (w) => `Do more with ${w}`,
-  saveToNotebookHint: "Return to it later, organized, searchable.",
   generateImage: "Generate image",
-  generatingImage: "Generating…",
-  generateImageHint: "A vivid AI-made visual, just for this word.",
-  composeSentence: "Compose a sentence",
-  composeSentenceHint: "Write your own, Gadit reviews for tone and fit.",
-  practiceWord: "Practice this word",
-  practiceWordHint: "A short quiz tuned to how you learn.",
-  unlockWithClear: "Unlock with Clear",
-  upgradeToClear: "Upgrade to Clear",
   softWallAnonTitle: "Keep going, it's still free",
-  softWallAnonBody:
-    "A quick free account unlocks up to 20 daily searches, with examples, idioms and word origins.",
   softWallSignupCta: "Continue for free",
   softWallBasicTitle: "You've reached today's limit",
-  softWallBasicBody:
-    "Free accounts get 20 searches per day. The limit resets tomorrow, or upgrade to Clear for unlimited searches plus images, kids mode, and grammar feedback.",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "1 free search left today, sign up free to get 20 a day."
-      : `${n} free searches left today, sign up free to get 20 a day.`,
-  clearUnlocksThis: "Clear unlocks this",
-  visualizeThisWord: "Visualize",
-  visualBlurb:
-    "One vivid image, generated by Gadit, a visual anchor for how this word feels.",
-  visualBlurbLocked:
-    "Generate a vivid, one-of-a-kind image for this word, understanding through sight.",
   reportLabel: "Report an error",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -3067,7 +2498,6 @@ const en: V2Strings = {
   imageGeneratingHint: "This usually takes 10 to 15 seconds.",
   imageOpenFullAria: "Open image full size",
   kidsComingSoon: "Kids' explanation coming soon.",
-  compareComingSoon: "Word games coming soon.",
   shareDefinitionAria: "Share this definition",
   meaningsEyebrow: "Definitions",
   wordOriginLanguage: "Language",
@@ -3075,14 +2505,10 @@ const en: V2Strings = {
   actionCompose: "Compose a sentence",
   actionCompare: "Compare words",
   listenToWord: "Listen",
-  offlinePin: "Save offline",
-  offlinePinTitle: "Save this word for offline study",
-  offlinePinnedTitle: "Saved, available without WiFi",
   offlineDownloadPack: "Download offline pack",
   offlineDownloadingPack: "Downloading…",
   offlinePackHeader: "Offline pack",
   offlinePackDescription: "Adds the most-searched words in your language to your Notebook, and keeps them available without WiFi for offline study.",
-  visualEmptyLabel: "An image will be drawn for this word",
   savedAgoTemplate: (t) => `Saved · ${t}`,
   shareLabel: "Share",
   backLabel: "Back",
@@ -3096,11 +2522,7 @@ const he: V2Strings = {
 
   searchPlaceholderHome: "הקלידו מילה",
   voiceInputTitle: "הכתבת מילה",
-  addContext: "הוסיפו הקשר",
   explain: "הסבר",
-  contextHint:
-    "קוראים משהו? הדביקו את המשפט שהמילה מופיעה בו, Gadit יבחר את המשמעות הנכונה.",
-  tryLabel: "נסו",
 
   valuePropsEyebrow: "מה Gadit עושה אחרת",
   valuePropsTitle: "יותר מהגדרה, דרך לחיות עם המילה.",
@@ -3126,12 +2548,9 @@ const he: V2Strings = {
 
   pricingEyebrow: "תמחור",
   pricingTeaserTitle: "שלוש רמות. כולן עם תוכן אמיתי.",
-  trustMicrocopy:
-    "ביטול בכל עת · ניסיון 14 ימים על Clear חודשי · ללא חיוב עד סוף הניסיון",
 
   footerProductGroup: "מוצר",
   footerLegalGroup: "משפטי",
-  footerCompare: "השוואה",
   footerNotebook: "מחברת",
   footerPricing: "תמחור",
   footerPrivacy: "פרטיות",
@@ -3144,7 +2563,6 @@ const he: V2Strings = {
   startFree: "התחילו חינם",
   verbStampDef: "להבין מילה עד הסוף",
   navSearch: "חיפוש",
-  navCompare: "השוואה",
   navNotebook: "מחברת",
   navPricing: "תמחור",
   navSchools: "בתי ספר",
@@ -3155,7 +2573,6 @@ const he: V2Strings = {
   kidsModeLabel: "ילדים",
   kidsModeTooltipOff: "לחצו כדי שכל מילה תוסבר כמו שהורה היה מסביר לילד.",
   kidsModeTooltipOn: "מצב ילדים פעיל. כל הגדרה תיכתב לילד. לחצו לכיבוי.",
-  kidsModeBasicGate: "מצב ילדים הוא פיצ'ר של Clear. שדרגו כדי להשתמש בו.",
 
   signupWelcomeTitle: "ברוכים הבאים ל-Gadit!",
   signupWelcomeBody: "החשבון שלכם מוכן. התחילו עם חיפוש של כל מילה.",
@@ -3282,37 +2699,13 @@ const he: V2Strings = {
   quizBackToWord: "חזרה למילה",
   quizReviewMistakes: "סקירת הטעויות",
 
-  // Compare Page (Screen 7)
-  compareEyebrow: "השוואה",
-  compareTitle: "הבחינו בין מילים דומות",
-  compareSubtitle:
-    "אומנות מול אמנות, affect מול effect, המילים שמבלבלות אפילו דוברים שוטפים.",
-  compareWord1Label: "מילה 1",
-  compareWord2Label: "מילה 2",
-  compareWord1Placeholder: "אומנות",
-  compareWord2Placeholder: "אמנות",
-  compareCta: "השוואה",
-  compareLoading: "משווים…",
-  compareEmpty: "הזינו שתי מילים להשוואה",
-  compareDifferenceLabel: "ההבדל",
-  compareExamplesLabel: "דוגמאות",
-  compareCommonMistakeLabel: "טעות נפוצה",
-  compareErrNotARealWord: "אחת מהמילים אינה מוכרת לנו.",
-  compareErrDifferentLanguages:
-    "שתי המילים נראות בשפות שונות, נסו זוג תואם.",
-  compareErrSameWord:
-    "אלו נראות כאותה מילה, נסו שתי מילים שונות.",
-  compareErrGeneric: "ההשוואה אינה זמינה כרגע.",
-
   // Notebook (Screen 8)
   notebookEyebrow: "מחברת",
   notebookTitle: "יקום המילים שלכם",
   notebookSubtitle:
     "כל מילה שלמדתם, נשמרת, מאורגנת, גדלה.",
-  notebookCounterTemplate: (n) => `${n} מילים שנלמדו`,
   notebookWordsExplored: "מילים שנלמדו",
   notebookPracticeNow: "חזרה על המילים שלי",
-  notebookDueTodayTemplate: (n) => `${n} לתרגול היום`,
   notebookListView: "רשימה",
   notebookGalaxyView: "גלקסיה",
   notebookEmptyTitle: "המחברת ריקה",
@@ -3329,7 +2722,6 @@ const he: V2Strings = {
   srWordNofMTemplate: (n, m) => `מילה ${n} מתוך ${m}`,
   srSkip: "דילוג",
   srClickToReveal: "לחצו כדי לראות",
-  srTapToReveal: "הקישו כדי לראות",
   srPrimaryMeaningLabel: "משמעות עיקרית",
   srExamplesLabel: "דוגמאות",
   srIForgot: "שכחתי",
@@ -3377,7 +2769,6 @@ const he: V2Strings = {
   accountNearingLimit: "מתקרבים לגבול החודשי.",
   accountSectionLabel: "חשבון",
   accountEmailLabel: "אימייל",
-  accountChangeEmail: "שינוי אימייל",
   accountSignOut: "התנתקות",
   accountDeleteAccount: "מחיקת חשבון",
 
@@ -3401,45 +2792,10 @@ const he: V2Strings = {
   reportCatCompareResult: "בעיה בהשוואה",
   reportCatSomethingElse: "משהו אחר",
 
-  origin: "מקור",
-  historyNote: "הערה היסטורית",
-  throughTime: "דרך הזמן",
-  forKids: "לילדים",
-  commonExpressions: "ביטויים נפוצים",
-  idiomsWithMeaning: "ביטויים במשמעות הזו",
-  meaningN: (n) => `משמעות ${n}`,
-  notJustPrimary: "לא רק הראשונה",
-  takeItFurther: "להעמיק",
-  doMoreWith: (w) => `עוד עם ${w}`,
-  saveToNotebookHint: "חזרו אליה אחר־כך, מאורגנת וזמינה לחיפוש.",
   generateImage: "צרו תמונה",
-  generatingImage: "יוצרים…",
-  generateImageHint: "תמונה חיה שנוצרת ב־AI, במיוחד למילה הזו.",
-  composeSentence: "חברו משפט",
-  composeSentenceHint: "כתבו משלכם, Gadit ייתן משוב על טון והקשר.",
-  practiceWord: "תרגלו את המילה",
-  practiceWordHint: "שאלון קצר שמותאם לאופן הלמידה שלכם.",
-  unlockWithClear: "פתחו עם Clear",
-  upgradeToClear: "שדרגו ל־Clear",
   softWallAnonTitle: "ההמשך חינמי, רק צריך חשבון",
-  softWallAnonBody:
-    "הרשמה מהירה פותחת עד 20 חיפושים ביום, עם הגדרות מלאות, דוגמאות, ניבים ומקור המילה.",
   softWallSignupCta: "להמשיך בחינם",
   softWallBasicTitle: "הגעתם למכסה היומית",
-  softWallBasicBody:
-    "חשבון חינם כולל 20 חיפושים ביום. המכסה מתאפסת מחר, או שדרגו ל־Clear לחיפושים ללא הגבלה, תמונות, מצב ילדים ומשוב על משפטים.",
-  softBannerSearchesLeft: (n) => {
-    const num = Number(n);
-    return num === 1
-      ? "נשאר חיפוש חינמי אחד היום, הרשמה חינם נותנת 20 ביום."
-      : `נשארו ${num} חיפושים חינמיים היום, הרשמה חינם נותנת 20 ביום.`;
-  },
-  clearUnlocksThis: "נפתח עם Clear",
-  visualizeThisWord: "ראו את",
-  visualBlurb:
-    "תמונה אחת חיה, שנוצרה על־ידי Gadit, עוגן ויזואלי לתחושת המילה.",
-  visualBlurbLocked:
-    "צרו תמונה ייחודית למילה, הבנה דרך הראייה.",
   reportLabel: "דווח על שגיאה",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -3452,7 +2808,6 @@ const he: V2Strings = {
   imageGeneratingHint: "זה לוקח בדרך כלל 10 עד 15 שניות.",
   imageOpenFullAria: "פתחו את התמונה בגודל מלא",
   kidsComingSoon: "הסבר לילדים יופיע כאן בקרוב.",
-  compareComingSoon: "משחקי מילים בקרוב.",
   shareDefinitionAria: "שתפו הגדרה זו",
   meaningsEyebrow: "הגדרות",
   wordOriginLanguage: "שפה",
@@ -3460,14 +2815,10 @@ const he: V2Strings = {
   actionCompose: "חברו משפט",
   actionCompare: "השוואת מילים",
   listenToWord: "האזנה",
-  offlinePin: "שמירה אופליין",
-  offlinePinTitle: "שמרו את המילה ללימוד אופליין",
-  offlinePinnedTitle: "נשמר, זמין גם בלי אינטרנט",
   offlineDownloadPack: "הורדת חבילת אופליין",
   offlineDownloadingPack: "מוריד...",
   offlinePackHeader: "חבילת אופליין",
   offlinePackDescription: "מוסיף את המילים הנפוצות ביותר בשפה שלכם למחברת, וזמינות גם בלי אינטרנט ללימוד אופליין.",
-  visualEmptyLabel: "תמונה תיווצר עבור המילה הזו",
   savedAgoTemplate: (t) => `נשמר · ${t}`,
   shareLabel: "שתפו",
   backLabel: "חזרה",
@@ -3481,10 +2832,7 @@ const ar: V2Strings = {
 
   searchPlaceholderHome: "اكتب كلمة",
   voiceInputTitle: "إملاء كلمة",
-  addContext: "أضف السياق",
   explain: "اشرح",
-  contextHint: "تقرأ نصًّا؟ ألصق الجملة ليختار Gadit المعنى الأنسب.",
-  tryLabel: "جرّب",
 
   valuePropsEyebrow: "ما الذي يفعله Gadit بشكل مختلف",
   valuePropsTitle: "أكثر من تعريف, طريقة للعيش مع الكلمة.",
@@ -3510,12 +2858,9 @@ const ar: V2Strings = {
 
   pricingEyebrow: "الأسعار",
   pricingTeaserTitle: "ثلاث مستويات. كلّها بمحتوى حقيقي.",
-  trustMicrocopy:
-    "ألغِ في أي وقت · تجربة 14 يومًا على Clear الشهري · بلا رسوم حتى نهاية التجربة",
 
   footerProductGroup: "المنتج",
   footerLegalGroup: "قانوني",
-  footerCompare: "مقارنة",
   footerNotebook: "الدفتر",
   footerPricing: "الأسعار",
   footerPrivacy: "الخصوصية",
@@ -3528,7 +2873,6 @@ const ar: V2Strings = {
   startFree: "ابدأ مجانًا",
   verbStampDef: "أن تفهم الكلمة حتى عمقها",
   navSearch: "بحث",
-  navCompare: "مقارنة",
   navNotebook: "الدفتر",
   navPricing: "الأسعار",
   navSchools: "المدارس",
@@ -3539,7 +2883,6 @@ const ar: V2Strings = {
   kidsModeLabel: "أطفال",
   kidsModeTooltipOff: "اضغط ليُشرح كل كلمة كما يشرحها الأب لطفله.",
   kidsModeTooltipOn: "وضع الأطفال مفعّل. كل تعريف سيُكتب لطفل. اضغط لإيقافه.",
-  kidsModeBasicGate: "وضع الأطفال ميزة في Clear. ارتقِ لاستخدامها.",
 
   signupWelcomeTitle: "أهلاً بك في Gadit!",
   signupWelcomeBody: "حسابك جاهز. ابدأ بالبحث عن أي كلمة.",
@@ -3665,37 +3008,13 @@ const ar: V2Strings = {
   quizBackToWord: "العودة إلى الكلمة",
   quizReviewMistakes: "مراجعة الأخطاء",
 
-  // Compare Page (Screen 7)
-  compareEyebrow: "مقارنة",
-  compareTitle: "ميِّز بين الكلمات المتشابهة",
-  compareSubtitle:
-    "ضلّ مقابل ظلّ، affect مقابل effect, الكلمات التي تخدع حتى الناطقين الأصليين.",
-  compareWord1Label: "الكلمة 1",
-  compareWord2Label: "الكلمة 2",
-  compareWord1Placeholder: "ضلّ",
-  compareWord2Placeholder: "ظلّ",
-  compareCta: "قارن",
-  compareLoading: "جاري المقارنة…",
-  compareEmpty: "أدخل كلمتين للمقارنة",
-  compareDifferenceLabel: "الفارق",
-  compareExamplesLabel: "أمثلة",
-  compareCommonMistakeLabel: "خطأ شائع",
-  compareErrNotARealWord: "إحدى الكلمتين غير معروفة.",
-  compareErrDifferentLanguages:
-    "الكلمتان تبدوان من لغتين مختلفتين, جرّب زوجًا متوافقًا.",
-  compareErrSameWord:
-    "تبدوان كأنهما الكلمة نفسها, جرّب كلمتين مختلفتين.",
-  compareErrGeneric: "المقارنة غير متاحة الآن.",
-
   // Notebook (Screen 8)
   notebookEyebrow: "الدفتر",
   notebookTitle: "عالمُك من الكلمات",
   notebookSubtitle:
     "كل كلمة استكشفتها, تُحفَظ وتُنظَّم، ومع الوقت تتسع مكتبتك.",
-  notebookCounterTemplate: (n) => `عدد الكلمات المستكشَفة: ${n}`,
   notebookWordsExplored: "كلمات استكشفتها",
   notebookPracticeNow: "مراجعة كلماتي",
-  notebookDueTodayTemplate: (n) => `${n} للمراجعة اليوم`,
   notebookListView: "قائمة",
   notebookGalaxyView: "مجرّة",
   notebookEmptyTitle: "دفترك فارغ",
@@ -3712,7 +3031,6 @@ const ar: V2Strings = {
   srWordNofMTemplate: (n, m) => `الكلمة ${n} من ${m}`,
   srSkip: "تخطّي",
   srClickToReveal: "انقر لكشف المعنى",
-  srTapToReveal: "اضغط لكشف المعنى",
   srPrimaryMeaningLabel: "المعنى الأساسي",
   srExamplesLabel: "أمثلة",
   srIForgot: "نسيت",
@@ -3776,7 +3094,6 @@ const ar: V2Strings = {
   accountNearingLimit: "تقترب من الحد الشهري.",
   accountSectionLabel: "الحساب",
   accountEmailLabel: "البريد الإلكتروني",
-  accountChangeEmail: "تغيير البريد",
   accountSignOut: "تسجيل الخروج",
   accountDeleteAccount: "حذف الحساب",
 
@@ -3800,44 +3117,10 @@ const ar: V2Strings = {
   reportCatCompareResult: "مشكلة في نتيجة المقارنة",
   reportCatSomethingElse: "شيء آخر",
 
-  origin: "الأصل",
-  historyNote: "ملاحظة تاريخية",
-  throughTime: "عبر الزمن",
-  forKids: "للأطفال",
-  commonExpressions: "تعبيرات شائعة",
-  idiomsWithMeaning: "تعبيرات بهذا المعنى",
-  meaningN: (n) => `المعنى ${n}`,
-  notJustPrimary: "ليس المعنى الأول وحده",
-  takeItFurther: "تعمَّق أكثر",
-  doMoreWith: (w) => `المزيد مع ${w}`,
-  saveToNotebookHint: "عُد إليها لاحقًا, منظَّمة وقابلة للبحث.",
   generateImage: "أنشئ صورة",
-  generatingImage: "جارٍ الإنشاء…",
-  generateImageHint:
-    "صورة بصرية حيّة من الذكاء الاصطناعي، لهذه الكلمة فقط.",
-  composeSentence: "اكتب جملة",
-  composeSentenceHint: "اكتب جملتك, يراجعها Gadit للنبرة والملاءمة.",
-  practiceWord: "تدرَّب على هذه الكلمة",
-  practiceWordHint: "اختبار قصير على مقاس تعلُّمك.",
-  unlockWithClear: "افتح بـ Clear",
-  upgradeToClear: "ارتقِ إلى Clear",
   softWallAnonTitle: "استنفدت عمليات البحث المجانية",
-  softWallAnonBody:
-    "سجّل مجانًا للبحث عن 20 كلمة يوميًا، مع تعريفات كاملة، أمثلة، تعابير، وأصل الكلمة.",
   softWallSignupCta: "اشتراك مجاني",
   softWallBasicTitle: "وصلت إلى الحد اليومي",
-  softWallBasicBody:
-    "الحساب المجاني يشمل 20 بحثًا في اليوم. يُعاد تعيين الحد غدًا, أو ارتقِ إلى Clear لبحث بلا حدود مع الصور وشرح الأطفال والمراجعة.",
-  softBannerSearchesLeft: (n) => {
-    const num = Number(n);
-    if (num === 1) return "بقي بحث مجاني واحد اليوم, الاشتراك المجاني يمنحك 20 يوميًا.";
-    if (num === 2) return "بقي بحثان مجانيان اليوم, الاشتراك المجاني يمنحك 20 يوميًا.";
-    return `بقيت ${num} عمليات بحث مجانية اليوم, الاشتراك المجاني يمنحك 20 يوميًا.`;
-  },
-  clearUnlocksThis: "تفتحها Clear",
-  visualizeThisWord: "تخيّل",
-  visualBlurb: "صورة واحدة حيّة من Gadit, مرساة بصرية لشعور الكلمة.",
-  visualBlurbLocked: "أنشئ صورة فريدة لهذه الكلمة, الفهم عبر النظر.",
   reportLabel: "بلّغ عن خطأ",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -3850,7 +3133,6 @@ const ar: V2Strings = {
   imageGeneratingHint: "يستغرق هذا عادة من 10 إلى 15 ثانية.",
   imageOpenFullAria: "افتح الصورة بالحجم الكامل",
   kidsComingSoon: "شرح للأطفال سيظهر هنا قريبًا.",
-  compareComingSoon: "ألعاب الكلمات قريبًا.",
   shareDefinitionAria: "شارك هذا التعريف",
   meaningsEyebrow: "تعريفات",
   wordOriginLanguage: "اللغة",
@@ -3858,14 +3140,10 @@ const ar: V2Strings = {
   actionCompose: "اكتب جملة",
   actionCompare: "قارن الكلمات",
   listenToWord: "استمع",
-  offlinePin: "حفظ بلا إنترنت",
-  offlinePinTitle: "احفظ هذه الكلمة للدراسة بلا إنترنت",
-  offlinePinnedTitle: "محفوظ, متاح بلا إنترنت",
   offlineDownloadPack: "تنزيل حزمة بلا إنترنت",
   offlineDownloadingPack: "جارٍ التنزيل…",
   offlinePackHeader: "حزمة بلا إنترنت",
   offlinePackDescription: "تُضاف الكلمات الأكثر بحثًا بلغتك إلى دفترك, متاحة أيضًا بدون إنترنت للدراسة بلا واي فاي.",
-  visualEmptyLabel: "ستُرسم صورة لهذه الكلمة",
   savedAgoTemplate: (t) => `محفوظ · ${t}`,
   shareLabel: "مشاركة",
   backLabel: "رجوع",
@@ -3880,11 +3158,7 @@ const ru: Partial<V2Strings> = {
 
   searchPlaceholderHome: "Введите слово",
   voiceInputTitle: "Продиктовать слово",
-  addContext: "Добавить контекст",
   explain: "Объяснить",
-  contextHint:
-    "Что-то читаете? Вставьте предложение, мы выберем нужное значение.",
-  tryLabel: "Попробуйте",
 
   valuePropsEyebrow: "Чем Gadit отличается",
   valuePropsTitle: "Больше, чем определение, это способ жить со словом.",
@@ -3910,12 +3184,9 @@ const ru: Partial<V2Strings> = {
 
   pricingEyebrow: "Тарифы",
   pricingTeaserTitle: "Три уровня. Все с настоящим контентом.",
-  trustMicrocopy:
-    "Отмена в любое время · 14 дней пробного на Clear · Без списания до конца пробного периода",
 
   footerProductGroup: "Продукт",
   footerLegalGroup: "Юридическое",
-  footerCompare: "Сравнить",
   footerNotebook: "Тетрадь",
   footerPricing: "Тарифы",
   footerPrivacy: "Конфиденциальность",
@@ -3928,7 +3199,6 @@ const ru: Partial<V2Strings> = {
   startFree: "Начать бесплатно",
   verbStampDef: "понять слово до конца",
   navSearch: "Поиск",
-  navCompare: "Сравнить",
   navNotebook: "Тетрадь",
   navPricing: "Тарифы",
   navSchools: "Школы",
@@ -3939,7 +3209,6 @@ const ru: Partial<V2Strings> = {
   kidsModeLabel: "Дети",
   kidsModeTooltipOff: "Нажмите, чтобы каждое слово объяснялось так, как родитель объяснил бы ребёнку.",
   kidsModeTooltipOn: "Детский режим включён. Каждое определение будет написано для ребёнка. Нажмите, чтобы выключить.",
-  kidsModeBasicGate: "Детский режим, функция Clear. Перейдите на тариф, чтобы пользоваться.",
 
   signupWelcomeTitle: "Добро пожаловать в Gadit!",
   signupWelcomeBody: "Аккаунт готов. Начните с поиска любого слова.",
@@ -4064,34 +3333,13 @@ const ru: Partial<V2Strings> = {
   quizBackToWord: "К слову",
   quizReviewMistakes: "Разобрать ошибки",
 
-  compareEyebrow: "Сравнить",
-  compareTitle: "Различайте похожие слова",
-  compareSubtitle:
-    "одеть vs надеть, affect vs effect, слова, на которых ошибаются даже носители.",
-  compareWord1Label: "Слово 1",
-  compareWord2Label: "Слово 2",
-  compareWord1Placeholder: "одеть",
-  compareWord2Placeholder: "надеть",
-  compareCta: "Сравнить",
-  compareLoading: "Сравниваем…",
-  compareEmpty: "Введите два слова для сравнения",
-  compareDifferenceLabel: "Разница",
-  compareExamplesLabel: "Примеры",
-  compareCommonMistakeLabel: "Частая ошибка",
-  compareErrNotARealWord: "Одно из слов нам не знакомо.",
-  compareErrDifferentLanguages:
-    "Эти слова, кажется, на разных языках, попробуйте пару из одного языка.",
-  compareErrSameWord: "Это одно и то же слово, попробуйте два разных.",
-  compareErrGeneric: "Сравнение временно недоступно.",
 
   notebookEyebrow: "Тетрадь",
   notebookTitle: "Ваша вселенная слов",
   notebookSubtitle:
     "Каждое слово, которое вы исследовали, сохраняется, упорядочивается, растёт со временем.",
-  notebookCounterTemplate: (n) => `Изучено слов: ${n}`,
   notebookWordsExplored: "изученных слов",
   notebookPracticeNow: "Повторить мои слова",
-  notebookDueTodayTemplate: (n) => `${n} к повторению сегодня`,
   notebookListView: "Список",
   notebookGalaxyView: "Галактика",
   notebookEmptyTitle: "Тетрадь пока пуста",
@@ -4107,7 +3355,6 @@ const ru: Partial<V2Strings> = {
   srWordNofMTemplate: (n, m) => `Слово ${n} из ${m}`,
   srSkip: "Пропустить",
   srClickToReveal: "Кликните, чтобы открыть",
-  srTapToReveal: "Нажмите, чтобы открыть",
   srPrimaryMeaningLabel: "Основное значение",
   srExamplesLabel: "Примеры",
   srIForgot: "Забыл",
@@ -4156,7 +3403,6 @@ const ru: Partial<V2Strings> = {
   accountNearingLimit: "Приближаетесь к лимиту месяца.",
   accountSectionLabel: "Аккаунт",
   accountEmailLabel: "Email",
-  accountChangeEmail: "Сменить email",
   accountSignOut: "Выйти",
   accountDeleteAccount: "Удалить аккаунт",
 
@@ -4179,46 +3425,10 @@ const ru: Partial<V2Strings> = {
   reportCatCompareResult: "Проблема со сравнением",
   reportCatSomethingElse: "Другое",
 
-  origin: "Происхождение",
-  historyNote: "Историческая заметка",
-  throughTime: "Сквозь время",
-  forKids: "Для детей",
-  commonExpressions: "Распространённые выражения",
-  idiomsWithMeaning: "Идиомы с этим значением",
-  meaningN: (n) => `Значение ${n}`,
-  notJustPrimary: "Не только основное",
-  takeItFurther: "Углубиться",
-  doMoreWith: (w) => `Больше со словом ${w}`,
-  saveToNotebookHint: "Вернётесь позже, упорядочено и с поиском.",
   generateImage: "Создать картинку",
-  generatingImage: "Создаём…",
-  generateImageHint: "Живая картинка от ИИ, для этого слова.",
-  composeSentence: "Составить предложение",
-  composeSentenceHint:
-    "Напишите своё, Gadit разберёт тон и уместность.",
-  practiceWord: "Тренировать слово",
-  practiceWordHint: "Короткий тест под ваш стиль.",
-  unlockWithClear: "Открыть в Clear",
-  upgradeToClear: "Перейти на Clear",
   softWallAnonTitle: "Вы использовали бесплатные поиски",
-  softWallAnonBody:
-    "Зарегистрируйтесь бесплатно, чтобы искать до 20 слов в день, с полными определениями, примерами, идиомами и происхождением слова.",
   softWallSignupCta: "Бесплатная регистрация",
   softWallBasicTitle: "Дневной лимит достигнут",
-  softWallBasicBody:
-    "Бесплатный аккаунт даёт 20 поисков в день. Лимит обновится завтра, или перейдите на Clear для безлимитных поисков, картинок, детского режима и разбора предложений.",
-  softBannerSearchesLeft: (n) => {
-    const num = Number(n);
-    const word =
-      num === 1 ? "поиск" : num >= 2 && num <= 4 ? "поиска" : "поисков";
-    return `Осталось ${num} бесплатных ${word} сегодня, регистрация бесплатна и даёт 20 в день.`;
-  },
-  clearUnlocksThis: "Доступно в Clear",
-  visualizeThisWord: "Увидеть",
-  visualBlurb:
-    "Одна живая картинка от Gadit, визуальный якорь для этого слова.",
-  visualBlurbLocked:
-    "Создайте уникальную картинку для этого слова, понимание через образ.",
   reportLabel: "Сообщить об ошибке",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -4231,7 +3441,6 @@ const ru: Partial<V2Strings> = {
   imageGeneratingHint: "Обычно это занимает от 10 до 15 секунд.",
   imageOpenFullAria: "Открыть изображение в полный размер",
   kidsComingSoon: "Объяснение для детей появится здесь скоро.",
-  compareComingSoon: "Игры со словами, скоро.",
   shareDefinitionAria: "Поделиться этим определением",
   meaningsEyebrow: "Определения",
   wordOriginLanguage: "Язык",
@@ -4239,14 +3448,10 @@ const ru: Partial<V2Strings> = {
   actionCompose: "Составить предложение",
   actionCompare: "Сравнить слова",
   listenToWord: "Прослушать",
-  offlinePin: "Сохранить офлайн",
-  offlinePinTitle: "Сохранить слово для изучения без интернета",
-  offlinePinnedTitle: "Сохранено, доступно без Wi-Fi",
   offlineDownloadPack: "Скачать офлайн-пакет",
   offlineDownloadingPack: "Скачиваем…",
   offlinePackHeader: "Офлайн-пакет",
   offlinePackDescription: "Добавляет самые популярные слова вашего языка в тетрадь, и делает их доступными без интернета.",
-  visualEmptyLabel: "Картинка появится для этого слова",
   savedAgoTemplate: (t) => `Сохранено · ${t}`,
   shareLabel: "Поделиться",
   backLabel: "Назад",
@@ -4261,11 +3466,7 @@ const es: Partial<V2Strings> = {
 
   searchPlaceholderHome: "Escribe una palabra",
   voiceInputTitle: "Dictar una palabra",
-  addContext: "Agregar contexto",
   explain: "Explicar",
-  contextHint:
-    "¿Estás leyendo algo? Pega la oración y elegimos el significado correcto.",
-  tryLabel: "Prueba",
 
   valuePropsEyebrow: "Lo que Gadit hace diferente",
   valuePropsTitle: "Más que una definición, una forma de vivir con la palabra.",
@@ -4291,12 +3492,9 @@ const es: Partial<V2Strings> = {
 
   pricingEyebrow: "Precios",
   pricingTeaserTitle: "Tres niveles. Todos con contenido real.",
-  trustMicrocopy:
-    "Cancela cuando quieras · Prueba de 14 días en Clear mensual · Sin cargo hasta que termine la prueba",
 
   footerProductGroup: "Producto",
   footerLegalGroup: "Legal",
-  footerCompare: "Comparar",
   footerNotebook: "Cuaderno",
   footerPricing: "Precios",
   footerPrivacy: "Privacidad",
@@ -4309,7 +3507,6 @@ const es: Partial<V2Strings> = {
   startFree: "Empezar gratis",
   verbStampDef: "entender una palabra hasta el fondo",
   navSearch: "Buscar",
-  navCompare: "Comparar",
   navNotebook: "Cuaderno",
   navPricing: "Precios",
   navSchools: "Escuelas",
@@ -4320,7 +3517,6 @@ const es: Partial<V2Strings> = {
   kidsModeLabel: "Niños",
   kidsModeTooltipOff: "Toca para que cada palabra se explique como un padre se la explicaría a un niño.",
   kidsModeTooltipOn: "Modo niños activado. Cada definición se escribirá para un niño. Toca para desactivar.",
-  kidsModeBasicGate: "El modo niños es una función de Clear. Mejora para usarlo.",
 
   signupWelcomeTitle: "¡Bienvenido a Gadit!",
   signupWelcomeBody: "Tu cuenta está lista. Empieza buscando cualquier palabra.",
@@ -4445,34 +3641,13 @@ const es: Partial<V2Strings> = {
   quizBackToWord: "Volver a la palabra",
   quizReviewMistakes: "Repasar las que fallé",
 
-  compareEyebrow: "Comparar",
-  compareTitle: "Distingue palabras parecidas",
-  compareSubtitle:
-    "haber vs a ver, affect vs effect, palabras que confunden incluso a hablantes nativos.",
-  compareWord1Label: "Palabra 1",
-  compareWord2Label: "Palabra 2",
-  compareWord1Placeholder: "haber",
-  compareWord2Placeholder: "a ver",
-  compareCta: "Comparar",
-  compareLoading: "Comparando…",
-  compareEmpty: "Ingresa dos palabras para comparar",
-  compareDifferenceLabel: "La diferencia",
-  compareExamplesLabel: "Ejemplos",
-  compareCommonMistakeLabel: "Error común",
-  compareErrNotARealWord: "No reconocemos una de esas palabras.",
-  compareErrDifferentLanguages:
-    "Estas palabras parecen estar en idiomas distintos, prueba con un par del mismo idioma.",
-  compareErrSameWord: "Parecen ser la misma palabra, prueba con dos distintas.",
-  compareErrGeneric: "Comparación no disponible ahora.",
 
   notebookEyebrow: "Cuaderno",
   notebookTitle: "Tu universo de palabras",
   notebookSubtitle:
     "Cada palabra que has explorado, guardada, organizada, creciendo.",
-  notebookCounterTemplate: (n) => `${n} palabras exploradas`,
   notebookWordsExplored: "palabras exploradas",
   notebookPracticeNow: "Repasar mis palabras",
-  notebookDueTodayTemplate: (n) => `${n} para repasar hoy`,
   notebookListView: "Lista",
   notebookGalaxyView: "Galaxia",
   notebookEmptyTitle: "Tu cuaderno está vacío",
@@ -4488,7 +3663,6 @@ const es: Partial<V2Strings> = {
   srWordNofMTemplate: (n, m) => `Palabra ${n} de ${m}`,
   srSkip: "Saltar",
   srClickToReveal: "Haz clic para mostrar",
-  srTapToReveal: "Toca para mostrar",
   srPrimaryMeaningLabel: "Significado principal",
   srExamplesLabel: "Ejemplos",
   srIForgot: "Olvidé",
@@ -4535,7 +3709,6 @@ const es: Partial<V2Strings> = {
   accountNearingLimit: "Te acercas al límite del mes.",
   accountSectionLabel: "Cuenta",
   accountEmailLabel: "Correo",
-  accountChangeEmail: "Cambiar correo",
   accountSignOut: "Cerrar sesión",
   accountDeleteAccount: "Eliminar cuenta",
 
@@ -4558,46 +3731,10 @@ const es: Partial<V2Strings> = {
   reportCatCompareResult: "Problema con resultado de comparación",
   reportCatSomethingElse: "Otra cosa",
 
-  origin: "Origen",
-  historyNote: "Nota histórica",
-  throughTime: "A través del tiempo",
-  forKids: "Para niños",
-  commonExpressions: "Expresiones comunes",
-  idiomsWithMeaning: "Modismos con este significado",
-  meaningN: (n) => `Significado ${n}`,
-  notJustPrimary: "No solo el principal",
-  takeItFurther: "Profundiza más",
-  doMoreWith: (w) => `Haz más con ${w}`,
-  saveToNotebookHint: "Vuelve después, organizado y con búsqueda.",
   generateImage: "Generar imagen",
-  generatingImage: "Generando…",
-  generateImageHint: "Una imagen viva hecha con IA, para esta palabra.",
-  composeSentence: "Componer una oración",
-  composeSentenceHint:
-    "Escribe la tuya, Gadit revisa el tono y el encaje.",
-  practiceWord: "Practicar esta palabra",
-  practiceWordHint: "Una prueba corta a tu medida.",
-  unlockWithClear: "Desbloquea con Clear",
-  upgradeToClear: "Pasa a Clear",
   softWallAnonTitle: "Usaste tus búsquedas gratis",
-  softWallAnonBody:
-    "Regístrate gratis para buscar hasta 20 palabras al día, con definiciones completas, ejemplos, expresiones y origen de la palabra.",
   softWallSignupCta: "Regístrate gratis",
   softWallBasicTitle: "Alcanzaste el límite del día",
-  softWallBasicBody:
-    "Las cuentas gratis tienen 20 búsquedas por día. El límite se reinicia mañana, o pasa a Clear para búsquedas ilimitadas, imágenes, modo niños y feedback en oraciones.",
-  softBannerSearchesLeft: (n) => {
-    const num = Number(n);
-    return num === 1
-      ? "Te queda 1 búsqueda gratis hoy, regístrate gratis para tener 20 al día."
-      : `Te quedan ${num} búsquedas gratis hoy, regístrate gratis para tener 20 al día.`;
-  },
-  clearUnlocksThis: "Disponible en Clear",
-  visualizeThisWord: "Visualiza",
-  visualBlurb:
-    "Una imagen viva, generada por Gadit, un ancla visual para esta palabra.",
-  visualBlurbLocked:
-    "Crea una imagen única para esta palabra, entender por la vista.",
   reportLabel: "Reportar un error",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -4611,21 +3748,16 @@ const es: Partial<V2Strings> = {
   imageGeneratingHint: "Suele tardar entre 10 y 15 segundos.",
   imageOpenFullAria: "Abrir imagen a tamaño completo",
   kidsComingSoon: "Explicación para niños llegará pronto.",
-  compareComingSoon: "Juegos de palabras pronto.",
   shareDefinitionAria: "Compartir esta definición",
   wordOriginLanguage: "Idioma",
   wordOriginOriginallyMeant: "Significaba originalmente",
   actionCompose: "Componer una oración",
   actionCompare: "Comparar palabras",
   listenToWord: "Escuchar",
-  offlinePin: "Guardar sin conexión",
-  offlinePinTitle: "Guardar esta palabra para estudiar sin conexión",
-  offlinePinnedTitle: "Guardada, disponible sin WiFi",
   offlineDownloadPack: "Descargar paquete sin conexión",
   offlineDownloadingPack: "Descargando…",
   offlinePackHeader: "Paquete sin conexión",
   offlinePackDescription: "Añade las palabras más buscadas en tu idioma a tu cuaderno, y las mantiene disponibles sin WiFi para estudiar sin conexión.",
-  visualEmptyLabel: "Se dibujará una imagen para esta palabra",
   savedAgoTemplate: (t) => `Guardada · ${t}`,
   shareLabel: "Compartir",
   backLabel: "Atrás",
@@ -4640,11 +3772,7 @@ const pt: Partial<V2Strings> = {
 
   searchPlaceholderHome: "Digite uma palavra",
   voiceInputTitle: "Ditar uma palavra",
-  addContext: "Adicionar contexto",
   explain: "Explicar",
-  contextHint:
-    "Lendo algo? Cole a frase e a gente escolhe o significado certo.",
-  tryLabel: "Experimente",
 
   valuePropsEyebrow: "O que o Gadit faz diferente",
   valuePropsTitle: "Mais que uma definição, um jeito de viver com a palavra.",
@@ -4670,12 +3798,9 @@ const pt: Partial<V2Strings> = {
 
   pricingEyebrow: "Preços",
   pricingTeaserTitle: "Três níveis. Todos com conteúdo de verdade.",
-  trustMicrocopy:
-    "Cancele quando quiser · Teste de 14 dias no Clear mensal · Sem cobrança até o teste acabar",
 
   footerProductGroup: "Produto",
   footerLegalGroup: "Legal",
-  footerCompare: "Comparar",
   footerNotebook: "Caderno",
   footerPricing: "Preços",
   footerPrivacy: "Privacidade",
@@ -4688,7 +3813,6 @@ const pt: Partial<V2Strings> = {
   startFree: "Começar grátis",
   verbStampDef: "entender uma palavra até o fim",
   navSearch: "Pesquisar",
-  navCompare: "Comparar",
   navNotebook: "Caderno",
   navPricing: "Preços",
   navSchools: "Escolas",
@@ -4699,7 +3823,6 @@ const pt: Partial<V2Strings> = {
   kidsModeLabel: "Crianças",
   kidsModeTooltipOff: "Toque para que cada palavra seja explicada como um pai explicaria a uma criança.",
   kidsModeTooltipOn: "Modo crianças ativado. Cada definição será escrita para uma criança. Toque para desativar.",
-  kidsModeBasicGate: "O modo crianças é uma função do Clear. Faça upgrade para usar.",
 
   signupWelcomeTitle: "Bem-vindo ao Gadit!",
   signupWelcomeBody: "Sua conta está pronta. Comece buscando qualquer palavra.",
@@ -4824,34 +3947,13 @@ const pt: Partial<V2Strings> = {
   quizBackToWord: "Voltar à palavra",
   quizReviewMistakes: "Revisar as que errei",
 
-  compareEyebrow: "Comparar",
-  compareTitle: "Diferencie palavras parecidas",
-  compareSubtitle:
-    "mau vs mal, affect vs effect, palavras que confundem até nativos.",
-  compareWord1Label: "Palavra 1",
-  compareWord2Label: "Palavra 2",
-  compareWord1Placeholder: "mau",
-  compareWord2Placeholder: "mal",
-  compareCta: "Comparar",
-  compareLoading: "Comparando…",
-  compareEmpty: "Digite duas palavras para comparar",
-  compareDifferenceLabel: "A diferença",
-  compareExamplesLabel: "Exemplos",
-  compareCommonMistakeLabel: "Erro comum",
-  compareErrNotARealWord: "Não reconhecemos uma dessas palavras.",
-  compareErrDifferentLanguages:
-    "Estas palavras parecem estar em idiomas diferentes, tente um par no mesmo idioma.",
-  compareErrSameWord: "Parecem ser a mesma palavra, tente duas diferentes.",
-  compareErrGeneric: "Comparação indisponível agora.",
 
   notebookEyebrow: "Caderno",
   notebookTitle: "Seu universo de palavras",
   notebookSubtitle:
     "Cada palavra que você explorou, guardada, organizada, crescendo.",
-  notebookCounterTemplate: (n) => `${n} palavras exploradas`,
   notebookWordsExplored: "palavras exploradas",
   notebookPracticeNow: "Revisar minhas palavras",
-  notebookDueTodayTemplate: (n) => `${n} para revisar hoje`,
   notebookListView: "Lista",
   notebookGalaxyView: "Galáxia",
   notebookEmptyTitle: "Seu caderno está vazio",
@@ -4867,7 +3969,6 @@ const pt: Partial<V2Strings> = {
   srWordNofMTemplate: (n, m) => `Palavra ${n} de ${m}`,
   srSkip: "Pular",
   srClickToReveal: "Clique para revelar",
-  srTapToReveal: "Toque para revelar",
   srPrimaryMeaningLabel: "Significado principal",
   srExamplesLabel: "Exemplos",
   srIForgot: "Esqueci",
@@ -4914,7 +4015,6 @@ const pt: Partial<V2Strings> = {
   accountNearingLimit: "Chegando ao limite do mês.",
   accountSectionLabel: "Conta",
   accountEmailLabel: "E-mail",
-  accountChangeEmail: "Mudar e-mail",
   accountSignOut: "Sair",
   accountDeleteAccount: "Excluir conta",
 
@@ -4937,46 +4037,10 @@ const pt: Partial<V2Strings> = {
   reportCatCompareResult: "Problema com resultado da comparação",
   reportCatSomethingElse: "Outra coisa",
 
-  origin: "Origem",
-  historyNote: "Nota histórica",
-  throughTime: "Ao longo do tempo",
-  forKids: "Para crianças",
-  commonExpressions: "Expressões comuns",
-  idiomsWithMeaning: "Expressões com este significado",
-  meaningN: (n) => `Significado ${n}`,
-  notJustPrimary: "Não só o principal",
-  takeItFurther: "Vá mais a fundo",
-  doMoreWith: (w) => `Faça mais com ${w}`,
-  saveToNotebookHint: "Volte depois, organizado e com busca.",
   generateImage: "Gerar imagem",
-  generatingImage: "Gerando…",
-  generateImageHint: "Uma imagem viva feita por IA, pra esta palavra.",
-  composeSentence: "Compor uma frase",
-  composeSentenceHint:
-    "Escreva a sua, o Gadit revisa o tom e o encaixe.",
-  practiceWord: "Praticar esta palavra",
-  practiceWordHint: "Um quiz curto adaptado a você.",
-  unlockWithClear: "Desbloqueie com Clear",
-  upgradeToClear: "Passe pro Clear",
   softWallAnonTitle: "Você usou suas buscas grátis",
-  softWallAnonBody:
-    "Cadastre-se grátis pra buscar até 20 palavras por dia, com definições completas, exemplos, expressões e a origem da palavra.",
   softWallSignupCta: "Cadastrar grátis",
   softWallBasicTitle: "Você atingiu o limite de hoje",
-  softWallBasicBody:
-    "Contas grátis têm 20 buscas por dia. O limite reinicia amanhã, ou passe pro Clear pra ter buscas ilimitadas, imagens, modo crianças e feedback de frases.",
-  softBannerSearchesLeft: (n) => {
-    const num = Number(n);
-    return num === 1
-      ? "Sobra 1 busca grátis hoje, cadastre-se grátis pra ter 20 por dia."
-      : `Sobram ${num} buscas grátis hoje, cadastre-se grátis pra ter 20 por dia.`;
-  },
-  clearUnlocksThis: "Disponível no Clear",
-  visualizeThisWord: "Visualizar",
-  visualBlurb:
-    "Uma imagem viva, gerada pelo Gadit, uma âncora visual pra esta palavra.",
-  visualBlurbLocked:
-    "Crie uma imagem única pra esta palavra, entender pelo olhar.",
   reportLabel: "Reportar erro",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -4990,21 +4054,16 @@ const pt: Partial<V2Strings> = {
   imageGeneratingHint: "Geralmente leva de 10 a 15 segundos.",
   imageOpenFullAria: "Abrir imagem em tamanho completo",
   kidsComingSoon: "Explicação para crianças em breve.",
-  compareComingSoon: "Jogos com palavras em breve.",
   shareDefinitionAria: "Compartilhar esta definição",
   wordOriginLanguage: "Idioma",
   wordOriginOriginallyMeant: "Significava originalmente",
   actionCompose: "Compor uma frase",
   actionCompare: "Comparar palavras",
   listenToWord: "Ouvir",
-  offlinePin: "Salvar offline",
-  offlinePinTitle: "Salvar esta palavra para estudar offline",
-  offlinePinnedTitle: "Salvo, disponível sem WiFi",
   offlineDownloadPack: "Baixar pacote offline",
   offlineDownloadingPack: "Baixando…",
   offlinePackHeader: "Pacote offline",
   offlinePackDescription: "Adiciona as palavras mais buscadas no seu idioma ao seu caderno, disponíveis também sem WiFi para estudar offline.",
-  visualEmptyLabel: "Uma imagem será criada para esta palavra",
   savedAgoTemplate: (t) => `Salva · ${t}`,
   shareLabel: "Compartilhar",
   backLabel: "Voltar",
@@ -5019,11 +4078,7 @@ const fr: Partial<V2Strings> = {
 
   searchPlaceholderHome: "Tapez un mot",
   voiceInputTitle: "Dicter un mot",
-  addContext: "Ajouter du contexte",
   explain: "Expliquer",
-  contextHint:
-    "Vous lisez quelque chose ? Collez la phrase et nous choisissons le bon sens.",
-  tryLabel: "Essayez",
 
   valuePropsEyebrow: "Ce que Gadit fait différemment",
   valuePropsTitle: "Plus qu'une définition, une façon de vivre avec le mot.",
@@ -5049,12 +4104,9 @@ const fr: Partial<V2Strings> = {
 
   pricingEyebrow: "Tarifs",
   pricingTeaserTitle: "Trois niveaux. Tous avec du vrai contenu.",
-  trustMicrocopy:
-    "Annulez à tout moment · Essai 14 jours sur Clear mensuel · Sans frais jusqu'à la fin de l'essai",
 
   footerProductGroup: "Produit",
   footerLegalGroup: "Légal",
-  footerCompare: "Comparer",
   footerNotebook: "Carnet",
   footerPricing: "Tarifs",
   footerPrivacy: "Confidentialité",
@@ -5067,7 +4119,6 @@ const fr: Partial<V2Strings> = {
   startFree: "Commencer gratuit",
   verbStampDef: "comprendre un mot jusqu'au bout",
   navSearch: "Rechercher",
-  navCompare: "Comparer",
   navNotebook: "Carnet",
   navPricing: "Tarifs",
   navSchools: "Écoles",
@@ -5078,7 +4129,6 @@ const fr: Partial<V2Strings> = {
   kidsModeLabel: "Enfants",
   kidsModeTooltipOff: "Touchez pour que chaque mot soit expliqué comme un parent l'expliquerait à son enfant.",
   kidsModeTooltipOn: "Mode enfants activé. Chaque définition sera écrite pour un enfant. Touchez pour désactiver.",
-  kidsModeBasicGate: "Le mode enfants est une fonctionnalité de Clear. Passez au plan supérieur pour l'utiliser.",
 
   signupWelcomeTitle: "Bienvenue sur Gadit !",
   signupWelcomeBody: "Votre compte est prêt. Commencez en cherchant un mot.",
@@ -5203,34 +4253,13 @@ const fr: Partial<V2Strings> = {
   quizBackToWord: "Retour au mot",
   quizReviewMistakes: "Revoir mes erreurs",
 
-  compareEyebrow: "Comparer",
-  compareTitle: "Distinguez les mots qui se ressemblent",
-  compareSubtitle:
-    "a vs à, affect vs effect, les mots qui piègent même les locuteurs natifs.",
-  compareWord1Label: "Mot 1",
-  compareWord2Label: "Mot 2",
-  compareWord1Placeholder: "a",
-  compareWord2Placeholder: "à",
-  compareCta: "Comparer",
-  compareLoading: "Comparaison…",
-  compareEmpty: "Saisissez deux mots à comparer",
-  compareDifferenceLabel: "La différence",
-  compareExamplesLabel: "Exemples",
-  compareCommonMistakeLabel: "Erreur fréquente",
-  compareErrNotARealWord: "L'un de ces mots n'est pas reconnu.",
-  compareErrDifferentLanguages:
-    "Ces deux mots semblent être dans des langues différentes, essayez une paire dans la même langue.",
-  compareErrSameWord: "On dirait le même mot, essayez deux mots différents.",
-  compareErrGeneric: "Comparaison indisponible pour le moment.",
 
   notebookEyebrow: "Carnet",
   notebookTitle: "Votre univers de mots",
   notebookSubtitle:
     "Chaque mot exploré, gardé, organisé, qui s'enrichit.",
-  notebookCounterTemplate: (n) => `${n} mots explorés`,
   notebookWordsExplored: "mots explorés",
   notebookPracticeNow: "Réviser mes mots",
-  notebookDueTodayTemplate: (n) => `${n} à revoir aujourd'hui`,
   notebookListView: "Liste",
   notebookGalaxyView: "Galaxie",
   notebookEmptyTitle: "Votre carnet est vide",
@@ -5246,7 +4275,6 @@ const fr: Partial<V2Strings> = {
   srWordNofMTemplate: (n, m) => `Mot ${n} sur ${m}`,
   srSkip: "Passer",
   srClickToReveal: "Cliquez pour révéler",
-  srTapToReveal: "Touchez pour révéler",
   srPrimaryMeaningLabel: "Sens principal",
   srExamplesLabel: "Exemples",
   srIForgot: "Oublié",
@@ -5293,7 +4321,6 @@ const fr: Partial<V2Strings> = {
   accountNearingLimit: "Vous approchez de la limite du mois.",
   accountSectionLabel: "Compte",
   accountEmailLabel: "E-mail",
-  accountChangeEmail: "Changer d'e-mail",
   accountSignOut: "Se déconnecter",
   accountDeleteAccount: "Supprimer le compte",
 
@@ -5316,46 +4343,10 @@ const fr: Partial<V2Strings> = {
   reportCatCompareResult: "Problème de résultat de comparaison",
   reportCatSomethingElse: "Autre chose",
 
-  origin: "Origine",
-  historyNote: "Note historique",
-  throughTime: "À travers le temps",
-  forKids: "Pour enfants",
-  commonExpressions: "Expressions courantes",
-  idiomsWithMeaning: "Expressions avec ce sens",
-  meaningN: (n) => `Sens ${n}`,
-  notJustPrimary: "Pas seulement le principal",
-  takeItFurther: "Aller plus loin",
-  doMoreWith: (w) => `Aller plus loin avec ${w}`,
-  saveToNotebookHint: "Vous y revenez plus tard, organisé et cherchable.",
   generateImage: "Générer une image",
-  generatingImage: "Génération…",
-  generateImageHint: "Une image vivante par IA, juste pour ce mot.",
-  composeSentence: "Composer une phrase",
-  composeSentenceHint:
-    "Écrivez la vôtre, Gadit relit le ton et l'emploi.",
-  practiceWord: "Pratiquer ce mot",
-  practiceWordHint: "Un quiz court adapté à vous.",
-  unlockWithClear: "Débloquer avec Clear",
-  upgradeToClear: "Passer à Clear",
   softWallAnonTitle: "Vous avez utilisé vos recherches gratuites",
-  softWallAnonBody:
-    "Inscrivez-vous gratuitement pour chercher jusqu'à 20 mots par jour, avec définitions complètes, exemples, expressions et origine du mot.",
   softWallSignupCta: "Inscription gratuite",
   softWallBasicTitle: "Vous avez atteint la limite du jour",
-  softWallBasicBody:
-    "Les comptes gratuits ont 20 recherches par jour. La limite se réinitialise demain, ou passez à Clear pour des recherches illimitées, des images, le mode enfants et les retours sur phrases.",
-  softBannerSearchesLeft: (n) => {
-    const num = Number(n);
-    return num === 1
-      ? "Il vous reste 1 recherche gratuite aujourd'hui, inscription gratuite pour 20 par jour."
-      : `Il vous reste ${num} recherches gratuites aujourd'hui, inscription gratuite pour 20 par jour.`;
-  },
-  clearUnlocksThis: "Disponible dans Clear",
-  visualizeThisWord: "Voir",
-  visualBlurb:
-    "Une image vivante, générée par Gadit, un ancrage visuel pour ce mot.",
-  visualBlurbLocked:
-    "Créez une image unique pour ce mot, comprendre par l'image.",
   reportLabel: "Signaler une erreur",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -5369,21 +4360,16 @@ const fr: Partial<V2Strings> = {
   imageGeneratingHint: "Cela prend généralement 10 à 15 secondes.",
   imageOpenFullAria: "Ouvrir l'image en taille réelle",
   kidsComingSoon: "L'explication pour enfants arrive bientôt.",
-  compareComingSoon: "Jeux de mots bientôt disponibles.",
   shareDefinitionAria: "Partager cette définition",
   wordOriginLanguage: "Langue",
   wordOriginOriginallyMeant: "Signifiait à l'origine",
   actionCompose: "Composer une phrase",
   actionCompare: "Comparer les mots",
   listenToWord: "Écouter",
-  offlinePin: "Enregistrer hors ligne",
-  offlinePinTitle: "Enregistrer ce mot pour l'étudier hors ligne",
-  offlinePinnedTitle: "Enregistré, disponible sans WiFi",
   offlineDownloadPack: "Télécharger le pack hors ligne",
   offlineDownloadingPack: "Téléchargement…",
   offlinePackHeader: "Pack hors ligne",
   offlinePackDescription: "Ajoute les mots les plus recherchés dans votre langue à votre carnet, disponibles aussi sans WiFi pour étudier hors ligne.",
-  visualEmptyLabel: "Une image sera créée pour ce mot",
   savedAgoTemplate: (t) => `Enregistré · ${t}`,
   shareLabel: "Partager",
   backLabel: "Retour",
@@ -5406,10 +4392,7 @@ const de: V2Strings = {
     "Ein Wörterbuch, das dich im Kontext abholt: Bedeutungen, Ursprünge, Redewendungen und ein lebendiges Bild, in 30+ Sprachen.",
   searchPlaceholderHome: "Tippe ein Wort",
   voiceInputTitle: "Wort diktieren",
-  addContext: "Kontext hinzufügen",
   explain: "Erklären",
-  contextHint: "Liest du gerade etwas? Füge den Satz ein, um die Bedeutung zu klären.",
-  tryLabel: "Probier",
 
   valuePropsEyebrow: "Was Gadit anders macht",
   valuePropsTitle: "Mehr als eine Definition: eine Art, mit einem Wort zu leben.",
@@ -5431,12 +4414,9 @@ const de: V2Strings = {
 
   pricingEyebrow: "Preise",
   pricingTeaserTitle: "Drei Stufen. Alle mit echten Inhalten.",
-  trustMicrocopy:
-    "Jederzeit kündbar · 14-Tage-Test auf Clear monatlich · Keine Abbuchung bis zum Ende des Tests",
 
   footerProductGroup: "Produkt",
   footerLegalGroup: "Rechtliches",
-  footerCompare: "Vergleichen",
   footerNotebook: "Notizbuch",
   footerPricing: "Preise",
   footerPrivacy: "Datenschutz",
@@ -5449,7 +4429,6 @@ const de: V2Strings = {
   startFree: "Kostenlos starten",
   verbStampDef: "ein Wort bis zum Ende verstehen",
   navSearch: "Suche",
-  navCompare: "Vergleichen",
   navNotebook: "Notizbuch",
   navPricing: "Preise",
   navSchools: "Schulen",
@@ -5460,7 +4439,6 @@ const de: V2Strings = {
   kidsModeLabel: "Kinder",
   kidsModeTooltipOff: "Tippe, damit jedes Wort so erklärt wird, wie ein Elternteil es einem Kind erklären würde.",
   kidsModeTooltipOn: "Kindermodus an. Jede Definition wird für ein Kind geschrieben. Tippe zum Ausschalten.",
-  kidsModeBasicGate: "Kindermodus ist eine Clear-Funktion. Upgrade, um sie zu nutzen.",
 
   signupWelcomeTitle: "Willkommen bei Gadit!",
   signupWelcomeBody: "Dein Konto ist bereit. Such direkt ein Wort.",
@@ -5577,32 +4555,12 @@ const de: V2Strings = {
   quizBackToWord: "Zurück zum Wort",
   quizReviewMistakes: "Die falschen noch einmal ansehen",
 
-  compareEyebrow: "Vergleichen",
-  compareTitle: "Ähnliche Wörter unterscheiden",
-  compareSubtitle:
-    "wie vs als, das vs dass, leihen vs verleihen, die Wörter, bei denen selbst Muttersprachler stolpern.",
-  compareWord1Label: "Wort 1",
-  compareWord2Label: "Wort 2",
-  compareWord1Placeholder: "wie",
-  compareWord2Placeholder: "als",
-  compareCta: "Vergleichen",
-  compareLoading: "Vergleiche…",
-  compareEmpty: "Gib zwei Wörter ein, um sie zu vergleichen",
-  compareDifferenceLabel: "Der Unterschied",
-  compareExamplesLabel: "Beispiele",
-  compareCommonMistakeLabel: "Häufiger Fehler",
-  compareErrNotARealWord: "Wir kennen eines dieser Wörter nicht.",
-  compareErrDifferentLanguages: "Diese beiden Wörter scheinen in verschiedenen Sprachen zu sein. Probier ein passendes Paar.",
-  compareErrSameWord: "Das sieht nach demselben Wort aus. Probier zwei verschiedene.",
-  compareErrGeneric: "Vergleich aktuell nicht verfügbar.",
 
   notebookEyebrow: "Notizbuch",
   notebookTitle: "Dein Wörter-Universum",
   notebookSubtitle: "Jedes Wort, das du erkundet hast, behalten, sortiert und wachsend.",
-  notebookCounterTemplate: (n) => `${n} Wörter erkundet`,
   notebookWordsExplored: "Wörter erkundet",
   notebookPracticeNow: "Meine Wörter wiederholen",
-  notebookDueTodayTemplate: (n) => `${n} heute fällig`,
   notebookListView: "Liste",
   notebookGalaxyView: "Galaxie",
   notebookEmptyTitle: "Dein Notizbuch ist leer",
@@ -5618,7 +4576,6 @@ const de: V2Strings = {
   srWordNofMTemplate: (n, m) => `Wort ${n} von ${m}`,
   srSkip: "Überspringen",
   srClickToReveal: "Klicke irgendwo, um zu enthüllen",
-  srTapToReveal: "Tippe, um zu enthüllen",
   srPrimaryMeaningLabel: "Hauptbedeutung",
   srExamplesLabel: "Beispiele",
   srIForgot: "Vergessen",
@@ -5660,7 +4617,6 @@ const de: V2Strings = {
   accountNearingLimit: "Nähert sich dem Monatslimit.",
   accountSectionLabel: "Konto",
   accountEmailLabel: "E-Mail",
-  accountChangeEmail: "E-Mail ändern",
   accountSignOut: "Abmelden",
   accountDeleteAccount: "Konto löschen",
 
@@ -5683,41 +4639,10 @@ const de: V2Strings = {
   reportCatCompareResult: "Problem mit Vergleichsergebnis",
   reportCatSomethingElse: "Etwas anderes",
 
-  origin: "Herkunft",
-  historyNote: "Geschichtsnotiz",
-  throughTime: "Im Lauf der Zeit",
-  forKids: "Für Kinder",
-  commonExpressions: "Gängige Ausdrücke",
-  idiomsWithMeaning: "Redewendungen mit dieser Bedeutung",
-  meaningN: (n) => `Bedeutung ${n}`,
-  notJustPrimary: "Nicht nur die primäre",
-  takeItFurther: "Mach mehr daraus",
-  doMoreWith: (w) => `Mehr mit ${w}`,
-  saveToNotebookHint: "Komm später zurück, sortiert und durchsuchbar.",
   generateImage: "Bild erstellen",
-  generatingImage: "Wird erstellt…",
-  generateImageHint: "Eine lebendige, KI-gemachte Visualisierung, nur für dieses Wort.",
-  composeSentence: "Einen Satz schreiben",
-  composeSentenceHint: "Schreib deinen eigenen, Gadit prüft Ton und Passung.",
-  practiceWord: "Dieses Wort üben",
-  practiceWordHint: "Ein kurzes Quiz, das auf dein Lernen abgestimmt ist.",
-  unlockWithClear: "Mit Clear freischalten",
-  upgradeToClear: "Auf Clear upgraden",
   softWallAnonTitle: "Du hast deine kostenlosen Suchen verbraucht",
-  softWallAnonBody:
-    "Registriere dich kostenlos, um bis zu 20 Wörter am Tag zu suchen, mit vollständigen Definitionen, Beispielen, Redewendungen und Wortherkunft.",
   softWallSignupCta: "Registrieren, kostenlos",
   softWallBasicTitle: "Du hast das heutige Limit erreicht",
-  softWallBasicBody:
-    "Kostenlose Konten haben 20 Suchen pro Tag. Das Limit setzt sich morgen zurück, oder upgrade auf Clear für unbegrenzte Suchen plus Bilder, Kindermodus und Grammatik-Feedback.",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "1 kostenlose Suche heute übrig, registriere dich kostenlos für 20 am Tag."
-      : `${n} kostenlose Suchen heute übrig, registriere dich kostenlos für 20 am Tag.`,
-  clearUnlocksThis: "Clear schaltet das frei",
-  visualizeThisWord: "Visualisieren",
-  visualBlurb: "Ein lebendiges Bild, von Gadit erstellt, ein visueller Anker für das Gefühl dieses Wortes.",
-  visualBlurbLocked: "Erstelle ein lebendiges, einzigartiges Bild für dieses Wort, Verstehen durchs Sehen.",
   reportLabel: "Fehler melden",
 
   wordOriginEyebrow: "Wortursprung",
@@ -5729,7 +4654,6 @@ const de: V2Strings = {
   imageGeneratingHint: "Das dauert normalerweise 10 bis 15 Sekunden.",
   imageOpenFullAria: "Bild in voller Größe öffnen",
   kidsComingSoon: "Kindererklärung kommt bald.",
-  compareComingSoon: "Wortspiele kommen bald.",
   shareDefinitionAria: "Diese Definition teilen",
   meaningsEyebrow: "Definitionen",
   wordOriginLanguage: "Sprache",
@@ -5737,15 +4661,11 @@ const de: V2Strings = {
   actionCompose: "Satz schreiben",
   actionCompare: "Wörter vergleichen",
   listenToWord: "Anhören",
-  offlinePin: "Offline speichern",
-  offlinePinTitle: "Dieses Wort offline zum Lernen speichern",
-  offlinePinnedTitle: "Gespeichert, ohne WLAN verfügbar",
   offlineDownloadPack: "Offline-Paket herunterladen",
   offlineDownloadingPack: "Lädt…",
   offlinePackHeader: "Offline-Paket",
   offlinePackDescription:
     "Fügt die meistgesuchten Wörter in deiner Sprache zu deinem Notizbuch hinzu, und hält sie ohne WLAN zum Offline-Lernen bereit.",
-  visualEmptyLabel: "Für dieses Wort wird ein Bild gezeichnet",
   savedAgoTemplate: (t) => `Gespeichert · ${t}`,
   shareLabel: "Teilen",
   backLabel: "Zurück",
@@ -5758,10 +4678,7 @@ const cs: V2Strings = {
     "Slovník, který tě potkává v kontextu: významy, původ, idiomy a živý obraz, ve 14 jazycích.",
   searchPlaceholderHome: "Napiš slovo",
   voiceInputTitle: "Nadiktovat slovo",
-  addContext: "Přidat kontext",
   explain: "Vysvětlit",
-  contextHint: "Něco čteš? Vlož větu, aby byl význam jasný.",
-  tryLabel: "Vyzkoušej",
 
   valuePropsEyebrow: "Čím se Gadit liší",
   valuePropsTitle: "Víc než definice, způsob, jak se slovem žít.",
@@ -5783,11 +4700,9 @@ const cs: V2Strings = {
 
   pricingEyebrow: "Ceník",
   pricingTeaserTitle: "Tři úrovně. Všechny s opravdovým obsahem.",
-  trustMicrocopy: "Zruš kdykoli · 14denní zkušební verze na Clear měsíčně · Žádné účtování do konce zkušebky",
 
   footerProductGroup: "Produkt",
   footerLegalGroup: "Právní",
-  footerCompare: "Porovnat",
   footerNotebook: "Sešit",
   footerPricing: "Ceník",
   footerPrivacy: "Soukromí",
@@ -5800,7 +4715,6 @@ const cs: V2Strings = {
   startFree: "Začít zdarma",
   verbStampDef: "pochopit slovo až do konce",
   navSearch: "Hledat",
-  navCompare: "Porovnat",
   navNotebook: "Sešit",
   navPricing: "Ceník",
   navSchools: "Školy",
@@ -5811,7 +4725,6 @@ const cs: V2Strings = {
   kidsModeLabel: "Děti",
   kidsModeTooltipOff: "Klepni, aby každé slovo bylo vysvětleno tak, jak by ho rodič vysvětlil dítěti.",
   kidsModeTooltipOn: "Dětský režim je zapnutý. Každá definice bude napsána pro dítě. Klepni pro vypnutí.",
-  kidsModeBasicGate: "Dětský režim je funkce Clearu. Přejdi na vyšší plán, abys ho mohl používat.",
 
   signupWelcomeTitle: "Vítej v Gaditu!",
   signupWelcomeBody: "Tvůj účet je připraven. Začni hledáním jakéhokoli slova.",
@@ -5928,32 +4841,12 @@ const cs: V2Strings = {
   quizBackToWord: "Zpět ke slovu",
   quizReviewMistakes: "Projít ty, co jsem nedal",
 
-  compareEyebrow: "Porovnat",
-  compareTitle: "Rozliš podobná slova",
-  compareSubtitle:
-    "stejný vs samý, mě vs mně, princip vs principál, slova, na kterých klopýtají i rodilí mluvčí.",
-  compareWord1Label: "Slovo 1",
-  compareWord2Label: "Slovo 2",
-  compareWord1Placeholder: "stejný",
-  compareWord2Placeholder: "samý",
-  compareCta: "Porovnat",
-  compareLoading: "Porovnávám…",
-  compareEmpty: "Zadej dvě slova k porovnání",
-  compareDifferenceLabel: "Rozdíl",
-  compareExamplesLabel: "Příklady",
-  compareCommonMistakeLabel: "Častá chyba",
-  compareErrNotARealWord: "Jedno z těch slov nepoznáváme.",
-  compareErrDifferentLanguages: "Tato dvě slova jsou zřejmě v různých jazycích. Zkus odpovídající dvojici.",
-  compareErrSameWord: "Vypadá to na stejné slovo. Zkus dvě odlišná.",
-  compareErrGeneric: "Porovnání teď není k dispozici.",
 
   notebookEyebrow: "Sešit",
   notebookTitle: "Tvůj vesmír slov",
   notebookSubtitle: "Každé slovo, které jsi prozkoumal, uloženo, uspořádáno, rostoucí.",
-  notebookCounterTemplate: (n) => `${n} slov prozkoumáno`,
   notebookWordsExplored: "slov prozkoumáno",
   notebookPracticeNow: "Zopakovat moje slova",
-  notebookDueTodayTemplate: (n) => `${n} dnes k opakování`,
   notebookListView: "Seznam",
   notebookGalaxyView: "Galaxie",
   notebookEmptyTitle: "Sešit je prázdný",
@@ -5969,7 +4862,6 @@ const cs: V2Strings = {
   srWordNofMTemplate: (n, m) => `Slovo ${n} z ${m}`,
   srSkip: "Přeskočit",
   srClickToReveal: "Klikni kamkoli pro odhalení",
-  srTapToReveal: "Klepni pro odhalení",
   srPrimaryMeaningLabel: "Hlavní význam",
   srExamplesLabel: "Příklady",
   srIForgot: "Zapomněl jsem",
@@ -6011,7 +4903,6 @@ const cs: V2Strings = {
   accountNearingLimit: "Blížíš se k měsíčnímu limitu.",
   accountSectionLabel: "Účet",
   accountEmailLabel: "E-mail",
-  accountChangeEmail: "Změnit e-mail",
   accountSignOut: "Odhlásit se",
   accountDeleteAccount: "Smazat účet",
 
@@ -6034,41 +4925,10 @@ const cs: V2Strings = {
   reportCatCompareResult: "Problém s výsledkem porovnání",
   reportCatSomethingElse: "Něco jiného",
 
-  origin: "Původ",
-  historyNote: "Historická poznámka",
-  throughTime: "V čase",
-  forKids: "Pro děti",
-  commonExpressions: "Běžné výrazy",
-  idiomsWithMeaning: "Idiomy s tímto významem",
-  meaningN: (n) => `Význam ${n}`,
-  notJustPrimary: "Nejen ten primární",
-  takeItFurther: "Pokračuj dál",
-  doMoreWith: (w) => `Udělej víc se slovem ${w}`,
-  saveToNotebookHint: "Vrať se k tomu později, uspořádané a vyhledatelné.",
   generateImage: "Vytvořit obrázek",
-  generatingImage: "Vytvářím…",
-  generateImageHint: "Živý obrázek od AI, jen pro toto slovo.",
-  composeSentence: "Napsat větu",
-  composeSentenceHint: "Napiš svou vlastní, Gadit zkontroluje tón a vhodnost.",
-  practiceWord: "Procvičit toto slovo",
-  practiceWordHint: "Krátký kvíz přizpůsobený tvému učení.",
-  unlockWithClear: "Odemkni s Clear",
-  upgradeToClear: "Upgradovat na Clear",
   softWallAnonTitle: "Vyčerpal jsi svá hledání zdarma",
-  softWallAnonBody:
-    "Zaregistruj se zdarma a hledej až 20 slov denně, s úplnými definicemi, příklady, idiomy a původem slova.",
   softWallSignupCta: "Registrace zdarma",
   softWallBasicTitle: "Dosáhl jsi dnešního limitu",
-  softWallBasicBody:
-    "Účty zdarma mají 20 hledání denně. Limit se zítra resetuje, nebo upgraduj na Clear pro neomezené hledání plus obrázky, dětský režim a zpětnou vazbu ke gramatice.",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "Dnes zbývá 1 hledání zdarma, zaregistruj se zdarma pro 20 denně."
-      : `Dnes zbývá ${n} hledání zdarma, zaregistruj se zdarma pro 20 denně.`,
-  clearUnlocksThis: "Clear toto odemkne",
-  visualizeThisWord: "Vizualizovat",
-  visualBlurb: "Jeden živý obrázek, vytvořený Gaditem, vizuální kotva pro to, jak slovo působí.",
-  visualBlurbLocked: "Vytvoř živý, jedinečný obrázek pro toto slovo, porozumění zrakem.",
   reportLabel: "Nahlásit chybu",
 
   wordOriginEyebrow: "Původ slova",
@@ -6080,7 +4940,6 @@ const cs: V2Strings = {
   imageGeneratingHint: "Obvykle to trvá 10 až 15 sekund.",
   imageOpenFullAria: "Otevřít obrázek v plné velikosti",
   kidsComingSoon: "Vysvětlení pro děti už brzy.",
-  compareComingSoon: "Slovní hry už brzy.",
   shareDefinitionAria: "Sdílet tuto definici",
   meaningsEyebrow: "Definice",
   wordOriginLanguage: "Jazyk",
@@ -6088,15 +4947,11 @@ const cs: V2Strings = {
   actionCompose: "Napsat větu",
   actionCompare: "Porovnat slova",
   listenToWord: "Poslechnout",
-  offlinePin: "Uložit offline",
-  offlinePinTitle: "Uložit toto slovo pro offline studium",
-  offlinePinnedTitle: "Uloženo, dostupné bez Wi-Fi",
   offlineDownloadPack: "Stáhnout offline balíček",
   offlineDownloadingPack: "Stahuji…",
   offlinePackHeader: "Offline balíček",
   offlinePackDescription:
     "Přidá nejhledanější slova ve tvém jazyce do sešitu, a udržuje je dostupná bez Wi-Fi pro offline studium.",
-  visualEmptyLabel: "Pro toto slovo bude vytvořen obrázek",
   // Share / save / listen on the result page
   shareLabel: "Sdílet",
   backLabel: "Zpět",
@@ -6116,10 +4971,7 @@ const sk: V2Strings = {
     "Slovník, ktorý ťa stretáva v kontexte: významy, pôvod, idiómy a živý obraz, v 20 jazykoch.",
   searchPlaceholderHome: "Napíš slovo",
   voiceInputTitle: "Nadiktovať slovo",
-  addContext: "Pridať kontext",
   explain: "Vysvetliť",
-  contextHint: "Niečo čítaš? Vlož vetu, aby bol význam jasný.",
-  tryLabel: "Vyskúšaj",
 
   valuePropsEyebrow: "Čím sa Gadit odlišuje",
   valuePropsTitle: "Viac než definícia, spôsob, ako so slovom žiť.",
@@ -6141,11 +4993,9 @@ const sk: V2Strings = {
 
   pricingEyebrow: "Cenník",
   pricingTeaserTitle: "Tri úrovne. Všetky s naozajstným obsahom.",
-  trustMicrocopy: "Zruš kedykoľvek · 14-dňová skúšobná verzia na Clear mesačne · Žiadne účtovanie do konca skúšky",
 
   footerProductGroup: "Produkt",
   footerLegalGroup: "Právne",
-  footerCompare: "Porovnať",
   footerNotebook: "Zošit",
   footerPricing: "Cenník",
   footerPrivacy: "Súkromie",
@@ -6158,7 +5008,6 @@ const sk: V2Strings = {
   startFree: "Začať zdarma",
   verbStampDef: "pochopiť slovo až do konca",
   navSearch: "Hľadať",
-  navCompare: "Porovnať",
   navNotebook: "Zošit",
   navPricing: "Cenník",
   navSchools: "Školy",
@@ -6169,7 +5018,6 @@ const sk: V2Strings = {
   kidsModeLabel: "Deti",
   kidsModeTooltipOff: "Klikni, aby každé slovo bolo vysvetlené tak, ako by ho rodič vysvetlil dieťaťu.",
   kidsModeTooltipOn: "Detský režim je zapnutý. Každá definícia bude napísaná pre dieťa. Klikni pre vypnutie.",
-  kidsModeBasicGate: "Detský režim je funkcia Clearu. Prejdi na vyšší plán, aby si ho mohol používať.",
 
   signupWelcomeTitle: "Vitaj v Gadite!",
   signupWelcomeBody: "Tvoj účet je pripravený. Začni hľadaním akéhokoľvek slova.",
@@ -6286,32 +5134,12 @@ const sk: V2Strings = {
   quizBackToWord: "Späť k slovu",
   quizReviewMistakes: "Prejsť tie, čo som nedal",
 
-  compareEyebrow: "Porovnať",
-  compareTitle: "Rozlíš podobné slová",
-  compareSubtitle:
-    "rovnaký vs ten istý, mi vs ma, princíp vs principál, slová, na ktorých sa potknú aj rodení hovoriaci.",
-  compareWord1Label: "Slovo 1",
-  compareWord2Label: "Slovo 2",
-  compareWord1Placeholder: "rovnaký",
-  compareWord2Placeholder: "ten istý",
-  compareCta: "Porovnať",
-  compareLoading: "Porovnávam…",
-  compareEmpty: "Zadaj dve slová na porovnanie",
-  compareDifferenceLabel: "Rozdiel",
-  compareExamplesLabel: "Príklady",
-  compareCommonMistakeLabel: "Častá chyba",
-  compareErrNotARealWord: "Jedno z tých slov nepoznáme.",
-  compareErrDifferentLanguages: "Tieto dve slová sú zrejme v rôznych jazykoch. Skús zodpovedajúcu dvojicu.",
-  compareErrSameWord: "Vyzerá to na rovnaké slovo. Skús dve odlišné.",
-  compareErrGeneric: "Porovnanie teraz nie je k dispozícii.",
 
   notebookEyebrow: "Zošit",
   notebookTitle: "Tvoj vesmír slov",
   notebookSubtitle: "Každé slovo, ktoré si preskúmal, uložené, usporiadané, rastúce.",
-  notebookCounterTemplate: (n) => `${n} slov preskúmaných`,
   notebookWordsExplored: "slov preskúmaných",
   notebookPracticeNow: "Zopakovať moje slová",
-  notebookDueTodayTemplate: (n) => `${n} dnes na opakovanie`,
   notebookListView: "Zoznam",
   notebookGalaxyView: "Galaxia",
   notebookEmptyTitle: "Zošit je prázdny",
@@ -6327,7 +5155,6 @@ const sk: V2Strings = {
   srWordNofMTemplate: (n, m) => `Slovo ${n} z ${m}`,
   srSkip: "Preskočiť",
   srClickToReveal: "Klikni kdekoľvek pre odhalenie",
-  srTapToReveal: "Ťukni pre odhalenie",
   srPrimaryMeaningLabel: "Hlavný význam",
   srExamplesLabel: "Príklady",
   srIForgot: "Zabudol som",
@@ -6369,7 +5196,6 @@ const sk: V2Strings = {
   accountNearingLimit: "Blížiš sa k mesačnému limitu.",
   accountSectionLabel: "Účet",
   accountEmailLabel: "E-mail",
-  accountChangeEmail: "Zmeniť e-mail",
   accountSignOut: "Odhlásiť sa",
   accountDeleteAccount: "Zmazať účet",
 
@@ -6392,41 +5218,10 @@ const sk: V2Strings = {
   reportCatCompareResult: "Problém s výsledkom porovnania",
   reportCatSomethingElse: "Niečo iné",
 
-  origin: "Pôvod",
-  historyNote: "Historická poznámka",
-  throughTime: "V čase",
-  forKids: "Pre deti",
-  commonExpressions: "Bežné výrazy",
-  idiomsWithMeaning: "Idiómy s týmto významom",
-  meaningN: (n) => `Význam ${n}`,
-  notJustPrimary: "Nielen ten primárny",
-  takeItFurther: "Pokračuj ďalej",
-  doMoreWith: (w) => `Urob viac so slovom ${w}`,
-  saveToNotebookHint: "Vráť sa k tomu neskôr, usporiadané a vyhľadateľné.",
   generateImage: "Vytvoriť obrázok",
-  generatingImage: "Vytváram…",
-  generateImageHint: "Živý obrázok od AI, len pre toto slovo.",
-  composeSentence: "Napísať vetu",
-  composeSentenceHint: "Napíš svoju vlastnú, Gadit skontroluje tón a vhodnosť.",
-  practiceWord: "Precvičiť toto slovo",
-  practiceWordHint: "Krátky kvíz prispôsobený tvojmu učeniu.",
-  unlockWithClear: "Odomkni s Clear",
-  upgradeToClear: "Upgradovať na Clear",
   softWallAnonTitle: "Vyčerpal si svoje vyhľadávania zadarmo",
-  softWallAnonBody:
-    "Zaregistruj sa zadarmo a hľadaj až 20 slov denne, s úplnými definíciami, príkladmi, idiómami a pôvodom slova.",
   softWallSignupCta: "Registrácia zadarmo",
   softWallBasicTitle: "Dosiahol si dnešný limit",
-  softWallBasicBody:
-    "Účty zadarmo majú 20 vyhľadávaní denne. Limit sa zajtra resetuje, alebo upgraduj na Clear pre neobmedzené hľadanie plus obrázky, detský režim a spätnú väzbu ku gramatike.",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "Dnes zostáva 1 vyhľadávanie zadarmo, zaregistruj sa zadarmo pre 20 denne."
-      : `Dnes zostávajú ${n} vyhľadávania zadarmo, zaregistruj sa zadarmo pre 20 denne.`,
-  clearUnlocksThis: "Clear toto odomkne",
-  visualizeThisWord: "Vizualizovať",
-  visualBlurb: "Jeden živý obrázok, vytvorený Gaditom, vizuálna kotva pre to, ako slovo pôsobí.",
-  visualBlurbLocked: "Vytvor živý, jedinečný obrázok pre toto slovo, porozumenie zrakom.",
   reportLabel: "Nahlásiť chybu",
 
   wordOriginEyebrow: "Pôvod slova",
@@ -6438,7 +5233,6 @@ const sk: V2Strings = {
   imageGeneratingHint: "Zvyčajne to trvá 10 až 15 sekúnd.",
   imageOpenFullAria: "Otvoriť obrázok v plnej veľkosti",
   kidsComingSoon: "Vysvetlenie pre deti už čoskoro.",
-  compareComingSoon: "Slovné hry už čoskoro.",
   shareDefinitionAria: "Zdieľať túto definíciu",
   meaningsEyebrow: "Definície",
   wordOriginLanguage: "Jazyk",
@@ -6446,15 +5240,11 @@ const sk: V2Strings = {
   actionCompose: "Napísať vetu",
   actionCompare: "Porovnať slová",
   listenToWord: "Vypočuť",
-  offlinePin: "Uložiť offline",
-  offlinePinTitle: "Uložiť toto slovo pre offline štúdium",
-  offlinePinnedTitle: "Uložené, dostupné bez Wi-Fi",
   offlineDownloadPack: "Stiahnuť offline balík",
   offlineDownloadingPack: "Sťahujem…",
   offlinePackHeader: "Offline balík",
   offlinePackDescription:
     "Pridá najhľadanejšie slová v tvojom jazyku do zošita, a udržuje ich dostupné bez Wi-Fi pre offline štúdium.",
-  visualEmptyLabel: "Pre toto slovo bude vytvorený obrázok",
   shareLabel: "Zdieľať",
   backLabel: "Späť",
   savedAgoTemplate: (t) => `Uložené · ${t}`,
@@ -6468,10 +5258,7 @@ const it: Partial<V2Strings> = {
     "Un dizionario che ti incontra nel contesto: significati, origini, modi di dire e un'immagine vivida, in 30+ lingue.",
   searchPlaceholderHome: "Scrivi una parola",
   voiceInputTitle: "Detta una parola",
-  addContext: "Aggiungi contesto",
   explain: "Spiega",
-  contextHint: "Stai leggendo qualcosa? Incolla la frase per chiarire il significato.",
-  tryLabel: "Prova",
 
   // Value props (Screen 1)
   valuePropsEyebrow: "Cosa fa Gadit di diverso",
@@ -6494,12 +5281,10 @@ const it: Partial<V2Strings> = {
 
   pricingEyebrow: "Prezzi",
   pricingTeaserTitle: "Tre piani. Tutti con contenuti veri.",
-  trustMicrocopy: "Annulla in qualsiasi momento · Prova di 14 giorni su Clear mensile · Nessun addebito fino al termine della prova",
 
   // Footer
   footerProductGroup: "Prodotto",
   footerLegalGroup: "Legale",
-  footerCompare: "Confronta",
   footerNotebook: "Quaderno",
   footerPricing: "Prezzi",
   footerPrivacy: "Privacy",
@@ -6513,7 +5298,6 @@ const it: Partial<V2Strings> = {
   startFree: "Inizia gratis",
   verbStampDef: "capire una parola fino in fondo",
   navSearch: "Cerca",
-  navCompare: "Confronta",
   navNotebook: "Quaderno",
   navPricing: "Prezzi",
   navSchools: "Scuole",
@@ -6564,18 +5348,15 @@ const it: Partial<V2Strings> = {
   actionCompose: "Scrivi una frase",
   actionCompare: "Confronta parole",
   // Visual / image gen
-  visualEmptyLabel: "Verrà generata un'immagine per questa parola",
   imageGeneratingLabel: "Generazione dell'immagine…",
   imageGeneratingHint: "Di solito richiede dai 10 ai 15 secondi.",
   imageOpenFullAria: "Apri l'immagine a tutta grandezza",
-  compareComingSoon: "I giochi di parole arrivano presto.",
   navPlay: "Giochi",
   navAffiliates: "Affiliati",
 
   kidsModeLabel: "Bambini",
   kidsModeTooltipOff: "Tocca per spiegare ogni parola come un genitore la spiegherebbe a un bambino.",
   kidsModeTooltipOn: "Modalità bambini attiva. Ogni definizione sarà scritta per un bambino. Tocca per disattivare.",
-  kidsModeBasicGate: "La modalità bambini è una funzione di Clear. Fai upgrade per usarla.",
 
   signupWelcomeTitle: "Benvenuto su Gadit!",
   signupWelcomeBody: "Il tuo account è pronto. Inizia cercando una parola qualsiasi.",
@@ -6672,34 +5453,12 @@ const it: Partial<V2Strings> = {
   quizBackToWord: "Torna alla parola",
   quizReviewMistakes: "Rivedi quelle che ho sbagliato",
 
-  // Compare page
-  compareEyebrow: "Confronta",
-  compareTitle: "Distinguere parole simili",
-  compareSubtitle:
-    "a vs ha, e vs è, qual è vs qual'è, le parole che fanno inciampare anche i madrelingua.",
-  compareWord1Label: "Parola 1",
-  compareWord2Label: "Parola 2",
-  compareWord1Placeholder: "a",
-  compareWord2Placeholder: "ha",
-  compareCta: "Confronta",
-  compareLoading: "Confronto in corso…",
-  compareEmpty: "Inserisci due parole per confrontarle",
-  compareDifferenceLabel: "La differenza",
-  compareExamplesLabel: "Esempi",
-  compareCommonMistakeLabel: "Errore comune",
-  compareErrNotARealWord: "Non riconosciamo una di queste parole.",
-  compareErrDifferentLanguages: "Queste due parole sembrano in lingue diverse. Prova una coppia compatibile.",
-  compareErrSameWord: "Sembrano la stessa parola. Provane due diverse.",
-  compareErrGeneric: "Confronto non disponibile al momento.",
-
   // Notebook page
   notebookEyebrow: "Quaderno",
   notebookTitle: "Il tuo universo di parole",
   notebookSubtitle: "Ogni parola che hai esplorato, conservata, organizzata, in crescita.",
-  notebookCounterTemplate: (n) => `${n} parole esplorate`,
   notebookWordsExplored: "parole esplorate",
   notebookPracticeNow: "Ripassa le mie parole",
-  notebookDueTodayTemplate: (n) => `${n} da rivedere oggi`,
   notebookListView: "Lista",
   notebookGalaxyView: "Galassia",
   notebookEmptyTitle: "Il tuo quaderno è vuoto",
@@ -6716,7 +5475,6 @@ const it: Partial<V2Strings> = {
   srWordNofMTemplate: (n, m) => `Parola ${n} di ${m}`,
   srSkip: "Salta",
   srClickToReveal: "Clicca ovunque per scoprire",
-  srTapToReveal: "Tocca per scoprire",
   srPrimaryMeaningLabel: "Significato principale",
   srExamplesLabel: "Esempi",
   srIForgot: "L'ho dimenticata",
@@ -6759,7 +5517,6 @@ const it: Partial<V2Strings> = {
   accountNearingLimit: "Ti stai avvicinando al limite del mese.",
   accountSectionLabel: "Account",
   accountEmailLabel: "Email",
-  accountChangeEmail: "Cambia email",
   accountSignOut: "Esci",
   accountDeleteAccount: "Elimina account",
 
@@ -6783,50 +5540,15 @@ const it: Partial<V2Strings> = {
   reportCatCompareResult: "Problema con il risultato del confronto",
   reportCatSomethingElse: "Qualcos'altro",
 
-  // Origin, history, kids
-  origin: "Origine",
-  historyNote: "Nota storica",
-  throughTime: "Nel tempo",
-  forKids: "Per bambini",
-  commonExpressions: "Espressioni comuni",
-  idiomsWithMeaning: "Modi di dire con questo significato",
-  meaningN: (n) => `Significato ${n}`,
-  notJustPrimary: "Non solo quello principale",
-  takeItFurther: "Vai oltre",
-  doMoreWith: (w) => `Fai di più con ${w}`,
-  saveToNotebookHint: "Tornaci più tardi, organizzato e ricercabile.",
   generateImage: "Genera immagine",
-  generatingImage: "Generazione…",
-  generateImageHint: "Una visualizzazione AI vivida, solo per questa parola.",
-  composeSentence: "Scrivi una frase",
-  composeSentenceHint: "Scrivi la tua, Gadit controlla tono e adattamento.",
-  practiceWord: "Esercitati con questa parola",
-  practiceWordHint: "Un breve quiz adattato al tuo modo di imparare.",
-  unlockWithClear: "Sblocca con Clear",
-  upgradeToClear: "Passa a Clear",
   softWallAnonTitle: "Hai usato le tue ricerche gratuite",
-  softWallAnonBody:
-    "Registrati gratis per cercare fino a 20 parole al giorno, con definizioni complete, esempi, modi di dire e origine della parola.",
   softWallSignupCta: "Registrati, è gratis",
   softWallBasicTitle: "Hai raggiunto il limite di oggi",
-  softWallBasicBody:
-    "Gli account gratuiti hanno 20 ricerche al giorno. Il limite si azzera domani, oppure passa a Clear per ricerche illimitate più immagini, modalità bambini e feedback grammaticale.",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "1 ricerca gratuita rimasta oggi, registrati gratis per averne 20 al giorno."
-      : `${n} ricerche gratuite rimaste oggi, registrati gratis per averne 20 al giorno.`,
-  clearUnlocksThis: "Clear sblocca questo",
-  visualizeThisWord: "Visualizza",
-  visualBlurb: "Un'immagine vivida, generata da Gadit, un'ancora visiva per come si sente questa parola.",
-  visualBlurbLocked: "Genera un'immagine vivida e unica per questa parola, comprensione attraverso la vista.",
   reportLabel: "Segnala un errore",
 
   // Misc result/save/listen
   kidsComingSoon: "Spiegazione per bambini in arrivo.",
   listenToWord: "Ascolta",
-  offlinePin: "Salva offline",
-  offlinePinTitle: "Salva questa parola per lo studio offline",
-  offlinePinnedTitle: "Salvata, disponibile senza WiFi",
   offlineDownloadPack: "Scarica pacchetto offline",
   offlineDownloadingPack: "Download in corso…",
   offlinePackHeader: "Pacchetto offline",
@@ -6842,10 +5564,7 @@ const ja: Partial<V2Strings> = {
     "文脈の中であなたを迎える辞書。意味、語源、イディオム、そして鮮やかなイメージを、30+言語で。",
   searchPlaceholderHome: "単語を入力",
   voiceInputTitle: "単語を発音する",
-  addContext: "文脈を追加",
   explain: "解説する",
-  contextHint: "何か読んでいますか？ 文を貼り付けると意味がはっきりします。",
-  tryLabel: "例",
 
   // Value props (Screen 1)
   valuePropsEyebrow: "Gadit が違うところ",
@@ -6868,12 +5587,10 @@ const ja: Partial<V2Strings> = {
 
   pricingEyebrow: "料金",
   pricingTeaserTitle: "3つのプラン。すべてに本物のコンテンツ。",
-  trustMicrocopy: "いつでもキャンセル可能 · Clear 月額プランで14日間お試し · お試し期間中は課金なし",
 
   // Footer
   footerProductGroup: "プロダクト",
   footerLegalGroup: "リーガル",
-  footerCompare: "比較",
   footerNotebook: "ノート",
   footerPricing: "料金",
   footerPrivacy: "プライバシー",
@@ -6887,7 +5604,6 @@ const ja: Partial<V2Strings> = {
   startFree: "無料で始める",
   verbStampDef: "言葉を完全に理解する",
   navSearch: "検索",
-  navCompare: "比較",
   navNotebook: "ノート",
   navPricing: "料金",
   navSchools: "学校",
@@ -6938,18 +5654,15 @@ const ja: Partial<V2Strings> = {
   actionCompose: "文を書く",
   actionCompare: "単語を比べる",
   // Visual / image gen
-  visualEmptyLabel: "この単語のイメージを生成します",
   imageGeneratingLabel: "画像を生成中…",
   imageGeneratingHint: "通常は10〜15秒ほどかかります。",
   imageOpenFullAria: "画像を全画面で開く",
-  compareComingSoon: "ワードゲームは近日公開。",
   navPlay: "ゲーム",
   navAffiliates: "パートナー",
 
   kidsModeLabel: "子ども",
   kidsModeTooltipOff: "タップすると、すべての単語が親が子に説明するように解説されます。",
   kidsModeTooltipOn: "キッズモードがオンです。すべての定義が子ども向けに書かれます。タップでオフにできます。",
-  kidsModeBasicGate: "キッズモードは Clear の機能です。アップグレードしてご利用ください。",
 
   signupWelcomeTitle: "Gadit へようこそ！",
   signupWelcomeBody: "アカウントが用意できました。気になる単語を検索してみましょう。",
@@ -7046,34 +5759,12 @@ const ja: Partial<V2Strings> = {
   quizBackToWord: "単語に戻る",
   quizReviewMistakes: "間違えた問題を見直す",
 
-  // Compare page
-  compareEyebrow: "比較",
-  compareTitle: "似た単語を見分ける",
-  compareSubtitle:
-    "affect と effect、暑い と熱い、principle と principal, ネイティブでもつまずく単語。",
-  compareWord1Label: "単語 1",
-  compareWord2Label: "単語 2",
-  compareWord1Placeholder: "affect",
-  compareWord2Placeholder: "effect",
-  compareCta: "比較する",
-  compareLoading: "比較中…",
-  compareEmpty: "比較する単語を2つ入力してください",
-  compareDifferenceLabel: "違い",
-  compareExamplesLabel: "例文",
-  compareCommonMistakeLabel: "よくある間違い",
-  compareErrNotARealWord: "いずれかの単語を認識できません。",
-  compareErrDifferentLanguages: "2つの単語は異なる言語のようです。対応する組み合わせをお試しください。",
-  compareErrSameWord: "同じ単語のようです。別の2語をお試しください。",
-  compareErrGeneric: "現在比較を利用できません。",
-
   // Notebook page
   notebookEyebrow: "ノート",
   notebookTitle: "あなたの言葉の宇宙",
   notebookSubtitle: "探索したすべての単語が、保存され、整理され、育っていきます。",
-  notebookCounterTemplate: (n) => `${n} 語を探索`,
   notebookWordsExplored: "語を探索",
   notebookPracticeNow: "自分の単語を復習",
-  notebookDueTodayTemplate: (n) => `今日 ${n} 件`,
   notebookListView: "リスト",
   notebookGalaxyView: "ギャラクシー",
   notebookEmptyTitle: "ノートは空です",
@@ -7090,7 +5781,6 @@ const ja: Partial<V2Strings> = {
   srWordNofMTemplate: (n, m) => `${m} 語中 ${n} 語目`,
   srSkip: "スキップ",
   srClickToReveal: "クリックで表示",
-  srTapToReveal: "タップで表示",
   srPrimaryMeaningLabel: "主な意味",
   srExamplesLabel: "例文",
   srIForgot: "忘れていた",
@@ -7131,7 +5821,6 @@ const ja: Partial<V2Strings> = {
   accountNearingLimit: "今月の上限に近づいています。",
   accountSectionLabel: "アカウント",
   accountEmailLabel: "メールアドレス",
-  accountChangeEmail: "メールを変更",
   accountSignOut: "ログアウト",
   accountDeleteAccount: "アカウントを削除",
 
@@ -7155,50 +5844,15 @@ const ja: Partial<V2Strings> = {
   reportCatCompareResult: "比較結果の問題",
   reportCatSomethingElse: "その他",
 
-  // Origin, history, kids, misc
-  origin: "語源",
-  historyNote: "歴史的背景",
-  throughTime: "時代を超えて",
-  forKids: "子ども向け",
-  commonExpressions: "よく使われる表現",
-  idiomsWithMeaning: "この意味のイディオム",
-  meaningN: (n) => `意味 ${n}`,
-  notJustPrimary: "主な意味だけではない",
-  takeItFurther: "もっと深く",
-  doMoreWith: (w) => `「${w}」でさらに学ぶ`,
-  saveToNotebookHint: "あとで戻ってこられます。整理されて検索もできます。",
   generateImage: "画像を生成",
-  generatingImage: "生成中…",
-  generateImageHint: "この単語だけのために生成された、鮮やかな AI ビジュアル。",
-  composeSentence: "文を書く",
-  composeSentenceHint: "あなた自身の文を書くと、Gadit がトーンと適切さをチェックします。",
-  practiceWord: "この単語を練習",
-  practiceWordHint: "あなたの学び方に合わせた短いクイズ。",
-  unlockWithClear: "Clear で解放",
-  upgradeToClear: "Clear にアップグレード",
   softWallAnonTitle: "無料検索を使い切りました",
-  softWallAnonBody:
-    "無料登録で1日最大20語を検索できます。完全な定義、例文、イディオム、語源つき。",
   softWallSignupCta: "無料登録",
   softWallBasicTitle: "今日の上限に達しました",
-  softWallBasicBody:
-    "無料アカウントは1日20回検索できます。上限は明日リセットされます。または Clear にアップグレードすると、検索無制限に加え、画像、キッズモード、文法フィードバックも使えます。",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "今日の無料検索は残り1回。無料登録で1日20回に。"
-      : `今日の無料検索は残り ${n} 回。無料登録で1日20回に。`,
-  clearUnlocksThis: "Clear がこれを解放します",
-  visualizeThisWord: "ビジュアル化",
-  visualBlurb: "Gadit が生成した鮮やかな一枚。この単語の感触のための視覚的なアンカー。",
-  visualBlurbLocked: "この単語のための鮮やかな唯一無二の画像を生成, 視覚で理解する。",
   reportLabel: "エラーを報告",
 
   // Result misc
   kidsComingSoon: "子ども向け説明は近日公開。",
   listenToWord: "聞く",
-  offlinePin: "オフライン保存",
-  offlinePinTitle: "オフライン学習用にこの単語を保存",
-  offlinePinnedTitle: "保存済み。Wi-Fi なしで利用可能",
   offlineDownloadPack: "オフラインパックをダウンロード",
   offlineDownloadingPack: "ダウンロード中…",
   offlinePackHeader: "オフラインパック",
@@ -7214,10 +5868,7 @@ const hi: Partial<V2Strings> = {
     "एक ऐसा शब्दकोश जो आपके संदर्भ में मिलता है: अर्थ, उत्पत्ति, मुहावरे और एक जीवंत तस्वीर, 30+ भाषाओं में।",
   searchPlaceholderHome: "कोई शब्द लिखें",
   voiceInputTitle: "एक शब्द बोलें",
-  addContext: "संदर्भ जोड़ें",
   explain: "समझाएँ",
-  contextHint: "कुछ पढ़ रहे हैं? अर्थ साफ़ करने के लिए वाक्य पेस्ट करें।",
-  tryLabel: "आज़माएँ",
 
   // Value props (Screen 1)
   valuePropsEyebrow: "Gadit अलग क्या करता है",
@@ -7240,12 +5891,10 @@ const hi: Partial<V2Strings> = {
 
   pricingEyebrow: "क़ीमत",
   pricingTeaserTitle: "तीन प्लान। सब में असली सामग्री।",
-  trustMicrocopy: "कभी भी रद्द करें · Clear मासिक पर 14 दिन का ट्रायल · ट्रायल ख़त्म होने तक कोई चार्ज नहीं",
 
   // Footer
   footerProductGroup: "उत्पाद",
   footerLegalGroup: "क़ानूनी",
-  footerCompare: "तुलना",
   footerNotebook: "नोटबुक",
   footerPricing: "क़ीमत",
   footerPrivacy: "गोपनीयता",
@@ -7259,7 +5908,6 @@ const hi: Partial<V2Strings> = {
   startFree: "मुफ्त शुरू करें",
   verbStampDef: "एक शब्द को पूरी तरह समझना",
   navSearch: "खोज",
-  navCompare: "तुलना",
   navNotebook: "नोटबुक",
   navPricing: "क़ीमत",
   navSchools: "स्कूल",
@@ -7310,18 +5958,15 @@ const hi: Partial<V2Strings> = {
   actionCompose: "एक वाक्य लिखें",
   actionCompare: "शब्दों की तुलना करें",
   // Visual / image gen
-  visualEmptyLabel: "इस शब्द के लिए एक तस्वीर बनेगी",
   imageGeneratingLabel: "तस्वीर बनाई जा रही है…",
   imageGeneratingHint: "आम तौर पर 10 से 15 सेकंड लगते हैं।",
   imageOpenFullAria: "तस्वीर पूरे आकार में खोलें",
-  compareComingSoon: "शब्द-खेल जल्द आ रहे हैं।",
   navPlay: "खेल",
   navAffiliates: "एफ़िलिएट्स",
 
   kidsModeLabel: "बच्चे",
   kidsModeTooltipOff: "हर शब्द को ऐसे समझाने के लिए दबाएँ जैसे माता-पिता बच्चे को समझाते हैं।",
   kidsModeTooltipOn: "बच्चों का मोड चालू। हर परिभाषा बच्चे के लिए लिखी जाएगी। बंद करने के लिए दबाएँ।",
-  kidsModeBasicGate: "बच्चों का मोड Clear की सुविधा है। उपयोग के लिए अपग्रेड करें।",
 
   signupWelcomeTitle: "Gadit में आपका स्वागत है!",
   signupWelcomeBody: "आपका खाता तैयार है। किसी भी शब्द से खोज शुरू करें।",
@@ -7418,34 +6063,12 @@ const hi: Partial<V2Strings> = {
   quizBackToWord: "शब्द पर वापस",
   quizReviewMistakes: "जो ग़लत हुए उन्हें दोहराएँ",
 
-  // Compare page
-  compareEyebrow: "तुलना करें",
-  compareTitle: "मिलते-जुलते शब्दों में फ़र्क़ करें",
-  compareSubtitle:
-    "वो शब्द जो अक्सर भ्रमित होते हैं, यहाँ तक कि नेटिव लोगों को भी।",
-  compareWord1Label: "शब्द 1",
-  compareWord2Label: "शब्द 2",
-  compareWord1Placeholder: "प्रभाव",
-  compareWord2Placeholder: "प्रभाव डालना",
-  compareCta: "तुलना करें",
-  compareLoading: "तुलना हो रही है…",
-  compareEmpty: "तुलना के लिए दो शब्द डालें",
-  compareDifferenceLabel: "फ़र्क़",
-  compareExamplesLabel: "उदाहरण",
-  compareCommonMistakeLabel: "आम ग़लती",
-  compareErrNotARealWord: "इन शब्दों में से एक हमें नहीं मिला।",
-  compareErrDifferentLanguages: "ये दो शब्द अलग-अलग भाषाओं के लगते हैं। एक मेल खाने वाला जोड़ा आज़माएँ।",
-  compareErrSameWord: "ये एक ही शब्द लग रहे हैं। दो अलग शब्द आज़माएँ।",
-  compareErrGeneric: "अभी तुलना उपलब्ध नहीं है।",
-
   // Notebook page
   notebookEyebrow: "नोटबुक",
   notebookTitle: "आपका शब्द-संसार",
   notebookSubtitle: "हर शब्द जो आपने खोजा है, सहेजा हुआ, व्यवस्थित, बढ़ता हुआ।",
-  notebookCounterTemplate: (n) => `${n} शब्द खोजे गए`,
   notebookWordsExplored: "शब्द खोजे गए",
   notebookPracticeNow: "मेरे शब्द दोहराएँ",
-  notebookDueTodayTemplate: (n) => `${n} आज दोहराने को`,
   notebookListView: "सूची",
   notebookGalaxyView: "गैलेक्सी",
   notebookEmptyTitle: "आपकी नोटबुक ख़ाली है",
@@ -7462,7 +6085,6 @@ const hi: Partial<V2Strings> = {
   srWordNofMTemplate: (n, m) => `शब्द ${n} में से ${m}`,
   srSkip: "छोड़ें",
   srClickToReveal: "खोलने के लिए कहीं भी क्लिक करें",
-  srTapToReveal: "खोलने के लिए दबाएँ",
   srPrimaryMeaningLabel: "मुख्य अर्थ",
   srExamplesLabel: "उदाहरण",
   srIForgot: "मैं भूल गया",
@@ -7505,7 +6127,6 @@ const hi: Partial<V2Strings> = {
   accountNearingLimit: "आप इस महीने की सीमा के पास पहुँच रहे हैं।",
   accountSectionLabel: "खाता",
   accountEmailLabel: "ईमेल",
-  accountChangeEmail: "ईमेल बदलें",
   accountSignOut: "साइन आउट",
   accountDeleteAccount: "खाता हटाएँ",
 
@@ -7529,50 +6150,15 @@ const hi: Partial<V2Strings> = {
   reportCatCompareResult: "तुलना के नतीजे में समस्या",
   reportCatSomethingElse: "कुछ और",
 
-  // Origin, history, kids
-  origin: "उत्पत्ति",
-  historyNote: "ऐतिहासिक नोट",
-  throughTime: "समय के साथ",
-  forKids: "बच्चों के लिए",
-  commonExpressions: "आम अभिव्यक्तियाँ",
-  idiomsWithMeaning: "इस अर्थ से जुड़े मुहावरे",
-  meaningN: (n) => `अर्थ ${n}`,
-  notJustPrimary: "सिर्फ़ मुख्य अर्थ ही नहीं",
-  takeItFurther: "और आगे बढ़ें",
-  doMoreWith: (w) => `${w} के साथ और करें`,
-  saveToNotebookHint: "बाद में वापस आएँ, व्यवस्थित और खोजने योग्य।",
   generateImage: "तस्वीर बनाएँ",
-  generatingImage: "बनाई जा रही है…",
-  generateImageHint: "इस शब्द के लिए, एक जीवंत AI दृश्य।",
-  composeSentence: "एक वाक्य लिखें",
-  composeSentenceHint: "अपना लिखें, Gadit टोन और फ़िट जाँचेगा।",
-  practiceWord: "इस शब्द का अभ्यास करें",
-  practiceWordHint: "आपकी सीखने की शैली के अनुसार एक छोटा क्विज़।",
-  unlockWithClear: "Clear के साथ अनलॉक करें",
-  upgradeToClear: "Clear पर अपग्रेड करें",
   softWallAnonTitle: "आपकी मुफ्त खोजें ख़त्म हो गईं",
-  softWallAnonBody:
-    "मुफ्त में रजिस्टर करें और रोज़ 20 शब्द खोजें, पूरी परिभाषा, उदाहरण, मुहावरे और शब्द की उत्पत्ति के साथ।",
   softWallSignupCta: "मुफ्त में रजिस्टर करें",
   softWallBasicTitle: "आपने आज की सीमा पूरी कर ली",
-  softWallBasicBody:
-    "मुफ्त खातों को रोज़ 20 खोजें मिलती हैं। यह कल रीसेट होगी, या Clear पर अपग्रेड करें असीमित खोज, तस्वीरें, बच्चों के मोड और व्याकरण फ़ीडबैक के लिए।",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "आज 1 मुफ्त खोज बाक़ी, मुफ्त रजिस्टर करें और रोज़ 20 पाएँ।"
-      : `आज ${n} मुफ्त खोजें बाक़ी, मुफ्त रजिस्टर करें और रोज़ 20 पाएँ।`,
-  clearUnlocksThis: "Clear यह अनलॉक करता है",
-  visualizeThisWord: "तस्वीर में देखें",
-  visualBlurb: "Gadit द्वारा बनाई एक जीवंत तस्वीर, इस शब्द का दृश्य लंगर।",
-  visualBlurbLocked: "इस शब्द के लिए एक जीवंत, अनोखी तस्वीर बनाएँ, देखने से समझ।",
   reportLabel: "ग़लती की रिपोर्ट करें",
 
   // Misc result/save/listen
   kidsComingSoon: "बच्चों के लिए समझ आ रही है।",
   listenToWord: "सुनें",
-  offlinePin: "ऑफ़लाइन सहेजें",
-  offlinePinTitle: "ऑफ़लाइन अध्ययन के लिए यह शब्द सहेजें",
-  offlinePinnedTitle: "सहेजा गया, बिना WiFi उपलब्ध",
   offlineDownloadPack: "ऑफ़लाइन पैक डाउनलोड करें",
   offlineDownloadingPack: "डाउनलोड हो रहा है…",
   offlinePackHeader: "ऑफ़लाइन पैक",
@@ -7588,10 +6174,7 @@ const am: Partial<V2Strings> = {
     "በአውድዎ ውስጥ የሚያገኝዎት መዝገበ ቃላት፦ ትርጉሞች፣ ሥርወ ቃላት፣ ፈሊጦች እና ሕያው ምስል፣ በ30+ ቋንቋዎች።",
   searchPlaceholderHome: "ቃል ይጻፉ",
   voiceInputTitle: "ቃል ይናገሩ",
-  addContext: "አውድ ይጨምሩ",
   explain: "አብራራ",
-  contextHint: "የሚያነቡት ነገር አለ? ትርጉሙን ግልጽ ለማድረግ ዓረፍተ ነገሩን ይለጥፉ።",
-  tryLabel: "ይሞክሩ",
 
   // Value props (Screen 1)
   valuePropsEyebrow: "Gadit ምን የተለየ ያደርጋል",
@@ -7614,12 +6197,10 @@ const am: Partial<V2Strings> = {
 
   pricingEyebrow: "ዋጋ",
   pricingTeaserTitle: "ሦስት እቅዶች። በሁሉም ውስጥ እውነተኛ ይዘት።",
-  trustMicrocopy: "በማንኛውም ጊዜ ይሰርዙ · በClear ወርሃዊ እቅድ የ14 ቀን ሙከራ · ሙከራው እስኪያበቃ ድረስ ክፍያ የለም",
 
   // Footer
   footerProductGroup: "ምርት",
   footerLegalGroup: "ሕጋዊ",
-  footerCompare: "ንጽጽር",
   footerNotebook: "ደብተር",
   footerPricing: "ዋጋ",
   footerPrivacy: "ግላዊነት",
@@ -7633,7 +6214,6 @@ const am: Partial<V2Strings> = {
   startFree: "በነጻ ይጀምሩ",
   verbStampDef: "ቃልን ሙሉ በሙሉ መረዳት",
   navSearch: "ፍለጋ",
-  navCompare: "ንጽጽር",
   navNotebook: "ደብተር",
   navPricing: "ዋጋ",
   navSchools: "ትምህርት ቤቶች",
@@ -7684,18 +6264,15 @@ const am: Partial<V2Strings> = {
   actionCompose: "ዓረፍተ ነገር ይጻፉ",
   actionCompare: "ቃላትን ያወዳድሩ",
   // Visual / image gen
-  visualEmptyLabel: "ለዚህ ቃል ምስል ይፈጠራል",
   imageGeneratingLabel: "ምስሉ እየተፈጠረ ነው…",
   imageGeneratingHint: "ብዙውን ጊዜ ከ10 እስከ 15 ሰከንድ ይወስዳል።",
   imageOpenFullAria: "ምስሉን በሙሉ መጠን ይክፈቱ",
-  compareComingSoon: "የቃላት ጨዋታዎች በቅርቡ ይመጣሉ።",
   navPlay: "ጨዋታ",
   navAffiliates: "አጋሮች",
 
   kidsModeLabel: "ልጆች",
   kidsModeTooltipOff: "እያንዳንዱ ቃል ወላጅ ለልጁ እንደሚያስረዳው እንዲብራራ ይንኩ።",
   kidsModeTooltipOn: "የልጆች ሁነታ በርቷል። እያንዳንዱ ፍቺ ለልጅ ተብሎ ይጻፋል። ለማጥፋት ይንኩ።",
-  kidsModeBasicGate: "የልጆች ሁነታ የClear ባህሪ ነው። ለመጠቀም ያሻሽሉ።",
 
   signupWelcomeTitle: "እንኳን ወደ Gadit በደህና መጡ!",
   signupWelcomeBody: "መለያዎ ዝግጁ ነው። በማንኛውም ቃል ፍለጋ ይጀምሩ።",
@@ -7792,34 +6369,12 @@ const am: Partial<V2Strings> = {
   quizBackToWord: "ወደ ቃሉ ይመለሱ",
   quizReviewMistakes: "የተሳሳቷቸውን ይከልሱ",
 
-  // Compare page
-  compareEyebrow: "ያወዳድሩ",
-  compareTitle: "ተመሳሳይ ቃላትን ይለዩ",
-  compareSubtitle:
-    "ብዙ ጊዜ የሚያደናግሩ ቃላት፣ የቋንቋው ተወላጆችንም ጭምር።",
-  compareWord1Label: "ቃል 1",
-  compareWord2Label: "ቃል 2",
-  compareWord1Placeholder: "ማወቅ",
-  compareWord2Placeholder: "መረዳት",
-  compareCta: "ያወዳድሩ",
-  compareLoading: "በማወዳደር ላይ…",
-  compareEmpty: "ለማወዳደር ሁለት ቃላት ያስገቡ",
-  compareDifferenceLabel: "ልዩነት",
-  compareExamplesLabel: "ምሳሌዎች",
-  compareCommonMistakeLabel: "የተለመደ ስህተት",
-  compareErrNotARealWord: "ከእነዚህ ቃላት አንዱን ማግኘት አልቻልንም።",
-  compareErrDifferentLanguages: "እነዚህ ሁለት ቃላት ከተለያዩ ቋንቋዎች ይመስላሉ። ተመሳሳይ ቋንቋ ያላቸውን ጥንድ ይሞክሩ።",
-  compareErrSameWord: "እነዚህ አንድ ዓይነት ቃል ይመስላሉ። ሁለት የተለያዩ ቃላት ይሞክሩ።",
-  compareErrGeneric: "ማወዳደር አሁን አይገኝም።",
-
   // Notebook page
   notebookEyebrow: "ደብተር",
   notebookTitle: "የቃላት ዓለምዎ",
   notebookSubtitle: "የፈለጉት እያንዳንዱ ቃል፣ ተቀምጦ፣ ተደራጅቶ፣ እያደገ።",
-  notebookCounterTemplate: (n) => `${n} ቃላት ተፈልገዋል`,
   notebookWordsExplored: "የተፈለጉ ቃላት",
   notebookPracticeNow: "ቃላቶቼን መከለስ",
-  notebookDueTodayTemplate: (n) => `${n} ዛሬ ለክለሳ`,
   notebookListView: "ዝርዝር",
   notebookGalaxyView: "ጋላክሲ",
   notebookEmptyTitle: "ደብተርዎ ባዶ ነው",
@@ -7836,7 +6391,6 @@ const am: Partial<V2Strings> = {
   srWordNofMTemplate: (n, m) => `ቃል ${n} ከ${m}`,
   srSkip: "ይዝለሉ",
   srClickToReveal: "ለማየት የትም ቦታ ይጫኑ",
-  srTapToReveal: "ለማየት ይንኩ",
   srPrimaryMeaningLabel: "ዋና ትርጉም",
   srExamplesLabel: "ምሳሌዎች",
   srIForgot: "ረሳሁት",
@@ -7879,7 +6433,6 @@ const am: Partial<V2Strings> = {
   accountNearingLimit: "የዚህን ወር ገደብ እየተቃረቡ ነው።",
   accountSectionLabel: "መለያ",
   accountEmailLabel: "ኢሜይል",
-  accountChangeEmail: "ኢሜይል ይቀይሩ",
   accountSignOut: "ይውጡ",
   accountDeleteAccount: "መለያ ይሰርዙ",
 
@@ -7903,50 +6456,15 @@ const am: Partial<V2Strings> = {
   reportCatCompareResult: "በንጽጽር ውጤት ላይ ችግር",
   reportCatSomethingElse: "ሌላ ነገር",
 
-  // Origin, history, kids
-  origin: "ሥርወ ቃል",
-  historyNote: "ታሪካዊ ማስታወሻ",
-  throughTime: "በጊዜ ሂደት",
-  forKids: "ለልጆች",
-  commonExpressions: "የተለመዱ አገላለጾች",
-  idiomsWithMeaning: "ከዚህ ትርጉም ጋር የተያያዙ ፈሊጦች",
-  meaningN: (n) => `ትርጉም ${n}`,
-  notJustPrimary: "ዋናው ትርጉም ብቻ አይደለም",
-  takeItFurther: "የበለጠ ይቀጥሉ",
-  doMoreWith: (w) => `በ${w} ተጨማሪ ያድርጉ`,
-  saveToNotebookHint: "በኋላ ይመለሱበት፣ የተደራጀ እና በቀላሉ የሚገኝ።",
   generateImage: "ምስል ይፍጠሩ",
-  generatingImage: "በመፍጠር ላይ…",
-  generateImageHint: "ለዚህ ቃል ብቻ የተፈጠረ ሕያው ምስል።",
-  composeSentence: "ዓረፍተ ነገር ይጻፉ",
-  composeSentenceHint: "የራስዎን ይጻፉ፣ Gadit ቃናውን እና አገባቡን ይፈትሻል።",
-  practiceWord: "ይህን ቃል ይለማመዱ",
-  practiceWordHint: "ከመማሪያ ስልትዎ ጋር የተስማማ አጭር ኩዊዝ።",
-  unlockWithClear: "በClear ይክፈቱ",
-  upgradeToClear: "ወደ Clear ያሻሽሉ",
   softWallAnonTitle: "ነጻ ፍለጋዎችዎ አልቀዋል",
-  softWallAnonBody:
-    "በነጻ ይመዝገቡ እና በቀን 20 ቃላት ይፈልጉ፣ ከሙሉ ፍቺ፣ ምሳሌዎች፣ ፈሊጦች እና ሥርወ ቃል ጋር።",
   softWallSignupCta: "በነጻ ይመዝገቡ",
   softWallBasicTitle: "የዛሬውን ገደብ ጨርሰዋል",
-  softWallBasicBody:
-    "ነጻ መለያዎች በቀን 20 ፍለጋዎች ያገኛሉ። ነገ እንደገና ይጀምራል፣ ወይም ላልተገደበ ፍለጋ፣ ምስሎች፣ የልጆች ሁነታ እና የሰዋስው ግብረመልስ ወደ Clear ያሻሽሉ።",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "ዛሬ 1 ነጻ ፍለጋ ቀርቷል፣ በነጻ ይመዝገቡ እና በቀን 20 ያግኙ።"
-      : `ዛሬ ${n} ነጻ ፍለጋዎች ቀርተዋል፣ በነጻ ይመዝገቡ እና በቀን 20 ያግኙ።`,
-  clearUnlocksThis: "Clear ይህን ይከፍታል",
-  visualizeThisWord: "በምስል ይመልከቱ",
-  visualBlurb: "በGadit የተፈጠረ ሕያው ምስል፣ የዚህ ቃል ምስላዊ መልህቅ።",
-  visualBlurbLocked: "ለዚህ ቃል ሕያው እና ልዩ ምስል ይፍጠሩ፣ በማየት መረዳት።",
   reportLabel: "ስህተት ሪፖርት ያድርጉ",
 
   // Misc result/save/listen
   kidsComingSoon: "የልጆች ማብራሪያ በቅርቡ ይመጣል።",
   listenToWord: "ያዳምጡ",
-  offlinePin: "ከመስመር ውጭ ያስቀምጡ",
-  offlinePinTitle: "ይህን ቃል ከመስመር ውጭ ለማጥናት ያስቀምጡ",
-  offlinePinnedTitle: "ተቀምጧል፣ ያለ WiFi ይገኛል",
   offlineDownloadPack: "የመስመር ውጭ ጥቅል ያውርዱ",
   offlineDownloadingPack: "በማውረድ ላይ…",
   offlinePackHeader: "የመስመር ውጭ ጥቅል",
@@ -7964,11 +6482,7 @@ const el: Partial<V2Strings> = {
 
   searchPlaceholderHome: "Πληκτρολόγησε μια λέξη",
   voiceInputTitle: "Υπαγόρευσε μια λέξη",
-  addContext: "Πρόσθεσε συμφραζόμενα",
   explain: "Εξήγησε",
-  contextHint:
-    "Διαβάζεις κάτι; Επικόλλησε την πρόταση για να ξεκαθαρίσεις τη σημασία.",
-  tryLabel: "Δοκίμασε",
 
   valuePropsEyebrow: "Τι κάνει το Gadit διαφορετικά",
   valuePropsTitle: "Κάτι παραπάνω από έναν ορισμό, ένας τρόπος να ζεις με μια λέξη.",
@@ -7994,12 +6508,9 @@ const el: Partial<V2Strings> = {
 
   pricingEyebrow: "Τιμές",
   pricingTeaserTitle: "Τρεις βαθμίδες. Όλες με πραγματικό περιεχόμενο.",
-  trustMicrocopy:
-    "Ακύρωση όποτε θες · Δωρεάν δοκιμή 14 ημερών στο Clear μηνιαίο · Καμία χρέωση μέχρι να λήξει η δοκιμή",
 
   footerProductGroup: "Προϊόν",
   footerLegalGroup: "Νομικά",
-  footerCompare: "Σύγκριση",
   footerNotebook: "Τετράδιο",
   footerPricing: "Τιμές",
   footerPrivacy: "Απόρρητο",
@@ -8012,7 +6523,6 @@ const el: Partial<V2Strings> = {
   startFree: "Ξεκίνα δωρεάν",
   verbStampDef: "να καταλαβαίνεις μια λέξη, ολοκληρωτικά",
   navSearch: "Αναζήτηση",
-  navCompare: "Σύγκριση",
   navNotebook: "Τετράδιο",
   navPricing: "Τιμές",
   navSchools: "Σχολεία",
@@ -8023,7 +6533,6 @@ const el: Partial<V2Strings> = {
   kidsModeLabel: "Παιδιά",
   kidsModeTooltipOff: "Πάτησε για να εξηγηθεί κάθε λέξη όπως θα την εξηγούσε ένας γονιός σε ένα παιδί.",
   kidsModeTooltipOn: "Η λειτουργία για παιδιά είναι ενεργή, κάθε ορισμός θα γράφεται για ένα παιδί. Πάτησε για απενεργοποίηση.",
-  kidsModeBasicGate: "Η λειτουργία για παιδιά είναι δυνατότητα του Clear. Αναβάθμισε για να τη χρησιμοποιήσεις.",
 
   signupWelcomeTitle: "Καλώς ήρθες στο Gadit!",
   signupWelcomeBody: "Ο λογαριασμός σου είναι έτοιμος. Ξεκίνα αναζητώντας οποιαδήποτε λέξη.",
@@ -8152,36 +6661,13 @@ const el: Partial<V2Strings> = {
   quizBackToWord: "Πίσω στη λέξη",
   quizReviewMistakes: "Δες αυτές που έχασα",
 
-  // Compare Page (Screen 7)
-  compareEyebrow: "Σύγκριση",
-  compareTitle: "Ξεχώρισε παρόμοιες λέξεις",
-  compareSubtitle:
-    "affect vs effect, אומנות vs אמנות, principle vs principal, οι λέξεις που μπερδεύουν ακόμα και τους φυσικούς ομιλητές.",
-  compareWord1Label: "Λέξη 1",
-  compareWord2Label: "Λέξη 2",
-  compareWord1Placeholder: "affect",
-  compareWord2Placeholder: "effect",
-  compareCta: "Σύγκρινε",
-  compareLoading: "Γίνεται σύγκριση…",
-  compareEmpty: "Βάλε δύο λέξεις για να τις συγκρίνεις",
-  compareDifferenceLabel: "Η διαφορά",
-  compareExamplesLabel: "Παραδείγματα",
-  compareCommonMistakeLabel: "Συνηθισμένο λάθος",
-  compareErrNotARealWord: "Δεν αναγνωρίζουμε μία από αυτές τις λέξεις.",
-  compareErrDifferentLanguages:
-    "Αυτές οι δύο λέξεις φαίνεται να είναι σε διαφορετικές γλώσσες, δοκίμασε ένα ζευγάρι στην ίδια γλώσσα.",
-  compareErrSameWord: "Αυτές μοιάζουν με την ίδια λέξη, δοκίμασε δύο διαφορετικές.",
-  compareErrGeneric: "Η σύγκριση δεν είναι διαθέσιμη αυτή τη στιγμή.",
-
   // Notebook (Screen 8)
   notebookEyebrow: "Τετράδιο",
   notebookTitle: "Το σύμπαν των λέξεών σου",
   notebookSubtitle:
     "Κάθε λέξη που εξερεύνησες, φυλαγμένη, οργανωμένη, να μεγαλώνει.",
-  notebookCounterTemplate: (n) => `${n} λέξεις εξερευνήθηκαν`,
   notebookWordsExplored: "λέξεις εξερευνήθηκαν",
   notebookPracticeNow: "Επανάληψη των λέξεών μου",
-  notebookDueTodayTemplate: (n) => `${n} για σήμερα`,
   notebookListView: "Λίστα",
   notebookGalaxyView: "Γαλαξίας",
   notebookEmptyTitle: "Το τετράδιό σου είναι άδειο",
@@ -8198,7 +6684,6 @@ const el: Partial<V2Strings> = {
   srWordNofMTemplate: (n, m) => `Λέξη ${n} από ${m}`,
   srSkip: "Παράλειψη",
   srClickToReveal: "Κάνε κλικ οπουδήποτε για αποκάλυψη",
-  srTapToReveal: "Πάτησε για αποκάλυψη",
   srPrimaryMeaningLabel: "Κύρια σημασία",
   srExamplesLabel: "Παραδείγματα",
   srIForgot: "Το ξέχασα",
@@ -8242,7 +6727,6 @@ const el: Partial<V2Strings> = {
   accountNearingLimit: "Πλησιάζεις το όριο του μήνα.",
   accountSectionLabel: "Λογαριασμός",
   accountEmailLabel: "Email",
-  accountChangeEmail: "Άλλαξε email",
   accountSignOut: "Αποσύνδεση",
   accountDeleteAccount: "Διαγραφή λογαριασμού",
 
@@ -8266,43 +6750,10 @@ const el: Partial<V2Strings> = {
   reportCatCompareResult: "Πρόβλημα στο αποτέλεσμα σύγκρισης",
   reportCatSomethingElse: "Κάτι άλλο",
 
-  origin: "Προέλευση",
-  historyNote: "Ιστορική σημείωση",
-  throughTime: "Μέσα στον χρόνο",
-  forKids: "Για παιδιά",
-  commonExpressions: "Συνηθισμένες εκφράσεις",
-  idiomsWithMeaning: "Ιδιωματισμοί με αυτή τη σημασία",
-  meaningN: (n) => `Σημασία ${n}`,
-  notJustPrimary: "Όχι μόνο η κύρια",
-  takeItFurther: "Πήγαινέ το παρακάτω",
-  doMoreWith: (w) => `Κάνε περισσότερα με τη λέξη ${w}`,
-  saveToNotebookHint: "Γύρνα σε αυτή αργότερα, οργανωμένη, με δυνατότητα αναζήτησης.",
   generateImage: "Δημιούργησε εικόνα",
-  generatingImage: "Γίνεται δημιουργία…",
-  generateImageHint: "Μια ζωντανή εικόνα φτιαγμένη ειδικά για αυτή τη λέξη.",
-  composeSentence: "Σύνθεσε μια πρόταση",
-  composeSentenceHint: "Γράψε τη δική σου, το Gadit την ελέγχει για ύφος και ταίριασμα.",
-  practiceWord: "Εξάσκησε αυτή τη λέξη",
-  practiceWordHint: "Ένα σύντομο κουίζ προσαρμοσμένο στο πώς μαθαίνεις.",
-  unlockWithClear: "Ξεκλείδωσέ το με το Clear",
-  upgradeToClear: "Αναβάθμισε σε Clear",
   softWallAnonTitle: "Χρησιμοποίησες τις δωρεάν αναζητήσεις σου",
-  softWallAnonBody:
-    "Εγγράψου δωρεάν για να ψάχνεις έως 20 λέξεις την ημέρα, με πλήρεις ορισμούς, παραδείγματα, ιδιωματισμούς και προέλευση λέξης.",
   softWallSignupCta: "Εγγράψου, είναι δωρεάν",
   softWallBasicTitle: "Έφτασες το σημερινό όριο",
-  softWallBasicBody:
-    "Οι δωρεάν λογαριασμοί έχουν 20 αναζητήσεις την ημέρα. Το όριο μηδενίζεται αύριο, ή αναβάθμισε σε Clear για απεριόριστες αναζητήσεις μαζί με εικόνες, λειτουργία για παιδιά και γραμματικά σχόλια.",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "Απομένει 1 δωρεάν αναζήτηση σήμερα, εγγράψου δωρεάν για να έχεις 20 τη μέρα."
-      : `Απομένουν ${n} δωρεάν αναζητήσεις σήμερα, εγγράψου δωρεάν για να έχεις 20 τη μέρα.`,
-  clearUnlocksThis: "Το Clear το ξεκλειδώνει",
-  visualizeThisWord: "Οπτικοποίησε",
-  visualBlurb:
-    "Μία ζωντανή εικόνα, φτιαγμένη από το Gadit, ένα οπτικό σημείο αναφοράς για το πώς αισθάνεσαι αυτή τη λέξη.",
-  visualBlurbLocked:
-    "Δημιούργησε μια ζωντανή, μοναδική εικόνα για αυτή τη λέξη, κατανόηση μέσα από την όραση.",
   reportLabel: "Ανέφερε ένα λάθος",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -8315,7 +6766,6 @@ const el: Partial<V2Strings> = {
   imageGeneratingHint: "Αυτό συνήθως παίρνει 10 με 15 δευτερόλεπτα.",
   imageOpenFullAria: "Άνοιξε την εικόνα σε πλήρες μέγεθος",
   kidsComingSoon: "Η εξήγηση για παιδιά έρχεται σύντομα.",
-  compareComingSoon: "Τα παιχνίδια λέξεων έρχονται σύντομα.",
   shareDefinitionAria: "Μοιράσου αυτόν τον ορισμό",
   meaningsEyebrow: "Ορισμοί",
   wordOriginLanguage: "Γλώσσα",
@@ -8323,14 +6773,10 @@ const el: Partial<V2Strings> = {
   actionCompose: "Σύνθεσε μια πρόταση",
   actionCompare: "Σύγκρινε λέξεις",
   listenToWord: "Άκουσε",
-  offlinePin: "Αποθήκευση για εκτός σύνδεσης",
-  offlinePinTitle: "Αποθήκευσε αυτή τη λέξη για μελέτη εκτός σύνδεσης",
-  offlinePinnedTitle: "Αποθηκεύτηκε, διαθέσιμη χωρίς WiFi",
   offlineDownloadPack: "Κατέβασε πακέτο εκτός σύνδεσης",
   offlineDownloadingPack: "Γίνεται λήψη…",
   offlinePackHeader: "Πακέτο εκτός σύνδεσης",
   offlinePackDescription: "Προσθέτει τις πιο αναζητημένες λέξεις στη γλώσσα σου στο τετράδιό σου, και τις κρατά διαθέσιμες χωρίς WiFi για μελέτη εκτός σύνδεσης.",
-  visualEmptyLabel: "Θα σχεδιαστεί μια εικόνα για αυτή τη λέξη",
   savedAgoTemplate: (t) => `Αποθηκεύτηκε · ${t}`,
   shareLabel: "Μοιράσου",
   backLabel: "Πίσω",
@@ -8347,11 +6793,7 @@ const zu: Partial<V2Strings> = {
 
   searchPlaceholderHome: "Thayipha igama",
   voiceInputTitle: "Sho igama",
-  addContext: "Engeza umongo",
   explain: "Chaza",
-  contextHint:
-    "Ufunda okuthile? Namathisela umusho ukuze sicacise incazelo.",
-  tryLabel: "Zama",
 
   valuePropsEyebrow: "Yini uGadit ayenza ngendlela ehlukile",
   valuePropsTitle: "Ngaphezu kwencazelo, indlela yokuphila negama.",
@@ -8377,12 +6819,9 @@ const zu: Partial<V2Strings> = {
 
   pricingEyebrow: "Amanani",
   pricingTeaserTitle: "Amazinga amathathu. Wonke aneqoqo langempela.",
-  trustMicrocopy:
-    "Khansela noma nini · Isilingo semihla engu-14 ku-Clear yenyanga · Awukhokhi kuze kuphele isilingo",
 
   footerProductGroup: "Umkhiqizo",
   footerLegalGroup: "Ezomthetho",
-  footerCompare: "Qhathanisa",
   footerNotebook: "Incwadi yamanothi",
   footerPricing: "Amanani",
   footerPrivacy: "Ubumfihlo",
@@ -8395,7 +6834,6 @@ const zu: Partial<V2Strings> = {
   startFree: "Qala mahhala",
   verbStampDef: "ukuqonda igama, ngokugcwele",
   navSearch: "Sesha",
-  navCompare: "Qhathanisa",
   navNotebook: "Incwadi yamanothi",
   navPricing: "Amanani",
   navSchools: "Izikole",
@@ -8406,7 +6844,6 @@ const zu: Partial<V2Strings> = {
   kidsModeLabel: "Izingane",
   kidsModeTooltipOff: "Thepha ukuze uchaze wonke igama njengoba umzali angachazela ingane.",
   kidsModeTooltipOn: "Imodi yezingane ivuliwe, zonke izincazelo zizobhalelwa ingane. Thepha ukuvala.",
-  kidsModeBasicGate: "Imodi yezingane iyisici se-Clear. Thuthukisa ukuze uyisebenzise.",
 
   signupWelcomeTitle: "Wamukelekile ku-Gadit!",
   signupWelcomeBody: "I-akhawunti yakho isilungile. Qala ngokusesha noma yiliphi igama.",
@@ -8535,36 +6972,13 @@ const zu: Partial<V2Strings> = {
   quizBackToWord: "Buyela egameni",
   quizReviewMistakes: "Buyekeza lawo engawaphosa",
 
-  // Compare Page (Screen 7)
-  compareEyebrow: "Qhathanisa",
-  compareTitle: "Hlukanisa amagama afanayo",
-  compareSubtitle:
-    "affect vs effect, אומנות vs אמנות, principle vs principal, amagama abamba ngisho nabakhuluma ulimi lwebele.",
-  compareWord1Label: "Igama 1",
-  compareWord2Label: "Igama 2",
-  compareWord1Placeholder: "affect",
-  compareWord2Placeholder: "effect",
-  compareCta: "Qhathanisa",
-  compareLoading: "Iyaqhathanisa…",
-  compareEmpty: "Faka amagama amabili ukuze uwaqhathanise",
-  compareDifferenceLabel: "Umehluko",
-  compareExamplesLabel: "Izibonelo",
-  compareCommonMistakeLabel: "Iphutha elivamile",
-  compareErrNotARealWord: "Asilazi elinye laleyo magama.",
-  compareErrDifferentLanguages:
-    "La magama amabili abonakala esezilimini ezehlukene, zama iphea evumelanayo.",
-  compareErrSameWord: "Lawa abukeka eyigama elifanayo, zama amabili ahlukene.",
-  compareErrGeneric: "Ukuqhathanisa akutholakali okwamanje.",
-
   // Notebook (Screen 8)
   notebookEyebrow: "Incwadi yamanothi",
   notebookTitle: "Umkhathi wakho wamagama",
   notebookSubtitle:
     "Wonke amagama owahlolile, agciniwe, ahleliwe, akhula.",
-  notebookCounterTemplate: (n) => `Amagama angu-${n} ahloliwe`,
   notebookWordsExplored: "amagama ahloliwe",
   notebookPracticeNow: "Buyekeza amagama ami",
-  notebookDueTodayTemplate: (n) => `Angu-${n} afanele namuhla`,
   notebookListView: "Uhlu",
   notebookGalaxyView: "Umthala",
   notebookEmptyTitle: "Incwadi yakho yamanothi ayinalutho",
@@ -8581,7 +6995,6 @@ const zu: Partial<V2Strings> = {
   srWordNofMTemplate: (n, m) => `Igama ${n} kwangu-${m}`,
   srSkip: "Yeqa",
   srClickToReveal: "Chofoza noma kuphi ukuze uveze",
-  srTapToReveal: "Thepha ukuze uveze",
   srPrimaryMeaningLabel: "Incazelo eyinhloko",
   srExamplesLabel: "Izibonelo",
   srIForgot: "Ngikhohliwe",
@@ -8625,7 +7038,6 @@ const zu: Partial<V2Strings> = {
   accountNearingLimit: "Kusondela emkhawulweni wale nyanga.",
   accountSectionLabel: "I-akhawunti",
   accountEmailLabel: "I-imeyili",
-  accountChangeEmail: "Shintsha i-imeyili",
   accountSignOut: "Phuma",
   accountDeleteAccount: "Susa i-akhawunti",
 
@@ -8649,43 +7061,10 @@ const zu: Partial<V2Strings> = {
   reportCatCompareResult: "Inkinga yomphumela wokuqhathanisa",
   reportCatSomethingElse: "Okunye",
 
-  origin: "Umsuka",
-  historyNote: "Inothi lomlando",
-  throughTime: "Ngokuhamba kwesikhathi",
-  forKids: "Kwezingane",
-  commonExpressions: "Amatemu avamile",
-  idiomsWithMeaning: "Izisho ngalencazelo",
-  meaningN: (n) => `Incazelo ${n}`,
-  notJustPrimary: "Hhayi nje eyinhloko",
-  takeItFurther: "Yenza okwengeziwe",
-  doMoreWith: (w) => `Yenza okwengeziwe nge-${w}`,
-  saveToNotebookHint: "Buyela kuyo kamuva, ihleliwe, iseshekayo.",
   generateImage: "Yakha isithombe",
-  generatingImage: "Iyakha…",
-  generateImageHint: "Umbukiso ocacile owenziwe yi-AI, wokhethelwe leli gama.",
-  composeSentence: "Bhala umusho",
-  composeSentenceHint: "Bhala owakho, uGadit abuyekeze ithoni nokufaneleka.",
-  practiceWord: "Zilolonge leli gama",
-  practiceWordHint: "Isivivinyo esifushane esilungiselelwe indlela ofunda ngayo.",
-  unlockWithClear: "Vula nge-Clear",
-  upgradeToClear: "Thuthukisela ku-Clear",
   softWallAnonTitle: "Usebenzise ukusesha kwakho kwamahhala",
-  softWallAnonBody:
-    "Bhalisa mahhala ukuze usesha amagama afika angu-20 ngosuku, nezincazelo ezigcwele, izibonelo, izisho, nomsuka wegama.",
   softWallSignupCta: "Bhalisa, kumahhala",
   softWallBasicTitle: "Ufinyelele umkhawulo wanamuhla",
-  softWallBasicBody:
-    "Ama-akhawunti amahhala athola ukusesha okungu-20 ngosuku. Umkhawulo usetha kabusha kusasa, noma thuthukisela ku-Clear ukuthola ukusesha okungenamkhawulo kanye nezithombe, imodi yezingane, nempendulo yohlelo lolimi.",
-  softBannerSearchesLeft: (n) =>
-    Number(n) === 1
-      ? "Kusele ukusesha okukodwa kwamahhala namuhla, bhalisa mahhala ukuthola okungu-20 ngosuku."
-      : `Kusele ukusesha okungu-${n} kwamahhala namuhla, bhalisa mahhala ukuthola okungu-20 ngosuku.`,
-  clearUnlocksThis: "I-Clear ivula lokhu",
-  visualizeThisWord: "Bona ngamehlo",
-  visualBlurb:
-    "Isithombe esisodwa esicacile, esakhiwe yi-Gadit, insika ebonakalayo yendlela leli gama elizwakala ngayo.",
-  visualBlurbLocked:
-    "Yakha isithombe esicacile, esiyingqayizivele saleli gama, ukuqonda ngokubona.",
   reportLabel: "Bika iphutha",
 
   // ── Wordbook redesign ───────────────────────────────────────
@@ -8698,7 +7077,6 @@ const zu: Partial<V2Strings> = {
   imageGeneratingHint: "Lokhu kuvame ukuthatha imizuzwana engu-10 kuya ku-15.",
   imageOpenFullAria: "Vula isithombe ngosayizi ogcwele",
   kidsComingSoon: "Incazelo yezingane iyeza maduze.",
-  compareComingSoon: "Imidlalo yamagama iyeza maduze.",
   shareDefinitionAria: "Yabelana ngale ncazelo",
   meaningsEyebrow: "Izincazelo",
   wordOriginLanguage: "Ulimi",
@@ -8706,14 +7084,10 @@ const zu: Partial<V2Strings> = {
   actionCompose: "Bhala umusho",
   actionCompare: "Qhathanisa amagama",
   listenToWord: "Lalela",
-  offlinePin: "Gcina ungaxhunyiwe",
-  offlinePinTitle: "Gcina leli gama ukuze ulifunde ungaxhunyiwe",
-  offlinePinnedTitle: "Kugcinwe, kuyatholakala ngaphandle kwe-WiFi",
   offlineDownloadPack: "Landa iphakethe lokungaxhumeki",
   offlineDownloadingPack: "Iyalanda…",
   offlinePackHeader: "Iphakethe lokungaxhumeki",
   offlinePackDescription: "Kungeza amagama aseshwa kakhulu ngolimi lwakho encwadini yakho yamanothi, futhi awagcina etholakala ngaphandle kwe-WiFi ukuze uwafunde ungaxhunyiwe.",
-  visualEmptyLabel: "Kuzodwetshwa isithombe saleli gama",
   savedAgoTemplate: (t) => `Kugcinwe · ${t}`,
   shareLabel: "Yabelana",
   backLabel: "Emuva",
@@ -8799,10 +7173,7 @@ Object.assign(vi, {
   "homeSubline": "Một cuốn từ điển hiểu ngữ cảnh của bạn: nghĩa, nguồn gốc, thành ngữ và một hình ảnh sống động, bằng 30+ ngôn ngữ.",
   "searchPlaceholderHome": "Nhập một từ",
   "voiceInputTitle": "Đọc một từ",
-  "addContext": "Thêm ngữ cảnh",
   "explain": "Giải nghĩa",
-  "contextHint": "Đang đọc gì đó? Dán câu vào để xác định đúng nghĩa.",
-  "tryLabel": "Thử",
   "valuePropsEyebrow": "Điều Gadit làm khác biệt",
   "valuePropsTitle": "Hơn cả một định nghĩa, đây là cách để sống cùng một từ.",
   "valueProp1Eyebrow": "Hiểu ngữ cảnh",
@@ -8821,10 +7192,8 @@ Object.assign(vi, {
   "seeFullResult": "Xem kết quả đầy đủ",
   "pricingEyebrow": "Bảng giá",
   "pricingTeaserTitle": "Ba gói. Gói nào cũng có nội dung thực chất.",
-  "trustMicrocopy": "Hủy bất cứ lúc nào · Dùng thử 14 ngày với gói Clear hàng tháng · Không tính phí cho đến khi hết thời gian dùng thử",
   "footerProductGroup": "Sản phẩm",
   "footerLegalGroup": "Pháp lý",
-  "footerCompare": "So sánh",
   "footerNotebook": "Sổ tay",
   "footerPricing": "Bảng giá",
   "footerPrivacy": "Bảo mật",
@@ -8836,7 +7205,6 @@ Object.assign(vi, {
   "startFree": "Bắt đầu miễn phí",
   "verbStampDef": "hiểu một từ, trọn vẹn",
   "navSearch": "Tra từ",
-  "navCompare": "So sánh",
   "navNotebook": "Sổ tay",
   "navPricing": "Bảng giá",
   "navSchools": "Trường học",
@@ -8846,7 +7214,6 @@ Object.assign(vi, {
   "kidsModeLabel": "Trẻ em",
   "kidsModeTooltipOff": "Chạm để giải thích mọi từ theo cách cha mẹ giảng cho con.",
   "kidsModeTooltipOn": "Chế độ trẻ em đang bật, mọi lời giải nghĩa sẽ được viết cho trẻ. Chạm để tắt.",
-  "kidsModeBasicGate": "Chế độ trẻ em là tính năng của gói Clear. Hãy nâng cấp để sử dụng.",
   "signupWelcomeTitle": "Chào mừng đến với Gadit!",
   "signupWelcomeBody": "Tài khoản của bạn đã sẵn sàng. Hãy bắt đầu bằng cách tra bất kỳ từ nào.",
   "pricingPageHeadline": "Ba gói. Gói nào cũng có nội dung thực chất.",
@@ -8944,23 +7311,6 @@ Object.assign(vi, {
   "quizPracticeAnotherWord": "Luyện tập từ khác",
   "quizBackToWord": "Quay lại từ",
   "quizReviewMistakes": "Xem lại những câu tôi sai",
-  "compareEyebrow": "So sánh",
-  "compareTitle": "Phân biệt các từ dễ nhầm",
-  "compareSubtitle": "affect và effect, אומנות và אמנות, principle và principal, những từ khiến ngay cả người bản ngữ cũng nhầm.",
-  "compareWord1Label": "Từ 1",
-  "compareWord2Label": "Từ 2",
-  "compareWord1Placeholder": "affect",
-  "compareWord2Placeholder": "effect",
-  "compareCta": "So sánh",
-  "compareLoading": "Đang so sánh…",
-  "compareEmpty": "Nhập hai từ để so sánh",
-  "compareDifferenceLabel": "Điểm khác biệt",
-  "compareExamplesLabel": "Ví dụ",
-  "compareCommonMistakeLabel": "Lỗi thường gặp",
-  "compareErrNotARealWord": "Chúng tôi không nhận ra một trong hai từ đó.",
-  "compareErrDifferentLanguages": "Hai từ này có vẻ thuộc các ngôn ngữ khác nhau, hãy thử một cặp cùng ngôn ngữ.",
-  "compareErrSameWord": "Đây có vẻ là cùng một từ, hãy thử hai từ khác nhau.",
-  "compareErrGeneric": "Tính năng so sánh hiện chưa khả dụng.",
   "notebookEyebrow": "Sổ tay",
   "notebookTitle": "Vũ trụ từ ngữ của bạn",
   "notebookSubtitle": "Mọi từ bạn đã khám phá, được lưu giữ, sắp xếp và lớn dần.",
@@ -8978,7 +7328,6 @@ Object.assign(vi, {
   "srEyebrow": "Luyện tập",
   "srSkip": "Bỏ qua",
   "srClickToReveal": "Nhấp vào bất kỳ đâu để hiện đáp án",
-  "srTapToReveal": "Chạm để hiện đáp án",
   "srPrimaryMeaningLabel": "Nghĩa chính",
   "srExamplesLabel": "Ví dụ",
   "srIForgot": "Tôi quên rồi",
@@ -9012,7 +7361,6 @@ Object.assign(vi, {
   "accountNearingLimit": "Sắp đến giới hạn của tháng này.",
   "accountSectionLabel": "Tài khoản",
   "accountEmailLabel": "Email",
-  "accountChangeEmail": "Đổi email",
   "accountSignOut": "Đăng xuất",
   "accountDeleteAccount": "Xóa tài khoản",
   "reportEyebrow": "Báo lỗi",
@@ -9033,33 +7381,10 @@ Object.assign(vi, {
   "reportCatComposeFeedback": "Vấn đề với phản hồi khi đặt câu",
   "reportCatCompareResult": "Vấn đề với kết quả so sánh",
   "reportCatSomethingElse": "Vấn đề khác",
-  "origin": "Nguồn gốc",
-  "historyNote": "Ghi chú lịch sử",
-  "throughTime": "Qua thời gian",
-  "forKids": "Dành cho trẻ em",
-  "commonExpressions": "Cách nói thường gặp",
-  "idiomsWithMeaning": "Thành ngữ với nghĩa này",
-  "notJustPrimary": "Không chỉ nghĩa chính",
-  "takeItFurther": "Đi xa hơn nữa",
-  "saveToNotebookHint": "Quay lại sau, đã sắp xếp gọn gàng và dễ tìm.",
   "generateImage": "Tạo hình ảnh",
-  "generatingImage": "Đang tạo…",
-  "generateImageHint": "Một hình ảnh sống động, được tạo riêng cho từ này.",
-  "composeSentence": "Đặt một câu",
-  "composeSentenceHint": "Tự viết câu của bạn, Gadit sẽ xem xét về sắc thái và độ phù hợp.",
-  "practiceWord": "Luyện tập từ này",
-  "practiceWordHint": "Một bài kiểm tra ngắn phù hợp với cách bạn học.",
-  "unlockWithClear": "Mở khóa với Clear",
-  "upgradeToClear": "Nâng cấp lên Clear",
-  "clearUnlocksThis": "Clear mở khóa tính năng này",
   "softWallAnonTitle": "Bạn đã dùng hết lượt tra miễn phí",
-  "softWallAnonBody": "Đăng ký miễn phí để tra tối đa 20 từ mỗi ngày, kèm nghĩa đầy đủ, ví dụ, thành ngữ và nguồn gốc từ.",
   "softWallSignupCta": "Đăng ký, hoàn toàn miễn phí",
   "softWallBasicTitle": "Bạn đã đạt giới hạn hôm nay",
-  "softWallBasicBody": "Tài khoản miễn phí được 20 lượt tra mỗi ngày. Giới hạn sẽ làm mới vào ngày mai, hoặc nâng cấp lên Clear để tra không giới hạn, kèm hình ảnh, chế độ trẻ em và phản hồi ngữ pháp.",
-  "visualizeThisWord": "Hình dung",
-  "visualBlurb": "Một hình ảnh sống động, do Gadit tạo ra, một điểm tựa hình ảnh cho cảm giác của từ này.",
-  "visualBlurbLocked": "Tạo một hình ảnh sống động, độc nhất cho từ này, hiểu qua thị giác.",
   "reportLabel": "Báo lỗi",
   "wordOriginEyebrow": "Nguồn gốc từ",
   "idiomsEyebrow": "Thành ngữ & cách diễn đạt",
@@ -9070,7 +7395,6 @@ Object.assign(vi, {
   "imageGeneratingHint": "Việc này thường mất khoảng 10 đến 15 giây.",
   "imageOpenFullAria": "Mở hình ảnh cỡ đầy đủ",
   "kidsComingSoon": "Lời giải thích cho trẻ em sắp ra mắt.",
-  "compareComingSoon": "Trò chơi từ vựng sắp ra mắt.",
   "shareDefinitionAria": "Chia sẻ nghĩa này",
   "meaningsEyebrow": "Các nghĩa",
   "wordOriginLanguage": "Ngôn ngữ",
@@ -9078,14 +7402,10 @@ Object.assign(vi, {
   "actionCompose": "Đặt một câu",
   "actionCompare": "So sánh từ",
   "listenToWord": "Nghe",
-  "offlinePin": "Lưu ngoại tuyến",
-  "offlinePinTitle": "Lưu từ này để học ngoại tuyến",
-  "offlinePinnedTitle": "Đã lưu, dùng được cả khi không có WiFi",
   "offlineDownloadPack": "Tải gói ngoại tuyến",
   "offlineDownloadingPack": "Đang tải…",
   "offlinePackHeader": "Gói ngoại tuyến",
   "offlinePackDescription": "Thêm những từ được tra nhiều nhất trong ngôn ngữ của bạn vào sổ tay, và giữ chúng dùng được cả khi không có WiFi để học ngoại tuyến.",
-  "visualEmptyLabel": "Một hình ảnh sẽ được vẽ cho từ này",
   "shareLabel": "Chia sẻ",
   "backLabel": "Quay lại"
 });
@@ -9097,10 +7417,7 @@ Object.assign(fil, {
   "homeSubline": "Isang diksyunaryo na sumasabay sa konteksto: mga kahulugan, pinagmulan, idyoma, at buhay na buhay na larawan, sa 22 wika.",
   "searchPlaceholderHome": "Mag-type ng salita",
   "voiceInputTitle": "Idikta ang salita",
-  "addContext": "Magdagdag ng konteksto",
   "explain": "Ipaliwanag",
-  "contextHint": "May binabasa? I-paste ang pangungusap para linawin ang kahulugan.",
-  "tryLabel": "Subukan",
   "valuePropsEyebrow": "Ang kaibahan ng Gadit",
   "valuePropsTitle": "Higit pa sa kahulugan, isang paraan para mamuhay kasama ang salita.",
   "valueProp1Eyebrow": "May-malay sa konteksto",
@@ -9119,10 +7436,8 @@ Object.assign(fil, {
   "seeFullResult": "Tingnan ang buong resulta",
   "pricingEyebrow": "Presyo",
   "pricingTeaserTitle": "Tatlong antas. Lahat may totoong nilalaman.",
-  "trustMicrocopy": "Kanselahin anumang oras · 14-araw na subok sa buwanang Clear · Walang bayad hangga't hindi natatapos ang subok",
   "footerProductGroup": "Produkto",
   "footerLegalGroup": "Legal",
-  "footerCompare": "Ihambing",
   "footerNotebook": "Kwaderno",
   "footerPricing": "Presyo",
   "footerPrivacy": "Privacy",
@@ -9134,7 +7449,6 @@ Object.assign(fil, {
   "startFree": "Magsimula nang libre",
   "verbStampDef": "unawain ang salita, nang lubusan",
   "navSearch": "Maghanap",
-  "navCompare": "Ihambing",
   "navNotebook": "Kwaderno",
   "navPricing": "Presyo",
   "navSchools": "Mga Paaralan",
@@ -9144,7 +7458,6 @@ Object.assign(fil, {
   "kidsModeLabel": "Bata",
   "kidsModeTooltipOff": "I-tap para ipaliwanag ang bawat salita gaya ng paliwanag ng magulang sa bata.",
   "kidsModeTooltipOn": "Naka-on ang kids mode, bawat kahulugan ay isusulat para sa bata. I-tap para i-off.",
-  "kidsModeBasicGate": "Ang kids mode ay feature ng Clear. Mag-upgrade para magamit ito.",
   "signupWelcomeTitle": "Maligayang pagdating sa Gadit!",
   "signupWelcomeBody": "Handa na ang iyong account. Magsimula sa paghahanap ng kahit anong salita.",
   "pricingPageHeadline": "Tatlong antas. Lahat may totoong nilalaman.",
@@ -9242,23 +7555,6 @@ Object.assign(fil, {
   "quizPracticeAnotherWord": "Magsanay ng ibang salita",
   "quizBackToWord": "Bumalik sa salita",
   "quizReviewMistakes": "Balik-aralan ang mga namali ko",
-  "compareEyebrow": "Ihambing",
-  "compareTitle": "Kilalanin ang pagkakaiba ng magkatulad na salita",
-  "compareSubtitle": "affect vs effect, אומנות vs אמנות, principle vs principal, ang mga salitang nakakalito kahit sa mga katutubong nagsasalita.",
-  "compareWord1Label": "Salita 1",
-  "compareWord2Label": "Salita 2",
-  "compareWord1Placeholder": "affect",
-  "compareWord2Placeholder": "effect",
-  "compareCta": "Ihambing",
-  "compareLoading": "Inihahambing…",
-  "compareEmpty": "Maglagay ng dalawang salita para ihambing ang mga ito",
-  "compareDifferenceLabel": "Ang pagkakaiba",
-  "compareExamplesLabel": "Mga halimbawa",
-  "compareCommonMistakeLabel": "Karaniwang pagkakamali",
-  "compareErrNotARealWord": "Hindi namin nakikilala ang isa sa mga salitang iyon.",
-  "compareErrDifferentLanguages": "Mukhang magkaibang wika ang dalawang salitang ito, subukan ang magkatugmang pares.",
-  "compareErrSameWord": "Mukhang iisang salita ito, subukan ang dalawang magkaiba.",
-  "compareErrGeneric": "Hindi magagamit ang paghahambing sa ngayon.",
   "notebookEyebrow": "Kwaderno",
   "notebookTitle": "Ang iyong sansinukob ng mga salita",
   "notebookSubtitle": "Bawat salitang natuklasan mo, iningatan, inayos, lumalago.",
@@ -9276,7 +7572,6 @@ Object.assign(fil, {
   "srEyebrow": "Magsanay",
   "srSkip": "Laktawan",
   "srClickToReveal": "I-click kahit saan para ipakita",
-  "srTapToReveal": "I-tap para ipakita",
   "srPrimaryMeaningLabel": "Pangunahing kahulugan",
   "srExamplesLabel": "Mga halimbawa",
   "srIForgot": "Nakalimutan ko",
@@ -9310,7 +7605,6 @@ Object.assign(fil, {
   "accountNearingLimit": "Malapit nang maabot ang limitasyon ngayong buwan.",
   "accountSectionLabel": "Account",
   "accountEmailLabel": "Email",
-  "accountChangeEmail": "Baguhin ang email",
   "accountSignOut": "Mag-sign out",
   "accountDeleteAccount": "Burahin ang account",
   "reportEyebrow": "Mag-ulat ng mali",
@@ -9331,33 +7625,10 @@ Object.assign(fil, {
   "reportCatComposeFeedback": "Isyu sa puna ng pangungusap",
   "reportCatCompareResult": "Isyu sa resulta ng paghahambing",
   "reportCatSomethingElse": "Iba pa",
-  "origin": "Pinagmulan",
-  "historyNote": "Tala ng kasaysayan",
-  "throughTime": "Sa paglipas ng panahon",
-  "forKids": "Para sa bata",
-  "commonExpressions": "Mga karaniwang ekspresyon",
-  "idiomsWithMeaning": "Mga idyoma sa kahulugang ito",
-  "notJustPrimary": "Hindi lang ang pangunahin",
-  "takeItFurther": "Palalimin pa",
-  "saveToNotebookHint": "Balikan mamaya, nakaayos, mahahanap.",
   "generateImage": "Gumawa ng larawan",
-  "generatingImage": "Ginagawa…",
-  "generateImageHint": "Isang buhay na larawan, para lang sa salitang ito.",
-  "composeSentence": "Bumuo ng pangungusap",
-  "composeSentenceHint": "Magsulat ng sarili mo, susuriin ng Gadit ang tono at pagkakaakma.",
-  "practiceWord": "Sanayin ang salitang ito",
-  "practiceWordHint": "Isang maikling pagsusulit na akma sa paraan mo ng pagkatuto.",
-  "unlockWithClear": "I-unlock gamit ang Clear",
-  "upgradeToClear": "Mag-upgrade sa Clear",
   "softWallAnonTitle": "Naubos mo na ang iyong libreng paghahanap",
-  "softWallAnonBody": "Mag-sign up nang libre para maghanap ng hanggang 20 salita kada araw, na may kumpletong kahulugan, halimbawa, idyoma at pinagmulan ng salita.",
   "softWallSignupCta": "Mag-sign up, libre ito",
   "softWallBasicTitle": "Naabot mo na ang limitasyon ngayong araw",
-  "softWallBasicBody": "Ang mga libreng account ay may 20 paghahanap kada araw. Magre-reset ang limitasyon bukas, o mag-upgrade sa Clear para sa walang limitasyong paghahanap kasama ang mga larawan, kids mode, at puna sa gramatika.",
-  "clearUnlocksThis": "I-unlock ito ng Clear",
-  "visualizeThisWord": "Isalarawan",
-  "visualBlurb": "Isang buhay na larawan, ginawa ng Gadit, isang biswal na sandigan kung paano madarama ang salitang ito.",
-  "visualBlurbLocked": "Gumawa ng buhay at natatanging larawan para sa salitang ito, umunawa sa pamamagitan ng paningin.",
   "reportLabel": "Mag-ulat ng mali",
   "wordOriginEyebrow": "Pinagmulan ng Salita",
   "meaningsEyebrow": "Mga Kahulugan",
@@ -9371,19 +7642,14 @@ Object.assign(fil, {
   "imageGeneratingHint": "Karaniwang tumatagal ito ng 10 hanggang 15 segundo.",
   "imageOpenFullAria": "Buksan ang larawan sa buong laki",
   "kidsComingSoon": "Malapit nang dumating ang paliwanag para sa bata.",
-  "compareComingSoon": "Malapit nang dumating ang mga laro ng salita.",
   "shareDefinitionAria": "Ibahagi ang kahulugang ito",
   "actionCompose": "Bumuo ng pangungusap",
   "actionCompare": "Ihambing ang mga salita",
   "listenToWord": "Makinig",
-  "offlinePin": "I-save offline",
-  "offlinePinTitle": "I-save ang salitang ito para sa pag-aaral offline",
-  "offlinePinnedTitle": "Nai-save, available kahit walang WiFi",
   "offlineDownloadPack": "I-download ang offline pack",
   "offlineDownloadingPack": "Dina-download…",
   "offlinePackHeader": "Offline pack",
   "offlinePackDescription": "Idinaragdag ang pinakamadalas hanapin na mga salita sa iyong wika sa iyong Kwaderno, at pinapanatili itong available kahit walang WiFi para sa pag-aaral offline.",
-  "visualEmptyLabel": "May larawang iguguhit para sa salitang ito",
   "shareLabel": "Ibahagi",
   "backLabel": "Bumalik"
 });
@@ -9395,10 +7661,7 @@ Object.assign(af, {
   "homeSubline": "'n Woordeboek wat jou in konteks ontmoet, betekenisse, herkomste, idiome, en 'n lewendige prent, in 30+ tale.",
   "searchPlaceholderHome": "Tik 'n woord",
   "voiceInputTitle": "Sê 'n woord",
-  "addContext": "Voeg konteks by",
   "explain": "Verklaar",
-  "contextHint": "Lees jy iets? Plak die sin om die betekenis uit te klaar.",
-  "tryLabel": "Probeer",
   "valuePropsEyebrow": "Wat Gadit anders doen",
   "valuePropsTitle": "Meer as 'n betekenis, 'n manier om saam met 'n woord te leef.",
   "valueProp1Eyebrow": "Konteksbewus",
@@ -9417,10 +7680,8 @@ Object.assign(af, {
   "seeFullResult": "Sien die volledige resultaat",
   "pricingEyebrow": "Pryse",
   "pricingTeaserTitle": "Drie vlakke. Almal met werklike inhoud.",
-  "trustMicrocopy": "Kanselleer enige tyd · 14-dae proeftydperk op Clear maandeliks · Geen koste tot die proeftydperk eindig nie",
   "footerProductGroup": "Produk",
   "footerLegalGroup": "Regtens",
-  "footerCompare": "Vergelyk",
   "footerNotebook": "Boekie",
   "footerPricing": "Pryse",
   "footerPrivacy": "Privaatheid",
@@ -9432,7 +7693,6 @@ Object.assign(af, {
   "startFree": "Begin gratis",
   "verbStampDef": "om 'n woord ten volle te verstaan",
   "navSearch": "Soek",
-  "navCompare": "Vergelyk",
   "navNotebook": "Boekie",
   "navPricing": "Pryse",
   "navSchools": "Skole",
@@ -9442,7 +7702,6 @@ Object.assign(af, {
   "kidsModeLabel": "Kinders",
   "kidsModeTooltipOff": "Tik om elke woord te verduidelik soos 'n ouer dit vir 'n kind sou doen.",
   "kidsModeTooltipOn": "Kindermodus is aan, elke betekenis sal vir 'n kind geskryf word. Tik om af te skakel.",
-  "kidsModeBasicGate": "Kindermodus is 'n Clear-funksie. Gradeer op om dit te gebruik.",
   "signupWelcomeTitle": "Welkom by Gadit!",
   "signupWelcomeBody": "Jou rekening is gereed. Begin deur enige woord te soek.",
   "pricingPageHeadline": "Drie vlakke. Almal met werklike inhoud.",
@@ -9540,23 +7799,6 @@ Object.assign(af, {
   "quizPracticeAnotherWord": "Oefen 'n ander woord",
   "quizBackToWord": "Terug na woord",
   "quizReviewMistakes": "Gaan die wat ek gemis het na",
-  "compareEyebrow": "Vergelyk",
-  "compareTitle": "Onderskei soortgelyke woorde",
-  "compareSubtitle": "affect vs effect, אומנות vs אמנות, principle vs principal, die woorde wat selfs moedertaalsprekers uitvang.",
-  "compareWord1Label": "Woord 1",
-  "compareWord2Label": "Woord 2",
-  "compareWord1Placeholder": "affect",
-  "compareWord2Placeholder": "effect",
-  "compareCta": "Vergelyk",
-  "compareLoading": "Vergelyk tans…",
-  "compareEmpty": "Voer twee woorde in om hulle te vergelyk",
-  "compareDifferenceLabel": "Die verskil",
-  "compareExamplesLabel": "Voorbeelde",
-  "compareCommonMistakeLabel": "Algemene fout",
-  "compareErrNotARealWord": "Ons herken nie een van daardie woorde nie.",
-  "compareErrDifferentLanguages": "Hierdie twee woorde lyk of hulle in verskillende tale is, probeer 'n passende paar.",
-  "compareErrSameWord": "Dit lyk na dieselfde woord, probeer twee verskillendes.",
-  "compareErrGeneric": "Vergelyk is tans nie beskikbaar nie.",
   "notebookEyebrow": "Boekie",
   "notebookTitle": "Jou heelal van woorde",
   "notebookSubtitle": "Elke woord wat jy verken het, gehou, georden, aan die groei.",
@@ -9574,7 +7816,6 @@ Object.assign(af, {
   "srEyebrow": "Oefen",
   "srSkip": "Slaan oor",
   "srClickToReveal": "Klik enige plek om te wys",
-  "srTapToReveal": "Tik om te wys",
   "srPrimaryMeaningLabel": "Vernaamste betekenis",
   "srExamplesLabel": "Voorbeelde",
   "srIForgot": "Ek het vergeet",
@@ -9608,7 +7849,6 @@ Object.assign(af, {
   "accountNearingLimit": "Nader aan hierdie maand se limiet.",
   "accountSectionLabel": "Rekening",
   "accountEmailLabel": "E-pos",
-  "accountChangeEmail": "Verander e-pos",
   "accountSignOut": "Meld af",
   "accountDeleteAccount": "Skrap rekening",
   "reportEyebrow": "Rapporteer 'n fout",
@@ -9629,33 +7869,10 @@ Object.assign(af, {
   "reportCatComposeFeedback": "Probleem met sin-terugvoer",
   "reportCatCompareResult": "Probleem met vergelykingsresultaat",
   "reportCatSomethingElse": "Iets anders",
-  "origin": "Herkoms",
-  "historyNote": "Geskiedenisnota",
-  "throughTime": "Deur die tyd",
-  "forKids": "Vir kinders",
-  "commonExpressions": "Algemene uitdrukkings",
-  "idiomsWithMeaning": "Idiome met hierdie betekenis",
-  "notJustPrimary": "Nie net die vernaamste een nie",
-  "takeItFurther": "Neem dit verder",
-  "saveToNotebookHint": "Keer later daarna terug, georden, deursoekbaar.",
   "generateImage": "Skep prent",
-  "generatingImage": "Skep tans…",
-  "generateImageHint": "'n Lewendige AI-gemaakte beeld, net vir hierdie woord.",
-  "composeSentence": "Skryf 'n sin",
-  "composeSentenceHint": "Skryf jou eie, en Gadit gaan die toon en gepastheid na.",
-  "practiceWord": "Oefen hierdie woord",
-  "practiceWordHint": "'n Kort vasvra afgestem op hoe jy leer.",
-  "unlockWithClear": "Ontsluit met Clear",
-  "upgradeToClear": "Gradeer op na Clear",
   "softWallAnonTitle": "Jy het jou gratis soektogte gebruik",
-  "softWallAnonBody": "Registreer gratis om tot 20 woorde per dag te soek, met volledige betekenisse, voorbeelde, idiome en woordherkoms.",
   "softWallSignupCta": "Registreer, dis gratis",
   "softWallBasicTitle": "Jy het vandag se limiet bereik",
-  "softWallBasicBody": "Gratis rekeninge kry 20 soektogte per dag. Die limiet stel môre terug, of gradeer op na Clear vir onbeperkte soektogte plus prente, kindermodus, en grammatika-terugvoer.",
-  "clearUnlocksThis": "Clear ontsluit dit",
-  "visualizeThisWord": "Visualiseer",
-  "visualBlurb": "Een lewendige prent, deur Gadit geskep, 'n visuele anker vir hoe hierdie woord voel.",
-  "visualBlurbLocked": "Skep 'n lewendige, unieke prent vir hierdie woord, verstaan deur die oog.",
   "reportLabel": "Rapporteer 'n fout",
   "wordOriginEyebrow": "Woordherkoms",
   "idiomsEyebrow": "Idiome & uitdrukkings",
@@ -9666,7 +7883,6 @@ Object.assign(af, {
   "imageGeneratingHint": "Dit neem gewoonlik 10 tot 15 sekondes.",
   "imageOpenFullAria": "Maak prent op volle grootte oop",
   "kidsComingSoon": "Verduideliking vir kinders binnekort.",
-  "compareComingSoon": "Woordspeletjies binnekort.",
   "shareDefinitionAria": "Deel hierdie betekenis",
   "meaningsEyebrow": "Betekenisse",
   "wordOriginLanguage": "Taal",
@@ -9674,14 +7890,10 @@ Object.assign(af, {
   "actionCompose": "Skryf 'n sin",
   "actionCompare": "Vergelyk woorde",
   "listenToWord": "Luister",
-  "offlinePin": "Stoor vanlyn",
-  "offlinePinTitle": "Stoor hierdie woord vir vanlyn studie",
-  "offlinePinnedTitle": "Gestoor, beskikbaar sonder WiFi",
   "offlineDownloadPack": "Laai vanlyn-pak af",
   "offlineDownloadingPack": "Laai tans af…",
   "offlinePackHeader": "Vanlyn-pak",
   "offlinePackDescription": "Voeg die mees gesoekte woorde in jou taal by jou Boekie, en hou hulle beskikbaar sonder WiFi vir vanlyn studie.",
-  "visualEmptyLabel": "'n Prent sal vir hierdie woord geteken word",
   "shareLabel": "Deel",
   "backLabel": "Terug"
 });
@@ -9693,10 +7905,7 @@ Object.assign(sw, {
   "homeSubline": "Kamusi inayokukuta katika muktadha, maana, asili, nahau, na picha hai, kwa lugha 30+.",
   "searchPlaceholderHome": "Andika neno",
   "voiceInputTitle": "Sema neno",
-  "addContext": "Ongeza muktadha",
   "explain": "Fafanua",
-  "contextHint": "Unasoma kitu? Bandika sentensi ili kubainisha maana.",
-  "tryLabel": "Jaribu",
   "valuePropsEyebrow": "Gadit inafanya nini tofauti",
   "valuePropsTitle": "Zaidi ya fasili, njia ya kuishi na neno.",
   "valueProp1Eyebrow": "Inatambua muktadha",
@@ -9715,10 +7924,8 @@ Object.assign(sw, {
   "seeFullResult": "Ona matokeo kamili",
   "pricingEyebrow": "Bei",
   "pricingTeaserTitle": "Ngazi tatu. Zote zenye maudhui halisi.",
-  "trustMicrocopy": "Ghairi wakati wowote · Jaribio la siku 14 kwenye Clear ya mwezi · Hakuna malipo hadi jaribio liishe",
   "footerProductGroup": "Bidhaa",
   "footerLegalGroup": "Kisheria",
-  "footerCompare": "Linganisha",
   "footerNotebook": "Daftari",
   "footerPricing": "Bei",
   "footerPrivacy": "Faragha",
@@ -9730,7 +7937,6 @@ Object.assign(sw, {
   "startFree": "Anza bila malipo",
   "verbStampDef": "kuelewa neno, kikamilifu",
   "navSearch": "Tafuta",
-  "navCompare": "Linganisha",
   "navNotebook": "Daftari",
   "navPricing": "Bei",
   "navSchools": "Shule",
@@ -9740,7 +7946,6 @@ Object.assign(sw, {
   "kidsModeLabel": "Watoto",
   "kidsModeTooltipOff": "Gusa ili kufafanua kila neno kama mzazi angemfafanulia mtoto.",
   "kidsModeTooltipOn": "Hali ya watoto imewashwa, kila fasili itaandikwa kwa ajili ya mtoto. Gusa ili kuzima.",
-  "kidsModeBasicGate": "Hali ya watoto ni kipengele cha Clear. Pandisha ili kuitumia.",
   "signupWelcomeTitle": "Karibu Gadit!",
   "signupWelcomeBody": "Akaunti yako iko tayari. Anza kwa kutafuta neno lolote.",
   "pricingPageHeadline": "Ngazi tatu. Zote zenye maudhui halisi.",
@@ -9838,23 +8043,6 @@ Object.assign(sw, {
   "quizPracticeAnotherWord": "Fanya mazoezi ya neno lingine",
   "quizBackToWord": "Rudi kwenye neno",
   "quizReviewMistakes": "Pitia yale niliyokosea",
-  "compareEyebrow": "Linganisha",
-  "compareTitle": "Tofautisha maneno yanayofanana",
-  "compareSubtitle": "affect vs effect, אומנות vs אמנות, principle vs principal, maneno yanayowakwaza hata wazungumzaji asili.",
-  "compareWord1Label": "Neno la 1",
-  "compareWord2Label": "Neno la 2",
-  "compareWord1Placeholder": "affect",
-  "compareWord2Placeholder": "effect",
-  "compareCta": "Linganisha",
-  "compareLoading": "Inalinganisha…",
-  "compareEmpty": "Andika maneno mawili ili kuyalinganisha",
-  "compareDifferenceLabel": "Tofauti",
-  "compareExamplesLabel": "Mifano",
-  "compareCommonMistakeLabel": "Kosa la kawaida",
-  "compareErrNotARealWord": "Hatulitambui mojawapo ya maneno hayo.",
-  "compareErrDifferentLanguages": "Maneno haya mawili yanaonekana kuwa katika lugha tofauti, jaribu jozi inayolingana.",
-  "compareErrSameWord": "Haya yanaonekana kuwa neno moja, jaribu mawili tofauti.",
-  "compareErrGeneric": "Ulinganishaji haupatikani kwa sasa.",
   "notebookEyebrow": "Daftari",
   "notebookTitle": "Ulimwengu wako wa maneno",
   "notebookSubtitle": "Kila neno ulilochunguza, limehifadhiwa, limepangwa, linakua.",
@@ -9872,7 +8060,6 @@ Object.assign(sw, {
   "srEyebrow": "Mazoezi",
   "srSkip": "Ruka",
   "srClickToReveal": "Bofya popote ili kuonyesha",
-  "srTapToReveal": "Gusa ili kuonyesha",
   "srPrimaryMeaningLabel": "Maana ya msingi",
   "srExamplesLabel": "Mifano",
   "srIForgot": "Nilisahau",
@@ -9906,7 +8093,6 @@ Object.assign(sw, {
   "accountNearingLimit": "Unakaribia kikomo cha mwezi huu.",
   "accountSectionLabel": "Akaunti",
   "accountEmailLabel": "Barua pepe",
-  "accountChangeEmail": "Badilisha barua pepe",
   "accountSignOut": "Toka",
   "accountDeleteAccount": "Futa akaunti",
   "reportEyebrow": "Ripoti kosa",
@@ -9927,33 +8113,10 @@ Object.assign(sw, {
   "reportCatComposeFeedback": "Tatizo la maoni ya kutunga",
   "reportCatCompareResult": "Tatizo la matokeo ya ulinganisho",
   "reportCatSomethingElse": "Kitu kingine",
-  "origin": "Asili",
-  "historyNote": "Dokezo la kihistoria",
-  "throughTime": "Kupitia wakati",
-  "forKids": "Kwa watoto",
-  "commonExpressions": "Misemo ya kawaida",
-  "idiomsWithMeaning": "Nahau zenye maana hii",
-  "notJustPrimary": "Si ile ya msingi tu",
-  "takeItFurther": "Endeleza zaidi",
-  "saveToNotebookHint": "Lirejee baadaye, limepangwa, linaweza kutafutwa.",
   "generateImage": "Tengeneza picha",
-  "generatingImage": "Inatengeneza…",
-  "generateImageHint": "Picha hai iliyotengenezwa na AI, kwa ajili ya neno hili tu.",
-  "composeSentence": "Tunga sentensi",
-  "composeSentenceHint": "Andika yako mwenyewe, Gadit itapitia toni na ulinganifu.",
-  "practiceWord": "Fanya mazoezi ya neno hili",
-  "practiceWordHint": "Jaribio fupi lililowekwa kulingana na jinsi unavyojifunza.",
-  "unlockWithClear": "Fungua na Clear",
-  "upgradeToClear": "Pandisha hadi Clear",
   "softWallAnonTitle": "Umetumia utafutaji wako wa bure",
-  "softWallAnonBody": "Jisajili bila malipo kutafuta hadi maneno 20 kwa siku, pamoja na fasili kamili, mifano, nahau na asili ya neno.",
   "softWallSignupCta": "Jisajili, ni bure",
   "softWallBasicTitle": "Umefikia kikomo cha leo",
-  "softWallBasicBody": "Akaunti za bure hupata utafutaji 20 kwa siku. Kikomo kinaanzishwa upya kesho, au pandisha hadi Clear kupata utafutaji usio na kikomo pamoja na picha, hali ya watoto, na maoni ya sarufi.",
-  "clearUnlocksThis": "Clear hufungua hili",
-  "visualizeThisWord": "Ona kwa picha",
-  "visualBlurb": "Picha moja hai, iliyotengenezwa na Gadit, nanga ya kuona jinsi neno hili linavyohisiwa.",
-  "visualBlurbLocked": "Tengeneza picha hai, ya kipekee kwa neno hili, kuelewa kupitia kuona.",
   "reportLabel": "Ripoti kosa",
   "wordOriginEyebrow": "Chimbuko la Neno",
   "idiomsEyebrow": "Nahau na misemo",
@@ -9964,7 +8127,6 @@ Object.assign(sw, {
   "imageGeneratingHint": "Kwa kawaida huchukua sekunde 10 hadi 15.",
   "imageOpenFullAria": "Fungua picha kwa ukubwa kamili",
   "kidsComingSoon": "Ufafanuzi kwa watoto unakuja hivi karibuni.",
-  "compareComingSoon": "Michezo ya maneno inakuja hivi karibuni.",
   "shareDefinitionAria": "Shiriki fasili hii",
   "meaningsEyebrow": "Fasili",
   "wordOriginLanguage": "Lugha",
@@ -9972,14 +8134,10 @@ Object.assign(sw, {
   "actionCompose": "Tunga sentensi",
   "actionCompare": "Linganisha maneno",
   "listenToWord": "Sikiliza",
-  "offlinePin": "Hifadhi nje ya mtandao",
-  "offlinePinTitle": "Hifadhi neno hili kwa masomo ya nje ya mtandao",
-  "offlinePinnedTitle": "Limehifadhiwa, linapatikana bila WiFi",
   "offlineDownloadPack": "Pakua kifurushi cha nje ya mtandao",
   "offlineDownloadingPack": "Inapakua…",
   "offlinePackHeader": "Kifurushi cha nje ya mtandao",
   "offlinePackDescription": "Huongeza maneno yanayotafutwa zaidi katika lugha yako kwenye Daftari lako, na kuyaweka yanapatikana bila WiFi kwa masomo ya nje ya mtandao.",
-  "visualEmptyLabel": "Picha itachorwa kwa ajili ya neno hili",
   "shareLabel": "Shiriki",
   "backLabel": "Rudi"
 });
@@ -9992,10 +8150,7 @@ Object.assign(zhCN, {
   "homeSubline": "一部懂语境的词典：含义、词源、习语，还有一幅生动的配图，支持 22 种语言。",
   "searchPlaceholderHome": "输入一个词",
   "voiceInputTitle": "口述一个词",
-  "addContext": "添加语境",
   "explain": "解释",
-  "contextHint": "在读什么吗？贴上句子，帮你确定是哪个含义。",
-  "tryLabel": "试试",
   "valuePropsEyebrow": "Gadit 有何不同",
   "valuePropsTitle": "不止于释义，更是一种与词语相处的方式。",
   "valueProp1Eyebrow": "读懂语境",
@@ -10014,10 +8169,8 @@ Object.assign(zhCN, {
   "seeFullResult": "查看完整结果",
   "pricingEyebrow": "价格",
   "pricingTeaserTitle": "三个档位，每一档都有真材实料。",
-  "trustMicrocopy": "随时可取消 · Clear 月付含 14 天试用 · 试用结束前不收费",
   "footerProductGroup": "产品",
   "footerLegalGroup": "法律",
-  "footerCompare": "对比",
   "footerNotebook": "生词本",
   "footerPricing": "价格",
   "footerPrivacy": "隐私",
@@ -10029,7 +8182,6 @@ Object.assign(zhCN, {
   "startFree": "免费开始",
   "verbStampDef": "把一个词彻底读懂",
   "navSearch": "查询",
-  "navCompare": "对比",
   "navNotebook": "生词本",
   "navPricing": "价格",
   "navSchools": "学校版",
@@ -10039,7 +8191,6 @@ Object.assign(zhCN, {
   "kidsModeLabel": "儿童",
   "kidsModeTooltipOff": "点一下，让每个词都像家长讲给孩子那样来解释。",
   "kidsModeTooltipOn": "儿童模式已开启，每条释义都会为孩子而写。点一下可关闭。",
-  "kidsModeBasicGate": "儿童模式是 Clear 的功能。升级后即可使用。",
   "signupWelcomeTitle": "欢迎来到 Gadit！",
   "signupWelcomeBody": "你的账户已就绪。查任意一个词，就可以开始了。",
   "pricingPageHeadline": "三个档位，每一档都有真材实料。",
@@ -10137,23 +8288,6 @@ Object.assign(zhCN, {
   "quizPracticeAnotherWord": "练习另一个词",
   "quizBackToWord": "返回词语",
   "quizReviewMistakes": "复习我做错的题",
-  "compareEyebrow": "对比",
-  "compareTitle": "分清相近的词",
-  "compareSubtitle": "「的」和「地」，「查」和「察」，「权力」和「权利」，这些连母语者都常搞混的词。",
-  "compareWord1Label": "第一个词",
-  "compareWord2Label": "第二个词",
-  "compareWord1Placeholder": "权力",
-  "compareWord2Placeholder": "权利",
-  "compareCta": "对比",
-  "compareLoading": "对比中……",
-  "compareEmpty": "输入两个词来对比",
-  "compareDifferenceLabel": "区别在哪",
-  "compareExamplesLabel": "例句",
-  "compareCommonMistakeLabel": "常见错误",
-  "compareErrNotARealWord": "其中有一个词我们无法识别。",
-  "compareErrDifferentLanguages": "这两个词似乎属于不同语言，请换一对同语言的词。",
-  "compareErrSameWord": "这看起来是同一个词，请换成两个不同的词。",
-  "compareErrGeneric": "对比功能暂时不可用。",
   "notebookEyebrow": "生词本",
   "notebookTitle": "你的词语宇宙",
   "notebookSubtitle": "你探索过的每一个词，都被留下、整理，不断生长。",
@@ -10171,7 +8305,6 @@ Object.assign(zhCN, {
   "srEyebrow": "练习",
   "srSkip": "跳过",
   "srClickToReveal": "点击任意处揭晓",
-  "srTapToReveal": "点一下揭晓",
   "srPrimaryMeaningLabel": "主要含义",
   "srExamplesLabel": "例句",
   "srIForgot": "我忘了",
@@ -10205,7 +8338,6 @@ Object.assign(zhCN, {
   "accountNearingLimit": "本月额度即将用完。",
   "accountSectionLabel": "账户",
   "accountEmailLabel": "邮箱",
-  "accountChangeEmail": "更改邮箱",
   "accountSignOut": "退出登录",
   "accountDeleteAccount": "删除账户",
   "reportEyebrow": "报告错误",
@@ -10226,33 +8358,10 @@ Object.assign(zhCN, {
   "reportCatComposeFeedback": "造句反馈有问题",
   "reportCatCompareResult": "对比结果有问题",
   "reportCatSomethingElse": "其他问题",
-  "origin": "词源",
-  "historyNote": "历史小记",
-  "throughTime": "岁月流变",
-  "forKids": "儿童版",
-  "commonExpressions": "常见表达",
-  "idiomsWithMeaning": "与此含义相关的习语",
-  "notJustPrimary": "不只是主要含义",
-  "takeItFurther": "更进一步",
-  "saveToNotebookHint": "以后随时回看，整齐有序，可搜索。",
   "generateImage": "生成配图",
-  "generatingImage": "生成中……",
-  "generateImageHint": "一幅为这个词量身生成的生动配图。",
-  "composeSentence": "造一个句子",
-  "composeSentenceHint": "自己写，Gadit 帮你看语气和贴切度。",
-  "practiceWord": "练习这个词",
-  "practiceWordHint": "一场为你的学习方式量身定制的小测验。",
-  "unlockWithClear": "用 Clear 解锁",
-  "upgradeToClear": "升级到 Clear",
   "softWallAnonTitle": "你的免费查询次数已用完",
-  "softWallAnonBody": "免费注册，每天最多可查 20 个词，含完整释义、例句、习语和词源。",
   "softWallSignupCta": "免费注册",
   "softWallBasicTitle": "你已达到今天的上限",
-  "softWallBasicBody": "免费账户每天可查 20 次。额度将于明天重置，升级到 Clear 则可无限查询，还有配图、儿童模式和语法反馈。",
-  "clearUnlocksThis": "Clear 可解锁此功能",
-  "visualizeThisWord": "可视化",
-  "visualBlurb": "一幅由 Gadit 生成的生动配图，为这个词的感觉提供一个视觉锚点。",
-  "visualBlurbLocked": "为这个词生成一幅独一无二的生动配图，用眼睛去读懂它。",
   "reportLabel": "报告错误",
   "wordOriginEyebrow": "词语来源",
   "idiomsEyebrow": "习语与表达",
@@ -10263,7 +8372,6 @@ Object.assign(zhCN, {
   "imageGeneratingHint": "通常需要 10 到 15 秒。",
   "imageOpenFullAria": "查看原图",
   "kidsComingSoon": "儿童版解释即将上线。",
-  "compareComingSoon": "词语游戏即将上线。",
   "shareDefinitionAria": "分享这条释义",
   "meaningsEyebrow": "含义",
   "wordOriginLanguage": "语言",
@@ -10271,14 +8379,10 @@ Object.assign(zhCN, {
   "actionCompose": "造一个句子",
   "actionCompare": "对比词语",
   "listenToWord": "朗读",
-  "offlinePin": "离线保存",
-  "offlinePinTitle": "保存这个词以便离线学习",
-  "offlinePinnedTitle": "已保存，没有 WiFi 也能看",
   "offlineDownloadPack": "下载离线词包",
   "offlineDownloadingPack": "下载中……",
   "offlinePackHeader": "离线词包",
   "offlinePackDescription": "把你所用语言里查得最多的词加入生词本，没有 WiFi 也能随时离线学习。",
-  "visualEmptyLabel": "将为这个词绘制一幅配图",
   "shareLabel": "分享",
   "backLabel": "返回"
 });
@@ -10290,10 +8394,7 @@ Object.assign(zhTW, {
   "homeSubline": "一部懂得語境的字典，釋義、詞源、慣用語，還有一張生動的配圖，支援 30+ 種語言。",
   "searchPlaceholderHome": "輸入一個詞",
   "voiceInputTitle": "用說的輸入一個詞",
-  "addContext": "加入語境",
   "explain": "解釋",
-  "contextHint": "正在讀什麼嗎？貼上句子，幫你判斷正確的意思。",
-  "tryLabel": "試試",
   "valuePropsEyebrow": "Gadit 有什麼不一樣",
   "valuePropsTitle": "不只是釋義，而是一種與詞語相處的方式。",
   "valueProp1Eyebrow": "讀懂語境",
@@ -10312,10 +8413,8 @@ Object.assign(zhTW, {
   "seeFullResult": "看完整結果",
   "pricingEyebrow": "定價",
   "pricingTeaserTitle": "三種方案，每一種都有真材實料。",
-  "trustMicrocopy": "隨時可取消 · Clear 月付享 14 天試用 · 試用結束前不收費",
   "footerProductGroup": "產品",
   "footerLegalGroup": "法律",
-  "footerCompare": "比較",
   "footerNotebook": "生詞本",
   "footerPricing": "定價",
   "footerPrivacy": "隱私權",
@@ -10327,7 +8426,6 @@ Object.assign(zhTW, {
   "startFree": "免費開始",
   "verbStampDef": "徹底看懂一個詞",
   "navSearch": "查詢",
-  "navCompare": "比較",
   "navNotebook": "生詞本",
   "navPricing": "定價",
   "navSchools": "學校方案",
@@ -10337,7 +8435,6 @@ Object.assign(zhTW, {
   "kidsModeLabel": "兒童",
   "kidsModeTooltipOff": "點一下，讓每個詞都用家長對孩子說話的方式解釋。",
   "kidsModeTooltipOn": "兒童模式已開啟，每則釋義都會寫給孩子看。點一下即可關閉。",
-  "kidsModeBasicGate": "兒童模式屬於 Clear，升級即可使用。",
   "signupWelcomeTitle": "歡迎來到 Gadit！",
   "signupWelcomeBody": "你的帳戶好了，先隨便查一個詞開始吧。",
   "pricingPageHeadline": "三種方案，每一種都有真材實料。",
@@ -10435,23 +8532,6 @@ Object.assign(zhTW, {
   "quizPracticeAnotherWord": "練習另一個詞",
   "quizBackToWord": "回到這個詞",
   "quizReviewMistakes": "複習我答錯的題目",
-  "compareEyebrow": "比較",
-  "compareTitle": "分辨相似的詞",
-  "compareSubtitle": "affect 與 effect、אומנות 與 אמנות、principle 與 principal，這些連母語者都會搞混的詞。",
-  "compareWord1Label": "第一個詞",
-  "compareWord2Label": "第二個詞",
-  "compareWord1Placeholder": "affect",
-  "compareWord2Placeholder": "effect",
-  "compareCta": "比較",
-  "compareLoading": "比較中…",
-  "compareEmpty": "輸入兩個詞來比較",
-  "compareDifferenceLabel": "差別在哪",
-  "compareExamplesLabel": "例句",
-  "compareCommonMistakeLabel": "常見錯誤",
-  "compareErrNotARealWord": "其中一個詞我們無法辨識。",
-  "compareErrDifferentLanguages": "這兩個詞似乎是不同語言的，請換成同一種語言的一對詞。",
-  "compareErrSameWord": "這看起來是同一個詞，換兩個不一樣的試試。",
-  "compareErrGeneric": "比較功能目前無法使用。",
   "notebookEyebrow": "生詞本",
   "notebookTitle": "你的詞語宇宙",
   "notebookSubtitle": "你探索過的每一個詞，都被留下、整理好，不斷累積。",
@@ -10469,7 +8549,6 @@ Object.assign(zhTW, {
   "srEyebrow": "練習",
   "srSkip": "略過",
   "srClickToReveal": "點任意處顯示答案",
-  "srTapToReveal": "點一下顯示答案",
   "srPrimaryMeaningLabel": "主要釋義",
   "srExamplesLabel": "例句",
   "srIForgot": "我忘了",
@@ -10503,7 +8582,6 @@ Object.assign(zhTW, {
   "accountNearingLimit": "快到本月上限了。",
   "accountSectionLabel": "帳戶",
   "accountEmailLabel": "電子郵件",
-  "accountChangeEmail": "更改電子郵件",
   "accountSignOut": "登出",
   "accountDeleteAccount": "刪除帳戶",
   "reportEyebrow": "回報錯誤",
@@ -10524,33 +8602,10 @@ Object.assign(zhTW, {
   "reportCatComposeFeedback": "造句回饋有問題",
   "reportCatCompareResult": "比較結果有問題",
   "reportCatSomethingElse": "其他問題",
-  "origin": "詞源",
-  "historyNote": "歷史小記",
-  "throughTime": "隨時間演變",
-  "forKids": "給孩子的版本",
-  "commonExpressions": "常見說法",
-  "idiomsWithMeaning": "與這個意思相關的慣用語",
-  "notJustPrimary": "不只是主要的那個",
-  "takeItFurther": "再往前一步",
-  "saveToNotebookHint": "之後隨時回來看，整理好、可搜尋。",
   "generateImage": "生成配圖",
-  "generatingImage": "生成中…",
-  "generateImageHint": "為這個詞量身生成的生動配圖。",
-  "composeSentence": "造一個句子",
-  "composeSentenceHint": "自己動手寫，Gadit 幫你看語氣和用法。",
-  "practiceWord": "練習這個詞",
-  "practiceWordHint": "一個依你學習方式量身的小測驗。",
-  "unlockWithClear": "用 Clear 解鎖",
-  "upgradeToClear": "升級到 Clear",
-  "clearUnlocksThis": "Clear 可解鎖這項功能",
   "softWallAnonTitle": "你的免費查詢次數用完了",
-  "softWallAnonBody": "免費註冊，每天最多可查 20 個詞，附完整釋義、例句、慣用語和詞語來源。",
   "softWallSignupCta": "免費註冊",
   "softWallBasicTitle": "你今天的額度用完了",
-  "softWallBasicBody": "免費帳戶每天有 20 次查詢。額度明天重置，或升級到 Clear，享無限查詢，再加上配圖、兒童模式和文法回饋。",
-  "visualizeThisWord": "看見它",
-  "visualBlurb": "一張由 Gadit 生成的生動配圖，是這個詞感覺的視覺錨點。",
-  "visualBlurbLocked": "為這個詞生成一張獨一無二的生動配圖，用眼睛去理解。",
   "reportLabel": "回報錯誤",
   "wordOriginEyebrow": "詞語來源",
   "idiomsEyebrow": "慣用語與說法",
@@ -10561,7 +8616,6 @@ Object.assign(zhTW, {
   "imageGeneratingHint": "通常需要 10 到 15 秒。",
   "imageOpenFullAria": "以完整尺寸開啟圖片",
   "kidsComingSoon": "兒童版解釋即將推出。",
-  "compareComingSoon": "文字遊戲即將推出。",
   "shareDefinitionAria": "分享這則釋義",
   "meaningsEyebrow": "釋義",
   "wordOriginLanguage": "語言",
@@ -10569,14 +8623,10 @@ Object.assign(zhTW, {
   "actionCompose": "造一個句子",
   "actionCompare": "比較詞語",
   "listenToWord": "朗讀",
-  "offlinePin": "離線儲存",
-  "offlinePinTitle": "把這個詞存起來，離線也能學",
-  "offlinePinnedTitle": "已儲存，沒有 WiFi 也能看",
   "offlineDownloadPack": "下載離線詞包",
   "offlineDownloadingPack": "下載中…",
   "offlinePackHeader": "離線詞包",
   "offlinePackDescription": "把你語言中最常被查的詞加進生詞本，沒有 WiFi 也能離線學習。",
-  "visualEmptyLabel": "會為這個詞畫一張配圖",
   "shareLabel": "分享",
   "backLabel": "返回"
 });
@@ -10588,10 +8638,7 @@ Object.assign(ko, {
   "homeSubline": "맥락에 맞춰 다가가는 사전. 뜻, 어원, 관용구, 그리고 생생한 그림까지, 30+개 언어로 만나 보세요.",
   "searchPlaceholderHome": "단어를 입력하세요",
   "voiceInputTitle": "음성으로 단어 입력",
-  "addContext": "맥락 추가",
   "explain": "뜻 보기",
-  "contextHint": "무언가를 읽고 있나요? 문장을 붙여넣으면 뜻을 정확히 구분해 드려요.",
-  "tryLabel": "예시",
   "valuePropsEyebrow": "Gadit이 다르게 하는 것",
   "valuePropsTitle": "단순한 뜻풀이를 넘어, 단어와 함께 살아가는 방법.",
   "valueProp1Eyebrow": "맥락 인식",
@@ -10610,10 +8657,8 @@ Object.assign(ko, {
   "seeFullResult": "전체 결과 보기",
   "pricingEyebrow": "요금제",
   "pricingTeaserTitle": "세 가지 요금제. 모두 진짜 내용을 담았어요.",
-  "trustMicrocopy": "언제든 취소 · Clear 월간 14일 체험 · 체험 종료 전까지 청구 없음",
   "footerProductGroup": "제품",
   "footerLegalGroup": "약관",
-  "footerCompare": "비교",
   "footerNotebook": "단어장",
   "footerPricing": "요금제",
   "footerPrivacy": "개인정보",
@@ -10625,7 +8670,6 @@ Object.assign(ko, {
   "startFree": "무료로 시작",
   "verbStampDef": "단어를 끝까지 이해하다",
   "navSearch": "검색",
-  "navCompare": "비교",
   "navNotebook": "단어장",
   "navPricing": "요금제",
   "navSchools": "학교",
@@ -10635,7 +8679,6 @@ Object.assign(ko, {
   "kidsModeLabel": "아이",
   "kidsModeTooltipOff": "부모가 아이에게 설명하듯, 모든 단어를 쉽게 풀어드려요. 눌러 보세요.",
   "kidsModeTooltipOn": "키즈 모드가 켜져 있어요. 모든 뜻풀이가 아이 눈높이로 쓰여요. 끄려면 누르세요.",
-  "kidsModeBasicGate": "키즈 모드는 Clear 기능이에요. 업그레이드하면 사용할 수 있어요.",
   "signupWelcomeTitle": "Gadit에 오신 걸 환영해요!",
   "signupWelcomeBody": "계정이 준비됐어요. 아무 단어나 검색하며 시작해 보세요.",
   "pricingPageHeadline": "세 가지 요금제. 모두 진짜 내용을 담았어요.",
@@ -10733,23 +8776,6 @@ Object.assign(ko, {
   "quizPracticeAnotherWord": "다른 단어 연습하기",
   "quizBackToWord": "단어로 돌아가기",
   "quizReviewMistakes": "틀린 문제 다시 보기",
-  "compareEyebrow": "비교",
-  "compareTitle": "비슷한 단어 구별하기",
-  "compareSubtitle": "affect vs effect, אומנות vs אמנות, principle vs principal, 원어민도 헷갈리는 그런 단어들이에요.",
-  "compareWord1Label": "단어 1",
-  "compareWord2Label": "단어 2",
-  "compareWord1Placeholder": "affect",
-  "compareWord2Placeholder": "effect",
-  "compareCta": "비교하기",
-  "compareLoading": "비교하는 중…",
-  "compareEmpty": "비교할 두 단어를 입력하세요",
-  "compareDifferenceLabel": "차이점",
-  "compareExamplesLabel": "예문",
-  "compareCommonMistakeLabel": "흔한 실수",
-  "compareErrNotARealWord": "그중 한 단어를 알아보지 못했어요.",
-  "compareErrDifferentLanguages": "두 단어가 서로 다른 언어인 것 같아요. 같은 언어의 짝을 넣어 보세요.",
-  "compareErrSameWord": "같은 단어로 보여요. 서로 다른 두 단어를 넣어 보세요.",
-  "compareErrGeneric": "지금은 비교 기능을 쓸 수 없어요.",
   "notebookEyebrow": "단어장",
   "notebookTitle": "나만의 단어 우주",
   "notebookSubtitle": "지금까지 탐험한 모든 단어를, 간직하고, 정리하며, 키워 나가요.",
@@ -10767,7 +8793,6 @@ Object.assign(ko, {
   "srEyebrow": "연습",
   "srSkip": "건너뛰기",
   "srClickToReveal": "아무 곳이나 클릭하면 보여요",
-  "srTapToReveal": "탭하면 보여요",
   "srPrimaryMeaningLabel": "주된 뜻",
   "srExamplesLabel": "예문",
   "srIForgot": "잊어버렸어요",
@@ -10801,7 +8826,6 @@ Object.assign(ko, {
   "accountNearingLimit": "이번 달 한도에 가까워지고 있어요.",
   "accountSectionLabel": "계정",
   "accountEmailLabel": "이메일",
-  "accountChangeEmail": "이메일 변경",
   "accountSignOut": "로그아웃",
   "accountDeleteAccount": "계정 삭제",
   "reportEyebrow": "오류 신고",
@@ -10822,33 +8846,10 @@ Object.assign(ko, {
   "reportCatComposeFeedback": "문장 피드백 문제",
   "reportCatCompareResult": "비교 결과 문제",
   "reportCatSomethingElse": "그 밖의 문제",
-  "origin": "어원",
-  "historyNote": "역사 이야기",
-  "throughTime": "시간의 흐름 속에서",
-  "forKids": "아이용",
-  "commonExpressions": "자주 쓰는 표현",
-  "idiomsWithMeaning": "이 뜻으로 쓰는 관용구",
-  "notJustPrimary": "주된 뜻만이 아니에요",
-  "takeItFurther": "더 나아가기",
-  "saveToNotebookHint": "나중에 다시 볼 수 있게, 정리되고 검색도 돼요.",
   "generateImage": "그림 만들기",
-  "generatingImage": "만드는 중…",
-  "generateImageHint": "이 단어만을 위한 생생한 그림이에요.",
-  "composeSentence": "문장 만들기",
-  "composeSentenceHint": "직접 써 보면 Gadit이 어조와 어울림을 살펴봐요.",
-  "practiceWord": "이 단어 연습하기",
-  "practiceWordHint": "학습 방식에 맞춘 짧은 퀴즈예요.",
-  "unlockWithClear": "Clear로 잠금 해제",
-  "upgradeToClear": "Clear로 업그레이드",
   "softWallAnonTitle": "무료 검색을 다 쓰셨어요",
-  "softWallAnonBody": "무료로 가입하면 하루에 단어 20개까지, 전체 뜻풀이, 예문, 관용구, 어원과 함께 검색할 수 있어요.",
   "softWallSignupCta": "무료로 가입하기",
   "softWallBasicTitle": "오늘의 한도에 도달했어요",
-  "softWallBasicBody": "무료 계정은 하루 20회 검색할 수 있어요. 한도는 내일 초기화돼요. Clear로 업그레이드하면 무제한 검색은 물론 그림, 키즈 모드, 문법 피드백까지 쓸 수 있어요.",
-  "clearUnlocksThis": "Clear에서 열려요",
-  "visualizeThisWord": "그림으로 보기",
-  "visualBlurb": "Gadit이 만든 생생한 그림 하나로, 이 단어의 느낌을 붙잡아 주는 시각적 이미지예요.",
-  "visualBlurbLocked": "이 단어만을 위한 생생하고 유일한 그림을 만들어, 보면서 이해해 보세요.",
   "reportLabel": "오류 신고",
   "wordOriginEyebrow": "단어의 유래",
   "idiomsEyebrow": "관용구 & 표현",
@@ -10859,7 +8860,6 @@ Object.assign(ko, {
   "imageGeneratingHint": "보통 10~15초 정도 걸려요.",
   "imageOpenFullAria": "그림 크게 보기",
   "kidsComingSoon": "아이 눈높이 설명이 곧 나와요.",
-  "compareComingSoon": "단어 놀이가 곧 나와요.",
   "shareDefinitionAria": "이 뜻 공유하기",
   "meaningsEyebrow": "뜻풀이",
   "wordOriginLanguage": "언어",
@@ -10867,14 +8867,10 @@ Object.assign(ko, {
   "actionCompose": "문장 만들기",
   "actionCompare": "단어 비교",
   "listenToWord": "듣기",
-  "offlinePin": "오프라인 저장",
-  "offlinePinTitle": "이 단어를 오프라인 학습용으로 저장",
-  "offlinePinnedTitle": "저장됨, WiFi 없이도 볼 수 있어요",
   "offlineDownloadPack": "오프라인 팩 다운로드",
   "offlineDownloadingPack": "다운로드 중…",
   "offlinePackHeader": "오프라인 팩",
   "offlinePackDescription": "당신의 언어에서 가장 많이 검색된 단어를 단어장에 추가하고, WiFi 없이도 오프라인으로 학습할 수 있게 보관해요.",
-  "visualEmptyLabel": "이 단어를 위한 그림이 그려질 거예요",
   "shareLabel": "공유",
   "backLabel": "뒤로"
 });
@@ -10886,10 +8882,7 @@ Object.assign(th, {
   "homeSubline": "พจนานุกรมที่เข้าใจบริบทของคุณ ทั้งความหมาย ที่มา สำนวน และภาพที่มีชีวิตชีวา ใน 30+ ภาษา",
   "searchPlaceholderHome": "พิมพ์คำที่อยากรู้",
   "voiceInputTitle": "พูดคำที่ต้องการ",
-  "addContext": "เพิ่มบริบท",
   "explain": "อธิบาย",
-  "contextHint": "กำลังอ่านอะไรอยู่? วางประโยคเพื่อระบุความหมายให้ชัด",
-  "tryLabel": "ลอง",
   "valuePropsEyebrow": "Gadit ทำอะไรที่ต่างออกไป",
   "valuePropsTitle": "มากกว่าความหมาย คือวิธีอยู่กับคำหนึ่งคำ",
   "valueProp1Eyebrow": "เข้าใจบริบท",
@@ -10908,10 +8901,8 @@ Object.assign(th, {
   "seeFullResult": "ดูผลลัพธ์เต็ม",
   "pricingEyebrow": "ราคา",
   "pricingTeaserTitle": "สามระดับ ทุกระดับมีเนื้อหาจริง",
-  "trustMicrocopy": "ยกเลิกเมื่อไรก็ได้ · ทดลองใช้ Clear รายเดือน 14 วัน · ไม่เก็บเงินจนกว่าช่วงทดลองจะจบ",
   "footerProductGroup": "ผลิตภัณฑ์",
   "footerLegalGroup": "ข้อกฎหมาย",
-  "footerCompare": "เปรียบเทียบ",
   "footerNotebook": "สมุด",
   "footerPricing": "ราคา",
   "footerPrivacy": "ความเป็นส่วนตัว",
@@ -10923,7 +8914,6 @@ Object.assign(th, {
   "startFree": "เริ่มใช้ฟรี",
   "verbStampDef": "เข้าใจคำหนึ่งคำอย่างถึงแก่น",
   "navSearch": "ค้นหา",
-  "navCompare": "เปรียบเทียบ",
   "navNotebook": "สมุด",
   "navPricing": "ราคา",
   "navSchools": "โรงเรียน",
@@ -10933,7 +8923,6 @@ Object.assign(th, {
   "kidsModeLabel": "เด็ก",
   "kidsModeTooltipOff": "แตะเพื่ออธิบายทุกคำแบบที่พ่อแม่จะอธิบายให้ลูกฟัง",
   "kidsModeTooltipOn": "เปิดโหมดเด็กอยู่ ทุกความหมายจะถูกเขียนสำหรับเด็ก แตะเพื่อปิด",
-  "kidsModeBasicGate": "โหมดเด็กเป็นฟีเจอร์ของ Clear อัปเกรดเพื่อใช้งาน",
   "signupWelcomeTitle": "ยินดีต้อนรับสู่ Gadit!",
   "signupWelcomeBody": "บัญชีของคุณพร้อมแล้ว เริ่มจากลองค้นคำใดก็ได้",
   "pricingPageHeadline": "สามระดับ ทุกระดับมีเนื้อหาจริง",
@@ -11031,23 +9020,6 @@ Object.assign(th, {
   "quizPracticeAnotherWord": "ฝึกคำอื่น",
   "quizBackToWord": "กลับไปที่คำ",
   "quizReviewMistakes": "ทบทวนข้อที่ฉันพลาด",
-  "compareEyebrow": "เปรียบเทียบ",
-  "compareTitle": "แยกแยะคำที่คล้ายกัน",
-  "compareSubtitle": "affect กับ effect, אומנות กับ אמנות, principle กับ principal คำที่แม้แต่เจ้าของภาษาก็ยังสะดุด",
-  "compareWord1Label": "คำที่ 1",
-  "compareWord2Label": "คำที่ 2",
-  "compareWord1Placeholder": "affect",
-  "compareWord2Placeholder": "effect",
-  "compareCta": "เปรียบเทียบ",
-  "compareLoading": "กำลังเปรียบเทียบ…",
-  "compareEmpty": "กรอกสองคำเพื่อเปรียบเทียบ",
-  "compareDifferenceLabel": "ความต่าง",
-  "compareExamplesLabel": "ตัวอย่าง",
-  "compareCommonMistakeLabel": "ข้อผิดพลาดที่พบบ่อย",
-  "compareErrNotARealWord": "เราไม่รู้จักคำใดคำหนึ่งในนั้น",
-  "compareErrDifferentLanguages": "สองคำนี้ดูเหมือนอยู่คนละภาษา ลองใช้คู่คำที่เป็นภาษาเดียวกัน",
-  "compareErrSameWord": "สองคำนี้ดูเหมือนเป็นคำเดียวกัน ลองใช้สองคำที่ต่างกัน",
-  "compareErrGeneric": "การเปรียบเทียบใช้งานไม่ได้ในขณะนี้",
   "notebookEyebrow": "สมุด",
   "notebookTitle": "จักรวาลคำของคุณ",
   "notebookSubtitle": "ทุกคำที่คุณสำรวจ ถูกเก็บ จัดระเบียบ และเติบโต",
@@ -11065,7 +9037,6 @@ Object.assign(th, {
   "srEyebrow": "ฝึกฝน",
   "srSkip": "ข้าม",
   "srClickToReveal": "คลิกที่ใดก็ได้เพื่อเผยคำตอบ",
-  "srTapToReveal": "แตะเพื่อเผยคำตอบ",
   "srPrimaryMeaningLabel": "ความหมายหลัก",
   "srExamplesLabel": "ตัวอย่าง",
   "srIForgot": "ฉันลืม",
@@ -11099,7 +9070,6 @@ Object.assign(th, {
   "accountNearingLimit": "ใกล้ถึงขีดจำกัดของเดือนนี้แล้ว",
   "accountSectionLabel": "บัญชี",
   "accountEmailLabel": "อีเมล",
-  "accountChangeEmail": "เปลี่ยนอีเมล",
   "accountSignOut": "ออกจากระบบ",
   "accountDeleteAccount": "ลบบัญชี",
   "reportEyebrow": "แจ้งข้อผิดพลาด",
@@ -11120,33 +9090,10 @@ Object.assign(th, {
   "reportCatComposeFeedback": "ปัญหาคำติชมการแต่งประโยค",
   "reportCatCompareResult": "ปัญหาผลการเปรียบเทียบ",
   "reportCatSomethingElse": "อื่นๆ",
-  "origin": "ที่มา",
-  "historyNote": "บันทึกความเป็นมา",
-  "throughTime": "ผ่านกาลเวลา",
-  "forKids": "สำหรับเด็ก",
-  "commonExpressions": "วลีที่พบบ่อย",
-  "idiomsWithMeaning": "สำนวนที่ใช้ความหมายนี้",
-  "notJustPrimary": "ไม่ใช่แค่ความหมายหลัก",
-  "takeItFurther": "ต่อยอดไปอีกขั้น",
-  "saveToNotebookHint": "กลับมาดูภายหลัง จัดระเบียบไว้ ค้นหาได้",
   "generateImage": "สร้างภาพ",
-  "generatingImage": "กำลังสร้าง…",
-  "generateImageHint": "ภาพที่มีชีวิตชีวา สร้างขึ้นเพื่อคำนี้โดยเฉพาะ",
-  "composeSentence": "แต่งประโยค",
-  "composeSentenceHint": "เขียนของคุณเอง แล้ว Gadit จะตรวจน้ำเสียงและความเหมาะสม",
-  "practiceWord": "ฝึกคำนี้",
-  "practiceWordHint": "แบบทดสอบสั้นๆ ปรับให้เข้ากับวิธีเรียนรู้ของคุณ",
-  "unlockWithClear": "ปลดล็อกด้วย Clear",
-  "upgradeToClear": "อัปเกรดเป็น Clear",
   "softWallAnonTitle": "คุณใช้การค้นหาฟรีครบแล้ว",
-  "softWallAnonBody": "สมัครฟรีเพื่อค้นได้สูงสุด 20 คำต่อวัน พร้อมความหมายเต็ม ตัวอย่าง สำนวน และที่มาของคำ",
   "softWallSignupCta": "สมัครสมาชิก ฟรี",
   "softWallBasicTitle": "คุณค้นครบตามโควตาของวันนี้แล้ว",
-  "softWallBasicBody": "บัญชีฟรีค้นได้ 20 ครั้งต่อวัน โควตาจะรีเซ็ตพรุ่งนี้ หรืออัปเกรดเป็น Clear เพื่อค้นหาได้ไม่จำกัด พร้อมภาพ โหมดเด็ก และคำติชมไวยากรณ์",
-  "clearUnlocksThis": "Clear ปลดล็อกสิ่งนี้",
-  "visualizeThisWord": "สร้างภาพ",
-  "visualBlurb": "ภาพหนึ่งภาพที่มีชีวิตชีวา สร้างโดย Gadit เป็นสมอทางสายตาให้รับรู้ถึงความรู้สึกของคำนี้",
-  "visualBlurbLocked": "สร้างภาพที่มีชีวิตชีวาและไม่ซ้ำใครสำหรับคำนี้ เข้าใจผ่านการมองเห็น",
   "reportLabel": "แจ้งข้อผิดพลาด",
   "wordOriginEyebrow": "ที่มาของคำ",
   "idiomsEyebrow": "สำนวนและวลี",
@@ -11157,7 +9104,6 @@ Object.assign(th, {
   "imageGeneratingHint": "โดยปกติใช้เวลา 10 ถึง 15 วินาที",
   "imageOpenFullAria": "เปิดภาพขนาดเต็ม",
   "kidsComingSoon": "คำอธิบายสำหรับเด็กเร็วๆ นี้",
-  "compareComingSoon": "เกมคำศัพท์เร็วๆ นี้",
   "shareDefinitionAria": "แชร์ความหมายนี้",
   "meaningsEyebrow": "ความหมาย",
   "wordOriginLanguage": "ภาษา",
@@ -11165,14 +9111,10 @@ Object.assign(th, {
   "actionCompose": "แต่งประโยค",
   "actionCompare": "เปรียบเทียบคำ",
   "listenToWord": "ฟัง",
-  "offlinePin": "บันทึกออฟไลน์",
-  "offlinePinTitle": "บันทึกคำนี้ไว้เรียนแบบออฟไลน์",
-  "offlinePinnedTitle": "บันทึกแล้ว ใช้ได้โดยไม่ต้องมี WiFi",
   "offlineDownloadPack": "ดาวน์โหลดชุดออฟไลน์",
   "offlineDownloadingPack": "กำลังดาวน์โหลด…",
   "offlinePackHeader": "ชุดออฟไลน์",
   "offlinePackDescription": "เพิ่มคำที่ค้นหามากที่สุดในภาษาของคุณลงในสมุด และเก็บไว้ให้ใช้ได้โดยไม่ต้องมี WiFi เพื่อเรียนแบบออฟไลน์",
-  "visualEmptyLabel": "จะมีการวาดภาพสำหรับคำนี้",
   "shareLabel": "แชร์",
   "backLabel": "ย้อนกลับ"
 });
@@ -11184,10 +9126,7 @@ Object.assign(bn, {
   "homeSubline": "এমন এক অভিধান যা প্রসঙ্গ ধরে আপনার পাশে দাঁড়ায়, অর্থ, উৎপত্তি, বাগধারা আর একটি প্রাণবন্ত ছবিসহ, ২২টি ভাষায়।",
   "searchPlaceholderHome": "একটি শব্দ লিখুন",
   "voiceInputTitle": "একটি শব্দ বলুন",
-  "addContext": "প্রসঙ্গ যোগ করুন",
   "explain": "ব্যাখ্যা করুন",
-  "contextHint": "কিছু পড়ছেন? অর্থ স্পষ্ট করতে বাক্যটি এখানে বসান।",
-  "tryLabel": "চেষ্টা করুন",
   "valuePropsEyebrow": "Gadit যা আলাদাভাবে করে",
   "valuePropsTitle": "শুধু একটা অর্থের চেয়ে বেশি, একটা শব্দের সাথে বেঁচে থাকার উপায়।",
   "valueProp1Eyebrow": "প্রসঙ্গ-সচেতন",
@@ -11206,10 +9145,8 @@ Object.assign(bn, {
   "seeFullResult": "সম্পূর্ণ ফলাফল দেখুন",
   "pricingEyebrow": "মূল্য",
   "pricingTeaserTitle": "তিনটি স্তর। সবগুলোতেই আসল বিষয়বস্তু।",
-  "trustMicrocopy": "যেকোনো সময় বাতিল করুন · Clear মাসিকে ১৪ দিনের ট্রায়াল · ট্রায়াল শেষ না হওয়া পর্যন্ত কোনো চার্জ নেই",
   "footerProductGroup": "পণ্য",
   "footerLegalGroup": "আইনি",
-  "footerCompare": "তুলনা",
   "footerNotebook": "নোটবুক",
   "footerPricing": "মূল্য",
   "footerPrivacy": "গোপনীয়তা",
@@ -11221,7 +9158,6 @@ Object.assign(bn, {
   "startFree": "বিনামূল্যে শুরু করুন",
   "verbStampDef": "একটি শব্দ পুরোপুরি বোঝা",
   "navSearch": "অনুসন্ধান",
-  "navCompare": "তুলনা",
   "navNotebook": "নোটবুক",
   "navPricing": "মূল্য",
   "navSchools": "স্কুল",
@@ -11231,7 +9167,6 @@ Object.assign(bn, {
   "kidsModeLabel": "শিশু",
   "kidsModeTooltipOff": "প্রতিটি শব্দ যেন বাবা-মা শিশুকে বোঝায় সেভাবে ব্যাখ্যা পেতে ট্যাপ করুন।",
   "kidsModeTooltipOn": "শিশু মোড চালু আছে, প্রতিটি অর্থ শিশুর জন্য লেখা হবে। বন্ধ করতে ট্যাপ করুন।",
-  "kidsModeBasicGate": "শিশু মোড একটি Clear ফিচার। ব্যবহার করতে আপগ্রেড করুন।",
   "signupWelcomeTitle": "Gadit-এ স্বাগতম!",
   "signupWelcomeBody": "আপনার অ্যাকাউন্ট প্রস্তুত। যেকোনো শব্দ খুঁজে শুরু করুন।",
   "pricingPageHeadline": "তিনটি স্তর। সবগুলোতেই আসল বিষয়বস্তু।",
@@ -11329,23 +9264,6 @@ Object.assign(bn, {
   "quizPracticeAnotherWord": "আরেকটি শব্দ অনুশীলন করুন",
   "quizBackToWord": "শব্দে ফিরে যান",
   "quizReviewMistakes": "যেগুলো ভুল করেছি সেগুলো দেখুন",
-  "compareEyebrow": "তুলনা",
-  "compareTitle": "একরকম শব্দের পার্থক্য বুঝুন",
-  "compareSubtitle": "affect vs effect, אומנות vs אמנות, principle vs principal, যেসব শব্দ মাতৃভাষীদেরও বিভ্রান্ত করে।",
-  "compareWord1Label": "শব্দ ১",
-  "compareWord2Label": "শব্দ ২",
-  "compareWord1Placeholder": "affect",
-  "compareWord2Placeholder": "effect",
-  "compareCta": "তুলনা করুন",
-  "compareLoading": "তুলনা করা হচ্ছে…",
-  "compareEmpty": "তুলনা করতে দুটি শব্দ লিখুন",
-  "compareDifferenceLabel": "পার্থক্য",
-  "compareExamplesLabel": "উদাহরণ",
-  "compareCommonMistakeLabel": "সাধারণ ভুল",
-  "compareErrNotARealWord": "ওই শব্দগুলোর একটি আমরা চিনতে পারছি না।",
-  "compareErrDifferentLanguages": "এই দুটি শব্দ ভিন্ন ভাষার বলে মনে হচ্ছে, একই ভাষার জোড়া চেষ্টা করুন।",
-  "compareErrSameWord": "এগুলো একই শব্দ বলে মনে হচ্ছে, দুটি আলাদা শব্দ চেষ্টা করুন।",
-  "compareErrGeneric": "তুলনা এই মুহূর্তে উপলব্ধ নয়।",
   "notebookEyebrow": "নোটবুক",
   "notebookTitle": "আপনার শব্দের জগৎ",
   "notebookSubtitle": "আপনার ঘেঁটে দেখা প্রতিটি শব্দ, সংরক্ষিত, গোছানো, বেড়ে চলা।",
@@ -11363,7 +9281,6 @@ Object.assign(bn, {
   "srEyebrow": "অনুশীলন",
   "srSkip": "এড়িয়ে যান",
   "srClickToReveal": "দেখতে যেকোনো জায়গায় ক্লিক করুন",
-  "srTapToReveal": "দেখতে ট্যাপ করুন",
   "srPrimaryMeaningLabel": "প্রধান অর্থ",
   "srExamplesLabel": "উদাহরণ",
   "srIForgot": "আমি ভুলে গিয়েছি",
@@ -11397,7 +9314,6 @@ Object.assign(bn, {
   "accountNearingLimit": "এই মাসের সীমার কাছাকাছি।",
   "accountSectionLabel": "অ্যাকাউন্ট",
   "accountEmailLabel": "ইমেইল",
-  "accountChangeEmail": "ইমেইল পরিবর্তন করুন",
   "accountSignOut": "সাইন আউট",
   "accountDeleteAccount": "অ্যাকাউন্ট মুছুন",
   "reportEyebrow": "ত্রুটি জানান",
@@ -11418,33 +9334,10 @@ Object.assign(bn, {
   "reportCatComposeFeedback": "বাক্যের মতামতে সমস্যা",
   "reportCatCompareResult": "তুলনার ফলাফলে সমস্যা",
   "reportCatSomethingElse": "অন্য কিছু",
-  "origin": "উৎপত্তি",
-  "historyNote": "ইতিহাসের টুকরো",
-  "throughTime": "কালের সাথে",
-  "forKids": "শিশুদের জন্য",
-  "commonExpressions": "প্রচলিত প্রবাদ",
-  "idiomsWithMeaning": "এই অর্থের বাগধারা",
-  "notJustPrimary": "শুধু প্রধানটি নয়",
-  "takeItFurther": "আরও এগিয়ে যান",
-  "saveToNotebookHint": "পরে ফিরে আসুন, গোছানো, খুঁজে পাওয়ার মতো।",
   "generateImage": "ছবি তৈরি করুন",
-  "generatingImage": "তৈরি হচ্ছে…",
-  "generateImageHint": "একটি প্রাণবন্ত ছবি, শুধু এই শব্দের জন্য।",
-  "composeSentence": "একটি বাক্য লিখুন",
-  "composeSentenceHint": "নিজে লিখুন, Gadit সুর ও মানানসইতা যাচাই করে।",
-  "practiceWord": "এই শব্দটি অনুশীলন করুন",
-  "practiceWordHint": "আপনি কীভাবে শেখেন তার সাথে মানানো একটি ছোট কুইজ।",
-  "unlockWithClear": "Clear দিয়ে আনলক করুন",
-  "upgradeToClear": "Clear-এ আপগ্রেড করুন",
   "softWallAnonTitle": "আপনার বিনামূল্যের অনুসন্ধান শেষ হয়েছে",
-  "softWallAnonBody": "প্রতিদিন ২০টি পর্যন্ত শব্দ খুঁজতে বিনামূল্যে সাইন আপ করুন, সম্পূর্ণ অর্থ, উদাহরণ, বাগধারা আর শব্দের উৎপত্তিসহ।",
   "softWallSignupCta": "সাইন আপ করুন, এটি বিনামূল্যে",
   "softWallBasicTitle": "আপনি আজকের সীমায় পৌঁছে গেছেন",
-  "softWallBasicBody": "বিনামূল্যের অ্যাকাউন্টে প্রতিদিন ২০টি অনুসন্ধান পাওয়া যায়। আগামীকাল সীমা নতুন করে শুরু হয়, অথবা সীমাহীন অনুসন্ধানের সাথে ছবি, শিশু মোড আর ব্যাকরণের মতামত পেতে Clear-এ আপগ্রেড করুন।",
-  "clearUnlocksThis": "Clear এটি আনলক করে",
-  "visualizeThisWord": "কল্পনায় দেখুন",
-  "visualBlurb": "একটি প্রাণবন্ত ছবি, Gadit-এর তৈরি, এই শব্দটি কেমন অনুভূত হয় তার একটি দৃশ্য-নোঙর।",
-  "visualBlurbLocked": "এই শব্দের জন্য একটি প্রাণবন্ত, অনন্য ছবি তৈরি করুন, দেখে দেখে বোঝা।",
   "reportLabel": "ত্রুটি জানান",
   "wordOriginEyebrow": "শব্দের উৎপত্তি",
   "idiomsEyebrow": "বাগধারা ও প্রবাদ",
@@ -11455,7 +9348,6 @@ Object.assign(bn, {
   "imageGeneratingHint": "সাধারণত ১০ থেকে ১৫ সেকেন্ড লাগে।",
   "imageOpenFullAria": "ছবি পূর্ণ আকারে খুলুন",
   "kidsComingSoon": "শিশুদের ব্যাখ্যা শীঘ্রই আসছে।",
-  "compareComingSoon": "শব্দ খেলা শীঘ্রই আসছে।",
   "shareDefinitionAria": "এই অর্থটি শেয়ার করুন",
   "meaningsEyebrow": "অর্থসমূহ",
   "wordOriginLanguage": "ভাষা",
@@ -11463,14 +9355,10 @@ Object.assign(bn, {
   "actionCompose": "একটি বাক্য লিখুন",
   "actionCompare": "শব্দ তুলনা করুন",
   "listenToWord": "শুনুন",
-  "offlinePin": "অফলাইনে সংরক্ষণ করুন",
-  "offlinePinTitle": "অফলাইনে পড়ার জন্য এই শব্দটি সংরক্ষণ করুন",
-  "offlinePinnedTitle": "সংরক্ষিত, WiFi ছাড়াই পাওয়া যাবে",
   "offlineDownloadPack": "অফলাইন প্যাক ডাউনলোড করুন",
   "offlineDownloadingPack": "ডাউনলোড হচ্ছে…",
   "offlinePackHeader": "অফলাইন প্যাক",
   "offlinePackDescription": "আপনার ভাষায় সবচেয়ে বেশি খোঁজা শব্দগুলো আপনার নোটবুকে যোগ করে, আর অফলাইনে পড়ার জন্য WiFi ছাড়াই সেগুলো রেখে দেয়।",
-  "visualEmptyLabel": "এই শব্দের জন্য একটি ছবি আঁকা হবে",
   "shareLabel": "শেয়ার করুন",
   "backLabel": "ফিরে যান"
 });
@@ -11483,10 +9371,7 @@ Object.assign(da, {
   "homeSubline": "En ordbog, der møder dig i konteksten, betydninger, oprindelse, udtryk og et levende billede, på 30+ sprog.",
   "searchPlaceholderHome": "Skriv et ord",
   "voiceInputTitle": "Diktér et ord",
-  "addContext": "Tilføj kontekst",
   "explain": "Forklar",
-  "contextHint": "Læser du noget? Indsæt sætningen for at afklare betydningen.",
-  "tryLabel": "Prøv",
   "valuePropsEyebrow": "Det gør Gadit anderledes",
   "valuePropsTitle": "Mere end en definition, en måde at leve med et ord på.",
   "valueProp1Eyebrow": "Forstår kontekst",
@@ -11505,10 +9390,8 @@ Object.assign(da, {
   "seeFullResult": "Se hele resultatet",
   "pricingEyebrow": "Priser",
   "pricingTeaserTitle": "Tre niveauer. Alle med ægte indhold.",
-  "trustMicrocopy": "Opsig når som helst · 14 dages prøveperiode på Clear månedlig · Ingen opkrævning før prøveperioden slutter",
   "footerProductGroup": "Produkt",
   "footerLegalGroup": "Juridisk",
-  "footerCompare": "Sammenlign",
   "footerNotebook": "Notesbog",
   "footerPricing": "Priser",
   "footerPrivacy": "Privatliv",
@@ -11520,7 +9403,6 @@ Object.assign(da, {
   "startFree": "Start gratis",
   "verbStampDef": "at forstå et ord, fuldt ud",
   "navSearch": "Søg",
-  "navCompare": "Sammenlign",
   "navNotebook": "Notesbog",
   "navPricing": "Priser",
   "navSchools": "Skoler",
@@ -11530,7 +9412,6 @@ Object.assign(da, {
   "kidsModeLabel": "Børn",
   "kidsModeTooltipOff": "Tryk for at forklare hvert ord, som en forælder ville forklare det for et barn.",
   "kidsModeTooltipOn": "Børnetilstand er slået til, hver betydning skrives til et barn. Tryk for at slå fra.",
-  "kidsModeBasicGate": "Børnetilstand er en Clear-funktion. Opgrader for at bruge den.",
   "signupWelcomeTitle": "Velkommen til Gadit!",
   "signupWelcomeBody": "Din konto er klar. Begynd med at søge på et ord.",
   "pricingPageHeadline": "Tre niveauer. Alle med ægte indhold.",
@@ -11628,23 +9509,6 @@ Object.assign(da, {
   "quizPracticeAnotherWord": "Øv et andet ord",
   "quizBackToWord": "Tilbage til ordet",
   "quizReviewMistakes": "Gennemgå dem, jeg missede",
-  "compareEyebrow": "Sammenlign",
-  "compareTitle": "Skeln lignende ord fra hinanden",
-  "compareSubtitle": "affect vs effect, אומנות vs אמנות, principle vs principal, de ord, der driller selv modersmålstalende.",
-  "compareWord1Label": "Ord 1",
-  "compareWord2Label": "Ord 2",
-  "compareWord1Placeholder": "affect",
-  "compareWord2Placeholder": "effect",
-  "compareCta": "Sammenlign",
-  "compareLoading": "Sammenligner…",
-  "compareEmpty": "Indtast to ord for at sammenligne dem",
-  "compareDifferenceLabel": "Forskellen",
-  "compareExamplesLabel": "Eksempler",
-  "compareCommonMistakeLabel": "Almindelig fejl",
-  "compareErrNotARealWord": "Vi genkender ikke et af de ord.",
-  "compareErrDifferentLanguages": "De to ord ser ud til at være på forskellige sprog, prøv et matchende par.",
-  "compareErrSameWord": "De ligner det samme ord, prøv to forskellige.",
-  "compareErrGeneric": "Sammenligning er ikke tilgængelig lige nu.",
   "notebookEyebrow": "Notesbog",
   "notebookTitle": "Dit univers af ord",
   "notebookSubtitle": "Hvert ord, du har udforsket, gemt, ordnet, i vækst.",
@@ -11662,7 +9526,6 @@ Object.assign(da, {
   "srEyebrow": "Øvelse",
   "srSkip": "Spring over",
   "srClickToReveal": "Klik hvor som helst for at vise",
-  "srTapToReveal": "Tryk for at vise",
   "srPrimaryMeaningLabel": "Primær betydning",
   "srExamplesLabel": "Eksempler",
   "srIForgot": "Jeg glemte det",
@@ -11696,7 +9559,6 @@ Object.assign(da, {
   "accountNearingLimit": "Nærmer sig denne måneds grænse.",
   "accountSectionLabel": "Konto",
   "accountEmailLabel": "E-mail",
-  "accountChangeEmail": "Skift e-mail",
   "accountSignOut": "Log ud",
   "accountDeleteAccount": "Slet konto",
   "reportEyebrow": "Rapportér en fejl",
@@ -11717,33 +9579,10 @@ Object.assign(da, {
   "reportCatComposeFeedback": "Problem med sætningsfeedback",
   "reportCatCompareResult": "Problem med sammenligning",
   "reportCatSomethingElse": "Noget andet",
-  "origin": "Oprindelse",
-  "historyNote": "Historisk note",
-  "throughTime": "Gennem tiden",
-  "forKids": "For børn",
-  "commonExpressions": "Almindelige udtryk",
-  "idiomsWithMeaning": "Udtryk med denne betydning",
-  "notJustPrimary": "Ikke kun den primære",
-  "takeItFurther": "Tag det videre",
-  "saveToNotebookHint": "Vend tilbage til det senere, ordnet og søgbart.",
   "generateImage": "Lav billede",
-  "generatingImage": "Laver…",
-  "generateImageHint": "En levende illustration, kun til dette ord.",
-  "composeSentence": "Skriv en sætning",
-  "composeSentenceHint": "Skriv din egen, Gadit gennemgår tone og pasform.",
-  "practiceWord": "Øv dette ord",
-  "practiceWordHint": "En kort quiz tilpasset måden, du lærer på.",
-  "unlockWithClear": "Lås op med Clear",
-  "upgradeToClear": "Opgrader til Clear",
   "softWallAnonTitle": "Du har brugt dine gratis søgninger",
-  "softWallAnonBody": "Opret dig gratis for at søge op til 20 ord om dagen, med fulde betydninger, eksempler, udtryk og ordets oprindelse.",
   "softWallSignupCta": "Opret dig, det er gratis",
   "softWallBasicTitle": "Du har nået dagens grænse",
-  "softWallBasicBody": "Gratis konti får 20 søgninger om dagen. Grænsen nulstilles i morgen, eller opgrader til Clear for ubegrænsede søgninger plus billeder, børnetilstand og grammatikfeedback.",
-  "clearUnlocksThis": "Clear låser dette op",
-  "visualizeThisWord": "Visualisér",
-  "visualBlurb": "Ét levende billede, skabt af Gadit, et visuelt holdepunkt for, hvordan dette ord føles.",
-  "visualBlurbLocked": "Lav et levende, helt unikt billede til dette ord, forståelse gennem synet.",
   "reportLabel": "Rapportér en fejl",
   "wordOriginEyebrow": "Ordets oprindelse",
   "idiomsEyebrow": "Udtryk og vendinger",
@@ -11754,7 +9593,6 @@ Object.assign(da, {
   "imageGeneratingHint": "Det tager normalt 10 til 15 sekunder.",
   "imageOpenFullAria": "Åbn billedet i fuld størrelse",
   "kidsComingSoon": "Børneforklaring kommer snart.",
-  "compareComingSoon": "Ordspil kommer snart.",
   "shareDefinitionAria": "Del denne betydning",
   "meaningsEyebrow": "Betydninger",
   "wordOriginLanguage": "Sprog",
@@ -11762,14 +9600,10 @@ Object.assign(da, {
   "actionCompose": "Skriv en sætning",
   "actionCompare": "Sammenlign ord",
   "listenToWord": "Lyt",
-  "offlinePin": "Gem offline",
-  "offlinePinTitle": "Gem dette ord til offline-studie",
-  "offlinePinnedTitle": "Gemt, tilgængeligt uden WiFi",
   "offlineDownloadPack": "Hent offline-pakke",
   "offlineDownloadingPack": "Henter…",
   "offlinePackHeader": "Offline-pakke",
   "offlinePackDescription": "Tilføjer de mest søgte ord på dit sprog til din notesbog og holder dem tilgængelige uden WiFi til offline-studie.",
-  "visualEmptyLabel": "Der bliver tegnet et billede til dette ord",
   "shareLabel": "Del",
   "backLabel": "Tilbage"
 });
@@ -11781,10 +9615,7 @@ Object.assign(hu, {
   "homeSubline": "Szótár, amely a kontextusban is ért: jelentések, eredet, szólások és egy élénk kép, 30+ nyelven.",
   "searchPlaceholderHome": "Írj be egy szót",
   "voiceInputTitle": "Mondj egy szót",
-  "addContext": "Adj hozzá kontextust",
   "explain": "Magyarázd el",
-  "contextHint": "Olvasol valamit? Illeszd be a mondatot a jelentés pontosításához.",
-  "tryLabel": "Próbáld",
   "valuePropsEyebrow": "Mit csinál másképp a Gadit",
   "valuePropsTitle": "Több egy jelentésnél, egy mód arra, hogy együtt élj a szóval.",
   "valueProp1Eyebrow": "Kontextusérzékeny",
@@ -11803,10 +9634,8 @@ Object.assign(hu, {
   "seeFullResult": "Nézd meg a teljes eredményt",
   "pricingEyebrow": "Árak",
   "pricingTeaserTitle": "Három szint. Mind valódi tartalommal.",
-  "trustMicrocopy": "Bármikor lemondható · 14 napos próba a havi Clearen · A próba végéig nincs terhelés",
   "footerProductGroup": "Termék",
   "footerLegalGroup": "Jogi",
-  "footerCompare": "Összehasonlítás",
   "footerNotebook": "Füzet",
   "footerPricing": "Árak",
   "footerPrivacy": "Adatvédelem",
@@ -11818,7 +9647,6 @@ Object.assign(hu, {
   "startFree": "Kezdd ingyen",
   "verbStampDef": "megérteni egy szót, teljesen",
   "navSearch": "Keresés",
-  "navCompare": "Összehasonlítás",
   "navNotebook": "Füzet",
   "navPricing": "Árak",
   "navSchools": "Iskolák",
@@ -11828,7 +9656,6 @@ Object.assign(hu, {
   "kidsModeLabel": "Gyerekek",
   "kidsModeTooltipOff": "Koppints, hogy minden szót úgy magyarázzunk el, ahogy egy szülő tenné a gyerekének.",
   "kidsModeTooltipOn": "A gyerekmód be van kapcsolva, minden jelentés gyereknek íródik. Koppints a kikapcsoláshoz.",
-  "kidsModeBasicGate": "A gyerekmód Clear funkció. Válts feljebb a használatához.",
   "signupWelcomeTitle": "Üdv a Gaditben!",
   "signupWelcomeBody": "A fiókod készen áll. Kezdd bármilyen szó keresésével.",
   "pricingPageHeadline": "Három szint. Mind valódi tartalommal.",
@@ -11926,23 +9753,6 @@ Object.assign(hu, {
   "quizPracticeAnotherWord": "Gyakorolj másik szót",
   "quizBackToWord": "Vissza a szóhoz",
   "quizReviewMistakes": "Nézd át, amiket elrontottam",
-  "compareEyebrow": "Összehasonlítás",
-  "compareTitle": "Különböztesd meg a hasonló szavakat",
-  "compareSubtitle": "affect vs effect, אומנות vs אמנות, principle vs principal, a szavak, amelyeken még az anyanyelvi beszélők is elcsúsznak.",
-  "compareWord1Label": "1. szó",
-  "compareWord2Label": "2. szó",
-  "compareWord1Placeholder": "affect",
-  "compareWord2Placeholder": "effect",
-  "compareCta": "Összehasonlítás",
-  "compareLoading": "Összehasonlítás…",
-  "compareEmpty": "Adj meg két szót az összehasonlításhoz",
-  "compareDifferenceLabel": "A különbség",
-  "compareExamplesLabel": "Példák",
-  "compareCommonMistakeLabel": "Gyakori hiba",
-  "compareErrNotARealWord": "Az egyik szót nem ismerjük fel.",
-  "compareErrDifferentLanguages": "Úgy tűnik, ez a két szó különböző nyelvű, próbálj egyező párt.",
-  "compareErrSameWord": "Ezek ugyanannak a szónak tűnnek, próbálj két különbözőt.",
-  "compareErrGeneric": "Az összehasonlítás most nem érhető el.",
   "notebookEyebrow": "Füzet",
   "notebookTitle": "A szavaid univerzuma",
   "notebookSubtitle": "Minden szó, amit felfedeztél, elmentve, rendszerezve, egyre gyarapodva.",
@@ -11960,7 +9770,6 @@ Object.assign(hu, {
   "srEyebrow": "Gyakorlás",
   "srSkip": "Kihagyás",
   "srClickToReveal": "Kattints bárhova a felfedéshez",
-  "srTapToReveal": "Koppints a felfedéshez",
   "srPrimaryMeaningLabel": "Fő jelentés",
   "srExamplesLabel": "Példák",
   "srIForgot": "Elfelejtettem",
@@ -11994,7 +9803,6 @@ Object.assign(hu, {
   "accountNearingLimit": "Közeledsz a havi korláthoz.",
   "accountSectionLabel": "Fiók",
   "accountEmailLabel": "E-mail",
-  "accountChangeEmail": "E-mail módosítása",
   "accountSignOut": "Kijelentkezés",
   "accountDeleteAccount": "Fiók törlése",
   "reportEyebrow": "Hiba jelentése",
@@ -12015,33 +9823,10 @@ Object.assign(hu, {
   "reportCatComposeFeedback": "Probléma a mondat-visszajelzéssel",
   "reportCatCompareResult": "Probléma az összehasonlítás eredményével",
   "reportCatSomethingElse": "Valami más",
-  "origin": "Eredet",
-  "historyNote": "Történeti jegyzet",
-  "throughTime": "Az idők során",
-  "forKids": "Gyerekeknek",
-  "commonExpressions": "Gyakori kifejezések",
-  "idiomsWithMeaning": "Szólások ezzel a jelentéssel",
-  "notJustPrimary": "Nem csak a fő jelentés",
-  "takeItFurther": "Vidd tovább",
-  "saveToNotebookHint": "Térj vissza hozzá később, rendszerezve, kereshetően.",
   "generateImage": "Kép készítése",
-  "generatingImage": "Készítés…",
-  "generateImageHint": "Élénk, egyedi illusztráció, kifejezetten ehhez a szóhoz.",
-  "composeSentence": "Írj egy mondatot",
-  "composeSentenceHint": "Írd meg a sajátodat, a Gadit átnézi a hangnemet és az illeszkedést.",
-  "practiceWord": "Gyakorold ezt a szót",
-  "practiceWordHint": "Rövid kvíz, a tanulási módodhoz igazítva.",
-  "unlockWithClear": "Nyisd meg a Clearrel",
-  "upgradeToClear": "Válts Clear csomagra",
-  "clearUnlocksThis": "Ezt a Clear nyitja meg",
   "softWallAnonTitle": "Elhasználtad az ingyenes kereséseidet",
-  "softWallAnonBody": "Regisztrálj ingyen, hogy naponta akár 20 szót kereshess, teljes jelentésekkel, példákkal, szólásokkal és a szó eredetével.",
   "softWallSignupCta": "Regisztrálj, ingyenes",
   "softWallBasicTitle": "Elérted a mai korlátot",
-  "softWallBasicBody": "Az ingyenes fiókok napi 20 keresést kapnak. A korlát holnap nullázódik, vagy válts Clear csomagra a korlátlan keresésért, plusz képek, gyerekmód és nyelvtani visszajelzés.",
-  "visualizeThisWord": "Jelenítsd meg",
-  "visualBlurb": "Egy élénk kép, a Gadit alkotása, vizuális horgony a szó hangulatához.",
-  "visualBlurbLocked": "Készíts élénk, egyedi képet ehhez a szóhoz, megértés a látáson át.",
   "reportLabel": "Hiba jelentése",
   "wordOriginEyebrow": "A szó eredete",
   "meaningsEyebrow": "Jelentések",
@@ -12055,19 +9840,14 @@ Object.assign(hu, {
   "imageGeneratingHint": "Ez általában 10-15 másodpercet vesz igénybe.",
   "imageOpenFullAria": "Kép megnyitása teljes méretben",
   "kidsComingSoon": "A gyerekbarát magyarázat hamarosan érkezik.",
-  "compareComingSoon": "A szójátékok hamarosan érkeznek.",
   "shareDefinitionAria": "Oszd meg ezt a jelentést",
   "actionCompose": "Írj egy mondatot",
   "actionCompare": "Szavak összehasonlítása",
   "listenToWord": "Meghallgatás",
-  "offlinePin": "Mentés offline",
-  "offlinePinTitle": "Mentsd el ezt a szót offline tanuláshoz",
-  "offlinePinnedTitle": "Elmentve, WiFi nélkül is elérhető",
   "offlineDownloadPack": "Offline csomag letöltése",
   "offlineDownloadingPack": "Letöltés…",
   "offlinePackHeader": "Offline csomag",
   "offlinePackDescription": "A nyelveden leggyakrabban keresett szavakat hozzáadja a füzetedhez, és WiFi nélkül is elérhetővé teszi őket offline tanuláshoz.",
-  "visualEmptyLabel": "Ehhez a szóhoz kép készül majd",
   "shareLabel": "Megosztás",
   "backLabel": "Vissza"
 });
@@ -12075,13 +9855,13 @@ Object.assign(hu, {
 
 // --- Template (function) keys for the 11 store-locale languages (2026-10-10
 // i18n sweep). The Object.assign blocks above carry only plain strings, so
-// these 17 templates ("Meaning 2", "Question 3 of 5", ...) were English. ---
+// these 12 templates ("Question 3 of 5", "Word 2 of 5", ...) were English. ---
 type V2Templates = Pick<V2Strings,
   "composeTitleTemplate" | "quizTitleTemplate" | "quizQuestionNofM" | "quizFinalScoreTemplate" |
-  "notebookCounterTemplate" | "notebookDueTodayTemplate" | "notebookSavedOnTemplate" |
+  "notebookSavedOnTemplate" |
   "srWordNofMTemplate" | "srSummaryStatTemplate" | "srNextReviewTemplate" |
   "accountNamedSpaceTemplate" | "accountTrialBadgeTemplate" | "accountRenewsOnTemplate" |
-  "meaningN" | "doMoreWith" | "softBannerSearchesLeft" | "savedAgoTemplate">;
+  "savedAgoTemplate">;
 
 const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
   vi: {
@@ -12089,8 +9869,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, câu đố`,
     quizQuestionNofM: (n, m) => `Câu ${n}/${m}`,
     quizFinalScoreTemplate: (c, t) => `Bạn trả lời đúng ${c}/${t} câu.`,
-    notebookCounterTemplate: (n) => `${n} từ đã khám phá`,
-    notebookDueTodayTemplate: (n) => `${n} từ cần ôn hôm nay`,
     notebookSavedOnTemplate: (d) => `Đã lưu ${d}`,
     srWordNofMTemplate: (n, m) => `Từ ${n}/${m}`,
     srSummaryStatTemplate: (k, f) => `${k} từ đã biết · ${f} từ cần ôn lại`,
@@ -12098,9 +9876,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `Không gian của ${n}`,
     accountTrialBadgeTemplate: (d) => `Dùng thử 14 ngày · còn ${d} ngày`,
     accountRenewsOnTemplate: (d) => `Gia hạn ${d}`,
-    meaningN: (n) => `Nghĩa ${n}`,
-    doMoreWith: (w) => `Làm nhiều hơn với ${w}`,
-    softBannerSearchesLeft: (n) => `Hôm nay còn ${n} lượt tra miễn phí, đăng ký miễn phí để có 20 lượt mỗi ngày.`,
     savedAgoTemplate: (t) => `Đã lưu · ${t}`,
   },
   fil: {
@@ -12108,8 +9883,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, quiz`,
     quizQuestionNofM: (n, m) => `Tanong ${n} sa ${m}`,
     quizFinalScoreTemplate: (c, t) => `Tama ang ${c} sa ${t}.`,
-    notebookCounterTemplate: (n) => `${n} salitang na-explore`,
-    notebookDueTodayTemplate: (n) => `${n} na dapat balikan ngayon`,
     notebookSavedOnTemplate: (d) => `Na-save ${d}`,
     srWordNofMTemplate: (n, m) => `Salita ${n} sa ${m}`,
     srSummaryStatTemplate: (k, f) => `${k} ang alam mo · ${f} ang babalikan`,
@@ -12117,9 +9890,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `Espasyo ni ${n}`,
     accountTrialBadgeTemplate: (d) => `14 na araw na trial · ${d} araw pa`,
     accountRenewsOnTemplate: (d) => `Magre-renew sa ${d}`,
-    meaningN: (n) => `Kahulugan ${n}`,
-    doMoreWith: (w) => `Gumawa pa ng higit gamit ang ${w}`,
-    softBannerSearchesLeft: (n) => `${n} libreng paghahanap na lang ngayon, mag-sign up nang libre para sa 20 bawat araw.`,
     savedAgoTemplate: (t) => `Na-save · ${t}`,
   },
   af: {
@@ -12127,8 +9897,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, vasvra`,
     quizQuestionNofM: (n, m) => `Vraag ${n} van ${m}`,
     quizFinalScoreTemplate: (c, t) => `Jy het ${c} uit ${t} reg.`,
-    notebookCounterTemplate: (n) => `${n} woorde verken`,
-    notebookDueTodayTemplate: (n) => `${n} vandag om te hersien`,
     notebookSavedOnTemplate: (d) => `Gestoor ${d}`,
     srWordNofMTemplate: (n, m) => `Woord ${n} van ${m}`,
     srSummaryStatTemplate: (k, f) => `${k} geweet · ${f} om weer te hersien`,
@@ -12136,9 +9904,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `${n} se ruimte`,
     accountTrialBadgeTemplate: (d) => `14 dae proeftydperk · ${d} ${Number(d) === 1 ? "dag" : "dae"} oor`,
     accountRenewsOnTemplate: (d) => `Hernu ${d}`,
-    meaningN: (n) => `Betekenis ${n}`,
-    doMoreWith: (w) => `Doen meer met ${w}`,
-    softBannerSearchesLeft: (n) => Number(n) === 1 ? "Nog 1 gratis soektog vandag, teken gratis aan vir 20 per dag." : `Nog ${n} gratis soektogte vandag, teken gratis aan vir 20 per dag.`,
     savedAgoTemplate: (t) => `Gestoor · ${t}`,
   },
   sw: {
@@ -12146,8 +9911,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, chemsha bongo`,
     quizQuestionNofM: (n, m) => `Swali ${n} kati ya ${m}`,
     quizFinalScoreTemplate: (c, t) => `Umepata ${c} kati ya ${t} sahihi.`,
-    notebookCounterTemplate: (n) => `Maneno ${n} yamechunguzwa`,
-    notebookDueTodayTemplate: (n) => `${n} ya kurudia leo`,
     notebookSavedOnTemplate: (d) => `Imehifadhiwa ${d}`,
     srWordNofMTemplate: (n, m) => `Neno ${n} kati ya ${m}`,
     srSummaryStatTemplate: (k, f) => `${k} uliyajua · ${f} ya kurudia`,
@@ -12155,9 +9918,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `Nafasi ya ${n}`,
     accountTrialBadgeTemplate: (d) => `Jaribio la siku 14 · zimebaki siku ${d}`,
     accountRenewsOnTemplate: (d) => `Inajirudia ${d}`,
-    meaningN: (n) => `Maana ${n}`,
-    doMoreWith: (w) => `Fanya zaidi na ${w}`,
-    softBannerSearchesLeft: (n) => `Zimebaki utafutaji ${n} wa bure leo, jisajili bure upate 20 kwa siku.`,
     savedAgoTemplate: (t) => `Imehifadhiwa · ${t}`,
   },
   "zh-CN": {
@@ -12165,8 +9925,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}，小测验`,
     quizQuestionNofM: (n, m) => `第 ${n} 题，共 ${m} 题`,
     quizFinalScoreTemplate: (c, t) => `你答对了 ${t} 题中的 ${c} 题。`,
-    notebookCounterTemplate: (n) => `已探索 ${n} 个词`,
-    notebookDueTodayTemplate: (n) => `今天待复习 ${n} 个`,
     notebookSavedOnTemplate: (d) => `保存于 ${d}`,
     srWordNofMTemplate: (n, m) => `第 ${n} 个词，共 ${m} 个`,
     srSummaryStatTemplate: (k, f) => `认识 ${k} 个 · 需再复习 ${f} 个`,
@@ -12174,9 +9932,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `${n} 的空间`,
     accountTrialBadgeTemplate: (d) => `14 天试用 · 还剩 ${d} 天`,
     accountRenewsOnTemplate: (d) => `${d} 续订`,
-    meaningN: (n) => `释义 ${n}`,
-    doMoreWith: (w) => `用 ${w} 做更多`,
-    softBannerSearchesLeft: (n) => `今天还剩 ${n} 次免费查询，免费注册每天可查 20 次。`,
     savedAgoTemplate: (t) => `已保存 · ${t}`,
   },
   "zh-TW": {
@@ -12184,8 +9939,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}，小測驗`,
     quizQuestionNofM: (n, m) => `第 ${n} 題，共 ${m} 題`,
     quizFinalScoreTemplate: (c, t) => `你答對了 ${t} 題中的 ${c} 題。`,
-    notebookCounterTemplate: (n) => `已探索 ${n} 個詞`,
-    notebookDueTodayTemplate: (n) => `今天待複習 ${n} 個`,
     notebookSavedOnTemplate: (d) => `儲存於 ${d}`,
     srWordNofMTemplate: (n, m) => `第 ${n} 個詞，共 ${m} 個`,
     srSummaryStatTemplate: (k, f) => `認得 ${k} 個 · 需再複習 ${f} 個`,
@@ -12193,9 +9946,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `${n} 的空間`,
     accountTrialBadgeTemplate: (d) => `14 天試用 · 還剩 ${d} 天`,
     accountRenewsOnTemplate: (d) => `${d} 續訂`,
-    meaningN: (n) => `釋義 ${n}`,
-    doMoreWith: (w) => `用 ${w} 做更多`,
-    softBannerSearchesLeft: (n) => `今天還剩 ${n} 次免費查詢，免費註冊每天可查 20 次。`,
     savedAgoTemplate: (t) => `已儲存 · ${t}`,
   },
   ko: {
@@ -12203,8 +9953,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, 퀴즈`,
     quizQuestionNofM: (n, m) => `${m}문제 중 ${n}번`,
     quizFinalScoreTemplate: (c, t) => `${t}문제 중 ${c}문제를 맞혔어요.`,
-    notebookCounterTemplate: (n) => `탐색한 단어 ${n}개`,
-    notebookDueTodayTemplate: (n) => `오늘 복습할 단어 ${n}개`,
     notebookSavedOnTemplate: (d) => `${d} 저장`,
     srWordNofMTemplate: (n, m) => `${m}개 중 ${n}번째 단어`,
     srSummaryStatTemplate: (k, f) => `알았던 단어 ${k}개 · 다시 복습할 단어 ${f}개`,
@@ -12212,9 +9960,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `${n} 님의 공간`,
     accountTrialBadgeTemplate: (d) => `14일 체험 · ${d}일 남음`,
     accountRenewsOnTemplate: (d) => `${d} 갱신`,
-    meaningN: (n) => `뜻 ${n}`,
-    doMoreWith: (w) => `${w}(으)로 더 해 보기`,
-    softBannerSearchesLeft: (n) => `오늘 무료 검색이 ${n}회 남았어요. 무료로 가입하면 하루 20회예요.`,
     savedAgoTemplate: (t) => `저장됨 · ${t}`,
   },
   th: {
@@ -12222,8 +9967,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, แบบทดสอบ`,
     quizQuestionNofM: (n, m) => `ข้อ ${n} จาก ${m}`,
     quizFinalScoreTemplate: (c, t) => `คุณตอบถูก ${c} จาก ${t} ข้อ`,
-    notebookCounterTemplate: (n) => `สำรวจแล้ว ${n} คำ`,
-    notebookDueTodayTemplate: (n) => `ต้องทบทวนวันนี้ ${n} คำ`,
     notebookSavedOnTemplate: (d) => `บันทึกเมื่อ ${d}`,
     srWordNofMTemplate: (n, m) => `คำที่ ${n} จาก ${m}`,
     srSummaryStatTemplate: (k, f) => `รู้แล้ว ${k} คำ · ต้องทบทวนอีก ${f} คำ`,
@@ -12231,9 +9974,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `พื้นที่ของ ${n}`,
     accountTrialBadgeTemplate: (d) => `ทดลองใช้ 14 วัน · เหลืออีก ${d} วัน`,
     accountRenewsOnTemplate: (d) => `ต่ออายุ ${d}`,
-    meaningN: (n) => `ความหมายที่ ${n}`,
-    doMoreWith: (w) => `ทำอะไรได้อีกกับ ${w}`,
-    softBannerSearchesLeft: (n) => `วันนี้เหลือการค้นหาฟรี ${n} ครั้ง สมัครฟรีเพื่อค้นหาได้วันละ 20 ครั้ง`,
     savedAgoTemplate: (t) => `บันทึกแล้ว · ${t}`,
   },
   bn: {
@@ -12241,8 +9981,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, কুইজ`,
     quizQuestionNofM: (n, m) => `প্রশ্ন ${n} / ${m}`,
     quizFinalScoreTemplate: (c, t) => `${t}টির মধ্যে ${c}টি সঠিক হয়েছে।`,
-    notebookCounterTemplate: (n) => `${n}টি শব্দ ঘুরে দেখা হয়েছে`,
-    notebookDueTodayTemplate: (n) => `আজ ${n}টি ঝালাই করার আছে`,
     notebookSavedOnTemplate: (d) => `সংরক্ষিত ${d}`,
     srWordNofMTemplate: (n, m) => `শব্দ ${n} / ${m}`,
     srSummaryStatTemplate: (k, f) => `${k}টি জানতেন · ${f}টি আবার ঝালাই করতে হবে`,
@@ -12250,9 +9988,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `${n}-এর জায়গা`,
     accountTrialBadgeTemplate: (d) => `14 দিনের ট্রায়াল · আর ${d} দিন বাকি`,
     accountRenewsOnTemplate: (d) => `নবায়ন ${d}`,
-    meaningN: (n) => `অর্থ ${n}`,
-    doMoreWith: (w) => `${w} দিয়ে আরও কিছু করুন`,
-    softBannerSearchesLeft: (n) => `আজ আর ${n}টি বিনামূল্যে অনুসন্ধান বাকি, বিনামূল্যে সাইন আপ করে দিনে 20টি পান।`,
     savedAgoTemplate: (t) => `সংরক্ষিত · ${t}`,
   },
   da: {
@@ -12260,8 +9995,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, quiz`,
     quizQuestionNofM: (n, m) => `Spørgsmål ${n} af ${m}`,
     quizFinalScoreTemplate: (c, t) => `Du fik ${c} ud af ${t} rigtige.`,
-    notebookCounterTemplate: (n) => `${n} ord udforsket`,
-    notebookDueTodayTemplate: (n) => `${n} til gennemgang i dag`,
     notebookSavedOnTemplate: (d) => `Gemt ${d}`,
     srWordNofMTemplate: (n, m) => `Ord ${n} af ${m}`,
     srSummaryStatTemplate: (k, f) => `${k} du kunne · ${f} til gennemgang igen`,
@@ -12269,9 +10002,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `${n}s område`,
     accountTrialBadgeTemplate: (d) => `14 dages prøveperiode · ${d} ${Number(d) === 1 ? "dag" : "dage"} tilbage`,
     accountRenewsOnTemplate: (d) => `Fornyes ${d}`,
-    meaningN: (n) => `Betydning ${n}`,
-    doMoreWith: (w) => `Gør mere med ${w}`,
-    softBannerSearchesLeft: (n) => `${n} gratis opslag tilbage i dag, opret dig gratis og få 20 om dagen.`,
     savedAgoTemplate: (t) => `Gemt · ${t}`,
   },
   hu: {
@@ -12279,8 +10009,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, kvíz`,
     quizQuestionNofM: (n, m) => `${n}. kérdés / ${m}`,
     quizFinalScoreTemplate: (c, t) => `${t} kérdésből ${c} jó válasz.`,
-    notebookCounterTemplate: (n) => `${n} felfedezett szó`,
-    notebookDueTodayTemplate: (n) => `${n} esedékes ma`,
     notebookSavedOnTemplate: (d) => `Mentve: ${d}`,
     srWordNofMTemplate: (n, m) => `${n}. szó / ${m}`,
     srSummaryStatTemplate: (k, f) => `${k} ment · ${f} ismétlendő`,
@@ -12288,9 +10016,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `${n} tere`,
     accountTrialBadgeTemplate: (d) => `14 napos próbaidő · még ${d} nap`,
     accountRenewsOnTemplate: (d) => `Megújul: ${d}`,
-    meaningN: (n) => `${n}. jelentés`,
-    doMoreWith: (w) => `Még több ezzel: ${w}`,
-    softBannerSearchesLeft: (n) => `Ma még ${n} ingyenes keresésed van, regisztrálj ingyen, és naponta 20 lesz.`,
     savedAgoTemplate: (t) => `Mentve · ${t}`,
   },
   xh: {
@@ -12298,8 +10023,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, imibuzo`,
     quizQuestionNofM: (n, m) => `Umbuzo ${n} kwe-${m}`,
     quizFinalScoreTemplate: (c, t) => `Uphendule ngokuchanekileyo ku-${c} kwe-${t}.`,
-    notebookCounterTemplate: (n) => `Amagama aphononongiweyo: ${n}`,
-    notebookDueTodayTemplate: (n) => `Afanele ukujongwa namhlanje: ${n}`,
     notebookSavedOnTemplate: (d) => `Igcinwe ngomhla ${d}`,
     srWordNofMTemplate: (n, m) => `Igama ${n} kwe-${m}`,
     srSummaryStatTemplate: (k, f) => `Ubuwazi: ${k} · Phinda ujonge: ${f}`,
@@ -12307,9 +10030,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `Indawo ka-${n}`,
     accountTrialBadgeTemplate: (d) => `Uvavanyo lweentsuku ezili-14 · kusele ${Number(d) === 1 ? "usuku olu-" : "iintsuku ezi-"}${d}`,
     accountRenewsOnTemplate: (d) => `Iyahlaziywa ngomhla ${d}`,
-    meaningN: (n) => `Intsingiselo ${n}`,
-    doMoreWith: (w) => `Yenza okungakumbi ngegama elithi ${w}`,
-    softBannerSearchesLeft: (n) => Number(n) === 1 ? "Kusele ukhangelo olu-1 lwasimahla namhlanje, bhalisa simahla ufumane olungama-20 ngosuku." : `Kusele ukhangelo olungama-${n} lwasimahla namhlanje, bhalisa simahla ufumane olungama-20 ngosuku.`,
     savedAgoTemplate: (t) => `Igcinwe · ${t}`,
   },
   nso: {
@@ -12317,8 +10037,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, tlhahlobo`,
     quizQuestionNofM: (n, m) => `Potšišo ya ${n} go tše ${m}`,
     quizFinalScoreTemplate: (c, t) => `O arabile gabotse tše ${c} go tše ${t}.`,
-    notebookCounterTemplate: (n) => `Mantšu a hlahlobilwego: ${n}`,
-    notebookDueTodayTemplate: (n) => `A swanetše go boeletšwa lehono: ${n}`,
     notebookSavedOnTemplate: (d) => `E bolokilwe ka ${d}`,
     srWordNofMTemplate: (n, m) => `Lentšu la ${n} go a ${m}`,
     srSummaryStatTemplate: (k, f) => `O be o a tseba: ${k} · A tla boeletšwa: ${f}`,
@@ -12326,9 +10044,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `Sebaka sa ${n}`,
     accountTrialBadgeTemplate: (d) => `Teko ya matšatši a 14 · go šetše ${Number(d) === 1 ? "letšatši le" : "matšatši a"} ${d}`,
     accountRenewsOnTemplate: (d) => `E mpshafatšwa ka ${d}`,
-    meaningN: (n) => `Bokao ${n}`,
-    doMoreWith: (w) => `Dira go feta ka ${w}`,
-    softBannerSearchesLeft: (n) => Number(n) === 1 ? "Go šetše nyakišišo e 1 ya mahala lehono, ingwadiše ka mahala go hwetša tše 20 ka letšatši." : `Go šetše dinyakišišo tše ${n} tša mahala lehono, ingwadiše ka mahala go hwetša tše 20 ka letšatši.`,
     savedAgoTemplate: (t) => `E bolokilwe · ${t}`,
   },
   tn: {
@@ -12336,8 +10051,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, tlhatlhobo`,
     quizQuestionNofM: (n, m) => `Potso ${n} mo go ${m}`,
     quizFinalScoreTemplate: (c, t) => `O arabile sentle ${c} mo go ${t}.`,
-    notebookCounterTemplate: (n) => `Mafoko a a sekasekilweng: ${n}`,
-    notebookDueTodayTemplate: (n) => `A emetse go boeletswa gompieno: ${n}`,
     notebookSavedOnTemplate: (d) => `Le bolokilwe ka ${d}`,
     srWordNofMTemplate: (n, m) => `Lefoko ${n} mo go ${m}`,
     srSummaryStatTemplate: (k, f) => `O ne o a itse: ${k} · Go boeletswa gape: ${f}`,
@@ -12345,9 +10058,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `Lefelo la ${n}`,
     accountTrialBadgeTemplate: (d) => `Teko ya malatsi a le 14 · go setse ${Number(d) === 1 ? "letsatsi le le" : "malatsi a le"} ${d}`,
     accountRenewsOnTemplate: (d) => `E ntšhwafadiwa ka ${d}`,
-    meaningN: (n) => `Bokao ${n}`,
-    doMoreWith: (w) => `Dira go feta ka ${w}`,
-    softBannerSearchesLeft: (n) => Number(n) === 1 ? "Go setse patlo e le 1 ya mahala gompieno, ikwadise ka mahala go bona di le 20 ka letsatsi." : `Go setse dipatlo di le ${n} tsa mahala gompieno, ikwadise ka mahala go bona di le 20 ka letsatsi.`,
     savedAgoTemplate: (t) => `Le bolokilwe · ${t}`,
   },
   st: {
@@ -12355,8 +10065,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, kwisi`,
     quizQuestionNofM: (n, m) => `Potso ya ${n} ho tse ${m}`,
     quizFinalScoreTemplate: (c, t) => `O arabile hantle tse ${c} ho tse ${t}.`,
-    notebookCounterTemplate: (n) => `Mantswe a hlahlobilweng: ${n}`,
-    notebookDueTodayTemplate: (n) => `A lokela ho phetwa kajeno: ${n}`,
     notebookSavedOnTemplate: (d) => `E bolokilwe ka ${d}`,
     srWordNofMTemplate: (n, m) => `Lentswe la ${n} ho a ${m}`,
     srSummaryStatTemplate: (k, f) => `O ne o a tseba: ${k} · Ho phetwa hape: ${f}`,
@@ -12364,9 +10072,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `Sebaka sa ${n}`,
     accountTrialBadgeTemplate: (d) => `Nako ya teko ya matsatsi a 14 · ho setse ${Number(d) === 1 ? "letsatsi le" : "matsatsi a"} ${d}`,
     accountRenewsOnTemplate: (d) => `E ntjhafatswa ka ${d}`,
-    meaningN: (n) => `Moelelo ${n}`,
-    doMoreWith: (w) => `Etsa ho feta ka ${w}`,
-    softBannerSearchesLeft: (n) => Number(n) === 1 ? "Ho setse patlo e 1 ya mahala kajeno, ngodisa mahala ho fumana tse 20 ka letsatsi." : `Ho setse dipatlo tse ${n} tsa mahala kajeno, ngodisa mahala ho fumana tse 20 ka letsatsi.`,
     savedAgoTemplate: (t) => `E bolokilwe · ${t}`,
   },
   ts: {
@@ -12374,8 +10079,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, mavutiso`,
     quizQuestionNofM: (n, m) => `Xivutiso ${n} xa ${m}`,
     quizFinalScoreTemplate: (c, t) => `Mi hlamule kahle ${c} eka ${t}.`,
-    notebookCounterTemplate: (n) => `Marito lama lavisisiweke: ${n}`,
-    notebookDueTodayTemplate: (n) => `Ya fanele ku vuyeleriwa namuntlha: ${n}`,
     notebookSavedOnTemplate: (d) => `Ri hlayisiwe hi ${d}`,
     srWordNofMTemplate: (n, m) => `Rito ${n} eka ${m}`,
     srSummaryStatTemplate: (k, f) => `A mi ma tiva: ${k} · Ku vuyelela nakambe: ${f}`,
@@ -12383,9 +10086,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `Ndzhawu ya ${n}`,
     accountTrialBadgeTemplate: (d) => `Ndzingo wa masiku ya 14 · ku sale ${Number(d) === 1 ? "siku ra" : "masiku ya"} ${d}`,
     accountRenewsOnTemplate: (d) => `Yi pfuxetiwa hi ${d}`,
-    meaningN: (n) => `Nhlamuselo ${n}`,
-    doMoreWith: (w) => `Endlani swo tala hi ${w}`,
-    softBannerSearchesLeft: (n) => Number(n) === 1 ? "Ku sale ku lava ka 1 ka mahala namuntlha, tsarisani mahala leswaku mi kuma 20 hi siku." : `Ku sale ku lava ka ${n} ka mahala namuntlha, tsarisani mahala leswaku mi kuma 20 hi siku.`,
     savedAgoTemplate: (t) => `Ri hlayisiwile · ${t}`,
   },
   ss: {
@@ -12393,8 +10093,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, imibuto`,
     quizQuestionNofM: (n, m) => `Umbuto ${n} kwa-${m}`,
     quizFinalScoreTemplate: (c, t) => `Uphendvule kahle ku-${c} kwa-${t}.`,
-    notebookCounterTemplate: (n) => `Emagama lahloliwe: ${n}`,
-    notebookDueTodayTemplate: (n) => `Afanele kubuyeketwa lamuhla: ${n}`,
     notebookSavedOnTemplate: (d) => `Kugcinwe mhla ${d}`,
     srWordNofMTemplate: (n, m) => `Ligama ${n} kwa-${m}`,
     srSummaryStatTemplate: (k, f) => `Bewuwati: ${k} · Kubuyeketa futsi: ${f}`,
@@ -12402,9 +10100,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `Indzawo ya-${n}`,
     accountTrialBadgeTemplate: (d) => `Kulinga kwemalanga langu-14 · ${Number(d) === 1 ? "lilanga lelisele" : "emalanga lasele"}: ${d}`,
     accountRenewsOnTemplate: (d) => `Kuyavuselelwa mhla ${d}`,
-    meaningN: (n) => `Umcondvo ${n}`,
-    doMoreWith: (w) => `Yenta lokunyenti ngeligama lelitsi ${w}`,
-    softBannerSearchesLeft: (n) => Number(n) === 1 ? "Kusele kusesha kwamahhala kwa-1 lamuhla, bhalisa mahhala kute utfole kwa-20 ngelilanga." : `Kusele kusesha kwamahhala kwa-${n} lamuhla, bhalisa mahhala kute utfole kwa-20 ngelilanga.`,
     savedAgoTemplate: (t) => `Kugcinwe · ${t}`,
   },
   ve: {
@@ -12412,8 +10107,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, mbudziso`,
     quizQuestionNofM: (n, m) => `Mbudziso ya ${n} kha ${m}`,
     quizFinalScoreTemplate: (c, t) => `No fhindula zwo luga ${c} kha ${t}.`,
-    notebookCounterTemplate: (n) => `Maipfi o ṱoḓisiswaho: ${n}`,
-    notebookDueTodayTemplate: (n) => `A fanela u sedzwa hafhu ṋamusi: ${n}`,
     notebookSavedOnTemplate: (d) => `Zwo vhulungwa nga ${d}`,
     srWordNofMTemplate: (n, m) => `Ipfi ḽa ${n} kha ${m}`,
     srSummaryStatTemplate: (k, f) => `No vha ni tshi a ḓivha: ${k} · U sedza hafhu: ${f}`,
@@ -12421,9 +10114,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `Fhethu ha ${n}`,
     accountTrialBadgeTemplate: (d) => `Tshilingo tsha maḓuvha a 14 · ho sala ${Number(d) === 1 ? "ḓuvha ḽa" : "maḓuvha a"} ${d}`,
     accountRenewsOnTemplate: (d) => `Zwi ḓo vusuludzwa nga ${d}`,
-    meaningN: (n) => `Ndeme ${n}`,
-    doMoreWith: (w) => `Itani zwinzhi nga ${w}`,
-    softBannerSearchesLeft: (n) => Number(n) === 1 ? "Ho sala u ṱoḓa ha 1 ha mahala ṋamusi, ḓiṅwaliseni mahala uri ni wane ha 20 nga ḓuvha." : `Ho sala u ṱoḓa ha ${n} ha mahala ṋamusi, ḓiṅwaliseni mahala uri ni wane ha 20 nga ḓuvha.`,
     savedAgoTemplate: (t) => `Zwo vhulungwa · ${t}`,
   },
   nr: {
@@ -12431,8 +10121,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     quizTitleTemplate: (w) => `${w}, ikhwizi`,
     quizQuestionNofM: (n, m) => `Umbuzo ${n} kwa-${m}`,
     quizFinalScoreTemplate: (c, t) => `Uphendule kuhle ku-${c} kwa-${t}.`,
-    notebookCounterTemplate: (n) => `Amezwi ahloliweko: ${n}`,
-    notebookDueTodayTemplate: (n) => `Alindele ukubuyekezwa namhlanje: ${n}`,
     notebookSavedOnTemplate: (d) => `Kubulungwe ngo-${d}`,
     srWordNofMTemplate: (n, m) => `Ilizwi ${n} kwa-${m}`,
     srSummaryStatTemplate: (k, f) => `Bewuwazi: ${k} · Ukubuyekeza godu: ${f}`,
@@ -12440,9 +10128,6 @@ const V2_TEMPLATES_MORE: Record<string, V2Templates> = {
     accountNamedSpaceTemplate: (n) => `Isikhala saka-${n}`,
     accountTrialBadgeTemplate: (d) => `Ukulinga kwamalanga ali-14 · kusele ${Number(d) === 1 ? "ilanga eli-" : "amalanga ali-"}${d}`,
     accountRenewsOnTemplate: (d) => `Kuvuselelwa ngo-${d}`,
-    meaningN: (n) => `Ihlathululo ${n}`,
-    doMoreWith: (w) => `Yenza okunengi ngelizwi elithi ${w}`,
-    softBannerSearchesLeft: (n) => Number(n) === 1 ? "Kusele ukufuna kwamahala oku-1 namhlanje, bhalisa mahala bona uthole oku-20 ngelanga." : `Kusele ukufuna kwamahala oku-${n} namhlanje, bhalisa mahala bona uthole oku-20 ngelanga.`,
     savedAgoTemplate: (t) => `Kubulungiwe · ${t}`,
   },
 };
@@ -12454,25 +10139,25 @@ for (const [code, tpl] of Object.entries(V2_TEMPLATES_MORE)) {
 }
 
 // --- Native isiXhosa (v2 core, function keys fall back to English) ---
-Object.assign(xh, {"homeHeadlineLine1": "Qonda", "homeHeadlineLine2": "ukuya esiphelweni.", "homeSubline": "Isichazi-magama esidibana nawe kumxholo, iintsingiselo, imvelaphi, izaci nomfanekiso ocacileyo, ngeelwimi ezingaphezu kwama-30.", "searchPlaceholderHome": "Chwetheza igama", "voiceInputTitle": "Thetha igama", "addContext": "Yongeza umxholo", "explain": "Cacisa", "contextHint": "Ufunda into ethile? Ncamathisela isivakalisi ukuze sicacise intsingiselo.", "tryLabel": "Zama", "valuePropsEyebrow": "Into eyenziwa ngokwahlukileyo yi-Gadit", "valuePropsTitle": "Ingaphezu kwentsingiselo, yindlela yokuphila negama.", "valueProp1Eyebrow": "Iqonda umxholo", "valueProp1Title": "Intsingiselo efanelekileyo, ngalo lonke ixesha", "valueProp1Body": "Ncamathisela isivakalisi, Gadit ikhetha intsingiselo ehambelanayo, hayi nje eyona iqhelekileyo.", "valueProp2Eyebrow": "Ngamehlo", "valueProp2Title": "Umfanekiso ocacileyo, wenzelwe eli gama kuphela", "valueProp2Body": "Wenzelwa igama ngalinye. Uncedo olubonwayo lokuqonda ukuba igama liziva njani, hayi umfanekiso nje ofumaneka naphi na.", "valueProp3Eyebrow": "Imvelaphi", "valueProp3Title": "Inqaku lembali, hayi ulwazi olugalelwe nje", "valueProp3Body": "Apho igama livela khona, libaliswa njengomhlathi, njengoko bekuya kubhala umhlobo onomdla.", "valueProp4Eyebrow": "Iilwimi ezingaphezu kwama-30", "valueProp4Title": "IsiHebhere nesiArabhu, ngokwemveli ngokupheleleyo", "valueProp4Body": "Ukubhala ukusuka ekunene ngokwenene, oonobumba bokwenyani, izaci zokwenyani, hayi ujongano oluguqulelwe nje.", "previewLabel": "Ukujonga kwangaphambili", "seeFullResult": "Bona isiphumo esipheleleyo", "pricingEyebrow": "Amaxabiso", "pricingTeaserTitle": "Amanqanaba amathathu. Onke anomxholo wokwenyani.", "trustMicrocopy": "Rhoxisa nanini na · Uvavanyo lweentsuku ezili-14 kwi-Clear ngenyanga · Akukho ntlawulo de luphele uvavanyo", "footerProductGroup": "Imveliso", "footerLegalGroup": "Ezomthetho", "footerCompare": "Thelekisa", "footerNotebook": "Incwadi", "footerPricing": "Amaxabiso", "footerPrivacy": "Ubucala", "footerTerms": "Imiqathango", "footerContact": "Uncedo", "footerTagline": "Isichazi-magama esikrelekrele seelwimi ezingaphezu kwama-30. Senzelwe ukufunda kwokwenyani.", "footerLanguagesNote": "Iilwimi ezingaphezu kwama-30", "signIn": "Ngena", "startFree": "Qalisa simahla", "verbStampDef": "ukuqonda igama, ngokupheleleyo", "navSearch": "Khangela", "navCompare": "Thelekisa", "navNotebook": "Incwadi", "navPricing": "Amaxabiso", "navSchools": "Izikolo", "navFeatures": "Iimpawu", "navPlay": "Dlala", "navAffiliates": "Amaqabane", "kidsModeLabel": "Abantwana", "kidsModeTooltipOff": "Cofa ukuze igama ngalinye licaciswe njengoko umzali ebeya kucacisela umntwana.", "kidsModeTooltipOn": "Imo yabantwana ivuliwe, yonke intsingiselo iza kubhalelwa umntwana. Cofa ukuze uyicime.", "kidsModeBasicGate": "Imo yabantwana luphawu lwe-Clear. Nyusela ukuze uyisebenzise.", "signupWelcomeTitle": "Wamkelekile kwi-Gadit!", "signupWelcomeBody": "Iakhawunti yakho ilungile. Qalisa ngokukhangela nawuphi na igama.", "pricingPageHeadline": "Amanqanaba amathathu. Onke anomxholo wokwenyani.", "pricingPageSubline": "Qalisa simahla. Nyusela xa ubunzulu bukunceda.", "billingMonthly": "Ngenyanga", "billingYearly": "Ngonyaka", "billingSave17": "Gcina i-17%", "tierBasicTagline": "Qonda", "tierBasicPitch": "Qalisa ngezinto eziyimfuneko.", "tierBasicCta": "Qalisa", "tierBasicFeatures": "Ukhangelo lwamagama olungama-20 ngosuku¶Zonke iintsingiselo (hayi nje eyona iphambili)¶Imizekelo emi-3 kwintsingiselo nganye¶Imvelaphi nembali yegama¶Kufuneka ungene", "tierClearTagline": "Bona ngamehlo", "tierClearPitch": "Yenza amagama aphile ngemifanekiso, imo yabantwana nengxelo.", "tierClearBadge": "Eyona ithandwayo", "tierClearCta": "Qalisa uvavanyo lwasimahla lweentsuku ezili-14", "tierClearCtaYearly": "Bhalisela unyaka", "tierClearTrust": "Rhoxisa nanini na · Akukho ntlawulo ngexesha lovavanyo", "tierClearFeatures": "Yonke into ekwi-Basic¶Ukhangelo olungenamda¶Iinkcazelo zabantwana¶Umfanekiso wegama ngalinye (30/ngenyanga)¶Bhala isivakalisi ufumane ingxelo¶Izaci namabinzana¶Imbali yokukhangela (iintsuku ezingama-30 zokugqibela)", "tierDeepTagline": "Ziqhelise", "tierDeepPitch": "Yakha ithala lakho lamagama elomelela ngokuhamba kwexesha.", "tierDeepCta": "Bhalisela i-Deep", "tierDeepFeatures": "Yonke into ekwi-Clear¶Imibuzo yokuziqhelisa¶Incwadi yakho yamagama¶Ukuziqhelisa okukrelekrele ukuze amagama ahlale¶Yahlula amagama afanayo¶Umfanekiso wegama ngalinye (100/ngenyanga)", "basicEquivalent": "", "clearEquivalent": "Kulingana ne-$2.50/ngenyanga", "deepEquivalent": "Kulingana ne-$4.17/ngenyanga", "trustStripCancel": "Rhoxisa nanini na kwiphothali ye-Stripe", "trustStripMoneyBack": "Ukubuyiselwa imali kwiintsuku ezili-14 kwintengo yokuqala", "trustStripDataYours": "Iinkcukacha zakho zezakho, zikhuphe nanini na", "trustStripNoAds": "Akukho zintengiso, akukho kulandelwa ngabantu besithathu", "faqEyebrow": "Imibuzo", "faqHeadline": "Imibuzo, iphendulwe", "faqQ1": "Ndingasitshintsha isicwangciso?", "faqA1": "Ewe, nyusela okanye wehlise nanini na. Ukulungelelaniswa kwentlawulo kwenzeka ngokuzenzekelayo, uhlawula umahluko kuphela.", "faqQ2": "Kwenzeka ntoni xa ndirhoxisa?", "faqA2": "Uhlala unokufikelela de kuphele ixesha lakho lokuhlawula, emva koko ubuyela kwi-Basic. Akukho nkcukacha zilahlekayo.", "faqQ3": "Ingaba uvavanyo lusimahla ngokwenene?", "faqA3": "Ewe. Sifuna ikhadi ukuthintela ukusetyenziswa gwenxa, kodwa awuhlawuliswa kude kube lusuku lwe-15. Rhoxisa ngaphambi koko = akukho ndleko.", "faqQ4": "Kutheni kukho amanqanaba amathathu?", "faqA4": "Abasebenzisi abahlukeneyo bafuna ubunzulu obahlukeneyo. Sikhetha ukudibana nawe apho ukhoyo kunokukuthengisela isicwangciso esinye esikhulu ngokugqithisileyo.", "faqQ5": "Ingaba iinkcazelo zabantwana zikhuselekile?", "faqA5": "Ewe. Zenziwa ngenjini yethu ngononophelo olufanayo nolomxholo wabantu abadala, zijongwe ngemithetho yethu yomxholo. Akukho mxholo wabantwana ubhalwe ngabasebenzisi.", "loginWelcomeBack": "Ngena", "loginCreateAccount": "Yenza iakhawunti yakho", "loginContinueWithGoogle": "Qhubeka nge-Google", "loginInAppNotice": "Ngaphakathi kwi-{app}, ngena nge-imeyile ngezantsi. Ukuze usebenzise i-Google, vula le linki kwibhrawuza yakho.", "loginOrSeparator": "okanye", "loginEmailLabel": "I-imeyile", "loginPasswordLabel": "Iphasiwedi", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Ngena", "loginSubmitSignUp": "Yenza iakhawunti", "loginSwitchToSignUp": "Awunayo iakhawunti? Bhalisa", "loginForgotPassword": "Uyilibele iphasiwedi?", "loginForgotPasswordEnterEmail": "Faka i-imeyile yakho ngentla kuqala, emva koko ucofe apha.", "loginResetSent": "Ukuba ikhona iakhawunti yale imeyile, ilinki yokutshintsha iphasiwedi isendleleni.", "loginResetError": "Asikwazanga ukuthumela i-imeyile yokutshintsha iphasiwedi. Zama kwakhona.", "loginSwitchToSignIn": "Sele unayo iakhawunti? Ngena", "loginShowPassword": "Bonisa iphasiwedi", "loginHidePassword": "Fihla iphasiwedi", "loginCloseAria": "Vala", "loginSigningIn": "Siyangena…", "loginCreatingAccount": "Senza iakhawunti…", "loginErrorWrongCredentials": "I-imeyile okanye iphasiwedi ayichanekanga.", "loginErrorEmailInUse": "Le imeyile sele isetyenziswa. Zama ukungena.", "loginErrorWeakPassword": "Iphasiwedi kufuneka ibe noonobumba abasi-8 ubuncinane, ibe nonobumba nenani.", "loginAgeTermsLine": "Ndineminyaka eli-18 nangaphezulu kwaye ndiyavumelana ne", "loginTermsLinkLabel": "Imiqathango", "loginPrivacyLinkLabel": "Umgaqo-nkqubo wabucala", "loginErrorAgeRequired": "Nceda uqinisekise ukuba uneminyaka eli-18 nangaphezulu kwaye uyavumelana neMiqathango noMgaqo-nkqubo wabucala.", "loginErrorInvalidEmail": "Nceda ufake idilesi ye-imeyile esebenzayo.", "loginErrorGoogleFailed": "Asikwazanga ukungena nge-Google. Zama kwakhona.", "loginErrorGeneric": "Kukho into engahambanga kakuhle. Zama kwakhona.", "composeEyebrow": "Yakha", "composeSubtitle": "Lisebenzise kwisivakalisi ufumane ingxelo kwangoko ngegrama, isimbo nokufaneleka.", "composeMeaningPickerLabel": "Khetha intsingiselo oziqhelisa ngayo", "composePlaceholder": "Chwetheza isivakalisi sakho apha…", "composeSubmit": "Jonga isivakalisi", "composeChecking": "Siyajonga…", "composeStatusPerfectLabel": "Igqibelele", "composeStatusAlmostLabel": "Uphantse wafika", "composeStatusIncorrectLabel": "Akukabi njalo", "composeSuggestionEyebrow": "Indlela ecetyiswayo yokusibhala", "composeTryAnother": "Zama esinye isivakalisi", "composeBackToWord": "Buyela egameni", "composeErrorEmpty": "Nceda ubhale isivakalisi kuqala.", "composeErrorTooShort": "Nceda ubhale amagama ambalwa ubuncinane.", "quizEyebrow": "Ziqhelise", "quizSubmit": "Ngenisa", "quizNext": "Umbuzo olandelayo", "quizFinish": "Gqiba", "quizYesCorrect": "Ewe, kuchanekile", "quizNotQuite": "Akukabi njalo", "quizLoading": "Silungiselela imibuzo yakho…", "quizPracticeAnotherWord": "Ziqhelise elinye igama", "quizBackToWord": "Buyela egameni", "quizReviewMistakes": "Phinda ujonge endiziphosileyo", "compareEyebrow": "Thelekisa", "compareTitle": "Yahlula amagama afanayo", "compareSubtitle": "affect vs effect, אומנות vs אמנות, principle vs principal, amagama abhida nkqu nabantu abathetha olo lwimi.", "compareWord1Label": "Igama 1", "compareWord2Label": "Igama 2", "compareWord1Placeholder": "affect", "compareWord2Placeholder": "effect", "compareCta": "Thelekisa", "compareLoading": "Siyathelekisa…", "compareEmpty": "Faka amagama amabini ukuze uwathelekise", "compareDifferenceLabel": "Umahluko", "compareExamplesLabel": "Imizekelo", "compareCommonMistakeLabel": "Impazamo eqhelekileyo", "compareErrNotARealWord": "Asilazi elinye kwala magama.", "compareErrDifferentLanguages": "La magama mabini abonakala engeelwimi ezahlukeneyo, zama amagama olwimi olunye.", "compareErrSameWord": "La magama abonakala elinye igama, zama amabini ahlukeneyo.", "compareErrGeneric": "Ukuthelekisa akufumaneki ngoku.", "notebookEyebrow": "Incwadi", "notebookTitle": "Ihlabathi lakho lamagama", "notebookSubtitle": "Lonke igama oliphononongileyo, ligciniwe, licwangcisiwe, liyakhula.", "notebookWordsExplored": "amagama aphononongiweyo", "notebookPracticeNow": "Phinda ujonge amagama am", "notebookListView": "Uluhlu", "notebookGalaxyView": "Umnyele", "notebookEmptyTitle": "Incwadi yakho ayinanto", "notebookEmptyCta": "Khangela igama ukuze uqalise", "notebookRemoveAria": "Susa", "notebookMasteredLabel": "★ Ulazi kakuhle", "notebookLegendRecent": "Agcinwe kutshanje", "notebookLegendMastered": "Uwazi kakuhle", "notebookLegendNeedsReview": "Afuna ukuphinda ajongwe", "srEyebrow": "Ziqhelise", "srSkip": "Tsiba", "srClickToReveal": "Cofa naphi na ukuze ubone", "srTapToReveal": "Cofa ukuze ubone", "srPrimaryMeaningLabel": "Intsingiselo ephambili", "srExamplesLabel": "Imizekelo", "srIForgot": "Ndilibele", "srIKnewIt": "Bendilazi", "srSchedulingHint": "Bendilazi = ukujonga okulandelayo kwiintsuku ezimbalwa. Ndilibele = libuyela kwanamhlanje.", "srWordsPracticed": "amagama oziqhelise ngawo", "srTomorrow": "Ngomso", "srDoneForToday": "Ugqibile namhlanje", "srPracticeMore": "Ziqhelise ngakumbi", "srEmptyTitle": "Akukho nto yokuphinda ujonge namhlanje", "srEmptyBody": "Wenze kakuhle. Buya ngomso.", "srBackToNotebook": "Buyela encwadini", "srLoading": "Silayisha ukuziqhelisa kwakho…", "accountEyebrow": "Iakhawunti", "accountYourSpace": "Indawo yakho", "accountPlanLabel": "Isicwangciso", "accountOnPlanFree": "Simahla", "accountNoActiveSubscription": "Akukho mrhumo usebenzayo", "accountChooseAPlan": "Khetha isicwangciso ukuze uqalise.", "accountCancelsAtPeriodEnd": "Iyarhoxa ekupheleni kwexesha lokuhlawula", "accountManageBilling": "Lawula iintlawulo", "accountChangePlan": "Tshintsha isicwangciso", "accountUpgrade": "Nyusela", "accountUpgradeToFamily": "Tshintshela kwi-Family", "accountUsageThisMonth": "Ukusetyenziswa kule nyanga", "accountImageGeneration": "Ukwenziwa kwemifanekiso", "accountSearches": "Ukhangelo", "accountLocked": "Kutshixiwe", "accountUnlimited": "akukho mda", "accountTodaySuffix": "namhlanje", "accountNearingLimit": "Usondela kumda wale nyanga.", "accountSectionLabel": "Iakhawunti", "accountEmailLabel": "I-imeyile", "accountChangeEmail": "Tshintsha i-imeyile", "accountSignOut": "Phuma", "accountDeleteAccount": "Cima iakhawunti", "reportEyebrow": "Xela impazamo", "reportTitle": "Yintoni engalunganga?", "reportTellMore": "Sixelele ngakumbi", "reportTellMorePh": "Akunyanzelekanga. Okukhona ucacisa, kokukhona siyilungisa ngokukhawuleza.", "reportSend": "Thumela ingxelo", "reportSending": "Siyathumela…", "reportThanks": "Enkosi, siyifumene.", "reportError": "Asikwazanga ukuthumela. Zama kwakhona kamva kancinci.", "reportCatIncorrectDefinition": "Intsingiselo engachanekanga", "reportCatWrongEtymology": "Imvelaphi engachanekanga", "reportCatBadExample": "Isivakalisi somzekelo esingalunganga", "reportCatKidsExplanation": "Ingxaki ngenkcazelo yabantwana", "reportCatIdiomIssue": "Ingxaki ngesaci", "reportCatWrongImage": "Umfanekiso ongalunganga", "reportCatQuizWrongAnswer": "Imibuzo: kuphawulwe impendulo engalunganga", "reportCatComposeFeedback": "Ingxaki ngengxelo yesivakalisi", "reportCatCompareResult": "Ingxaki ngesiphumo sothelekiso", "reportCatSomethingElse": "Enye into", "origin": "Imvelaphi", "historyNote": "Inqaku lembali", "throughTime": "Ngokuhamba kwexesha", "forKids": "Kwabantwana", "commonExpressions": "Amabinzana aqhelekileyo", "idiomsWithMeaning": "Izaci ezinale ntsingiselo", "notJustPrimary": "Hayi nje eyona iphambili", "takeItFurther": "Qhubela phambili", "saveToNotebookHint": "Uyibuyele kamva, icwangcisiwe, iyakhangeleka.", "generateImage": "Yenza umfanekiso", "generatingImage": "Siyenza…", "generateImageHint": "Umfanekiso ocacileyo owenziwe ngokuzenzekelayo, wenzelwe eli gama kuphela.", "composeSentence": "Yakha isivakalisi", "composeSentenceHint": "Bhala esakho, Gadit isijonga ngesimbo nokufaneleka.", "practiceWord": "Ziqhelise eli gama", "practiceWordHint": "Imibuzo emifutshane elungiselelwe indlela ofunda ngayo.", "unlockWithClear": "Vula nge-Clear", "upgradeToClear": "Nyusela kwi-Clear", "softWallAnonTitle": "Qhubeka, kusesimahla", "softWallAnonBody": "Iakhawunti yasimahla ekhawulezayo ivula ukhangelo olufikelela kuma-20 ngosuku, nemizekelo, izaci nemvelaphi yamagama.", "softWallSignupCta": "Qhubeka simahla", "softWallBasicTitle": "Ufikelele kumda wanamhlanje", "softWallBasicBody": "Iiakhawunti zasimahla zifumana ukhangelo olungama-20 ngosuku. Umda uqala ngokutsha ngomso, okanye nyusela kwi-Clear ukuze ufumane ukhangelo olungenamda kunye nemifanekiso, imo yabantwana nengxelo ngegrama.", "clearUnlocksThis": "I-Clear iyakuvula oku", "visualizeThisWord": "Bona ngamehlo", "visualBlurb": "Umfanekiso omnye ocacileyo, owenziwe yi-Gadit, uncedo olubonwayo lokuqonda ukuba eli gama liziva njani.", "visualBlurbLocked": "Yenza umfanekiso ocacileyo, ongafaniyo nomnye, weli gama, uqonde ngokubona.", "reportLabel": "Xela impazamo", "wordOriginEyebrow": "Imvelaphi yegama", "idiomsEyebrow": "Izaci namabinzana", "wordOriginBackgroundLabel": "Imbali", "wordOriginOriginalWord": "Igama lokuqala", "wordOriginBreakdown": "Iinxalenye zegama", "imageGeneratingLabel": "Senza umfanekiso…", "imageGeneratingHint": "Oku kudla ngokuthatha imizuzwana eli-10 ukuya kweli-15.", "imageOpenFullAria": "Vula umfanekiso ngobukhulu obupheleleyo", "kidsComingSoon": "Inkcazelo yabantwana iyeza kungekudala.", "compareComingSoon": "Imidlalo yamagama iyeza kungekudala.", "shareDefinitionAria": "Yabelana ngale ntsingiselo", "meaningsEyebrow": "Iintsingiselo", "wordOriginLanguage": "Ulwimi", "wordOriginOriginallyMeant": "Ekuqaleni lalithetha", "actionCompose": "Yakha isivakalisi", "actionCompare": "Thelekisa amagama", "listenToWord": "Mamela", "offlinePin": "Gcina ungekho kwi-intanethi", "offlinePinTitle": "Gcina eli gama ukuze ufunde ungekho kwi-intanethi", "offlinePinnedTitle": "Igciniwe, iyafumaneka ngaphandle kwe-WiFi", "offlineDownloadPack": "Khuphela ipakethe yokufunda ungekho kwi-intanethi", "offlineDownloadingPack": "Siyakhuphela…", "offlinePackHeader": "Ipakethe yokufunda ungekho kwi-intanethi", "offlinePackDescription": "Yongeza amagama akhangelwa kakhulu kulwimi lwakho kwiNcwadi yakho, kwaye iwagcine efumaneka ngaphandle kwe-WiFi ukuze ufunde ungekho kwi-intanethi.", "visualEmptyLabel": "Kuza kuzotywa umfanekiso weli gama", "shareLabel": "Yabelana", "backLabel": "Buyela umva"});
+Object.assign(xh, {"homeHeadlineLine1": "Qonda", "homeHeadlineLine2": "ukuya esiphelweni.", "homeSubline": "Isichazi-magama esidibana nawe kumxholo, iintsingiselo, imvelaphi, izaci nomfanekiso ocacileyo, ngeelwimi ezingaphezu kwama-30.", "searchPlaceholderHome": "Chwetheza igama", "voiceInputTitle": "Thetha igama", "explain": "Cacisa", "valuePropsEyebrow": "Into eyenziwa ngokwahlukileyo yi-Gadit", "valuePropsTitle": "Ingaphezu kwentsingiselo, yindlela yokuphila negama.", "valueProp1Eyebrow": "Iqonda umxholo", "valueProp1Title": "Intsingiselo efanelekileyo, ngalo lonke ixesha", "valueProp1Body": "Ncamathisela isivakalisi, Gadit ikhetha intsingiselo ehambelanayo, hayi nje eyona iqhelekileyo.", "valueProp2Eyebrow": "Ngamehlo", "valueProp2Title": "Umfanekiso ocacileyo, wenzelwe eli gama kuphela", "valueProp2Body": "Wenzelwa igama ngalinye. Uncedo olubonwayo lokuqonda ukuba igama liziva njani, hayi umfanekiso nje ofumaneka naphi na.", "valueProp3Eyebrow": "Imvelaphi", "valueProp3Title": "Inqaku lembali, hayi ulwazi olugalelwe nje", "valueProp3Body": "Apho igama livela khona, libaliswa njengomhlathi, njengoko bekuya kubhala umhlobo onomdla.", "valueProp4Eyebrow": "Iilwimi ezingaphezu kwama-30", "valueProp4Title": "IsiHebhere nesiArabhu, ngokwemveli ngokupheleleyo", "valueProp4Body": "Ukubhala ukusuka ekunene ngokwenene, oonobumba bokwenyani, izaci zokwenyani, hayi ujongano oluguqulelwe nje.", "previewLabel": "Ukujonga kwangaphambili", "seeFullResult": "Bona isiphumo esipheleleyo", "pricingEyebrow": "Amaxabiso", "pricingTeaserTitle": "Amanqanaba amathathu. Onke anomxholo wokwenyani.", "footerProductGroup": "Imveliso", "footerLegalGroup": "Ezomthetho", "footerNotebook": "Incwadi", "footerPricing": "Amaxabiso", "footerPrivacy": "Ubucala", "footerTerms": "Imiqathango", "footerContact": "Uncedo", "footerTagline": "Isichazi-magama esikrelekrele seelwimi ezingaphezu kwama-30. Senzelwe ukufunda kwokwenyani.", "footerLanguagesNote": "Iilwimi ezingaphezu kwama-30", "signIn": "Ngena", "startFree": "Qalisa simahla", "verbStampDef": "ukuqonda igama, ngokupheleleyo", "navSearch": "Khangela", "navNotebook": "Incwadi", "navPricing": "Amaxabiso", "navSchools": "Izikolo", "navFeatures": "Iimpawu", "navPlay": "Dlala", "navAffiliates": "Amaqabane", "kidsModeLabel": "Abantwana", "kidsModeTooltipOff": "Cofa ukuze igama ngalinye licaciswe njengoko umzali ebeya kucacisela umntwana.", "kidsModeTooltipOn": "Imo yabantwana ivuliwe, yonke intsingiselo iza kubhalelwa umntwana. Cofa ukuze uyicime.", "signupWelcomeTitle": "Wamkelekile kwi-Gadit!", "signupWelcomeBody": "Iakhawunti yakho ilungile. Qalisa ngokukhangela nawuphi na igama.", "pricingPageHeadline": "Amanqanaba amathathu. Onke anomxholo wokwenyani.", "pricingPageSubline": "Qalisa simahla. Nyusela xa ubunzulu bukunceda.", "billingMonthly": "Ngenyanga", "billingYearly": "Ngonyaka", "billingSave17": "Gcina i-17%", "tierBasicTagline": "Qonda", "tierBasicPitch": "Qalisa ngezinto eziyimfuneko.", "tierBasicCta": "Qalisa", "tierBasicFeatures": "Ukhangelo lwamagama olungama-20 ngosuku¶Zonke iintsingiselo (hayi nje eyona iphambili)¶Imizekelo emi-3 kwintsingiselo nganye¶Imvelaphi nembali yegama¶Kufuneka ungene", "tierClearTagline": "Bona ngamehlo", "tierClearPitch": "Yenza amagama aphile ngemifanekiso, imo yabantwana nengxelo.", "tierClearBadge": "Eyona ithandwayo", "tierClearCta": "Qalisa uvavanyo lwasimahla lweentsuku ezili-14", "tierClearCtaYearly": "Bhalisela unyaka", "tierClearTrust": "Rhoxisa nanini na · Akukho ntlawulo ngexesha lovavanyo", "tierClearFeatures": "Yonke into ekwi-Basic¶Ukhangelo olungenamda¶Iinkcazelo zabantwana¶Umfanekiso wegama ngalinye (30/ngenyanga)¶Bhala isivakalisi ufumane ingxelo¶Izaci namabinzana¶Imbali yokukhangela (iintsuku ezingama-30 zokugqibela)", "tierDeepTagline": "Ziqhelise", "tierDeepPitch": "Yakha ithala lakho lamagama elomelela ngokuhamba kwexesha.", "tierDeepCta": "Bhalisela i-Deep", "tierDeepFeatures": "Yonke into ekwi-Clear¶Imibuzo yokuziqhelisa¶Incwadi yakho yamagama¶Ukuziqhelisa okukrelekrele ukuze amagama ahlale¶Yahlula amagama afanayo¶Umfanekiso wegama ngalinye (100/ngenyanga)", "basicEquivalent": "", "clearEquivalent": "Kulingana ne-$2.50/ngenyanga", "deepEquivalent": "Kulingana ne-$4.17/ngenyanga", "trustStripCancel": "Rhoxisa nanini na kwiphothali ye-Stripe", "trustStripMoneyBack": "Ukubuyiselwa imali kwiintsuku ezili-14 kwintengo yokuqala", "trustStripDataYours": "Iinkcukacha zakho zezakho, zikhuphe nanini na", "trustStripNoAds": "Akukho zintengiso, akukho kulandelwa ngabantu besithathu", "faqEyebrow": "Imibuzo", "faqHeadline": "Imibuzo, iphendulwe", "faqQ1": "Ndingasitshintsha isicwangciso?", "faqA1": "Ewe, nyusela okanye wehlise nanini na. Ukulungelelaniswa kwentlawulo kwenzeka ngokuzenzekelayo, uhlawula umahluko kuphela.", "faqQ2": "Kwenzeka ntoni xa ndirhoxisa?", "faqA2": "Uhlala unokufikelela de kuphele ixesha lakho lokuhlawula, emva koko ubuyela kwi-Basic. Akukho nkcukacha zilahlekayo.", "faqQ3": "Ingaba uvavanyo lusimahla ngokwenene?", "faqA3": "Ewe. Sifuna ikhadi ukuthintela ukusetyenziswa gwenxa, kodwa awuhlawuliswa kude kube lusuku lwe-15. Rhoxisa ngaphambi koko = akukho ndleko.", "faqQ4": "Kutheni kukho amanqanaba amathathu?", "faqA4": "Abasebenzisi abahlukeneyo bafuna ubunzulu obahlukeneyo. Sikhetha ukudibana nawe apho ukhoyo kunokukuthengisela isicwangciso esinye esikhulu ngokugqithisileyo.", "faqQ5": "Ingaba iinkcazelo zabantwana zikhuselekile?", "faqA5": "Ewe. Zenziwa ngenjini yethu ngononophelo olufanayo nolomxholo wabantu abadala, zijongwe ngemithetho yethu yomxholo. Akukho mxholo wabantwana ubhalwe ngabasebenzisi.", "loginWelcomeBack": "Ngena", "loginCreateAccount": "Yenza iakhawunti yakho", "loginContinueWithGoogle": "Qhubeka nge-Google", "loginInAppNotice": "Ngaphakathi kwi-{app}, ngena nge-imeyile ngezantsi. Ukuze usebenzise i-Google, vula le linki kwibhrawuza yakho.", "loginOrSeparator": "okanye", "loginEmailLabel": "I-imeyile", "loginPasswordLabel": "Iphasiwedi", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Ngena", "loginSubmitSignUp": "Yenza iakhawunti", "loginSwitchToSignUp": "Awunayo iakhawunti? Bhalisa", "loginForgotPassword": "Uyilibele iphasiwedi?", "loginForgotPasswordEnterEmail": "Faka i-imeyile yakho ngentla kuqala, emva koko ucofe apha.", "loginResetSent": "Ukuba ikhona iakhawunti yale imeyile, ilinki yokutshintsha iphasiwedi isendleleni.", "loginResetError": "Asikwazanga ukuthumela i-imeyile yokutshintsha iphasiwedi. Zama kwakhona.", "loginSwitchToSignIn": "Sele unayo iakhawunti? Ngena", "loginShowPassword": "Bonisa iphasiwedi", "loginHidePassword": "Fihla iphasiwedi", "loginCloseAria": "Vala", "loginSigningIn": "Siyangena…", "loginCreatingAccount": "Senza iakhawunti…", "loginErrorWrongCredentials": "I-imeyile okanye iphasiwedi ayichanekanga.", "loginErrorEmailInUse": "Le imeyile sele isetyenziswa. Zama ukungena.", "loginErrorWeakPassword": "Iphasiwedi kufuneka ibe noonobumba abasi-8 ubuncinane, ibe nonobumba nenani.", "loginAgeTermsLine": "Ndineminyaka eli-18 nangaphezulu kwaye ndiyavumelana ne", "loginTermsLinkLabel": "Imiqathango", "loginPrivacyLinkLabel": "Umgaqo-nkqubo wabucala", "loginErrorAgeRequired": "Nceda uqinisekise ukuba uneminyaka eli-18 nangaphezulu kwaye uyavumelana neMiqathango noMgaqo-nkqubo wabucala.", "loginErrorInvalidEmail": "Nceda ufake idilesi ye-imeyile esebenzayo.", "loginErrorGoogleFailed": "Asikwazanga ukungena nge-Google. Zama kwakhona.", "loginErrorGeneric": "Kukho into engahambanga kakuhle. Zama kwakhona.", "composeEyebrow": "Yakha", "composeSubtitle": "Lisebenzise kwisivakalisi ufumane ingxelo kwangoko ngegrama, isimbo nokufaneleka.", "composeMeaningPickerLabel": "Khetha intsingiselo oziqhelisa ngayo", "composePlaceholder": "Chwetheza isivakalisi sakho apha…", "composeSubmit": "Jonga isivakalisi", "composeChecking": "Siyajonga…", "composeStatusPerfectLabel": "Igqibelele", "composeStatusAlmostLabel": "Uphantse wafika", "composeStatusIncorrectLabel": "Akukabi njalo", "composeSuggestionEyebrow": "Indlela ecetyiswayo yokusibhala", "composeTryAnother": "Zama esinye isivakalisi", "composeBackToWord": "Buyela egameni", "composeErrorEmpty": "Nceda ubhale isivakalisi kuqala.", "composeErrorTooShort": "Nceda ubhale amagama ambalwa ubuncinane.", "quizEyebrow": "Ziqhelise", "quizSubmit": "Ngenisa", "quizNext": "Umbuzo olandelayo", "quizFinish": "Gqiba", "quizYesCorrect": "Ewe, kuchanekile", "quizNotQuite": "Akukabi njalo", "quizLoading": "Silungiselela imibuzo yakho…", "quizPracticeAnotherWord": "Ziqhelise elinye igama", "quizBackToWord": "Buyela egameni", "quizReviewMistakes": "Phinda ujonge endiziphosileyo", "notebookEyebrow": "Incwadi", "notebookTitle": "Ihlabathi lakho lamagama", "notebookSubtitle": "Lonke igama oliphononongileyo, ligciniwe, licwangcisiwe, liyakhula.", "notebookWordsExplored": "amagama aphononongiweyo", "notebookPracticeNow": "Phinda ujonge amagama am", "notebookListView": "Uluhlu", "notebookGalaxyView": "Umnyele", "notebookEmptyTitle": "Incwadi yakho ayinanto", "notebookEmptyCta": "Khangela igama ukuze uqalise", "notebookRemoveAria": "Susa", "notebookMasteredLabel": "★ Ulazi kakuhle", "notebookLegendRecent": "Agcinwe kutshanje", "notebookLegendMastered": "Uwazi kakuhle", "notebookLegendNeedsReview": "Afuna ukuphinda ajongwe", "srEyebrow": "Ziqhelise", "srSkip": "Tsiba", "srClickToReveal": "Cofa naphi na ukuze ubone", "srPrimaryMeaningLabel": "Intsingiselo ephambili", "srExamplesLabel": "Imizekelo", "srIForgot": "Ndilibele", "srIKnewIt": "Bendilazi", "srSchedulingHint": "Bendilazi = ukujonga okulandelayo kwiintsuku ezimbalwa. Ndilibele = libuyela kwanamhlanje.", "srWordsPracticed": "amagama oziqhelise ngawo", "srTomorrow": "Ngomso", "srDoneForToday": "Ugqibile namhlanje", "srPracticeMore": "Ziqhelise ngakumbi", "srEmptyTitle": "Akukho nto yokuphinda ujonge namhlanje", "srEmptyBody": "Wenze kakuhle. Buya ngomso.", "srBackToNotebook": "Buyela encwadini", "srLoading": "Silayisha ukuziqhelisa kwakho…", "accountEyebrow": "Iakhawunti", "accountYourSpace": "Indawo yakho", "accountPlanLabel": "Isicwangciso", "accountOnPlanFree": "Simahla", "accountNoActiveSubscription": "Akukho mrhumo usebenzayo", "accountChooseAPlan": "Khetha isicwangciso ukuze uqalise.", "accountCancelsAtPeriodEnd": "Iyarhoxa ekupheleni kwexesha lokuhlawula", "accountManageBilling": "Lawula iintlawulo", "accountChangePlan": "Tshintsha isicwangciso", "accountUpgrade": "Nyusela", "accountUpgradeToFamily": "Tshintshela kwi-Family", "accountUsageThisMonth": "Ukusetyenziswa kule nyanga", "accountImageGeneration": "Ukwenziwa kwemifanekiso", "accountSearches": "Ukhangelo", "accountLocked": "Kutshixiwe", "accountUnlimited": "akukho mda", "accountTodaySuffix": "namhlanje", "accountNearingLimit": "Usondela kumda wale nyanga.", "accountSectionLabel": "Iakhawunti", "accountEmailLabel": "I-imeyile", "accountSignOut": "Phuma", "accountDeleteAccount": "Cima iakhawunti", "reportEyebrow": "Xela impazamo", "reportTitle": "Yintoni engalunganga?", "reportTellMore": "Sixelele ngakumbi", "reportTellMorePh": "Akunyanzelekanga. Okukhona ucacisa, kokukhona siyilungisa ngokukhawuleza.", "reportSend": "Thumela ingxelo", "reportSending": "Siyathumela…", "reportThanks": "Enkosi, siyifumene.", "reportError": "Asikwazanga ukuthumela. Zama kwakhona kamva kancinci.", "reportCatIncorrectDefinition": "Intsingiselo engachanekanga", "reportCatWrongEtymology": "Imvelaphi engachanekanga", "reportCatBadExample": "Isivakalisi somzekelo esingalunganga", "reportCatKidsExplanation": "Ingxaki ngenkcazelo yabantwana", "reportCatIdiomIssue": "Ingxaki ngesaci", "reportCatWrongImage": "Umfanekiso ongalunganga", "reportCatQuizWrongAnswer": "Imibuzo: kuphawulwe impendulo engalunganga", "reportCatComposeFeedback": "Ingxaki ngengxelo yesivakalisi", "reportCatCompareResult": "Ingxaki ngesiphumo sothelekiso", "reportCatSomethingElse": "Enye into", "generateImage": "Yenza umfanekiso", "softWallAnonTitle": "Qhubeka, kusesimahla", "softWallSignupCta": "Qhubeka simahla", "softWallBasicTitle": "Ufikelele kumda wanamhlanje", "reportLabel": "Xela impazamo", "wordOriginEyebrow": "Imvelaphi yegama", "idiomsEyebrow": "Izaci namabinzana", "wordOriginBackgroundLabel": "Imbali", "wordOriginOriginalWord": "Igama lokuqala", "wordOriginBreakdown": "Iinxalenye zegama", "imageGeneratingLabel": "Senza umfanekiso…", "imageGeneratingHint": "Oku kudla ngokuthatha imizuzwana eli-10 ukuya kweli-15.", "imageOpenFullAria": "Vula umfanekiso ngobukhulu obupheleleyo", "kidsComingSoon": "Inkcazelo yabantwana iyeza kungekudala.", "shareDefinitionAria": "Yabelana ngale ntsingiselo", "meaningsEyebrow": "Iintsingiselo", "wordOriginLanguage": "Ulwimi", "wordOriginOriginallyMeant": "Ekuqaleni lalithetha", "actionCompose": "Yakha isivakalisi", "actionCompare": "Thelekisa amagama", "listenToWord": "Mamela", "offlineDownloadPack": "Khuphela ipakethe yokufunda ungekho kwi-intanethi", "offlineDownloadingPack": "Siyakhuphela…", "offlinePackHeader": "Ipakethe yokufunda ungekho kwi-intanethi", "offlinePackDescription": "Yongeza amagama akhangelwa kakhulu kulwimi lwakho kwiNcwadi yakho, kwaye iwagcine efumaneka ngaphandle kwe-WiFi ukuze ufunde ungekho kwi-intanethi.", "shareLabel": "Yabelana", "backLabel": "Buyela umva"});
 
 // --- Native Sepedi (v2 core, function keys fall back to English) ---
-Object.assign(nso, {"homeHeadlineLine1": "Kwešiša", "homeHeadlineLine2": "go fihla mafelelong.", "homeSubline": "Pukuntšu ye e go thušago go ya ka seemo, ditlhalošo, mothopo, dika le seswantšho se se phelago, ka dipolelo tše 30+.", "searchPlaceholderHome": "Tlanya lentšu", "voiceInputTitle": "Bolela lentšu", "addContext": "Oketša seemo", "explain": "Hlaloša", "contextHint": "O bala se sengwe? Kgomaretša lefoko gore re hwetše bokao bjo bo nepagetšego.", "tryLabel": "Leka", "valuePropsEyebrow": "Se Gadit e se dirago ka tsela ye e fapanego", "valuePropsTitle": "Go feta tlhalošo, ke tsela ya go phela le lentšu.", "valueProp1Eyebrow": "E ela hloko seemo", "valueProp1Title": "Bokao bjo bo nepagetšego, nako le nako", "valueProp1Body": "Kgomaretša lefoko, Gadit e kgetha bokao bjo bo sepelelanago, e sego fela bjo bo tlwaelegilego kudu.", "valueProp2Eyebrow": "Ka pono", "valueProp2Title": "Seswantšho se se phelago, sa lentšu le fela", "valueProp2Body": "Se dirwa bakeng sa lentšu le lengwe le le lengwe. Ke sešupo sa pono sa ka moo lentšu le kwagalago ka gona, e sego seswantšho sa kgale sa go tšewa gongwe.", "valueProp3Eyebrow": "Mothopo wa lentšu", "valueProp3Title": "Taba ya histori, e sego tshedimošo ye ntši ya Wikipedia", "valueProp3Body": "Moo lentšu le tšwago gona, le anegwa ka serapa, bjalo ka ge mogwera yo a ratago go tseba a ka ngwala.", "valueProp4Eyebrow": "Dipolelo tše 30+", "valueProp4Title": "Seheberu le Searabia, ka botlalo bja tšona", "valueProp4Body": "Mongwalo wa nnete wa go tloga go le letona, difonte tša nnete, dika tša nnete, e sego tšhebedišo ye e fetoletšwego fela.", "previewLabel": "Ponelopele", "seeFullResult": "Bona sephetho ka botlalo", "pricingEyebrow": "Ditheko", "pricingTeaserTitle": "Maemo a mararo. Ka moka a na le diteng tša nnete.", "trustMicrocopy": "Khansela nako efe goba efe · Teko ya matšatši a 14 go Clear ya kgwedi · Ga go tefo go fihlela teko e fela", "footerProductGroup": "Setšweletšwa", "footerLegalGroup": "Tša molao", "footerCompare": "Bapetša", "footerNotebook": "Puku ya mantšu", "footerPricing": "Ditheko", "footerPrivacy": "Sephiri", "footerTerms": "Melawana", "footerContact": "Thušo", "footerTagline": "Pukuntšu ye bohlale ya dipolelo tše 30+. E agetšwe go bala ga nnete.", "footerLanguagesNote": "Dipolelo tše 30+", "signIn": "Tsena", "startFree": "Thoma ka mahala", "verbStampDef": "go kwešiša lentšu, ka botlalo", "navSearch": "Nyaka", "navCompare": "Bapetša", "navNotebook": "Puku ya mantšu", "navPricing": "Ditheko", "navSchools": "Dikolo", "navFeatures": "Dikarolo", "navPlay": "Raloka", "navAffiliates": "Balekane", "kidsModeLabel": "Bana", "kidsModeTooltipOff": "Kgotla go hlaloša lentšu le lengwe le le lengwe bjalo ka ge motswadi a ka hlalošetša ngwana.", "kidsModeTooltipOn": "Mokgwa wa bana o bulegile, tlhalošo ye nngwe le ye nngwe e tla ngwalelwa ngwana. Kgotla go o tima.", "kidsModeBasicGate": "Mokgwa wa bana ke karolo ya Clear. Kaonafatša gore o o šomiše.", "signupWelcomeTitle": "O amogelwa go Gadit!", "signupWelcomeBody": "Akhaonto ya gago e lokile. Thoma ka go nyaka lentšu lefe goba lefe.", "pricingPageHeadline": "Maemo a mararo. Ka moka a na le diteng tša nnete.", "pricingPageSubline": "Thoma ka mahala. Kaonafatša ge botebo bo go thuša.", "billingMonthly": "Ka kgwedi", "billingYearly": "Ka ngwaga", "billingSave17": "Boloka 17%", "tierBasicTagline": "Kwešiša", "tierBasicPitch": "Thoma ka tše bohlokwa.", "tierBasicCta": "Thoma", "tierBasicFeatures": "Dinyakišišo tša mantšu tše 20 ka letšatši¶Ditlhalošo ka moka (e sego fela ye kgolo)¶Mehlala ye 3 ya tlhalošo ye nngwe le ye nngwe¶Mothopo le histori ya lentšu¶Go tsena go a nyakega", "tierClearTagline": "Bona", "tierClearPitch": "Phediša mantšu ka diswantšho, mokgwa wa bana le dikarabelo.", "tierClearBadge": "E ratwago kudu", "tierClearCta": "Thoma teko ya mahala ya matšatši a 14", "tierClearCtaYearly": "Ingwadiše ka ngwaga", "tierClearTrust": "Khansela nako efe goba efe · Ga go tefo nakong ya teko", "tierClearFeatures": "Tšohle tša Basic¶Dinyakišišo tše di sa felego¶Ditlhalošo tša bana¶Seswantšho sa lentšu le lengwe le le lengwe (30/kgwedi)¶Ngwala lefoko o hwetše dikarabelo¶Dika le dipolelwana¶Histori ya dinyakišišo (matšatši a 30 a go feta)", "tierDeepTagline": "Itlwaetše", "tierDeepPitch": "Aga bokgobapuku bja gago bja mantšu bjo bo tiago ka nako.", "tierDeepCta": "Ingwadišetše Deep", "tierDeepFeatures": "Tšohle tša Clear¶Ditlhahlobo tša tlwaetšo¶Puku ya gago ya mantšu¶Tlwaetšo ye bohlale ya mantšu ao a dulago¶Aroganya mantšu a a swanago¶Seswantšho sa lentšu le lengwe le le lengwe (100/kgwedi)", "basicEquivalent": "", "clearEquivalent": "Go lekana le $2.50/kgwedi", "deepEquivalent": "Go lekana le $4.17/kgwedi", "trustStripCancel": "Khansela nako efe goba efe ka phothale ya Stripe", "trustStripMoneyBack": "Tšhelete e a bušwa ka matšatši a 14 theko ya mathomo", "trustStripDataYours": "Tshedimošo ya gago ke ya gago, e ntšhe nako efe goba efe", "trustStripNoAds": "Ga go dipapatšo, ga go go latelwa ke batho ba bangwe", "faqEyebrow": "Dipotšišo", "faqHeadline": "Dipotšišo, di arabilwe", "faqQ1": "Na nka fetoša leano?", "faqA1": "Ee, kaonafatša goba theoša nako efe goba efe. Tefo e lekanetšwa ka bowona, o lefa fela phapano.", "faqQ2": "Go direga eng ge nka khansela?", "faqA2": "O tšwela pele o na le phihlelelo go fihla mafelelong a nako ya gago ya tefo, ke moka o boela go Basic. Ga go tshedimošo ye e lahlegago.", "faqQ3": "Na teko ke ya mahala ka nnete?", "faqA3": "Ee. Re kgopela karata gore re thibele tšhomišo ye mpe, eupša ga o lefišwe go fihla letšatšing la 15. Khansela pele ga fao = ga go tefo.", "faqQ4": "Ke ka lebaka la eng go na le maemo a mararo?", "faqA4": "Badiriši ba fapanego ba nyaka botebo bjo bo fapanego. Re rata go go thuša moo o lego gona go e na le go go rekišetša leano le tee le le imelago.", "faqQ5": "Na ditlhalošo tša bana di bolokegile?", "faqA5": "Ee. Di dirwa ke enjene ya rena ka tlhokomelo ye e swanago le ya diteng tša batho ba bagolo, gomme di lekolwa go ya ka melao ya rena ya diteng. Ga go diteng tša bana tše di ngwadilwego ke badiriši.", "loginWelcomeBack": "Tsena", "loginCreateAccount": "Bula akhaonto ya gago", "loginContinueWithGoogle": "Tšwela pele ka Google", "loginInAppNotice": "Ka gare ga {app}, tsena ka imeile ka fase. Bakeng sa kgetho ya Google, bula linki ye ka sefetleking sa gago.", "loginOrSeparator": "goba", "loginEmailLabel": "Imeile", "loginPasswordLabel": "Phasewete", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Tsena", "loginSubmitSignUp": "Bula akhaonto", "loginSwitchToSignUp": "Ga o na akhaonto? Ingwadiše", "loginForgotPassword": "O lebetše phasewete?", "loginForgotPasswordEnterEmail": "Tsenya imeile ya gago ka godimo pele, ke moka o kgotle mo.", "loginResetSent": "Ge e ba go na le akhaonto ya imeile yeo, linki ya go fetoša phasewete e tseleng.", "loginResetError": "Re paletšwe ke go romela imeile ya go fetoša phasewete. Leka gape.", "loginSwitchToSignIn": "O šetše o na le akhaonto? Tsena", "loginShowPassword": "Bontšha phasewete", "loginHidePassword": "Uta phasewete", "loginCloseAria": "Tswalela", "loginSigningIn": "Re a go tsenya…", "loginCreatingAccount": "Re bula akhaonto…", "loginErrorWrongCredentials": "Imeile goba phasewete e fošagetše.", "loginErrorEmailInUse": "Imeile ye e šetše e šomišwa. Leka go tsena.", "loginErrorWeakPassword": "Phasewete e swanetše go ba le dihlaka tše 8 bonyenyane, gomme e be le tlhaka le nomoro.", "loginAgeTermsLine": "Ke na le mengwaga ye 18 goba go feta gomme ke dumelelana le", "loginTermsLinkLabel": "Melawana", "loginPrivacyLinkLabel": "Pholisi ya Sephiri", "loginErrorAgeRequired": "Hle kgonthiša gore o na le mengwaga ye 18 goba go feta gomme o dumelelana le Melawana le Pholisi ya Sephiri.", "loginErrorInvalidEmail": "Hle tsenya aterese ya imeile ye e nepagetšego.", "loginErrorGoogleFailed": "Re paletšwe ke go go tsenya ka Google. Leka gape.", "loginErrorGeneric": "Go na le se se senyegilego. Leka gape.", "composeEyebrow": "Bopa", "composeSubtitle": "Le šomiše lefokong o hwetše dikarabelo gateetee mabapi le popopolelo, segalo le go sepelelana.", "composeMeaningPickerLabel": "Kgetha bokao bjo o bo itlwaetšago", "composePlaceholder": "Tlanya lefoko la gago mo…", "composeSubmit": "Lekola lefoko", "composeChecking": "Re a lekola…", "composeStatusPerfectLabel": "Go phethagetše", "composeStatusAlmostLabel": "O batametše", "composeStatusIncorrectLabel": "Aowa, ga se ka mo", "composeSuggestionEyebrow": "Mongwalo wo o šišintšwego", "composeTryAnother": "Leka lefoko le lengwe", "composeBackToWord": "Boela lentšung", "composeErrorEmpty": "Hle ngwala lefoko pele.", "composeErrorTooShort": "Hle ngwala mantšu a mmalwa bonyenyane.", "quizEyebrow": "Tlwaetšo", "quizSubmit": "Romela", "quizNext": "Potšišo ye e latelago", "quizFinish": "Fetša", "quizYesCorrect": "Ee, go nepagetše", "quizNotQuite": "Aowa, ga se ka mo", "quizLoading": "Re lokišetša tlhahlobo ya gago…", "quizPracticeAnotherWord": "Itlwaetše lentšu le lengwe", "quizBackToWord": "Boela lentšung", "quizReviewMistakes": "Boeletša ao ke a fošitšego", "compareEyebrow": "Bapetša", "compareTitle": "Aroganya mantšu a a swanago", "compareSubtitle": "affect le effect, אומנות le אמנות, principle le principal, mantšu ao a gakantšhago gaešita le bao e lego polelo ya bona ya gae.", "compareWord1Label": "Lentšu 1", "compareWord2Label": "Lentšu 2", "compareWord1Placeholder": "affect", "compareWord2Placeholder": "effect", "compareCta": "Bapetša", "compareLoading": "Re a bapetša…", "compareEmpty": "Tsenya mantšu a mabedi go a bapetša", "compareDifferenceLabel": "Phapano", "compareExamplesLabel": "Mehlala", "compareCommonMistakeLabel": "Phošo ye e tlwaelegilego", "compareErrNotARealWord": "Ga re tsebe le lengwe la mantšu ao.", "compareErrDifferentLanguages": "Mantšu a a mabedi a bonagala a le ka dipolelo tše di fapanego, leka mantšu a polelo e tee.", "compareErrSameWord": "A bonagala e le lentšu le tee, leka a mabedi a a fapanego.", "compareErrGeneric": "Papetšo ga e hwetšagale bjale.", "notebookEyebrow": "Puku ya mantšu", "notebookTitle": "Lefase la gago la mantšu", "notebookSubtitle": "Lentšu le lengwe le le lengwe leo o le hlahlobilego, le bolokilwe, le rulagantšwe, le a gola.", "notebookWordsExplored": "mantšu a hlahlobilwego", "notebookPracticeNow": "Boeletša mantšu a ka", "notebookListView": "Lenaneo", "notebookGalaxyView": "Sehlopha sa dinaledi", "notebookEmptyTitle": "Puku ya gago ga e na selo", "notebookEmptyCta": "Nyaka lentšu go thoma", "notebookRemoveAria": "Tloša", "notebookMasteredLabel": "★ Le tsebja gabotse", "notebookLegendRecent": "A bolokilwe morago bjale", "notebookLegendMastered": "A tsebja gabotse", "notebookLegendNeedsReview": "A nyaka go boeletšwa", "srEyebrow": "Tlwaetšo", "srSkip": "Tšhela", "srClickToReveal": "Kgotla felo gohle go utolla", "srTapToReveal": "Kgotla go utolla", "srPrimaryMeaningLabel": "Bokao bjo bogolo", "srExamplesLabel": "Mehlala", "srIForgot": "Ke lebetše", "srIKnewIt": "Ke be ke le tseba", "srSchedulingHint": "Ke be ke le tseba = poeletšo ye e latelago ka morago ga matšatši a mmalwa. Ke lebetše = le boela lehono.", "srWordsPracticed": "mantšu a itlwaeditšwego", "srTomorrow": "Gosasa", "srDoneForToday": "Re feditše lehono", "srPracticeMore": "Itlwaetše go feta", "srEmptyTitle": "Ga go se se swanetšego go boeletšwa lehono", "srEmptyBody": "O dirile gabotse. Boa gosasa.", "srBackToNotebook": "Boela pukung", "srLoading": "Re laiša tlwaetšo ya gago…", "accountEyebrow": "Akhaonto", "accountYourSpace": "Sebaka sa gago", "accountPlanLabel": "Leano", "accountOnPlanFree": "Mahala", "accountNoActiveSubscription": "Ga go peeletšo ye e šomago", "accountChooseAPlan": "Kgetha leano go thoma.", "accountCancelsAtPeriodEnd": "E tla khanselwa mafelelong a nako ya tefo", "accountManageBilling": "Laola ditefo", "accountChangePlan": "Fetoša leano", "accountUpgrade": "Kaonafatša", "accountUpgradeToFamily": "Fetogela go Family", "accountUsageThisMonth": "Tšhomišo kgweding ye", "accountImageGeneration": "Go dira diswantšho", "accountSearches": "Dinyakišišo", "accountLocked": "E notletšwe", "accountUnlimited": "di sa felego", "accountTodaySuffix": "lehono", "accountNearingLimit": "O batamela mollwane wa kgwedi ye.", "accountSectionLabel": "Akhaonto", "accountEmailLabel": "Imeile", "accountChangeEmail": "Fetoša imeile", "accountSignOut": "Tšwa", "accountDeleteAccount": "Phumola akhaonto", "reportEyebrow": "Bega phošo", "reportTitle": "Go fošagetše eng?", "reportTellMore": "Re botše go feta", "reportTellMorePh": "Ga go gapeletšwe. Ge o hlaloša gabotse, re tla e lokiša ka pela.", "reportSend": "Romela pego", "reportSending": "Re a romela…", "reportThanks": "Re a leboga, re e amogetše.", "reportError": "Re paletšwe ke go romela. Leka gape ka morago ga nakwana.", "reportCatIncorrectDefinition": "Tlhalošo ye e fošagetšego", "reportCatWrongEtymology": "Mothopo wa lentšu o fošagetše", "reportCatBadExample": "Lefoko la mohlala le le fošagetšego", "reportCatKidsExplanation": "Bothata bja tlhalošo ya bana", "reportCatIdiomIssue": "Bothata bja seka", "reportCatWrongImage": "Seswantšho se se fošagetšego", "reportCatQuizWrongAnswer": "Tlhahlobo: karabo e swailwe e fošagetše", "reportCatComposeFeedback": "Bothata bja dikarabelo tša lefoko", "reportCatCompareResult": "Bothata bja sephetho sa papetšo", "reportCatSomethingElse": "Se sengwe", "origin": "Mothopo", "historyNote": "Taba ya histori", "throughTime": "Go ralala nako", "forKids": "Bakeng sa bana", "commonExpressions": "Dipolelwana tše di tlwaelegilego", "idiomsWithMeaning": "Dika tša bokao bjo", "notJustPrimary": "E sego fela bjo bogolo", "takeItFurther": "Tšwela pele", "saveToNotebookHint": "Boela go lona ka morago, le rulagantšwe, le nyakega gabonolo.", "generateImage": "Dira seswantšho", "generatingImage": "Re a dira…", "generateImageHint": "Seswantšho se se phelago se se dirilwego ke Gadit, sa lentšu le fela.", "composeSentence": "Bopa lefoko", "composeSentenceHint": "Ngwala la gago, Gadit e le lekola segalo le go sepelelana.", "practiceWord": "Itlwaetše lentšu le", "practiceWordHint": "Tlhahlobo ye kopana ye e lokišeditšwego ka moo o ithutago ka gona.", "unlockWithClear": "Bula ka Clear", "upgradeToClear": "Kaonafatša go Clear", "softWallAnonTitle": "Tšwela pele, e sa le mahala", "softWallAnonBody": "Akhaonto ya mahala ye e bulwago ka pela e go fa dinyakišišo tše 20 ka letšatši, ka mehlala, dika le mothopo wa mantšu.", "softWallSignupCta": "Tšwela pele ka mahala", "softWallBasicTitle": "O fihlile mollwaneng wa lehono", "softWallBasicBody": "Diakhaonto tša mahala di hwetša dinyakišišo tše 20 ka letšatši. Mollwane o thoma lefsa gosasa, goba kaonafatša go Clear go hwetša dinyakišišo tše di sa felego gotee le diswantšho, mokgwa wa bana le dikarabelo tša popopolelo.", "clearUnlocksThis": "Clear e bula se", "visualizeThisWord": "Bona ka seswantšho", "visualBlurb": "Seswantšho se tee se se phelago, se dirilwe ke Gadit, sešupo sa pono sa ka moo lentšu le le kwagalago ka gona.", "visualBlurbLocked": "Dira seswantšho se se phelago, se se sa swanego le se sengwe, sa lentšu le, o kwešiše ka go bona.", "reportLabel": "Bega phošo", "wordOriginEyebrow": "Mothopo wa Lentšu", "idiomsEyebrow": "Dika le dipolelwana", "wordOriginBackgroundLabel": "Histori", "wordOriginOriginalWord": "Lentšu la mathomo", "wordOriginBreakdown": "Dikarolo tša lentšu", "imageGeneratingLabel": "Re dira seswantšho…", "imageGeneratingHint": "Gantši se tšea metsotswana ye 10 go ya go ye 15.", "imageOpenFullAria": "Bula seswantšho ka bogolo bja sona ka moka", "kidsComingSoon": "Tlhalošo ya bana e tla kgauswinyane.", "compareComingSoon": "Dipapadi tša mantšu di tla kgauswinyane.", "shareDefinitionAria": "Abelana tlhalošo ye", "meaningsEyebrow": "Ditlhalošo", "wordOriginLanguage": "Polelo", "wordOriginOriginallyMeant": "Mathomong le be le ra", "actionCompose": "Bopa lefoko", "actionCompare": "Bapetša mantšu", "listenToWord": "Theeletša", "offlinePin": "Boloka go šomiša ntle le inthanete", "offlinePinTitle": "Boloka lentšu le gore o ithute ntle le inthanete", "offlinePinnedTitle": "Le bolokilwe, le a hwetšagala ntle le WiFi", "offlineDownloadPack": "Laolla sephuthelwana sa ntle le inthanete", "offlineDownloadingPack": "Re a laolla…", "offlinePackHeader": "Sephuthelwana sa ntle le inthanete", "offlinePackDescription": "E oketša mantšu ao a nyakwago kudu ka polelo ya gago Pukung ya gago ya mantšu, gomme e dira gore a hwetšagale ntle le WiFi gore o ithute ntle le inthanete.", "visualEmptyLabel": "Seswantšho se tla thalwa bakeng sa lentšu le", "shareLabel": "Abelana", "backLabel": "Morago"});
+Object.assign(nso, {"homeHeadlineLine1": "Kwešiša", "homeHeadlineLine2": "go fihla mafelelong.", "homeSubline": "Pukuntšu ye e go thušago go ya ka seemo, ditlhalošo, mothopo, dika le seswantšho se se phelago, ka dipolelo tše 30+.", "searchPlaceholderHome": "Tlanya lentšu", "voiceInputTitle": "Bolela lentšu", "explain": "Hlaloša", "valuePropsEyebrow": "Se Gadit e se dirago ka tsela ye e fapanego", "valuePropsTitle": "Go feta tlhalošo, ke tsela ya go phela le lentšu.", "valueProp1Eyebrow": "E ela hloko seemo", "valueProp1Title": "Bokao bjo bo nepagetšego, nako le nako", "valueProp1Body": "Kgomaretša lefoko, Gadit e kgetha bokao bjo bo sepelelanago, e sego fela bjo bo tlwaelegilego kudu.", "valueProp2Eyebrow": "Ka pono", "valueProp2Title": "Seswantšho se se phelago, sa lentšu le fela", "valueProp2Body": "Se dirwa bakeng sa lentšu le lengwe le le lengwe. Ke sešupo sa pono sa ka moo lentšu le kwagalago ka gona, e sego seswantšho sa kgale sa go tšewa gongwe.", "valueProp3Eyebrow": "Mothopo wa lentšu", "valueProp3Title": "Taba ya histori, e sego tshedimošo ye ntši ya Wikipedia", "valueProp3Body": "Moo lentšu le tšwago gona, le anegwa ka serapa, bjalo ka ge mogwera yo a ratago go tseba a ka ngwala.", "valueProp4Eyebrow": "Dipolelo tše 30+", "valueProp4Title": "Seheberu le Searabia, ka botlalo bja tšona", "valueProp4Body": "Mongwalo wa nnete wa go tloga go le letona, difonte tša nnete, dika tša nnete, e sego tšhebedišo ye e fetoletšwego fela.", "previewLabel": "Ponelopele", "seeFullResult": "Bona sephetho ka botlalo", "pricingEyebrow": "Ditheko", "pricingTeaserTitle": "Maemo a mararo. Ka moka a na le diteng tša nnete.", "footerProductGroup": "Setšweletšwa", "footerLegalGroup": "Tša molao", "footerNotebook": "Puku ya mantšu", "footerPricing": "Ditheko", "footerPrivacy": "Sephiri", "footerTerms": "Melawana", "footerContact": "Thušo", "footerTagline": "Pukuntšu ye bohlale ya dipolelo tše 30+. E agetšwe go bala ga nnete.", "footerLanguagesNote": "Dipolelo tše 30+", "signIn": "Tsena", "startFree": "Thoma ka mahala", "verbStampDef": "go kwešiša lentšu, ka botlalo", "navSearch": "Nyaka", "navNotebook": "Puku ya mantšu", "navPricing": "Ditheko", "navSchools": "Dikolo", "navFeatures": "Dikarolo", "navPlay": "Raloka", "navAffiliates": "Balekane", "kidsModeLabel": "Bana", "kidsModeTooltipOff": "Kgotla go hlaloša lentšu le lengwe le le lengwe bjalo ka ge motswadi a ka hlalošetša ngwana.", "kidsModeTooltipOn": "Mokgwa wa bana o bulegile, tlhalošo ye nngwe le ye nngwe e tla ngwalelwa ngwana. Kgotla go o tima.", "signupWelcomeTitle": "O amogelwa go Gadit!", "signupWelcomeBody": "Akhaonto ya gago e lokile. Thoma ka go nyaka lentšu lefe goba lefe.", "pricingPageHeadline": "Maemo a mararo. Ka moka a na le diteng tša nnete.", "pricingPageSubline": "Thoma ka mahala. Kaonafatša ge botebo bo go thuša.", "billingMonthly": "Ka kgwedi", "billingYearly": "Ka ngwaga", "billingSave17": "Boloka 17%", "tierBasicTagline": "Kwešiša", "tierBasicPitch": "Thoma ka tše bohlokwa.", "tierBasicCta": "Thoma", "tierBasicFeatures": "Dinyakišišo tša mantšu tše 20 ka letšatši¶Ditlhalošo ka moka (e sego fela ye kgolo)¶Mehlala ye 3 ya tlhalošo ye nngwe le ye nngwe¶Mothopo le histori ya lentšu¶Go tsena go a nyakega", "tierClearTagline": "Bona", "tierClearPitch": "Phediša mantšu ka diswantšho, mokgwa wa bana le dikarabelo.", "tierClearBadge": "E ratwago kudu", "tierClearCta": "Thoma teko ya mahala ya matšatši a 14", "tierClearCtaYearly": "Ingwadiše ka ngwaga", "tierClearTrust": "Khansela nako efe goba efe · Ga go tefo nakong ya teko", "tierClearFeatures": "Tšohle tša Basic¶Dinyakišišo tše di sa felego¶Ditlhalošo tša bana¶Seswantšho sa lentšu le lengwe le le lengwe (30/kgwedi)¶Ngwala lefoko o hwetše dikarabelo¶Dika le dipolelwana¶Histori ya dinyakišišo (matšatši a 30 a go feta)", "tierDeepTagline": "Itlwaetše", "tierDeepPitch": "Aga bokgobapuku bja gago bja mantšu bjo bo tiago ka nako.", "tierDeepCta": "Ingwadišetše Deep", "tierDeepFeatures": "Tšohle tša Clear¶Ditlhahlobo tša tlwaetšo¶Puku ya gago ya mantšu¶Tlwaetšo ye bohlale ya mantšu ao a dulago¶Aroganya mantšu a a swanago¶Seswantšho sa lentšu le lengwe le le lengwe (100/kgwedi)", "basicEquivalent": "", "clearEquivalent": "Go lekana le $2.50/kgwedi", "deepEquivalent": "Go lekana le $4.17/kgwedi", "trustStripCancel": "Khansela nako efe goba efe ka phothale ya Stripe", "trustStripMoneyBack": "Tšhelete e a bušwa ka matšatši a 14 theko ya mathomo", "trustStripDataYours": "Tshedimošo ya gago ke ya gago, e ntšhe nako efe goba efe", "trustStripNoAds": "Ga go dipapatšo, ga go go latelwa ke batho ba bangwe", "faqEyebrow": "Dipotšišo", "faqHeadline": "Dipotšišo, di arabilwe", "faqQ1": "Na nka fetoša leano?", "faqA1": "Ee, kaonafatša goba theoša nako efe goba efe. Tefo e lekanetšwa ka bowona, o lefa fela phapano.", "faqQ2": "Go direga eng ge nka khansela?", "faqA2": "O tšwela pele o na le phihlelelo go fihla mafelelong a nako ya gago ya tefo, ke moka o boela go Basic. Ga go tshedimošo ye e lahlegago.", "faqQ3": "Na teko ke ya mahala ka nnete?", "faqA3": "Ee. Re kgopela karata gore re thibele tšhomišo ye mpe, eupša ga o lefišwe go fihla letšatšing la 15. Khansela pele ga fao = ga go tefo.", "faqQ4": "Ke ka lebaka la eng go na le maemo a mararo?", "faqA4": "Badiriši ba fapanego ba nyaka botebo bjo bo fapanego. Re rata go go thuša moo o lego gona go e na le go go rekišetša leano le tee le le imelago.", "faqQ5": "Na ditlhalošo tša bana di bolokegile?", "faqA5": "Ee. Di dirwa ke enjene ya rena ka tlhokomelo ye e swanago le ya diteng tša batho ba bagolo, gomme di lekolwa go ya ka melao ya rena ya diteng. Ga go diteng tša bana tše di ngwadilwego ke badiriši.", "loginWelcomeBack": "Tsena", "loginCreateAccount": "Bula akhaonto ya gago", "loginContinueWithGoogle": "Tšwela pele ka Google", "loginInAppNotice": "Ka gare ga {app}, tsena ka imeile ka fase. Bakeng sa kgetho ya Google, bula linki ye ka sefetleking sa gago.", "loginOrSeparator": "goba", "loginEmailLabel": "Imeile", "loginPasswordLabel": "Phasewete", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Tsena", "loginSubmitSignUp": "Bula akhaonto", "loginSwitchToSignUp": "Ga o na akhaonto? Ingwadiše", "loginForgotPassword": "O lebetše phasewete?", "loginForgotPasswordEnterEmail": "Tsenya imeile ya gago ka godimo pele, ke moka o kgotle mo.", "loginResetSent": "Ge e ba go na le akhaonto ya imeile yeo, linki ya go fetoša phasewete e tseleng.", "loginResetError": "Re paletšwe ke go romela imeile ya go fetoša phasewete. Leka gape.", "loginSwitchToSignIn": "O šetše o na le akhaonto? Tsena", "loginShowPassword": "Bontšha phasewete", "loginHidePassword": "Uta phasewete", "loginCloseAria": "Tswalela", "loginSigningIn": "Re a go tsenya…", "loginCreatingAccount": "Re bula akhaonto…", "loginErrorWrongCredentials": "Imeile goba phasewete e fošagetše.", "loginErrorEmailInUse": "Imeile ye e šetše e šomišwa. Leka go tsena.", "loginErrorWeakPassword": "Phasewete e swanetše go ba le dihlaka tše 8 bonyenyane, gomme e be le tlhaka le nomoro.", "loginAgeTermsLine": "Ke na le mengwaga ye 18 goba go feta gomme ke dumelelana le", "loginTermsLinkLabel": "Melawana", "loginPrivacyLinkLabel": "Pholisi ya Sephiri", "loginErrorAgeRequired": "Hle kgonthiša gore o na le mengwaga ye 18 goba go feta gomme o dumelelana le Melawana le Pholisi ya Sephiri.", "loginErrorInvalidEmail": "Hle tsenya aterese ya imeile ye e nepagetšego.", "loginErrorGoogleFailed": "Re paletšwe ke go go tsenya ka Google. Leka gape.", "loginErrorGeneric": "Go na le se se senyegilego. Leka gape.", "composeEyebrow": "Bopa", "composeSubtitle": "Le šomiše lefokong o hwetše dikarabelo gateetee mabapi le popopolelo, segalo le go sepelelana.", "composeMeaningPickerLabel": "Kgetha bokao bjo o bo itlwaetšago", "composePlaceholder": "Tlanya lefoko la gago mo…", "composeSubmit": "Lekola lefoko", "composeChecking": "Re a lekola…", "composeStatusPerfectLabel": "Go phethagetše", "composeStatusAlmostLabel": "O batametše", "composeStatusIncorrectLabel": "Aowa, ga se ka mo", "composeSuggestionEyebrow": "Mongwalo wo o šišintšwego", "composeTryAnother": "Leka lefoko le lengwe", "composeBackToWord": "Boela lentšung", "composeErrorEmpty": "Hle ngwala lefoko pele.", "composeErrorTooShort": "Hle ngwala mantšu a mmalwa bonyenyane.", "quizEyebrow": "Tlwaetšo", "quizSubmit": "Romela", "quizNext": "Potšišo ye e latelago", "quizFinish": "Fetša", "quizYesCorrect": "Ee, go nepagetše", "quizNotQuite": "Aowa, ga se ka mo", "quizLoading": "Re lokišetša tlhahlobo ya gago…", "quizPracticeAnotherWord": "Itlwaetše lentšu le lengwe", "quizBackToWord": "Boela lentšung", "quizReviewMistakes": "Boeletša ao ke a fošitšego", "notebookEyebrow": "Puku ya mantšu", "notebookTitle": "Lefase la gago la mantšu", "notebookSubtitle": "Lentšu le lengwe le le lengwe leo o le hlahlobilego, le bolokilwe, le rulagantšwe, le a gola.", "notebookWordsExplored": "mantšu a hlahlobilwego", "notebookPracticeNow": "Boeletša mantšu a ka", "notebookListView": "Lenaneo", "notebookGalaxyView": "Sehlopha sa dinaledi", "notebookEmptyTitle": "Puku ya gago ga e na selo", "notebookEmptyCta": "Nyaka lentšu go thoma", "notebookRemoveAria": "Tloša", "notebookMasteredLabel": "★ Le tsebja gabotse", "notebookLegendRecent": "A bolokilwe morago bjale", "notebookLegendMastered": "A tsebja gabotse", "notebookLegendNeedsReview": "A nyaka go boeletšwa", "srEyebrow": "Tlwaetšo", "srSkip": "Tšhela", "srClickToReveal": "Kgotla felo gohle go utolla", "srPrimaryMeaningLabel": "Bokao bjo bogolo", "srExamplesLabel": "Mehlala", "srIForgot": "Ke lebetše", "srIKnewIt": "Ke be ke le tseba", "srSchedulingHint": "Ke be ke le tseba = poeletšo ye e latelago ka morago ga matšatši a mmalwa. Ke lebetše = le boela lehono.", "srWordsPracticed": "mantšu a itlwaeditšwego", "srTomorrow": "Gosasa", "srDoneForToday": "Re feditše lehono", "srPracticeMore": "Itlwaetše go feta", "srEmptyTitle": "Ga go se se swanetšego go boeletšwa lehono", "srEmptyBody": "O dirile gabotse. Boa gosasa.", "srBackToNotebook": "Boela pukung", "srLoading": "Re laiša tlwaetšo ya gago…", "accountEyebrow": "Akhaonto", "accountYourSpace": "Sebaka sa gago", "accountPlanLabel": "Leano", "accountOnPlanFree": "Mahala", "accountNoActiveSubscription": "Ga go peeletšo ye e šomago", "accountChooseAPlan": "Kgetha leano go thoma.", "accountCancelsAtPeriodEnd": "E tla khanselwa mafelelong a nako ya tefo", "accountManageBilling": "Laola ditefo", "accountChangePlan": "Fetoša leano", "accountUpgrade": "Kaonafatša", "accountUpgradeToFamily": "Fetogela go Family", "accountUsageThisMonth": "Tšhomišo kgweding ye", "accountImageGeneration": "Go dira diswantšho", "accountSearches": "Dinyakišišo", "accountLocked": "E notletšwe", "accountUnlimited": "di sa felego", "accountTodaySuffix": "lehono", "accountNearingLimit": "O batamela mollwane wa kgwedi ye.", "accountSectionLabel": "Akhaonto", "accountEmailLabel": "Imeile", "accountSignOut": "Tšwa", "accountDeleteAccount": "Phumola akhaonto", "reportEyebrow": "Bega phošo", "reportTitle": "Go fošagetše eng?", "reportTellMore": "Re botše go feta", "reportTellMorePh": "Ga go gapeletšwe. Ge o hlaloša gabotse, re tla e lokiša ka pela.", "reportSend": "Romela pego", "reportSending": "Re a romela…", "reportThanks": "Re a leboga, re e amogetše.", "reportError": "Re paletšwe ke go romela. Leka gape ka morago ga nakwana.", "reportCatIncorrectDefinition": "Tlhalošo ye e fošagetšego", "reportCatWrongEtymology": "Mothopo wa lentšu o fošagetše", "reportCatBadExample": "Lefoko la mohlala le le fošagetšego", "reportCatKidsExplanation": "Bothata bja tlhalošo ya bana", "reportCatIdiomIssue": "Bothata bja seka", "reportCatWrongImage": "Seswantšho se se fošagetšego", "reportCatQuizWrongAnswer": "Tlhahlobo: karabo e swailwe e fošagetše", "reportCatComposeFeedback": "Bothata bja dikarabelo tša lefoko", "reportCatCompareResult": "Bothata bja sephetho sa papetšo", "reportCatSomethingElse": "Se sengwe", "generateImage": "Dira seswantšho", "softWallAnonTitle": "Tšwela pele, e sa le mahala", "softWallSignupCta": "Tšwela pele ka mahala", "softWallBasicTitle": "O fihlile mollwaneng wa lehono", "reportLabel": "Bega phošo", "wordOriginEyebrow": "Mothopo wa Lentšu", "idiomsEyebrow": "Dika le dipolelwana", "wordOriginBackgroundLabel": "Histori", "wordOriginOriginalWord": "Lentšu la mathomo", "wordOriginBreakdown": "Dikarolo tša lentšu", "imageGeneratingLabel": "Re dira seswantšho…", "imageGeneratingHint": "Gantši se tšea metsotswana ye 10 go ya go ye 15.", "imageOpenFullAria": "Bula seswantšho ka bogolo bja sona ka moka", "kidsComingSoon": "Tlhalošo ya bana e tla kgauswinyane.", "shareDefinitionAria": "Abelana tlhalošo ye", "meaningsEyebrow": "Ditlhalošo", "wordOriginLanguage": "Polelo", "wordOriginOriginallyMeant": "Mathomong le be le ra", "actionCompose": "Bopa lefoko", "actionCompare": "Bapetša mantšu", "listenToWord": "Theeletša", "offlineDownloadPack": "Laolla sephuthelwana sa ntle le inthanete", "offlineDownloadingPack": "Re a laolla…", "offlinePackHeader": "Sephuthelwana sa ntle le inthanete", "offlinePackDescription": "E oketša mantšu ao a nyakwago kudu ka polelo ya gago Pukung ya gago ya mantšu, gomme e dira gore a hwetšagale ntle le WiFi gore o ithute ntle le inthanete.", "shareLabel": "Abelana", "backLabel": "Morago"});
 
 // --- Native Setswana (v2 core, function keys fall back to English) ---
-Object.assign(tn, {"homeHeadlineLine1": "Tlhaloganya", "homeHeadlineLine2": "go fitlha kwa bofelong.", "homeSubline": "Thanodi e e go thusang go ya ka polelo: dikao, ditshimologo, dikapolelo le setshwantsho se se tshelang, ka dipuo di feta 30.", "searchPlaceholderHome": "Kwala lefoko", "voiceInputTitle": "Bua lefoko", "addContext": "Tsenya polelo", "explain": "Tlhalosa", "contextHint": "A o bala sengwe? Kopolola polelo gore bokao bo tlhaloganyesege.", "tryLabel": "Leka", "valuePropsEyebrow": "Se Gadit e se dirang ka tsela e e farologaneng", "valuePropsTitle": "Go feta tlhaloso, tsela ya go tshela le lefoko.", "valueProp1Eyebrow": "E itse polelo", "valueProp1Title": "Bokao jo bo nepagetseng, ka metlha", "valueProp1Body": "Kopolola polelo, Gadit e tlhopha bokao jo bo tshwanelang, e seng fela jo bo tlwaelegileng thata.", "valueProp2Eyebrow": "Setshwantsho", "valueProp2Title": "Setshwantsho se se tshelang, sa lefoko le fela", "valueProp2Body": "Se direlwa lefoko lengwe le lengwe. Se go thusa go gopola kafa lefoko le utlwalang ka teng, e seng setshwantsho sa kgale.", "valueProp3Eyebrow": "Tshimologo", "valueProp3Title": "Kgang ya hisitori, e seng dintlha di tlhakatlhakane", "valueProp3Body": "Kwa lefoko le tswang teng, le anelwa ka serapa, jaaka tsala e e batlang go itse e ka le kwala.", "valueProp4Eyebrow": "Dipuo di feta 30", "valueProp4Title": "Sehebera le Searabia, ka botlalo", "valueProp4Body": "Go kwala go tswa moja go ya molema tota, ditlhaka tsa mmatota, dikapolelo tsa mmatota, e seng fela thanolo ya bokaelo.", "previewLabel": "Ponelopele", "seeFullResult": "Bona maduo otlhe", "pricingEyebrow": "Ditlhwatlhwa", "pricingTeaserTitle": "Maemo a mararo. Otlhe a na le diteng tsa mmatota.", "trustMicrocopy": "Khansela nako nngwe le nngwe · Teko ya malatsi a le 14 mo Clear ya kgwedi · Ga o duedisiwe go fitlha teko e fela", "footerProductGroup": "Sedirisiwa", "footerLegalGroup": "Molao", "footerCompare": "Bapisa", "footerNotebook": "Bukana", "footerPricing": "Ditlhwatlhwa", "footerPrivacy": "Sephiri", "footerTerms": "Melawana", "footerContact": "Thuso", "footerTagline": "Thanodi e e botlhale ya dipuo di feta 30. E diretswe go bala ga mmatota.", "footerLanguagesNote": "Dipuo di feta 30", "signIn": "Tsena", "startFree": "Simolola ka mahala", "verbStampDef": "go tlhaloganya lefoko, ka botlalo", "navSearch": "Batla", "navCompare": "Bapisa", "navNotebook": "Bukana", "navPricing": "Ditlhwatlhwa", "navSchools": "Dikolo", "navFeatures": "Dintlha", "navPlay": "Tshameka", "navAffiliates": "Balekane", "kidsModeLabel": "Bana", "kidsModeTooltipOff": "Tobetsa go tlhalosa lefoko lengwe le lengwe jaaka motsadi a ka tlhalosetsa ngwana.", "kidsModeTooltipOn": "Mokgwa wa bana o butswe, tlhaloso nngwe le nngwe e tla kwalelwa ngwana. Tobetsa go o tima.", "kidsModeBasicGate": "Mokgwa wa bana ke karolo ya Clear. Tlhatlosa go o dirisa.", "signupWelcomeTitle": "O amogelesegile mo Gadit!", "signupWelcomeBody": "Akhaonto ya gago e siametse. Simolola ka go batla lefoko lefe kana lefe.", "pricingPageHeadline": "Maemo a mararo. Otlhe a na le diteng tsa mmatota.", "pricingPageSubline": "Simolola ka mahala. Tlhatlosa fa botlalo bo go thusa.", "billingMonthly": "Ka kgwedi", "billingYearly": "Ka ngwaga", "billingSave17": "Boloka 17%", "tierBasicTagline": "Tlhaloganya", "tierBasicPitch": "Simolola ka dilo tse di botlhokwa.", "tierBasicCta": "Simolola", "tierBasicFeatures": "Dipatlo tsa mafoko di le 20 ka letsatsi¶Dikao tsotlhe (e seng fela jo bogolo)¶Dikai di le 3 mo bokaong bongwe le bongwe¶Tshimologo ya lefoko¶Go tlhokega go tsena", "tierClearTagline": "Bona", "tierClearPitch": "Tshedisa mafoko ka ditshwantsho, mokgwa wa bana le maikutlo.", "tierClearBadge": "E e ratwang thata", "tierClearCta": "Simolola teko ya mahala ya malatsi a le 14", "tierClearCtaYearly": "Ikwadisa ka ngwaga", "tierClearTrust": "Khansela nako nngwe le nngwe · Ga o duedisiwe ka nako ya teko", "tierClearFeatures": "Sengwe le sengwe se se mo Basic¶Dipatlo kwa ntle ga selekanyo¶Ditlhaloso tsa bana¶Setshwantsho sa lefoko lengwe le lengwe (30/kgwedi)¶Kwala polelo o bone maikutlo¶Dikapolelo le dipolelo¶Hisitori ya dipatlo (malatsi a le 30 a bofelo)", "tierDeepTagline": "Ikatise", "tierDeepPitch": "Aga pokello ya gago ya mafoko e e nonofang ka nako.", "tierDeepCta": "Ikwadisetsa Deep", "tierDeepFeatures": "Sengwe le sengwe se se mo Clear¶Ditlhatlhobo tsa boikatiso¶Bukana ya gago ya mafoko¶Boikatiso jo botlhale jwa mafoko a a nnelang ruri¶Farologanya mafoko a a tshwanang¶Setshwantsho sa lefoko lengwe le lengwe (100/kgwedi)", "basicEquivalent": "", "clearEquivalent": "Go lekana le $2.50/kgwedi", "deepEquivalent": "Go lekana le $4.17/kgwedi", "trustStripCancel": "Khansela nako nngwe le nngwe ka Stripe", "trustStripMoneyBack": "Madi a busediwa mo malatsing a le 14 a theko ya ntlha", "trustStripDataYours": "Tshedimosetso ya gago ke ya gago, e ntshe nako nngwe le nngwe", "trustStripNoAds": "Ga go na dipapatso, ga go na go salwa morago ke ba bangwe", "faqEyebrow": "Dipotso", "faqHeadline": "Dipotso, di arabilwe", "faqQ1": "A nka fetola leano?", "faqA1": "Ee, tlhatlosa kgotsa fokotsa nako nngwe le nngwe. Tefo e baakanngwa ka bonosi, o duela pharologano fela.", "faqQ2": "Go diragala eng fa ke khansela?", "faqA2": "O tswelela o dirisa go fitlha bofelo jwa nako ya gago ya tefo, morago o boela kwa Basic. Ga go na tshedimosetso e e latlhegang.", "faqQ3": "A teko ke ya mahala tota?", "faqA3": "Ee. Re kopa karata go thibela tiriso e e sa siamang, mme ga o duedisiwe go fitlha ka letsatsi la bo15. Khansela pele ga foo = ga o duele sepe.", "faqQ4": "Ke eng fa go na le maemo a mararo?", "faqA4": "Badirisi ba farologana ba tlhoka botlalo jo bo farologaneng. Re rata go go thusa fa o leng teng go na le go go rekisetsa leano le le lengwe le le kgolo.", "faqQ5": "A ditlhaloso tsa bana di babalesegile?", "faqA5": "Ee. Di dirwa ka bonosi ke enjene ya rona ka tlhokomelo e e tshwanang le ya diteng tsa bagolo, di sekasekilwe ke melawana ya rona ya diteng. Ga go na diteng tsa bana tse di kwadilweng ke badirisi.", "loginWelcomeBack": "Tsena", "loginCreateAccount": "Bula akhaonto ya gago", "loginContinueWithGoogle": "Tswelela ka Google", "loginInAppNotice": "Mo teng ga {app}, tsena ka imeile fa tlase. Go dirisa Google, bula kgolagano e mo sebatling sa gago.", "loginOrSeparator": "kgotsa", "loginEmailLabel": "Imeile", "loginPasswordLabel": "Lefoko la sephiri", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Tsena", "loginSubmitSignUp": "Bula akhaonto", "loginSwitchToSignUp": "Ga o na akhaonto? Ikwadise", "loginForgotPassword": "O lebetse lefoko la sephiri?", "loginForgotPasswordEnterEmail": "Kwala imeile ya gago fa godimo pele, morago o tobetse fa.", "loginResetSent": "Fa go na le akhaonto ya imeile eo, kgolagano ya go fetola e a tla.", "loginResetError": "Ga re a kgona go romela imeile ya go fetola. Leka gape.", "loginSwitchToSignIn": "O setse o na le akhaonto? Tsena", "loginShowPassword": "Bontsha lefoko la sephiri", "loginHidePassword": "Fitlha lefoko la sephiri", "loginCloseAria": "Tswala", "loginSigningIn": "Re a go tsenya…", "loginCreatingAccount": "Re bula akhaonto…", "loginErrorWrongCredentials": "Imeile kgotsa lefoko la sephiri le phoso.", "loginErrorEmailInUse": "Imeile e setse e dirisiwa. Leka go tsena.", "loginErrorWeakPassword": "Lefoko la sephiri le tshwanetse go nna le ditlhaka di le 8 bonnye mme le na le tlhaka le nomoro.", "loginAgeTermsLine": "Ke na le dingwaga di le 18 kgotsa go feta mme ke dumalana le", "loginTermsLinkLabel": "Melawana", "loginPrivacyLinkLabel": "Pholisi ya Sephiri", "loginErrorAgeRequired": "Tsweetswee tlhomamisa gore o na le dingwaga di le 18 kgotsa go feta mme o dumalana le Melawana le Pholisi ya Sephiri.", "loginErrorInvalidEmail": "Tsweetswee kwala aterese ya imeile e e nepagetseng.", "loginErrorGoogleFailed": "Ga re a kgona go go tsenya ka Google. Leka gape.", "loginErrorGeneric": "Go na le sengwe se se sa tsamaeng sentle. Leka gape.", "composeEyebrow": "Kwala", "composeSubtitle": "Le dirise mo polelong mme o bone maikutlo ka bonako ka thutapuo, segalo le go tshwanela.", "composeMeaningPickerLabel": "Tlhopha bokao jo o ikatisang ka jone", "composePlaceholder": "Kwala polelo ya gago fa…", "composeSubmit": "Tlhola polelo", "composeChecking": "Re a tlhola…", "composeStatusPerfectLabel": "Go siame thata", "composeStatusAlmostLabel": "O gaufi", "composeStatusIncorrectLabel": "E seng sentle", "composeSuggestionEyebrow": "Polelo e e tshitshintsweng", "composeTryAnother": "Leka polelo e nngwe", "composeBackToWord": "Boela kwa lefokong", "composeErrorEmpty": "Tsweetswee kwala polelo pele.", "composeErrorTooShort": "Tsweetswee kwala mafoko a le mmalwa bonnye.", "quizEyebrow": "Boikatiso", "quizSubmit": "Romela", "quizNext": "Potso e e latelang", "quizFinish": "Fetsa", "quizYesCorrect": "Ee, go nepagetse", "quizNotQuite": "E seng sentle", "quizLoading": "Re baakanya tlhatlhobo ya gago…", "quizPracticeAnotherWord": "Ikatise ka lefoko le lengwe", "quizBackToWord": "Boela kwa lefokong", "quizReviewMistakes": "Boeletsa tse ke di phositseng", "compareEyebrow": "Bapisa", "compareTitle": "Farologanya mafoko a a tshwanang", "compareSubtitle": "affect le effect, אומנות le אמנות, principle le principal, mafoko a a tshwenyang le bao e leng puo ya bone ya gae.", "compareWord1Label": "Lefoko 1", "compareWord2Label": "Lefoko 2", "compareWord1Placeholder": "affect", "compareWord2Placeholder": "effect", "compareCta": "Bapisa", "compareLoading": "Re a bapisa…", "compareEmpty": "Kwala mafoko a mabedi go a bapisa", "compareDifferenceLabel": "Pharologano", "compareExamplesLabel": "Dikai", "compareCommonMistakeLabel": "Phoso e e tlwaelegileng", "compareErrNotARealWord": "Ga re itse lengwe la mafoko ao.", "compareErrDifferentLanguages": "Mafoko a a bonala a le mo dipuong tse di farologaneng, leka mafoko a puo e le nngwe.", "compareErrSameWord": "A a bonala a le lefoko le le lengwe, leka a mabedi a a farologaneng.", "compareErrGeneric": "Papiso ga e teng ga jaana.", "notebookEyebrow": "Bukana", "notebookTitle": "Lefatshe la gago la mafoko", "notebookSubtitle": "Lefoko lengwe le lengwe le o le sekasekileng, le bolokilwe, le rulagantswe, le a gola.", "notebookWordsExplored": "mafoko a a sekasekilweng", "notebookPracticeNow": "Boeletsa mafoko a me", "notebookListView": "Lenaane", "notebookGalaxyView": "Dinaledi", "notebookEmptyTitle": "Bukana ya gago ga e na sepe", "notebookEmptyCta": "Batla lefoko go simolola", "notebookRemoveAria": "Tlosa", "notebookMasteredLabel": "★ O a le itse", "notebookLegendRecent": "A bolokilwe bosheng", "notebookLegendMastered": "O a a itse", "notebookLegendNeedsReview": "A tlhoka go boeletswa", "srEyebrow": "Boikatiso", "srSkip": "Tlola", "srClickToReveal": "Tobetsa gongwe le gongwe go bontsha", "srTapToReveal": "Tobetsa go bontsha", "srPrimaryMeaningLabel": "Bokao jo bogolo", "srExamplesLabel": "Dikai", "srIForgot": "Ke lebetse", "srIKnewIt": "Ke ne ke le itse", "srSchedulingHint": "Ke ne ke le itse = go boeletsa gape morago ga malatsi a le mmalwa. Ke lebetse = go boela gape gompieno.", "srWordsPracticed": "mafoko a o ikatisitseng ka one", "srTomorrow": "Ka moso", "srDoneForToday": "O feditse gompieno", "srPracticeMore": "Ikatise go feta", "srEmptyTitle": "Ga go na sepe sa go boeletsa gompieno", "srEmptyBody": "O dirile sentle. Boa ka moso.", "srBackToNotebook": "Boela kwa bukaneng", "srLoading": "Re laisa boikatiso jwa gago…", "accountEyebrow": "Akhaonto", "accountYourSpace": "Lefelo la gago", "accountPlanLabel": "Leano", "accountOnPlanFree": "Mahala", "accountNoActiveSubscription": "Ga go na ikwadiso e e dirang", "accountChooseAPlan": "Tlhopha leano go simolola.", "accountCancelsAtPeriodEnd": "E tla khanselwa kwa bofelong jwa nako ya tefo", "accountManageBilling": "Laola dituelo", "accountChangePlan": "Fetola leano", "accountUpgrade": "Tlhatlosa", "accountUpgradeToFamily": "Fetolela go Family", "accountUsageThisMonth": "Tiriso ya kgwedi e", "accountImageGeneration": "Go dira ditshwantsho", "accountSearches": "Dipatlo", "accountLocked": "E notletswe", "accountUnlimited": "kwa ntle ga selekanyo", "accountTodaySuffix": "gompieno", "accountNearingLimit": "O atamela selekanyo sa kgwedi e.", "accountSectionLabel": "Akhaonto", "accountEmailLabel": "Imeile", "accountChangeEmail": "Fetola imeile", "accountSignOut": "Tswa", "accountDeleteAccount": "Phimola akhaonto", "reportEyebrow": "Bega phoso", "reportTitle": "Go phoso eng?", "reportTellMore": "Re bolelele go feta", "reportTellMorePh": "Ga go patelediwe. Fa o tlhalosa sentle, re tla e baakanya ka bonako.", "reportSend": "Romela pego", "reportSending": "Re a romela…", "reportThanks": "Re a leboga, re e amogetse.", "reportError": "Ga re a kgona go romela. Leka gape morago ga nakwana.", "reportCatIncorrectDefinition": "Tlhaloso e phoso", "reportCatWrongEtymology": "Tshimologo e phoso", "reportCatBadExample": "Polelo ya sekai e e sa siamang", "reportCatKidsExplanation": "Bothata ka tlhaloso ya bana", "reportCatIdiomIssue": "Bothata ka kapolelo", "reportCatWrongImage": "Setshwantsho se se phoso", "reportCatQuizWrongAnswer": "Tlhatlhobo: karabo e tshwailwe phoso", "reportCatComposeFeedback": "Bothata ka maikutlo a polelo", "reportCatCompareResult": "Bothata ka maduo a papiso", "reportCatSomethingElse": "Sengwe se sengwe", "origin": "Tshimologo", "historyNote": "Kgang ya hisitori", "throughTime": "Go ralala nako", "forKids": "Ya bana", "commonExpressions": "Dipolelo tse di tlwaelegileng", "idiomsWithMeaning": "Dikapolelo tse di nang le bokao jo", "notJustPrimary": "E seng fela jo bogolo", "takeItFurther": "Tswelela pele", "saveToNotebookHint": "Le boele moragonyana, le rulagantswe, le batlega.", "generateImage": "Dira setshwantsho", "generatingImage": "Re a dira…", "generateImageHint": "Setshwantsho se se tshelang se se dirilweng ka bonosi, sa lefoko le fela.", "composeSentence": "Kwala polelo", "composeSentenceHint": "Kwala ya gago, Gadit e e tlhola segalo le go tshwanela.", "practiceWord": "Ikatise ka lefoko le", "practiceWordHint": "Tlhatlhobo e khutshwane e e tshwanelang kafa o ithutang ka teng.", "unlockWithClear": "Bula ka Clear", "upgradeToClear": "Tlhatlosetsa go Clear", "softWallAnonTitle": "Tswelela, e sa ntse e le mahala", "softWallAnonBody": "Akhaonto e e bonako ya mahala e go bulela dipatlo di le 20 ka letsatsi, le dikai, dikapolelo le ditshimologo tsa mafoko.", "softWallSignupCta": "Tswelela ka mahala", "softWallBasicTitle": "O fitlhile kwa bofelong jwa gompieno", "softWallBasicBody": "Diakhaonto tsa mahala di bona dipatlo di le 20 ka letsatsi. Selekanyo se simolola sešwa ka moso, kgotsa tlhatlosetsa go Clear go bona dipatlo kwa ntle ga selekanyo, ditshwantsho, mokgwa wa bana le maikutlo ka thutapuo.", "clearUnlocksThis": "Clear e bula se", "visualizeThisWord": "Bona", "visualBlurb": "Setshwantsho se le sengwe se se tshelang, se dirilwe ke Gadit, go go thusa go gopola kafa lefoko le utlwalang ka teng.", "visualBlurbLocked": "Dira setshwantsho se se tshelang, se se sa tshwaneng le sepe, sa lefoko le, o tlhaloganye ka go bona.", "reportLabel": "Bega phoso", "wordOriginEyebrow": "Tshimologo ya Lefoko", "idiomsEyebrow": "Dikapolelo le dipolelo", "wordOriginBackgroundLabel": "Hisitori", "wordOriginOriginalWord": "Lefoko la ntlha", "wordOriginBreakdown": "Dikarolo tsa lefoko", "imageGeneratingLabel": "Re dira setshwantsho…", "imageGeneratingHint": "Gantsi go tsaya metsotswana e le 10 go ya go 15.", "imageOpenFullAria": "Bula setshwantsho ka bogolo jotlhe", "kidsComingSoon": "Tlhaloso ya bana e a tla.", "compareComingSoon": "Metshameko ya mafoko e a tla.", "shareDefinitionAria": "Abelana tlhaloso e", "meaningsEyebrow": "Ditlhaloso", "wordOriginLanguage": "Puo", "wordOriginOriginallyMeant": "Kwa tshimologong le ne le raya", "actionCompose": "Kwala polelo", "actionCompare": "Bapisa mafoko", "listenToWord": "Reetsa", "offlinePin": "Boloka go dirisa kwa ntle ga inthanete", "offlinePinTitle": "Boloka lefoko le go ithuta kwa ntle ga inthanete", "offlinePinnedTitle": "Le bolokilwe, le teng kwa ntle ga WiFi", "offlineDownloadPack": "Laolola sephuthelo sa kwa ntle ga inthanete", "offlineDownloadingPack": "Re a laolola…", "offlinePackHeader": "Sephuthelo sa kwa ntle ga inthanete", "offlinePackDescription": "Se tsenya mafoko a a batlwang thata mo puong ya gago mo Bukaneng ya gago, mme se a dira gore a nne teng kwa ntle ga WiFi go ithuta kwa ntle ga inthanete.", "visualEmptyLabel": "Go tla tshwantshiwa setshwantsho sa lefoko le", "shareLabel": "Abelana", "backLabel": "Morago"});
+Object.assign(tn, {"homeHeadlineLine1": "Tlhaloganya", "homeHeadlineLine2": "go fitlha kwa bofelong.", "homeSubline": "Thanodi e e go thusang go ya ka polelo: dikao, ditshimologo, dikapolelo le setshwantsho se se tshelang, ka dipuo di feta 30.", "searchPlaceholderHome": "Kwala lefoko", "voiceInputTitle": "Bua lefoko", "explain": "Tlhalosa", "valuePropsEyebrow": "Se Gadit e se dirang ka tsela e e farologaneng", "valuePropsTitle": "Go feta tlhaloso, tsela ya go tshela le lefoko.", "valueProp1Eyebrow": "E itse polelo", "valueProp1Title": "Bokao jo bo nepagetseng, ka metlha", "valueProp1Body": "Kopolola polelo, Gadit e tlhopha bokao jo bo tshwanelang, e seng fela jo bo tlwaelegileng thata.", "valueProp2Eyebrow": "Setshwantsho", "valueProp2Title": "Setshwantsho se se tshelang, sa lefoko le fela", "valueProp2Body": "Se direlwa lefoko lengwe le lengwe. Se go thusa go gopola kafa lefoko le utlwalang ka teng, e seng setshwantsho sa kgale.", "valueProp3Eyebrow": "Tshimologo", "valueProp3Title": "Kgang ya hisitori, e seng dintlha di tlhakatlhakane", "valueProp3Body": "Kwa lefoko le tswang teng, le anelwa ka serapa, jaaka tsala e e batlang go itse e ka le kwala.", "valueProp4Eyebrow": "Dipuo di feta 30", "valueProp4Title": "Sehebera le Searabia, ka botlalo", "valueProp4Body": "Go kwala go tswa moja go ya molema tota, ditlhaka tsa mmatota, dikapolelo tsa mmatota, e seng fela thanolo ya bokaelo.", "previewLabel": "Ponelopele", "seeFullResult": "Bona maduo otlhe", "pricingEyebrow": "Ditlhwatlhwa", "pricingTeaserTitle": "Maemo a mararo. Otlhe a na le diteng tsa mmatota.", "footerProductGroup": "Sedirisiwa", "footerLegalGroup": "Molao", "footerNotebook": "Bukana", "footerPricing": "Ditlhwatlhwa", "footerPrivacy": "Sephiri", "footerTerms": "Melawana", "footerContact": "Thuso", "footerTagline": "Thanodi e e botlhale ya dipuo di feta 30. E diretswe go bala ga mmatota.", "footerLanguagesNote": "Dipuo di feta 30", "signIn": "Tsena", "startFree": "Simolola ka mahala", "verbStampDef": "go tlhaloganya lefoko, ka botlalo", "navSearch": "Batla", "navNotebook": "Bukana", "navPricing": "Ditlhwatlhwa", "navSchools": "Dikolo", "navFeatures": "Dintlha", "navPlay": "Tshameka", "navAffiliates": "Balekane", "kidsModeLabel": "Bana", "kidsModeTooltipOff": "Tobetsa go tlhalosa lefoko lengwe le lengwe jaaka motsadi a ka tlhalosetsa ngwana.", "kidsModeTooltipOn": "Mokgwa wa bana o butswe, tlhaloso nngwe le nngwe e tla kwalelwa ngwana. Tobetsa go o tima.", "signupWelcomeTitle": "O amogelesegile mo Gadit!", "signupWelcomeBody": "Akhaonto ya gago e siametse. Simolola ka go batla lefoko lefe kana lefe.", "pricingPageHeadline": "Maemo a mararo. Otlhe a na le diteng tsa mmatota.", "pricingPageSubline": "Simolola ka mahala. Tlhatlosa fa botlalo bo go thusa.", "billingMonthly": "Ka kgwedi", "billingYearly": "Ka ngwaga", "billingSave17": "Boloka 17%", "tierBasicTagline": "Tlhaloganya", "tierBasicPitch": "Simolola ka dilo tse di botlhokwa.", "tierBasicCta": "Simolola", "tierBasicFeatures": "Dipatlo tsa mafoko di le 20 ka letsatsi¶Dikao tsotlhe (e seng fela jo bogolo)¶Dikai di le 3 mo bokaong bongwe le bongwe¶Tshimologo ya lefoko¶Go tlhokega go tsena", "tierClearTagline": "Bona", "tierClearPitch": "Tshedisa mafoko ka ditshwantsho, mokgwa wa bana le maikutlo.", "tierClearBadge": "E e ratwang thata", "tierClearCta": "Simolola teko ya mahala ya malatsi a le 14", "tierClearCtaYearly": "Ikwadisa ka ngwaga", "tierClearTrust": "Khansela nako nngwe le nngwe · Ga o duedisiwe ka nako ya teko", "tierClearFeatures": "Sengwe le sengwe se se mo Basic¶Dipatlo kwa ntle ga selekanyo¶Ditlhaloso tsa bana¶Setshwantsho sa lefoko lengwe le lengwe (30/kgwedi)¶Kwala polelo o bone maikutlo¶Dikapolelo le dipolelo¶Hisitori ya dipatlo (malatsi a le 30 a bofelo)", "tierDeepTagline": "Ikatise", "tierDeepPitch": "Aga pokello ya gago ya mafoko e e nonofang ka nako.", "tierDeepCta": "Ikwadisetsa Deep", "tierDeepFeatures": "Sengwe le sengwe se se mo Clear¶Ditlhatlhobo tsa boikatiso¶Bukana ya gago ya mafoko¶Boikatiso jo botlhale jwa mafoko a a nnelang ruri¶Farologanya mafoko a a tshwanang¶Setshwantsho sa lefoko lengwe le lengwe (100/kgwedi)", "basicEquivalent": "", "clearEquivalent": "Go lekana le $2.50/kgwedi", "deepEquivalent": "Go lekana le $4.17/kgwedi", "trustStripCancel": "Khansela nako nngwe le nngwe ka Stripe", "trustStripMoneyBack": "Madi a busediwa mo malatsing a le 14 a theko ya ntlha", "trustStripDataYours": "Tshedimosetso ya gago ke ya gago, e ntshe nako nngwe le nngwe", "trustStripNoAds": "Ga go na dipapatso, ga go na go salwa morago ke ba bangwe", "faqEyebrow": "Dipotso", "faqHeadline": "Dipotso, di arabilwe", "faqQ1": "A nka fetola leano?", "faqA1": "Ee, tlhatlosa kgotsa fokotsa nako nngwe le nngwe. Tefo e baakanngwa ka bonosi, o duela pharologano fela.", "faqQ2": "Go diragala eng fa ke khansela?", "faqA2": "O tswelela o dirisa go fitlha bofelo jwa nako ya gago ya tefo, morago o boela kwa Basic. Ga go na tshedimosetso e e latlhegang.", "faqQ3": "A teko ke ya mahala tota?", "faqA3": "Ee. Re kopa karata go thibela tiriso e e sa siamang, mme ga o duedisiwe go fitlha ka letsatsi la bo15. Khansela pele ga foo = ga o duele sepe.", "faqQ4": "Ke eng fa go na le maemo a mararo?", "faqA4": "Badirisi ba farologana ba tlhoka botlalo jo bo farologaneng. Re rata go go thusa fa o leng teng go na le go go rekisetsa leano le le lengwe le le kgolo.", "faqQ5": "A ditlhaloso tsa bana di babalesegile?", "faqA5": "Ee. Di dirwa ka bonosi ke enjene ya rona ka tlhokomelo e e tshwanang le ya diteng tsa bagolo, di sekasekilwe ke melawana ya rona ya diteng. Ga go na diteng tsa bana tse di kwadilweng ke badirisi.", "loginWelcomeBack": "Tsena", "loginCreateAccount": "Bula akhaonto ya gago", "loginContinueWithGoogle": "Tswelela ka Google", "loginInAppNotice": "Mo teng ga {app}, tsena ka imeile fa tlase. Go dirisa Google, bula kgolagano e mo sebatling sa gago.", "loginOrSeparator": "kgotsa", "loginEmailLabel": "Imeile", "loginPasswordLabel": "Lefoko la sephiri", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Tsena", "loginSubmitSignUp": "Bula akhaonto", "loginSwitchToSignUp": "Ga o na akhaonto? Ikwadise", "loginForgotPassword": "O lebetse lefoko la sephiri?", "loginForgotPasswordEnterEmail": "Kwala imeile ya gago fa godimo pele, morago o tobetse fa.", "loginResetSent": "Fa go na le akhaonto ya imeile eo, kgolagano ya go fetola e a tla.", "loginResetError": "Ga re a kgona go romela imeile ya go fetola. Leka gape.", "loginSwitchToSignIn": "O setse o na le akhaonto? Tsena", "loginShowPassword": "Bontsha lefoko la sephiri", "loginHidePassword": "Fitlha lefoko la sephiri", "loginCloseAria": "Tswala", "loginSigningIn": "Re a go tsenya…", "loginCreatingAccount": "Re bula akhaonto…", "loginErrorWrongCredentials": "Imeile kgotsa lefoko la sephiri le phoso.", "loginErrorEmailInUse": "Imeile e setse e dirisiwa. Leka go tsena.", "loginErrorWeakPassword": "Lefoko la sephiri le tshwanetse go nna le ditlhaka di le 8 bonnye mme le na le tlhaka le nomoro.", "loginAgeTermsLine": "Ke na le dingwaga di le 18 kgotsa go feta mme ke dumalana le", "loginTermsLinkLabel": "Melawana", "loginPrivacyLinkLabel": "Pholisi ya Sephiri", "loginErrorAgeRequired": "Tsweetswee tlhomamisa gore o na le dingwaga di le 18 kgotsa go feta mme o dumalana le Melawana le Pholisi ya Sephiri.", "loginErrorInvalidEmail": "Tsweetswee kwala aterese ya imeile e e nepagetseng.", "loginErrorGoogleFailed": "Ga re a kgona go go tsenya ka Google. Leka gape.", "loginErrorGeneric": "Go na le sengwe se se sa tsamaeng sentle. Leka gape.", "composeEyebrow": "Kwala", "composeSubtitle": "Le dirise mo polelong mme o bone maikutlo ka bonako ka thutapuo, segalo le go tshwanela.", "composeMeaningPickerLabel": "Tlhopha bokao jo o ikatisang ka jone", "composePlaceholder": "Kwala polelo ya gago fa…", "composeSubmit": "Tlhola polelo", "composeChecking": "Re a tlhola…", "composeStatusPerfectLabel": "Go siame thata", "composeStatusAlmostLabel": "O gaufi", "composeStatusIncorrectLabel": "E seng sentle", "composeSuggestionEyebrow": "Polelo e e tshitshintsweng", "composeTryAnother": "Leka polelo e nngwe", "composeBackToWord": "Boela kwa lefokong", "composeErrorEmpty": "Tsweetswee kwala polelo pele.", "composeErrorTooShort": "Tsweetswee kwala mafoko a le mmalwa bonnye.", "quizEyebrow": "Boikatiso", "quizSubmit": "Romela", "quizNext": "Potso e e latelang", "quizFinish": "Fetsa", "quizYesCorrect": "Ee, go nepagetse", "quizNotQuite": "E seng sentle", "quizLoading": "Re baakanya tlhatlhobo ya gago…", "quizPracticeAnotherWord": "Ikatise ka lefoko le lengwe", "quizBackToWord": "Boela kwa lefokong", "quizReviewMistakes": "Boeletsa tse ke di phositseng", "notebookEyebrow": "Bukana", "notebookTitle": "Lefatshe la gago la mafoko", "notebookSubtitle": "Lefoko lengwe le lengwe le o le sekasekileng, le bolokilwe, le rulagantswe, le a gola.", "notebookWordsExplored": "mafoko a a sekasekilweng", "notebookPracticeNow": "Boeletsa mafoko a me", "notebookListView": "Lenaane", "notebookGalaxyView": "Dinaledi", "notebookEmptyTitle": "Bukana ya gago ga e na sepe", "notebookEmptyCta": "Batla lefoko go simolola", "notebookRemoveAria": "Tlosa", "notebookMasteredLabel": "★ O a le itse", "notebookLegendRecent": "A bolokilwe bosheng", "notebookLegendMastered": "O a a itse", "notebookLegendNeedsReview": "A tlhoka go boeletswa", "srEyebrow": "Boikatiso", "srSkip": "Tlola", "srClickToReveal": "Tobetsa gongwe le gongwe go bontsha", "srPrimaryMeaningLabel": "Bokao jo bogolo", "srExamplesLabel": "Dikai", "srIForgot": "Ke lebetse", "srIKnewIt": "Ke ne ke le itse", "srSchedulingHint": "Ke ne ke le itse = go boeletsa gape morago ga malatsi a le mmalwa. Ke lebetse = go boela gape gompieno.", "srWordsPracticed": "mafoko a o ikatisitseng ka one", "srTomorrow": "Ka moso", "srDoneForToday": "O feditse gompieno", "srPracticeMore": "Ikatise go feta", "srEmptyTitle": "Ga go na sepe sa go boeletsa gompieno", "srEmptyBody": "O dirile sentle. Boa ka moso.", "srBackToNotebook": "Boela kwa bukaneng", "srLoading": "Re laisa boikatiso jwa gago…", "accountEyebrow": "Akhaonto", "accountYourSpace": "Lefelo la gago", "accountPlanLabel": "Leano", "accountOnPlanFree": "Mahala", "accountNoActiveSubscription": "Ga go na ikwadiso e e dirang", "accountChooseAPlan": "Tlhopha leano go simolola.", "accountCancelsAtPeriodEnd": "E tla khanselwa kwa bofelong jwa nako ya tefo", "accountManageBilling": "Laola dituelo", "accountChangePlan": "Fetola leano", "accountUpgrade": "Tlhatlosa", "accountUpgradeToFamily": "Fetolela go Family", "accountUsageThisMonth": "Tiriso ya kgwedi e", "accountImageGeneration": "Go dira ditshwantsho", "accountSearches": "Dipatlo", "accountLocked": "E notletswe", "accountUnlimited": "kwa ntle ga selekanyo", "accountTodaySuffix": "gompieno", "accountNearingLimit": "O atamela selekanyo sa kgwedi e.", "accountSectionLabel": "Akhaonto", "accountEmailLabel": "Imeile", "accountSignOut": "Tswa", "accountDeleteAccount": "Phimola akhaonto", "reportEyebrow": "Bega phoso", "reportTitle": "Go phoso eng?", "reportTellMore": "Re bolelele go feta", "reportTellMorePh": "Ga go patelediwe. Fa o tlhalosa sentle, re tla e baakanya ka bonako.", "reportSend": "Romela pego", "reportSending": "Re a romela…", "reportThanks": "Re a leboga, re e amogetse.", "reportError": "Ga re a kgona go romela. Leka gape morago ga nakwana.", "reportCatIncorrectDefinition": "Tlhaloso e phoso", "reportCatWrongEtymology": "Tshimologo e phoso", "reportCatBadExample": "Polelo ya sekai e e sa siamang", "reportCatKidsExplanation": "Bothata ka tlhaloso ya bana", "reportCatIdiomIssue": "Bothata ka kapolelo", "reportCatWrongImage": "Setshwantsho se se phoso", "reportCatQuizWrongAnswer": "Tlhatlhobo: karabo e tshwailwe phoso", "reportCatComposeFeedback": "Bothata ka maikutlo a polelo", "reportCatCompareResult": "Bothata ka maduo a papiso", "reportCatSomethingElse": "Sengwe se sengwe", "generateImage": "Dira setshwantsho", "softWallAnonTitle": "Tswelela, e sa ntse e le mahala", "softWallSignupCta": "Tswelela ka mahala", "softWallBasicTitle": "O fitlhile kwa bofelong jwa gompieno", "reportLabel": "Bega phoso", "wordOriginEyebrow": "Tshimologo ya Lefoko", "idiomsEyebrow": "Dikapolelo le dipolelo", "wordOriginBackgroundLabel": "Hisitori", "wordOriginOriginalWord": "Lefoko la ntlha", "wordOriginBreakdown": "Dikarolo tsa lefoko", "imageGeneratingLabel": "Re dira setshwantsho…", "imageGeneratingHint": "Gantsi go tsaya metsotswana e le 10 go ya go 15.", "imageOpenFullAria": "Bula setshwantsho ka bogolo jotlhe", "kidsComingSoon": "Tlhaloso ya bana e a tla.", "shareDefinitionAria": "Abelana tlhaloso e", "meaningsEyebrow": "Ditlhaloso", "wordOriginLanguage": "Puo", "wordOriginOriginallyMeant": "Kwa tshimologong le ne le raya", "actionCompose": "Kwala polelo", "actionCompare": "Bapisa mafoko", "listenToWord": "Reetsa", "offlineDownloadPack": "Laolola sephuthelo sa kwa ntle ga inthanete", "offlineDownloadingPack": "Re a laolola…", "offlinePackHeader": "Sephuthelo sa kwa ntle ga inthanete", "offlinePackDescription": "Se tsenya mafoko a a batlwang thata mo puong ya gago mo Bukaneng ya gago, mme se a dira gore a nne teng kwa ntle ga WiFi go ithuta kwa ntle ga inthanete.", "shareLabel": "Abelana", "backLabel": "Morago"});
 
 // --- Native Sesotho (v2 core, function keys fall back to English) ---
-Object.assign(st, {"homeHeadlineLine1": "Utlwisisa", "homeHeadlineLine2": "ho fihlela qetellong.", "homeSubline": "Bukantswe e utlwisisang maemo a hao: meelelo, ditshimoloho, dikapolelo, le setshwantsho se phelang, ka dipuo tse fetang 30.", "searchPlaceholderHome": "Ngola lentswe", "voiceInputTitle": "Bua lentswe", "addContext": "Eketsa maemo", "explain": "Hlalosa", "contextHint": "O bala ho hong? Kgomaretsa polelo hore re fumane moelelo o nepahetseng.", "tryLabel": "Leka", "valuePropsEyebrow": "Seo Gadit e se etsang ka tsela e fapaneng", "valuePropsTitle": "Ho feta tlhaloso, ke tsela ya ho phela le lentswe.", "valueProp1Eyebrow": "E utlwisisa maemo", "valueProp1Title": "Moelelo o nepahetseng, nako le nako", "valueProp1Body": "Kgomaretsa polelo, Gadit e kgetha moelelo o tsamaisanang le yona, eseng feela o tlwaelehileng haholo.", "valueProp2Eyebrow": "Setshwantsho", "valueProp2Title": "Setshwantsho se phelang, bakeng sa lentswe lena feela", "valueProp2Body": "Se etselwa lentswe le leng le le leng. Ke setshwantsho se o thusang ho hopola kamoo lentswe le utlwahalang kateng, eseng foto e tlwaelehileng.", "valueProp3Eyebrow": "Tshimoloho ya lentswe", "valueProp3Title": "Nalane e kgutshwane, eseng pokello ya Wikipedia", "valueProp3Body": "Moo lentswe le tswang teng, le phetwa ka serapa, jwalo ka ha motswalle ya ratang ho tseba a ka ngola.", "valueProp4Eyebrow": "Dipuo tse fetang 30", "valueProp4Title": "Seheberu le Searabia, ka botlalo", "valueProp4Body": "Ho ngola ho tloha ka ho le letona ka nnete, mengolo ya nnete, dikapolelo tsa nnete, eseng sebopeho se fetoletsweng feela.", "previewLabel": "Ponelopele", "seeFullResult": "Bona sephetho kaofela", "pricingEyebrow": "Ditheko", "pricingTeaserTitle": "Mekgahlelo e meraro. Kaofela ka dikahare tsa nnete.", "trustMicrocopy": "Emisa nako efe kapa efe · Nako ya teko ya matsatsi a 14 ho Clear ka kgwedi · Ha ho tefo ho fihlela nako ya teko e fela", "footerProductGroup": "Sehlahiswa", "footerLegalGroup": "Molao", "footerCompare": "Bapisa", "footerNotebook": "Bukana", "footerPricing": "Ditheko", "footerPrivacy": "Lekunutu", "footerTerms": "Dipehelo", "footerContact": "Thuso", "footerTagline": "Bukantswe e bohlale ya dipuo tse fetang 30. E etseditswe ho bala ha nnete.", "footerLanguagesNote": "Dipuo tse fetang 30", "signIn": "Kena", "startFree": "Qala mahala", "verbStampDef": "ho utlwisisa lentswe, ka botlalo", "navSearch": "Batla", "navCompare": "Bapisa", "navNotebook": "Bukana", "navPricing": "Ditheko", "navSchools": "Dikolo", "navFeatures": "Dikarolo", "navPlay": "Bapala", "navAffiliates": "Balekane", "kidsModeLabel": "Bana", "kidsModeTooltipOff": "Tobetsa hore lentswe le leng le le leng le hlaloswe jwalo ka ha motswadi a ka hlalosetsa ngwana.", "kidsModeTooltipOn": "Mokgwa wa bana o butswe, tlhaloso e nngwe le e nngwe e tla ngolwa bakeng sa ngwana. Tobetsa ho o tima.", "kidsModeBasicGate": "Mokgwa wa bana ke karolo ya Clear. Ntlafatsa hore o o sebedise.", "signupWelcomeTitle": "Re a o amohela ho Gadit!", "signupWelcomeBody": "Akhaonte ya hao e se e lokile. Qala ka ho batla lentswe lefe kapa lefe.", "pricingPageHeadline": "Mekgahlelo e meraro. Kaofela ka dikahare tsa nnete.", "pricingPageSubline": "Qala mahala. Ntlafatsa ha botebo bo o thusa.", "billingMonthly": "Ka kgwedi", "billingYearly": "Ka selemo", "billingSave17": "Boloka 17%", "tierBasicTagline": "Utlwisisa", "tierBasicPitch": "Qala ka tse bohlokwa.", "tierBasicCta": "Qala", "tierBasicFeatures": "Dipatlo tsa mantswe tse 20 ka letsatsi¶Meelelo yohle (eseng feela wa mantlha)¶Mehlala e 3 bakeng sa moelelo ka mong¶Tshimoloho le nalane ya lentswe¶Ho kena ho a hlokahala", "tierClearTagline": "Bona", "tierClearPitch": "Phelisa mantswe ka ditshwantsho, mokgwa wa bana, le maikutlo.", "tierClearBadge": "E ratwang haholo", "tierClearCta": "Qala nako ya teko ya mahala ya matsatsi a 14", "tierClearCtaYearly": "Ngodisa ka selemo", "tierClearTrust": "Emisa nako efe kapa efe · Ha ho tefo nakong ya teko", "tierClearFeatures": "Tsohle tse ho Basic¶Dipatlo tse se nang moeli¶Ditlhaloso tsa bana¶Setshwantsho bakeng sa lentswe le leng le le leng (30/kgwedi)¶Ngola polelo mme o fumane maikutlo¶Dikapolelo le dipolelo¶Nalane ya dipatlo (matsatsi a 30 a fetileng)", "tierDeepTagline": "Ikwetlise", "tierDeepPitch": "Aha laeborari ya hao ya mantswe e matlafalang ha nako e ntse e tsamaya.", "tierDeepCta": "Ngodisetsa Deep", "tierDeepFeatures": "Tsohle tse ho Clear¶Dikwisi tsa boikwetliso¶Bukana ya hao ya mantswe¶Boikwetliso bo bohlale bakeng sa mantswe a dulang¶Arohanya mantswe a tshwanang¶Setshwantsho bakeng sa lentswe le leng le le leng (100/kgwedi)", "basicEquivalent": "", "clearEquivalent": "E lekana le $2.50/kgwedi", "deepEquivalent": "E lekana le $4.17/kgwedi", "trustStripCancel": "Emisa nako efe kapa efe ka portal ya Stripe", "trustStripMoneyBack": "Tjhelete e kgutliswa nakong ya matsatsi a 14 thekong ya pele", "trustStripDataYours": "Dintlha tsa hao ke tsa hao, di ntshe nako efe kapa efe", "trustStripNoAds": "Ha ho dipapatso, ha ho ho latedisa ke batho ba bang", "faqEyebrow": "Dipotso", "faqHeadline": "Dipotso, di arabilwe", "faqQ1": "Na nka fetola moralo?", "faqA1": "E, ntlafatsa kapa theola nako efe kapa efe. Ditefo di lokiswa ka bo tsona, o lefa phapang feela.", "faqQ2": "Ho etsahala eng ha ke emisa?", "faqA2": "O ntse o kena ho fihlela qetellong ya nako ya hao ya tefo, ebe o kgutlela ho Basic. Ha ho dintlha tse lahlehang.", "faqQ3": "Na nako ya teko e hlile e le mahala?", "faqA3": "E. Re kopa karete ho thibela tshebediso e mpe, empa ha o lefiswe ho fihlela letsatsing la 15. Emisa pele ho moo = ha o lefe letho.", "faqQ4": "Hobaneng mekgahlelo e meraro?", "faqA4": "Basebedisi ba fapaneng ba hloka botebo bo fapaneng. Re kgetha ho o fihlela moo o leng teng ho ena le ho o rekisetsa moralo o le mong o moholo haholo.", "faqQ5": "Na ditlhaloso tsa bana di bolokehile?", "faqA5": "E. Di etswa ka bo tsona ke enjene ya rona ka tlhokomelo e tshwanang le ya dikahare tsa batho ba baholo, mme di hlahlojwa ke melao ya rona ya dikahare. Ha ho dikahare tsa bana tse etswang ke basebedisi.", "loginWelcomeBack": "Kena", "loginCreateAccount": "Bula akhaonte ya hao", "loginContinueWithGoogle": "Tswela pele ka Google", "loginInAppNotice": "Ka hare ho {app}, kena ka imeile ka tlase. Bakeng sa kgetho ya Google, bula lehokela lena sebading sa hao sa inthanete.", "loginOrSeparator": "kapa", "loginEmailLabel": "Imeile", "loginPasswordLabel": "Phasewete", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Kena", "loginSubmitSignUp": "Bula akhaonte", "loginSwitchToSignUp": "Ha o na akhaonte? Ngodisa", "loginForgotPassword": "O lebetse phasewete?", "loginForgotPasswordEnterEmail": "Pele, kenya imeile ya hao ka hodimo, ebe o tobetsa mona.", "loginResetSent": "Haeba ho na le akhaonte ya imeile eo, lehokela la ho seta phasewete botjha le tseleng.", "loginResetError": "Ha re a kgona ho romela imeile ya ho seta phasewete botjha. Leka hape.", "loginSwitchToSignIn": "O se o na le akhaonte? Kena", "loginShowPassword": "Bontsha phasewete", "loginHidePassword": "Pata phasewete", "loginCloseAria": "Kwala", "loginSigningIn": "Re a o kenya…", "loginCreatingAccount": "Re bula akhaonte…", "loginErrorWrongCredentials": "Imeile kapa phasewete e fosahetse.", "loginErrorEmailInUse": "Imeile ena e se e sebediswa. Leka ho kena.", "loginErrorWeakPassword": "Phasewete e lokela ho ba le ditlhaku bonyane tse 8 mme e be le tlhaku le nomoro.", "loginAgeTermsLine": "Ke dilemo tse 18 kapa ho feta mme ke dumellana le", "loginTermsLinkLabel": "Dipehelo", "loginPrivacyLinkLabel": "Leano la Lekunutu", "loginErrorAgeRequired": "Ka kopo netefatsa hore o dilemo tse 18 kapa ho feta mme o dumellana le Dipehelo le Leano la Lekunutu.", "loginErrorInvalidEmail": "Ka kopo kenya aterese ya imeile e nepahetseng.", "loginErrorGoogleFailed": "Ha re a kgona ho o kenya ka Google. Leka hape.", "loginErrorGeneric": "Ho na le se sa tsamayang hantle. Leka hape.", "composeEyebrow": "Ngola", "composeSubtitle": "Le sebedise polelong mme o fumane maikutlo hang hang ka sebopeho sa puo, molumo le ho tsamaisana.", "composeMeaningPickerLabel": "Kgetha moelelo oo o ikwetlisang ka wona", "composePlaceholder": "Ngola polelo ya hao mona…", "composeSubmit": "Hlahloba polelo", "composeChecking": "Re a hlahloba…", "composeStatusPerfectLabel": "E phethehile", "composeStatusAlmostLabel": "O batla o fihlile", "composeStatusIncorrectLabel": "Ha e a nepahala hantle", "composeSuggestionEyebrow": "Tlhahiso ya ho ngola botjha", "composeTryAnother": "Leka polelo e nngwe", "composeBackToWord": "Kgutlela lentsweng", "composeErrorEmpty": "Ka kopo ngola polelo pele.", "composeErrorTooShort": "Ka kopo ngola bonyane mantswe a mmalwa.", "quizEyebrow": "Boikwetliso", "quizSubmit": "Romela", "quizNext": "Potso e latelang", "quizFinish": "Qetela", "quizYesCorrect": "E, ho nepahetse", "quizNotQuite": "Ha ho a nepahala hantle", "quizLoading": "Re lokisa kwisi ya hao…", "quizPracticeAnotherWord": "Ikwetlise ka lentswe le leng", "quizBackToWord": "Kgutlela lentsweng", "quizReviewMistakes": "Pheta tseo ke di fositseng", "compareEyebrow": "Bapisa", "compareTitle": "Arohanya mantswe a tshwanang", "compareSubtitle": "affect le effect, אומנות le אמנות, principle le principal: mantswe a qhekellang le batho ba buang puo eo ho tloha bongwaneng.", "compareWord1Label": "Lentswe 1", "compareWord2Label": "Lentswe 2", "compareWord1Placeholder": "affect", "compareWord2Placeholder": "effect", "compareCta": "Bapisa", "compareLoading": "Re a bapisa…", "compareEmpty": "Kenya mantswe a mabedi ho a bapisa", "compareDifferenceLabel": "Phapang", "compareExamplesLabel": "Mehlala", "compareCommonMistakeLabel": "Phoso e tlwaelehileng", "compareErrNotARealWord": "Ha re tsebe le leng la mantswe ao.", "compareErrDifferentLanguages": "Mantswe ana a mabedi a bonahala a le ka dipuo tse fapaneng, leka mantswe a mabedi a puo e le nngwe.", "compareErrSameWord": "Ana a bonahala e le lentswe le le leng, leka a mabedi a fapaneng.", "compareErrGeneric": "Papiso ha e fumanehe hona jwale.", "notebookEyebrow": "Bukana", "notebookTitle": "Lefatshe la hao la mantswe", "notebookSubtitle": "Lentswe le leng le le leng leo o le hlahlobileng, le bolokilwe, le hlophisitswe, le ntse le hola.", "notebookWordsExplored": "mantswe a hlahlobilweng", "notebookPracticeNow": "Pheta mantswe a ka", "notebookListView": "Lenane", "notebookGalaxyView": "Sehlopha sa dinaledi", "notebookEmptyTitle": "Bukana ya hao ha e na letho", "notebookEmptyCta": "Batla lentswe ho qala", "notebookRemoveAria": "Tlosa", "notebookMasteredLabel": "★ O le tseba hantle", "notebookLegendRecent": "Tse sa tswa bolokwa", "notebookLegendMastered": "Tseo o di tsebang hantle", "notebookLegendNeedsReview": "Di hloka ho phetwa", "srEyebrow": "Boikwetliso", "srSkip": "Tlola", "srClickToReveal": "Tobetsa kae kapa kae ho bontsha", "srTapToReveal": "Tobetsa ho bontsha", "srPrimaryMeaningLabel": "Moelelo wa mantlha", "srExamplesLabel": "Mehlala", "srIForgot": "Ke lebetse", "srIKnewIt": "Ke ne ke le tseba", "srSchedulingHint": "Ke ne ke le tseba = pheto e latelang ka mora matsatsi a mmalwa. Ke lebetse = le kgutlela kajeno.", "srWordsPracticed": "mantswe a ikwetlisitsweng", "srTomorrow": "Hosane", "srDoneForToday": "O qetile bakeng sa kajeno", "srPracticeMore": "Ikwetlise ho feta", "srEmptyTitle": "Ha ho letho la ho pheta kajeno", "srEmptyBody": "O entse hantle. Kgutla hosane.", "srBackToNotebook": "Kgutlela bukaneng", "srLoading": "Re lokisa boikwetliso ba hao…", "accountEyebrow": "Akhaonte", "accountYourSpace": "Sebaka sa hao", "accountPlanLabel": "Moralo", "accountOnPlanFree": "Mahala", "accountNoActiveSubscription": "Ha ho ngodiso e sebetsang", "accountChooseAPlan": "Kgetha moralo ho qala.", "accountCancelsAtPeriodEnd": "E tla emiswa qetellong ya nako ya tefo", "accountManageBilling": "Laola ditefo", "accountChangePlan": "Fetola moralo", "accountUpgrade": "Ntlafatsa", "accountUpgradeToFamily": "Fetohela ho Family", "accountUsageThisMonth": "Tshebediso kgweding ena", "accountImageGeneration": "Ho etsa ditshwantsho", "accountSearches": "Dipatlo", "accountLocked": "E notletswe", "accountUnlimited": "ha ho moeli", "accountTodaySuffix": "kajeno", "accountNearingLimit": "O atamela moeli wa kgwedi ena.", "accountSectionLabel": "Akhaonte", "accountEmailLabel": "Imeile", "accountChangeEmail": "Fetola imeile", "accountSignOut": "Tswa", "accountDeleteAccount": "Hlakola akhaonte", "reportEyebrow": "Tlaleha phoso", "reportTitle": "Ho fosahetse eng?", "reportTellMore": "Re bolelle haholwanyane", "reportTellMorePh": "Ha ho qobellwe. Ha o hlalosa ka ho qaqileng, re tla e lokisa kapele.", "reportSend": "Romela tlaleho", "reportSending": "Re a romela…", "reportThanks": "Re a leboha, re e fumane.", "reportError": "Ha re a kgona ho romela. Leka hape kamora nakwana.", "reportCatIncorrectDefinition": "Tlhaloso e fosahetse", "reportCatWrongEtymology": "Tshimoloho ya lentswe e fosahetse", "reportCatBadExample": "Polelo ya mohlala e mpe", "reportCatKidsExplanation": "Bothata ka tlhaloso ya bana", "reportCatIdiomIssue": "Bothata ka kapolelo", "reportCatWrongImage": "Setshwantsho se fosahetse", "reportCatQuizWrongAnswer": "Kwisi: karabo e tshwailwe hampe", "reportCatComposeFeedback": "Bothata ka maikutlo a polelo", "reportCatCompareResult": "Bothata ka sephetho sa papiso", "reportCatSomethingElse": "Ho hong", "origin": "Tshimoloho", "historyNote": "Nalane e kgutshwane", "throughTime": "Ha nako e ntse e tsamaya", "forKids": "Bakeng sa bana", "commonExpressions": "Dipolelo tse tlwaelehileng", "idiomsWithMeaning": "Dikapolelo tse nang le moelelo ona", "notJustPrimary": "Eseng feela wa mantlha", "takeItFurther": "Tswela pele", "saveToNotebookHint": "O tle o kgutlele ho lona hamorao, le hlophisitswe, le batlehang.", "generateImage": "Etsa setshwantsho", "generatingImage": "Re a etsa…", "generateImageHint": "Setshwantsho se phelang se entsweng ke Gadit, bakeng sa lentswe lena feela.", "composeSentence": "Ngola polelo", "composeSentenceHint": "Ngola ya hao, Gadit e tla e hlahloba molumo le ho tsamaisana.", "practiceWord": "Ikwetlise ka lentswe lena", "practiceWordHint": "Kwisi e kgutshwane e lokisetswang kamoo o ithutang kateng.", "unlockWithClear": "Bula ka Clear", "upgradeToClear": "Ntlafatsetsa ho Clear", "softWallAnonTitle": "Tswela pele, e ntse e le mahala", "softWallAnonBody": "Akhaonte ya mahala e potlakileng e bula dipatlo tse fihlang ho 20 ka letsatsi, ka mehlala, dikapolelo le ditshimoloho tsa mantswe.", "softWallSignupCta": "Tswela pele mahala", "softWallBasicTitle": "O fihlile moeling wa kajeno", "softWallBasicBody": "Diakhaonte tsa mahala di fumana dipatlo tse 20 ka letsatsi. Moeli o qala botjha hosane, kapa ntlafatsetsa ho Clear bakeng sa dipatlo tse se nang moeli hammoho le ditshwantsho, mokgwa wa bana, le maikutlo ka sebopeho sa puo.", "clearUnlocksThis": "Clear e bula sena", "visualizeThisWord": "Bona ka setshwantsho", "visualBlurb": "Setshwantsho se le seng se phelang, se entsweng ke Gadit, se o thusang ho hopola kamoo lentswe lena le utlwahalang kateng.", "visualBlurbLocked": "Etsa setshwantsho se phelang, se ikgethang bakeng sa lentswe lena, o utlwisise ka ho bona.", "reportLabel": "Tlaleha phoso", "wordOriginEyebrow": "Tshimoloho ya Lentswe", "idiomsEyebrow": "Dikapolelo le dipolelo", "wordOriginBackgroundLabel": "Nalane", "wordOriginOriginalWord": "Lentswe la pele", "wordOriginBreakdown": "Dikarolo tsa lentswe", "imageGeneratingLabel": "Re etsa setshwantsho…", "imageGeneratingHint": "Hangata sena se nka metsotswana e 10 ho isa ho e 15.", "imageOpenFullAria": "Bula setshwantsho ka boholo bo felletseng", "kidsComingSoon": "Tlhaloso ya bana e tla haufinyane.", "compareComingSoon": "Dipapadi tsa mantswe di tla haufinyane.", "shareDefinitionAria": "Arolelana tlhaloso ena", "meaningsEyebrow": "Ditlhaloso", "wordOriginLanguage": "Puo", "wordOriginOriginallyMeant": "Qalong le ne le bolela", "actionCompose": "Ngola polelo", "actionCompare": "Bapisa mantswe", "listenToWord": "Mamela", "offlinePin": "Boloka ho sebedisa ntle le inthanete", "offlinePinTitle": "Boloka lentswe lena hore o ithute ntle le inthanete", "offlinePinnedTitle": "E bolokilwe, e fumaneha ntle le WiFi", "offlineDownloadPack": "Jarolla sephutheloana sa ntle le inthanete", "offlineDownloadingPack": "Re a jarolla…", "offlinePackHeader": "Sephutheloana sa ntle le inthanete", "offlinePackDescription": "E eketsa mantswe a batlwang haholo ka puo ya hao Bukaneng ya hao, mme e a boloka a fumaneha ntle le WiFi hore o ithute ntle le inthanete.", "visualEmptyLabel": "Setshwantsho se tla takwa bakeng sa lentswe lena", "shareLabel": "Arolelana", "backLabel": "Morao"});
+Object.assign(st, {"homeHeadlineLine1": "Utlwisisa", "homeHeadlineLine2": "ho fihlela qetellong.", "homeSubline": "Bukantswe e utlwisisang maemo a hao: meelelo, ditshimoloho, dikapolelo, le setshwantsho se phelang, ka dipuo tse fetang 30.", "searchPlaceholderHome": "Ngola lentswe", "voiceInputTitle": "Bua lentswe", "explain": "Hlalosa", "valuePropsEyebrow": "Seo Gadit e se etsang ka tsela e fapaneng", "valuePropsTitle": "Ho feta tlhaloso, ke tsela ya ho phela le lentswe.", "valueProp1Eyebrow": "E utlwisisa maemo", "valueProp1Title": "Moelelo o nepahetseng, nako le nako", "valueProp1Body": "Kgomaretsa polelo, Gadit e kgetha moelelo o tsamaisanang le yona, eseng feela o tlwaelehileng haholo.", "valueProp2Eyebrow": "Setshwantsho", "valueProp2Title": "Setshwantsho se phelang, bakeng sa lentswe lena feela", "valueProp2Body": "Se etselwa lentswe le leng le le leng. Ke setshwantsho se o thusang ho hopola kamoo lentswe le utlwahalang kateng, eseng foto e tlwaelehileng.", "valueProp3Eyebrow": "Tshimoloho ya lentswe", "valueProp3Title": "Nalane e kgutshwane, eseng pokello ya Wikipedia", "valueProp3Body": "Moo lentswe le tswang teng, le phetwa ka serapa, jwalo ka ha motswalle ya ratang ho tseba a ka ngola.", "valueProp4Eyebrow": "Dipuo tse fetang 30", "valueProp4Title": "Seheberu le Searabia, ka botlalo", "valueProp4Body": "Ho ngola ho tloha ka ho le letona ka nnete, mengolo ya nnete, dikapolelo tsa nnete, eseng sebopeho se fetoletsweng feela.", "previewLabel": "Ponelopele", "seeFullResult": "Bona sephetho kaofela", "pricingEyebrow": "Ditheko", "pricingTeaserTitle": "Mekgahlelo e meraro. Kaofela ka dikahare tsa nnete.", "footerProductGroup": "Sehlahiswa", "footerLegalGroup": "Molao", "footerNotebook": "Bukana", "footerPricing": "Ditheko", "footerPrivacy": "Lekunutu", "footerTerms": "Dipehelo", "footerContact": "Thuso", "footerTagline": "Bukantswe e bohlale ya dipuo tse fetang 30. E etseditswe ho bala ha nnete.", "footerLanguagesNote": "Dipuo tse fetang 30", "signIn": "Kena", "startFree": "Qala mahala", "verbStampDef": "ho utlwisisa lentswe, ka botlalo", "navSearch": "Batla", "navNotebook": "Bukana", "navPricing": "Ditheko", "navSchools": "Dikolo", "navFeatures": "Dikarolo", "navPlay": "Bapala", "navAffiliates": "Balekane", "kidsModeLabel": "Bana", "kidsModeTooltipOff": "Tobetsa hore lentswe le leng le le leng le hlaloswe jwalo ka ha motswadi a ka hlalosetsa ngwana.", "kidsModeTooltipOn": "Mokgwa wa bana o butswe, tlhaloso e nngwe le e nngwe e tla ngolwa bakeng sa ngwana. Tobetsa ho o tima.", "signupWelcomeTitle": "Re a o amohela ho Gadit!", "signupWelcomeBody": "Akhaonte ya hao e se e lokile. Qala ka ho batla lentswe lefe kapa lefe.", "pricingPageHeadline": "Mekgahlelo e meraro. Kaofela ka dikahare tsa nnete.", "pricingPageSubline": "Qala mahala. Ntlafatsa ha botebo bo o thusa.", "billingMonthly": "Ka kgwedi", "billingYearly": "Ka selemo", "billingSave17": "Boloka 17%", "tierBasicTagline": "Utlwisisa", "tierBasicPitch": "Qala ka tse bohlokwa.", "tierBasicCta": "Qala", "tierBasicFeatures": "Dipatlo tsa mantswe tse 20 ka letsatsi¶Meelelo yohle (eseng feela wa mantlha)¶Mehlala e 3 bakeng sa moelelo ka mong¶Tshimoloho le nalane ya lentswe¶Ho kena ho a hlokahala", "tierClearTagline": "Bona", "tierClearPitch": "Phelisa mantswe ka ditshwantsho, mokgwa wa bana, le maikutlo.", "tierClearBadge": "E ratwang haholo", "tierClearCta": "Qala nako ya teko ya mahala ya matsatsi a 14", "tierClearCtaYearly": "Ngodisa ka selemo", "tierClearTrust": "Emisa nako efe kapa efe · Ha ho tefo nakong ya teko", "tierClearFeatures": "Tsohle tse ho Basic¶Dipatlo tse se nang moeli¶Ditlhaloso tsa bana¶Setshwantsho bakeng sa lentswe le leng le le leng (30/kgwedi)¶Ngola polelo mme o fumane maikutlo¶Dikapolelo le dipolelo¶Nalane ya dipatlo (matsatsi a 30 a fetileng)", "tierDeepTagline": "Ikwetlise", "tierDeepPitch": "Aha laeborari ya hao ya mantswe e matlafalang ha nako e ntse e tsamaya.", "tierDeepCta": "Ngodisetsa Deep", "tierDeepFeatures": "Tsohle tse ho Clear¶Dikwisi tsa boikwetliso¶Bukana ya hao ya mantswe¶Boikwetliso bo bohlale bakeng sa mantswe a dulang¶Arohanya mantswe a tshwanang¶Setshwantsho bakeng sa lentswe le leng le le leng (100/kgwedi)", "basicEquivalent": "", "clearEquivalent": "E lekana le $2.50/kgwedi", "deepEquivalent": "E lekana le $4.17/kgwedi", "trustStripCancel": "Emisa nako efe kapa efe ka portal ya Stripe", "trustStripMoneyBack": "Tjhelete e kgutliswa nakong ya matsatsi a 14 thekong ya pele", "trustStripDataYours": "Dintlha tsa hao ke tsa hao, di ntshe nako efe kapa efe", "trustStripNoAds": "Ha ho dipapatso, ha ho ho latedisa ke batho ba bang", "faqEyebrow": "Dipotso", "faqHeadline": "Dipotso, di arabilwe", "faqQ1": "Na nka fetola moralo?", "faqA1": "E, ntlafatsa kapa theola nako efe kapa efe. Ditefo di lokiswa ka bo tsona, o lefa phapang feela.", "faqQ2": "Ho etsahala eng ha ke emisa?", "faqA2": "O ntse o kena ho fihlela qetellong ya nako ya hao ya tefo, ebe o kgutlela ho Basic. Ha ho dintlha tse lahlehang.", "faqQ3": "Na nako ya teko e hlile e le mahala?", "faqA3": "E. Re kopa karete ho thibela tshebediso e mpe, empa ha o lefiswe ho fihlela letsatsing la 15. Emisa pele ho moo = ha o lefe letho.", "faqQ4": "Hobaneng mekgahlelo e meraro?", "faqA4": "Basebedisi ba fapaneng ba hloka botebo bo fapaneng. Re kgetha ho o fihlela moo o leng teng ho ena le ho o rekisetsa moralo o le mong o moholo haholo.", "faqQ5": "Na ditlhaloso tsa bana di bolokehile?", "faqA5": "E. Di etswa ka bo tsona ke enjene ya rona ka tlhokomelo e tshwanang le ya dikahare tsa batho ba baholo, mme di hlahlojwa ke melao ya rona ya dikahare. Ha ho dikahare tsa bana tse etswang ke basebedisi.", "loginWelcomeBack": "Kena", "loginCreateAccount": "Bula akhaonte ya hao", "loginContinueWithGoogle": "Tswela pele ka Google", "loginInAppNotice": "Ka hare ho {app}, kena ka imeile ka tlase. Bakeng sa kgetho ya Google, bula lehokela lena sebading sa hao sa inthanete.", "loginOrSeparator": "kapa", "loginEmailLabel": "Imeile", "loginPasswordLabel": "Phasewete", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Kena", "loginSubmitSignUp": "Bula akhaonte", "loginSwitchToSignUp": "Ha o na akhaonte? Ngodisa", "loginForgotPassword": "O lebetse phasewete?", "loginForgotPasswordEnterEmail": "Pele, kenya imeile ya hao ka hodimo, ebe o tobetsa mona.", "loginResetSent": "Haeba ho na le akhaonte ya imeile eo, lehokela la ho seta phasewete botjha le tseleng.", "loginResetError": "Ha re a kgona ho romela imeile ya ho seta phasewete botjha. Leka hape.", "loginSwitchToSignIn": "O se o na le akhaonte? Kena", "loginShowPassword": "Bontsha phasewete", "loginHidePassword": "Pata phasewete", "loginCloseAria": "Kwala", "loginSigningIn": "Re a o kenya…", "loginCreatingAccount": "Re bula akhaonte…", "loginErrorWrongCredentials": "Imeile kapa phasewete e fosahetse.", "loginErrorEmailInUse": "Imeile ena e se e sebediswa. Leka ho kena.", "loginErrorWeakPassword": "Phasewete e lokela ho ba le ditlhaku bonyane tse 8 mme e be le tlhaku le nomoro.", "loginAgeTermsLine": "Ke dilemo tse 18 kapa ho feta mme ke dumellana le", "loginTermsLinkLabel": "Dipehelo", "loginPrivacyLinkLabel": "Leano la Lekunutu", "loginErrorAgeRequired": "Ka kopo netefatsa hore o dilemo tse 18 kapa ho feta mme o dumellana le Dipehelo le Leano la Lekunutu.", "loginErrorInvalidEmail": "Ka kopo kenya aterese ya imeile e nepahetseng.", "loginErrorGoogleFailed": "Ha re a kgona ho o kenya ka Google. Leka hape.", "loginErrorGeneric": "Ho na le se sa tsamayang hantle. Leka hape.", "composeEyebrow": "Ngola", "composeSubtitle": "Le sebedise polelong mme o fumane maikutlo hang hang ka sebopeho sa puo, molumo le ho tsamaisana.", "composeMeaningPickerLabel": "Kgetha moelelo oo o ikwetlisang ka wona", "composePlaceholder": "Ngola polelo ya hao mona…", "composeSubmit": "Hlahloba polelo", "composeChecking": "Re a hlahloba…", "composeStatusPerfectLabel": "E phethehile", "composeStatusAlmostLabel": "O batla o fihlile", "composeStatusIncorrectLabel": "Ha e a nepahala hantle", "composeSuggestionEyebrow": "Tlhahiso ya ho ngola botjha", "composeTryAnother": "Leka polelo e nngwe", "composeBackToWord": "Kgutlela lentsweng", "composeErrorEmpty": "Ka kopo ngola polelo pele.", "composeErrorTooShort": "Ka kopo ngola bonyane mantswe a mmalwa.", "quizEyebrow": "Boikwetliso", "quizSubmit": "Romela", "quizNext": "Potso e latelang", "quizFinish": "Qetela", "quizYesCorrect": "E, ho nepahetse", "quizNotQuite": "Ha ho a nepahala hantle", "quizLoading": "Re lokisa kwisi ya hao…", "quizPracticeAnotherWord": "Ikwetlise ka lentswe le leng", "quizBackToWord": "Kgutlela lentsweng", "quizReviewMistakes": "Pheta tseo ke di fositseng", "notebookEyebrow": "Bukana", "notebookTitle": "Lefatshe la hao la mantswe", "notebookSubtitle": "Lentswe le leng le le leng leo o le hlahlobileng, le bolokilwe, le hlophisitswe, le ntse le hola.", "notebookWordsExplored": "mantswe a hlahlobilweng", "notebookPracticeNow": "Pheta mantswe a ka", "notebookListView": "Lenane", "notebookGalaxyView": "Sehlopha sa dinaledi", "notebookEmptyTitle": "Bukana ya hao ha e na letho", "notebookEmptyCta": "Batla lentswe ho qala", "notebookRemoveAria": "Tlosa", "notebookMasteredLabel": "★ O le tseba hantle", "notebookLegendRecent": "Tse sa tswa bolokwa", "notebookLegendMastered": "Tseo o di tsebang hantle", "notebookLegendNeedsReview": "Di hloka ho phetwa", "srEyebrow": "Boikwetliso", "srSkip": "Tlola", "srClickToReveal": "Tobetsa kae kapa kae ho bontsha", "srPrimaryMeaningLabel": "Moelelo wa mantlha", "srExamplesLabel": "Mehlala", "srIForgot": "Ke lebetse", "srIKnewIt": "Ke ne ke le tseba", "srSchedulingHint": "Ke ne ke le tseba = pheto e latelang ka mora matsatsi a mmalwa. Ke lebetse = le kgutlela kajeno.", "srWordsPracticed": "mantswe a ikwetlisitsweng", "srTomorrow": "Hosane", "srDoneForToday": "O qetile bakeng sa kajeno", "srPracticeMore": "Ikwetlise ho feta", "srEmptyTitle": "Ha ho letho la ho pheta kajeno", "srEmptyBody": "O entse hantle. Kgutla hosane.", "srBackToNotebook": "Kgutlela bukaneng", "srLoading": "Re lokisa boikwetliso ba hao…", "accountEyebrow": "Akhaonte", "accountYourSpace": "Sebaka sa hao", "accountPlanLabel": "Moralo", "accountOnPlanFree": "Mahala", "accountNoActiveSubscription": "Ha ho ngodiso e sebetsang", "accountChooseAPlan": "Kgetha moralo ho qala.", "accountCancelsAtPeriodEnd": "E tla emiswa qetellong ya nako ya tefo", "accountManageBilling": "Laola ditefo", "accountChangePlan": "Fetola moralo", "accountUpgrade": "Ntlafatsa", "accountUpgradeToFamily": "Fetohela ho Family", "accountUsageThisMonth": "Tshebediso kgweding ena", "accountImageGeneration": "Ho etsa ditshwantsho", "accountSearches": "Dipatlo", "accountLocked": "E notletswe", "accountUnlimited": "ha ho moeli", "accountTodaySuffix": "kajeno", "accountNearingLimit": "O atamela moeli wa kgwedi ena.", "accountSectionLabel": "Akhaonte", "accountEmailLabel": "Imeile", "accountSignOut": "Tswa", "accountDeleteAccount": "Hlakola akhaonte", "reportEyebrow": "Tlaleha phoso", "reportTitle": "Ho fosahetse eng?", "reportTellMore": "Re bolelle haholwanyane", "reportTellMorePh": "Ha ho qobellwe. Ha o hlalosa ka ho qaqileng, re tla e lokisa kapele.", "reportSend": "Romela tlaleho", "reportSending": "Re a romela…", "reportThanks": "Re a leboha, re e fumane.", "reportError": "Ha re a kgona ho romela. Leka hape kamora nakwana.", "reportCatIncorrectDefinition": "Tlhaloso e fosahetse", "reportCatWrongEtymology": "Tshimoloho ya lentswe e fosahetse", "reportCatBadExample": "Polelo ya mohlala e mpe", "reportCatKidsExplanation": "Bothata ka tlhaloso ya bana", "reportCatIdiomIssue": "Bothata ka kapolelo", "reportCatWrongImage": "Setshwantsho se fosahetse", "reportCatQuizWrongAnswer": "Kwisi: karabo e tshwailwe hampe", "reportCatComposeFeedback": "Bothata ka maikutlo a polelo", "reportCatCompareResult": "Bothata ka sephetho sa papiso", "reportCatSomethingElse": "Ho hong", "generateImage": "Etsa setshwantsho", "softWallAnonTitle": "Tswela pele, e ntse e le mahala", "softWallSignupCta": "Tswela pele mahala", "softWallBasicTitle": "O fihlile moeling wa kajeno", "reportLabel": "Tlaleha phoso", "wordOriginEyebrow": "Tshimoloho ya Lentswe", "idiomsEyebrow": "Dikapolelo le dipolelo", "wordOriginBackgroundLabel": "Nalane", "wordOriginOriginalWord": "Lentswe la pele", "wordOriginBreakdown": "Dikarolo tsa lentswe", "imageGeneratingLabel": "Re etsa setshwantsho…", "imageGeneratingHint": "Hangata sena se nka metsotswana e 10 ho isa ho e 15.", "imageOpenFullAria": "Bula setshwantsho ka boholo bo felletseng", "kidsComingSoon": "Tlhaloso ya bana e tla haufinyane.", "shareDefinitionAria": "Arolelana tlhaloso ena", "meaningsEyebrow": "Ditlhaloso", "wordOriginLanguage": "Puo", "wordOriginOriginallyMeant": "Qalong le ne le bolela", "actionCompose": "Ngola polelo", "actionCompare": "Bapisa mantswe", "listenToWord": "Mamela", "offlineDownloadPack": "Jarolla sephutheloana sa ntle le inthanete", "offlineDownloadingPack": "Re a jarolla…", "offlinePackHeader": "Sephutheloana sa ntle le inthanete", "offlinePackDescription": "E eketsa mantswe a batlwang haholo ka puo ya hao Bukaneng ya hao, mme e a boloka a fumaneha ntle le WiFi hore o ithute ntle le inthanete.", "shareLabel": "Arolelana", "backLabel": "Morao"});
 
 // --- Native Xitsonga (v2 core, function keys fall back to English) ---
-Object.assign(ts, {"homeHeadlineLine1": "Twisisa", "homeHeadlineLine2": "ku fikela emakumu.", "homeSubline": "Dikixinari leyi mi hlanganaka na yona eka xiyimo, tinhlamuselo, masungulo, swivulavulelo, na xifaniso lexi hanyaka, hi tindzimi ta 30+.", "searchPlaceholderHome": "Tsalani rito", "voiceInputTitle": "Vula rito hi rito", "addContext": "Engetela xiyimo", "explain": "Hlamusela", "contextHint": "Xana mi hlaya swo karhi? Namekani xivulwa leswaku nhlamuselo yi twala kahle.", "tryLabel": "Ringeta", "valuePropsEyebrow": "Leswi Gadit yi swi endlaka hi ndlela yo hambana", "valuePropsTitle": "Ku tlula nhlamuselo, i ndlela yo hanya na rito.", "valueProp1Eyebrow": "Yi twisisa xiyimo", "valueProp1Title": "Nhlamuselo leyi lulameke, minkarhi hinkwayo", "valueProp1Body": "Namekani xivulwa, Gadit yi hlawula nhlamuselo leyi fambelanaka, ku nga ri leyi tolovelekeke ntsena.", "valueProp2Eyebrow": "Xifaniso", "valueProp2Title": "Xifaniso lexi hanyaka, xa rito leri ntsena", "valueProp2Body": "Xi endleriwa rito rin'wana na rin'wana. Xikombiso xa leswi rito ri twalaka ha kona, ku nga ri xifaniso xa ntolovelo.", "valueProp3Eyebrow": "Masungulo", "valueProp3Title": "Matimu ya rito, hayi nhulu ya Wikipedia", "valueProp3Body": "Laha rito ri sukeke kona, ri hlamuseriwa hi ndzimana, hi ndlela leyi munghana wo tsakela ku tiva a nga yi tsalaka ha yona.", "valueProp4Eyebrow": "Tindzimi ta 30+", "valueProp4Title": "Xiheberu na Xiarabu, hi ndlela ya xiviri", "valueProp4Body": "Ku tsala ka xiviri ku suka exineneni ku ya eximatsini, titsalwa ta xiviri, swivulavulelo swa xiviri, ku nga ri ku hundzuluxela ntsena.", "previewLabel": "Ku languta ka ku sungula", "seeFullResult": "Vona mbuyelo hinkwawo", "pricingEyebrow": "Minxavo", "pricingTeaserTitle": "Swiyimo swinharhu. Hinkwaswo swi na vuxokoxoko bya xiviri.", "trustMicrocopy": "Khansela nkarhi wun'wana na wun'wana · Ndzingo wa masiku ya 14 eka Clear ya n'hweti · A ku hakeriwi ku fikela ndzingo wu hela", "footerProductGroup": "Xitirhisiwa", "footerLegalGroup": "Swa nawu", "footerCompare": "Pimanisa", "footerNotebook": "Buku ya marito", "footerPricing": "Minxavo", "footerPrivacy": "Xihundla", "footerTerms": "Swipimelo", "footerContact": "Mpfuno", "footerTagline": "Dikixinari ya vutlhari ya tindzimi ta 30+. Yi endleriwe ku hlaya ka xiviri.", "footerLanguagesNote": "Tindzimi ta 30+", "signIn": "Nghena", "startFree": "Sungula mahala", "verbStampDef": "ku twisisa rito, hi ku helela", "navSearch": "Lava", "navCompare": "Pimanisa", "navNotebook": "Buku ya marito", "navPricing": "Minxavo", "navSchools": "Swikolo", "navFeatures": "Swihlawulekisi", "navPlay": "Tlanga", "navAffiliates": "Vatirhisani", "kidsModeLabel": "Vana", "kidsModeTooltipOff": "Thintani leswaku rito rin'wana na rin'wana ri hlamuseriwa hi ndlela leyi mutswari a nga hlamuselaka n'wana ha yona.", "kidsModeTooltipOn": "Xiyimo xa vana xi pfuriwile, nhlamuselo yin'wana na yin'wana yi ta tsaleriwa n'wana. Thintani leswaku mi xi tima.", "kidsModeBasicGate": "Xiyimo xa vana i xihlawulekisi xa Clear. Tlakusani leswaku mi xi tirhisa.", "signupWelcomeTitle": "Mi amukeriwile eka Gadit!", "signupWelcomeBody": "Akhawunti ya n'wina yi lunghekile. Sungulani hi ku lava rito rin'wana na rin'wana.", "pricingPageHeadline": "Swiyimo swinharhu. Hinkwaswo swi na vuxokoxoko bya xiviri.", "pricingPageSubline": "Sungulani mahala. Tlakusani loko vuenti byi mi pfuna.", "billingMonthly": "Hi n'hweti", "billingYearly": "Hi lembe", "billingSave17": "Hlayisa 17%", "tierBasicTagline": "Twisisa", "tierBasicPitch": "Sungulani hi swa nkoka.", "tierBasicCta": "Sungula", "tierBasicFeatures": "Ku lava marito ya 20 hi siku¶Tinhlamuselo hinkwato (ku nga ri leyi ya nkoka ntsena)¶Swikombiso swa 3 eka nhlamuselo yin'wana na yin'wana¶Masungulo na matimu ya rito¶Ku nghena swa laveka", "tierClearTagline": "Vona hi xifaniso", "tierClearPitch": "Hanyisani marito hi swifaniso, xiyimo xa vana, na switsundzuxo.", "tierClearBadge": "Leyi rhandziwaka ngopfu", "tierClearCta": "Sungula ndzingo wa mahala wa masiku ya 14", "tierClearCtaYearly": "Tsarisa hi lembe", "tierClearTrust": "Khansela nkarhi wun'wana na wun'wana · A ku hakeriwi hi nkarhi wa ndzingo", "tierClearFeatures": "Hinkwaswo leswi nga eka Basic¶Ku lava handle ka ndzilakano¶Tinhlamuselo ta vana¶Xifaniso xa rito rin'wana na rin'wana (30/n'hweti)¶Tsala xivulwa u kuma switsundzuxo¶Swivulavulelo na swivulwa leswi tolovelekeke¶Matimu ya ku lava (masiku ya 30 lama hundzeke)", "tierDeepTagline": "Titoloveta", "tierDeepPitch": "Akani layiburari ya marito ya n'wina leyi tiyaka hi ku famba ka nkarhi.", "tierDeepCta": "Tsarisa eka Deep", "tierDeepFeatures": "Hinkwaswo leswi nga eka Clear¶Mavutiso yo titoloveta¶Buku ya marito ya wena¶Ntoloveto wa vutlhari wa marito lama tshamaka¶Hambanisa marito lama fanaka¶Xifaniso xa rito rin'wana na rin'wana (100/n'hweti)", "basicEquivalent": "", "clearEquivalent": "Swi ringana na $2.50/n'hweti", "deepEquivalent": "Swi ringana na $4.17/n'hweti", "trustStripCancel": "Khansela nkarhi wun'wana na wun'wana hi Stripe", "trustStripMoneyBack": "Ku vuyiseriwa mali ka masiku ya 14 eka ku xava ko sungula", "trustStripDataYours": "Vuxokoxoko bya n'wina i bya n'wina, byi humeseni nkarhi wun'wana na wun'wana", "trustStripNoAds": "A ku na swinavelo, a ku na ku landzeleriwa hi van'wana", "faqEyebrow": "Swivutiso", "faqHeadline": "Swivutiso, swi hlamuriwile", "faqQ1": "Xana ndzi nga cinca pulani?", "faqA1": "Ina, tlakusani kumbe mi rhelela nkarhi wun'wana na wun'wana. Ku hakela swi lulamisiwa hi ku tiendlela, mi hakela ku hambana ntsena.", "faqQ2": "Ku humelela yini loko ndzi khansela?", "faqA2": "Mi ya emahlweni mi tirhisa ku fikela emakumu ka nkarhi wa n'wina wa ku hakela, kutani mi tlhelela eka Basic. A ku lahleki nchumu.", "faqQ3": "Xana ndzingo i wa mahala hakunene?", "faqA3": "Ina. Hi lava khadi leswaku hi sivela ku tirhisiwa hi ndlela yo biha, kambe a mi hakerisiwi ku fikela hi siku ra 15. Khanselani emahlweni ka kona, a mi nge hakeli nchumu.", "faqQ4": "Hikokwalaho ka yini ku ri na swiyimo swinharhu?", "faqA4": "Vatirhisi vo hambana va lava vuenti byo hambana. Hi tsakela ku mi kuma laha mi nga kona, ku ri na ku mi xavisela pulani yin'we leyikulu ngopfu.", "faqQ5": "Xana tinhlamuselo ta vana ti hlayisekile?", "faqA5": "Ina. Ti endliwa hi njini ya hina hi vukheta lebyi fanaka na vuxokoxoko bya vanhu lavakulu, ti kamberiwa hi milawu ya hina ya vuxokoxoko. A ku na vuxokoxoko lebyi tsariweke hi vana van'wana.", "loginWelcomeBack": "Nghena", "loginCreateAccount": "Endlani akhawunti ya n'wina", "loginContinueWithGoogle": "Yisa emahlweni hi Google", "loginInAppNotice": "Endzeni ka {app}, nghenani hi imeyili laha hansi. Leswaku mi tirhisa Google, pfulani linki leyi eka bulawuza ya n'wina.", "loginOrSeparator": "kumbe", "loginEmailLabel": "Imeyili", "loginPasswordLabel": "Phasiwedi", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Nghena", "loginSubmitSignUp": "Endla akhawunti", "loginSwitchToSignUp": "A mi na akhawunti? Tsarisani", "loginForgotPassword": "Mi rivele phasiwedi?", "loginForgotPasswordEnterEmail": "Tsalani imeyili ya n'wina laha henhla ku sungula, kutani mi thinta laha.", "loginResetSent": "Loko ku ri na akhawunti ya imeyili yoleyo, linki yo cinca phasiwedi yi le ndleleni.", "loginResetError": "A hi swi kotanga ku rhumela imeyili yo cinca phasiwedi. Ringetani nakambe.", "loginSwitchToSignIn": "Xana mi se mi na akhawunti? Nghenani", "loginShowPassword": "Kombisa phasiwedi", "loginHidePassword": "Fihla phasiwedi", "loginCloseAria": "Pfala", "loginSigningIn": "Ku nghena…", "loginCreatingAccount": "Ku endla akhawunti…", "loginErrorWrongCredentials": "Imeyili kumbe phasiwedi a swi lulamanga.", "loginErrorEmailInUse": "Imeyili leyi yi se yi tirhisiwa. Ringetani ku nghena.", "loginErrorWeakPassword": "Phasiwedi yi fanele ku va na switsalwa swa 8 kumbe ku tlula, ku katsa na letere na nomboro.", "loginAgeTermsLine": "Ndzi na malembe ya 18 kumbe ku tlula naswona ndza pfumelelana na", "loginTermsLinkLabel": "Swipimelo", "loginPrivacyLinkLabel": "Pholisi ya Xihundla", "loginErrorAgeRequired": "Hi kombela mi tiyisisa leswaku mi na malembe ya 18 kumbe ku tlula naswona mi pfumelelana na Swipimelo na Pholisi ya Xihundla.", "loginErrorInvalidEmail": "Hi kombela mi tsala adirese ya imeyili leyi lulameke.", "loginErrorGoogleFailed": "A hi swi kotanga ku mi nghenisa hi Google. Ringetani nakambe.", "loginErrorGeneric": "Ku na leswi hoxekeke. Ringetani nakambe.", "composeEyebrow": "Tsala", "composeSubtitle": "Ri tirhiseni eka xivulwa mi kuma switsundzuxo hi xihatla hi ta ntirho wa ririmi, rito na ku fambelana.", "composeMeaningPickerLabel": "Hlawulani nhlamuselo leyi mi yi titolovetaka", "composePlaceholder": "Tsalani xivulwa xa n'wina laha…", "composeSubmit": "Kambela xivulwa", "composeChecking": "Ku kambela…", "composeStatusPerfectLabel": "Swi hetisekile", "composeStatusAlmostLabel": "Mi le kusuhi", "composeStatusIncorrectLabel": "A swi lulamanga hi ku helela", "composeSuggestionEyebrow": "Xivulwa lexi ringanyetiweke", "composeTryAnother": "Ringetani xivulwa xin'wana", "composeBackToWord": "Tlhelela eka rito", "composeErrorEmpty": "Hi kombela mi tsala xivulwa ku sungula.", "composeErrorTooShort": "Hi kombela mi tsala marito ma nga ri mangani.", "quizEyebrow": "Ntoloveto", "quizSubmit": "Rhumela", "quizNext": "Xivutiso lexi landzelaka", "quizFinish": "Heta", "quizYesCorrect": "Ina, swi lulamile", "quizNotQuite": "A swi lulamanga hi ku helela", "quizLoading": "Hi lunghiselela mavutiso ya n'wina…", "quizPracticeAnotherWord": "Titoloveta rito rin'wana", "quizBackToWord": "Tlhelela eka rito", "quizReviewMistakes": "Vuyelela leswi ndzi swi hoxeke", "compareEyebrow": "Pimanisa", "compareTitle": "Hambanisa marito lama fanaka", "compareSubtitle": "affect vs effect, אומנות vs אמנות, principle vs principal, marito lama phasaka hambi ku ri vavulavuri va ririmi leri.", "compareWord1Label": "Rito 1", "compareWord2Label": "Rito 2", "compareWord1Placeholder": "affect", "compareWord2Placeholder": "effect", "compareCta": "Pimanisa", "compareLoading": "Ku pimanisa…", "compareEmpty": "Tsalani marito mambirhi leswaku mi ma pimanisa", "compareDifferenceLabel": "Ku hambana", "compareExamplesLabel": "Swikombiso", "compareCommonMistakeLabel": "Xihoxo lexi tolovelekeke", "compareErrNotARealWord": "A hi ri tivi rin'wana ra marito wolawo.", "compareErrDifferentLanguages": "Marito lawa mambirhi ma vonaka ma ri hi tindzimi to hambana, ringetani marito ya ririmi rin'we.", "compareErrSameWord": "Lawa ma vonaka ma ri rito rin'we, ringetani marito mambirhi lama hambaneke.", "compareErrGeneric": "Ku pimanisa a swi koteki sweswi.", "notebookEyebrow": "Buku ya marito", "notebookTitle": "Misava ya n'wina ya marito", "notebookSubtitle": "Rito rin'wana na rin'wana leri mi ri lavisiseke, ri hlayisiwile, ri hleriwile, ri ri karhi ri kula.", "notebookWordsExplored": "marito lama lavisisiweke", "notebookPracticeNow": "Vuyelela marito ya mina", "notebookListView": "Nxaxamelo", "notebookGalaxyView": "Ntlawa wa tinyeleti", "notebookEmptyTitle": "Buku ya n'wina ya marito a yi na nchumu", "notebookEmptyCta": "Lavani rito leswaku mi sungula", "notebookRemoveAria": "Susa", "notebookMasteredLabel": "★ Ri tiviwile", "notebookLegendRecent": "Lama hlayisiweke sweswinyana", "notebookLegendMastered": "Lama tiviweke", "notebookLegendNeedsReview": "Lama lavaka ku vuyeleriwa", "srEyebrow": "Ntoloveto", "srSkip": "Tlula", "srClickToReveal": "Kliki kun'wana na kun'wana leswaku mi vona", "srTapToReveal": "Thintani leswaku mi vona", "srPrimaryMeaningLabel": "Nhlamuselo ya nkoka", "srExamplesLabel": "Swikombiso", "srIForgot": "Ndzi rivarile", "srIKnewIt": "A ndzi ri tiva", "srSchedulingHint": "A ndzi ri tiva = ku vuyelela loku landzelaka endzhaku ka masiku ma nga ri mangani. Ndzi rivarile = ri tlhelela namuntlha.", "srWordsPracticed": "marito lama titolovetiweke", "srTomorrow": "Mundzuku", "srDoneForToday": "Swi herile namuntlha", "srPracticeMore": "Titoloveta ku engetela", "srEmptyTitle": "A ku na swo vuyelela namuntlha", "srEmptyBody": "Mi tirhile kahle. Vuyani mundzuku.", "srBackToNotebook": "Tlhelela ebukwini", "srLoading": "Hi layicha ntoloveto wa n'wina…", "accountEyebrow": "Akhawunti", "accountYourSpace": "Ndzhawu ya n'wina", "accountPlanLabel": "Pulani", "accountOnPlanFree": "Mahala", "accountNoActiveSubscription": "A ku na mbhaliso lowu tirhaka", "accountChooseAPlan": "Hlawulani pulani leswaku mi sungula.", "accountCancelsAtPeriodEnd": "Yi ta khanseriwa emakumu ka nkarhi wa ku hakela", "accountManageBilling": "Lawula ku hakela", "accountChangePlan": "Cinca pulani", "accountUpgrade": "Tlakusa", "accountUpgradeToFamily": "Cincela eka Family", "accountUsageThisMonth": "Matirhiselo n'hweti leyi", "accountImageGeneration": "Ku endla swifaniso", "accountSearches": "Ku lava", "accountLocked": "Swi pfaleriwile", "accountUnlimited": "handle ka ndzilakano", "accountTodaySuffix": "namuntlha", "accountNearingLimit": "Mi le kusuhi na ndzilakano wa n'hweti leyi.", "accountSectionLabel": "Akhawunti", "accountEmailLabel": "Imeyili", "accountChangeEmail": "Cinca imeyili", "accountSignOut": "Huma", "accountDeleteAccount": "Susa akhawunti", "reportEyebrow": "Vika xihoxo", "reportTitle": "I yini lexi nga lulamangiki?", "reportTellMore": "Hi byeleni swo tala", "reportTellMorePh": "A swi boheki. Loko mi kongomisa ngopfu, hi ta swi lulamisa hi xihatla.", "reportSend": "Rhumela xiviko", "reportSending": "Ku rhumela…", "reportThanks": "Hi khensa, hi xi kumile.", "reportError": "A swi rhumelekanga. Ringetani nakambe endzhaku ka xinkarhana.", "reportCatIncorrectDefinition": "Nhlamuselo leyi hoxeke", "reportCatWrongEtymology": "Masungulo lama hoxeke", "reportCatBadExample": "Xivulwa xa xikombiso lexi nga lulamangiki", "reportCatKidsExplanation": "Xiphiqo eka nhlamuselo ya vana", "reportCatIdiomIssue": "Xiphiqo eka xivulavulelo", "reportCatWrongImage": "Xifaniso lexi hoxeke", "reportCatQuizWrongAnswer": "Mavutiso: nhlamulo yi fungiwe hi ndlela leyi hoxeke", "reportCatComposeFeedback": "Xiphiqo eka switsundzuxo swa xivulwa", "reportCatCompareResult": "Xiphiqo eka mbuyelo wa ku pimanisa", "reportCatSomethingElse": "Swin'wana", "origin": "Masungulo", "historyNote": "Matimu ya rito", "throughTime": "Hi ku famba ka nkarhi", "forKids": "Ya vana", "commonExpressions": "Swivulavulelo leswi tolovelekeke", "idiomsWithMeaning": "Swivulavulelo swa nhlamuselo leyi", "notJustPrimary": "Ku nga ri leyi ya nkoka ntsena", "takeItFurther": "Yisani emahlweni", "saveToNotebookHint": "Ri tlheleleni endzhaku, ri hleriwile, ri laveka hi ku olova.", "generateImage": "Endla xifaniso", "generatingImage": "Ku endla…", "generateImageHint": "Xifaniso lexi hanyaka lexi endliweke hi njini ya hina, xa rito leri ntsena.", "composeSentence": "Tsala xivulwa", "composeSentenceHint": "Tsalani xa n'wina, Gadit yi languta ndlela ya ku vulavula na ku fambelana.", "practiceWord": "Titoloveta rito leri", "practiceWordHint": "Mavutiso yo koma lama fambelanaka na ndlela leyi mi dyondzaka ha yona.", "unlockWithClear": "Pfula hi Clear", "upgradeToClear": "Tlakusela eka Clear", "softWallAnonTitle": "Yisani emahlweni, ha ha ri mahala", "softWallAnonBody": "Akhawunti ya mahala yo hatlisa yi pfula ku lava ku fika eka 20 hi siku, na swikombiso, swivulavulelo na masungulo ya marito.", "softWallSignupCta": "Yisa emahlweni mahala", "softWallBasicTitle": "Mi fikile emakumu ka namuntlha", "softWallBasicBody": "Tiakhawunti ta mahala ti kuma ku lava ka 20 hi siku. Ndzilakano wu sungula nakambe mundzuku, kumbe tlakuselani eka Clear leswaku mi lava handle ka ndzilakano, ku engetela swifaniso, xiyimo xa vana, na switsundzuxo swa ririmi.", "clearUnlocksThis": "Clear yi pfula leswi", "visualizeThisWord": "Vona hi xifaniso", "visualBlurb": "Xifaniso xin'we lexi hanyaka, lexi endliweke hi Gadit, xikombiso xa leswi rito leri ri twalaka ha kona.", "visualBlurbLocked": "Endlani xifaniso lexi hanyaka, lexi nga riki na xin'wana xo fana na xona, xa rito leri, mi twisisa hi ku vona.", "reportLabel": "Vika xihoxo", "wordOriginEyebrow": "Masungulo ya Rito", "idiomsEyebrow": "Swivulavulelo na swivulwa", "wordOriginBackgroundLabel": "Matimu", "wordOriginOriginalWord": "Rito ro sungula", "wordOriginBreakdown": "Swiphemu swa rito", "imageGeneratingLabel": "Hi endla xifaniso…", "imageGeneratingHint": "Hi ntolovelo swi teka 10 ku ya eka 15 wa tisekoni.", "imageOpenFullAria": "Pfula xifaniso hi vukulu hinkwabyo", "kidsComingSoon": "Nhlamuselo ya vana yi ta ku nga ri khale.", "compareComingSoon": "Mintlangu ya marito yi ta ku nga ri khale.", "shareDefinitionAria": "Avelana nhlamuselo leyi", "meaningsEyebrow": "Tinhlamuselo", "wordOriginLanguage": "Ririmi", "wordOriginOriginallyMeant": "Eku sunguleni a ri vula", "actionCompose": "Tsala xivulwa", "actionCompare": "Pimanisa marito", "listenToWord": "Yingisa", "offlinePin": "Hlayisa ku tirhisa handle ka inthanete", "offlinePinTitle": "Hlayisa rito leri ku ri dyondza handle ka inthanete", "offlinePinnedTitle": "Ri hlayisiwile, ri kumeka handle ka WiFi", "offlineDownloadPack": "Dawuniloda phakete yo tirhisa handle ka inthanete", "offlineDownloadingPack": "Ku dawuniloda…", "offlinePackHeader": "Phakete yo tirhisa handle ka inthanete", "offlinePackDescription": "Yi engetela marito lama laviwaka ngopfu eka ririmi ra n'wina eBukwini ya n'wina ya marito, naswona yi ma hlayisa ma kumeka handle ka WiFi leswaku mi dyondza handle ka inthanete.", "visualEmptyLabel": "Xifaniso xi ta dirowiwa xa rito leri", "shareLabel": "Avelana", "backLabel": "Endzhaku"});
+Object.assign(ts, {"homeHeadlineLine1": "Twisisa", "homeHeadlineLine2": "ku fikela emakumu.", "homeSubline": "Dikixinari leyi mi hlanganaka na yona eka xiyimo, tinhlamuselo, masungulo, swivulavulelo, na xifaniso lexi hanyaka, hi tindzimi ta 30+.", "searchPlaceholderHome": "Tsalani rito", "voiceInputTitle": "Vula rito hi rito", "explain": "Hlamusela", "valuePropsEyebrow": "Leswi Gadit yi swi endlaka hi ndlela yo hambana", "valuePropsTitle": "Ku tlula nhlamuselo, i ndlela yo hanya na rito.", "valueProp1Eyebrow": "Yi twisisa xiyimo", "valueProp1Title": "Nhlamuselo leyi lulameke, minkarhi hinkwayo", "valueProp1Body": "Namekani xivulwa, Gadit yi hlawula nhlamuselo leyi fambelanaka, ku nga ri leyi tolovelekeke ntsena.", "valueProp2Eyebrow": "Xifaniso", "valueProp2Title": "Xifaniso lexi hanyaka, xa rito leri ntsena", "valueProp2Body": "Xi endleriwa rito rin'wana na rin'wana. Xikombiso xa leswi rito ri twalaka ha kona, ku nga ri xifaniso xa ntolovelo.", "valueProp3Eyebrow": "Masungulo", "valueProp3Title": "Matimu ya rito, hayi nhulu ya Wikipedia", "valueProp3Body": "Laha rito ri sukeke kona, ri hlamuseriwa hi ndzimana, hi ndlela leyi munghana wo tsakela ku tiva a nga yi tsalaka ha yona.", "valueProp4Eyebrow": "Tindzimi ta 30+", "valueProp4Title": "Xiheberu na Xiarabu, hi ndlela ya xiviri", "valueProp4Body": "Ku tsala ka xiviri ku suka exineneni ku ya eximatsini, titsalwa ta xiviri, swivulavulelo swa xiviri, ku nga ri ku hundzuluxela ntsena.", "previewLabel": "Ku languta ka ku sungula", "seeFullResult": "Vona mbuyelo hinkwawo", "pricingEyebrow": "Minxavo", "pricingTeaserTitle": "Swiyimo swinharhu. Hinkwaswo swi na vuxokoxoko bya xiviri.", "footerProductGroup": "Xitirhisiwa", "footerLegalGroup": "Swa nawu", "footerNotebook": "Buku ya marito", "footerPricing": "Minxavo", "footerPrivacy": "Xihundla", "footerTerms": "Swipimelo", "footerContact": "Mpfuno", "footerTagline": "Dikixinari ya vutlhari ya tindzimi ta 30+. Yi endleriwe ku hlaya ka xiviri.", "footerLanguagesNote": "Tindzimi ta 30+", "signIn": "Nghena", "startFree": "Sungula mahala", "verbStampDef": "ku twisisa rito, hi ku helela", "navSearch": "Lava", "navNotebook": "Buku ya marito", "navPricing": "Minxavo", "navSchools": "Swikolo", "navFeatures": "Swihlawulekisi", "navPlay": "Tlanga", "navAffiliates": "Vatirhisani", "kidsModeLabel": "Vana", "kidsModeTooltipOff": "Thintani leswaku rito rin'wana na rin'wana ri hlamuseriwa hi ndlela leyi mutswari a nga hlamuselaka n'wana ha yona.", "kidsModeTooltipOn": "Xiyimo xa vana xi pfuriwile, nhlamuselo yin'wana na yin'wana yi ta tsaleriwa n'wana. Thintani leswaku mi xi tima.", "signupWelcomeTitle": "Mi amukeriwile eka Gadit!", "signupWelcomeBody": "Akhawunti ya n'wina yi lunghekile. Sungulani hi ku lava rito rin'wana na rin'wana.", "pricingPageHeadline": "Swiyimo swinharhu. Hinkwaswo swi na vuxokoxoko bya xiviri.", "pricingPageSubline": "Sungulani mahala. Tlakusani loko vuenti byi mi pfuna.", "billingMonthly": "Hi n'hweti", "billingYearly": "Hi lembe", "billingSave17": "Hlayisa 17%", "tierBasicTagline": "Twisisa", "tierBasicPitch": "Sungulani hi swa nkoka.", "tierBasicCta": "Sungula", "tierBasicFeatures": "Ku lava marito ya 20 hi siku¶Tinhlamuselo hinkwato (ku nga ri leyi ya nkoka ntsena)¶Swikombiso swa 3 eka nhlamuselo yin'wana na yin'wana¶Masungulo na matimu ya rito¶Ku nghena swa laveka", "tierClearTagline": "Vona hi xifaniso", "tierClearPitch": "Hanyisani marito hi swifaniso, xiyimo xa vana, na switsundzuxo.", "tierClearBadge": "Leyi rhandziwaka ngopfu", "tierClearCta": "Sungula ndzingo wa mahala wa masiku ya 14", "tierClearCtaYearly": "Tsarisa hi lembe", "tierClearTrust": "Khansela nkarhi wun'wana na wun'wana · A ku hakeriwi hi nkarhi wa ndzingo", "tierClearFeatures": "Hinkwaswo leswi nga eka Basic¶Ku lava handle ka ndzilakano¶Tinhlamuselo ta vana¶Xifaniso xa rito rin'wana na rin'wana (30/n'hweti)¶Tsala xivulwa u kuma switsundzuxo¶Swivulavulelo na swivulwa leswi tolovelekeke¶Matimu ya ku lava (masiku ya 30 lama hundzeke)", "tierDeepTagline": "Titoloveta", "tierDeepPitch": "Akani layiburari ya marito ya n'wina leyi tiyaka hi ku famba ka nkarhi.", "tierDeepCta": "Tsarisa eka Deep", "tierDeepFeatures": "Hinkwaswo leswi nga eka Clear¶Mavutiso yo titoloveta¶Buku ya marito ya wena¶Ntoloveto wa vutlhari wa marito lama tshamaka¶Hambanisa marito lama fanaka¶Xifaniso xa rito rin'wana na rin'wana (100/n'hweti)", "basicEquivalent": "", "clearEquivalent": "Swi ringana na $2.50/n'hweti", "deepEquivalent": "Swi ringana na $4.17/n'hweti", "trustStripCancel": "Khansela nkarhi wun'wana na wun'wana hi Stripe", "trustStripMoneyBack": "Ku vuyiseriwa mali ka masiku ya 14 eka ku xava ko sungula", "trustStripDataYours": "Vuxokoxoko bya n'wina i bya n'wina, byi humeseni nkarhi wun'wana na wun'wana", "trustStripNoAds": "A ku na swinavelo, a ku na ku landzeleriwa hi van'wana", "faqEyebrow": "Swivutiso", "faqHeadline": "Swivutiso, swi hlamuriwile", "faqQ1": "Xana ndzi nga cinca pulani?", "faqA1": "Ina, tlakusani kumbe mi rhelela nkarhi wun'wana na wun'wana. Ku hakela swi lulamisiwa hi ku tiendlela, mi hakela ku hambana ntsena.", "faqQ2": "Ku humelela yini loko ndzi khansela?", "faqA2": "Mi ya emahlweni mi tirhisa ku fikela emakumu ka nkarhi wa n'wina wa ku hakela, kutani mi tlhelela eka Basic. A ku lahleki nchumu.", "faqQ3": "Xana ndzingo i wa mahala hakunene?", "faqA3": "Ina. Hi lava khadi leswaku hi sivela ku tirhisiwa hi ndlela yo biha, kambe a mi hakerisiwi ku fikela hi siku ra 15. Khanselani emahlweni ka kona, a mi nge hakeli nchumu.", "faqQ4": "Hikokwalaho ka yini ku ri na swiyimo swinharhu?", "faqA4": "Vatirhisi vo hambana va lava vuenti byo hambana. Hi tsakela ku mi kuma laha mi nga kona, ku ri na ku mi xavisela pulani yin'we leyikulu ngopfu.", "faqQ5": "Xana tinhlamuselo ta vana ti hlayisekile?", "faqA5": "Ina. Ti endliwa hi njini ya hina hi vukheta lebyi fanaka na vuxokoxoko bya vanhu lavakulu, ti kamberiwa hi milawu ya hina ya vuxokoxoko. A ku na vuxokoxoko lebyi tsariweke hi vana van'wana.", "loginWelcomeBack": "Nghena", "loginCreateAccount": "Endlani akhawunti ya n'wina", "loginContinueWithGoogle": "Yisa emahlweni hi Google", "loginInAppNotice": "Endzeni ka {app}, nghenani hi imeyili laha hansi. Leswaku mi tirhisa Google, pfulani linki leyi eka bulawuza ya n'wina.", "loginOrSeparator": "kumbe", "loginEmailLabel": "Imeyili", "loginPasswordLabel": "Phasiwedi", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Nghena", "loginSubmitSignUp": "Endla akhawunti", "loginSwitchToSignUp": "A mi na akhawunti? Tsarisani", "loginForgotPassword": "Mi rivele phasiwedi?", "loginForgotPasswordEnterEmail": "Tsalani imeyili ya n'wina laha henhla ku sungula, kutani mi thinta laha.", "loginResetSent": "Loko ku ri na akhawunti ya imeyili yoleyo, linki yo cinca phasiwedi yi le ndleleni.", "loginResetError": "A hi swi kotanga ku rhumela imeyili yo cinca phasiwedi. Ringetani nakambe.", "loginSwitchToSignIn": "Xana mi se mi na akhawunti? Nghenani", "loginShowPassword": "Kombisa phasiwedi", "loginHidePassword": "Fihla phasiwedi", "loginCloseAria": "Pfala", "loginSigningIn": "Ku nghena…", "loginCreatingAccount": "Ku endla akhawunti…", "loginErrorWrongCredentials": "Imeyili kumbe phasiwedi a swi lulamanga.", "loginErrorEmailInUse": "Imeyili leyi yi se yi tirhisiwa. Ringetani ku nghena.", "loginErrorWeakPassword": "Phasiwedi yi fanele ku va na switsalwa swa 8 kumbe ku tlula, ku katsa na letere na nomboro.", "loginAgeTermsLine": "Ndzi na malembe ya 18 kumbe ku tlula naswona ndza pfumelelana na", "loginTermsLinkLabel": "Swipimelo", "loginPrivacyLinkLabel": "Pholisi ya Xihundla", "loginErrorAgeRequired": "Hi kombela mi tiyisisa leswaku mi na malembe ya 18 kumbe ku tlula naswona mi pfumelelana na Swipimelo na Pholisi ya Xihundla.", "loginErrorInvalidEmail": "Hi kombela mi tsala adirese ya imeyili leyi lulameke.", "loginErrorGoogleFailed": "A hi swi kotanga ku mi nghenisa hi Google. Ringetani nakambe.", "loginErrorGeneric": "Ku na leswi hoxekeke. Ringetani nakambe.", "composeEyebrow": "Tsala", "composeSubtitle": "Ri tirhiseni eka xivulwa mi kuma switsundzuxo hi xihatla hi ta ntirho wa ririmi, rito na ku fambelana.", "composeMeaningPickerLabel": "Hlawulani nhlamuselo leyi mi yi titolovetaka", "composePlaceholder": "Tsalani xivulwa xa n'wina laha…", "composeSubmit": "Kambela xivulwa", "composeChecking": "Ku kambela…", "composeStatusPerfectLabel": "Swi hetisekile", "composeStatusAlmostLabel": "Mi le kusuhi", "composeStatusIncorrectLabel": "A swi lulamanga hi ku helela", "composeSuggestionEyebrow": "Xivulwa lexi ringanyetiweke", "composeTryAnother": "Ringetani xivulwa xin'wana", "composeBackToWord": "Tlhelela eka rito", "composeErrorEmpty": "Hi kombela mi tsala xivulwa ku sungula.", "composeErrorTooShort": "Hi kombela mi tsala marito ma nga ri mangani.", "quizEyebrow": "Ntoloveto", "quizSubmit": "Rhumela", "quizNext": "Xivutiso lexi landzelaka", "quizFinish": "Heta", "quizYesCorrect": "Ina, swi lulamile", "quizNotQuite": "A swi lulamanga hi ku helela", "quizLoading": "Hi lunghiselela mavutiso ya n'wina…", "quizPracticeAnotherWord": "Titoloveta rito rin'wana", "quizBackToWord": "Tlhelela eka rito", "quizReviewMistakes": "Vuyelela leswi ndzi swi hoxeke", "notebookEyebrow": "Buku ya marito", "notebookTitle": "Misava ya n'wina ya marito", "notebookSubtitle": "Rito rin'wana na rin'wana leri mi ri lavisiseke, ri hlayisiwile, ri hleriwile, ri ri karhi ri kula.", "notebookWordsExplored": "marito lama lavisisiweke", "notebookPracticeNow": "Vuyelela marito ya mina", "notebookListView": "Nxaxamelo", "notebookGalaxyView": "Ntlawa wa tinyeleti", "notebookEmptyTitle": "Buku ya n'wina ya marito a yi na nchumu", "notebookEmptyCta": "Lavani rito leswaku mi sungula", "notebookRemoveAria": "Susa", "notebookMasteredLabel": "★ Ri tiviwile", "notebookLegendRecent": "Lama hlayisiweke sweswinyana", "notebookLegendMastered": "Lama tiviweke", "notebookLegendNeedsReview": "Lama lavaka ku vuyeleriwa", "srEyebrow": "Ntoloveto", "srSkip": "Tlula", "srClickToReveal": "Kliki kun'wana na kun'wana leswaku mi vona", "srPrimaryMeaningLabel": "Nhlamuselo ya nkoka", "srExamplesLabel": "Swikombiso", "srIForgot": "Ndzi rivarile", "srIKnewIt": "A ndzi ri tiva", "srSchedulingHint": "A ndzi ri tiva = ku vuyelela loku landzelaka endzhaku ka masiku ma nga ri mangani. Ndzi rivarile = ri tlhelela namuntlha.", "srWordsPracticed": "marito lama titolovetiweke", "srTomorrow": "Mundzuku", "srDoneForToday": "Swi herile namuntlha", "srPracticeMore": "Titoloveta ku engetela", "srEmptyTitle": "A ku na swo vuyelela namuntlha", "srEmptyBody": "Mi tirhile kahle. Vuyani mundzuku.", "srBackToNotebook": "Tlhelela ebukwini", "srLoading": "Hi layicha ntoloveto wa n'wina…", "accountEyebrow": "Akhawunti", "accountYourSpace": "Ndzhawu ya n'wina", "accountPlanLabel": "Pulani", "accountOnPlanFree": "Mahala", "accountNoActiveSubscription": "A ku na mbhaliso lowu tirhaka", "accountChooseAPlan": "Hlawulani pulani leswaku mi sungula.", "accountCancelsAtPeriodEnd": "Yi ta khanseriwa emakumu ka nkarhi wa ku hakela", "accountManageBilling": "Lawula ku hakela", "accountChangePlan": "Cinca pulani", "accountUpgrade": "Tlakusa", "accountUpgradeToFamily": "Cincela eka Family", "accountUsageThisMonth": "Matirhiselo n'hweti leyi", "accountImageGeneration": "Ku endla swifaniso", "accountSearches": "Ku lava", "accountLocked": "Swi pfaleriwile", "accountUnlimited": "handle ka ndzilakano", "accountTodaySuffix": "namuntlha", "accountNearingLimit": "Mi le kusuhi na ndzilakano wa n'hweti leyi.", "accountSectionLabel": "Akhawunti", "accountEmailLabel": "Imeyili", "accountSignOut": "Huma", "accountDeleteAccount": "Susa akhawunti", "reportEyebrow": "Vika xihoxo", "reportTitle": "I yini lexi nga lulamangiki?", "reportTellMore": "Hi byeleni swo tala", "reportTellMorePh": "A swi boheki. Loko mi kongomisa ngopfu, hi ta swi lulamisa hi xihatla.", "reportSend": "Rhumela xiviko", "reportSending": "Ku rhumela…", "reportThanks": "Hi khensa, hi xi kumile.", "reportError": "A swi rhumelekanga. Ringetani nakambe endzhaku ka xinkarhana.", "reportCatIncorrectDefinition": "Nhlamuselo leyi hoxeke", "reportCatWrongEtymology": "Masungulo lama hoxeke", "reportCatBadExample": "Xivulwa xa xikombiso lexi nga lulamangiki", "reportCatKidsExplanation": "Xiphiqo eka nhlamuselo ya vana", "reportCatIdiomIssue": "Xiphiqo eka xivulavulelo", "reportCatWrongImage": "Xifaniso lexi hoxeke", "reportCatQuizWrongAnswer": "Mavutiso: nhlamulo yi fungiwe hi ndlela leyi hoxeke", "reportCatComposeFeedback": "Xiphiqo eka switsundzuxo swa xivulwa", "reportCatCompareResult": "Xiphiqo eka mbuyelo wa ku pimanisa", "reportCatSomethingElse": "Swin'wana", "generateImage": "Endla xifaniso", "softWallAnonTitle": "Yisani emahlweni, ha ha ri mahala", "softWallSignupCta": "Yisa emahlweni mahala", "softWallBasicTitle": "Mi fikile emakumu ka namuntlha", "reportLabel": "Vika xihoxo", "wordOriginEyebrow": "Masungulo ya Rito", "idiomsEyebrow": "Swivulavulelo na swivulwa", "wordOriginBackgroundLabel": "Matimu", "wordOriginOriginalWord": "Rito ro sungula", "wordOriginBreakdown": "Swiphemu swa rito", "imageGeneratingLabel": "Hi endla xifaniso…", "imageGeneratingHint": "Hi ntolovelo swi teka 10 ku ya eka 15 wa tisekoni.", "imageOpenFullAria": "Pfula xifaniso hi vukulu hinkwabyo", "kidsComingSoon": "Nhlamuselo ya vana yi ta ku nga ri khale.", "shareDefinitionAria": "Avelana nhlamuselo leyi", "meaningsEyebrow": "Tinhlamuselo", "wordOriginLanguage": "Ririmi", "wordOriginOriginallyMeant": "Eku sunguleni a ri vula", "actionCompose": "Tsala xivulwa", "actionCompare": "Pimanisa marito", "listenToWord": "Yingisa", "offlineDownloadPack": "Dawuniloda phakete yo tirhisa handle ka inthanete", "offlineDownloadingPack": "Ku dawuniloda…", "offlinePackHeader": "Phakete yo tirhisa handle ka inthanete", "offlinePackDescription": "Yi engetela marito lama laviwaka ngopfu eka ririmi ra n'wina eBukwini ya n'wina ya marito, naswona yi ma hlayisa ma kumeka handle ka WiFi leswaku mi dyondza handle ka inthanete.", "shareLabel": "Avelana", "backLabel": "Endzhaku"});
 
 // --- Native siSwati (v2 core, function keys fall back to English) ---
-Object.assign(ss, {"homeHeadlineLine1": "Condza", "homeHeadlineLine2": "kuze kube sekugcineni.", "homeSubline": "Sichazamagama lesihlangana nawe esimeni, tinchazelo, imvelaphi, tisho, nesitfombe lesikhanyako, ngetilwimi letingetulu kwa-30.", "searchPlaceholderHome": "Bhala ligama", "voiceInputTitle": "Khuluma ligama", "addContext": "Engeta simo", "explain": "Chaza", "contextHint": "Ufundza lokutsite? Namatsisela umusho kute ucacise umcondvo.", "tryLabel": "Zama", "valuePropsEyebrow": "Lokwentiwa yi-Gadit ngendlela leyehlukile", "valuePropsTitle": "Lokungetulu kwenchazelo, yindlela yekuphila naligama.", "valueProp1Eyebrow": "Iyasicondza simo", "valueProp1Title": "Umcondvo lofanele, ngaso sonkhe sikhatsi", "valueProp1Body": "Namatsisela umusho, Gadit ikhetsa umcondvo lofanele, hhayi nje lovame kakhulu.", "valueProp2Eyebrow": "Ngemehlo", "valueProp2Title": "Sitfombe lesikhanyako, saleligama kuphela", "valueProp2Body": "Sidalelwa ligama ngalinye. Sisekelo lesibonakalako sekutsi ligama litiva njani, hhayi sitfombe lesivamile.", "valueProp3Eyebrow": "Imvelaphi", "valueProp3Title": "Umlandvo lomfisha, hhayi lunyenti lwe-Wikipedia", "valueProp3Body": "Kutsi ligama livelaphi, kulandzisiswe ngendzima, lolo hlobo lumngani lofisa kwati angalubhala.", "valueProp4Eyebrow": "Tilwimi letingetulu kwa-30", "valueProp4Title": "SiHebheru nesi-Arabhu, njengelulwimi lwemdzabu", "valueProp4Body": "RTL yangempela, emafonti angempela, tisho tangempela, hhayi likhasi lelihunyushwe nje lanamatsiselwa.", "previewLabel": "Kubuka kucala", "seeFullResult": "Bona umphumela lophelele", "pricingEyebrow": "Emanani", "pricingTeaserTitle": "Emazinga lamatsatfu. Onkhe anelokucuketfwe kwangempela.", "trustMicrocopy": "Khansela nobe nini · Kulinga kwemalanga langu-14 ku-Clear yenyanga · Akukhokhwa lutfo kuze kuphele kulinga", "footerProductGroup": "Umkhicito", "footerLegalGroup": "Temtsetfo", "footerCompare": "Catsanisa", "footerNotebook": "Incwadzi", "footerPricing": "Emanani", "footerPrivacy": "Imfihlo", "footerTerms": "Imigomo", "footerContact": "Lusito", "footerTagline": "Sichazamagama lesihlakaniphile setilwimi letingetulu kwa-30. Sakhelwe kufundza kwangempela.", "footerLanguagesNote": "Tilwimi letingetulu kwa-30", "signIn": "Ngena", "startFree": "Cala mahhala", "verbStampDef": "kucondza ligama, ngalokuphelele", "navSearch": "Sesha", "navCompare": "Catsanisa", "navNotebook": "Incwadzi", "navPricing": "Emanani", "navSchools": "Tikolwa", "navFeatures": "Lokukhona", "navPlay": "Dlala", "navAffiliates": "Balingani", "kidsModeLabel": "Bantfwana", "kidsModeTooltipOff": "Cindzetela kute ligama ngalinye lichazwe njengobe umtali angachazela umntfwana.", "kidsModeTooltipOn": "Simo sebantfwana sivuliwe, inchazelo ngayinye itawubhalelwa umntfwana. Cindzetela kute usicishe.", "kidsModeBasicGate": "Simo sebantfwana sitfolakala ku-Clear. Khuphula kute usisebentise.", "signupWelcomeTitle": "Wemukelekile ku-Gadit!", "signupWelcomeBody": "I-akhawunti yakho seyilungile. Cala ngekusesha nobe nguliphi ligama.", "pricingPageHeadline": "Emazinga lamatsatfu. Onkhe anelokucuketfwe kwangempela.", "pricingPageSubline": "Cala mahhala. Khuphula uma kujula kukusita.", "billingMonthly": "Ngenyanga", "billingYearly": "Ngemnyaka", "billingSave17": "Longa 17%", "tierBasicTagline": "Condza", "tierBasicPitch": "Cala ngalokubalulekile.", "tierBasicCta": "Cala", "tierBasicFeatures": "Kusesha emagama la-20 ngelilanga¶Tonkhe tinchazelo (hhayi nje lekucala)¶Tibonelo leti-3 kumcondvo ngamunye¶Imvelaphi yeligama¶Kudzingeka kungena", "tierClearTagline": "Bona", "tierClearPitch": "Phililisa emagama ngetitfombe, simo sebantfwana, nemibono.", "tierClearBadge": "Lokutsandvwa kakhulu", "tierClearCta": "Cala kulinga kwamahhala kwemalanga langu-14", "tierClearCtaYearly": "Bhalisa ngemnyaka", "tierClearTrust": "Khansela nobe nini · Akukhokhwa lutfo ngesikhatsi sekulinga", "tierClearFeatures": "Konkhe lokuku-Basic¶Kusesha ngaphandle kwemkhawulo¶Tinchazelo tebantfwana¶Sitfombe saligama ngalinye (30/ngenyanga)¶Bhala umusho, utfole imibono¶Tisho netinkhulumo¶Umlandvo wekusesha (emalanga la-30 lagcine)", "tierDeepTagline": "Ticecesha", "tierDeepPitch": "Yakha umtapo wakho wemagama lochubeka uba namandla ngekuhamba kwesikhatsi.", "tierDeepCta": "Bhalisela Deep", "tierDeepFeatures": "Konkhe lokuku-Clear¶Imibuto yekuticecesha¶Incwadzi yakho yemagama¶Kuticecesha lokuhlakaniphile kwemagama lahlala ekhanda¶Hlukanisa emagama lafanako¶Sitfombe saligama ngalinye (100/ngenyanga)", "basicEquivalent": "", "clearEquivalent": "Kulingana na-$2.50/ngenyanga", "deepEquivalent": "Kulingana na-$4.17/ngenyanga", "trustStripCancel": "Khansela nobe nini nge-Stripe", "trustStripMoneyBack": "Imali ibuyiselwa ngekhatsi kwemalanga langu-14 ekutsengeni kwekucala", "trustStripDataYours": "Imininingwane yakho ingeyakho, yikhiphe nobe nini", "trustStripNoAds": "Kute tikhangiso, kute kulandzelelwa ngulabanye", "faqEyebrow": "Imibuto", "faqHeadline": "Imibuto, iphendvuliwe", "faqQ1": "Ngingalishintja lihlelo?", "faqA1": "Yebo, khuphula nobe wehlise nobe nini. Kubalwa kwemali kwentiwa ngekutenteka, ukhokha umehluko kuphela.", "faqQ2": "Kwentekani uma ngikhansela?", "faqA2": "Uchubeka nekusebentisa kuze kuphele sikhatsi sakho sekukhokha, bese ubuyela ku-Basic. Kute imininingwane lelahlekako.", "faqQ3": "Kulinga kumahhala ngempela?", "faqA3": "Yebo. Sidzinga likhadi kute sivimbele kusetjentiswa kabi, kodvwa awukhokhiswa kuze kube lilanga le-15. Khansela ngaphambi kwaloko = akukhokhwa lutfo.", "faqQ4": "Kungani emazinga lamatsatfu?", "faqA4": "Basebentisi labehlukene badzinga kujula lokwehlukene. Sincamela kuhlangana nawe lapho ukhona kunekutsi sikutsengisele lihlelo linye lelikhulu kakhulu.", "faqQ5": "Tinchazelo tebantfwana tiphephile yini?", "faqA5": "Yebo. Tibhalwa yinjini yetfu ngekunakekela lokufanako nekwalokucuketfwe kwebantfu labadzala, futsi tihlolwa ngemitsetfo yetfu yalokucuketfwe. Kute lokucuketfwe kwebantfwana lokubhalwe ngubasebentisi.", "loginWelcomeBack": "Ngena", "loginCreateAccount": "Vula i-akhawunti yakho", "loginContinueWithGoogle": "Chubeka nge-Google", "loginInAppNotice": "Ngekhatsi kwa-{app}, ngena nge-imeyili lengentansi. Kute usebentise i-Google, vula lelilinki ku-browser yakho.", "loginOrSeparator": "nobe", "loginEmailLabel": "I-imeyili", "loginPasswordLabel": "Liphasiwedi", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Ngena", "loginSubmitSignUp": "Vula i-akhawunti", "loginSwitchToSignUp": "Awunayo i-akhawunti? Bhalisa", "loginForgotPassword": "Ukhohlwe liphasiwedi?", "loginForgotPasswordEnterEmail": "Cala ngekufaka i-imeyili yakho ngetulu, bese ucindzetela lapha.", "loginResetSent": "Uma kukhona i-akhawunti yaleyo imeyili, lilinki lekusetha kabusha seliyeta.", "loginResetError": "Asikhonanga kutfumela i-imeyili yekusetha kabusha. Phindza uzame.", "loginSwitchToSignIn": "Sewunayo i-akhawunti? Ngena", "loginShowPassword": "Khombisa liphasiwedi", "loginHidePassword": "Fihla liphasiwedi", "loginCloseAria": "Vala", "loginSigningIn": "Kuyangenwa…", "loginCreatingAccount": "Kuvulwa i-akhawunti…", "loginErrorWrongCredentials": "I-imeyili nobe liphasiwedi akulungi.", "loginErrorEmailInUse": "Lena imeyili seyisetjentiswa. Zama kungena.", "loginErrorWeakPassword": "Liphasiwedi kufanele libe netinhlamvu letingenani le-8 futsi libe nenhlamvu kanye nenombolo.", "loginAgeTermsLine": "Ngineminyaka le-18 nobe ngetulu futsi ngiyavumelana ne", "loginTermsLinkLabel": "Imigomo", "loginPrivacyLinkLabel": "Inchubomgomo Yemfihlo", "loginErrorAgeRequired": "Sicela ucinisekise kutsi uneminyaka le-18 nobe ngetulu futsi uyavumelana neMigomo kanye neNchubomgomo Yemfihlo.", "loginErrorInvalidEmail": "Sicela ufake i-imeyili lelungile.", "loginErrorGoogleFailed": "Asikhonanga kungena nge-Google. Phindza uzame.", "loginErrorGeneric": "Kukhona lokungakahambi kahle. Phindza uzame.", "composeEyebrow": "Bhala", "composeSubtitle": "Lisebentise emushweni, utfole imibono masinyane ngelulwimi, ngendlela yekukhuluma, nangekufanela.", "composeMeaningPickerLabel": "Khetsa umcondvo loticecesha ngawo", "composePlaceholder": "Bhala umusho wakho lapha…", "composeSubmit": "Hlola umusho", "composeChecking": "Kuyahlolwa…", "composeStatusPerfectLabel": "Kuphelele", "composeStatusAlmostLabel": "Sewucishe", "composeStatusIncorrectLabel": "Akusiko impela", "composeSuggestionEyebrow": "Indlela lephakanyisiwe", "composeTryAnother": "Zama lomunye umusho", "composeBackToWord": "Buyela eligameni", "composeErrorEmpty": "Sicela ucale ngekubhala umusho.", "composeErrorTooShort": "Sicela ubhale nangabe emagama lambalwa.", "quizEyebrow": "Kuticecesha", "quizSubmit": "Tfumela", "quizNext": "Umbuto lolandzelako", "quizFinish": "Qedza", "quizYesCorrect": "Yebo, kulungile", "quizNotQuite": "Akusiko impela", "quizLoading": "Silungiselela imibuto yakho…", "quizPracticeAnotherWord": "Ticecesha ngalelinye ligama", "quizBackToWord": "Buyela eligameni", "quizReviewMistakes": "Buyeketa lengiwaphutsile", "compareEyebrow": "Catsanisa", "compareTitle": "Hlukanisa emagama lafanako", "compareSubtitle": "affect vs effect, אומנות vs אמנות, principle vs principal, emagama ladida ngisho nalabakhuluma lolulwimi kusukela ebuncaneni.", "compareWord1Label": "Ligama 1", "compareWord2Label": "Ligama 2", "compareWord1Placeholder": "affect", "compareWord2Placeholder": "effect", "compareCta": "Catsanisa", "compareLoading": "Kuyacatsaniswa…", "compareEmpty": "Faka emagama lamabili kute uwacatsanise", "compareDifferenceLabel": "Umehluko", "compareExamplesLabel": "Tibonelo", "compareCommonMistakeLabel": "Liphutsa lelivamile", "compareErrNotARealWord": "Asilati linye kulawo magama.", "compareErrDifferentLanguages": "Lamagama lamabili abonakala angawetilwimi letehlukene, zama emagama lamabili elulwimi lunye.", "compareErrSameWord": "Lawa abukeka angaligama linye, zama lamabili lehlukene.", "compareErrGeneric": "Kucatsanisa akutfolakali nyalo.", "notebookEyebrow": "Incwadzi", "notebookTitle": "Umhlaba wakho wemagama", "notebookSubtitle": "Onkhe emagama lowahlolile, agciniwe, ahlelekile, ayakhula.", "notebookWordsExplored": "emagama lahloliwe", "notebookPracticeNow": "Buyeketa emagama ami", "notebookListView": "Luhla", "notebookGalaxyView": "Tinkhanyeti", "notebookEmptyTitle": "Incwadzi yakho ayinalutfo", "notebookEmptyCta": "Sesha ligama kute ucale", "notebookRemoveAria": "Susa", "notebookMasteredLabel": "★ Licondziwe", "notebookLegendRecent": "Lokusandza kugcinwa", "notebookLegendMastered": "Lokucondziwe", "notebookLegendNeedsReview": "Kudzinga kubuyeketwa", "srEyebrow": "Kuticecesha", "srSkip": "Yeca", "srClickToReveal": "Cindzetela nobe kuphi kute kuvele", "srTapToReveal": "Cindzetela kute kuvele", "srPrimaryMeaningLabel": "Umcondvo lomkhulu", "srExamplesLabel": "Tibonelo", "srIForgot": "Ngikhohliwe", "srIKnewIt": "Bengilati", "srSchedulingHint": "Bengilati = kubuyeketa lokulandzelako ngemuva kwemalanga lambalwa. Ngikhohliwe = kubuyela lamuhla.", "srWordsPracticed": "emagama loticeceshe ngawo", "srTomorrow": "Kusasa", "srDoneForToday": "Sekuphelile lamuhla", "srPracticeMore": "Ticecesha kakhulu", "srEmptyTitle": "Kute lokufanele kubuyeketwa lamuhla", "srEmptyBody": "Wente kahle. Buya kusasa.", "srBackToNotebook": "Buyela encwadzini", "srLoading": "Kulayishwa kuticecesha kwakho…", "accountEyebrow": "I-akhawunti", "accountYourSpace": "Indzawo yakho", "accountPlanLabel": "Lihlelo", "accountOnPlanFree": "Mahhala", "accountNoActiveSubscription": "Kute kubhalisa lokusebentako", "accountChooseAPlan": "Khetsa lihlelo kute ucale.", "accountCancelsAtPeriodEnd": "Kuyakhanselwa ekupheleni kwesikhatsi sekukhokha", "accountManageBilling": "Phatsa tinkhokhelo", "accountChangePlan": "Shintja lihlelo", "accountUpgrade": "Khuphula", "accountUpgradeToFamily": "Shintjela ku-Family", "accountUsageThisMonth": "Kusetjentiswa kulenyanga", "accountImageGeneration": "Kudalwa kwetitfombe", "accountSearches": "Kusesha", "accountLocked": "Kuvaliwe", "accountUnlimited": "ngaphandle kwemkhawulo", "accountTodaySuffix": "lamuhla", "accountNearingLimit": "Usondzela emkhawulweni walenyanga.", "accountSectionLabel": "I-akhawunti", "accountEmailLabel": "I-imeyili", "accountChangeEmail": "Shintja i-imeyili", "accountSignOut": "Phuma", "accountDeleteAccount": "Cisha i-akhawunti", "reportEyebrow": "Bika liphutsa", "reportTitle": "Yini lengakalungi?", "reportTellMore": "Sitjele kabanti", "reportTellMorePh": "Uma utsandza. Nawucacisa kakhulu, siyashesha kukulungisa.", "reportSend": "Tfumela umbiko", "reportSending": "Kuyatfunyelwa…", "reportThanks": "Siyabonga, siwutfolile.", "reportError": "Asikhonanga kutfumela. Phindza uzame kancane.", "reportCatIncorrectDefinition": "Inchazelo lengakalungi", "reportCatWrongEtymology": "Imvelaphi lengakalungi", "reportCatBadExample": "Umusho wesibonelo lomubi", "reportCatKidsExplanation": "Inkinga yenchazelo yebantfwana", "reportCatIdiomIssue": "Inkinga yesisho", "reportCatWrongImage": "Sitfombe lesingakalungi", "reportCatQuizWrongAnswer": "Imibuto: kuphawulwe imphendvulo lengakalungi", "reportCatComposeFeedback": "Inkinga yemibono ngemusho", "reportCatCompareResult": "Inkinga yemphumela wekucatsanisa", "reportCatSomethingElse": "Lokunye", "origin": "Imvelaphi", "historyNote": "Umlandvo lomfisha", "throughTime": "Ngekuhamba kwesikhatsi", "forKids": "Kwebantfwana", "commonExpressions": "Tinkhulumo letivamile", "idiomsWithMeaning": "Tisho nalomcondvo", "notJustPrimary": "Hhayi nje lomkhulu", "takeItFurther": "Chubeka kakhulu", "saveToNotebookHint": "Buyela kulo ngemuva, lihlelekile, liyasesheka.", "generateImage": "Dala sitfombe", "generatingImage": "Kuyadalwa…", "generateImageHint": "Sitfombe lesikhanyako lesentiwe yinjini yetfu, saleligama kuphela.", "composeSentence": "Bhala umusho", "composeSentenceHint": "Bhala lowakho, Gadit iyabuketa indlela yekukhuluma nekufanela.", "practiceWord": "Ticecesha ngaleligama", "practiceWordHint": "Imibuto lemifisha lehambisana nendlela lofundza ngayo.", "unlockWithClear": "Vula nge-Clear", "upgradeToClear": "Khuphukela ku-Clear", "softWallAnonTitle": "Chubeka, kusemahhala", "softWallAnonBody": "I-akhawunti yamahhala lesheshako ikuvulela kusesha lokufika ku-20 ngelilanga, kanye netibonelo, tisho nemvelaphi yemagama.", "softWallSignupCta": "Chubeka mahhala", "softWallBasicTitle": "Sewufike emkhawulweni walamuhla", "softWallBasicBody": "Ema-akhawunti amahhala atfola kusesha la-20 ngelilanga. Umkhawulo ucala kabusha kusasa, nobe khuphukela ku-Clear kute usesha ngaphandle kwemkhawulo kanye netitfombe, simo sebantfwana, nemibono ngelulwimi.", "clearUnlocksThis": "Clear iyakuvula loku", "visualizeThisWord": "Bona ngemehlo", "visualBlurb": "Sitfombe sinye lesikhanyako, lesidalwe yi-Gadit, lesikusita ubone kutsi leligama litiva njani.", "visualBlurbLocked": "Dala sitfombe lesikhanyako, lesingenamfanani saleligama, ucondze ngekubona.", "reportLabel": "Bika liphutsa", "wordOriginEyebrow": "Imvelaphi Yeligama", "idiomsEyebrow": "Tisho netinkhulumo", "wordOriginBackgroundLabel": "Sendlalelo", "wordOriginOriginalWord": "Ligama lekucala", "wordOriginBreakdown": "Tincenye teligama", "imageGeneratingLabel": "Kudalwa sitfombe…", "imageGeneratingHint": "Loku kuvame kutsatsa imizuzwana lesuka ku-10 kuya ku-15.", "imageOpenFullAria": "Vula sitfombe ngebukhulu baso bonkhe", "kidsComingSoon": "Inchazelo yebantfwana iseyeta.", "compareComingSoon": "Imidlalo yemagama iseyeta.", "shareDefinitionAria": "Yabelana ngalenchazelo", "meaningsEyebrow": "Tinchazelo", "wordOriginLanguage": "Lulwimi", "wordOriginOriginallyMeant": "Ekucaleni bekusho", "actionCompose": "Bhala umusho", "actionCompare": "Catsanisa emagama", "listenToWord": "Lalela", "offlinePin": "Gcina ngaphandle kwe-inthanethi", "offlinePinTitle": "Gcina leligama kute ufundze ngaphandle kwe-inthanethi", "offlinePinnedTitle": "Kugciniwe, kuyatfolakala ngaphandle kwe-WiFi", "offlineDownloadPack": "Landza liphakethe lekufundza ngaphandle kwe-inthanethi", "offlineDownloadingPack": "Kuyalandzwa…", "offlinePackHeader": "Liphakethe langaphandle kwe-inthanethi", "offlinePackDescription": "Lengeta emagama lasheshwa kakhulu elulwimini lwakho eNcwadzini yakho, futsi liwagcine atfolakala ngaphandle kwe-WiFi kute ufundze ngaphandle kwe-inthanethi.", "visualEmptyLabel": "Leligama litawudwetjelwa sitfombe", "shareLabel": "Yabelana", "backLabel": "Emuva"});
+Object.assign(ss, {"homeHeadlineLine1": "Condza", "homeHeadlineLine2": "kuze kube sekugcineni.", "homeSubline": "Sichazamagama lesihlangana nawe esimeni, tinchazelo, imvelaphi, tisho, nesitfombe lesikhanyako, ngetilwimi letingetulu kwa-30.", "searchPlaceholderHome": "Bhala ligama", "voiceInputTitle": "Khuluma ligama", "explain": "Chaza", "valuePropsEyebrow": "Lokwentiwa yi-Gadit ngendlela leyehlukile", "valuePropsTitle": "Lokungetulu kwenchazelo, yindlela yekuphila naligama.", "valueProp1Eyebrow": "Iyasicondza simo", "valueProp1Title": "Umcondvo lofanele, ngaso sonkhe sikhatsi", "valueProp1Body": "Namatsisela umusho, Gadit ikhetsa umcondvo lofanele, hhayi nje lovame kakhulu.", "valueProp2Eyebrow": "Ngemehlo", "valueProp2Title": "Sitfombe lesikhanyako, saleligama kuphela", "valueProp2Body": "Sidalelwa ligama ngalinye. Sisekelo lesibonakalako sekutsi ligama litiva njani, hhayi sitfombe lesivamile.", "valueProp3Eyebrow": "Imvelaphi", "valueProp3Title": "Umlandvo lomfisha, hhayi lunyenti lwe-Wikipedia", "valueProp3Body": "Kutsi ligama livelaphi, kulandzisiswe ngendzima, lolo hlobo lumngani lofisa kwati angalubhala.", "valueProp4Eyebrow": "Tilwimi letingetulu kwa-30", "valueProp4Title": "SiHebheru nesi-Arabhu, njengelulwimi lwemdzabu", "valueProp4Body": "RTL yangempela, emafonti angempela, tisho tangempela, hhayi likhasi lelihunyushwe nje lanamatsiselwa.", "previewLabel": "Kubuka kucala", "seeFullResult": "Bona umphumela lophelele", "pricingEyebrow": "Emanani", "pricingTeaserTitle": "Emazinga lamatsatfu. Onkhe anelokucuketfwe kwangempela.", "footerProductGroup": "Umkhicito", "footerLegalGroup": "Temtsetfo", "footerNotebook": "Incwadzi", "footerPricing": "Emanani", "footerPrivacy": "Imfihlo", "footerTerms": "Imigomo", "footerContact": "Lusito", "footerTagline": "Sichazamagama lesihlakaniphile setilwimi letingetulu kwa-30. Sakhelwe kufundza kwangempela.", "footerLanguagesNote": "Tilwimi letingetulu kwa-30", "signIn": "Ngena", "startFree": "Cala mahhala", "verbStampDef": "kucondza ligama, ngalokuphelele", "navSearch": "Sesha", "navNotebook": "Incwadzi", "navPricing": "Emanani", "navSchools": "Tikolwa", "navFeatures": "Lokukhona", "navPlay": "Dlala", "navAffiliates": "Balingani", "kidsModeLabel": "Bantfwana", "kidsModeTooltipOff": "Cindzetela kute ligama ngalinye lichazwe njengobe umtali angachazela umntfwana.", "kidsModeTooltipOn": "Simo sebantfwana sivuliwe, inchazelo ngayinye itawubhalelwa umntfwana. Cindzetela kute usicishe.", "signupWelcomeTitle": "Wemukelekile ku-Gadit!", "signupWelcomeBody": "I-akhawunti yakho seyilungile. Cala ngekusesha nobe nguliphi ligama.", "pricingPageHeadline": "Emazinga lamatsatfu. Onkhe anelokucuketfwe kwangempela.", "pricingPageSubline": "Cala mahhala. Khuphula uma kujula kukusita.", "billingMonthly": "Ngenyanga", "billingYearly": "Ngemnyaka", "billingSave17": "Longa 17%", "tierBasicTagline": "Condza", "tierBasicPitch": "Cala ngalokubalulekile.", "tierBasicCta": "Cala", "tierBasicFeatures": "Kusesha emagama la-20 ngelilanga¶Tonkhe tinchazelo (hhayi nje lekucala)¶Tibonelo leti-3 kumcondvo ngamunye¶Imvelaphi yeligama¶Kudzingeka kungena", "tierClearTagline": "Bona", "tierClearPitch": "Phililisa emagama ngetitfombe, simo sebantfwana, nemibono.", "tierClearBadge": "Lokutsandvwa kakhulu", "tierClearCta": "Cala kulinga kwamahhala kwemalanga langu-14", "tierClearCtaYearly": "Bhalisa ngemnyaka", "tierClearTrust": "Khansela nobe nini · Akukhokhwa lutfo ngesikhatsi sekulinga", "tierClearFeatures": "Konkhe lokuku-Basic¶Kusesha ngaphandle kwemkhawulo¶Tinchazelo tebantfwana¶Sitfombe saligama ngalinye (30/ngenyanga)¶Bhala umusho, utfole imibono¶Tisho netinkhulumo¶Umlandvo wekusesha (emalanga la-30 lagcine)", "tierDeepTagline": "Ticecesha", "tierDeepPitch": "Yakha umtapo wakho wemagama lochubeka uba namandla ngekuhamba kwesikhatsi.", "tierDeepCta": "Bhalisela Deep", "tierDeepFeatures": "Konkhe lokuku-Clear¶Imibuto yekuticecesha¶Incwadzi yakho yemagama¶Kuticecesha lokuhlakaniphile kwemagama lahlala ekhanda¶Hlukanisa emagama lafanako¶Sitfombe saligama ngalinye (100/ngenyanga)", "basicEquivalent": "", "clearEquivalent": "Kulingana na-$2.50/ngenyanga", "deepEquivalent": "Kulingana na-$4.17/ngenyanga", "trustStripCancel": "Khansela nobe nini nge-Stripe", "trustStripMoneyBack": "Imali ibuyiselwa ngekhatsi kwemalanga langu-14 ekutsengeni kwekucala", "trustStripDataYours": "Imininingwane yakho ingeyakho, yikhiphe nobe nini", "trustStripNoAds": "Kute tikhangiso, kute kulandzelelwa ngulabanye", "faqEyebrow": "Imibuto", "faqHeadline": "Imibuto, iphendvuliwe", "faqQ1": "Ngingalishintja lihlelo?", "faqA1": "Yebo, khuphula nobe wehlise nobe nini. Kubalwa kwemali kwentiwa ngekutenteka, ukhokha umehluko kuphela.", "faqQ2": "Kwentekani uma ngikhansela?", "faqA2": "Uchubeka nekusebentisa kuze kuphele sikhatsi sakho sekukhokha, bese ubuyela ku-Basic. Kute imininingwane lelahlekako.", "faqQ3": "Kulinga kumahhala ngempela?", "faqA3": "Yebo. Sidzinga likhadi kute sivimbele kusetjentiswa kabi, kodvwa awukhokhiswa kuze kube lilanga le-15. Khansela ngaphambi kwaloko = akukhokhwa lutfo.", "faqQ4": "Kungani emazinga lamatsatfu?", "faqA4": "Basebentisi labehlukene badzinga kujula lokwehlukene. Sincamela kuhlangana nawe lapho ukhona kunekutsi sikutsengisele lihlelo linye lelikhulu kakhulu.", "faqQ5": "Tinchazelo tebantfwana tiphephile yini?", "faqA5": "Yebo. Tibhalwa yinjini yetfu ngekunakekela lokufanako nekwalokucuketfwe kwebantfu labadzala, futsi tihlolwa ngemitsetfo yetfu yalokucuketfwe. Kute lokucuketfwe kwebantfwana lokubhalwe ngubasebentisi.", "loginWelcomeBack": "Ngena", "loginCreateAccount": "Vula i-akhawunti yakho", "loginContinueWithGoogle": "Chubeka nge-Google", "loginInAppNotice": "Ngekhatsi kwa-{app}, ngena nge-imeyili lengentansi. Kute usebentise i-Google, vula lelilinki ku-browser yakho.", "loginOrSeparator": "nobe", "loginEmailLabel": "I-imeyili", "loginPasswordLabel": "Liphasiwedi", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Ngena", "loginSubmitSignUp": "Vula i-akhawunti", "loginSwitchToSignUp": "Awunayo i-akhawunti? Bhalisa", "loginForgotPassword": "Ukhohlwe liphasiwedi?", "loginForgotPasswordEnterEmail": "Cala ngekufaka i-imeyili yakho ngetulu, bese ucindzetela lapha.", "loginResetSent": "Uma kukhona i-akhawunti yaleyo imeyili, lilinki lekusetha kabusha seliyeta.", "loginResetError": "Asikhonanga kutfumela i-imeyili yekusetha kabusha. Phindza uzame.", "loginSwitchToSignIn": "Sewunayo i-akhawunti? Ngena", "loginShowPassword": "Khombisa liphasiwedi", "loginHidePassword": "Fihla liphasiwedi", "loginCloseAria": "Vala", "loginSigningIn": "Kuyangenwa…", "loginCreatingAccount": "Kuvulwa i-akhawunti…", "loginErrorWrongCredentials": "I-imeyili nobe liphasiwedi akulungi.", "loginErrorEmailInUse": "Lena imeyili seyisetjentiswa. Zama kungena.", "loginErrorWeakPassword": "Liphasiwedi kufanele libe netinhlamvu letingenani le-8 futsi libe nenhlamvu kanye nenombolo.", "loginAgeTermsLine": "Ngineminyaka le-18 nobe ngetulu futsi ngiyavumelana ne", "loginTermsLinkLabel": "Imigomo", "loginPrivacyLinkLabel": "Inchubomgomo Yemfihlo", "loginErrorAgeRequired": "Sicela ucinisekise kutsi uneminyaka le-18 nobe ngetulu futsi uyavumelana neMigomo kanye neNchubomgomo Yemfihlo.", "loginErrorInvalidEmail": "Sicela ufake i-imeyili lelungile.", "loginErrorGoogleFailed": "Asikhonanga kungena nge-Google. Phindza uzame.", "loginErrorGeneric": "Kukhona lokungakahambi kahle. Phindza uzame.", "composeEyebrow": "Bhala", "composeSubtitle": "Lisebentise emushweni, utfole imibono masinyane ngelulwimi, ngendlela yekukhuluma, nangekufanela.", "composeMeaningPickerLabel": "Khetsa umcondvo loticecesha ngawo", "composePlaceholder": "Bhala umusho wakho lapha…", "composeSubmit": "Hlola umusho", "composeChecking": "Kuyahlolwa…", "composeStatusPerfectLabel": "Kuphelele", "composeStatusAlmostLabel": "Sewucishe", "composeStatusIncorrectLabel": "Akusiko impela", "composeSuggestionEyebrow": "Indlela lephakanyisiwe", "composeTryAnother": "Zama lomunye umusho", "composeBackToWord": "Buyela eligameni", "composeErrorEmpty": "Sicela ucale ngekubhala umusho.", "composeErrorTooShort": "Sicela ubhale nangabe emagama lambalwa.", "quizEyebrow": "Kuticecesha", "quizSubmit": "Tfumela", "quizNext": "Umbuto lolandzelako", "quizFinish": "Qedza", "quizYesCorrect": "Yebo, kulungile", "quizNotQuite": "Akusiko impela", "quizLoading": "Silungiselela imibuto yakho…", "quizPracticeAnotherWord": "Ticecesha ngalelinye ligama", "quizBackToWord": "Buyela eligameni", "quizReviewMistakes": "Buyeketa lengiwaphutsile", "notebookEyebrow": "Incwadzi", "notebookTitle": "Umhlaba wakho wemagama", "notebookSubtitle": "Onkhe emagama lowahlolile, agciniwe, ahlelekile, ayakhula.", "notebookWordsExplored": "emagama lahloliwe", "notebookPracticeNow": "Buyeketa emagama ami", "notebookListView": "Luhla", "notebookGalaxyView": "Tinkhanyeti", "notebookEmptyTitle": "Incwadzi yakho ayinalutfo", "notebookEmptyCta": "Sesha ligama kute ucale", "notebookRemoveAria": "Susa", "notebookMasteredLabel": "★ Licondziwe", "notebookLegendRecent": "Lokusandza kugcinwa", "notebookLegendMastered": "Lokucondziwe", "notebookLegendNeedsReview": "Kudzinga kubuyeketwa", "srEyebrow": "Kuticecesha", "srSkip": "Yeca", "srClickToReveal": "Cindzetela nobe kuphi kute kuvele", "srPrimaryMeaningLabel": "Umcondvo lomkhulu", "srExamplesLabel": "Tibonelo", "srIForgot": "Ngikhohliwe", "srIKnewIt": "Bengilati", "srSchedulingHint": "Bengilati = kubuyeketa lokulandzelako ngemuva kwemalanga lambalwa. Ngikhohliwe = kubuyela lamuhla.", "srWordsPracticed": "emagama loticeceshe ngawo", "srTomorrow": "Kusasa", "srDoneForToday": "Sekuphelile lamuhla", "srPracticeMore": "Ticecesha kakhulu", "srEmptyTitle": "Kute lokufanele kubuyeketwa lamuhla", "srEmptyBody": "Wente kahle. Buya kusasa.", "srBackToNotebook": "Buyela encwadzini", "srLoading": "Kulayishwa kuticecesha kwakho…", "accountEyebrow": "I-akhawunti", "accountYourSpace": "Indzawo yakho", "accountPlanLabel": "Lihlelo", "accountOnPlanFree": "Mahhala", "accountNoActiveSubscription": "Kute kubhalisa lokusebentako", "accountChooseAPlan": "Khetsa lihlelo kute ucale.", "accountCancelsAtPeriodEnd": "Kuyakhanselwa ekupheleni kwesikhatsi sekukhokha", "accountManageBilling": "Phatsa tinkhokhelo", "accountChangePlan": "Shintja lihlelo", "accountUpgrade": "Khuphula", "accountUpgradeToFamily": "Shintjela ku-Family", "accountUsageThisMonth": "Kusetjentiswa kulenyanga", "accountImageGeneration": "Kudalwa kwetitfombe", "accountSearches": "Kusesha", "accountLocked": "Kuvaliwe", "accountUnlimited": "ngaphandle kwemkhawulo", "accountTodaySuffix": "lamuhla", "accountNearingLimit": "Usondzela emkhawulweni walenyanga.", "accountSectionLabel": "I-akhawunti", "accountEmailLabel": "I-imeyili", "accountSignOut": "Phuma", "accountDeleteAccount": "Cisha i-akhawunti", "reportEyebrow": "Bika liphutsa", "reportTitle": "Yini lengakalungi?", "reportTellMore": "Sitjele kabanti", "reportTellMorePh": "Uma utsandza. Nawucacisa kakhulu, siyashesha kukulungisa.", "reportSend": "Tfumela umbiko", "reportSending": "Kuyatfunyelwa…", "reportThanks": "Siyabonga, siwutfolile.", "reportError": "Asikhonanga kutfumela. Phindza uzame kancane.", "reportCatIncorrectDefinition": "Inchazelo lengakalungi", "reportCatWrongEtymology": "Imvelaphi lengakalungi", "reportCatBadExample": "Umusho wesibonelo lomubi", "reportCatKidsExplanation": "Inkinga yenchazelo yebantfwana", "reportCatIdiomIssue": "Inkinga yesisho", "reportCatWrongImage": "Sitfombe lesingakalungi", "reportCatQuizWrongAnswer": "Imibuto: kuphawulwe imphendvulo lengakalungi", "reportCatComposeFeedback": "Inkinga yemibono ngemusho", "reportCatCompareResult": "Inkinga yemphumela wekucatsanisa", "reportCatSomethingElse": "Lokunye", "generateImage": "Dala sitfombe", "softWallAnonTitle": "Chubeka, kusemahhala", "softWallSignupCta": "Chubeka mahhala", "softWallBasicTitle": "Sewufike emkhawulweni walamuhla", "reportLabel": "Bika liphutsa", "wordOriginEyebrow": "Imvelaphi Yeligama", "idiomsEyebrow": "Tisho netinkhulumo", "wordOriginBackgroundLabel": "Sendlalelo", "wordOriginOriginalWord": "Ligama lekucala", "wordOriginBreakdown": "Tincenye teligama", "imageGeneratingLabel": "Kudalwa sitfombe…", "imageGeneratingHint": "Loku kuvame kutsatsa imizuzwana lesuka ku-10 kuya ku-15.", "imageOpenFullAria": "Vula sitfombe ngebukhulu baso bonkhe", "kidsComingSoon": "Inchazelo yebantfwana iseyeta.", "shareDefinitionAria": "Yabelana ngalenchazelo", "meaningsEyebrow": "Tinchazelo", "wordOriginLanguage": "Lulwimi", "wordOriginOriginallyMeant": "Ekucaleni bekusho", "actionCompose": "Bhala umusho", "actionCompare": "Catsanisa emagama", "listenToWord": "Lalela", "offlineDownloadPack": "Landza liphakethe lekufundza ngaphandle kwe-inthanethi", "offlineDownloadingPack": "Kuyalandzwa…", "offlinePackHeader": "Liphakethe langaphandle kwe-inthanethi", "offlinePackDescription": "Lengeta emagama lasheshwa kakhulu elulwimini lwakho eNcwadzini yakho, futsi liwagcine atfolakala ngaphandle kwe-WiFi kute ufundze ngaphandle kwe-inthanethi.", "shareLabel": "Yabelana", "backLabel": "Emuva"});
 
 // --- Native Tshivenḓa (v2 core, function keys fall back to English) ---
-Object.assign(ve, {"homeHeadlineLine1": "Pfesesani", "homeHeadlineLine2": "u swika magumoni.", "homeSubline": "Bugu ya maipfi ine ya ni wana kha nyimele, ndeme, vhubvo, mirero, na tshifanyiso tshi vhonalaho zwavhuḓi, nga nyambo dza 30+.", "searchPlaceholderHome": "Ṅwalani ipfi", "voiceInputTitle": "Ambani ipfi", "addContext": "Engedzani nyimele", "explain": "Ṱalutshedzani", "contextHint": "Ni khou vhala zwiṅwe? Dzhenisani mutaladzi uri ndeme yone i wanale.", "tryLabel": "Lingedzani", "valuePropsEyebrow": "Zwine Gadit ya ita nga nḓila yo fhambanaho", "valuePropsTitle": "Zwi fhira ṱhalutshedzo, ndi nḓila ya u tshila na ipfi.", "valueProp1Eyebrow": "I ḓivha nyimele", "valueProp1Title": "Ndeme yone, tshifhinga tshoṱhe", "valueProp1Body": "Dzhenisani mutaladzi, Gadit i khetha ndeme ine ya tshimbilelana nawo, hu si ine ya ḓivhea nga maanḓa fhedzi.", "valueProp2Eyebrow": "Zwi vhonalaho", "valueProp2Title": "Tshifanyiso tshi vhonalaho zwavhuḓi, tsha ipfi iḽi fhedzi", "valueProp2Body": "Tshi itelwa ipfi ḽiṅwe na ḽiṅwe. Tshi ni thusa u humbula nḓila ine ipfi ḽa pfala ngayo, a si tshifanyiso tsha tshoṱhe.", "valueProp3Eyebrow": "Vhubvo ha ipfi", "valueProp3Title": "Ṱhaluso ya mvelaphanḓa, a si mafhungo manzhi a sa pfali", "valueProp3Body": "Hune ipfi ḽa bva hone, ho ṱaluswa nga phara, sa zwine khonani i funaho u ḓivha ya nga zwi ṅwala.", "valueProp4Eyebrow": "Nyambo dza 30+", "valueProp4Title": "Luheberu na Luarabu, nga vhuḓalo", "valueProp4Body": "Ṅwalo wa u bva tshanḓa tshi ḽa u ya tshanḓa tshi monyi wa vhukuma, maṅwalelo a vhukuma, mirero ya vhukuma, a si tshishumiswa tsho ṱalutshedzelwaho fhedzi.", "previewLabel": "Tsumbo", "seeFullResult": "Vhonani mvelelo yoṱhe", "pricingEyebrow": "Mitengo", "pricingTeaserTitle": "Pulane tharu. Dzoṱhe dzi na zwithu zwa vhukuma.", "trustMicrocopy": "Khanselani tshifhinga tshiṅwe na tshiṅwe · Tshilingo tsha maḓuvha a 14 kha Clear ya ṅwedzi · A hu na mbadelo u swika tshilingo tshi tshi fhela", "footerProductGroup": "Tshibveledzwa", "footerLegalGroup": "Zwa mulayo", "footerCompare": "Vhambedzani", "footerNotebook": "Bugu", "footerPricing": "Mitengo", "footerPrivacy": "Tshiphiri", "footerTerms": "Milayo", "footerContact": "Thuso", "footerTagline": "Bugu ya maipfi ya vhuṱali ya nyambo dza 30+. Yo itelwa u vhala ha vhukuma.", "footerLanguagesNote": "Nyambo dza 30+", "signIn": "Dzhenani", "startFree": "Thomani mahala", "verbStampDef": "u pfesesa ipfi, nga vhuḓalo", "navSearch": "Ṱoḓani", "navCompare": "Vhambedzani", "navNotebook": "Bugu", "navPricing": "Mitengo", "navSchools": "Zwikolo", "navFeatures": "Zwine ya ita", "navPlay": "Tambani", "navAffiliates": "Vhashumisani", "kidsModeLabel": "Vhana", "kidsModeTooltipOff": "Kwamani uri ipfi ḽiṅwe na ḽiṅwe ḽi ṱalutshedzwe sa zwine mubebi a nga ṱalutshedza ṅwana.", "kidsModeTooltipOn": "Tshiimo tsha vhana tshi khou shuma, ṱhalutshedzo iṅwe na iṅwe i ḓo ṅwalelwa ṅwana. Kwamani uri ni tshi dzime.", "kidsModeBasicGate": "Tshiimo tsha vhana ndi tshipiḓa tsha Clear. Khwinifhadzani uri ni tshi shumise.", "signupWelcomeTitle": "Ri a ni ṱanganedza kha Gadit!", "signupWelcomeBody": "Akhaunthu yaṋu yo lugela. Thomani nga u ṱoḓa ipfi ḽiṅwe na ḽiṅwe.", "pricingPageHeadline": "Pulane tharu. Dzoṱhe dzi na zwithu zwa vhukuma.", "pricingPageSubline": "Thomani mahala. Khwinifhadzani musi u dzhena nga ngomu zwi tshi ni thusa.", "billingMonthly": "Nga ṅwedzi", "billingYearly": "Nga ṅwaha", "billingSave17": "Vhulungani 17%", "tierBasicTagline": "Pfesesani", "tierBasicPitch": "Thomani nga zwa ndeme.", "tierBasicCta": "Thomani", "tierBasicFeatures": "U ṱoḓa maipfi a 20 nga ḓuvha¶Ndeme dzoṱhe (hu si ya ndeme khulwane fhedzi)¶Tsumbo tharu kha ndeme iṅwe na iṅwe¶Vhubvo na mvelaphanḓa ya ipfi¶Ni fanela u dzhena", "tierClearTagline": "Vhonani", "tierClearPitch": "Iteni uri maipfi a tshile nga zwifanyiso, tshiimo tsha vhana, na vhuṱanzi.", "tierClearBadge": "Ine vhanzhi vha i funa", "tierClearCta": "Thomani tshilingo tsha mahala tsha maḓuvha a 14", "tierClearCtaYearly": "Ḓiṅwaliseni nga ṅwaha", "tierClearTrust": "Khanselani tshifhinga tshiṅwe na tshiṅwe · A hu na mbadelo nga tshifhinga tsha tshilingo", "tierClearFeatures": "Zwoṱhe zwi re kha Basic¶U ṱoḓa hu si na mukano¶Ṱhalutshedzo dza vhana¶Tshifanyiso kha ipfi ḽiṅwe na ḽiṅwe (30/ṅwedzi)¶Ṅwalani mutaladzi ni wane vhuṱanzi¶Mirero na maambele¶Zwe na ṱoḓa (maḓuvha a 30 o fhiraho)", "tierDeepTagline": "Ḓowelani", "tierDeepPitch": "Fhaṱani tshiṱalo tshaṋu tsha maipfi tshine tsha khwaṱha nga tshifhinga.", "tierDeepCta": "Ḓiṅwaliseni kha Deep", "tierDeepFeatures": "Zwoṱhe zwi re kha Clear¶Mbudziso dza nḓowelo¶Bugu yaṋu ya maipfi¶Nḓowelo ya vhuṱali ya maipfi ane a dzula¶Fhambanyani maipfi a fanaho¶Tshifanyiso kha ipfi ḽiṅwe na ḽiṅwe (100/ṅwedzi)", "basicEquivalent": "", "clearEquivalent": "Zwi lingana na $2.50/ṅwedzi", "deepEquivalent": "Zwi lingana na $4.17/ṅwedzi", "trustStripCancel": "Khanselani tshifhinga tshiṅwe na tshiṅwe nga Stripe", "trustStripMoneyBack": "Tshelede i a vhuedzedzwa nga maḓuvha a 14 kha u renga ha u thoma", "trustStripDataYours": "Mafhungo aṋu ndi aṋu, a bviseni tshifhinga tshiṅwe na tshiṅwe", "trustStripNoAds": "A hu na zwiambadzo, a hu na u tevhelwa nga vhaṅwe", "faqEyebrow": "Mbudziso", "faqHeadline": "Mbudziso, dzo fhindulwa", "faqQ1": "Naa ndi nga shandula pulane?", "faqA1": "Ee, khwinifhadzani kana ni fhungudze tshifhinga tshiṅwe na tshiṅwe. Mbadelo i lugiswa nga yoṱhe, ni badela phambano fhedzi.", "faqQ2": "Hu itea mini arali nda khansela?", "faqA2": "Ni ḓo bvela phanḓa na u shumisa u swika magumoni a tshifhinga tsha mbadelo, nga murahu ni humele kha Basic. A hu na mafhungo ane a xela.", "faqQ3": "Naa tshilingo ndi tsha mahala vhukuma?", "faqA3": "Ee. Ri ṱoḓa garaṱa uri ri thivhele u shumiswa zwi si zwone, fhedzi a ni badelisi u swika nga ḓuvha ḽa vhu 15. Khanselani phanḓa ha zwenezwo = a hu na mbadelo.", "faqQ4": "Ndi ngani pulane dzi tharu?", "faqA4": "Vhashumisi vho fhambanaho vha ṱoḓa u dzhena nga ngomu ho fhambanaho. Ri funa u ni wana hune na vha hone, u fhira u ni rengisela pulane ithihi khulwane.", "faqQ5": "Naa ṱhalutshedzo dza vhana dzo tsireledzea?", "faqA5": "Ee. Dzi itwa nga tshishumiswa tshashu tsha vhuṱali nga ṱhogomelo i fanaho na ya zwithu zwa vhahulwane, dzi tshi sedzwa nga milayo yashu ya zwithu. A hu na zwithu zwa vhana zwo ṅwalwaho nga vhashumisi.", "loginWelcomeBack": "Dzhenani", "loginCreateAccount": "Itani akhaunthu yaṋu", "loginContinueWithGoogle": "Bvelani phanḓa nga Google", "loginInAppNotice": "Ngomu ha {app}, dzhenani nga imeiḽi afho fhasi. Kha nḓila ya Google, vulani vhukwamani uhu kha burausa yaṋu.", "loginOrSeparator": "kana", "loginEmailLabel": "Imeiḽi", "loginPasswordLabel": "Phasiwedi", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Dzhenani", "loginSubmitSignUp": "Itani akhaunthu", "loginSwitchToSignUp": "A ni na akhaunthu? Ḓiṅwaliseni", "loginForgotPassword": "No hangwa phasiwedi?", "loginForgotPasswordEnterEmail": "Ṅwalani imeiḽi yaṋu afho nṱha u thoma, nga murahu ni kwame fhano.", "loginResetSent": "Arali hu na akhaunthu ya imeiḽi iyo, vhukwamani ha u vusulusa vhu khou ḓa.", "loginResetError": "Imeiḽi ya u vusulusa a yo ngo rumelwa. Lingedzani hafhu.", "loginSwitchToSignIn": "No no vha na akhaunthu? Dzhenani", "loginShowPassword": "Sumbedzani phasiwedi", "loginHidePassword": "Dzumbani phasiwedi", "loginCloseAria": "Valani", "loginSigningIn": "Ri khou ni dzhenisa…", "loginCreatingAccount": "Ri khou ita akhaunthu…", "loginErrorWrongCredentials": "Imeiḽi kana phasiwedi yo khakhea.", "loginErrorEmailInUse": "Imeiḽi iyi i khou shumiswa. Lingedzani u dzhena.", "loginErrorWeakPassword": "Phasiwedi i fanela u vha na zwiṅwalwa zwa 8 nga u fhungudza nahone i vhe na ḽeḓere na nomboro.", "loginAgeTermsLine": "Ndi na miṅwaha ya 18 kana u fhira nahone ndi a tenda", "loginTermsLinkLabel": "Milayo", "loginPrivacyLinkLabel": "Mbekanyamaitele ya Tshiphiri", "loginErrorAgeRequired": "Ri humbela ni khwaṱhise uri ni na miṅwaha ya 18 kana u fhira nahone ni a tenda Milayo na Mbekanyamaitele ya Tshiphiri.", "loginErrorInvalidEmail": "Ri humbela ni ṅwale imeiḽi yo teaho.", "loginErrorGoogleFailed": "A ro ngo kona u ni dzhenisa nga Google. Lingedzani hafhu.", "loginErrorGeneric": "Ho khakhea zwiṅwe. Lingedzani hafhu.", "composeEyebrow": "Vhumbani", "composeSubtitle": "Ḽi shumiseni kha mutaladzi ni wane vhuṱanzi nga u ṱavhanya nga ha gireme, nḓila ya u amba, na u tshimbilelana.", "composeMeaningPickerLabel": "Khethani ndeme ine na khou i ḓowela", "composePlaceholder": "Ṅwalani mutaladzi waṋu fhano…", "composeSubmit": "Ṱolani mutaladzi", "composeChecking": "Ri khou ṱola…", "composeStatusPerfectLabel": "Zwo luga tshoṱhe", "composeStatusAlmostLabel": "Ni tsini", "composeStatusIncorrectLabel": "A si zwone tshoṱhe", "composeSuggestionEyebrow": "Mutaladzi wo themendelwaho", "composeTryAnother": "Lingedzani mutaladzi muṅwe", "composeBackToWord": "Humelani kha ipfi", "composeErrorEmpty": "Ri humbela ni ṅwale mutaladzi u thoma.", "composeErrorTooShort": "Ri humbela ni ṅwale maipfi o vhalaho nga u fhungudza.", "quizEyebrow": "Nḓowelo", "quizSubmit": "Rumelani", "quizNext": "Mbudziso i tevhelaho", "quizFinish": "Fhedzani", "quizYesCorrect": "Ee, ndi zwone", "quizNotQuite": "A si zwone tshoṱhe", "quizLoading": "Ri khou lugisa mbudziso dzaṋu…", "quizPracticeAnotherWord": "Ḓowelani ipfi ḽiṅwe", "quizBackToWord": "Humelani kha ipfi", "quizReviewMistakes": "Sedzani hafhu zwe nda khakha", "compareEyebrow": "Vhambedzani", "compareTitle": "Fhambanyani maipfi a fanaho", "compareSubtitle": "affect na effect, אומנות na אמנות, principle na principal, maipfi ane a khakhisa na vhaambi vha luambo.", "compareWord1Label": "Ipfi 1", "compareWord2Label": "Ipfi 2", "compareWord1Placeholder": "affect", "compareWord2Placeholder": "effect", "compareCta": "Vhambedzani", "compareLoading": "Ri khou vhambedza…", "compareEmpty": "Ṅwalani maipfi mavhili uri a vhambedzwe", "compareDifferenceLabel": "Phambano", "compareExamplesLabel": "Tsumbo", "compareCommonMistakeLabel": "Vhukhakhi vhu ḓivheaho", "compareErrNotARealWord": "A ri ḽi ḓivhi ḽiṅwe ḽa maipfi ayo.", "compareErrDifferentLanguages": "Maipfi aya mavhili a vhonala a nga a nyambo dzo fhambanaho, lingedzani maipfi a luambo luthihi.", "compareErrSameWord": "Aya a vhonala a nga ndi ipfi ḽithihi, lingedzani maipfi mavhili o fhambanaho.", "compareErrGeneric": "U vhambedza a zwi khou wanala zwino.", "notebookEyebrow": "Bugu", "notebookTitle": "Shango ḽaṋu ḽa maipfi", "notebookSubtitle": "Ipfi ḽiṅwe na ḽiṅwe ḽe na ḽi ṱoḓisisa, ḽo vhulungwa, ḽo dzudzanywa, ḽi tshi khou aluwa.", "notebookWordsExplored": "maipfi o ṱoḓisiswaho", "notebookPracticeNow": "Sedzani hafhu maipfi anga", "notebookListView": "Mutevhe", "notebookGalaxyView": "Galaxy", "notebookEmptyTitle": "Bugu yaṋu a i na tshithu", "notebookEmptyCta": "Ṱoḓani ipfi uri ni thome", "notebookRemoveAria": "Bvisani", "notebookMasteredLabel": "★ Ḽo ḓivhiwa", "notebookLegendRecent": "Zwo vhulungwa zwenezwino", "notebookLegendMastered": "Ḽo ḓivhiwa", "notebookLegendNeedsReview": "Ḽi ṱoḓa u sedzwa hafhu", "srEyebrow": "Nḓowelo", "srSkip": "Fhirani", "srClickToReveal": "Kiḽikani hunwe na hunwe uri zwi vhonale", "srTapToReveal": "Kwamani uri zwi vhonale", "srPrimaryMeaningLabel": "Ndeme khulwane", "srExamplesLabel": "Tsumbo", "srIForgot": "Ndo hangwa", "srIKnewIt": "Ndo vha ndi tshi ḽi ḓivha", "srSchedulingHint": "Ndo vha ndi tshi ḽi ḓivha = u sedza hafhu nga murahu ha maḓuvha mashoni. Ndo hangwa = hafhu ṋamusi.", "srWordsPracticed": "maipfi o ḓowelwaho", "srTomorrow": "Matshelo", "srDoneForToday": "Zwo fhela ṋamusi", "srPracticeMore": "Ḓowelani zwinzhi", "srEmptyTitle": "A hu na zwa u sedza hafhu ṋamusi", "srEmptyBody": "No shuma zwavhuḓi. Vhuyani matshelo.", "srBackToNotebook": "Humelani kha bugu", "srLoading": "Ri khou lugisa nḓowelo yaṋu…", "accountEyebrow": "Akhaunthu", "accountYourSpace": "Fhethu haṋu", "accountPlanLabel": "Pulane", "accountOnPlanFree": "Mahala", "accountNoActiveSubscription": "A hu na ṅwaliso u khou shumaho", "accountChooseAPlan": "Khethani pulane uri ni thome.", "accountCancelsAtPeriodEnd": "I ḓo khanselwa magumoni a tshifhinga tsha mbadelo", "accountManageBilling": "Langani mbadelo", "accountChangePlan": "Shandukani pulane", "accountUpgrade": "Khwinifhadzani", "accountUpgradeToFamily": "Shandukelani kha Family", "accountUsageThisMonth": "Kushumiselwe ṅwedzi uno", "accountImageGeneration": "U ita zwifanyiso", "accountSearches": "U ṱoḓa", "accountLocked": "Yo kiyiwa", "accountUnlimited": "hu si na mukano", "accountTodaySuffix": "ṋamusi", "accountNearingLimit": "Ni khou swikela mukano wa ṅwedzi uno.", "accountSectionLabel": "Akhaunthu", "accountEmailLabel": "Imeiḽi", "accountChangeEmail": "Shandukani imeiḽi", "accountSignOut": "Bvani", "accountDeleteAccount": "Phumulani akhaunthu", "reportEyebrow": "Vhigani vhukhakhi", "reportTitle": "Ho khakhea mini?", "reportTellMore": "Ri vhudzeni zwinzhi", "reportTellMorePh": "A zwi kombetshedzwi. Arali na ṱalutshedza zwavhuḓi, ri ḓo zwi lugisa nga u ṱavhanya.", "reportSend": "Rumelani muvhigo", "reportSending": "Ri khou rumela…", "reportThanks": "Ri a livhuwa, ro u wana.", "reportError": "A wo ngo rumelwa. Lingedzani hafhu nga murahu ha tshifhinganyana.", "reportCatIncorrectDefinition": "Ṱhalutshedzo yo khakheaho", "reportCatWrongEtymology": "Vhubvo ha ipfi ho khakheaho", "reportCatBadExample": "Mutaladzi wa tsumbo u songo lugaho", "reportCatKidsExplanation": "Thaidzo ya ṱhalutshedzo ya vhana", "reportCatIdiomIssue": "Thaidzo ya murero", "reportCatWrongImage": "Tshifanyiso tsho khakheaho", "reportCatQuizWrongAnswer": "Mbudziso: phindulo yo khakheaho yo swaywa", "reportCatComposeFeedback": "Thaidzo ya vhuṱanzi ha mutaladzi", "reportCatCompareResult": "Thaidzo ya mvelelo ya mbambedzo", "reportCatSomethingElse": "Zwiṅwe", "origin": "Vhubvo", "historyNote": "Ṱhaluso ya mvelaphanḓa", "throughTime": "Nga tshifhinga", "forKids": "Kha vhana", "commonExpressions": "Maambele a ḓivheaho", "idiomsWithMeaning": "Mirero ya ndeme iyi", "notJustPrimary": "A si ndeme khulwane fhedzi", "takeItFurther": "Iyani phanḓa", "saveToNotebookHint": "Ḽi humeleni nga murahu, ḽo dzudzanywa, ḽi tshi wanala.", "generateImage": "Itani tshifanyiso", "generatingImage": "Ri khou ita…", "generateImageHint": "Tshifanyiso tshi vhonalaho zwavhuḓi tsho itwaho nga tshishumiswa tshashu, tsha ipfi iḽi fhedzi.", "composeSentence": "Vhumbani mutaladzi", "composeSentenceHint": "Ṅwalani waṋu, Gadit i ṱola nḓila ya u amba na u tshimbilelana.", "practiceWord": "Ḓowelani ipfi iḽi", "practiceWordHint": "Mbudziso pfufhi dzo lugiselwaho nḓila ine na guda ngayo.", "unlockWithClear": "Vulani nga Clear", "upgradeToClear": "Khwinifhadzani u ya kha Clear", "softWallAnonTitle": "Bvelani phanḓa, zwi kha ḓi vha mahala", "softWallAnonBody": "Akhaunthu ya mahala ine ya itwa nga u ṱavhanya i ni ṋea u ṱoḓa u swika kha 20 nga ḓuvha, na tsumbo, mirero na vhubvo ha maipfi.", "softWallSignupCta": "Bvelani phanḓa mahala", "softWallBasicTitle": "No swikela mukano wa ṋamusi", "softWallBasicBody": "Akhaunthu dza mahala dzi wana u ṱoḓa ha 20 nga ḓuvha. Mukano u thoma hafhu matshelo, kana khwinifhadzani u ya kha Clear uri ni ṱoḓe hu si na mukano, na zwifanyiso, tshiimo tsha vhana, na vhuṱanzi ha gireme.", "clearUnlocksThis": "Clear i vula hezwi", "visualizeThisWord": "Vhonani", "visualBlurb": "Tshifanyiso tshithihi tshi vhonalaho zwavhuḓi, tsho itwaho nga Gadit, tshi ni thusa u humbula nḓila ine ipfi iḽi ḽa pfala ngayo.", "visualBlurbLocked": "Itani tshifanyiso tshi vhonalaho zwavhuḓi tshi sa fani na tshiṅwe tsha ipfi iḽi, ni pfesese nga u vhona.", "reportLabel": "Vhigani vhukhakhi", "wordOriginEyebrow": "Vhubvo ha Ipfi", "idiomsEyebrow": "Mirero na maambele", "wordOriginBackgroundLabel": "Mvelaphanḓa", "wordOriginOriginalWord": "Ipfi ḽa u thoma", "wordOriginBreakdown": "Zwipiḓa zwa ipfi", "imageGeneratingLabel": "Ri khou ita tshifanyiso…", "imageGeneratingHint": "Kanzhi zwi dzhia u bva kha tshekoni dza 10 u swika kha 15.", "imageOpenFullAria": "Vulani tshifanyiso nga vhuhulu hatsho hoṱhe", "kidsComingSoon": "Ṱhalutshedzo ya vhana i khou ḓa.", "compareComingSoon": "Mitambo ya maipfi i khou ḓa.", "shareDefinitionAria": "Kovhekanyani ṱhalutshedzo iyi", "meaningsEyebrow": "Ṱhalutshedzo", "wordOriginLanguage": "Luambo", "wordOriginOriginallyMeant": "Ḽo vha ḽi tshi amba", "actionCompose": "Vhumbani mutaladzi", "actionCompare": "Vhambedzani maipfi", "listenToWord": "Thetshelesani", "offlinePin": "Vhulungani hu si na inthanethe", "offlinePinTitle": "Vhulungani ipfi iḽi uri ni ḽi gude hu si na inthanethe", "offlinePinnedTitle": "Zwo vhulungwa, zwi a wanala hu si na WiFi", "offlineDownloadPack": "Ḓaunuḽodani phakhethe ya hu si na inthanethe", "offlineDownloadingPack": "Ri khou ḓaunuḽoda…", "offlinePackHeader": "Phakhethe ya hu si na inthanethe", "offlinePackDescription": "I engedza maipfi ane a ṱoḓwa nga maanḓa nga luambo lwaṋu kha Bugu yaṋu, nahone i a vhulunga uri a wanale hu si na WiFi u itela u guda hu si na inthanethe.", "visualEmptyLabel": "Hu ḓo olwa tshifanyiso tsha ipfi iḽi", "shareLabel": "Kovhekanyani", "backLabel": "Murahu"});
+Object.assign(ve, {"homeHeadlineLine1": "Pfesesani", "homeHeadlineLine2": "u swika magumoni.", "homeSubline": "Bugu ya maipfi ine ya ni wana kha nyimele, ndeme, vhubvo, mirero, na tshifanyiso tshi vhonalaho zwavhuḓi, nga nyambo dza 30+.", "searchPlaceholderHome": "Ṅwalani ipfi", "voiceInputTitle": "Ambani ipfi", "explain": "Ṱalutshedzani", "valuePropsEyebrow": "Zwine Gadit ya ita nga nḓila yo fhambanaho", "valuePropsTitle": "Zwi fhira ṱhalutshedzo, ndi nḓila ya u tshila na ipfi.", "valueProp1Eyebrow": "I ḓivha nyimele", "valueProp1Title": "Ndeme yone, tshifhinga tshoṱhe", "valueProp1Body": "Dzhenisani mutaladzi, Gadit i khetha ndeme ine ya tshimbilelana nawo, hu si ine ya ḓivhea nga maanḓa fhedzi.", "valueProp2Eyebrow": "Zwi vhonalaho", "valueProp2Title": "Tshifanyiso tshi vhonalaho zwavhuḓi, tsha ipfi iḽi fhedzi", "valueProp2Body": "Tshi itelwa ipfi ḽiṅwe na ḽiṅwe. Tshi ni thusa u humbula nḓila ine ipfi ḽa pfala ngayo, a si tshifanyiso tsha tshoṱhe.", "valueProp3Eyebrow": "Vhubvo ha ipfi", "valueProp3Title": "Ṱhaluso ya mvelaphanḓa, a si mafhungo manzhi a sa pfali", "valueProp3Body": "Hune ipfi ḽa bva hone, ho ṱaluswa nga phara, sa zwine khonani i funaho u ḓivha ya nga zwi ṅwala.", "valueProp4Eyebrow": "Nyambo dza 30+", "valueProp4Title": "Luheberu na Luarabu, nga vhuḓalo", "valueProp4Body": "Ṅwalo wa u bva tshanḓa tshi ḽa u ya tshanḓa tshi monyi wa vhukuma, maṅwalelo a vhukuma, mirero ya vhukuma, a si tshishumiswa tsho ṱalutshedzelwaho fhedzi.", "previewLabel": "Tsumbo", "seeFullResult": "Vhonani mvelelo yoṱhe", "pricingEyebrow": "Mitengo", "pricingTeaserTitle": "Pulane tharu. Dzoṱhe dzi na zwithu zwa vhukuma.", "footerProductGroup": "Tshibveledzwa", "footerLegalGroup": "Zwa mulayo", "footerNotebook": "Bugu", "footerPricing": "Mitengo", "footerPrivacy": "Tshiphiri", "footerTerms": "Milayo", "footerContact": "Thuso", "footerTagline": "Bugu ya maipfi ya vhuṱali ya nyambo dza 30+. Yo itelwa u vhala ha vhukuma.", "footerLanguagesNote": "Nyambo dza 30+", "signIn": "Dzhenani", "startFree": "Thomani mahala", "verbStampDef": "u pfesesa ipfi, nga vhuḓalo", "navSearch": "Ṱoḓani", "navNotebook": "Bugu", "navPricing": "Mitengo", "navSchools": "Zwikolo", "navFeatures": "Zwine ya ita", "navPlay": "Tambani", "navAffiliates": "Vhashumisani", "kidsModeLabel": "Vhana", "kidsModeTooltipOff": "Kwamani uri ipfi ḽiṅwe na ḽiṅwe ḽi ṱalutshedzwe sa zwine mubebi a nga ṱalutshedza ṅwana.", "kidsModeTooltipOn": "Tshiimo tsha vhana tshi khou shuma, ṱhalutshedzo iṅwe na iṅwe i ḓo ṅwalelwa ṅwana. Kwamani uri ni tshi dzime.", "signupWelcomeTitle": "Ri a ni ṱanganedza kha Gadit!", "signupWelcomeBody": "Akhaunthu yaṋu yo lugela. Thomani nga u ṱoḓa ipfi ḽiṅwe na ḽiṅwe.", "pricingPageHeadline": "Pulane tharu. Dzoṱhe dzi na zwithu zwa vhukuma.", "pricingPageSubline": "Thomani mahala. Khwinifhadzani musi u dzhena nga ngomu zwi tshi ni thusa.", "billingMonthly": "Nga ṅwedzi", "billingYearly": "Nga ṅwaha", "billingSave17": "Vhulungani 17%", "tierBasicTagline": "Pfesesani", "tierBasicPitch": "Thomani nga zwa ndeme.", "tierBasicCta": "Thomani", "tierBasicFeatures": "U ṱoḓa maipfi a 20 nga ḓuvha¶Ndeme dzoṱhe (hu si ya ndeme khulwane fhedzi)¶Tsumbo tharu kha ndeme iṅwe na iṅwe¶Vhubvo na mvelaphanḓa ya ipfi¶Ni fanela u dzhena", "tierClearTagline": "Vhonani", "tierClearPitch": "Iteni uri maipfi a tshile nga zwifanyiso, tshiimo tsha vhana, na vhuṱanzi.", "tierClearBadge": "Ine vhanzhi vha i funa", "tierClearCta": "Thomani tshilingo tsha mahala tsha maḓuvha a 14", "tierClearCtaYearly": "Ḓiṅwaliseni nga ṅwaha", "tierClearTrust": "Khanselani tshifhinga tshiṅwe na tshiṅwe · A hu na mbadelo nga tshifhinga tsha tshilingo", "tierClearFeatures": "Zwoṱhe zwi re kha Basic¶U ṱoḓa hu si na mukano¶Ṱhalutshedzo dza vhana¶Tshifanyiso kha ipfi ḽiṅwe na ḽiṅwe (30/ṅwedzi)¶Ṅwalani mutaladzi ni wane vhuṱanzi¶Mirero na maambele¶Zwe na ṱoḓa (maḓuvha a 30 o fhiraho)", "tierDeepTagline": "Ḓowelani", "tierDeepPitch": "Fhaṱani tshiṱalo tshaṋu tsha maipfi tshine tsha khwaṱha nga tshifhinga.", "tierDeepCta": "Ḓiṅwaliseni kha Deep", "tierDeepFeatures": "Zwoṱhe zwi re kha Clear¶Mbudziso dza nḓowelo¶Bugu yaṋu ya maipfi¶Nḓowelo ya vhuṱali ya maipfi ane a dzula¶Fhambanyani maipfi a fanaho¶Tshifanyiso kha ipfi ḽiṅwe na ḽiṅwe (100/ṅwedzi)", "basicEquivalent": "", "clearEquivalent": "Zwi lingana na $2.50/ṅwedzi", "deepEquivalent": "Zwi lingana na $4.17/ṅwedzi", "trustStripCancel": "Khanselani tshifhinga tshiṅwe na tshiṅwe nga Stripe", "trustStripMoneyBack": "Tshelede i a vhuedzedzwa nga maḓuvha a 14 kha u renga ha u thoma", "trustStripDataYours": "Mafhungo aṋu ndi aṋu, a bviseni tshifhinga tshiṅwe na tshiṅwe", "trustStripNoAds": "A hu na zwiambadzo, a hu na u tevhelwa nga vhaṅwe", "faqEyebrow": "Mbudziso", "faqHeadline": "Mbudziso, dzo fhindulwa", "faqQ1": "Naa ndi nga shandula pulane?", "faqA1": "Ee, khwinifhadzani kana ni fhungudze tshifhinga tshiṅwe na tshiṅwe. Mbadelo i lugiswa nga yoṱhe, ni badela phambano fhedzi.", "faqQ2": "Hu itea mini arali nda khansela?", "faqA2": "Ni ḓo bvela phanḓa na u shumisa u swika magumoni a tshifhinga tsha mbadelo, nga murahu ni humele kha Basic. A hu na mafhungo ane a xela.", "faqQ3": "Naa tshilingo ndi tsha mahala vhukuma?", "faqA3": "Ee. Ri ṱoḓa garaṱa uri ri thivhele u shumiswa zwi si zwone, fhedzi a ni badelisi u swika nga ḓuvha ḽa vhu 15. Khanselani phanḓa ha zwenezwo = a hu na mbadelo.", "faqQ4": "Ndi ngani pulane dzi tharu?", "faqA4": "Vhashumisi vho fhambanaho vha ṱoḓa u dzhena nga ngomu ho fhambanaho. Ri funa u ni wana hune na vha hone, u fhira u ni rengisela pulane ithihi khulwane.", "faqQ5": "Naa ṱhalutshedzo dza vhana dzo tsireledzea?", "faqA5": "Ee. Dzi itwa nga tshishumiswa tshashu tsha vhuṱali nga ṱhogomelo i fanaho na ya zwithu zwa vhahulwane, dzi tshi sedzwa nga milayo yashu ya zwithu. A hu na zwithu zwa vhana zwo ṅwalwaho nga vhashumisi.", "loginWelcomeBack": "Dzhenani", "loginCreateAccount": "Itani akhaunthu yaṋu", "loginContinueWithGoogle": "Bvelani phanḓa nga Google", "loginInAppNotice": "Ngomu ha {app}, dzhenani nga imeiḽi afho fhasi. Kha nḓila ya Google, vulani vhukwamani uhu kha burausa yaṋu.", "loginOrSeparator": "kana", "loginEmailLabel": "Imeiḽi", "loginPasswordLabel": "Phasiwedi", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Dzhenani", "loginSubmitSignUp": "Itani akhaunthu", "loginSwitchToSignUp": "A ni na akhaunthu? Ḓiṅwaliseni", "loginForgotPassword": "No hangwa phasiwedi?", "loginForgotPasswordEnterEmail": "Ṅwalani imeiḽi yaṋu afho nṱha u thoma, nga murahu ni kwame fhano.", "loginResetSent": "Arali hu na akhaunthu ya imeiḽi iyo, vhukwamani ha u vusulusa vhu khou ḓa.", "loginResetError": "Imeiḽi ya u vusulusa a yo ngo rumelwa. Lingedzani hafhu.", "loginSwitchToSignIn": "No no vha na akhaunthu? Dzhenani", "loginShowPassword": "Sumbedzani phasiwedi", "loginHidePassword": "Dzumbani phasiwedi", "loginCloseAria": "Valani", "loginSigningIn": "Ri khou ni dzhenisa…", "loginCreatingAccount": "Ri khou ita akhaunthu…", "loginErrorWrongCredentials": "Imeiḽi kana phasiwedi yo khakhea.", "loginErrorEmailInUse": "Imeiḽi iyi i khou shumiswa. Lingedzani u dzhena.", "loginErrorWeakPassword": "Phasiwedi i fanela u vha na zwiṅwalwa zwa 8 nga u fhungudza nahone i vhe na ḽeḓere na nomboro.", "loginAgeTermsLine": "Ndi na miṅwaha ya 18 kana u fhira nahone ndi a tenda", "loginTermsLinkLabel": "Milayo", "loginPrivacyLinkLabel": "Mbekanyamaitele ya Tshiphiri", "loginErrorAgeRequired": "Ri humbela ni khwaṱhise uri ni na miṅwaha ya 18 kana u fhira nahone ni a tenda Milayo na Mbekanyamaitele ya Tshiphiri.", "loginErrorInvalidEmail": "Ri humbela ni ṅwale imeiḽi yo teaho.", "loginErrorGoogleFailed": "A ro ngo kona u ni dzhenisa nga Google. Lingedzani hafhu.", "loginErrorGeneric": "Ho khakhea zwiṅwe. Lingedzani hafhu.", "composeEyebrow": "Vhumbani", "composeSubtitle": "Ḽi shumiseni kha mutaladzi ni wane vhuṱanzi nga u ṱavhanya nga ha gireme, nḓila ya u amba, na u tshimbilelana.", "composeMeaningPickerLabel": "Khethani ndeme ine na khou i ḓowela", "composePlaceholder": "Ṅwalani mutaladzi waṋu fhano…", "composeSubmit": "Ṱolani mutaladzi", "composeChecking": "Ri khou ṱola…", "composeStatusPerfectLabel": "Zwo luga tshoṱhe", "composeStatusAlmostLabel": "Ni tsini", "composeStatusIncorrectLabel": "A si zwone tshoṱhe", "composeSuggestionEyebrow": "Mutaladzi wo themendelwaho", "composeTryAnother": "Lingedzani mutaladzi muṅwe", "composeBackToWord": "Humelani kha ipfi", "composeErrorEmpty": "Ri humbela ni ṅwale mutaladzi u thoma.", "composeErrorTooShort": "Ri humbela ni ṅwale maipfi o vhalaho nga u fhungudza.", "quizEyebrow": "Nḓowelo", "quizSubmit": "Rumelani", "quizNext": "Mbudziso i tevhelaho", "quizFinish": "Fhedzani", "quizYesCorrect": "Ee, ndi zwone", "quizNotQuite": "A si zwone tshoṱhe", "quizLoading": "Ri khou lugisa mbudziso dzaṋu…", "quizPracticeAnotherWord": "Ḓowelani ipfi ḽiṅwe", "quizBackToWord": "Humelani kha ipfi", "quizReviewMistakes": "Sedzani hafhu zwe nda khakha", "notebookEyebrow": "Bugu", "notebookTitle": "Shango ḽaṋu ḽa maipfi", "notebookSubtitle": "Ipfi ḽiṅwe na ḽiṅwe ḽe na ḽi ṱoḓisisa, ḽo vhulungwa, ḽo dzudzanywa, ḽi tshi khou aluwa.", "notebookWordsExplored": "maipfi o ṱoḓisiswaho", "notebookPracticeNow": "Sedzani hafhu maipfi anga", "notebookListView": "Mutevhe", "notebookGalaxyView": "Galaxy", "notebookEmptyTitle": "Bugu yaṋu a i na tshithu", "notebookEmptyCta": "Ṱoḓani ipfi uri ni thome", "notebookRemoveAria": "Bvisani", "notebookMasteredLabel": "★ Ḽo ḓivhiwa", "notebookLegendRecent": "Zwo vhulungwa zwenezwino", "notebookLegendMastered": "Ḽo ḓivhiwa", "notebookLegendNeedsReview": "Ḽi ṱoḓa u sedzwa hafhu", "srEyebrow": "Nḓowelo", "srSkip": "Fhirani", "srClickToReveal": "Kiḽikani hunwe na hunwe uri zwi vhonale", "srPrimaryMeaningLabel": "Ndeme khulwane", "srExamplesLabel": "Tsumbo", "srIForgot": "Ndo hangwa", "srIKnewIt": "Ndo vha ndi tshi ḽi ḓivha", "srSchedulingHint": "Ndo vha ndi tshi ḽi ḓivha = u sedza hafhu nga murahu ha maḓuvha mashoni. Ndo hangwa = hafhu ṋamusi.", "srWordsPracticed": "maipfi o ḓowelwaho", "srTomorrow": "Matshelo", "srDoneForToday": "Zwo fhela ṋamusi", "srPracticeMore": "Ḓowelani zwinzhi", "srEmptyTitle": "A hu na zwa u sedza hafhu ṋamusi", "srEmptyBody": "No shuma zwavhuḓi. Vhuyani matshelo.", "srBackToNotebook": "Humelani kha bugu", "srLoading": "Ri khou lugisa nḓowelo yaṋu…", "accountEyebrow": "Akhaunthu", "accountYourSpace": "Fhethu haṋu", "accountPlanLabel": "Pulane", "accountOnPlanFree": "Mahala", "accountNoActiveSubscription": "A hu na ṅwaliso u khou shumaho", "accountChooseAPlan": "Khethani pulane uri ni thome.", "accountCancelsAtPeriodEnd": "I ḓo khanselwa magumoni a tshifhinga tsha mbadelo", "accountManageBilling": "Langani mbadelo", "accountChangePlan": "Shandukani pulane", "accountUpgrade": "Khwinifhadzani", "accountUpgradeToFamily": "Shandukelani kha Family", "accountUsageThisMonth": "Kushumiselwe ṅwedzi uno", "accountImageGeneration": "U ita zwifanyiso", "accountSearches": "U ṱoḓa", "accountLocked": "Yo kiyiwa", "accountUnlimited": "hu si na mukano", "accountTodaySuffix": "ṋamusi", "accountNearingLimit": "Ni khou swikela mukano wa ṅwedzi uno.", "accountSectionLabel": "Akhaunthu", "accountEmailLabel": "Imeiḽi", "accountSignOut": "Bvani", "accountDeleteAccount": "Phumulani akhaunthu", "reportEyebrow": "Vhigani vhukhakhi", "reportTitle": "Ho khakhea mini?", "reportTellMore": "Ri vhudzeni zwinzhi", "reportTellMorePh": "A zwi kombetshedzwi. Arali na ṱalutshedza zwavhuḓi, ri ḓo zwi lugisa nga u ṱavhanya.", "reportSend": "Rumelani muvhigo", "reportSending": "Ri khou rumela…", "reportThanks": "Ri a livhuwa, ro u wana.", "reportError": "A wo ngo rumelwa. Lingedzani hafhu nga murahu ha tshifhinganyana.", "reportCatIncorrectDefinition": "Ṱhalutshedzo yo khakheaho", "reportCatWrongEtymology": "Vhubvo ha ipfi ho khakheaho", "reportCatBadExample": "Mutaladzi wa tsumbo u songo lugaho", "reportCatKidsExplanation": "Thaidzo ya ṱhalutshedzo ya vhana", "reportCatIdiomIssue": "Thaidzo ya murero", "reportCatWrongImage": "Tshifanyiso tsho khakheaho", "reportCatQuizWrongAnswer": "Mbudziso: phindulo yo khakheaho yo swaywa", "reportCatComposeFeedback": "Thaidzo ya vhuṱanzi ha mutaladzi", "reportCatCompareResult": "Thaidzo ya mvelelo ya mbambedzo", "reportCatSomethingElse": "Zwiṅwe", "generateImage": "Itani tshifanyiso", "softWallAnonTitle": "Bvelani phanḓa, zwi kha ḓi vha mahala", "softWallSignupCta": "Bvelani phanḓa mahala", "softWallBasicTitle": "No swikela mukano wa ṋamusi", "reportLabel": "Vhigani vhukhakhi", "wordOriginEyebrow": "Vhubvo ha Ipfi", "idiomsEyebrow": "Mirero na maambele", "wordOriginBackgroundLabel": "Mvelaphanḓa", "wordOriginOriginalWord": "Ipfi ḽa u thoma", "wordOriginBreakdown": "Zwipiḓa zwa ipfi", "imageGeneratingLabel": "Ri khou ita tshifanyiso…", "imageGeneratingHint": "Kanzhi zwi dzhia u bva kha tshekoni dza 10 u swika kha 15.", "imageOpenFullAria": "Vulani tshifanyiso nga vhuhulu hatsho hoṱhe", "kidsComingSoon": "Ṱhalutshedzo ya vhana i khou ḓa.", "shareDefinitionAria": "Kovhekanyani ṱhalutshedzo iyi", "meaningsEyebrow": "Ṱhalutshedzo", "wordOriginLanguage": "Luambo", "wordOriginOriginallyMeant": "Ḽo vha ḽi tshi amba", "actionCompose": "Vhumbani mutaladzi", "actionCompare": "Vhambedzani maipfi", "listenToWord": "Thetshelesani", "offlineDownloadPack": "Ḓaunuḽodani phakhethe ya hu si na inthanethe", "offlineDownloadingPack": "Ri khou ḓaunuḽoda…", "offlinePackHeader": "Phakhethe ya hu si na inthanethe", "offlinePackDescription": "I engedza maipfi ane a ṱoḓwa nga maanḓa nga luambo lwaṋu kha Bugu yaṋu, nahone i a vhulunga uri a wanale hu si na WiFi u itela u guda hu si na inthanethe.", "shareLabel": "Kovhekanyani", "backLabel": "Murahu"});
 
 // --- Native isiNdebele (v2 core, function keys fall back to English) ---
-Object.assign(nr, {"homeHeadlineLine1": "Zwisisa", "homeHeadlineLine2": "bekube sekupheleni.", "homeSubline": "Isihlathululimezwi esihlangana nawe emutjhweni, iinhlathululo, umsuka, izaga, nesithombe esikhanyako, ngamalimi angaphezu kwa-30.", "searchPlaceholderHome": "Tlola ilizwi", "voiceInputTitle": "Tjho ilizwi ngelizwi lakho", "addContext": "Faka umutjho", "explain": "Hlathulula", "contextHint": "Ufunda okuthileko? Namathisela umutjho bona sithole ihlathululo eqondileko.", "tryLabel": "Linga", "valuePropsEyebrow": "Lokho i-Gadit ekwenza ngokwehlukileko", "valuePropsTitle": "Ngaphezu kwehlathululo, yindlela yokuphila nelizwi.", "valueProp1Eyebrow": "Ilalela umutjho", "valueProp1Title": "Ihlathululo efaneleko, qobe kwenzeka", "valueProp1Body": "Namathisela umutjho, i-Gadit ikhetha ihlathululo efanelako, ingasi leyo ejayelekileko kwaphela.", "valueProp2Eyebrow": "Ngesithombe", "valueProp2Title": "Isithombe esikhanyako, selizwi leli kwaphela", "valueProp2Body": "Senzelwa ilizwi ngalinye. Isithombe esikusiza ukuzwa bona ilizwi linjani, akusi sithombe esivamileko.", "valueProp3Eyebrow": "Umsuka welizwi", "valueProp3Title": "Umlando omfitjhani, akusi yinqwaba ye-Wikipedia", "valueProp3Body": "Lapho ilizwi livela khona, kulandiswa ngesigaba, njengalokho bekungatlolwa mngani onelukuluku.", "valueProp4Eyebrow": "Amalimi angaphezu kwa-30", "valueProp4Title": "IsiHebheru nesi-Arabhu, ngokuzeleko", "valueProp4Body": "Ukutlola kwamambala kusukela kwesokudla ukuya kwesobunxele, iimfonti zamambala, izaga zamambala, akusi sakhiwo esitjhugululiweko kwaphela.", "previewLabel": "Ukuqala", "seeFullResult": "Bona umphumela woke", "pricingEyebrow": "Amanani", "pricingTeaserTitle": "Amazinga amathathu. Woke anokuqukethwe kwamambala.", "trustMicrocopy": "Khansela nanyana kunini · Ukulinga kwamalanga ali-14 ku-Clear ngenyanga · Akubhadelwa litho bekube kuphela ukulinga", "footerProductGroup": "Umkhiqizo", "footerLegalGroup": "Ezomthetho", "footerCompare": "Madanisa", "footerNotebook": "Ibhuku lamezwi", "footerPricing": "Amanani", "footerPrivacy": "Ifihlo", "footerTerms": "Imibandela", "footerContact": "Isizo", "footerTagline": "Isihlathululimezwi esihlakaniphileko samalimi angaphezu kwa-30. Sakhelwe ukufunda kwamambala.", "footerLanguagesNote": "Amalimi angaphezu kwa-30", "signIn": "Ngena", "startFree": "Thoma mahala", "verbStampDef": "ukuzwisisa ilizwi, ngokuzeleko", "navSearch": "Funa", "navCompare": "Madanisa", "navNotebook": "Ibhuku lamezwi", "navPricing": "Amanani", "navSchools": "Schools", "navFeatures": "Iinzuzo", "navPlay": "Dlala", "navAffiliates": "Abalingani", "kidsModeLabel": "Abantwana", "kidsModeTooltipOff": "Thinta bona ilizwi ngalinye lihlathululwe njengalokho umbelethi angahlathululela umntwana.", "kidsModeTooltipOn": "Imodi yabantwana ivuliwe, ihlathululo ngayinye izakutlolelwa umntwana. Thinta bona uyivale.", "kidsModeBasicGate": "Imodi yabantwana ingenye yeenzuzo ze-Clear. Thuthukisa bona uyisebenzise.", "signupWelcomeTitle": "Wamukelekile ku-Gadit!", "signupWelcomeBody": "I-akhawunti yakho isilungile. Thoma ngokufuna nanyana ngiliphi ilizwi.", "pricingPageHeadline": "Amazinga amathathu. Woke anokuqukethwe kwamambala.", "pricingPageSubline": "Thoma mahala. Thuthukisa lokha ukungena ekhabolo nakukusizako.", "billingMonthly": "Ngenyanga", "billingYearly": "Ngomnyaka", "billingSave17": "Onga ama-17%", "tierBasicTagline": "Zwisisa", "tierBasicPitch": "Thoma ngokuqakathekileko.", "tierBasicCta": "Thoma", "tierBasicFeatures": "Ukufuna amezwi oku-20 ngelanga¶Zoke iinhlathululo (ingasi eyokuthoma kwaphela)¶Izibonelo ezi-3 ehlathululweni ngayinye¶Umsuka nomlando welizwi¶Kufuneka ungene", "tierClearTagline": "Bona ngesithombe", "tierClearPitch": "Yenza amezwi aphile ngezithombe, imodi yabantwana, namazwana.", "tierClearBadge": "Okuthandwa khulu", "tierClearCta": "Thoma ukulinga kwamahala kwamalanga ali-14", "tierClearCtaYearly": "Bhalisela umnyaka", "tierClearTrust": "Khansela nanyana kunini · Akubhadelwa litho ngesikhathi sokulinga", "tierClearFeatures": "Koke okuku-Basic¶Ukufuna ngaphandle komkhawulo¶Iinhlathululo zabantwana¶Isithombe selizwi ngalinye (30/ngenyanga)¶Tlola umutjho uthole amazwana¶Izaga neenkulumo¶Umlando wokufuna (amalanga ama-30 wokugcina)", "tierDeepTagline": "Zilolonge", "tierDeepPitch": "Yakha umtapo wamezwi wakho oqina ngokuya kwesikhathi.", "tierDeepCta": "Bhalisela i-Deep", "tierDeepFeatures": "Koke okuku-Clear¶Iinkhwizi zokuzilolonga¶Ibhuku lamezwi lakho¶Ukuzilolonga okuhlakaniphileko kwamezwi ahlala isikhathi eside¶Hlukanisa amezwi afanako¶Isithombe selizwi ngalinye (100/ngenyanga)", "basicEquivalent": "", "clearEquivalent": "Kulingana ne-$2.50/ngenyanga", "deepEquivalent": "Kulingana ne-$4.17/ngenyanga", "trustStripCancel": "Khansela nanyana kunini ngephothali ye-Stripe", "trustStripMoneyBack": "Imali ibuyiswa phakathi kwamalanga ali-14 ekuthengeni kokuthoma", "trustStripDataYours": "Imininingwana yakho ngeyakho, yikhuphe nanyana kunini", "trustStripNoAds": "Akunakukhangisa, akunakulandelelwa ngabanye", "faqEyebrow": "Imibuzo", "faqHeadline": "Imibuzo, iphenduliwe", "faqQ1": "Ngingalitjhentjha ihlelo lami?", "faqA1": "Iye, thuthukisa namkha wehlise nanyana kunini. Ukubalwa kwemali kwenzeka ngokuzenzakalela, ubhadela umehluko kwaphela.", "faqQ2": "Kwenzekani nangikhansela?", "faqA2": "Usaragela ukungena bekube kuphela isikhathi sakho sokubhadela, bese ubuyela ku-Basic. Ayikho imininingwana elahlekako.", "faqQ3": "Ukulinga kumahala ngamambala?", "faqA3": "Iye. Sibawa ikarada bona sivikele ukusetjenziswa kumbi, kodwana awubhadeliswa bekube lilanga le-15. Khansela ngaphambi kwalokho = akubhadelwa litho.", "faqQ4": "Kubayini kunamazinga amathathu?", "faqA4": "Abasebenzisi abahlukeneko batlhoga ukujula okuhlukeneko. Sithanda ukuhlangana nawe lapho ukhona kunokukuthengisela ihlelo linye elikhulu khulu.", "faqQ5": "Iinhlathululo zabantwana ziphephile na?", "faqA5": "Iye. Zenziwa yinjini yethu ngokuqaphela okufanako nokuqukethwe kwabadala, begodu zihlolwa yimithetho yethu yokuqukethwe. Akunakuqukethwe kwabantwana okwenziwe ngabasebenzisi.", "loginWelcomeBack": "Ngena", "loginCreateAccount": "Vula i-akhawunti yakho", "loginContinueWithGoogle": "Raga nge-Google", "loginInAppNotice": "Ngaphakathi ku-{app}, ngena nge-imeyili ngezansi. Bona usebenzise i-Google, vula ilinki le ebhrawuzarini yakho.", "loginOrSeparator": "namkha", "loginEmailLabel": "I-imeyili", "loginPasswordLabel": "Iphasiwedi", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Ngena", "loginSubmitSignUp": "Vula i-akhawunti", "loginSwitchToSignUp": "Awunayo i-akhawunti? Bhalisa", "loginForgotPassword": "Ukhohlwe iphasiwedi?", "loginForgotPasswordEnterEmail": "Tlola i-imeyili yakho ngaphezulu kuqala, bese uthinta lapha.", "loginResetSent": "Nange kukhona i-akhawunti ye-imeyili leyo, ilinki yokutjhentjha iphasiwedi isendleleni.", "loginResetError": "Asikghoni ukuthumela i-imeyili yokutjhentjha iphasiwedi. Linga godu.", "loginSwitchToSignIn": "Sele unayo i-akhawunti? Ngena", "loginShowPassword": "Tjengisa iphasiwedi", "loginHidePassword": "Fihla iphasiwedi", "loginCloseAria": "Vala", "loginSigningIn": "Uyangena…", "loginCreatingAccount": "I-akhawunti iyavulwa…", "loginErrorWrongCredentials": "I-imeyili namkha iphasiwedi akukalungi.", "loginErrorEmailInUse": "I-imeyili le sele iyasetjenziswa. Linga ukungena.", "loginErrorWeakPassword": "Iphasiwedi kufuze ibe neenhlamvu ezi-8 okungenani, ibe nelembu nenomboro.", "loginAgeTermsLine": "Ngineminyaka eli-18 namkha ngaphezulu begodu ngiyavumelana ne", "loginTermsLinkLabel": "Imibandela", "loginPrivacyLinkLabel": "Umthethomgomo Wefihlo", "loginErrorAgeRequired": "Sibawa uqinisekise bona uneminyaka eli-18 namkha ngaphezulu begodu uyavumelana neMibandela noMthethomgomo Wefihlo.", "loginErrorInvalidEmail": "Sibawa utlole i-imeyili elungileko.", "loginErrorGoogleFailed": "Asikghoni ukungena nge-Google. Linga godu.", "loginErrorGeneric": "Kukhona okungakahambi kuhle. Linga godu.", "composeEyebrow": "Tlola", "composeSubtitle": "Lisebenzise emutjhweni bese uthola amazwana khonokho ngohlelo lwelimi, ithoni nokufanela.", "composeMeaningPickerLabel": "Khetha ihlathululo ozilolongela yona", "composePlaceholder": "Tlola umutjho wakho lapha…", "composeSubmit": "Hlola umutjho", "composeChecking": "Kuyahlolwa…", "composeStatusPerfectLabel": "Kupheleleko", "composeStatusAlmostLabel": "Sewuseduze", "composeStatusIncorrectLabel": "Akukalungi kahle", "composeSuggestionEyebrow": "Umutjho ophakanyisiweko", "composeTryAnother": "Linga omunye umutjho", "composeBackToWord": "Buyela elizwini", "composeErrorEmpty": "Sibawa utlole umutjho kuqala.", "composeErrorTooShort": "Sibawa utlole amezwi ambalwa okungenani.", "quizEyebrow": "Ukuzilolonga", "quizSubmit": "Thumela", "quizNext": "Umbuzo olandelako", "quizFinish": "Qeda", "quizYesCorrect": "Iye, kulungile", "quizNotQuite": "Akukalungi kahle", "quizLoading": "Silungiselela ikhwizi yakho…", "quizPracticeAnotherWord": "Zilolonge ngelinye ilizwi", "quizBackToWord": "Buyela elizwini", "quizReviewMistakes": "Buyekeza engiwaphosileko", "compareEyebrow": "Madanisa", "compareTitle": "Hlukanisa amezwi afanako", "compareSubtitle": "affect ne effect, principle ne principal, amezwi adida ngitjho nabakhuluma ilimi lokuzalwa.", "compareWord1Label": "Ilizwi 1", "compareWord2Label": "Ilizwi 2", "compareWord1Placeholder": "affect", "compareWord2Placeholder": "effect", "compareCta": "Madanisa", "compareLoading": "Kuyamadaniswa…", "compareEmpty": "Tlola amezwi amabili bona uwamadanise", "compareDifferenceLabel": "Umehluko", "compareExamplesLabel": "Izibonelo", "compareCommonMistakeLabel": "Iphutha elivamileko", "compareErrNotARealWord": "Asilazi elinye lamezwi lawo.", "compareErrDifferentLanguages": "Amezwi la amabili abonakala asemalimini ahlukeneko, linga amezwi welimi linye.", "compareErrSameWord": "La abonakala ayilizwi linye, linga amezwi amabili ahlukeneko.", "compareErrGeneric": "Ukumadanisa akutholakali nje.", "notebookEyebrow": "Ibhuku lamezwi", "notebookTitle": "Iphasi lakho lamezwi", "notebookSubtitle": "Ilizwi ngalinye olihlolileko, libulungiwe, lihlelekile, liyakhula.", "notebookWordsExplored": "amezwi ahloliweko", "notebookPracticeNow": "Buyekeza amezwi wami", "notebookListView": "Irhelo", "notebookGalaxyView": "Iinkanyezi", "notebookEmptyTitle": "Ibhuku lakho alinalitho", "notebookEmptyCta": "Funa ilizwi bona uthome", "notebookRemoveAria": "Susa", "notebookMasteredLabel": "★ Ulazi kuhle", "notebookLegendRecent": "Abulungwe kwakutjhanje", "notebookLegendMastered": "Owazi kuhle", "notebookLegendNeedsReview": "Atlhoga ukubuyekezwa", "srEyebrow": "Ukuzilolonga", "srSkip": "Tjhiya", "srClickToReveal": "Qhwarhaza nanyana kuphi bona kuvele", "srTapToReveal": "Thinta bona kuvele", "srPrimaryMeaningLabel": "Ihlathululo eqakathekileko", "srExamplesLabel": "Izibonelo", "srIForgot": "Ngikhohlwe", "srIKnewIt": "Bengilazi", "srSchedulingHint": "Bengilazi = ukubuyekeza okulandelako ngemva kwamalanga ambalwa. Ngikhohlwe = libuyela namhlanje.", "srWordsPracticed": "amezwi azilolongelweko", "srTomorrow": "Kusasa", "srDoneForToday": "Kuphelile namhlanje", "srPracticeMore": "Zilolonge godu", "srEmptyTitle": "Akukho okubuyekezwako namhlanje", "srEmptyBody": "Wenze kuhle. Buya kusasa.", "srBackToNotebook": "Buyela ebhukwini", "srLoading": "Kulayitha ukuzilolonga kwakho…", "accountEyebrow": "I-akhawunti", "accountYourSpace": "Isikhala sakho", "accountPlanLabel": "Ihlelo", "accountOnPlanFree": "Mahala", "accountNoActiveSubscription": "Akunakubhalisela okusebenzako", "accountChooseAPlan": "Khetha ihlelo bona uthome.", "accountCancelsAtPeriodEnd": "Kuzakukhanselwa ekupheleni kwesikhathi sokubhadela", "accountManageBilling": "Lawula ukubhadela", "accountChangePlan": "Tjhentjha ihlelo", "accountUpgrade": "Thuthukisa", "accountUpgradeToFamily": "Tjhentjhela ku-Family", "accountUsageThisMonth": "Ukusebenzisa kwenyanga le", "accountImageGeneration": "Ukwenza izithombe", "accountSearches": "Ukufuna", "accountLocked": "Kukhiyiwe", "accountUnlimited": "ngaphandle komkhawulo", "accountTodaySuffix": "namhlanje", "accountNearingLimit": "Usondela emkhawulweni wenyanga le.", "accountSectionLabel": "I-akhawunti", "accountEmailLabel": "I-imeyili", "accountChangeEmail": "Tjhentjha i-imeyili", "accountSignOut": "Phuma", "accountDeleteAccount": "Sula i-akhawunti", "reportEyebrow": "Bika iphutha", "reportTitle": "Yini engakalungi?", "reportTellMore": "Sitjele okunengi", "reportTellMorePh": "Akukateleleki. Nawutjho ngokuqondileko, silungisa msinyana.", "reportSend": "Thumela umbiko", "reportSending": "Kuyathunyelwa…", "reportThanks": "Ngiyathokoza, siwuthole.", "reportError": "Akukghonakali ukuthumela. Linga godu kancani.", "reportCatIncorrectDefinition": "Ihlathululo engakalungi", "reportCatWrongEtymology": "Umsuka ongakalungi", "reportCatBadExample": "Umutjho wesibonelo omumbi", "reportCatKidsExplanation": "Umraro ngehlathululo yabantwana", "reportCatIdiomIssue": "Umraro ngesaga", "reportCatWrongImage": "Isithombe esingakalungi", "reportCatQuizWrongAnswer": "Ikhwizi: ipendulo engakalungi itjengiswe", "reportCatComposeFeedback": "Umraro ngamazwana womutjho", "reportCatCompareResult": "Umraro ngomphumela wokumadanisa", "reportCatSomethingElse": "Okhunye", "origin": "Umsuka", "historyNote": "Umlando", "throughTime": "Ngokuya kwesikhathi", "forKids": "Kwabantwana", "commonExpressions": "Iinkulumo ezijayelekileko", "idiomsWithMeaning": "Izaga ezinehlathululo le", "notJustPrimary": "Ingasi eyokuthoma kwaphela", "takeItFurther": "Ragela phambili", "saveToNotebookHint": "Libuyele ngemva kwalokho, lihlelekile, liyafunyaneka.", "generateImage": "Enza isithombe", "generatingImage": "Kuyenziwa…", "generateImageHint": "Isithombe esikhanyako esenziwe yi-Gadit, selizwi leli kwaphela.", "composeSentence": "Tlola umutjho", "composeSentenceHint": "Tlola owakho, i-Gadit ihlola ithoni nokufanela.", "practiceWord": "Zilolonge ngelizwi leli", "practiceWordHint": "Ikhwizi efitjhani elungiselelwe indlela ofunda ngayo.", "unlockWithClear": "Vula nge-Clear", "upgradeToClear": "Thuthukisela ku-Clear", "softWallAnonTitle": "Ragela phambili, kusemahala", "softWallAnonBody": "I-akhawunti yamahala esheshako ivula ukufuna oku-20 ngelanga, kunye nezibonelo, izaga nomsuka wamezwi.", "softWallSignupCta": "Raga mahala", "softWallBasicTitle": "Ufikile emkhawulweni wanamhlanje", "softWallBasicBody": "Ama-akhawunti wamahala athola ukufuna oku-20 ngelanga. Umkhawulo uthoma butjha kusasa, namkha uthuthukisele ku-Clear bona ufune ngaphandle komkhawulo, kunye nezithombe, imodi yabantwana namazwana ngohlelo lwelimi.", "clearUnlocksThis": "I-Clear iyakuvula lokhu", "visualizeThisWord": "Bona ngesithombe", "visualBlurb": "Isithombe esikhanyako esenziwe yi-Gadit, esikusiza ukuzwa bona ilizwi leli linjani.", "visualBlurbLocked": "Enza isithombe esikhanyako, esinganalo omunye ofana naso, selizwi leli, uzwisise ngamehlo.", "reportLabel": "Bika iphutha", "wordOriginEyebrow": "Umsuka Welizwi", "idiomsEyebrow": "Izaga neenkulumo", "wordOriginBackgroundLabel": "Umlando", "wordOriginOriginalWord": "Ilizwi lokuthoma", "wordOriginBreakdown": "Iingcenye zelizwi", "imageGeneratingLabel": "Kwenziwa isithombe…", "imageGeneratingHint": "Lokhu kuthatha imizuzwana eli-10 ukuya kwe-15.", "imageOpenFullAria": "Vula isithombe ngobukhulu baso boke", "kidsComingSoon": "Ihlathululo yabantwana iyeza msinyana.", "compareComingSoon": "Imidlalo yamezwi iyeza msinyana.", "shareDefinitionAria": "Abelana ngehlathululo le", "meaningsEyebrow": "Iinhlathululo", "wordOriginLanguage": "Ilimi", "wordOriginOriginallyMeant": "Ekuthomeni belitjho", "actionCompose": "Tlola umutjho", "actionCompare": "Madanisa amezwi", "listenToWord": "Lalela", "offlinePin": "Bulunga ngaphandle kwe-inthanethi", "offlinePinTitle": "Bulunga ilizwi leli bona ufunde ngaphandle kwe-inthanethi", "offlinePinnedTitle": "Kubulungiwe, kuyatholakala ngaphandle kwe-WiFi", "offlineDownloadPack": "Dawuniloda iphakethe langaphandle kwe-inthanethi", "offlineDownloadingPack": "Kuyadawunilodwa…", "offlinePackHeader": "Iphakethe langaphandle kwe-inthanethi", "offlinePackDescription": "Lifaka amezwi afunwa khulu ngelimi lakho eBhukwini lakho lamezwi, begodu liwagcina atholakala ngaphandle kwe-WiFi bona ufunde ngaphandle kwe-inthanethi.", "visualEmptyLabel": "Kuzakudwetjwa isithombe selizwi leli", "shareLabel": "Abelana", "backLabel": "Emuva"});
+Object.assign(nr, {"homeHeadlineLine1": "Zwisisa", "homeHeadlineLine2": "bekube sekupheleni.", "homeSubline": "Isihlathululimezwi esihlangana nawe emutjhweni, iinhlathululo, umsuka, izaga, nesithombe esikhanyako, ngamalimi angaphezu kwa-30.", "searchPlaceholderHome": "Tlola ilizwi", "voiceInputTitle": "Tjho ilizwi ngelizwi lakho", "explain": "Hlathulula", "valuePropsEyebrow": "Lokho i-Gadit ekwenza ngokwehlukileko", "valuePropsTitle": "Ngaphezu kwehlathululo, yindlela yokuphila nelizwi.", "valueProp1Eyebrow": "Ilalela umutjho", "valueProp1Title": "Ihlathululo efaneleko, qobe kwenzeka", "valueProp1Body": "Namathisela umutjho, i-Gadit ikhetha ihlathululo efanelako, ingasi leyo ejayelekileko kwaphela.", "valueProp2Eyebrow": "Ngesithombe", "valueProp2Title": "Isithombe esikhanyako, selizwi leli kwaphela", "valueProp2Body": "Senzelwa ilizwi ngalinye. Isithombe esikusiza ukuzwa bona ilizwi linjani, akusi sithombe esivamileko.", "valueProp3Eyebrow": "Umsuka welizwi", "valueProp3Title": "Umlando omfitjhani, akusi yinqwaba ye-Wikipedia", "valueProp3Body": "Lapho ilizwi livela khona, kulandiswa ngesigaba, njengalokho bekungatlolwa mngani onelukuluku.", "valueProp4Eyebrow": "Amalimi angaphezu kwa-30", "valueProp4Title": "IsiHebheru nesi-Arabhu, ngokuzeleko", "valueProp4Body": "Ukutlola kwamambala kusukela kwesokudla ukuya kwesobunxele, iimfonti zamambala, izaga zamambala, akusi sakhiwo esitjhugululiweko kwaphela.", "previewLabel": "Ukuqala", "seeFullResult": "Bona umphumela woke", "pricingEyebrow": "Amanani", "pricingTeaserTitle": "Amazinga amathathu. Woke anokuqukethwe kwamambala.", "footerProductGroup": "Umkhiqizo", "footerLegalGroup": "Ezomthetho", "footerNotebook": "Ibhuku lamezwi", "footerPricing": "Amanani", "footerPrivacy": "Ifihlo", "footerTerms": "Imibandela", "footerContact": "Isizo", "footerTagline": "Isihlathululimezwi esihlakaniphileko samalimi angaphezu kwa-30. Sakhelwe ukufunda kwamambala.", "footerLanguagesNote": "Amalimi angaphezu kwa-30", "signIn": "Ngena", "startFree": "Thoma mahala", "verbStampDef": "ukuzwisisa ilizwi, ngokuzeleko", "navSearch": "Funa", "navNotebook": "Ibhuku lamezwi", "navPricing": "Amanani", "navSchools": "Schools", "navFeatures": "Iinzuzo", "navPlay": "Dlala", "navAffiliates": "Abalingani", "kidsModeLabel": "Abantwana", "kidsModeTooltipOff": "Thinta bona ilizwi ngalinye lihlathululwe njengalokho umbelethi angahlathululela umntwana.", "kidsModeTooltipOn": "Imodi yabantwana ivuliwe, ihlathululo ngayinye izakutlolelwa umntwana. Thinta bona uyivale.", "signupWelcomeTitle": "Wamukelekile ku-Gadit!", "signupWelcomeBody": "I-akhawunti yakho isilungile. Thoma ngokufuna nanyana ngiliphi ilizwi.", "pricingPageHeadline": "Amazinga amathathu. Woke anokuqukethwe kwamambala.", "pricingPageSubline": "Thoma mahala. Thuthukisa lokha ukungena ekhabolo nakukusizako.", "billingMonthly": "Ngenyanga", "billingYearly": "Ngomnyaka", "billingSave17": "Onga ama-17%", "tierBasicTagline": "Zwisisa", "tierBasicPitch": "Thoma ngokuqakathekileko.", "tierBasicCta": "Thoma", "tierBasicFeatures": "Ukufuna amezwi oku-20 ngelanga¶Zoke iinhlathululo (ingasi eyokuthoma kwaphela)¶Izibonelo ezi-3 ehlathululweni ngayinye¶Umsuka nomlando welizwi¶Kufuneka ungene", "tierClearTagline": "Bona ngesithombe", "tierClearPitch": "Yenza amezwi aphile ngezithombe, imodi yabantwana, namazwana.", "tierClearBadge": "Okuthandwa khulu", "tierClearCta": "Thoma ukulinga kwamahala kwamalanga ali-14", "tierClearCtaYearly": "Bhalisela umnyaka", "tierClearTrust": "Khansela nanyana kunini · Akubhadelwa litho ngesikhathi sokulinga", "tierClearFeatures": "Koke okuku-Basic¶Ukufuna ngaphandle komkhawulo¶Iinhlathululo zabantwana¶Isithombe selizwi ngalinye (30/ngenyanga)¶Tlola umutjho uthole amazwana¶Izaga neenkulumo¶Umlando wokufuna (amalanga ama-30 wokugcina)", "tierDeepTagline": "Zilolonge", "tierDeepPitch": "Yakha umtapo wamezwi wakho oqina ngokuya kwesikhathi.", "tierDeepCta": "Bhalisela i-Deep", "tierDeepFeatures": "Koke okuku-Clear¶Iinkhwizi zokuzilolonga¶Ibhuku lamezwi lakho¶Ukuzilolonga okuhlakaniphileko kwamezwi ahlala isikhathi eside¶Hlukanisa amezwi afanako¶Isithombe selizwi ngalinye (100/ngenyanga)", "basicEquivalent": "", "clearEquivalent": "Kulingana ne-$2.50/ngenyanga", "deepEquivalent": "Kulingana ne-$4.17/ngenyanga", "trustStripCancel": "Khansela nanyana kunini ngephothali ye-Stripe", "trustStripMoneyBack": "Imali ibuyiswa phakathi kwamalanga ali-14 ekuthengeni kokuthoma", "trustStripDataYours": "Imininingwana yakho ngeyakho, yikhuphe nanyana kunini", "trustStripNoAds": "Akunakukhangisa, akunakulandelelwa ngabanye", "faqEyebrow": "Imibuzo", "faqHeadline": "Imibuzo, iphenduliwe", "faqQ1": "Ngingalitjhentjha ihlelo lami?", "faqA1": "Iye, thuthukisa namkha wehlise nanyana kunini. Ukubalwa kwemali kwenzeka ngokuzenzakalela, ubhadela umehluko kwaphela.", "faqQ2": "Kwenzekani nangikhansela?", "faqA2": "Usaragela ukungena bekube kuphela isikhathi sakho sokubhadela, bese ubuyela ku-Basic. Ayikho imininingwana elahlekako.", "faqQ3": "Ukulinga kumahala ngamambala?", "faqA3": "Iye. Sibawa ikarada bona sivikele ukusetjenziswa kumbi, kodwana awubhadeliswa bekube lilanga le-15. Khansela ngaphambi kwalokho = akubhadelwa litho.", "faqQ4": "Kubayini kunamazinga amathathu?", "faqA4": "Abasebenzisi abahlukeneko batlhoga ukujula okuhlukeneko. Sithanda ukuhlangana nawe lapho ukhona kunokukuthengisela ihlelo linye elikhulu khulu.", "faqQ5": "Iinhlathululo zabantwana ziphephile na?", "faqA5": "Iye. Zenziwa yinjini yethu ngokuqaphela okufanako nokuqukethwe kwabadala, begodu zihlolwa yimithetho yethu yokuqukethwe. Akunakuqukethwe kwabantwana okwenziwe ngabasebenzisi.", "loginWelcomeBack": "Ngena", "loginCreateAccount": "Vula i-akhawunti yakho", "loginContinueWithGoogle": "Raga nge-Google", "loginInAppNotice": "Ngaphakathi ku-{app}, ngena nge-imeyili ngezansi. Bona usebenzise i-Google, vula ilinki le ebhrawuzarini yakho.", "loginOrSeparator": "namkha", "loginEmailLabel": "I-imeyili", "loginPasswordLabel": "Iphasiwedi", "loginEmailPlaceholder": "you@example.com", "loginPasswordPlaceholder": "••••••••", "loginSubmitSignIn": "Ngena", "loginSubmitSignUp": "Vula i-akhawunti", "loginSwitchToSignUp": "Awunayo i-akhawunti? Bhalisa", "loginForgotPassword": "Ukhohlwe iphasiwedi?", "loginForgotPasswordEnterEmail": "Tlola i-imeyili yakho ngaphezulu kuqala, bese uthinta lapha.", "loginResetSent": "Nange kukhona i-akhawunti ye-imeyili leyo, ilinki yokutjhentjha iphasiwedi isendleleni.", "loginResetError": "Asikghoni ukuthumela i-imeyili yokutjhentjha iphasiwedi. Linga godu.", "loginSwitchToSignIn": "Sele unayo i-akhawunti? Ngena", "loginShowPassword": "Tjengisa iphasiwedi", "loginHidePassword": "Fihla iphasiwedi", "loginCloseAria": "Vala", "loginSigningIn": "Uyangena…", "loginCreatingAccount": "I-akhawunti iyavulwa…", "loginErrorWrongCredentials": "I-imeyili namkha iphasiwedi akukalungi.", "loginErrorEmailInUse": "I-imeyili le sele iyasetjenziswa. Linga ukungena.", "loginErrorWeakPassword": "Iphasiwedi kufuze ibe neenhlamvu ezi-8 okungenani, ibe nelembu nenomboro.", "loginAgeTermsLine": "Ngineminyaka eli-18 namkha ngaphezulu begodu ngiyavumelana ne", "loginTermsLinkLabel": "Imibandela", "loginPrivacyLinkLabel": "Umthethomgomo Wefihlo", "loginErrorAgeRequired": "Sibawa uqinisekise bona uneminyaka eli-18 namkha ngaphezulu begodu uyavumelana neMibandela noMthethomgomo Wefihlo.", "loginErrorInvalidEmail": "Sibawa utlole i-imeyili elungileko.", "loginErrorGoogleFailed": "Asikghoni ukungena nge-Google. Linga godu.", "loginErrorGeneric": "Kukhona okungakahambi kuhle. Linga godu.", "composeEyebrow": "Tlola", "composeSubtitle": "Lisebenzise emutjhweni bese uthola amazwana khonokho ngohlelo lwelimi, ithoni nokufanela.", "composeMeaningPickerLabel": "Khetha ihlathululo ozilolongela yona", "composePlaceholder": "Tlola umutjho wakho lapha…", "composeSubmit": "Hlola umutjho", "composeChecking": "Kuyahlolwa…", "composeStatusPerfectLabel": "Kupheleleko", "composeStatusAlmostLabel": "Sewuseduze", "composeStatusIncorrectLabel": "Akukalungi kahle", "composeSuggestionEyebrow": "Umutjho ophakanyisiweko", "composeTryAnother": "Linga omunye umutjho", "composeBackToWord": "Buyela elizwini", "composeErrorEmpty": "Sibawa utlole umutjho kuqala.", "composeErrorTooShort": "Sibawa utlole amezwi ambalwa okungenani.", "quizEyebrow": "Ukuzilolonga", "quizSubmit": "Thumela", "quizNext": "Umbuzo olandelako", "quizFinish": "Qeda", "quizYesCorrect": "Iye, kulungile", "quizNotQuite": "Akukalungi kahle", "quizLoading": "Silungiselela ikhwizi yakho…", "quizPracticeAnotherWord": "Zilolonge ngelinye ilizwi", "quizBackToWord": "Buyela elizwini", "quizReviewMistakes": "Buyekeza engiwaphosileko", "notebookEyebrow": "Ibhuku lamezwi", "notebookTitle": "Iphasi lakho lamezwi", "notebookSubtitle": "Ilizwi ngalinye olihlolileko, libulungiwe, lihlelekile, liyakhula.", "notebookWordsExplored": "amezwi ahloliweko", "notebookPracticeNow": "Buyekeza amezwi wami", "notebookListView": "Irhelo", "notebookGalaxyView": "Iinkanyezi", "notebookEmptyTitle": "Ibhuku lakho alinalitho", "notebookEmptyCta": "Funa ilizwi bona uthome", "notebookRemoveAria": "Susa", "notebookMasteredLabel": "★ Ulazi kuhle", "notebookLegendRecent": "Abulungwe kwakutjhanje", "notebookLegendMastered": "Owazi kuhle", "notebookLegendNeedsReview": "Atlhoga ukubuyekezwa", "srEyebrow": "Ukuzilolonga", "srSkip": "Tjhiya", "srClickToReveal": "Qhwarhaza nanyana kuphi bona kuvele", "srPrimaryMeaningLabel": "Ihlathululo eqakathekileko", "srExamplesLabel": "Izibonelo", "srIForgot": "Ngikhohlwe", "srIKnewIt": "Bengilazi", "srSchedulingHint": "Bengilazi = ukubuyekeza okulandelako ngemva kwamalanga ambalwa. Ngikhohlwe = libuyela namhlanje.", "srWordsPracticed": "amezwi azilolongelweko", "srTomorrow": "Kusasa", "srDoneForToday": "Kuphelile namhlanje", "srPracticeMore": "Zilolonge godu", "srEmptyTitle": "Akukho okubuyekezwako namhlanje", "srEmptyBody": "Wenze kuhle. Buya kusasa.", "srBackToNotebook": "Buyela ebhukwini", "srLoading": "Kulayitha ukuzilolonga kwakho…", "accountEyebrow": "I-akhawunti", "accountYourSpace": "Isikhala sakho", "accountPlanLabel": "Ihlelo", "accountOnPlanFree": "Mahala", "accountNoActiveSubscription": "Akunakubhalisela okusebenzako", "accountChooseAPlan": "Khetha ihlelo bona uthome.", "accountCancelsAtPeriodEnd": "Kuzakukhanselwa ekupheleni kwesikhathi sokubhadela", "accountManageBilling": "Lawula ukubhadela", "accountChangePlan": "Tjhentjha ihlelo", "accountUpgrade": "Thuthukisa", "accountUpgradeToFamily": "Tjhentjhela ku-Family", "accountUsageThisMonth": "Ukusebenzisa kwenyanga le", "accountImageGeneration": "Ukwenza izithombe", "accountSearches": "Ukufuna", "accountLocked": "Kukhiyiwe", "accountUnlimited": "ngaphandle komkhawulo", "accountTodaySuffix": "namhlanje", "accountNearingLimit": "Usondela emkhawulweni wenyanga le.", "accountSectionLabel": "I-akhawunti", "accountEmailLabel": "I-imeyili", "accountSignOut": "Phuma", "accountDeleteAccount": "Sula i-akhawunti", "reportEyebrow": "Bika iphutha", "reportTitle": "Yini engakalungi?", "reportTellMore": "Sitjele okunengi", "reportTellMorePh": "Akukateleleki. Nawutjho ngokuqondileko, silungisa msinyana.", "reportSend": "Thumela umbiko", "reportSending": "Kuyathunyelwa…", "reportThanks": "Ngiyathokoza, siwuthole.", "reportError": "Akukghonakali ukuthumela. Linga godu kancani.", "reportCatIncorrectDefinition": "Ihlathululo engakalungi", "reportCatWrongEtymology": "Umsuka ongakalungi", "reportCatBadExample": "Umutjho wesibonelo omumbi", "reportCatKidsExplanation": "Umraro ngehlathululo yabantwana", "reportCatIdiomIssue": "Umraro ngesaga", "reportCatWrongImage": "Isithombe esingakalungi", "reportCatQuizWrongAnswer": "Ikhwizi: ipendulo engakalungi itjengiswe", "reportCatComposeFeedback": "Umraro ngamazwana womutjho", "reportCatCompareResult": "Umraro ngomphumela wokumadanisa", "reportCatSomethingElse": "Okhunye", "generateImage": "Enza isithombe", "softWallAnonTitle": "Ragela phambili, kusemahala", "softWallSignupCta": "Raga mahala", "softWallBasicTitle": "Ufikile emkhawulweni wanamhlanje", "reportLabel": "Bika iphutha", "wordOriginEyebrow": "Umsuka Welizwi", "idiomsEyebrow": "Izaga neenkulumo", "wordOriginBackgroundLabel": "Umlando", "wordOriginOriginalWord": "Ilizwi lokuthoma", "wordOriginBreakdown": "Iingcenye zelizwi", "imageGeneratingLabel": "Kwenziwa isithombe…", "imageGeneratingHint": "Lokhu kuthatha imizuzwana eli-10 ukuya kwe-15.", "imageOpenFullAria": "Vula isithombe ngobukhulu baso boke", "kidsComingSoon": "Ihlathululo yabantwana iyeza msinyana.", "shareDefinitionAria": "Abelana ngehlathululo le", "meaningsEyebrow": "Iinhlathululo", "wordOriginLanguage": "Ilimi", "wordOriginOriginallyMeant": "Ekuthomeni belitjho", "actionCompose": "Tlola umutjho", "actionCompare": "Madanisa amezwi", "listenToWord": "Lalela", "offlineDownloadPack": "Dawuniloda iphakethe langaphandle kwe-inthanethi", "offlineDownloadingPack": "Kuyadawunilodwa…", "offlinePackHeader": "Iphakethe langaphandle kwe-inthanethi", "offlinePackDescription": "Lifaka amezwi afunwa khulu ngelimi lakho eBhukwini lakho lamezwi, begodu liwagcina atholakala ngaphandle kwe-WiFi bona ufunde ngaphandle kwe-inthanethi.", "shareLabel": "Abelana", "backLabel": "Emuva"});

@@ -143,16 +143,10 @@ h2 { font-size: clamp(26px, 3.5vw, 32px); line-height: 1.25; font-weight: 700; }
 h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 
 /* ── ANIMATIONS ── */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-
-.animate-fade-in-up { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .animate-fade-in    { animation: fadeIn  0.35s ease both; }
 
 /* =========================================================================
@@ -258,21 +252,6 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   }
 }
 
-/* Outer chrome on desktop — soft warm gradient beyond the content column */
-.wordbook .wb-chrome {
-  background: linear-gradient(135deg, #EDE5D2 0%, #E5DBC4 100%);
-  /* dvh after vh: older browsers keep vh, modern mobile tracks the
-     real viewport as the URL bar collapses. Launch QA 2026-07-03. */
-  min-height: 100vh;
-  min-height: 100dvh;
-}
-
-.wordbook .wb-shell {
-  background: var(--paper);
-  max-width: 760px;
-  margin: 0 auto;
-}
-
 /* ── Outer page shell — replaces the navy gd-stage on /word ──── */
 .wordbook.wb-shell-page {
   background: var(--paper);
@@ -368,12 +347,6 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
-}
-.wordbook .wb-shell-divider {
-  width: 1px;
-  height: 22px;
-  background: var(--rule);
-  margin: 0 4px;
 }
 /* Sign in is the ONLY coloured button in the masthead — a clear
    blue CTA so first-time visitors know where to start. Everything
@@ -744,50 +717,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   gap: 8px;
   margin-top: 14px;
 }
-.wordbook .wb-word-act {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 13px;
-  background: transparent;
-  border: 1px solid var(--rule);
-  border-radius: 999px;
-  font-family: var(--wb-sans);
-  font-size: 12.5px;
-  font-weight: 500;
-  color: var(--ink-soft);
-  cursor: pointer;
-  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
-}
-.wordbook .wb-word-act:hover {
-  background: rgba(0, 0, 0, 0.04);
-  color: var(--ink);
-}
-.wordbook .wb-word-act.is-saved {
-  color: var(--t-deep);
-  border-color: rgba(90, 68, 144, 0.35);
-  background: rgba(90, 68, 144, 0.06);
-}
-/* Save offline (the pin button at the top of WordHeader) is a
-   Clear-tier feature. Gadi 2026-06-20: "האייקון של השמירה offline ...
-   צריך להיות פיצ'ר של קליר בלבד" — wear the teal Clear colour so
-   the user can read the tier at a glance, the same way the per-
-   meaning Save tab does inline below. */
-.wordbook .wb-word-act[data-tier="clear"] {
-  background: var(--teal-soft);
-  border-color: #C5E8E5;
-  color: var(--teal-edge);
-}
-.wordbook .wb-word-act[data-tier="clear"]:hover {
-  background: var(--teal-soft);
-  border-color: var(--teal);
-  color: var(--teal);
-}
-.wordbook .wb-word-act.is-pinned[data-tier="clear"] {
-  background: var(--teal);
-  border-color: var(--teal);
-  color: var(--surface);
-}
+
 .wordbook .wb-word-act-icon {
   width: 34px;
   height: 34px;
@@ -877,69 +807,6 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 }
 .wordbook .wb-meanings .wb-eyebrow .wb-eyebrow-icon { color: var(--m-deep); }
 
-.wordbook .wb-meaning-row {
-  display: flex;
-  gap: 18px;
-  padding: 18px 0 22px;
-  border-bottom: 1px solid var(--rule-faint);
-}
-.wordbook .wb-meaning-row:first-of-type { padding-top: 8px; }
-.wordbook .wb-meaning-row:last-child {
-  border-bottom: none;
-  padding-bottom: 6px;
-}
-.wordbook .wb-meaning-num {
-  font-family: var(--wb-serif);
-  font-style: italic;
-  font-size: 22px;
-  font-weight: 500;
-  line-height: 1.15;
-  width: 22px;
-  flex-shrink: 0;
-  color: var(--ink);
-  letter-spacing: -0.02em;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-meaning-num { font-size: 26px; }
-}
-.wordbook .wb-meaning-body { flex: 1; min-width: 0; }
-.wordbook .wb-meaning-def {
-  font-family: var(--wb-sans);
-  font-size: 17px;
-  line-height: 1.55;
-  color: var(--ink);
-  margin-bottom: 14px;
-  letter-spacing: -0.005em;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-meaning-def { font-size: 18px; line-height: 1.6; }
-}
-.wordbook .wb-meaning-ex {
-  font-family: var(--wb-serif);
-  font-style: italic;
-  font-size: 15.5px;
-  line-height: 1.65;
-  color: var(--ink-soft);
-  padding-block: 6px;
-  padding-inline-start: 18px;
-  position: relative;
-  letter-spacing: 0.002em;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-meaning-ex { font-size: 16px; }
-}
-.wordbook .wb-meaning-ex::before {
-  content: '';
-  position: absolute;
-  inset-inline-start: 0;
-  top: calc(0.825em + 6px);
-  width: 10px;
-  height: 1.5px;
-  background: var(--ink-muted);
-  opacity: 0.55;
-  border-radius: 1px;
-}
-
 /* ── SECTIONS (no card surfaces — sit directly on cream) ────────
    Earlier rounds wrapped each section in a tinted card (rust /
    mint / lavender). Gadi felt those colour blocks read as "adult /
@@ -968,22 +835,6 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 /* (removed — was the standalone "Background" paragraph; now a wb-origin-row) */
 
 /* Visual — accent: pink (eyebrow icon only) */
-.wordbook .wb-visual .wb-eyebrow .wb-eyebrow-icon { color: var(--v-deep); }
-.wordbook .wb-visual-empty {
-  aspect-ratio: 16 / 10;
-  background: var(--paper);
-  border: 1px dashed var(--rule);
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 22px 20px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-visual-empty { aspect-ratio: 16 / 7; }
-}
 .wordbook .wb-visual-art {
   margin-bottom: 12px;
   color: var(--v-deep);
@@ -997,278 +848,6 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   margin-bottom: 14px;
   line-height: 1.4;
   color: var(--ink-muted);
-}
-/* Generate-image CTA — quiet ghost pill. Almost-transparent pink
-   wash + hairline pink border. Dead-centred icon + label cluster. */
-.wordbook .wb-visual-cta {
-  padding: 9px 20px;
-  background: rgba(236, 72, 153, 0.04);
-  color: #BE185D;
-  border: 1px solid rgba(236, 72, 153, 0.20);
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 500;
-  font-family: var(--wb-sans);
-  cursor: pointer;
-  letter-spacing: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin: 0 auto;
-  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
-  box-shadow: none;
-}
-.wordbook .wb-visual-cta:hover {
-  background: rgba(236, 72, 153, 0.10);
-  border-color: rgba(236, 72, 153, 0.35);
-  color: #9D174D;
-}
-.wordbook .wb-visual-cta:disabled { opacity: 0.55; cursor: wait; }
-.wordbook .wb-visual-cta svg { display: block; flex-shrink: 0; }
-
-.wordbook .wb-visual-filled {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  aspect-ratio: 16 / 10;
-  box-shadow: inset 0 0 0 1px rgba(61, 140, 94, 0.30);
-}
-@media (min-width: 768px) {
-  .wordbook .wb-visual-filled { aspect-ratio: 16 / 7; }
-}
-.wordbook .wb-visual-filled img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.wordbook .wb-visual-overlay {
-  position: absolute;
-  bottom: 10px;
-  inset-inline-end: 10px;
-  display: flex;
-  gap: 6px;
-}
-.wordbook .wb-visual-overlay button {
-  padding: 6px 12px;
-  font-size: 11.5px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.55);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-  font-family: var(--wb-sans);
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-/* Take it further — accent: purple (eyebrow only); each tile inside
-   carries its own playful per-tile colour for instant scanning. */
-.wordbook .wb-further .wb-eyebrow .wb-eyebrow-icon { color: var(--t-deep); }
-.wordbook .wb-further-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 9px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-further-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 11px;
-  }
-}
-/* Tiles — framed feature cards. Centered content with a thin
-   border so each tile reads as its own "thing", with a tier badge
-   (Clear / Deep) under the title when the feature is gated. */
-.wordbook .wb-tile {
-  padding: 18px 14px;
-  border: 1px solid var(--rule-soft);
-  background: var(--surface);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  cursor: pointer;
-  text-align: center;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 124px;
-  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
-  font-family: var(--wb-sans);
-  color: var(--ink);
-  border-radius: 14px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-tile { padding: 20px 14px; min-height: 136px; }
-}
-.wordbook .wb-tile:hover {
-  transform: translateY(-2px);
-  border-color: var(--rule);
-  box-shadow: 0 6px 18px -8px rgba(11, 18, 32, 0.15);
-}
-.wordbook .wb-tile:hover .wb-tile-icon {
-  transform: scale(1.06);
-}
-
-/* Tier badge — tiny pill under the tile title that tells the user
-   which subscription unlocks this feature. Free tiles get no badge.
-   Colour-matched to the tier (Clear=blue, Deep=purple). */
-.wordbook .wb-tile-tier {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 999px;
-  font-family: var(--wb-sans);
-  line-height: 1;
-}
-.wordbook .wb-tile-tier[data-tier="clear"] {
-  background: rgba(37, 99, 235, 0.10);
-  color: #1D4ED8;
-}
-.wordbook .wb-tile-tier[data-tier="deep"] {
-  background: rgba(139, 92, 246, 0.12);
-  color: #6D28D9;
-}
-.wordbook .wb-tile-icon {
-  width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: transform 160ms ease;
-}
-.wordbook .wb-tile-icon svg {
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.10));
-}
-
-/* Per-tile icon colours — bright + playful, no boxes behind them */
-.wordbook .wb-tile[data-action="compose"] .wb-tile-icon { color: var(--acc-compose); }
-.wordbook .wb-tile[data-action="practice"] .wb-tile-icon { color: var(--acc-quiz); }
-.wordbook .wb-tile[data-action="compare"] .wb-tile-icon { color: var(--acc-compare); }
-.wordbook .wb-tile[data-action="kids"] .wb-tile-icon { color: var(--acc-kids); }
-.wordbook .wb-tile-title {
-  font-size: 14.5px;
-  font-weight: 600;
-  color: var(--ink);
-  line-height: 1.3;
-  font-family: var(--wb-sans);
-  letter-spacing: -0.005em;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-tile-title { font-size: 15.5px; }
-}
-
-/* ── ACTION BAR (mobile sticky) ───────────────────────────────── */
-.wordbook .wb-action-bar {
-  position: fixed;
-  bottom: 0;
-  inset-inline-start: 0;
-  inset-inline-end: 0;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid var(--rule-soft);
-  padding: 10px 16px calc(18px + env(safe-area-inset-bottom));
-  display: flex;
-  gap: 10px;
-  z-index: 40;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-action-bar { display: none; }
-}
-.wordbook .wb-save-btn {
-  flex: 1;
-  padding: 14px;
-  background: var(--teal);
-  color: white;
-  border: none;
-  border-radius: 14px;
-  font-size: 14.5px;
-  font-weight: 500;
-  font-family: var(--wb-sans);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  letter-spacing: -0.003em;
-  transition: background 120ms ease;
-}
-.wordbook .wb-save-btn:hover { background: var(--teal-deep); }
-.wordbook .wb-save-btn.is-saved { background: var(--t-deep); }
-.wordbook .wb-save-btn.is-saved:hover { background: var(--t-deep); filter: brightness(1.05); }
-.wordbook .wb-secondary-btn {
-  width: 48px;
-  height: 48px;
-  background: var(--paper);
-  border: 1px solid var(--rule);
-  border-radius: 14px;
-  color: var(--ink-soft);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-/* Inline Save / Share / Sign-in chips sitting in the masthead actions.
-   Smaller and less shouty than the previous floating-pill version that
-   sat above the word title. They blend with the lang button and feel
-   like part of the bar, not a separate "action zone". */
-.wordbook .wb-topbar-save {
-  padding: 7px 14px;
-  border: 1px solid var(--teal);
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 500;
-  background: var(--teal);
-  color: white;
-  font-family: var(--wb-sans);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 120ms ease, border-color 120ms ease;
-}
-.wordbook .wb-topbar-save:hover {
-  background: var(--teal-deep);
-  border-color: var(--teal-deep);
-}
-.wordbook .wb-topbar-save.is-saved {
-  background: transparent;
-  color: var(--t-deep);
-  border-color: rgba(90, 68, 144, 0.35);
-}
-.wordbook .wb-topbar-save.is-saved:hover {
-  background: rgba(90, 68, 144, 0.06);
-}
-.wordbook .wb-topbar-icon-btn {
-  width: 34px;
-  height: 34px;
-  background: transparent;
-  border: 1px solid var(--rule);
-  border-radius: 999px;
-  color: var(--ink-soft);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 120ms ease;
-}
-.wordbook .wb-topbar-icon-btn:hover { background: rgba(0, 0, 0, 0.04); }
-
-/* On mobile, nav + Save in topbar are hidden — sticky bottom bar
-   handles Save/Share, and the nav collapses into the hamburger
-   (TODO: hamburger menu in a later iteration). */
-@media (max-width: 767px) {
-  .wordbook .wb-topbar-save { display: none; }
-  .wordbook .wb-shell-divider { display: none; }
 }
 
 /* ── RTL overrides ────────────────────────────────────────────── */
@@ -1305,25 +884,11 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
     line-height: 1.05;
   }
 }
-.wordbook[dir="rtl"] .wb-meaning-num {
-  font-family: var(--wb-he);
-  font-style: normal;
-  font-weight: 500;
-}
-.wordbook[dir="rtl"] .wb-meaning-ex {
-  font-family: var(--wb-he);
-  font-style: normal;
-  line-height: 1.7;
-}
-.wordbook[dir="rtl"] .wb-meaning-ex::before {
-  top: calc(0.85em + 6px);
-}
 .wordbook[dir="rtl"] .wb-word-meta {
   font-family: var(--wb-he);
   font-style: normal;
 }
 .wordbook[dir="rtl"] .wb-word-meta em { font-style: normal; }
-.wordbook[dir="rtl"] .wb-meaning-def { font-family: var(--wb-he); }
 .wordbook[dir="rtl"] .wb-origin-value {
   font-family: var(--wb-he);
   font-style: normal;
@@ -1333,29 +898,13 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
   font-family: var(--wb-he);
   font-style: normal;
 }
-.wordbook[dir="rtl"] .wb-tile-title { font-family: var(--wb-he); }
 .wordbook[dir="rtl"] .wb-progress {
   font-family: var(--wb-he);
   font-style: normal;
 }
-.wordbook[dir="rtl"] .wb-save-btn { font-family: var(--wb-he); }
-
-/* ── SKELETON LOADER (used by image generation) ── */
-@keyframes gadit-skeleton {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-@keyframes gadit-pulse {
-  0%, 100% { opacity: 0.55; transform: scale(1); }
-  50%      { opacity: 1;    transform: scale(1.08); }
-}
 
 /* ── PRICING: subtle scale on the popular card (desktop only) ── */
 @media (min-width: 768px) {
-  .pricing-popular {
-    transform: scale(1.025);
-  }
   /* V2 pricing tier — Clear card lift. Mobile keeps scale: none so the
      1.04 doesn't push the card past the viewport gutter in single-col
      layout. */
@@ -1400,55 +949,8 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .legal-body a:hover { text-decoration: none; }
 .legal-body strong { color: #0F172A; }
 
-.delay-100 { animation-delay: 0.08s; }
-.delay-200 { animation-delay: 0.16s; }
-.delay-300 { animation-delay: 0.24s; }
-.delay-400 { animation-delay: 0.32s; }
-.delay-500 { animation-delay: 0.40s; }
-
 /* ── SCROLL REVEAL ── */
 .section-hidden  { opacity: 0; transform: translateY(20px); }
-.section-visible { animation: fadeInUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) both; }
-
-/* ── CARD ── */
-.gadit-card {
-  background: var(--surface);
-  border: 1px solid rgb(226 232 240 / 0.9);
-  border-radius: 1.5rem;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
-}
-.gadit-card:hover {
-  box-shadow: var(--shadow-md);
-  border-color: rgb(203 213 225);
-}
-
-.gadit-card-interactive {
-  background: var(--surface);
-  border: 1px solid rgb(226 232 240 / 0.9);
-  border-radius: 1.5rem;
-  box-shadow: var(--shadow-sm);
-  cursor: pointer;
-  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.18s ease;
-}
-.gadit-card-interactive:hover {
-  box-shadow: var(--shadow-md);
-  border-color: rgb(147 197 253 / 0.8);
-  transform: translateY(-2px);
-}
-
-/* ── SEARCH ── */
-.search-container {
-  background: var(--surface);
-  border: 1.5px solid rgb(226 232 240);
-  border-radius: 1.125rem;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
-}
-.search-container:focus-within {
-  border-color: rgb(147 197 253);
-  box-shadow: var(--shadow-md), 0 0 0 3px rgb(37 99 235 / 0.07);
-}
 
 /* ── PRIMARY BUTTON ── */
 .btn-primary {
@@ -1468,45 +970,6 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .btn-primary:active:not(:disabled) {
   transform: translateY(0);
   box-shadow: var(--shadow-blue);
-}
-
-/* ── SECONDARY BUTTON ── */
-.btn-secondary {
-  background: var(--surface);
-  color: #475569;
-  font-weight: 500;
-  border: 1.5px solid rgb(226 232 240);
-  border-radius: 0.75rem;
-  box-shadow: var(--shadow-xs);
-  transition: border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
-}
-.btn-secondary:hover:not(:disabled) {
-  border-color: rgb(147 197 253);
-  color: var(--primary);
-  box-shadow: var(--shadow-sm);
-  transform: translateY(-1px);
-}
-
-/* ── CHIPS ── */
-.gadit-chip {
-  display: inline-flex;
-  align-items: center;
-  background: var(--surface);
-  border: 1.5px solid rgb(226 232 240);
-  border-radius: 999px;
-  color: #64748b;
-  font-size: 0.875rem;
-  padding: 0.45rem 1rem;
-  box-shadow: var(--shadow-xs);
-  cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease, background 0.15s ease;
-}
-.gadit-chip:hover {
-  border-color: rgb(147 197 253);
-  color: var(--primary);
-  background: rgb(239 246 255);
-  box-shadow: var(--shadow-sm);
-  transform: translateY(-1px);
 }
 
 /* ════════════════════════════════════════════════════════════════════
@@ -1570,7 +1033,7 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([lang="zh-CN"]):not([lang="zh-TW"]):not([lang="ko"]):not([lang="hi"]):not([lang="bn"]):not([lang="th"]):not([lang="am"]) {
   --body-ui: var(--font-inter), 'Inter', 'Rubik', 'Heebo', system-ui, -apple-system, sans-serif;
 }
-html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([lang="zh-CN"]):not([lang="zh-TW"]):not([lang="ko"]):not([lang="hi"]):not([lang="bn"]):not([lang="th"]):not([lang="am"]) :is(.gd-font-display, .gd-font-sans-ui, .gd-eyebrow, .wordbook .wb-lang-chip, .wordbook .wb-pricing-save, .wordbook .wb-meaning-num, .wordbook .wb-visual-label, .wordbook .wb-tile-tier, .wordbook .wb-mnum) {
+html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([lang="zh-CN"]):not([lang="zh-TW"]):not([lang="ko"]):not([lang="hi"]):not([lang="bn"]):not([lang="th"]):not([lang="am"]) :is(.gd-font-display, .gd-font-sans-ui, .gd-eyebrow, .wordbook .wb-lang-chip, .wordbook .wb-pricing-save, .wordbook .wb-visual-label, .wordbook .wb-mnum) {
   font-family: var(--body-ui);
 }
 
@@ -1589,28 +1052,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
   overflow: hidden;
 }
 
-/* Atmospheric starfield.
-   Fourth pass — switched to a static SVG asset (web/public/starscape.svg)
-   after the radial-gradient implementations rendered sub-pixel and
-   disappeared on hi-DPI displays. The SVG carries 4 featured stars
-   with a real 4-point cross-shaped glow halo (via <filter>
-   feGaussianBlur), 32 medium dots in white + pale blue, and ~50
-   dust pixels for density. Tiles cleanly because GPT laid out the
-   star positions to flow across edges.
-
-   The stars layer needs an explicit z-index of 0 so a sibling content
-   layer with z-index: 1 sits above it but the canvas background
-   (z-index: auto) sits below. */
-.gd-stars {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background-image: url('/starscape.svg');
-  background-repeat: repeat;
-  background-size: 1200px 800px;
-}
-
 /* ── Card lift (warm paper floating on navy) ── */
 .gd-card {
   background: var(--gd-paper-50);
@@ -1622,66 +1063,12 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
     0 24px 60px -24px oklch(0.08 0.08 260 / 0.6),
     0 8px 22px -10px oklch(0.08 0.08 260 / 0.5);
 }
-.gd-card-kids {
-  background:
-    linear-gradient(180deg, oklch(0.97 0.035 80) 0%, oklch(0.955 0.04 75) 100%);
-  color: var(--gd-ink-900);
-  border-radius: 20px;
-  box-shadow:
-    0 0 0 1px oklch(0.9 0.07 80 / 0.5),
-    0 24px 60px -24px oklch(0.5 0.15 60 / 0.35),
-    0 8px 22px -10px oklch(0.5 0.15 60 / 0.3);
-}
-
-/* ── Electric ring motif (echoes the icon ring) ── */
-.gd-ring {
-  display: inline-flex; align-items: center; justify-content: center;
-  border-radius: 999px;
-  box-shadow:
-    0 0 0 1.5px var(--gd-electric),
-    0 0 0 3.5px oklch(0.72 0.19 245 / 0.18),
-    0 0 14px var(--gd-electric-glow);
-}
-.gd-ring-soft {
-  box-shadow:
-    0 0 0 1px oklch(0.72 0.19 245 / 0.55),
-    0 0 10px oklch(0.72 0.19 245 / 0.28);
-}
-
-/* ── Locked tier-gate state — frosted, "promise not wall" ── */
-.gd-locked {
-  position: relative;
-  isolation: isolate;
-}
-.gd-locked::after {
-  content: "";
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(circle at 30% 20%, oklch(0.72 0.19 245 / 0.06), transparent 50%),
-    linear-gradient(135deg, oklch(0 0 0 / 0.02) 0%, oklch(0 0 0 / 0.06) 100%);
-  backdrop-filter: blur(0.5px);
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 1;
-}
-.gd-locked > * { position: relative; z-index: 0; opacity: 0.55; }
-.gd-locked .gd-lock-badge { opacity: 1; z-index: 2; }
 
 /* ── Tier pip (small luminous dot) ── */
 .gd-tier-dot {
   width: 6px; height: 6px; border-radius: 999px;
   background: var(--gd-electric);
   box-shadow: 0 0 6px var(--gd-electric-glow);
-}
-
-/* ── Striped placeholder (image slot empty hint) ── */
-.gd-stripe {
-  background-image:
-    repeating-linear-gradient(
-      45deg,
-      oklch(0.85 0.02 265 / 0.4) 0 1px,
-      transparent 1px 9px
-    );
 }
 
 /* ── Image-slot idle drift animation ── */
@@ -1732,31 +1119,13 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
   color: var(--gd-ink-500);
 }
 
-/* ── ImageSlot empty state: drop rigid aspect ratio on mobile ──
-   Desktop uses 16:6 wide banner with absolute-positioned content. On
-   <640px viewports, 16:6 collapses to ~120px which clips the CTA +
-   blurb. Switch to a min-height-driven box so content dictates size. */
-@media (max-width: 640px) {
-  .gd-image-empty {
-    aspect-ratio: auto !important;
-    max-height: none !important;
-    min-height: 220px;
-  }
-  .gd-image-empty-content {
-    position: relative !important;
-    inset: auto !important;
-    padding-block: 28px !important;
-  }
-}
-
 /* ── Mobile + reduced-motion performance mode ──
    Disables expensive blurs and animations on small screens / when the user
    asks for reduced motion. Keeps the brand's character on capable devices,
    degrades gracefully on iPhone SE class hardware. */
 @media (max-width: 640px) {
   .gd-drift { animation: none; }
-  .gd-card,
-  .gd-card-kids {
+  .gd-card {
     border-radius: 18px;
     box-shadow:
       0 0 0 1px oklch(1 0 0 / 0.05),
@@ -1764,7 +1133,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
   }
   /* Mobile: dim the field a touch but keep it readable. The original
      0.25 effectively erased the stars; 0.55 keeps atmosphere alive. */
-  .gd-stars { opacity: 0.55; }
   .gd-mobile-flat { backdrop-filter: none !important; }
 }
 
@@ -1880,7 +1248,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
   font-style: italic;
   font-weight: 500;
 }
-.wordbook .wb-shell-divider { display: none; }
 /* Sign in is the SECONDARY action in the masthead — Start free is the
    primary CTA and gets the warm amber pill. Sign in is a ghost button:
    dark text on transparent with a subtle border. This restores the
@@ -2047,40 +1414,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
 
 /* Save / Share — neutral pills, no purple "saved" treatment */
 .wordbook .wb-word-actions { margin-top: 4px; gap: 8px; }
-.wordbook .wb-word-act {
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  color: var(--ink);
-  font-family: var(--wb-sans);
-  font-size: 13px;
-  font-weight: 500;
-  padding: 0 14px;
-  border-radius: 8px;
-  letter-spacing: 0;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  line-height: 1;
-}
-.wordbook .wb-word-act:hover {
-  background: var(--mist);
-  color: var(--ink);
-}
-.wordbook .wb-word-act.is-saved {
-  background: var(--teal-soft);
-  border-color: var(--teal);
-  color: var(--teal-edge);
-}
-/* Pinned-for-offline pill — purple (Deep-tier accent) so it visually
-   distinguishes from Save (teal). Two adjacent actions in the same
-   color would read as one control; the user needs to see them as
-   distinct affordances. */
-.wordbook .wb-word-act.is-pinned {
-  background: #F3EEFF;
-  border-color: #7C3AED;
-  color: #6D28D9;
-}
 
 /* ── Mobile collapse: icon-only action pills ───────────────────
    On phones (≤640px) the labelled pills (Save / Save offline) and
@@ -2092,13 +1425,8 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
    in `title` + `aria-label` so long-press surfaces it on mobile and
    screen readers continue to read the right thing. */
 @media (max-width: 640px) {
-  .wordbook .wb-word-act-label,
   .wordbook .wb-mtab-label {
     display: none;
-  }
-  .wordbook .wb-word-act {
-    padding: 8px 10px;
-    gap: 0;
   }
   /* Tab chips — Gadi 2026-06-20 added a sixth tile (save), and now
      the row has 6 chips: image / kids / compose / save / quiz /
@@ -2118,17 +1446,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
     flex-shrink: 0;
     justify-content: center;
   }
-}
-/* tiny mono "S" kbd hint inside the Save button */
-.wordbook .wb-word-act .wb-kbd {
-  font-family: var(--wb-mono);
-  font-size: 10px;
-  color: var(--ink-faint);
-  margin-inline-start: 4px;
-  padding: 1px 5px;
-  border: 1px solid var(--rule);
-  border-radius: 3px;
-  background: var(--mist);
 }
 .wordbook .wb-word-act-icon {
   background: var(--surface);
@@ -2182,68 +1499,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
     padding: 4px 20px 0;
   }
 }
-.wordbook .wb-meanings .wb-meanings-grid { display: none; }
-
-/* Each meaning is now a white card, not a hairline row */
-.wordbook .wb-meaning-row {
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-  padding: 18px 20px;
-  display: block;
-  flex-direction: initial;
-  gap: 0;
-}
-.wordbook .wb-meaning-row:first-of-type { padding-top: 18px; }
-.wordbook .wb-meaning-row:last-child {
-  border-bottom: 1px solid var(--rule);
-  padding-bottom: 18px;
-}
-.wordbook .wb-meaning-num {
-  font-family: var(--wb-mono);
-  font-style: normal;
-  font-weight: 500;
-  font-size: 11px;
-  color: var(--ink-faint);
-  letter-spacing: 0.04em;
-  width: auto;
-  margin-bottom: 8px;
-  text-shadow: none;
-}
-.wordbook .wb-meaning-body { flex: initial; }
-.wordbook .wb-meaning-def {
-  font-family: var(--wb-sans);
-  font-size: 16px;
-  line-height: 1.55;
-  color: var(--ink);
-  font-weight: 500;
-  margin-bottom: 14px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-meaning-def { font-size: 16px; }
-}
-/* Example block — mist-tinted sub-box with thin border start */
-.wordbook .wb-meaning-ex-wrap {
-  background: var(--mist);
-  border-radius: 6px;
-  padding: 10px 12px;
-  margin-top: 6px;
-}
-.wordbook .wb-meaning-ex {
-  font-family: var(--wb-he);
-  font-style: normal;
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--ink);
-  line-height: 1.5;
-  padding: 0;
-}
-.wordbook .wb-meaning-ex::before { display: none; }
-.wordbook .wb-meaning-ex + .wb-meaning-ex {
-  margin-top: 6px;
-  padding-top: 6px;
-  border-top: 1px dashed var(--rule);
-}
 
 /* Generic card — used for Origin / Visual / Take it further */
 .wordbook .wb-card {
@@ -2263,9 +1518,7 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
 }
 
 /* Strip variant-specific bg gradients */
-.wordbook .wb-origin,
-.wordbook .wb-visual,
-.wordbook .wb-further {
+.wordbook .wb-origin {
   background: var(--surface);
 }
 
@@ -2381,21 +1634,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
 }
 
 /* Visual empty state — grid pattern instead of dashed border */
-.wordbook .wb-visual-empty {
-  background:
-    linear-gradient(var(--rule) 1px, transparent 1px),
-    linear-gradient(90deg, var(--rule) 1px, transparent 1px),
-    var(--surface);
-  background-size: 32px 32px;
-  background-position: 0 0, 0 0;
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-  aspect-ratio: 16 / 9;
-  padding: 32px 24px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-visual-empty { aspect-ratio: 16 / 6; }
-}
 .wordbook .wb-visual-art { color: var(--ink-faint); }
 .wordbook .wb-visual-art svg { width: 28px; height: 28px; }
 .wordbook .wb-visual-label {
@@ -2407,130 +1645,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
   font-style: normal;
   margin-bottom: 12px;
   text-transform: uppercase;
-}
-.wordbook .wb-visual-cta {
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  color: var(--ink);
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-family: var(--wb-sans);
-  font-size: 13px;
-  font-weight: 500;
-}
-.wordbook .wb-visual-cta:hover {
-  background: var(--mist);
-  border-color: var(--border-2);
-  color: var(--ink);
-}
-
-/* Take it further — uniform teal tiles, mono number + tier badge */
-.wordbook .wb-further-grid { gap: 12px; }
-@media (min-width: 768px) {
-  .wordbook .wb-further-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-  }
-}
-.wordbook .wb-tile {
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-  padding: 16px;
-  gap: 0;
-  min-height: 140px;
-  align-items: stretch;
-  flex-direction: column;
-  position: relative;
-  transition: border-color 0.15s ease, background 0.15s ease;
-  transform: none;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-tile { min-height: 160px; padding: 18px; }
-}
-.wordbook .wb-tile:hover {
-  border-color: var(--teal);
-  background: var(--surface);
-  transform: none;
-  box-shadow: none;
-}
-
-/* All tile icons in uniform teal-soft square */
-.wordbook .wb-tile-icon,
-.wordbook .wb-tile[data-action] .wb-tile-icon {
-  width: 36px;
-  height: 36px;
-  background: var(--teal-soft);
-  color: var(--teal-edge);
-  border-radius: 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-bottom: 14px;
-}
-.wordbook .wb-tile-icon svg {
-  width: 18px;
-  height: 18px;
-  filter: none;
-}
-
-.wordbook .wb-tile-title {
-  font-family: var(--wb-he);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--ink);
-  line-height: 1.3;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-tile-title { font-size: 16px; }
-}
-.wordbook .wb-tile-title::after { display: none; }
-
-/* tier badge in tile corner */
-.wordbook .wb-tile-tier {
-  position: absolute;
-  top: 16px;
-  inset-inline-end: 16px;
-  font-family: var(--wb-mono);
-  font-size: 10px;
-  font-weight: 500;
-  padding: 3px 8px;
-  border-radius: 4px;
-  letter-spacing: 0.04em;
-  border: 1px solid;
-}
-.wordbook .wb-tile-tier[data-tier="clear"] {
-  background: var(--teal-soft);
-  color: var(--teal-edge);
-  border-color: #C5E8E5;
-}
-.wordbook .wb-tile-tier[data-tier="deep"] {
-  background: var(--deep-bg);
-  color: var(--deep-fg);
-  border-color: var(--deep-edge);
-}
-
-/* Sticky bottom action bar — clean teal save */
-.wordbook .wb-action-bar {
-  background: rgba(255, 255, 255, 0.97);
-  border-top: 1px solid var(--rule);
-}
-.wordbook .wb-save-btn {
-  background: var(--ink);
-  color: var(--surface);
-  border-radius: 8px;
-}
-.wordbook .wb-save-btn:hover { background: #1A1F2B; }
-.wordbook .wb-save-btn.is-saved {
-  background: var(--teal);
-  color: var(--surface);
-}
-.wordbook .wb-save-btn.is-saved:hover { background: var(--teal-edge); filter: none; }
-.wordbook .wb-secondary-btn {
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-radius: 8px;
 }
 
 /* Topbar action: lang switcher chip */
@@ -2767,8 +1881,7 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
   margin-inline-start: 1px;
   font-weight: 700;
 }
-:root[data-theme="dark"] .wordbook .wb-reader-done,
-.wordbook.wb-dark .wb-reader-done {
+:root[data-theme="dark"] .wordbook .wb-reader-done {
   color: #6EE7A8;
   background: rgba(22, 163, 74, 0.2);
 }
@@ -2785,8 +1898,7 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
-:root[data-theme="dark"] .wordbook .wb-reader-hard,
-.wordbook.wb-dark .wb-reader-hard {
+:root[data-theme="dark"] .wordbook .wb-reader-hard {
   background: rgba(251, 191, 36, 0.26);
   color: #FDE68A;
 }
@@ -3115,21 +2227,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
 }
 
 /* Idioms block — no card surface, just labeled text on the card. */
-.wordbook .wb-midioms {
-  margin-bottom: 16px;
-  padding: 0;
-  background: transparent;
-  border: none;
-}
-.wordbook .wb-midioms-label {
-  font-family: var(--wb-he);
-  font-size: 14px;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--ink-muted);
-  font-weight: 600;
-  margin-bottom: 6px;
-}
 .wordbook .wb-midiom {
   font-family: var(--wb-he);
   font-size: 15px;
@@ -3242,13 +2339,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
    moved from the WordHeader into the per-meaning action row. The
    bookmark SVG fills via currentColor, so when the tab is saved
    the icon body fills too. */
-.wordbook .wb-mtab.is-saved {
-  background: var(--teal);
-  border-color: var(--teal);
-  color: var(--surface);
-}
-.wordbook .wb-mtab.is-saved .wb-mtab-icon { color: var(--surface); fill: var(--surface); }
-.wordbook .wb-mtab.is-saved .wb-mtab-icon svg path { fill: currentColor; }
 .wordbook .wb-mtab.is-locked {
   color: var(--ink-faint);
   background: var(--paper-deep);
@@ -3356,27 +2446,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
 }
 
 /* Empty image state inside the panel */
-/* Animated 3-dot loader for the in-progress image generation */
-.wordbook .wb-loader-dots {
-  display: inline-flex;
-  gap: 6px;
-  margin-top: 4px;
-}
-.wordbook .wb-loader-dots span {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--teal);
-  opacity: 0.4;
-  animation: wb-dot-pulse 1.2s ease-in-out infinite;
-}
-.wordbook .wb-loader-dots span:nth-child(2) { animation-delay: 0.18s; }
-.wordbook .wb-loader-dots span:nth-child(3) { animation-delay: 0.36s; }
-@keyframes wb-dot-pulse {
-  0%, 80%, 100% { opacity: 0.25; transform: scale(0.85); }
-  40%           { opacity: 1;    transform: scale(1.15); }
-}
-
 .wordbook .wb-mpanel-empty {
   background:
     linear-gradient(var(--rule) 1px, transparent 1px),
@@ -3423,12 +2492,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
   color: var(--ink-soft);
   line-height: 1.5;
 }
-
-/* RTL — the inline-start border on the meaning card should sit on
-   the right edge in Hebrew, which logical properties already handle.
-   Override the legacy .wb-meaning-row block-styling so it doesn't
-   apply to MeaningEntry. */
-.wordbook .wb-meaning-row { display: none; }
 
 /* ═══════════════════════════════════════════════════════════════════
    TIER-COLOURED TABS — each tab carries the tier it unlocks so the
@@ -3758,12 +2821,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
 .wordbook .wb-home-search-input::placeholder { color: var(--ink-faint); font-weight: 400; }
 
 /* Right group — mic (passthrough from VoiceInput) + submit */
-.wordbook .wb-home-search-actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
-}
 .wordbook .wb-home-search-mic {
   display: inline-flex;
   /* Nudge the mic toward the submit button — beta feedback that the
@@ -3848,22 +2905,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
   color: var(--ink) !important;
 }
 .wordbook .wb-home-search-mic svg { width: 18px; height: 18px; }
-.wordbook .wb-home-search-go {
-  background: var(--teal);
-  border: none;
-  color: var(--surface);
-  width: 38px;
-  height: 38px;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: background 0.15s ease;
-}
-.wordbook .wb-home-search-go:hover { background: var(--teal-edge); }
-.wordbook .wb-home-search-go svg { width: 16px; height: 16px; }
 
 /* Sample word chips — sit on the same line as the "לדוגמה" label,
    sized to match, with a barely-there background so they recede
@@ -4071,60 +3112,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
   line-height: 1.5;
 }
 
-/* Row that holds the KidsModeToggle below the search samples on the
-   homepage. Centred + a touch of top space so the toggle reads as a
-   sibling of the search affordance, not as part of the samples row. */
-.wordbook .wb-home-kids-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.wordbook .wb-home-samples {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-}
-.wordbook .wb-home-samples-label {
-  font-family: var(--wb-he);
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--ink-faint);
-  letter-spacing: 0;
-  text-transform: none;
-  margin-inline-end: 4px;
-  opacity: 0.7;
-}
-/* Sample chips — soft hint only. Flat text, no pill background, light
-   gray color. They should whisper 'try one of these' without competing
-   with the search box for attention. Teal on hover keeps them
-   discoverable. */
-.wordbook .wb-home-sample {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 6px;
-  border: none;
-  background: transparent;
-  font-family: var(--wb-he);
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--ink-faint);
-  cursor: pointer;
-  transition: color 0.15s ease;
-  line-height: 1.4;
-}
-.wordbook .wb-home-sample:hover {
-  color: var(--teal);
-  background: transparent;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
 /* ═══════════════════════════════════════════════════════════════════
    PRICING — 3 tier cards, each painted in its tier colour.
    Basic = neutral. Clear = teal (#0EA5A5). Deep = purple (#7C3AED).
@@ -4315,11 +3302,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
 .wordbook .wb-pc-t-basic .wb-pc-check { color: #64748B; }
 .wordbook .wb-pc-t-clear .wb-pc-check { color: #0EA5A5; }
 .wordbook .wb-pc-t-deep .wb-pc-check { color: #7C3AED; }
-
-.wordbook .wb-pc-badge {
-  display: inline-block; background: #0EA5A5; color: #fff; font-size: 10.5px;
-  font-weight: 800; padding: 2px 9px; border-radius: 999px; margin-bottom: 8px;
-}
 .wordbook .wb-pc-name { font-family: var(--wb-serif); font-size: 19px; font-weight: 700; color: var(--ink); }
 .wordbook .wb-pc-price { font-size: 23px; font-weight: 800; color: var(--ink); margin-top: 4px; }
 .wordbook .wb-pc-period { font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-inline-start: 3px; }
@@ -4334,11 +3316,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
 .wordbook .wb-pc-t-basic .wb-pc-cta { background: #64748B; color: #fff; border-color: #64748B; }
 .wordbook .wb-pc-t-clear .wb-pc-cta { background: #0EA5A5; color: #fff; border-color: #0EA5A5; }
 .wordbook .wb-pc-t-deep .wb-pc-cta { background: #7C3AED; color: #fff; border-color: #7C3AED; }
-/* "Best for families" pill on the Family column (Gadi 2026-10-06). */
-.wordbook .wb-pc-badge {
-  display: inline-block; margin-bottom: 6px; padding: 3px 10px; border-radius: 999px;
-  background: rgba(124, 58, 237, 0.12); color: #6D28D9; font-size: 11.5px; font-weight: 700;
-}
 
 /* ─── Schools comparison table (.wb-sc) ─────────────────────────────
    Mustard sibling of .wb-pc. Gadi 2026-08-15: three Schools plans by
@@ -4682,276 +3659,6 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
 .wordbook .wb-tier-clear .wb-tier-check { background: var(--teal-soft); color: var(--teal); }
 .wordbook .wb-tier-deep  .wb-tier-check { background: var(--deep-bg);  color: var(--deep-fg); }
 
-/* ═══════════════════════════════════════════════════════════════════
-   FEATURES PAGE — landing page that shows every Gadit capability.
-   Same CrispTech shell + footer. Hero, then a grid of feature cards
-   (each with the tier badge that unlocks it), then bottom CTA row.
-   ═══════════════════════════════════════════════════════════════════ */
-
-.wordbook .wb-features-main {
-  flex: 1;
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 32px 22px 56px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-features-main { padding: 56px 32px 80px; }
-}
-
-.wordbook .wb-features-hero {
-  text-align: center;
-  margin-bottom: 40px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-features-hero { margin-bottom: 56px; }
-}
-
-/* Gadit logo + tagline as ONE LOCKUP. The tagline is sized + spaced
-   so its rendered text width visually matches the Gadit wordmark
-   above. Gap between them is near zero — they read as one breath. */
-.wordbook .wb-features-logo {
-  font-family: var(--wb-sans);
-  font-weight: 600;
-  font-size: 64px;
-  letter-spacing: -0.035em;
-  color: var(--ink);
-  line-height: 1;
-  margin-bottom: 0;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-features-logo { font-size: 80px; margin-bottom: 0; }
-}
-.wordbook .wb-features-logo-it {
-  color: var(--teal);
-  font-style: italic;
-  font-weight: 500;
-}
-
-/* Tagline — sized to match the Gadit logo width above. Heebo letters
-   are visually narrower than Inter, so the tagline needs ~55-60% of
-   the logo's font-size to span the same width. */
-/* Section heading "What Gadit gives you:" — sits below the logo
-   as a clear section opener (not a brand tagline). Dark ink, bold,
-   centered, with a comfortable gap before the feature list. */
-.wordbook .wb-features-title {
-  font-family: var(--wb-he);
-  font-weight: 700;
-  font-size: 20px;
-  letter-spacing: -0.005em;
-  line-height: 1.2;
-  color: var(--ink);
-  margin: 14px 0 24px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-features-title { font-size: 24px; margin: 20px 0 32px; }
-}
-.wordbook .wb-features-sub {
-  font-family: var(--wb-he);
-  font-size: 15.5px;
-  font-weight: 500;
-  color: var(--ink-muted);
-  line-height: 1.6;
-  margin: 0 auto 24px;
-  max-width: 700px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-features-sub { font-size: 17px; margin-bottom: 32px; }
-}
-
-.wordbook .wb-features-cta-row,
-.wordbook .wb-features-cta-bottom {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-}
-.wordbook .wb-features-cta-bottom {
-  display: flex;
-  justify-content: center;
-  margin-top: 36px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-features-cta-bottom { margin-top: 48px; }
-}
-.wordbook .wb-features-cta-bottom .wb-features-cta-primary {
-  font-size: 16px;
-  padding: 13px 28px;
-}
-.wordbook .wb-features-cta-primary {
-  font-family: var(--wb-he);
-  font-size: 15px;
-  font-weight: 600;
-  background: var(--teal);
-  color: var(--surface);
-  padding: 11px 22px;
-  border-radius: 10px;
-  text-decoration: none;
-  transition: background 0.15s ease;
-}
-.wordbook .wb-features-cta-primary:hover { background: var(--teal-edge); }
-.wordbook .wb-features-cta-secondary {
-  font-family: var(--wb-he);
-  font-size: 15px;
-  font-weight: 600;
-  background: var(--surface);
-  color: var(--ink);
-  border: 1px solid var(--rule);
-  padding: 11px 22px;
-  border-radius: 10px;
-  text-decoration: none;
-  transition: background 0.15s ease, border-color 0.15s ease;
-}
-.wordbook .wb-features-cta-secondary:hover {
-  background: var(--mist);
-  border-color: var(--border-2);
-}
-
-/* Feature grid — single vertical column on every viewport. Each card
-   is a wide horizontal block: a colored illustration block on the
-   start side (tier color), a big title in the centre, tier pill on
-   the end side. The colored block IS the life of the card. */
-.wordbook .wb-features-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  max-width: 760px;
-  margin: 0 auto;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-features-grid { gap: 18px; }
-}
-
-.wordbook .wb-feature-card {
-  display: flex;
-  align-items: stretch;
-  gap: 0;
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-radius: 16px;
-  overflow: hidden;
-  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
-  position: relative;
-  min-height: 96px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-feature-card { min-height: 112px; }
-}
-.wordbook .wb-feature-card:hover {
-  border-color: var(--border-2);
-  box-shadow: 0 8px 22px -10px rgba(15, 23, 42, 0.14);
-  transform: translateY(-1px);
-}
-
-/* The colored illustration block — uses the tier color as a full
-   tinted block with the icon at large size. This is the visual
-   anchor of the card. */
-.wordbook .wb-feature-illust {
-  width: 96px;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-feature-illust { width: 128px; }
-}
-.wordbook .wb-feature-illust svg {
-  width: 38px;
-  height: 38px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-feature-illust svg { width: 48px; height: 48px; }
-}
-
-/* Title — fills the card height and centers its own text via
-   internal flex, so the perceived center matches the icon block
-   on the side regardless of font metrics. */
-.wordbook .wb-feature-title {
-  font-family: var(--wb-he);
-  font-weight: 500;
-  font-size: 16px;
-  letter-spacing: -0.005em;
-  color: var(--ink);
-  margin: 0;
-  line-height: 1.3;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  padding: 16px 18px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-feature-title { font-size: 18px; padding: 20px 24px; }
-}
-
-/* Tier pill vertically centered against the icon and title so all
-   three elements share one center line across the row. */
-.wordbook .wb-feature-card .wb-tier-pill {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  inset-inline-end: 14px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-feature-card .wb-tier-pill { inset-inline-end: 16px; }
-}
-
-/* Tier pill on feature card — modernized: pill-shape, Inter sans
-   (was JetBrains mono, which read as 'old-school terminal'), with
-   a tiny tier-coloured dot in front. Solid tint, no border — feels
-   crisper next to the white card. */
-.wordbook .wb-tier-pill {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--wb-sans);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  padding: 4px 10px;
-  border-radius: 999px;
-  flex-shrink: 0;
-  border: none;
-  line-height: 1;
-}
-.wordbook .wb-tier-pill-basic {
-  background: var(--basic-bg);
-  color: var(--basic-fg);
-}
-.wordbook .wb-tier-pill-clear {
-  background: var(--teal-soft);
-  color: var(--teal-edge);
-}
-.wordbook .wb-tier-pill-deep {
-  background: var(--deep-bg);
-  color: var(--deep-fg);
-}
-
-/* Footer (shared with home) */
-/* Homepage founder aside — a small personal note between the search
-   block and the footer. Restrained: italic, soft color, centered, no
-   chrome. The homepage is search-first; this is meant to feel like a
-   glimpse, not an essay. */
-.wordbook .wb-home-founder {
-  max-width: 560px;
-  margin: 32px auto 0;
-  padding: 0 22px 8px;
-  text-align: center;
-  font-family: var(--wb-sans);
-}
-.wordbook .wb-home-founder-note {
-  margin: 0;
-  font-size: 14.5px;
-  line-height: 1.6;
-  color: var(--ink-muted);
-  font-style: italic;
-}
-.wordbook .wb-home-founder-sign {
-  margin: 6px 0 0;
-  font-size: 12.5px;
-  letter-spacing: 0.02em;
-  color: var(--ink-faint);
-}
-
 /* ── Now I Gad it — brand element ──────────────────────────────────
    Two pieces work together. The Wordmark Flip (animations below)
    subtly morphs the topbar logo from "Gadit" to "Gad it." once per
@@ -5279,21 +3986,6 @@ html[data-theme="dark"] .wordbook .wb-verb-stamp-pos {
 /* Per-language section header inside the notebook (Gadi 2026-08-17). */
 .wordbook .wb-notebook-langsec { margin-bottom: 22px; }
 /* הכתבות (Dictations) section — saved spelling-practice series (Gadi 2026-09-19). */
-.wordbook .wb-dict-sub {
-  margin: -4px 0 12px;
-  font-size: 12.5px;
-  color: var(--muted, #6B7280);
-}
-.wordbook .wb-dict-card .wb-dict-again {
-  display: inline-block;
-  margin-top: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--accent, #0EA5A5);
-}
-.wordbook .wb-dict-card .wb-notebook-card-link:hover .wb-dict-again {
-  text-decoration: underline;
-}
 .wordbook .wb-notebook-langhead {
   display: flex;
   align-items: center;
@@ -5674,27 +4366,6 @@ html[data-theme="dark"] .wordbook .wb-verb-stamp-pos {
 /* Save toast — small pill that fades in at the top of the page when
    a word is saved to the notebook. Sits above the topbar (z>30) so
    it's visible even on long pages where the topbar is sticky. */
-.wordbook .wb-save-toast {
-  position: fixed;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 60;
-  background: var(--teal);
-  color: var(--surface);
-  font-family: var(--wb-he);
-  font-size: 14px;
-  font-weight: 600;
-  padding: 10px 18px;
-  border-radius: 999px;
-  box-shadow: 0 8px 24px rgba(14, 165, 165, 0.35);
-  animation: wb-save-toast-in 0.22s ease-out;
-  pointer-events: none;
-}
-.wordbook .wb-save-toast.is-error {
-  background: #DC2626;
-  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.35);
-}
 @keyframes wb-save-toast-in {
   from { opacity: 0; transform: translate(-50%, -8px); }
   to   { opacity: 1; transform: translate(-50%, 0); }
@@ -5799,7 +4470,6 @@ html[data-theme="dark"] .wordbook .wb-verb-stamp-pos {
    they left the search input. Teal-soft outer ring matches the
    .wb-home-search-box focus-within ring exactly. */
 .wordbook .wb-kids-toggle:focus-visible,
-.wordbook .wb-shell-lang-trigger:focus-visible,
 .wordbook .wb-shell-lang-mobile-trigger:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px rgba(14, 165, 165, 0.35);
@@ -5990,27 +4660,6 @@ html[data-theme="dark"] .wordbook .wb-verb-stamp-pos {
     background: var(--rule);
     margin: 6px 4px;
   }
-  .wordbook .wb-shell-mobile-langs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    padding: 4px;
-  }
-  .wordbook .wb-shell-mobile-langs button {
-    flex: 1 0 auto;
-    min-width: 0;
-    padding: 8px 10px;
-    font-size: 13.5px;
-    border-radius: 6px;
-    text-align: center;
-    justify-content: center;
-    color: var(--ink-muted);
-  }
-  .wordbook .wb-shell-mobile-langs button.is-active {
-    background: var(--teal-soft);
-    color: var(--teal);
-    font-weight: 600;
-  }
 }
 
 /* Mobile-only language switch sitting INLINE in the topbar (not
@@ -6109,26 +4758,6 @@ html[data-theme="dark"] .wordbook .wb-verb-stamp-pos {
    search bar. Passes ?sentence=... through to /word, which then
    feeds /api/define as contextSentence and gets the meaning that
    matches the user's sentence specifically. */
-.wordbook .wb-home-sentence-toggle {
-  margin-top: 4px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-family: var(--wb-he);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ink-muted);
-  padding: 6px 10px;
-  border-radius: 999px;
-  transition: color 0.15s ease, background 0.15s ease;
-}
-.wordbook .wb-home-sentence-toggle:hover {
-  color: var(--teal);
-  background: var(--teal-soft);
-}
 .wordbook .wb-home-sentence-wrap {
   /* Matches the search-box width exactly — full width of the form
      parent (.wb-home-search), no max-width override. */
@@ -6139,39 +4768,6 @@ html[data-theme="dark"] .wordbook .wb-verb-stamp-pos {
 /* Eyebrow above the always-on sentence textarea — Gadi 2026-06-19
    replaced the "+ Add the sentence…" toggle with this small subtitle
    that tells people the field is optional without forcing a click. */
-.wordbook .wb-home-sentence-eyebrow {
-  font-family: var(--wb-sans);
-  font-size: 11.5px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  margin: 6px 4px 4px;
-}
-.wordbook[dir="rtl"] .wb-home-sentence-eyebrow {
-  text-transform: none;
-  letter-spacing: 0.01em;
-}
-.wordbook .wb-home-sentence-close {
-  position: absolute;
-  top: 8px;
-  inset-inline-end: 8px;
-  width: 28px;
-  height: 28px;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  color: var(--ink-faint);
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-.wordbook .wb-home-sentence-close:hover {
-  background: var(--rule-faint);
-  color: var(--ink-muted);
-}
 .wordbook .wb-home-sentence-input {
   width: 100%;
   background: var(--surface);
@@ -6651,9 +5247,6 @@ html[data-theme="dark"] .wordbook .wb-verb-stamp-pos {
 @media (max-width: 767px) {
   .wordbook .wb-word-searchbar-stage { top: 0; }
 }
-.wordbook .wb-word-searchbar-stage.is-stuck {
-  box-shadow: 0 4px 14px -8px rgba(15, 23, 42, 0.18);
-}
 /* Dark mode: the fog gradient must fade to the dark page ground, not the
    hardcoded light #F9FAFB, which otherwise showed a light band under the
    topbar on the word page in dark mode (Gadi 2026-08-22). */
@@ -6682,11 +5275,6 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
 .wordbook .wb-word-searchbar:focus-within {
   border-color: rgba(14, 165, 165, 0.55);
   box-shadow: 0 0 0 3px rgba(14, 165, 165, 0.12);
-}
-.wordbook .wb-word-searchbar-icon {
-  display: inline-flex;
-  color: var(--ink-muted, #6B7280);
-  flex-shrink: 0;
 }
 .wordbook .wb-word-searchbar-input {
   flex: 1;
@@ -7173,43 +5761,7 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
   outline-offset: 3px;
 }
 
-/* ─── Section ─────────────────────────────────────────────────── */
-.wordbook .wb-feat-section { margin-bottom: clamp(48px, 7vw, 80px); }
-.wordbook .wb-feat-section-label {
-  font-family: var(--wb-sans);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--teal-deep, #0E7490);
-  text-align: center;
-  margin-top: 56px;
-  margin-bottom: 28px;
-}
-.wordbook[dir="rtl"] .wb-feat-section-label { font-family: var(--wb-he); }
-
 /* ─── Bento grid ──────────────────────────────────────────────── */
-.wordbook .wb-feat-bento {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-}
-@media (min-width: 640px) {
-  .wordbook .wb-feat-bento {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-}
-@media (min-width: 960px) {
-  .wordbook .wb-feat-bento {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-  }
-  /* Featured card spans 2 columns on desktop for emphasis */
-  .wordbook .wb-feat-bento .wb-feat-card.is-featured {
-    grid-column: span 2;
-  }
-}
 
 .wordbook .wb-feat-card {
   background: var(--surface);
@@ -7238,10 +5790,6 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
     transform: translateY(-2px);
   }
 }
-.wordbook .wb-feat-card.is-featured {
-  background: linear-gradient(180deg, var(--surface) 0%, rgba(14, 165, 165, 0.04) 100%);
-  border-color: rgba(14, 165, 165, 0.25);
-}
 
 .wordbook .wb-feat-card-head {
   display: flex;
@@ -7257,13 +5805,6 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
   align-items: center;
   justify-content: center;
 }
-/* Slightly larger icon-tile on featured card */
-.wordbook .wb-feat-card.is-featured .wb-feat-card-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-}
-
 .wordbook .wb-feat-tier-chip {
   display: inline-flex;
   align-items: center;
@@ -7305,12 +5846,6 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
 .wordbook[dir="rtl"] .wb-feat-card-title {
   letter-spacing: 0;
 }
-.wordbook .wb-feat-card.is-featured .wb-feat-card-title {
-  font-size: 24px;
-}
-@media (min-width: 768px) {
-  .wordbook .wb-feat-card.is-featured .wb-feat-card-title { font-size: 28px; }
-}
 
 .wordbook .wb-feat-card-body {
   font-family: var(--wb-sans);
@@ -7320,7 +5855,6 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
   margin: 0;
 }
 .wordbook[dir="rtl"] .wb-feat-card-body { font-family: var(--wb-he); }
-.wordbook .wb-feat-card.is-featured .wb-feat-card-body { font-size: 15.5px; }
 
 /* ─── Final CTA ───────────────────────────────────────────────── */
 .wordbook .wb-feat-final {
@@ -7471,67 +6005,6 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
   background: var(--wb-canvas);
 }
 
-/* ─── Tier tie-back ───────────────────────────────────────────────
-   One-liners that name what each tier adds. Compact list, generous
-   inline gap. This is the bridge between "here are the features" and
-   "here is the pricing." */
-.wordbook .wb-feat-tiertie {
-  max-width: 760px;
-  margin: 0 auto clamp(32px, 4vw, 52px);
-  text-align: center;
-}
-.wordbook .wb-feat-tiertie-title {
-  font-family: var(--wb-serif);
-  font-weight: 700;
-  font-size: clamp(20px, 2.6vw, 26px);
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  margin: 0 0 clamp(14px, 1.8vw, 20px);
-}
-.wordbook[dir="rtl"] .wb-feat-tiertie-title {
-  letter-spacing: 0;
-}
-[lang="ar"].wordbook .wb-feat-tiertie-title,
-.wordbook[lang="ar"] .wb-feat-tiertie-title { font-family: var(--wb-ar); }
-.wordbook .wb-feat-tiertie-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.wordbook .wb-feat-tiertie-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-family: var(--wb-sans);
-  font-size: 14.5px;
-  line-height: 1.5;
-  color: var(--ink-soft);
-  text-align: start;
-  padding: 10px 14px;
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-radius: 12px;
-}
-.wordbook[dir="rtl"] .wb-feat-tiertie-row { font-family: var(--wb-he); }
-[lang="ar"].wordbook .wb-feat-tiertie-row,
-.wordbook[lang="ar"] .wb-feat-tiertie-row { font-family: var(--wb-ar); }
-.wordbook .wb-feat-tiertie-row .wb-feat-tier-chip { flex-shrink: 0; }
-/* Brand name inside the tieback sentence picks up the tier accent
-   colour (Clear -> teal, Deep -> purple). Basic stays at ink colour
-   since gray-on-white would look washed out. display: inline-block +
-   direction: ltr keeps "Basic"/"Clear"/"Deep" rendering left-to-right
-   inside an RTL paragraph. */
-.wordbook .wb-feat-tier-name {
-  display: inline-block;
-  direction: ltr;
-  font-weight: 700;
-}
-.wordbook .wb-feat-tier-name-basic  { color: var(--ink); }
-.wordbook .wb-feat-tier-name-clear  { color: #0EA5A5; }
-.wordbook .wb-feat-tier-name-deep   { color: #7C3AED; }
-.wordbook .wb-feat-tier-name-family { color: #1E40AF; }
-
 /* ─── Final CTA character + bubble ────────────────────────────────
    The character returns at the very end with a speech bubble carrying
    the brand verb ("Now I gad it!"). Closes the page on the same
@@ -7654,67 +6127,12 @@ html[data-theme="dark"] .wordbook .wb-word-searchbar-stage {
   margin: 0 0 20px;
 }
 
-.wordbook .wb-play-streak {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: rgba(245, 158, 11, 0.08);
-  border: 1px solid rgba(245, 158, 11, 0.18);
-  color: rgb(180, 83, 9);
-  font-size: 13px;
-  font-weight: 600;
-}
-.wordbook .wb-play-streak-best {
-  margin-inline-start: 6px;
-  padding-inline-start: 10px;
-  border-inline-start: 1px solid rgba(245, 158, 11, 0.25);
-  color: rgb(146, 64, 14);
-  font-weight: 500;
-  opacity: 0.8;
-}
-
 .wordbook .wb-play-loading,
 .wordbook .wb-play-error {
   text-align: center;
   padding: 48px 16px;
   color: var(--wb-ink-soft);
 }
-
-.wordbook .wb-play-empty {
-  text-align: center;
-  padding: 48px 24px;
-  background: var(--surface);
-  border: 1px solid var(--wb-border);
-  border-radius: 16px;
-  max-width: 480px;
-  margin-inline: auto;
-}
-.wordbook .wb-play-empty-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--wb-ink);
-  margin-bottom: 8px;
-}
-.wordbook .wb-play-empty-hint {
-  font-size: 14px;
-  color: var(--wb-ink-soft);
-  margin: 0 0 20px;
-}
-.wordbook .wb-play-empty-cta {
-  display: inline-block;
-  padding: 10px 20px;
-  background: rgb(14, 165, 165);
-  color: #fff;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 14px;
-  text-decoration: none;
-  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), background 160ms;
-}
-.wordbook .wb-play-empty-cta:hover { background: rgb(13, 148, 148); }
-.wordbook .wb-play-empty-cta:active { transform: scale(0.97); }
 
 /* Section: one per category (notebook / origin / precision / structure).
    Each section gets a small heading + its own grid. Sections stack
@@ -8632,153 +7050,6 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
   from { opacity: 0; transform: translateY(4px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
-/* Kids Mode banner — top of /play menu. Parent-facing card that
-   surfaces the toggle so a 6-12 year old is never handed the device
-   into an adult-content games menu. Three visual states: default
-   (invite, teal-tinted), is-on (confirmation, deeper teal), is-gate
-   (upsell for Basic / signed-out, quieter neutral). Round 1 shipped
-   2026-06-29 with Gadi's family testing on his son. */
-.wordbook .wb-play-kids-banner {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px 20px;
-  margin-bottom: 20px;
-  background: rgba(14, 165, 165, 0.06);
-  border: 1px solid rgba(14, 165, 165, 0.28);
-  border-radius: 16px;
-}
-.wordbook .wb-play-kids-banner.is-on {
-  background: rgba(14, 165, 165, 0.10);
-  border-color: rgba(14, 165, 165, 0.45);
-}
-.wordbook .wb-play-kids-banner.is-gate {
-  background: rgba(0, 0, 0, 0.03);
-  border-color: var(--wb-border, #E5E7EB);
-}
-.wordbook .wb-play-kids-banner-icon {
-  font-size: 32px;
-  line-height: 1;
-  flex-shrink: 0;
-}
-.wordbook .wb-play-kids-banner-text {
-  flex: 1;
-  min-width: 0;
-}
-.wordbook .wb-play-kids-banner-title {
-  font-family: var(--wb-font-display);
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--wb-ink);
-  margin-bottom: 2px;
-}
-.wordbook .wb-play-kids-banner-desc {
-  font-size: 13.5px;
-  line-height: 1.45;
-  color: var(--wb-ink-soft);
-}
-.wordbook .wb-play-kids-banner-cta {
-  flex-shrink: 0;
-  padding: 10px 18px;
-  background: var(--teal, #0EA5A5);
-  border: 1px solid var(--teal, #0EA5A5);
-  border-radius: 999px;
-  color: white;
-  font-family: var(--wb-sans);
-  font-size: 13.5px;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background 160ms ease, transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-.wordbook .wb-play-kids-banner-cta:hover {
-  background: #0d9494;
-  border-color: #0d9494;
-}
-.wordbook .wb-play-kids-banner-cta:active { transform: scale(0.97); }
-.wordbook .wb-play-kids-banner-cta.is-ghost {
-  background: transparent;
-  color: var(--teal, #0EA5A5);
-}
-.wordbook .wb-play-kids-banner-cta.is-ghost:hover {
-  background: rgba(14, 165, 165, 0.08);
-}
-@media (max-width: 599px) {
-  .wordbook .wb-play-kids-banner.is-gate {
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .wordbook .wb-play-kids-banner.is-gate .wb-play-kids-banner-cta {
-    width: 100%;
-    text-align: center;
-  }
-}
-
-/* Banner v2 (Gadi 2026-10-09): the old teal strip with an emoji face read
-   as dated next to the picture cards. Now a card in the same family: warm
-   cream when Kids Mode is on, white when off, a hairline ring, the yellow
-   mascot from the covers popping out of the top edge, and a real on/off
-   switch. Colours are fixed (not skin tokens) so it reads under every kid
-   skin. */
-.wordbook .wb-play-kids-banner {
-  position: relative;
-  gap: 14px;
-  margin-top: 26px;
-  padding: 10px 18px;
-  padding-inline-start: 12px;
-  background: #FFFFFF;
-  border: 0;
-  border-radius: 16px;
-  box-shadow: 0 0 0 0.5px rgba(15, 23, 42, 0.14), 0 1px 2px rgba(15, 23, 42, 0.05), 0 6px 16px -10px rgba(15, 23, 42, 0.22);
-}
-/* "On" background (Gadi picked it 2026-10-09, of three): soft mint from
-   the notebook-card family, dark teal text, teal switch. */
-.wordbook .wb-play-kids-banner.is-on { background: #E7F4F2; box-shadow: 0 0 0 1px #BCE0DA; border: 0; }
-.wordbook .wb-play-kids-banner.is-on .wb-play-kids-banner-title { color: #0F3B39; }
-.wordbook .wb-play-kids-banner.is-on .wb-play-kids-banner-desc { color: #4A6461; }
-.wordbook .wb-play-kids-banner.is-on .wb-play-kids-switch.is-on { background: #0F6F6C; }
-.wordbook .wb-play-kids-banner.is-gate { background: #FFFFFF; border: 0; }
-.wordbook .wb-play-kids-banner-mascot {
-  /* Full square canvas (not trimmed) so both poses keep the same scale. */
-  width: 90px;
-  height: 90px;
-  margin-top: -36px;
-  margin-bottom: -8px;
-  flex-shrink: 0;
-  filter: drop-shadow(0 6px 8px rgba(120, 80, 10, 0.18));
-}
-.wordbook .wb-play-kids-banner .wb-play-kids-banner-title { color: #172320; font-weight: 700; }
-.wordbook .wb-play-kids-banner .wb-play-kids-banner-desc { color: #5C6B66; }
-.wordbook .wb-play-kids-switch {
-  flex-shrink: 0;
-  position: relative;
-  width: 52px;
-  height: 30px;
-  padding: 0;
-  border: 0;
-  border-radius: 999px;
-  background: #CBD5E1;
-  cursor: pointer;
-  transition: background 180ms ease;
-}
-.wordbook .wb-play-kids-switch.is-on { background: #0F6F6C; }
-.wordbook .wb-play-kids-switch-knob {
-  position: absolute;
-  top: 3px;
-  inset-inline-start: 3px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #FFFFFF;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.3);
-  transition: inset-inline-start 180ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-.wordbook .wb-play-kids-switch.is-on .wb-play-kids-switch-knob { inset-inline-start: 25px; }
-.wordbook .wb-play-kids-switch:focus-visible { outline: 3px solid #0EA5A5; outline-offset: 3px; }
-@media (max-width: 599px) {
-  .wordbook .wb-play-kids-banner-mascot { width: 76px; height: 76px; margin-top: -30px; }
-}
 /* Hear the word in the games (Gadi 2026-10-11). */
 .wordbook .wb-play-prompt .wb-play-speak { margin-inline-start: 10px; vertical-align: middle; }
 .wordbook .wb-flash-say { display: flex; justify-content: center; margin-top: 10px; }
@@ -8786,19 +7057,6 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
 .wordbook .wb-play-cta-duel { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; max-width: 340px; margin: 14px auto 0; min-height: 48px; padding: 0 18px; border-radius: 999px; border: 1.5px dashed rgba(180,83,9,0.45); background: #FFF6E5; color: #8A4B00; font: inherit; font-size: 15px; font-weight: 800; cursor: pointer; }
 .wordbook .wb-play-cta-duel:hover { background: #FFEFD0; }
 .wordbook .wb-play-cta-duel:focus-visible { outline: 3px solid #0EA5A5; outline-offset: 2px; }
-/* Kids Mode + Word Duel as a pair of equal cards (Gadi 2026-10-11). */
-.wordbook .wb-play-banners { margin: 26px 0 20px; display: grid; gap: 14px; }
-.wordbook .wb-play-banners.has-duel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.wordbook .wb-play-banners .wb-play-kids-banner { margin: 0; min-width: 0; }
-.wordbook .wb-play-kids-banner.is-duel { background: #FFFFFF; }
-.wordbook .wb-play-kids-banner-cta.is-duel { background: #0F6F6C; border-color: #0F6F6C; font-weight: 700; white-space: nowrap; }
-.wordbook .wb-play-kids-banner-cta.is-duel:hover { background: #0B5A57; border-color: #0B5A57; }
-@media (max-width: 860px) {
-  .wordbook .wb-play-banners.has-duel { grid-template-columns: 1fr; row-gap: 34px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .wordbook .wb-play-kids-switch, .wordbook .wb-play-kids-switch-knob { transition: none; }
-}
 
 /* Next / Finish button — shown after a round's reveal so the player
    advances at their own pace. Replaced the auto-advance setTimeout
@@ -9244,7 +7502,6 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
   .wordbook .wb-play-cta-primary,
   .wordbook .wb-play-cta-ghost,
   .wordbook .wb-play-next,
-  .wordbook .wb-play-kids-banner-cta,
   .wordbook .wb-schools-cta,
   .wordbook .wb-schools-price-card,
   .wordbook .wb-schools-faq-chevron,
@@ -9686,983 +7943,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
   .wb-wgm-cta-ghost { transition: none; }
 }
 
-/* ─────────────────────────────────────────────────────────────
- * /affiliates — public marketing page for the Partner Program
- *
- * Mission-led hero, three audience pillars, three-step process,
- * worked earnings example, FAQ, final CTA. CrispTech aesthetic:
- * white canvas, teal accents, generous whitespace, AA contrast.
- *
- * All entrance animations use strong ease-out
- * cubic-bezier(0.23, 1, 0.32, 1) and never start from scale(0)
- * (always 0.96 minimum so elements never appear out of nothing).
- * Reduced-motion strips all entrance animation while keeping
- * opacity changes for visual feedback.
- * ───────────────────────────────────────────────────────────── */
-
-.wordbook .wb-aff-page {
-  background: var(--wb-canvas);
-  /* Belt-and-suspenders against horizontal overflow on mobile —
-     if any descendant accidentally exceeds 100vw (long Hebrew CTA
-     wrapping in a flex row, a stray pre/table/image), the whole
-     viewport stays the same width instead of triggering a horizontal
-     scroll bar that hides half the page until the user pinches out. */
-  overflow-x: clip;
-  max-width: 100vw;
-}
-
-.wordbook .wb-aff-main {
-  max-width: 1080px;
-  margin-inline: auto;
-  padding-inline: 24px;
-  /* Same protection at the content layer — every section sits inside
-     this container, so a section that goes wide is bounded here too. */
-  max-width: min(1080px, 100vw);
-  box-sizing: border-box;
-}
-
-/* ── Eyebrow / section heading vocabulary ───────────────────── */
-.wordbook .wb-aff-eyebrow {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgb(13, 148, 148);
-}
-
-.wordbook .wb-aff-section-head {
-  text-align: center;
-  max-width: 680px;
-  margin-inline: auto;
-  margin-bottom: 36px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.wordbook .wb-aff-section-title {
-  font-family: var(--wb-font-display);
-  font-size: clamp(26px, 4vw, 36px);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--wb-ink);
-  line-height: 1.2;
-  margin: 0;
-}
-.wordbook .wb-aff-section-sub {
-  font-size: 16px;
-  color: var(--wb-ink-soft);
-  line-height: 1.6;
-  margin: 0;
-}
-
-.wordbook .wb-aff-section {
-  padding: 64px 0;
-  border-top: 1px solid rgba(15, 23, 42, 0.05);
-}
-.wordbook .wb-aff-section:first-of-type { border-top: none; }
-@media (min-width: 768px) {
-  .wordbook .wb-aff-section { padding: 80px 0; }
-}
-
-/* ── Hero ───────────────────────────────────────────────────── */
-.wordbook .wb-aff-hero {
-  padding: 72px 0 80px;
-  text-align: center;
-  max-width: 760px;
-  margin-inline: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 18px;
-  animation: wbAffFadeIn 600ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-@keyframes wbAffFadeIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.wordbook .wb-aff-title {
-  font-family: var(--wb-font-display);
-  font-size: clamp(34px, 6vw, 56px);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  color: var(--wb-ink);
-  margin: 0;
-  line-height: 1.1;
-  white-space: pre-line;
-}
-.wordbook .wb-aff-lede {
-  font-size: clamp(16px, 1.8vw, 19px);
-  color: var(--wb-ink-soft);
-  line-height: 1.6;
-  margin: 0;
-  max-width: 620px;
-}
-
-/* ── CTAs ───────────────────────────────────────────────────── */
-.wordbook .wb-aff-cta-row {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 12px;
-}
-.wordbook .wb-aff-cta-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 28px;
-  background: rgb(14, 165, 165);
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 15px;
-  text-decoration: none;
-  min-height: 48px;
-  cursor: pointer;
-  transition:
-    background 180ms cubic-bezier(0.23, 1, 0.32, 1),
-    transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
-    box-shadow 200ms;
-  box-shadow: 0 2px 8px rgba(14, 165, 165, 0.25);
-}
-.wordbook .wb-aff-cta-primary:hover {
-  background: rgb(13, 148, 148);
-  box-shadow: 0 6px 18px rgba(14, 165, 165, 0.35);
-}
-.wordbook .wb-aff-cta-primary:active { transform: scale(0.97); }
-.wordbook .wb-aff-cta-primary svg {
-  flex-shrink: 0;
-  /* Flip arrow in RTL so it always points "forward" toward action */
-}
-.wordbook[dir="rtl"] .wb-aff-cta-primary svg { transform: scaleX(-1); }
-
-.wordbook .wb-aff-cta-ghost {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 28px;
-  background: transparent;
-  color: var(--wb-ink);
-  border: 1px solid rgba(15, 23, 42, 0.14);
-  border-radius: 999px;
-  font-weight: 500;
-  font-size: 15px;
-  text-decoration: none;
-  min-height: 48px;
-  cursor: pointer;
-  transition: background 160ms, border-color 160ms, transform 160ms;
-}
-.wordbook .wb-aff-cta-ghost:hover {
-  background: rgba(15, 23, 42, 0.04);
-  border-color: rgba(15, 23, 42, 0.22);
-}
-.wordbook .wb-aff-cta-ghost:active { transform: scale(0.97); }
-
-/* ── Proof chips (under hero) ───────────────────────────────── */
-.wordbook .wb-aff-proofs {
-  list-style: none;
-  padding: 0;
-  margin: 28px 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-}
-.wordbook .wb-aff-proofs li {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: var(--surface);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--wb-ink-soft);
-  font-variant-numeric: tabular-nums;
-}
-.wordbook .wb-aff-proofs svg {
-  color: rgb(13, 148, 148);
-  flex-shrink: 0;
-}
-
-/* ── Who it's for — 3-card grid ─────────────────────────────── */
-.wordbook .wb-aff-who-grid {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-}
-.wordbook .wb-aff-who-card {
-  background: var(--surface);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 16px;
-  padding: 28px 26px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 220ms, border-color 220ms;
-}
-.wordbook .wb-aff-who-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-  border-color: rgba(14, 165, 165, 0.25);
-}
-.wordbook .wb-aff-who-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: rgba(14, 165, 165, 0.08);
-  color: rgb(13, 148, 148);
-  margin-bottom: 4px;
-}
-.wordbook .wb-aff-who-title {
-  font-family: var(--wb-font-display);
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--wb-ink);
-  margin: 0;
-  line-height: 1.3;
-}
-.wordbook .wb-aff-who-desc {
-  font-size: 14.5px;
-  color: var(--wb-ink-soft);
-  line-height: 1.6;
-  margin: 0;
-}
-
-/* ── How it works — numbered 3-step grid ────────────────────── */
-.wordbook .wb-aff-how-grid {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-  counter-reset: aff-step;
-}
-.wordbook .wb-aff-how-step {
-  background: var(--surface);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 16px;
-  padding: 28px 26px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.wordbook .wb-aff-how-num {
-  position: absolute;
-  top: 22px;
-  inset-inline-start: 22px;
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  background: rgba(14, 165, 165, 0.10);
-  color: rgb(13, 148, 148);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--wb-font-display);
-  font-weight: 700;
-  font-size: 14px;
-}
-.wordbook .wb-aff-how-title {
-  font-family: var(--wb-font-display);
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--wb-ink);
-  margin: 0;
-  padding-inline-start: 40px;
-  line-height: 1.35;
-}
-.wordbook .wb-aff-how-desc {
-  font-size: 14.5px;
-  color: var(--wb-ink-soft);
-  line-height: 1.6;
-  margin: 0;
-}
-
-/* ── Earnings example ───────────────────────────────────────── */
-.wordbook .wb-aff-earn-card {
-  max-width: 560px;
-  margin-inline: auto;
-  background: var(--surface);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 18px;
-  padding: 30px 28px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
-}
-.wordbook .wb-aff-earn-heading {
-  font-family: var(--wb-font-display);
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--wb-ink);
-}
-.wordbook .wb-aff-earn-lines {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 15px;
-  color: var(--wb-ink-soft);
-  font-variant-numeric: tabular-nums;
-  line-height: 1.5;
-}
-.wordbook .wb-aff-earn-total {
-  font-family: var(--wb-font-display);
-  font-size: clamp(20px, 3vw, 26px);
-  font-weight: 700;
-  color: rgb(13, 148, 148);
-  padding-top: 16px;
-  border-top: 1px solid rgba(15, 23, 42, 0.06);
-  letter-spacing: -0.01em;
-}
-.wordbook .wb-aff-earn-note {
-  max-width: 560px;
-  margin: 18px auto 0;
-  font-size: 12.5px;
-  line-height: 1.55;
-  color: var(--wb-ink-soft);
-  opacity: 0.85;
-  text-align: center;
-}
-
-/* ── FAQ list ───────────────────────────────────────────────── */
-.wordbook .wb-aff-faq-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-width: 720px;
-  margin-inline: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.wordbook .wb-aff-faq-item {
-  background: var(--surface);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 14px;
-  padding: 22px 24px;
-  transition: border-color 200ms;
-}
-.wordbook .wb-aff-faq-item:hover {
-  border-color: rgba(14, 165, 165, 0.20);
-}
-.wordbook .wb-aff-faq-q {
-  font-family: var(--wb-font-display);
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--wb-ink);
-  margin: 0 0 8px;
-  line-height: 1.4;
-}
-.wordbook .wb-aff-faq-a {
-  font-size: 14.5px;
-  color: var(--wb-ink-soft);
-  line-height: 1.65;
-  margin: 0;
-}
-
-/* ── Final CTA section ─────────────────────────────────────── */
-.wordbook .wb-aff-final {
-  text-align: center;
-  padding: 72px 0 96px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  border-top: 1px solid rgba(15, 23, 42, 0.05);
-  background: linear-gradient(180deg, transparent, rgba(14, 165, 165, 0.04));
-}
-.wordbook .wb-aff-final-title {
-  font-family: var(--wb-font-display);
-  font-size: clamp(28px, 4vw, 38px);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--wb-ink);
-  margin: 0;
-  line-height: 1.2;
-}
-.wordbook .wb-aff-final-sub {
-  font-size: 16px;
-  color: var(--wb-ink-soft);
-  margin: 0;
-  max-width: 540px;
-  line-height: 1.6;
-}
-
-/* ─── New sections for the v2 affiliates page ──────────────── */
-
-/* Topbar sign-in: small text link, NOT a button (one dominant CTA
-   per page — reviewer consensus across all 5 AIs). */
-.wordbook .wb-aff-topbar-signin {
-  font-size: 12.5px;
-  font-weight: 500;
-  color: var(--wb-ink-soft);
-  text-decoration: none;
-  padding: 4px 8px;
-  border-radius: 6px;
-  transition: color 160ms, background 160ms;
-  white-space: nowrap;
-}
-.wordbook .wb-aff-topbar-signin:hover {
-  color: var(--wb-ink);
-  background: rgba(15, 23, 42, 0.04);
-}
-@media (max-width: 640px) {
-  .wordbook .wb-aff-topbar-signin { display: none; }
-}
-
-/* Mid-page CTA — smaller variant of the primary button, sits inside
-   a wrapper that centers it horizontally. Used between sections to
-   reinforce the action without overwhelming the page. */
-.wordbook .wb-aff-mid-cta {
-  display: flex;
-  justify-content: center;
-  margin-top: 40px;
-}
-.wordbook .wb-aff-cta-primary-compact {
-  padding: 11px 22px;
-  font-size: 14px;
-  min-height: 42px;
-}
-
-/* Generic 3-column card grid used by Why-recommend AND Who-it's-for.
-   They share the same visual treatment because they share the same
-   role on the page: a row of three reasons / personas.
-   minmax uses `min(260px, 100%)` instead of plain `260px` so the
-   grid never demands a column wider than the container — that was
-   the source of the horizontal overflow on narrow phones. */
-.wordbook .wb-aff-grid-3 {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-  gap: 20px;
-}
-.wordbook .wb-aff-feature-card {
-  background: var(--surface);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 16px;
-  padding: 28px 26px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 220ms, border-color 220ms;
-  box-sizing: border-box;
-  /* Long Hebrew / German compound words shouldn't push the card wider
-     than its grid cell on narrow phones. */
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-.wordbook .wb-aff-feature-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-  border-color: rgba(14, 165, 165, 0.25);
-}
-.wordbook .wb-aff-feature-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: rgba(14, 165, 165, 0.08);
-  color: rgb(13, 148, 148);
-  margin-bottom: 4px;
-}
-.wordbook .wb-aff-feature-title {
-  font-family: var(--wb-font-display);
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--wb-ink);
-  margin: 0;
-  line-height: 1.3;
-}
-.wordbook .wb-aff-feature-desc {
-  font-size: 14.5px;
-  color: var(--wb-ink-soft);
-  line-height: 1.6;
-  margin: 0;
-}
-
-/* What-you-get — 2×2 grid of smaller, denser cards so all four "we
-   give you this" items read together as a kit, not a feature list. */
-.wordbook .wb-aff-get-grid {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  /* Desktop: 2x2 — visually balanced for exactly 4 cards.
-     Below ~720px each card collapses to its own row via the media
-     query in the mobile block (single-column there). */
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  max-width: 760px;
-  margin-inline: auto;
-}
-@media (max-width: 720px) {
-  .wordbook .wb-aff-get-grid {
-    grid-template-columns: 1fr;
-  }
-}
-.wordbook .wb-aff-get-card {
-  background: var(--surface);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 14px;
-  padding: 24px 22px;
-  /* Vertical stack — icon top, then title, then description.
-     The previous horizontal grid (icon | text) crushed Hebrew titles
-     like "אזור אישי מסודר" into a 3-line stack on the narrow 280px
-     cards. Stacking vertically lets the title use the full card width. */
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: flex-start;
-  box-sizing: border-box;
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-.wordbook .wb-aff-get-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: rgba(14, 165, 165, 0.08);
-  color: rgb(13, 148, 148);
-  flex-shrink: 0;
-  margin-bottom: 2px;
-}
-.wordbook .wb-aff-get-title {
-  font-family: var(--wb-font-display);
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--wb-ink);
-  margin: 0 0 6px;
-  line-height: 1.35;
-}
-.wordbook .wb-aff-get-desc {
-  font-size: 14px;
-  color: var(--wb-ink-soft);
-  line-height: 1.55;
-  margin: 0;
-}
-
-/* ─── Interactive earnings calculator ──────────────────────── */
-.wordbook .wb-aff-calc {
-  max-width: 640px;
-  margin: 0 auto 32px;
-  background: var(--surface);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 18px;
-  padding: 28px 30px;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
-}
-.wordbook .wb-aff-calc-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
-}
-.wordbook .wb-aff-calc-label {
-  font-size: 14px;
-  color: var(--wb-ink-soft);
-  font-weight: 500;
-}
-.wordbook .wb-aff-calc-value {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 6px;
-}
-.wordbook .wb-aff-calc-num {
-  font-family: var(--wb-font-display);
-  font-size: clamp(28px, 4vw, 36px);
-  font-weight: 700;
-  color: rgb(13, 148, 148);
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.wordbook .wb-aff-calc-unit {
-  font-size: 14px;
-  color: var(--wb-ink-soft);
-  font-weight: 500;
-}
-
-/* Range slider — custom track + thumb so the control reads as part
-   of the brand, not a default OS chrome. WebKit + Firefox parallel
-   declarations because the cross-browser story is still split. */
-.wordbook .wb-aff-calc-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 6px;
-  border-radius: 999px;
-  background: linear-gradient(
-    to right,
-    rgb(14, 165, 165) 0%,
-    rgb(14, 165, 165) calc((var(--val, 10) - 1) / 49 * 100%),
-    rgba(15, 23, 42, 0.10) calc((var(--val, 10) - 1) / 49 * 100%),
-    rgba(15, 23, 42, 0.10) 100%
-  );
-  outline: none;
-  cursor: pointer;
-  margin: 0 0 24px;
-  transition: background 60ms linear;
-}
-.wordbook .wb-aff-calc-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  background: var(--surface);
-  border: 2px solid rgb(13, 148, 148);
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
-  cursor: grab;
-  transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-.wordbook .wb-aff-calc-slider::-webkit-slider-thumb:active {
-  transform: scale(1.15);
-  cursor: grabbing;
-}
-.wordbook .wb-aff-calc-slider::-moz-range-thumb {
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  background: var(--surface);
-  border: 2px solid rgb(13, 148, 148);
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
-  cursor: grab;
-}
-.wordbook .wb-aff-calc-slider:focus-visible {
-  outline: 2px solid rgb(14, 165, 165);
-  outline-offset: 4px;
-}
-
-.wordbook .wb-aff-calc-outputs {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-.wordbook .wb-aff-calc-output {
-  background: rgba(14, 165, 165, 0.04);
-  border: 1px solid rgba(14, 165, 165, 0.12);
-  border-radius: 12px;
-  padding: 16px 18px;
-  text-align: center;
-}
-.wordbook .wb-aff-calc-output-label {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--wb-ink-soft);
-  margin-bottom: 6px;
-}
-.wordbook .wb-aff-calc-output-value {
-  font-family: var(--wb-font-display);
-  font-size: clamp(20px, 3vw, 26px);
-  font-weight: 700;
-  color: var(--wb-ink);
-  font-variant-numeric: tabular-nums;
-}
-.wordbook .wb-aff-calc-output-value.is-emphasis {
-  color: rgb(13, 148, 148);
-}
-
-/* Scenario table — concrete examples around the slider. Keeps the
-   data readable across mobile (where the slider becomes the primary
-   interaction) and desktop (where the table reads at a glance).
-   Fixed layout so cells share the width evenly and a long header
-   doesn't push the table beyond 100% on narrow phones. */
-.wordbook .wb-aff-earn-table {
-  width: 100%;
-  /* Match the calculator card width (640px) above for visual rhythm. */
-  max-width: 640px;
-  margin: 0 auto 24px;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: var(--surface);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 14px;
-  overflow: hidden;
-  font-variant-numeric: tabular-nums;
-  table-layout: fixed;
-}
-.wordbook .wb-aff-earn-table th,
-.wordbook .wb-aff-earn-table td {
-  padding: 12px 18px;
-  text-align: start;
-  font-size: 14px;
-}
-.wordbook .wb-aff-earn-table th {
-  background: rgba(14, 165, 165, 0.05);
-  color: var(--wb-ink-soft);
-  font-weight: 600;
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
-}
-.wordbook .wb-aff-earn-table td {
-  color: var(--wb-ink);
-  border-bottom: 1px solid rgba(15, 23, 42, 0.04);
-}
-.wordbook .wb-aff-earn-table tr:last-child td { border-bottom: none; }
-.wordbook .wb-aff-earn-table td:last-child {
-  font-weight: 600;
-  color: rgb(13, 148, 148);
-}
-
-/* ─── Trust section: founder note + product stats ──────────── */
-.wordbook .wb-aff-trust-grid {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 28px;
-  max-width: 980px;
-  margin-inline: auto;
-}
-@media (max-width: 760px) {
-  .wordbook .wb-aff-trust-grid { grid-template-columns: 1fr; }
-}
-.wordbook .wb-aff-founder {
-  background: var(--surface);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 18px;
-  padding: 30px 32px;
-}
-.wordbook .wb-aff-founder-heading {
-  font-family: var(--wb-font-display);
-  font-size: 14px;
-  font-weight: 600;
-  color: rgb(13, 148, 148);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  margin: 0 0 14px;
-}
-.wordbook .wb-aff-founder-body {
-  font-size: 16px;
-  color: var(--wb-ink);
-  line-height: 1.7;
-  margin: 0 0 16px;
-  font-family: var(--wb-font-display);
-  font-weight: 400;
-}
-/* Render the founder body as multiple paragraphs split on \n\n by the
-   React component. Paragraph spacing reads as a real personal letter,
-   not a single dense block. */
-.wordbook .wb-aff-founder-body p {
-  margin: 0 0 14px;
-}
-.wordbook .wb-aff-founder-body p:last-child {
-  margin-bottom: 0;
-}
-.wordbook .wb-aff-founder-sign {
-  font-size: 13.5px;
-  color: var(--wb-ink-soft);
-  font-style: italic;
-}
-
-.wordbook .wb-aff-stats {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  justify-content: center;
-}
-@media (max-width: 760px) {
-  .wordbook .wb-aff-stats {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-}
-.wordbook .wb-aff-stats li {
-  background: var(--surface);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 14px;
-  padding: 20px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-@media (max-width: 760px) {
-  .wordbook .wb-aff-stats li { flex: 1 1 30%; min-width: 0; }
-}
-.wordbook .wb-aff-stat-num {
-  font-family: var(--wb-font-display);
-  font-size: clamp(28px, 4vw, 36px);
-  font-weight: 700;
-  color: rgb(13, 148, 148);
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.wordbook .wb-aff-stat-label {
-  font-size: 13px;
-  color: var(--wb-ink-soft);
-  line-height: 1.4;
-}
-
-/* ── Mobile overrides ──────────────────────────────────────────
-   Below 640px the page needs tighter padding, smaller display
-   sizes, and a vertical calculator output stack so the slider
-   reading isn't squeezed into a 50%-width box. */
-@media (max-width: 640px) {
-  .wordbook .wb-aff-main { padding-inline: 16px; }
-
-  .wordbook .wb-aff-hero {
-    padding: 40px 0 48px;
-    gap: 14px;
-  }
-  .wordbook .wb-aff-title {
-    font-size: clamp(26px, 8vw, 34px);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-  }
-  .wordbook .wb-aff-lede { font-size: 15px; }
-
-  .wordbook .wb-aff-section { padding: 48px 0; }
-  .wordbook .wb-aff-section-head { margin-bottom: 24px; gap: 10px; }
-  .wordbook .wb-aff-section-title {
-    font-size: clamp(22px, 6vw, 28px);
-    line-height: 1.25;
-  }
-  .wordbook .wb-aff-section-sub { font-size: 15px; }
-
-  /* CTAs wrap better and stay tappable */
-  .wordbook .wb-aff-cta-primary {
-    padding: 14px 22px;
-    font-size: 14.5px;
-    width: 100%;
-    max-width: 360px;
-    justify-content: center;
-    text-align: center;
-  }
-  .wordbook .wb-aff-cta-primary-compact {
-    /* Compact mid-page CTAs stay narrow (auto width) so they don't
-       balloon to the same size as the hero/final CTA. The parent
-       rule's 100% width gets overridden here. */
-    width: auto;
-    max-width: none;
-    padding: 12px 20px;
-    font-size: 14px;
-  }
-
-  /* Proof chips — slightly tighter */
-  .wordbook .wb-aff-proofs { gap: 8px; margin-top: 22px; }
-  .wordbook .wb-aff-proofs li {
-    font-size: 12px;
-    padding: 6px 12px;
-  }
-
-  /* Card grids — single column on tight mobile */
-  .wordbook .wb-aff-grid-3,
-  .wordbook .wb-aff-get-grid { gap: 14px; }
-  .wordbook .wb-aff-feature-card {
-    padding: 22px 20px;
-    gap: 10px;
-  }
-  .wordbook .wb-aff-feature-title { font-size: 17px; }
-  .wordbook .wb-aff-feature-desc { font-size: 14px; }
-
-  .wordbook .wb-aff-get-card {
-    padding: 18px 20px;
-    gap: 14px;
-    grid-template-columns: auto 1fr;
-  }
-  .wordbook .wb-aff-get-icon {
-    width: 36px;
-    height: 36px;
-  }
-
-  /* How-it-works — single column, full-width numbers */
-  .wordbook .wb-aff-how-grid { gap: 14px; }
-  .wordbook .wb-aff-how-step {
-    padding: 22px 20px;
-  }
-  .wordbook .wb-aff-how-num {
-    top: 18px;
-    inset-inline-end: 18px;
-  }
-
-  /* Calculator — stack outputs vertically so the dollar number gets
-     room to breathe instead of squeezing into ~140px on narrow phones. */
-  .wordbook .wb-aff-calc { padding: 22px 20px; }
-  .wordbook .wb-aff-calc-row { margin-bottom: 14px; }
-  .wordbook .wb-aff-calc-outputs {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-  .wordbook .wb-aff-calc-output { padding: 14px 16px; }
-
-  /* Earnings table — compact padding so all 3 columns fit */
-  .wordbook .wb-aff-earn-table th,
-  .wordbook .wb-aff-earn-table td {
-    padding: 10px 12px;
-    font-size: 13px;
-  }
-  .wordbook .wb-aff-earn-table th { font-size: 11px; }
-  .wordbook .wb-aff-earn-note {
-    font-size: 12px;
-    margin-top: 14px;
-  }
-
-  /* Trust grid — stacked, founder note tighter */
-  .wordbook .wb-aff-founder { padding: 24px 22px; }
-  .wordbook .wb-aff-founder-body { font-size: 15px; line-height: 1.65; }
-  .wordbook .wb-aff-stats li { padding: 16px 18px; }
-
-  /* FAQ — denser */
-  .wordbook .wb-aff-faq-item { padding: 18px 20px; }
-  .wordbook .wb-aff-faq-q { font-size: 15px; }
-  .wordbook .wb-aff-faq-a { font-size: 14px; }
-
-  /* Final CTA */
-  .wordbook .wb-aff-final { padding: 48px 0 64px; }
-  .wordbook .wb-aff-final-title { font-size: clamp(24px, 7vw, 32px); }
-  .wordbook .wb-aff-final-sub { font-size: 15px; }
-}
-
-/* Mobile viewports — clamp the proof chips into a 2x2 grid so the
-   four hero badges land as a clean square instead of wrapping into
-   the 1-2-1 layout that flex-wrap was producing on phones. The
-   breakpoint covers every common mobile width up to large phones. */
-@media (max-width: 640px) {
-  .wordbook .wb-aff-proofs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    width: 100%;
-    gap: 8px;
-  }
-  .wordbook .wb-aff-proofs li {
-    justify-content: center;
-    text-align: center;
-    font-size: 11.5px;
-    padding: 7px 10px;
-  }
-}
-
 /* Home footer — also reused under /affiliates and /play. On narrow
    phones the comma-separated link list wraps mid-link, splitting
    "תוכנית השותפים" across two lines and reading as broken copy.
@@ -10670,219 +7950,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
    items, never inside them. */
 .wordbook .wb-home-footer > * {
   white-space: nowrap;
-}
-
-/* ─────────────────────────────────────────────────────────────
- * /affiliate/dashboard — embedded Affonso partner dashboard
- *
- * Full-bleed iframe sitting under the Gadit topbar. The Affonso
- * embed handles all of its own typography/colours; our job is just
- * to give it the rest of the viewport and a clean wrapper.
- * ───────────────────────────────────────────────────────────── */
-
-.wordbook .wb-affdash-page {
-  background: var(--wb-canvas);
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-}
-
-.wordbook .wb-affdash-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 16px clamp(12px, 3vw, 32px);
-  max-width: 1280px;
-  width: 100%;
-  margin-inline: auto;
-  box-sizing: border-box;
-}
-
-.wordbook .wb-affdash-iframe {
-  flex: 1;
-  width: 100%;
-  min-height: 720px;
-  border: none;
-  border-radius: 16px;
-  background: var(--surface);
-  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
-}
-/* Payout-method guided callout above the embed. Frames the in-iframe
-   Affonso "Payment method required" banner as part of the Gadit
-   onboarding so the step doesn't feel like a foreign element. */
-.wordbook .wb-affdash-payout-guide {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 14px;
-  padding: 16px 20px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #E0F6F4 0%, #F3FBFA 100%);
-  border: 1px solid rgba(14, 116, 144, 0.16);
-  color: var(--ink, #111827);
-}
-.wordbook .wb-affdash-payout-guide-body {
-  flex: 1 1 320px;
-  min-width: 0;
-}
-.wordbook .wb-affdash-payout-guide-title {
-  margin: 0 0 4px;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--teal-deep, #155E75);
-}
-.wordbook .wb-affdash-payout-guide-text {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--ink, #111827);
-}
-.wordbook .wb-affdash-payout-guide-dismiss {
-  flex: 0 0 auto;
-  background: var(--surface);
-  color: var(--teal-deep, #155E75);
-  border: 1px solid rgba(14, 116, 144, 0.24);
-  border-radius: 999px;
-  padding: 8px 18px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-}
-.wordbook .wb-affdash-payout-guide-dismiss:hover {
-  background: #F0FAF9;
-}
-@media (max-width: 720px) {
-  .wordbook .wb-affdash-payout-guide {
-    padding: 14px 16px;
-    gap: 12px;
-  }
-  .wordbook .wb-affdash-payout-guide-dismiss {
-    width: 100%;
-  }
-}
-
-/* Loading / error / signed-out states share the same centered
-   card-ish layout. Keeps the page from looking blank while the
-   token round-trip happens. */
-.wordbook .wb-affdash-state {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 14px;
-  padding: 80px 24px;
-  max-width: 520px;
-  margin-inline: auto;
-}
-.wordbook .wb-affdash-state-title {
-  font-family: var(--wb-font-display);
-  font-size: clamp(22px, 3vw, 28px);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--wb-ink);
-  margin: 0;
-  line-height: 1.3;
-}
-.wordbook .wb-affdash-state-body {
-  font-size: 15px;
-  color: var(--wb-ink-soft);
-  line-height: 1.6;
-  margin: 0;
-}
-.wordbook .wb-affdash-state-link {
-  display: inline-block;
-  margin-top: 6px;
-  padding: 10px 20px;
-  background: rgb(14, 165, 165);
-  color: #fff;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 14px;
-  text-decoration: none;
-  transition: background 160ms, transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-.wordbook .wb-affdash-state-link:hover { background: rgb(13, 148, 148); }
-.wordbook .wb-affdash-state-link:active { transform: scale(0.97); }
-
-/* Sign-in button shown in the no-user state — primary teal CTA,
-   sibling of the marketing link below it. Re-opens promptLogin so a
-   visitor who dismissed the auto-prompt can sign in when ready. */
-.wordbook .wb-affdash-state-cta {
-  margin-top: 8px;
-  padding: 11px 26px;
-  background: rgb(14, 165, 165);
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 160ms, transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-.wordbook .wb-affdash-state-cta:hover { background: rgb(13, 148, 148); }
-.wordbook .wb-affdash-state-cta:active { transform: scale(0.97); }
-/* When the CTA is present, the marketing link below it should read as
-   a tertiary action — softer than the primary teal pill. */
-.wordbook .wb-affdash-state-cta + .wb-affdash-state-link {
-  margin-top: 12px;
-  padding: 0;
-  background: transparent;
-  color: var(--teal-deep, #155E75);
-  font-weight: 500;
-  text-decoration: underline;
-}
-.wordbook .wb-affdash-state-cta + .wb-affdash-state-link:hover {
-  background: transparent;
-  color: var(--ink, #111827);
-}
-
-/* Loading spinner — small teal ring rotating around its centre.
-   Sits above the title in the loading state. */
-.wordbook .wb-affdash-spinner {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 3px solid rgba(14, 165, 165, 0.18);
-  border-top-color: rgb(14, 165, 165);
-  animation: wbAffdashSpin 700ms linear infinite;
-}
-@keyframes wbAffdashSpin {
-  to { transform: rotate(360deg); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .wordbook .wb-affdash-spinner { animation: none; }
-}
-
-@media (max-width: 640px) {
-  .wordbook .wb-affdash-main { padding: 12px 8px; }
-  .wordbook .wb-affdash-iframe {
-    min-height: 600px;
-    border-radius: 12px;
-  }
-}
-
-/* ── Reduced-motion ─────────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  .wordbook .wb-aff-hero { animation: none; }
-  .wordbook .wb-aff-who-card,
-  .wordbook .wb-aff-feature-card,
-  .wordbook .wb-aff-cta-primary,
-  .wordbook .wb-aff-cta-ghost,
-  .wordbook .wb-aff-faq-item,
-  .wordbook .wb-aff-calc-slider::-webkit-slider-thumb {
-    transition: none;
-  }
-  .wordbook .wb-aff-who-card:hover,
-  .wordbook .wb-aff-feature-card:hover,
-  .wordbook .wb-aff-cta-primary:hover,
-  .wordbook .wb-aff-cta-primary:active,
-  .wordbook .wb-aff-cta-ghost:active {
-    transform: none;
-  }
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -11285,10 +8352,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
   background: rgba(124, 58, 237, 0.12);
   color: var(--wb-demo-purple);
 }
-.wordbook .wb-demo-anim-tier-affiliate {
-  background: rgba(217, 119, 6, 0.14);
-  color: var(--wb-demo-gold);
-}
 
 /* The stage is fixed-height so scene swaps don't reflow the page. The
    height is generous enough that the densest scene (Clear) fits
@@ -11508,10 +8571,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
   padding: 14px 16px;
   margin-bottom: 12px;
 }
-.wordbook .wb-demo-anim-card.is-clear {
-  border-color: rgba(14, 165, 165, 0.28);
-  background: rgba(14, 165, 165, 0.04);
-}
 .wordbook .wb-demo-anim-card.is-deep {
   border-color: rgba(124, 58, 237, 0.28);
   background: rgba(124, 58, 237, 0.04);
@@ -11585,13 +8644,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
   color: #047857;
   font-weight: 500;
 }
-.wordbook .wb-demo-anim-pill-eyebrow {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--wb-demo-ink-faint);
-}
 
 /* Clear scene specifics — kids toggle that "flips on" via the same
    visual as the real KidsModeToggle. */
@@ -11643,30 +8695,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
 @keyframes wb-demo-toggle-slide-rtl {
   from { transform: translateX(16px); }
   to   { transform: translateX(0); }
-}
-
-.wordbook .wb-demo-anim-image-row {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  padding: 12px;
-  background: var(--surface);
-  border: 1px solid var(--wb-demo-rule);
-  border-radius: 12px;
-  margin-bottom: 12px;
-}
-.wordbook .wb-demo-anim-image {
-  width: 56px;
-  height: 56px;
-  border-radius: 10px;
-  background:
-    radial-gradient(circle at 30% 30%, rgba(245, 158, 11, 0.6), transparent 50%),
-    radial-gradient(circle at 70% 70%, rgba(14, 165, 165, 0.6), transparent 50%),
-    linear-gradient(135deg, #FEF3C7, #DBEAFE);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
 }
 .wordbook .wb-demo-anim-image-sparkle {
   font-size: 22px;
@@ -11839,14 +8867,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
 }
 
 /* Affiliate scene specifics */
-.wordbook .wb-demo-anim-dash-title {
-  font-family: var(--wb-sans);
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--wb-demo-ink);
-  letter-spacing: -0.01em;
-  margin-bottom: 14px;
-}
 .wordbook .wb-demo-anim-link {
   background: rgba(217, 119, 6, 0.06);
   border: 1px dashed rgba(217, 119, 6, 0.3);
@@ -11963,7 +8983,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
     padding: 18px 18px 12px;
   }
   .wordbook .wb-demo-anim-word { font-size: 26px; }
-  .wordbook .wb-demo-anim-dash-title { font-size: 16px; }
   .wordbook .wb-demo-anim-stat-value { font-size: 18px; }
 }
 
@@ -11974,154 +8993,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
    accent strip on top, generous padding, with the price + CTA pinned
    to the inline-end so the value props read from the start edge
    first. */
-/* The Family card lives inside .wb-pricing-main (max-width: 1100px),
-   so the wrap spans 100% with no extra padding — edge-aligns with
-   the 3-tier grid above. Accent colour: royal blue #1E40AF
-   (2026-06-26). The first burnt-sienna attempt collided with Basic's
-   amber on the same row, so we moved to the cool side: blue completes
-   the palette (Basic warm + Clear teal + Deep purple + Family blue),
-   sits clearly between Clear and Deep without reading as either, and
-   matches the global SaaS convention for "family plan" colour
-   (Google Family Link, Apple Family Sharing, Microsoft Family). */
-.wordbook .wb-family-card-wrap {
-  width: 100%;
-  margin: clamp(28px, 4vw, 44px) 0 0;
-}
-.wordbook .wb-family-card {
-  display: grid;
-  /* Three columns - each side column takes roughly the same width
-     as Deep's column above, so the price + CTA sit directly below
-     the right-most (LTR) / left-most (RTL) tier card's CTA. */
-  grid-template-columns: 1fr 1.4fr 1fr;
-  gap: clamp(28px, 4vw, 56px);
-  align-items: center;
-  padding: clamp(32px, 4vw, 52px);
-  background: var(--surface);
-  /* Light blue tier border to match the basic/clear/deep colored
-     borders on the three personal-tier cards above. */
-  border: 1px solid #93C5FD;
-  border-radius: 28px;
-  position: relative;
-  /* Clip the ::before accent strip to the card's rounded corners.
-     Without this the strip overflows the curve and looks unfinished. */
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(30, 64, 175, 0.08), 0 16px 40px -16px rgba(30, 64, 175, 0.22);
-}
-.wordbook .wb-family-card::before {
-  content: "";
-  position: absolute;
-  inset-inline-start: 0;
-  inset-inline-end: 0;
-  top: 0;
-  height: 4px;
-  border-radius: 28px 28px 0 0;
-  background: #1E40AF;
-}
-.wordbook .wb-family-eyebrow {
-  font-family: var(--wb-sans);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #1E3A8A;
-  margin-bottom: 8px;
-}
-.wordbook[dir="rtl"] .wb-family-eyebrow { font-family: var(--wb-he); letter-spacing: 0.06em; }
-.wordbook .wb-family-name {
-  font-family: var(--wb-serif);
-  font-weight: 700;
-  font-size: clamp(30px, 3.8vw, 42px);
-  line-height: 1.05;
-  letter-spacing: -0.01em;
-  /* Tier-coloured wordmark to match Basic (warm), Clear (teal), Deep
-     (purple). Family wears royal blue, the same hex as the accent
-     strip + CTA + tier border, so the colour reads as one signature. */
-  color: #1E40AF;
-  margin: 0 0 12px;
-}
-.wordbook .wb-family-tagline {
-  font-family: var(--wb-sans);
-  font-size: 16px;
-  line-height: 1.55;
-  color: var(--ink-soft);
-  margin: 0;
-}
-.wordbook[dir="rtl"] .wb-family-tagline { font-family: var(--wb-he); }
-.wordbook .wb-family-tagline .wb-tier-tagline-hl {
-  color: #1E40AF;
-  font-weight: 700;
-}
-.wordbook .wb-family-features {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-}
-.wordbook .wb-family-features li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-family: var(--wb-sans);
-  font-size: 14.5px;
-  line-height: 1.5;
-  color: var(--ink-soft);
-}
-.wordbook[dir="rtl"] .wb-family-features li { font-family: var(--wb-he); }
-/* Check-icon styled as a colored chip to match the three personal-tier
-   cards above (.wb-tier-check pattern). Soft sky-blue circle, royal-blue
-   check glyph. Same 20x20 dimensions so the rhythm is identical. */
-.wordbook .wb-family-check {
-  width: 20px;
-  height: 20px;
-  border-radius: 999px;
-  background: #DBEAFE;
-  color: #1E40AF;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-.wordbook .wb-family-cta-col {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 12px;
-  /* Explicit min-width so the CTA never squeezes narrower than the
-     personal-tier CTAs above (~260px on desktop). */
-  min-width: 0;
-}
-.wordbook .wb-family-price-row {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  justify-content: center;
-}
-/* Matches .wb-tier-price exactly so all four prices on /pricing read
-   at the same weight, size and family — a unified pricing rhythm. */
-.wordbook .wb-family-price {
-  font-family: var(--wb-sans);
-  font-weight: 700;
-  font-size: 40px;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  line-height: 1;
-}
-.wordbook .wb-family-period {
-  font-family: var(--wb-sans);
-  font-size: 14px;
-  color: var(--ink-soft);
-}
-.wordbook[dir="rtl"] .wb-family-period { font-family: var(--wb-he); }
-.wordbook .wb-family-subprice {
-  font-family: var(--wb-sans);
-  font-size: 12.5px;
-  color: var(--ink-faint);
-  text-align: center;
-}
-.wordbook[dir="rtl"] .wb-family-subprice { font-family: var(--wb-he); }
 /* CTA matches the wb-tier-cta shape on the 3 personal tier cards so
    the whole pricing block reads as one family of buttons. Same
    border-radius (10px), same padding rhythm, just royal blue. */
@@ -12150,15 +9021,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
 .wordbook .wb-family-cta:focus-visible {
   outline: 2px solid #1E3A8A;
   outline-offset: 3px;
-}
-
-@media (max-width: 900px) {
-  .wordbook .wb-family-card {
-    grid-template-columns: 1fr;
-    text-align: start;
-    gap: 20px;
-  }
-  .wordbook .wb-family-cta-col { min-width: 0; }
 }
 
 /* ─── Family dashboard / add / pair / join ────────────────────────
@@ -12206,17 +9068,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
   max-width: 600px;
 }
 .wordbook[dir="rtl"] .wb-family-sub { font-family: var(--wb-he); }
-.wordbook .wb-family-welcome-pill {
-  display: inline-block;
-  padding: 8px 14px;
-  background: rgba(30, 64, 175, 0.1);
-  border-radius: 999px;
-  font-family: var(--wb-sans);
-  font-size: 13px;
-  color: #1E3A8A;
-  margin-bottom: 16px;
-}
-.wordbook[dir="rtl"] .wb-family-welcome-pill { font-family: var(--wb-he); }
 /* Shown when the family already has 5 children — the cap on the Family
    plan. Replaces the "+ Add" button at the cap so the parent can't
    start an add flow that will fail. */
@@ -12234,25 +9085,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
   max-width: 480px;
 }
 .wordbook[dir="rtl"] .wb-family-cap-pill { font-family: var(--wb-he); }
-.wordbook .wb-family-add-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 0 22px;
-  background: #1E40AF;
-  color: #FFFFFF;
-  border-radius: 999px;
-  font-family: var(--wb-sans);
-  font-size: 14.5px;
-  font-weight: 600;
-  text-decoration: none;
-  box-shadow: 0 1px 2px rgba(30, 64, 175, 0.3), 0 8px 24px -8px rgba(30, 64, 175, 0.45);
-  transition: background 180ms var(--wb-ease-out), transform 160ms var(--wb-ease-out);
-}
-.wordbook[dir="rtl"] .wb-family-add-btn { font-family: var(--wb-he); }
-.wordbook .wb-family-add-btn:hover { background: #1E3A8A; }
-.wordbook .wb-family-add-btn:active { transform: scale(0.97); }
 
 .wordbook .wb-family-section { margin-bottom: clamp(24px, 4vw, 36px); }
 .wordbook .wb-family-section-title {
@@ -12910,20 +9742,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
     gap: 20px;
   }
   .wordbook .wb-school-cta-col { min-width: 0; }
-}
-
-/* ─── Schools features-page group ───────────────────────────────────
-   Mirror of .wb-feat-groups-family. Sits below the Family group with
-   the same top margin so the rhythm is consistent. The Hl highlight
-   inside the group title picks up the mustard accent automatically
-   via the shared --wb-group-hl var (set on the wrapper). */
-.wordbook .wb-feat-groups-school {
-  margin-top: clamp(20px, 3vw, 32px);
-}
-.wordbook .wb-feat-group-school {
-  --wb-group-accent: #CA8A04;
-  --wb-group-hl: #CA8A04;
-  border-color: #FCD34D;
 }
 
 /* ─── Schools owner dashboard ───────────────────────────────────────
@@ -13616,19 +10434,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
   }
 }
 
-.wordbook .wb-schools-pricechip {
-  display: inline-block;
-  font-family: var(--wb-sans);
-  font-size: 13px;
-  font-weight: 700;
-  color: #0EA5A5;
-  background: rgba(14, 165, 165, 0.10);
-  border: 1px solid rgba(14, 165, 165, 0.25);
-  padding: 6px 14px;
-  border-radius: 999px;
-  margin-bottom: 18px;
-}
-
 .wordbook .wb-schools-h1 {
   font-family: var(--wb-serif);
   font-size: clamp(34px, 5vw, 56px);
@@ -14145,10 +10950,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
   border-color: rgba(14, 165, 165, 0.5);
   box-shadow: 0 12px 32px -12px rgba(14, 165, 165, 0.25);
 }
-.wordbook .wb-schools-price-card-large {
-  border-color: rgba(14, 165, 165, 0.4);
-  background: linear-gradient(180deg, rgba(14, 165, 165, 0.03), #fff 80%);
-}
 .wordbook .wb-schools-price-name {
   font-family: var(--wb-sans);
   font-size: 13px;
@@ -14408,24 +11209,6 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
   border-radius: 999px;
 }
 
-/* Inline text CTA that scrolls to the order form */
-.wordbook .wb-schools-textcta {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 24px;
-  background: none;
-  border: none;
-  padding: 0;
-  font-family: var(--wb-he);
-  font-size: 15px;
-  font-weight: 700;
-  color: #0EA5A5;
-  cursor: pointer;
-  transition: opacity 160ms var(--wb-ease-out);
-}
-.wordbook .wb-schools-textcta:hover { opacity: 0.72; }
-
 /* ─── Appearance skins (Gadi 2026-08-16) ──────────────────────────────
    One global data-theme on <html> swaps a palette. Stage 1 paints the
    strong skin on the PLAY / games surfaces (the "too grown-up" area) where
@@ -14470,22 +11253,7 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
 .wordbook .wb-skin-dd-item .wb-skin-name { flex: 1; }
 .wordbook .wb-skin-emoji { font-size: 16px; line-height: 1; }
 /* Gift-store wallet header inside the skin dropdown (kids gamification v2). */
-.wordbook .wb-skin-dd-wallet-wrap { padding: 2px 2px 6px; margin-bottom: 4px; border-bottom: 1px solid var(--rule, #E2E5EA); }
-.wordbook .wb-skin-dd-wallet {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 5px 8px 4px;
-  font-family: var(--wb-sans); font-size: 12px; font-weight: 650; color: var(--ink-soft, #5A6472);
-}
-.wordbook[dir="rtl"] .wb-skin-dd-wallet { font-family: var(--wb-he); }
-.wordbook .wb-skin-dd-wallet strong { font-size: 15px; font-weight: 800; color: var(--accent, #0EA5A5); font-variant-numeric: tabular-nums; }
-.wordbook .wb-skin-dd-ask { padding: 0 8px; font-family: var(--wb-sans); font-size: 11px; font-weight: 600; color: var(--ink-muted, #94a3b8); }
-.wordbook[dir="rtl"] .wb-skin-dd-ask { font-family: var(--wb-he); }
-.wordbook .wb-skin-price { font-size: 11.5px; font-weight: 750; font-variant-numeric: tabular-nums; }
 .wordbook .wb-skin-earnhint { font-size: 10.5px; font-weight: 600; color: var(--ink-muted, #94a3b8); opacity: 0.9; }
-.wordbook .wb-skin-owned {
-  font-size: 10px; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase;
-  padding: 1px 6px; border-radius: 999px;
-  background: color-mix(in srgb, var(--accent, #0EA5A5) 18%, transparent); color: var(--accent, #0EA5A5);
-}
 .wordbook .wb-skin-dots { display: inline-flex; gap: 3px; }
 .wordbook .wb-skin-dots > span { width: 9px; height: 9px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1); }
 
@@ -14538,7 +11306,6 @@ html[data-theme] .wb-kid-area {
 }
 html[data-theme] .wb-kid-area .wb-play-question,
 html[data-theme] .wb-kid-area .wb-play-exit,
-html[data-theme] .wb-kid-area .wb-play-empty,
 html[data-theme] .wb-kid-area .wb-play-root-tile,
 html[data-theme] .wb-kid-area .wb-play-build-slot,
 html[data-theme] .wb-kid-area .wb-play-build-tile,
@@ -14602,8 +11369,8 @@ html[data-theme] .wb-kid-area .wb-verb-stamp-pos { color: var(--teal-deep); }
 html[data-theme] .wb-kid-area .wb-notebook-cta { background: var(--teal-deep); color: var(--surface); }
 html[data-theme] .wb-kid-area .wb-notebook-cta:hover { background: var(--teal-deep); filter: brightness(1.08); }
 /* Homework links and labels hardcode the light-theme dark teal. */
-html[data-theme] .wb-kid-area :is(.wb-hw-tonight-k, .wb-hw-back, .wb-hw-add-paste, .wb-hw-add-small, .wb-hw-add-btn, .wb-learn-simple-link, .wb-dict-change, .wb-pick-ok),
-html[data-theme="dark"] .wordbook :is(.wb-hw-tonight-k, .wb-hw-back, .wb-hw-add-paste, .wb-hw-add-small, .wb-hw-add-btn, .wb-learn-simple-link, .wb-dict-change, .wb-pick-ok) { color: var(--teal-deep); }
+html[data-theme] .wb-kid-area :is(.wb-hw-tonight-k, .wb-hw-back, .wb-hw-add-small, .wb-hw-add-btn, .wb-learn-simple-link, .wb-dict-change, .wb-pick-ok),
+html[data-theme="dark"] .wordbook :is(.wb-hw-tonight-k, .wb-hw-back, .wb-hw-add-small, .wb-hw-add-btn, .wb-learn-simple-link, .wb-dict-change, .wb-pick-ok) { color: var(--teal-deep); }
 /* Light skins: the browser's grey placeholder was 2.9 on their tinted fields. */
 html:is([data-theme="candy"], [data-theme="rainbow"]) .wb-kid-area :is(input, textarea)::placeholder { color: var(--ink-muted); opacity: 1; }
 /* Kids Mode washes on the games page, over the dark ground for an adult in Dark. */
@@ -14716,8 +11483,7 @@ html[data-theme] .wb-kid-bg .wb-shell-topbar {
   -webkit-backdrop-filter: blur(10px);
   border-bottom-color: color-mix(in srgb, var(--ink) 12%, transparent);
 }
-html[data-theme] .wb-kid-bg .wb-word-searchbar-stage,
-html[data-theme] .wb-kid-bg .wb-word-searchbar-stage.is-stuck {
+html[data-theme] .wb-kid-bg .wb-word-searchbar-stage {
   background: transparent;
   box-shadow: none;
 }
@@ -14986,30 +11752,11 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
 
 /* Tool icons (Gadi 2026-10-11): beside each tool's name in the bar and in
    the mobile menu, and larger beside its page title. */
-.wordbook .wb-shell-navlink .wb-nav-icon,
-.wordbook .wb-shell-mobile-link .wb-nav-icon { flex: none; opacity: 0.85; }
-.wordbook .wb-shell-navlink:has(.wb-nav-icon),
-.wordbook .wb-shell-mobile-link:has(.wb-nav-icon) { display: inline-flex; align-items: center; gap: 6px; }
-.wordbook .wb-shell-mobile-link:has(.wb-nav-icon) { display: flex; gap: 10px; }
-.wordbook .wb-shell-navlink.is-active .wb-nav-icon { opacity: 1; color: var(--accent, #0EA5A5); }
 .wordbook .wb-title-icon { flex: none; color: var(--accent, #0EA5A5); }
 .wordbook .wb-play-title:has(.wb-title-icon) { display: flex; align-items: center; justify-content: center; gap: 12px; }
 /* Kids Mode under every tool's title (it applies to every section). */
-.wordbook .wb-tool-kids { display: flex; justify-content: center; margin-top: 12px; }
 .wordbook .wb-notebook-title:has(.wb-title-icon) { display: flex; align-items: center; justify-content: center; gap: 12px; }
-.wordbook .wb-homework-strip { display: flex; align-items: center; gap: 12px; margin: 18px 0 6px; padding: 12px 16px; border-radius: 14px; background: color-mix(in srgb, var(--accent, #0EA5A5) 12%, var(--surface, #fff)); border: 1px solid color-mix(in srgb, var(--accent, #0EA5A5) 30%, transparent); color: var(--ink, #0f172a); text-decoration: none; font-weight: 700; }
-.wordbook .wb-homework-strip svg { color: var(--accent, #0EA5A5); flex: none; }
-.wordbook .wb-homework-strip-text { flex: 1; min-width: 0; }
-.wordbook .wb-homework-strip-go { font-size: 14px; color: var(--accent, #0F6F6C); white-space: nowrap; }
-.wordbook .wb-homework-strip-go { color: var(--ink-soft, #475569); }
 /* The Kids Mode strip under each tool's title: the mascot, on/off, a switch. */
-.wordbook .wb-kids-strip { display: inline-flex; align-items: center; gap: 10px; padding: 4px 14px 4px 6px; border-radius: 999px; border: 1px solid var(--rule, #E2E8F0); background: var(--surface, #fff); color: var(--ink, #0f172a); font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
-.wordbook .wb-kids-strip img { width: 36px; height: 36px; object-fit: contain; flex: none; }
-.wordbook .wb-kids-strip.is-on { border-color: color-mix(in srgb, var(--accent, #0EA5A5) 45%, transparent); background: color-mix(in srgb, var(--accent, #0EA5A5) 10%, var(--surface, #fff)); }
-.wordbook .wb-kids-strip-track { width: 34px; height: 20px; border-radius: 999px; background: #CBD5E1; position: relative; flex: none; transition: background 160ms; }
-.wordbook .wb-kids-strip-track span { position: absolute; top: 2px; inset-inline-start: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.25); transition: inset-inline-start 160ms; }
-.wordbook .wb-kids-strip.is-on .wb-kids-strip-track { background: var(--accent, #0EA5A5); }
-.wordbook .wb-kids-strip.is-on .wb-kids-strip-track span { inset-inline-start: 16px; }
 .wordbook .wb-tool-sub { white-space: pre-line; }
 /* Kids Mode beside the logo (Gadi 2026-10-12): the mascot awake = on,
    asleep = off; the label hides on narrow screens. */
@@ -15049,19 +11796,6 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
 .wordbook .wb-hw-tile-row > .wb-learn-topics { width: 100%; }
 .wordbook .wb-hw-tile-row > .wb-learn-card { margin: 0; width: 100%; box-sizing: border-box; }
 .wordbook .wb-hw-tile-row > .wb-learn-lesson-grid { width: 100%; }
-.wb-hw-card {
-  display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0;
-  text-align: start; font-family: inherit; cursor: pointer; text-decoration: none;
-  background: var(--surface, #fff); border: 1px solid var(--hairline, #E5E7EB); border-radius: 16px;
-  padding: 18px 16px 16px; color: var(--ink, #0B1220);
-  transition: border-color .15s ease, transform .15s ease;
-}
-.wb-hw-card:hover { border-color: #0EA5A5; }
-.wb-hw-card:active { transform: scale(.98); }
-.wb-hw-card:focus-visible { outline: 2px solid #0EA5A5; outline-offset: 2px; }
-.wb-hw-card-i { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; background: rgba(14, 165, 165, .1); }
-.wb-hw-card-t { font-size: 16.5px; font-weight: 800; line-height: 1.3; }
-.wb-hw-card-d { font-size: 13px; line-height: 1.5; color: var(--ink-muted, #6B7280); }
 .wb-hw-tonight {
   display: flex; align-items: center; gap: 12px; width: 100%; font-family: inherit; cursor: pointer; text-align: start;
   background: rgba(14, 165, 165, .08); border: 1px solid rgba(14, 165, 165, .35); border-radius: 14px;
@@ -15078,10 +11812,6 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
 html[data-theme="dark"] .wb-hw-tonight-k, html[data-theme="dark"] .wb-hw-back { color: #5EEAD4; }
 /* Kid skins: the deep teal each skin derives for its own ground (Gadi 2026-10-17: the fixed light mint read faint on light skins). */
 html[data-theme="space"] .wb-hw-tonight-k, html[data-theme="space"] .wb-hw-back, html[data-theme="ocean"] .wb-hw-tonight-k, html[data-theme="ocean"] .wb-hw-back, html[data-theme="jungle"] .wb-hw-tonight-k, html[data-theme="jungle"] .wb-hw-back, html[data-theme="neon"] .wb-hw-tonight-k, html[data-theme="neon"] .wb-hw-back, html[data-theme="sunset"] .wb-hw-tonight-k, html[data-theme="sunset"] .wb-hw-back, html[data-theme="aurora"] .wb-hw-tonight-k, html[data-theme="aurora"] .wb-hw-back, html[data-theme="cosmos"] .wb-hw-tonight-k, html[data-theme="cosmos"] .wb-hw-back, html[data-theme="lava"] .wb-hw-tonight-k, html[data-theme="lava"] .wb-hw-back, html[data-theme="royal"] .wb-hw-tonight-k, html[data-theme="royal"] .wb-hw-back { color: var(--teal-deep, #0A7472); }
-@media (max-width: 420px) {
-  .wb-hw-card { padding: 14px 12px; }
-  .wb-hw-card-t { font-size: 15px; }
-}
 
 /* Every Word opened from Homework: the way back and "done reading". */
 a.wb-hw-back { text-decoration: none; }
@@ -15098,13 +11828,7 @@ a.wb-hw-back { text-decoration: none; }
 /* Narrow phones: the label goes on its own line so the title is not squeezed into one word per line. */
 @media (max-width: 520px) { .wb-hw-tonight-main { flex-wrap: wrap; row-gap: 6px; } .wb-hw-tonight-k { flex-basis: 100%; } }
 .wb-hw-add-big { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 6px 0 4px; }
-.wb-hw-add-photo {
-  display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 420px;
-  min-height: 60px; padding: 14px 22px; border-radius: 16px; border: 0; background: #0B7F7F; color: #fff;
-  font: inherit; font-size: 18px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 22px -12px rgba(14, 165, 165, .8);
-}
-.wb-hw-add-photo span { font-size: 22px; }
-.wb-hw-add-paste, .wb-hw-add-small { background: none; border: 0; padding: 6px 4px; font: inherit; font-size: 14.5px; font-weight: 700; color: #0A7472; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.wb-hw-add-small { background: none; border: 0; padding: 6px 4px; font: inherit; font-size: 14.5px; font-weight: 700; color: #0A7472; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .wb-hw-add-small { align-self: flex-start; text-decoration: none; }
 .wb-hw-intake { display: flex; flex-direction: column; gap: 12px; background: var(--surface, #fff); border: 1px solid var(--hairline, #E5E7EB); border-radius: 16px; padding: 18px 16px; }
 .wb-hw-intake-sub { margin: 0; font-size: 14px; line-height: 1.6; color: var(--ink-muted, #6B7280); }
@@ -15120,8 +11844,8 @@ a.wb-hw-back { text-decoration: none; }
 .wb-hw-intake-date { align-self: flex-start; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--hairline, #E5E7EB); font: inherit; background: var(--surface, #fff); color: var(--ink, #0B1220); }
 .wb-hw-intake-save { padding: 12px 30px; border-radius: 12px; border: 0; background: #0B7F7F; color: #fff; font: inherit; font-size: 15.5px; font-weight: 800; cursor: pointer; }
 .wb-hw-intake-save:disabled, .wb-hw-intake-photo:disabled { opacity: .6; cursor: default; }
-.wb-hw-add-photo:focus-visible, .wb-hw-chip:focus-visible, .wb-hw-intake-save:focus-visible, .wb-hw-intake-photo:focus-visible { outline: 2px solid #0A7472; outline-offset: 2px; }
-html[data-theme="dark"] .wb-hw-add-paste, html[data-theme="dark"] .wb-hw-add-small, html[data-theme="space"] .wb-hw-add-paste, html[data-theme="space"] .wb-hw-add-small, html[data-theme="ocean"] .wb-hw-add-paste, html[data-theme="ocean"] .wb-hw-add-small, html[data-theme="jungle"] .wb-hw-add-paste, html[data-theme="jungle"] .wb-hw-add-small, html[data-theme="neon"] .wb-hw-add-paste, html[data-theme="neon"] .wb-hw-add-small, html[data-theme="sunset"] .wb-hw-add-paste, html[data-theme="sunset"] .wb-hw-add-small, html[data-theme="aurora"] .wb-hw-add-paste, html[data-theme="aurora"] .wb-hw-add-small, html[data-theme="cosmos"] .wb-hw-add-paste, html[data-theme="cosmos"] .wb-hw-add-small, html[data-theme="lava"] .wb-hw-add-paste, html[data-theme="lava"] .wb-hw-add-small, html[data-theme="royal"] .wb-hw-add-paste, html[data-theme="royal"] .wb-hw-add-small { color: #5EEAD4; }
+.wb-hw-chip:focus-visible, .wb-hw-intake-save:focus-visible, .wb-hw-intake-photo:focus-visible { outline: 2px solid #0A7472; outline-offset: 2px; }
+html[data-theme="dark"] .wb-hw-add-small, html[data-theme="space"] .wb-hw-add-small, html[data-theme="ocean"] .wb-hw-add-small, html[data-theme="jungle"] .wb-hw-add-small, html[data-theme="neon"] .wb-hw-add-small, html[data-theme="sunset"] .wb-hw-add-small, html[data-theme="aurora"] .wb-hw-add-small, html[data-theme="cosmos"] .wb-hw-add-small, html[data-theme="lava"] .wb-hw-add-small, html[data-theme="royal"] .wb-hw-add-small { color: #5EEAD4; }
 
 /* Same-language dictation (Gadi 2026-10-12): the word is heard, not seen,
    so the speaker is the big thing on the card. */
@@ -15146,7 +11870,6 @@ html[data-theme="dark"] .wb-hw-add-btn, html[data-theme="space"] .wb-hw-add-btn,
 .wb-learn-home { display: flex; flex-direction: column; gap: 14px; }
 .wb-learn-simple { display: flex; flex-direction: column; gap: 12px; background: var(--surface, #fff); border: 1px solid var(--hairline, #E5E7EB); border-radius: 16px; padding: 18px 18px 14px; }
 .wb-learn-simple-head { display: flex; align-items: center; gap: 12px; }
-.wb-learn-simple-icon { flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; background: rgba(14, 165, 165, .1); }
 .wb-learn-simple .wb-learn-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .wb-learn-simple .wb-learn-text b { font-size: 17px; font-weight: 800; color: var(--ink, #0B1220); }
 .wb-learn-simple .wb-learn-text span { font-size: 13.5px; color: var(--ink-muted, #6B7280); }
@@ -15161,7 +11884,6 @@ html[data-theme="dark"] .wb-hw-add-btn, html[data-theme="space"] .wb-hw-add-btn,
 .wb-learn-simple-link.is-quiet { font-weight: 500; color: var(--ink-muted, #6B7280); }
 .wb-dict-setup { display: flex; flex-direction: column; gap: 12px; background: var(--surface, #fff); border: 1px solid var(--hairline, #E5E7EB); border-radius: 16px; padding: 18px 16px; }
 .wb-dict-setup .wb-hw-intake-save { align-self: flex-start; margin-top: 6px; }
-.wb-dict-h { font-size: 17px; font-weight: 800; color: var(--ink, #0B1220); margin: 0 0 4px; }
 .wb-dict-topic { margin: 0 0 12px; text-align: center; font-size: 20px; font-weight: 800; line-height: 1.25; color: var(--ink, #1F2937); text-wrap: balance; }
 .wb-dict-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; font-size: 12.5px; font-weight: 600; color: var(--ink-muted, #6B7280); }
 .wb-dict-modes { display: inline-flex; gap: 4px; margin-inline-start: auto; background: var(--paper, #F3F4F6); border-radius: 999px; padding: 3px; }

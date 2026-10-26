@@ -22,7 +22,14 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 20;
 
+// Off (Gadi 2026-10-26): nothing in Gadit spends gift points any more (the
+// gift store is gone), and points that pile up with no use confuse families
+// without Yooniz. The route answers like a zero grant so Yooniz handles it as
+// it handles a full weekly cap; set to true to turn gifting back on.
+const GIFTS_ENABLED = false;
+
 export async function POST(req: NextRequest) {
+  if (!GIFTS_ENABLED) return NextResponse.json({ granted: 0, giftPointsTotal: 0, remainingThisWeek: 0, reason: "gifts_disabled" });
   const secret = process.env.YOONIZ_GADIT_SSO_SECRET;
   if (!secret) return NextResponse.json({ error: "not_configured" }, { status: 503 });
 

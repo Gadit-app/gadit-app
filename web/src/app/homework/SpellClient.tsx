@@ -429,11 +429,12 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
   const href = useHref();
   const router = useRouter();
   const { user, plan, planReady, kidsAccess, familyRole, loading: authLoading } = useAuth();
-  // Dictation is a Family tool (Gadi 2026-09-19, narrowed 2026-10-06): the
-  // Family plan, schools, and the older standalone Deep plan. Not the
-  // Individual plan, not Clear, not Basic.
-  // Practice is every Deep account (Individual too); its dictation and test
-  // cards follow the Family rule unless practice-i18n.ts says otherwise.
+  // Homework (the kids' area) is a Family tool (Gadi 2026-09-19, narrowed
+  // 2026-10-06): a Deep account with kids access, i.e. the Family plan,
+  // schools and the older standalone Deep plan. Not Clear, not Basic.
+  // Practice is every Deep account (Individual too). Its dictation and test
+  // cards are shown to Individual as well while PRACTICE_DICTATION_FOR_INDIVIDUAL
+  // (practice-i18n.ts) is true, as it is now; set to false, they are Family only.
   const hasAccess = adult ? plan === "deep" : plan === "deep" && kidsAccess;
   const listTools = !adult || kidsAccess || PRACTICE_DICTATION_FOR_INDIVIDUAL;
   const navKey = adult ? ("practice" as const) : ("spell" as const);
