@@ -142,40 +142,6 @@ export async function setCachedWord(
 }
 
 /**
- * Toggle the "pinned" flag — used by the "download for offline study"
- * button. Pinned entries are protected from any future auto-prune.
- */
-export async function setPinned(
-  lang: string,
-  word: string,
-  pinned: boolean,
-): Promise<void> {
-  if (!isSupported()) return;
-  const existing = await getCachedWord(lang, word);
-  if (!existing) return;
-  await setCachedWord(lang, word, existing.result, { pinned });
-}
-
-/**
- * Drop a single entry. Used by the "remove from offline" affordance.
- */
-export async function removeCachedWord(lang: string, word: string): Promise<void> {
-  if (!isSupported()) return;
-  try {
-    const db = await openDB();
-    await new Promise<void>((resolve, reject) => {
-      const tx = db.transaction(STORE_WORDS, "readwrite");
-      const store = tx.objectStore(STORE_WORDS);
-      const req = store.delete(makeKey(lang, word));
-      req.onsuccess = () => resolve();
-      req.onerror = () => reject(req.error);
-    });
-  } catch (e) {
-    console.warn("[offline-db] removeCachedWord failed:", e);
-  }
-}
-
-/**
  * List the N most-recently-viewed cached entries — drives the offline
  * "your downloaded words" view. Ordered newest first.
  */

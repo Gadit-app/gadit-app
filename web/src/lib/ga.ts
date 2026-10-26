@@ -11,11 +11,6 @@ import { adsAllowed, setAdsRoleIsKid } from "./ad-scope";
 export const GA_ID = "G-28987K226D";
 const DISABLE_KEY = `ga-disable-${GA_ID}`;
 
-const KID_PATH = /^\/(?:[a-z]{2,3}(?:-[A-Z]{2})?\/)?(?:c|kids|spell|homework)(?:\/|$)/;
-export function isKidPath(path: string): boolean {
-  return KID_PATH.test(path);
-}
-
 // One gate for every pixel (lib/ad-scope.ts): acquisition pages only, never a child.
 export function setGaRoleIsKid(kid: boolean) {
   setAdsRoleIsKid(kid);

@@ -32,7 +32,6 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { Eyebrow } from "./primitives";
-import { gadCopy } from "@/lib/gadit-button-copy";
 import { notifyActivity } from "@/lib/notify-activity-client";
 
 interface QuizQuestion {
@@ -234,36 +233,6 @@ function QuizOption({
 }
 
 // ─── Final score screen ───────────────────────────────────────
-/** After the one "Gad it!" question: a short celebration when it was right
- *  (+10 only when the finished practice really counted for the rank, see
- *  lib/rank-points), a gentle "almost" when not. */
-function GadItFinal({ lang, correct, award, plus, onClose }: { lang: Parameters<typeof v2>[0]; correct: boolean; award: "awarded" | "already" | null; plus: boolean; onClose: () => void }) {
-  const c = gadCopy(lang);
-  return (
-    <div className="gd-font-sans-ui" style={{ textAlign: "center", padding: "28px 8px 8px" }}>
-      <style>{`@keyframes gd-gad-pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}@media (prefers-reduced-motion: reduce){.gd-gad-pop{animation:none!important}}`}</style>
-      {correct ? (
-        <>
-          <div className="gd-gad-pop" aria-hidden="true" style={{ fontSize: 44, animation: "gd-gad-pop .5s ease-out" }}>🌱</div>
-          <div dir="ltr" style={{ unicodeBidi: "isolate", fontSize: 26, fontWeight: 800, color: "var(--gd-ink-900, #0B1220)", marginTop: 6 }}>
-            {c.success}{plus && <span style={{ color: "#0B7F7F", marginInlineStart: 8 }}>+10</span>}
-          </div>
-          {award && <p style={{ fontSize: 14.5, color: "var(--gd-ink-700, #374151)", marginTop: 8 }}>{award === "already" ? c.alreadySub : c.doneSub}</p>}
-        </>
-      ) : (
-        <p style={{ fontSize: 16, fontWeight: 700, color: "var(--gd-ink-800, #1F2937)", marginTop: 4 }}>{c.wrong}</p>
-      )}
-      <button
-        type="button"
-        onClick={onClose}
-        style={{ marginTop: 18, padding: "12px 26px", borderRadius: 12, border: "none", background: "#0B7F7F", color: "#fff", fontWeight: 700, fontSize: 15, cursor: "pointer", fontFamily: "inherit" }}
-      >
-        {v2(lang, "quizBackToWord")}
-      </button>
-    </div>
-  );
-}
-
 function QuizFinal({
   correct,
   total,
@@ -410,17 +379,13 @@ export function QuizModalV2({
   word,
   meaning,
   language,
-  single = false,
 }: {
   open: boolean;
   onClose: () => void;
   word: string;
   meaning: string;
-  /** "Gad it!" (Gadi 2026-10-18): ONE quick question; a correct answer marks
-   *  the word understood (+10 once) and shows the gad-it moment. */
-  single?: boolean;
   /** The word's language, matching how it was saved to the notebook, so a
-   *  passed quiz can mark it understood + award comprehension points. */
+   *  passed quiz can mark it understood. */
   language?: string;
 }) {
   const { user, promptLogin, familyRole } = useAuth();
@@ -441,10 +406,6 @@ export function QuizModalV2({
   // Tracks which questions the user got right (after revealing each)
   const [results, setResults] = useState<boolean[]>([]);
   const [done, setDone] = useState(false);
-  // What the understood API answered, for the gad-it moment.
-  const [award, setAward] = useState<"awarded" | "already" | null>(null);
-  /** The finished quiz counted as a completed practice (+10 rank points). */
-  const [plus, setPlus] = useState(false);
 
   // Reset every time we open from scratch
   useEffect(() => {
@@ -457,8 +418,6 @@ export function QuizModalV2({
       setRevealed(false);
       setResults([]);
       setDone(false);
-      setAward(null);
-      setPlus(false);
     }
   }, [open]);
 
@@ -472,23 +431,20 @@ export function QuizModalV2({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  // A finished quiz (the "Gad it!" question too) is a completed practice for
-  // the rank, whatever the score (Gadi 2026-10-21): 10 points, at most 10 a
-  // day, counted on the server. Also tells a child's parent, like a game.
+  // A finished quiz is a completed practice for the rank, whatever the score
+  // (Gadi 2026-10-21): 10 points, at most 10 a day, counted on the server.
+  // Also tells a child's parent, like a game.
   useEffect(() => {
     if (!done || !user || results.length === 0) return;
-    let off = false;
-    void notifyActivity(user, { kind: "game", label: word || "", score: results.filter(Boolean).length, total: results.length })
-      .then((r) => { if (!off) setPlus(r.counted); });
-    return () => { off = true; };
+    void notifyActivity(user, { kind: "game", label: word || "", score: results.filter(Boolean).length, total: results.length });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [done]);
 
-  // Kids gamification v2: when a quiz is PASSED for this word, mark it
-  // understood and award comprehension points (multiplier, not a gate). Best
-  // effort + non-blocking; the API is idempotent per word (understoodAt), so
-  // re-passing never double-credits, and a 60% bar keeps one lucky tap from
-  // counting as real understanding.
+  // When a quiz is PASSED for this word, mark it understood in the notebook
+  // (no rank points since 2026-10-21; the finished quiz above is the
+  // practice). Best effort + non-blocking; the API is idempotent per word
+  // (understoodAt), and a 60% bar keeps one lucky tap from counting as real
+  // understanding.
   useEffect(() => {
     if (!done || !user || !language || !word) return;
     const total = results.length;
@@ -497,13 +453,11 @@ export function QuizModalV2({
     (async () => {
       try {
         const idToken = await user.getIdToken();
-        const r = await fetch("/api/notebook/understood", {
+        await fetch("/api/notebook/understood", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
           body: JSON.stringify({ word, language, source: "quiz" }),
         });
-        const j = (await r.json().catch(() => ({}))) as { awarded?: number; understood?: boolean; alreadyUnderstood?: boolean };
-        setAward(j.alreadyUnderstood ? "already" : j.understood ? "awarded" : null);
         // Points may have crossed a rank threshold that unlocks a new skin;
         // drop the picker's cached rank so it refetches fresh next mount.
         try { sessionStorage.removeItem("gadit-kid-rankindex"); } catch { /* ignore */ }
@@ -527,7 +481,7 @@ export function QuizModalV2({
           "Content-Type": "application/json",
           Authorization: `Bearer ${idToken}`,
         },
-        body: JSON.stringify({ word, meaning, uiLang: lang, count: single ? 1 : 4, kids }),
+        body: JSON.stringify({ word, meaning, uiLang: lang, count: 4, kids }),
       });
       if (!res.ok) {
         if (res.status === 402) {
@@ -542,13 +496,13 @@ export function QuizModalV2({
         setErrorMsg("No questions returned.");
         return;
       }
-      setQuestions(data.questions.slice(0, single ? 1 : 4));
+      setQuestions(data.questions.slice(0, 4));
     } catch {
       setErrorMsg("Quiz unavailable right now.");
     } finally {
       setLoading(false);
     }
-  }, [user, lang, word, meaning, promptLogin, single, kids]);
+  }, [user, lang, word, meaning, promptLogin, kids]);
 
   // Kick off the fetch when modal opens
   useEffect(() => {
@@ -650,13 +604,8 @@ export function QuizModalV2({
           </svg>
         </button>
 
-        {/* === The gad-it moment (single question) === */}
-        {done && questions && single && (
-          <GadItFinal lang={lang} correct={!!results[0]} award={award} plus={plus} onClose={onClose} />
-        )}
-
         {/* === Final score state === */}
-        {done && questions && !single && (
+        {done && questions && (
           <QuizFinal
             correct={results.filter(Boolean).length}
             total={questions.length}

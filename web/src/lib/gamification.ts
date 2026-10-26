@@ -58,8 +58,9 @@ export const RANKS: { key: RankKey; min: number }[] = [
  * reported through /api/family/notify-activity) is POINTS.practice, at most
  * PRACTICE_DAILY_CAP practices per local day so nobody can farm it. The
  * "understood" flag on a notebook word stays, but no longer earns rank points.
- * Parent/Yooniz "gift points" live in a SEPARATE, capped wallet (see
- * GIFT_WEEKLY_CAP) and never count toward ranks.
+ * Yooniz "gift points" live in a SEPARATE, capped wallet (see
+ * GIFT_WEEKLY_CAP) and never count toward ranks. Nothing spends them since
+ * the gift store was removed.
  */
 export const POINTS = { seen: 1, practice: 10 } as const;
 /** Completed practices that count per user per local day. */
@@ -90,20 +91,9 @@ export function rankIndexOf(key: unknown): number {
   return RANKS.findIndex((r) => r.key === key);
 }
 
-/** Weekly ceiling on parent/Yooniz gift points, so bonuses stay a treat and
- *  can't launder raw-count into the earned economy. */
+/** Weekly ceiling on Yooniz gift points (/api/yooniz/gift), so bonuses stay a
+ *  treat and can't launder raw-count into the earned economy. */
 export const GIFT_WEEKLY_CAP = 50;
-
-/**
- * Gift-store prices, in GIFT points (the separate parent/Yooniz wallet — never
- * ranks). Single source of truth so both the client picker (@/lib/appearance
- * reads these) and the server buy endpoint agree. Keyed by ThemeId. A skin
- * listed here is buyable; the 5 original skins are free and never appear.
- */
-export const SKIN_PRICES: Record<string, number> = {
-  sunset: 15, aurora: 20, cosmos: 25, lava: 30, // dual-path: also earnable by rank
-  rainbow: 35, royal: 40,                        // store-exclusive
-};
 
 export type RankInfo = {
   key: RankKey;

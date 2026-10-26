@@ -29,52 +29,51 @@ import { RANKS } from "@/lib/gamification";
 import { useServerRank } from "@/lib/use-rank-state";
 import { rankLabel } from "@/lib/gamification-labels";
 
-// Store micro-copy (en + he, English fallback — matches the existing picker
-// label pattern; full-language coverage is a follow-up).
-const STORE_COPY: Record<string, { balance: string; buy: string; owned: string; ask: string; need: string; orRank: string }> = {
-  en: { balance: "Gift points", buy: "Get for", owned: "Yours", ask: "Ask a parent to unlock skins", need: "{n} 🎁 to go", orRank: "Opens at {rank}" },
-  ar: { balance: "نقاط الهدايا", buy: "احصل عليه بـ", owned: "لك", ask: "اطلب من أحد الوالدين فتح المظاهر", need: "باقي {n} 🎁", orRank: "يفتح عند {rank}" },
-  ru: { balance: "Подарочные очки", buy: "Купить за", owned: "У тебя есть", ask: "Попроси родителей открыть образы", need: "Осталось {n} 🎁", orRank: "Открывается на {rank}" },
-  es: { balance: "Puntos de regalo", buy: "Consíguelo por", owned: "Tuyo", ask: "Pide a mamá o papá que desbloqueen skins", need: "Faltan {n} 🎁", orRank: "Se abre en {rank}" },
-  pt: { balance: "Pontos de presente", buy: "Comprar por", owned: "Seu", ask: "Peça a um dos pais para desbloquear skins", need: "Faltam {n} 🎁", orRank: "Abre em {rank}" },
-  fr: { balance: "Points cadeaux", buy: "Obtenir pour", owned: "À toi", ask: "Demande à un parent de débloquer les skins", need: "Encore {n} 🎁", orRank: "S'ouvre à {rank}" },
-  de: { balance: "Geschenkpunkte", buy: "Holen für", owned: "Dir gehört's", ask: "Bitte ein Elternteil, Skins freizuschalten", need: "Noch {n} 🎁", orRank: "Öffnet sich bei {rank}" },
-  cs: { balance: "Dárkové body", buy: "Pořiď za", owned: "Máš", ask: "Požádej rodiče, ať odemkne vzhledy", need: "Zbývá {n} 🎁", orRank: "Otevře se na {rank}" },
-  sk: { balance: "Darčekové body", buy: "Získaj za", owned: "Máš", ask: "Popros rodiča, nech odomkne vzhľady", need: "Zostáva {n} 🎁", orRank: "Otvorí sa na {rank}" },
-  it: { balance: "Punti regalo", buy: "Ottieni per", owned: "Tuo", ask: "Chiedi a un genitore di sbloccare gli skin", need: "Mancano {n} 🎁", orRank: "Si sblocca a {rank}" },
-  ja: { balance: "ギフトポイント", buy: "こうかんする", owned: "もっているよ", ask: "おうちの人にスキンをひらいてもらおう", need: "あと {n} 🎁", orRank: "{rank}でひらくよ" },
-  hi: { balance: "गिफ्ट पॉइंट", buy: "पाओ इतने में", owned: "तुम्हारा", ask: "स्किन खोलने के लिए मम्मी-पापा से कहो", need: "बस {n} 🎁 और", orRank: "{rank} पर खुलता है" },
-  am: { balance: "የስጦታ ነጥቦች", buy: "ግዛ በ", owned: "ያንተ", ask: "ስኪኖችን ለመክፈት ወላጅ ጠይቅ", need: "ቀሪ {n} 🎁", orRank: "በ{rank} ይከፈታል" },
-  uk: { balance: "Подарункові бали", buy: "Купити за", owned: "Твій", ask: "Попроси батьків відкрити образи", need: "Ще {n} 🎁", orRank: "Відкривається на {rank}" },
-  tr: { balance: "Hediye puanları", buy: "Şununla al", owned: "Senin", ask: "Görünümleri açmak için bir yetişkinden yardım iste", need: "{n} 🎁 kaldı", orRank: "{rank} seviyesinde açılır" },
-  pl: { balance: "Punkty prezentowe", buy: "Kup za", owned: "Twoje", ask: "Poproś rodzica o odblokowanie skórek", need: "Jeszcze {n} 🎁", orRank: "Odblokowuje się na poziomie {rank}" },
-  fa: { balance: "امتیازهای هدیه", buy: "بخر با", owned: "مال توست", ask: "از یکی از والدین بخواه ظاهرها را باز کند", need: "{n} 🎁 مانده", orRank: "در {rank} باز می‌شود" },
-  id: { balance: "Poin hadiah", buy: "Ambil seharga", owned: "Milikmu", ask: "Minta orang tua membuka tampilan", need: "Kurang {n} 🎁 lagi", orRank: "Terbuka di {rank}" },
-  nl: { balance: "Cadeaupunten", buy: "Haal voor", owned: "Van jou", ask: "Vraag een ouder om skins te ontgrendelen", need: "Nog {n} 🎁", orRank: "Gaat open bij {rank}" },
-  el: { balance: "Πόντοι δώρου", buy: "Πάρε με", owned: "Δικό σου", ask: "Ζήτα από έναν γονιό να ξεκλειδώσει εμφανίσεις", need: "Απομένουν {n} 🎁", orRank: "Ξεκλειδώνει στο {rank}" },
-  zu: { balance: "Amaphuzu esipho", buy: "Thenga ngo", owned: "Okwakho", ask: "Cela umzali avule izimo", need: "Kusele {n} 🎁", orRank: "Kuvuleka ku-{rank}" },
-  xh: { balance: "Amanqaku ezipho", buy: "Fumana nge", owned: "Yeyakho", ask: "Cela umzali ukuze avule iinkangeleko", need: "Kusele {n} 🎁", orRank: "Iyavuleka ku-{rank}" },
-  nso: { balance: "Dintlha tša dimpho", buy: "Hwetša ka", owned: "Ke sa gago", ask: "Kgopela motswadi go bula diaparo", need: "Go šetše {n} 🎁", orRank: "E bula go {rank}" },
-  tn: { balance: "Dintlha tsa dimpho", buy: "Bona ka", owned: "Ke sa gago", ask: "Kopa motsadi go bula diaparo tsa sekirini", need: "Go setse {n} 🎁", orRank: "E bulega kwa {rank}" },
-  st: { balance: "Dintlha tsa dimpho", buy: "Fumana ka", owned: "Ke ya hao", ask: "Kopa motswadi hore a bule dikhabiso", need: "{n} 🎁 di setse", orRank: "E bula ho {rank}" },
-  ts: { balance: "Tinhlayo ta tinyiko", buy: "Kuma hi", owned: "Swa wena", ask: "Kombela mutswari a pfula swiambalo leswi", need: "Ku sale {n} 🎁", orRank: "Yi pfuleka eka {rank}" },
-  ss: { balance: "Emaphuzu etipho", buy: "Tfola nga", owned: "Kungekwakho", ask: "Cela umtali akuvulele tikhumba", need: "Kusele {n} 🎁", orRank: "Kuyavuleka ku-{rank}" },
-  ve: { balance: "Maraga a mpho", buy: "Wanani nga", owned: "Ndi zwaṋu", ask: "Humbelani mubebi uri a vule zwivhonalo", need: "Ho sala {n} 🎁", orRank: "Zwi vulea kha {rank}" },
-  nr: { balance: "Amaphuzu wesipho", buy: "Thola nge", owned: "Ngokwakho", ask: "Bawa umbelethi bona akuvulele iinkhumba", need: "Kusele {n} 🎁", orRank: "Kuvuleka ku-{rank}" },
-  vi: { balance: "Điểm quà tặng", buy: "Đổi với", owned: "Của bạn", ask: "Nhờ bố mẹ mở khóa giao diện", need: "Còn thiếu {n} 🎁", orRank: "Mở ở {rank}" },
-  fil: { balance: "Mga gift point", buy: "Kunin sa", owned: "Sa iyo na", ask: "Humingi sa magulang para ma-unlock ang mga skin", need: "{n} 🎁 na lang", orRank: "Magbubukas sa {rank}" },
-  af: { balance: "Geskenkpunte", buy: "Kry vir", owned: "Joune", ask: "Vra 'n ouer om skins oop te sluit", need: "{n} 🎁 oor", orRank: "Maak oop by {rank}" },
-  sw: { balance: "Pointi za zawadi", buy: "Pata kwa", owned: "Yako", ask: "Muombe mzazi afungue skini", need: "{n} 🎁 zimebaki", orRank: "Hufunguka kwenye {rank}" },
-  "zh-CN": { balance: "礼物点数", buy: "兑换", owned: "已拥有", ask: "让家长来解锁皮肤吧", need: "还差 {n} 🎁", orRank: "在 {rank} 解锁" },
-  "zh-TW": { balance: "禮物點數", buy: "兌換", owned: "已擁有", ask: "讓家長來解鎖造型吧", need: "還差 {n} 🎁", orRank: "在 {rank} 解鎖" },
-  ko: { balance: "선물 포인트", buy: "교환하기", owned: "보유 중", ask: "부모님께 스킨 잠금 해제를 부탁해 보세요", need: "{n} 🎁 남았어요", orRank: "{rank}에서 열려" },
-  th: { balance: "แต้มของขวัญ", buy: "แลกด้วย", owned: "ของคุณแล้ว", ask: "ขอให้ผู้ปกครองช่วยปลดล็อกสกินให้", need: "อีก {n} 🎁", orRank: "เปิดที่ {rank}" },
-  bn: { balance: "উপহার পয়েন্ট", buy: "কিনে নাও", owned: "তোমার", ask: "স্কিন আনলক করতে অভিভাবককে বলো", need: "আর {n} 🎁 বাকি", orRank: "{rank}-এ খুলবে" },
-  da: { balance: "Gavepoint", buy: "Få for", owned: "Din", ask: "Bed en voksen om at låse skins op", need: "{n} 🎁 tilbage", orRank: "Åbner ved {rank}" },
-  hu: { balance: "Ajándékpontok", buy: "Beszerzés", owned: "A tiéd", ask: "Kérj meg egy szülőt, hogy oldja fel a skineket", need: "Még {n} 🎁", orRank: "{rank} szinten nyílik meg" },
-  he: { balance: "נקודות מתנה", buy: "קבל תמורת", owned: "שלך", ask: "בקש מההורה כדי לפתוח סקינים", need: "עוד {n} 🎁", orRank: "נפתח בדרגת {rank}" },
+// The hint under a locked skin: the rank it opens at, in every UI language.
+const LOCK_COPY: Record<string, { orRank: string }> = {
+  en: { orRank: "Opens at {rank}" },
+  ar: { orRank: "يفتح عند {rank}" },
+  ru: { orRank: "Открывается на {rank}" },
+  es: { orRank: "Se abre en {rank}" },
+  pt: { orRank: "Abre em {rank}" },
+  fr: { orRank: "S'ouvre à {rank}" },
+  de: { orRank: "Öffnet sich bei {rank}" },
+  cs: { orRank: "Otevře se na {rank}" },
+  sk: { orRank: "Otvorí sa na {rank}" },
+  it: { orRank: "Si sblocca a {rank}" },
+  ja: { orRank: "{rank}でひらくよ" },
+  hi: { orRank: "{rank} पर खुलता है" },
+  am: { orRank: "በ{rank} ይከፈታል" },
+  uk: { orRank: "Відкривається на {rank}" },
+  tr: { orRank: "{rank} seviyesinde açılır" },
+  pl: { orRank: "Odblokowuje się na poziomie {rank}" },
+  fa: { orRank: "در {rank} باز می‌شود" },
+  id: { orRank: "Terbuka di {rank}" },
+  nl: { orRank: "Gaat open bij {rank}" },
+  el: { orRank: "Ξεκλειδώνει στο {rank}" },
+  zu: { orRank: "Kuvuleka ku-{rank}" },
+  xh: { orRank: "Iyavuleka ku-{rank}" },
+  nso: { orRank: "E bula go {rank}" },
+  tn: { orRank: "E bulega kwa {rank}" },
+  st: { orRank: "E bula ho {rank}" },
+  ts: { orRank: "Yi pfuleka eka {rank}" },
+  ss: { orRank: "Kuyavuleka ku-{rank}" },
+  ve: { orRank: "Zwi vulea kha {rank}" },
+  nr: { orRank: "Kuvuleka ku-{rank}" },
+  vi: { orRank: "Mở ở {rank}" },
+  fil: { orRank: "Magbubukas sa {rank}" },
+  af: { orRank: "Maak oop by {rank}" },
+  sw: { orRank: "Hufunguka kwenye {rank}" },
+  "zh-CN": { orRank: "在 {rank} 解锁" },
+  "zh-TW": { orRank: "在 {rank} 解鎖" },
+  ko: { orRank: "{rank}에서 열려" },
+  th: { orRank: "เปิดที่ {rank}" },
+  bn: { orRank: "{rank}-এ খুলবে" },
+  da: { orRank: "Åbner ved {rank}" },
+  hu: { orRank: "{rank} szinten nyílik meg" },
+  he: { orRank: "נפתח בדרגת {rank}" },
 };
-function storeCopy(lang: string) { return STORE_COPY[lang] ?? STORE_COPY.en; }
+function lockCopy(lang: string) { return LOCK_COPY[lang] ?? LOCK_COPY.en; }
 
 export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "adult" }) {
   const { lang } = useLang();
@@ -82,7 +81,7 @@ export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "a
   const [theme, setTheme] = useTheme();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
-  const copy = storeCopy(lang);
+  const copy = lockCopy(lang);
 
   const list: ThemeMeta[] =
     scope === "kid"

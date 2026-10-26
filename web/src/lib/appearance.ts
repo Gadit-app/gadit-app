@@ -17,7 +17,6 @@
  */
 
 import { useCallback, useEffect, useState } from "react";
-import { SKIN_PRICES } from "@/lib/gamification";
 
 export type ThemeId =
   | "light"
@@ -49,12 +48,6 @@ export interface ThemeMeta {
    *  gift points) drives this, so it can't be faked. The 5 original skins stay
    *  free forever; only these new ones are earned. */
   unlockAtRank?: number;
-  /** Kids gamification v2 (gift store): the price in GIFT points to buy this
-   *  skin. Gift points come from a parent (in-app reward) or Yooniz, live in a
-   *  separate capped wallet, and NEVER touch ranks. A skin with a price is
-   *  buyable in the store; one that ALSO has unlockAtRank is dual-path (earn it
-   *  by climbing, OR let a parent gift-buy it early). Absent = not for sale. */
-  price?: number;
 }
 
 export const THEMES: ThemeMeta[] = [
@@ -98,11 +91,8 @@ export const THEMES: ThemeMeta[] = [
     name: { he: "מלכותי", en: "Royal", ar: "ملكي", ru: "Королевский" } },
 ];
 
-// Inject store prices from the single source of truth (server + client agree).
-for (const t of THEMES) if (SKIN_PRICES[t.id] != null) t.price = SKIN_PRICES[t.id];
-
-// Native skin names for the remaining 29 UI languages (he/en/ar/ru are inline
-// above). Kids see these in the store, so every language shows a real name.
+// Native skin names for the remaining UI languages (he/en/ar/ru are inline
+// above). Kids see these in the skin picker, so every language shows a real name.
 const THEME_NAMES_I18N: Partial<Record<ThemeId, Record<string, string>>> = {
   light: { ar: "فاتح", ru: "Светлая", es: "Claro", pt: "Claro", fr: "Clair", de: "Hell", cs: "Světlý", sk: "Svetlý", it: "Chiaro", ja: "ライト", hi: "लाइट", am: "ብርሃን", uk: "Світла", tr: "Açık", pl: "Jasny", fa: "روشن", id: "Terang", nl: "Licht", el: "Φωτεινό", zu: "Ukukhanya", xh: "Ukukhanya", nso: "Seetša", tn: "Lesedi", st: "Lesedi", ts: "Ku vonakala", ss: "Kukhanya", ve: "Tshedza", nr: "Ukukhanya", vi: "Sáng", fil: "Maliwanag", af: "Lig", sw: "Mwangaza", "zh-CN": "明亮", "zh-TW": "明亮", ko: "라이트", th: "สว่าง", bn: "আলো", da: "Lys", hu: "Világos" },
   dark: { ar: "داكن", ru: "Тёмная", es: "Oscuro", pt: "Escuro", fr: "Sombre", de: "Dunkel", cs: "Tmavý", sk: "Tmavý", it: "Scuro", ja: "ダーク", hi: "डार्क", am: "ጨለማ", uk: "Темна", tr: "Koyu", pl: "Ciemny", fa: "تیره", id: "Gelap", nl: "Donker", el: "Σκοτεινό", zu: "Okumnyama", xh: "Ubumnyama", nso: "Leswiswi", tn: "Lefifi", st: "Lefifi", ts: "Munyama", ss: "Kumnyama", ve: "Swiswi", nr: "Ubumnyama", vi: "Tối", fil: "Madilim", af: "Donker", sw: "Giza", "zh-CN": "暗黑", "zh-TW": "暗黑", ko: "다크", th: "มืด", bn: "অন্ধকার", da: "Mørk", hu: "Sötét" },
@@ -119,9 +109,6 @@ const THEME_NAMES_I18N: Partial<Record<ThemeId, Record<string, string>>> = {
   royal: { ar: "ملكي", ru: "Королевская", es: "Real", pt: "Real", fr: "Royal", de: "Königlich", cs: "Královský", sk: "Kráľovský", it: "Reale", ja: "ロイヤル", hi: "शाही", am: "ንጉሣዊ", uk: "Королівська", tr: "Kraliyet", pl: "Królewski", fa: "سلطنتی", id: "Kerajaan", nl: "Koninklijk", el: "Βασιλικό", zu: "Ubukhosi", xh: "Ubukumkani", nso: "Bogoši", tn: "Bogosi", st: "Borena", ts: "Vuhosi", ss: "Bukhosi", ve: "Vhuhosi", nr: "Ubukosi", vi: "Hoàng gia", fil: "Panghari", af: "Koninklik", sw: "Kifalme", "zh-CN": "皇家", "zh-TW": "皇家", ko: "로열", th: "ราชวงศ์", bn: "রাজকীয়", da: "Kongelig", hu: "Királyi" },
 };
 for (const t of THEMES) { const ex = THEME_NAMES_I18N[t.id]; if (ex) Object.assign(t.name, ex); }
-
-/** Skins that can be bought in the gift store (have a price), cheapest first. */
-export const STORE_THEMES = THEMES.filter((t) => t.price != null).sort((a, b) => a.price! - b.price!);
 
 export const KID_THEMES = THEMES.filter((t) => t.kind === "kid");
 export const ADULT_THEMES = THEMES.filter((t) => t.kind === "adult");

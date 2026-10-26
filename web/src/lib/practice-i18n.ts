@@ -370,10 +370,10 @@ export function practiceNav(lang: string): string {
 }
 
 /**
- * Dictation and test prep are Family tools (individual-prices.ts: "the
- * child-facing tools ... dictation practice ... belong to Family"), so an
- * Individual subscriber's Practice shows reading and language learning only.
- * Flip this to give Individual all four cards (the APIs behind them check
- * only that the person is signed in).
+ * On (true): an Individual subscriber's Practice shows all four cards,
+ * dictation and test prep included, not only reading and language learning
+ * (the APIs behind them check only that the person is signed in). Set it to
+ * false to keep dictation and test prep as Family tools again
+ * (individual-prices.ts).
  */
 export const PRACTICE_DICTATION_FOR_INDIVIDUAL = true;

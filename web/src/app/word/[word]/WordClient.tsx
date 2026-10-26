@@ -49,7 +49,7 @@ import VoiceInput from "@/components/VoiceInput";
 import { useHref, wordPath } from "@/lib/href";
 import { sentencePlaceholder } from "@/lib/sentence-copy";
 import { goBackOr } from "@/lib/back-nav";
-import { getCachedWord, setCachedWord, setPinned as setPinnedDb } from "@/lib/offline-db";
+import { getCachedWord, setCachedWord } from "@/lib/offline-db";
 import { UpgradeModal, type UpgradeTrigger } from "@/components/UpgradeModal";
 import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 import { useLangRows, toggleLangGroup } from "@/lib/lang-groups";
@@ -60,7 +60,6 @@ import { MarketingHeader } from "@/components/design/MarketingHeader";
 import { ClassroomTopbar } from "@/components/design/ClassroomTopbar";
 import { skinStyleVars, readStashedSkin } from "@/lib/school-skin";
 import { HomeFooter } from "@/components/design/home";
-import { ComposeModalV2 } from "@/components/design/ComposeModalV2";
 import { QuizModalV2 } from "@/components/design/QuizModalV2";
 import { WordGameModal } from "@/components/design/WordGameModal";
 import { ClassroomStage } from "@/components/classroom/ClassroomStage";
@@ -409,50 +408,6 @@ const NETWORK_LOST_COPY: Record<string, string> = {
   bn: "ইন্টারনেট সংযোগ বিচ্ছিন্ন হয়েছে। নেটওয়ার্ক দেখে আবার চেষ্টা করুন।",
   da: "Internetforbindelsen blev afbrudt. Tjek netværket og prøv igen.",
   hu: "Megszakadt az internetkapcsolat. Ellenőrizd a hálózatot, és próbáld újra.",
-};
-
-const SAVE_FAILED_COPY: Record<string, string> = {
-  en: "Save failed, try again",
-  he: "השמירה נכשלה, נסו שוב",
-  ar: "فشل الحفظ, حاول مرة أخرى",
-  ru: "Не удалось сохранить, попробуйте снова",
-  es: "Error al guardar, inténtalo de nuevo",
-  pt: "Falha ao salvar, tente novamente",
-  fr: "Échec de l'enregistrement, réessayez",
-  de: "Speichern fehlgeschlagen, erneut versuchen",
-  cs: "Uložení selhalo, zkuste to znovu",
-  sk: "Uloženie zlyhalo, skús to znova",
-  it: "Salvataggio fallito, riprova",
-  ja: "保存に失敗しました。もう一度お試しください",
-  hi: "सहेजना असफल, फिर से कोशिश करें",
-  am: "ማስቀመጥ አልተሳካም፣ እንደገና ይሞክሩ",
-  uk: "Не вдалося зберегти, спробуйте ще раз",
-  tr: "Kaydedilemedi, tekrar dene",
-  pl: "Nie udało się zapisać, spróbuj ponownie",
-  fa: "ذخیره نشد، دوباره امتحان کنید",
-  id: "Gagal menyimpan, coba lagi",
-  nl: "Opslaan mislukt, probeer het opnieuw",
-  el: "Η αποθήκευση απέτυχε, δοκίμασε ξανά",
-  zu: "Ukulondoloza kwehlulekile, zama futhi",
-  xh: "Ukugcina akuphumelelanga, zama kwakhona",
-  nso: "Go boloka go paletšwe, leka gape",
-  tn: "Go boloka go padile, leka gape",
-  st: "Ho boloka ho hlolehile, leka hape",
-  ts: "Ku hlayisa a swi tirhanga, ringetani nakambe",
-  ss: "Kugcina kwehlulekile, phindza uzame",
-  ve: "A zwo ngo vhulungwa, lingedzani hafhu",
-  nr: "Ukubulunga kwehlulekile, linga godu",
-  vi: "Lưu không thành công, hãy thử lại",
-  fil: "Hindi na-save, subukan ulit",
-  af: "Stoor het misluk, probeer weer",
-  sw: "Imeshindikana kuhifadhi, jaribu tena",
-  "zh-CN": "保存失败，请重试",
-  "zh-TW": "儲存失敗，請重試",
-  ko: "저장하지 못했어요. 다시 시도해 주세요",
-  th: "บันทึกไม่สำเร็จ ลองใหม่อีกครั้ง",
-  bn: "সংরক্ষণ করা যায়নি, আবার চেষ্টা করুন",
-  da: "Gemning mislykkedes, prøv igen",
-  hu: "A mentés nem sikerült, próbáld újra",
 };
 
 const SEARCH_DICTIONARY_COPY: Record<string, string> = {
@@ -1151,11 +1106,6 @@ export function WordClient({
       }
     })();
   }, [result?.word, result?.language, familyRole, user, loading, lang]);
-  // Offline pin state: true means the user has explicitly downloaded
-  // this word for offline study (vs the implicit auto-cache that all
-  // Clear/Deep users get on view). Loaded from IDB once the result
-  // lands; toggled by the Pin button in WordHeader.
-  const [isPinned, setIsPinned] = useState(false);
   // Upgrade modal — open with the feature + tier the user just tried.
   // Null = no modal showing.
   const [upgradeTrigger, setUpgradeTrigger] = useState<UpgradeTrigger | null>(null);
@@ -1171,9 +1121,6 @@ export function WordClient({
   // typos still get the model's own "did you mean" suggestion in the
   // result. `detectWrongKeyboard` is intentionally left unused here.
   void detectWrongKeyboard;
-  // Brief toast above the topbar confirming a save worked. The button
-  // label also flips to "Saved" but the toast gives an explicit ack.
-  const [saveFlash, setSaveFlash] = useState(false);
   // The 429 case carries a "nextStep" hint from the server — anon
   // visitors see "sign up to keep searching", basic users see
   // "upgrade to Clear for unlimited". Captures the difference so we
@@ -1213,9 +1160,7 @@ export function WordClient({
   const [classroomExamples, setClassroomExamples] = useState<string[]>([]);
   // An approved Gemara quote of the meaning (a unit that lists meanings).
   const [classroomQuote, setClassroomQuote] = useState<ClassroomQuote | null>(null);
-  const [composeOpen, setComposeOpen] = useState(false);
   const [quizOpen, setQuizOpen] = useState(false);
-  const [gadOpen, setGadOpen] = useState(false);
   const [wordGameOpen, setWordGameOpen] = useState(false);
 
   // Niqqud (מנוקד) — optional Hebrew vowel points for young readers (grades
@@ -1621,8 +1566,8 @@ export function WordClient({
                 // shaped — partial-json hands us mid-stream rows like
                 // { meaning: "חלום ז" } before examples have arrived,
                 // and the renderer used to crash when examples was
-                // undefined. Defensive rendering inside MeaningCard
-                // catches the rest, but filtering here avoids a flash
+                // undefined. Defensive rendering inside MeaningEntry
+                // (result.tsx) catches the rest, but filtering here avoids a flash
                 // of empty cards on screen during the stream.
                 const partialMeanings = Array.isArray(partial.meanings)
                   ? partial.meanings.filter(
@@ -2040,62 +1985,6 @@ export function WordClient({
     goUpgrade();
   }
 
-  // Tracks why save failed so we can show the right toast/text.
-  // null = either succeeded or hasn't been attempted this turn.
-  const [saveError, setSaveError] = useState<string>("");
-
-  async function handleSave() {
-    if (!user) {
-      promptLogin(v2(lang, "saveToNotebook"));
-      return;
-    }
-    if (!result) return;
-    // Notebook is a Clear-tier feature. Basic users get the contextual
-    // upgrade modal instead of a silent /pricing redirect — exactly
-    // the same UX as locked tabs (image/kids/quiz/etc).
-    if (plan === "basic") {
-      setUpgradeTrigger({ feature: "notebook", tier: "clear" });
-      return;
-    }
-    try {
-      const idToken = await user.getIdToken();
-      const res = await fetch("/api/notebook", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
-        },
-        body: JSON.stringify({
-          // /api/notebook expects { word, language, meaning } — the
-          // earlier 'uiLang' typo here matched no field on the server
-          // and silently 400'd, which is why every save looked like
-          // a no-op until the red error toast was added.
-          word: result.word,
-          language: result.language,
-          meaning: result.meanings[0]?.meaning ?? "",
-        }),
-      });
-      if (res.ok) {
-        setIsSaved(true);
-        setSaveError("");
-        setSaveFlash(true);
-        window.setTimeout(() => setSaveFlash(false), 2400);
-      } else {
-        // Server rejected — surface an error toast so the click feels
-        // acknowledged even on failure.
-        console.error("notebook POST failed:", res.status, await res.text());
-        setSaveError(`HTTP ${res.status}`);
-        setSaveFlash(true);
-        window.setTimeout(() => { setSaveFlash(false); setSaveError(""); }, 3000);
-      }
-    } catch (e) {
-      console.error("notebook:", e);
-      setSaveError(String(e));
-      setSaveFlash(true);
-      window.setTimeout(() => { setSaveFlash(false); setSaveError(""); }, 3000);
-    }
-  }
-
   function handleShare() {
     if (typeof navigator === "undefined") return;
     const nav = navigator as Navigator & {
@@ -2111,66 +2000,15 @@ export function WordClient({
     }
   }
 
-  // Toggle the IDB pinned flag for the current word. Pin = user has
-  // explicitly downloaded this entry for offline study, so it's
-  // protected from any future auto-prune logic. The underlying
-  // record is the one setCachedWord already wrote on render; we
-  // only flip the pinned boolean here, not the result body.
-  async function handlePin() {
-    if (!result) return;
-    const next = !isPinned;
-    setIsPinned(next);
-    try {
-      await setPinnedDb(lang, initialWord, next);
-    } catch (e) {
-      console.warn("[pin] failed:", e);
-      // Revert UI on failure so the user doesn't get a false-positive
-      // 'saved' state when the underlying store rejected the write.
-      setIsPinned(!next);
-    }
-  }
-
-  // Whenever a fresh result lands AND the user is on Clear/Deep, read
-  // back the IDB record to surface the existing pinned state on the
-  // button. (Auto-cache write fires from inside run(); we only need
-  // to read after it settles.)
-  useEffect(() => {
-    if (!result) return;
-    if (plan !== "clear" && plan !== "deep") return;
-    let cancelled = false;
-    (async () => {
-      const entry = await getCachedWord(lang, initialWord);
-      if (!cancelled) setIsPinned(Boolean(entry?.pinned));
-    })();
-    return () => { cancelled = true; };
-  }, [result, plan, lang, initialWord]);
-
-  function handleAction(id: "save" | "image" | "compose" | "practice" | "compare" | "kids" | "gadit") {
+  function handleAction(id: "practice" | "compare" | "gadit") {
     if (id === "gadit") {
-      // "Gad it!": one quick question (same gate as the quiz).
+      // "Gad it!" fires this only when it is locked (signed out, or a plan
+      // without a notebook): sign in, or the upgrade prompt.
       if (!user) {
         promptLogin(v2(lang, "quizEyebrow"));
         return;
       }
-      if (plan !== "deep") {
-        goUpgrade("quiz");
-        return;
-      }
-      setGadOpen(true);
-      return;
-    }
-    if (id === "save") return handleSave();
-    if (id === "image") return handleGenerate();
-    if (id === "compose") {
-      if (!user) {
-        promptLogin(v2(lang, "composeSubmit"));
-        return;
-      }
-      if (plan === "basic") {
-        goUpgrade("compose");
-        return;
-      }
-      setComposeOpen(true);
+      goUpgrade("quiz");
       return;
     }
     if (id === "practice") {
@@ -2202,23 +2040,6 @@ export function WordClient({
       setWordGameOpen(true);
       return;
     }
-    if (id === "kids") {
-      // Kids' explanation gates on Clear+ tier (per existing KidsCard
-      // locked logic). For now, route anonymous → signup, basic → pricing,
-      // clear/deep → no-op (will surface inline kids modal in next iter).
-      if (!user) {
-        promptLogin(v2(lang, "forKids"));
-        return;
-      }
-      if (plan === "basic") {
-        goUpgrade("kids");
-        return;
-      }
-      // TODO: open a kids-explanation modal. For now this is a soft
-      // landing — the data exists in result.meanings[i].kidsExplanation
-      // and a dedicated modal will be wired in the next iter.
-      return;
-    }
   }
 
   // ── Render ─────────────────────────────────────────────────────
@@ -2227,7 +2048,7 @@ export function WordClient({
   // intentionally NOT rendered here: it's dark navy chrome that
   // clashes with the cream surface and adds noise above the word.
   // A minimal wordmark + home link in `.wb-shell-topbar` takes its
-  // place; Save / Share live inside ResultView's own topbar.
+  // place; Share lives in ResultView's word header (saving is automatic).
   return (
     <div
       className={`wordbook wb-shell-page${familyRole === "kid" ? " wb-kid-bg" : ""}`}
@@ -2235,16 +2056,6 @@ export function WordClient({
       style={classroomCode ? skinStyleVars(classroomSkin) : undefined}
     >
       <WordMilestone count={notebookCount} lang={lang} fireworks={familyRole === "kid" || kidsMode} />
-      {saveFlash && (
-        <div
-          className={`wb-save-toast ${saveError ? "is-error" : ""}`}
-          role="status"
-        >
-          {saveError
-            ? pick(SAVE_FAILED_COPY, lang)
-            : v2(lang, "savedToWordBook")}
-        </div>
-      )}
       <div style={{ position: "relative", zIndex: 1 }}>
         {/* Classroom mode hides the full Gadit chrome entirely (logo,
             nav, plan badge, lang switch, share, account menu). Gadi
@@ -2784,14 +2595,9 @@ export function WordClient({
             kidsImagesLoading={kidsImgLoading}
             isSaved={isSaved}
             notebookFull={notebookFull}
-            onSave={handleSave}
             onShare={handleShare}
-            isPinned={isPinned}
-            onPin={plan === "clear" || plan === "deep" ? handlePin : undefined}
             onGenerate={handleGenerate}
             onUpgrade={handleUpgrade}
-            onRegenerate={handleGenerate}
-            onSaveImage={handleSave}
             onAction={handleAction}
             onReport={(section) => {
               const presetMap: Record<string, string> = {
@@ -2819,31 +2625,11 @@ export function WordClient({
         {!present && <GadVerbStamp />}
       </div>
 
-      {result && (
-        <ComposeModalV2
-          open={composeOpen}
-          onClose={() => setComposeOpen(false)}
-          word={result.word}
-          meanings={result.meanings.map((m) => m.meaning)}
-        />
-      )}
-
       <ReportModalV2
         open={reportContext !== null}
         onClose={() => setReportContext(null)}
         context={reportContext ?? undefined}
       />
-
-      {result && gadOpen && (
-        <QuizModalV2
-          open={gadOpen}
-          onClose={() => setGadOpen(false)}
-          word={result.word}
-          meaning={(kidsMode || familyRole === "kid") && result.meanings[0]?.kidsExplanation?.explanation ? result.meanings[0].kidsExplanation.explanation : result.meanings[0]?.meaning ?? ""}
-          language={result.language}
-          single
-        />
-      )}
 
       {result && (
         <QuizModalV2

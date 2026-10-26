@@ -7,18 +7,17 @@
  *
  * Composition (top → bottom on cream paper):
  *   <ProgressSignal />    "Saved · 2 days ago" chip — only when isSaved
- *   <WordHeader />        meta line + word title (54px mobile / 96px desktop)
- *   <MeaningsBlock />     Meanings — NO card, sit directly on paper
+ *   <WordHeader />        meta line + word title + share
+ *   <MeaningsBlock />     Meanings — NO card, sit directly on paper; each
+ *                         meaning carries its own tab row (image, kids,
+ *                         quiz, word games)
+ *   <IdiomsSection />     idioms from every meaning
  *   <OriginCard />        rust card: Language + Originally meant + optional story
- *   <VisualCard />        mint card: empty state with Generate, or filled image
- *   <TakeItFurther />     lavender card: 4 tiles (Compose / Quiz / Compare / Kids)
- *   <ActionBar />         mobile sticky bottom: Save to Word Book + share
+ *   <GadItButton />       "Gad it!" at the end of the page
+ *   <WordQuestions />     ask-about-this-word chips
  *
- * Legacy exports kept for backward compatibility with consumers:
- *   - MeaningCard (renders a single row; ResultView itself uses MeaningsBlock)
- *   - KidsCard, IdiomsCard (no-op exports; not rendered by ResultView)
- *   - EtymologyCard → now renders as OriginCard
- *   - ImageSlot → now renders as VisualCard
+ * Saving to the notebook and offline are automatic (WordClient), so the
+ * page has no save or pin buttons.
  *
  * Defensive against missing API fields:
  *   - pos / ipa aren't currently returned by /api/define; WordHeader accepts
@@ -26,12 +25,8 @@
  *     only shown in the meta line if present).
  *   - Etymology can arrive as a string (legacy) or a structured object.
  *     OriginCard handles both shapes.
- *   - kidsExplanation lives per-meaning in the schema. In the new design,
- *     "Kids' explanation" is a tile inside Take it further (note 1 from
- *     gadit-final.html). The legacy KidsCard export is preserved but no
- *     longer rendered by ResultView.
- *   - generalIdioms is dropped from the page entirely (not in the new
- *     design). IdiomsCard export is kept as a no-op for legacy callers.
+ *   - kidsExplanation lives per-meaning in the schema: the meaning's "kids"
+ *     tab, or the main text in Kids Mode.
  */
 
 import { WaitText, WaitDots } from "@/components/WaitText";
@@ -39,7 +34,7 @@ import { MeaningPractice } from "./MeaningPractice";
 import { meaningPracticeCopy } from "@/lib/meaning-practice-i18n";
 import { gadCopy, GAD_TAP_HINT } from "@/lib/gadit-button-copy";
 import { nativeShareFallback } from "@/lib/native-app";
-import { useState, useEffect, useMemo, type ReactNode } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { miscUi } from "@/lib/misc-ui-i18n";
 import { planCopy, FREE_NOTEBOOK_MAX } from "@/lib/plan-copy";
 import Link from "next/link";
@@ -73,18 +68,6 @@ export interface Idiom {
    *  Mode in place of `meaning`. Absent on older cached results. */
   kidsMeaning?: string;
 }
-
-/** "Opposite" chip label per UI language (en fallback). The opposite WORD
- *  itself comes from the model in the meaning's own language. */
-export const OPPOSITE_LABEL: Record<string, string> = {
-  en: "Opposite", he: "הפך", ar: "العكس", ru: "Противоположность", es: "Opuesto",
-  pt: "Oposto", fr: "Contraire", de: "Gegenteil", it: "Contrario", nl: "Tegenovergestelde",
-  cs: "Opak", sk: "Opak", uk: "Протилежність", tr: "Zıt anlamı", pl: "Przeciwieństwo",
-  fa: "متضاد", id: "Lawan kata", el: "Αντίθετο", hi: "विलोम", ja: "反対語",
-  am: "ተቃራኒ", zu: "Okuphambene", xh: "Isichasi", nso: "Lehlakanyi", tn: "Kganetso", st: "Se fapaneng", ts: "Rito ro kanetana", ss: "Lokuphambene", ve: "Ipfi ḽi fhambanaho", nr: "Okuphikisanako", vi: "Trái nghĩa", fil: "Kabaligtaran", af: "Teenoorgestelde",
-  sw: "Kinyume", "zh-CN": "反义词", "zh-TW": "反義詞", ko: "반대말", th: "ตรงข้าม",
-  bn: "বিপরীত", da: "Modsætning", hu: "Ellentét",
-};
 
 export interface Meaning {
   meaning: string;
@@ -129,10 +112,9 @@ export interface WordResult {
   correctedFrom?: string | null;
 }
 
-// ActionDef — IDs surfaced by the Take it further tiles. WordClient
-// receives the id via onAction and dispatches to the right behavior.
-// "kids" and "compare" are new for the wordbook redesign.
-export type ActionId = "save" | "image" | "compose" | "practice" | "compare" | "kids" | "gadit";
+// Actions the page hands to WordClient through onAction: the quiz tab
+// ("practice"), the word games tab ("compare") and a locked Gad it! button.
+export type ActionId = "practice" | "compare" | "gadit";
 
 // ─── Helpers ───────────────────────────────────────────────────
 const LANG_NAMES: Record<string, string[]> = {
@@ -221,9 +203,8 @@ function detectWordLang(language: string): string {
 }
 
 // ─── CrispTech icons — 1.5px line family, currentColor only ─────
-// Single visual family. The eyebrow icons are HIDDEN by CSS (we
-// don't want big icons next to section labels anymore); they stay
-// in code only for backward export compatibility.
+// Single visual family. BookIcon and ScrollIcon sit in the Meanings and
+// Word Origin eyebrows (globals.css decides whether they show).
 
 function BookIcon() {
   return (
@@ -244,26 +225,8 @@ function ScrollIcon() {
     </svg>
   );
 }
-function VisualEyebrowIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="5" width="18" height="14" rx="1.5" />
-      <circle cx="8" cy="10" r="1.5" />
-      <path d="M3 16.5l4-3.5 4 3 4-4 6 4" />
-    </svg>
-  );
-}
-function CompassIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="9" />
-      <path d="m9.5 14.5 1.5-5 5-1.5-1.5 5z" />
-      <circle cx="12" cy="12" r="0.8" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
 
-// Crosshair — used in the visual empty state
+// Crosshair — used in the image tab's empty state
 function CrosshairIcon({ size = 28 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
@@ -273,7 +236,7 @@ function CrosshairIcon({ size = 28 }: { size?: number }) {
   );
 }
 
-// Lock — used in DEEP tier badge
+// Lock — shown on a tab the plan does not open
 function LockIcon({ size = 10 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -299,73 +262,6 @@ function ShareIcon({ size = 18 }: { size?: number }) {
     </svg>
   );
 }
-function BookmarkFillIcon({ size = 18 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-    </svg>
-  );
-}
-function PinIcon({ size = 18, filled = false }: { size?: number; filled?: boolean }) {
-  // Cloud-down arrow — the visual metaphor users recognise from
-  // streaming services for 'download for offline'. Filled state =
-  // already downloaded; outline state = tap to download.
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M20 16.2A4.5 4.5 0 0 0 17.5 8h-1.8A7 7 0 1 0 4 14.9" />
-      <path d="M12 12v9" fill="none" />
-      <path d="m16 17-4 4-4-4" fill="none" />
-    </svg>
-  );
-}
-function PlusIcon({ size = 13 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <path d="M12 5v14M5 12h14" />
-    </svg>
-  );
-}
-
-// CrispTech tile icons — uniform 1.5px line family, currentColor.
-// The teal-soft 36×36 square around the icon is provided by CSS
-// (.wb-tile-icon). Icon itself is just the glyph.
-
-function TileComposeIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 20h4l10-10-4-4L4 16z" />
-      <path d="M14 6l4 4" />
-    </svg>
-  );
-}
-function TileQuizIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M9.5 9.5a2.5 2.5 0 1 1 4 2c-1 .8-1.5 1.4-1.5 2.5" />
-      <circle cx="12" cy="17.5" r="0.5" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-function TileCompareIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="5" width="8" height="14" rx="1" />
-      <rect x="13" y="5" width="8" height="14" rx="1" />
-      <path d="M7 9v6M17 9v6" />
-    </svg>
-  );
-}
-function TileKidsIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="9" r="3.5" />
-      <path d="M5 21c0-3.5 3-6 7-6s7 2.5 7 6" />
-      <circle cx="10" cy="9" r="0.4" fill="currentColor" stroke="none" />
-      <circle cx="14" cy="9" r="0.4" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
 
 // ─── ProgressSignal ────────────────────────────────────────────
 export function ProgressSignal({ savedAgo }: { savedAgo: string }) {
@@ -386,11 +282,7 @@ export function WordHeader({
   language,
   translation,
   pos,
-  isSaved = false,
-  onSave,
   onShare,
-  isPinned = false,
-  onPin,
   // ipa accepted for API stability — not rendered in this design.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ipa: _ipa,
@@ -403,14 +295,7 @@ export function WordHeader({
   translation?: string;
   pos?: string;
   ipa?: string;
-  isSaved?: boolean;
-  onSave?: () => void;
   onShare?: () => void;
-  /** Pinned = explicitly downloaded for offline study. Visual chip
-   *  changes label/icon based on state. Hidden entirely when onPin
-   *  isn't passed (Basic users + signed-out visitors). */
-  isPinned?: boolean;
-  onPin?: () => void;
   /** Niqqud toggle, shown next to the word's speaker (Hebrew word + signed-in
    *  only). Vowel points for young readers. Gadi 2026-08-22. */
   showNiqqud?: boolean;
@@ -492,36 +377,16 @@ export function WordHeader({
           </div>
         )}
       </div>
-      {(onSave || onShare || onPin) && (
+      {onShare && (
         <div className="wb-word-actions">
-          {onSave && (
-            <button
-              type="button"
-              className={`wb-word-act ${isSaved ? "is-saved" : ""}`}
-              onClick={onSave}
-              title={isSaved ? v2(lang, "savedToWordBook") : v2(lang, "saveToWordBook")}
-              aria-label={isSaved ? v2(lang, "savedToWordBook") : v2(lang, "saveToWordBook")}
-            >
-              <BookmarkFillIcon size={13} />
-              <span className="wb-word-act-label">
-                {isSaved ? v2(lang, "savedToWordBook") : v2(lang, "saveToWordBook")}
-              </span>
-            </button>
-          )}
-          {/* Offline pin moved into the per-meaning Clear-tier row
-              of tabs 2026-06-20 (Gadi). Old WordHeader pin button
-              JSX intentionally removed; isPinned still threads
-              through to result.tsx for the new pin chip below. */}
-          {onShare && (
-            <button
-              type="button"
-              className="wb-word-act-icon"
-              aria-label={v2(lang, "shareLabel")}
-              onClick={onShare}
-            >
-              <ShareIcon size={14} />
-            </button>
-          )}
+          <button
+            type="button"
+            className="wb-word-act-icon"
+            aria-label={v2(lang, "shareLabel")}
+            onClick={onShare}
+          >
+            <ShareIcon size={14} />
+          </button>
         </div>
       )}
     </div>
@@ -534,17 +399,14 @@ export function WordHeader({
 // inline content below for image/kids; fire modal/route for the
 // interactive flows (compose, compare, quiz).
 
-type TabId = "save" | "pin" | "image" | "kids" | "compose" | "compare" | "quiz";
+/** A feature the upgrade prompt can name ("compose" comes from MeaningPractice). */
+type TabId = "image" | "kids" | "compose" | "compare" | "quiz";
+/** The tabs the per-meaning row renders. */
+type RowTabId = Exclude<TabId, "compose">;
 
 interface MeaningEntryProps {
   n: number;
   meaning: Meaning;
-  /** Total number of meanings in this word, used by the POS badge
-      logic so we suppress the badge when there is only ONE meaning
-      (the Outsider's caveat from the 2026-06-20 LLM Council: for
-      "apple", "tree", "car" the small 'noun' chip just reads as
-      noise next to a definition the reader already understands). */
-  totalMeanings: number;
   plan: Plan;
   /** When true (set from /word page when the visitor came from
    *  /c/<CODE> during the school's active hours), unlock the
@@ -553,18 +415,6 @@ interface MeaningEntryProps {
    *  per-tab rules. */
   classroomInSession?: boolean;
   word: string;
-  /** Whether this word is in the user's notebook. Drives the
-      "save" tab's saved-vs-unsaved visual (filled bookmark, label
-      flip to "Saved" / "נשמר"). The save tab itself only renders
-      when onSave is defined, mirroring the optional pattern of the
-      other action handlers. */
-  isSaved?: boolean;
-  onSave?: () => void;
-  /** Whether the word is pinned for offline use (cached in
-      IndexedDB). Drives the "pin" tab's pinned-vs-unpinned visual.
-      The pin tab only renders when onPin is defined. */
-  isPinned?: boolean;
-  onPin?: () => void;
   imageUrl?: string;
   imageGenerating?: boolean;
   onGenerate?: () => void;
@@ -592,8 +442,8 @@ interface MeaningEntryProps {
 }
 
 function tierForTab(tab: TabId): "basic" | "clear" | "deep" {
-  // Save, pin, image, kids, compose are Clear+ features.
-  // Compare and quiz are Deep features.
+  // Image, kids, compose are Clear+ features.
+  // Compare (word games) and quiz are Deep features.
   // Nothing is Basic-only (Basic users see definitions + idioms only).
   if (tab === "compare" || tab === "quiz") return "deep";
   return "clear";
@@ -605,12 +455,12 @@ function tabUnlocked(tab: TabId, plan: Plan, classroomInSession = false): boolea
   // Clear customer gets, PLUS the games tab specifically (so the
   // school gets at least one game in class — Letter Scramble inside
   // the Word Games modal). We deliberately do NOT unlock compose,
-  // save (notebook) or pin (offline) — those require a real per-user
-  // account to be meaningful. Gadi 2026-06-29 product decision.
+  // which needs a real per-user account to be meaningful. Gadi
+  // 2026-06-29 product decision.
   if (classroomInSession) {
     if (tab === "image" || tab === "kids") return true;
     if (tab === "compare") return true; // "compare" maps to word games
-    if (tab === "save" || tab === "pin" || tab === "compose") return false;
+    if (tab === "compose") return false;
     if (tab === "quiz") return false; // personalised quizzes need account
   }
   if (need === "clear") return plan === "clear" || plan === "deep";
@@ -621,7 +471,7 @@ function tabUnlocked(tab: TabId, plan: Plan, classroomInSession = false): boolea
 // Compact icon variants for the tab row — explicit 16×16 with no
 // inner detail clutter. Stroke uses currentColor so the active-tab
 // state can flip them white via CSS.
-function TabIcon({ name }: { name: TabId }) {
+function TabIcon({ name }: { name: RowTabId }) {
   const common = {
     width: 16,
     height: 16,
@@ -633,30 +483,6 @@ function TabIcon({ name }: { name: TabId }) {
     strokeLinejoin: "round" as const,
   };
   switch (name) {
-    case "save":
-      // Notebook — bookmark icon was too abstract on mobile (Gadi
-      // 2026-06-20: "אחריות לא מבינים מה זה האייקון הזה"). A small
-      // lined notebook reads as "your notebook" instantly.
-      return (
-        <svg {...common}>
-          <rect x="5" y="3" width="14" height="18" rx="1.5" />
-          <line x1="8" y1="8" x2="16" y2="8" />
-          <line x1="8" y1="12" x2="16" y2="12" />
-          <line x1="8" y1="16" x2="13" y2="16" />
-        </svg>
-      );
-    case "pin":
-      // Download-to-device glyph — the offline pin used to live in
-      // the WordHeader's action row as a download-arrow chip; moved
-      // here 2026-06-20 to keep all Clear-tier features (image,
-      // kids, compose, save, pin) on the same row.
-      return (
-        <svg {...common}>
-          <path d="M12 3v12" />
-          <path d="M7 10l5 5 5-5" />
-          <path d="M5 19h14" />
-        </svg>
-      );
     case "image":
       return (
         <svg {...common}>
@@ -679,13 +505,6 @@ function TabIcon({ name }: { name: TabId }) {
           <path d="M11.5 5.5 c0.4 -1.4 1.4 -1.4 1.8 0" />
           {/* Compact rounded body */}
           <path d="M6.5 21 v-3 a5.5 5.5 0 0 1 11 0 v3" />
-        </svg>
-      );
-    case "compose":
-      return (
-        <svg {...common}>
-          <path d="M4 20h4l10-10-4-4L4 16z" />
-          <path d="M14 6l4 4" />
         </svg>
       );
     case "compare":
@@ -712,70 +531,61 @@ function TabIcon({ name }: { name: TabId }) {
 // so the slot is now a word-games panel. The TabId stays 'compare'
 // for now to avoid a wide rename across the result/i18n/unlock
 // tables; only the visible label and the panel body change.
-const TAB_LABELS: Record<string, Record<TabId, string>> = {
-  he: { save: "שמירה במחברת",  pin: "שמירה אופליין",  image: "תמונה",       kids: "הסבר לילדים",      compose: "חברו משפט",          quiz: "חידון",        compare: "משחקי מילים" },
-  en: { save: "Save to Notebook", pin: "Save offline", image: "Image",   kids: "Kids' explanation", compose: "Compose a sentence", quiz: "Quiz",         compare: "Word games" },
-  ar: { save: "حفظ في الدفتر",  pin: "حفظ بدون اتصال", image: "صورة",        kids: "شرح للأطفال",       compose: "اكتب جملة",          quiz: "اختبار",       compare: "ألعاب كلمات" },
-  ru: { save: "В блокнот",      pin: "Офлайн",         image: "Картинка",     kids: "Для детей",         compose: "Составить фразу",    quiz: "Викторина",    compare: "Игры со словами" },
-  es: { save: "A mi cuaderno",  pin: "Sin conexión",   image: "Imagen",       kids: "Explicación niños", compose: "Componer frase",     quiz: "Quiz",         compare: "Juegos de palabras" },
-  pt: { save: "Salvar no caderno", pin: "Offline",     image: "Imagem",       kids: "Para crianças",     compose: "Compor frase",       quiz: "Quiz",         compare: "Jogos com palavras" },
-  fr: { save: "Carnet",         pin: "Hors-ligne",     image: "Image",        kids: "Pour enfants",      compose: "Composer phrase",    quiz: "Quiz",         compare: "Jeux de mots" },
-  de: { save: "Ins Heft",       pin: "Offline",        image: "Bild",          kids: "Für Kinder",        compose: "Satz schreiben",      quiz: "Quiz",         compare: "Wortspiele" },
-  cs: { save: "Do sešitu",      pin: "Offline",        image: "Obrázek",       kids: "Pro děti",          compose: "Napsat větu",         quiz: "Kvíz",         compare: "Slovní hry" },
-  sk: { save: "Do zošita",      pin: "Offline",        image: "Obrázok",       kids: "Pre deti",          compose: "Napísať vetu",        quiz: "Kvíz",         compare: "Slovné hry" },
-  it: { save: "Quaderno",       pin: "Offline",        image: "Immagine",      kids: "Per bambini",        compose: "Scrivi una frase",    quiz: "Quiz",         compare: "Giochi di parole" },
-  ja: { save: "ノートに保存",    pin: "オフライン保存",  image: "画像",          kids: "子ども向け説明",      compose: "文を書く",            quiz: "クイズ",       compare: "単語ゲーム" },
-  hi: { save: "नोटबुक में सहेजें", pin: "ऑफ़लाइन सहेजें",  image: "तस्वीर",       kids: "बच्चों के लिए समझ", compose: "वाक्य लिखें",         quiz: "क्विज़",        compare: "शब्द खेल" },
-  am: { save: "በማስታወሻ ደብተር አስቀምጥ", pin: "ከመስመር ውጭ አስቀምጥ", image: "ምስል",      kids: "ለልጆች ማብራሪያ",      compose: "ዓረፍተ ነገር ጻፉ",        quiz: "ኩዊዝ",         compare: "የቃላት ጨዋታዎች" },
-  uk: { save: "У зошит", pin: "Офлайн", image: "Зображення", kids: "Для дітей", compose: "Скласти речення", quiz: "Вікторина", compare: "Ігри зі словами" },
-  tr: { save: "Deftere kaydet", pin: "Çevrimdışı kaydet", image: "Görsel", kids: "Çocuklar için", compose: "Cümle kur", quiz: "Test", compare: "Kelime oyunları" },
-  pl: { save: "Do zeszytu", pin: "Offline", image: "Obrazek", kids: "Dla dzieci", compose: "Ułóż zdanie", quiz: "Quiz", compare: "Gry słowne" },
-  fa: { save: "ذخیره در دفتر", pin: "ذخیره آفلاین", image: "تصویر", kids: "توضیح برای کودکان", compose: "جمله بساز", quiz: "آزمونک", compare: "بازی با کلمات" },
-  id: { save: "Simpan ke buku", pin: "Simpan offline", image: "Gambar", kids: "Untuk anak", compose: "Buat kalimat", quiz: "Kuis", compare: "Permainan kata" },
-  nl: { save: "In schrift", pin: "Offline", image: "Afbeelding", kids: "Voor kinderen", compose: "Zin maken", quiz: "Quiz", compare: "Woordspellen" },
-  el: { save: "Στο τετράδιο", pin: "Εκτός σύνδεσης", image: "Εικόνα", kids: "Για παιδιά", compose: "Γράψε πρόταση", quiz: "Κουίζ", compare: "Παιχνίδια λέξεων" },
-  zu: { save: "Gcina encwadini", pin: "Gcina ungaxhunyiwe", image: "Isithombe", kids: "Incazelo yezingane", compose: "Bhala umusho", quiz: "Imibuzo", compare: "Imidlalo yamagama" },
-  xh: { save: "Gcina encwadini", pin: "Gcina ungekho kwi-intanethi", image: "Umfanekiso",   kids: "Inkcazelo yabantwana", compose: "Yakha isivakalisi", quiz: "Imibuzo",         compare: "Imidlalo yamagama" },
-  nso: { save: "Boloka pukung", pin: "Boloka ntle le inthanete", image: "Seswantšho",   kids: "Tlhalošo ya bana", compose: "Bopa lefoko", quiz: "Tlhahlobo",         compare: "Dipapadi tša mantšu" },
-  tn: { save: "Boloka mo bukaneng", pin: "Boloka go dirisa kwa ntle ga inthanete", image: "Setshwantsho",   kids: "Tlhaloso ya bana", compose: "Kwala polelo", quiz: "Tlhatlhobo",         compare: "Metshameko ya mafoko" },
-  st: { save: "Boloka Bukaneng", pin: "Boloka ho sebedisa ntle le inthanete", image: "Setshwantsho",   kids: "Tlhaloso ya bana", compose: "Ngola polelo", quiz: "Kwisi",         compare: "Dipapadi tsa mantswe" },
-  ts: { save: "Hlayisa ebukwini", pin: "Hlayisa handle ka inthanete", image: "Xifaniso",   kids: "Nhlamuselo ya vana", compose: "Tsala xivulwa", quiz: "Mavutiso",         compare: "Mintlangu ya marito" },
-  ss: { save: "Gcina eNcwadzini", pin: "Gcina ngaphandle kwe-inthanethi", image: "Sitfombe",   kids: "Inchazelo yebantfwana", compose: "Bhala umusho", quiz: "Imibuto",         compare: "Imidlalo yemagama" },
-  ve: { save: "Vhulungani kha Bugu", pin: "Vhulungani hu si na inthanethe", image: "Tshifanyiso",   kids: "Ṱhalutshedzo ya vhana", compose: "Vhumbani mutaladzi", quiz: "Mbudziso",         compare: "Mitambo ya maipfi" },
-  nr: { save: "Bulunga eBhukwini lamezwi", pin: "Bulunga ngaphandle kwe-inthanethi", image: "Isithombe",   kids: "Ihlathululo yabantwana", compose: "Tlola umutjho", quiz: "Ikhwizi",         compare: "Imidlalo yamezwi" },
-  vi: { save: "Lưu vào sổ", pin: "Lưu ngoại tuyến", image: "Hình ảnh", kids: "Giải thích cho bé", compose: "Đặt câu", quiz: "Câu đố", compare: "Trò chơi chữ" },
-  fil: { save: "I-save sa notebook", pin: "I-save offline", image: "Larawan", kids: "Para sa bata", compose: "Bumuo ng pangungusap", quiz: "Pagsusulit", compare: "Laro ng salita" },
-  af: { save: "Stoor in skrif", pin: "Stoor aflyn", image: "Prent", kids: "Vir kinders", compose: "Skryf 'n sin", quiz: "Vasvra", compare: "Woordspeletjies" },
-  sw: { save: "Hifadhi kwenye daftari", pin: "Hifadhi nje ya mtandao", image: "Picha", kids: "Maelezo kwa watoto", compose: "Tunga sentensi", quiz: "Chemsha bongo", compare: "Michezo ya maneno" },
-  "zh-CN": { save: "存入笔记本", pin: "离线保存", image: "图片", kids: "儿童讲解", compose: "造句", quiz: "小测验", compare: "单词游戏" },
-  "zh-TW": { save: "存入筆記本", pin: "離線儲存", image: "圖片", kids: "兒童講解", compose: "造句", quiz: "小測驗", compare: "單字遊戲" },
-  ko: { save: "노트에 저장", pin: "오프라인 저장", image: "이미지", kids: "어린이 설명", compose: "문장 만들기", quiz: "퀴즈", compare: "단어 게임" },
-  th: { save: "บันทึกลงสมุด", pin: "บันทึกออฟไลน์", image: "รูปภาพ", kids: "คำอธิบายสำหรับเด็ก", compose: "แต่งประโยค", quiz: "แบบทดสอบ", compare: "เกมคำศัพท์" },
-  bn: { save: "খাতায় রাখুন", pin: "অফলাইনে রাখুন", image: "ছবি", kids: "শিশুদের জন্য ব্যাখ্যা", compose: "বাক্য লিখুন", quiz: "কুইজ", compare: "শব্দের খেলা" },
-  da: { save: "Gem i hæftet", pin: "Gem offline", image: "Billede", kids: "Til børn", compose: "Skriv en sætning", quiz: "Quiz", compare: "Ordspil" },
-  hu: { save: "Mentés a füzetbe", pin: "Offline mentés", image: "Kép", kids: "Gyerekeknek", compose: "Mondatalkotás", quiz: "Kvíz", compare: "Szójátékok" },
+const TAB_LABELS: Record<string, Record<RowTabId, string>> = {
+  he: { image: "תמונה",       kids: "הסבר לילדים",      quiz: "חידון",        compare: "משחקי מילים" },
+  en: { image: "Image",   kids: "Kids' explanation", quiz: "Quiz",         compare: "Word games" },
+  ar: { image: "صورة",        kids: "شرح للأطفال",       quiz: "اختبار",       compare: "ألعاب كلمات" },
+  ru: { image: "Картинка",     kids: "Для детей",         quiz: "Викторина",    compare: "Игры со словами" },
+  es: { image: "Imagen",       kids: "Explicación niños", quiz: "Quiz",         compare: "Juegos de palabras" },
+  pt: { image: "Imagem",       kids: "Para crianças",     quiz: "Quiz",         compare: "Jogos com palavras" },
+  fr: { image: "Image",        kids: "Pour enfants",      quiz: "Quiz",         compare: "Jeux de mots" },
+  de: { image: "Bild",          kids: "Für Kinder",        quiz: "Quiz",         compare: "Wortspiele" },
+  cs: { image: "Obrázek",       kids: "Pro děti",          quiz: "Kvíz",         compare: "Slovní hry" },
+  sk: { image: "Obrázok",       kids: "Pre deti",          quiz: "Kvíz",         compare: "Slovné hry" },
+  it: { image: "Immagine",      kids: "Per bambini",        quiz: "Quiz",         compare: "Giochi di parole" },
+  ja: { image: "画像",          kids: "子ども向け説明",      quiz: "クイズ",       compare: "単語ゲーム" },
+  hi: { image: "तस्वीर",       kids: "बच्चों के लिए समझ", quiz: "क्विज़",        compare: "शब्द खेल" },
+  am: { image: "ምስል",      kids: "ለልጆች ማብራሪያ",      quiz: "ኩዊዝ",         compare: "የቃላት ጨዋታዎች" },
+  uk: { image: "Зображення", kids: "Для дітей", quiz: "Вікторина", compare: "Ігри зі словами" },
+  tr: { image: "Görsel", kids: "Çocuklar için", quiz: "Test", compare: "Kelime oyunları" },
+  pl: { image: "Obrazek", kids: "Dla dzieci", quiz: "Quiz", compare: "Gry słowne" },
+  fa: { image: "تصویر", kids: "توضیح برای کودکان", quiz: "آزمونک", compare: "بازی با کلمات" },
+  id: { image: "Gambar", kids: "Untuk anak", quiz: "Kuis", compare: "Permainan kata" },
+  nl: { image: "Afbeelding", kids: "Voor kinderen", quiz: "Quiz", compare: "Woordspellen" },
+  el: { image: "Εικόνα", kids: "Για παιδιά", quiz: "Κουίζ", compare: "Παιχνίδια λέξεων" },
+  zu: { image: "Isithombe", kids: "Incazelo yezingane", quiz: "Imibuzo", compare: "Imidlalo yamagama" },
+  xh: { image: "Umfanekiso",   kids: "Inkcazelo yabantwana", quiz: "Imibuzo",         compare: "Imidlalo yamagama" },
+  nso: { image: "Seswantšho",   kids: "Tlhalošo ya bana", quiz: "Tlhahlobo",         compare: "Dipapadi tša mantšu" },
+  tn: { image: "Setshwantsho",   kids: "Tlhaloso ya bana", quiz: "Tlhatlhobo",         compare: "Metshameko ya mafoko" },
+  st: { image: "Setshwantsho",   kids: "Tlhaloso ya bana", quiz: "Kwisi",         compare: "Dipapadi tsa mantswe" },
+  ts: { image: "Xifaniso",   kids: "Nhlamuselo ya vana", quiz: "Mavutiso",         compare: "Mintlangu ya marito" },
+  ss: { image: "Sitfombe",   kids: "Inchazelo yebantfwana", quiz: "Imibuto",         compare: "Imidlalo yemagama" },
+  ve: { image: "Tshifanyiso",   kids: "Ṱhalutshedzo ya vhana", quiz: "Mbudziso",         compare: "Mitambo ya maipfi" },
+  nr: { image: "Isithombe",   kids: "Ihlathululo yabantwana", quiz: "Ikhwizi",         compare: "Imidlalo yamezwi" },
+  vi: { image: "Hình ảnh", kids: "Giải thích cho bé", quiz: "Câu đố", compare: "Trò chơi chữ" },
+  fil: { image: "Larawan", kids: "Para sa bata", quiz: "Pagsusulit", compare: "Laro ng salita" },
+  af: { image: "Prent", kids: "Vir kinders", quiz: "Vasvra", compare: "Woordspeletjies" },
+  sw: { image: "Picha", kids: "Maelezo kwa watoto", quiz: "Chemsha bongo", compare: "Michezo ya maneno" },
+  "zh-CN": { image: "图片", kids: "儿童讲解", quiz: "小测验", compare: "单词游戏" },
+  "zh-TW": { image: "圖片", kids: "兒童講解", quiz: "小測驗", compare: "單字遊戲" },
+  ko: { image: "이미지", kids: "어린이 설명", quiz: "퀴즈", compare: "단어 게임" },
+  th: { image: "รูปภาพ", kids: "คำอธิบายสำหรับเด็ก", quiz: "แบบทดสอบ", compare: "เกมคำศัพท์" },
+  bn: { image: "ছবি", kids: "শিশুদের জন্য ব্যাখ্যা", quiz: "কুইজ", compare: "শব্দের খেলা" },
+  da: { image: "Billede", kids: "Til børn", quiz: "Quiz", compare: "Ordspil" },
+  hu: { image: "Kép", kids: "Gyerekeknek", quiz: "Kvíz", compare: "Szójátékok" },
 };
-// Split by tier 2026-06-20 (Gadi): on mobile the wb-mtabs container
-// renders one row per tier so the Clear-tier features (teal) stay
-// together and the Deep-tier features (purple) stay together. Read
-// CLEAR_TAB_IDS + DEEP_TAB_IDS instead of a single flat list.
+// The row's tabs, by the plan that opens them (Clear+ first, then Deep).
 // Save and offline are automatic now and compose is the text link under the
 // examples (MeaningPractice), so the row keeps image + kids (Gadi 2026-10-24).
-const CLEAR_TAB_IDS: TabId[] = ["image", "kids"];
-const DEEP_TAB_IDS:  TabId[] = ["quiz", "compare"];
-const TAB_IDS: TabId[] = [...CLEAR_TAB_IDS, ...DEEP_TAB_IDS];
+const CLEAR_TAB_IDS: RowTabId[] = ["image", "kids"];
+const DEEP_TAB_IDS:  RowTabId[] = ["quiz", "compare"];
 
 function MeaningEntry({
   n,
   meaning,
-  totalMeanings,
   plan,
   classroomInSession = false,
   word,
-  isSaved = false,
-  onSave,
-  isPinned = false,
-  onPin,
   imageUrl,
   imageGenerating,
   onGenerate,
@@ -787,7 +597,6 @@ function MeaningEntry({
   streaming = false,
 }: MeaningEntryProps) {
   const { lang } = useLang();
-  const href = useHref();
   const tabLabels = TAB_LABELS[lang] ?? TAB_LABELS.en;
   // image + kids render inline; compose + quiz + compare fire route/modal.
   const [openTab, setOpenTab] = useState<"image" | "kids" | null>(null);
@@ -845,20 +654,15 @@ function MeaningEntry({
 
   // Local renderer so the two tier-grouped tab rows (Clear + Deep)
   // can share the same chip JSX without duplicating it.
-  function renderTab(id: TabId) {
+  function renderTab(id: RowTabId) {
     const unlocked = tabUnlocked(id, plan, classroomInSession);
     const isOpen = openTab === id;
-    const showSavedState = id === "save" && isSaved;
-    const showPinnedState = id === "pin" && isPinned;
     const classes = [
       "wb-mtab",
       isOpen ? "is-open" : "",
       unlocked ? "" : "is-locked",
-      showSavedState || showPinnedState ? "is-saved" : "",
     ].filter(Boolean).join(" ");
-    let label = tabLabels[id];
-    if (showSavedState) label = v2(lang, "savedToWordBook");
-    else if (showPinnedState) label = v2(lang, "offlinePinned");
+    const label = tabLabels[id];
     return (
       <button
         key={id}
@@ -866,7 +670,7 @@ function MeaningEntry({
         className={classes}
         data-tier="clear"
         onClick={() => handleTabClick(id)}
-        aria-pressed={isOpen || showSavedState || showPinnedState}
+        aria-pressed={isOpen}
         title={label}
         aria-label={label}
       >
@@ -879,14 +683,12 @@ function MeaningEntry({
     );
   }
 
-  function handleTabClick(tab: TabId) {
+  function handleTabClick(tab: RowTabId) {
     const unlocked = tabUnlocked(tab, plan);
     if (!unlocked) {
       onUpgrade?.(tab, tierForTab(tab) as "clear" | "deep");
       return;
     }
-    if (tab === "save") { onSave?.(); return; }
-    if (tab === "pin") { onPin?.(); return; }
     if (tab === "image") {
       setOpenTab(openTab === "image" ? null : "image");
       if (openTab !== "image" && !imageUrl && !imageGenerating) {
@@ -899,7 +701,6 @@ function MeaningEntry({
       return;
     }
     if (tab === "compare") { onAction?.("compare"); return; }
-    if (tab === "compose") { onAction?.("compose"); return; }
     if (tab === "quiz") { onAction?.("practice"); return; }
   }
 
@@ -1060,8 +861,10 @@ function MeaningEntry({
           since the kids-friendly content IS now the main definition
           shown above. Showing the tab would be redundant and confusing
           ("explain like a kid" → already done). */}
-      {/* One row, one colour (Gadi 2026-10-24): the Clear/Deep tiers are
-          gone, so image, kids, quiz and games sit together in teal. */}
+      {/* One row, one colour (Gadi 2026-10-24): image, kids, quiz and games
+          sit together in teal. The tabs still lock by plan (tabUnlocked):
+          image and kids need Clear or Deep, quiz and games need Deep; a
+          locked tab opens the upgrade prompt. */}
       <div className="wb-mtabs wb-mtabs-tier">
         {[...CLEAR_TAB_IDS, ...DEEP_TAB_IDS]
           .filter((id) => !(showKids && (id === "kids" || id === "image")))
@@ -1163,10 +966,6 @@ export function MeaningsBlock({
   word = "",
   plan = "basic",
   classroomInSession = false,
-  isSaved = false,
-  onSave,
-  isPinned = false,
-  onPin,
   imageUrl,
   imageGenerating,
   onGenerate,
@@ -1182,10 +981,6 @@ export function MeaningsBlock({
   plan?: Plan;
   streaming?: boolean;
   classroomInSession?: boolean;
-  isSaved?: boolean;
-  onSave?: () => void;
-  isPinned?: boolean;
-  onPin?: () => void;
   imageUrl?: string;
   imageGenerating?: boolean;
   onGenerate?: () => void;
@@ -1216,14 +1011,9 @@ export function MeaningsBlock({
             key={i}
             n={i + 1}
             meaning={m}
-            totalMeanings={meanings.length}
             word={word}
             plan={plan}
             classroomInSession={classroomInSession}
-            isSaved={isSaved}
-            onSave={onSave}
-            isPinned={isPinned}
-            onPin={onPin}
             imageUrl={imageUrl}
             imageGenerating={imageGenerating}
             onGenerate={onGenerate}
@@ -1235,25 +1025,6 @@ export function MeaningsBlock({
             onReport={onReport}
           />
         ))}
-      </div>
-    </div>
-  );
-}
-
-// Legacy single-row export (kept for backward compatibility).
-export function MeaningCard({ n, meaning }: { n: number; meaning: Meaning; onReport?: () => void }) {
-  return (
-    <div className="wordbook">
-      <div className="wb-meanings">
-        <div className="wb-meaning-row">
-          <div className="wb-meaning-num">{n}</div>
-          <div className="wb-meaning-body">
-            {meaning.meaning && <div className="wb-meaning-def">{meaning.meaning}</div>}
-            {(meaning.examples ?? []).filter((ex) => String(ex ?? "").trim()).map((ex, j) => (
-              <div className="wb-meaning-ex" key={j}>{ex}</div>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );
@@ -1516,192 +1287,6 @@ export function OriginCard({ etymology, onReport, plan = "basic" }: { etymology:
   );
 }
 
-// Legacy alias for code that still imports EtymologyCard.
-export function EtymologyCard({ etymology }: { etymology: Etymology | string; onReport?: () => void }) {
-  return <OriginCard etymology={etymology} />;
-}
-
-// ─── VisualCard (renamed from ImageSlot) ──────────────────────
-export function VisualCard({
-  state,
-  word,
-  imageUrl,
-  generating,
-  onGenerate,
-  onUpgrade,
-  onRegenerate,
-}: {
-  state: "empty-clear" | "empty-locked" | "filled";
-  word: string;
-  imageUrl?: string;
-  generating?: boolean;
-  onGenerate?: () => void;
-  onUpgrade?: (tab?: TabId, tier?: "clear" | "deep") => void;
-  onRegenerate?: () => void;
-}) {
-  const { lang } = useLang();
-
-  if (state === "filled" && imageUrl) {
-    return (
-      <div className="wb-card wb-visual">
-        <div className="wb-eyebrow">
-          <span className="wb-eyebrow-icon"><VisualEyebrowIcon /></span>
-          {v2(lang, "visualEyebrow")}
-        </div>
-        <div className="wb-visual-filled">
-          <img src={imageUrl} alt={word} />
-          {onRegenerate && (
-            <div className="wb-visual-overlay">
-              <button type="button" onClick={onRegenerate} aria-label="Regenerate">
-                <PlusIcon size={11} /> {v2(lang, "generateLabel")}
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  const isLocked = state === "empty-locked";
-  return (
-    <div className="wb-card wb-visual">
-      <div className="wb-eyebrow">
-        <span className="wb-eyebrow-icon"><VisualEyebrowIcon /></span>
-        {v2(lang, "visualEyebrow")}
-      </div>
-      <div className="wb-visual-empty">
-        <div className="wb-visual-art"><CrosshairIcon size={28} /></div>
-        <div className="wb-visual-label">VISUAL · 1600×900</div>
-        <button
-          type="button"
-          className="wb-visual-cta"
-          onClick={isLocked ? () => onUpgrade?.("image", "clear") : onGenerate}
-          disabled={generating}
-        >
-          <PlusIcon /> {generating ? <WaitDots /> : v2(lang, "generateLabel")}
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// Legacy alias.
-export function ImageSlot(props: {
-  state: "empty-clear" | "empty-locked" | "filled";
-  word: string;
-  imageUrl?: string;
-  generating?: boolean;
-  onGenerate?: () => void;
-  onUpgrade?: (tab?: TabId, tier?: "clear" | "deep") => void;
-  onRegenerate?: () => void;
-  onSaveImage?: () => void;
-}) {
-  return <VisualCard {...props} />;
-}
-
-// ─── TakeItFurther — 4 tiles ──────────────────────────────────
-export function TakeItFurther({
-  onAction,
-}: {
-  word?: string;
-  plan?: Plan;
-  onAction?: (id: ActionId) => void;
-}) {
-  const { lang } = useLang();
-  // Tier mapping matches WordClient.handleAction:
-  //   compose, kids → require Clear+
-  //   practice (Quiz) → requires Deep
-  //   compare → free, no badge
-  const tiles: {
-    id: ActionId;
-    title: string;
-    icon: ReactNode;
-    tier?: "clear" | "deep";
-  }[] = [
-    // Tier-ordered: Clear tiles first (rightmost in RTL / leftmost in
-    // LTR), Deep tiles last. Visually groups the row by tier so the
-    // user reads "what Clear gives me" → "what Deep gives me".
-    { id: "kids",     title: v2(lang, "actionKidsExplanation"), icon: <TileKidsIcon />,    tier: "clear" },
-    { id: "compose",  title: v2(lang, "actionCompose"),         icon: <TileComposeIcon />, tier: "clear" },
-    { id: "compare",  title: v2(lang, "actionCompare"),         icon: <TileCompareIcon />, tier: "deep"  },
-    { id: "practice", title: v2(lang, "actionQuiz"),            icon: <TileQuizIcon />,    tier: "deep"  },
-  ];
-  return (
-    <div className="wb-card wb-further">
-      <div className="wb-eyebrow">
-        <span className="wb-eyebrow-icon"><CompassIcon /></span>
-        {v2(lang, "takeItFurtherEyebrow")}
-      </div>
-      <div className="wb-further-grid">
-        {tiles.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            className="wb-tile"
-            data-action={t.id}
-            onClick={() => onAction?.(t.id)}
-          >
-            <span className="wb-tile-icon">{t.icon}</span>
-            <div className="wb-tile-title">{t.title}</div>
-            {t.tier && (
-              <span className="wb-tile-tier" data-tier={t.tier}>
-                {t.tier === "deep" && <LockIcon size={10} />}
-                {t.tier === "clear" ? "CLEAR" : "DEEP"}
-              </span>
-            )}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ─── Legacy no-op exports kept for import stability ───────────
-export function KidsCard(_props: { kids: KidsExplanation; locked?: boolean; onUpgrade?: () => void }) {
-  return null;
-}
-export function IdiomsCard(_props: { idioms: Idiom[]; onReport?: () => void }) {
-  return null;
-}
-
-// ─── ActionBar (mobile sticky) ─────────────────────────────────
-function ActionBar({
-  isSaved,
-  onSave,
-  onShare,
-}: {
-  isSaved: boolean;
-  onSave?: () => void;
-  onShare?: () => void;
-}) {
-  const { lang } = useLang();
-  return (
-    <div className="wb-action-bar">
-      <button
-        type="button"
-        className={`wb-save-btn ${isSaved ? "is-saved" : ""}`}
-        onClick={onSave}
-      >
-        <BookmarkFillIcon />
-        {isSaved ? v2(lang, "savedToWordBook") : v2(lang, "saveToWordBook")}
-      </button>
-      <button
-        type="button"
-        className="wb-secondary-btn"
-        aria-label={v2(lang, "shareLabel")}
-        onClick={onShare}
-      >
-        <ShareIcon />
-      </button>
-    </div>
-  );
-}
-
-// TopbarSave used to render a Save pill + Share icon above the word.
-// Removed in favor of folding Save/Share into the global wordbook
-// masthead in WordClient — the floating pill above the title felt
-// detached and visually noisy on cream paper.
-
 // ─── ResultView (page composition) ─────────────────────────────
 // "Gad it" (Gadi 2026-10-24): at the END of the page, after the word origin.
 // No question any more: the tap itself says "I understood" and marks the word
@@ -1761,13 +1346,9 @@ export function ResultView({
   isSaved = false,
   notebookFull = false,
   savedAgo,
-  onSave,
   onShare,
-  isPinned = false,
-  onPin,
   onGenerate,
   onUpgrade,
-  onRegenerate,
   onAction,
   onReport,
   kidsImages,
@@ -1793,14 +1374,9 @@ export function ResultView({
   /** A free notebook already holds FREE_NOTEBOOK_MAX words, so this one was not saved. */
   notebookFull?: boolean;
   savedAgo?: string;
-  onSave?: () => void;
   onShare?: () => void;
-  isPinned?: boolean;
-  onPin?: () => void;
   onGenerate?: () => void;
   onUpgrade?: (tab?: TabId, tier?: "clear" | "deep") => void;
-  onRegenerate?: () => void;
-  onSaveImage?: () => void;
   onAction?: (id: ActionId) => void;
   onReport?: (section: string) => void;
   /** Kids Mode: per-meaning pictures keyed by meaning index. */
@@ -1814,30 +1390,19 @@ export function ResultView({
 }) {
   const { dir, lang } = useLang();
   const href = useHref();
-  // imageState retained for the legacy <VisualCard /> export; no
-  // longer rendered in this ResultView since image lives inside each
-  // MeaningEntry tab now. The state derivation also feeds onAction
-  // for the inline image generation flow.
-  void imageUrl; void plan; // silence unused warnings on the branches
-  void onRegenerate;
 
   return (
     <div className="wordbook wb-page" dir={dir}>
       {isSaved && savedAgo && <ProgressSignal savedAgo={savedAgo} />}
 
-      {/* WordHeader no longer renders the Save button, Gadi 2026-06-20
-          moved Save to Notebook into the per-meaning action row so it
-          carries Clear-tier teal colouring and reads as a feature of
-          each definition. WordHeader keeps offline-pin + share. */}
+      {/* Saving and offline are automatic (no buttons), so the header
+          keeps only share. */}
       <WordHeader
         word={result.word}
         language={result.language}
         translation={result.translation}
         ipa={result.ipa}
-        isSaved={isSaved}
         onShare={onShare}
-        isPinned={isPinned}
-        onPin={onPin}
         showNiqqud={showNiqqud}
         niqqudOn={niqqudOn}
         onToggleNiqqud={onToggleNiqqud}
@@ -1908,10 +1473,6 @@ export function ResultView({
         plan={plan}
         streaming={streaming}
         classroomInSession={classroomInSession}
-        isSaved={isSaved}
-        onSave={onSave}
-        isPinned={isPinned}
-        onPin={onPin}
         imageUrl={imageUrl}
         imageGenerating={imageGenerating}
         onGenerate={onGenerate}
