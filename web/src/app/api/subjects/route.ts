@@ -7,9 +7,12 @@ import { subjectsCatalog, subjectsLangs, subjectTopicWords, type SubjectsLang } 
  * Paying plans only (Clear / Deep; Family members and Individual map there).
  *
  * GET ?lang=he|en|de   (de only once its catalog files exist)
- *   -> { lang, subjects: [{ key, name, icon, topics: [{ id, title, age: "younger"|"older" }] }] }
+ *   -> { lang, subjects: [{ key, age, name, icon, topics: [{ id, title, age: "younger"|"older" }] }] }
+ *      one entry per subject card and level (lib/subject-words.ts): younger
+ *      has the elementary subjects, older the secondary ones; a key can
+ *      appear once per level ("mathematics" is חשבון / מתמטיקה)
  * GET ?lang=he|en|de&topic=<id>
- *   -> { id, subject, subjectName, title, age, words: [{ w, d }] }
+ *   -> { id, subject, subjectName, icon, title, age, words: [{ w, d }] }
  *
  * 401 signed out, 402 { error: "upgrade_required" } on Basic, 404 for an id
  * that is not one of this language's catalog topics (a school's own set

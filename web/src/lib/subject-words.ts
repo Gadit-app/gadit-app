@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { CUR_TOPICS, curSubject, zaTopic } from "@/lib/curriculum-catalog";
+import { CUR_TOPICS, zaTopic } from "@/lib/curriculum-catalog";
 import { getCurriculumSetDoc } from "@/lib/curriculum-sets";
 import za from "@/lib/curriculum-catalog-za.json";
 
@@ -17,35 +17,48 @@ import za from "@/lib/curriculum-catalog-za.json";
  *       override like the South African ones
  * A further language is one more entry in CATALOGS below.
  *
+ * Elementary first (Gadi 2026-10-26: many mothers buy Gadit for children in
+ * elementary school): the subject cards depend on the level. "younger" has
+ * the subjects of elementary school (arithmetic, geometry, science, the home
+ * language...), "older" the six secondary subjects plus geometry. Each card
+ * is a key, a label, an icon and the rule that picks its topics; a topic
+ * belongs to exactly one card, and the card's label is the subject name the
+ * word page receives.
+ *
  * Read-only. Nothing here touches a school, its quotas, digests or reports.
- * Only catalog ids of the six subjects are ever served; a school's own set
+ * Only catalog ids of these cards' topics are ever served; a school's own set
  * ("cur-sch-") or any other id is not in the allowed list.
  */
 
 export type SubjectsLang = "he" | "en" | "de";
 export type SubjectAge = "younger" | "older";
-export const SUBJECT_KEYS = ["mathematics", "chemistry", "physics", "biology", "history", "geography"] as const;
-export type SubjectKey = (typeof SUBJECT_KEYS)[number];
 
 export type SubjectTopic = { id: string; title: string; age: SubjectAge };
-export type SubjectEntry = { key: SubjectKey; name: string; icon: string; topics: SubjectTopic[] };
+/** One subject card of one level. The same key can appear once per level
+ *  ("mathematics" is חשבון for younger and מתמטיקה for older). */
+export type SubjectEntry = { key: string; age: SubjectAge; name: string; icon: string; topics: SubjectTopic[] };
 export type SubjectsCatalog = { lang: SubjectsLang; subjects: SubjectEntry[] };
 export type SubjectWord = { w: string; d: string };
-export type SubjectTopicWords = { id: string; subject: SubjectKey; subjectName: string; title: string; age: SubjectAge; words: SubjectWord[] };
+export type SubjectTopicWords = { id: string; subject: string; subjectName: string; icon: string; title: string; age: SubjectAge; words: SubjectWord[] };
 
-const isSubjectKey = (k: string): k is SubjectKey => (SUBJECT_KEYS as readonly string[]).includes(k);
-
-type Row = SubjectTopic & { subject: SubjectKey; sort: number[] };
+/** A subject card: key, label and icon (public/subjects/<icon>.webp). */
+type Card = { key: string; name: string; icon: string };
+type Row = SubjectTopic & { card: string; sort: number[] };
 type Catalog = {
   /** id prefix of this catalog's topics */
   prefix: string;
+  /** The cards of each level, in the order they are shown. */
+  cards: Record<SubjectAge, Card[]>;
   rows: () => Row[];
-  name: (key: SubjectKey) => string;
   /** Ids that have words, before any Firestore check. null = check Firestore. */
   builtInIds: (() => Set<string>) | null;
   /** The words of one topic. */
   words: (id: string) => Promise<Array<{ w: string; d: string }> | null>;
 };
+
+const card = (key: string, name: string, icon = key): Card => ({ key, name, icon });
+// Geometry has no icon of its own: it uses the math field icon (calculator and ruler), so it differs from arithmetic.
+const GEO_ICON = "cat-math";
 
 // ── Hebrew: the Israeli catalog ──────────────────────────────────────────
 const HE_GRADE: Record<string, number> = { א: 1, ב: 2, ג: 3, ד: 4, ה: 5, ו: 6, ז: 7, ח: 8, ט: 9, י: 10, יא: 11, יב: 12 };
@@ -57,48 +70,97 @@ function heGrades(g: string): [number, number] {
 }
 const HE_LEVEL_RANK: Record<string, number> = { gan: 0, elementary: 1, middle: 2, high: 3 };
 const ageOfHe = (l: string): SubjectAge | null => (l === "gan" || l === "elementary" ? "younger" : l === "middle" || l === "high" ? "older" : null);
-const HE_NAMES: Record<SubjectKey, string> = {
-  mathematics: "מתמטיקה", chemistry: "כימיה", physics: "פיזיקה",
-  biology: "ביולוגיה", history: "היסטוריה", geography: "גאוגרפיה",
+const HE_CARDS: Record<SubjectAge, Card[]> = {
+  younger: [
+    card("mathematics", "חשבון"),
+    card("geometry", "גאומטריה", GEO_ICON),
+    card("science-and-technology", "מדעים"),
+    card("hebrew", "עברית"),
+    card("english", "אנגלית"),
+    card("homeland-society-and-civics", "מולדת"),
+    card("geography", "גאוגרפיה"),
+    card("bible", "תנ\"ך"),
+    card("history", "היסטוריה"),
+  ],
+  older: [
+    card("mathematics", "מתמטיקה"),
+    card("geometry", "גאומטריה", GEO_ICON),
+    card("chemistry", "כימיה"),
+    card("physics", "פיזיקה"),
+    card("biology", "ביולוגיה"),
+    card("history", "היסטוריה"),
+    card("geography", "גאוגרפיה"),
+  ],
 };
+/** The geometry topics of mathematics, by their catalog titles. */
+const HE_GEOMETRY = new Set([
+  // gan + elementary
+  "צורות גאומטריות בסיסיות ותחושה מרחבית", "מצולעים ומשולשים", "זוויות", "מרובעים", "היקף ושטח",
+  "מעגל ועיגול", "גופים: נפח ושטח פנים", "סימטריה",
+  // middle + high
+  "זוויות וישרים מקבילים", "משולשים: סוגים ותכונות", "חפיפת משולשים", "משולש שווה שוקיים ודלתון",
+  "מרובעים: מקבילית, מלבן, מעוין וטרפז", "משפט פיתגורס", "דמיון משולשים", "מעגל: היקף ושטח",
+  "גופים במרחב: נפח ושטח פנים", "גאומטריה אוקלידית: משולשים ומעגל", "גאומטריה אנליטית",
+]);
 
 function heRows(): Row[] {
   const rows: Row[] = [];
   CUR_TOPICS.forEach((t, i) => {
-    if (!isSubjectKey(t.s)) return;
     const age = ageOfHe(t.l);
     if (!age) return;
+    const key = t.s === "mathematics" && HE_GEOMETRY.has(t.t.trim()) ? "geometry" : t.s;
+    if (!HE_CARDS[age].some((c) => c.key === key)) return;
     const [g1, g2] = heGrades(t.g);
-    rows.push({ id: t.id, title: t.t, age, subject: t.s, sort: [HE_LEVEL_RANK[t.l] ?? 9, g1, g2, i] });
+    rows.push({ id: t.id, title: t.t, age, card: key, sort: [HE_LEVEL_RANK[t.l] ?? 9, g1, g2, i] });
   });
   return rows;
 }
 
-// ── English: South Africa (natural sciences split by strand) ─────────────
-// "Planet Earth and Beyond" and "Structures" belong to none of the six.
-const ZA_STRAND: Record<string, SubjectKey> = {
+// ── English: South Africa ────────────────────────────────────────────────
+// younger = Intermediate Phase (gr 4-6), older = Senior Phase (gr 7-9).
+// Geometry is the "Space and Shape" / "Shape and Space" strand of mathematics.
+// Older natural sciences split by strand; "Planet Earth and Beyond" belongs
+// to none of the cards. Younger natural sciences stay ONE card.
+const ZA_STRAND: Record<string, string> = {
   "matter & materials": "chemistry", "matter and materials": "chemistry",
   "energy & change": "physics", "energy and change": "physics",
   "life & living": "biology", "life and living": "biology",
 };
-function zaSubjectOf(s: string, strand: string | undefined): SubjectKey | null {
-  if (s === "mathematics" || s === "history" || s === "geography") return s;
-  if (s === "natural-sciences" || s === "natural-sciences-technology") return ZA_STRAND[(strand ?? "").trim().toLowerCase()] ?? null;
-  return null;
-}
-const EN_NAMES: Record<SubjectKey, string> = {
-  mathematics: "Mathematics", chemistry: "Chemistry", physics: "Physics",
-  biology: "Biology", history: "History", geography: "Geography",
+const isZaGeometry = (strand: string | undefined) => /^(space and shape|shape and space)( \(geometry\))?$/i.test((strand ?? "").trim());
+const EN_CARDS: Record<SubjectAge, Card[]> = {
+  younger: [
+    card("mathematics", "Math"),
+    card("geometry", "Geometry", GEO_ICON),
+    card("natural-sciences-technology", "Natural Sciences"),
+    card("english-home-language", "English"),
+    card("life-skills", "Life Skills"),
+    card("geography", "Geography"),
+    card("history", "History"),
+  ],
+  older: [
+    card("mathematics", "Mathematics"),
+    card("geometry", "Geometry", GEO_ICON),
+    card("chemistry", "Chemistry"),
+    card("physics", "Physics"),
+    card("biology", "Biology"),
+    card("history", "History"),
+    card("geography", "Geography"),
+  ],
 };
+function zaCardOf(s: string, strand: string | undefined, age: SubjectAge): string | null {
+  if (s === "mathematics") return isZaGeometry(strand) ? "geometry" : "mathematics";
+  if (age === "older" && s === "natural-sciences") return ZA_STRAND[(strand ?? "").trim().toLowerCase()] ?? null;
+  return s;
+}
 type ZaRow = { id: string; s: string; l: string; g: string; t: string; term?: number | null; strand?: string };
 function enRows(): Row[] {
   const rows: Row[] = [];
   (za.topics as ZaRow[]).forEach((t, i) => {
-    const subject = zaSubjectOf(t.s, t.strand);
-    if (!subject) return;
     const age: SubjectAge | null = t.l === "intermediate" ? "younger" : t.l === "senior" ? "older" : null;
     if (!age) return;
-    rows.push({ id: t.id, title: t.t, age, subject, sort: [age === "younger" ? 0 : 1, Number(t.g) || 99, t.term ?? 9, i] });
+    const key = zaCardOf(t.s, t.strand, age);
+    if (!key || !EN_CARDS[age].some((c) => c.key === key)) return;
+    rows.push({ id: t.id, title: t.t, age, card: key, sort: [age === "younger" ? 0 : 1, Number(t.g) || 99, t.term ?? 9, i] });
   });
   return rows;
 }
@@ -109,10 +171,34 @@ type DeCatalogFile = {
   topics?: Record<string, { id: string; s: string; l: string; t: string; o?: number }> | Array<{ id: string; s: string; l: string; t: string; o?: number }>;
 };
 type SetsFile = Record<string, { words?: string[]; defs?: Record<string, string> }>;
-const DE_NAMES: Record<SubjectKey, string> = {
-  mathematics: "Mathematik", chemistry: "Chemie", physics: "Physik",
-  biology: "Biologie", history: "Geschichte", geography: "Geografie",
+// Younger: chemistry, physics and biology are one card, "Natur und Technik"
+// (as in Lehrplan 21, Zyklus 2), and German itself is a subject.
+const DE_CARDS: Record<SubjectAge, Card[]> = {
+  younger: [
+    card("mathematics", "Mathematik"),
+    card("geometry", "Geometrie", GEO_ICON),
+    card("nature-and-technology", "Natur und Technik", "science-and-technology"),
+    card("german", "Deutsch", "cat-language"),
+    card("geography", "Geografie"),
+    card("history", "Geschichte"),
+  ],
+  older: [
+    card("mathematics", "Mathematik"),
+    card("geometry", "Geometrie", GEO_ICON),
+    card("chemistry", "Chemie"),
+    card("physics", "Physik"),
+    card("biology", "Biologie"),
+    card("history", "Geschichte"),
+    card("geography", "Geografie"),
+  ],
 };
+/** The geometry topics of mathematics, by their titles. */
+const DE_GEOMETRY = new Set(["Geometrie", "Umfang und Flächeninhalt", "Geometrie in der Ebene", "Körper und Messen"]);
+function deCardOf(s: string, title: string, age: SubjectAge): string {
+  if (s === "mathematics") return DE_GEOMETRY.has(title.trim()) ? "geometry" : "mathematics";
+  if (age === "younger" && (s === "chemistry" || s === "physics" || s === "biology")) return "nature-and-technology";
+  return s;
+}
 // Read from disk (next.config.ts traces them into the function): a missing
 // or broken file just means no German catalog, never a failed build.
 function readJson<T>(file: string): T | null {
@@ -133,10 +219,12 @@ function deRows(): Row[] {
   const list = Array.isArray(cat.topics) ? cat.topics : Object.values(cat.topics ?? {});
   const rows: Row[] = [];
   list.forEach((t, i) => {
-    if (!t || typeof t.id !== "string" || !t.id.startsWith("cur-de-") || !isSubjectKey(t.s)) return;
+    if (!t || typeof t.id !== "string" || !t.id.startsWith("cur-de-") || typeof t.s !== "string") return;
     const age: SubjectAge | null = t.l === "younger" || t.l === "older" ? t.l : null;
     if (!age || !t.t) return;
-    rows.push({ id: t.id, title: String(t.t), age, subject: t.s, sort: [age === "younger" ? 0 : 1, Number(t.o ?? i), i] });
+    const key = deCardOf(t.s, String(t.t), age);
+    if (!DE_CARDS[age].some((c) => c.key === key)) return;
+    rows.push({ id: t.id, title: String(t.t), age, card: key, sort: [age === "younger" ? 0 : 1, Number(t.o ?? i), i] });
   });
   return rows;
 }
@@ -167,23 +255,23 @@ async function sharedWords(id: string) {
 const CATALOGS: Record<SubjectsLang, Catalog> = {
   he: {
     prefix: "cur-",
+    cards: HE_CARDS,
     rows: heRows,
-    name: (k) => curSubject(k)?.he ?? HE_NAMES[k],
     builtInIds: null,
     words: sharedWords,
   },
   en: {
     prefix: "cur-za-",
+    cards: EN_CARDS,
     rows: enRows,
-    name: (k) => EN_NAMES[k],
     // Every South African topic has built-in words (curriculum-sets-za.json).
     builtInIds: () => new Set(enRows().filter((r) => zaTopic(r.id)).map((r) => r.id)),
     words: sharedWords,
   },
   de: {
     prefix: "cur-de-",
+    cards: DE_CARDS,
     rows: deRows,
-    name: (k) => deFiles().cat?.subjects?.find((s) => s.key === k)?.de || DE_NAMES[k],
     builtInIds: () => new Set(deRows().filter((r) => setsWords(deFiles().sets, r.id)).map((r) => r.id)),
     words: async (id) => (await firestoreWords(id)) ?? setsWords(deFiles().sets, id),
   },
@@ -194,9 +282,10 @@ export function subjectsLangs(): SubjectsLang[] {
   return (Object.keys(CATALOGS) as SubjectsLang[]).filter((l) => staticRows(l).rows.length > 0);
 }
 
-export function subjectName(key: SubjectKey, lang: SubjectsLang): string {
-  return CATALOGS[lang].name(key);
+function cardOf(lang: SubjectsLang, age: SubjectAge, key: string): Card | undefined {
+  return CATALOGS[lang].cards[age].find((c) => c.key === key);
 }
+const iconPath = (c: Card) => `/subjects/${c.icon}.webp`;
 
 // ── The static part: every allowed topic, in order (built once) ─────────
 function bySort(a: Row, b: Row): number {
@@ -253,16 +342,18 @@ async function availableIds(lang: SubjectsLang): Promise<Set<string>> {
   return ids;
 }
 
-/** The six subjects and their topics with words, in that language. */
+/** The subject cards of both levels (younger first), each with its topics
+ *  that have words, in that language. A card with no topics is left out. */
 export async function subjectsCatalog(lang: SubjectsLang): Promise<SubjectsCatalog> {
   const ids = await availableIds(lang);
   const rows = staticRows(lang).rows;
-  const subjects: SubjectEntry[] = SUBJECT_KEYS.map((key) => ({
-    key,
-    name: subjectName(key, lang),
-    icon: `/subjects/${key}.webp`,
-    topics: rows.filter((r) => r.subject === key && ids.has(r.id)).map(({ id, title, age }) => ({ id, title, age })),
-  }));
+  const subjects: SubjectEntry[] = [];
+  for (const age of ["younger", "older"] as const) {
+    for (const c of CATALOGS[lang].cards[age]) {
+      const topics = rows.filter((r) => r.age === age && r.card === c.key && ids.has(r.id)).map(({ id, title, age: a }) => ({ id, title, age: a }));
+      if (topics.length) subjects.push({ key: c.key, age, name: c.name, icon: iconPath(c), topics });
+    }
+  }
   return { lang, subjects };
 }
 
@@ -272,6 +363,8 @@ export async function subjectTopicWords(lang: SubjectsLang, id: string): Promise
   if (!allowedTopic(lang, id)) return null;
   const row = staticRows(lang).byId.get(id);
   if (!row) return null;
+  const c = cardOf(lang, row.age, row.card);
+  if (!c) return null;
   const pairs = await CATALOGS[lang].words(id);
   if (!pairs) return null;
   const seen = new Set<string>();
@@ -285,5 +378,5 @@ export async function subjectTopicWords(lang: SubjectsLang, id: string): Promise
     words.push({ w, d });
   }
   if (!words.length) return null;
-  return { id, subject: row.subject, subjectName: subjectName(row.subject, lang), title: row.title, age: row.age, words };
+  return { id, subject: c.key, subjectName: c.name, icon: iconPath(c), title: row.title, age: row.age, words };
 }

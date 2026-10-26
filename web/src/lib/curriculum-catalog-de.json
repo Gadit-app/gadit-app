@@ -35,6 +35,12 @@
    "de": "Geografie",
    "en": "Geography",
    "he": "גאוגרפיה"
+  },
+  {
+   "key": "german",
+   "de": "Deutsch",
+   "en": "German",
+   "he": "גרמנית"
   }
  ],
  "topics": {
@@ -905,6 +911,76 @@
    "l": "older",
    "t": "Naturgefahren und Umwelt",
    "o": 123
+  },
+  "124": {
+   "id": "cur-de-1f0356ffb4",
+   "s": "german",
+   "l": "younger",
+   "t": "Nomen",
+   "o": 124
+  },
+  "125": {
+   "id": "cur-de-1d1d937271",
+   "s": "german",
+   "l": "younger",
+   "t": "Verben",
+   "o": 125
+  },
+  "126": {
+   "id": "cur-de-8f3499a088",
+   "s": "german",
+   "l": "younger",
+   "t": "Adjektive",
+   "o": 126
+  },
+  "127": {
+   "id": "cur-de-bae0f4a690",
+   "s": "german",
+   "l": "younger",
+   "t": "Pronomen und Begleiter",
+   "o": 127
+  },
+  "128": {
+   "id": "cur-de-b126964e66",
+   "s": "german",
+   "l": "younger",
+   "t": "Satzglieder",
+   "o": 128
+  },
+  "129": {
+   "id": "cur-de-8037d459e9",
+   "s": "german",
+   "l": "younger",
+   "t": "Zeitformen",
+   "o": 129
+  },
+  "130": {
+   "id": "cur-de-75ef375c14",
+   "s": "german",
+   "l": "younger",
+   "t": "Satzarten und Satzzeichen",
+   "o": 130
+  },
+  "131": {
+   "id": "cur-de-66628246cc",
+   "s": "german",
+   "l": "younger",
+   "t": "Rechtschreibung",
+   "o": 131
+  },
+  "132": {
+   "id": "cur-de-c220ae18d1",
+   "s": "german",
+   "l": "younger",
+   "t": "Wortbildung und Wortfamilien",
+   "o": 132
+  },
+  "133": {
+   "id": "cur-de-8f4ebca67d",
+   "s": "german",
+   "l": "younger",
+   "t": "Textsorten",
+   "o": 133
   }
  }
 }

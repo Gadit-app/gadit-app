@@ -3602,5 +3602,299 @@
    "Treibhauseffekt": "Erwärmung der Erde, weil gewisse Gase Wärme in der Atmosphäre zurückhalten. Ohne ihn wäre es auf der Erde zu kalt.",
    "Schutzmassnahme": "Massnahme, die Schäden durch Naturgefahren vermindern soll, zum Beispiel Dämme, Lawinenverbauungen oder Frühwarnsysteme."
   }
+ },
+ "cur-de-1f0356ffb4": {
+  "words": [
+   "Nomen",
+   "Artikel",
+   "Eigenname",
+   "zusammengesetztes Nomen",
+   "Genus",
+   "Numerus",
+   "Singular",
+   "Plural",
+   "Nominativ",
+   "Akkusativ",
+   "Dativ",
+   "Genitiv"
+  ],
+  "defs": {
+   "Nomen": "Ein Nomen ist ein Namenwort. Es bezeichnet Menschen, Tiere, Dinge, Orte oder auch etwas Unsichtbares wie Freude.",
+   "Artikel": "Ein Artikel steht beim Nomen. Er zeigt oft Geschlecht, Zahl und Fall, zum Beispiel der, die, das oder ein, eine.",
+   "Eigenname": "Ein Eigenname ist der besondere Name einer Person, eines Ortes oder einer Marke. Er meint genau ein bestimmtes Wesen oder Ding.",
+   "zusammengesetztes Nomen": "Ein zusammengesetztes Nomen besteht aus zwei oder mehr Wörtern. Zusammen bilden sie ein neues Nomen, zum Beispiel Haustür.",
+   "Genus": "Das Genus ist das grammatische Geschlecht eines Nomens. Es heisst männlich, weiblich oder sächlich.",
+   "Numerus": "Der Numerus zeigt, ob ein Nomen in der Einzahl oder in der Mehrzahl steht. Er gibt also die Zahl an.",
+   "Singular": "Der Singular ist die Einzahl. Er meint genau eine Person, ein Tier, eine Sache oder eine Idee.",
+   "Plural": "Der Plural ist die Mehrzahl. Er meint mehrere Personen, Tiere, Sachen oder Ideen.",
+   "Nominativ": "Der Nominativ ist der 1. Fall. Er zeigt oft, wer oder was etwas tut.",
+   "Akkusativ": "Der Akkusativ ist der 4. Fall. Er zeigt oft, wen oder was eine Handlung betrifft.",
+   "Dativ": "Der Dativ ist der 3. Fall. Er zeigt oft, wem etwas gegeben, gesagt oder gezeigt wird.",
+   "Genitiv": "Der Genitiv ist der 2. Fall. Er zeigt oft, wem etwas gehört oder wozu etwas gehört."
+  }
+ },
+ "cur-de-1d1d937271": {
+  "words": [
+   "Verb",
+   "Grundform",
+   "Personalform",
+   "Verbstamm",
+   "Zeitform",
+   "Präsens",
+   "Perfekt",
+   "Präteritum",
+   "Futur",
+   "Hilfsverb",
+   "Partizip II",
+   "unregelmässiges Verb"
+  ],
+  "defs": {
+   "Verb": "Ein Verb beschreibt, was jemand tut, was geschieht oder wie etwas ist. Es ist die Wortart der Tätigkeitswörter.",
+   "Grundform": "Die Grundform ist die unveränderte Form eines Verbs. Sie heisst auch Infinitiv, zum Beispiel gehen oder spielen.",
+   "Personalform": "Die Personalform ist die veränderte Form eines Verbs. Sie passt zu Person und Zahl, zum Beispiel ich gehe oder wir spielen.",
+   "Verbstamm": "Der Verbstamm ist der feste Teil eines Verbs. An ihn werden Endungen angehängt, zum Beispiel spiel- in spielen.",
+   "Zeitform": "Die Zeitform zeigt, wann etwas passiert. Verben können Gegenwart, Vergangenheit oder Zukunft ausdrücken.",
+   "Präsens": "Das Präsens ist die Zeitform der Gegenwart. Es sagt, was jetzt passiert oder allgemein gilt.",
+   "Perfekt": "Das Perfekt ist eine Zeitform der Vergangenheit. Es wird mit haben oder sein und dem Partizip II gebildet.",
+   "Präteritum": "Das Präteritum ist eine Zeitform der Vergangenheit. Es kommt vor allem in Geschichten und Berichten vor.",
+   "Futur": "Das Futur ist eine Zeitform der Zukunft. Es wird meist mit werden und der Grundform gebildet.",
+   "Hilfsverb": "Hilfsverben helfen, Zeitformen zu bilden. Die wichtigsten Hilfsverben sind haben, sein und werden.",
+   "Partizip II": "Das Partizip II ist eine besondere Verbform, zum Beispiel gespielt oder gegangen. Es wird oft für das Perfekt gebraucht.",
+   "unregelmässiges Verb": "Ein unregelmässiges Verb verändert sich nicht nach einem festen Muster. Zum Beispiel: gehen, ging, gegangen."
+  }
+ },
+ "cur-de-8f3499a088": {
+  "words": [
+   "Adjektiv",
+   "Eigenschaftswort",
+   "Nomen",
+   "Verb",
+   "Artikel",
+   "Steigerung",
+   "Grundstufe",
+   "Mehrstufe",
+   "Meiststufe",
+   "Vergleich",
+   "Adjektivendung"
+  ],
+  "defs": {
+   "Adjektiv": "Ein Adjektiv beschreibt, wie jemand oder etwas ist. Es nennt eine Eigenschaft oder ein Merkmal.",
+   "Eigenschaftswort": "Eigenschaftswort ist ein anderes Wort für Adjektiv. Es beschreibt Nomen genauer.",
+   "Nomen": "Ein Nomen ist ein Namenwort wie Hund, Haus oder Schule. Adjektive beziehen sich oft auf ein Nomen.",
+   "Verb": "Ein Verb ist ein Tunwort wie laufen oder sein. Adjektive können auch nach Verben wie sein oder werden stehen.",
+   "Artikel": "Ein Artikel steht vor dem Nomen, zum Beispiel der, die, das oder ein. Er hilft bei der richtigen Adjektivform.",
+   "Steigerung": "Steigerung zeigt Unterschiede bei Eigenschaften. Adjektive können in drei Stufen vorkommen.",
+   "Grundstufe": "Die Grundstufe ist die normale Form des Adjektivs, zum Beispiel schnell. Sie vergleicht noch nicht.",
+   "Mehrstufe": "Die Mehrstufe vergleicht zwei Personen oder Dinge, zum Beispiel schneller. Sie zeigt: mehr von einer Eigenschaft.",
+   "Meiststufe": "Die Meiststufe zeigt die höchste Stufe, zum Beispiel am schnellsten. Sie vergleicht mit mehreren.",
+   "Vergleich": "Ein Vergleich stellt Eigenschaften gegenüber. Dabei werden oft Mehrstufe und Meiststufe verwendet.",
+   "Adjektivendung": "Die Adjektivendung ist das Ende eines Adjektivs, zum Beispiel -e, -en oder -es. Sie passt sich im Satz an."
+  }
+ },
+ "cur-de-bae0f4a690": {
+  "words": [
+   "Begleiter",
+   "Pronomen",
+   "Artikel",
+   "bestimmter Artikel",
+   "unbestimmter Artikel",
+   "Personalpronomen",
+   "Possessivartikel",
+   "Possessivpronomen",
+   "Demonstrativpronomen",
+   "Indefinitpronomen",
+   "Relativpronomen"
+  ],
+  "defs": {
+   "Begleiter": "Begleiter stehen vor einem Nomen und zeigen es genauer. Dazu gehören zum Beispiel Artikel und Possessivartikel.",
+   "Pronomen": "Pronomen sind Wörter, die für ein Nomen stehen oder darauf verweisen. Sie helfen, Wiederholungen zu vermeiden.",
+   "Artikel": "Artikel sind Begleiter vor einem Nomen. Sie zeigen zum Beispiel Geschlecht und Anzahl an.",
+   "bestimmter Artikel": "Der bestimmte Artikel meint etwas Bekanntes oder Bestimmtes: der, die, das.",
+   "unbestimmter Artikel": "Der unbestimmte Artikel meint etwas nicht genau Bestimmtes: ein, eine.",
+   "Personalpronomen": "Personalpronomen stehen für Personen oder Dinge: ich, du, er, sie, es, wir, ihr, sie.",
+   "Possessivartikel": "Possessivartikel begleiten ein Nomen und zeigen Besitz an: mein Heft, unsere Klasse.",
+   "Possessivpronomen": "Possessivpronomen ersetzen ein Nomen und zeigen Besitz an: Das Heft ist meins.",
+   "Demonstrativpronomen": "Demonstrativpronomen heben etwas hervor oder zeigen darauf: dieser, diese, dieses, jener.",
+   "Indefinitpronomen": "Indefinitpronomen bezeichnen Personen oder Dinge ungenau: jemand, niemand, manche, alle.",
+   "Relativpronomen": "Relativpronomen leiten einen Nebensatz ein und beziehen sich auf ein Nomen: der, die, das, welcher."
+  }
+ },
+ "cur-de-b126964e66": {
+  "words": [
+   "Satzglied",
+   "Verb",
+   "Prädikat",
+   "Subjekt",
+   "Objekt",
+   "Akkusativobjekt",
+   "Dativobjekt",
+   "adverbiale Bestimmung",
+   "Ortsangabe",
+   "Zeitangabe",
+   "Verschiebeprobe",
+   "Ersatzprobe"
+  ],
+  "defs": {
+   "Satzglied": "Ein Satzglied ist ein Teil des Satzes, der zusammengehört. Es kann oft als Ganzes verschoben werden.",
+   "Verb": "Das Verb sagt, was geschieht oder was jemand tut. Im Satz ist es ein wichtiger Kern.",
+   "Prädikat": "Das Prädikat ist das Verb oder die Verbgruppe im Satz. Es zeigt die Handlung oder den Vorgang.",
+   "Subjekt": "Das Subjekt sagt, wer oder was etwas tut oder ist. Danach fragt man mit: Wer oder was?",
+   "Objekt": "Ein Objekt ergänzt das Verb genauer. Es sagt, wen, was oder wem etwas geschieht.",
+   "Akkusativobjekt": "Das Akkusativobjekt ist das Objekt im Wen- oder Was-Fall. Danach fragt man mit: Wen oder was?",
+   "Dativobjekt": "Das Dativobjekt ist das Objekt im Wem-Fall. Danach fragt man mit: Wem?",
+   "adverbiale Bestimmung": "Die adverbiale Bestimmung gibt genauere Umstände an. Sie kann Zeit, Ort, Grund oder Art und Weise nennen.",
+   "Ortsangabe": "Die Ortsangabe sagt, wo etwas ist oder geschieht. Danach fragt man mit: Wo, wohin oder woher?",
+   "Zeitangabe": "Die Zeitangabe sagt, wann oder wie lange etwas geschieht. Danach fragt man mit: Wann oder wie lange?",
+   "Verschiebeprobe": "Mit der Verschiebeprobe prüft man Satzglieder. Was sich gemeinsam verschieben lässt, ist oft ein Satzglied.",
+   "Ersatzprobe": "Mit der Ersatzprobe ersetzt man ein Satzglied durch ein Wort, zum Beispiel ein Pronomen. So erkennt man zusammengehörige Teile."
+  }
+ },
+ "cur-de-8037d459e9": {
+  "words": [
+   "Verb",
+   "Zeitform",
+   "Präsens",
+   "Perfekt",
+   "Präteritum",
+   "Plusquamperfekt",
+   "Futur",
+   "Hilfsverb",
+   "Partizip II",
+   "Infinitiv",
+   "Tempus"
+  ],
+  "defs": {
+   "Verb": "Ein Verb ist ein Tunwort. Bei Zeitformen zeigt es, wann etwas passiert.",
+   "Zeitform": "Eine Zeitform zeigt, ob etwas jetzt, früher oder später geschieht.",
+   "Präsens": "Das Präsens ist die Gegenwartsform. Es zeigt, was jetzt geschieht oder allgemein gilt.",
+   "Perfekt": "Das Perfekt ist eine Vergangenheitsform. Es wird oft verwendet, wenn man mündlich von früher erzählt.",
+   "Präteritum": "Das Präteritum ist eine Vergangenheitsform. Es kommt oft in Geschichten und schriftlichen Texten vor.",
+   "Plusquamperfekt": "Das Plusquamperfekt zeigt, dass etwas schon vor einem anderen vergangenen Ereignis passiert war.",
+   "Futur": "Das Futur ist eine Zukunftsform. Es zeigt, was später geschehen wird.",
+   "Hilfsverb": "Hilfsverben sind sein, haben und werden. Mit ihnen bildet man mehrere Zeitformen.",
+   "Partizip II": "Das Partizip II ist eine Verbform wie gespielt oder gegangen. Es gehört zum Perfekt und Plusquamperfekt.",
+   "Infinitiv": "Der Infinitiv ist die Grundform des Verbs, zum Beispiel spielen. Er wird auch für das Futur gebraucht.",
+   "Tempus": "Tempus ist der Fachbegriff für eine Zeitform des Verbs."
+  }
+ },
+ "cur-de-75ef375c14": {
+  "words": [
+   "Satzzeichen",
+   "Aussagesatz",
+   "Fragesatz",
+   "Aufforderungssatz",
+   "Ausrufesatz",
+   "Punkt",
+   "Fragezeichen",
+   "Ausrufezeichen",
+   "Komma",
+   "Doppelpunkt",
+   "Anführungszeichen",
+   "wörtliche Rede"
+  ],
+  "defs": {
+   "Satzzeichen": "Satzzeichen gliedern Texte und zeigen, wie ein Satz gemeint ist. Sie helfen beim Lesen und Verstehen.",
+   "Aussagesatz": "Ein Aussagesatz teilt etwas mit. Am Ende steht meistens ein Punkt.",
+   "Fragesatz": "Ein Fragesatz stellt eine Frage. Am Ende steht ein Fragezeichen.",
+   "Aufforderungssatz": "Ein Aufforderungssatz sagt, dass jemand etwas tun soll. Am Ende steht oft ein Ausrufezeichen.",
+   "Ausrufesatz": "Ein Ausrufesatz drückt starke Gefühle oder Überraschung aus. Am Ende steht ein Ausrufezeichen.",
+   "Punkt": "Der Punkt beendet einen Aussagesatz. Er zeigt eine Sprechpause und einen klaren Abschluss.",
+   "Fragezeichen": "Das Fragezeichen steht am Ende eines Fragesatzes. Es zeigt, dass etwas gefragt wird.",
+   "Ausrufezeichen": "Das Ausrufezeichen steht bei Ausrufen und Aufforderungen. Es zeigt Nachdruck oder starke Gefühle.",
+   "Komma": "Das Komma trennt Satzteile oder Wörter in einer Aufzählung. Es hilft, den Satz richtig zu lesen.",
+   "Doppelpunkt": "Der Doppelpunkt kündigt etwas an, zum Beispiel eine Aufzählung oder wörtliche Rede.",
+   "Anführungszeichen": "Anführungszeichen markieren die wörtliche Rede oder besondere Wörter. Sie stehen vor und nach dem Gesagten.",
+   "wörtliche Rede": "Wörtliche Rede gibt genau wieder, was jemand sagt. Sie steht meist in Anführungszeichen."
+  }
+ },
+ "cur-de-66628246cc": {
+  "words": [
+   "Silbe",
+   "Vokal",
+   "Umlaut",
+   "Wortstamm",
+   "Wortfamilie",
+   "Grossschreibung",
+   "Nomen",
+   "Doppelkonsonant",
+   "Dehnung",
+   "Schärfung",
+   "Vorsilbe",
+   "Endung"
+  ],
+  "defs": {
+   "Silbe": "Ein Wortteil mit einem Sprechschlag. Silben helfen, Wörter richtig zu lesen, zu trennen und zu schreiben.",
+   "Vokal": "Selbstlaut wie a, e, i, o, u. Vokale können kurz oder lang gesprochen werden, das ist für die Schreibung wichtig.",
+   "Umlaut": "Veränderter Vokal: ä, ö, ü. Umlaute kommen in vielen Wörtern und Wortfamilien vor und beeinflussen die Schreibung.",
+   "Wortstamm": "Der feste Grundteil eines Wortes. Er bleibt in einer Wortfamilie oft gleich und hilft beim richtigen Schreiben.",
+   "Wortfamilie": "Gruppe von Wörtern mit demselben Wortstamm. Sie zeigt, wie Wörter zusammenhängen und unterstützt die Rechtschreibung.",
+   "Grossschreibung": "Regel, dass Nomen und Satzanfänge mit grossem Anfangsbuchstaben geschrieben werden.",
+   "Nomen": "Wortart für Dinge, Menschen, Tiere oder Begriffe. Nomen werden in der Rechtschreibung grossgeschrieben.",
+   "Doppelkonsonant": "Zwei gleiche Mitlaute hintereinander, zum Beispiel ll oder mm. Sie stehen oft nach einem kurz gesprochenen Vokal.",
+   "Dehnung": "Schreibung eines langen Vokals, zum Beispiel mit h oder ie. Sie zeigt, dass der Selbstlaut lang gesprochen wird.",
+   "Schärfung": "Schreibung nach kurzem Vokal, oft mit Doppelkonsonant. Sie zeigt, dass der Selbstlaut kurz gesprochen wird.",
+   "Vorsilbe": "Wortteil vor dem Wortstamm, zum Beispiel ver- oder un-. Vorsilben verändern die Bedeutung und bleiben in der Schreibung fest.",
+   "Endung": "Wortteil am Schluss eines Wortes, zum Beispiel -en oder -lich. Endungen helfen beim richtigen Schreiben von Wortformen."
+  }
+ },
+ "cur-de-c220ae18d1": {
+  "words": [
+   "Wortstamm",
+   "Wortfamilie",
+   "Wortart",
+   "Nomen",
+   "Verb",
+   "Adjektiv",
+   "Vorsilbe",
+   "Nachsilbe",
+   "Ableitung",
+   "zusammengesetztes Wort",
+   "Bestimmungswort",
+   "Grundwort"
+  ],
+  "defs": {
+   "Wortstamm": "Der Wortstamm ist der Teil eines Wortes, der die Grundbedeutung trägt. In einer Wortfamilie kommt er in vielen Wörtern vor.",
+   "Wortfamilie": "Eine Wortfamilie ist eine Gruppe von Wörtern mit demselben Wortstamm. Ihre Bedeutungen sind miteinander verwandt.",
+   "Wortart": "Die Wortart zeigt, zu welcher Gruppe ein Wort gehört, zum Beispiel Nomen, Verb oder Adjektiv. Bei der Wortbildung kann sich die Wortart ändern.",
+   "Nomen": "Ein Nomen ist ein Namenwort, zum Beispiel Haus oder Freiheit. Es kann aus anderen Wörtern gebildet werden.",
+   "Verb": "Ein Verb ist ein Tunwort, zum Beispiel laufen oder schreiben. Es kann Grundlage für neue Wörter sein.",
+   "Adjektiv": "Ein Adjektiv beschreibt eine Eigenschaft, zum Beispiel schnell oder freundlich. Es kann aus anderen Wörtern entstehen oder neue Wörter bilden.",
+   "Vorsilbe": "Eine Vorsilbe steht vor dem Wortstamm. Sie verändert die Bedeutung des Wortes.",
+   "Nachsilbe": "Eine Nachsilbe steht hinter dem Wortstamm. Sie verändert oft die Bedeutung oder die Wortart.",
+   "Ableitung": "Eine Ableitung entsteht, wenn zu einem Wortstamm eine Vor- oder Nachsilbe kommt. So wird ein neues Wort gebildet.",
+   "zusammengesetztes Wort": "Ein zusammengesetztes Wort entsteht, wenn zwei oder mehr Wörter zu einem neuen Wort verbunden werden.",
+   "Bestimmungswort": "Das Bestimmungswort ist der vordere Teil eines zusammengesetzten Wortes. Es beschreibt das Grundwort genauer.",
+   "Grundwort": "Das Grundwort ist der letzte Teil eines zusammengesetzten Wortes. Es zeigt die Grundbedeutung des ganzen Wortes."
+  }
+ },
+ "cur-de-8f4ebca67d": {
+  "words": [
+   "Textsorte",
+   "Erzählung",
+   "Märchen",
+   "Bericht",
+   "Beschreibung",
+   "Anleitung",
+   "Brief",
+   "Interview",
+   "Gedicht",
+   "Sachtext",
+   "Einleitung",
+   "Hauptteil"
+  ],
+  "defs": {
+   "Textsorte": "Eine Textsorte ist eine Art von Text mit typischen Merkmalen, einem bestimmten Zweck und oft einer passenden Form.",
+   "Erzählung": "Eine Erzählung berichtet eine erfundene oder erlebte Geschichte. Sie hat Figuren, eine Handlung und meist Spannung.",
+   "Märchen": "Ein Märchen ist eine besondere Erzählung mit erfundenen Figuren und wundersamen Ereignissen. Oft beginnt es mit typischen Formeln.",
+   "Bericht": "Ein Bericht informiert sachlich über ein Ereignis. Er nennt wichtige Fakten und bleibt ohne eigene Meinung.",
+   "Beschreibung": "Eine Beschreibung erklärt genau, wie etwas aussieht oder ist. Sie hilft, Personen, Tiere, Orte oder Dinge vorzustellen.",
+   "Anleitung": "Eine Anleitung zeigt Schritt für Schritt, wie etwas gemacht wird. Sie ist klar, geordnet und gut verständlich.",
+   "Brief": "Ein Brief ist ein Text an eine bestimmte Person. Er hat meist Anrede, Mitteilung und Gruss.",
+   "Interview": "Ein Interview ist ein Gespräch mit Fragen und Antworten. Es dient dazu, Informationen von einer Person zu erhalten.",
+   "Gedicht": "Ein Gedicht ist ein kurzer dichterischer Text. Es arbeitet oft mit Versen, Bildern, Rhythmus oder Reimen.",
+   "Sachtext": "Ein Sachtext informiert über ein Thema aus der Wirklichkeit. Er erklärt, beschreibt oder berichtet verständlich und genau.",
+   "Einleitung": "Die Einleitung ist der Anfang eines Textes. Sie führt in das Thema ein und macht klar, worum es geht.",
+   "Hauptteil": "Der Hauptteil ist der wichtigste Teil eines Textes. Hier stehen die Informationen, die Handlung oder die genaue Erklärung."
+  }
  }
 }

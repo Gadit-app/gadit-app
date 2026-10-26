@@ -28,8 +28,9 @@ import { subjectsLangFor, type SubjectsUiLang } from "@/lib/subjects-langs";
 
 type Age = "younger" | "older";
 type Topic = { id: string; title: string; age: Age };
-type Subject = { key: string; name: string; icon: string; topics: Topic[] };
-type TopicWords = { id: string; subject: string; subjectName: string; title: string; age: Age; words: Array<{ w: string; d: string }> };
+/** One subject card of one level: the cards differ by level (elementary first). */
+type Subject = { key: string; age: Age; name: string; icon: string; topics: Topic[] };
+type TopicWords = { id: string; subject: string; subjectName: string; icon?: string; title: string; age: Age; words: Array<{ w: string; d: string }> };
 
 const STR = {
   he: {
@@ -193,6 +194,10 @@ export function SubjectsBrowser({ ui, deep, getToken }: { ui: SubjectsUiLang; de
   });
   const age: Age = urlAge === "younger" || urlAge === "older" ? urlAge : savedAge ?? (familyRole === "kid" ? "younger" : "older");
 
+  // The catalog, once per language.
+  const [subjects, setSubjects] = useState<Subject[] | null>(null);
+  const [loadErr, setLoadErr] = useState(false);
+
   const go = useCallback((next: { a?: Age; s?: string; t?: string }, replace = false) => {
     const q = new URLSearchParams();
     q.set("a", next.a ?? age);
@@ -203,15 +208,15 @@ export function SubjectsBrowser({ ui, deep, getToken }: { ui: SubjectsUiLang; de
     else router.push(url);
   }, [age, router]);
 
+  // On a subject's page, a level that has the same subject stays on it
+  // (geometry, history...); otherwise back to the subject cards.
   const setAge = (a: Age) => {
     setSavedAge(a);
     try { localStorage.setItem(AGE_KEY, a); } catch { /* storage blocked */ }
-    go({ a }, true);
+    const keep = subjectKey && (subjects ?? []).some((s) => s.key === subjectKey && s.age === a) ? subjectKey : undefined;
+    go({ a, s: keep }, true);
   };
 
-  // The catalog, once per language.
-  const [subjects, setSubjects] = useState<Subject[] | null>(null);
-  const [loadErr, setLoadErr] = useState(false);
   useEffect(() => {
     // One language per mount (the parent keys this component by language).
     let cancelled = false;
@@ -230,11 +235,13 @@ export function SubjectsBrowser({ ui, deep, getToken }: { ui: SubjectsUiLang; de
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ui]);
 
+  // The cards of this level, in the server's order (kids' most common first).
   const visible = useMemo(
-    () => (subjects ?? []).map((s) => ({ ...s, topics: s.topics.filter((t) => t.age === age) })).filter((s) => s.topics.length > 0),
+    () => (subjects ?? []).filter((s) => s.age === age).map((s) => ({ ...s, topics: s.topics.filter((t) => t.age === age) })).filter((s) => s.topics.length > 0),
     [subjects, age],
   );
-  const subject = (subjects ?? []).find((s) => s.key === subjectKey);
+  // The card of this level; a link from another level still finds its subject.
+  const subject = (subjects ?? []).find((s) => s.key === subjectKey && s.age === age) ?? (subjects ?? []).find((s) => s.key === subjectKey);
 
   if (loadErr) return <p className="wb-subj-note">{T.loadErr}</p>;
 
@@ -371,7 +378,7 @@ function TopicView({ ui, T, deep, topicId, getToken, subject, onBack }: {
   if (err) return <div className="wb-subj">{back}<p className="wb-subj-note">{T.loadErr}</p></div>;
   if (!data) return <div className="wb-subj">{back}<div className="wb-subj-wait"><WaitDots className="gd-wait-big" /></div></div>;
 
-  const icon = subject?.icon ?? `/subjects/${data.subject}.webp`;
+  const icon = data.icon ?? subject?.icon ?? `/subjects/${data.subject}.webp`;
   return (
     <div className="wb-subj">
       {back}

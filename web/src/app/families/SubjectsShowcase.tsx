@@ -15,9 +15,9 @@ const HE: BandCopy = {
   kicker: "חדש ב-Gadit",
   title: "המילים החשובות של כל מקצוע בבית הספר",
   lines: [
-    "מתמטיקה, כימיה, פיזיקה, ביולוגיה, היסטוריה וגאוגרפיה.",
+    "חשבון, גאומטריה, מדעים, עברית, אנגלית, מולדת, גאוגרפיה והיסטוריה.",
     "בוחרים מקצוע ונושא, ומקבלים את המילים שמופיעות בשיעור.",
-    "כל מילה מוסברת רק במשמעות של המקצוע: \"תא\" בביולוגיה הוא לא תא בכלא.",
+    "כל מילה מוסברת רק במשמעות של המקצוע: \"שבר\" בחשבון הוא לא שבר ביד.",
     "כפתור אחד מוסיף את כל המילים למחברת, ומתרגלים אותן במשחקים לפני המבחן.",
   ],
   note: "בקרוב מקצועות נוספים.",
@@ -26,15 +26,15 @@ const EN: BandCopy = {
   kicker: "New in Gadit",
   title: "The key words of every school subject",
   lines: [
-    "Math, chemistry, physics, biology, history and geography.",
+    "Math, geometry, science, English, life skills, geography and history.",
     "Pick a subject and a topic, and get the words that come up in the lesson.",
-    "Every word is explained in that subject's meaning only: a \"cell\" in biology isn't a prison cell.",
+    "Every word is explained in that subject's meaning only: a \"table\" in math isn't the one you eat at.",
     "One button adds all the words to the notebook, to practise in the games before the test.",
   ],
   note: "More subjects coming soon.",
 };
 const DE_LINES_TAIL = [
-  "Jedes Wort wird nur in der Bedeutung des Fachs erklärt: Eine \"Zelle\" in Biologie ist keine Gefängniszelle.",
+  "Jedes Wort wird nur in der Bedeutung des Fachs erklärt: Ein \"Bruch\" in Mathematik ist kein Knochenbruch.",
   "Ein Knopf legt alle Wörter ins Notizbuch, zum Üben in den Spielen vor der Prüfung.",
 ];
 /** Families page: parents are addressed with "Sie". */
@@ -42,7 +42,7 @@ const DE_SIE: BandCopy = {
   kicker: "Neu in Gadit",
   title: "Die wichtigsten Wörter jedes Schulfachs",
   lines: [
-    "Mathematik, Chemie, Physik, Biologie, Geschichte und Geografie.",
+    "Mathematik, Geometrie, Natur und Technik, Deutsch, Geografie und Geschichte.",
     "Wählen Sie ein Fach und ein Thema, und Sie bekommen die Wörter, die im Unterricht vorkommen.",
     ...DE_LINES_TAIL,
   ],
@@ -52,7 +52,7 @@ const DE_SIE: BandCopy = {
 const DE_DU: BandCopy = {
   ...DE_SIE,
   lines: [
-    "Mathematik, Chemie, Physik, Biologie, Geschichte und Geografie.",
+    "Mathematik, Geometrie, Natur und Technik, Deutsch, Geografie und Geschichte.",
     "Wähle ein Fach und ein Thema, und du bekommst die Wörter, die im Unterricht vorkommen.",
     ...DE_LINES_TAIL,
   ],
@@ -65,58 +65,68 @@ export function subjectsBandCopy(ui: SubjectsUiLang, page: "families" | "individ
 }
 
 /**
- * The topic screen as the app shows it, with real words. Hebrew: Firestore
- * curriculumSets/cur-85291ca745 (12 words); English: curriculum-sets-za.json
- * cur-za-ffbae8649d (8 words); German: curriculum-sets-de.json
- * cur-de-1992a697f0 (12 words). The first words in their real order.
+ * The topic screen as the app shows it, with real words: elementary
+ * geometry, angles (Gadi 2026-10-26). Hebrew: Firestore
+ * curriculumSets/cur-0fbf7bc106 "זוויות" (12 words); English:
+ * curriculum-sets-za.json cur-za-73cc2e30ef (Grade 7, the last year of
+ * primary school in South Africa, 8 words); German: curriculum-sets-de.json
+ * cur-de-103530cf09 "Geometrie" (12 words). A few of the words, with their
+ * definitions copied as they are, in their real order. One row is open with
+ * its picture, like a meaning on the word page: an obtuse angle
+ * (public/fam/obtuse-angle.webp, drawn once in the Gadit house style, no
+ * text, shared by the 3 languages).
  * UI strings as in SubjectsClient.tsx (STR).
  */
+type MockWord = { w: string; d: string; open?: boolean };
 const MOCK: Record<SubjectsUiLang, {
-  subject: string; topic: string; count: string; hint: string; listen: string; add: string;
-  words: { w: string; d: string }[];
+  subject: string; topic: string; count: string; hint: string; listen: string; add: string; picture: string;
+  words: MockWord[];
 }> = {
   he: {
-    subject: "כימיה",
-    topic: "חומרים ותערובות",
+    subject: "גאומטריה",
+    topic: "זוויות",
     count: "12 מילים",
     hint: "לחיצה על מילה פותחת הסבר מלא שלה, בדיוק במשמעות של המקצוע הזה.",
     listen: "האזנה",
     add: "הוספת המילים למחברת",
+    picture: "זווית קהה: שתי קרניים שנפגשות בקדקוד, פתוחות יותר מזווית ישרה",
     words: [
-      { w: "חומר", d: "כל דבר שיש לו מסה ותופס מקום במרחב." },
-      { w: "תערובת", d: "שילוב של שני חומרים או יותר, שכל אחד מהם שומר על תכונותיו." },
-      { w: "תמיסה", d: "תערובת הומוגנית של חומר מומס בתוך ממס." },
-      { w: "ממס", d: "החומר שבתוכו מתמוסס חומר אחר ליצירת תמיסה." },
-      { w: "מומס", d: "החומר שמתמוסס בתוך ממס ליצירת תמיסה." },
+      { w: "זווית", d: "המרחב הנוצר בין שני קווים ישרים הנפגשים בנקודה." },
+      { w: "זווית ישרה", d: "זווית שגודלה 90 מעלות." },
+      { w: "זווית חדה", d: "זווית שגודלה קטן מ-90 מעלות." },
+      { w: "זווית קהה", d: "זווית שגודלה גדול מ-90 מעלות וקטן מ-180 מעלות.", open: true },
+      { w: "זווית שטוחה", d: "זווית שגודלה 180 מעלות." },
     ],
   },
   en: {
-    subject: "Chemistry",
-    topic: "Solutions as special mixtures",
+    subject: "Geometry",
+    topic: "Construction of geometric figures",
     count: "8 words",
     hint: "Tap a word for its full explanation, in exactly this subject's meaning.",
     listen: "Listen",
     add: "Add these words to my notebook",
+    picture: "An obtuse angle: two rays meeting at a vertex, opened wider than a right angle",
     words: [
-      { w: "solutions", d: "Mixtures where a solute is dissolved in a solvent." },
-      { w: "soluble", d: "Able to be dissolved in a liquid." },
-      { w: "insoluble", d: "Not able to be dissolved in a liquid." },
-      { w: "evaporating", d: "The process of a liquid turning into a gas." },
-      { w: "crystallisation", d: "The formation of crystals from a solution." },
+      { w: "protractor", d: "A tool used to measure angles in degrees." },
+      { w: "acute angles", d: "Angles that are less than 90 degrees." },
+      { w: "right-angles", d: "Angles that are exactly 90 degrees." },
+      { w: "obtuse angles", d: "Angles that are more than 90 degrees but less than 180 degrees.", open: true },
+      { w: "parallel lines", d: "Lines that are always the same distance apart and never meet." },
     ],
   },
   de: {
-    subject: "Chemie",
-    topic: "Stoffe und ihre Eigenschaften",
+    subject: "Geometrie",
+    topic: "Geometrie",
     count: "12 Wörter",
     hint: "Tippe auf ein Wort: Es wird dir genau in der Bedeutung für dieses Fach erklärt.",
     listen: "Anhören",
     add: "Diese Wörter ins Notizbuch aufnehmen",
+    picture: "Ein stumpfer Winkel: zwei Strecken treffen sich in einem Punkt, weiter geöffnet als ein rechter Winkel",
     words: [
-      { w: "Stoff", d: "Ein Stoff ist ein Material mit bestimmten Eigenschaften. Zum Beispiel Holz, Glas, Wasser oder Eisen." },
-      { w: "Eigenschaft", d: "Eine Eigenschaft beschreibt, wie ein Stoff ist. Dazu gehören zum Beispiel Farbe, Härte oder ob er Wasser aufnimmt." },
-      { w: "fest", d: "Ein fester Stoff behält seine Form. Er fliesst nicht und lässt sich nicht einfach in ein anderes Gefäss giessen." },
-      { w: "flüssig", d: "Ein flüssiger Stoff hat keine eigene Form. Er fliesst und nimmt die Form des Gefässes an." },
+      { w: "Punkt", d: "Ein Punkt zeigt eine genaue Lage. Er hat keine Länge, Breite oder Höhe." },
+      { w: "Strecke", d: "Eine Strecke ist die gerade Verbindung zwischen zwei Punkten. Sie hat einen Anfang und ein Ende." },
+      { w: "Winkel", d: "Ein Winkel entsteht, wenn zwei Linien oder Strecken an einem Punkt zusammentreffen. Er zeigt die Grösse der Drehung.", open: true },
+      { w: "parallel", d: "Parallele Geraden haben immer den gleichen Abstand. Sie schneiden sich nie." },
     ],
   },
 };
@@ -139,7 +149,7 @@ export function SubjectsScreenMock({ ui }: { ui: SubjectsUiLang }) {
       <style>{CSS}</style>
       <div className="lp-subj-hero">
         <span className="lp-subj-hero-img">
-          <Image src="/subjects/chemistry.webp" alt="" width={88} height={88} sizes="72px" />
+          <Image src="/subjects/cat-math.webp" alt="" width={88} height={88} sizes="72px" />
         </span>
         <div className="lp-subj-hero-text">
           <div className="lp-subj-cat">{m.subject}</div>
@@ -150,12 +160,17 @@ export function SubjectsScreenMock({ ui }: { ui: SubjectsUiLang }) {
       <p className="lp-subj-hint">{m.hint}</p>
       <ul className="lp-subj-words">
         {m.words.map((x) => (
-          <li key={x.w} className="lp-subj-word">
+          <li key={x.w} className={x.open ? "lp-subj-word is-open" : "lp-subj-word"}>
             <div className="lp-subj-word-head">
               <span className="lp-subj-w">{x.w}</span>
               <span className="lp-subj-listen" title={m.listen}><Speaker /></span>
             </div>
             <span className="lp-subj-d">{x.d}</span>
+            {x.open && (
+              <span className="lp-subj-pic">
+                <Image src="/fam/obtuse-angle.webp" alt={m.picture} width={768} height={768} sizes="(max-width: 560px) 70vw, 260px" />
+              </span>
+            )}
           </li>
         ))}
       </ul>
@@ -194,6 +209,9 @@ const CSS = `
 .lp-subj-w { font-size: 17px; font-weight: 800; color: #155E75; overflow-wrap: anywhere; }
 .lp-subj-listen { flex-shrink: 0; display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #E0F6F4; color: #0B7D7D; }
 .lp-subj-d { display: block; margin-top: 3px; font-size: 14.5px; line-height: 1.5; color: #3A3F4B; }
+.lp-subj-word.is-open { border-color: #9FDCD6; box-shadow: 0 10px 24px -16px rgba(15,111,108,0.45); }
+.lp-subj-pic { display: block; width: 100%; max-width: 260px; aspect-ratio: 4 / 3; margin: 10px auto 0; overflow: hidden; border-radius: 14px; background: #FBF1E1; }
+.lp-subj-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .lp-subj-add { display: flex; justify-content: center; margin-top: 14px; }
 .lp-subj-btn { display: inline-flex; align-items: center; justify-content: center; padding: 11px 22px; border-radius: 999px; background: #0F6F6C; color: #fff; font-size: 15px; font-weight: 700; text-align: center; box-shadow: 0 8px 20px -12px rgba(15,111,108,0.6); }
 @media (max-width: 560px) {
