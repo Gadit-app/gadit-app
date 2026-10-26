@@ -46,6 +46,7 @@ import { requestInstallOpen } from "@/lib/install-bus";
 import { isInAppBrowser } from "@/lib/in-app-browser";
 import { track } from "@/lib/track";
 import { practiceNav } from "@/lib/practice-i18n";
+import { subjectsLangFor, SUBJECTS_NAV } from "@/lib/subjects-langs";
 
 // Nav keys that lead to a purchase surface — tagged .gd-buy so they are
 // hidden inside the Google Play consumption-only TWA (html[data-play="1"]).
@@ -113,6 +114,7 @@ export type NavKey =
   | "read"
   | "spell"
   | "practice"
+  | "subjects"
   | "individuals"
   | "schools"
   | "families"
@@ -299,6 +301,11 @@ function useNavLinks(): NavLink[] {
   // (Gadi 2026-08-27: kill the topbar flashes.)
   if (loading || (user && !planReady)) return [];
 
+  // Key words by subject (Gadi 2026-10-26): its own tab, only in the UI
+  // languages that have the catalog (he, en, and de once its data exists).
+  const subjLang = subjectsLangFor(lang);
+  const subjects: NavLink[] = subjLang ? [{ key: "subjects", href: href("/subjects"), label: SUBJECTS_NAV[subjLang] }] : [];
+
   // A kid on a Family plan gets a stripped-down, commerce-free nav
   // (council 2026-08-04): only their own words + games. No Features,
   // Families, Schools, Pricing or Partners — a child can't buy, can't
@@ -315,6 +322,7 @@ function useNavLinks(): NavLink[] {
       // and the games last, as the reward.
       { key: "notebook", href: href("/notebook"), label: TREASURE_NAV[lang] ?? TREASURE_NAV.en },
       { key: "spell", href: href("/homework"), label: SPELL_NAV[lang] ?? SPELL_NAV.en },
+      ...subjects,
       { key: "read", href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en },
       { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
       { key: "play", href: href("/play"), label: v2(lang, "navPlay") },
@@ -343,6 +351,7 @@ function useNavLinks(): NavLink[] {
         ...(deep && kidsAccess && kidsMode
           ? [{ key: "spell" as const, href: href("/homework"), label: SPELL_NAV[lang] ?? SPELL_NAV.en }]
           : deep ? [{ key: "practice" as const, href: href("/exercises"), label: practiceNav(lang) }] : []),
+        ...subjects,
         ...(deep ? [{ key: "read" as const, href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en }] : []),
         { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
         ...(deep ? [{ key: "play" as const, href: href("/play"), label: v2(lang, "navPlay") }] : []),

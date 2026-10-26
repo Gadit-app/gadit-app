@@ -15470,3 +15470,89 @@ html[data-theme="dark"] .wordbook .wb-word-sentence-input::placeholder { color: 
 
 /* The search mic is for paid plans only; its empty slot takes no room (Gadi 2026-10-25). */
 .wordbook .wb-home-search-mic:empty, .wordbook .wb-word-searchbar-mic:empty { display: none; }
+
+/* ── Key words by subject (/subjects, 2026-10-26) ─────────────────────────
+   Subject cards, the younger / older switch, the topic list and the word
+   rows. Colours from the page tokens, so dark mode and kid skins follow. */
+.wordbook .wb-subj { display: flex; flex-direction: column; gap: 0; }
+.wordbook .wb-subj-wait { display: flex; justify-content: center; padding: 48px 0; }
+.wordbook .wb-subj-note { margin: 14px 0; font-size: 15.5px; color: var(--ink-muted, #6B7280); }
+.wordbook .wb-subj-gate {
+  max-width: 520px; margin: 8px auto 0; padding: 26px 22px; text-align: center;
+  background: var(--card, var(--surface, #fff)); border: 1px solid var(--hairline, var(--rule, #E5E7EB)); border-radius: 18px;
+}
+.wordbook .wb-subj-gate-title { margin: 0 0 8px; font-size: 17px; font-weight: 700; line-height: 1.45; color: var(--ink, #0B1220); }
+.wordbook .wb-subj-gate-body { margin: 0 0 18px; font-size: 15px; line-height: 1.55; color: var(--ink-muted, #6B7280); }
+.wordbook .wb-subj-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 24px; border: 0; border-radius: 999px; cursor: pointer;
+  background: var(--teal-deep, #0F6F6C); color: #fff; font: inherit; font-size: 15.5px; font-weight: 700; text-decoration: none;
+  box-shadow: 0 8px 20px -12px rgba(15,111,108,0.6);
+}
+.wordbook .wb-subj-btn:disabled { opacity: .75; cursor: wait; }
+.wordbook .wb-subj-age {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px; max-width: 360px; width: 100%;
+  margin: 0 auto 22px; padding: 4px; border-radius: 14px; background: var(--paper-deep, #E9F1EC);
+}
+.wordbook .wb-subj-age button {
+  border: 0; border-radius: 11px; padding: 9px 10px; background: transparent; cursor: pointer;
+  font: inherit; font-size: 15.5px; font-weight: 700; color: var(--ink-soft, #3F4856);
+}
+.wordbook .wb-subj-age button.is-on { background: var(--card, var(--surface, #fff)); color: var(--ink, #0B1220); box-shadow: 0 2px 6px rgba(11,18,32,.12); }
+.wordbook .wb-subj-h2 { margin: 2px 0 4px; font-size: clamp(21px, 3vw, 26px); font-weight: 800; line-height: 1.2; color: var(--ink, #0B1220); text-wrap: balance; }
+.wordbook .wb-subj-h3 { margin: 0 0 12px; font-size: 17px; font-weight: 800; color: var(--ink, #0B1220); }
+.wordbook .wb-subj-meta { font-size: 14px; font-weight: 600; color: var(--ink-muted, #6B7280); }
+.wordbook .wb-subj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.wordbook .wb-subj-card {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 16px 8px 14px; cursor: pointer;
+  background: var(--card, var(--surface, #fff)); border: 1px solid var(--hairline, var(--rule, #E2E5EA)); border-radius: 18px;
+  font: inherit; color: var(--ink, #0B1220); text-align: center; transition: border-color .15s, transform .15s;
+}
+.wordbook .wb-subj-card:hover { border-color: var(--teal, #0E7490); transform: translateY(-2px); }
+.wordbook .wb-subj-card-img, .wordbook .wb-subj-hero-img { display: block; overflow: hidden; border-radius: 18px; background: var(--paper, #F2F6F4); flex-shrink: 0; }
+.wordbook .wb-subj-card-img { width: 72px; height: 72px; }
+.wordbook .wb-subj-card-img img, .wordbook .wb-subj-hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wordbook .wb-subj-card-name { font-size: 15.5px; font-weight: 800; line-height: 1.3; }
+.wordbook .wb-subj-card-meta { font-size: 13px; font-weight: 600; color: var(--ink-muted, #6B7280); }
+.wordbook .wb-subj-back {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; margin: 0 0 14px; padding: 4px 0;
+  border: 0; background: none; cursor: pointer; font: inherit; font-size: 15px; font-weight: 700; color: var(--ink-muted, #6B7280);
+}
+.wordbook .wb-subj-back:hover { color: var(--ink, #0B1220); }
+.wordbook [dir="rtl"] .wb-subj-arrow, [dir="rtl"] .wordbook .wb-subj-arrow, .wordbook[dir="rtl"] .wb-subj-arrow { transform: scaleX(-1); }
+.wordbook .wb-subj-hero { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.wordbook .wb-subj-hero-img { width: 88px; height: 88px; border-radius: 22px; box-shadow: 0 6px 18px rgba(11,18,32,.08); }
+.wordbook .wb-subj-hero-cat { font-size: 14px; font-weight: 700; color: var(--teal, #0E7490); }
+.wordbook .wb-subj-topics, .wordbook .wb-subj-words { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.wordbook .wb-subj-topic {
+  width: 100%; display: flex; align-items: center; gap: 10px; padding: 14px 16px; cursor: pointer; text-align: start;
+  background: var(--card, var(--surface, #fff)); border: 1px solid var(--hairline, var(--rule, #E2E5EA)); border-radius: 14px;
+  font: inherit; color: var(--ink, #0B1220); transition: border-color .15s;
+}
+.wordbook .wb-subj-topic:hover { border-color: var(--teal, #0E7490); }
+.wordbook .wb-subj-topic-title { flex: 1; min-width: 0; font-size: 15.5px; font-weight: 700; line-height: 1.4; }
+.wordbook .wb-subj-chevron { flex-shrink: 0; color: var(--ink-faint, #9CA3AF); }
+.wordbook .wb-subj-hint { margin: 0 0 14px; font-size: 14.5px; line-height: 1.5; color: var(--ink-muted, #6B7280); }
+.wordbook .wb-subj-word {
+  padding: 12px 16px 14px; background: var(--card, var(--surface, #fff));
+  border: 1px solid var(--hairline, var(--rule, #E2E5EA)); border-radius: 14px;
+}
+.wordbook .wb-subj-word-head { display: flex; align-items: center; gap: 8px; }
+.wordbook .wb-subj-word-w { font-size: 18px; font-weight: 800; color: var(--teal-deep, #155E75); text-decoration: none; }
+.wordbook .wb-subj-word-w:hover { text-decoration: underline; }
+.wordbook .wb-subj-word-d { display: block; margin-top: 4px; font-size: 15px; line-height: 1.55; color: var(--ink-soft, #3F4856); text-decoration: none; }
+.wordbook .wb-subj-listen { flex-shrink: 0; }
+.wordbook .wb-subj-add { display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 22px 0 8px; text-align: center; }
+.wordbook .wb-subj-added {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 14px; margin: 0;
+  padding: 12px 16px; border-radius: 14px; background: rgba(14,165,165,0.08); border: 1px solid rgba(14,165,165,0.22);
+  font-size: 15px; font-weight: 600; color: var(--ink, #0B1220);
+}
+.wordbook .wb-subj-added-link { padding: 7px 16px; border-radius: 999px; background: var(--teal-deep, #0F6F6C); color: #fff; font-weight: 700; font-size: 14px; text-decoration: none; white-space: nowrap; }
+@media (max-width: 560px) {
+  .wordbook .wb-subj-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .wordbook .wb-subj-card-img { width: 64px; height: 64px; }
+  .wordbook .wb-subj-hero-img { width: 72px; height: 72px; border-radius: 18px; }
+  .wordbook .wb-subj-btn { width: 100%; }
+}
+/* ── end Key words by subject ── */

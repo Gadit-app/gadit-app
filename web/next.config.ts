@@ -1,5 +1,12 @@
 import type { NextConfig } from "next";
 import path from "node:path";
+import fs from "node:fs";
+
+// Key words by subject in German (/subjects, 2026-10-26): its two data files
+// are optional. The page offers German only when both exist at build time,
+// and the API reads them from disk (traced into its function below).
+const SUBJECTS_DE = ["src/lib/curriculum-catalog-de.json", "src/lib/curriculum-sets-de.json"]
+  .every((f) => fs.existsSync(path.join(process.cwd(), f)));
 
 /**
  * First-party Affonso proxy.
@@ -68,6 +75,10 @@ const nextConfig: NextConfig = {
     // Always inlined ("0" unless the build sets it to "1"), so a normal build
     // drops the emulator code in lib/firebase.ts completely.
     NEXT_PUBLIC_GADIT_LOCAL_PREVIEW: process.env.NEXT_PUBLIC_GADIT_LOCAL_PREVIEW === "1" ? "1" : "0",
+    NEXT_PUBLIC_SUBJECTS_DE: SUBJECTS_DE ? "1" : "0",
+  },
+  outputFileTracingIncludes: {
+    "/api/subjects": ["./src/lib/curriculum-catalog-de.json", "./src/lib/curriculum-sets-de.json"],
   },
   // The review addresses of the new landing pages became the real pages
   // (Gadi 2026-10-07): keep any shared review link working.
