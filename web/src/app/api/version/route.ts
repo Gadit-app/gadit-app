@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
 /**
  * Current deployed build id, read fresh on every request (never cached).
@@ -9,9 +9,12 @@ import { NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export function GET() {
+export function GET(req: NextRequest) {
+  // Admin only: the Node.js runtime actually serving this deploy (security
+  // advisories name exact patch versions, 2026-10-26).
+  const admin = !!process.env.ADMIN_SECRET && req.nextUrl.searchParams.get("secret") === process.env.ADMIN_SECRET;
   return NextResponse.json(
-    { v: process.env.VERCEL_GIT_COMMIT_SHA || "dev" },
+    { v: process.env.VERCEL_GIT_COMMIT_SHA || "dev", ...(admin ? { node: process.version, region: process.env.VERCEL_REGION ?? null } : {}) },
     { headers: { "Cache-Control": "no-store, max-age=0" } },
   );
 }
