@@ -18,12 +18,7 @@ const L = (...lines: string[]) => lines.join("\n\n");
 
 const GREETING: Record<SubjectsLang, string> = { he: "היי {שם},", en: "Hi {name},", de: "Hallo {name}," };
 
-/** First lines: the announcement says "we added", the series says "there is". */
-const INTRO_NEW: Record<SubjectsLang, string> = {
-  he: L("הוספנו ל-Gadit לשונית חדשה: **מקצועות**.", "היא מופיעה בתפריט העליון."),
-  en: L("We added a new tab to Gadit: **Subjects**.", "You'll find it in the top menu."),
-  de: L("Wir haben Gadit einen neuen Reiter hinzugefügt: **Fächer**.", "Du findest ihn oben im Menü."),
-};
+/** First line of the series emails. */
 const INTRO_SERIES: Record<SubjectsLang, string> = {
   he: "בתפריט העליון של Gadit יש לשונית בשם **מקצועות**.",
   en: "Gadit has a tab called **Subjects** in the top menu.",
@@ -87,7 +82,6 @@ const TRY_FREE: Record<SubjectsLang, string> = {
 /** German for parents: the family series addresses them with "Sie"
  *  (emailTemplates fam2-*), the Individual series with "du". */
 const DE_SIE = {
-  intro_new: L("Wir haben Gadit einen neuen Reiter hinzugefügt: **Fächer**.", "Sie finden ihn oben im Menü."),
   middle: L(
     "## Jedes Fach mit seinen wichtigsten Wörtern",
     "Mathematik, Chemie, Physik, Biologie, Geschichte und Geografie.",
@@ -103,11 +97,6 @@ const DE_SIE = {
   try_free: L("## Kostenlos ausprobieren", "Die Schlüsselwörter nach Fach gehören zu den Abos Individual und Family.", "Beide starten mit 14 Tagen kostenlos, und Sie können jederzeit kündigen."),
 };
 
-const SUBJECT_NEW: Record<SubjectsLang, string> = {
-  he: "חדש ב-Gadit: מילות מפתח במקצועות",
-  en: "New in Gadit: key words by subject",
-  de: "Neu in Gadit: Schlüsselwörter nach Fach",
-};
 const SUBJECT_SERIES: Record<SubjectsLang, string> = {
   he: "המילים החשובות של כל מקצוע, במקום אחד",
   en: "Every subject's key words, in one place",
@@ -130,20 +119,102 @@ const NEXT_INDIV: Record<SubjectsLang, string> = {
   de: "In der nächsten E-Mail sehen wir uns an, was du in deinen ersten zwei Wochen schon aufgebaut hast.",
 };
 
-/** Announcement "2026-10-subjects" (Family owners + Individual; German as to parents). */
+/** The launch announcement has its own, warmer copy (Gadi 2026-10-26: "it's
+ *  something new and great, it should feel like it"): good news first, what a
+ *  subject means at school, more subjects coming, and a question to reply to
+ *  (replies reach gadi@gadit.app). The series emails keep the calmer copy above. */
+const ANN: Record<SubjectsLang, { subject: string; open: string; middle: string; practise: string; soon: string; cta: string }> = {
+  he: {
+    subject: "חדש ב-Gadit: המילים החשובות של כל מקצוע בבית הספר",
+    open: L(
+      "שמחים לבשר לכם על משהו חדש ב-Gadit.",
+      "הוספנו אזור חדש: **מקצועות**.",
+      "זה המקום של המילים החשובות במקצועות של בית הספר: מתמטיקה, כימיה, פיזיקה, ביולוגיה, היסטוריה וגאוגרפיה.",
+      "הוא מופיע בתפריט העליון.",
+    ),
+    middle: L(
+      "## בדיוק מה שלומדים בכיתה",
+      "בוחרים מקצוע, צעירים או בוגרים, ואז נושא, למשל \"חומרים ותערובות\" בכימיה.",
+      "מקבלים את המילים שמופיעות בשיעור, כל אחת עם ההסבר שלה במקצוע הזה.",
+      "## בלי לבלבל בין משמעויות",
+      "\"תא\" בביולוגיה הוא לא תא בכלא, ו\"תמיסה\" בכימיה היא לא סתם נוזל.",
+      "לחיצה על מילה פותחת הסבר מלא עם דוגמאות, רק במשמעות של המקצוע.",
+      "ואפשר גם להקשיב לכל מילה.",
+    ),
+    practise: L("## מגיעים מוכנים למבחן", "כפתור אחד מוסיף את כל המילים של הנושא למחברת.", "משם מתרגלים אותן במשחקים, עד שהן יושבות."),
+    soon: L(
+      "## ובקרוב, עוד מקצועות",
+      "אנחנו כבר עובדים על המקצועות הבאים.",
+      "ונשמח לשמוע מכם: באיזה מקצוע הייתם רוצים לראות את מילות המפתח?",
+      "פשוט עונים למייל הזה, ואנחנו קוראים כל תשובה.",
+    ),
+    cta: "לגלות את המקצועות",
+  },
+  en: {
+    subject: "New in Gadit: the key words of every school subject",
+    open: L(
+      "We're happy to share something new in Gadit.",
+      "We've added a new area: **Subjects**.",
+      "It's where you'll find the key words of school subjects: math, chemistry, physics, biology, history and geography.",
+      "You'll find it in the top menu.",
+    ),
+    middle: L(
+      "## Exactly what's taught in class",
+      "Pick a subject, younger or older, then a topic, like \"Solutions as special mixtures\" in chemistry.",
+      "You get the words that come up in the lesson, each explained the way that subject uses it.",
+      "## No mixed-up meanings",
+      "A \"cell\" in biology isn't a prison cell, and \"power\" in physics isn't about who's in charge.",
+      "Tap a word for a full explanation with examples, in that subject's meaning only.",
+      "You can listen to every word too.",
+    ),
+    practise: L("## Ready for the test", "One button adds all the topic's words to the notebook.", "From there you practise them in the games until they stick."),
+    soon: L(
+      "## More subjects soon",
+      "We're already working on the next ones.",
+      "And we'd love to hear from you: which subject's key words would you like to see?",
+      "Just reply to this email. We read every answer.",
+    ),
+    cta: "Explore Subjects",
+  },
+  de: {
+    subject: "Neu in Gadit: die wichtigsten Wörter jedes Schulfachs",
+    open: L(
+      "Wir freuen uns, Ihnen etwas Neues in Gadit vorzustellen.",
+      "Es gibt jetzt einen neuen Bereich: **Fächer**.",
+      "Hier finden Sie die wichtigsten Wörter der Schulfächer: Mathematik, Chemie, Physik, Biologie, Geschichte und Geografie.",
+      "Sie finden ihn oben im Menü.",
+    ),
+    middle: L(
+      "## Genau das, was im Unterricht vorkommt",
+      "Wählen Sie ein Fach, Jüngere oder Ältere, dann ein Thema, zum Beispiel \"Stoffe und ihre Eigenschaften\" in Chemie.",
+      "Sie bekommen die Wörter, die im Unterricht vorkommen, jedes so erklärt, wie das Fach es braucht.",
+      "## Keine verwechselten Bedeutungen",
+      "Eine \"Zelle\" in Biologie ist keine Gefängniszelle, und \"Strom\" in Physik ist kein Fluss.",
+      "Ein Tipp auf ein Wort öffnet eine ganze Erklärung mit Beispielen, nur in der Bedeutung des Fachs.",
+      "Jedes Wort lässt sich auch anhören.",
+    ),
+    practise: L("## Gut vorbereitet für die Prüfung", "Ein Knopf legt alle Wörter des Themas ins Notizbuch.", "Dort üben Ihre Kinder sie in den Spielen, bis sie sitzen."),
+    soon: L(
+      "## Bald kommen weitere Fächer",
+      "Wir arbeiten schon an den nächsten.",
+      "Und wir möchten gern von Ihnen hören: Zu welchem Fach würden Sie gern die wichtigsten Wörter sehen?",
+      "Antworten Sie einfach auf diese E-Mail. Wir lesen jede Antwort.",
+    ),
+    cta: "Fächer entdecken",
+  },
+};
+
+/** Announcement "2026-10-subjects" (Family owners + Individual). */
 export function subjectsAnnouncement(l: SubjectsLang): EmailContent {
-  const body = l === "de"
-    ? L(GREETING.de, DE_SIE.intro_new, DE_SIE.middle, DE_SIE.practise)
-    : L(GREETING[l], INTRO_NEW[l], MIDDLE[l], PRACTISE[l]);
-  return mail(SUBJECT_NEW[l], body, CTA[l]);
+  const a = ANN[l];
+  return mail(a.subject, L(GREETING[l], a.open, a.middle, a.practise, a.soon), a.cta);
 }
 
-/** Announcement "2026-10-subjects-basic" (Basic accounts): the same, plus the trial close. */
+/** Announcement "2026-10-subjects-basic" (Basic accounts): the trial close before "more subjects soon". */
 export function subjectsAnnouncementBasic(l: SubjectsLang): EmailContent {
-  const body = l === "de"
-    ? L(GREETING.de, DE_SIE.intro_new, DE_SIE.middle, DE_SIE.practise, DE_SIE.try_free)
-    : L(GREETING[l], INTRO_NEW[l], MIDDLE[l], PRACTISE[l], TRY_FREE[l]);
-  return mail(SUBJECT_NEW[l], body, CTA_TRY[l]);
+  const a = ANN[l];
+  const tryFree = l === "de" ? DE_SIE.try_free : TRY_FREE[l];
+  return mail(a.subject, L(GREETING[l], a.open, a.middle, a.practise, tryFree, a.soon), CTA_TRY[l]);
 }
 
 /** Onboarding series email: fam2-subjects (family: true) or ind-subjects. */
