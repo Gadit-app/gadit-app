@@ -1,0 +1,910 @@
+{
+ "subjects": [
+  {
+   "key": "mathematics",
+   "de": "Mathematik",
+   "en": "Mathematics",
+   "he": "מתמטיקה"
+  },
+  {
+   "key": "chemistry",
+   "de": "Chemie",
+   "en": "Chemistry",
+   "he": "כימיה"
+  },
+  {
+   "key": "physics",
+   "de": "Physik",
+   "en": "Physics",
+   "he": "פיזיקה"
+  },
+  {
+   "key": "biology",
+   "de": "Biologie",
+   "en": "Biology",
+   "he": "ביולוגיה"
+  },
+  {
+   "key": "history",
+   "de": "Geschichte",
+   "en": "History",
+   "he": "היסטוריה"
+  },
+  {
+   "key": "geography",
+   "de": "Geografie",
+   "en": "Geography",
+   "he": "גאוגרפיה"
+  }
+ ],
+ "topics": {
+  "0": {
+   "id": "cur-de-9e15ac1c3d",
+   "s": "mathematics",
+   "l": "younger",
+   "t": "Zahlenraum bis 1 Million",
+   "o": 0
+  },
+  "1": {
+   "id": "cur-de-11f043c881",
+   "s": "mathematics",
+   "l": "younger",
+   "t": "Schriftlich rechnen",
+   "o": 1
+  },
+  "2": {
+   "id": "cur-de-6e259e3eb9",
+   "s": "mathematics",
+   "l": "younger",
+   "t": "Kopfrechnen und Überschlagen",
+   "o": 2
+  },
+  "3": {
+   "id": "cur-de-0cf010423c",
+   "s": "mathematics",
+   "l": "younger",
+   "t": "Brüche",
+   "o": 3
+  },
+  "4": {
+   "id": "cur-de-6e4e0ab7c3",
+   "s": "mathematics",
+   "l": "younger",
+   "t": "Dezimalzahlen",
+   "o": 4
+  },
+  "5": {
+   "id": "cur-de-4a44b936aa",
+   "s": "mathematics",
+   "l": "younger",
+   "t": "Grössen und Sachrechnen",
+   "o": 5
+  },
+  "6": {
+   "id": "cur-de-621a26d935",
+   "s": "mathematics",
+   "l": "younger",
+   "t": "Zeit und Geld",
+   "o": 6
+  },
+  "7": {
+   "id": "cur-de-103530cf09",
+   "s": "mathematics",
+   "l": "younger",
+   "t": "Geometrie",
+   "o": 7
+  },
+  "8": {
+   "id": "cur-de-97eb219ef4",
+   "s": "mathematics",
+   "l": "younger",
+   "t": "Umfang und Flächeninhalt",
+   "o": 8
+  },
+  "9": {
+   "id": "cur-de-7393221aeb",
+   "s": "mathematics",
+   "l": "younger",
+   "t": "Daten, Tabellen und Diagramme",
+   "o": 9
+  },
+  "10": {
+   "id": "cur-de-e89ba9c375",
+   "s": "mathematics",
+   "l": "older",
+   "t": "Zahlen und Grundoperationen",
+   "o": 10
+  },
+  "11": {
+   "id": "cur-de-7e37252238",
+   "s": "mathematics",
+   "l": "older",
+   "t": "Brüche, Dezimalzahlen und Prozente",
+   "o": 11
+  },
+  "12": {
+   "id": "cur-de-d8b0fd13b2",
+   "s": "mathematics",
+   "l": "older",
+   "t": "Terme und Gleichungen",
+   "o": 12
+  },
+  "13": {
+   "id": "cur-de-add94ce4d1",
+   "s": "mathematics",
+   "l": "older",
+   "t": "Verhältnisse und Proportionalität",
+   "o": 13
+  },
+  "14": {
+   "id": "cur-de-01caaf452f",
+   "s": "mathematics",
+   "l": "older",
+   "t": "Geometrie in der Ebene",
+   "o": 14
+  },
+  "15": {
+   "id": "cur-de-4c939bfeaf",
+   "s": "mathematics",
+   "l": "older",
+   "t": "Koordinaten und Funktionen",
+   "o": 15
+  },
+  "16": {
+   "id": "cur-de-4fcd666f20",
+   "s": "mathematics",
+   "l": "older",
+   "t": "Daten, Statistik und Wahrscheinlichkeiten",
+   "o": 16
+  },
+  "17": {
+   "id": "cur-de-1f2cd3e30d",
+   "s": "mathematics",
+   "l": "older",
+   "t": "Körper und Messen",
+   "o": 17
+  },
+  "18": {
+   "id": "cur-de-99b53978d7",
+   "s": "mathematics",
+   "l": "older",
+   "t": "Potenzen und Wurzeln",
+   "o": 18
+  },
+  "19": {
+   "id": "cur-de-82b2c5beb3",
+   "s": "mathematics",
+   "l": "older",
+   "t": "Lineare Gleichungssysteme",
+   "o": 19
+  },
+  "20": {
+   "id": "cur-de-1992a697f0",
+   "s": "chemistry",
+   "l": "younger",
+   "t": "Stoffe und ihre Eigenschaften",
+   "o": 20
+  },
+  "21": {
+   "id": "cur-de-9af7bd01f3",
+   "s": "chemistry",
+   "l": "younger",
+   "t": "Mischen und Trennen",
+   "o": 21
+  },
+  "22": {
+   "id": "cur-de-fd7e797840",
+   "s": "chemistry",
+   "l": "younger",
+   "t": "Wasser",
+   "o": 22
+  },
+  "23": {
+   "id": "cur-de-8e6bdcd2b8",
+   "s": "chemistry",
+   "l": "younger",
+   "t": "Luft",
+   "o": 23
+  },
+  "24": {
+   "id": "cur-de-0a174f5bb2",
+   "s": "chemistry",
+   "l": "younger",
+   "t": "Verbrennung und Feuer",
+   "o": 24
+  },
+  "25": {
+   "id": "cur-de-3c4d6d3419",
+   "s": "chemistry",
+   "l": "younger",
+   "t": "Lösen und Kristallisieren",
+   "o": 25
+  },
+  "26": {
+   "id": "cur-de-0f9a880bd8",
+   "s": "chemistry",
+   "l": "younger",
+   "t": "Aggregatzustände",
+   "o": 26
+  },
+  "27": {
+   "id": "cur-de-cb9d39c744",
+   "s": "chemistry",
+   "l": "younger",
+   "t": "Einfache chemische Veränderungen",
+   "o": 27
+  },
+  "28": {
+   "id": "cur-de-d13c903d22",
+   "s": "chemistry",
+   "l": "younger",
+   "t": "Metalle und andere Werkstoffe",
+   "o": 28
+  },
+  "29": {
+   "id": "cur-de-55d9e7c34c",
+   "s": "chemistry",
+   "l": "younger",
+   "t": "Rohstoffe, Recycling und Umwelt",
+   "o": 29
+  },
+  "30": {
+   "id": "cur-de-e77538065e",
+   "s": "chemistry",
+   "l": "older",
+   "t": "Stoffe und ihre Eigenschaften",
+   "o": 30
+  },
+  "31": {
+   "id": "cur-de-89bd4686d4",
+   "s": "chemistry",
+   "l": "older",
+   "t": "Stoffgemische trennen",
+   "o": 31
+  },
+  "32": {
+   "id": "cur-de-49a03fac51",
+   "s": "chemistry",
+   "l": "older",
+   "t": "Teilchenmodell",
+   "o": 32
+  },
+  "33": {
+   "id": "cur-de-345ce4e9b7",
+   "s": "chemistry",
+   "l": "older",
+   "t": "Atome und Moleküle",
+   "o": 33
+  },
+  "34": {
+   "id": "cur-de-33ddb12622",
+   "s": "chemistry",
+   "l": "older",
+   "t": "Chemische Reaktionen",
+   "o": 34
+  },
+  "35": {
+   "id": "cur-de-9e577a165a",
+   "s": "chemistry",
+   "l": "older",
+   "t": "Verbrennung",
+   "o": 35
+  },
+  "36": {
+   "id": "cur-de-56b21b6ef3",
+   "s": "chemistry",
+   "l": "older",
+   "t": "Luft und Wasser",
+   "o": 36
+  },
+  "37": {
+   "id": "cur-de-5712a9efcd",
+   "s": "chemistry",
+   "l": "older",
+   "t": "Säuren und Basen",
+   "o": 37
+  },
+  "38": {
+   "id": "cur-de-8e2b82d8d2",
+   "s": "chemistry",
+   "l": "older",
+   "t": "Metalle",
+   "o": 38
+  },
+  "39": {
+   "id": "cur-de-11aa4eaa41",
+   "s": "chemistry",
+   "l": "older",
+   "t": "Salze",
+   "o": 39
+  },
+  "40": {
+   "id": "cur-de-1dd9df98ba",
+   "s": "chemistry",
+   "l": "older",
+   "t": "Kohlenstoff und organische Stoffe",
+   "o": 40
+  },
+  "41": {
+   "id": "cur-de-6300ea4df4",
+   "s": "chemistry",
+   "l": "older",
+   "t": "Energie aus chemischen Reaktionen",
+   "o": 41
+  },
+  "42": {
+   "id": "cur-de-f7396e7414",
+   "s": "physics",
+   "l": "younger",
+   "t": "Luft und Wasser",
+   "o": 42
+  },
+  "43": {
+   "id": "cur-de-bdbf3ad229",
+   "s": "physics",
+   "l": "younger",
+   "t": "Wetter",
+   "o": 43
+  },
+  "44": {
+   "id": "cur-de-c6c684b475",
+   "s": "physics",
+   "l": "younger",
+   "t": "Licht und Schatten",
+   "o": 44
+  },
+  "45": {
+   "id": "cur-de-219d7728ae",
+   "s": "physics",
+   "l": "younger",
+   "t": "Schall und Hören",
+   "o": 45
+  },
+  "46": {
+   "id": "cur-de-b4a123897c",
+   "s": "physics",
+   "l": "younger",
+   "t": "Wärme und Temperatur",
+   "o": 46
+  },
+  "47": {
+   "id": "cur-de-cd875b5731",
+   "s": "physics",
+   "l": "younger",
+   "t": "Magnete und Magnetismus",
+   "o": 47
+  },
+  "48": {
+   "id": "cur-de-50b9411144",
+   "s": "physics",
+   "l": "younger",
+   "t": "Elektrizität und Stromkreis",
+   "o": 48
+  },
+  "49": {
+   "id": "cur-de-abe6edfacd",
+   "s": "physics",
+   "l": "younger",
+   "t": "Kräfte und Bewegung",
+   "o": 49
+  },
+  "50": {
+   "id": "cur-de-80f259d429",
+   "s": "physics",
+   "l": "younger",
+   "t": "Hebel und einfache Maschinen",
+   "o": 50
+  },
+  "51": {
+   "id": "cur-de-afbb6deac8",
+   "s": "physics",
+   "l": "younger",
+   "t": "Erde, Sonne und Mond",
+   "o": 51
+  },
+  "52": {
+   "id": "cur-de-27847758b5",
+   "s": "physics",
+   "l": "older",
+   "t": "Messen und Stoffe",
+   "o": 52
+  },
+  "53": {
+   "id": "cur-de-b85be5e37a",
+   "s": "physics",
+   "l": "older",
+   "t": "Bewegung und Geschwindigkeit",
+   "o": 53
+  },
+  "54": {
+   "id": "cur-de-db79e42c32",
+   "s": "physics",
+   "l": "older",
+   "t": "Kraft und einfache Maschinen",
+   "o": 54
+  },
+  "55": {
+   "id": "cur-de-bd079a1ccf",
+   "s": "physics",
+   "l": "older",
+   "t": "Druck und Auftrieb",
+   "o": 55
+  },
+  "56": {
+   "id": "cur-de-26e9da66db",
+   "s": "physics",
+   "l": "older",
+   "t": "Energie",
+   "o": 56
+  },
+  "57": {
+   "id": "cur-de-e82f9d3842",
+   "s": "physics",
+   "l": "older",
+   "t": "Wärme und Temperatur",
+   "o": 57
+  },
+  "58": {
+   "id": "cur-de-497c5cbdfb",
+   "s": "physics",
+   "l": "older",
+   "t": "Elektrizität",
+   "o": 58
+  },
+  "59": {
+   "id": "cur-de-199ec22a43",
+   "s": "physics",
+   "l": "older",
+   "t": "Magnetismus und Elektromagnetismus",
+   "o": 59
+  },
+  "60": {
+   "id": "cur-de-655bb6f16a",
+   "s": "physics",
+   "l": "older",
+   "t": "Licht und Optik",
+   "o": 60
+  },
+  "61": {
+   "id": "cur-de-566d3787e9",
+   "s": "physics",
+   "l": "older",
+   "t": "Schall",
+   "o": 61
+  },
+  "62": {
+   "id": "cur-de-e31dfa58c9",
+   "s": "biology",
+   "l": "younger",
+   "t": "Der menschliche Körper",
+   "o": 62
+  },
+  "63": {
+   "id": "cur-de-4db1e58c9d",
+   "s": "biology",
+   "l": "younger",
+   "t": "Ernährung und Verdauung",
+   "o": 63
+  },
+  "64": {
+   "id": "cur-de-5583bf3768",
+   "s": "biology",
+   "l": "younger",
+   "t": "Skelett und Muskeln",
+   "o": 64
+  },
+  "65": {
+   "id": "cur-de-f312774498",
+   "s": "biology",
+   "l": "younger",
+   "t": "Atmung und Blutkreislauf",
+   "o": 65
+  },
+  "66": {
+   "id": "cur-de-5b61756fa5",
+   "s": "biology",
+   "l": "younger",
+   "t": "Sinne",
+   "o": 66
+  },
+  "67": {
+   "id": "cur-de-b39df46035",
+   "s": "biology",
+   "l": "younger",
+   "t": "Pflanzen",
+   "o": 67
+  },
+  "68": {
+   "id": "cur-de-01b771ebb5",
+   "s": "biology",
+   "l": "younger",
+   "t": "Tiere",
+   "o": 68
+  },
+  "69": {
+   "id": "cur-de-3df83b249a",
+   "s": "biology",
+   "l": "younger",
+   "t": "Lebensräume",
+   "o": 69
+  },
+  "70": {
+   "id": "cur-de-9587af0a0a",
+   "s": "biology",
+   "l": "younger",
+   "t": "Nahrungsketten und Nahrungsnetze",
+   "o": 70
+  },
+  "71": {
+   "id": "cur-de-1b1c17d273",
+   "s": "biology",
+   "l": "younger",
+   "t": "Fortpflanzung und Entwicklung",
+   "o": 71
+  },
+  "72": {
+   "id": "cur-de-54c67d64a7",
+   "s": "biology",
+   "l": "older",
+   "t": "Zelle und Mikroskop",
+   "o": 72
+  },
+  "73": {
+   "id": "cur-de-8964674e8f",
+   "s": "biology",
+   "l": "older",
+   "t": "Stoffwechsel und Ernährung",
+   "o": 73
+  },
+  "74": {
+   "id": "cur-de-daa52cd702",
+   "s": "biology",
+   "l": "older",
+   "t": "Atmung und Blutkreislauf",
+   "o": 74
+  },
+  "75": {
+   "id": "cur-de-cdf0bbbf0c",
+   "s": "biology",
+   "l": "older",
+   "t": "Bewegung und Sinnesorgane",
+   "o": 75
+  },
+  "76": {
+   "id": "cur-de-8742775a78",
+   "s": "biology",
+   "l": "older",
+   "t": "Fortpflanzung und Entwicklung",
+   "o": 76
+  },
+  "77": {
+   "id": "cur-de-2105ee162b",
+   "s": "biology",
+   "l": "older",
+   "t": "Vererbung",
+   "o": 77
+  },
+  "78": {
+   "id": "cur-de-2ff10c3645",
+   "s": "biology",
+   "l": "older",
+   "t": "Ökologie und Lebensräume",
+   "o": 78
+  },
+  "79": {
+   "id": "cur-de-107abcd10b",
+   "s": "biology",
+   "l": "older",
+   "t": "Pflanzen",
+   "o": 79
+  },
+  "80": {
+   "id": "cur-de-ebe94133d0",
+   "s": "biology",
+   "l": "older",
+   "t": "Mikroorganismen",
+   "o": 80
+  },
+  "81": {
+   "id": "cur-de-9ec6b02a52",
+   "s": "biology",
+   "l": "older",
+   "t": "Evolution",
+   "o": 81
+  },
+  "82": {
+   "id": "cur-de-a7d834b58d",
+   "s": "history",
+   "l": "younger",
+   "t": "Zeit und Quellen",
+   "o": 82
+  },
+  "83": {
+   "id": "cur-de-ac5ac918e8",
+   "s": "history",
+   "l": "younger",
+   "t": "Steinzeit",
+   "o": 83
+  },
+  "84": {
+   "id": "cur-de-510e24f59f",
+   "s": "history",
+   "l": "younger",
+   "t": "Altes Ägypten",
+   "o": 84
+  },
+  "85": {
+   "id": "cur-de-af5438aa79",
+   "s": "history",
+   "l": "younger",
+   "t": "Antikes Griechenland",
+   "o": 85
+  },
+  "86": {
+   "id": "cur-de-180687fada",
+   "s": "history",
+   "l": "younger",
+   "t": "Römisches Reich",
+   "o": 86
+  },
+  "87": {
+   "id": "cur-de-807e4d5cfe",
+   "s": "history",
+   "l": "younger",
+   "t": "Mittelalter",
+   "o": 87
+  },
+  "88": {
+   "id": "cur-de-c80e454306",
+   "s": "history",
+   "l": "younger",
+   "t": "Entstehung der Schweiz",
+   "o": 88
+  },
+  "89": {
+   "id": "cur-de-bb55802cce",
+   "s": "history",
+   "l": "younger",
+   "t": "Entdeckungen und Erfindungen",
+   "o": 89
+  },
+  "90": {
+   "id": "cur-de-1030fd1b86",
+   "s": "history",
+   "l": "younger",
+   "t": "Industrialisierung",
+   "o": 90
+  },
+  "91": {
+   "id": "cur-de-e4b8ffaf0f",
+   "s": "history",
+   "l": "younger",
+   "t": "Schweiz im 20. Jahrhundert",
+   "o": 91
+  },
+  "92": {
+   "id": "cur-de-11d46504ec",
+   "s": "history",
+   "l": "older",
+   "t": "Französische Revolution",
+   "o": 92
+  },
+  "93": {
+   "id": "cur-de-03e630b396",
+   "s": "history",
+   "l": "older",
+   "t": "Industrialisierung",
+   "o": 93
+  },
+  "94": {
+   "id": "cur-de-db1d7dd182",
+   "s": "history",
+   "l": "older",
+   "t": "Die Schweiz im 19. Jahrhundert",
+   "o": 94
+  },
+  "95": {
+   "id": "cur-de-1f8c6bf6dc",
+   "s": "history",
+   "l": "older",
+   "t": "Imperialismus und Kolonialismus",
+   "o": 95
+  },
+  "96": {
+   "id": "cur-de-d875d114de",
+   "s": "history",
+   "l": "older",
+   "t": "Erster Weltkrieg",
+   "o": 96
+  },
+  "97": {
+   "id": "cur-de-d27e3824df",
+   "s": "history",
+   "l": "older",
+   "t": "Zwischenkriegszeit",
+   "o": 97
+  },
+  "98": {
+   "id": "cur-de-68c4a2e4b2",
+   "s": "history",
+   "l": "older",
+   "t": "Zweiter Weltkrieg",
+   "o": 98
+  },
+  "99": {
+   "id": "cur-de-825fc9754c",
+   "s": "history",
+   "l": "older",
+   "t": "Kalter Krieg",
+   "o": 99
+  },
+  "100": {
+   "id": "cur-de-b0a511f36f",
+   "s": "history",
+   "l": "older",
+   "t": "Die Schweiz im 20. Jahrhundert",
+   "o": 100
+  },
+  "101": {
+   "id": "cur-de-dfd572694e",
+   "s": "history",
+   "l": "older",
+   "t": "Globalisierung und Gegenwart",
+   "o": 101
+  },
+  "102": {
+   "id": "cur-de-d5f268a114",
+   "s": "geography",
+   "l": "younger",
+   "t": "Karten lesen und orientieren",
+   "o": 102
+  },
+  "103": {
+   "id": "cur-de-4ab377410f",
+   "s": "geography",
+   "l": "younger",
+   "t": "Die Schweiz im Überblick",
+   "o": 103
+  },
+  "104": {
+   "id": "cur-de-df81f04c2f",
+   "s": "geography",
+   "l": "younger",
+   "t": "Landschaften der Schweiz",
+   "o": 104
+  },
+  "105": {
+   "id": "cur-de-de1ed05703",
+   "s": "geography",
+   "l": "younger",
+   "t": "Wetter und Klima",
+   "o": 105
+  },
+  "106": {
+   "id": "cur-de-ef2dfddf64",
+   "s": "geography",
+   "l": "younger",
+   "t": "Gewässer und Wasserkreislauf",
+   "o": 106
+  },
+  "107": {
+   "id": "cur-de-ad61082493",
+   "s": "geography",
+   "l": "younger",
+   "t": "Leben und Arbeiten in Stadt und Land",
+   "o": 107
+  },
+  "108": {
+   "id": "cur-de-7705afd4f7",
+   "s": "geography",
+   "l": "younger",
+   "t": "Verkehr und Mobilität",
+   "o": 108
+  },
+  "109": {
+   "id": "cur-de-987a01604b",
+   "s": "geography",
+   "l": "younger",
+   "t": "Landwirtschaft und Ernährung",
+   "o": 109
+  },
+  "110": {
+   "id": "cur-de-2d20b3bb21",
+   "s": "geography",
+   "l": "younger",
+   "t": "Energie und Rohstoffe",
+   "o": 110
+  },
+  "111": {
+   "id": "cur-de-09c1eea5c5",
+   "s": "geography",
+   "l": "younger",
+   "t": "Naturgefahren",
+   "o": 111
+  },
+  "112": {
+   "id": "cur-de-d738c16cee",
+   "s": "geography",
+   "l": "younger",
+   "t": "Europa und seine Länder",
+   "o": 112
+  },
+  "113": {
+   "id": "cur-de-6d4e6228fc",
+   "s": "geography",
+   "l": "younger",
+   "t": "Nachhaltige Entwicklung und Umweltschutz",
+   "o": 113
+  },
+  "114": {
+   "id": "cur-de-f94d89d09d",
+   "s": "geography",
+   "l": "older",
+   "t": "Orientierung und Karten",
+   "o": 114
+  },
+  "115": {
+   "id": "cur-de-69b9ca3fdc",
+   "s": "geography",
+   "l": "older",
+   "t": "Wetter und Klima",
+   "o": 115
+  },
+  "116": {
+   "id": "cur-de-5b79f009dc",
+   "s": "geography",
+   "l": "older",
+   "t": "Landschaften der Schweiz",
+   "o": 116
+  },
+  "117": {
+   "id": "cur-de-ad09ac4059",
+   "s": "geography",
+   "l": "older",
+   "t": "Bevölkerung und Siedlung",
+   "o": 117
+  },
+  "118": {
+   "id": "cur-de-32a5a236d7",
+   "s": "geography",
+   "l": "older",
+   "t": "Landwirtschaft",
+   "o": 118
+  },
+  "119": {
+   "id": "cur-de-127565f1fd",
+   "s": "geography",
+   "l": "older",
+   "t": "Industrie und Dienstleistungen",
+   "o": 119
+  },
+  "120": {
+   "id": "cur-de-9e3f9b56fe",
+   "s": "geography",
+   "l": "older",
+   "t": "Verkehr und Mobilität",
+   "o": 120
+  },
+  "121": {
+   "id": "cur-de-a2555a6ce0",
+   "s": "geography",
+   "l": "older",
+   "t": "Europa",
+   "o": 121
+  },
+  "122": {
+   "id": "cur-de-7c2dc3924d",
+   "s": "geography",
+   "l": "older",
+   "t": "Globale Disparitäten und Entwicklung",
+   "o": 122
+  },
+  "123": {
+   "id": "cur-de-ac93a72a95",
+   "s": "geography",
+   "l": "older",
+   "t": "Naturgefahren und Umwelt",
+   "o": 123
+  }
+ }
+}
