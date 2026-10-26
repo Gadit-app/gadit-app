@@ -1561,6 +1561,19 @@ h3 { font-size: clamp(20px, 2.5vw, 22px); line-height: 1.3; font-weight: 600; }
 .gd-font-he      { font-family: var(--font-rubik), var(--font-geist-sans), system-ui, sans-serif; }
 .gd-font-ar      { font-family: var(--font-arabic), var(--font-geist-sans), system-ui, serif; }
 
+/* ── One body font in the quiz, compose and report modals (Gadi 2026-10-26) ──
+   In Latin, Cyrillic and Greek languages these modals used Fraunces serif
+   (.gd-font-display), Geist (.gd-font-sans-ui, eyebrows) and a few mono
+   labels, unlike the rest of the app. They now use the app's body font,
+   Inter. Rubik/Heebo stay next in the stack for Hebrew letters inside the
+   page. Hebrew, Arabic, Persian and the other scripts keep their own fonts. */
+html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([lang="zh-CN"]):not([lang="zh-TW"]):not([lang="ko"]):not([lang="hi"]):not([lang="bn"]):not([lang="th"]):not([lang="am"]) {
+  --body-ui: var(--font-inter), 'Inter', 'Rubik', 'Heebo', system-ui, -apple-system, sans-serif;
+}
+html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([lang="zh-CN"]):not([lang="zh-TW"]):not([lang="ko"]):not([lang="hi"]):not([lang="bn"]):not([lang="th"]):not([lang="am"]) :is(.gd-font-display, .gd-font-sans-ui, .gd-eyebrow, .wordbook .wb-lang-chip, .wordbook .wb-pricing-save, .wordbook .wb-meaning-num, .wordbook .wb-visual-label, .wordbook .wb-tile-tier, .wordbook .wb-mnum) {
+  font-family: var(--body-ui);
+}
+
 /* Arabic/Hebrew body needs +1px and looser leading for comfortable reading */
 [dir="rtl"] .gd-rtl-body  { font-size: 1.0625em; line-height: 1.8; }
 [dir="rtl"] .gd-rtl-title { line-height: 1.15; }
