@@ -125,8 +125,8 @@ Choose right away or one daily summary, and what to hear about, in the [parent b
     en: subjectsAnnouncement("en"),
     t: { de: subjectsAnnouncement("de") },
     langs: SUBJECTS_LANGS,
-    sendAt: "2026-10-29T07:00:00+02:00",
-    approved: false,
+    sendAt: "2026-10-29T09:00:00+02:00",
+    approved: true,
     skipIfSeriesSent: [SUBJECTS_SERIES_KEYS.family, SUBJECTS_SERIES_KEYS.individual],
   },
   {
@@ -138,7 +138,7 @@ Choose right away or one daily summary, and what to hear about, in the [parent b
     en: subjectsAnnouncementBasic("en"),
     t: { de: subjectsAnnouncementBasic("de") },
     langs: SUBJECTS_LANGS,
-    sendAt: "2026-10-29T07:00:00+02:00",
-    approved: false,
+    sendAt: "2026-10-29T09:00:00+02:00",
+    approved: true,
   },
 ];
