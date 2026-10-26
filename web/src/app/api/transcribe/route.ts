@@ -26,6 +26,14 @@ const LANG_HINT: Record<string, string> = {
   nl: "nl",
   el: "el",
   zu: "zu",
+  xh: "xh",
+  nso: "nso",
+  tn: "tn",
+  st: "st",
+  ts: "ts",
+  ss: "ss",
+  ve: "ve",
+  nr: "nr",
   vi: "vi",
   fil: "tl",
   af: "af",
@@ -37,6 +45,18 @@ const LANG_HINT: Record<string, string> = {
   bn: "bn",
   da: "da",
   hu: "hu",
+};
+
+// Languages whisper-1 accepts as a language hint. For any other (Zulu, Xhosa,
+// Sepedi, Setswana, Sesotho, Xitsonga, siSwati, Tshivenda, isiNdebele,
+// Amharic, Bengali) OpenAI rejects the call with unsupported_language, so a
+// learner practising Zulu in Say it got no score at all (Gadi 2026-10-26).
+// Those go to gpt-4o-transcribe with the language named in the prompt, which
+// heard "Sawubona, mama. Unjani?" exactly in a test.
+const WHISPER_LANGS = new Set(["af", "ar", "hy", "az", "be", "bs", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "gl", "de", "el", "he", "hi", "hu", "is", "id", "it", "ja", "kn", "kk", "ko", "lv", "lt", "mk", "ms", "mr", "mi", "ne", "no", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "tl", "ta", "th", "tr", "uk", "ur", "vi", "cy"]);
+const LANG_NAME: Record<string, string> = {
+  zu: "isiZulu (Zulu)", xh: "isiXhosa (Xhosa)", nso: "Sepedi (Northern Sotho)", tn: "Setswana (Tswana)", st: "Sesotho (Southern Sotho)",
+  ts: "Xitsonga (Tsonga)", ss: "siSwati (Swati)", ve: "Tshivenda (Venda)", nr: "isiNdebele (South Ndebele)", am: "Amharic", bn: "Bengali",
 };
 
 export async function POST(req: NextRequest) {
@@ -84,10 +104,17 @@ export async function POST(req: NextRequest) {
       ? "ogg"
       : "webm";
     upstreamForm.append("file", audioFile, `audio.${ext}`);
-    upstreamForm.append("model", "whisper-1");
-    // verbose_json adds the audio duration, which prices the call.
-    upstreamForm.append("response_format", "verbose_json");
-    if (langHint) upstreamForm.append("language", langHint);
+    const viaWhisper = !langHint || WHISPER_LANGS.has(langHint);
+    const model = viaWhisper ? "whisper-1" : "gpt-4o-transcribe";
+    upstreamForm.append("model", model);
+    if (viaWhisper) {
+      // verbose_json adds the audio duration, which prices the call.
+      upstreamForm.append("response_format", "verbose_json");
+      if (langHint) upstreamForm.append("language", langHint);
+    } else {
+      upstreamForm.append("response_format", "json");
+      upstreamForm.append("prompt", `The speaker is speaking ${LANG_NAME[langHint!] ?? langHint}. Transcribe exactly what is said, in that language and its usual spelling.`);
+    }
 
     const res = await fetch("https://api.openai.com/v1/audio/transcriptions", {
       method: "POST",
@@ -106,8 +133,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const data = (await res.json()) as { text?: string; duration?: number };
-    void logAiUsage({ feature: "transcribe", model: "whisper-1", costUsd: whisperCostUsd(Number(data.duration ?? 0)), plan: userInfo.plan });
+    const data = (await res.json()) as { text?: string; duration?: number; usage?: { input_tokens?: number; output_tokens?: number } };
+    // gpt-4o-transcribe bills tokens: audio in about $6 per million, text out $10 per million.
+    const costUsd = viaWhisper
+      ? whisperCostUsd(Number(data.duration ?? 0))
+      : (Number(data.usage?.input_tokens ?? 0) * 6 + Number(data.usage?.output_tokens ?? 0) * 10) / 1e6;
+    void logAiUsage({ feature: "transcribe", model, costUsd, plan: userInfo.plan });
     return NextResponse.json({ text: (data.text || "").trim() });
   } catch (err) {
     console.error("transcribe error:", err);
