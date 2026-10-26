@@ -7,6 +7,8 @@ import { fillDeep, landingPrices, screensLang } from "@/lib/landing-i18n";
 import { INDIVIDUAL_DISPLAY, INDIVIDUAL_MONTHLY } from "@/lib/individual-prices";
 import { planCopy } from "@/lib/plan-copy";
 import { REAL_COPY, REAL_CSS, PhoneShot, Lines, type RealTool } from "./RealScreens";
+import { SubjectsScreenMock, SubjectsLines, subjectsBandCopy } from "./SubjectsShowcase";
+import { subjectsLangFor } from "@/lib/subjects-langs";
 import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -8475,6 +8477,8 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
   // `classic` = the pre-2026-09-28 illustrated page, kept at /families/landing-old.
   const real = i18n ? fillDeep(i18n.real, prices) : !classic && lang === "he" ? REAL_COPY.he : undefined;
   const shotLang = i18n ? screensLang(lang) : lang;
+  // The Subjects band: only in the languages that have the feature (he, en, de).
+  const subjUi = subjectsLangFor(lang);
 
   // Default angle: vocab (Gadi 2026-07-17 + council: the master promise
   // is visible vocabulary growth; the pain angles stay as variants).
@@ -8979,8 +8983,26 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
           </section>
         )}
 
-
-
+        {/* Subjects (Gadi 2026-10-26): right after homework, only where the
+            feature exists (he, en, de). White, between the teal homework band
+            and the cream tool band. */}
+        {real && subjUi && (() => {
+          const sc = subjectsBandCopy(subjUi, "families");
+          return (
+            <section className="fam-band fam-band-white fam-subj-band">
+              <div className="fam-feature">
+                <div className="fam-feature-text">
+                  <div className="fam-kicker">{sc.kicker}</div>
+                  <h2 className="fam-h2 fam-h2-start">{sc.title}</h2>
+                  <SubjectsLines copy={sc} pClass="fam-body" noteClass="fam-subj-note" />
+                </div>
+                <div className="fam-feature-visual">
+                  <SubjectsScreenMock ui={subjUi} />
+                </div>
+              </div>
+            </section>
+          );
+        })()}
 
         {real && real.tools.filter((t) => !t.afterGames).map((f, i) => toolSection(f, i))}
 
@@ -10423,6 +10445,10 @@ const FAM_CSS = `
    grid-auto-rows:1fr + a flex column that stretches the mock (Gadi
    2026-07-29). */
 .fam-section-wide { max-width: 1140px; }
+/* Subjects band (2026-10-26): the small "more subjects soon" line. */
+.fam-subj-note { margin: 4px 0 0; font-size: 14.5px; font-weight: 600; color: #0b7d7d; }
+/* Hebrew has no capitals: the uppercase kicker would only turn the brand into GADIT. */
+html[lang="he"] .fam-subj-band .fam-kicker { text-transform: none; }
 .fam-how-steps {
   display: grid;
   grid-template-columns: 1fr;

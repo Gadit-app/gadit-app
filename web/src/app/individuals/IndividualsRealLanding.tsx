@@ -13,6 +13,8 @@ import { INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY } from "@/lib/individual-prices";
 import { fill, landingDir, landingFont, landingPrices, screensLang } from "@/lib/landing-i18n";
 import type { IndCopy } from "./i18n/types";
 import HE from "./i18n/he";
+import { SubjectsScreenMock, SubjectsLines, subjectsBandCopy } from "../families/SubjectsShowcase";
+import { subjectsLangFor } from "@/lib/subjects-langs";
 
 /**
  * The Hebrew Individuals landing (Gadi 2026-10-06), built like the Families
@@ -72,6 +74,9 @@ export function IndividualsRealLanding({ copy = HE, lang = "he" }: { copy?: IndC
     promptLogin({ mode: "signup", resumeUrl: home, onSuccess: () => { window.location.href = home; } });
   };
   const t = C.photo;
+  // The Subjects band: only in the languages that have the feature (he, en, de).
+  const subjUi = subjectsLangFor(lang);
+  const sc = subjUi ? subjectsBandCopy(subjUi, "individuals") : null;
   return (
     <div className="ind" dir={landingDir(lang)} lang={lang} style={lang === "he" ? undefined : { fontFamily: landingFont(lang) }}>
       <style>{CSS + CSS2}</style>
@@ -173,6 +178,24 @@ export function IndividualsRealLanding({ copy = HE, lang = "he" }: { copy?: IndC
             </div>
           </div>
         </section>
+
+        {/* Subjects (Gadi 2026-10-26): after the photo of a page, the other
+            school tool; only where the feature exists (he, en, de). Its own
+            warm band, between the tint photo band and the white tools band. */}
+        {subjUi && sc && (
+          <section className="ind-band ind-subj-band">
+            <div className="ind-feature">
+              <div className="ind-feature-text">
+                <div className="ind-kicker ind-start ind-subj-kicker">{sc.kicker}</div>
+                <h2 className="ind-h2">{sc.title}</h2>
+                <SubjectsLines copy={sc} pClass="ind-body" noteClass="ind-subj-note" />
+              </div>
+              <div className="ind-feature-visual">
+                <SubjectsScreenMock ui={subjUi} />
+              </div>
+            </div>
+          </section>
+        )}
 
         <section className="ind-band ind-white">
           <div className="ind-kicker">{C.moreKicker}</div>
@@ -287,6 +310,10 @@ const CSS2 = `
   .ind-step { flex: none; width: 100%; max-width: 340px; box-sizing: border-box; padding: 22px 14px; }
   .ind-step .ind-phone { max-width: 210px; }
 }
+/* Subjects band (2026-10-26): warm, like the Families games band. */
+.ind-subj-band { background: linear-gradient(160deg, #FFF1D6 0%, #FFF8EA 55%, #FFFFFF 100%); }
+.ind-subj-kicker { color: #B45309; }
+.ind-subj-note { margin: 4px 0 0; font-size: 15px; font-weight: 700; color: var(--teal-d); }
 /* The plan list and the price: two cards in the green frame, 520px, close together. */
 .ind-includes-card { max-width: 520px; box-sizing: border-box; margin: 30px auto 0; background: #fff; border: 2px solid var(--teal); border-radius: 28px; padding: 26px 30px; box-shadow: var(--card); }
 .ind-price-card { border: 2px solid var(--teal); margin-top: 20px; box-sizing: border-box; }
