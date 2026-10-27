@@ -1858,7 +1858,10 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
                 ) : (
                   <>
                     <span dir={promptRtl ? "rtl" : "ltr"} style={{ fontSize: 30, fontWeight: 800, color: "var(--ink,#0B1220)" }}>{promptOf(current)}</span>
-                    <TTSButton text={promptOf(current)} audioLang={promptLang} ariaLabel={t("listen", lang)} />
+                    {/* Tracing shows the answer word already, so the speaker
+                        says THAT word (Gadi 2026-10-27: a mother tracing "trip"
+                        heard "טיול"); typing keeps the prompt, the test. */}
+                    <TTSButton text={mode === "type" ? promptOf(current) : answerOf(current)} audioLang={mode === "type" ? promptLang : answerLang} ariaLabel={t("listen", lang)} />
                   </>
                 )}
               </div>
