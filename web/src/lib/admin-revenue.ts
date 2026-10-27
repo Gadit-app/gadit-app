@@ -514,11 +514,12 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
       const tier: Tier = a.kind === "family" ? "family" : "individual";
       const currency = String(a.currency ?? "usd").toLowerCase();
       const gross = typeof a.price === "number" ? a.price : 0;
-      const monthlyUsd = Math.round(toUsd(gross, currency) * 0.85 * 100) / 100;
+      const yearly = a.interval === "yearly";
+      const monthlyUsd = Math.round(toUsd(gross, currency) * 0.85 / (yearly ? 12 : 1) * 100) / 100;
       const status = a.status === "expired" ? "canceled" : String(a.status);
       const custKey = "apple:" + a.uid;
       const sub: RevenueSubscriber = {
-        uid: "apple:" + doc.id, email, tier, billing: "monthly", monthlyUsd, currency, status,
+        uid: "apple:" + doc.id, email, tier, billing: yearly ? "yearly" : "monthly", monthlyUsd, currency, status,
         cancelAtPeriodEnd: a.autoRenew === false,
         trialEnd: a.trial ? (a.expiresAt ?? null) : null,
         signedUpAt: (user.createdAt as string | undefined) ?? null,
@@ -535,7 +536,7 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
         mrr += monthlyUsd;
         if (status === "past_due") { atRiskMrr += monthlyUsd; pastDueCount += 1; atRisk.push(sub); }
         if (a.autoRenew === false) { scheduledCancelCount += 1; sub.scheduledCancel = true; }
-        bump(payBreak, tier, "monthly", monthlyUsd);
+        bump(payBreak, tier, yearly ? "yearly" : "monthly", monthlyUsd);
         const eps = earliestPayingStartByCustomer.get(custKey);
         if (eps == null || payingStartMs < eps) earliestPayingStartByCustomer.set(custKey, payingStartMs);
       } else if (status === "trialing" || ((status === "active" || status === "past_due") && a.trial)) {
@@ -544,7 +545,7 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
         trialingByTier[tier] += 1;
         trialingMrr += monthlyUsd;
         trialingCardedMrr += monthlyUsd; trialingCardedCount += 1;
-        bump(trialBreak, tier, "monthly", monthlyUsd);
+        bump(trialBreak, tier, yearly ? "yearly" : "monthly", monthlyUsd);
       } else if (status === "canceled") {
         const endedMs = Date.parse(String(a.updatedAt ?? "")) || 0;
         if (endedMs > thirtyDaysAgo) recentlyCanceled.push(sub);

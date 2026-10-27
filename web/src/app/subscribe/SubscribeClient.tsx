@@ -20,7 +20,7 @@ import { isPlayModeClient } from "@/lib/play-copy";
 import { subscribeCopy, fill } from "@/lib/subscribe-copy";
 import {
   APPLE_SKUS, canBuyInApp, fetchNativeProducts, nativeBuy, nativeRestore, nativeManageSubscriptions, claimPurchases,
-  type NativeProduct,
+  type NativeProduct, type AppleInterval,
 } from "@/lib/native-iap";
 
 type Kind = keyof typeof APPLE_SKUS;
@@ -36,6 +36,7 @@ export function SubscribeClient() {
   const [busy, setBusy] = useState<Kind | "restore" | null>(null);
   const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
   const [appleUser, setAppleUser] = useState(false);
+  const [interval, setIntervalChoice] = useState<AppleInterval>("monthly");
 
   // Only inside an iOS build that can sell; kids never see a price.
   const started = useRef(false);
@@ -68,7 +69,7 @@ export function SubscribeClient() {
 
   if (!ready) return null;
 
-  const priceOf = (k: Kind) => products?.find((p) => p.id === APPLE_SKUS[k]) ?? null;
+  const priceOf = (k: Kind) => products?.find((p) => p.id === APPLE_SKUS[k][interval]) ?? null;
 
   async function buy(k: Kind) {
     if (busy) return;
@@ -138,6 +139,16 @@ export function SubscribeClient() {
         </section>
       ) : (
         <>
+          <div role="radiogroup" aria-label={c.title} style={{ display: "flex", justifyContent: "center", gap: 8 }}>
+            {(["monthly", "yearly"] as const).map((v) => (
+              <button key={v} type="button" role="radio" aria-checked={interval === v} onClick={() => setIntervalChoice(v)}
+                style={{ padding: "8px 18px", borderRadius: 999, fontSize: 14.5, fontWeight: 700, cursor: "pointer",
+                  border: "1.5px solid var(--teal,#0EA5A5)", background: interval === v ? "var(--teal,#0EA5A5)" : "transparent",
+                  color: interval === v ? "#fff" : "var(--teal-deep,#0A7472)" }}>
+                {v === "monthly" ? c.monthly : c.yearly}
+              </button>
+            ))}
+          </div>
           {plans.map(({ k, name, sub, rows }) => {
             const p = priceOf(k);
             return (
@@ -150,7 +161,7 @@ export function SubscribeClient() {
                   {rows.map((r) => <li key={r}>{r}</li>)}
                 </ul>
                 <div style={{ fontSize: 15, fontWeight: 700, color: "var(--ink,#0B1220)" }}>
-                  {products === null ? c.loading : p ? fill(p.trial ? c.trialThen : c.perMonth, { price: p.displayPrice }) : c.unavailable}
+                  {products === null ? c.loading : p ? fill(interval === "yearly" ? (p.trial ? c.trialThenYear : c.perYear) : (p.trial ? c.trialThen : c.perMonth), { price: p.displayPrice }) : c.unavailable}
                 </div>
                 <button type="button" disabled={!p || !!busy} onClick={() => void buy(k)} style={btn(true, !p || !!busy)}>
                   {busy === k ? "…" : p?.trial ? c.startTrial : c.subscribe}

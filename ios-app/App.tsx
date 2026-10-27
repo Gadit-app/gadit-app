@@ -130,7 +130,12 @@ function appUrlFrom(data: unknown): string | null {
 // App Store purchases (Gadi 2026-10-27, App Review 3.1.1): the web page asks,
 // StoreKit sells, and the page sends the signed transaction to our server
 // (web/src/lib/native-iap.ts, web/src/lib/apple-iap.ts). Only our products.
-const IAP_SKUS = ["com.gadit.app.individual.monthly", "com.gadit.app.family.monthly"];
+const IAP_SKUS = [
+  "com.gadit.app.individual.monthly",
+  "com.gadit.app.individual.yearly",
+  "com.gadit.app.family.monthly",
+  "com.gadit.app.family.yearly",
+];
 
 type WebPurchase = { jws: string; productId: string; transactionId: string };
 function toWeb(p: Purchase): WebPurchase | null {

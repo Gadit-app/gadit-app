@@ -11,6 +11,10 @@ type Copy = {
   family: string;
   trialThen: string;      // {price}
   perMonth: string;       // {price}
+  trialThenYear: string;  // {price}
+  perYear: string;        // {price}
+  monthly: string;
+  yearly: string;
   startTrial: string;
   subscribe: string;
   restore: string;
@@ -39,10 +43,14 @@ const EN: Copy = {
   family: "Family",
   trialThen: "14 days free, then {price} a month",
   perMonth: "{price} a month",
+  trialThenYear: "14 days free, then {price} a year",
+  perYear: "{price} a year",
+  monthly: "Monthly",
+  yearly: "Yearly",
   startTrial: "Start 14 days free",
   subscribe: "Subscribe",
   restore: "Restore purchases",
-  legal: "Payment is charged to your Apple ID when the free trial ends. The subscription renews every month unless it is cancelled at least 24 hours before the end of the period. You can manage or cancel it any time in your App Store account settings.",
+  legal: "Payment is charged to your Apple ID when the free trial ends. The subscription renews every month or year, according to the plan chosen, unless it is cancelled at least 24 hours before the end of the period. You can manage or cancel it any time in your App Store account settings.",
   terms: "Terms of Use",
   privacy: "Privacy Policy",
   loading: "Loading the plans…",
@@ -67,10 +75,14 @@ const HE: Copy = {
   family: "Family",
   trialThen: "14 יום חינם, ואחר כך {price} לחודש",
   perMonth: "{price} לחודש",
+  trialThenYear: "14 יום חינם, ואחר כך {price} לשנה",
+  perYear: "{price} לשנה",
+  monthly: "חודשי",
+  yearly: "שנתי",
   startTrial: "14 יום ניסיון חינם",
   subscribe: "להצטרפות",
   restore: "שחזור רכישות",
-  legal: "התשלום נגבה מחשבון ה-Apple ID שלכם בסוף תקופת הניסיון. המנוי מתחדש בכל חודש, אלא אם מבטלים אותו לפחות 24 שעות לפני סוף התקופה. אפשר לנהל ולבטל אותו בכל רגע בהגדרות החשבון ב-App Store.",
+  legal: "התשלום נגבה מחשבון ה-Apple ID שלכם בסוף תקופת הניסיון. המנוי מתחדש בכל חודש או בכל שנה, לפי המסלול שנבחר, אלא אם מבטלים אותו לפחות 24 שעות לפני סוף התקופה. אפשר לנהל ולבטל אותו בכל רגע בהגדרות החשבון ב-App Store.",
   terms: "תנאי שימוש",
   privacy: "מדיניות פרטיות",
   loading: "טוענים את המנויים…",

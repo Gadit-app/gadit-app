@@ -28,16 +28,21 @@ import { bootstrapFamily, stampFamilyActivated, sendFamilyWelcome } from "@/lib/
 import { autoEnrollPartner } from "@/lib/partner-auto";
 import { sendMail } from "@/lib/mail";
 import { APPLE_ROOT_CA_G3_B64 } from "@/lib/apple-root-cert";
-import { APPLE_INDIVIDUAL_PRODUCT } from "@/lib/individual-prices";
+import { APPLE_INDIVIDUAL_PRODUCT, APPLE_INDIVIDUAL_YEARLY } from "@/lib/individual-prices";
 
 export const APPLE_BUNDLE_ID = "com.gadit.app";
 /** App Store Connect app id of "Gadit Vocabulary" (needed to verify Production). */
 export const APPLE_APP_ID = 6824663361;
 export const APPLE_FAMILY_PRODUCT = "com.gadit.app.family.monthly";
+export const APPLE_FAMILY_YEARLY = "com.gadit.app.family.yearly";
 export const APPLE_PRODUCTS: Record<string, "individual" | "family"> = {
   [APPLE_INDIVIDUAL_PRODUCT]: "individual",
+  [APPLE_INDIVIDUAL_YEARLY]: "individual",
   [APPLE_FAMILY_PRODUCT]: "family",
+  [APPLE_FAMILY_YEARLY]: "family",
 };
+/** Yearly App Store products (monthly and yearly like the website, 2026-10-27). */
+export const APPLE_YEARLY = new Set([APPLE_INDIVIDUAL_YEARLY, APPLE_FAMILY_YEARLY]);
 /** Apple keeps 15% (Small Business Program). */
 export const APPLE_NET_SHARE = 0.85;
 
@@ -135,6 +140,7 @@ export async function applyAppleState(
     uid,
     productId,
     kind,
+    interval: APPLE_YEARLY.has(productId) ? "yearly" : "monthly",
     status: state,
     environment: tx.environment ?? null,
     expiresAt: tx.expiresDate ? new Date(tx.expiresDate).toISOString() : null,
@@ -174,7 +180,7 @@ export async function applyAppleState(
   // The family is made on the first Family state, also after an upgrade
   // from Individual (same subscription, new product).
   if (paid && kind === "family" && user.familyId !== uid) {
-    await bootstrapFamily(uid, "monthly");
+    await bootstrapFamily(uid, APPLE_YEARLY.has(productId) ? "yearly" : "monthly");
     await stampFamilyActivated(uid);
     await sendFamilyWelcome(uid, (user.email as string | undefined) ?? null);
   }
@@ -197,7 +203,7 @@ async function notifyApple(uid: string, email: string | undefined, kind: string,
     const html = `<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:520px;margin:0 auto;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden">
 <div style="background:linear-gradient(135deg,#0EA5A5,#0E7490);padding:22px;color:#fff;font-size:20px;font-weight:700">${what}${sandbox}</div>
 <table style="width:100%;font-size:14px;padding:18px;border-collapse:collapse">
-<tr><td style="color:#6B7280;padding:6px 18px;width:110px">Plan</td><td style="font-weight:600">${tier} (monthly)</td></tr>
+<tr><td style="color:#6B7280;padding:6px 18px;width:110px">Plan</td><td style="font-weight:600">${tier} (${tx.productId && APPLE_YEARLY.has(tx.productId) ? "yearly" : "monthly"})</td></tr>
 ${price ? `<tr><td style="color:#6B7280;padding:6px 18px">Price</td><td>${esc(price)} (we keep 85%)</td></tr>` : ""}
 <tr><td style="color:#6B7280;padding:6px 18px">Country</td><td>${esc(tx.storefront ?? "")}</td></tr>
 <tr><td style="color:#6B7280;padding:6px 18px">Email</td><td>${esc(email ?? uid)}</td></tr>

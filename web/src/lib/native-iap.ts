@@ -17,9 +17,10 @@
 import { postToNative, isIosApp, hasNativeBridge } from "@/lib/native-app";
 
 export const APPLE_SKUS = {
-  individual: "com.gadit.app.individual.monthly",
-  family: "com.gadit.app.family.monthly",
+  individual: { monthly: "com.gadit.app.individual.monthly", yearly: "com.gadit.app.individual.yearly" },
+  family: { monthly: "com.gadit.app.family.monthly", yearly: "com.gadit.app.family.yearly" },
 } as const;
+export type AppleInterval = "monthly" | "yearly";
 
 export type NativeProduct = { id: string; displayPrice: string; trial: boolean };
 export type NativePurchase = { jws: string; productId: string; transactionId: string };
@@ -52,7 +53,7 @@ function ask(msg: Record<string, unknown>, timeoutMs: number): Promise<Reply> {
 }
 
 export async function fetchNativeProducts(): Promise<NativeProduct[]> {
-  const r = await ask({ type: "iap:products", skus: Object.values(APPLE_SKUS) }, 15000);
+  const r = await ask({ type: "iap:products", skus: Object.values(APPLE_SKUS).flatMap((k) => [k.monthly, k.yearly]) }, 15000);
   return r.ok && Array.isArray(r.products) ? r.products : [];
 }
 
