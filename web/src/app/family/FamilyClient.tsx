@@ -24,7 +24,7 @@ import { useEffect, useState } from "react";
 import { familyUi } from "@/lib/family-ui-i18n";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { collection, doc, onSnapshot, orderBy, query, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, onSnapshot, orderBy, query, updateDoc } from "firebase/firestore";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -45,6 +45,7 @@ import {
   isParentRole,
   memberColorFor,
   MAX_KIDS_PER_FAMILY,
+  kidLimitFor,
   avatarsForRole,
   avatarUrl,
   type MemberRole,
@@ -2065,6 +2066,16 @@ export function FamilyClient() {
   const [family, setFamily] = useState<Family | null>(null);
   const [members, setMembers] = useState<FamilyMember[]>([]);
   const [familyChecked, setFamilyChecked] = useState(false);
+  // The family's own child limit (users/{owner}.maxKids, e.g. a 6th child we
+  // granted, Gadi 2026-10-20). Only the owner can read that doc; anyone else
+  // sees the plan's 5 here, and the add page checks again.
+  const [kidLimit, setKidLimit] = useState(MAX_KIDS_PER_FAMILY);
+  useEffect(() => {
+    if (!user) return;
+    getDoc(doc(db, "users", user.uid))
+      .then((snap) => setKidLimit(kidLimitFor(snap.data()?.maxKids)))
+      .catch(() => {});
+  }, [user]);
   const [progress, setProgress] = useState<{ children: ChildProgress[]; totalWords: number; weekWords: number } | null>(null);
   const [progressLoaded, setProgressLoaded] = useState(false);
   // Bumped after the parent changes a child's learning setting: reload the numbers.
@@ -2214,7 +2225,7 @@ export function FamilyClient() {
 
   const parents = members.filter((m) => isParentRole(m.role));
   const children = members.filter((m) => !isParentRole(m.role));
-  const atCap = children.length >= MAX_KIDS_PER_FAMILY;
+  const atCap = children.length >= kidLimit;
   const hour = new Date().getHours();
   const ownerMember = members.find((m) => m.isOwner);
   // Greet by first name. Skip a name that's just the role word ("אבא" /
