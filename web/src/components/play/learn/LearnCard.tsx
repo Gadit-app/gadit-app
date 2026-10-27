@@ -9,6 +9,7 @@ import { learnCopy } from "./learn-i18n";
 import { lessonCopy } from "./lesson-i18n";
 import type { Lesson } from "./LessonPath";
 import { QText } from "@/components/play/QText";
+import { ocrForm } from "@/lib/ocr-upload";
 
 /**
  * "What are you learning now?" on /play (Gadi 2026-10-11; the council's
@@ -111,8 +112,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
   const photo = async (file: File) => {
     setBusy(true); setMsg(t.reading);
     try {
-      const fd = new FormData();
-      fd.append("image", file);
+      const fd = await ocrForm(file);
       const r = await fetch("/api/ocr", { method: "POST", headers: await auth(), body: fd });
       const j = await r.json().catch(() => ({}));
       if (r.ok && j.text) { setText((x) => (x ? `${x}\n` : "") + String(j.text)); setMsg(t.checkWords); }
@@ -128,8 +128,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
     try {
       let all = "";
       for (const f of Array.from(files).slice(0, 6)) {
-        const fd = new FormData();
-        fd.append("image", f);
+        const fd = await ocrForm(f);
         const r = await fetch("/api/ocr", { method: "POST", headers: await auth(), body: fd });
         const j = await r.json().catch(() => ({}));
         if (r.ok && j.text) all += `\n${String(j.text)}`;

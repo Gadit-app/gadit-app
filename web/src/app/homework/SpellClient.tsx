@@ -45,6 +45,7 @@ import { CURSIVE_FAMILY, PRINT_FAMILY, drawCursiveStart, drawLetterStart, isLati
 import { misc } from "@/lib/misc-i18n";
 import { ml } from "@/lib/my-lists-i18n";
 import { playNotActive } from "@/lib/play-copy";
+import { ocrForm } from "@/lib/ocr-upload";
 
 // Internal direction ids: "he2en" = native → English, "en2he" = English →
 // native. The "he" in the name is legacy — the non-English side is the
@@ -687,8 +688,7 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
     setCreating(true);
     setCreateMsg(t("photoReading", lang));
     try {
-      const fd = new FormData();
-      fd.append("image", file);
+      const fd = await ocrForm(file);
       const r = await fetch("/api/ocr", { method: "POST", headers: { Authorization: `Bearer ${await user.getIdToken()}` }, body: fd });
       const j = (await r.json().catch(() => ({}))) as { text?: string };
       const text = (j.text ?? "").trim();

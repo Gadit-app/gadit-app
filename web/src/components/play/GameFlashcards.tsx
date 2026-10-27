@@ -40,6 +40,7 @@ import { DICTATION_SETS, getCatTitle, type DictationSet, type WordPair } from "@
 import { FLASH_MORE, DIR_MORE, PICK_MORE } from "./play-games-i18n";
 import { SPELL_T_EXTRA } from "@/lib/spell-i18n";
 import { QText } from "./QText";
+import { ocrForm } from "@/lib/ocr-upload";
 
 export type FlashMode = "words" | "meanings";
 
@@ -290,8 +291,7 @@ export function GameFlashcards({
     setPhotoMsg(photoT("photoReading", lang));
     let text = "";
     try {
-      const fd = new FormData();
-      fd.append("image", file);
+      const fd = await ocrForm(file);
       const r = await fetch("/api/ocr", { method: "POST", headers: { Authorization: `Bearer ${await user.getIdToken()}` }, body: fd });
       const j = (await r.json().catch(() => ({}))) as { text?: string };
       text = r.ok ? (j.text ?? "").trim() : "";

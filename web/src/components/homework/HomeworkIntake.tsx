@@ -16,6 +16,7 @@ import { GaditIcon } from "@/components/design/GaditIcon";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { intakeCopy } from "@/lib/homework-intake-i18n";
+import { ocrForm } from "@/lib/ocr-upload";
 
 type Kind = "list" | "text" | "pages";
 type DateChoice = "none" | "tomorrow" | "sunday" | "week" | "other";
@@ -87,8 +88,7 @@ export function HomeworkIntake({ lang, dir, nativeLang, learnLang, initialFiles,
     let ok = 0;
     try {
       for (const f of files.slice(0, 6)) {
-        const fd = new FormData();
-        fd.append("image", f);
+        const fd = await ocrForm(f);
         const r = await fetch("/api/ocr", { method: "POST", headers: await auth(), body: fd });
         const j = (await r.json().catch(() => ({}))) as { text?: string };
         const t = (j.text ?? "").trim();

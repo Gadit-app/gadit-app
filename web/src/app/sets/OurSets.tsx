@@ -10,6 +10,7 @@ import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 import { registerWordSet, type WordSet } from "@/lib/word-sets";
 import { isSchoolSetId, splitSetWords, setLangOf, cleanSetLevel, SCHOOL_SET_LEVELS, SCHOOL_SET_MAX_WORDS, SCHOOL_SET_MAX_SETS, SCHOOL_SET_TITLE_MAX, type SchoolSetLevel } from "@/lib/school-set-ids";
 import { OUR_SETS_COPY, fillCopy, type OurSetsCopy } from "./our-sets-copy";
+import { ocrForm } from "@/lib/ocr-upload";
 
 /**
  * "Our sets" at the top of /sets (Gadi 2026-10-17): the school's own word
@@ -119,8 +120,7 @@ export default function OurSets() {
     setMsg({ text: c.reading, wait: true });
     try {
       // The same page reader as the homework photo.
-      const fd = new FormData();
-      fd.append("image", file);
+      const fd = await ocrForm(file);
       const r = await authed("/api/ocr", { method: "POST", body: fd });
       const text = (((await r.json().catch(() => ({}))) as { text?: string }).text ?? "").trim();
       if (!r.ok || text.length < 2 || !(await suggest("photo", text))) setMsg({ text: c.photoFail, bad: true });

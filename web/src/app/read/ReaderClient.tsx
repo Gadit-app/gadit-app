@@ -22,6 +22,7 @@ import { homeworkCopy } from "@/lib/homework-i18n";
 import { practiceCopy } from "@/lib/practice-i18n";
 import { ReportQuestionButton } from "@/components/play/ReportQuestionButton";
 import { playNotActive } from "@/lib/play-copy";
+import { prepareForUpload } from "@/lib/ocr-upload";
 
 /**
  * /read — the Reader. Paste or photograph a passage; Gadit lays it out as
@@ -410,44 +411,6 @@ function copy(lang: Lang): ReaderStrings {
 
 function fmtProgress(tpl: string, a: number, b: number): string {
   return tpl.replace("{a}", String(a)).replace("{b}", String(b));
-}
-
-/**
- * Prepare a picked file for the OCR upload. Images are downscaled to a max edge
- * and re-encoded as JPEG so a multi-MB phone photo lands well under the
- * serverless body limit (the usual cause of "we couldn't read the file"), and
- * EXIF orientation is baked in so a sideways photo OCRs upright. PDFs and any
- * format the browser can't decode pass through unchanged.
- */
-async function prepareForUpload(file: Blob): Promise<Blob> {
-  if (file.type === "application/pdf" || !file.type.startsWith("image/")) return file;
-  // 3000px keeps fine detail (Hebrew niqqud, small print) legible for OCR while
-  // JPEG at 0.92 still lands well under the body limit for a page of text.
-  const MAX_EDGE = 3000;
-  const JPEG_QUALITY = 0.92;
-  const SMALL_ENOUGH = 1.2 * 1024 * 1024; // already small and reasonable → leave it
-  try {
-    const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
-    const longest = Math.max(bitmap.width, bitmap.height);
-    // Nothing to gain from re-encoding a small, well-sized image.
-    if (longest <= MAX_EDGE && file.size <= SMALL_ENOUGH) { bitmap.close?.(); return file; }
-    const scale = Math.min(1, MAX_EDGE / longest);
-    const w = Math.max(1, Math.round(bitmap.width * scale));
-    const h = Math.max(1, Math.round(bitmap.height * scale));
-    const canvas = document.createElement("canvas");
-    canvas.width = w;
-    canvas.height = h;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) { bitmap.close?.(); return file; }
-    ctx.drawImage(bitmap, 0, 0, w, h);
-    bitmap.close?.();
-    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", JPEG_QUALITY));
-    return blob && blob.size > 0 ? blob : file;
-  } catch {
-    // HEIC on a browser that can't decode it, etc. — send the original and let
-    // the server try; if it's too large the user gets the clear size message.
-    return file;
-  }
 }
 
 /** A short model reply that is a refusal ("I'm sorry, I can't transcribe…")
