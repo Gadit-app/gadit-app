@@ -15,6 +15,7 @@
     "expo-asset": "~58.0.17",
     "expo-constants": "~58.0.12",
     "expo-crypto": "~58.0.7",
+    "expo-iap": "6.3.0",
     "expo-notifications": "~58.1.5",
     "expo-splash-screen": "~58.0.10",
     "expo-status-bar": "~58.0.3",

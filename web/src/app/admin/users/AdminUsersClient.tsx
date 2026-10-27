@@ -28,6 +28,7 @@ type AdminUserRow = {
   lastSearchAt: string | null;
   stripeCustomerId: string | null;
   subscriptionStatus: string | null;
+  billingProvider?: string | null;
   cancelReason?: string | null;
   cancelComment?: string | null;
   category?: "basic" | "individual" | "family" | "schools";
@@ -290,7 +291,12 @@ const CANCEL_REASON_ADMIN_HE: Record<string, string> = {
   "I don't need it right now": "לא צריכים כרגע",
 };
 
+// Paid through the App Store (iOS app): " · Apple" after the plan.
 function planBadge(row: AdminUserRow): { label: string; bg: string; fg: string } {
+  const b = planBadgeBase(row);
+  return row.billingProvider === "apple" && b.label !== "Basic" ? { ...b, label: `${b.label} · Apple` } : b;
+}
+function planBadgeBase(row: AdminUserRow): { label: string; bg: string; fg: string } {
   // Family and Schools both store plan="deep" (identical feature set);
   // the distinct identity lives in familyId / schoolId. Surface it so
   // a Family owner reads as "Family", not "Deep".

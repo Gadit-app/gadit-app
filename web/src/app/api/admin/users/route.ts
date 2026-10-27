@@ -58,6 +58,7 @@ type AdminUserRow = {
   lastSearchAt: string | null;     // ISO
   stripeCustomerId: string | null;
   subscriptionStatus: string | null;
+  billingProvider: string | null;  // "apple" = App Store subscription
   cancelReason: string | null;     // exit-survey answer (canonical English)
   cancelComment: string | null;
   category: import("@/lib/internal-accounts").CustomerCategory;
@@ -169,6 +170,7 @@ export async function GET(req: NextRequest) {
       lastSearchAt: tsToIso(d.lastSearchAt),
       stripeCustomerId: (d.stripeCustomerId as string) ?? null,
       subscriptionStatus: (d.subscriptionStatus as string) ?? null,
+      billingProvider: (d.billingProvider as string) ?? null,
       cancelReason: (d.cancelReason as string) ?? null,
       cancelComment: (d.cancelComment as string) ?? null,
       // Basic / Individual / Family / Schools (Gadi 2026-10-10), and our own

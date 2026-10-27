@@ -40,7 +40,8 @@
           "iosUrlScheme": "com.googleusercontent.apps.11084221528-24flg3qfpkevrackjnag0l6p8iufaplh"
         }
       ],
-      "expo-asset"
+      "expo-asset",
+      "expo-iap"
     ],
     "owner": "gadibenlavi",
     "extra": {

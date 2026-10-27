@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@apple/app-store-server-library": "3.1.0",
     "@stripe/stripe-js": "^9.2.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",

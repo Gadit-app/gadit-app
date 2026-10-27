@@ -5,6 +5,7 @@ import { beforeAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useAuth } from "@/lib/auth-context";
 import { isExpoPushToken, isIosApp, postToNative } from "@/lib/native-app";
+import { claimPurchases, type NativePurchase } from "@/lib/native-iap";
 
 type TokenWindow = Window & { __gaditPushToken?: string };
 
@@ -59,6 +60,22 @@ export function NativeAppBridge() {
     const onToken = (e: Event) => void save((e as CustomEvent<{ token?: string }>).detail?.token);
     window.addEventListener("gadit-push-token", onToken);
     return () => window.removeEventListener("gadit-push-token", onToken);
+  }, [user]);
+
+  // 5. App Store purchases that finish outside the subscribe screen (a
+  // purchase interrupted earlier, Ask to Buy approved, a renewal replayed at
+  // launch) arrive as {id:"update"}: the server checks each one, then the
+  // shell finishes it (lib/native-iap.ts).
+  useEffect(() => {
+    if (!isIosApp() || !user) return;
+    const u = user;
+    const onIap = (e: Event) => {
+      const d = (e as CustomEvent<{ id?: string; purchases?: NativePurchase[] }>).detail;
+      if (d?.id !== "update" || !Array.isArray(d.purchases) || !d.purchases.length) return;
+      void u.getIdToken().then((t) => claimPurchases(d.purchases!, t)).catch(() => {});
+    };
+    window.addEventListener("gadit-native-iap", onIap);
+    return () => window.removeEventListener("gadit-native-iap", onIap);
   }, [user]);
 
   // 4. Unlink the token from the outgoing user while they are still signed

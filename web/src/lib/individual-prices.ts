@@ -17,6 +17,8 @@ export const INDIVIDUAL_MONTHLY = "price_1UU4EQRprLKxF6OiJPaeN6l9";
 export const INDIVIDUAL_YEARLY = "price_1UU4ESRprLKxF6OiLrUd8MP0";
 export const INDIVIDUAL_MONTHLY_V1 = "price_1UNUEtRprLKxF6OiwgeDZzy6";
 export const INDIVIDUAL_YEARLY_V1 = "price_1UNUEtRprLKxF6OiBx1F54bW";
+/** The App Store product of Individual (iOS app, 2026-10-27); stored as priceId. */
+export const APPLE_INDIVIDUAL_PRODUCT = "com.gadit.app.individual.monthly";
 export const INDIVIDUAL_PRICE_IDS = [INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY, INDIVIDUAL_MONTHLY_V1, INDIVIDUAL_YEARLY_V1];
 export const INDIVIDUAL_YEARLY_IDS = [INDIVIDUAL_YEARLY, INDIVIDUAL_YEARLY_V1];
 
@@ -30,5 +32,5 @@ export const INDIVIDUAL_DISPLAY = {
 };
 
 export function isIndividualPriceId(priceId: string | null | undefined): boolean {
-  return !!priceId && INDIVIDUAL_PRICE_IDS.includes(priceId);
+  return !!priceId && (INDIVIDUAL_PRICE_IDS.includes(priceId) || priceId === APPLE_INDIVIDUAL_PRODUCT);
 }

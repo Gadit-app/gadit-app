@@ -40,6 +40,9 @@ import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 import { toggleLangGroup } from "@/lib/lang-groups";
 import { LangSearchList } from "@/components/LangSearch";
 import { useHref } from "@/lib/href";
+import { isIosApp } from "@/lib/native-app";
+import { nativeManageSubscriptions } from "@/lib/native-iap";
+import { subscribeCopy } from "@/lib/subscribe-copy";
 import { countCached, setCachedWord } from "@/lib/offline-db";
 
 // Upgrade button label template.
@@ -365,6 +368,8 @@ interface AccountData {
   trialDaysLeft: number;
   trialEnd: number | null;
   cancelAtPeriodEnd: boolean;
+  /** "apple" = paid through the App Store (iOS app): managed in Apple settings. */
+  billingProvider?: string | null;
   images: { used: number; limit: number; monthKey: string };
 }
 
@@ -1074,7 +1079,18 @@ function PlanSection({
               (not Stripe's portal) so a card-holding trialer sees the one-time
               14-day extension offer first. Hidden once already set to cancel. */}
           {/* "I cancelled by mistake": undo a scheduled cancellation. */}
-          {plan !== "basic" && (data.cancelAtPeriodEnd || resumed) && (
+          {/* An App Store subscription is changed and cancelled in Apple's
+              settings only (we cannot cancel it for the user). */}
+          {plan !== "basic" && data.billingProvider === "apple" && (
+            <div style={{ marginTop: 14 }}>
+              {isIosApp() ? (
+                <GhostBtn onClick={nativeManageSubscriptions}>{subscribeCopy(lang).manage}</GhostBtn>
+              ) : (
+                <a href="https://apps.apple.com/account/subscriptions" target="_blank" rel="noopener noreferrer" style={{ fontFamily: fontBody(lang), fontSize: 14, color: "var(--teal-deep, #0B7A7A)", fontWeight: 600 }}>{subscribeCopy(lang).manage}</a>
+              )}
+            </div>
+          )}
+          {plan !== "basic" && data.billingProvider !== "apple" && (data.cancelAtPeriodEnd || resumed) && (
             <div style={{ marginTop: 14 }}>
               {resumed ? (
                 <span style={{ fontFamily: fontBody(lang), fontSize: 14, color: "var(--teal-deep, #0B7A7A)", fontWeight: 600 }}>
@@ -1085,7 +1101,7 @@ function PlanSection({
               )}
             </div>
           )}
-          {plan !== "basic" && !data.cancelAtPeriodEnd && !resumed && (
+          {plan !== "basic" && data.billingProvider !== "apple" && !data.cancelAtPeriodEnd && !resumed && (
             <div style={{ marginTop: 14 }}>
               <button
                 type="button"

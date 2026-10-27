@@ -3,6 +3,7 @@ import { INDIVIDUAL_PRICE_IDS } from "@/lib/individual-prices";
 import Stripe from "stripe";
 import { NEW_SCHOOLS_PRICE_IDS } from "@/lib/schools-prices";
 import { CAC_USD, GROSS_MARGIN, BUSINESS_TZ } from "@/lib/admin-config";
+import { getAdminDb } from "@/lib/firebase-admin";
 
 /**
  * Shared Stripe revenue summary, read LIVE from Stripe.
@@ -71,6 +72,8 @@ export type RevenueSubscriber = {
   scheduledCancel?: boolean;
   endedThisWeek?: boolean;
   unmappedPrice?: boolean;
+  /** Where the money comes from; absent = Stripe. Apple amounts are net of Apple's 15%. */
+  provider?: "apple";
 };
 
 export type BreakdownEntry = { tier: Tier; billing: Billing; count: number; mrr: number };
@@ -495,6 +498,60 @@ export async function summarizeStripeRevenue(stripe: Stripe): Promise<StripeReve
         }
       }
     }
+  }
+
+  // App Store subscriptions (lib/apple-iap.ts), net of Apple's 15%. Sandbox
+  // purchases (App Review, TestFlight) are never revenue.
+  try {
+    const db = getAdminDb();
+    const appleSnap = await db.collection("appleSubs").get();
+    for (const doc of appleSnap.docs) {
+      const a = doc.data();
+      if (a.environment === "Sandbox" || typeof a.uid !== "string") continue;
+      const user = (await db.collection("users").doc(a.uid).get()).data() ?? {};
+      const email = (user.email as string | undefined) ?? null;
+      if (isInternalEmail(email)) continue;
+      const tier: Tier = a.kind === "family" ? "family" : "individual";
+      const currency = String(a.currency ?? "usd").toLowerCase();
+      const gross = typeof a.price === "number" ? a.price : 0;
+      const monthlyUsd = Math.round(toUsd(gross, currency) * 0.85 * 100) / 100;
+      const status = a.status === "expired" ? "canceled" : String(a.status);
+      const custKey = "apple:" + a.uid;
+      const sub: RevenueSubscriber = {
+        uid: "apple:" + doc.id, email, tier, billing: "monthly", monthlyUsd, currency, status,
+        cancelAtPeriodEnd: a.autoRenew === false,
+        trialEnd: a.trial ? (a.expiresAt ?? null) : null,
+        signedUpAt: (user.createdAt as string | undefined) ?? null,
+        stripeCustomerId: null, country: (a.storefront as string | undefined) ?? null,
+        priceId: a.productId, amountNative: gross, periodEnd: a.expiresAt ?? null, provider: "apple",
+      };
+      const payingStartMs = Date.parse(String(a.updatedAt ?? "")) || now;
+      if ((status === "active" || status === "past_due") && !a.trial) {
+        active.push(sub);
+        activePayingCount += 1;
+        payingByTier[tier] += 1;
+        payingCustomers.add(custKey);
+        hasActiveByCustomer.set(custKey, true);
+        mrr += monthlyUsd;
+        if (status === "past_due") { atRiskMrr += monthlyUsd; pastDueCount += 1; atRisk.push(sub); }
+        if (a.autoRenew === false) { scheduledCancelCount += 1; sub.scheduledCancel = true; }
+        bump(payBreak, tier, "monthly", monthlyUsd);
+        const eps = earliestPayingStartByCustomer.get(custKey);
+        if (eps == null || payingStartMs < eps) earliestPayingStartByCustomer.set(custKey, payingStartMs);
+      } else if (status === "trialing" || ((status === "active" || status === "past_due") && a.trial)) {
+        active.push(sub);
+        trialingCount += 1;
+        trialingByTier[tier] += 1;
+        trialingMrr += monthlyUsd;
+        trialingCardedMrr += monthlyUsd; trialingCardedCount += 1;
+        bump(trialBreak, tier, "monthly", monthlyUsd);
+      } else if (status === "canceled") {
+        const endedMs = Date.parse(String(a.updatedAt ?? "")) || 0;
+        if (endedMs > thirtyDaysAgo) recentlyCanceled.push(sub);
+      }
+    }
+  } catch (e) {
+    console.warn("[admin-revenue] apple subscriptions skipped:", e);
   }
 
   // New customers this month = customers whose FIRST-EVER sub started this

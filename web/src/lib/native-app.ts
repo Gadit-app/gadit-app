@@ -23,7 +23,7 @@ export function isIosAppUA(ua: string | null | undefined): boolean {
 }
 
 type NativeGlobal = {
-  GaditNative?: { platform?: string; version?: string; auth?: string[] };
+  GaditNative?: { platform?: string; version?: string; auth?: string[]; iap?: boolean };
   ReactNativeWebView?: { postMessage: (msg: string) => void };
 };
 
@@ -46,7 +46,13 @@ export type NativeMessage =
   /** Run the native Apple / Google sign-in sheet (lib/native-auth.ts). */
   | { type: "auth:apple" | "auth:google"; id: string }
   /** Open the native share sheet. */
-  | { type: "share"; url: string; text?: string };
+  | { type: "share"; url: string; text?: string }
+  /** App Store purchases (lib/native-iap.ts). */
+  | { type: "iap:products"; id: string; skus: string[] }
+  | { type: "iap:buy"; id: string; sku: string; token: string }
+  | { type: "iap:restore"; id: string }
+  | { type: "iap:finish"; transactionId: string }
+  | { type: "iap:manage" };
 
 /** True when the native bridge is there to receive messages. */
 export function hasNativeBridge(): boolean {

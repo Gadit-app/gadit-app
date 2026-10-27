@@ -27,6 +27,19 @@ import * as Notifications from "expo-notifications";
 import * as SplashScreen from "expo-splash-screen";
 import Constants from "expo-constants";
 import { NATIVE_AUTH_PROVIDERS, runNativeAuth, type NativeAuthProvider } from "./native-auth";
+import {
+  initConnection,
+  fetchProducts,
+  requestPurchase,
+  finishTransaction,
+  restorePurchases,
+  getAvailablePurchases,
+  purchaseUpdatedListener,
+  purchaseErrorListener,
+  deepLinkToSubscriptions,
+  ErrorCode,
+  type Purchase,
+} from "expo-iap";
 
 // The native shell for Gadit on iOS: a full-screen WebView over www.gadit.app,
 // plus native sign-in (Apple + Google), native push and the native share sheet,
@@ -60,7 +73,7 @@ const IN_APP_HOSTS = [
 ];
 
 const INJECT_BEFORE_LOAD = `
-  window.GaditNative = { platform: ${JSON.stringify(Platform.OS)}, version: ${JSON.stringify(VERSION)}, auth: ${JSON.stringify(NATIVE_AUTH_PROVIDERS)} };
+  window.GaditNative = { platform: ${JSON.stringify(Platform.OS)}, version: ${JSON.stringify(VERSION)}, auth: ${JSON.stringify(NATIVE_AUTH_PROVIDERS)}, iap: true };
   true;
 `;
 
@@ -114,6 +127,18 @@ function appUrlFrom(data: unknown): string | null {
   }
 }
 
+// App Store purchases (Gadi 2026-10-27, App Review 3.1.1): the web page asks,
+// StoreKit sells, and the page sends the signed transaction to our server
+// (web/src/lib/native-iap.ts, web/src/lib/apple-iap.ts). Only our products.
+const IAP_SKUS = ["com.gadit.app.individual.monthly", "com.gadit.app.family.monthly"];
+
+type WebPurchase = { jws: string; productId: string; transactionId: string };
+function toWeb(p: Purchase): WebPurchase | null {
+  const jws = p.purchaseToken ?? "";
+  if (!jws || !IAP_SKUS.includes(p.productId)) return null;
+  return { jws, productId: p.productId, transactionId: p.id };
+}
+
 function hostOf(url: string): string | null {
   const m = /^https?:\/\/([^/?#:]+)/i.exec(url);
   return m ? m[1].toLowerCase() : null;
@@ -127,6 +152,13 @@ export default function App() {
   const [sourceUri, setSourceUri] = useState(START_URL);
   const pushToken = useRef<string | null>(null);
   const loaded = useRef(false);
+  // StoreKit: the open purchase request, purchases waiting to be finished
+  // (after the server accepted them), and ones that arrived before the page
+  // was signed in.
+  const buyId = useRef<string | null>(null);
+  const unfinished = useRef(new Map<string, Purchase>());
+  const queued = useRef<WebPurchase[]>([]);
+  const signedIn = useRef(false);
 
   /** Hand the push token to the page (the native bridge in web/src). */
   const deliverToken = useCallback((token: string) => {
@@ -137,6 +169,52 @@ export default function App() {
       true;
     `);
   }, []);
+
+  /** Answer the page's purchase requests ("gadit-native-iap"). */
+  const deliverIap = useCallback((payload: object) => {
+    const body = JSON.stringify(payload);
+    webRef.current?.injectJavaScript(`
+      (function(){
+        if (location.hostname !== "www.gadit.app") return;
+        window.dispatchEvent(new CustomEvent("gadit-native-iap", { detail: ${body} }));
+      })();
+      true;
+    `);
+  }, []);
+
+  /** Purchases StoreKit hands us: the answer to a buy, or a later update. */
+  const onStorePurchase = useCallback((p: Purchase) => {
+    const w = toWeb(p);
+    if (!w) return;
+    unfinished.current.set(w.transactionId, p);
+    if (buyId.current) {
+      const id = buyId.current;
+      buyId.current = null;
+      deliverIap({ id, ok: true, purchases: [w] });
+    } else if (signedIn.current) {
+      deliverIap({ id: "update", purchases: [w] });
+    } else {
+      queued.current.push(w);
+    }
+  }, [deliverIap]);
+
+  useEffect(() => {
+    if (Platform.OS !== "ios") return;
+    let alive = true;
+    const up = purchaseUpdatedListener((p) => { if (alive) onStorePurchase(p); });
+    const err = purchaseErrorListener((e) => {
+      if (!buyId.current) return;
+      const id = buyId.current;
+      buyId.current = null;
+      deliverIap({ id, ok: false, error: e.code === ErrorCode.UserCancelled ? "cancelled" : "failed" });
+    });
+    initConnection().catch(() => {});
+    return () => {
+      alive = false;
+      up.remove();
+      err.remove();
+    };
+  }, [onStorePurchase, deliverIap]);
 
   /** Open a URL inside the app's WebView. */
   const openInApp = useCallback((url: string) => {
@@ -170,7 +248,7 @@ export default function App() {
   //  - {type:"share", url, text}: the native share sheet.
   const onMessage = useCallback(
     (e: WebViewMessageEvent) => {
-      let msg: { type?: string; state?: string; id?: unknown; url?: unknown; text?: unknown } | null = null;
+      let msg: { type?: string; state?: string; id?: unknown; url?: unknown; text?: unknown; sku?: unknown; token?: unknown; transactionId?: unknown } | null = null;
       try {
         msg = JSON.parse(e.nativeEvent.data);
       } catch {
@@ -184,6 +262,51 @@ export default function App() {
         runNativeAuth(provider).then((result) => deliverAuth(id, result));
         return;
       }
+      if (msg?.type?.startsWith("iap:")) {
+        if (!isAppPage(e.nativeEvent.url) || Platform.OS !== "ios") return;
+        const id = typeof msg.id === "string" ? msg.id.slice(0, 64) : "";
+        if (msg.type === "iap:products" && id) {
+          fetchProducts({ skus: IAP_SKUS, type: "subs" })
+            .then((list) => deliverIap({
+              id, ok: true,
+              products: (list ?? []).map((p) => {
+                const q = p as { id: string; displayPrice: string; introductoryPricePaymentModeIOS?: string };
+                return { id: q.id, displayPrice: q.displayPrice, trial: q.introductoryPricePaymentModeIOS === "free-trial" };
+              }),
+            }))
+            .catch(() => deliverIap({ id, ok: false, error: "unavailable" }));
+        } else if (msg.type === "iap:buy" && id) {
+          const sku = typeof msg.sku === "string" && IAP_SKUS.includes(msg.sku) ? msg.sku : "";
+          const token = typeof msg.token === "string" && /^[0-9a-f-]{36}$/i.test(msg.token) ? msg.token : "";
+          if (!sku || !token) { deliverIap({ id, ok: false, error: "failed" }); return; }
+          buyId.current = id;
+          requestPurchase({ request: { apple: { sku, appAccountToken: token } }, type: "subs" }).catch(() => {
+            if (buyId.current === id) { buyId.current = null; deliverIap({ id, ok: false, error: "failed" }); }
+          });
+        } else if (msg.type === "iap:restore" && id) {
+          restorePurchases()
+            .then(() => getAvailablePurchases())
+            .then((list) => {
+              const out: WebPurchase[] = [];
+              for (const p of list ?? []) {
+                const w = toWeb(p);
+                if (w) { unfinished.current.set(w.transactionId, p); out.push(w); }
+              }
+              deliverIap({ id, ok: true, purchases: out });
+            })
+            .catch(() => deliverIap({ id, ok: false, error: "failed" }));
+        } else if (msg.type === "iap:finish") {
+          const tid = typeof msg.transactionId === "string" ? msg.transactionId : "";
+          const p = unfinished.current.get(tid);
+          if (p) {
+            unfinished.current.delete(tid);
+            finishTransaction({ purchase: p, isConsumable: false }).catch(() => {});
+          }
+        } else if (msg.type === "iap:manage") {
+          deepLinkToSubscriptions().catch(() => Linking.openURL("https://apps.apple.com/account/subscriptions").catch(() => {}));
+        }
+        return;
+      }
       if (msg?.type === "share") {
         if (!isAppPage(e.nativeEvent.url)) return;
         const url = typeof msg.url === "string" ? msg.url.slice(0, 2000) : "";
@@ -191,7 +314,12 @@ export default function App() {
         if (url || text) Share.share(url ? { url, message: text || url } : { message: text }).catch(() => {});
         return;
       }
+      if (msg?.type === "auth") signedIn.current = msg.state === "signed-in";
       if (msg?.type !== "auth" || msg.state !== "signed-in") return;
+      // Purchases that came in before anyone was signed in.
+      if (queued.current.length) {
+        deliverIap({ id: "update", purchases: queued.current.splice(0) });
+      }
       if (pushToken.current) {
         deliverToken(pushToken.current);
         return;
@@ -202,7 +330,7 @@ export default function App() {
         deliverToken(token);
       });
     },
-    [deliverToken, deliverAuth]
+    [deliverToken, deliverAuth, deliverIap]
   );
 
   // Tapping a notification opens its url in the app: while running, and on a

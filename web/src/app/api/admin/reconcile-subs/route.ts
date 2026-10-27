@@ -217,6 +217,8 @@ export async function POST(req: NextRequest) {
         skippedComp.push(doc.id);
         continue;
       }
+      // App Store subscribers have no Stripe sub by design (lib/apple-iap.ts).
+      if (doc.data()?.billingProvider === "apple") continue;
       downgraded.push({ uid: doc.id, was: st });
       if (!dryRun) {
         await doc.ref.set(

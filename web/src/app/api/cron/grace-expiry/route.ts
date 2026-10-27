@@ -99,6 +99,26 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  // App Store backstop: a renewal or expiry notification can be missed. An
+  // Apple subscription whose period ended over 7 days ago without a renewal
+  // is over (a renewal would have moved appleExpiresAt forward).
+  const appleEnded: string[] = [];
+  try {
+    const apple = await db.collection("users").where("billingProvider", "==", "apple").get();
+    for (const doc of apple.docs) {
+      const d = doc.data();
+      const exp = typeof d.appleExpiresAt === "string" ? Date.parse(d.appleExpiresAt) : NaN;
+      if (d.plan === "basic" || !Number.isFinite(exp) || exp > now - 7 * DAY) continue;
+      appleEnded.push(doc.id);
+      if (!dryRun) {
+        await doc.ref.set({ plan: "basic", subscriptionStatus: "canceled", appleEndedByCron: new Date().toISOString(), updatedAt: new Date().toISOString() }, { merge: true });
+        await syncFamilyMembersPlan(doc.id, "basic");
+      }
+    }
+  } catch (e) {
+    console.warn("[grace-expiry] apple backstop failed:", e);
+  }
+
   // Paid access that nobody pays for (lib/family-plan-sync.ts).
   let audit: Awaited<ReturnType<typeof auditPaidAccess>> | null = null;
   try {
@@ -115,5 +135,5 @@ export async function GET(req: NextRequest) {
     console.warn("[grace-expiry] paid-access audit failed:", e);
   }
 
-  return NextResponse.json({ checked: snap.size, downgraded: downgraded.length, ids: downgraded, reminded: reminded.length, remindedIds: reminded, audit, dryRun });
+  return NextResponse.json({ checked: snap.size, downgraded: downgraded.length, ids: downgraded, reminded: reminded.length, remindedIds: reminded, appleEnded, audit, dryRun });
 }

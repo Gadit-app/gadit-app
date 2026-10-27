@@ -1,7 +1,10 @@
 "use client";
 
 import { WaitText } from "@/components/WaitText";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { subscribeCopy } from "@/lib/subscribe-copy";
+import { isIosApp } from "@/lib/native-app";
+import { nativeManageSubscriptions } from "@/lib/native-iap";
 import type { User } from "firebase/auth";
 
 /**
@@ -211,6 +214,19 @@ export function DeleteAccountModal({
   const [typed, setTyped] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
+  // An App Store subscription is not cancelled with the account (we cannot
+  // cancel it), so its owner is told where to cancel it.
+  const [apple, setApple] = useState(false);
+  useEffect(() => {
+    void (async () => {
+      try {
+        const { doc, getDoc } = await import("firebase/firestore");
+        const { db } = await import("@/lib/firebase");
+        const d = (await getDoc(doc(db, "users", user.uid))).data();
+        setApple(d?.billingProvider === "apple" && d?.plan !== "basic");
+      } catch { /* no note */ }
+    })();
+  }, [user.uid]);
   const emailOk = !!acctEmail && typed.trim().toLowerCase() === acctEmail.toLowerCase();
 
   async function doDelete() {
@@ -254,6 +270,16 @@ export function DeleteAccountModal({
       >
         <h3 style={{ margin: "0 0 6px", fontSize: 20, fontWeight: 800, color: "#111827" }}>{c.title}</h3>
         <p style={{ margin: "0 0 18px", fontSize: 13.5, lineHeight: 1.5, color: "#6b7280" }}>{c.sub}</p>
+        {apple && (
+          <p style={{ margin: "-8px 0 18px", fontSize: 13.5, lineHeight: 1.5, color: "#92400E", background: "#FEF3C7", borderRadius: 10, padding: "10px 12px" }}>
+            {subscribeCopy(lang).deleteNote}{" "}
+            {isIosApp() ? (
+              <button type="button" onClick={nativeManageSubscriptions} style={{ background: "none", border: "none", padding: 0, color: "inherit", textDecoration: "underline", font: "inherit", cursor: "pointer" }}>{subscribeCopy(lang).manage}</button>
+            ) : (
+              <a href="https://apps.apple.com/account/subscriptions" target="_blank" rel="noopener noreferrer" style={{ color: "inherit" }}>{subscribeCopy(lang).manage}</a>
+            )}
+          </p>
+        )}
 
         <div style={{ fontSize: 13, fontWeight: 700, color: "#374151", marginBottom: 8 }}>{c.why}</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>

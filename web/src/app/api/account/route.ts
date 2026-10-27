@@ -58,6 +58,7 @@ export async function GET(req: NextRequest) {
       trialDaysLeft,
       trialEnd: trialEndSec,
       cancelAtPeriodEnd: data.cancelAtPeriodEnd ?? false,
+      billingProvider: data.billingProvider ?? null,
       images: {
         used: imagesUsed,
         limit: imagesLimit,
