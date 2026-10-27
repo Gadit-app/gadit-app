@@ -96,7 +96,7 @@ async function generateList(list: string, uiLangName: string, nativeLangName: st
     body: JSON.stringify({
       model: TEXT_MODEL_FAST,
       temperature: 0.2,
-      max_completion_tokens: 900,
+      max_completion_tokens: 2500,
       response_format: { type: "json_object" },
       messages: [
         {
@@ -106,7 +106,7 @@ async function generateList(list: string, uiLangName: string, nativeLangName: st
 Return STRICT JSON: {"safe": true, "title": "My list", "words": [{"en":"...","he":"..."}]}.
 - Each input line is either a single word (in English OR ${nativeLangName}) or a "word - translation" pair (separated by -, =, tab, or a dash). For each line, output one item with BOTH "en" (the English word) and "he" (the ${nativeLangName} word) filled: translate the missing side; if a pair is given, keep it.
 - IMPORTANT: the "he" field must hold the ${nativeLangName} word (NOT necessarily Hebrew — the field is named "he" for legacy reasons), written in ${nativeLangName} letters: never copy the English word into it (zebra → the ${nativeLangName} word for zebra).
-- Keep the user's own words; only add the translation. English lowercase (proper nouns keep their capital). Skip empty lines, numbers-only lines, and duplicates. Up to 20 words.
+- Keep the user's own words; only add the translation. English lowercase (proper nouns keep their capital). Skip empty lines, numbers-only lines, and duplicates. Keep EVERY word of the list (up to ${CHUNK_WORDS + 10}), never shorten it.
 ${fromPhoto ? `- This text was PHOTOGRAPHED from a school workbook page (read by OCR), so it may hold instructions, exercise numbers, sentences and page furniture. Pick only the vocabulary words the page is teaching: a word list, a word bank, highlighted or new words. If there is no clear list, take the key words of the passage. Fix obvious OCR misspellings. Ignore instructions such as "read", "circle", "fill in".
 ` : ""}- CHILD SAFETY: skip any single word not appropriate for a young child. If the WHOLE list is inappropriate (violence, adult, drugs, hate, etc.), return {"safe": false, "title": "", "words": []}.
 Output ONLY the JSON object.`,
@@ -127,7 +127,7 @@ Output ONLY the JSON object.`,
     ? parsed.words.map((w) => {
         const o = (w ?? {}) as { en?: unknown; he?: unknown };
         return { en: typeof o.en === "string" ? o.en.trim().slice(0, 40) : "", he: typeof o.he === "string" ? o.he.trim().slice(0, 40) : "" };
-      }).filter((w) => w.en && w.he).slice(0, 20)
+      }).filter((w) => w.en && w.he).slice(0, CHUNK_WORDS + 10)
     : [];
   if (words.length < 2) return { safe: false, title: "", words: [] };
   // A word the model left untranslated (e.g. "zebra" → "zebra" for Hebrew):
@@ -161,6 +161,56 @@ Output ONLY the JSON object.`,
   return { safe: true, title: t || (uiLangName === "Hebrew" ? "הרשימה שלי" : "My list"), words };
 }
 
+/** A long list (a mother photographed a 283-word school list, Gadi
+ *  2026-10-27) is paired in pieces of about this many words, side by side,
+ *  so every word comes back and the answer stays fast. */
+const CHUNK_WORDS = 40;
+const MAX_LIST_WORDS = 300;
+
+/** Split a pasted or photographed list into pieces of about CHUNK_WORDS
+ *  words, on line breaks (a "word - translation" line is never cut). */
+function chunkList(list: string): string[] {
+  const out: string[] = [];
+  let cur: string[] = [];
+  let n = 0;
+  // A long comma list on one line is cut between its words.
+  const lines = list.split(/\r?\n/).flatMap((l) => {
+    const items = l.split(/[,;،、，]/).filter((x) => x.trim());
+    return items.length > CHUNK_WORDS ? items.map((x) => x.trim()) : [l];
+  });
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    const w = Math.max(1, line.split(/[,;،、，]/).filter((x) => x.trim()).length);
+    if (n && n + w > CHUNK_WORDS) { out.push(cur.join("\n")); cur = []; n = 0; }
+    cur.push(line);
+    n += w;
+  }
+  if (cur.length) out.push(cur.join("\n"));
+  return out;
+}
+
+async function generateLongList(list: string, uiLangName: string, nativeLangName: string, fromPhoto = false): Promise<{ safe: boolean; title: string; words: Pair[] }> {
+  const chunks = chunkList(list);
+  if (chunks.length <= 1) return generateList(list, uiLangName, nativeLangName, fromPhoto);
+  const parts = await Promise.all(chunks.map((c) => generateList(c, uiLangName, nativeLangName, fromPhoto).catch(() => null)));
+  if (parts.every((p) => p === null)) throw new Error("generate_failed");
+  // A piece judged unsafe is left out; the list is unsafe only when nothing is left.
+  const seen = new Set<string>();
+  const words: Pair[] = [];
+  for (const p of parts) {
+    if (!p?.safe) continue;
+    for (const w of p.words) {
+      const k = w.en.toLowerCase();
+      if (seen.has(k)) continue;
+      seen.add(k);
+      words.push(w);
+    }
+  }
+  if (words.length < 2) return { safe: false, title: "", words: [] };
+  const title = parts.find((p) => p?.safe)?.title ?? "";
+  return { safe: true, title, words: words.slice(0, MAX_LIST_WORDS) };
+}
+
 export async function POST(req: NextRequest) {
   const authHeader = req.headers.get("authorization") || "";
   const idToken = authHeader.toLowerCase().startsWith("bearer ") ? authHeader.slice(7).trim() : "";
@@ -186,7 +236,7 @@ export async function POST(req: NextRequest) {
     if (typeof b.topic === "string") topic = b.topic.trim().slice(0, 40);
     fromPhoto = b.fromPhoto === true;
     // A photographed page carries more text around the words.
-    if (typeof b.list === "string") list = b.list.trim().slice(0, fromPhoto ? 2500 : 800);
+    if (typeof b.list === "string") list = b.list.trim().slice(0, 4000);
     if (typeof b.uiLang === "string" && LANG_NAME[b.uiLang]) lang = b.uiLang;
     if (typeof b.nativeLang === "string" && LANG_NAME[b.nativeLang]) nativeLang = b.nativeLang;
     else nativeLang = lang === "en" ? "he" : lang;
@@ -210,7 +260,7 @@ export async function POST(req: NextRequest) {
       } catch { /* cache read best-effort */ }
     }
     try {
-      const out = await generateList(list, LANG_NAME[lang], nativeName, fromPhoto);
+      const out = await generateLongList(list, LANG_NAME[lang], nativeName, fromPhoto);
       if (cref && out.safe) { try { await cref.set({ lang, nativeLang, cacheId, ...out, at: new Date().toISOString() }); } catch { /* ignore */ } }
       return NextResponse.json(out);
     } catch {

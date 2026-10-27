@@ -253,6 +253,14 @@ function stableShuffle(items: string[], salt: string): string[] {
 function norm(s: string) {
   return s.trim().toLowerCase().replace(/\s+/g, " ");
 }
+/** Cut a long list into even parts of at most `max` words (283 → 8 × ~36). */
+function splitList(words: WordPair[], max: number): WordPair[][] {
+  const k = Math.max(1, Math.ceil(words.length / max));
+  const size = Math.ceil(words.length / k);
+  const out: WordPair[][] = [];
+  for (let i = 0; i < words.length; i += size) out.push(words.slice(i, i + size));
+  return out;
+}
 // Stable id for a custom (topic/list) set, so re-practicing upserts one doc.
 function hashWords(words: WordPair[]): string {
   const s = words.map((w) => w.en.toLowerCase()).join("|");
@@ -721,8 +729,12 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
         return;
       }
       const name = listName.trim() || defaultListName();
-      begin({ id: "custom", icon: "📝", titleEn: name, titleHe: name, words: data.words });
-      void saveNewList(data.words, name, "📝");
+      // A long list (a whole school list, Gadi 2026-10-27) becomes several
+      // saved lists of up to 40 words, "name (1/7)", and the first one starts.
+      const parts = splitList(data.words, 40);
+      const partName = (i: number) => (parts.length > 1 ? `${name} (${i + 1}/${parts.length})` : name);
+      begin({ id: "custom", icon: "📝", titleEn: partName(0), titleHe: partName(0), words: parts[0] });
+      void (async () => { for (let i = 0; i < parts.length; i++) await saveNewList(parts[i], partName(i), "📝"); })();
       setListText("");
       setListName("");
     } catch {
@@ -1607,7 +1619,7 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
                 placeholder={ml("pastePh", lang)}
                 dir={dir === "rtl" ? "rtl" : "auto"}
                 rows={3}
-                maxLength={800}
+                maxLength={4000}
                 style={{ width: "100%", marginTop: 6, padding: "10px 13px", fontSize: 15, borderRadius: 11, border: "1px solid var(--hairline,#E5E7EB)", outline: "none", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)", resize: "vertical", lineHeight: 1.6 }}
               />
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
@@ -1727,7 +1739,7 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
                 placeholder={adult ? learnCopy(lang).listPlaceholder : t("pastePlaceholder", lang)}
                 dir={dir === "rtl" ? "rtl" : "auto"}
                 rows={4}
-                maxLength={800}
+                maxLength={4000}
                 style={{ width: "100%", padding: "11px 13px", fontSize: 15, borderRadius: 11, border: "1px solid var(--hairline,#E5E7EB)", outline: "none", background: "var(--paper,#F9FAFB)", color: "var(--ink,#0B1220)", resize: "vertical", lineHeight: 1.6 }}
               />
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
