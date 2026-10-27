@@ -10,7 +10,9 @@
     },
     "preview": {
       "distribution": "internal",
-      "ios": { "simulator": false }
+      "ios": {
+        "simulator": false
+      }
     },
     "production": {
       "autoIncrement": true
@@ -19,7 +21,8 @@
   "submit": {
     "production": {
       "ios": {
-        "appleId": "gadibenlavi@gmail.com"
+        "appleId": "gadibenlavi@gmail.com",
+        "ascAppId": "6824663361"
       }
     }
   }
