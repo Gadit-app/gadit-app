@@ -8477,7 +8477,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
   // `classic` = the pre-2026-09-28 illustrated page, kept at /families/landing-old.
   const real = i18n ? fillDeep(i18n.real, prices) : !classic && lang === "he" ? REAL_COPY.he : undefined;
   const shotLang = i18n ? screensLang(lang) : lang;
-  // The Subjects band: only in the languages that have the feature (he, en, de).
+  // The Subjects band: only in the languages that have the feature (he, en, de, ar).
   const subjUi = subjectsBandLangFor(lang);
 
   // Default angle: vocab (Gadi 2026-07-17 + council: the master promise
@@ -8984,7 +8984,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
         )}
 
         {/* Subjects (Gadi 2026-10-26): right after homework, only where the
-            feature exists (he, en, de). White, between the teal homework band
+            feature exists (he, en, de, ar). White, between the teal homework band
             and the cream tool band. */}
         {real && subjUi && (() => {
           const sc = subjectsBandCopy(subjUi, "families");

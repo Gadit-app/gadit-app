@@ -4,8 +4,8 @@
  * existed at build time (next.config.ts sets NEXT_PUBLIC_SUBJECTS_DE).
  */
 export type SubjectsUiLang = "he" | "en" | "de" | "ar";
-/** Languages whose landing pages show the Subjects band (Arabic has the page, not the band yet). */
-export type SubjectsBandLang = "he" | "en" | "de";
+/** Languages whose landing pages show the Subjects band (all of them since Arabic, 2026-10-28). */
+export type SubjectsBandLang = SubjectsUiLang;
 
 export const SUBJECTS_DE_ON = process.env.NEXT_PUBLIC_SUBJECTS_DE === "1";
 
@@ -18,10 +18,9 @@ export function subjectsLangFor(lang: string): SubjectsUiLang | null {
   return null;
 }
 
-/** The landing-page Subjects band's language, or null (no band in Arabic yet). */
+/** The landing-page Subjects band's language, or null where the page is not offered. */
 export function subjectsBandLangFor(lang: string): SubjectsBandLang | null {
-  const l = subjectsLangFor(lang);
-  return l === "ar" ? null : l;
+  return subjectsLangFor(lang);
 }
 
 /** Top-menu label. */

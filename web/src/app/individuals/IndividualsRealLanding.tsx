@@ -74,7 +74,7 @@ export function IndividualsRealLanding({ copy = HE, lang = "he" }: { copy?: IndC
     promptLogin({ mode: "signup", resumeUrl: home, onSuccess: () => { window.location.href = home; } });
   };
   const t = C.photo;
-  // The Subjects band: only in the languages that have the feature (he, en, de).
+  // The Subjects band: only in the languages that have the feature (he, en, de, ar).
   const subjUi = subjectsBandLangFor(lang);
   const sc = subjUi ? subjectsBandCopy(subjUi, "individuals") : null;
   return (
@@ -180,7 +180,7 @@ export function IndividualsRealLanding({ copy = HE, lang = "he" }: { copy?: IndC
         </section>
 
         {/* Subjects (Gadi 2026-10-26): after the photo of a page, the other
-            school tool; only where the feature exists (he, en, de). Its own
+            school tool; only where the feature exists (he, en, de, ar). Its own
             warm band, between the tint photo band and the white tools band. */}
         {subjUi && sc && (
           <section className="ind-band ind-subj-band">

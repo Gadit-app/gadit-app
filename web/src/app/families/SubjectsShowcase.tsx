@@ -5,8 +5,8 @@ import type { SubjectsBandLang } from "@/lib/subjects-langs";
  * "Subjects" on the Families and Individuals landing pages (Gadi 2026-10-26):
  * the copy of the band and a faithful static recreation of the /subjects
  * word list (SubjectsClient.tsx), with real demo data copied from the
- * curriculum sets. Only he, en and de have the feature: the pages show the
- * band only when subjectsLangFor(lang) (lib/subjects-langs.ts) is not null.
+ * curriculum sets. Only he, en, de and ar have the feature: the pages show the
+ * band only when subjectsBandLangFor(lang) (lib/subjects-langs.ts) is not null.
  */
 
 type BandCopy = { kicker: string; title: string; lines: string[]; note: string };
@@ -58,9 +58,23 @@ const DE_DU: BandCopy = {
   ],
 };
 
+/** Arabic (Gadi 2026-10-28): one copy for both pages, the reader addressed in the singular like the rest of the Arabic landing. */
+const AR: BandCopy = {
+  kicker: "جديد في Gadit",
+  title: "الكلمات المهمة في كل مادة دراسية",
+  lines: [
+    "الرياضيات، العلوم، الكيمياء، الفيزياء، الأحياء، اللغة العربية، الموطن والمجتمع، الجغرافيا والتاريخ.",
+    "اختر المادة والموضوع، واحصل على الكلمات التي ترد في الدرس.",
+    "كل كلمة تُشرح بمعناها في المادة فقط: «الجذر» في الرياضيات ليس جذر الشجرة.",
+    "زر واحد يضيف كل الكلمات إلى الدفتر، للتدرب عليها في الألعاب قبل الامتحان.",
+  ],
+  note: "قريبا مواد أخرى.",
+};
+
 export function subjectsBandCopy(ui: SubjectsBandLang, page: "families" | "individuals"): BandCopy {
   if (ui === "he") return HE;
   if (ui === "de") return page === "families" ? DE_SIE : DE_DU;
+  if (ui === "ar") return AR;
   return EN;
 }
 
@@ -70,11 +84,12 @@ export function subjectsBandCopy(ui: SubjectsBandLang, page: "families" | "indiv
  * curriculumSets/cur-0fbf7bc106 "זוויות" (12 words); English:
  * curriculum-sets-za.json cur-za-73cc2e30ef (Grade 7, the last year of
  * primary school in South Africa, 8 words); German: curriculum-sets-de.json
- * cur-de-103530cf09 "Geometrie" (12 words). A few of the words, with their
+ * cur-de-103530cf09 "Geometrie" (12 words); Arabic: Firestore
+ * curriculumSets/cur-ar-4e5bc665fd "أشكال هندسيّة وأجسام" (grade 4, 12 words). A few of the words, with their
  * definitions copied as they are, in their real order. One row is open with
  * its picture, like a meaning on the word page: an obtuse angle
  * (public/fam/obtuse-angle.webp, drawn once in the Gadit house style, no
- * text, shared by the 3 languages).
+ * text, shared by the 4 languages).
  * UI strings as in SubjectsClient.tsx (STR).
  */
 type MockWord = { w: string; d: string; open?: boolean };
@@ -129,6 +144,22 @@ const MOCK: Record<SubjectsBandLang, {
       { w: "parallel", d: "Parallele Geraden haben immer den gleichen Abstand. Sie schneiden sich nie." },
     ],
   },
+  ar: {
+    subject: "الرياضيات",
+    topic: "أشكال هندسيّة وأجسام",
+    count: "12 كلمة",
+    hint: "اضغط على كلمة لترى شرحها الكامل، بمعناها في هذه المادة بالضبط.",
+    listen: "استماع",
+    add: "إضافة هذه الكلمات إلى دفتري",
+    picture: "زاوية منفرجة: ضلعان يلتقيان في رأس، وفتحتهما أكبر من الزاوية القائمة",
+    words: [
+      { w: "مضلع", d: "شكل مستو مغلق يتكون من قطع مستقيمة فقط، مثل المثلث والمربع والمستطيل." },
+      { w: "ضلع", d: "قطعة مستقيمة تكوّن جزءا من حدود الشكل الهندسي أو وجها من أوجه بعض المجسمات." },
+      { w: "رأس", d: "نقطة يلتقي فيها ضلعان في شكل مستو، أو عدة أحرف في مجسم." },
+      { w: "زاوية", d: "مقدار الفتحة بين ضلعين يلتقيان في نقطة واحدة داخل الشكل أو عند حدوده.", open: true },
+      { w: "مثلث", d: "مضلع له ثلاثة أضلاع وثلاثة رؤوس، وهو أبسط الأشكال المضلعّة." },
+    ],
+  },
 };
 
 function Speaker() {
@@ -145,7 +176,7 @@ function Speaker() {
 export function SubjectsScreenMock({ ui }: { ui: SubjectsBandLang }) {
   const m = MOCK[ui];
   return (
-    <div className="lp-subj-screen" role="img" aria-label={`${m.subject}: ${m.topic}, ${m.count}`} dir={ui === "he" ? "rtl" : "ltr"} lang={ui}>
+    <div className="lp-subj-screen" role="img" aria-label={`${m.subject}: ${m.topic}, ${m.count}`} dir={ui === "he" || ui === "ar" ? "rtl" : "ltr"} lang={ui}>
       <style>{CSS}</style>
       <div className="lp-subj-hero">
         <span className="lp-subj-hero-img">
