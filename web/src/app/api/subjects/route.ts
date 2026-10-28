@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyUserAndGetPlan } from "@/lib/firebase-admin";
-import { subjectsCatalog, subjectsLangs, subjectTopicWords, type SubjectsLang } from "@/lib/subject-words";
+import { subjectsCatalog, subjectsLangs, subjectTopicWords, subjectWordIndex, type SubjectsLang } from "@/lib/subject-words";
 
 /**
  * Key words by subject (/subjects), read-only. Bearer: a Firebase ID token.
@@ -11,6 +11,9 @@ import { subjectsCatalog, subjectsLangs, subjectTopicWords, type SubjectsLang } 
  *      one entry per subject card and level (lib/subject-words.ts): younger
  *      has the elementary subjects, older the secondary ones; a key can
  *      appear once per level ("mathematics" is חשבון / מתמטיקה)
+ * GET ?lang=he|en|de&subject=<key>&age=younger|older
+ *   -> { words: [{ w, d, t: topicId, tt: topicTitle }] } every key word of that
+ *      subject card, for the search inside a subject (2026-10-28)
  * GET ?lang=he|en|de&topic=<id>
  *   -> { id, subject, subjectName, icon, title, age, words: [{ w, d }] }
  *
@@ -31,7 +34,14 @@ export async function GET(req: NextRequest) {
   if (!subjectsLangs().includes(lang)) return NextResponse.json({ error: "lang_not_available" }, { status: 404 });
   const topic = (sp.get("topic") ?? "").trim().slice(0, 40);
   const headers = { "Cache-Control": "private, max-age=60" };
+  const subject = (sp.get("subject") ?? "").trim().slice(0, 40);
+  const age = sp.get("age");
   try {
+    if (subject && (age === "younger" || age === "older")) {
+      const words = await subjectWordIndex(lang, subject, age);
+      if (!words) return NextResponse.json({ error: "not_found" }, { status: 404 });
+      return NextResponse.json({ words }, { headers: { "Cache-Control": "private, max-age=300" } });
+    }
     if (topic) {
       const words = await subjectTopicWords(lang, topic);
       if (!words) return NextResponse.json({ error: "not_found" }, { status: 404 });

@@ -30,6 +30,8 @@ type Age = "younger" | "older";
 type Topic = { id: string; title: string; age: Age };
 /** One subject card of one level: the cards differ by level (elementary first). */
 type Subject = { key: string; age: Age; name: string; icon: string; topics: Topic[] };
+/** One word of a subject card's search index: t = topic id, tt = topic title. */
+type IndexWord = { w: string; d: string; t: string; tt: string };
 type TopicWords = { id: string; subject: string; subjectName: string; icon?: string; title: string; age: Age; words: Array<{ w: string; d: string }> };
 
 const STR = {
@@ -61,9 +63,12 @@ const STR = {
     lockedTitle: "מילות המפתח במקצועות הן חלק מ-Individual ומ-Family",
     lockedBody: "בכל מקצוע ונושא: המילים החשובות, כל מילה עם הפירוש שמתאים למקצוע.",
     searchAll: "חיפוש מקצוע או נושא",
-    searchIn: (name: string) => `חיפוש נושא ב${name}`,
+    searchIn: (name: string) => `חיפוש נושא או מילה ב${name}`,
     noMatch: "לא מצאנו מקצוע או נושא כזה. נסו מילה אחרת.",
-    noTopic: "לא מצאנו נושא כזה. נסו מילה אחרת.",
+    noTopic: "לא מצאנו נושא או מילה כזו. נסו מילה אחרת.",
+    foundWords: "מילים שמתאימות לחיפוש",
+    inTopic: (t: string) => `בנושא: ${t}`,
+    searching: "מחפשים גם במילים",
     foundTopics: "נושאים שמתאימים לחיפוש",
     clearSearch: "ניקוי החיפוש",
     searchWords: "חיפוש מילה בנושא",
@@ -98,9 +103,12 @@ const STR = {
     lockedTitle: "Key words by subject is part of Individual and Family",
     lockedBody: "For every subject and topic: the key words, each with the meaning that fits the subject.",
     searchAll: "Search a subject or topic",
-    searchIn: (name: string) => `Search topics in ${name}`,
+    searchIn: (name: string) => `Search a topic or word in ${name}`,
     noMatch: "No subject or topic matches. Try another word.",
-    noTopic: "No topic matches. Try another word.",
+    noTopic: "No topic or word matches. Try another word.",
+    foundWords: "Matching words",
+    inTopic: (t: string) => `In: ${t}`,
+    searching: "Searching the words too",
     foundTopics: "Matching topics",
     clearSearch: "Clear search",
     searchWords: "Search a word in this topic",
@@ -136,9 +144,12 @@ const STR = {
     lockedTitle: "Schlüsselwörter nach Fach gehören zu Individual und Family",
     lockedBody: "Zu jedem Fach und Thema die wichtigsten Wörter, jedes mit der Bedeutung, die zum Fach passt.",
     searchAll: "Fach oder Thema suchen",
-    searchIn: (name: string) => `Thema in ${name} suchen`,
+    searchIn: (name: string) => `Thema oder Wort in ${name} suchen`,
     noMatch: "Kein Fach und kein Thema gefunden. Versuch ein anderes Wort.",
-    noTopic: "Kein Thema gefunden. Versuch ein anderes Wort.",
+    noTopic: "Kein Thema und kein Wort gefunden. Versuch ein anderes Wort.",
+    foundWords: "Passende Wörter",
+    inTopic: (t: string) => `Im Thema: ${t}`,
+    searching: "Auch in den Wörtern wird gesucht",
     foundTopics: "Passende Themen",
     clearSearch: "Suche löschen",
     searchWords: "Wort in diesem Thema suchen",
@@ -174,9 +185,12 @@ const STR = {
     lockedTitle: "الكلمات المفتاحية في المواد جزء من Individual وFamily",
     lockedBody: "في كل مادة وموضوع: الكلمات المهمة، كل كلمة بالمعنى الذي يناسب المادة.",
     searchAll: "ابحث عن مادة أو موضوع",
-    searchIn: (name: string) => `ابحث عن موضوع في ${name}`,
+    searchIn: (name: string) => `ابحث عن موضوع أو كلمة في ${name}`,
     noMatch: "لم نجد مادة أو موضوعا كهذا. جرّب كلمة أخرى.",
-    noTopic: "لم نجد موضوعا كهذا. جرّب كلمة أخرى.",
+    noTopic: "لم نجد موضوعا أو كلمة كهذه. جرّب كلمة أخرى.",
+    foundWords: "كلمات مطابقة",
+    inTopic: (t: string) => `في موضوع: ${t}`,
+    searching: "نبحث في الكلمات أيضا",
     foundTopics: "مواضيع مطابقة",
     clearSearch: "مسح البحث",
     searchWords: "ابحث عن كلمة في هذا الموضوع",
@@ -316,6 +330,42 @@ export function SubjectsBrowser({ ui, deep, getToken }: { ui: SubjectsUiLang; de
   const [topicSearch, setTopicSearch] = useState({ k: "", v: "" });
   const topicQuery = topicSearch.k === topicKey ? topicSearch.v : "";
   const setTopicQuery = (v: string) => setTopicSearch({ k: topicKey, v });
+  // Inside a subject the search also covers every key word of its topics,
+  // loaded once per subject card when the reader types (2026-10-28).
+  const href = useHref();
+  const idxKey = subject ? `${subject.key}|${subject.age}` : "";
+  const tqNorm = normalizeSearch(topicQuery);
+  const wantWords = !!idxKey && tqNorm.length >= 2;
+  const [wordIdx, setWordIdx] = useState<{ k: string; words: IndexWord[] }>({ k: "", words: [] });
+  useEffect(() => {
+    if (!wantWords || wordIdx.k === idxKey || !subject) return;
+    let cancelled = false;
+    (async () => {
+      let words: IndexWord[] = [];
+      try {
+        const res = await fetch(`/api/subjects?lang=${ui}&subject=${encodeURIComponent(subject.key)}&age=${subject.age}`, { headers: { Authorization: `Bearer ${await getToken()}` } });
+        if (res.ok) words = ((await res.json()) as { words?: IndexWord[] }).words ?? [];
+      } catch { /* topics still search; words just stay empty */ }
+      if (!cancelled) setWordIdx({ k: idxKey, words });
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wantWords, idxKey, wordIdx.k, ui]);
+  const wordsReady = wordIdx.k === idxKey;
+  const foundWords = useMemo(() => {
+    if (!wantWords || !wordsReady) return [];
+    const byWord = wordIdx.words.filter((x) => normalizeSearch(x.w).includes(tqNorm));
+    const byMeaning = wordIdx.words.filter((x) => !normalizeSearch(x.w).includes(tqNorm) && normalizeSearch(x.d).includes(tqNorm));
+    const seen = new Set<string>();
+    return [...byWord, ...byMeaning].filter((x) => {
+      const k = `${x.w}
+${x.t}`;
+      if (seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    }).slice(0, 40);
+  }, [wantWords, wordsReady, wordIdx.words, tqNorm]);
+
   const q = normalizeSearch(query);
   const found = useMemo(() => {
     if (!q) return null;
@@ -348,11 +398,11 @@ export function SubjectsBrowser({ ui, deep, getToken }: { ui: SubjectsUiLang; de
           </div>
         </div>
         <AgeSwitch T={T} age={age} onAge={setAge} />
-        {allTopics.length > 6 && (
+        {allTopics.length > 0 && (
           <SearchBox value={topicQuery} onChange={setTopicQuery} placeholder={T.searchIn(subject.name)} clearLabel={T.clearSearch} />
         )}
         {tq && !topics.length ? (
-          <p className="wb-subj-note">{T.noTopic}</p>
+          wantWords && !wordsReady ? null : !foundWords.length && <p className="wb-subj-note">{T.noTopic}</p>
         ) : topics.length ? (
           <>
             <h3 className="wb-subj-h3">{T.pickTopic}</h3>
@@ -369,6 +419,27 @@ export function SubjectsBrowser({ ui, deep, getToken }: { ui: SubjectsUiLang; de
           </>
         ) : (
           <p className="wb-subj-note">{T.empty}</p>
+        )}
+        {wantWords && !wordsReady && <p className="wb-subj-note">{T.searching} <WaitDots /></p>}
+        {foundWords.length > 0 && (
+          <>
+            <h3 className="wb-subj-h3 wb-subj-h3-gap">{T.foundWords}</h3>
+            <ul className="wb-subj-words">
+              {foundWords.map((x) => {
+                const ctx = `${subject.name}: ${x.w}, ${x.d}`;
+                return (
+                  <li key={`${x.w}-${x.t}`} className="wb-subj-word">
+                    <div className="wb-subj-word-head">
+                      <Link href={href(wordPath(x.w, `sentence=${encodeURIComponent(ctx)}`))} className="wb-subj-word-w">{x.w}</Link>
+                      <TTSButton text={x.w} audioLang={ui} useOpenAI ariaLabel={`${T.listen}: ${x.w}`} className="wb-subj-listen" />
+                    </div>
+                    <Link href={href(wordPath(x.w, `sentence=${encodeURIComponent(ctx)}`))} className="wb-subj-word-d" tabIndex={-1}>{x.d}</Link>
+                    <button type="button" className="wb-subj-word-topic" onClick={() => go({ s: subject.key, t: x.t })}>{T.inTopic(x.tt)}</button>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
         )}
       </div>
     );

@@ -12291,6 +12291,12 @@ html[data-theme="dark"] .wordbook .wb-word-sentence-input::placeholder { color: 
 }
 .wordbook .wb-subj-search-clear:hover { background: var(--paper-deep, #E9F1EC); color: var(--ink, #0B1220); }
 .wordbook .wb-subj-found-cards { margin-bottom: 22px; }
+.wordbook .wb-subj-h3-gap { margin-top: 22px; }
+.wordbook .wb-subj-word-topic {
+  display: inline-block; margin-top: 6px; padding: 0; border: 0; background: none; cursor: pointer;
+  font: inherit; font-size: 13px; font-weight: 700; color: var(--teal, #0E7490); text-align: start;
+}
+.wordbook .wb-subj-word-topic:hover { text-decoration: underline; }
 .wordbook .wb-subj-chevron { flex-shrink: 0; color: var(--ink-faint, #9CA3AF); }
 .wordbook .wb-subj-hint { margin: 0 0 14px; font-size: 14.5px; line-height: 1.5; color: var(--ink-muted, #6B7280); }
 .wordbook .wb-subj-word {

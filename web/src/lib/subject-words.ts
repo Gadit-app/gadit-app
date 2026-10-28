@@ -423,3 +423,31 @@ export async function subjectTopicWords(lang: SubjectsLang, id: string): Promise
   if (!words.length) return null;
   return { id, subject: c.key, subjectName: c.name, icon: iconPath(c), title: row.title, age: row.age, words };
 }
+
+// ── Every word of one subject card (search inside a subject, 2026-10-28) ──
+export type SubjectIndexWord = SubjectWord & { t: string; tt: string };
+const INDEX_TTL_MS = 10 * 60 * 1000;
+const wordIndex = new Map<string, { at: number; words: SubjectIndexWord[] }>();
+
+/** All key words of a subject card's topics (with the topic id and title),
+ *  for searching a word inside a subject. Cached a few minutes per server. */
+export async function subjectWordIndex(lang: SubjectsLang, key: string, age: SubjectAge): Promise<SubjectIndexWord[] | null> {
+  if (!cardOf(lang, age, key)) return null;
+  const k = `${lang}|${key}|${age}`;
+  const hit = wordIndex.get(k);
+  if (hit && Date.now() - hit.at < INDEX_TTL_MS) return hit.words;
+  const ids = await availableIds(lang);
+  const rows = staticRows(lang).rows.filter((r) => r.age === age && r.card === key && ids.has(r.id));
+  const out: SubjectIndexWord[][] = new Array(rows.length);
+  let next = 0;
+  const worker = async () => {
+    for (let i = next++; i < rows.length; i = next++) {
+      const tw = await subjectTopicWords(lang, rows[i].id).catch(() => null);
+      out[i] = tw ? tw.words.map((x) => ({ ...x, t: rows[i].id, tt: rows[i].title })) : [];
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(8, rows.length) }, worker));
+  const words = out.flat();
+  wordIndex.set(k, { at: Date.now(), words });
+  return words;
+}
