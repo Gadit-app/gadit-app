@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gadit for Families</title>
+<meta name="description" content="Gadit builds your child's vocabulary, word by word: an explanation at your child's level, a picture for every meaning, homework help, school subjects, games and a parent dashboard.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -15,43 +16,50 @@
     --rust:#C2410C; --rust-soft:#FBE7DC;
     --ink:#0B0F19; --ink-soft:#3A3F4B; --ink-muted:#5C6270; --ink-faint:#8B91A0;
     --cream:#F6F4EE; --paper:#F2F6F4; --surface:#FFFFFF; --rule:#E6E8EC;
-    --basic:#94A3B8;
     --sans:'Inter',system-ui,sans-serif;
     --lat:'Inter',system-ui,sans-serif;
-    --maxw:1000px;
+    --maxw:1040px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{font-family:var(--sans);background:var(--cream);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  section{padding:clamp(56px,9vw,110px) 22px;position:relative}
+  img{max-width:100%;display:block}
+  .lat{font-family:var(--lat);direction:ltr;unicode-bidi:isolate}
+  section{padding:clamp(56px,9vw,104px) 20px;position:relative}
+  section.alt{background:var(--paper)}
   .wrap{max-width:var(--maxw);margin:0 auto}
+  .center{text-align:center;max-width:700px;margin-inline:auto}
   .eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-deep);margin-bottom:14px}
   .eyebrow.pain{color:var(--rust)}
-  h1{font-size:clamp(34px,7vw,64px);font-weight:900;letter-spacing:-.022em;line-height:1.04;text-wrap:balance}
-  h2{font-size:clamp(27px,4.6vw,44px);font-weight:800;letter-spacing:-.02em;line-height:1.1;text-wrap:balance}
-  .lead{font-size:clamp(17px,2.3vw,21px);color:var(--ink-soft);max-width:620px;font-weight:400}
-
-  .cover{background:linear-gradient(165deg,#0c2a2a 0%,#0e3b38 52%,#123f52 100%);color:#eafcf8;min-height:100dvh;display:flex;align-items:center;overflow:hidden}
-  .cover::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 45% at 82% 12%,rgba(45,212,191,.22),transparent 60%),radial-gradient(55% 45% at 12% 96%,rgba(124,58,237,.20),transparent 60%);pointer-events:none}
-  .cover .wrap{position:relative;z-index:1}
-  .brand{font-weight:700;font-size:30px;letter-spacing:-.03em}
-  .brand i{color:#2DD4BF;font-style:italic;font-weight:500}
-  .cover h1{color:#fff;margin:26px 0 18px;max-width:17ch}
-  .cover .lead{color:#bfeee6;max-width:560px}
-  .scrolls{margin-top:38px;font-size:13px;color:#7fe0d3;font-weight:600;display:flex;align-items:center;gap:8px}
-  .scrolls span{display:inline-block;animation:bob 1.8s ease-in-out infinite}
-  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
-
-  .scene{display:grid;grid-template-columns:1fr;gap:clamp(30px,5vw,64px);align-items:center}
-  @media(min-width:860px){.scene{grid-template-columns:1fr 1fr}.scene.flip .copy{order:2}}
+  .eyebrow.new{display:inline-block;background:var(--amber-soft);color:#b45309;border-radius:999px;padding:5px 12px;letter-spacing:.04em}
+  h1{font-size:clamp(34px,7vw,62px);font-weight:900;letter-spacing:-.02em;line-height:1.08;text-wrap:balance}
+  h2{font-size:clamp(27px,4.4vw,42px);font-weight:800;letter-spacing:-.015em;line-height:1.15;text-wrap:balance}
+  h3{line-height:1.25}
+  .lead{font-size:clamp(17px,2.2vw,20px);color:var(--ink-soft);max-width:600px;font-weight:400;line-height:1.7}
+  .center .lead{margin-inline:auto}
   .copy h2{margin-bottom:16px}
   .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px}
+  .center .chips{justify-content:center}
   .chip{font-size:13.5px;font-weight:600;color:var(--ink-soft);background:var(--surface);border:1px solid var(--rule);border-radius:999px;padding:8px 14px}
   .chip b{color:var(--teal-deep);font-weight:700}
 
+  /* cover */
+  .cover{background:linear-gradient(165deg,#0c2a2a 0%,#0e3b38 52%,#123f52 100%);color:#eafcf8;min-height:100dvh;display:flex;align-items:center;overflow:hidden}
+  .cover::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 45% at 82% 12%,rgba(45,212,191,.22),transparent 60%),radial-gradient(55% 45% at 12% 96%,rgba(124,58,237,.20),transparent 60%);pointer-events:none}
+  .cover .wrap{position:relative;z-index:1;width:100%}
+  .brand{font-family:var(--lat);direction:ltr;font-weight:700;font-size:30px;letter-spacing:-.03em;display:inline-block}
+  .brand i{color:#2DD4BF;font-style:italic;font-weight:500}
+  .cover h1{color:#fff;margin:24px 0 18px;max-width:15ch}
+  .cover .lead{color:#bfeee6;max-width:560px}
+  .trust{margin-top:26px;display:inline-flex;gap:10px;align-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 16px;font-size:14px;color:#d6f7f1}
+  .scrolls{margin-top:34px;font-size:13px;color:#7fe0d3;font-weight:600;display:flex;align-items:center;gap:8px}
+  .scrolls span{display:inline-block;animation:bob 1.8s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+  /* pain */
   .painsec{background:linear-gradient(180deg,#faeee8,var(--cream))}
-  .lesson{background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:22px 22px 24px;box-shadow:0 24px 55px -32px rgba(60,30,15,.4)}
-  .lesson .ll{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:9px;display:flex;align-items:center;gap:7px}
+  .lesson{background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:22px 22px 24px;box-shadow:0 24px 55px -32px rgba(60,30,15,.4);max-width:620px;margin:34px auto 0}
+  .lesson .ll{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:9px;display:flex;align-items:center;gap:7px}
   .lesson .ll .dot{width:7px;height:7px;border-radius:99px;background:var(--teal)}
   .lesson .ll.bad{color:var(--rust);margin-top:22px}
   .lesson .ll.bad .dot{background:var(--rust)}
@@ -60,245 +68,446 @@
   .redact{display:inline-block;background:#c9cdd3;color:transparent;border-radius:5px;padding:0 3px;user-select:none;position:relative;top:2px}
   .paincap{font-size:13.5px;color:var(--rust);font-weight:600;margin-top:18px}
 
-  .phone{width:min(320px,86vw);margin:0 auto;background:#0e1512;border-radius:38px;padding:11px;box-shadow:0 30px 70px -28px rgba(8,20,18,.6),0 0 0 1px rgba(0,0,0,.04);position:relative}
-  .phone::before{content:"";position:absolute;top:20px;left:50%;transform:translateX(-50%);width:110px;height:6px;border-radius:99px;background:#2a3330;z-index:3}
-  .screen{background:var(--surface);border-radius:28px;overflow:hidden;aspect-ratio:9/18.6;position:relative}
-  .st-bar{display:flex;justify-content:space-between;align-items:center;padding:14px 18px 8px;font-size:12px;font-weight:700;color:var(--ink-muted)}
-  .st-bar .brand2{font-size:15px;color:var(--ink)}
-  .st-bar .brand2 i{color:var(--teal);font-style:italic;font-weight:500}
-  .wp{padding:6px 16px 18px}
-  .wp-word{font-size:30px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
-  .wp-spk{width:26px;height:26px;border-radius:999px;border:1px solid var(--rule);color:var(--teal);display:grid;place-items:center;font-size:12px;flex:none}
-  .wp-phon{color:var(--ink-faint);font-size:13px;margin-top:2px}
-  .mcard{border:1px solid var(--rule);border-radius:14px;padding:12px 13px;margin-top:12px;background:#fff;position:relative;overflow:hidden}
-  .mcard::before{content:"";position:absolute;inset-block:0;inset-inline-start:0;width:4px;background:var(--c)}
-  .mcard .tag{font-size:11px;font-weight:800;letter-spacing:.03em;color:var(--c);text-transform:uppercase}
-  .mcard .def{font-size:13.5px;color:var(--ink);margin-top:5px;font-weight:500;line-height:1.5}
-  .mcard .ex{font-size:12.5px;color:var(--ink-muted);margin-top:7px;padding-inline-start:10px;border-inline-start:2px solid var(--rule);line-height:1.5;font-style:italic}
-  .tapw{color:var(--teal-deep);border-bottom:1.5px dotted var(--teal);font-weight:600}
+  /* scenes with real screens */
+  .scene{display:grid;grid-template-columns:1fr;gap:clamp(30px,5vw,60px);align-items:center}
+  @media(min-width:860px){.scene{grid-template-columns:1.05fr 1fr}.scene.flip .copy{order:2}}
+  .copy{min-width:0}
+  .phones{display:flex;gap:clamp(12px,2.5vw,22px);justify-content:center;align-items:flex-start}
+  .phone{width:min(300px,78vw);background:#0e1512;border-radius:36px;padding:9px;box-shadow:0 30px 70px -28px rgba(8,20,18,.55),0 0 0 1px rgba(0,0,0,.04);flex:none}
+  .phones.two .phone{width:min(250px,42vw)}
+  .phones.two .phone:nth-child(2){margin-top:46px}
+  .phone img{width:100%;aspect-ratio:780/1688;object-fit:cover;object-position:top;border-radius:28px;background:#fff}
+  .points{list-style:none;display:grid;gap:10px;margin-top:20px}
+  .points li{display:flex;gap:10px;align-items:flex-start;font-size:16px;color:var(--ink-soft);line-height:1.55}
+  .points li::before{content:"";flex:none;width:20px;height:20px;margin-top:2px;border-radius:99px;background:var(--teal-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='%230B7D7D' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
 
-  .kids{--kb:linear-gradient(160deg,#181a44 0%,#2a1f5e 60%,#3b2a6e 100%);background:var(--kb);color:#eef0ff;height:100%;padding:14px 16px 18px}
-  .kids .kbar{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;color:#c9c3f2}
-  .kids .krank{background:rgba(255,255,255,.14);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800}
-  .kids .kword{font-size:32px;font-weight:800;margin:20px 0 3px}
-  .kids .ksub{color:#b9b2ea;font-size:12.5px}
-  .kcard{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:14px;margin-top:18px;backdrop-filter:blur(4px)}
-  .kcard .kl{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#a9e9df;margin-bottom:7px}
-  .kcard p{font-size:14px;line-height:1.65;color:#f2f2ff}
-  .ktap{color:#8be8dd;border-bottom:1.5px dotted #5fd6c8;font-weight:600}
-  .kchip{display:inline-flex;align-items:center;gap:6px;margin-top:16px;background:#22D3EE;color:#04241f;font-weight:800;font-size:12.5px;border-radius:999px;padding:8px 14px}
+  /* homework cards */
+  .cards3{display:grid;grid-template-columns:1fr;gap:14px;margin-top:30px}
+  @media(min-width:760px){.cards3{grid-template-columns:repeat(3,1fr)}}
+  .card{background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:20px 18px}
+  .card .ic{font-size:26px}
+  .card h3{font-size:17px;font-weight:800;margin:10px 0 8px}
+  .card p{font-size:14.5px;color:var(--ink-muted);line-height:1.6}
 
-  .browser{background:#fff;border-radius:16px;box-shadow:0 30px 70px -30px rgba(16,44,38,.4),0 0 0 1px var(--rule);overflow:hidden}
-  .bbar{background:var(--cream);border-bottom:1px solid var(--rule);padding:11px 14px;display:flex;align-items:center;gap:8px}
-  .bdot{width:11px;height:11px;border-radius:99px;background:#dfe3e0}
-  .burl{margin-inline-start:10px;font-size:11.5px;color:var(--ink-faint);background:#fff;border:1px solid var(--rule);border-radius:7px;padding:4px 12px;flex:1;max-width:260px}
-  .dash{background:var(--cream);padding:18px 16px 20px}
-  .dash-h{font-size:15px;font-weight:800;margin-bottom:2px}
-  .dash-sub{font-size:12px;color:var(--ink-muted);margin-bottom:14px}
-  .kidgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  @media(max-width:520px){.kidgrid{grid-template-columns:1fr}}
-  .kidc{background:#fff;border:1px solid var(--rule);border-radius:16px;padding:13px 14px;position:relative;overflow:hidden}
-  .kidc::before{content:"";position:absolute;inset-inline:0;top:0;height:4px;background:linear-gradient(90deg,var(--kc),color-mix(in srgb,var(--kc) 55%,#fff))}
-  .kidc .top{display:flex;align-items:center;gap:9px;margin-top:3px}
-  .kidc .av{width:34px;height:34px;border-radius:999px;background:var(--kc);color:#fff;font-weight:800;display:grid;place-items:center;font-size:15px}
-  .kidc .nm{font-weight:800;font-size:14px}
-  .kidc .rl{font-size:11px;color:var(--ink-faint)}
-  .kidc .hero{margin-top:10px;display:flex;align-items:baseline;gap:6px}
-  .kidc .hero b{font-size:26px;color:var(--teal-deep);font-weight:800}
-  .kidc .hero span{font-size:11.5px;color:var(--ink-muted)}
-  .badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
-  .bdg{font-size:11px;font-weight:700;border-radius:999px;padding:5px 9px}
-  .bdg.s{background:var(--amber-soft);color:#b45309}
-  .bdg.r{background:var(--purple-soft);color:#6d28d9}
-  .bdg.w{background:var(--teal-soft);color:#0f766e}
-  .reward{margin-top:12px;padding-top:11px;border-top:1px dashed rgba(31,41,55,.12);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
-  .reward.win{background:linear-gradient(0deg,rgba(245,158,11,.06),transparent);border-radius:0 0 12px 12px;margin-inline:-14px;padding-inline:14px;margin-bottom:-13px;padding-bottom:12px;border-top-color:rgba(245,158,11,.35)}
-  .reward .rh{font-size:11.5px;font-weight:700;color:var(--ink-soft)}
-  .reward.win .rh{color:#b45309;font-weight:800}
-  .gchip{background:rgba(14,165,165,.1);color:#0f766e;border:1px solid rgba(14,165,165,.28);border-radius:999px;padding:4px 9px;font-size:12px;font-weight:800}
+  /* subjects mock */
+  .subj{background:var(--surface);border:1px solid var(--rule);border-radius:20px;padding:18px;box-shadow:0 26px 60px -34px rgba(16,44,38,.45);max-width:440px;margin:0 auto;width:100%}
+  .subj-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+  .subj-h b{font-size:18px}
+  .subj-h span{font-size:12.5px;color:var(--ink-muted);background:var(--paper);border-radius:999px;padding:4px 10px;flex:none}
+  .subj-hint{font-size:13px;color:var(--ink-muted);margin-bottom:10px}
+  .sw{border:1px solid var(--rule);border-radius:12px;padding:10px 12px;margin-top:8px}
+  .sw b{font-size:15px}
+  .sw p{font-size:13.5px;color:var(--ink-muted);margin-top:2px}
+  .sw.open{border-color:var(--teal);background:var(--teal-soft)}
+  .sw.open img{margin-top:10px;border-radius:10px;width:100%;max-height:170px;object-fit:contain;background:#fff}
+  .subj-btn{margin-top:14px;text-align:center;background:var(--teal);color:#fff;font-weight:700;border-radius:12px;padding:11px;font-size:14.5px}
 
-  .steps{display:grid;grid-template-columns:1fr;gap:16px;margin-top:34px}
-  @media(min-width:760px){.steps{grid-template-columns:repeat(3,1fr)}}
-  .step{background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:22px 20px}
-  .step .n{font-size:13px;font-weight:800;color:var(--teal);letter-spacing:.02em}
-  .step h3{font-size:18px;font-weight:800;margin:8px 0 7px}
-  .step p{font-size:14.5px;color:var(--ink-muted);line-height:1.55}
+  /* comparison */
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:30px;max-width:760px;margin-inline:auto}
+  .vs .col{border-radius:18px;padding:20px 18px;border:1px solid var(--rule);background:var(--surface)}
+  .vs .col.us{border:2px solid var(--teal);background:linear-gradient(180deg,var(--teal-soft),var(--surface) 70%)}
+  .vs h3{font-size:18px;font-weight:800;margin-bottom:12px}
+  .vs ul{list-style:none;display:grid;gap:9px}
+  .vs li{font-size:14.5px;line-height:1.5;color:var(--ink-soft)}
+  .vs .us li::before{content:"✓ ";color:var(--teal-deep);font-weight:800}
+  .vs .them li::before{content:"✕ ";color:var(--rust);font-weight:800}
 
+  /* safety */
   .safe{display:grid;grid-template-columns:1fr;gap:14px;margin-top:32px}
   @media(min-width:680px){.safe{grid-template-columns:1fr 1fr}}
   .safeitem{display:flex;gap:13px;align-items:flex-start;background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:18px}
   .safeitem .ic{width:40px;height:40px;border-radius:11px;background:var(--teal-soft);color:var(--teal-deep);display:grid;place-items:center;font-size:19px;flex:none}
   .safeitem h3{font-size:16px;font-weight:800;margin-bottom:4px}
-  .safeitem p{font-size:14px;color:var(--ink-muted);line-height:1.5}
+  .safeitem p{font-size:14px;color:var(--ink-muted);line-height:1.55}
 
+  /* testimonials */
+  .quotes{display:grid;grid-template-columns:1fr;gap:14px;margin-top:30px}
+  @media(min-width:760px){.quotes{grid-template-columns:1fr 1fr}}
+  .quote{background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:20px 20px 18px;display:grid;gap:12px;align-content:start}
+  .quote p{font-size:15.5px;line-height:1.7;color:var(--ink-soft)}
+  .quote .who{font-size:14px;font-weight:800;color:var(--teal-deep)}
+  .qgroup{font-size:14px;font-weight:800;color:var(--ink-faint);letter-spacing:.06em;text-transform:uppercase;margin-top:34px}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:1fr;gap:12px;margin-top:32px;counter-reset:s}
+  @media(min-width:760px){.steps{grid-template-columns:repeat(5,1fr)}}
+  .step{background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:18px 16px}
+  .step .n{font-family:var(--lat);font-size:13px;font-weight:800;color:var(--teal)}
+  .step h3{font-size:16px;font-weight:800;margin:8px 0 6px}
+  .step p{font-size:13.5px;color:var(--ink-muted);line-height:1.5}
+
+  /* team */
+  .team{display:grid;grid-template-columns:1fr;gap:18px;align-items:center}
+  @media(min-width:760px){.team{grid-template-columns:auto 1fr}}
+  .big{font-size:clamp(46px,8vw,76px);font-weight:900;color:var(--teal-deep);line-height:1;font-family:var(--lat)}
+  .big small{display:block;font-family:var(--sans);font-size:15px;font-weight:700;color:var(--ink-muted);margin-top:6px}
+
+  /* plan */
+  .plan{display:grid;grid-template-columns:1fr;gap:18px;margin-top:30px;align-items:start}
+  @media(min-width:820px){.plan{grid-template-columns:1.2fr 1fr}}
+  .incl{background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:22px}
+  .incl .points{margin-top:0}
+  .price{background:linear-gradient(165deg,#0c2a2a,#0e3b38 60%,#123f52);color:#eafcf8;border-radius:20px;padding:26px 22px;display:grid;gap:12px}
+  .price .p{font-size:44px;font-weight:900;color:#fff;line-height:1}
+  .price .p small{font-size:16px;font-weight:600;color:#bfeee6}
+  .price .yr{font-size:15px;color:#bfeee6}
+  .price .yr b{color:#2DD4BF}
+  .price ul{list-style:none;display:grid;gap:7px;font-size:14px;color:#cdeee8;border-top:1px solid rgba(255,255,255,.14);padding-top:12px}
+
+  /* vision */
   .vision{background:linear-gradient(165deg,#0c2a2a,#0e3b38 60%,#123f52);color:#eafcf8;text-align:center}
-  .vision h2{color:#fff;max-width:20ch;margin:0 auto 16px}
+  .vision h2{color:#fff;max-width:18ch;margin:0 auto 16px}
   .vision .lead{color:#bfeee6;margin:0 auto}
-  .cta{margin-top:34px;display:inline-flex;flex-direction:column;align-items:center;gap:14px}
-  .cta a{font-weight:800;font-size:17px;background:#2DD4BF;color:#04241f;text-decoration:none;padding:15px 34px;border-radius:14px;box-shadow:0 12px 30px -10px rgba(45,212,191,.5);transition:transform .15s ease}
-  .cta a:hover{transform:translateY(-2px)}
+  .cta{margin-top:32px;display:inline-flex;flex-direction:column;align-items:center;gap:12px}
+  .cta a{font-family:var(--sans);font-weight:800;font-size:17px;background:#2DD4BF;color:#04241f;text-decoration:none;padding:15px 34px;border-radius:14px;box-shadow:0 12px 30px -10px rgba(45,212,191,.5)}
   .cta small{color:#7fe0d3;font-size:13px}
   footer{background:#08201f;color:#5b7d78;text-align:center;padding:30px 20px;font-size:12.5px}
+  footer b{font-family:var(--lat)}
 </style>
 </head>
 <body>
 
+<!-- COVER -->
 <section class="cover">
   <div class="wrap">
     <div class="brand">Gad<i>it</i></div>
-    <h1>Your child reads, but doesn't always truly understand.</h1>
-    <p class="lead">Every day, words the child doesn't understand slip by, and they move on. Gadit is the safe space where every child stops, understands each word all the way through, and builds language word by word.</p>
+    <h1>Your child's vocabulary grows word by word</h1>
+    <p class="lead">Gadit builds your child's vocabulary with a smart visual dictionary and practice made just for kids.<br>Every word gets an explanation at your child's level, a picture, examples, and games that make learning feel completely different.</p>
+    <div class="trust">The Gadit team has taught more than 15,000 learners over 15 years</div>
     <div class="scrolls"><span>↓</span> Scroll</div>
   </div>
 </section>
 
+<!-- PAIN -->
 <section class="painsec">
   <div class="wrap">
-    <div style="max-width:640px;margin:0 auto 34px;text-align:center">
-      <div class="eyebrow pain">The real pain</div>
-      <h2>This is what a text looks like with the words missing.</h2>
-      <p class="lead" style="margin:16px auto 0">A child doesn't stop to ask about every word. They skip what they don't understand, keep reading, and the material doesn't land. Each little gap in understanding joins the next.</p>
+    <div class="center">
+      <div class="eyebrow pain">What happens in your child's head</div>
+      <h2>A text is like a puzzle, and every word is a piece</h2>
+      <p class="lead" style="margin-top:16px">When a child reads, their brain builds a whole picture from the words.<br>Three or four holes are enough, and the child no longer sees the picture.</p>
     </div>
-    <div class="lesson" style="max-width:620px;margin:0 auto">
+    <div class="lesson">
       <div class="ll"><span class="dot"></span>What the book says</div>
-      <p class="lt">The ancient navigator crossed the stormy ocean using a compass and the northern stars.</p>
-      <div class="ll bad"><span class="dot"></span>What the child actually takes in</div>
-      <p class="lt dim">The ancient <span class="redact">navigator</span> crossed the <span class="redact">stormy</span> <span class="redact">ocean</span> using a <span class="redact">compass</span> and the northern stars.</p>
-      <div class="paincap">Every gray block is a word the child didn't understand, and simply moved past.</div>
+      <p class="lt">The determined sailor had to reach the island, and despite the storm he never hesitated.</p>
+      <div class="ll bad"><span class="dot"></span>What your child actually takes in</div>
+      <p class="lt dim">The <span class="redact">determined</span> sailor had to reach the island, and despite the <span class="redact">storm</span> he never <span class="redact">hesitated</span>.</p>
+      <div class="paincap">Every gray block is a word your child didn't understand, and simply skipped.</div>
     </div>
   </div>
 </section>
 
+<!-- COST -->
 <section>
-  <div class="wrap" style="text-align:center;max-width:720px">
+  <div class="wrap center">
     <div class="eyebrow pain">And it's not just a grade</div>
-    <h2>A child who doesn't understand stops believing in themselves.</h2>
-    <p class="lead" style="margin:18px auto 0">Vocabulary stays thin, and comprehension breaks word by word. Slowly it becomes a feeling of "I'm not good enough," frustration with school, and lost confidence. And it happens quietly, with no one able to point to where the thread snapped.</p>
+    <h2>A child who doesn't understand starts to believe they're just not good at this</h2>
+    <p class="lead" style="margin-top:18px">They don't ask. They guess and move on.<br>And when words are missing, the whole topic goes missing too: in math, in science and in history.<br>And you're sitting next to them again, explaining word after word.</p>
   </div>
 </section>
 
-<section style="background:var(--paper)">
+<!-- WORD PAGE -->
+<section class="alt">
   <div class="wrap scene">
     <div class="copy">
-      <div class="eyebrow">The fix · for every child</div>
-      <h2>Explained at a child's level. In the language they think in.</h2>
-      <p class="lead">Kids Mode explains every word at eye level, in 33 languages. And tapping any word in the explanation opens that one too, all the way down, with no dead ends.</p>
-      <div class="chips">
-        <span class="chip">Every <b>meaning</b>, not just the main one</span>
-        <span class="chip">3 <b>examples</b> per meaning</span>
-        <span class="chip">Read any word aloud</span>
-        <span class="chip">New here? Explained in the home language</span>
-      </div>
+      <div class="eyebrow">A smart visual dictionary</div>
+      <h2>Every word explained at your child's level</h2>
+      <p class="lead">Your child types a word they don't understand, in a clean and safe place, and that's it.<br>They get a clear definition, without hard words that explain hard words.</p>
+      <ul class="points">
+        <li>Every meaning of the word, not just the main one</li>
+        <li>A picture for every meaning, linking the word to what it means</li>
+        <li>Three real-life examples for every meaning</li>
+        <li>The word's origin, and every word read aloud in one tap</li>
+        <li>Kids Mode for the little ones, and full explanations for older kids and parents</li>
+      </ul>
     </div>
-    <div class="mock">
-      <div class="phone"><div class="screen"><div class="kids">
-        <div class="kbar"><span>🚀 Kids Mode</span><span class="krank">🏅 Word Finder</span></div>
-        <div class="kword">horizon</div>
-        <div class="ksub">say it: hə-RY-zən</div>
-        <div class="kcard">
-          <div class="kl">what it means</div>
-          <p>The horizon is the far line where the <span class="ktap">sky</span> seems to touch the <span class="ktap">ground</span>. When you look straight ahead into the distance, the farthest place you can see is the horizon!</p>
-        </div>
-        <div class="kchip">▶ Read aloud · tap any word</div>
-      </div></div></div>
-    </div>
+    <div class="phones"><div class="phone"><img src="/fam/screens/en/word.webp" alt="A word page in Gadit: adventure, with a definition, a picture and examples" loading="lazy"></div></div>
   </div>
 </section>
 
+<!-- CONTEXT -->
 <section>
   <div class="wrap scene flip">
     <div class="copy">
-      <div class="eyebrow">Every meaning</div>
-      <h2>A dictionary that doesn't give one answer and leave the child alone.</h2>
-      <p class="lead">Every meaning, in clear layers, with examples and etymology. The child sees the full picture, not just the main meaning.</p>
+      <div class="eyebrow">Understanding the context</div>
+      <h2>The right meaning, exactly as the sentence in the book uses it</h2>
+      <p class="lead">One word can mean several different things.<br>Paste the sentence from the book, and Gadit marks exactly the meaning that fits it.</p>
+      <div class="chips"><span class="chip">"We sat on the bank and watched the ducks swim by"</span><span class="chip">The meaning here: <b>the land right next to a river</b></span></div>
     </div>
-    <div class="mock">
-      <div class="phone"><div class="screen">
-        <div class="st-bar"><span class="brand2">Gad<i>it</i></span><span>9:41</span></div>
-        <div class="wp">
-          <div class="wp-word">horizon <span class="wp-spk">▶</span></div>
-          <div class="wp-phon">/həˈraɪzən/ · noun</div>
-          <div class="mcard" style="--c:var(--basic)"><div class="tag">Basic meaning</div><div class="def">The far line where the sky seems to meet the ground.</div><div class="ex">We watched the sun sink below the <b>horizon</b>.</div></div>
-          <div class="mcard" style="--c:var(--teal)"><div class="tag">Another meaning</div><div class="def">The range of a person's <span class="tapw">knowledge</span> or <span class="tapw">experience</span>.</div></div>
-        </div>
-      </div></div>
+    <div class="phones"><div class="phone"><img src="/fam/screens/en/context.webp" alt="Picking the right meaning from a sentence" loading="lazy"></div></div>
+  </div>
+</section>
+
+<!-- NOTEBOOK + PRACTICE -->
+<section class="alt">
+  <div class="wrap scene">
+    <div class="copy">
+      <div class="eyebrow">A personal notebook and smart practice</div>
+      <h2>Every word is saved, and comes back just when it's about to be forgotten</h2>
+      <p class="lead">Every word your child looks up goes into their own notebook automatically.<br>From there it comes back in short quizzes and in games built from their own words.</p>
+      <ul class="points">
+        <li>A notebook for every child, split by language</li>
+        <li>A short quiz that brings a word back before it's forgotten</li>
+        <li>A day streak, a weekly goal and ranks to climb</li>
+      </ul>
+    </div>
+    <div class="phones"><div class="phone"><img src="/fam/screens/en/notebook.webp" alt="The personal word notebook" loading="lazy"></div></div>
+  </div>
+</section>
+
+<!-- HOMEWORK -->
+<section>
+  <div class="wrap">
+    <div class="scene flip">
+      <div class="copy">
+        <div class="eyebrow">Homework help</div>
+        <h2>Take a photo of the homework, and Gadit helps your child understand it</h2>
+        <p class="lead">Photograph, upload or paste the homework page.<br>Gadit recognizes whether it's a word list, a text to read or material for a test.<br>Your child sees exactly what to prepare, and starts with one tap.</p>
+      </div>
+      <div class="phones two">
+        <div class="phone"><img src="/fam/screens/en/homework.webp" alt="Homework" loading="lazy"></div>
+        <div class="phone"><img src="/fam/screens/en/homework-learn.webp" alt="Learning the words" loading="lazy"></div>
+      </div>
+    </div>
+    <div class="cards3">
+      <div class="card"><div class="ic">🌍</div><h3>Learning words</h3><p>Dictation in any language.<br>A "listen and pick" game for the little ones.<br>English lessons step by step, and ready-made topics for elementary and middle school.</p></div>
+      <div class="card"><div class="ic">📖</div><h3>Reading a text</h3><p>Photograph a page from the book and tap any word.<br>A word that isn't clear gets an explanation and a picture.</p></div>
+      <div class="card"><div class="ic">📝</div><h3>Getting ready for a test</h3><p>A test or a dictation? Add the words and practice right up to the day itself.<br>A word your child got wrong comes back until it's right.</p></div>
     </div>
   </div>
 </section>
 
-<section style="background:var(--paper)">
-  <div class="wrap">
-    <div style="text-align:center;max-width:680px;margin:0 auto 36px">
-      <div class="eyebrow">What no one else has</div>
-      <h2>A parent board that sees exactly what each child learned.</h2>
-      <p class="lead" style="margin:16px auto 0">Not "Got it?". At a glance: how many words each child learned this week, their streak, and which words entered their notebook. And when a child does something great, you can reward them on the spot.</p>
+<!-- SUBJECTS (new) -->
+<section class="alt">
+  <div class="wrap scene">
+    <div class="copy">
+      <div class="eyebrow new">New in Gadit</div>
+      <h2>The key words of every school subject</h2>
+      <p class="lead">Math, geometry, science, English, life skills, geography and history.<br>Pick a subject and a topic, and get the words that come up in the lesson.</p>
+      <ul class="points">
+        <li>Every word is explained in that subject's meaning only: a "table" in math isn't the one you eat at</li>
+        <li>One button adds all the words to the notebook</li>
+        <li>Practice them in the games before the test</li>
+      </ul>
+      <p class="lead" style="margin-top:14px;font-size:15px;color:var(--ink-muted)">More subjects coming soon.</p>
     </div>
-    <div class="browser" style="max-width:720px;margin:0 auto">
-      <div class="bbar"><span class="bdot"></span><span class="bdot"></span><span class="bdot"></span><span class="burl">gadit.app/family</span></div>
-      <div class="dash">
-        <div class="dash-h">Good evening 🌙</div>
-        <div class="dash-sub">3 kids in the family · 70 words learned</div>
-        <div class="kidgrid">
-          <div class="kidc" style="--kc:#0EA5A5">
-            <div class="top"><div class="av">Y</div><div><div class="nm">Yael</div><div class="rl">daughter</div></div></div>
-            <div class="hero"><b>38</b><span>words in notebook</span></div>
-            <div class="badges"><span class="bdg s">🔥 12-day streak</span><span class="bdg r">🏅 Word Finder</span><span class="bdg w">+9 this week</span></div>
-            <div class="reward win"><span class="rh">12-day streak! 🔥</span><span class="gchip">🎁 20</span></div>
-          </div>
-          <div class="kidc" style="--kc:#7C3AED">
-            <div class="top"><div class="av">N</div><div><div class="nm">Noam</div><div class="rl">son</div></div></div>
-            <div class="hero"><b>21</b><span>words in notebook</span></div>
-            <div class="badges"><span class="bdg r">🏅 Scout</span><span class="bdg w">+5 this week</span></div>
-            <div class="reward"><span class="rh">Reward the effort</span><span class="gchip">🎁 10</span></div>
-          </div>
-        </div>
+    <div class="subj">
+      <div class="subj-h"><b>Geometry · Construction of geometric figures</b><span>8 words</span></div>
+      <div class="subj-hint">Tap a word for its full explanation, in exactly this subject's meaning.</div>
+      <div class="sw"><b>protractor</b><p>A tool used to measure angles in degrees.</p></div>
+      <div class="sw"><b>acute angles</b><p>Angles that are less than 90 degrees.</p></div>
+      <div class="sw"><b>right-angles</b><p>Angles that are exactly 90 degrees.</p></div>
+      <div class="sw open"><b>obtuse angles</b><p>Angles that are more than 90 degrees but less than 180 degrees.</p><img src="/fam/obtuse-angle.webp" alt="An obtuse angle: two rays meeting at a vertex, opened wider than a right angle" loading="lazy"></div>
+      <div class="subj-btn">Add these words to my notebook</div>
+    </div>
+  </div>
+</section>
+
+<!-- SAY IT -->
+<section>
+  <div class="wrap scene flip">
+    <div class="copy">
+      <div class="eyebrow">Learning languages · Say it</div>
+      <h2>Learn to speak a new language with ease</h2>
+      <p class="lead">Type a sentence and choose the language you're learning.<br>Gadit reads it aloud.<br>Your child says it and gets stars for saying it right.</p>
+      <div class="chips"><span class="chip">Hear <b>how it's said</b></span><span class="chip">Say it yourself and get <b>stars</b></span><span class="chip">A message to the parent</span></div>
+    </div>
+    <div class="phones"><div class="phone"><img src="/fam/screens/en/say.webp" alt="Say it: pronunciation practice with stars" loading="lazy"></div></div>
+  </div>
+</section>
+
+<!-- GAMES + DUEL -->
+<section class="alt">
+  <div class="wrap scene">
+    <div class="copy">
+      <div class="eyebrow">Games and practice</div>
+      <h2>The words stick because your child plays with them</h2>
+      <p class="lead">Every game is built from the words your child looked up.<br>Your child can play a duel against a brother or sister, on the same device or with an invite code, and you get a message saying who won.</p>
+      <ul class="points">
+        <li>A weekly goal and a day streak</li>
+        <li>Duels between siblings, or against the word robot</li>
+        <li>A family leaderboard</li>
+      </ul>
+    </div>
+    <div class="phones two">
+      <div class="phone"><img src="/fam/screens/en/duel.webp" alt="A word duel" loading="lazy"></div>
+      <div class="phone"><img src="/fam/screens/en/play.webp" alt="Word games" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- READING ALONE -->
+<section>
+  <div class="wrap scene flip">
+    <div class="copy">
+      <div class="eyebrow">Reading on their own</div>
+      <h2>Read a book alone and open every hard word with one tap</h2>
+      <p class="lead">A book, a story or an article: photograph the page, and Gadit marks the hard words.<br>Tap a word and get an explanation without leaving the book.<br>That way your child keeps reading alone, all the way to the end.</p>
+      <div class="chips"><span class="chip">Photograph a page straight from the camera</span><span class="chip">Tap <b>any word</b></span><span class="chip">An explanation of a <b>whole sentence</b></span></div>
+    </div>
+    <div class="phones two">
+      <div class="phone"><img src="/fam/screens/en/read.webp" alt="Photographing a page from the book" loading="lazy"></div>
+      <div class="phone"><img src="/fam/screens/en/read-word.webp" alt="Tapping a word on the page" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PARENT DASHBOARD -->
+<section class="alt">
+  <div class="wrap scene">
+    <div class="copy">
+      <div class="eyebrow">Parent dashboard</div>
+      <h2>See exactly which words your child already understands</h2>
+      <p class="lead">All your children on one screen.<br>How many words are in each notebook, how many were added this week, the day streak and the latest words they looked up.</p>
+      <ul class="points">
+        <li>An alert on everything your child finished: words, games and homework</li>
+        <li>Right away or as a daily summary, and you choose what for</li>
+        <li>On your phone or by email</li>
+      </ul>
+    </div>
+    <div class="phones two">
+      <div class="phone"><img src="/fam/screens/en/dashboard.webp" alt="The parent dashboard" loading="lazy"></div>
+      <div class="phone"><img src="/fam/screens/en/alerts.webp" alt="Alerts for the parent" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- VS -->
+<section>
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">The difference</div>
+      <h2>Why not just search online or ask a chatbot?</h2>
+      <p class="lead" style="margin-top:14px">Because those are tools for adults.<br>Gadit is built the other way around: one closed, clean page for every word, with no way to get lost.</p>
+    </div>
+    <div class="vs">
+      <div class="col us"><h3 class="lat">Gadit</h3><ul><li>One clean page for every word</li><li>An explanation at your child's level</li><li>A notebook and practice that stay</li><li>A parent dashboard</li></ul></div>
+      <div class="col them"><h3>The open internet</h3><ul><li>Ads and links in every direction</li><li>An open chat with no limits</li><li>One answer, soon forgotten</li><li>The parent sees nothing</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- SAFETY -->
+<section class="alt">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">Safety</div>
+      <h2>A safe place for your child, with no ads and no open chat</h2>
+      <p class="lead" style="margin-top:14px">There's one thing to do here: understand a word, and go back to learning.<br>One screen you can give your child with peace of mind.</p>
+    </div>
+    <div class="safe">
+      <div class="safeitem"><div class="ic">🚫</div><div><h3>No ads, no chat</h3><p>No open chat, no feed, no ads and no links out.</p></div></div>
+      <div class="safeitem"><div class="ic">🔒</div><div><h3>A profile for every child</h3><p>Every child has their own notebook, ranks and skins. On a shared device, each child signs in with a personal code.</p></div></div>
+      <div class="safeitem"><div class="ic">👨‍👩‍👧</div><div><h3>Full parent control</h3><p>The parent manages the profiles and sees everything. You can also invite a teacher or coach, with access you open and close.</p></div></div>
+      <div class="safeitem"><div class="ic">🛡️</div><div><h3>Your child's data</h3><p>We keep only the name, the age and the words they looked up. We don't sell or share information about children, and you can delete everything at any time.</p></div></div>
+      <div class="safeitem"><div class="ic">🌍</div><div><h3>Explanations in more than 40 languages</h3><p>A word in any language gets a simple explanation in your child's own language. And the explanation can also come in the language you speak at home.</p></div></div>
+      <div class="safeitem"><div class="ic">📱</div><div><h3>On every device</h3><p>On phone, tablet and computer, in any browser. On Android there's also an app on Google Play.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">From real families</div>
+      <h2>What kids and parents tell us</h2>
+    </div>
+    <div class="qgroup">Kids</div>
+    <div class="quotes" style="margin-top:12px">
+      <div class="quote"><p>I really, really loved the dictations, the games, and the homework I can translate with Gadit. You can take a photo of your homework text and see what every word means. And there are goals, which really add motivation to learn new words.</p><div class="who">Ziv, grade 5</div></div>
+      <div class="quote"><p>Gadit helps me a lot with my studies! I used to feel like I had to lug around a million books and dictionaries just to understand a new word. Now I type the word in a flash, and I get a picture next to the definitions too.</p><div class="who">Romi, 12</div></div>
+    </div>
+    <div class="qgroup">Parents</div>
+    <div class="quotes" style="margin-top:12px">
+      <div class="quote"><p>Since I put Gadit on my three kids' phones, the change has been amazing. I taught them one habit: don't understand a word? Open Gadit. Today they no longer come to ask me about everything, they check on their own.</p><div class="who">Reut Arbel, mother of three</div></div>
+      <div class="quote"><p>My daughter practiced with it for an English dictation. We used to make flashcards, and with Gadit it's all simple and fun. She really enjoyed it, and did really well on the dictation.</p><div class="who">Gat Megido, Ziv's mother</div></div>
+      <div class="quote"><p>Kids can learn more independently, understand new words and enrich their vocabulary. I warmly recommend the app, for the whole family!</p><div class="who">Amir Levi, father of Tom and Ori</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO START -->
+<section class="alt">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">How to start</div>
+      <h2>Five steps, and the vocabulary starts to grow</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="n">01</div><h3>Add the people in your family</h3><p>The second parent and up to 5 children, each with a name, an age and a color. Less than a minute.</p></div>
+      <div class="step"><div class="n">02</div><h3>Connect the devices</h3><p>A QR code or a 6-digit code, no password. No device of their own? There's a shared kids screen.</p></div>
+      <div class="step"><div class="n">03</div><h3>Your kids start to understand</h3><p>Explanations in kids' language, examples and a picture for every meaning.</p></div>
+      <div class="step"><div class="n">04</div><h3>Practice until the word sticks</h3><p>Games and quizzes built from the words your child looked up.</p></div>
+      <div class="step"><div class="n">05</div><h3>Every word is saved</h3><p>The notebook grows word by word, with a day streak and a weekly goal.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section>
+  <div class="wrap team">
+    <div class="big">15<small>years in education</small></div>
+    <div>
+      <h2 style="margin-bottom:12px">15 years in education, in one tool for your child</h2>
+      <p class="lead">Gadit was built by a team with 15 years of experience in education, who have taught more than 15,000 learners.<br>What we saw work again and again, in class and at home, we put into one simple tool your child can use alone.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PLAN -->
+<section class="alt">
+  <div class="wrap">
+    <div class="center">
+      <div class="eyebrow">The Family plan</div>
+      <h2>What you get with the Family plan</h2>
+    </div>
+    <div class="plan">
+      <div class="incl">
+        <ul class="points">
+          <li>Unlimited lookups for the whole family</li>
+          <li>Every meaning, with a picture for each one</li>
+          <li>Kids Mode for the little ones and full explanations for the older ones</li>
+          <li>A personal notebook and smart practice for every child</li>
+          <li>A parent dashboard with alerts on everything your child finished</li>
+          <li>Homework: dictation in any language, lessons and test prep</li>
+          <li>The key words of every school subject</li>
+          <li>Photograph a page from the book and tap any word</li>
+          <li>Say it: speaking practice in a new language</li>
+          <li>Games and word duels between siblings</li>
+          <li>Up to 5 children in separate profiles</li>
+          <li>Explanations in more than 40 languages</li>
+        </ul>
+      </div>
+      <div class="price">
+        <div class="p">$5.99 <small>a month</small></div>
+        <div class="yr">or <b>$59 a year</b>, and save $12.88</div>
+        <div style="font-size:15px;color:#fff;font-weight:600">Less than one private lesson a month, for all the children at home</div>
+        <ul>
+          <li>14-day free trial</li>
+          <li>A card is required, and the first charge comes only after the 14 days</li>
+          <li>Two days before, we send you a reminder email</li>
+          <li>Cancel in one click from your account page, no phone call</li>
+          <li>Cancelled? The words in the notebooks are not deleted</li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
 
-<section>
-  <div class="wrap">
-    <div style="text-align:center;max-width:640px;margin:0 auto">
-      <div class="eyebrow">How it works</div>
-      <h2>One path, from the word to understanding.</h2>
-    </div>
-    <div class="steps">
-      <div class="step"><div class="n">01</div><h3>The child types a word</h3><p>and gets every meaning, examples and etymology, at their level and in their language. Every word in the explanation is tappable.</p></div>
-      <div class="step"><div class="n">02</div><h3>The word sticks</h3><p>Every search saves to a personal notebook, split by language, with practice and word games that make the word stay.</p></div>
-      <div class="step"><div class="n">03</div><h3>The parent sees and rewards</h3><p>The parent board shows what each child learned this week, and at the right moment you can give a reward the child spends on new skins.</p></div>
-    </div>
-  </div>
-</section>
-
-<section style="background:var(--paper)">
-  <div class="wrap">
-    <div style="max-width:600px">
-      <div class="eyebrow">Safe by design</div>
-      <h2>A closed space. No one you didn't invite.</h2>
-    </div>
-    <div class="safe">
-      <div class="safeitem"><div class="ic">🔒</div><div><h3>A profile per child</h3><p>Each child with their own notebook, ranks and skins, behind a short PIN.</p></div></div>
-      <div class="safeitem"><div class="ic">🚫</div><div><h3>No ads, no chat</h3><p>No advertising, no messages from strangers, no data trading. Just a child and words.</p></div></div>
-      <div class="safeitem"><div class="ic">👨‍👩‍👧</div><div><h3>Full parent control</h3><p>The parent manages every profile, sees everything, and invites a teacher or coach with controlled access anytime.</p></div></div>
-      <div class="safeitem"><div class="ic">🌍</div><div><h3>33 interface languages</h3><p>English, Hebrew, Arabic, Russian and more, full RTL. A newcomer understands in their home language while building a new one.</p></div></div>
-    </div>
-  </div>
-</section>
-
+<!-- VISION + CTA -->
 <section class="vision">
   <div class="wrap">
-    <div class="eyebrow" style="color:#7fe0d3">The vision</div>
-    <h2>A generation that never gives up on a single word.</h2>
-    <p class="lead">Because there's always a safe place to understand, in any language, all the way through.</p>
+    <div class="eyebrow" style="color:#7fe0d3">Start today</div>
+    <h2>And watch your child's vocabulary grow day after day</h2>
+    <p class="lead">Because there's always a safe place to understand every word, all the way through.</p>
     <div class="cta">
-      <a href="https://www.gadit.app/families">Start free, one path for the whole family</a>
-      <small>No credit card · two-minute setup</small>
+      <a href="https://www.gadit.app/families">Start your 14-day free trial</a>
+      <small>One plan for the whole family · Cancel in one click</small>
     </div>
   </div>
 </section>
 
-<footer><b>Gadit</b> · gadit.app · Understand every word, all the way through.</footer>
+<footer><b>Gadit</b> · gadit.app · Understand every word, all the way through</footer>
 
 </body>
 </html>
