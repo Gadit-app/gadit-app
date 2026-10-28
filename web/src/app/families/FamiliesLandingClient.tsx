@@ -8,7 +8,7 @@ import { INDIVIDUAL_DISPLAY, INDIVIDUAL_MONTHLY } from "@/lib/individual-prices"
 import { planCopy } from "@/lib/plan-copy";
 import { REAL_COPY, REAL_CSS, PhoneShot, Lines, type RealTool } from "./RealScreens";
 import { SubjectsScreenMock, SubjectsLines, subjectsBandCopy } from "./SubjectsShowcase";
-import { subjectsLangFor } from "@/lib/subjects-langs";
+import { subjectsBandLangFor } from "@/lib/subjects-langs";
 import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -8478,7 +8478,7 @@ export default function FamiliesLandingClient({ withNav = false, classic = false
   const real = i18n ? fillDeep(i18n.real, prices) : !classic && lang === "he" ? REAL_COPY.he : undefined;
   const shotLang = i18n ? screensLang(lang) : lang;
   // The Subjects band: only in the languages that have the feature (he, en, de).
-  const subjUi = subjectsLangFor(lang);
+  const subjUi = subjectsBandLangFor(lang);
 
   // Default angle: vocab (Gadi 2026-07-17 + council: the master promise
   // is visible vocabulary growth; the pain angles stay as variants).

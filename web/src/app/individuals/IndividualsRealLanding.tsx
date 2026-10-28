@@ -14,7 +14,7 @@ import { fill, landingDir, landingFont, landingPrices, screensLang } from "@/lib
 import type { IndCopy } from "./i18n/types";
 import HE from "./i18n/he";
 import { SubjectsScreenMock, SubjectsLines, subjectsBandCopy } from "../families/SubjectsShowcase";
-import { subjectsLangFor } from "@/lib/subjects-langs";
+import { subjectsBandLangFor } from "@/lib/subjects-langs";
 
 /**
  * The Hebrew Individuals landing (Gadi 2026-10-06), built like the Families
@@ -75,7 +75,7 @@ export function IndividualsRealLanding({ copy = HE, lang = "he" }: { copy?: IndC
   };
   const t = C.photo;
   // The Subjects band: only in the languages that have the feature (he, en, de).
-  const subjUi = subjectsLangFor(lang);
+  const subjUi = subjectsBandLangFor(lang);
   const sc = subjUi ? subjectsBandCopy(subjUi, "individuals") : null;
   return (
     <div className="ind" dir={landingDir(lang)} lang={lang} style={lang === "he" ? undefined : { fontFamily: landingFont(lang) }}>

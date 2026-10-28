@@ -118,11 +118,40 @@ const STR = {
     lockedTitle: "Schlüsselwörter nach Fach gehören zu Individual und Family",
     lockedBody: "Zu jedem Fach und Thema die wichtigsten Wörter, jedes mit der Bedeutung, die zum Fach passt.",
   },
+  // Modern Standard Arabic, the usual singular of app instructions.
+  ar: {
+    title: "الكلمات المفتاحية في المواد",
+    sub: "اختر مادة وموضوعا لترى كلماته المهمة، كل كلمة بالمعنى الذي يناسب المادة.",
+    ageAria: "العمر",
+    younger: "الصغار",
+    older: "الكبار",
+    pickSubject: "اختر مادة",
+    topics: (n: number) => (n === 1 ? "موضوع واحد" : n === 2 ? "موضوعان" : n <= 10 ? `${n} مواضيع` : `${n} موضوعا`),
+    allSubjects: "كل المواد",
+    allTopics: "كل المواضيع",
+    pickTopic: "اختر موضوعا",
+    words: (n: number) => (n === 1 ? "كلمة واحدة" : n === 2 ? "كلمتان" : n <= 10 ? `${n} كلمات` : `${n} كلمة`),
+    tapHint: "اضغط على كلمة لترى شرحها الكامل، بمعناها في هذه المادة بالضبط.",
+    listen: "استماع",
+    add: "إضافة هذه الكلمات إلى دفتري",
+    adding: "جار الإضافة إلى الدفتر",
+    addedPlay: "أضيفت إلى الدفتر. يمكن التدرب عليها في الألعاب",
+    playLink: "إلى الألعاب",
+    addedNb: "أضيفت إلى الدفتر",
+    nbLink: "إلى الدفتر",
+    addErr: "لم نتمكن من إضافة كل الكلمات. حاول مرة أخرى.",
+    loadErr: "حدث خطأ ما. حدّث الصفحة.",
+    empty: "لا توجد مواضيع لهذا العمر بعد.",
+    loginTitle: "سجّل الدخول لترى الكلمات المفتاحية في المواد",
+    loginBtn: "تسجيل الدخول",
+    lockedTitle: "الكلمات المفتاحية في المواد جزء من Individual وFamily",
+    lockedBody: "في كل مادة وموضوع: الكلمات المهمة، كل كلمة بالمعنى الذي يناسب المادة.",
+  },
 } satisfies Record<SubjectsUiLang, Record<string, unknown>>;
 type Strings = (typeof STR)[SubjectsUiLang];
 
 /** The language name the dictionary stores a word under (notebook ids match its own saves). */
-const WORD_LANGUAGE: Record<SubjectsUiLang, string> = { he: "Hebrew", en: "English", de: "German" };
+const WORD_LANGUAGE: Record<SubjectsUiLang, string> = { he: "Hebrew", en: "English", de: "German", ar: "Arabic" };
 
 const AGE_KEY = "gadit_subjects_age";
 const WIDTH = 760;
@@ -131,7 +160,7 @@ export function SubjectsClient() {
   const { user, plan, planReady, loading, promptLogin } = useAuth();
   const { lang } = useLang();
   const href = useHref();
-  // Another UI language falls back to English (the menu shows the tab only in he/en/de).
+  // Another UI language falls back to English (the menu shows the tab only in he/en/de/ar).
   const ui: SubjectsUiLang = subjectsLangFor(lang) ?? "en";
   const T = STR[ui];
 

@@ -4,6 +4,7 @@ import { getAdminDb } from "@/lib/firebase-admin";
 import { CUR_TOPICS, zaTopic } from "@/lib/curriculum-catalog";
 import { getCurriculumSetDoc } from "@/lib/curriculum-sets";
 import za from "@/lib/curriculum-catalog-za.json";
+import arCat from "@/lib/curriculum-catalog-ar.json";
 
 /**
  * "Key words by subject" (מילות מפתח במקצועות, Gadi 2026-10-26): a page for
@@ -15,6 +16,7 @@ import za from "@/lib/curriculum-catalog-za.json";
  *   de: curriculum-catalog-de.json + curriculum-sets-de.json (read from disk
  *       when present, so the build never depends on them), or a Firestore
  *       override like the South African ones
+ *   ar: the Arab state education catalog, words in Firestore curriculumSets/{id}
  * A further language is one more entry in CATALOGS below.
  *
  * Elementary first (Gadi 2026-10-26: many mothers buy Gadit for children in
@@ -30,7 +32,7 @@ import za from "@/lib/curriculum-catalog-za.json";
  * ("cur-sch-") or any other id is not in the allowed list.
  */
 
-export type SubjectsLang = "he" | "en" | "de";
+export type SubjectsLang = "he" | "en" | "de" | "ar";
 export type SubjectAge = "younger" | "older";
 
 export type SubjectTopic = { id: string; title: string; age: SubjectAge };
@@ -228,6 +230,40 @@ function deRows(): Row[] {
   });
   return rows;
 }
+// ── Arabic: Arab state education (Gadi 2026-10-28) ───────────────────────
+// Same levels and Hebrew-letter grades as the Israeli catalog. The Hebrew and
+// English subjects are left out: their words are not in Arabic.
+const AR_CARDS: Record<SubjectAge, Card[]> = {
+  younger: [
+    card("mathematics", "الرياضيات"),
+    card("science-and-technology", "العلوم والتكنولوجيا"),
+    card("arabic-language", "اللغة العربية"),
+    card("homeland-society-and-civics", "الموطن والمجتمع"),
+    card("geography", "الجغرافيا"),
+    card("history-arab", "التاريخ"),
+  ],
+  older: [
+    card("mathematics", "الرياضيات"),
+    card("science-and-technology", "العلوم والتكنولوجيا"),
+    card("chemistry", "الكيمياء"),
+    card("physics", "الفيزياء"),
+    card("biology", "علم الأحياء"),
+    card("history-arab", "التاريخ"),
+    card("geography", "الجغرافيا"),
+  ],
+};
+type ArRow = { id: string; s: string; l: string; t: string; g: string };
+function arRows(): Row[] {
+  const rows: Row[] = [];
+  (arCat.topics as ArRow[]).forEach((t, i) => {
+    const age = ageOfHe(t.l);
+    if (!age || !AR_CARDS[age].some((c) => c.key === t.s)) return;
+    const [g1, g2] = heGrades(t.g);
+    rows.push({ id: t.id, title: t.t, age, card: t.s, sort: [HE_LEVEL_RANK[t.l] ?? 9, g1, g2, i] });
+  });
+  return rows;
+}
+
 function setsWords(sets: SetsFile | null, id: string) {
   const s = sets?.[id];
   if (!s?.words?.length) return null;
@@ -274,6 +310,13 @@ const CATALOGS: Record<SubjectsLang, Catalog> = {
     rows: deRows,
     builtInIds: () => new Set(deRows().filter((r) => setsWords(deFiles().sets, r.id)).map((r) => r.id)),
     words: async (id) => (await firestoreWords(id)) ?? setsWords(deFiles().sets, id),
+  },
+  ar: {
+    prefix: "cur-ar-",
+    cards: AR_CARDS,
+    rows: arRows,
+    builtInIds: null,
+    words: sharedWords,
   },
 };
 

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { SubjectsUiLang } from "@/lib/subjects-langs";
+import type { SubjectsBandLang } from "@/lib/subjects-langs";
 
 /**
  * "Subjects" on the Families and Individuals landing pages (Gadi 2026-10-26):
@@ -58,7 +58,7 @@ const DE_DU: BandCopy = {
   ],
 };
 
-export function subjectsBandCopy(ui: SubjectsUiLang, page: "families" | "individuals"): BandCopy {
+export function subjectsBandCopy(ui: SubjectsBandLang, page: "families" | "individuals"): BandCopy {
   if (ui === "he") return HE;
   if (ui === "de") return page === "families" ? DE_SIE : DE_DU;
   return EN;
@@ -78,7 +78,7 @@ export function subjectsBandCopy(ui: SubjectsUiLang, page: "families" | "individ
  * UI strings as in SubjectsClient.tsx (STR).
  */
 type MockWord = { w: string; d: string; open?: boolean };
-const MOCK: Record<SubjectsUiLang, {
+const MOCK: Record<SubjectsBandLang, {
   subject: string; topic: string; count: string; hint: string; listen: string; add: string; picture: string;
   words: MockWord[];
 }> = {
@@ -142,7 +142,7 @@ function Speaker() {
 }
 
 /** A picture of the screen: nothing in it is a control. */
-export function SubjectsScreenMock({ ui }: { ui: SubjectsUiLang }) {
+export function SubjectsScreenMock({ ui }: { ui: SubjectsBandLang }) {
   const m = MOCK[ui];
   return (
     <div className="lp-subj-screen" role="img" aria-label={`${m.subject}: ${m.topic}, ${m.count}`} dir={ui === "he" ? "rtl" : "ltr"} lang={ui}>
