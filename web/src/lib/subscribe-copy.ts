@@ -1,9 +1,11 @@
 /**
  * Copy of the App Store subscribe screen in the iOS app (/subscribe,
  * Gadi 2026-10-27). Plan bullets come from plan-copy (every language);
- * these lines are English and Hebrew first, other languages fall back to
- * English until they are translated. Hebrew speaks to the reader in plural.
+ * these lines are written in English and Hebrew here; the other 39 UI
+ * languages are in subscribe-copy-i18n.json (translated 2026-10-29, each in
+ * the form of address of that language's UI). Hebrew speaks to the reader in plural.
  */
+import i18n from "@/lib/subscribe-copy-i18n.json";
 type Copy = {
   title: string;
   sub: string;
@@ -103,7 +105,7 @@ const HE: Copy = {
   deleteNote: "המנוי שלכם הוא דרך ה-App Store, ולכן מחיקת החשבון לא מבטלת אותו. בטלו אותו במנויים של ה-App Store כדי שלא תחויבו שוב.",
 };
 
-const COPY: Record<string, Copy> = { en: EN, he: HE };
+const COPY: Record<string, Copy> = { ...(i18n as Record<string, Copy>), en: EN, he: HE };
 
 export function subscribeCopy(lang: string): Copy {
   return COPY[lang] ?? EN;
