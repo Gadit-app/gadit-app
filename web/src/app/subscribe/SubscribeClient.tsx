@@ -11,6 +11,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { BackLink } from "@/components/BackLink";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -125,6 +126,8 @@ export function SubscribeClient() {
 
   return (
     <main dir={dir} style={{ maxWidth: 560, margin: "0 auto", padding: "28px 16px 48px", display: "grid", gap: 18 }}>
+      {/* The app has no browser Back button (Eyal's TestFlight run, 2026-10-28). */}
+      <BackLink href={href("/")} anyPrevious style={{ justifySelf: "start", fontSize: 15, fontWeight: 600, color: "var(--ink-muted,#6B7280)", textDecoration: "none", padding: "6px 2px" }}>{c.back}</BackLink>
       <header style={{ display: "grid", gap: 6, textAlign: "center" }}>
         <h1 style={{ fontSize: 26, fontWeight: 800, margin: 0, lineHeight: 1.2, color: "var(--ink,#0B1220)" }}>{c.title}</h1>
         <p style={{ margin: 0, fontSize: 15, color: "var(--ink-muted,#6B7280)" }}>{c.sub}</p>

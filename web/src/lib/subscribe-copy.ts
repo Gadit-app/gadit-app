@@ -33,6 +33,7 @@ type Copy = {
   have: string;           // {plan}
   manage: string;
   seePlans: string;
+  back: string;
   deleteNote: string;
 };
 
@@ -65,6 +66,7 @@ const EN: Copy = {
   have: "You have Gadit {plan}.",
   manage: "Manage subscription",
   seePlans: "See plans",
+  back: "← Back",
   deleteNote: "Your subscription is through the App Store, so deleting the account does not cancel it. Cancel it in your App Store subscriptions so you are not charged again.",
 };
 
@@ -97,6 +99,7 @@ const HE: Copy = {
   have: "יש לכם Gadit {plan}.",
   manage: "ניהול המנוי",
   seePlans: "לבחירת מנוי",
+  back: "→ חזרה",
   deleteNote: "המנוי שלכם הוא דרך ה-App Store, ולכן מחיקת החשבון לא מבטלת אותו. בטלו אותו במנויים של ה-App Store כדי שלא תחויבו שוב.",
 };
 
