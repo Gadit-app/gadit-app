@@ -66,6 +66,9 @@ const STR = {
     noTopic: "לא מצאנו נושא כזה. נסו מילה אחרת.",
     foundTopics: "נושאים שמתאימים לחיפוש",
     clearSearch: "ניקוי החיפוש",
+    searchWords: "חיפוש מילה בנושא",
+    noWord: "המילה הזו לא נמצאת בנושא הזה.",
+    lookUp: (w: string) => `לפירוש המלא של "${w}" במילון`,
   },
   en: {
     title: "Key words by subject",
@@ -100,6 +103,9 @@ const STR = {
     noTopic: "No topic matches. Try another word.",
     foundTopics: "Matching topics",
     clearSearch: "Clear search",
+    searchWords: "Search a word in this topic",
+    noWord: "This word is not in this topic.",
+    lookUp: (w: string) => `Look up "${w}" in the dictionary`,
   },
   // Swiss spelling (ss, never ß), the informal "du" of family apps.
   de: {
@@ -135,6 +141,9 @@ const STR = {
     noTopic: "Kein Thema gefunden. Versuch ein anderes Wort.",
     foundTopics: "Passende Themen",
     clearSearch: "Suche löschen",
+    searchWords: "Wort in diesem Thema suchen",
+    noWord: "Dieses Wort ist nicht in diesem Thema.",
+    lookUp: (w: string) => `„${w}“ im Wörterbuch nachschlagen`,
   },
   // Modern Standard Arabic, the usual singular of app instructions.
   ar: {
@@ -170,6 +179,9 @@ const STR = {
     noTopic: "لم نجد موضوعا كهذا. جرّب كلمة أخرى.",
     foundTopics: "مواضيع مطابقة",
     clearSearch: "مسح البحث",
+    searchWords: "ابحث عن كلمة في هذا الموضوع",
+    noWord: "هذه الكلمة غير موجودة في هذا الموضوع.",
+    lookUp: (w: string) => `ابحث عن "${w}" في القاموس`,
   },
 } satisfies Record<SubjectsUiLang, Record<string, unknown>>;
 type Strings = (typeof STR)[SubjectsUiLang];
@@ -487,6 +499,9 @@ function TopicView({ ui, T, deep, topicId, getToken, subject, onBack }: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ui, topicId]);
 
+  // Search a word in this topic (Gadi 2026-10-28): by the word or its meaning.
+  const [wordQuery, setWordQuery] = useState("");
+
   // "Add these words to my notebook": only on a tap, never by itself.
   const [adding, setAdding] = useState<"idle" | "busy" | "done" | "error">("idle");
   async function addAll() {
@@ -524,6 +539,8 @@ function TopicView({ ui, T, deep, topicId, getToken, subject, onBack }: {
   if (!data) return <div className="wb-subj">{back}<div className="wb-subj-wait"><WaitDots className="gd-wait-big" /></div></div>;
 
   const icon = data.icon ?? subject?.icon ?? `/subjects/${data.subject}.webp`;
+  const wq = normalizeSearch(wordQuery);
+  const shown = wq ? data.words.filter((x) => normalizeSearch(x.w).includes(wq) || normalizeSearch(x.d).includes(wq)) : data.words;
   return (
     <div className="wb-subj">
       {back}
@@ -536,8 +553,17 @@ function TopicView({ ui, T, deep, topicId, getToken, subject, onBack }: {
         </div>
       </div>
       <p className="wb-subj-hint">{T.tapHint}</p>
+      {data.words.length > 8 && (
+        <SearchBox value={wordQuery} onChange={setWordQuery} placeholder={T.searchWords} clearLabel={T.clearSearch} />
+      )}
+      {wq && !shown.length && (
+        <p className="wb-subj-note">
+          {T.noWord}{" "}
+          <Link href={href(wordPath(wordQuery.trim()))} className="wb-subj-added-link">{T.lookUp(wordQuery.trim())}</Link>
+        </p>
+      )}
       <ul className="wb-subj-words">
-        {data.words.map((x, i) => {
+        {shown.map((x, i) => {
           // Context mode on the word page: the subject and the word open the
           // sentence (the dictionary caches context answers by its first 60 characters).
           const ctx = `${data.subjectName}: ${x.w}, ${x.d}`;
