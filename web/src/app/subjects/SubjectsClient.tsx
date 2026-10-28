@@ -60,6 +60,12 @@ const STR = {
     loginBtn: "התחברות",
     lockedTitle: "מילות המפתח במקצועות הן חלק מ-Individual ומ-Family",
     lockedBody: "בכל מקצוע ונושא: המילים החשובות, כל מילה עם הפירוש שמתאים למקצוע.",
+    searchAll: "חיפוש מקצוע או נושא",
+    searchIn: (name: string) => `חיפוש נושא ב${name}`,
+    noMatch: "לא מצאנו מקצוע או נושא כזה. נסו מילה אחרת.",
+    noTopic: "לא מצאנו נושא כזה. נסו מילה אחרת.",
+    foundTopics: "נושאים שמתאימים לחיפוש",
+    clearSearch: "ניקוי החיפוש",
   },
   en: {
     title: "Key words by subject",
@@ -88,6 +94,12 @@ const STR = {
     loginBtn: "Sign in",
     lockedTitle: "Key words by subject is part of Individual and Family",
     lockedBody: "For every subject and topic: the key words, each with the meaning that fits the subject.",
+    searchAll: "Search a subject or topic",
+    searchIn: (name: string) => `Search topics in ${name}`,
+    noMatch: "No subject or topic matches. Try another word.",
+    noTopic: "No topic matches. Try another word.",
+    foundTopics: "Matching topics",
+    clearSearch: "Clear search",
   },
   // Swiss spelling (ss, never ß), the informal "du" of family apps.
   de: {
@@ -117,6 +129,12 @@ const STR = {
     loginBtn: "Anmelden",
     lockedTitle: "Schlüsselwörter nach Fach gehören zu Individual und Family",
     lockedBody: "Zu jedem Fach und Thema die wichtigsten Wörter, jedes mit der Bedeutung, die zum Fach passt.",
+    searchAll: "Fach oder Thema suchen",
+    searchIn: (name: string) => `Thema in ${name} suchen`,
+    noMatch: "Kein Fach und kein Thema gefunden. Versuch ein anderes Wort.",
+    noTopic: "Kein Thema gefunden. Versuch ein anderes Wort.",
+    foundTopics: "Passende Themen",
+    clearSearch: "Suche löschen",
   },
   // Modern Standard Arabic, the usual singular of app instructions.
   ar: {
@@ -146,6 +164,12 @@ const STR = {
     loginBtn: "تسجيل الدخول",
     lockedTitle: "الكلمات المفتاحية في المواد جزء من Individual وFamily",
     lockedBody: "في كل مادة وموضوع: الكلمات المهمة، كل كلمة بالمعنى الذي يناسب المادة.",
+    searchAll: "ابحث عن مادة أو موضوع",
+    searchIn: (name: string) => `ابحث عن موضوع في ${name}`,
+    noMatch: "لم نجد مادة أو موضوعا كهذا. جرّب كلمة أخرى.",
+    noTopic: "لم نجد موضوعا كهذا. جرّب كلمة أخرى.",
+    foundTopics: "مواضيع مطابقة",
+    clearSearch: "مسح البحث",
   },
 } satisfies Record<SubjectsUiLang, Record<string, unknown>>;
 type Strings = (typeof STR)[SubjectsUiLang];
@@ -272,6 +296,22 @@ export function SubjectsBrowser({ ui, deep, getToken }: { ui: SubjectsUiLang; de
   // The card of this level; a link from another level still finds its subject.
   const subject = (subjects ?? []).find((s) => s.key === subjectKey && s.age === age) ?? (subjects ?? []).find((s) => s.key === subjectKey);
 
+  // Search (Gadi 2026-10-28): on the cards, a subject or any of its topics;
+  // inside a subject, its topics. Each screen keeps its own query.
+  const [query, setQuery] = useState("");
+  // The topic query belongs to one subject and level: another one starts empty.
+  const topicKey = `${subjectKey}|${age}`;
+  const [topicSearch, setTopicSearch] = useState({ k: "", v: "" });
+  const topicQuery = topicSearch.k === topicKey ? topicSearch.v : "";
+  const setTopicQuery = (v: string) => setTopicSearch({ k: topicKey, v });
+  const q = normalizeSearch(query);
+  const found = useMemo(() => {
+    if (!q) return null;
+    const cards = visible.filter((s) => normalizeSearch(s.name).includes(q));
+    const topics = visible.flatMap((s) => s.topics.filter((t) => normalizeSearch(t.title).includes(q)).map((t) => ({ s, t }))).slice(0, 60);
+    return { cards, topics };
+  }, [q, visible]);
+
   if (loadErr) return <p className="wb-subj-note">{T.loadErr}</p>;
 
   if (topicId) {
@@ -280,7 +320,9 @@ export function SubjectsBrowser({ ui, deep, getToken }: { ui: SubjectsUiLang; de
   if (!subjects) return <div className="wb-subj-wait"><WaitDots className="gd-wait-big" /></div>;
 
   if (subject) {
-    const topics = subject.topics.filter((t) => t.age === age);
+    const allTopics = subject.topics.filter((t) => t.age === age);
+    const tq = normalizeSearch(topicQuery);
+    const topics = tq ? allTopics.filter((t) => normalizeSearch(t.title).includes(tq)) : allTopics;
     return (
       <div className="wb-subj">
         <button type="button" className="wb-subj-back" onClick={() => go({})}>
@@ -290,11 +332,16 @@ export function SubjectsBrowser({ ui, deep, getToken }: { ui: SubjectsUiLang; de
           <span className="wb-subj-hero-img"><img src={subject.icon} alt="" width={88} height={88} /></span>
           <div>
             <h2 className="wb-subj-h2">{subject.name}</h2>
-            <div className="wb-subj-meta">{T.topics(topics.length)}</div>
+            <div className="wb-subj-meta">{T.topics(allTopics.length)}</div>
           </div>
         </div>
         <AgeSwitch T={T} age={age} onAge={setAge} />
-        {topics.length ? (
+        {allTopics.length > 6 && (
+          <SearchBox value={topicQuery} onChange={setTopicQuery} placeholder={T.searchIn(subject.name)} clearLabel={T.clearSearch} />
+        )}
+        {tq && !topics.length ? (
+          <p className="wb-subj-note">{T.noTopic}</p>
+        ) : topics.length ? (
           <>
             <h3 className="wb-subj-h3">{T.pickTopic}</h3>
             <ul className="wb-subj-topics">
@@ -318,6 +365,45 @@ export function SubjectsBrowser({ ui, deep, getToken }: { ui: SubjectsUiLang; de
   return (
     <div className="wb-subj">
       <AgeSwitch T={T} age={age} onAge={setAge} />
+      {visible.length > 0 && <SearchBox value={query} onChange={setQuery} placeholder={T.searchAll} clearLabel={T.clearSearch} />}
+      {found ? (
+        found.cards.length || found.topics.length ? (
+          <>
+            {found.cards.length > 0 && (
+              <div className="wb-subj-grid wb-subj-found-cards">
+                {found.cards.map((s) => (
+                  <button key={s.key} type="button" className="wb-subj-card" onClick={() => go({ s: s.key })}>
+                    <span className="wb-subj-card-img"><img src={s.icon} alt="" width={72} height={72} loading="lazy" /></span>
+                    <span className="wb-subj-card-name">{s.name}</span>
+                    <span className="wb-subj-card-meta">{T.topics(s.topics.length)}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+            {found.topics.length > 0 && (
+              <>
+                <h3 className="wb-subj-h3">{T.foundTopics}</h3>
+                <ul className="wb-subj-topics">
+                  {found.topics.map(({ s, t }) => (
+                    <li key={`${s.key}-${t.id}`}>
+                      <button type="button" className="wb-subj-topic" onClick={() => go({ s: s.key, t: t.id })}>
+                        <span className="wb-subj-topic-title">
+                          {t.title}
+                          <span className="wb-subj-topic-sub">{s.name}</span>
+                        </span>
+                        <Chevron />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </>
+        ) : (
+          <p className="wb-subj-note">{T.noMatch}</p>
+        )
+      ) : (
+      <>
       <h2 className="wb-subj-h3">{T.pickSubject}</h2>
       {visible.length ? (
         <div className="wb-subj-grid">
@@ -331,6 +417,36 @@ export function SubjectsBrowser({ ui, deep, getToken }: { ui: SubjectsUiLang; de
         </div>
       ) : (
         <p className="wb-subj-note">{T.empty}</p>
+      )}
+      </>
+      )}
+    </div>
+  );
+}
+
+/** Lower case, no Hebrew points or Arabic marks, single spaces: "מָתֵמָטִיקָה" finds "מתמטיקה". */
+function normalizeSearch(s: string): string {
+  return s
+    .toLocaleLowerCase()
+    .replace(/[֑-ׇً-ٰٟ]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function SearchBox({ value, onChange, placeholder, clearLabel }: { value: string; onChange: (v: string) => void; placeholder: string; clearLabel: string }) {
+  return (
+    <div className="wb-subj-search">
+      <svg className="wb-subj-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7" />
+        <path d="M20 20l-3.5-3.5" />
+      </svg>
+      <input type="search" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} aria-label={placeholder} enterKeyHint="search" />
+      {value && (
+        <button type="button" className="wb-subj-search-clear" onClick={() => onChange("")} aria-label={clearLabel}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
       )}
     </div>
   );

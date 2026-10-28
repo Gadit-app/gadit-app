@@ -12270,6 +12270,27 @@ html[data-theme="dark"] .wordbook .wb-word-sentence-input::placeholder { color: 
 }
 .wordbook .wb-subj-topic:hover { border-color: var(--teal, #0E7490); }
 .wordbook .wb-subj-topic-title { flex: 1; min-width: 0; font-size: 15.5px; font-weight: 700; line-height: 1.4; }
+.wordbook .wb-subj-topic-sub { display: block; margin-top: 2px; font-size: 13px; font-weight: 600; color: var(--ink-muted, #6B7280); }
+/* Search a subject or topic (2026-10-28). */
+.wordbook .wb-subj-search {
+  position: relative; display: flex; align-items: center; max-width: 520px; width: 100%; margin: 0 auto 20px;
+  background: var(--card, var(--surface, #fff)); border: 1px solid var(--hairline, var(--rule, #E2E5EA)); border-radius: 14px;
+  transition: border-color .15s, box-shadow .15s;
+}
+.wordbook .wb-subj-search:focus-within { border-color: var(--teal, #0E7490); box-shadow: 0 0 0 3px rgba(14,116,144,.12); }
+.wordbook .wb-subj-search-icon { flex-shrink: 0; margin-inline-start: 14px; color: var(--ink-faint, #9CA3AF); }
+.wordbook .wb-subj-search input {
+  flex: 1; min-width: 0; padding: 12px 10px; border: 0; outline: 0; background: transparent;
+  font: inherit; font-size: 16px; color: var(--ink, #0B1220); -webkit-appearance: none; appearance: none;
+}
+.wordbook .wb-subj-search input::-webkit-search-cancel-button { display: none; }
+.wordbook .wb-subj-search input::placeholder { color: var(--ink-faint, #9CA3AF); }
+.wordbook .wb-subj-search-clear {
+  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; margin-inline-end: 6px;
+  border: 0; border-radius: 999px; background: transparent; color: var(--ink-muted, #6B7280); cursor: pointer;
+}
+.wordbook .wb-subj-search-clear:hover { background: var(--paper-deep, #E9F1EC); color: var(--ink, #0B1220); }
+.wordbook .wb-subj-found-cards { margin-bottom: 22px; }
 .wordbook .wb-subj-chevron { flex-shrink: 0; color: var(--ink-faint, #9CA3AF); }
 .wordbook .wb-subj-hint { margin: 0 0 14px; font-size: 14.5px; line-height: 1.5; color: var(--ink-muted, #6B7280); }
 .wordbook .wb-subj-word {
