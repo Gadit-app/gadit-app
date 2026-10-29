@@ -3,7 +3,7 @@
 // signature and guides link). The email texts themselves are translated
 // per email and stored as overrides (emailTemplates/{key}.{lang}).
 
-export const FAMILY_LANGS = ["he","en","ar","ru","es","pt","fr","de","cs","sk","it","ja","hi","am","uk","tr","pl","fa","id","nl","el","zu","vi","fil","af","sw","zh-CN","zh-TW","ko","th","bn","da","hu"] as const;
+export const FAMILY_LANGS = ["he","en","ar","ru","es","pt","fr","de","cs","sk","it","ja","hi","am","uk","tr","pl","fa","id","nl","el","zu","vi","fil","af","sw","zh-CN","zh-TW","ko","th","bn","da","hu","xh","nso","tn","st","ts","ss","ve","nr"] as const;
 export type FamilyLang = (typeof FAMILY_LANGS)[number];
 export const isFamilyLang = (l: unknown): l is FamilyLang => typeof l === "string" && (FAMILY_LANGS as readonly string[]).includes(l);
 export const RTL_LANGS = new Set(["he", "ar", "fa"]);
@@ -43,13 +43,8 @@ export const FAMILY_FIXED: Record<FamilyLang, FamilyFixed> = {
   "bn": {"unsub":"সাবস্ক্রিপশন বন্ধ করুন","tagline":"প্রতিটি শব্দ পুরোপুরি বুঝুন","closing":"কোনো প্রশ্ন বা সাহায্য লাগলে আমরা আছি।","signature":"Gadit টিম","helpText":"সব গাইড"},
   "da": {"unsub":"Afmeld","tagline":"Forstå hvert ord helt til bunds","closing":"Vi er her, hvis du har spørgsmål eller brug for hjælp.","signature":"Teamet bag Gadit","helpText":"Alle guides"},
   "hu": {"unsub":"Leiratkozás","tagline":"Érts meg minden szót igazán.","closing":"Ha kérdésed van, vagy segítség kell, itt vagyunk.","signature":"A Gadit csapata","helpText":"Összes útmutató"},
-};
-
-// The eight South African UI languages (2026-10-15) have no Family series
-// translation, but the lifecycle emails (checkout recovery, activation, weekly
-// report: i18n/<lang>.json) are translated into them (2026-10-22): their
-// fixed strings, so the footer and signature match the email.
-export const EXTRA_FIXED: Record<string, FamilyFixed> = {
+  // The eight South African UI languages (2026-10-15); their Family series
+  // translations are in Firestore since 2026-10-19.
   "xh": {"unsub":"Zikhuphe kuluhlu","tagline":"Lonke igama, liqondakele","closing":"Sikhona nakuwuphi na umbuzo okanye xa ufuna uncedo.","signature":"Iqela le-Gadit","helpText":"Zonke izikhokelo"},
   "nso": {"unsub":"Itloše lenaneong","tagline":"Lentšu le lengwe le le lengwe, le kwešišwa","closing":"Re gona bakeng sa potšišo efe goba efe goba thušo.","signature":"Sehlopha sa Gadit","helpText":"Ditlhahlo ka moka"},
   "tn": {"unsub":"Itlose mo lenaneong","tagline":"Lefoko lengwe le lengwe, le tlhaloganngwe","closing":"Re teng go araba potso nngwe le nngwe kgotsa go thusa.","signature":"Setlhopha sa Gadit","helpText":"Dikaelo tsotlhe"},
@@ -62,5 +57,5 @@ export const EXTRA_FIXED: Record<string, FamilyFixed> = {
 
 /** The fixed email strings of any UI language (English when it has none). */
 export function fixedFor(lang: string): FamilyFixed {
-  return isFamilyLang(lang) ? FAMILY_FIXED[lang] : EXTRA_FIXED[lang] ?? FAMILY_FIXED.en;
+  return isFamilyLang(lang) ? FAMILY_FIXED[lang] : FAMILY_FIXED.en;
 }
