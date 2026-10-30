@@ -1,5 +1,6 @@
 import type { User } from "firebase/auth";
 import { toLocalDateStr } from "@/lib/gamification";
+import { playSkinFx } from "@/lib/skin-fx";
 
 /**
  * Tell the server a child finished something (Gadi 2026-10-12: the parent
@@ -7,8 +8,9 @@ import { toLocalDateStr } from "@/lib/gamification";
  * summary, as they chose). The server ignores grown-ups. Best-effort, and
  * `keepalive` so leaving the page right after does not drop it.
  *
- * Every call is also a completed practice for the rank (10 points, at most 10
- * a day, counted on the server). Resolves to whether this one counted.
+ * Every call is also a completed practice (at most 10 a day count, on the
+ * server), which unlocks avatar skins; the child's skin plays its effect.
+ * Resolves to whether this one counted.
  */
 export async function notifyActivity(
   user: User | null | undefined,
@@ -24,6 +26,7 @@ export async function notifyActivity(
       body: JSON.stringify({ ...body, day: toLocalDateStr(new Date().toISOString()) }),
     });
     forgetRank();
+    playSkinFx("practice");
     const j = (await r.json().catch(() => null)) as { practice?: { counted?: boolean } } | null;
     return { counted: j?.practice?.counted === true };
   } catch { return { counted: false }; }

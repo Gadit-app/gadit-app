@@ -16,6 +16,7 @@
  */
 
 import { AppIntentPing } from "@/components/AppIntentPing";
+import { playSkinFx } from "@/lib/skin-fx";
 import { WaitDots } from "@/components/WaitText";
 import { isNotAWordResult } from "@/lib/not-a-word";
 import { WordMilestone } from "@/components/design/WordMilestone";
@@ -1804,6 +1805,7 @@ export function WordClient({
           setNotebookFull(false);
           const j = (await res.json().catch(() => ({}))) as { saved?: boolean; count?: number };
           if (j.saved && typeof j.count === "number") setNotebookCount(j.count);
+          if (j.saved) playSkinFx("word");
         } else if (res.status === 402) {
           setNotebookFull(true);
         }

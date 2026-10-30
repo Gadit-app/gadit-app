@@ -940,6 +940,7 @@ export function FamilyPairClient() {
   const [now, setNow] = useState(Date.now());
   const [generating, setGenerating] = useState(false);
   const [member, setMember] = useState<FamilyMember | null>(null);
+  const [firstLinkedAt, setFirstLinkedAt] = useState<string | null | undefined>(undefined);
 
   const origin = typeof window !== "undefined" ? window.location.origin : "https://gadit.app";
   const qrUrl = useMemo(
@@ -954,19 +955,28 @@ export function FamilyPairClient() {
       doc(db, "families", user.uid, "members", memberId),
       (snap) => {
         if (snap.exists()) {
-          setMember({ id: snap.id, ...(snap.data() as Omit<FamilyMember, "id">) });
+          const m = { id: snap.id, ...(snap.data() as Omit<FamilyMember, "id">) };
+          // The link time as the page first saw it: a change means a device
+          // was just linked from here.
+          setFirstLinkedAt((v) => (v === undefined ? (m.deviceLinkedAt ?? null) : v));
+          setMember(m);
         }
       }
     );
     return unsub;
   }, [user, memberId]);
 
-  // Generate a fresh pairing code on mount.
+  // A child can be linked on more than one device (phone AND computer, Hila
+  // 2026-10-30): always make a fresh code, even when the member already has
+  // a linked device. "Paired" means a device linked AFTER this page opened
+  // (redeem stamps deviceLinkedAt every time, see firstLinkedAt).
   useEffect(() => {
-    if (!user || member?.userId) return;
+    if (!user) return;
     void generateCode();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, member?.userId]);
+  }, [user]);
+  const justPaired =
+    !!member?.userId && firstLinkedAt !== undefined && !!member.deviceLinkedAt && member.deviceLinkedAt !== firstLinkedAt;
 
   // Tick clock so the countdown re-renders.
   useEffect(() => {
@@ -1008,8 +1018,8 @@ export function FamilyPairClient() {
     return <div className="wordbook wb-family-page" dir={dir}><div className="gd-wait-page"><WaitDots className="gd-wait-big" /></div></div>;
   }
 
-  // Success state — the member just paired their device.
-  if (member?.userId) {
+  // Success state: a device was just linked from this page.
+  if (justPaired) {
     return (
       <div className="wordbook wb-family-page" dir={dir}>
         <main className="wb-family-main">

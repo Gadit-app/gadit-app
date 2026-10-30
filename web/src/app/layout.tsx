@@ -5,6 +5,7 @@ import "./globals.css";
 import { CjkFonts } from "@/components/CjkFonts";
 import { cjkHref } from "@/lib/cjk-fonts";
 import { AuthProvider } from "@/lib/auth-context";
+import { SkinFx } from "@/components/SkinFx";
 import { LangProvider } from "@/lib/lang-context";
 import { CoachSessionBanner } from "@/components/CoachSessionBanner";
 import { AdminImpersonationBanner } from "@/components/AdminImpersonationBanner";
@@ -497,6 +498,7 @@ export default async function RootLayout({
               <CoachSessionBanner />
               <AdminImpersonationBanner />
               <KidsModeBar />
+              <SkinFx />
               {children}
               <VoiceAssistant />
               <GuideOverlay />
