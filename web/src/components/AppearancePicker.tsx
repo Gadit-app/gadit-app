@@ -28,6 +28,9 @@ import {
 import { RANKS } from "@/lib/gamification";
 import { useServerRank } from "@/lib/use-rank-state";
 import { rankLabel } from "@/lib/gamification-labels";
+import { SkinsPanel, SkinUnlockMoment, skinCopy } from "@/components/KidSkins";
+import { KidsCelebration } from "@/components/design/KidsCelebration";
+import { avatarUrl } from "@/lib/family";
 
 // The hint under a locked skin: the rank it opens at, in every UI language.
 const LOCK_COPY: Record<string, { orRank: string }> = {
@@ -76,8 +79,10 @@ const LOCK_COPY: Record<string, { orRank: string }> = {
 function lockCopy(lang: string) { return LOCK_COPY[lang] ?? LOCK_COPY.en; }
 
 export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "adult" }) {
-  const { lang } = useLang();
-  const { user } = useAuth();
+  const { lang, dir } = useLang();
+  const { user, familyRole, avatarId } = useAuth();
+  const [skinsOpen, setSkinsOpen] = useState(false);
+  const [celebrate, setCelebrate] = useState(0);
   const [theme, setTheme] = useTheme();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
@@ -97,6 +102,9 @@ export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "a
   // match the rank the child sees.
   const serverRank = useServerRank(user, scope === "kid");
   const rankIndex = serverRank?.rankIndex ?? 0;
+  // Avatar skins open by completed practice (lib/looks.ts), kids only.
+  const isKid = scope === "kid" && familyRole === "kid";
+  const sc = skinCopy(lang);
 
   useEffect(() => {
     if (!open) return;
@@ -115,6 +123,8 @@ export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "a
   // A skin is unlocked PURELY by rank (= distinct words learned). Free skins
   // have no rank gate; earnable skins unlock when their rank is reached. No
   // gift-points / store path anymore (Gadi 2026-08-27).
+  function bump() { setCelebrate((x) => x + 1); }
+
   function skinState(t: ThemeMeta) {
     const rankReached = t.unlockAtRank != null && rankIndex >= t.unlockAtRank;
     const isFree = t.unlockAtRank == null;
@@ -139,6 +149,25 @@ export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "a
       </button>
       {open && (
         <div className="wb-skin-dd-menu" role="listbox">
+          {isKid && user && (
+            <>
+              <button
+                type="button"
+                className="wb-skin-dd-item"
+                onClick={() => { setOpen(false); setSkinsOpen(true); }}
+                style={{ fontWeight: 800 }}
+              >
+                {avatarUrl(avatarId) ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={avatarUrl(avatarId)!} alt="" width={26} height={26} style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover" }} />
+                ) : (
+                  <span className="wb-skin-emoji" aria-hidden="true">🧑‍🚀</span>
+                )}
+                <span className="wb-skin-name">{sc.open}</span>
+              </button>
+              <div style={{ fontSize: 11.5, fontWeight: 700, opacity: 0.7, padding: "6px 10px 2px" }}>{sc.backgrounds}</div>
+            </>
+          )}
           {list.map((t) => {
             const st = skinState(t);
             const justUnlocked = t.unlockAtRank != null && t.unlockAtRank === rankIndex;
@@ -177,6 +206,15 @@ export function AppearancePicker({ scope = "kid" }: { scope?: "all" | "kid" | "a
             );
           })}
         </div>
+      )}
+      {isKid && user && skinsOpen && (
+        <SkinsPanel user={user} lang={lang} dir={dir} practices={serverRank?.practices ?? 0} avatarId={avatarId} onClose={() => setSkinsOpen(false)} />
+      )}
+      {isKid && user && (
+        <>
+          <KidsCelebration runId={celebrate} />
+          <SkinUnlockMoment user={user} lang={lang} dir={dir} practices={serverRank ? serverRank.practices : null} onCelebrate={bump} />
+        </>
       )}
     </div>
   );

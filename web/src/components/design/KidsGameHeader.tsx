@@ -9,6 +9,9 @@ import { rankIconSrc } from "@/lib/rank-icons";
 import { KID_THEMES, themeName } from "@/lib/appearance";
 import { KidsCelebration } from "./KidsCelebration";
 import { useAuth } from "@/lib/auth-context";
+import { SkinsPanel, skinCopy } from "@/components/KidSkins";
+import { LOOKS, nextLook } from "@/lib/looks";
+import { avatarUrl } from "@/lib/family";
 
 // Streak days that earn a celebration. streakTier() returns the highest one
 // reached, so we can tell when the child crosses into a new tier.
@@ -45,52 +48,52 @@ function streakProgress(streak: number): number {
 // Small local copy for the ranks table (he + en, en fallback) so a new
 // surface doesn't force a full gamification-labels sweep.
 const RANKS_COPY: Record<string, { title: string; sub: (n: number) => string; words: string; you: string; locked: string; close: string }> = {
-  en: { title: "Your ranks", sub: (n) => `You've earned ${n} points. New word = 1 point · Finished practice = 10 points`, words: "points", you: "You're here", locked: "Locked", close: "Close" },
-  he: { title: "הדרגות שלכם", sub: (n) => `צברתם ${n} נקודות. מילה חדשה = נקודה · תרגול שסיימתם = 10 נקודות`, words: "נקודות", you: "אתם כאן", locked: "נעול", close: "סגירה" },
+  en: { title: "Your ranks", sub: (n) => `You've collected ${n} words. Every new word moves you up`, words: "words", you: "You're here", locked: "Locked", close: "Close" },
+  he: { title: "הדרגות שלכם", sub: (n) => `אספתם ${n} מילים. כל מילה חדשה מקדמת אתכם לדרגה הבאה`, words: "מילים", you: "אתם כאן", locked: "נעול", close: "סגירה" },
 };
 
 // Ranks-table modal copy for the other 31 languages (was en+he only),
 // added 2026-08-22 so the ranks modal is native everywhere.
 Object.assign(RANKS_COPY, {
-  "ar": { title: "رتبك", sub: (n) => `جمعتم ${n} نقطة. كلمة جديدة = نقطة · تمرين أنهيتموه = 10 نقاط`, words: "نقطة", you: "أنت هنا", locked: "مقفل", close: "إغلاق" },
-  "ru": { title: "Твои ранги", sub: (n) => `Вы набрали ${n} очков. Новое слово = 1 очко · Законченная тренировка = 10 очков`, words: "очков", you: "Ты здесь", locked: "Закрыто", close: "Закрыть" },
-  "es": { title: "Tus rangos", sub: (n) => `Han ganado ${n} puntos. Palabra nueva = 1 punto · Práctica terminada = 10 puntos`, words: "puntos", you: "Estás aquí", locked: "Bloqueado", close: "Cerrar" },
-  "pt": { title: "Seus níveis", sub: (n) => `Vocês ganharam ${n} pontos. Palavra nova = 1 ponto · Prática concluída = 10 pontos`, words: "pontos", you: "Você está aqui", locked: "Bloqueado", close: "Fechar" },
-  "fr": { title: "Tes rangs", sub: (n) => `Vous avez gagné ${n} points. Nouveau mot = 1 point · Exercice terminé = 10 points`, words: "points", you: "Tu es ici", locked: "Verrouillé", close: "Fermer" },
-  "de": { title: "Deine Ränge", sub: (n) => `Ihr habt ${n} Punkte gesammelt. Neues Wort = 1 Punkt · Fertige Übung = 10 Punkte`, words: "Punkte", you: "Du bist hier", locked: "Gesperrt", close: "Schließen" },
-  "cs": { title: "Tvoje hodnosti", sub: (n) => `Získali jste ${n} bodů. Nové slovo = 1 bod · Dokončené cvičení = 10 bodů`, words: "bodů", you: "Tady jsi", locked: "Zamčeno", close: "Zavřít" },
-  "sk": { title: "Tvoje hodnosti", sub: (n) => `Získali ste ${n} bodov. Nové slovo = 1 bod · Dokončené cvičenie = 10 bodov`, words: "bodov", you: "Tu si", locked: "Zamknuté", close: "Zavrieť" },
-  "it": { title: "I tuoi gradi", sub: (n) => `Avete guadagnato ${n} punti. Parola nuova = 1 punto · Esercizio finito = 10 punti`, words: "punti", you: "Sei qui", locked: "Bloccato", close: "Chiudi" },
-  "ja": { title: "あなたのランク", sub: (n) => `${n}ポイント獲得しました。新しい言葉 = 1ポイント · 終えた練習 = 10ポイント`, words: "ポイント", you: "ここだよ", locked: "ロック中", close: "閉じる" },
-  "hi": { title: "तुम्हारे रैंक", sub: (n) => `आपने ${n} अंक कमाए हैं। नया शब्द = 1 अंक · पूरा किया अभ्यास = 10 अंक`, words: "अंक", you: "तुम यहाँ हो", locked: "बंद", close: "बंद करें" },
-  "am": { title: "ደረጃዎችህ", sub: (n) => `${n} ነጥብ አግኝታችኋል። አዲስ ቃል = 1 ነጥብ · የጨረሳችሁት ልምምድ = 10 ነጥብ`, words: "ነጥብ", you: "እዚህ ነህ", locked: "ተቆልፏል", close: "ዝጋ" },
-  "uk": { title: "Твої ранги", sub: (n) => `Ви набрали ${n} балів. Нове слово = 1 бал · Завершене тренування = 10 балів`, words: "балів", you: "Ти тут", locked: "Закрито", close: "Закрити" },
-  "tr": { title: "Rütbelerin", sub: (n) => `${n} puan kazandınız. Yeni kelime = 1 puan · Bitirilen alıştırma = 10 puan`, words: "puan", you: "Buradasın", locked: "Kilitli", close: "Kapat" },
-  "pl": { title: "Twoje rangi", sub: (n) => `Zdobyliście ${n} punktów. Nowe słowo = 1 punkt · Ukończone ćwiczenie = 10 punktów`, words: "punktów", you: "Tu jesteś", locked: "Zablokowane", close: "Zamknij" },
-  "fa": { title: "رتبه‌های تو", sub: (n) => `شما ${n} امتیاز گرفتید. کلمه‌ی جدید = 1 امتیاز · تمرینی که تمام کردید = 10 امتیاز`, words: "امتیاز", you: "تو اینجایی", locked: "قفل", close: "بستن" },
-  "id": { title: "Peringkatmu", sub: (n) => `Kalian sudah mengumpulkan ${n} poin. Kata baru = 1 poin · Latihan selesai = 10 poin`, words: "poin", you: "Kamu di sini", locked: "Terkunci", close: "Tutup" },
-  "nl": { title: "Jouw rangen", sub: (n) => `Jullie hebben ${n} punten verdiend. Nieuw woord = 1 punt · Afgeronde oefening = 10 punten`, words: "punten", you: "Jij bent hier", locked: "Vergrendeld", close: "Sluiten" },
-  "el": { title: "Οι βαθμοί σου", sub: (n) => `Κερδίσατε ${n} πόντους. Νέα λέξη = 1 πόντος · Ολοκληρωμένη εξάσκηση = 10 πόντοι`, words: "πόντοι", you: "Εδώ είσαι", locked: "Κλειδωμένο", close: "Κλείσιμο" },
-  "zu": { title: "Amazinga akho", sub: (n) => `Nithole amaphuzu angu-${n}. Igama elisha = iphuzu 1 · Ukuzilolonga enikuqedile = amaphuzu angu-10`, words: "amaphuzu", you: "Ulapha", locked: "Kukhiyiwe", close: "Vala" },
-  xh: { title: "Amanqanaba akho", sub: (n) => `Nizuze amanqaku angama-${n}. Igama elitsha = inqaku eli-1 · Umthambo eniwugqibileyo = amanqaku ali-10`, words: "amanqaku", you: "Ulapha", locked: "Kutshixiwe", close: "Vala" },
-  nso: { title: "Maemo a gago", sub: (n) => `Le hweditše dintlha tše ${n}. Lentšu le lefsa = ntlha e 1 · Tlwaetšo ye le e feditšego = dintlha tše 10`, words: "dintlha", you: "O mo", locked: "E notletšwe", close: "Tswalela" },
-  tn: { title: "Maemo a gago", sub: (n) => `Lo kgobokantse dintlha di le ${n}. Lefoko le lesha = ntlha e le 1 · Katiso e lo e weditseng = dintlha di le 10`, words: "dintlha", you: "O fano", locked: "E notletswe", close: "Tswala" },
-  st: { title: "Maemo a hao", sub: (n) => `Le fumane dintlha tse ${n}. Lentswe le letjha = ntlha e 1 · Boikwetliso boo le bo qetileng = dintlha tse 10`, words: "dintlha", you: "O mona", locked: "E notletswe", close: "Kwala" },
-  ts: { title: "Swiyimo swa wena", sub: (n) => `Mi kume tinhlayo ta ${n}. Rito lerintshwa = nhlayo ya 1 · Ndzetelo leyi mi yi heteke = tinhlayo ta 10`, words: "tinhlayo", you: "U laha", locked: "Yi lotleriwile", close: "Pfala" },
-  ss: { title: "Tikhundla takho", sub: (n) => `Nitfole emaphuzu langu-${n}. Ligama lelisha = liphuzu la-1 · Kuzijwayeta lenikucedzile = emaphuzu la-10`, words: "emaphuzu", you: "Ulapha", locked: "Kuvaliwe", close: "Vala" },
-  ve: { title: "Vhuimo haṋu", sub: (n) => `No wana maraga a ${n}. Ipfi ḽiswa = ḽiraga 1 · Nḓowedzo ye na i fhedza = maraga a 10`, words: "maraga", you: "Ni fhano", locked: "Zwo valwa", close: "Valani" },
-  nr: { title: "Amazinga wakho", sub: (n) => `Nithole amaphuzu ali-${n}. Ilimi elitjha = iphuzu eli-1 · Ukuzilolonga enikuqedileko = amaphuzu ali-10`, words: "amaphuzu", you: "Ulapha", locked: "Kukhiyiwe", close: "Vala" },
-  "af": { title: "Jou range", sub: (n) => `Julle het ${n} punte verdien. Nuwe woord = 1 punt · Voltooide oefening = 10 punte`, words: "punte", you: "Jy is hier", locked: "Gesluit", close: "Maak toe" },
-  "bn": { title: "তোমার র‍্যাঙ্ক", sub: (n) => `আপনারা ${n} পয়েন্ট পেয়েছেন। নতুন শব্দ = 1 পয়েন্ট · শেষ করা অনুশীলন = 10 পয়েন্ট`, words: "পয়েন্ট", you: "তুমি এখানে", locked: "লক করা", close: "বন্ধ করো" },
-  "da": { title: "Dine niveauer", sub: (n) => `I har tjent ${n} point. Nyt ord = 1 point · Færdig øvelse = 10 point`, words: "point", you: "Du er her", locked: "Låst", close: "Luk" },
-  "fil": { title: "Mga ranggo mo", sub: (n) => `Nakakuha na kayo ng ${n} puntos. Bagong salita = 1 puntos · Natapos na pagsasanay = 10 puntos`, words: "puntos", you: "Nandito ka", locked: "Naka-lock", close: "Isara" },
-  "hu": { title: "A rangjaid", sub: (n) => `${n} pontot gyűjtöttetek. Új szó = 1 pont · Befejezett gyakorlás = 10 pont`, words: "pont", you: "Itt vagy", locked: "Zárolva", close: "Bezárás" },
-  "ko": { title: "내 랭크", sub: (n) => `${n}점을 모았어요. 새 단어 = 1점 · 끝낸 연습 = 10점`, words: "점", you: "여기예요", locked: "잠김", close: "닫기" },
-  "sw": { title: "Vyeo vyako", sub: (n) => `Mmepata pointi ${n}. Neno jipya = pointi 1 · Zoezi mlilomaliza = pointi 10`, words: "pointi", you: "Uko hapa", locked: "Imefungwa", close: "Funga" },
-  "th": { title: "อันดับของคุณ", sub: (n) => `คุณได้ ${n} คะแนนแล้ว คำใหม่ = 1 คะแนน · แบบฝึกที่ทำจบ = 10 คะแนน`, words: "คะแนน", you: "คุณอยู่นี่", locked: "ล็อก", close: "ปิด" },
-  "vi": { title: "Cấp bậc của bạn", sub: (n) => `Các bạn đã kiếm được ${n} điểm. Từ mới = 1 điểm · Bài luyện đã xong = 10 điểm`, words: "điểm", you: "Bạn ở đây", locked: "Đã khóa", close: "Đóng" },
-  "zh-CN": { title: "你的段位", sub: (n) => `您已获得 ${n} 分。新词 = 1 分 · 完成的练习 = 10 分`, words: "分", you: "你在这里", locked: "未解锁", close: "关闭" },
-  "zh-TW": { title: "你的段位", sub: (n) => `您已獲得 ${n} 分。新詞 = 1 分 · 完成的練習 = 10 分`, words: "分", you: "你在這裡", locked: "未解鎖", close: "關閉" },
+  "ar": { title: "رتبك", sub: (n) => `جمعتم ${n} ${n % 100 >= 3 && n % 100 <= 10 ? "كلمات" : "كلمة"}. كل كلمة جديدة تقدّمكم إلى الأعلى`, words: "كلمة", you: "أنت هنا", locked: "مقفل", close: "إغلاق" },
+  "ru": { title: "Твои ранги", sub: (n) => `Собрано слов: ${n}. Каждое новое слово поднимает вас выше`, words: "слов", you: "Ты здесь", locked: "Закрыто", close: "Закрыть" },
+  "es": { title: "Tus rangos", sub: (n) => `Han reunido ${n} palabras. Cada palabra nueva los hace subir`, words: "palabras", you: "Estás aquí", locked: "Bloqueado", close: "Cerrar" },
+  "pt": { title: "Seus níveis", sub: (n) => `Vocês reuniram ${n} palavras. Cada palavra nova faz vocês subirem`, words: "palavras", you: "Você está aqui", locked: "Bloqueado", close: "Fechar" },
+  "fr": { title: "Tes rangs", sub: (n) => `Vous avez collecté ${n} mots. Chaque nouveau mot vous fait monter`, words: "mots", you: "Tu es ici", locked: "Verrouillé", close: "Fermer" },
+  "de": { title: "Deine Ränge", sub: (n) => `Ihr habt ${n} Wörter gesammelt. Jedes neue Wort bringt euch weiter nach oben`, words: "Wörter", you: "Du bist hier", locked: "Gesperrt", close: "Schließen" },
+  "cs": { title: "Tvoje hodnosti", sub: (n) => `Počet nasbíraných slov: ${n}. Každé nové slovo vás posune výš`, words: "slov", you: "Tady jsi", locked: "Zamčeno", close: "Zavřít" },
+  "sk": { title: "Tvoje hodnosti", sub: (n) => `Počet nazbieraných slov: ${n}. Každé nové slovo vás posunie vyššie`, words: "slov", you: "Tu si", locked: "Zamknuté", close: "Zavrieť" },
+  "it": { title: "I tuoi gradi", sub: (n) => `Avete raccolto ${n} parole. Ogni parola nuova vi fa salire`, words: "parole", you: "Sei qui", locked: "Bloccato", close: "Chiudi" },
+  "ja": { title: "あなたのランク", sub: (n) => `${n}語を集めました。新しい言葉ひとつごとに、ランクが上がっていきます`, words: "語", you: "ここだよ", locked: "ロック中", close: "閉じる" },
+  "hi": { title: "तुम्हारे रैंक", sub: (n) => `आपने ${n} शब्द जमा किए हैं। हर नया शब्द आपको आगे बढ़ाता है`, words: "शब्द", you: "तुम यहाँ हो", locked: "बंद", close: "बंद करें" },
+  "am": { title: "ደረጃዎችህ", sub: (n) => `${n} ቃላት ሰብስባችኋል። እያንዳንዱ አዲስ ቃል ወደ ላይ ያሳድጋችኋል`, words: "ቃላት", you: "እዚህ ነህ", locked: "ተቆልፏል", close: "ዝጋ" },
+  "uk": { title: "Твої ранги", sub: (n) => `Зібрано слів: ${n}. Кожне нове слово підіймає вас вище`, words: "слів", you: "Ти тут", locked: "Закрито", close: "Закрити" },
+  "tr": { title: "Rütbelerin", sub: (n) => `${n} kelime topladınız. Her yeni kelime sizi yukarı taşır`, words: "kelime", you: "Buradasın", locked: "Kilitli", close: "Kapat" },
+  "pl": { title: "Twoje rangi", sub: (n) => `Zebrane słowa: ${n}. Każde nowe słowo przesuwa was wyżej`, words: "słów", you: "Tu jesteś", locked: "Zablokowane", close: "Zamknij" },
+  "fa": { title: "رتبه‌های تو", sub: (n) => `شما ${n} کلمه جمع کرده‌اید. هر کلمه‌ی جدید شما را بالاتر می‌برد`, words: "کلمه", you: "تو اینجایی", locked: "قفل", close: "بستن" },
+  "id": { title: "Peringkatmu", sub: (n) => `Kalian sudah mengumpulkan ${n} kata. Setiap kata baru membuat kalian naik`, words: "kata", you: "Kamu di sini", locked: "Terkunci", close: "Tutup" },
+  "nl": { title: "Jouw rangen", sub: (n) => `Jullie hebben ${n} woorden verzameld. Elk nieuw woord brengt jullie hoger`, words: "woorden", you: "Jij bent hier", locked: "Vergrendeld", close: "Sluiten" },
+  "el": { title: "Οι βαθμοί σου", sub: (n) => `Μαζέψατε ${n} λέξεις. Κάθε νέα λέξη σας ανεβάζει`, words: "λέξεις", you: "Εδώ είσαι", locked: "Κλειδωμένο", close: "Κλείσιμο" },
+  "zu": { title: "Amazinga akho", sub: (n) => `Niqoqe amagama angu-${n}. Igama ngalinye elisha linikhuphula phezulu`, words: "amagama", you: "Ulapha", locked: "Kukhiyiwe", close: "Vala" },
+  xh: { title: "Amanqanaba akho", sub: (n) => `Niqokelele amagama angama-${n}. Igama ngalinye elitsha linenyusela phezulu`, words: "amagama", you: "Ulapha", locked: "Kutshixiwe", close: "Vala" },
+  nso: { title: "Maemo a gago", sub: (n) => `Le kgobokeditše mantšu a ${n}. Lentšu le lengwe le le lengwe le lefsa le le rotošetša godimo`, words: "mantšu", you: "O mo", locked: "E notletšwe", close: "Tswalela" },
+  tn: { title: "Maemo a gago", sub: (n) => `Lo kokoantse mafoko a le ${n}. Lefoko lengwe le lengwe le lesha le lo tlhatlosetsa kwa godimo`, words: "mafoko", you: "O fano", locked: "E notletswe", close: "Tswala" },
+  st: { title: "Maemo a hao", sub: (n) => `Le bokeletse mantswe a ${n}. Lentswe le leng le le leng le letjha le le nyolla hodimo`, words: "mantswe", you: "O mona", locked: "E notletswe", close: "Kwala" },
+  ts: { title: "Swiyimo swa wena", sub: (n) => `Mi hlengelete marito ya ${n}. Rito rin'wana ni rin'wana lerintshwa ri mi tlakusela ehenhla`, words: "marito", you: "U laha", locked: "Yi lotleriwile", close: "Pfala" },
+  ss: { title: "Tikhundla takho", sub: (n) => `Nibute emagama langu-${n}. Ligama ngalinye lelisha linikhuphula etulu`, words: "emagama", you: "Ulapha", locked: "Kuvaliwe", close: "Vala" },
+  ve: { title: "Vhuimo haṋu", sub: (n) => `No kuvhanganya maipfi a ${n}. Ipfi ḽiṅwe na ḽiṅwe ḽiswa ḽi ni gonyisa nṱha`, words: "maipfi", you: "Ni fhano", locked: "Zwo valwa", close: "Valani" },
+  nr: { title: "Amazinga wakho", sub: (n) => `Nibuthe amezwi ali-${n}. Ilizwi ngalinye elitjha linikhuphula phezulu`, words: "amezwi", you: "Ulapha", locked: "Kukhiyiwe", close: "Vala" },
+  "af": { title: "Jou range", sub: (n) => `Julle het ${n} woorde versamel. Elke nuwe woord skuif julle hoër op`, words: "woorde", you: "Jy is hier", locked: "Gesluit", close: "Maak toe" },
+  "bn": { title: "তোমার র‍্যাঙ্ক", sub: (n) => `আপনারা ${n}টি শব্দ জমিয়েছেন। প্রতিটি নতুন শব্দ আপনাদের আরও ওপরে তোলে`, words: "শব্দ", you: "তুমি এখানে", locked: "লক করা", close: "বন্ধ করো" },
+  "da": { title: "Dine niveauer", sub: (n) => `I har samlet ${n} ord. Hvert nyt ord rykker jer højere op`, words: "ord", you: "Du er her", locked: "Låst", close: "Luk" },
+  "fil": { title: "Mga ranggo mo", sub: (n) => `Nakaipon na kayo ng ${n} salita. Bawat bagong salita ay nagpapaangat sa inyo`, words: "salita", you: "Nandito ka", locked: "Naka-lock", close: "Isara" },
+  "hu": { title: "A rangjaid", sub: (n) => `${n} szót gyűjtöttetek. Minden új szóval feljebb léptek`, words: "szó", you: "Itt vagy", locked: "Zárolva", close: "Bezárás" },
+  "ko": { title: "내 랭크", sub: (n) => `단어 ${n}개를 모았어요. 새 단어 하나하나가 등급을 올려 줘요`, words: "단어", you: "여기예요", locked: "잠김", close: "닫기" },
+  "sw": { title: "Vyeo vyako", sub: (n) => `Mmekusanya maneno ${n}. Kila neno jipya linawapandisha juu`, words: "maneno", you: "Uko hapa", locked: "Imefungwa", close: "Funga" },
+  "th": { title: "อันดับของคุณ", sub: (n) => `คุณเก็บได้ ${n} คำแล้ว ทุกคำใหม่ช่วยให้คุณเลื่อนขึ้น`, words: "คำ", you: "คุณอยู่นี่", locked: "ล็อก", close: "ปิด" },
+  "vi": { title: "Cấp bậc của bạn", sub: (n) => `Các bạn đã thu thập ${n} từ. Mỗi từ mới giúp các bạn lên cao hơn`, words: "từ", you: "Bạn ở đây", locked: "Đã khóa", close: "Đóng" },
+  "zh-CN": { title: "你的段位", sub: (n) => `您已收集 ${n} 个单词。每个新单词都会让您升得更高`, words: "单词", you: "你在这里", locked: "未解锁", close: "关闭" },
+  "zh-TW": { title: "你的段位", sub: (n) => `您已收集 ${n} 個單字。每個新單字都會讓您升得更高`, words: "單字", you: "你在這裡", locked: "未解鎖", close: "關閉" },
 } satisfies Record<string, { title: string; sub: (n: number) => string; words: string; you: string; locked: string; close: string }>);
 
 function ranksCopy(lang: string) { return RANKS_COPY[lang] ?? RANKS_COPY.en; }
@@ -128,9 +131,10 @@ export function KidsGameHeader({
   dir: "rtl" | "ltr";
 }) {
   // Practice days (games, lessons, homework, reading, "say it") also keep
-  // the streak alive (Gadi 2026-10-12); practices also earn rank points
-  // (2026-10-21). Both come from the server.
-  const { user } = useAuth();
+  // the streak alive (Gadi 2026-10-12); completed practices unlock avatar
+  // skins (2026-10-30). Both come from the server.
+  const { user, familyRole, avatarId } = useAuth();
+  const [skinsOpen, setSkinsOpen] = useState(false);
   const server = useServerRank(user);
   const g = useMemo(() => gameFrom(addedAtDates, server), [addedAtDates, server]);
 
@@ -213,6 +217,13 @@ export function KidsGameHeader({
         </button>
       </div>
 
+      {familyRole === "kid" && user && server && (
+        <NextSkinStrip practices={server.practices} lang={lang} dir={dir} onOpen={() => setSkinsOpen(true)} />
+      )}
+      {skinsOpen && user && server && (
+        <SkinsPanel user={user} lang={lang} dir={dir} practices={server.practices} avatarId={avatarId} onClose={() => setSkinsOpen(false)} />
+      )}
+
       {ranksOpen && (
         <RanksModal
           onClose={() => setRanksOpen(false)}
@@ -223,6 +234,32 @@ export function KidsGameHeader({
         />
       )}
     </>
+  );
+}
+
+/** "My skins" strip under the tiles: the next locked skin and how many
+ *  completed practices it still needs (the chase, Gadi 2026-10-30). Tap opens
+ *  all skins. When every skin is open it shows the count. */
+function NextSkinStrip({ practices, lang, dir, onOpen }: { practices: number; lang: string; dir: "rtl" | "ltr"; onOpen: () => void }) {
+  const c = skinCopy(lang);
+  const nx = nextLook(practices);
+  const prevAt = nx ? Math.max(0, ...LOOKS.filter((l) => l.unlockAt < nx.look.unlockAt).map((l) => l.unlockAt)) : 0;
+  const pct = nx ? Math.round(((practices - prevAt) / Math.max(1, nx.look.unlockAt - prevAt)) * 100) : 100;
+  const src = avatarUrl(nx ? nx.look.id : LOOKS[LOOKS.length - 1].id);
+  return (
+    <button type="button" dir={dir} className="wb-kids-tile wb-kids-tile-btn" onClick={onOpen} style={{ marginTop: -10, marginBottom: 22, flexDirection: "row", alignItems: "center", gap: 14 }}>
+      {src && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={src} alt="" width={52} height={52} style={{ width: 52, height: 52, borderRadius: "50%", objectFit: "cover", flexShrink: 0, filter: nx ? "grayscale(1) brightness(0.8)" : "none", opacity: nx ? 0.7 : 1 }} />
+      )}
+      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 8, textAlign: dir === "rtl" ? "right" : "left" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 8, flexWrap: "wrap" }}>
+          <span className="wb-kids-tile-label">{c.open}</span>
+          <span className="wb-kids-tile-cap" style={{ fontWeight: 700 }}>{nx ? c.locked(nx.missing) : c.sub(LOOKS.length, LOOKS.length)}</span>
+        </div>
+        <Bar pct={Math.max(0, Math.min(100, pct))} color="#EC4899" />
+      </div>
+    </button>
   );
 }
 

@@ -176,8 +176,8 @@ const G: Dict = {
 
   // ── frame labels: ranks (KidsGameHeader, gamification-labels, appearance) ──
   "ui.yourRanks": { en: "Your ranks", he: "הדרגות שלכם" },
-  "ui.ranksSub": { en: "You've earned {n} points. New word = 1 point · Finished practice = 10 points", he: "צברתם {n} נקודות. מילה חדשה = נקודה · תרגול שסיימתם = 10 נקודות" },
-  "ui.points": { en: "points", he: "נקודות" },
+  "ui.ranksSub": { en: "You've collected {n} words. Every new word moves you up", he: "אספתם {n} מילים. כל מילה חדשה מקדמת אתכם לדרגה הבאה" },
+  "ui.points": { en: "words", he: "מילים" },
   "ui.youHere": { en: "You're here", he: "אתם כאן" },
   "ui.locked": { en: "Locked", he: "נעול" },
   "ui.dayStreak": { en: "Day streak", he: "רצף ימים" },
@@ -185,7 +185,7 @@ const G: Dict = {
   "ui.weeklyGoal": { en: "Weekly goal", he: "יעד שבועי" },
   "ui.goalWords": { en: "{n} / {g} new words", he: "{n} / {g} מילים חדשות" },
   "ui.yourRank": { en: "Your rank", he: "הדרגה שלך" },
-  "ui.toNext": { en: "{n} more points to level up", he: "עוד {n} נקודות לדרגה הבאה" },
+  "ui.toNext": { en: "{n} more words to level up", he: "עוד {n} מילים לדרגה הבאה" },
   "ui.skinSpace": { en: "Space", he: "חלל" },
   "ui.skinSunset": { en: "Sunset", he: "שקיעה" },
   "ui.skinAurora": { en: "Aurora", he: "זוהר" },
@@ -247,8 +247,8 @@ const G: Dict = {
   "ui.gPassport": { en: "Word Passport", he: "דרכון מילים" },
   "ui.gTwin": { en: "Twin Trap", he: "מלכודת תאומים" },
   "ui.gShade": { en: "Shade Slider", he: "סולם עוצמה" },
-  "ui.nPoints": { en: "{n} points", he: "{n} נקודות" },
-  "ui.pointsRule": { en: "New word = 1 point · Finished practice = 10 points", he: "מילה חדשה = נקודה · תרגול שסיימתם = 10 נקודות" },
+  "ui.newSkin": { en: "New skin unlocked", he: "נפתח סקין חדש" },
+  "ui.pointsRule": { en: "New word = a step up · Finished practice = new skins", he: "מילה חדשה = צעד לדרגה הבאה · תרגול שסיימתם = סקינים חדשים" },
   "ui.duelCard": { en: "Play with someone", he: "שחקו עם מישהו" },
   "ui.duelCardSub": { en: "Play each other: a parent against a kid, siblings or friends.", he: "שחקו אחד נגד השני: הורה נגד ילד, אחים או חברים." },
   "ui.duelTitle": { en: "Word Duel", he: "דו-קרב מילים" },
@@ -452,9 +452,9 @@ const G: Dict = {
 
   // ── guide: ranks ──
   "ranks.title": { en: "Ranks, streaks and the family leaderboard", he: "דרגות, רצפים ולוח המובילים" },
-  "ranks.desc": { en: "Every new word and every finished practice moves you toward the next rank.", he: "כל מילה חדשה וכל תרגול שמסיימים מקדמים לדרגה הבאה." },
+  "ranks.desc": { en: "Every new word moves you toward the next rank, and finished practice unlocks new skins.", he: "כל מילה חדשה מקדמת אתכם לדרגה הבאה, ותרגולים שמסיימים פותחים סקינים חדשים." },
   "ranks.s1": { en: "Tap the rank badge in the top bar to see your ranks.", he: "לוחצים על תג הדרגה בסרגל העליון כדי לראות את הדרגות." },
-  "ranks.s2": { en: "A new word earns 1 point and a finished practice earns 10.", he: "מילה חדשה שווה נקודה, ותרגול שמסיימים שווה 10 נקודות." },
+  "ranks.s2": { en: "Every new word in your notebook moves you up the ranks.", he: "כל מילה חדשה במחברת מקדמת אתכם בדרגות." },
   "ranks.s3": { en: "Kids see a day streak, a weekly goal and their rank, and higher ranks unlock new looks.", he: "ילדים רואים רצף ימים, יעד שבועי ודרגה, ודרגות גבוהות פותחות עיצובים חדשים." },
   "ranks.s4": { en: "The family leaderboard in My family shows who looked up the most words.", he: "לוח המובילים ב'המשפחה שלי' מראה מי חיפש הכי הרבה מילים." },
 
@@ -488,7 +488,7 @@ const G: Dict = {
   "games.s1": { en: "Open 'Play' in the top menu.", he: "פותחים 'משחקים' בתפריט העליון." },
   "games.s2": { en: "'From your notebook' plays on the words you looked up.", he: "ב'מהמחברת שלך' משחקים על המילים שחיפשתם." },
   "games.s3": { en: "Below are more games on word origins, precise words and word structure.", he: "מתחת יש עוד משחקים על מקור המילים, דיוק במילים ומבנה המילה." },
-  "games.s4": { en: "Every finished game earns 10 points toward your rank.", he: "כל משחק שמסיימים שווה 10 נקודות לדרגה." },
+  "games.s4": { en: "Every finished game brings you closer to a new skin.", he: "כל משחק שמסיימים מקרב אתכם לסקין חדש." },
 
   // ── guide: duel ──
   "duel.title": { en: "Word Duel", he: "דו-קרב מילים" },

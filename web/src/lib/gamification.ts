@@ -30,37 +30,34 @@ export type RankKey =
   // weeks (Gadi 2026-08: the old ladder ended at 300 and ran out too fast).
   | "champion" | "sage" | "virtuoso" | "legend" | "wizard" | "grandmaster";
 
-/** Thresholds for each rank, in POINTS (see computeGamification). Re-spaced
- *  2026-10-21 (Gadi) when completed practice started to earn points: an
- *  easier first step, then a smooth rise to the same top. Re-searching the
- *  same word never inflates a rank. A rank once reached is never lost
- *  (users/{uid}.rankFloor, see lib/rank-points.ts). */
+/** Thresholds for each rank, in distinct WORDS (Gadi 2026-10-30: one number
+ *  next to the rank, the same one the family leaderboard counts). Completed
+ *  practice no longer moves the rank; it unlocks avatar looks instead (see
+ *  lib/looks.ts). A rank once reached is never lost (users/{uid}.rankFloor,
+ *  see lib/rank-points.ts). */
 export const RANKS: { key: RankKey; min: number }[] = [
   { key: "scout", min: 0 },
-  { key: "explorer", min: 20 },
-  { key: "tracker", min: 60 },
-  { key: "ranger", min: 120 },
-  { key: "guide", min: 200 },
-  { key: "master", min: 320 },
-  { key: "champion", min: 480 },
-  { key: "sage", min: 700 },
-  { key: "virtuoso", min: 950 },
-  { key: "legend", min: 1250 },
-  { key: "wizard", min: 1650 },
-  { key: "grandmaster", min: 2200 },
+  { key: "explorer", min: 10 },
+  { key: "tracker", min: 25 },
+  { key: "ranger", min: 50 },
+  { key: "guide", min: 90 },
+  { key: "master", min: 140 },
+  { key: "champion", min: 200 },
+  { key: "sage", min: 280 },
+  { key: "virtuoso", min: 380 },
+  { key: "legend", min: 500 },
+  { key: "wizard", min: 650 },
+  { key: "grandmaster", min: 850 },
 ];
 
 /**
- * Points model for ranks (Gadi 2026-10-21, replaces the 2026-08 "understood
- * word = 10" model, which almost never fired): every distinct notebook word
- * is POINTS.seen, every COMPLETED PRACTICE (a finished dictation, "say it",
- * listen-and-pick, lesson, game, reading check, word-page quiz or word game,
- * reported through /api/family/notify-activity) is POINTS.practice, at most
- * PRACTICE_DAILY_CAP practices per local day so nobody can farm it. The
- * "understood" flag on a notebook word stays, but no longer earns rank points.
- * Yooniz "gift points" live in a SEPARATE, capped wallet (see
- * GIFT_WEEKLY_CAP) and never count toward ranks. Nothing spends them since
- * the gift store was removed.
+ * Since 2026-10-30 (Gadi) the rank counts distinct notebook words only.
+ * COMPLETED PRACTICE (a finished dictation, "say it", listen-and-pick, lesson,
+ * game, reading check, word-page quiz or word game, reported through
+ * /api/family/notify-activity) unlocks avatar looks (lib/looks.ts), at most
+ * PRACTICE_DAILY_CAP practices per local day so nobody can farm it. Yooniz
+ * "gift points" live in a SEPARATE, capped wallet (GIFT_WEEKLY_CAP) and never
+ * count toward ranks.
  */
 export const POINTS = { seen: 1, practice: 10 } as const;
 /** Completed practices that count per user per local day. */
@@ -78,8 +75,11 @@ export function countedPractices(counts: unknown): number {
   return n;
 }
 
-export function rankPoints(words: number, practices: number): number {
-  return Math.max(0, words) * POINTS.seen + Math.max(0, practices) * POINTS.practice;
+/** The rank metric: distinct words only since 2026-10-30. `practices` is
+ *  kept in the signature for callers, and now drives avatar looks instead. */
+export function rankPoints(words: number, _practices = 0): number {
+  void _practices;
+  return Math.max(0, words);
 }
 
 export function isRankKey(v: unknown): v is RankKey {

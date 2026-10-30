@@ -1,4 +1,5 @@
 import { addAvatarNames } from "./family-ui-i18n";
+import { LOOKS } from "@/lib/looks";
 /**
  * Family subscription shared types + helpers.
  *
@@ -97,7 +98,8 @@ export const PARENT_AVATARS: (AvatarDef & { for: "father" | "mother" })[] = [
 const ALL_AVATARS: AvatarDef[] = [...KID_AVATARS, ...PARENT_AVATARS];
 // Names in the other 29 UI languages (2026-10-10).
 addAvatarNames(ALL_AVATARS);
-const AVATAR_IDS = new Set(ALL_AVATARS.map((a) => a.id));
+// Unlockable skins (lib/looks.ts) render through the same avatarUrl.
+const AVATAR_IDS = new Set([...ALL_AVATARS.map((a) => a.id), ...LOOKS.map((l) => l.id)]);
 
 /** The avatars offered for a member, by role: kids get the character set,
  *  parents get the dad/mom set matching their role. */

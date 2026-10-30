@@ -309,7 +309,7 @@ export function gamesSteps(lang: Lang): WalkStep[] {
             <div style={{ fontSize: 40 }}>🎉</div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/ranks/explorer.webp" alt="" width={64} height={64} style={{ objectFit: "contain" }} />
-            <div style={{ fontSize: 18, fontWeight: 800, color: "#8B5CF6" }}>{gtf(lang, "ui.nPoints", { n: "⁦+10⁩" })}</div>
+            <div style={{ fontSize: 18, fontWeight: 800, color: "#8B5CF6" }}>{gt(lang, "ui.newSkin")}</div>
             <div style={{ fontSize: 12, color: WT.muted, textAlign: "center", lineHeight: 1.5, padding: "0 8px" }}>{gt(lang, "ui.pointsRule")}</div>
           </Sheet>
         </Screen>

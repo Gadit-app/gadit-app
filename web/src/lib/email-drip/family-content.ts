@@ -723,18 +723,18 @@ Every word a child looks up is a question they had in mind. With alerts on, you 
       "היי {שם}, מה מחזיר את הילד ל-Gadit כל יום",
       `היי {שם},
 
-הרגל נבנה מהתקדמות שרואים. בשביל זה לכל ילד יש נקודות, דרגות, רצף ימים ויעד שבועי.
+הרגל נבנה מהתקדמות שרואים. בשביל זה לכל ילד יש דרגות, סקינים, רצף ימים ויעד שבועי.
 
 ## דרגות, רצף וסקינים
 הילד רואה את ההתקדמות שלו מתחת לחיפוש ב[דף הבית](/) ובראש [המחברת](/notebook): "רצף ימים", "יעד שבועי" ו"הדרגה שלך".
 
-היעד השבועי מתחיל מ-5 מילים חדשות, ומתאים את עצמו לקצב של הילד. יש 12 דרגות, וחלק מהן פותחות סקינים חדשים, עיצובים שהילד בוחר ל-Gadit שלו.
+היעד השבועי מתחיל מ-5 מילים חדשות, ומתאים את עצמו לקצב של הילד. יש 12 דרגות, ו-24 סקינים לדמות של הילד שנפתחים ככל שהוא מתרגל.
 
 ## איך זה עובד, שלב אחר שלב:
-1. כל מילה שנשמרת במחברת שווה נקודה אחת.
-2. כל תרגול שהילד מסיים (משחק, הכתבה, שיעור או קריאה) שווה 10 נקודות.
-3. הנקודות מעלות את הילד בדרגות.
-4. בדרגות מסוימות נפתח סקין חדש.
+1. כל מילה חדשה שנשמרת במחברת מקדמת את הילד לדרגה הבאה.
+2. כל תרגול שהילד מסיים (משחק, הכתבה, שיעור או קריאה) מקרב אותו לסקין חדש.
+3. הילד בוחר בעצמו איזה סקין ללבוש, והוא מופיע בכל מקום שבו הדמות שלו מופיעה.
+4. סקין שנפתח נשאר של הילד לתמיד.
 
 אין מה להגדיר. הכול עובד לבד מהיום הראשון.
 
@@ -746,18 +746,18 @@ Every word a child looks up is a question they had in mind. With alerts on, you 
       "Hi {name}, what brings your child back to Gadit every day",
       `Hi {name},
 
-A habit is built from progress you can see. That's why every child has points, ranks, a day streak and a weekly goal.
+A habit is built from progress you can see. That's why every child has ranks, skins, a day streak and a weekly goal.
 
 ## Ranks, streaks and skins
 Your child sees their progress under the search on the [home page](/) and at the top of [the notebook](/notebook): their streak, their weekly goal and their rank.
 
-The weekly goal starts at 5 new words and adjusts itself to your child's pace. There are 12 ranks, and some of them unlock new skins, designs your child picks for their own Gadit.
+The weekly goal starts at 5 new words and adjusts itself to your child's pace. There are 12 ranks, and 24 skins for your child's character that unlock as they practice.
 
 ## How it works, step by step:
-1. Every word saved to the notebook is worth one point.
-2. Every practice your child finishes (a game, a dictation, a lesson or a reading) is worth 10 points.
-3. Points move your child up the ranks.
-4. Certain ranks unlock a new skin.
+1. Every new word saved to the notebook moves your child toward the next rank.
+2. Every practice your child finishes (a game, a dictation, a lesson or a reading) brings a new skin closer.
+3. Your child picks which skin to wear, and it shows everywhere their character appears.
+4. A skin once unlocked stays theirs for good.
 
 There's nothing to set up. It all works on its own from day one.
 
