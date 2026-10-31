@@ -17,7 +17,7 @@ import { WaitText } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signInWithCustomToken } from "firebase/auth";
-import { auth as firebaseAuth } from "@/lib/firebase";
+import { auth as firebaseAuth } from "@/lib/firebase-auth";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 

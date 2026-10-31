@@ -8,13 +8,15 @@
 
 import { useState } from "react";
 import { useLang } from "@/lib/lang-context";
-import { gt } from "@/lib/guide-i18n";
+import { gt, useGuideLang } from "@/lib/guide-i18n";
 import { getGuide } from "@/lib/guides";
 import { WalkthroughModal } from "@/components/Walkthrough";
 
 export function GuideButton({ guide, size = 20, title }: { guide: string; size?: number; title?: string }) {
   const { lang } = useLang();
   const [open, setOpen] = useState(false);
+  // Guide text for this language loads in the background after the page is up.
+  const ready = useGuideLang(lang);
   const g = getGuide(guide);
   if (!g) return null;
 
@@ -34,7 +36,7 @@ export function GuideButton({ guide, size = 20, title }: { guide: string; size?:
       >
         ?
       </button>
-      {open && (
+      {open && ready && (
         <WalkthroughModal
           guideId={g.id}
           title={gt(lang, g.titleKey)}

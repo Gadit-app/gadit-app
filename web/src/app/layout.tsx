@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import "@/lib/lang-packs-all"; // server: every language of the text packs
 import { cookies, headers } from "next/headers";
 import "./fonts.css";
 import "./globals.css";

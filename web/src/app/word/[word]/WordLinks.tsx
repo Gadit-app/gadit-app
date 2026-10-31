@@ -1,4 +1,5 @@
 import { planCopy } from "@/lib/plan-copy";
+import "@/lib/lang-packs-all"; // server: every language of the text packs
 import { langNameIn } from "@/lib/i18n";
 import { neighbourWords } from "@/lib/word-index";
 

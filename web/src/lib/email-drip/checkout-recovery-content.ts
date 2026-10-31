@@ -1,4 +1,5 @@
 import { renderEmailHtmlV2, mdLiteToHtml, applyName, type EmailContent } from "./render";
+import "@/lib/lang-packs-all"; // server: every language of the text packs
 import { PRICE_DISPLAY } from "@/lib/pricing-currency";
 import { isIndividualPriceId, INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY_IDS } from "@/lib/individual-prices";
 import { planCopy } from "@/lib/plan-copy";

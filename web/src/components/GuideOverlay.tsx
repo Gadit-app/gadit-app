@@ -11,7 +11,7 @@
 
 import { useEffect, useState } from "react";
 import { useLang } from "@/lib/lang-context";
-import { gt } from "@/lib/guide-i18n";
+import { gt, useGuideLang } from "@/lib/guide-i18n";
 import { getGuide } from "@/lib/guides";
 import { WalkthroughModal } from "@/components/Walkthrough";
 
@@ -35,7 +35,9 @@ export function GuideOverlay() {
   }, []);
 
   const g = getGuide(id);
-  if (!g) return null;
+  // The guide text loads only when a guide is asked for (?guide=).
+  const ready = useGuideLang(lang, !!g);
+  if (!g || !ready) return null;
 
   function close() {
     setId(null);

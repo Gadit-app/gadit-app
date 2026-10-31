@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
-import { gt } from "@/lib/guide-i18n";
+import { gt, useGuideLangWait } from "@/lib/guide-i18n";
 import { GUIDES, GUIDE_SECTIONS, getGuide } from "@/lib/guides";
 import { WalkthroughModal } from "@/components/Walkthrough";
 
@@ -41,7 +41,22 @@ function CapIcon({ color }: { color: string }) {
   );
 }
 
+// This screen is all guide text: wait for this language before rendering.
+function GuideGate({ lang, children }: { lang: string; children: React.ReactNode }) {
+  useGuideLangWait(lang);
+  return children;
+}
+
 export function HelpClient() {
+  const { lang } = useLang();
+  return (
+    <GuideGate lang={lang}>
+      <HelpScreen />
+    </GuideGate>
+  );
+}
+
+function HelpScreen() {
   const { lang, dir } = useLang();
   const href = useHref();
   const [openId, setOpenId] = useState<string | null>(null);

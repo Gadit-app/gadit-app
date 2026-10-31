@@ -1,5 +1,6 @@
 // Translates PLAN_COPY (src/lib/plan-copy.ts, en + he written by hand) into
-// every other UI language and writes src/lib/plan-copy-i18n.json. Only keys
+// every other UI language and writes src/lib/plan-copy-i18n/<lang>.json (one file per
+// language, so the browser loads only its own; hashes in _hash.json). Only keys
 // missing from a language (or changed in English, tracked by a hash) are
 // translated again. Gadi 2026-10-06.
 //   node scripts/plan-copy-i18n.mjs
@@ -24,8 +25,9 @@ function block(name) {
 const EN = block("en");
 const HE = block("he");
 const LANGS = { ar: "Arabic", ru: "Russian", es: "Spanish", pt: "Portuguese", fr: "French", de: "German", cs: "Czech", sk: "Slovak", it: "Italian", ja: "Japanese", hi: "Hindi", am: "Amharic", uk: "Ukrainian", tr: "Turkish", pl: "Polish", fa: "Persian", id: "Indonesian", nl: "Dutch", el: "Greek", zu: "Zulu", vi: "Vietnamese", fil: "Filipino", af: "Afrikaans", sw: "Swahili", "zh-CN": "Simplified Chinese", "zh-TW": "Traditional Chinese", ko: "Korean", th: "Thai", bn: "Bengali", da: "Danish", hu: "Hungarian", xh: "Xhosa", nso: "Sepedi (Northern Sotho)", tn: "Setswana", st: "Sesotho", ts: "Xitsonga", ss: "siSwati", ve: "Tshivenda", nr: "isiNdebele (South Ndebele)" };
-const OUT = path.join(HERE, "../src/lib/plan-copy-i18n.json");
-const out = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, "utf8")) : {};
+const DIR = path.join(HERE, "../src/lib/plan-copy-i18n");
+const out = {};
+for (const f of fs.existsSync(DIR) ? fs.readdirSync(DIR) : []) if (f.endsWith(".json")) out[f.slice(0, -5)] = JSON.parse(fs.readFileSync(path.join(DIR, f), "utf8"));
 const hash = (s) => crypto.createHash("sha1").update(s).digest("hex").slice(0, 8);
 out._hash = out._hash ?? {};
 
@@ -71,4 +73,6 @@ ${JSON.stringify(items, null, 1)}`;
   console.log(code, done ? `ok (${todo.length})` : "FAILED");
 }
 for (const k of Object.keys(EN)) out._hash[k] = hash(EN[k]);
-fs.writeFileSync(OUT, JSON.stringify(out, null, 1));
+fs.mkdirSync(DIR, { recursive: true });
+for (const [code, d] of Object.entries(out)) fs.writeFileSync(path.join(DIR, code + ".json"), JSON.stringify(d, null, 1) + "\n");
+// New language: also add its loader to PLAN_PACK in src/lib/plan-copy.ts.

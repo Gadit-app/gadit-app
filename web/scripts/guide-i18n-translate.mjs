@@ -1,5 +1,6 @@
 // Translates walkthrough text (src/lib/guide-i18n.ts, en + he written by hand)
-// into every other UI language and rewrites src/lib/guide-i18n-translations.ts.
+// into every other UI language and rewrites src/lib/guide-tr/<lang>.json (one file per
+// language; a new language also needs its loader in GUIDE_PACK, guide-i18n.ts).
 // Translates keys missing from a language, plus any keys passed on the command
 // line (English text changed); drops keys that no longer exist in English.
 //   node scripts/guide-i18n-translate.mjs [changedKey ...]
@@ -9,17 +10,15 @@ const HERE = path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Z]:)
 const env = fs.readFileSync(path.join(HERE, "../.env.local"), "utf8");
 const KEY = (env.match(/^OPENAI_API_KEY=(.*)$/m)?.[1] ?? "").trim().replace(/^["']|["']$/g, "");
 const SRC = path.join(HERE, "../src/lib/guide-i18n.ts");
-const OUT = path.join(HERE, "../src/lib/guide-i18n-translations.ts");
+const DIR = path.join(HERE, "../src/lib/guide-tr");
 
 // English source: every `"key": { en: "...", ... }` entry in G.
 const src = fs.readFileSync(SRC, "utf8");
 const EN = {};
 for (const m of src.matchAll(/^\s+"([\w.-]+)": \{ en: "((?:[^"\\]|\\.)*)"/gm)) EN[m[1]] = JSON.parse(`"${m[2]}"`);
 
-const trSrc = fs.readFileSync(OUT, "utf8");
-const at = trSrc.indexOf("= {");
-const head = trSrc.slice(0, at + 3);
-const TR = JSON.parse(trSrc.slice(at + 2).trim().replace(/;\s*$/, "").replace(/,(\s*[}\]])/g, "$1"));
+const TR = {};
+for (const f of fs.readdirSync(DIR)) if (f.endsWith(".json")) TR[f.slice(0, -5)] = JSON.parse(fs.readFileSync(path.join(DIR, f), "utf8"));
 
 const LANGS = { ar: "Arabic", ru: "Russian", es: "Spanish", pt: "Portuguese", fr: "French", de: "German", cs: "Czech", sk: "Slovak", it: "Italian", ja: "Japanese", hi: "Hindi", am: "Amharic", uk: "Ukrainian", tr: "Turkish", pl: "Polish", fa: "Persian", id: "Indonesian", nl: "Dutch", el: "Greek", zu: "Zulu", vi: "Vietnamese", fil: "Filipino", af: "Afrikaans", sw: "Swahili", "zh-CN": "Simplified Chinese", "zh-TW": "Traditional Chinese", ko: "Korean", th: "Thai", bn: "Bengali", da: "Danish", hu: "Hungarian", xh: "Xhosa", nso: "Sepedi (Northern Sotho)", tn: "Setswana", st: "Sesotho", ts: "Xitsonga", ss: "siSwati", ve: "Tshivenda", nr: "isiNdebele (South Ndebele)" };
 const changed = new Set(process.argv.slice(2));
@@ -69,6 +68,5 @@ ${JSON.stringify(items, null, 1)}`;
 }
 const entries = Object.entries(LANGS).filter(([c]) => !ONLY.length || ONLY.includes(c));
 for (let i = 0; i < entries.length; i += 4) await Promise.all(entries.slice(i, i + 4).map(([c, n]) => one(c, n)));
-const body = Object.entries(TR).map(([lang, o]) => `  ${JSON.stringify(lang)}: ${JSON.stringify(o, null, 1).replace(/\n/g, "\n ")},`).join("\n");
-fs.writeFileSync(OUT, `${head}\n${body}\n};\n`);
+for (const [lang, o] of Object.entries(TR)) fs.writeFileSync(path.join(DIR, lang + ".json"), JSON.stringify(o, null, 1) + "\n");
 console.log("written", JSON.stringify(usage), "cost $" + ((usage.in * 2.5 + usage.out * 15) / 1e6).toFixed(3));

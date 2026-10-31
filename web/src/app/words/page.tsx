@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "@/lib/lang-packs-all"; // server: every language of the text packs
 import { headers } from "next/headers";
 import { planCopy } from "@/lib/plan-copy";
 import { LANGUAGES } from "@/lib/i18n";

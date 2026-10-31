@@ -4331,11 +4331,16 @@ for (const { code } of LANGUAGES) {
 
 // New plans (Gadi 2026-10-06): the plan answers come from plan-copy, so the
 // help center says Basic / Individual / Family in every language.
-for (const code of Object.keys(HELP) as Lang[]) {
-  const h = HELP[code];
+// The plan answers are filled in when a language is first shown (not for all
+// languages at load), because plan-copy loads one language at a time (2026-10-31).
+const PLAN_FILLED = new Set<HelpContent>();
+export function helpFor(lang: Lang): HelpContent {
+  const h = HELP[lang] ?? HELP.en;
+  if (PLAN_FILLED.has(h)) return h;
+  PLAN_FILLED.add(h);
   const billing = h?.categories?.find((c) => c.id === "billing");
-  if (!billing) continue;
-  const L = h === HELP.en ? "en" : code;
+  if (!billing) return h;
+  const L = h === HELP.en ? "en" : lang;
   for (const it of billing.items) {
     if (it.id === "switch-plan") {
       it.q = planCopy(L, "helpSwitchQ");
@@ -4347,4 +4352,5 @@ for (const code of Object.keys(HELP) as Lang[]) {
       it.a = [planCopy(L, "helpCompareA1"), planCopy(L, "helpCompareA2"), planCopy(L, "helpCompareA3")];
     }
   }
+  return h;
 }

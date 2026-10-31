@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { beforeAuthStateChanged } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase-auth";
 import { useAuth } from "@/lib/auth-context";
 import { isExpoPushToken, isIosApp, postToNative } from "@/lib/native-app";
 import { claimPurchases, type NativePurchase } from "@/lib/native-iap";

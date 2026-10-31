@@ -1,4 +1,4 @@
-import MORE from "./plan-copy-i18n.json";
+import { makePack } from "./lang-pack";
 
 /**
  * Copy for the new plan structure (Gadi 2026-10-06): Free, Individual,
@@ -157,11 +157,53 @@ export const PLAN_COPY = {
 };
 
 export type PlanCopyKey = keyof typeof PLAN_COPY.en;
-const OTHER = MORE as Record<string, Partial<Record<PlanCopyKey, string>>>;
+type PlanStrings = Partial<Record<PlanCopyKey, string>>;
+/** The other UI languages, one JSON file each in lib/plan-copy-i18n/ (2026-10-31). */
+export const PLAN_PACK = makePack<PlanStrings>({}, {
+  "af": () => import("./plan-copy-i18n/af.json"),
+  "am": () => import("./plan-copy-i18n/am.json"),
+  "ar": () => import("./plan-copy-i18n/ar.json"),
+  "bn": () => import("./plan-copy-i18n/bn.json"),
+  "cs": () => import("./plan-copy-i18n/cs.json"),
+  "da": () => import("./plan-copy-i18n/da.json"),
+  "de": () => import("./plan-copy-i18n/de.json"),
+  "el": () => import("./plan-copy-i18n/el.json"),
+  "es": () => import("./plan-copy-i18n/es.json"),
+  "fa": () => import("./plan-copy-i18n/fa.json"),
+  "fil": () => import("./plan-copy-i18n/fil.json"),
+  "fr": () => import("./plan-copy-i18n/fr.json"),
+  "hi": () => import("./plan-copy-i18n/hi.json"),
+  "hu": () => import("./plan-copy-i18n/hu.json"),
+  "id": () => import("./plan-copy-i18n/id.json"),
+  "it": () => import("./plan-copy-i18n/it.json"),
+  "ja": () => import("./plan-copy-i18n/ja.json"),
+  "ko": () => import("./plan-copy-i18n/ko.json"),
+  "nl": () => import("./plan-copy-i18n/nl.json"),
+  "nr": () => import("./plan-copy-i18n/nr.json"),
+  "nso": () => import("./plan-copy-i18n/nso.json"),
+  "pl": () => import("./plan-copy-i18n/pl.json"),
+  "pt": () => import("./plan-copy-i18n/pt.json"),
+  "ru": () => import("./plan-copy-i18n/ru.json"),
+  "sk": () => import("./plan-copy-i18n/sk.json"),
+  "ss": () => import("./plan-copy-i18n/ss.json"),
+  "st": () => import("./plan-copy-i18n/st.json"),
+  "sw": () => import("./plan-copy-i18n/sw.json"),
+  "th": () => import("./plan-copy-i18n/th.json"),
+  "tn": () => import("./plan-copy-i18n/tn.json"),
+  "tr": () => import("./plan-copy-i18n/tr.json"),
+  "ts": () => import("./plan-copy-i18n/ts.json"),
+  "uk": () => import("./plan-copy-i18n/uk.json"),
+  "ve": () => import("./plan-copy-i18n/ve.json"),
+  "vi": () => import("./plan-copy-i18n/vi.json"),
+  "xh": () => import("./plan-copy-i18n/xh.json"),
+  "zh-CN": () => import("./plan-copy-i18n/zh-CN.json"),
+  "zh-TW": () => import("./plan-copy-i18n/zh-TW.json"),
+  "zu": () => import("./plan-copy-i18n/zu.json"),
+});
 
 export function planCopy(lang: string, key: PlanCopyKey, vars: Record<string, string | number> = {}): string {
   const base =
-    (lang === "he" ? PLAN_COPY.he[key] : lang === "en" ? PLAN_COPY.en[key] : OTHER[lang]?.[key]) ?? PLAN_COPY.en[key];
+    (lang === "he" ? PLAN_COPY.he[key] : lang === "en" ? PLAN_COPY.en[key] : PLAN_PACK.data[lang]?.[key]) ?? PLAN_COPY.en[key];
   return base.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m));
 }
 

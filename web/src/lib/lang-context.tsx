@@ -1,6 +1,24 @@
 "use client";
-import { createContext, useContext, useEffect, useState } from "react";
-import { Lang, detectBrowserLang, getLangDir, T } from "./i18n";
+import { createContext, startTransition, useContext, useEffect, useState } from "react";
+import { Lang, detectBrowserLang, getLangDir, T, T_PACK } from "./i18n";
+import { V2_PACK } from "./i18n-v2";
+import { PLAN_PACK } from "./plan-copy";
+import { loadPack, packReady, useLangPacks, type Pack } from "./lang-pack";
+
+// The text packs every screen reads. Each language is its own small chunk
+// (2026-10-31), so the browser downloads only the language on screen.
+const PACKS: Pack<unknown>[] = [T_PACK, V2_PACK, PLAN_PACK];
+const LANG_LOADS: Record<string, Promise<void>> = {};
+export function langReady(l: string): boolean {
+  return PACKS.every((p) => packReady(p, l));
+}
+/** Load every text pack of a language (cached; never rejects). */
+export function ensureLang(l: string): Promise<void> {
+  if (langReady(l)) return Promise.resolve();
+  return (LANG_LOADS[l] ??= Promise.all(PACKS.map((p) => loadPack(p, l))).then(() => {
+    if (!langReady(l)) delete LANG_LOADS[l]; // a network error: retry next time
+  }));
+}
 
 interface LangContextType {
   lang: Lang;
@@ -21,7 +39,27 @@ const LangContext = createContext<LangContextType | null>(null);
  * but that still gives a single frame of English content for users
  * whose browser locale doesn't match their chosen UI — which is rare.
  */
-export function LangProvider({
+/**
+ * The page's language must be in memory before the first render, on the
+ * server and before hydration, or the text would render in English first.
+ * React keeps the server HTML on screen while this small chunk loads. It is a
+ * component of its own with no hooks: waiting inside a component that already
+ * holds state breaks React's replay (minified error 467).
+ */
+function LangGate({ lang, children }: { lang: string; children: React.ReactNode }) {
+  useLangPacks(PACKS, lang);
+  return children;
+}
+
+export function LangProvider(props: { children: React.ReactNode; initialLang?: Lang }) {
+  return (
+    <LangGate lang={props.initialLang ?? "en"}>
+      <LangProviderInner {...props} />
+    </LangGate>
+  );
+}
+
+function LangProviderInner({
   children,
   initialLang,
 }: {
@@ -60,7 +98,7 @@ export function LangProvider({
     } catch {
       resolved = initialLang ?? "en";
     }
-    if (resolved !== lang) setLangState(resolved);
+    if (resolved !== lang) ensureLang(resolved).then(() => startTransition(() => setLangState(resolved)));
     // Persist so the SERVER renders the right language on the next load
     // (kills the English flash next time the PWA opens).
     try {
@@ -73,7 +111,9 @@ export function LangProvider({
   }, []);
 
   function setLang(l: Lang) {
-    setLangState(l);
+    // Switch once the new language is loaded, so the screen never shows English in between.
+    // A transition keeps the current screen up while a page-level gate (FamGate) loads its part.
+    ensureLang(l).then(() => startTransition(() => setLangState(l)));
     try {
       localStorage.setItem("gadit-lang", l);
     } catch { /* private mode / blocked */ }

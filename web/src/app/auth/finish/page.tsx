@@ -10,7 +10,7 @@
 import { WaitText } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import { isSignInWithEmailLink, signInWithEmailLink, signInWithCustomToken } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase-auth";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { finishCopy } from "@/lib/login-help-copy";

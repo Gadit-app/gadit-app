@@ -8,7 +8,80 @@
  */
 
 import type { Lang } from "@/lib/i18n";
-import { TR } from "@/lib/guide-i18n-translations";
+import { useEffect, useState } from "react";
+import { makePack, loadPack, packReady, useLangPacks, type Pack } from "@/lib/lang-pack";
+
+/**
+ * Every other language lives in lib/guide-tr/<lang>.json and loads only when a
+ * guide is about to show (2026-10-31: all of it used to ride on every page, 300KB).
+ */
+export const GUIDE_PACK = makePack<Record<string, string>>({}, {
+  "af": () => import("./guide-tr/af.json"),
+  "am": () => import("./guide-tr/am.json"),
+  "ar": () => import("./guide-tr/ar.json"),
+  "bn": () => import("./guide-tr/bn.json"),
+  "cs": () => import("./guide-tr/cs.json"),
+  "da": () => import("./guide-tr/da.json"),
+  "de": () => import("./guide-tr/de.json"),
+  "el": () => import("./guide-tr/el.json"),
+  "es": () => import("./guide-tr/es.json"),
+  "fa": () => import("./guide-tr/fa.json"),
+  "fil": () => import("./guide-tr/fil.json"),
+  "fr": () => import("./guide-tr/fr.json"),
+  "hi": () => import("./guide-tr/hi.json"),
+  "hu": () => import("./guide-tr/hu.json"),
+  "id": () => import("./guide-tr/id.json"),
+  "it": () => import("./guide-tr/it.json"),
+  "ja": () => import("./guide-tr/ja.json"),
+  "ko": () => import("./guide-tr/ko.json"),
+  "nl": () => import("./guide-tr/nl.json"),
+  "nr": () => import("./guide-tr/nr.json"),
+  "nso": () => import("./guide-tr/nso.json"),
+  "pl": () => import("./guide-tr/pl.json"),
+  "pt": () => import("./guide-tr/pt.json"),
+  "ru": () => import("./guide-tr/ru.json"),
+  "sk": () => import("./guide-tr/sk.json"),
+  "ss": () => import("./guide-tr/ss.json"),
+  "st": () => import("./guide-tr/st.json"),
+  "sw": () => import("./guide-tr/sw.json"),
+  "th": () => import("./guide-tr/th.json"),
+  "tn": () => import("./guide-tr/tn.json"),
+  "tr": () => import("./guide-tr/tr.json"),
+  "ts": () => import("./guide-tr/ts.json"),
+  "uk": () => import("./guide-tr/uk.json"),
+  "ve": () => import("./guide-tr/ve.json"),
+  "vi": () => import("./guide-tr/vi.json"),
+  "xh": () => import("./guide-tr/xh.json"),
+  "zh-CN": () => import("./guide-tr/zh-CN.json"),
+  "zh-TW": () => import("./guide-tr/zh-TW.json"),
+  "zu": () => import("./guide-tr/zu.json"),
+});
+/** The menu label "Guides" shows on every page, so it is kept here in every language. */
+const HELP_TITLE: Record<string, string> = {"af":"Gidse","am":"መመሪያዎች","ar":"الأدلة","bn":"গাইড","cs":"Návody","da":"Guider","de":"Anleitungen","el":"Οδηγοί","es":"Guías","fa":"راهنماها","fil":"Mga gabay","fr":"Guides","hi":"गाइड","hu":"Útmutatók","id":"Panduan","it":"Guide","ja":"ガイド","ko":"가이드","nl":"Gidsen","nr":"Iinkhombandlela","nso":"Ditaelo","pl":"Poradniki","pt":"Guias","ru":"Руководства","sk":"Návody","ss":"Imihlahlandlela","st":"Ditataiso","sw":"Miongozo","th":"คู่มือ","tn":"Dikaelo","tr":"Kılavuzlar","ts":"Swikombandlela","uk":"Посібники","ve":"Vhulivhisi","vi":"Hướng dẫn","xh":"Izikhokelo","zh-CN":"指南","zh-TW":"指南","zu":"Iziqondiso"};
+
+export const guideReady = (lang: string) => packReady(GUIDE_PACK, lang);
+export const loadGuideLang = (lang: string) => loadPack(GUIDE_PACK, lang);
+
+/** Load the guide text for a language after mount; true once it is in. */
+export function useGuideLang(lang: string, enabled = true): boolean {
+  const [, bump] = useState(0);
+  const ready = guideReady(lang);
+  useEffect(() => {
+    if (!enabled || ready) return;
+    let live = true;
+    loadGuideLang(lang).then(() => { if (live) bump((n) => n + 1); });
+    return () => { live = false; };
+  }, [lang, enabled, ready]);
+  return ready;
+}
+
+/**
+ * For a screen made only of guide text: wait for it before rendering (server
+ * and hydration). Call it from a component with no hooks of its own (see LangGate).
+ */
+export function useGuideLangWait(lang: string): void {
+  useLangPacks([GUIDE_PACK as Pack<unknown>], lang);
+}
 
 type Entry = Partial<Record<Lang, string>> & { en: string };
 type Dict = Record<string, Entry>;
@@ -522,7 +595,7 @@ export function gt(lang: Lang, key: string): string {
   // generated TR layer, falling back to English until translated.
   if (lang === "he") return e.he ?? e.en;
   if (lang === "en") return e.en;
-  return TR[lang]?.[key] ?? e.en;
+  return GUIDE_PACK.data[lang]?.[key] ?? (key === "help.title" ? HELP_TITLE[lang] : undefined) ?? e.en;
 }
 
 /** Interpolate {n} etc. */

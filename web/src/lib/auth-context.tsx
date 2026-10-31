@@ -22,7 +22,11 @@ import {
 } from "firebase/auth";
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore, doc, onSnapshot } from "firebase/firestore";
+// Firestore is imported on demand, only once someone is signed in (2026-10-31):
+// visitors who never sign in never download the 166KB database SDK.
+type FirestoreMod = typeof import("firebase/firestore");
+// Through lib/firebase first, so local emulator runs keep connecting the database there.
+const loadFirestore = () => import("./firebase").then(() => import("firebase/firestore"));
 import { track } from "@/lib/track";
 import { isBlockedSignupEmail } from "@/lib/signup-guard";
 import { nativeAuthAvailable, requestNativeAuth, type NativeAuthProvider } from "@/lib/native-auth";
@@ -41,7 +45,7 @@ function getFirebaseAuth() {
   return getAuth(app);
 }
 
-function getFirebaseDb() {
+function getFirebaseDb(getFirestore: FirestoreMod["getFirestore"]) {
   const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
     authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -313,8 +317,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setSchoolId(cached.schoolId);
       setFamilyRole(cached.familyRole);
     }
-    const db = getFirebaseDb();
-    const unsub = onSnapshot(
+    let unsub: (() => void) | undefined;
+    let cancelled = false;
+    void loadFirestore().then(({ getFirestore, doc, onSnapshot }) => {
+    if (cancelled) return;
+    const db = getFirebaseDb(getFirestore);
+    unsub = onSnapshot(
       doc(db, "users", user.uid),
       (snap) => {
         const data = snap.data();
@@ -348,7 +356,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setPlanReady(true);
       }
     );
-    return unsub;
+    });
+    return () => { cancelled = true; if (unsub) unsub(); };
   }, [user]);
 
   // Kids Mode turns ON on every entry into a child's profile, and back to
@@ -377,7 +386,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const res = await user.getIdTokenResult();
         const memberId = res.claims?.memberId as string | undefined;
         if (!memberId || cancelled) return;
-        const db = getFirebaseDb();
+        const { getFirestore, doc, onSnapshot } = await loadFirestore();
+        if (cancelled) return;
+        const db = getFirebaseDb(getFirestore);
         unsub = onSnapshot(
           doc(db, "families", familyId, "members", memberId),
           (snap) => {

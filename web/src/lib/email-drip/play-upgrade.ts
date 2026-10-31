@@ -1,4 +1,5 @@
 import { planCopy } from "@/lib/plan-copy";
+import "@/lib/lang-packs-all"; // server: every language of the text packs
 import { payUrl } from "@/lib/pay-url";
 import { renderEmailHtmlV2, mdLiteToHtml, applyName } from "./render";
 import { EMAIL_BASE } from "./family-content";

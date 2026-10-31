@@ -20,7 +20,7 @@
  */
 
 import { useLang } from "@/lib/lang-context";
-import { HELP } from "@/lib/help-i18n";
+import { helpFor } from "@/lib/help-i18n";
 
 // Customer-service address for Help Center contacts. Wired up in
 // Namecheap as a forwarder (support@gadit.app → gadibenlavi@gmail.com,
@@ -46,7 +46,7 @@ const PLAY_HIDDEN_ITEMS = new Set([
 
 export function HelpCenter() {
   const { lang, dir } = useLang();
-  const c = HELP[lang] ?? HELP.en;
+  const c = helpFor(lang);
   const isRtl = dir === "rtl";
 
   return (

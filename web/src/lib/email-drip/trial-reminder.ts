@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import "@/lib/lang-packs-all"; // server: every language of the text packs
 import { planCopy } from "@/lib/plan-copy";
 import { isIndividualPriceId } from "@/lib/individual-prices";
 import { renderEmailHtmlV2, mdLiteToHtml, applyName } from "./render";

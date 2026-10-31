@@ -11,7 +11,7 @@
 
 import { useEffect } from "react";
 import { signInWithCustomToken } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase-auth";
 import { useAuth } from "@/lib/auth-context";
 
 const WWW = "https://www.gadit.app";

@@ -18,21 +18,17 @@ function table(file, name) {
   return out;
 }
 
-const IDENT = { zhCN: "zh-CN", zhTW: "zh-TW" };
-/** One key across the language tables of i18n-v2.ts: `const xx: V2Strings = {`,
- *  `const xx: Partial<V2Strings> = {` and later `Object.assign(xx, {` blocks.
- *  A language without its own value shows the English one in the app. */
+/** One key across the v2 language files, src/lib/i18n-v2-packs/<lang>.ts (one
+ *  file per language since 2026-10-31). A language without its own value shows
+ *  the English one in the app. */
 function v2key(key) {
-  const s = read("lib/i18n-v2.ts");
-  const opens = [...s.matchAll(/\n(?:const ([A-Za-z]+): (?:Partial<)?V2Strings>? = \{|Object\.assign\(([A-Za-z]+), \{)/g)];
+  const dir = path.join(SRC, "lib/i18n-v2-packs");
   const keyRe = new RegExp(`\\n\\s*"?${key}"?\\s*:\\s*"((?:[^"\\\\]|\\\\.)*)"`);
   const out = {};
-  for (let k = 0; k < opens.length; k++) {
-    const id = opens[k][1] || opens[k][2];
-    const lang = IDENT[id] ?? id;
-    const block = s.slice(opens[k].index, k + 1 < opens.length ? opens[k + 1].index : s.length);
-    const m = block.match(keyRe);
-    if (m && !out[lang]) out[lang] = JSON.parse(`"${m[1]}"`);
+  for (const f of fs.readdirSync(dir)) {
+    if (!f.endsWith(".ts")) continue;
+    const m = read("lib/i18n-v2-packs/" + f).match(keyRe);
+    if (m) out[f.slice(0, -3)] = JSON.parse(`"${m[1]}"`);
   }
   return out;
 }

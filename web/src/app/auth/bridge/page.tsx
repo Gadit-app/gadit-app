@@ -10,7 +10,7 @@
 
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase-auth";
 
 /** The page that framed this bridge: the other host of the pair. */
 const parentOrigin = () => (window.location.hostname === "gadit.app" ? "https://www.gadit.app" : "https://gadit.app");
