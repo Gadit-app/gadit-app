@@ -717,7 +717,7 @@ const CSS = `
 .wt-curtain.is-open .wt-curtain-half.is-l{transform:translateX(-102%)}
 .wt-curtain.is-open .wt-curtain-half.is-r{transform:scaleX(-1) translateX(-102%)}
 .wt-curtain-body{position:absolute;inset:0;display:grid;place-items:center;padding:16px}
-.wt-door-title{display:grid;gap:18px;justify-items:center;text-align:center}
+.wt-door-title{display:grid;gap:18px;justify-items:center;text-align:center;background:#00000059;padding:22px 26px;border-radius:28px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .wt-door-title strong{font-size:clamp(34px,9vw,58px);color:#fff;text-shadow:0 3px 0 #1f5130,0 6px 18px #000a;line-height:1.1}
 .wt-intro-wrap{position:absolute;inset:0;z-index:8;display:grid;place-items:center;padding:16px;background:#0003}
 .wt-intro{display:grid;gap:12px;justify-items:center;text-align:center;background:#fff;border-radius:28px;padding:22px 26px;box-shadow:0 14px 40px #0005;max-width:360px;width:100%;animation:wt-popin .35s cubic-bezier(.2,1.4,.4,1)}

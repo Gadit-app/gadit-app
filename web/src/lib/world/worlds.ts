@@ -12,7 +12,7 @@
 import type { WorldKey } from "./world-i18n";
 
 /** Worlds whose art is built. */
-export type WorldId = Extract<WorldKey, "jungle" | "space" | "castle">;
+export type WorldId = WorldKey;
 
 export type WorldDef = {
   id: WorldId;
@@ -74,6 +74,58 @@ export const WORLDS: Record<WorldId, WorldDef> = {
     doorAspect: 300 / 457,
     plaqueY: 55,
     letterColor: "#4a2a00",
+  },
+  ninja: {
+    id: "ninja",
+    dir: "/worlds/ninja",
+    spots: ["lantern", "barrel", "bamboo", "shrine"],
+    animals: ["panda", "frog2", "fox", "crane", "koi"],
+    ground: ["#c9b28a", "#9c8460"],
+    edge: ["#7fb069", "#6a9b55"],
+    sky: "#f6c9b5",
+    areaSize: 5,
+    doorAspect: 300 / 399,
+    plaqueY: 50,
+    letterColor: "#5a3410",
+  },
+  stadium: {
+    id: "stadium",
+    dir: "/worlds/stadium",
+    spots: ["ballbag", "cones", "locker", "trophy"],
+    animals: ["mascot", "ball", "whistle", "kangaroo", "sneaker"],
+    ground: ["#d9734e", "#b45a3a"],
+    edge: ["#ffffff", "#5fb34a"],
+    sky: "#9fd3f5",
+    areaSize: 5,
+    doorAspect: 300 / 504,
+    plaqueY: 35,
+    letterColor: "#1d4ed8",
+  },
+  forest: {
+    id: "forest",
+    dir: "/worlds/forest",
+    spots: ["mushroom", "stump", "flower", "nest"],
+    animals: ["hedgehog", "bunny", "deer", "raccoon", "firefly"],
+    ground: ["#5b4a3a", "#3e3228"],
+    edge: ["#3f8f6a", "#2f7357"],
+    sky: "#16384a",
+    areaSize: 5,
+    doorAspect: 300 / 402,
+    plaqueY: 55,
+    letterColor: "#4a2a10",
+  },
+  city: {
+    id: "city",
+    dir: "/worlds/city",
+    spots: ["trashcan", "mailbox", "boombox", "foodcart"],
+    animals: ["pigeon", "cat2", "rat", "dog2", "raccoon2"],
+    ground: ["#7d7f93", "#5a5c70"],
+    edge: ["#9fa1b5", "#6c6e82"],
+    sky: "#1a1b3d",
+    areaSize: 5,
+    doorAspect: 300 / 456,
+    plaqueY: 71,
+    letterColor: "#7a1f5c",
   },
 };
 
