@@ -450,14 +450,15 @@ export function TopRankBadge({ lang, dir }: { lang: string; dir: "rtl" | "ltr" }
         aria-label={tip}
         className="wb-rank-badge"
         style={{
-          width: 36, height: 36, flexShrink: 0, padding: 0, borderRadius: 999, cursor: "pointer",
+          // Same size as the profile picture next to it (.wb-avatar, 34px), Gadi 2026-11-01.
+          width: 34, height: 34, flexShrink: 0, padding: 0, borderRadius: 999, cursor: "pointer",
           border: "1.5px solid color-mix(in srgb, #8B5CF6 35%, transparent)",
           background: "color-mix(in srgb, #8B5CF6 10%, var(--surface, #fff))",
           display: "inline-flex", alignItems: "center", justifyContent: "center", position: "relative",
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={rankIconSrc(g.rank.key)} alt="" width={30} height={30} style={{ width: 30, height: 30, objectFit: "contain" }} />
+        <img src={rankIconSrc(g.rank.key)} alt="" width={28} height={28} style={{ width: 28, height: 28, objectFit: "contain" }} />
         {/* How far to the next rank, as a thin ring segment under the picture. */}
         <span aria-hidden="true" style={{ position: "absolute", insetInline: 6, bottom: -3, height: 3, borderRadius: 999, background: "color-mix(in srgb, var(--ink, #111) 12%, transparent)", overflow: "hidden" }}>
           <span style={{ display: "block", height: "100%", width: `${Math.round(g.rank.progress * 100)}%`, background: "#8B5CF6", borderRadius: 999 }} />
