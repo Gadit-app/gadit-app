@@ -11,6 +11,7 @@
  * while the child plays and join the game. A word missed comes back once.
  */
 import { useEffect, useMemo, useRef, useState } from "react";
+import { sfx } from "@/lib/game-sfx";
 import { WaitText } from "@/components/WaitText";
 import { TTSButton } from "@/components/design/TTSButton";
 import { useAuth } from "@/lib/auth-context";
@@ -130,6 +131,7 @@ export function GamePicturePick({ items, learnLang, lang, t, title, onExit }: {
     if (!round || result) return;
     setPicked(o);
     const ok = o === round.pic;
+    if (ok) sfx.correct(); else sfx.wrong();
     if (!round.repeat) {
       reportAnswer(round.item.w, ok);
       if (ok) setScore((s) => s + 1);

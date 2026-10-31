@@ -7,6 +7,7 @@
  * then the right sentence is shown and read aloud.
  */
 import { useMemo, useState } from "react";
+import { sfx } from "@/lib/game-sfx";
 import { shuffle } from "@/lib/play-engine";
 import { PlayHeader, type PlayT } from "../GameQuiz";
 import { GameResult } from "../GameResult";
@@ -67,11 +68,13 @@ export function GameSentenceBuilder({ sentences, onExit, lang, t, audioLang }: {
   const tap = (id: number) => {
     if (verdict) return;
     const next = [...placed, id];
+    sfx.letter(placed.length);
     setPlaced(next);
     if (next.length === r.tiles.length) {
       const built = next.map((i) => byId.get(i)).join(" ");
       const ok = built === r.sentence;
       setVerdict(ok ? "right" : "wrong");
+      setTimeout(() => (ok ? sfx.correct() : sfx.wrong()), 200);
       if (ok) setScore((s) => s + 1);
       else setMissed((m) => [...m, r.sentence]);
     }

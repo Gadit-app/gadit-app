@@ -14,6 +14,7 @@
  */
 
 import { useState, useMemo } from "react";
+import { sfx } from "@/lib/game-sfx";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
@@ -77,8 +78,10 @@ export function GameTwinTrap({
     setPicked(i);
     const r = rounds[idx];
     if (i === r.correctIdx) {
+      sfx.correct();
       setScore((s) => s + 1);
     } else {
+      sfx.wrong();
       setMissed((m) => [
         ...m,
         {

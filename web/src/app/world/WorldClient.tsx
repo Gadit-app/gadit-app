@@ -31,6 +31,8 @@ import { avatarUrl } from "@/lib/family";
 import { learnTargets } from "@/lib/learn/targets";
 import { notifyActivity } from "@/lib/notify-activity-client";
 import { TTSButton } from "@/components/design/TTSButton";
+import { SfxToggle } from "@/components/SfxToggle";
+import { sfx } from "@/lib/game-sfx";
 import { WORLDS, worldArt, type WorldDef, type WorldId } from "@/lib/world/worlds";
 import { forkLetters, gateTiles, keyMatches, lettersOf, spellable, spellForm, type SpellLang } from "@/lib/world/letters";
 import { worldCopy, type WorldCopy } from "@/lib/world/world-i18n";
@@ -44,33 +46,7 @@ const iso = (s: string) => `⁨${s}⁩`;
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 const hashOf = (s: string) => { let h = 2166136261; for (const ch of s) { h ^= ch.codePointAt(0)!; h = Math.imul(h, 16777619); } return h >>> 0; };
 
-/* ---------- little sounds (no files) ---------- */
-let actx: AudioContext | null = null;
-function tone(freqs: number[], dur = 0.12, type: OscillatorType = "triangle", slide = 0) {
-  try {
-    actx = actx ?? new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
-    const t0 = actx.currentTime;
-    freqs.forEach((f, i) => {
-      const o = actx!.createOscillator();
-      const g = actx!.createGain();
-      o.type = type;
-      o.frequency.setValueAtTime(f, t0 + i * dur);
-      if (slide) o.frequency.exponentialRampToValueAtTime(Math.max(40, f + slide), t0 + (i + 1) * dur);
-      g.gain.setValueAtTime(0.0001, t0 + i * dur);
-      g.gain.exponentialRampToValueAtTime(0.18, t0 + i * dur + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, t0 + (i + 1) * dur);
-      o.connect(g).connect(actx!.destination);
-      o.start(t0 + i * dur);
-      o.stop(t0 + (i + 1) * dur + 0.02);
-    });
-  } catch { /* sound is optional */ }
-}
-const sfx = {
-  right: () => tone([660, 880], 0.1),
-  wrong: () => tone([300], 0.32, "sine", -180),
-  star: () => tone([988, 1318], 0.08, "sine"),
-  gate: () => tone([523, 659, 784, 1046], 0.13),
-};
+/* sounds: the shared kit in lib/game-sfx.ts (2026-10-31) */
 
 /* ---------- words ---------- */
 async function loadWords(token: string, ui: string): Promise<{ words: TrailWord[]; reads: string | null }> {
@@ -250,7 +226,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
     const right = letter === letters[i];
     walkTo(g.doorX(i, j) - g.doorW * 0.42, () => {
       if (right) {
-        sfx.right();
+        sfx.correct();
         setOpened((o) => ({ ...o, [i]: j }));
         setTimeout(() => {
           const last = i === letters.length - 1;
@@ -295,7 +271,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
   const check = useCallback((idxs: number[]) => {
     const guess = idxs.map((k) => tiles[k]).join("");
     if (guess === word.w) {
-      sfx.gate();
+      sfx.magic();
       setPhase("open");
       const g = geoRef.current;
       setTimeout(() => walkTo(g.gateX + g.gateW * 0.1), 500);
@@ -310,6 +286,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
   const addTile = useCallback((k: number) => {
     if (phase !== "gate" || reveal || typed.includes(k) || typed.length >= letters.length) return;
     const next = [...typed, k];
+    sfx.letter(next.length - 1);
     setTyped(next);
     if (next.length === letters.length) setTimeout(() => check(next), 250);
   }, [phase, reveal, typed, letters.length, check]);
@@ -406,6 +383,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
         </div>
         <span className="wt-round wt-tts"><TTSButton text={word.w} audioLang={audioLang} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} /></span>
         <span className="wt-stars">⭐ {stars}</span>
+        <SfxToggle className="wt-round" />
       </div>
 
       {started && phase === "walk" ? <div className="wt-tip">{c.pick}</div> : null}
@@ -449,6 +427,13 @@ function Clearing({ world, c, items, fresh, onNext, onBack, ui }: {
   const inArea = n % world.areaSize;
   const newArea = !!fresh && inArea === 0 && n > 0;
   const freshItem = fresh ? items.find((x) => `${x.lang}:${x.w}` === fresh) : null;
+  // The word arrives in the child's world: a fanfare, or a level-up when a new area opens.
+  useEffect(() => {
+    if (!fresh) return;
+    const tm = setTimeout(() => (newArea ? sfx.unlock() : sfx.win()), 650);
+    return () => clearTimeout(tm);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fresh]);
   const scale = n > 24 ? 0.7 : n > 12 ? 0.85 : 1;
   return (
     <div className="wt-clearing" style={{ backgroundImage: `url(${worldArt(world, "clearing")})` }} dir={ui === "he" || ui === "ar" || ui === "fa" ? "rtl" : "ltr"}>
@@ -555,6 +540,7 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
 
   const enter = () => {
     if (!word) return;
+    sfx.whoosh();
     setCurtainOpen(true);
     setPhase("intro");
   };
@@ -580,7 +566,7 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
       }
     } catch { /* the world still opens */ }
     setFresh(key);
-    setTimeout(() => { setPhase("clearing"); setCurtainOpen(true); }, 900);
+    setTimeout(() => { setPhase("clearing"); setCurtainOpen(true); sfx.whoosh(); }, 900);
   }, [demo, user, word, pics, wn.title, worldId]);
 
   const next = useCallback(async () => {

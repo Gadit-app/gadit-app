@@ -11,6 +11,7 @@
  */
 
 import { useState, useEffect, useMemo } from "react";
+import { sfx } from "@/lib/game-sfx";
 import type { PlayWord, AnagramRound } from "@/lib/play-engine";
 import { buildAnagramRounds, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
@@ -77,6 +78,7 @@ export function GameAnagram({
       if (!usedSlots.has(i)) { nextSlot = i; break; }
     }
     if (nextSlot < 0) return;
+    sfx.letter(usedSlots.size);
     setTiles((prev) =>
       prev.map((t) => (t.id === tile.id ? { ...t, slot: nextSlot } : t)),
     );
@@ -100,8 +102,10 @@ export function GameAnagram({
     if (guess.toLowerCase() === word.word.word.toLowerCase()) {
       setResultState("correct");
       reportAnswer(word.word.word, true);
+      sfx.correct();
       setScore((s) => s + 1);
     } else {
+      sfx.wrong();
       setResultState("wrong");
       reportAnswer(word.word.word, false);
       setMissed((m) => [...m, word]);

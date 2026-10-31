@@ -10,6 +10,7 @@
  */
 
 import { useState, useMemo } from "react";
+import { sfx } from "@/lib/game-sfx";
 import type { PlayWord, FillBlankQuestion } from "@/lib/play-engine";
 import { buildFillBlankQuestions, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
@@ -49,8 +50,8 @@ export function GameFillBlank({
     setPicked(i);
     const q = questions[idx];
     reportAnswer(q.word.word, i === q.correctIdx);
-    if (i === q.correctIdx) setScore((s) => s + 1);
-    else setMissed((m) => [...m, q]);
+    if (i === q.correctIdx) { sfx.correct(); setScore((s) => s + 1); }
+    else { sfx.wrong(); setMissed((m) => [...m, q]); }
   }
 
   function advance() {

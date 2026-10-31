@@ -6,6 +6,7 @@
  * pronoun that replaces it.
  */
 import { useMemo, useState } from "react";
+import { sfx } from "@/lib/game-sfx";
 import { shuffle } from "@/lib/play-engine";
 import { PlayHeader, type PlayT } from "../GameQuiz";
 import { GameResult } from "../GameResult";
@@ -55,6 +56,7 @@ export function GamePronoun({ items, onExit, lang, t, audioLang }: {
   const pick = (p: string) => {
     if (picked) return;
     setPicked(p);
+    if (p === r.answer) sfx.correct(); else sfx.wrong();
     if (p === r.answer) setScore((s) => s + 1);
     else setMissed((m) => [...m, { word: r.phrase, meaning: r.answer }]);
     // New buttons for every question (key holds idx), and the tapped one loses

@@ -1,6 +1,7 @@
 "use client";
 
 import { DuelPrompt, DuelOptText } from "./DuelPrompt";
+import { sfx } from "@/lib/game-sfx";
 import { useEffect, useRef, useState } from "react";
 import { ROUND_MS, roundPoints, type DuelQuestion } from "@/lib/duel";
 import { duelCopy } from "./duel-i18n";
@@ -42,12 +43,19 @@ export function DuelLocal({ questions, lang, dir, onExit, defaultNames }: {
 
   const record = (round: number, who: 0 | 1, choice: number | null, startedAt: number) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (choice != null) sfx.tap();
     const q = questions[round];
     const ms = Date.now() - startedAt;
     const points = choice == null ? 0 : roundPoints(choice === q.correctIdx, ms);
     setAnswers((prev) => prev.map((a, r) => (r === round ? (who === 0 ? [{ choice, points }, a[1]] : [a[0], { choice, points }]) : a)));
     setStep(who === 0 ? { kind: "pass", round, who: 1 } : { kind: "reveal", round });
   };
+
+  // The reveal swooshes in; the end gets a fanfare.
+  useEffect(() => {
+    if (step.kind === "reveal") sfx.whoosh();
+    else if (step.kind === "done") sfx.win();
+  }, [step.kind]);
 
   // Time's up for whoever is answering.
   useEffect(() => {

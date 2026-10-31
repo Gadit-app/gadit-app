@@ -16,6 +16,7 @@
  */
 
 import { useState, useEffect, useMemo } from "react";
+import { sfx } from "@/lib/game-sfx";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
@@ -81,8 +82,10 @@ export function GameBuildAWord({
     setRevealed(true);
     const isCorrect = placed.join("") === r.correct.join("");
     if (isCorrect) {
+      sfx.correct();
       setScore((s) => s + 1);
     } else {
+      sfx.wrong();
       setMissed((m) => [...m, r]);
     }
   }, [placed, revealed, r, slotCount]);
@@ -101,6 +104,7 @@ export function GameBuildAWord({
     if (revealed) return;
     if (placed.includes(morpheme)) return;
     if (placed.length >= slotCount) return;
+    sfx.letter(placed.length);
     setPlaced((prev) => [...prev, morpheme]);
   }
 

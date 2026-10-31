@@ -12,6 +12,7 @@
  */
 
 import { useEffect, type ReactNode } from "react";
+import { sfx } from "@/lib/game-sfx";
 import { useAuth } from "@/lib/auth-context";
 import { recordPlay } from "@/lib/play-streak";
 import { dirForLang } from "@/lib/play-engine";
@@ -48,6 +49,9 @@ export function GameResult({
   const lessonNext = getLessonNext();
   const { user } = useAuth();
   useEffect(() => {
+    // The end of a game: a fanfare for a perfect round, a magic chime for the rest (always a celebration).
+    const p = data.total > 0 ? data.score / data.total : 0;
+    const tm = setTimeout(() => (p >= 1 ? sfx.win() : sfx.magic()), 250);
     recordPlay(user);
     // The parent hears about every finished game (Gadi 2026-10-12), but
     // not about each step inside a lesson: the lesson reports once.
@@ -55,6 +59,7 @@ export function GameResult({
     // user is intentionally omitted from deps — we only want to record
     // once on mount; if auth pops in mid-result-screen we'd otherwise
     // double-record.
+    return () => clearTimeout(tm);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

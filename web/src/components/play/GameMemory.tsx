@@ -9,6 +9,7 @@
  */
 
 import { useState, useEffect, useRef, useMemo } from "react";
+import { sfx } from "@/lib/game-sfx";
 import type { PlayWord, MemoryCard } from "@/lib/play-engine";
 import { buildMemoryDeck, SESSION_SIZE } from "@/lib/play-engine";
 import { reportAnswer } from "@/lib/learn/report";
@@ -62,6 +63,7 @@ export function GameMemory({
     if (flipped.includes(card.id)) return;
     if (matched.includes(card.pairKey)) return;
     const next = [...flipped, card.id];
+    sfx.flip();
     setFlipped(next);
     if (next.length === 2) {
       setMoves((m) => m + 1);
@@ -70,6 +72,7 @@ export function GameMemory({
       const b = deck.find((c) => c.id === bId)!;
       if (a.pairKey === b.pairKey) {
         reportAnswer(a.word.word, true);
+        setTimeout(() => sfx.correct(), 180);
         setMatched((m) => [...m, a.pairKey]);
         setFlipped([]);
       } else {
@@ -77,6 +80,7 @@ export function GameMemory({
         // they close — 800ms felt rushed in the beta. ~1.4s for two
         // short labels is the standard for this kind of memory game.
         lockRef.current = true;
+        setTimeout(() => sfx.wrong(), 250);
         setTimeout(() => {
           setFlipped([]);
           lockRef.current = false;

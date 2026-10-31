@@ -26,6 +26,7 @@
  */
 
 import { WaitText } from "@/components/WaitText";
+import { sfx } from "@/lib/game-sfx";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { PlayWord } from "@/lib/play-engine";
 import { shuffle, SESSION_SIZE } from "@/lib/play-engine";
@@ -646,7 +647,7 @@ export function GameFlashcards({
       <button
         type="button"
         className={`wb-flash-card${flipped ? " is-flipped" : ""}${deckHasPics ? " has-pics" : ""}`}
-        onClick={() => setFlipped((x) => !x)}
+        onClick={() => { sfx.flip(); setFlipped((x) => !x); }}
         aria-pressed={flipped}
       >
         <span className="wb-flash-inner">

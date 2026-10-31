@@ -1,6 +1,7 @@
 "use client";
 
 import { WaitText, WaitDots } from "@/components/WaitText";
+import { sfx } from "@/lib/game-sfx";
 import { ReportQuestionButton } from "../ReportQuestionButton";
 import { DuelPrompt, DuelOptText } from "./DuelPrompt";
 import { QText } from "../QText";
@@ -72,6 +73,7 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
 
   const answer = async (round: number, choice: number) => {
     if (!user || picked?.round === round) return;
+    sfx.tap();
     setPicked({ round, choice });
     try {
       await fetch("/api/duel", {
@@ -96,6 +98,19 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
       if (r.ok && j.code) { setView(null); setPicked(null); setCode(String(j.code)); }
     } finally { setAsking(false); }
   };
+
+  // A sound for each reveal (right or wrong for me) and a fanfare at the end.
+  const soundKey = useRef("");
+  useEffect(() => {
+    if (!view) return;
+    const p = view.phase;
+    const key = p.kind === "reveal" ? `r${p.round}` : p.kind === "done" ? "done" : "";
+    if (!key || key === soundKey.current) return;
+    soundKey.current = key;
+    if (p.kind === "done") { sfx.win(); return; }
+    const mine = view.reveal?.[view.you];
+    if (mine && mine.choice != null) (mine.points > 0 ? sfx.correct : sfx.wrong)();
+  }, [view]);
 
   if (error) {
     return (

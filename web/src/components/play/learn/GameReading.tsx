@@ -6,6 +6,7 @@
  * with a read-aloud; the checks come one at a time under it.
  */
 import { useState } from "react";
+import { sfx } from "@/lib/game-sfx";
 import { PlayHeader, type PlayT } from "../GameQuiz";
 import { GameResult } from "../GameResult";
 import { TTSButton } from "@/components/design/TTSButton";
@@ -43,6 +44,7 @@ export function GameReading({ reading, onExit, lang, t, audioLang, dirText }: {
   const pick = (v: boolean) => {
     if (answer !== null) return;
     setAnswer(v);
+    if (v === ch.yes) sfx.correct(); else sfx.wrong();
     if (v === ch.yes) setScore((s) => s + 1);
     setTimeout(() => { setIdx((i) => i + 1); setAnswer(null); }, v === ch.yes ? 900 : 1600);
   };

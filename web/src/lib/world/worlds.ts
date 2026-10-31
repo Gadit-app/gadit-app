@@ -136,8 +136,11 @@ export const WORLD_ICON: Record<WorldKey, string> = { jungle: "ðŸŒ´", space: "ðŸ
 /** Words spelled in the world before that open the next one. */
 export const UNLOCK_WORDS = 5;
 
+/** Bump when the art files change: the service worker caches images by URL forever. */
+export const WORLD_ART_V = 2;
+
 export function worldArt(w: WorldDef, name: string): string {
-  return `${w.dir}/${name}.webp`;
+  return `${w.dir}/${name}.webp?v=${WORLD_ART_V}`;
 }
 
 export function isWorldId(x: unknown): x is WorldId {

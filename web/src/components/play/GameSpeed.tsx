@@ -13,6 +13,7 @@
  */
 
 import { useState, useEffect, useRef, useMemo } from "react";
+import { sfx } from "@/lib/game-sfx";
 import type { PlayWord, QuizQuestion } from "@/lib/play-engine";
 import { buildSpeedDeck } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
@@ -85,8 +86,8 @@ export function GameSpeed({
     if (!q) return;
     setPicked(i);
     reportAnswer(q.word.word, i === q.correctIdx);
-    if (i === q.correctIdx) setScore((s) => s + 1);
-    else setTimeLeft((t) => Math.max(0, t - WRONG_PENALTY));
+    if (i === q.correctIdx) { sfx.correct(); setScore((s) => s + 1); }
+    else { sfx.wrong(); setTimeLeft((t) => Math.max(0, t - WRONG_PENALTY)); }
     // Quick advance — 220ms reveal then next.
     advanceRef.current = window.setTimeout(() => {
       if (idx + 1 >= deck.length) setStage("done");

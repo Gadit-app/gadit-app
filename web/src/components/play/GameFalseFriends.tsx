@@ -12,6 +12,7 @@
  */
 
 import { useState, useMemo } from "react";
+import { sfx } from "@/lib/game-sfx";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, dirForLang } from "@/lib/play-engine";
@@ -51,8 +52,10 @@ export function GameFalseFriends({
     // Button 0 = TRUE (real cognate). Button 1 = FALSE (trap).
     const userSaysReal = buttonIdx === 0;
     if (userSaysReal === r.isReal) {
+      sfx.correct();
       setScore((s) => s + 1);
     } else {
+      sfx.wrong();
       setMissed((m) => [...m, r]);
     }
   }

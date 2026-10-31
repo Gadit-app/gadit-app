@@ -16,6 +16,7 @@
  */
 
 import { useState, useEffect, useMemo } from "react";
+import { sfx } from "@/lib/game-sfx";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
@@ -115,7 +116,10 @@ export function GameRootRush({
     const tile = r.tiles[tileIdx];
     setTaps((prev) => [...prev, { tileIdx, correct: tile.isCorrect }]);
     if (tile.isCorrect) {
+      sfx.correct();
       setScore((s) => s + 1);
+    } else {
+      sfx.wrong();
     }
   }
 

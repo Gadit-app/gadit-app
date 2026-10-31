@@ -9,6 +9,7 @@
  */
 
 import { useMemo, useState } from "react";
+import { sfx } from "@/lib/game-sfx";
 import type { PlayWord, TrueFalseRound } from "@/lib/play-engine";
 import { buildTrueFalseRounds, SESSION_SIZE } from "@/lib/play-engine";
 import { GameResult } from "./GameResult";
@@ -62,8 +63,8 @@ export function GameTrueFalse({ pool, onExit, lang, t }: { pool: PlayWord[]; onE
     if (answer !== null || !r) return;
     setAnswer(v);
     reportAnswer(r.word.word, v === r.isTrue);
-    if (v === r.isTrue) setScore((s) => s + 1);
-    else setMissed((m) => [...m, r]);
+    if (v === r.isTrue) { sfx.correct(); setScore((s) => s + 1); }
+    else { sfx.wrong(); setMissed((m) => [...m, r]); }
   }
 
   const correct = answer !== null && answer === r.isTrue;

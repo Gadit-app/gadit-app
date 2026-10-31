@@ -11,6 +11,8 @@
  */
 
 import { ReportQuestionButton } from "./ReportQuestionButton";
+import { sfx } from "@/lib/game-sfx";
+import { SfxToggle } from "@/components/SfxToggle";
 import { useState, useMemo, useEffect } from "react";
 import type { PlayWord, QuizQuestion } from "@/lib/play-engine";
 import { buildQuizQuestions, SESSION_SIZE } from "@/lib/play-engine";
@@ -50,8 +52,8 @@ export function GameQuiz({
     setPicked(i);
     const q = questions[idx];
     reportAnswer(q.word.word, i === q.correctIdx);
-    if (i === q.correctIdx) setScore((s) => s + 1);
-    else setMissed((m) => [...m, q]);
+    if (i === q.correctIdx) { sfx.correct(); setScore((s) => s + 1); }
+    else { sfx.wrong(); setMissed((m) => [...m, q]); }
   }
 
   function advance() {
@@ -154,6 +156,10 @@ export function PlayHeader({
     const a = document.activeElement as HTMLElement | null;
     if (a && a.tagName === "BUTTON" && a.closest(".wb-play-stage") && !a.closest(".wb-play-header")) a.blur();
   }, [progress]);
+  // The last five seconds of a timed round tick.
+  useEffect(() => {
+    if (typeof timeLeft === "number" && timeLeft > 0 && timeLeft <= 5) sfx.tick();
+  }, [timeLeft]);
   return (
     <div className="wb-play-header">
       <button type="button" className="wb-play-exit" onClick={onExit} aria-label={t.exit}>
@@ -164,6 +170,7 @@ export function PlayHeader({
       <div className="wb-play-header-title">{title}</div>
       <div className="wb-play-header-meta">
         <ReportQuestionButton where={title} />
+        <SfxToggle style={{ background: "none", border: 0, padding: "2px 4px", fontSize: 18, lineHeight: 1, cursor: "pointer" }} />
         <NiqqudToggle />
         {progress && <span className="wb-play-progress">{progress}</span>}
         {typeof timeLeft === "number" && (

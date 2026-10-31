@@ -4469,7 +4469,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
                     <li key="world">
                       <Link href={href("/world")} className="wb-play-card wb-play-card-world wb-play-cat-notebook has-cover">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img className="wb-play-card-cover" src="/worlds/jungle/clearing.webp" alt="" loading="lazy" width={720} height={480} />
+                        <img className="wb-play-card-cover" src="/worlds/jungle/clearing.webp?v=2" alt="" loading="lazy" width={720} height={480} />
                         <span className="wb-play-card-text">
                           <span className="wb-play-card-title">🌴 {worldCardCopy(lang).mapTitle}</span>
                           <span className="wb-play-card-desc">{worldCardCopy(lang).cardDesc}</span>

@@ -15,6 +15,7 @@
  */
 
 import { useState, useEffect, useMemo } from "react";
+import { sfx } from "@/lib/game-sfx";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
@@ -88,6 +89,7 @@ export function GameShadeSlider({
       if (w === r.canonical[i]) roundScore++;
     });
     setScore((s) => s + roundScore);
+    if (roundScore >= 3) sfx.correct(); else sfx.wrong();
     if (roundScore < 3) {
       setMissed((m) => [...m, r]);
     }
@@ -106,6 +108,7 @@ export function GameShadeSlider({
   function takeFromPool(word: string) {
     if (revealed) return;
     if (placed.includes(word)) return;
+    sfx.letter(placed.length);
     setPlaced((prev) => [...prev, word]);
   }
 
