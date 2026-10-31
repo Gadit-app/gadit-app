@@ -4471,7 +4471,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img className="wb-play-card-cover" src="/worlds/jungle/clearing.webp" alt="" loading="lazy" width={720} height={480} />
                         <span className="wb-play-card-text">
-                          <span className="wb-play-card-title">🌴 {worldCopy(lang).worlds.jungle.title}</span>
+                          <span className="wb-play-card-title">🌴 {worldCopy(lang).mapTitle}</span>
                           <span className="wb-play-card-desc">{worldCopy(lang).cardDesc}</span>
                         </span>
                       </Link>

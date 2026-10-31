@@ -12,7 +12,7 @@
 import type { WorldKey } from "./world-i18n";
 
 /** Worlds whose art is built. */
-export type WorldId = Extract<WorldKey, "jungle" | "space">;
+export type WorldId = Extract<WorldKey, "jungle" | "space" | "castle">;
 
 export type WorldDef = {
   id: WorldId;
@@ -61,6 +61,19 @@ export const WORLDS: Record<WorldId, WorldDef> = {
     doorAspect: 300 / 330,
     plaqueY: 46,
     letterColor: "#1d2350",
+  },
+  castle: {
+    id: "castle",
+    dir: "/worlds/castle",
+    spots: ["chest", "cauldron", "books", "armor"],
+    animals: ["owl", "dragon", "ghost", "toad", "broom"],
+    ground: ["#6d5a8e", "#4a3c66"],
+    edge: ["#8e7bb0", "#7a679c"],
+    sky: "#3a2f63",
+    areaSize: 5,
+    doorAspect: 300 / 457,
+    plaqueY: 55,
+    letterColor: "#4a2a00",
   },
 };
 
