@@ -36,6 +36,7 @@ import { sfx } from "@/lib/game-sfx";
 import { WORLDS, worldArt, type WorldDef, type WorldId } from "@/lib/world/worlds";
 import { forkLetters, gateTiles, keyMatches, lettersOf, spellable, spellForm, type SpellLang } from "@/lib/world/letters";
 import { worldCopy, type WorldCopy } from "@/lib/world/world-i18n";
+import { worldGoal } from "@/lib/world/world-goal-i18n";
 
 export type TrailWord = { raw: string; w: string; nq?: string; t: string; pic: string; lang: SpellLang };
 type WorldItem = { w: string; lang: string; t: string; pic: string | null; at: number };
@@ -364,26 +365,35 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
           {avatar ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={avatar} alt="" draggable={false} />
-          ) : <span>🧒</span>}
+          ) : (
+            // No picture of their own yet: a character in the game's own style, never an emoji.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src="/avatars/look-hoodie-1.webp" alt="" draggable={false} />
+          )}
         </div>
       </div>
 
       <div className="wt-hud">
-        <button type="button" className="wt-round" onClick={onExit} aria-label={c.back}>✕</button>
+        <div className="wt-hud-side">
+          <button type="button" className="wt-round" onClick={onExit} aria-label={c.back}>✕</button>
+          <SfxToggle className="wt-round" />
+        </div>
         <div className="wt-slots" dir={rtl ? "rtl" : "ltr"}>
           {pic ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img className="wt-slots-pic" src={pic} alt="" />
           ) : null}
+          {/* Hear the word: it sits on the word itself, so it is clear what it reads. */}
+          <span className="wt-slots-say"><TTSButton text={word.w} audioLang={audioLang} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} /></span>
           {letters.map((l, i) => {
             const fromGate = phase !== "walk" ? (reveal ? l : (tiles[typed[i]] ?? (phase === "open" ? l : ""))) : "";
             const ch = phase === "walk" ? (shown(i) ? l : "") : fromGate;
             return <span key={i} className={`wt-slot${ch ? " is-filled" : ""}${reveal ? " is-reveal" : ""}`}>{ch}</span>;
           })}
         </div>
-        <span className="wt-round wt-tts"><TTSButton text={word.w} audioLang={audioLang} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} /></span>
-        <span className="wt-stars">⭐ {stars}</span>
-        <SfxToggle className="wt-round" />
+        <div className="wt-hud-side is-end">
+          <span className="wt-stars">⭐ {stars}</span>
+        </div>
       </div>
 
       {started && phase === "walk" ? <div className="wt-tip">{c.pick}</div> : null}
@@ -626,6 +636,9 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
             <span ref={introSay} className="wt-intro-say">
               <TTSButton text={word.w} audioLang={word.lang === "he" ? "he-IL" : "en-US"} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} />
             </span>
+            <div className="wt-intro-goal">
+              {worldGoal(lang, word.nq || word.w).map((line, i) => <p key={i}>{line}</p>)}
+            </div>
             <button type="button" className="wt-btn" onClick={() => setPhase("trail")}>{c.go}</button>
           </div>
         </div>
@@ -685,11 +698,19 @@ const CSS = `
 .wt-avatar{position:absolute;border-radius:50%;border:4px solid #fff;background:#fff;box-shadow:0 6px 14px #0004;overflow:hidden;display:grid;place-items:center;font-size:40px;z-index:2}
 .wt-avatar img{width:100%;height:100%;object-fit:cover}
 .wt-avatar.is-walking{animation:wt-bob .32s ease-in-out infinite alternate}
-.wt-hud{position:absolute;top:calc(env(safe-area-inset-top,0px) + 10px);left:10px;right:10px;display:flex;align-items:center;gap:8px;z-index:5}
+/* three columns: the word bar sits in the middle of the screen, over the doors, whatever the side buttons take */
+.wt-hud{position:absolute;top:calc(env(safe-area-inset-top,0px) + 10px);left:10px;right:10px;display:grid;grid-template-columns:1fr minmax(0,560px) 1fr;align-items:center;gap:8px;z-index:5}
+.wt-hud-side{display:flex;align-items:center;gap:8px;min-width:96px}
+.wt-hud-side.is-end{justify-content:flex-end}
 .wt-round{width:44px;height:44px;flex:0 0 44px;border-radius:50%;border:0;background:#fffe;box-shadow:0 2px 8px #0002;font-size:20px;display:grid;place-items:center;cursor:pointer;color:#14202b}
 .wt-tts-btn{width:44px;height:44px;border:0;background:none;display:grid;place-items:center;cursor:pointer;color:#0a7472}
 .wt-tts-btn svg{width:24px;height:24px}
-.wt-slots{flex:1 1 auto;min-width:0;max-width:560px;margin-inline:auto;display:flex;justify-content:center;align-items:center;gap:5px;background:#fffffff0;border-radius:18px;padding:6px 10px;box-shadow:0 2px 10px #0002;overflow:hidden}
+.wt-slots-say .wt-tts-btn{width:34px;height:34px}
+.wt-slots-say{display:grid;place-items:center;flex:0 0 auto}
+.wt-intro-goal{display:grid;gap:2px;text-align:center;color:#3d4a52;font-size:15px;line-height:1.4;max-width:300px}
+.wt-intro-goal p{margin:0}
+.wt-intro-goal p:first-child{font-weight:800;color:#14202b}
+.wt-slots{min-width:0;display:flex;justify-content:center;align-items:center;gap:5px;background:#fffffff0;border-radius:18px;padding:6px 10px;box-shadow:0 2px 10px #0002;overflow:hidden}
 .wt-slots-pic{width:40px;height:40px;border-radius:10px;object-fit:cover;margin-inline-end:4px}
 .wt-slot{width:clamp(24px,7vw,36px);height:42px;border-bottom:4px solid #0a7472;font-size:clamp(22px,6vw,30px);font-weight:800;display:grid;place-items:center}
 .wt-slot.is-filled{animation:wt-pop .35s}

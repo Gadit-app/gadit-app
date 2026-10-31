@@ -19,7 +19,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -461,6 +461,9 @@ function vaCopy(lang: string): VaCopy {
 
 export function VoiceAssistant() {
   const { user, plan } = useAuth();
+  // Games have their own sound and word buttons; the mic stays out of them.
+  const pathname = usePathname() ?? "";
+  const inGame = /\/(world|play|duel|games|spell)(\/|$)/.test(pathname);
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -570,7 +573,7 @@ export function VoiceAssistant() {
   // anywhere on the page (no need to hunt for the mic button).
   useEffect(() => {
     // iOS is tap-to-ask only (no reliable hands-free), so never auto-resume.
-    const elig = !!user && (plan === "clear" || plan === "deep") && supported && !isMobile && !isIOSPlatform();
+    const elig = !!user && (plan === "clear" || plan === "deep") && supported && !isMobile && !isIOSPlatform() && !inGame;
     if (!elig || listeningRef.current) return;
     let saved = false;
     try { saved = localStorage.getItem(PREF_KEY) === "1"; } catch { /* ignore */ }
@@ -587,10 +590,11 @@ export function VoiceAssistant() {
       document.removeEventListener("pointerdown", resume);
       document.removeEventListener("keydown", resume);
     };
-  }, [user, plan, supported, start, isMobile]);
+  }, [user, plan, supported, start, isMobile, inGame]);
 
-  // Gate: paying, logged-in users on a supporting browser only.
-  const eligible = !!user && (plan === "clear" || plan === "deep") && supported && !isMobile;
+  // Gate: paying, logged-in users on a supporting browser only, and never inside
+  // a game (Gadi 2026-11-01: the mic next to a game's own buttons only confused).
+  const eligible = !!user && (plan === "clear" || plan === "deep") && supported && !isMobile && !inGame;
   if (!eligible) return null;
 
   const active = status === "listening" || status === "heard";

@@ -93,7 +93,8 @@ export function WorldMap({ demo }: { demo?: Counts }) {
 
 const CSS = `
 .wm-root{min-height:100dvh;background:linear-gradient(#0f3b2c,#16533c 40%,#1d2350);color:#fff;padding:calc(env(safe-area-inset-top,0px) + 14px) 16px calc(env(safe-area-inset-bottom,0px) + 28px)}
-.wm-head{max-width:620px;margin:0 auto 18px;display:flex;gap:12px;align-items:flex-start}
+.wm-head{max-width:620px;margin:0 auto 18px;display:grid;grid-template-columns:44px 1fr 44px;gap:12px;align-items:center}
+.wm-titles{text-align:center;min-width:0}
 .wm-back{width:44px;height:44px;flex:0 0 44px;border-radius:50%;background:#ffffff26;color:#fff;display:grid;place-items:center;font-size:20px;text-decoration:none}
 .wm-titles h1{margin:0;font-size:clamp(26px,7vw,36px);line-height:1.15;text-wrap:balance}
 .wm-titles p{margin:4px 0 0;opacity:.85;font-size:15px}
