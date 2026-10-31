@@ -65,6 +65,7 @@ import { GameIdiomDecoder } from "@/components/play/GameIdiomDecoder";
 import { GameMeaningLens } from "@/components/play/GameMeaningLens";
 import { GameEtymologyArtist } from "@/components/play/GameEtymologyArtist";
 import { DuelHub } from "@/components/play/duel/DuelHub";
+import { worldCopy } from "@/lib/world/world-i18n";
 import { setAnswerListener } from "@/lib/learn/report";
 import { setDuelLauncher } from "@/lib/duel-launch";
 import { duelCopy } from "@/components/play/duel/duel-i18n";
@@ -4463,6 +4464,19 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
                   <h2 className="wb-play-section-heading">{section.label}</h2>
                 )}
                 <ul className="wb-play-grid">
+                  {/* The world game (Gadi 2026-10-30): first card, a world to walk in. */}
+                  {isPaid && section.id === "notebook" && (
+                    <li key="world">
+                      <Link href={href("/world")} className="wb-play-card wb-play-card-world wb-play-cat-notebook has-cover">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img className="wb-play-card-cover" src="/worlds/jungle/clearing.webp" alt="" loading="lazy" width={720} height={480} />
+                        <span className="wb-play-card-text">
+                          <span className="wb-play-card-title">🌴 {worldCopy(lang).worlds.jungle.title}</span>
+                          <span className="wb-play-card-desc">{worldCopy(lang).cardDesc}</span>
+                        </span>
+                      </Link>
+                    </li>
+                  )}
                   {isPaid && section.id === "notebook" && (() => {
                     const dc = duelCopy(lang);
                     return (
