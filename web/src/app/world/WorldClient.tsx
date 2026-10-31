@@ -145,19 +145,30 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
   const geo = useMemo(() => {
     const W = size.w, H = size.h;
     const groundH = H * 0.22;
-    const doorH = clamp(Math.min(H * 0.27, W * (doors >= 3 ? 0.33 : 0.42)), 110, 240);
-    const doorW = doorH * world.doorAspect;
-    const avatarS = clamp(H * 0.12, 62, 104);
+    const avatarS = clamp(Math.min(H * 0.1, W * (doors >= 3 ? 0.17 : 0.2)), 58, 96);
+    /* the doors stand in the middle of the screen, with room on their left
+       for the avatar (it stands a little in front of the first door): the
+       group never gets wider than that leaves */
+    const lead = doors >= 3 ? 0.2 : 0.35;
+    const gap = doors >= 3 ? 1.05 : 1.14;
+    const span = gap * (doors - 1) + 1;
+    const fitW = (W - avatarS * (2 * lead + 1) - 12) / span;
+    const wantH = clamp(Math.min(H * 0.27, W * (doors >= 3 ? 0.33 : 0.42)), 110, 240);
+    const doorW = Math.min(wantH * world.doorAspect, fitW);
+    const doorH = doorW / world.doorAspect;
+    const groupW = doorW * span;
     const seg = clamp(W * 0.95, 380, 860);
     const p0 = W * 0.38;
     const forkX = (i: number) => p0 + i * seg + seg * 0.7;
-    const doorX = (i: number, j: number) => forkX(i) + (j - (doors - 1) / 2) * doorW * 1.14;
-    const waitX = (i: number) => doorX(i, 0) - doorW * 0.95;
+    const doorX = (i: number, j: number) => forkX(i) + (j - (doors - 1) / 2) * doorW * gap;
+    const waitX = (i: number) => forkX(i) - groupW / 2 - avatarS * lead;
+    /* camera: screen-left = avatar - camOff, so at a fork the doors are centred */
+    const camOff = Math.max(avatarS / 2 + 6, W / 2 - groupW / 2 - avatarS * lead);
     const spotX = (i: number) => p0 + i * seg + seg * 0.22;
     const gateW = clamp(W * 0.6, 230, 420);
     const gateX = p0 + letters.length * seg + seg * 0.45;
     const len = gateX + W * 0.7;
-    return { W, H, groundH, doorH, doorW, avatarS, seg, forkX, doorX, waitX, spotX, gateW, gateX, len, speed: Math.max(300, W * 0.55) };
+    return { W, H, groundH, doorH, doorW, avatarS, seg, forkX, doorX, waitX, camOff, spotX, gateW, gateX, len, speed: Math.max(300, W * 0.55) };
   }, [size, doors, letters.length, world.doorAspect]);
 
   const geoRef = useRef(geo);
@@ -171,6 +182,8 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
   const posRef = useRef(geo.W * 0.18);
   const targetRef = useRef(geo.W * 0.18);
   const arriveRef = useRef<(() => void) | null>(null);
+  /* the fork the camera holds still on (-1 = follow the avatar) */
+  const camForkRef = useRef(0);
   useEffect(() => {
     let raf = 0;
     let last = performance.now();
@@ -189,7 +202,9 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
         arriveRef.current = null;
         f();
       }
-      const cam = clamp(posRef.current - g.W * 0.16, 0, Math.max(0, g.len - g.W));
+      const lf = camForkRef.current;
+      const follow = posRef.current - g.camOff;
+      const cam = clamp(lf >= 0 ? Math.min(follow, g.waitX(lf) - g.camOff) : follow, 0, Math.max(0, g.len - g.W));
       if (trackRef.current) trackRef.current.style.transform = `translate3d(${rtl ? cam : -cam}px,0,0)`;
       const av = avatarRef.current;
       if (av) {
@@ -239,6 +254,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
         setOpened((o) => ({ ...o, [i]: j }));
         setTimeout(() => {
           const last = i === letters.length - 1;
+          camForkRef.current = last ? -1 : i + 1;
           walkTo(last ? g.gateX - g.gateW * 0.62 : g.waitX(i + 1), () => {
             busy.current = false;
             if (last) setPhase("gate");
@@ -348,7 +364,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
             <button key={key} type="button" className={cls} style={{ ...at(geo.doorX(i, j), geo.doorW), width: geo.doorW, bottom: bottomOf(0.42) }} onClick={() => tryDoor(i, j)} aria-label={l} disabled={i !== fork || isOpen}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={worldArt(world, "door")} alt="" draggable={false} />
-              <span className="wt-door-letter" style={{ fontSize: geo.doorH * 0.17, top: `${world.plaqueY}%`, color: world.letterColor }}>{l}</span>
+              <span className="wt-door-letter" style={{ fontSize: Math.min(geo.doorW * 0.27, geo.doorH * 0.22), top: `${world.plaqueY}%`, color: world.letterColor }}>{l}</span>
             </button>
           );
         }))}
@@ -687,7 +703,7 @@ const CSS = `
 .wt-round{width:44px;height:44px;flex:0 0 44px;border-radius:50%;border:0;background:#fffe;box-shadow:0 2px 8px #0002;font-size:20px;display:grid;place-items:center;cursor:pointer;color:#14202b}
 .wt-tts-btn{width:44px;height:44px;border:0;background:none;display:grid;place-items:center;cursor:pointer;color:#0a7472}
 .wt-tts-btn svg{width:24px;height:24px}
-.wt-slots{flex:1 1 auto;min-width:0;display:flex;justify-content:center;align-items:center;gap:5px;background:#fffffff0;border-radius:18px;padding:6px 10px;box-shadow:0 2px 10px #0002;overflow:hidden}
+.wt-slots{flex:1 1 auto;min-width:0;max-width:560px;margin-inline:auto;display:flex;justify-content:center;align-items:center;gap:5px;background:#fffffff0;border-radius:18px;padding:6px 10px;box-shadow:0 2px 10px #0002;overflow:hidden}
 .wt-slots-pic{width:40px;height:40px;border-radius:10px;object-fit:cover;margin-inline-end:4px}
 .wt-slot{width:clamp(24px,7vw,36px);height:42px;border-bottom:4px solid #0a7472;font-size:clamp(22px,6vw,30px);font-weight:800;display:grid;place-items:center}
 .wt-slot.is-filled{animation:wt-pop .35s}
