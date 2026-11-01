@@ -22,6 +22,7 @@ export type GameId =
   | "flashdefs"  // Definition cards: word on the front, flip for the meaning
   | "truefalse"  // True or false: does this meaning belong to this word?
   | "fillblank"
+  | "context"    // Context Detective: a short story with 2 or 3 blanks, written for the word set
   | "memory"
   | "anagram"
   | "speed"
@@ -68,6 +69,7 @@ export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
   flashdefs: 1,
   truefalse: 2,
   fillblank: 4, // and we need examples, checked separately
+  context: 4,   // words in one language; the stories are written for them
   memory: 4,
   anagram: 1,
   speed: 4,
@@ -91,6 +93,7 @@ export const SESSION_SIZE: Record<GameId, number> = {
   flashdefs: 10,
   truefalse: 10,
   fillblank: 5,
+  context: 3,   // 3 stories, each with 2 or 3 blanks
   memory: 4, // 4 pairs = 8 cards
   anagram: 5,
   speed: 999, // continuous until timer

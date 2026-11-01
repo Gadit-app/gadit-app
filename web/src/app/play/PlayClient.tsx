@@ -48,6 +48,8 @@ import { notifyActivity } from "@/lib/notify-activity-client";
 import { getStreak, syncFromServer } from "@/lib/play-streak";
 import { GameQuiz, type PlayT } from "@/components/play/GameQuiz";
 import { GameFillBlank } from "@/components/play/GameFillBlank";
+import { GameContextDetective } from "@/components/play/GameContextDetective";
+import { ctxCopy } from "@/components/play/context-detective-i18n";
 import { NiqqudProvider } from "@/lib/niqqud-display";
 import { GameMemory } from "@/components/play/GameMemory";
 import { GameFlashcards, flashCopy } from "@/components/play/GameFlashcards";
@@ -3853,6 +3855,13 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
     () => gamePool.filter((p) => usableFillBlankExamples(p).length > 0).length,
     [gamePool],
   );
+  // Context Detective writes its stories in ONE language: the biggest
+  // language group of the pool is what counts.
+  const contextWords = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const p of gamePool) { const c = wordLangOf(p); m.set(c, (m.get(c) ?? 0) + 1); }
+    return Math.max(0, ...m.values());
+  }, [gamePool]);
 
   // Game catalogue — grouped on the menu by category. Order within
   // each category matters: notebook games go first (familiar), then
@@ -3950,6 +3959,22 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
           <path d="M4 7h7" />
           <path d="M4 12h16" />
           <path d="M4 17h11" />
+        </svg>
+      ),
+    },
+    {
+      id: "context",
+      title: ctxCopy(lang).title,
+      desc: ctxCopy(lang).desc,
+      enabled: contextWords >= MIN_WORDS_FOR_GAME.context,
+      accent: "violet",
+      category: "notebook",
+      kidsFriendly: true,
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 6h10M4 10h6M4 14h4" />
+          <circle cx="15.5" cy="14.5" r="3.5" />
+          <path d="m18 17 3 3" />
         </svg>
       ),
     },
@@ -4315,6 +4340,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
           {stage.game === "truefalse" && <GameTrueFalse {...props} />}
           {stage.game === "quiz" && <GameQuiz {...props} />}
           {stage.game === "fillblank" && <GameFillBlank {...props} />}
+          {stage.game === "context" && <GameContextDetective {...props} kids={kidsMode} />}
           {stage.game === "memory" && <GameMemory {...props} />}
           {stage.game === "anagram" && <GameAnagram {...props} />}
           {stage.game === "speed" && <GameSpeed {...props} />}

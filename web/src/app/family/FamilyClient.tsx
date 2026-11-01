@@ -32,6 +32,7 @@ import { BackLink } from "@/components/BackLink";
 import { DuelPermission } from "@/components/play/duel/DuelPermission";
 import { learnCopy } from "@/components/play/learn/learn-i18n";
 import { LANGUAGES } from "@/lib/i18n";
+import { FriendRequests } from "./FriendRequests";
 import { FamilySetupChecklist } from "./FamilySetupChecklist";
 import { ageLabelFor } from "./add/FamilyAddClient";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
@@ -2523,6 +2524,8 @@ export function FamilyClient() {
               {/* First-steps checklist — hides itself once the family is
                   set up or the owner dismisses it. */}
               <FamilySetupChecklist placement="family" members={members} lang={lang} />
+              {/* Friend requests in Word Worlds wait here for a parent (Gadi 2026-11-01). */}
+              <FriendRequests user={user} lang={lang} dir={dir} />
               {!progressLoaded ? (
                 <div className="fam-dash-grid">
                   {Array.from({ length: children.length > 0 ? children.length : 2 }).map((_, i) => (

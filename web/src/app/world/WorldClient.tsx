@@ -38,13 +38,14 @@ import { WORLDS, worldArt, type WorldDef, type WorldId } from "@/lib/world/world
 import { forkLetters, gateTiles, keyMatches, lettersOf, registerAlphabet, spellable, spellForm, RTL_SPELL, type SpellLang } from "@/lib/world/letters";
 import { isBankSpell, readSpellChoice } from "@/lib/world/spell-choice";
 import { Glyph } from "./Glyph";
+import { friendsCopy } from "@/lib/world/friends-i18n";
 import { worldCopy, type WorldCopy } from "@/lib/world/world-i18n";
 import { worldGoal } from "@/lib/world/world-goal-i18n";
 
 /** native: a word from the world's own bank, any language (results go to /api/world/words). */
-export type TrailWord = { raw: string; w: string; nq?: string; t: string; pic: string; lang: SpellLang; native?: boolean };
+export type TrailWord = { raw: string; w: string; nq?: string; t: string; pic: string; lang: SpellLang; native?: boolean; gift?: { id: string; from: string } };
 /** x, y: where the child put the word in the clearing (% of the meadow), once they have moved one. */
-type WorldItem = { w: string; lang: string; t: string; pic: string | null; at: number; x?: number; y?: number };
+export type WorldItem = { w: string; lang: string; t: string; pic: string | null; at: number; x?: number; y?: number; from?: string };
 type LearnPoolItem = { w: string; t: string; nq?: string; en?: string };
 
 /** Keeps a Latin word or letter in its place inside right-to-left text. */
@@ -515,9 +516,11 @@ function nearestFree(p: Pt, placed: Pt[], grid: Pt[], fw: number, fh: number): P
   return best;
 }
 
-function Clearing({ world, c, items, fresh, onNext, onBack, ui, onLayout }: {
+/** visit: a friend's world (Gadi 2026-11-01), read only: their title, no dragging, our own footer. */
+export function Clearing({ world, c, items, fresh, onNext, onBack, ui, onLayout, visit }: {
   world: WorldDef; c: WorldCopy; items: WorldItem[]; fresh: string | null; onNext: () => void; onBack: () => void; ui: string;
   onLayout: (pos: Record<string, Pt>, size: { w: number; h: number }) => void;
+  visit?: { title: string; foot: React.ReactNode };
 }) {
   const { user } = useAuth();
   const [pics, setPics] = useState<Record<string, string>>({});
@@ -577,6 +580,7 @@ function Clearing({ world, c, items, fresh, onNext, onBack, ui, onLayout }: {
     return { x: e.clientX - r.left, y: e.clientY - r.top };
   };
   const onDown = (e: React.PointerEvent, k: string) => {
+    if (visit) return;
     const at = layout[k];
     if (!at || !meadowRef.current) return;
     e.preventDefault();
@@ -606,7 +610,7 @@ function Clearing({ world, c, items, fresh, onNext, onBack, ui, onLayout }: {
   return (
     <div className="wt-clearing" style={{ backgroundImage: `url(${worldArt(world, "clearing")})` }} dir={ui === "he" || ui === "ar" || ui === "fa" ? "rtl" : "ltr"}>
       <div className="wt-clearing-head">
-        <strong>{c.worlds[world.id].my}</strong>
+        <strong>{visit ? visit.title : c.worlds[world.id].my}</strong>
         <span>{c.worlds[world.id].wordsIn(n)}</span>
       </div>
       <div className="wt-meadow" ref={meadowRef}>
@@ -635,18 +639,19 @@ function Clearing({ world, c, items, fresh, onNext, onBack, ui, onLayout }: {
                 ) : <span aria-hidden="true">🌱</span>}
               </span>
               <span className="wt-friend-name" dir={RTL_SPELL.has(x.lang) ? "rtl" : "ltr"}>{x.w}</span>
+              {x.from ? <span className="wt-friend-gift" title={x.from} aria-hidden="true">🎁</span> : null}
             </div>
           );
         }) : null}
       </div>
-      <div className="wt-clearing-foot">
+      {visit ? <div className="wt-clearing-foot">{visit.foot}</div> : <div className="wt-clearing-foot">
         {freshItem ? <div className="wt-arrived">{newArea ? c.worlds[world.id].newArea : c.worlds[world.id].arrived(iso(freshItem.w))}</div> : null}
         {!newArea ? <div className="wt-area">{c.toArea(world.areaSize - inArea)}</div> : null}
         <div className="wt-row">
           <button type="button" className="wt-btn" onClick={onNext}>{c.next}</button>
           <button type="button" className="wt-btn is-ghost" onClick={onBack}>🗺️ {c.mapTitle}</button>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }
@@ -690,6 +695,21 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
         fetch("/api/world", { headers: { Authorization: `Bearer ${token}` } }).then((x) => (x.ok ? x.json() : null)).catch(() => null),
       ]);
       const w = (worldRes as { worlds?: Record<string, { items?: WorldItem[] }> } | null)?.worlds?.[worldId]?.items ?? [];
+      // A friend's gift (Gadi 2026-11-01): spelled first, then it lives here.
+      const giftId = new URLSearchParams(window.location.search).get("gift");
+      if (giftId) {
+        const fj = await fetch("/api/friends", { headers: { Authorization: `Bearer ${token}` } }).then((x) => (x.ok ? x.json() : null)).catch(() => null);
+        const g = (fj as { gifts?: Array<{ id: string; fromName: string; w: string; lang: string; t: string; pic: string | null }> } | null)?.gifts?.find((x) => x.id === giftId);
+        if (g && spellable(g.w, g.lang)) {
+          if (g.lang !== "en" && g.lang !== "he") {
+            const aj = await fetch(`/api/world/words?lang=${encodeURIComponent(g.lang)}&ui=${encodeURIComponent(lang)}`, { headers: { Authorization: `Bearer ${token}` } }).then((x) => (x.ok ? x.json() : null)).catch(() => null);
+            registerAlphabet(g.lang, (aj as { alphabet?: string[] } | null)?.alphabet ?? []);
+          }
+          const key = `gift:${g.id}`;
+          if (g.pic) setPics((p) => ({ ...p, [key]: g.pic! }));
+          words.unshift({ raw: g.w, w: spellForm(g.w, g.lang), t: g.t, pic: g.pic ? key : "", lang: g.lang, native: isBankSpell(lang, g.lang), gift: { id: g.id, from: g.fromName } });
+        }
+      }
       setItems(w);
       setReads(r);
       setQueue(words);
@@ -744,6 +764,12 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
       const res = await fetch("/api/world", { method: "POST", headers, body: JSON.stringify({ world: worldId, w: word.w, lang: word.lang, t: word.t, pic, stars: r.stars }) });
       if (res.ok) {
         setItems((cur) => (cur.some((x) => x.w === word.w && x.lang === word.lang) ? cur : [...cur, { w: word.w, lang: word.lang, t: word.t, pic, at: Date.now() }]));
+      }
+      if (word.gift) {
+        const gift = word.gift;
+        await fetch("/api/friends", { method: "POST", headers, body: JSON.stringify({ action: "open", id: gift.id, world: worldId }) }).catch(() => undefined);
+        setItems((cur) => cur.map((x) => (x.w === word.w && x.lang === word.lang ? { ...x, from: gift.from } : x)));
+        try { window.history.replaceState(null, "", window.location.pathname); } catch { /* fine */ }
       }
     } catch { /* the world still opens */ }
     setFresh(key);
@@ -810,7 +836,7 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
       {word && phase === "intro" ? (
         <div className="wt-intro-wrap">
           <div className="wt-intro">
-            <span className="wt-intro-label">{c.yourWord}</span>
+            <span className="wt-intro-label">{word.gift ? `🎁 ${friendsCopy(lang).giftFrom(word.gift.from)}` : c.yourWord}</span>
             {pics[word.pic] ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img className="wt-intro-pic" src={pics[word.pic]} alt="" />
@@ -849,7 +875,7 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
   );
 }
 
-const CSS = `
+export const CSS = `
 .wt-root{position:fixed;inset:0;z-index:60;overflow:hidden;background:#bfe3d0;color:#14202b;-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .wt-stage{position:absolute;inset:0;overflow:hidden}
 .wt-far{position:absolute;left:0;right:0;top:0;background-repeat:repeat-x;background-size:auto 100%;background-position-y:bottom}
@@ -964,6 +990,7 @@ const CSS = `
 .wt-friend.is-drag .wt-friend-pic{box-shadow:0 14px 28px #0006}
 .wt-friend-pic{width:clamp(58px,15vw,84px);height:clamp(58px,15vw,84px);border-radius:50%;border:4px solid #fff;background:#fff;box-shadow:0 6px 14px #0004;overflow:hidden;display:grid;place-items:center;font-size:32px}
 .wt-friend-pic img{width:100%;height:100%;object-fit:cover}
+.wt-friend-gift{position:absolute;top:-6px;inset-inline-end:-6px;font-size:20px;filter:drop-shadow(0 2px 2px #0005)}
 .wt-friend-name{background:#fffe;border-radius:999px;padding:1px 8px;font-weight:800;font-size:13px}
 .wt-friend.is-fresh{z-index:2;animation:wt-drop .8s cubic-bezier(.2,1.5,.4,1)}
 .wt-friend.is-fresh .wt-friend-pic{box-shadow:0 0 0 4px #ffd23f,0 0 30px #ffd23f}

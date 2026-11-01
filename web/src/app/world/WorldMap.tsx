@@ -21,18 +21,22 @@ import { langNameIn, type Lang } from "@/lib/i18n";
 import { toggleLangGroup } from "@/lib/lang-groups";
 import { LangSearchList } from "@/components/LangSearch";
 import { NO_SPELL_LANGS } from "@/lib/world/letters";
+import { FriendGifts, FriendsPanel, useFriends, type FriendsData } from "./FriendsPanel";
 import { learnTargets } from "@/lib/learn/targets";
 import { readSpellChoice, spellOptions, writeSpellChoice } from "@/lib/world/spell-choice";
 
 type Counts = Partial<Record<string, number>>;
 
-export function WorldMap({ demo }: { demo?: Counts }) {
+export function WorldMap({ demo, demoFriends }: { demo?: Counts; demoFriends?: FriendsData }) {
   const { user, plan, planReady, loading, promptLogin } = useAuth();
   const { lang, dir } = useLang();
   const href = useHref();
   const router = useRouter();
   const c = worldCopy(lang);
   const [counts, setCounts] = useState<Counts | null>(demo ?? null);
+  const friends = useFriends(demo ? null : user, demoFriends);
+  // A gift is opened in the newest world the child has open.
+  const giftWorld = [...WORLD_ORDER].reverse().find((k) => isWorldId(k) && counts && wordsToOpen(k, counts) === 0) ?? "jungle";
   // The language the child spells in (Gadi 2026-11-01): any language with letters.
   const opts = spellOptions();
   const [spell, setSpell] = useState<string | null>(demo ? lang : null);
@@ -131,6 +135,7 @@ export function WorldMap({ demo }: { demo?: Counts }) {
           ) : null}
         </div>
       ) : null}
+      <FriendGifts data={friends.data} lang={lang} giftWorld={giftWorld} />
       <ol className="wm-path">
         {WORLD_ORDER.map((k, i) => {
           const names = c.worlds[k];
@@ -163,6 +168,7 @@ export function WorldMap({ demo }: { demo?: Counts }) {
           );
         })}
       </ol>
+      {demo && !demoFriends ? null : <FriendsPanel user={user} lang={lang} data={friends.data} reload={friends.reload} />}
     </div>
   );
 }
