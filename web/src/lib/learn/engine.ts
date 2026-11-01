@@ -51,7 +51,7 @@ export function topicsFor(lang: LearnLang) {
   return lang === "en" ? ENGLISH_TOPICS : HEBREW_TOPICS;
 }
 
-export const wordKey = (lang: LearnLang, w: string) => `${lang}_${w.trim().toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "_").slice(0, 60)}`;
+export const wordKey = (lang: string, w: string) => `${lang}_${w.trim().toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "_").slice(0, 60)}`;
 
 /** One answer: the word's box and the hidden pointer move. */
 export function applyAnswer(prev: WordState | undefined, ok: boolean, now: number, d?: number): WordState {
@@ -86,7 +86,7 @@ export function movePointer(d: number, ok: boolean, answered: number, streak: nu
 export function pickSession(
   items: LearnItem[],
   states: Record<string, WordState>,
-  lang: LearnLang,
+  lang: string,
   d: number,
   now: number,
   size = 16,

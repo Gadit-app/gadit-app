@@ -17,6 +17,9 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { WORLDS, WORLD_ICON, WORLD_ORDER, isWorldId, worldArt, wordsToOpen } from "@/lib/world/worlds";
 import { worldCopy } from "@/lib/world/world-i18n";
+import { langNameIn } from "@/lib/i18n";
+import { learnTargets } from "@/lib/learn/targets";
+import { readSpellChoice, spellOptions, writeSpellChoice } from "@/lib/world/spell-choice";
 
 type Counts = Partial<Record<string, number>>;
 
@@ -27,6 +30,28 @@ export function WorldMap({ demo }: { demo?: Counts }) {
   const router = useRouter();
   const c = worldCopy(lang);
   const [counts, setCounts] = useState<Counts | null>(demo ?? null);
+  // The language the child spells in (Gadi 2026-11-01): their own or one they learn.
+  const opts = spellOptions(lang);
+  const [spell, setSpell] = useState<string | null>(demo ? opts[0] ?? null : null);
+  useEffect(() => {
+    if (demo || !user || opts.length < 2) return;
+    let alive = true;
+    (async () => {
+      const saved = readSpellChoice(user.uid, lang);
+      if (saved) { setSpell(saved); return; }
+      // No pick yet: the game uses the learning-mode language, so the map shows it.
+      try {
+        const r = await fetch(`/api/learn?ui=${encodeURIComponent(lang)}`, { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+        const j = r.ok ? ((await r.json()) as { profile?: { lang?: string | null } }) : null;
+        const l = j?.profile?.lang;
+        if (alive) setSpell(l && opts.includes(l) ? l : learnTargets(lang)[0] ?? opts[0]);
+      } catch { if (alive) setSpell(learnTargets(lang)[0] ?? opts[0]); }
+    })();
+    return () => { alive = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [demo, user, lang]);
+  const pickSpell = (l: string) => { setSpell(l); if (user) writeSpellChoice(user.uid, lang, l); };
+  const nameOf = (l: string) => { const n = langNameIn(l, lang); return n.charAt(0).toLocaleUpperCase(lang) + n.slice(1); };
 
   useEffect(() => {
     if (demo || loading) return;
@@ -56,6 +81,18 @@ export function WorldMap({ demo }: { demo?: Counts }) {
           <p>{c.mapSub}</p>
         </div>
       </header>
+      {opts.length > 1 && (demo || user) ? (
+        <div className="wm-spell">
+          <span className="wm-spell-q">{c.spellIn}</span>
+          <div className="wm-spell-row" role="group" aria-label={c.spellIn}>
+            {opts.map((l) => (
+              <button key={l} type="button" className="wm-spell-btn" aria-pressed={spell === l} disabled={!spell} onClick={() => pickSpell(l)}>
+                {nameOf(l)}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : null}
       <ol className="wm-path">
         {WORLD_ORDER.map((k, i) => {
           const names = c.worlds[k];
@@ -115,4 +152,10 @@ const CSS = `
 .wm-stop.is-open .wm-note{color:#5f6b73;opacity:1}
 .wm-play{background:#0a7472;color:#fff;border-radius:999px;padding:10px 18px;font-weight:800;box-shadow:0 4px 0 #075452}
 .wm-stop.is-soon .wm-card{opacity:.7}
+.wm-spell{max-width:620px;margin:0 auto 20px;display:grid;gap:10px;justify-items:center;text-align:center}
+.wm-spell-q{font-size:16px;font-weight:700}
+.wm-spell-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.wm-spell-btn{min-height:46px;padding:10px 22px;border-radius:999px;border:2px solid #ffffff66;background:#ffffff1a;color:#fff;font:inherit;font-size:17px;font-weight:700;cursor:pointer}
+.wm-spell-btn[aria-pressed="true"]{background:#fff;color:#0a7472;border-color:#fff;box-shadow:0 4px 0 #0005}
+.wm-spell-btn:disabled{opacity:.6}
 `;

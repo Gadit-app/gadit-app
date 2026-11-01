@@ -35,11 +35,13 @@ import { TTSButton } from "@/components/design/TTSButton";
 import { SfxToggle } from "@/components/SfxToggle";
 import { sfx } from "@/lib/game-sfx";
 import { WORLDS, worldArt, type WorldDef, type WorldId } from "@/lib/world/worlds";
-import { forkLetters, gateTiles, keyMatches, lettersOf, spellable, spellForm, type SpellLang } from "@/lib/world/letters";
+import { forkLetters, gateTiles, keyMatches, lettersOf, registerAlphabet, spellable, spellForm, RTL_SPELL, type SpellLang } from "@/lib/world/letters";
+import { isNativeSpell, readSpellChoice } from "@/lib/world/spell-choice";
 import { worldCopy, type WorldCopy } from "@/lib/world/world-i18n";
 import { worldGoal } from "@/lib/world/world-goal-i18n";
 
-export type TrailWord = { raw: string; w: string; nq?: string; t: string; pic: string; lang: SpellLang };
+/** native: spelled in the app's own language (results go to /api/world/words). */
+export type TrailWord = { raw: string; w: string; nq?: string; t: string; pic: string; lang: SpellLang; native?: boolean };
 type WorldItem = { w: string; lang: string; t: string; pic: string | null; at: number };
 type LearnPoolItem = { w: string; t: string; nq?: string; en?: string };
 
@@ -51,13 +53,23 @@ const hashOf = (s: string) => { let h = 2166136261; for (const ch of s) { h ^= c
 /* sounds: the shared kit in lib/game-sfx.ts (2026-10-31) */
 
 /* ---------- words ---------- */
-async function loadWords(token: string, ui: string): Promise<{ words: TrailWord[]; reads: string | null }> {
+async function loadWords(token: string, ui: string, choice: string | null): Promise<{ words: TrailWord[]; reads: string | null }> {
+  // The app's own language (Gadi 2026-11-01): its own word track.
+  if (choice && isNativeSpell(ui, choice)) {
+    const r = await fetch(`/api/world/words?lang=${encodeURIComponent(choice)}`, { headers: { Authorization: `Bearer ${token}` } });
+    const j = r.ok ? ((await r.json()) as { pool?: LearnPoolItem[]; alphabet?: string[]; reads?: string | null }) : null;
+    registerAlphabet(choice, j?.alphabet ?? []);
+    const words = (j?.pool ?? [])
+      .filter((x) => spellable(x.w, choice))
+      .map((x) => ({ raw: x.w, w: spellForm(x.w, choice), nq: x.nq, t: "", pic: x.en ?? "", lang: choice, native: true }));
+    return { words, reads: j?.reads ?? null };
+  }
   const get = async (q: string) => {
     const r = await fetch(`/api/learn?ui=${encodeURIComponent(ui)}${q}`, { headers: { Authorization: `Bearer ${token}` } });
     return r.ok ? ((await r.json()) as { profile?: { lang?: SpellLang | null; reads?: string | null }; pool?: LearnPoolItem[] }) : null;
   };
-  let j = await get("");
-  let lang = j?.profile?.lang ?? null;
+  let j = await get(choice ? `&lang=${choice}` : "");
+  let lang = choice ?? j?.profile?.lang ?? null;
   if (!lang || !j?.pool?.length) {
     lang = learnTargets(ui)[0] as SpellLang;
     j = await get(`&lang=${lang}`);
@@ -102,8 +114,8 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
   word: TrailWord; world: WorldDef; c: WorldCopy; avatar: string | null; doors: number; started: boolean; pic: string | null;
   onDone: (r: TrailResult) => void; onExit: () => void;
 }) {
-  const rtl = word.lang === "he";
-  const audioLang = word.lang === "he" ? "he-IL" : "en-US";
+  const rtl = RTL_SPELL.has(word.lang);
+  const audioLang = word.lang === "he" ? "he-IL" : word.lang === "en" ? "en-US" : word.lang;
   const letters = useMemo(() => lettersOf(word.w, word.lang), [word]);
   const forks = useMemo(() => letters.map((l) => forkLetters(l, word.lang, doors)), [letters, word.lang, doors]);
   const spots = useMemo(() => {
@@ -415,7 +427,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
             <img className="wt-slots-pic" src={pic} alt="" />
           ) : null}
           {/* Hear the word: it sits on the word itself, so it is clear what it reads. */}
-          <span className="wt-slots-say"><TTSButton text={word.w} audioLang={audioLang} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} /></span>
+          <span className="wt-slots-say"><TTSButton text={word.native ? word.raw : word.w} audioLang={audioLang} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} /></span>
           {letters.map((l, i) => {
             const fromGate = phase !== "walk" ? (reveal ? l : (tiles[typed[i]] ?? (phase === "open" ? l : ""))) : "";
             const ch = phase === "walk" ? (shown(i) ? l : "") : fromGate;
@@ -496,7 +508,7 @@ function Clearing({ world, c, items, fresh, onNext, onBack, ui }: {
                   <img src={src} alt="" loading="lazy" />
                 ) : <span aria-hidden="true">🌱</span>}
               </span>
-              <span className="wt-friend-name" dir={x.lang === "he" ? "rtl" : "ltr"}>{x.w}</span>
+              <span className="wt-friend-name" dir={RTL_SPELL.has(x.lang) ? "rtl" : "ltr"}>{x.w}</span>
             </div>
           );
         })}
@@ -548,7 +560,7 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
     try {
       const token = await user.getIdToken();
       const [{ words, reads: r }, worldRes] = await Promise.all([
-        loadWords(token, lang),
+        loadWords(token, lang, readSpellChoice(user.uid, lang)),
         fetch("/api/world", { headers: { Authorization: `Bearer ${token}` } }).then((x) => (x.ok ? x.json() : null)).catch(() => null),
       ]);
       const w = (worldRes as { worlds?: Record<string, { items?: WorldItem[] }> } | null)?.worlds?.[worldId]?.items ?? [];
@@ -600,7 +612,8 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
     } else try {
       const token = await user.getIdToken();
       const headers = { "Content-Type": "application/json", Authorization: `Bearer ${token}` };
-      fetch("/api/learn", { method: "POST", headers, body: JSON.stringify({ action: "results", lang: word.lang, results: [{ w: word.raw, ok }] }) }).catch(() => undefined);
+      if (word.native) fetch("/api/world/words", { method: "POST", headers, body: JSON.stringify({ lang: word.lang, results: [{ w: word.raw, ok }] }) }).catch(() => undefined);
+      else fetch("/api/learn", { method: "POST", headers, body: JSON.stringify({ action: "results", lang: word.lang, results: [{ w: word.raw, ok }] }) }).catch(() => undefined);
       void notifyActivity(user, { kind: "game", label: `${wn.title} · ${word.w}`, score: Math.max(0, total - r.wrongs), total });
       const res = await fetch("/api/world", { method: "POST", headers, body: JSON.stringify({ world: worldId, w: word.w, lang: word.lang, t: word.t, pic, stars: r.stars }) });
       if (res.ok) {
@@ -664,13 +677,13 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
               // eslint-disable-next-line @next/next/no-img-element
               <img className="wt-intro-pic" src={pics[word.pic]} alt="" />
             ) : null}
-            <strong className="wt-intro-word" dir={word.lang === "he" ? "rtl" : "ltr"}>{word.nq || word.w}</strong>
+            <strong className="wt-intro-word" dir={RTL_SPELL.has(word.lang) ? "rtl" : "ltr"}>{word.nq || (word.native ? word.raw : word.w)}</strong>
             {word.t ? <span className="wt-intro-t">{word.t}</span> : null}
             <span ref={introSay} className="wt-intro-say">
-              <TTSButton text={word.w} audioLang={word.lang === "he" ? "he-IL" : "en-US"} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} />
+              <TTSButton text={word.native ? word.raw : word.w} audioLang={word.lang === "he" ? "he-IL" : word.lang === "en" ? "en-US" : word.lang} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} />
             </span>
             <div className="wt-intro-goal">
-              {worldGoal(lang, word.nq || word.w).map((line, i) => <p key={i}>{line}</p>)}
+              {worldGoal(lang, word.nq || (word.native ? word.raw : word.w)).map((line, i) => <p key={i}>{line}</p>)}
             </div>
             <button type="button" className="wt-btn" onClick={() => setPhase("trail")}>{c.go}</button>
           </div>

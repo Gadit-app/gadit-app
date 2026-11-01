@@ -45,6 +45,8 @@ export type WorldCopy = {
   skip: string;
   foundStar: string;
   orType: string;
+  /** Above the language choice on the world map. */
+  spellIn: string;
   /** The map of worlds. */
   mapTitle: string;
   mapSub: string;
@@ -76,6 +78,7 @@ const en: WorldCopy = {
   skip: "Skip",
   foundStar: "You found a star!",
   orType: "Or type it on the keyboard",
+  spellIn: "Which language are we spelling in?",
   mapTitle: "Word Worlds",
   mapSub: "Every word you spell comes to live in your world",
   locked: (n, prev) => (n === 1 ? `Spell 1 more word in ${prev} to open it` : `Spell ${n} more words in ${prev} to open it`),
@@ -113,6 +116,7 @@ const he: WorldCopy = {
   skip: "דילוג",
   foundStar: "מצאתם כוכב!",
   orType: "או הקלידו במקלדת",
+  spellIn: "באיזו שפה מאייתים?",
   mapTitle: "עולמות המילים",
   mapSub: "כל מילה שתאייתו באה לגור בעולם שלכם",
   locked: (n, prev) => (n === 1 ? `עוד מילה אחת ב${prev} כדי לפתוח` : `עוד ${n} מילים ב${prev} כדי לפתוח`),
