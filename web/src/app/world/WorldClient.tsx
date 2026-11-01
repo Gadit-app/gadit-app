@@ -87,8 +87,9 @@ function Curtain({ world, open, children, onTap }: { world: WorldDef; open: bool
   const img = `url(${worldArt(world, "curtain")})`;
   return (
     <div className={`wt-curtain${open ? " is-open" : ""}`} onClick={onTap} aria-hidden={open}>
-      <div className="wt-curtain-half is-l" style={{ backgroundImage: img }} />
-      <div className="wt-curtain-half is-r" style={{ backgroundImage: img }} />
+      {/* One picture split down the middle: closed, the halves meet as one image. */}
+      <div className="wt-curtain-half is-l"><div className="wt-curtain-img" style={{ backgroundImage: img }} /></div>
+      <div className="wt-curtain-half is-r"><div className="wt-curtain-img" style={{ backgroundImage: img }} /></div>
       {!open && children ? <div className="wt-curtain-body">{children}</div> : null}
     </div>
   );
@@ -728,6 +729,7 @@ const CSS = `
 .wt-tile:disabled{opacity:.25;cursor:default}
 .wt-gate-row,.wt-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
 .wt-gate-hint{color:#5f6b73;font-size:14px}
+@media (hover:none){.wt-gate-hint{display:none}}
 .wt-btn{border:0;border-radius:999px;background:#0a7472;color:#fff;font:inherit;font-weight:800;font-size:18px;padding:12px 26px;cursor:pointer;box-shadow:0 4px 0 #075452}
 .wt-btn:disabled{opacity:.5}
 .wt-btn.is-ghost{background:#fff;color:#0a7472;box-shadow:0 0 0 2px #0a7472 inset}
@@ -735,11 +737,15 @@ const CSS = `
 .wt-link{border:0;background:none;color:#fff;font:inherit;font-weight:700;text-decoration:underline;cursor:pointer;text-shadow:0 1px 4px #000a}
 .wt-curtain{position:absolute;inset:0;z-index:20;pointer-events:auto}
 .wt-curtain.is-open{pointer-events:none}
-.wt-curtain-half{position:absolute;top:0;bottom:0;width:51%;background-size:cover;background-position:center;transition:transform 1.1s cubic-bezier(.7,0,.25,1);box-shadow:0 0 30px #0007}
-.wt-curtain-half.is-l{left:0}
-.wt-curtain-half.is-r{right:0;transform:scaleX(-1)}
+.wt-curtain-half{position:absolute;top:0;bottom:0;width:50%;overflow:hidden;transition:transform 1.1s cubic-bezier(.7,0,.25,1),box-shadow .4s}
+.wt-curtain-half.is-l{left:0;width:calc(50% + 1px)}
+.wt-curtain-half.is-r{right:0}
+.wt-curtain-img{position:absolute;top:0;bottom:0;width:200%;background-size:cover;background-position:center top}
+.wt-curtain-half.is-l .wt-curtain-img{left:0;width:calc(200% - 2px)}
+.wt-curtain-half.is-r .wt-curtain-img{right:0}
+.wt-curtain.is-open .wt-curtain-half{box-shadow:0 0 30px #0007}
 .wt-curtain.is-open .wt-curtain-half.is-l{transform:translateX(-102%)}
-.wt-curtain.is-open .wt-curtain-half.is-r{transform:scaleX(-1) translateX(-102%)}
+.wt-curtain.is-open .wt-curtain-half.is-r{transform:translateX(102%)}
 .wt-curtain-body{position:absolute;inset:0;display:grid;place-items:center;padding:16px}
 .wt-door-title{display:grid;gap:18px;justify-items:center;text-align:center;background:#00000059;padding:22px 26px;border-radius:28px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .wt-door-title strong{font-size:clamp(34px,9vw,58px);color:#fff;text-shadow:0 3px 0 #1f5130,0 6px 18px #000a;line-height:1.1}
