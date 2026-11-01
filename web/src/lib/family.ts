@@ -111,7 +111,7 @@ export function avatarsForRole(role: MemberRole): AvatarDef[] {
 
 /** The image URL for a picked avatar id, or null if unset/unknown. */
 export function avatarUrl(id?: string | null): string | null {
-  return id && AVATAR_IDS.has(id) ? `/avatars/${id}.webp` : null;
+  return id && AVATAR_IDS.has(id) ? `/avatars/${id}.webp?v=2` : null;
 }
 
 /** "Parent" group = father + mother. "Children" group = boy + girl. */
