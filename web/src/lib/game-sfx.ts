@@ -141,6 +141,12 @@ const now = (a: AudioContext) => a.currentTime + 0.01;
 // C-major pentatonic from C5: every step sounds good after the one before
 const PENTA = [523.25, 587.33, 659.25, 783.99, 880, 1046.5, 1174.66, 1318.51, 1567.98, 1760, 2093];
 
+/** Tells a game's world (components/play/WorldStage) how the child did, so
+ *  the avatar can cheer or wonder. Sent even when the sound is off. */
+function mood(m: "happy" | "oops") {
+  try { window.dispatchEvent(new CustomEvent("gadit-mood", { detail: m })); } catch { /* no window */ }
+}
+
 export const sfx = {
   /** A light bubble pop: tapping a tile, a card, a button in a game. */
   tap() {
@@ -151,6 +157,7 @@ export const sfx = {
 
   /** Right answer: a bright two-note chime with a little sparkle. */
   correct() {
+    mood("happy");
     const a = audio(); if (!a) return; const t = now(a); const d = bus(a);
     bell(a, d, 1318.51, t, 0.2, 0.55);
     bell(a, d, 1760, t + 0.085, 0.24, 0.9);
@@ -159,6 +166,7 @@ export const sfx = {
 
   /** Wrong answer: a soft cartoon "bloop", friendly, never a buzzer. */
   wrong() {
+    mood("oops");
     const a = audio(); if (!a) return; const t = now(a); const d = bus(a, { wet: 0.3 });
     tone(a, d, { f: 392, to: 330, t, dur: 0.13, peak: 0.16, type: "triangle", lp: 1600 });
     tone(a, d, { f: 311, to: 220, t: t + 0.13, dur: 0.26, peak: 0.16, type: "triangle", lp: 1400 });
@@ -200,6 +208,7 @@ export const sfx = {
 
   /** A win / a finished game: a short brass fanfare with confetti pops. */
   win() {
+    mood("happy");
     const a = audio(); if (!a) return; const t = now(a); const d = bus(a, { wet: 0.55 });
     const seq: [number, number, number][] = [[392, 0, 0.09], [523.25, 0.1, 0.09], [659.25, 0.2, 0.09], [783.99, 0.3, 0.16]];
     for (const [f, dt, dur] of seq) brass(a, d, f, t + dt, dur, 0.07);

@@ -48,6 +48,7 @@ import { notifyActivity } from "@/lib/notify-activity-client";
 import { getStreak, syncFromServer } from "@/lib/play-streak";
 import { GameQuiz, type PlayT } from "@/components/play/GameQuiz";
 import { GameFillBlank } from "@/components/play/GameFillBlank";
+import { WorldStage } from "@/components/play/WorldStage";
 import { GameContextDetective } from "@/components/play/GameContextDetective";
 import { ctxCopy } from "@/components/play/context-detective-i18n";
 import { NiqqudProvider } from "@/lib/niqqud-display";
@@ -84,7 +85,7 @@ const LANGS = LANGUAGES;
 // Localized strings — kept inline rather than added to i18n-v2 to keep
 // the games self-contained and easy to ship. Will be migrated into
 // V2Strings if anything else needs them.
-const COPY: Record<string, PlayT> = {
+export const COPY: Record<string, PlayT> = {
   he: {
     menuTitle: "משחקי מילים",
     menuLede: "חיזוק האוצר שלך בכיף · בלי קליקים מיותרים",
@@ -4220,6 +4221,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
     };
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
+        <WorldStage game="lesson">
         <LessonPath lesson={stage.lesson} learnLang={stage.learnLang} preReader={stage.preReader} lang={lang} t={t} onDone={() => void markDone()} onExit={() => {
           void flushLearn();
           // Back to where the lesson was opened (Gadi 2026-10-12, navigation QA):
@@ -4229,6 +4231,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
           // A grown-up's Practice (Gadi 2026-10-22) goes back to its language card.
           router.push(href(from === "practice" ? "/exercises?v=learn" : from === "learn" ? "/homework?v=learn" : "/homework"));
         }} />
+        </WorldStage>
       </div>
     );
   }
@@ -4257,70 +4260,70 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
     if (stage.game === "twin") {
       return (
         <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <GameTwinTrap {...curatedProps} />
+          <WorldStage game={stage.game}><GameTwinTrap {...curatedProps} /></WorldStage>
         </div>
       );
     }
     if (stage.game === "time") {
       return (
         <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <GameTimeTraveler {...curatedProps} />
+          <WorldStage game={stage.game}><GameTimeTraveler {...curatedProps} /></WorldStage>
         </div>
       );
     }
     if (stage.game === "passport") {
       return (
         <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <GameWordPassport {...curatedProps} />
+          <WorldStage game={stage.game}><GameWordPassport {...curatedProps} /></WorldStage>
         </div>
       );
     }
     if (stage.game === "friends") {
       return (
         <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <GameFalseFriends {...curatedProps} />
+          <WorldStage game={stage.game}><GameFalseFriends {...curatedProps} /></WorldStage>
         </div>
       );
     }
     if (stage.game === "root") {
       return (
         <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <GameRootRush {...curatedProps} />
+          <WorldStage game={stage.game}><GameRootRush {...curatedProps} /></WorldStage>
         </div>
       );
     }
     if (stage.game === "shade") {
       return (
         <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <GameShadeSlider {...curatedProps} />
+          <WorldStage game={stage.game}><GameShadeSlider {...curatedProps} /></WorldStage>
         </div>
       );
     }
     if (stage.game === "build") {
       return (
         <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <GameBuildAWord {...curatedProps} />
+          <WorldStage game={stage.game}><GameBuildAWord {...curatedProps} /></WorldStage>
         </div>
       );
     }
     if (stage.game === "idiom") {
       return (
         <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <GameIdiomDecoder {...curatedProps} />
+          <WorldStage game={stage.game}><GameIdiomDecoder {...curatedProps} /></WorldStage>
         </div>
       );
     }
     if (stage.game === "lens") {
       return (
         <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <GameMeaningLens {...curatedProps} />
+          <WorldStage game={stage.game}><GameMeaningLens {...curatedProps} /></WorldStage>
         </div>
       );
     }
     if (stage.game === "artist") {
       return (
         <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <GameEtymologyArtist {...curatedProps} />
+          <WorldStage game={stage.game}><GameEtymologyArtist {...curatedProps} /></WorldStage>
         </div>
       );
     }
@@ -4334,6 +4337,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
         {/* Optional niqqud/tashkeel on what the games SHOW (Hebrew/Arabic
             UI). Anagram is excluded: its tiles are single letters. */}
+        <WorldStage game={stage.game === "context" ? "" : stage.game}>
         <NiqqudProvider lang={lang} available={(lang === "he" || lang === "ar") && stage.game !== "anagram"}>
           {stage.game === "flashcards" && <GameFlashcards {...props} focusWord={focusWord} mode="words" />}
           {stage.game === "flashdefs" && <GameFlashcards {...props} focusWord={focusWord} mode="meanings" />}
@@ -4345,6 +4349,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
           {stage.game === "anagram" && <GameAnagram {...props} />}
           {stage.game === "speed" && <GameSpeed {...props} />}
         </NiqqudProvider>
+        </WorldStage>
       </div>
     );
   }
