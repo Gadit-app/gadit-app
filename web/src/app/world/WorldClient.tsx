@@ -36,11 +36,11 @@ import { SfxToggle } from "@/components/SfxToggle";
 import { sfx } from "@/lib/game-sfx";
 import { WORLDS, worldArt, type WorldDef, type WorldId } from "@/lib/world/worlds";
 import { forkLetters, gateTiles, keyMatches, lettersOf, registerAlphabet, spellable, spellForm, RTL_SPELL, type SpellLang } from "@/lib/world/letters";
-import { isNativeSpell, readSpellChoice } from "@/lib/world/spell-choice";
+import { isBankSpell, readSpellChoice } from "@/lib/world/spell-choice";
 import { worldCopy, type WorldCopy } from "@/lib/world/world-i18n";
 import { worldGoal } from "@/lib/world/world-goal-i18n";
 
-/** native: spelled in the app's own language (results go to /api/world/words). */
+/** native: a word from the world's own bank, any language (results go to /api/world/words). */
 export type TrailWord = { raw: string; w: string; nq?: string; t: string; pic: string; lang: SpellLang; native?: boolean };
 type WorldItem = { w: string; lang: string; t: string; pic: string | null; at: number };
 type LearnPoolItem = { w: string; t: string; nq?: string; en?: string };
@@ -54,14 +54,14 @@ const hashOf = (s: string) => { let h = 2166136261; for (const ch of s) { h ^= c
 
 /* ---------- words ---------- */
 async function loadWords(token: string, ui: string, choice: string | null): Promise<{ words: TrailWord[]; reads: string | null }> {
-  // The app's own language (Gadi 2026-11-01): its own word track.
-  if (choice && isNativeSpell(ui, choice)) {
-    const r = await fetch(`/api/world/words?lang=${encodeURIComponent(choice)}`, { headers: { Authorization: `Bearer ${token}` } });
+  // Any language with letters (Gadi 2026-11-01): the world's own word track.
+  if (choice && isBankSpell(ui, choice)) {
+    const r = await fetch(`/api/world/words?lang=${encodeURIComponent(choice)}&ui=${encodeURIComponent(ui)}`, { headers: { Authorization: `Bearer ${token}` } });
     const j = r.ok ? ((await r.json()) as { pool?: LearnPoolItem[]; alphabet?: string[]; reads?: string | null }) : null;
     registerAlphabet(choice, j?.alphabet ?? []);
     const words = (j?.pool ?? [])
       .filter((x) => spellable(x.w, choice))
-      .map((x) => ({ raw: x.w, w: spellForm(x.w, choice), nq: x.nq, t: "", pic: x.en ?? "", lang: choice, native: true }));
+      .map((x) => ({ raw: x.w, w: spellForm(x.w, choice), nq: x.nq, t: x.t ?? "", pic: x.en ?? "", lang: choice, native: true }));
     return { words, reads: j?.reads ?? null };
   }
   const get = async (q: string) => {

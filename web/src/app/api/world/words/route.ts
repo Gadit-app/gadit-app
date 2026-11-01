@@ -11,18 +11,20 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * Words for spelling in the child's OWN language in the world game (Gadi
- * 2026-11-01: "a Hebrew-speaking child can practise Hebrew too"). The
- * learning languages (English, Hebrew as a second language) stay on
- * /api/learn; this is the mother-tongue track, for every UI language that
- * has letters (not Chinese or Japanese).
+ * Words for spelling in any language with letters in the world game (Gadi
+ * 2026-11-01: "a Hebrew-speaking child can practise Hebrew too", then "why
+ * not a language picker"). The learning languages with their own engine
+ * (English, Hebrew as a second language) stay on /api/learn; every other
+ * pick, the child's own language included, comes from here. Not Chinese or
+ * Japanese (characters, not letters).
  *
  * Words: the learning bank in that language (English as is, Hebrew from
  * its own bank with niqqud, the rest from the bank's child-friendly
  * translations), so every word already has a picture (its English word).
  * Difficulty for a native speaker is the spelling itself: word length.
  *
- *   GET  ?lang=de                       → { pool, alphabet, reads }
+ *   GET  ?lang=de&ui=he                 → { pool, alphabet, reads }
+ *        (t: the word in the child's language, empty for their own)
  *   POST { lang, results:[{w, ok}] }    → { ok }
  *
  * Mastery: users/{uid}/spellWords/{lang_word}; pointer on users/{uid}.spell.
@@ -32,6 +34,16 @@ type Row = { w: string; nq?: string; en: string };
 type SpellDoc = { d?: Record<string, number>; answered?: Record<string, number>; streak?: Record<string, number> };
 
 const UI_LANGS = new Set<string>(LANGUAGES.map((l) => l.code));
+const EN_ROW = new Map(ENGLISH_BANK.map((x) => [x.w, x]));
+
+/** An English bank word in the child's language ("" when we don't have it). */
+function inUi(en: string, ui: string): string {
+  if (ui === "en") return en;
+  const row = EN_ROW.get(en);
+  if (ui === "he" || ui === "ar" || ui === "ru") return row?.[ui] ?? "";
+  return (ENGLISH_BANK_T[ui]?.[en] ?? "").trim();
+}
+
 const banks = new Map<string, { items: LearnItem[]; alphabet: string[] }>();
 
 function rowsFor(lang: string): Row[] {
@@ -75,6 +87,7 @@ export async function GET(req: NextRequest) {
   const uid = await uidOf(req);
   if (!uid) return NextResponse.json({ error: "login_required" }, { status: 401 });
   const lang = req.nextUrl.searchParams.get("lang");
+  const ui = req.nextUrl.searchParams.get("ui") ?? lang;
   if (!okLang(lang)) return NextResponse.json({ error: "unknown_lang" }, { status: 400 });
   const ref = getAdminDb().collection("users").doc(uid);
   const [user, snap] = await Promise.all([
@@ -87,7 +100,10 @@ export async function GET(req: NextRequest) {
   const reads = (user.get("learn") as { reads?: string } | undefined)?.reads ?? null;
   const { items, alphabet } = bank(lang);
   const pool = pickSession(items, states, lang, spell.d?.[lang] ?? 1, Date.now(), 16);
-  return NextResponse.json({ pool: pool.map((x) => ({ w: x.w, t: "", nq: x.nq, en: x.en })), alphabet, reads });
+  const t = (x: LearnItem) => (ui === lang || !ui || !x.en ? "" : inUi(x.en, ui));
+  // Hebrew bank rows carry their own Arabic and Russian.
+  const heRow = lang === "he" && (ui === "ar" || ui === "ru") ? new Map(HEBREW_BANK.map((x) => [x.w, x[ui]])) : null;
+  return NextResponse.json({ pool: pool.map((x) => ({ w: x.w, t: heRow?.get(x.w) ?? t(x), nq: x.nq, en: x.en })), alphabet, reads });
 }
 
 export async function POST(req: NextRequest) {

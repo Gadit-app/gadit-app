@@ -11521,6 +11521,7 @@ html[data-theme="royal"] .wb-kid-bg { --skin-bg: radial-gradient(65% 48% at 82% 
    in ONE row on the child's home/notebook; theme-aware surface cards with a
    coloured icon chip per loop. Stack on narrow phones. */
 .wordbook .wb-kids-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 4px 0 22px; }
+.wordbook .wb-kids-tiles.is-four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (max-width: 680px) { .wordbook .wb-kids-tiles { grid-template-columns: 1fr; } }
 .wordbook .wb-kids-tile {
   background: var(--surface); border: 1px solid var(--rule); border-radius: 18px;

@@ -170,11 +170,28 @@ export function KidsGameHeader({
   const toNext = g.rank.next === null ? 0 : Math.max(0, g.rank.next - g.points);
 
   const AMBER = "#F59E0B", TEAL = "#0EA5A5", PURPLE = "#8B5CF6";
+  const showSkins = familyRole === "kid" && !!user && !!server;
 
   return (
     <>
-      <div dir={dir} className="wb-kids-tiles">
+      <div dir={dir} className={`wb-kids-tiles${showSkins ? " is-four" : ""}`}>
         <KidsCelebration runId={celebrateId} />
+
+        {/* Explorer rank — tap for the full ranks table */}
+        <button type="button" className="wb-kids-tile wb-kids-tile-btn" onClick={() => setRanksOpen(true)}>
+          <div className="wb-kids-tile-head">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={rankIconSrc(g.rank.key)} alt="" width={52} height={52} style={{ width: 52, height: 52, flexShrink: 0, objectFit: "contain" }} />
+            <div style={{ minWidth: 0, textAlign: dir === "rtl" ? "right" : "left" }}>
+              <div className="wb-kids-tile-label">{c.rankTitle}</div>
+              <div className="wb-kids-tile-num is-rank" style={{ color: PURPLE }}>{rankLabel(g.rank.key, lang)}</div>
+            </div>
+          </div>
+          <Bar pct={Math.round(g.rank.progress * 100)} color={PURPLE} />
+          <div className="wb-kids-tile-cap">{g.rank.next === null ? `⭐ ${c.topRank}` : c.toNext(toNext)}</div>
+        </button>
+        {/* My skins: second (Gadi 2026-11-01: rank, skins, streak, weekly goal) */}
+        {showSkins && <NextSkinStrip practices={server.practices} lang={lang} dir={dir} onOpen={() => setSkinsOpen(true)} />}
 
         {/* Streak */}
         <div className="wb-kids-tile">
@@ -202,24 +219,8 @@ export function KidsGameHeader({
           <div className="wb-kids-tile-cap">{weeklyDone ? `✅ ${c.weeklyDone}` : c.weeklyProgress(g.weekly, g.weeklyGoal)}</div>
         </div>
 
-        {/* Explorer rank — tap for the full ranks table */}
-        <button type="button" className="wb-kids-tile wb-kids-tile-btn" onClick={() => setRanksOpen(true)}>
-          <div className="wb-kids-tile-head">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={rankIconSrc(g.rank.key)} alt="" width={52} height={52} style={{ width: 52, height: 52, flexShrink: 0, objectFit: "contain" }} />
-            <div style={{ minWidth: 0, textAlign: dir === "rtl" ? "right" : "left" }}>
-              <div className="wb-kids-tile-label">{c.rankTitle}</div>
-              <div className="wb-kids-tile-num is-rank" style={{ color: PURPLE }}>{rankLabel(g.rank.key, lang)}</div>
-            </div>
-          </div>
-          <Bar pct={Math.round(g.rank.progress * 100)} color={PURPLE} />
-          <div className="wb-kids-tile-cap">{g.rank.next === null ? `⭐ ${c.topRank}` : c.toNext(toNext)}</div>
-        </button>
       </div>
 
-      {familyRole === "kid" && user && server && (
-        <NextSkinStrip practices={server.practices} lang={lang} dir={dir} onOpen={() => setSkinsOpen(true)} />
-      )}
       {skinsOpen && user && server && (
         <SkinsPanel user={user} lang={lang} dir={dir} practices={server.practices} avatarId={avatarId} onClose={() => setSkinsOpen(false)} />
       )}
@@ -240,25 +241,28 @@ export function KidsGameHeader({
 /** "My skins" strip under the tiles: the next locked skin and how many
  *  completed practices it still needs (the chase, Gadi 2026-10-30). Tap opens
  *  all skins. When every skin is open it shows the count. */
+const PINK = "#EC4899";
 function NextSkinStrip({ practices, lang, dir, onOpen }: { practices: number; lang: string; dir: "rtl" | "ltr"; onOpen: () => void }) {
   const c = skinCopy(lang);
   const nx = nextLook(practices);
   const prevAt = nx ? Math.max(0, ...LOOKS.filter((l) => l.unlockAt < nx.look.unlockAt).map((l) => l.unlockAt)) : 0;
   const pct = nx ? Math.round(((practices - prevAt) / Math.max(1, nx.look.unlockAt - prevAt)) * 100) : 100;
   const src = avatarUrl(nx ? nx.look.id : LOOKS[LOOKS.length - 1].id);
+  const opened = LOOKS.filter((l) => l.unlockAt <= practices).length;
   return (
-    <button type="button" dir={dir} className="wb-kids-tile wb-kids-tile-btn" onClick={onOpen} style={{ marginTop: -10, marginBottom: 22, flexDirection: "row", alignItems: "center", gap: 14 }}>
-      {src && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt="" width={52} height={52} style={{ width: 52, height: 52, borderRadius: "50%", objectFit: "cover", flexShrink: 0, filter: nx ? "grayscale(1) brightness(0.8)" : "none", opacity: nx ? 0.7 : 1 }} />
-      )}
-      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 8, textAlign: dir === "rtl" ? "right" : "left" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 8, flexWrap: "wrap" }}>
-          <span className="wb-kids-tile-label">{c.open}</span>
-          <span className="wb-kids-tile-cap" style={{ fontWeight: 700 }}>{nx ? c.locked(nx.missing) : c.sub(LOOKS.length, LOOKS.length)}</span>
+    <button type="button" className="wb-kids-tile wb-kids-tile-btn" onClick={onOpen}>
+      <div className="wb-kids-tile-head">
+        {src && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={src} alt="" width={52} height={52} style={{ width: 52, height: 52, borderRadius: "50%", objectFit: "cover", flexShrink: 0, filter: nx ? "grayscale(1) brightness(0.8)" : "none", opacity: nx ? 0.7 : 1 }} />
+        )}
+        <div style={{ minWidth: 0, textAlign: dir === "rtl" ? "right" : "left" }}>
+          <div className="wb-kids-tile-label">{c.open}</div>
+          <div className="wb-kids-tile-num" style={{ color: PINK }}>{opened}<span className="wb-kids-tile-of">/{LOOKS.length}</span></div>
         </div>
-        <Bar pct={Math.max(0, Math.min(100, pct))} color="#EC4899" />
       </div>
+      <Bar pct={Math.max(0, Math.min(100, pct))} color={PINK} />
+      <div className="wb-kids-tile-cap">{nx ? c.locked(nx.missing) : c.sub(LOOKS.length, LOOKS.length)}</div>
     </button>
   );
 }
