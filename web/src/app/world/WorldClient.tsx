@@ -37,12 +37,14 @@ import { sfx } from "@/lib/game-sfx";
 import { WORLDS, worldArt, type WorldDef, type WorldId } from "@/lib/world/worlds";
 import { forkLetters, gateTiles, keyMatches, lettersOf, registerAlphabet, spellable, spellForm, RTL_SPELL, type SpellLang } from "@/lib/world/letters";
 import { isBankSpell, readSpellChoice } from "@/lib/world/spell-choice";
+import { Glyph } from "./Glyph";
 import { worldCopy, type WorldCopy } from "@/lib/world/world-i18n";
 import { worldGoal } from "@/lib/world/world-goal-i18n";
 
 /** native: a word from the world's own bank, any language (results go to /api/world/words). */
 export type TrailWord = { raw: string; w: string; nq?: string; t: string; pic: string; lang: SpellLang; native?: boolean };
-type WorldItem = { w: string; lang: string; t: string; pic: string | null; at: number };
+/** x, y: where the child put the word in the clearing (% of the meadow), once they have moved one. */
+type WorldItem = { w: string; lang: string; t: string; pic: string | null; at: number; x?: number; y?: number };
 type LearnPoolItem = { w: string; t: string; nq?: string; en?: string };
 
 /** Keeps a Latin word or letter in its place inside right-to-left text. */
@@ -373,7 +375,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
             <button key={key} type="button" className={cls} style={{ ...at(geo.doorX(i, j), geo.doorW), width: geo.doorW, bottom: bottomOf(0.42) }} onClick={() => tryDoor(i, j)} aria-label={l} disabled={i !== fork || isOpen}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={worldArt(world, "door")} alt="" draggable={false} />
-              <span className="wt-door-letter" style={{ fontSize: Math.min(geo.doorW * 0.27, geo.doorH * 0.22), top: `${world.plaqueY}%`, color: world.letterColor }}>{l}</span>
+              <span className="wt-door-letter" style={{ fontSize: Math.min(geo.doorW * 0.27, geo.doorH * 0.22), top: `${world.plaqueY}%`, color: world.letterColor }}><Glyph ch={l} /></span>
             </button>
           );
         }))}
@@ -431,7 +433,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
           {letters.map((l, i) => {
             const fromGate = phase !== "walk" ? (reveal ? l : (tiles[typed[i]] ?? (phase === "open" ? l : ""))) : "";
             const ch = phase === "walk" ? (shown(i) ? l : "") : fromGate;
-            return <span key={i} className={`wt-slot${ch ? " is-filled" : ""}${reveal ? " is-reveal" : ""}`}>{ch}</span>;
+            return <span key={i} className={`wt-slot${ch ? " is-filled" : ""}${reveal ? " is-reveal" : ""}`}>{ch ? <Glyph ch={ch} /> : null}</span>;
           })}
         </div>
         <div className="wt-hud-side is-end">
@@ -447,7 +449,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
           <strong className="wt-gate-title">{reveal ? c.almost : c.gate}</strong>
           <div className="wt-tiles" dir={rtl ? "rtl" : "ltr"}>
             {tiles.map((l, k) => (
-              <button key={k} type="button" className="wt-tile" disabled={typed.includes(k) || reveal} onClick={() => addTile(k)}>{l}</button>
+              <button key={k} type="button" className="wt-tile" disabled={typed.includes(k) || reveal} onClick={() => addTile(k)}><Glyph ch={l} /></button>
             ))}
           </div>
           <div className="wt-gate-row">
@@ -461,8 +463,61 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
 }
 
 /* ---------- the child's world (the clearing) ---------- */
-function Clearing({ world, c, items, fresh, onNext, onBack, ui }: {
+type Pt = { x: number; y: number };
+const itemKey = (x: WorldItem) => `${x.lang}:${x.w}`;
+
+/** Where every word stands in the meadow, in px (Gadi 2026-11-01: never on
+ *  top of each other unless the meadow is full). Words the child placed keep
+ *  their spot if it is free; the rest start at their own spot (from a hash)
+ *  and move to the nearest free one. */
+function layoutMeadow(items: WorldItem[], W: number, H: number, fw: number, fh: number): { pos: Record<string, Pt>; full: boolean } {
+  const out: Record<string, Pt> = {};
+  let full = false;
+  if (W < fw || H < fh) return { pos: out, full: true };
+  const minX = fw / 2, maxX = W - fw / 2, minY = fh / 2, maxY = H - fh / 2;
+  const clampPt = (p: Pt): Pt => ({ x: clamp(p.x, minX, maxX), y: clamp(p.y, minY, maxY) });
+  const placed: Pt[] = [];
+  const grid = meadowGrid(W, H, fw, fh);
+  const want = (x: WorldItem): Pt => {
+    if (x.x != null && x.y != null) return clampPt({ x: (x.x / 100) * W, y: (x.y / 100) * H });
+    const h = hashOf(itemKey(x));
+    return clampPt({ x: ((6 + (h % 88)) / 100) * W, y: ((8 + ((h >>> 8) % 80)) / 100) * H });
+  };
+  // The child's own placements first, then the rest by arrival.
+  const order = [...items.filter((x) => x.x != null), ...items.filter((x) => x.x == null)];
+  for (const it of order) {
+    const p = want(it);
+    const f = nearestFree(p, placed, grid, fw, fh);
+    if (!f) full = true;
+    const q = f ?? p;
+    out[itemKey(it)] = q;
+    placed.push(q);
+  }
+  return { pos: out, full };
+}
+
+function meadowGrid(W: number, H: number, fw: number, fh: number): Pt[] {
+  const step = Math.max(12, Math.min(fw, fh) / 3);
+  const grid: Pt[] = [];
+  for (let y = fh / 2; y <= H - fh / 2 + 0.5; y += step) for (let x = fw / 2; x <= W - fw / 2 + 0.5; x += step) grid.push({ x, y });
+  return grid;
+}
+
+/** `p` if no word is there, else the closest spot with room; null when the meadow is full. */
+function nearestFree(p: Pt, placed: Pt[], grid: Pt[], fw: number, fh: number): Pt | null {
+  const free = (a: Pt) => placed.every((q) => Math.abs(q.x - a.x) >= fw || Math.abs(q.y - a.y) >= fh);
+  if (free(p)) return p;
+  let best: Pt | null = null, bd = Infinity;
+  for (const g of grid) {
+    const d = (g.x - p.x) ** 2 + (g.y - p.y) ** 2;
+    if (d < bd && free(g)) { bd = d; best = g; }
+  }
+  return best;
+}
+
+function Clearing({ world, c, items, fresh, onNext, onBack, ui, onLayout }: {
   world: WorldDef; c: WorldCopy; items: WorldItem[]; fresh: string | null; onNext: () => void; onBack: () => void; ui: string;
+  onLayout: (pos: Record<string, Pt>, size: { w: number; h: number }) => void;
 }) {
   const { user } = useAuth();
   const [pics, setPics] = useState<Record<string, string>>({});
@@ -487,31 +542,102 @@ function Clearing({ world, c, items, fresh, onNext, onBack, ui }: {
     return () => clearTimeout(tm);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fresh]);
-  const scale = n > 24 ? 0.7 : n > 12 ? 0.85 : 1;
+
+  const meadowRef = useRef<HTMLDivElement>(null);
+  const [box, setBox] = useState({ w: 0, h: 0 });
+  useEffect(() => {
+    const el = meadowRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([e]) => setBox({ w: e.contentRect.width, h: e.contentRect.height }));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  // A word's footprint: its picture (as in the CSS) plus its name under it.
+  // The words get smaller as the meadow fills, so they overlap only when even
+  // the smallest size has no room left.
+  const vw = typeof window !== "undefined" ? window.innerWidth : 390;
+  const { scale, fw, fh, layout } = useMemo(() => {
+    const base = clamp(vw * 0.15, 58, 84);
+    let last = null as null | { scale: number; fw: number; fh: number; layout: Record<string, Pt> };
+    for (const sc of [1, 0.85, 0.72, 0.6, 0.5]) {
+      const pic = base * sc;
+      const w = pic * 1.2 + 6, h = pic + 26 * sc;
+      const r = layoutMeadow(items, box.w, box.h, w, h);
+      last = { scale: sc, fw: w, fh: h, layout: r.pos };
+      if (!r.full) break;
+    }
+    return last!;
+  }, [items, box.w, box.h, vw]);
+
+  // Drag a word anywhere, with the mouse or a finger (Gadi 2026-11-01).
+  type Drag = { k: string; x: number; y: number; ox: number; oy: number; moved: boolean };
+  const [drag, setDrag] = useState<Drag | null>(null);
+  const local = (e: React.PointerEvent) => {
+    const r = meadowRef.current!.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  };
+  const onDown = (e: React.PointerEvent, k: string) => {
+    const at = layout[k];
+    if (!at || !meadowRef.current) return;
+    e.preventDefault();
+    e.currentTarget.setPointerCapture(e.pointerId);
+    const p = local(e);
+    setDrag({ k, x: at.x, y: at.y, ox: p.x - at.x, oy: p.y - at.y, moved: false });
+  };
+  const onMove = (e: React.PointerEvent) => {
+    if (!drag) return;
+    const p = local(e);
+    const x = clamp(p.x - drag.ox, fw / 2, box.w - fw / 2), y = clamp(p.y - drag.oy, fh / 2, box.h - fh / 2);
+    setDrag({ ...drag, x, y, moved: drag.moved || Math.hypot(x - drag.x, y - drag.y) > 3 });
+  };
+  const onUp = () => {
+    if (!drag) return;
+    const d = drag;
+    setDrag(null);
+    if (!d.moved) return;
+    // Dropped on another word: the nearest spot with room instead.
+    const placed = items.filter((x) => itemKey(x) !== d.k).map((x) => layout[itemKey(x)]).filter(Boolean);
+    const spot = nearestFree({ x: d.x, y: d.y }, placed, meadowGrid(box.w, box.h, fw, fh), fw, fh) ?? { x: d.x, y: d.y };
+    // Keep the whole meadow as it is now, so no other word moves later.
+    onLayout({ ...layout, [d.k]: spot }, box);
+    sfx.tap();
+  };
+
   return (
     <div className="wt-clearing" style={{ backgroundImage: `url(${worldArt(world, "clearing")})` }} dir={ui === "he" || ui === "ar" || ui === "fa" ? "rtl" : "ltr"}>
       <div className="wt-clearing-head">
         <strong>{c.worlds[world.id].my}</strong>
         <span>{c.worlds[world.id].wordsIn(n)}</span>
       </div>
-      <div className="wt-meadow">
+      <div className="wt-meadow" ref={meadowRef}>
         {n === 0 ? <div className="wt-empty">{c.worlds[world.id].empty}</div> : null}
-        {items.map((x) => {
-          const h = hashOf(`${x.lang}:${x.w}`);
-          const isFresh = fresh === `${x.lang}:${x.w}`;
+        {box.w > 0 ? items.map((x) => {
+          const k = itemKey(x);
+          const isFresh = fresh === k;
+          const isDrag = drag?.k === k;
+          const at = isDrag ? drag : layout[k];
+          if (!at) return null;
           const src = x.pic || pics[x.w] || null;
           return (
-            <div key={`${x.lang}:${x.w}`} className={`wt-friend${isFresh ? " is-fresh" : ""}`} style={{ left: `${6 + (h % 82)}%`, top: `${8 + ((h >>> 8) % 70)}%`, transform: `translate(-50%,-50%) scale(${isFresh ? 1.25 : scale})` }}>
+            <div
+              key={k}
+              className={`wt-friend${isFresh ? " is-fresh" : ""}${isDrag ? " is-drag" : ""}`}
+              style={{ left: at.x, top: at.y, transform: `translate(-50%,-50%) scale(${isDrag ? scale * 1.12 : isFresh ? 1.25 : scale})` }}
+              onPointerDown={(e) => onDown(e, k)}
+              onPointerMove={onMove}
+              onPointerUp={onUp}
+              onPointerCancel={onUp}
+            >
               <span className="wt-friend-pic">
                 {src ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={src} alt="" loading="lazy" />
+                  <img src={src} alt="" loading="lazy" draggable={false} />
                 ) : <span aria-hidden="true">🌱</span>}
               </span>
               <span className="wt-friend-name" dir={RTL_SPELL.has(x.lang) ? "rtl" : "ltr"}>{x.w}</span>
             </div>
           );
-        })}
+        }) : null}
       </div>
       <div className="wt-clearing-foot">
         {freshItem ? <div className="wt-arrived">{newArea ? c.worlds[world.id].newArea : c.worlds[world.id].arrived(iso(freshItem.w))}</div> : null}
@@ -648,6 +774,18 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
   }, [idx, queue, user, pics, load]);
 
   const exit = () => router.push(href("/world"));
+  // The child moved a word in the clearing: keep every word where it stands now.
+  const saveLayout = useCallback((pos: Record<string, Pt>, size: { w: number; h: number }) => {
+    const pct = (v: number, n: number) => Math.round((v / Math.max(1, n)) * 1000) / 10;
+    setItems((cur) => cur.map((x) => { const p = pos[itemKey(x)]; return p ? { ...x, x: pct(p.x, size.w), y: pct(p.y, size.h) } : x; }));
+    if (demo || !user) return;
+    const list = Object.entries(pos).map(([k, p]) => { const i = k.indexOf(":"); return { lang: k.slice(0, i), w: k.slice(i + 1), x: pct(p.x, size.w), y: pct(p.y, size.h) }; });
+    void user.getIdToken().then((token) => fetch("/api/world", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ action: "layout", world: worldId, items: list }),
+    })).catch(() => undefined);
+  }, [demo, user, worldId]);
 
   return (
     <div className="wt-root">
@@ -667,7 +805,7 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
         />
       ) : null}
 
-      {phase === "clearing" ? <Clearing world={world} c={c} items={items} fresh={fresh} onNext={next} onBack={exit} ui={lang} /> : null}
+      {phase === "clearing" ? <Clearing world={world} c={c} items={items} fresh={fresh} onNext={next} onBack={exit} ui={lang} onLayout={saveLayout} /> : null}
 
       {word && phase === "intro" ? (
         <div className="wt-intro-wrap">
@@ -728,7 +866,7 @@ const CSS = `
 .wt-spot-pop.is-fly{animation:wt-fly 1.6s ease-out forwards}
 .wt-door{transition:opacity .3s,transform .3s,filter .3s}
 .wt-door:disabled{cursor:default}
-.wt-door-letter{position:absolute;left:50%;top:47%;transform:translate(-50%,-52%);font-weight:800;line-height:1;color:#3b2a14;text-shadow:0 1px 0 #fff9;pointer-events:none;font-family:inherit}
+.wt-door-letter{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);font-weight:800;line-height:1;color:#3b2a14;text-shadow:0 1px 0 #fff9;pointer-events:none;font-family:inherit}
 .wt-door.is-next{animation:wt-breathe 1.8s ease-in-out infinite}
 .wt-door.is-tried{opacity:.45;filter:grayscale(.6)}
 .wt-door.is-open{opacity:.35;transform:translateY(6px) scale(.96)}
@@ -821,7 +959,9 @@ const CSS = `
 .wt-clearing-head span{color:#5f6b73;font-size:14px}
 .wt-meadow{position:relative;margin:10px 16px}
 .wt-empty{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fffe;border-radius:16px;padding:10px 16px;font-weight:700;text-align:center}
-.wt-friend{position:absolute;display:grid;justify-items:center;gap:2px;transition:transform .5s}
+.wt-friend{position:absolute;display:grid;justify-items:center;gap:2px;transition:transform .5s,left .35s,top .35s;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.wt-friend.is-drag{transition:transform .15s;z-index:5;cursor:grabbing}
+.wt-friend.is-drag .wt-friend-pic{box-shadow:0 14px 28px #0006}
 .wt-friend-pic{width:clamp(58px,15vw,84px);height:clamp(58px,15vw,84px);border-radius:50%;border:4px solid #fff;background:#fff;box-shadow:0 6px 14px #0004;overflow:hidden;display:grid;place-items:center;font-size:32px}
 .wt-friend-pic img{width:100%;height:100%;object-fit:cover}
 .wt-friend-name{background:#fffe;border-radius:999px;padding:1px 8px;font-weight:800;font-size:13px}

@@ -14,9 +14,11 @@ export const dynamic = "force-dynamic";
  *
  *   GET                                   → { worlds: { jungle: { items, stars } } }
  *   POST { world, w, lang, t, pic, stars } → { ok, items: n, isNew }
+ *   POST { action: "layout", world, items: [{ w, lang, x, y }] } → { ok }
+ *        where the child dragged the words in the clearing (% of the meadow)
  */
 
-type Item = { w: string; lang: string; t: string; pic: string | null; at: number };
+type Item = { w: string; lang: string; t: string; pic: string | null; at: number; x?: number; y?: number };
 type WorldState = { items?: Item[]; stars?: number };
 
 async function uidOf(req: NextRequest): Promise<string | null> {
@@ -42,6 +44,25 @@ export async function POST(req: NextRequest) {
   const body = (await req.json().catch(() => null)) as Record<string, unknown> | null;
   const world = body?.world;
   if (!isWorldId(world)) return NextResponse.json({ error: "unknown_world" }, { status: 400 });
+  if (body?.action === "layout") {
+    const list = Array.isArray(body.items) ? (body.items as Array<Record<string, unknown>>).slice(0, 300) : [];
+    const pos = new Map<string, { x: number; y: number }>();
+    const pct = (v: unknown) => { const n = Number(v); return Number.isFinite(n) ? Math.round(Math.max(0, Math.min(100, n)) * 10) / 10 : null; };
+    for (const it of list) {
+      const x = pct(it.x), y = pct(it.y);
+      if (x != null && y != null) pos.set(`${str(it.lang, 8)}:${str(it.w, 40)}`, { x, y });
+    }
+    if (!pos.size) return NextResponse.json({ ok: true });
+    const ref = getAdminDb().collection("users").doc(uid);
+    await getAdminDb().runTransaction(async (tx) => {
+      const snap = await tx.get(ref);
+      const cur = ((snap.get("world") as Record<string, WorldState> | undefined) ?? {})[world] ?? {};
+      if (!Array.isArray(cur.items)) return;
+      const items = cur.items.map((x) => { const p = pos.get(`${x.lang}:${x.w}`); return p ? { ...x, ...p } : x; });
+      tx.set(ref, { world: { [world]: { items } } }, { merge: true });
+    });
+    return NextResponse.json({ ok: true });
+  }
   const w = str(body?.w, 40);
   const lang = str(body?.lang, 8);
   if (!w || !lang) return NextResponse.json({ error: "word_required" }, { status: 400 });
