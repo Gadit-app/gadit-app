@@ -3560,6 +3560,9 @@ const FOCUS_GAMES: GameId[] = ["flashcards", "flashdefs", "quiz", "memory", "ana
 
 /** Games with a cover picture in public/play/<id>.webp (Gadi 2026-10-09).
  *  Add an id here once its picture is in place; others keep their icon. */
+/** Bump when covers are redrawn under the same file names (the service worker
+ *  serves images cache-first, so a new name is the only sure way through). */
+const COVER_V = 2;
 const GAME_COVERS = new Set<GameId>([
   "flashcards", "flashdefs", "quiz", "fillblank", "memory", "anagram", "speed",
   "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "truefalse", "context",
@@ -4240,7 +4243,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
   if (stage.kind === "duel") {
     const duelGames = games
       .filter((g) => g.enabled && DUEL_GAMES.has(g.id) && (!kidsMode || g.kidsFriendly))
-      .map((g) => ({ id: g.id, title: g.title, cover: `/play/${g.id}.webp`, build: () => buildDuelFor(g.id) }));
+      .map((g) => ({ id: g.id, title: g.title, cover: `/play/${g.id}.webp?v=${COVER_V}`, build: () => buildDuelFor(g.id) }));
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
         <WorldStage game="duel">
@@ -4519,7 +4522,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
                       <li key="duel">
                         <button type="button" className="wb-play-card wb-play-card-duel wb-play-cat-notebook has-cover" onClick={() => setStage({ kind: "duel" })}>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img className="wb-play-card-cover" src="/play/duel.webp" alt="" loading="lazy" width={720} height={480} />
+                          <img className="wb-play-card-cover" src={`/play/duel.webp?v=${COVER_V}`} alt="" loading="lazy" width={720} height={480} />
                           <span className="wb-play-card-text">
                             <span className="wb-play-card-title">{dc.playThisVs}</span>
                             <span className="wb-play-card-desc">{dc.bannerDesc}</span>
@@ -4538,7 +4541,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
                       >
                         {GAME_COVERS.has(g.id) ? (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img className="wb-play-card-cover" src={`/play/${g.id}.webp`} alt="" loading="lazy" width={720} height={480} />
+                          <img className="wb-play-card-cover" src={`/play/${g.id}.webp?v=${COVER_V}`} alt="" loading="lazy" width={720} height={480} />
                         ) : (
                           <span className="wb-play-card-icon">{g.icon}</span>
                         )}

@@ -19,7 +19,9 @@
 // v4 → v5 (2026-06-29 evening): Gadi flagged that the script-match
 // distractor fix wasn't landing on his device — the SW was serving
 // the pre-fix bundle. Bump wipes it.
-const CACHE_VERSION = "gadit-v20";
+// v20 → v21 (2026-11-01): game covers were redrawn under the same names, and
+// the cache-first rule kept showing the old ones on every returning device.
+const CACHE_VERSION = "gadit-v21";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const PAGE_CACHE = `${CACHE_VERSION}-pages`;
 
