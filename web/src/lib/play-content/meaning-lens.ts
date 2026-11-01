@@ -94,7 +94,7 @@ const MEANING_LENS_ROUNDS_EN: MeaningLensRound[] = [
     options: [
       "a written or printed message",
       "a single character of an alphabet",
-      "a permission to act (a letter of credit)",
+      "a formal written document (a letter of credit)",
       "an academic emblem on clothing",
     ],
     correctIdx: 1,
@@ -158,7 +158,7 @@ const MEANING_LENS_ROUNDS_EN: MeaningLensRound[] = [
       "the cargo space of a car",
     ],
     correctIdx: 3,
-    story: "'Suitcases' + 'drove off' = American car-cargo sense. British English uses 'boot'. All four trunk meanings (elephant, tree, chest, car) share the idea of a central container.",
+    story: "'Suitcases' + 'drove off' = the American car-cargo sense. British English uses 'boot'. This meaning comes from the older sense 'large storage chest'.",
   },
   {
     word: "scale",
@@ -194,7 +194,7 @@ const MEANING_LENS_ROUNDS_EN: MeaningLensRound[] = [
 const MEANING_LENS_ROUNDS_HE: MeaningLensRound[] = [
   {
     word: "עין",
-    sentence: "מי שתיית האדמה זרמו מן העין שבמדבר.",
+    sentence: "מי שתייה זרמו מן העין שבמדבר.",
     options: [
       "איבר הראייה",
       "מעיין מים",
@@ -202,7 +202,7 @@ const MEANING_LENS_ROUNDS_HE: MeaningLensRound[] = [
       "טבעת על הצוואר",
     ],
     correctIdx: 1,
-    story: "'מי' + 'אדמה' + 'במדבר' = מקור מים. עין במקרא היא גם איבר וגם מעיין — שני שורשים שהתאחדו במילה אחת.",
+    story: "'מי' + 'במדבר' = מקור מים. בעברית 'עין' יכולה להיות גם איבר הראייה וגם מעיין; ההקשר קובע.",
   },
   {
     word: "ספר",
@@ -214,7 +214,7 @@ const MEANING_LENS_ROUNDS_HE: MeaningLensRound[] = [
       "סופר או סופרת",
     ],
     correctIdx: 2,
-    story: "'קראתי' + 'כל הלילה' = פעילות קריאה. ספר באותיות זהות הוא ספרא (קצב), ספירה, וגם גבול ('עיר הספר').",
+    story: "'קראתי' + 'כל הלילה' = פעילות קריאה. 'ספר' יכול להיות גם שם עצם לקריאה, גם גבול ('עיר הספר') וגם קשור לספירה.",
   },
   {
     word: "ספר",
@@ -302,7 +302,7 @@ const MEANING_LENS_ROUNDS_HE: MeaningLensRound[] = [
   },
   {
     word: "רוח",
-    sentence: "רוח הצעירים בארץ עברה דרמטית מאז.",
+    sentence: "רוח הצעירים בארץ השתנתה דרמטית מאז.",
     options: [
       "תנועת אוויר",
       "ההלך הרוח הקולקטיבי, אופי",
@@ -314,7 +314,7 @@ const MEANING_LENS_ROUNDS_HE: MeaningLensRound[] = [
   },
   {
     word: "לב",
-    sentence: "לב העיר מלא בקפה והומה אדם.",
+    sentence: "לב העיר מלא בבתי קפה והומה אדם.",
     options: [
       "האיבר השואב דם",
       "המרכז של מקום",
@@ -322,7 +322,7 @@ const MEANING_LENS_ROUNDS_HE: MeaningLensRound[] = [
       "הסבלנות והאומץ",
     ],
     correctIdx: 1,
-    story: "'העיר' + 'מלא בקפה' = המרכז העירוני. כל המשמעויות של לב מקיימות מטאפורה: מרכז של דבר, מקור החיים.",
+    story: "'העיר' + 'מלא בבתי קפה' = המרכז העירוני. 'לב' משמש גם לאיבר ממשי וגם למרכז של מקום או דבר.",
   },
   {
     word: "אבן",
@@ -444,25 +444,25 @@ const MEANING_LENS_ROUNDS_AR: MeaningLensRound[] = [
     word: "وَجه",
     sentence: "هذا وَجه آخر للقصّة لم نسمعه من قبل.",
     options: [
-      "الجبهة من رأس الإنسان",
+      "ملامح الإنسان وصورته",
       "جانب أو زاوية نظر",
       "اتّجاه أو مَقصِد",
-      "الجزء العلوي من شيء",
+      "السطح الظاهر من الشيء",
     ],
     correctIdx: 1,
     story: "آخر + للقصّة + لم نسمعه = زاوية مختلفة. وَجه القصّة = روايتها من زاوية معيّنة. مجاز شائع في العربية اليومية.",
   },
   {
     word: "رُوح",
-    sentence: "هَبَطت رُوح جديدة على الفريق هذا الموسم.",
+    sentence: "دبَّت رُوحٌ جديدة في الفريق هذا الموسم.",
     options: [
       "النفَس أو الحَياة",
       "كائن غير مرئي",
       "النَشاط والحماسة",
-      "العَطر أو الرائحة",
+      "الجَوهر أو الخُلاصة",
     ],
     correctIdx: 2,
-    story: "هبطت + الفريق + الموسم = الحماسة الجَماعية. رُوح الفريق ليست النَفَس الحرفي بل الطاقة المشتركة بين اللاعبين.",
+    story: "دبّت + الفريق + الموسم = الحماسة الجَماعية. رُوح الفريق ليست النَّفَس الحرفي بل الطاقة المشتركة بين اللاعبين.",
   },
 ];
 
@@ -577,7 +577,7 @@ const MEANING_LENS_ROUNDS_RU: MeaningLensRound[] = [
       "вселенная",
     ],
     correctIdx: 1,
-    story: "«Все люди» сразу указывают на планетарное значение. Лев Толстой написал «Войну и мир», где «мир» имеет оба значения сразу — одна из лучших игр слов в литературе.",
+    story: "«Все люди» сразу указывают на планетарное значение. У слова «мир» есть и значение «отсутствие войны», но здесь его снимает контекст.",
   },
   {
     word: "свет",
@@ -776,7 +776,7 @@ const MEANING_LENS_ROUNDS_KIDS_HE: MeaningLensRound[] = [
       "הבוקר, הזמן שלפני הצהריים",
       "שם של ילד או ילדה",
       "מנורה או תאורה בחדר",
-      "אנרגיה שרואים איתה",
+      "להבה של אש",
     ],
     correctIdx: 2,
     story: "\"הדליק\" ו\"בחדר\" מובילים למשמעות של מנורה. בוקר לא מדליקים ואי אפשר להדליק שם של ילד. רק תאורה בחדר מתאימה.",
@@ -807,7 +807,7 @@ const MEANING_LENS_ROUNDS_KIDS_HE: MeaningLensRound[] = [
   },
   {
     word: "בית",
-    sentence: "אחרי בית הראשון של השיר הצטרפה כל הכיתה.",
+    sentence: "אחרי הבית הראשון של השיר הצטרפה כל הכיתה.",
     options: [
       "המקום שגרים בו",
       "חלק אחד של שיר או פזמון",
@@ -839,7 +839,7 @@ const MEANING_LENS_ROUNDS_KIDS_HE: MeaningLensRound[] = [
       "אדם שלא נחמד",
     ],
     correctIdx: 1,
-    story: "\"של הים\" משנה את המשמעות לגמרי. כלב ים זו לא חיית מחמד — זו חיה שחיה במים הקרים. שם מטעה כי היא לא באמת מוצאת של כלב.",
+    story: "\"של הים\" משנה את המשמעות לגמרי. כלב ים זו לא חיית מחמד, זו חיה שחיה במים הקרים. השם מטעה כי היא לא באמת סוג של כלב.",
   },
 ];
 

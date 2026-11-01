@@ -72,7 +72,7 @@ const IDIOM_DECODER_ROUNDS_EN: IdiomDecoderRound[] = [
       "to lose your temper publicly",
     ],
     correctIdx: 2,
-    story: "Originally maritime: small icebreaker ships cleared paths for trade vessels. The social meaning is a polite metaphor for clearing a frozen room.",
+    story: "Originally about ships making a path through ice. By the 1500s it also meant overcoming social stiffness, Shakespeare used it that way.",
   },
   {
     idiom: "bite the bullet",
@@ -132,7 +132,7 @@ const IDIOM_DECODER_ROUNDS_EN: IdiomDecoderRound[] = [
       "to take a very long time",
     ],
     correctIdx: 1,
-    story: "Possibly from 19th-century portrait painters charging more for full-body poses (arms and legs cost extra). The hyperbole stuck; the portraits did not.",
+    story: "Probably 20th-century American hyperbole; there's no good evidence it comes from portrait painters. It just means absurdly expensive.",
   },
   {
     idiom: "hit the nail on the head",
@@ -211,7 +211,7 @@ const IDIOM_DECODER_ROUNDS_HE: IdiomDecoderRound[] = [
       "הצליח אחרי מאמצים",
     ],
     correctIdx: 2,
-    story: "מתוך תהלים: 'הצדיק לא יִפֹּל בפח'. פח כאן = מלכודת לציפורים. מילולית 3,000 שנה לפני 'נפל בפח' המודרני.",
+    story: "פח במקרא הוא מלכודת לציפורים או לחיות קטנות. מכאן 'נפל בפח' קיבל את המשמעות המודרנית: נכנס למלכודת או נרמה.",
   },
   {
     idiom: "שבר את הראש",
@@ -247,7 +247,7 @@ const IDIOM_DECODER_ROUNDS_HE: IdiomDecoderRound[] = [
       "התבייש להתחיל משימה",
     ],
     correctIdx: 1,
-    story: "ביטוי לטיני 'tauros prendere cornibus'. בכל השפות אומר אותו דבר: מתמודד באומץ עם הקשה ביותר במצב.",
+    story: "ביטוי ותיק הקיים בשפות רבות. פירושו להתמודד ישירות ובאומץ עם הבעיה הקשה ביותר.",
   },
   {
     idiom: "פתח דלת חדשה",
@@ -283,7 +283,7 @@ const IDIOM_DECODER_ROUNDS_HE: IdiomDecoderRound[] = [
       "צעק מכאב",
     ],
     correctIdx: 2,
-    story: "ביטוי שלילי בעברית. 'פתח את הפה' = דיבר כשלא היה צריך. הקשור בקרוב ל'סתום את הפה'. רגיש לקונטקסט.",
+    story: "ביטוי שלילי בעברית. 'פתח את הפה' = דיבר כשלא היה צריך. קשור כמובן ל'סתום את הפה'. רגיש לקונטקסט.",
   },
   {
     idiom: "טס באוויר",
@@ -307,7 +307,7 @@ const IDIOM_DECODER_ROUNDS_HE: IdiomDecoderRound[] = [
       "נגנב מהבית",
     ],
     correctIdx: 1,
-    story: "מקראי. כלח = זקנה, יום החיים בסוף. 'אבד עליו הכלח' = הזמן עבר עליו, אינו רלוונטי. תרגום נוסטלגי לאלגנטית.",
+    story: "מקראי. כלח פירושו זקנה. 'אבד עליו הכלח' = הזמן עבר עליו; הוא התיישן ואיבד רלוונטיות.",
   },
   {
     idiom: "מקרי לחלוטין",
@@ -319,7 +319,7 @@ const IDIOM_DECODER_ROUNDS_HE: IdiomDecoderRound[] = [
       "תוצאה של חוקים",
     ],
     correctIdx: 2,
-    story: "ביטוי שגרתי. בעברית 'מקרי' = ללא תכנון. ההפך מ'מתוכנן' או 'מכוון'. ביטוי מודרני שדגל ב'יד המקרה'.",
+    story: "ביטוי שגרתי. בעברית 'מקרי' פירושו ללא תכנון או כוונה; ההפך מ'מתוכנן' או 'מכוון'.",
   },
   {
     idiom: "הרים את הראש",
@@ -353,8 +353,8 @@ const IDIOM_DECODER_ROUNDS_AR: IdiomDecoderRound[] = [
     story: "مثل عربي قديم منتشر في كثير من اللغات. يدلّ على الإنجاز المزدوج بجهدٍ واحد، أو الكفاءة في توفير الوقت.",
   },
   {
-    idiom: "في الفم سَمَكة وفي اليد عصفور",
-    literal: "إنسان يحمل عصفورًا حيًّا بإحدى يديه، فمه مفتوح يخرج منه ذيل سَمَكة. صورة غريبة لكنّها واضحة.",
+    idiom: "عصفورٌ في اليد خيرٌ من عشرةٍ على الشجرة",
+    literal: "شخص يُمسك عصفورًا صغيرًا بيده، بينما عشرة عصافير تقف على شجرة بعيدة لا يقدر على الإمساك بها.",
     options: [
       "تَعدُّد المشاكل",
       "الواقع المتاح أفضل من المحتمل",
@@ -550,7 +550,7 @@ const IDIOM_DECODER_ROUNDS_RU: IdiomDecoderRound[] = [
       "удачно жениться",
     ],
     correctIdx: 0,
-    story: "О неловком провале. Калоша — символ конфуза. «Сесть в калошу» — выставить себя глупо перед другими. Сродни выражению «попасть впросак».",
+    story: "О неловком провале. Вероятно, выражение связано с более старым «сесть в лужу»: оба означают выставить себя глупо перед другими.",
   },
   {
     idiom: "зарубить на носу",
@@ -578,7 +578,7 @@ const IDIOM_DECODER_ROUNDS_RU: IdiomDecoderRound[] = [
   },
   {
     idiom: "хоть пруд пруди",
-    literal: "Огромный пруд, до краёв заполненный какими-то предметами. Их так много, что можно перепрудить второй пруд той же породой. Изобилие.",
+    literal: "Огромный пруд, до краёв заполненный какими-то предметами. Их так много, что можно запрудить ещё один пруд. Изобилие.",
     options: [
       "сильное наводнение",
       "очень много чего-то",
@@ -605,7 +605,7 @@ const IDIOM_DECODER_ROUNDS_KIDS_EN: IdiomDecoderRound[] = [
       "kids are playing in the rain",
     ],
     correctIdx: 0,
-    story: "This funny old English saying probably started 300 years ago. Some think it's from old roof-thatched houses where cats really did hide during storms and sometimes tumbled out.",
+    story: "This funny old English saying is a few hundred years old. No one knows for sure where it came from, but it means rain that's pouring very hard.",
   },
   {
     idiom: "a piece of cake",
@@ -665,7 +665,7 @@ const IDIOM_DECODER_ROUNDS_KIDS_EN: IdiomDecoderRound[] = [
       "to lose your lunch",
     ],
     correctIdx: 0,
-    story: "Ancient Greeks voted by dropping colored beans into jars. If someone knocked the jar over, everyone could count the votes early — the secret was out.",
+    story: "People once used beans for voting in some places, but no one knows for sure if that started this saying. Today, 'spill the beans' means reveal a secret.",
   },
   {
     idiom: "when pigs fly",
@@ -713,7 +713,7 @@ const IDIOM_DECODER_ROUNDS_KIDS_EN: IdiomDecoderRound[] = [
       "watching the weather",
     ],
     correctIdx: 0,
-    story: "Weather scientists used to number cloud types. The ninth kind — cumulonimbus — is the tallest and puffiest. So being 'on cloud nine' means you're up as high as feelings go.",
+    story: "No one knows exactly why it's 'cloud nine', but the phrase has meant feeling extremely happy for more than 100 years.",
   },
 ];
 
@@ -728,7 +728,7 @@ const IDIOM_DECODER_ROUNDS_KIDS_HE: IdiomDecoderRound[] = [
       "ילדים משחקים בגשם",
     ],
     correctIdx: 0,
-    story: "ביטוי אנגלי משעשע שנולד לפני 300 שנה. יש מי שאומרים שהוא בא מבתים ישנים עם גגות קש שבהם חתולים היו מסתתרים בסופות ולפעמים נופלים מהגג.",
+    story: "ביטוי אנגלי משעשע ועתיק. מקורו המדויק לא ידוע, והסיפור על חתולים שנפלו מגגות קש הוא רק השערה לא מוכחת.",
   },
   {
     idiom: "פרפרים בבטן",
@@ -740,7 +740,7 @@ const IDIOM_DECODER_ROUNDS_KIDS_HE: IdiomDecoderRound[] = [
       "אתה רעב",
     ],
     correctIdx: 0,
-    story: "כשמתרגשים, הבטן באמת מרגישה מוזרה — זה אדרנלין שמזרים דם למקום אחר. הביטוי הזה קיים בעברית ובכמעט כל שפה בעולם.",
+    story: "כשמתרגשים, הבטן באמת מרגישה מוזרה, זה חלק מתגובת הגוף ללחץ ולהתרגשות. הביטוי הזה קיים בעברית ובשפות רבות בעולם.",
   },
   {
     idiom: "עלה על גדותיו",
@@ -815,7 +815,7 @@ const IDIOM_DECODER_ROUNDS_KIDS_HE: IdiomDecoderRound[] = [
     story: "פעם, כשאוניות היו נתקעות בים קפוא, מישהו היה חייב לשבור את הקרח כדי שיוכלו לשוט. היום אנחנו \"שוברים את הקרח\" בכל פעם שאנחנו פותחים שיחה עם מישהו חדש.",
   },
   {
-    idiom: "אף פעם לא ידפוק פעמיים",
+    idiom: "הזדמנות לא דופקת פעמיים",
     literal: "הזדמנות עומדת מחוץ לדלת ודופקת. אם לא פותחים לה, היא מסתובבת והולכת ולא חוזרת אף פעם.",
     options: [
       "הזדמנות טובה מגיעה רק פעם אחת",
@@ -824,7 +824,7 @@ const IDIOM_DECODER_ROUNDS_KIDS_HE: IdiomDecoderRound[] = [
       "אף אחד לא בבית",
     ],
     correctIdx: 0,
-    story: "פתגם שאומר: כשמגיעה הזדמנות טובה בחיים, תפוס אותה. אם תהסס יותר מדי, היא לא תחזור. חלק מהגירסה האנגלית של הפתגם הזה בן יותר מ-500 שנה.",
+    story: "פתגם שאומר: כשמגיעה הזדמנות טובה בחיים, תופסים אותה. מי שמהסס יותר מדי, היא לא תחזור אליו. חלק מהגרסה האנגלית של הפתגם הזה בת יותר מ-500 שנה.",
   },
   {
     idiom: "יש לו זנב מהיר",

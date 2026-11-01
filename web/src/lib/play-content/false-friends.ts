@@ -87,7 +87,7 @@ const FALSE_FRIENDS_ROUNDS_EN: FalseFriendsRound[] = [
     story: "Estar constipado means to have a cold (a stuffed nose). Constipated as in English is 'estreñido'. Don't mix up your symptoms at the pharmacy.",
   },
   {
-    foreignWord: "telefon",
+    foreignWord: "Telefon",
     foreignFlag: "de",
     foreignLang: "German",
     englishTwin: "telephone",
@@ -103,7 +103,7 @@ const FALSE_FRIENDS_ROUNDS_EN: FalseFriendsRound[] = [
     story: "It means current, present-day. Spanish 'actualmente' = currently, NOT actually. The English 'actually' is closer to 'realmente'.",
   },
   {
-    foreignWord: "mist",
+    foreignWord: "Mist",
     foreignFlag: "de",
     foreignLang: "German",
     englishTwin: "mist",
@@ -143,7 +143,7 @@ const FALSE_FRIENDS_ROUNDS_EN: FalseFriendsRound[] = [
     story: "In Italian, burro is butter. In Spanish, burro is donkey. The same letters, two different farms. Both languages get the joke.",
   },
   {
-    foreignWord: "fabrik",
+    foreignWord: "Fabrik",
     foreignFlag: "de",
     foreignLang: "German",
     englishTwin: "fabric",
@@ -159,7 +159,7 @@ const FALSE_FRIENDS_ROUNDS_EN: FalseFriendsRound[] = [
     story: "Real twin. From Latin intelligere (to understand). One of the cleanest borrowings — same meaning, same Latin path.",
   },
   {
-    foreignWord: "chef",
+    foreignWord: "Chef",
     foreignFlag: "de",
     foreignLang: "German",
     englishTwin: "chef",
@@ -194,7 +194,7 @@ const FALSE_FRIENDS_ROUNDS_EN: FalseFriendsRound[] = [
     foreignWord: "vermist",
     foreignFlag: "nl",
     foreignLang: "Dutch",
-    englishTwin: "Vermist (missing)",
+    englishTwin: "missed",
     isReal: true,
     story: "Real twin. Dutch vermist = missing (as in a missing person). Both derive from the same Germanic root meaning to fail to find.",
   },
@@ -207,7 +207,7 @@ const FALSE_FRIENDS_ROUNDS_EN: FalseFriendsRound[] = [
     story: "It means to leave / exit. Looks like 'sully' or 'saliva' but is unrelated. The verb 'to dirty' in Spanish is 'ensuciar'.",
   },
   {
-    foreignWord: "billion",
+    foreignWord: "Billion",
     foreignFlag: "de",
     foreignLang: "German",
     englishTwin: "billion",
@@ -223,7 +223,7 @@ const FALSE_FRIENDS_ROUNDS_EN: FalseFriendsRound[] = [
     story: "It means reading. French 'la lecture' is the act of reading; a lecture (the academic talk) is 'un cours' or 'une conférence'.",
   },
   {
-    foreignWord: "auto",
+    foreignWord: "Auto",
     foreignFlag: "de",
     foreignLang: "German",
     englishTwin: "auto (car)",
@@ -244,7 +244,7 @@ const FALSE_FRIENDS_ROUNDS_HE: FalseFriendsRound[] = [
     foreignLang: "ספרדית",
     englishTwin: "נבוך",
     isReal: false,
-    story: "זה אומר 'בהריון'. דובר ספרדית שתגיד לו אתה 'embarazada' תקבל מבט מאוד מבולבל.",
+    story: "זה אומר 'בהריון'. אם תגידו לדובר ספרדית שאתם 'embarazada', תקבלו מבט מאוד מבולבל.",
   },
   {
     foreignWord: "Gift",
@@ -276,7 +276,7 @@ const FALSE_FRIENDS_ROUNDS_HE: FalseFriendsRound[] = [
     foreignLang: "ספרדית",
     englishTwin: "משפחה",
     isReal: true,
-    story: "תאום אמיתי. מאותה לטינית familia (משק בית). שלושה אלפי שנים והמשמעות זהה.",
+    story: "תאום אמיתי. מאותה לטינית familia (משק בית). כבר כאלפיים שנה והמשמעות דומה.",
   },
   {
     foreignWord: "Kind",
@@ -327,7 +327,7 @@ const FALSE_FRIENDS_ROUNDS_HE: FalseFriendsRound[] = [
     story: "בספרדית actual = עכשווי. 'actualmente' זה 'כיום', לא 'באמת'. הצרפתית לקחה אותו כיוון.",
   },
   {
-    foreignWord: "fabrik",
+    foreignWord: "Fabrik",
     foreignFlag: "de",
     foreignLang: "גרמנית",
     englishTwin: "בד (כמו 'fabric' באנגלית)",
@@ -343,7 +343,7 @@ const FALSE_FRIENDS_ROUNDS_HE: FalseFriendsRound[] = [
     story: "תאום אמיתי. מלטינית intelligere (להבין). המסלול הקלאסי: לטינית → איטלקית → אירופה כולה.",
   },
   {
-    foreignWord: "auto",
+    foreignWord: "Auto",
     foreignFlag: "de",
     foreignLang: "גרמנית",
     englishTwin: "אוטו (מכונית)",
@@ -356,7 +356,7 @@ const FALSE_FRIENDS_ROUNDS_HE: FalseFriendsRound[] = [
     foreignLang: "ספרדית",
     englishTwin: "דוקטור / רופא",
     isReal: true,
-    story: "תאום אמיתי. מלטינית doctor (מורה). הרפואה הצטרפה למשמעות אחרי. תואר אקדמי וכלי רפואי באים מאותו מקום.",
+    story: "תאום אמיתי. מלטינית doctor (מורה). הרפואה הצטרפה למשמעות אחר כך. תואר אקדמי ומקצוע רפואי באים מאותו מקום.",
   },
 ];
 
@@ -385,7 +385,7 @@ const FALSE_FRIENDS_ROUNDS_AR: FalseFriendsRound[] = [
     foreignWord: "librairie",
     foreignFlag: "fr",
     foreignLang: "الفرنسية",
-    englishTwin: "مكتبة",
+    englishTwin: "مكتبة عامة",
     isReal: false,
     story: "في الفرنسية librairie تعني المكتبة التي تبيع الكتب. المكتبة العامة هي bibliothèque. خطأ شائع للسائحين.",
   },
@@ -435,7 +435,7 @@ const FALSE_FRIENDS_ROUNDS_AR: FalseFriendsRound[] = [
     foreignLang: "الإيطالية",
     englishTwin: "موسيقى",
     isReal: true,
-    story: "توأم حقيقي. من اليونانية mousiké (فنّ الموزات). نفس الكلمة في كلّ اللغات الأوروبية، ووصلت العربية كذلك.",
+    story: "توأم حقيقي. من اليونانية mousiké (فنّ ربات الفنون). الكلمة متقاربة في لغات أوروبية كثيرة، ووصلت إلى العربية أيضًا.",
   },
   {
     foreignWord: "actual",
@@ -491,7 +491,7 @@ const FALSE_FRIENDS_ROUNDS_RU: FalseFriendsRound[] = [
     foreignLang: "французский",
     englishTwin: "журнал (magazine)",
     isReal: false,
-    story: "По-французски magasin — это магазин. Журнал во французском — revue. Тот же корень, разные смыслы.",
+    story: "По-французски magasin, это магазин. Французское magazine тоже существует, но magasin значит не журнал.",
   },
   {
     foreignWord: "familia",
@@ -538,8 +538,8 @@ const FALSE_FRIENDS_ROUNDS_RU: FalseFriendsRound[] = [
     foreignFlag: "es",
     foreignLang: "испанский",
     englishTwin: "актуальный",
-    isReal: true,
-    story: "Настоящий близнец. Оба слова от латинского actualis (действующий, текущий). Русский «актуальный» взял именно это значение.",
+    isReal: false,
+    story: "По-испански actual, это текущий, нынешний. Русское «актуальный» значит скорее важный и злободневный.",
   },
   {
     foreignWord: "intelligent",
@@ -563,7 +563,7 @@ const FALSE_FRIENDS_ROUNDS_RU: FalseFriendsRound[] = [
     foreignLang: "французский",
     englishTwin: "лекция",
     isReal: false,
-    story: "По-французски lecture — это чтение. Лекция по-французски — conférence. Распространённая ошибка изучающих французский.",
+    story: "По-французски lecture, это чтение. А «лекция» по-французски чаще будет cours или conférence.",
   },
 ];
 

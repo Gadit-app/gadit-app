@@ -190,9 +190,9 @@ const TWIN_TRAP_ROUNDS_EN: TwinTrapRound[] = [
 
   // ─── Farther / Further ─────────────────────────────────────
   {
-    sentence: "How much ____ until we get there?",
+    sentence: "We need ____ information before we decide.",
     options: ["farther", "further"],
-    correctIdx: 0,
+    correctIdx: 1,
     explain: "Farther = physical distance. Further = abstract / more (further discussion).",
   },
   {
@@ -260,7 +260,7 @@ const TWIN_TRAP_ROUNDS_EN: TwinTrapRound[] = [
 
   // ─── Who / Whom ────────────────────────────────────────────
   {
-    sentence: "____ should I ask about the schedule?",
+    sentence: "To ____ should I address the letter?",
     options: ["who", "whom"],
     correctIdx: 1,
     explain: "Whom is the object (ask whom). Who is the subject (who asked?). Trick: if you'd answer 'him', use whom.",
@@ -379,7 +379,7 @@ const TWIN_TRAP_ROUNDS_HE: TwinTrapRound[] = [
     sentence: "כמה ילדים יש לכם? יש לנו ____.",
     options: ["שני", "שניים"],
     correctIdx: 1,
-    explain: "שניים בא ללא שם עצם. אם היה ספר עצם היה הופך לשני.",
+    explain: "שניים בא ללא שם עצם. אם היה שם עצם היה הופך לשני.",
   },
   {
     sentence: "הוא ____ הביתה אחרי העבודה.",
@@ -418,7 +418,7 @@ const TWIN_TRAP_ROUNDS_HE: TwinTrapRound[] = [
     explain: "אש = להבה / חום. אז = מילת זמן (אז־אחרי כן). אל תתבלבל באותיות הדומות.",
   },
   {
-    sentence: "ראיתי את הסרט ____ הוא נגמר.",
+    sentence: "הגעתי לקולנוע ____ שהסרט התחיל.",
     options: ["לפני", "בפני"],
     correctIdx: 0,
     explain: "לפני = קודם בזמן. בפני = מול אדם או בנוכחות.",
@@ -430,13 +430,13 @@ const TWIN_TRAP_ROUNDS_HE: TwinTrapRound[] = [
     explain: "בפני = מול / בנוכחות. לפני = קודם. שניהם נכונים אבל בהקשרים שונים.",
   },
   {
-    sentence: "אני לא יודע, ולא ____ דווקא.",
+    sentence: "זה ____ דווקא נכון, יש גם דעות אחרות.",
     options: ["לא", "לאו"],
     correctIdx: 1,
     explain: "לאו דווקא = ביטוי קבוע. לא לבד מציין שלילה פשוטה.",
   },
   {
-    sentence: "אבל לא ____ עליתי לבד, אלא עם חבר.",
+    sentence: "ביקשתי ממנו לא לבוא, והוא ____ בא.",
     options: ["דווקא", "לאו דווקא"],
     correctIdx: 0,
     explain: "דווקא מחזק את ההפך. לאו דווקא מרכך טענה קודמת. הקשר משפטי שונה.",
@@ -497,7 +497,7 @@ const TWIN_TRAP_ROUNDS_AR: TwinTrapRound[] = [
     explain: "سيء صفة الذمّ. شيء اسم محايد. الهمزة الواحدة تغيّر المعنى.",
   },
   {
-    sentence: "اشتريتُ كأسًا من ____ البارد.",
+    sentence: "اشتريتُ كأسًا من ____ باردٍ.",
     options: ["مال", "ماء"],
     correctIdx: 1,
     explain: "ماء = السائل. مال = النقود. اختلاف الهمزة عن اللام يقلب المعنى.",
@@ -522,9 +522,9 @@ const TWIN_TRAP_ROUNDS_AR: TwinTrapRound[] = [
   },
   {
     sentence: "أحبّ ____ الناس الطيبين.",
-    options: ["كل", "كلّ"],
+    options: ["كَلَّ", "كلّ"],
     correctIdx: 1,
-    explain: "كلّ بالشدّة تعني جميع. كل بدونها فعل من فعل (تَعِبَ).",
+    explain: "كلّ بالشدّة تعني «جميع». كَلَّ فعلٌ معناه تَعِبَ.",
   },
   {
     sentence: "____ الكتاب مكتوبٌ بخط جميل.",
@@ -578,9 +578,9 @@ const TWIN_TRAP_ROUNDS_RU: TwinTrapRound[] = [
   },
   {
     sentence: "____, нам пора заканчивать обсуждение.",
-    options: ["Вообще", "В общем"],
+    options: ["Вообщем", "В общем"],
     correctIdx: 1,
-    explain: "В общем — для итога или резюме. Вообще — указание на принцип или полноту.",
+    explain: "«В общем» пишется раздельно и подводит итог. Слитное «вообщем», частая ошибка, такого слова нет.",
   },
   {
     sentence: "Мне ____ заниматься, я очень занят на работе.",
@@ -619,13 +619,13 @@ const TWIN_TRAP_ROUNDS_RU: TwinTrapRound[] = [
     explain: "Что — для уточняющего вопроса о факте. Чтобы — для цели или желания.",
   },
   {
-    sentence: "Этот ученик ____ умный, ____ и трудолюбивый.",
+    sentence: "Этот ученик умный, а ____ трудолюбивый.",
     options: ["тоже", "также"],
     correctIdx: 1,
     explain: "Также — дополнение в перечислении. Тоже — присоединение к уже сказанному, обычно с глаголом.",
   },
   {
-    sentence: "Мой брат любит читать, и я ____ читаю каждый день.",
+    sentence: "Мой брат любит читать, и я ____.",
     options: ["тоже", "также"],
     correctIdx: 0,
     explain: "Тоже — то же самое делает другой субъект. Также — добавление к перечислению.",
@@ -646,8 +646,8 @@ const TWIN_TRAP_ROUNDS_KIDS_EN: TwinTrapRound[] = [
   {
     sentence: "I want to eat ____ pizza slice.",
     options: ["their", "there"],
-    correctIdx: 1,
-    explain: "There points to a place. Their means belongs to them. Pizza slice is a thing, not a place — but here 'there' is short for 'over there'.",
+    correctIdx: 0,
+    explain: "Their means belonging to them. The pizza slice belongs to someone, so 'their' fits.",
   },
   {
     sentence: "The children took ____ backpacks to school.",
@@ -719,7 +719,7 @@ const TWIN_TRAP_ROUNDS_KIDS_HE: TwinTrapRound[] = [
     explain: "\"אט\" זה מילה נרדפת ללאט. \"אט אט\" זה בעצם לאט לאט. \"את\" זו מילה שמציגה מושא — לא מתאימה כאן.",
   },
   {
-    sentence: "____ מגיע לבית הספר?",
+    sentence: "____ מהילדים מגיע לבית הספר?",
     options: ["מה", "מי"],
     correctIdx: 1,
     explain: "\"מי\" שואל על אדם. \"מה\" שואל על חפץ או פעולה. לבית הספר מגיעים אנשים, אז שואלים \"מי\".",
@@ -734,7 +734,7 @@ const TWIN_TRAP_ROUNDS_KIDS_HE: TwinTrapRound[] = [
     sentence: "אמא ____ לי לישון מוקדם.",
     options: ["אמרה", "עמרה"],
     correctIdx: 0,
-    explain: "\"אמרה\" מהשורש אמ\"ר, לדבר. \"עמרה\" זה שם עצם (עומר של דגן). כשמישהו מדבר משתמשים ב\"אמר\" עם א'.",
+    explain: "\"אמרה\" היא צורת עבר של \"לומר\". כאן אמא דיברה, לכן צריך \"אמרה\" בא'.",
   },
   {
     sentence: "אני יודע ____ הטלפון שלך.",
@@ -743,7 +743,7 @@ const TWIN_TRAP_ROUNDS_KIDS_HE: TwinTrapRound[] = [
     explain: "\"מספר\" זה ספרה או קוד. \"משפר\" זה מהשורש שפ\"ר, לעשות משהו טוב יותר. טלפון יש לו מספר, לא משפר.",
   },
   {
-    sentence: "החתול קפץ ____ העץ.",
+    sentence: "החתול ישב ____ העץ.",
     options: ["על", "אל"],
     correctIdx: 0,
     explain: "\"על\" מציין למעלה — החתול הגיע לגובה על העץ. \"אל\" מציין כיוון — לכיוון העץ. פה החתול כבר על העץ.",

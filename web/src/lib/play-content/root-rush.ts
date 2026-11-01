@@ -37,8 +37,8 @@ const ROOT_RUSH_ROUNDS_EN: RootRushRound[] = [
     origin: "Latin",
     meaning: "to look, to see",
     correct: ["inspect", "spectator", "prospect"],
-    distractors: ["special", "speed", "speak"],
-    story: "Once you spot SPECT you'll see it everywhere: inspect (look in), prospect (look forward), spectator (watcher). Beware special and speak — different roots.",
+    distractors: ["spend", "speed", "speak"],
+    story: "Once you spot SPECT you'll see it everywhere: inspect (look in), prospect (look forward), spectator (watcher). Beware spend, speed and speak, different roots.",
   },
   {
     root: "SCRIB / SCRIPT",
@@ -62,7 +62,7 @@ const ROOT_RUSH_ROUNDS_EN: RootRushRound[] = [
     meaning: "far, distant",
     correct: ["television", "telescope", "telegraph"],
     distractors: ["temple", "temper", "tempo"],
-    story: "Greek tele = far. Telescope = far-seer, telegraph = far-writer, television = far-vision. The TEMP family is from Latin tempus (time) — completely unrelated.",
+    story: "Greek tele = far. Telescope = far-seer, telegraph = far-writer, television = far-vision. Tempo is from Latin tempus (time); temple and temper are unrelated.",
   },
   {
     root: "AQUA",
@@ -94,7 +94,7 @@ const ROOT_RUSH_ROUNDS_EN: RootRushRound[] = [
     meaning: "earth, land",
     correct: ["geology", "geography", "geometry"],
     distractors: ["gentle", "generous", "genuine"],
-    story: "Greek ge = earth. Geography = writing about earth. Geometry = measuring the earth. The GEN words come from Latin gens (clan, kin) — different origin entirely.",
+    story: "Greek ge = earth. Geography = writing about earth. Geometry = measuring the earth. The GEN- words here are unrelated to GEO despite the similar start.",
   },
   {
     root: "AUDI",
@@ -109,7 +109,7 @@ const ROOT_RUSH_ROUNDS_EN: RootRushRound[] = [
     origin: "Latin",
     meaning: "hand",
     correct: ["manual", "manuscript", "manipulate"],
-    distractors: ["mansion", "manner", "mango"],
+    distractors: ["mansion", "manic", "mango"],
     story: "Latin manus = hand. Manuscript = handwritten. Manipulate = handle. Mansion is from manere (to remain), and mango is from Tamil mankay. Hands off.",
   },
   {
@@ -187,7 +187,7 @@ const ROOT_RUSH_ROUNDS_HE: RootRushRound[] = [
   {
     root: "ק.ר.א",
     origin: "עברית",
-    meaning: "לקרוא בקול, לחנן בשם",
+    meaning: "לקרוא בקול, לקרוא בשם",
     correct: ["קורא", "מקרא", "קריאה"],
     distractors: ["קרוב", "קר", "קרקע"],
     story: "ק.ר.א הוא לקרוא טקסט בקול וגם להעניק שם. הסחות: 'קרוב' מ-ק.ר.ב., 'קר' שורש ק.ר.ר., 'קרקע' מ-ק.ר.ק.",
@@ -198,7 +198,7 @@ const ROOT_RUSH_ROUNDS_HE: RootRushRound[] = [
     meaning: "ללכת, להתקדם",
     correct: ["הולך", "מהלך", "הליכה"],
     distractors: ["הר", "היום", "הוד"],
-    story: "ה.ל.כ הוא שורש התנועה בעברית. בנוסף נגזרו הלך (פעיל), מתהלך (התפעל), נילך, להלן. הסחות הם שורשים שונים.",
+    story: "ה.ל.כ הוא שורש התנועה בעברית. בנוסף נגזרו הולך, מתהלך, הליכה ומהלך. הסחות הן משורשים שונים.",
   },
   {
     root: "ר.צ.ה",
@@ -222,7 +222,7 @@ const ROOT_RUSH_ROUNDS_HE: RootRushRound[] = [
     meaning: "לדבר, לאמור",
     correct: ["דובר", "דיבור", "מדבר"],
     distractors: ["דבש", "דבק", "דקה"],
-    story: "ד.ב.ר נמצא בכל הזיקוקים של עברית: דובר, דברן, להגיד דבר. הסחות: 'דבש' מ-ד.ב.ש., 'דבק' מ-ד.ב.ק.",
+    story: "ד.ב.ר נפוץ מאוד בעברית: דובר, דיבור, דברן, לדבר. הסחות: 'דבש' מ-ד.ב.ש., 'דבק' מ-ד.ב.ק.",
   },
   {
     root: "א.כ.ל",
@@ -238,7 +238,7 @@ const ROOT_RUSH_ROUNDS_HE: RootRushRound[] = [
     meaning: "לראות, להבחין",
     correct: ["רואה", "מראה", "ראייה"],
     distractors: ["ראש", "רחב", "רעב"],
-    story: "ר.א.ה (רואה, מראה, ראייה, מורא, ראוי). הסחות: 'ראש' מ-ר.א.ש., 'רחב' מ-ר.ח.ב., 'רעב' מ-ר.ע.ב.",
+    story: "ר.א.ה (רואה, מראה, ראייה, נראה, ראוי). הסחות: 'ראש' מ-ר.א.ש., 'רחב' מ-ר.ח.ב., 'רעב' מ-ר.ע.ב.",
   },
   {
     root: "ג.ד.ל",
@@ -262,7 +262,7 @@ const ROOT_RUSH_ROUNDS_AR: RootRushRound[] = [
     meaning: "الكتابة والتسجيل",
     correct: ["كاتب", "مكتبة", "كتاب"],
     distractors: ["كَتِف", "كِتمان", "كرة"],
-    story: "من ك.ت.ب اشتُقّ: كاتب (الفاعل)، كتاب (المفعول)، مكتبة (المكان). كَتِف من ك.ت.ف، كِتمان من ك.ت.م.",
+    story: "من ك.ت.ب اشتُقّ: كاتب، كتاب، مكتبة. كَتِف من ك.ت.ف، وكِتمان من ك.ت.م.",
   },
   {
     root: "ع.ل.م",
@@ -293,8 +293,8 @@ const ROOT_RUSH_ROUNDS_AR: RootRushRound[] = [
     origin: "العربية",
     meaning: "الفعل والعمل",
     correct: ["عامِل", "عَمَل", "مَعمَل"],
-    distractors: ["عُمر", "عَمّ", "عُملة"],
-    story: "ع.م.ل للفعل والعمل. عمل، عامل، معمول، معمل، عمليّة. العمر من ع.م.ر، العملة من ع.م.ل أيضًا فعلًا.",
+    distractors: ["عُمر", "عَمّ", "عَمود"],
+    story: "ع.م.ل للفعل والعمل. عمل، عامل، معمول، معمل، عمليّة. عُمر من ع.م.ر، وعمّ من ع.م.م، وعَمود من ع.م.د.",
   },
   {
     root: "ق.ر.أ",
@@ -317,8 +317,8 @@ const ROOT_RUSH_ROUNDS_AR: RootRushRound[] = [
     origin: "العربية",
     meaning: "الركوب والصعود",
     correct: ["راكِب", "مَركَب", "ركوب"],
-    distractors: ["ركبة", "رَكام", "رِكاز"],
-    story: "ر.ك.ب الجذر للحركة. راكب، مركب، مركبة، ركوب، تركيب. الركبة من نفس الجذر فعلاً (موضع الانثناء).",
+    distractors: ["رُتبة", "رَكام", "رِكاز"],
+    story: "ر.ك.ب جذر للحركة. راكب، مركب، مركبة، ركوب، تركيب. أمّا الرُتبة فمن ر.ت.ب، والرُكام من ر.ك.م.",
   },
   {
     root: "س.م.ع",
@@ -404,7 +404,7 @@ const ROOT_RUSH_ROUNDS_RU: RootRushRound[] = [
     origin: "праславянский",
     meaning: "свет, светить",
     correct: ["светлый", "рассвет", "освещение"],
-    distractors: ["свежий", "свеча", "святой"],
+    distractors: ["свежий", "сверло", "святой"],
     story: "СВЕТ даёт светлый, рассвет, освещение, светофор. Свеча от того же корня — она светит. Свежий и святой — разные корни, лишь похожие звуком.",
   },
   {
@@ -412,7 +412,7 @@ const ROOT_RUSH_ROUNDS_RU: RootRushRound[] = [
     origin: "праславянский",
     meaning: "работать, труд",
     correct: ["рабочий", "заработок", "обработка"],
-    distractors: ["раб", "радость", "ракета"],
+    distractors: ["рабица", "радость", "ракета"],
     story: "Корень РАБОТ происходит от РАБ (раб делал работу). Раб, рабство — однокоренные. Радость и ракета — совершенно разные источники.",
   },
   {
