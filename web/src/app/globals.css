@@ -12106,6 +12106,21 @@ html[data-theme="dark"] .wordbook .wb-word-sentence-input::placeholder { color: 
 /* ── Waiting dots (components/WaitText.tsx): three dots that keep moving
    after any "Reading the file…" style copy, so a wait is never silent.
    currentColor fits every button and skin; reduced motion = static dots. ── */
+/* The waiting copy itself breathes: a soft fade travels along the letters
+   (in reading direction), so the wait never looks frozen. A mask keeps
+   Arabic/Hindi letters joined. padding-block widens the painted box on the
+   inline span so the bouncing dots are not clipped, without moving the line. */
+.gd-wait {
+  padding-block: 0.45em;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 38%, rgba(0,0,0,0.22) 50%, #000 62%, #000 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 38%, rgba(0,0,0,0.22) 50%, #000 62%, #000 100%);
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  animation: gd-wait-wave 1.9s linear infinite;
+}
+.gd-wait:dir(rtl) { animation-name: gd-wait-wave-rtl; }
+@keyframes gd-wait-wave { from { -webkit-mask-position: 100% 0; mask-position: 100% 0; } to { -webkit-mask-position: 0% 0; mask-position: 0% 0; } }
+@keyframes gd-wait-wave-rtl { from { -webkit-mask-position: 0% 0; mask-position: 0% 0; } to { -webkit-mask-position: 100% 0; mask-position: 100% 0; } }
 .gd-wait-tail { white-space: nowrap; }
 .gd-wait-dots {
   display: inline-flex;
@@ -12137,6 +12152,7 @@ html[data-theme="dark"] .wordbook .wb-word-sentence-input::placeholder { color: 
 .gd-wait-page { display: grid; place-items: center; padding: 72px 16px; color: var(--ink-muted, #6B7280); }
 @media (prefers-reduced-motion: reduce) {
   .gd-wait-dot { animation: none; opacity: 0.85; }
+  .gd-wait { animation: none; -webkit-mask-image: none; mask-image: none; }
 }
 
 /* A word's full definition over the current screen (FullWordSheet, 2026-10-21). */

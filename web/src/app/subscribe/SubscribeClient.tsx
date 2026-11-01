@@ -8,6 +8,7 @@
  * build without purchases) the page sends people away: the website sells
  * through /pricing, and the Play app sells nothing.
  */
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -164,7 +165,7 @@ export function SubscribeClient() {
                   {rows.map((r) => <li key={r}>{r}</li>)}
                 </ul>
                 <div style={{ fontSize: 15, fontWeight: 700, color: "var(--ink,#0B1220)" }}>
-                  {products === null ? c.loading : p ? fill(interval === "yearly" ? (p.trial ? c.trialThenYear : c.perYear) : (p.trial ? c.trialThen : c.perMonth), { price: p.displayPrice }) : c.unavailable}
+                  {products === null ? <WaitText text={c.loading} /> : p ? fill(interval === "yearly" ? (p.trial ? c.trialThenYear : c.perYear) : (p.trial ? c.trialThen : c.perMonth), { price: p.displayPrice }) : c.unavailable}
                 </div>
                 <button type="button" disabled={!p || !!busy} onClick={() => void buy(k)} style={btn(true, !p || !!busy)}>
                   {busy === k ? "…" : p?.trial ? c.startTrial : c.subscribe}

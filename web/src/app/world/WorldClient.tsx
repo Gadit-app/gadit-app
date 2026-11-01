@@ -22,6 +22,7 @@
  * phones. Hebrew words walk right to left, in reading direction.
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
@@ -644,7 +645,7 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
         </div>
       ) : null}
 
-      {!queue && !failed && phase !== "clearing" ? <div className="wt-loading">{c.loading}</div> : null}
+      {!queue && !failed && phase !== "clearing" ? <div className="wt-loading"><WaitText text={c.loading} live /></div> : null}
       {failed && phase !== "clearing" ? (
         <div className="wt-loading">
           <p>{c.noWords}</p>
@@ -656,7 +657,7 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
         {phase === "door" ? (
           <div className="wt-door-title">
             <strong>{wn.title}</strong>
-            <button type="button" className="wt-btn is-big" disabled={!word} onClick={(e) => { e.stopPropagation(); enter(); }}>{word ? wn.enter : c.loading}</button>
+            <button type="button" className="wt-btn is-big" disabled={!word} onClick={(e) => { e.stopPropagation(); enter(); }}>{word ? wn.enter : <WaitText text={c.loading} />}</button>
             <button type="button" className="wt-link" onClick={(e) => { e.stopPropagation(); exit(); }}>{c.back}</button>
           </div>
         ) : null}

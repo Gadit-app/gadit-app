@@ -8,6 +8,7 @@
  * "coming soon" so the child sees where the path goes.
  */
 
+import { WaitText } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -73,7 +74,7 @@ export function WorldMap({ demo }: { demo?: Counts }) {
               <span className="wm-text">
                 <strong>{WORLD_ICON[k]} {names.title}</strong>
                 {!built ? <span className="wm-note">{c.soon}</span>
-                  : !counts ? <span className="wm-note">{c.loading}</span>
+                  : !counts ? <span className="wm-note"><WaitText text={c.loading} live /></span>
                   : open ? <span className="wm-note">{n > 0 ? names.wordsIn(n) : names.empty}</span>
                   : <span className="wm-note">{c.locked(need, prevTitle)}</span>}
               </span>
