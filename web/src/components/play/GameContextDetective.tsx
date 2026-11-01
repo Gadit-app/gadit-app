@@ -12,6 +12,11 @@
  * the finished story is read aloud. 3 stories per session.
  *
  * The stories come from /api/play/context (one call, cached per word set).
+ *
+ * Played inside a word world (Gadi 2026-11-01: "every game with graphics
+ * like the worlds"): the child's newest world is the backdrop, the story
+ * hangs on a parchment sign, the words are stones on the ground, and the
+ * child's avatar stands by and reacts.
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -22,11 +27,14 @@ import { dirForLang, sample, shuffle, wordLangOf } from "@/lib/play-engine";
 import type { ContextRound } from "@/lib/context-game";
 import { GameResult } from "./GameResult";
 import { reportAnswer } from "@/lib/learn/report";
-import { PlayHeader, type PlayT } from "./GameQuiz";
+import type { PlayT } from "./GameQuiz";
 import { QText } from "./QText";
 import { TTSButton } from "@/components/design/TTSButton";
 import { WaitText } from "@/components/WaitText";
 import { ctxCopy, type CtxCopy } from "./context-detective-i18n";
+import { SfxToggle } from "@/components/SfxToggle";
+import { avatarUrl } from "@/lib/family";
+import { WORLDS, WORLD_ORDER, isWorldId, worldArt, wordsToOpen, type WorldId } from "@/lib/world/worlds";
 
 const fill = (tpl: string, v: Record<string, string | number>) =>
   tpl.replace(/\{(\w+)\}/g, (_, k: string) => String(v[k] ?? ""));
@@ -58,6 +66,57 @@ function pickWords(pool: PlayWord[], ui: string, kids: boolean): { words: string
 }
 
 type Load = { session: number; rounds?: ContextRound[]; error?: boolean };
+type Mood = "idle" | "happy" | "oops";
+
+/** The child's newest open world (the backdrop), jungle until we know. */
+function useNewestWorld(): WorldId {
+  const { user } = useAuth();
+  const [id, setId] = useState<WorldId>("jungle");
+  useEffect(() => {
+    if (!user) return;
+    let alive = true;
+    void (async () => {
+      try {
+        const r = await fetch("/api/world", { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+        const j = r.ok ? ((await r.json()) as { worlds?: Record<string, { items?: unknown[] }> }) : null;
+        const counts: Record<string, number> = {};
+        for (const [k, v] of Object.entries(j?.worlds ?? {})) counts[k] = Array.isArray(v.items) ? v.items.length : 0;
+        const k = [...WORLD_ORDER].reverse().find((w) => isWorldId(w) && wordsToOpen(w, counts) === 0);
+        if (alive && k && isWorldId(k)) setId(k);
+      } catch { /* jungle */ }
+    })();
+    return () => { alive = false; };
+  }, [user]);
+  return id;
+}
+
+/** The scene: world backdrop, round buttons on top, the avatar by the sign. */
+export function CtxWorld({ worldId, onExit, exitLabel, progress, score, mood, children }: {
+  worldId: WorldId; onExit: () => void; exitLabel: string; progress?: string; score?: number; mood: Mood; children: React.ReactNode;
+}) {
+  const { avatarId, avatarPhotoUrl } = useAuth();
+  const av = avatarUrl(avatarId) ?? avatarPhotoUrl ?? null;
+  return (
+    <div className="ctx-world" style={{ backgroundImage: `url(${worldArt(WORLDS[worldId], "clearing")})` }}>
+      <div className="ctx-hud">
+        <div className="ctx-hud-side">
+          <button type="button" className="ctx-round" onClick={onExit} aria-label={exitLabel}>✕</button>
+          <SfxToggle className="ctx-round" />
+        </div>
+        {progress ? <span className="ctx-pill">{progress}{score != null ? <> · ⭐ {score}</> : null}</span> : null}
+      </div>
+      <div className="ctx-scroll">
+        <div className="ctx-col">{children}</div>
+      </div>
+      <div className={`ctx-avatar is-${mood}`} aria-hidden="true">
+        {av ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={av} alt="" />
+        ) : <span>🙂</span>}
+      </div>
+    </div>
+  );
+}
 
 export function GameContextDetective({
   pool,
@@ -84,6 +143,8 @@ export function GameContextDetective({
   const [total, setTotal] = useState(0);
   const [missed, setMissed] = useState<string[]>([]);
   const [done, setDone] = useState(false);
+  const worldId = useNewestWorld();
+  const [mood, setMood] = useState<Mood>("idle");
 
   useEffect(() => {
     if (!user) return;
@@ -132,9 +193,8 @@ export function GameContextDetective({
 
   if (!ready || ready.error || !rounds[idx]) {
     return (
-      <div className="wb-play-stage">
-        <PlayHeader title={c.title} onExit={onExit} t={t} />
-        <div className="wb-play-question ctx-state">
+      <CtxWorld worldId={worldId} onExit={onExit} exitLabel={t.resultBackToGames} mood="idle">
+        <div className="ctx-sign ctx-state">
           {!ready ? (
             <div className="ctx-loading"><WaitText text={c.loading} live /></div>
           ) : (
@@ -143,21 +203,20 @@ export function GameContextDetective({
                 {(pick.words.length < 2 ? c.tooFew : c.error).split("\n").map((line, i) => <div key={i}>{line}</div>)}
               </div>
               {pick.words.length >= 2 && (
-                <button type="button" className="wb-play-next" onClick={() => setSession((n) => n + 1)}>{c.retry}</button>
+                <button type="button" className="ctx-btn" onClick={() => setSession((n) => n + 1)}>{c.retry}</button>
               )}
-              <button type="button" className="wb-play-cta-ghost ctx-back" onClick={onExit}>{t.resultBackToGames}</button>
+              <button type="button" className="ctx-btn is-ghost" onClick={onExit}>{t.resultBackToGames}</button>
             </>
           )}
         </div>
         <style>{CTX_CSS}</style>
-      </div>
+      </CtxWorld>
     );
   }
 
   const last = idx + 1 >= rounds.length;
   return (
-    <div className="wb-play-stage">
-      <PlayHeader title={c.title} progress={`${idx + 1}/${rounds.length}`} score={score} onExit={onExit} t={t} />
+    <CtxWorld worldId={worldId} onExit={onExit} exitLabel={t.resultBackToGames} progress={`${c.title} · ${idx + 1}/${rounds.length}`} score={score} mood={mood}>
       <ContextStory
         key={`${session}-${idx}`}
         round={rounds[idx]}
@@ -168,13 +227,14 @@ export function GameContextDetective({
           const r = rounds[idx];
           setScore((n) => n + oks.filter(Boolean).length);
           setTotal((n) => n + oks.length);
+          setMood(oks.every(Boolean) ? "happy" : "oops");
           const wrong = r.base.filter((_, i) => !oks[i]);
           if (wrong.length) setMissed((m) => [...m, ...wrong.filter((w) => !m.some((x) => same(x, w)))]);
         }}
-        onNext={() => { if (last) setDone(true); else setIdx((n) => n + 1); }}
+        onNext={() => { setMood("idle"); if (last) setDone(true); else setIdx((n) => n + 1); }}
       />
       <style>{CTX_CSS}</style>
-    </div>
+    </CtxWorld>
   );
 }
 
@@ -263,8 +323,8 @@ export function ContextStory({
 
   return (
     <>
-      <div className="wb-play-question ctx-card">
-        <div className="wb-play-question-eyebrow"><QText text={c.prompt} /></div>
+      <div className="ctx-sign ctx-card">
+        <div className="ctx-eyebrow"><QText text={c.prompt} /></div>
         <div className="ctx-story" dir={dir} lang={wordLang}>
           {round.segments.map((seg, i) => (
             <span key={i}>
@@ -319,14 +379,14 @@ export function ContextStory({
               );
             })}
           </div>
-          <button type="button" className="wb-play-next ctx-check" onClick={check} disabled={!allFilled}>
+          <button type="button" className="ctx-btn ctx-check" onClick={check} disabled={!allFilled}>
             {c.check}
           </button>
         </>
       )}
 
       {checked && (
-        <div className="ctx-reveal" role="status">
+        <div className="ctx-reveal ctx-sign" role="status">
           <div className={`ctx-sum${oks.every(Boolean) ? " is-all" : ""}`}>
             {fill(c.score, { n: oks.filter(Boolean).length, m: n })}
           </div>
@@ -350,7 +410,7 @@ export function ContextStory({
             </span>
             <span>{c.listen}</span>
           </div>
-          <button type="button" className="wb-play-next" onClick={onNext}>{nextLabel}</button>
+          <button type="button" className="ctx-btn" onClick={onNext}>{nextLabel}</button>
         </div>
       )}
     </>
@@ -358,41 +418,62 @@ export function ContextStory({
 }
 
 export const CTX_CSS = `
-.ctx-card { text-align: start; padding: 22px 18px; }
-.ctx-card .wb-play-question-eyebrow { text-align: center; text-transform: none; letter-spacing: 0; font-size: 14px; line-height: 1.45; }
-.ctx-story { text-align: start; font-family: var(--wb-font-display); font-size: clamp(18px, 4.6vw, 22px); line-height: 2.05; color: var(--wb-ink, #1f2937); }
-.ctx-blank { display: inline-flex; align-items: center; justify-content: center; gap: 6px; vertical-align: baseline; min-width: 84px; min-height: 44px; margin: 2px 3px; padding: 0 12px; border-radius: 10px; border: 2px dashed rgba(79, 70, 229, 0.45); background: rgba(79, 70, 229, 0.06); color: rgb(67, 56, 202); font: inherit; font-weight: 700; line-height: 1.2; cursor: pointer; transition: background 160ms, border-color 160ms, box-shadow 160ms; }
+.ctx-world { position: fixed; inset: 0; z-index: 60; background-color: #bfe3d0; background-size: cover; background-position: center; display: grid; grid-template-rows: auto 1fr; color: #2b1d0e; -webkit-tap-highlight-color: transparent; }
+.ctx-world::before { content: ""; position: absolute; inset: 0; background: linear-gradient(#0000 55%, #0003); pointer-events: none; }
+.ctx-hud { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: calc(env(safe-area-inset-top, 0px) + 12px) 14px 6px; }
+.ctx-hud-side { display: flex; gap: 8px; }
+.ctx-round { width: 44px; height: 44px; flex: 0 0 44px; border-radius: 50%; border: 0; background: #fffe; box-shadow: 0 2px 8px #0002; font-size: 20px; display: grid; place-items: center; cursor: pointer; color: #14202b; }
+.ctx-pill { background: #fffe; border-radius: 999px; padding: 8px 14px; font-weight: 800; box-shadow: 0 2px 8px #0002; white-space: nowrap; font-size: 15px; color: #14202b; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ctx-scroll { position: relative; z-index: 1; overflow-y: auto; padding: 8px 16px calc(env(safe-area-inset-bottom, 0px) + 110px); }
+.ctx-col { max-width: 640px; margin: 0 auto; display: grid; gap: 16px; }
+/* the story hangs on a parchment sign in a wooden frame */
+.ctx-sign { position: relative; background: linear-gradient(#fdf4dc, #f6e5bd); border: 7px solid #8a5a2b; border-radius: 20px; box-shadow: 0 0 0 3px #5e3a17, 0 14px 30px #0006, inset 0 0 30px #c99a5a55; padding: 20px 18px; }
+.ctx-sign::before, .ctx-sign::after { content: ""; position: absolute; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #d9b98a, #5e3a17); }
+.ctx-sign::before { inset-inline-start: 8px; }
+.ctx-sign::after { inset-inline-end: 8px; }
+.ctx-card { text-align: start; }
+.ctx-eyebrow { text-align: center; font-size: 14px; line-height: 1.45; font-weight: 700; color: #7a5326; margin-bottom: 6px; }
+.ctx-story { text-align: start; font-family: var(--wb-font-display); font-size: clamp(18px, 4.6vw, 22px); line-height: 2.05; color: #2b1d0e; }
+.ctx-blank { display: inline-flex; align-items: center; justify-content: center; gap: 6px; vertical-align: baseline; min-width: 84px; min-height: 44px; margin: 2px 3px; padding: 0 12px; border-radius: 12px; border: 2px dashed #a8773f; background: #fff8e6; color: #7a4a14; font: inherit; font-weight: 800; line-height: 1.2; cursor: pointer; transition: background 160ms, border-color 160ms, box-shadow 160ms; }
 .ctx-blank.is-glued { margin-inline-end: 0; }
-.ctx-blank.is-filled { border-style: solid; background: rgba(79, 70, 229, 0.10); }
-.ctx-blank.is-selected { border-style: solid; border-color: #0EA5A5; background: rgba(14, 165, 165, 0.10); box-shadow: 0 0 0 3px rgba(14, 165, 165, 0.22); color: #0b6f6f; }
-.ctx-blank.is-right { border-style: solid; border-color: rgba(16, 185, 129, 0.6); background: rgba(16, 185, 129, 0.12); color: #047857; cursor: default; }
-.ctx-blank.is-wrong { border-style: solid; border-color: rgba(225, 29, 72, 0.5); background: rgba(225, 29, 72, 0.08); color: rgb(190, 18, 60); cursor: default; }
-.ctx-blank-num { font-size: 13px; font-weight: 700; opacity: 0.55; }
+.ctx-blank.is-filled { border-style: solid; background: #fff; }
+.ctx-blank.is-selected { border-style: solid; border-color: #f2b705; background: #fff3c4; box-shadow: 0 0 0 4px #ffd23f88; color: #6b4e00; }
+.ctx-blank.is-right { border-style: solid; border-color: #2f9e44; background: #e3f7e6; color: #1f6b2f; cursor: default; }
+.ctx-blank.is-wrong { border-style: solid; border-color: #e03131; background: #ffe8e8; color: #b42318; cursor: default; }
+.ctx-blank-num { font-size: 13px; font-weight: 800; opacity: 0.55; }
 .ctx-blank-chosen { font-weight: 600; opacity: 0.8; }
-.ctx-blank-fix { color: #047857; }
-.ctx-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 16px; }
-.ctx-chip { min-height: 48px; min-width: 64px; padding: 0 18px; border-radius: 999px; border: 1.5px solid var(--wb-border, #d1d5db); background: var(--surface, #fff); color: var(--wb-ink, #1f2937); font: inherit; font-size: 17px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 0 rgba(15, 23, 42, 0.06); transition: transform 140ms, border-color 160ms, background 160ms; }
-.ctx-chip:hover:not(:disabled) { border-color: rgba(14, 165, 165, 0.55); background: rgba(14, 165, 165, 0.05); }
-.ctx-chip:active:not(:disabled) { transform: scale(0.96); }
-.ctx-chip.is-used { border-style: dashed; color: transparent; background: transparent; box-shadow: none; cursor: default; }
-.ctx-check:disabled { opacity: 0.4; cursor: default; box-shadow: none; }
-.ctx-reveal { margin-top: 16px; display: grid; gap: 12px; }
-.ctx-sum { text-align: center; font-weight: 800; font-size: 17px; color: #b45309; }
-.ctx-sum.is-all { color: #0b7d7d; }
+.ctx-blank-fix { color: #1f6b2f; }
+/* the words are stones on the ground */
+.ctx-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 4px; }
+.ctx-chip { min-height: 52px; min-width: 70px; padding: 0 20px; border-radius: 22px 18px 24px 16px; border: 0; background: radial-gradient(120% 90% at 30% 25%, #f4f1ea, #cfc8b8 70%, #a9a190); color: #2b2418; font: inherit; font-size: 18px; font-weight: 800; cursor: pointer; box-shadow: 0 5px 0 #7d7565, 0 9px 14px #0005; transition: transform 140ms; }
+.ctx-chip:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 #7d7565, 0 4px 8px #0005; }
+.ctx-chip.is-used { background: #0002; color: transparent; box-shadow: inset 0 3px 6px #0004; cursor: default; }
+.ctx-btn { justify-self: center; min-height: 52px; border: 0; border-radius: 999px; background: #0a7472; color: #fff; font: inherit; font-weight: 800; font-size: 18px; padding: 12px 30px; cursor: pointer; box-shadow: 0 4px 0 #075452, 0 8px 16px #0004; }
+.ctx-btn.is-ghost { background: #fff; color: #0a7472; box-shadow: 0 0 0 2px #0a7472 inset; }
+.ctx-check:disabled { opacity: 0.55; cursor: default; }
+.ctx-reveal { display: grid; gap: 12px; }
+.ctx-sum { text-align: center; font-weight: 800; font-size: 18px; color: #b45309; }
+.ctx-sum.is-all { color: #1f6b2f; }
 .ctx-why { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.ctx-why li { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--wb-border, #e5e7eb); background: var(--surface, #fff); }
-.ctx-why li.is-right { border-color: rgba(16, 185, 129, 0.35); }
-.ctx-why li.is-wrong { border-color: rgba(225, 29, 72, 0.35); }
-.ctx-why-mark { flex: none; width: 24px; height: 24px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #fff; background: #10b981; }
-.ctx-why li.is-wrong .ctx-why-mark { background: #e11d48; }
+.ctx-why li { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 14px; background: #fffdf6; border: 2px solid #e8d3a8; }
+.ctx-why li.is-right { border-color: #8fd19e; }
+.ctx-why li.is-wrong { border-color: #f1a1a1; }
+.ctx-why-mark { flex: none; width: 26px; height: 26px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #fff; background: #2f9e44; }
+.ctx-why li.is-wrong .ctx-why-mark { background: #e03131; }
 .ctx-why-body { display: grid; gap: 3px; min-width: 0; }
-.ctx-why-word { font-weight: 800; font-size: 16px; color: var(--wb-ink, #1f2937); }
-.ctx-why-chose { font-size: 13px; color: rgb(190, 18, 60); }
-.ctx-why-text { font-size: 15px; line-height: 1.5; color: var(--wb-ink, #1f2937); }
-.ctx-listen { display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; color: var(--wb-ink-soft, #4b5563); }
-.ctx-state { display: grid; gap: 14px; justify-items: center; text-align: center; padding: 36px 18px; }
-.ctx-loading { font-size: 17px; font-weight: 700; color: var(--wb-ink, #1f2937); }
-.ctx-error { display: grid; gap: 4px; font-size: 16px; line-height: 1.5; color: var(--wb-ink, #1f2937); }
-.ctx-state .wb-play-next { margin: 0; }
-.ctx-back { min-height: 44px; }
+.ctx-why-word { font-weight: 800; font-size: 16px; color: #2b1d0e; }
+.ctx-why-chose { font-size: 13px; color: #b42318; }
+.ctx-why-text { font-size: 15px; line-height: 1.5; color: #2b1d0e; }
+.ctx-listen { display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; color: #7a5326; }
+.ctx-state { display: grid; gap: 14px; justify-items: center; text-align: center; padding: 36px 18px; margin-top: 12vh; }
+.ctx-loading { font-size: 18px; font-weight: 800; color: #2b1d0e; }
+.ctx-error { display: grid; gap: 4px; font-size: 16px; line-height: 1.5; color: #2b1d0e; }
+/* the child's avatar stands on the ground by the sign and reacts */
+.ctx-avatar { position: absolute; z-index: 2; inset-inline-start: 14px; bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); width: clamp(64px, 18vw, 92px); aspect-ratio: 1; border-radius: 50%; border: 4px solid #fff; background: #fff; box-shadow: 0 6px 14px #0004; overflow: hidden; display: grid; place-items: center; font-size: 40px; pointer-events: none; }
+.ctx-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.ctx-avatar.is-happy { animation: ctx-jump .55s ease-out 3; }
+.ctx-avatar.is-oops { animation: ctx-tilt 1.2s ease-in-out 1; }
+@keyframes ctx-jump { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-26px) scale(1.06); } }
+@keyframes ctx-tilt { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-10deg); } 60% { transform: rotate(8deg); } }
+@media (prefers-reduced-motion: reduce) { .ctx-avatar.is-happy, .ctx-avatar.is-oops { animation: none; } }
 `;
