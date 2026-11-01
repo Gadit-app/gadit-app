@@ -161,7 +161,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
     const gateW = clamp(W * 0.6, 230, 420);
     const gateX = p0 + letters.length * seg + seg * 0.45;
     const len = gateX + W * 0.7;
-    return { W, H, groundH, doorH, doorW, avatarS, seg, forkX, doorX, waitX, camOff, spotX, gateW, gateX, len, speed: Math.max(300, W * 0.55) };
+    return { W, H, groundH, doorH, doorW, avatarS, seg, forkX, doorX, waitX, camOff, spotX, gateW, gateX, len, speed: Math.max(480, W * 0.85) /* 2026-11-01: ~1.6x faster, the walk between letters felt slow */ };
   }, [size, doors, letters.length, world.doorAspect]);
 
   const geoRef = useRef(geo);
@@ -253,7 +253,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
             if (last) setPhase("gate");
           });
           setFork(i + 1);
-        }, 420);
+        }, 260);
       } else {
         sfx.wrong();
         wrongs.current += 1;
@@ -896,7 +896,7 @@ const CSS = `
 @keyframes wt-portal{from{clip-path:circle(0px at var(--px) var(--py))}to{clip-path:circle(150vmax at var(--px) var(--py))}}
 .wt-avatar{position:absolute;border-radius:50%;border:4px solid #fff;background:#fff;box-shadow:0 6px 14px #0004;overflow:hidden;display:grid;place-items:center;font-size:40px;z-index:2}
 .wt-avatar img{width:100%;height:100%;object-fit:cover}
-.wt-avatar.is-walking{animation:wt-bob .32s ease-in-out infinite alternate}
+.wt-avatar.is-walking{animation:wt-bob .26s ease-in-out infinite alternate}
 /* three columns: the word bar sits in the middle of the screen, over the doors, whatever the side buttons take */
 .wt-hud{position:absolute;top:calc(env(safe-area-inset-top,0px) + 10px);left:10px;right:10px;display:grid;grid-template-columns:1fr minmax(0,560px) 1fr;align-items:center;gap:8px;z-index:5}
 .wt-hud-side{display:flex;align-items:center;gap:8px;min-width:96px}
