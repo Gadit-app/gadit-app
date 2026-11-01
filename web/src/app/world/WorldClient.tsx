@@ -226,6 +226,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
   const [found, setFound] = useState<Record<number, "star" | "fly">>({});
   const [stars, setStars] = useState(0);
   const [toast, setToast] = useState<string | null>(null);
+  const toastTm = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const busy = useRef(false);
   const wrongs = useRef(0);
   const gateFirstTry = useRef(true);
@@ -278,7 +279,9 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
       sfx.star();
       setStars((n) => n + 1);
       setToast(c.foundStar);
-      setTimeout(() => setToast(null), 1300);
+      // One message at a time: a second star restarts the timer.
+      clearTimeout(toastTm.current);
+      toastTm.current = setTimeout(() => setToast(null), 1300);
     }
   }, [found, spots, c.foundStar]);
 
