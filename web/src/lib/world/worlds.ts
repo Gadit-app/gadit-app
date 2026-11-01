@@ -32,6 +32,11 @@ export type WorldDef = {
   /** Door art: width / height, the plaque's centre (from the top, %) and its letter colour. */
   doorAspect: number;
   plaqueY: number;
+  /** Where the doors sit in gate.webp, in % of the image (2026-11-01: the gate
+   *  opens and the child walks through). ratio = image height / width.
+   *  arch = how tall the rounded top is, in % of the door box (0 = square).
+   *  shape "round" = a round hatch whose halves slide apart instead of swinging. */
+  gate: { ratio: number; x0: number; x1: number; y0: number; y1: number; arch: number; shape?: "round" };
   letterColor: string;
 };
 
@@ -47,6 +52,7 @@ export const WORLDS: Record<WorldId, WorldDef> = {
     areaSize: 5,
     doorAspect: 300 / 401,
     plaqueY: 47,
+    gate: { ratio: 0.9004, x0: 29.5, x1: 70.5, y0: 34, y1: 99, arch: 0 },
     letterColor: "#3b2a14",
   },
   space: {
@@ -60,6 +66,7 @@ export const WORLDS: Record<WorldId, WorldDef> = {
     areaSize: 5,
     doorAspect: 300 / 330,
     plaqueY: 46,
+    gate: { ratio: 0.832, x0: 21, x1: 79, y0: 29, y1: 89, arch: 0, shape: "round" },
     letterColor: "#1d2350",
   },
   castle: {
@@ -73,6 +80,7 @@ export const WORLDS: Record<WorldId, WorldDef> = {
     areaSize: 5,
     doorAspect: 300 / 457,
     plaqueY: 55,
+    gate: { ratio: 0.8906, x0: 26, x1: 74, y0: 39, y1: 99, arch: 14 },
     letterColor: "#4a2a00",
   },
   ninja: {
@@ -86,6 +94,7 @@ export const WORLDS: Record<WorldId, WorldDef> = {
     areaSize: 5,
     doorAspect: 300 / 399,
     plaqueY: 50,
+    gate: { ratio: 0.7295, x0: 27.5, x1: 72.5, y0: 40, y1: 92, arch: 0 },
     letterColor: "#5a3410",
   },
   stadium: {
@@ -99,6 +108,7 @@ export const WORLDS: Record<WorldId, WorldDef> = {
     areaSize: 5,
     doorAspect: 300 / 504,
     plaqueY: 35,
+    gate: { ratio: 0.8193, x0: 22, x1: 78, y0: 45, y1: 97, arch: 12 },
     letterColor: "#1d4ed8",
   },
   forest: {
@@ -112,6 +122,7 @@ export const WORLDS: Record<WorldId, WorldDef> = {
     areaSize: 5,
     doorAspect: 300 / 402,
     plaqueY: 55,
+    gate: { ratio: 0.8682, x0: 25, x1: 75, y0: 28, y1: 97, arch: 28 },
     letterColor: "#4a2a10",
   },
   city: {
@@ -125,6 +136,7 @@ export const WORLDS: Record<WorldId, WorldDef> = {
     areaSize: 5,
     doorAspect: 300 / 456,
     plaqueY: 71,
+    gate: { ratio: 0.8828, x0: 22, x1: 78, y0: 32, y1: 92, arch: 30 },
     letterColor: "#7a1f5c",
   },
 };

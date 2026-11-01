@@ -96,7 +96,7 @@ function Curtain({ world, open, children, onTap }: { world: WorldDef; open: bool
 }
 
 /* ---------- the trail ---------- */
-type TrailResult = { wrongs: number; gateFirstTry: boolean; stars: number };
+type TrailResult = { wrongs: number; gateFirstTry: boolean; stars: number; portal?: boolean };
 
 function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: {
   word: TrailWord; world: WorldDef; c: WorldCopy; avatar: string | null; doors: number; started: boolean; pic: string | null;
@@ -271,14 +271,29 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
   const tiles = useMemo(() => gateTiles(word.w, word.lang), [word]);
   const [typed, setTyped] = useState<number[]>([]);
   const [reveal, setReveal] = useState(false);
+  /* Spelled right: the doors open, the child walks in, and the next area
+     spreads out from the doorway (Gadi 2026-11-01: "the gate never opens"). */
+  const [gateOpen, setGateOpen] = useState(false);
+  const [entering, setEntering] = useState(false);
+  const [portal, setPortal] = useState<{ x: number; y: number } | null>(null);
+  const wayRef = useRef<HTMLDivElement>(null);
   const check = useCallback((idxs: number[]) => {
     const guess = idxs.map((k) => tiles[k]).join("");
     if (guess === word.w) {
       sfx.magic();
       setPhase("open");
       const g = geoRef.current;
-      setTimeout(() => walkTo(g.gateX + g.gateW * 0.1), 500);
-      setTimeout(() => onDone({ wrongs: wrongs.current, gateFirstTry: gateFirstTry.current, stars }), 1500);
+      setTimeout(() => { setGateOpen(true); sfx.unlock(); }, 350);
+      setTimeout(() => walkTo(g.gateX, () => {
+        setEntering(true);
+        sfx.whoosh();
+        setTimeout(() => {
+          const w = wayRef.current?.getBoundingClientRect();
+          const st = rootRef.current?.getBoundingClientRect();
+          setPortal(w && st ? { x: w.left + w.width / 2 - st.left, y: w.top + w.height / 2 - st.top } : { x: g.W / 2, y: g.H / 2 });
+          setTimeout(() => onDone({ wrongs: wrongs.current, gateFirstTry: gateFirstTry.current, stars, portal: true }), 950);
+        }, 500);
+      }), 1300);
     } else {
       sfx.wrong();
       gateFirstTry.current = false;
@@ -312,6 +327,8 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
   }, [started, phase, forks, fork, tried, tryDoor, tiles, typed, addTile, word.lang]);
 
   const side = rtl ? "right" : "left";
+  const gd = world.gate;
+  const dw = gd.x1 - gd.x0;
   const at = (x: number, w: number) => ({ [side]: `${x - w / 2}px` });
   const bottomOf = (f: number) => `${geo.groundH * f}px`;
   const shown = (i: number) => (phase === "walk" ? i < fork : true);
@@ -357,13 +374,23 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
           </div>
         ) : null}
 
-        <div className={`wt-gate${phase === "open" ? " is-open" : ""}`} style={{ ...at(geo.gateX, geo.gateW), width: geo.gateW, bottom: bottomOf(0.4) }}>
+        <div className={`wt-gate${gateOpen ? " is-open" : ""}${gd.shape === "round" ? " is-round" : ""}`} style={{ ...at(geo.gateX, geo.gateW), width: geo.gateW, bottom: bottomOf(0.4) }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={worldArt(world, "gate")} alt="" draggable={false} />
-          {phase === "open" ? <span className="wt-gate-burst" aria-hidden="true">✨</span> : null}
+          {/* The doorway: what lies beyond, and the two door leaves cut from the
+              same picture, so closed they look exactly like the drawing. */}
+          <div ref={wayRef} className="wt-gate-way" style={{ left: `${gd.x0}%`, top: `${gd.y0}%`, width: `${dw}%`, height: `${gd.y1 - gd.y0}%`, borderRadius: gd.shape === "round" ? "50%" : `50% 50% 0 0 / ${gd.arch}% ${gd.arch}% 0 0` }}>
+            <div className="wt-gate-beyond" style={{ backgroundImage: `url(${worldArt(world, "clearing")})` }} />
+            {[0, 1].map((k) => (
+              <div key={k} className={`wt-gate-leaf ${k ? "is-r" : "is-l"}`}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={worldArt(world, "gate")} alt="" draggable={false} style={{ width: `${10000 / (dw / 2)}%`, left: `${(-(gd.x0 + k * dw / 2) * 100) / (dw / 2)}%`, top: `${(-gd.y0 * 100) / (gd.y1 - gd.y0)}%` }} />
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="wt-avatar" ref={avatarRef} style={{ width: geo.avatarS, height: geo.avatarS, bottom: bottomOf(0.22) }}>
+        <div className={`wt-avatar${entering ? " is-entering" : ""}`} ref={avatarRef} style={{ width: geo.avatarS, height: geo.avatarS, bottom: bottomOf(0.22) }}>
           {avatar ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={avatar} alt="" draggable={false} />
@@ -374,6 +401,8 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
           )}
         </div>
       </div>
+
+      {portal ? <div className="wt-portal" style={{ backgroundImage: `url(${worldArt(world, "clearing")})`, ["--px" as string]: `${portal.x}px`, ["--py" as string]: `${portal.y}px` }} /> : null}
 
       <div className="wt-hud">
         <div className="wt-hud-side">
@@ -559,7 +588,8 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
 
   const finish = useCallback(async (r: TrailResult) => {
     if (!word || (!user && !demo)) return;
-    setCurtainOpen(false);
+    // Through the gate, the new area is already on screen: no curtain.
+    if (!r.portal) setCurtainOpen(false);
     setPhase("closing");
     const ok = r.gateFirstTry && r.wrongs <= 1;
     const total = lettersOf(word.w, word.lang).length;
@@ -578,7 +608,8 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
       }
     } catch { /* the world still opens */ }
     setFresh(key);
-    setTimeout(() => { setPhase("clearing"); setCurtainOpen(true); sfx.whoosh(); }, 900);
+    if (r.portal) { setPhase("clearing"); setCurtainOpen(true); }
+    else setTimeout(() => { setPhase("clearing"); setCurtainOpen(true); sfx.whoosh(); }, 900);
   }, [demo, user, word, pics, wn.title, worldId]);
 
   const next = useCallback(async () => {
@@ -694,9 +725,24 @@ const CSS = `
 .wt-animal{position:absolute;display:grid;justify-items:center;gap:4px;animation:wt-popin .35s cubic-bezier(.2,1.6,.4,1);pointer-events:none;z-index:3}
 .wt-animal img{width:70%}
 .wt-bubble{background:#fff;border-radius:16px;padding:6px 14px;font-weight:800;font-size:22px;box-shadow:0 4px 14px #0003;white-space:nowrap}
-.wt-gate{position:absolute;transition:transform .8s,opacity .8s,filter .8s}
-.wt-gate.is-open{transform:scale(1.1);opacity:0;filter:brightness(1.8)}
-.wt-gate-burst{position:absolute;left:50%;top:40%;font-size:64px;transform:translate(-50%,-50%);animation:wt-burst .9s ease-out}
+.wt-gate{position:absolute}
+.wt-gate-way{position:absolute;overflow:hidden;perspective:700px}
+.wt-gate-beyond{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .3s}
+.wt-gate-beyond::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 60%,#fffbe0 0%,#fff6c055 35%,transparent 70%);animation:wt-glow 1.4s ease-in-out infinite alternate}
+.wt-gate.is-open .wt-gate-beyond{opacity:1}
+.wt-gate-leaf{position:absolute;top:0;bottom:0;width:50%;overflow:hidden;transition:transform 1.1s cubic-bezier(.5,0,.2,1),filter 1.1s}
+.wt-gate-leaf.is-l{left:0;transform-origin:left center}
+.wt-gate-leaf.is-r{right:0;transform-origin:right center}
+.wt-gate .wt-gate-leaf img{position:absolute;max-width:none;height:auto}
+.wt-gate.is-open .wt-gate-leaf{filter:brightness(.7)}
+.wt-gate.is-open .wt-gate-leaf.is-l{transform:rotateY(78deg)}
+.wt-gate.is-open .wt-gate-leaf.is-r{transform:rotateY(-78deg)}
+.wt-gate.is-round.is-open .wt-gate-leaf.is-l{transform:translateX(-100%)}
+.wt-gate.is-round.is-open .wt-gate-leaf.is-r{transform:translateX(100%)}
+@keyframes wt-glow{from{opacity:.55}to{opacity:1}}
+.wt-avatar.is-entering{transition:transform .55s ease-in,opacity .55s ease-in;transform:translateY(-40%) scale(.4);opacity:0}
+.wt-portal{position:absolute;inset:0;z-index:8;background-size:cover;background-position:center;animation:wt-portal .9s cubic-bezier(.6,0,.3,1) forwards}
+@keyframes wt-portal{from{clip-path:circle(0px at var(--px) var(--py))}to{clip-path:circle(150vmax at var(--px) var(--py))}}
 .wt-avatar{position:absolute;border-radius:50%;border:4px solid #fff;background:#fff;box-shadow:0 6px 14px #0004;overflow:hidden;display:grid;place-items:center;font-size:40px;z-index:2}
 .wt-avatar img{width:100%;height:100%;object-fit:cover}
 .wt-avatar.is-walking{animation:wt-bob .32s ease-in-out infinite alternate}
@@ -780,7 +826,7 @@ const CSS = `
 @keyframes wt-up{to{transform:translate(-50%,-260%) scale(1.4);opacity:0}}
 @keyframes wt-popin{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes wt-pop{0%{transform:scale(.4)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
-@keyframes wt-burst{from{transform:translate(-50%,-50%) scale(.3);opacity:1}to{transform:translate(-50%,-50%) scale(3);opacity:0}}
+
 @keyframes wt-slide{from{transform:translateY(100%)}to{transform:translateY(0)}}
 @keyframes wt-drop{0%{transform:translate(-50%,-260%) scale(.4);opacity:0}100%{transform:translate(-50%,-50%) scale(1.25);opacity:1}}
 @media (prefers-reduced-motion:reduce){.wt-root *{animation-duration:.01ms!important;transition-duration:.01ms!important}}
