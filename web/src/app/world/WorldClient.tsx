@@ -34,7 +34,7 @@ import { notifyActivity } from "@/lib/notify-activity-client";
 import { TTSButton } from "@/components/design/TTSButton";
 import { SfxToggle } from "@/components/SfxToggle";
 import { sfx } from "@/lib/game-sfx";
-import { WORLDS, worldArt, type WorldDef, type WorldId } from "@/lib/world/worlds";
+import { DECOR_COST, decorKinds, WORLDS, worldArt, type WorldDef, type WorldId } from "@/lib/world/worlds";
 import { forkLetters, gateTiles, keyMatches, lettersOf, registerAlphabet, spellable, spellForm, RTL_SPELL, type SpellLang } from "@/lib/world/letters";
 import { isBankSpell, readSpellChoice } from "@/lib/world/spell-choice";
 import { Glyph } from "./Glyph";
@@ -45,6 +45,7 @@ import { worldGoal } from "@/lib/world/world-goal-i18n";
 /** native: a word from the world's own bank, any language (results go to /api/world/words). */
 export type TrailWord = { raw: string; w: string; nq?: string; t: string; pic: string; lang: SpellLang; native?: boolean; gift?: { id: string; from: string } };
 /** x, y: where the child put the word in the clearing (% of the meadow), once they have moved one. */
+export type Decor = { id: string; kind: string; at: number; x?: number; y?: number };
 export type WorldItem = { w: string; lang: string; t: string; pic: string | null; at: number; x?: number; y?: number; from?: string };
 type LearnPoolItem = { w: string; t: string; nq?: string; en?: string };
 
@@ -446,7 +447,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
       </div>
 
       {started && phase === "walk" ? <div className="wt-tip">{c.pick}</div> : null}
-      {toast ? <div className="wt-toast">{toast}</div> : null}
+      {toast ? <div className="wt-toast">{toast}<small>{c.starUse}</small></div> : null}
 
       {phase === "gate" ? (
         <div className="wt-gatepanel">
@@ -520,15 +521,18 @@ function nearestFree(p: Pt, placed: Pt[], grid: Pt[], fw: number, fh: number): P
 }
 
 /** visit: a friend's world (Gadi 2026-11-01), read only: their title, no dragging, our own footer. */
-export function Clearing({ world, c, items, fresh, onNext, onBack, ui, onLayout, visit }: {
+export function Clearing({ world, c, items: words, fresh, onNext, onBack, ui, onLayout, visit, bank, onBuy }: {
   world: WorldDef; c: WorldCopy; items: WorldItem[]; fresh: string | null; onNext: () => void; onBack: () => void; ui: string;
   onLayout: (pos: Record<string, Pt>, size: { w: number; h: number }) => void;
   visit?: { title: string; foot: React.ReactNode };
+  /** Stars to spend in this world and the decorations bought (Gadi 2026-11-01). */
+  bank?: { left: number; decor: Decor[] };
+  onBuy?: (kind: string) => Promise<boolean>;
 }) {
   const { user } = useAuth();
   const [pics, setPics] = useState<Record<string, string>>({});
   useEffect(() => {
-    const need = items.filter((x) => !x.pic).map((x) => x.lang === "en" ? x.w : "").filter(Boolean);
+    const need = words.filter((x) => !x.pic).map((x) => x.lang === "en" ? x.w : "").filter(Boolean);
     if (!user || !need.length) return;
     let alive = true;
     (async () => {
@@ -536,8 +540,16 @@ export function Clearing({ world, c, items, fresh, onNext, onBack, ui, onLayout,
       if (alive) setPics(got);
     })();
     return () => { alive = false; };
-  }, [items, user]);
-  const n = items.length;
+  }, [words, user]);
+  // The words, then the decorations: one meadow, laid out and dragged together.
+  const decor = bank?.decor;
+  const items = useMemo(() => [
+    ...words,
+    ...(decor ?? []).map((d): WorldItem => ({ w: d.id, lang: "decor", t: d.kind, pic: worldArt(world, d.kind), at: d.at, x: d.x, y: d.y })),
+  ], [words, decor, world]);
+  const n = words.length;
+  const [shop, setShop] = useState(false);
+  const [buying, setBuying] = useState(false);
   const inArea = n % world.areaSize;
   const newArea = !!fresh && inArea === 0 && n > 0;
   const freshItem = fresh ? items.find((x) => `${x.lang}:${x.w}` === fresh) : null;
@@ -578,14 +590,15 @@ export function Clearing({ world, c, items, fresh, onNext, onBack, ui, onLayout,
   // Drag a word anywhere, with the mouse or a finger (Gadi 2026-11-01).
   type Drag = { k: string; x: number; y: number; ox: number; oy: number; moved: boolean };
   const [drag, setDrag] = useState<Drag | null>(null);
+  // The meadow is the dragged word's parent (no ref read while rendering).
   const local = (e: React.PointerEvent) => {
-    const r = meadowRef.current!.getBoundingClientRect();
+    const r = (e.currentTarget.parentElement as HTMLElement).getBoundingClientRect();
     return { x: e.clientX - r.left, y: e.clientY - r.top };
   };
   const onDown = (e: React.PointerEvent, k: string) => {
     if (visit) return;
     const at = layout[k];
-    if (!at || !meadowRef.current) return;
+    if (!at) return;
     e.preventDefault();
     e.currentTarget.setPointerCapture(e.pointerId);
     const p = local(e);
@@ -628,28 +641,75 @@ export function Clearing({ world, c, items, fresh, onNext, onBack, ui, onLayout,
           return (
             <div
               key={k}
-              className={`wt-friend${isFresh ? " is-fresh" : ""}${isDrag ? " is-drag" : ""}`}
+              className={`wt-friend${x.lang === "decor" ? " is-decor" : ""}${isFresh ? " is-fresh" : ""}${isDrag ? " is-drag" : ""}`}
               style={{ left: at.x, top: at.y, transform: `translate(-50%,-50%) scale(${isDrag ? scale * 1.12 : isFresh ? 1.25 : scale})` }}
               onPointerDown={(e) => onDown(e, k)}
               onPointerMove={onMove}
               onPointerUp={onUp}
               onPointerCancel={onUp}
             >
-              <span className="wt-friend-pic">
-                {src ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={src} alt="" loading="lazy" draggable={false} />
-                ) : <span aria-hidden="true">🌱</span>}
-              </span>
-              <span className="wt-friend-name" dir={RTL_SPELL.has(x.lang) ? "rtl" : "ltr"}>{x.w}</span>
+              {x.lang === "decor" ? (
+                // A decoration: the picture alone, no frame and no name.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={src ?? ""} alt="" draggable={false} />
+              ) : (
+                <>
+                  <span className="wt-friend-pic">
+                    {src ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={src} alt="" loading="lazy" draggable={false} />
+                    ) : <span aria-hidden="true">🌱</span>}
+                  </span>
+                  <span className="wt-friend-name" dir={RTL_SPELL.has(x.lang) ? "rtl" : "ltr"}>{x.w}</span>
+                </>
+              )}
               {x.from ? <span className="wt-friend-gift" title={x.from} aria-hidden="true">🎁</span> : null}
             </div>
           );
         }) : null}
       </div>
+      {shop && bank && onBuy ? (
+        <div className="wt-shop-wrap" onClick={() => setShop(false)}>
+          <div className="wt-shop" role="dialog" aria-label={c.decorTitle} onClick={(e) => e.stopPropagation()}>
+            <strong className="wt-shop-title">{c.decorTitle}</strong>
+            <span className="wt-shop-sub">{c.decorHave.replace("{n}", String(bank.left))} · {c.decorCost.replace("{n}", String(DECOR_COST))}</span>
+            <div className="wt-shop-grid">
+              {decorKinds(world).map((kind) => {
+                const can = bank.left >= DECOR_COST && !buying;
+                return (
+                  <button
+                    key={kind}
+                    type="button"
+                    className="wt-shop-item"
+                    disabled={!can}
+                    onClick={async () => {
+                      setBuying(true);
+                      const ok = await onBuy(kind);
+                      setBuying(false);
+                      if (ok) { sfx.magic(); setShop(false); }
+                    }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={worldArt(world, kind)} alt="" draggable={false} />
+                    <span>⭐ {DECOR_COST}</span>
+                  </button>
+                );
+              })}
+            </div>
+            {bank.left < DECOR_COST ? <p className="wt-shop-need">{c.decorNeed}</p> : null}
+            <button type="button" className="wt-btn is-ghost" onClick={() => setShop(false)}>{c.back}</button>
+          </div>
+        </div>
+      ) : null}
       {visit ? <div className="wt-clearing-foot">{visit.foot}</div> : <div className="wt-clearing-foot">
         {freshItem ? <div className="wt-arrived">{newArea ? c.worlds[world.id].newArea : c.worlds[world.id].arrived(iso(freshItem.w))}</div> : null}
         {!newArea ? <div className="wt-area">{c.toArea(world.areaSize - inArea)}</div> : null}
+        {bank && onBuy ? (
+          <button type="button" className="wt-decor-btn" onClick={() => { sfx.tap(); setShop(true); }}>
+            <span className="wt-decor-stars">⭐ {bank.left}</span>
+            <span>🎨 {c.decorate}</span>
+          </button>
+        ) : null}
         <div className="wt-row">
           <button type="button" className="wt-btn" onClick={onNext}>{c.next}</button>
           <button type="button" className="wt-btn is-ghost" onClick={onBack}>🗺️ {c.mapTitle}</button>
@@ -682,6 +742,7 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
   const [idx, setIdx] = useState(0);
   const [pics, setPics] = useState<Record<string, string>>({});
   const [items, setItems] = useState<WorldItem[]>([]);
+  const [bank, setBank] = useState<{ stars: number; spent: number; decor: Decor[] }>({ stars: 0, spent: 0, decor: [] });
   const [phase, setPhase] = useState<"door" | "intro" | "trail" | "closing" | "clearing">("door");
   const [curtainOpen, setCurtainOpen] = useState(false);
   const [fresh, setFresh] = useState<string | null>(null);
@@ -714,6 +775,8 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
         }
       }
       setItems(w);
+      const ws = (worldRes as { worlds?: Record<string, { stars?: number; spent?: number; decor?: Decor[] }> } | null)?.worlds?.[worldId];
+      setBank({ stars: ws?.stars ?? 0, spent: ws?.spent ?? 0, decor: ws?.decor ?? [] });
       setReads(r);
       setQueue(words);
       setIdx(0);
@@ -765,6 +828,7 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
       else fetch("/api/learn", { method: "POST", headers, body: JSON.stringify({ action: "results", lang: word.lang, results: [{ w: word.raw, ok }] }) }).catch(() => undefined);
       void notifyActivity(user, { kind: "game", label: `${wn.title} · ${word.w}`, score: Math.max(0, total - r.wrongs), total });
       const res = await fetch("/api/world", { method: "POST", headers, body: JSON.stringify({ world: worldId, w: word.w, lang: word.lang, t: word.t, pic, stars: r.stars }) });
+      if (res.ok) setBank((b) => ({ ...b, stars: b.stars + Math.max(0, Math.min(20, r.stars)) }));
       if (res.ok) {
         setItems((cur) => (cur.some((x) => x.w === word.w && x.lang === word.lang) ? cur : [...cur, { w: word.w, lang: word.lang, t: word.t, pic, at: Date.now() }]));
       }
@@ -803,10 +867,31 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
   }, [idx, queue, user, pics, load]);
 
   const exit = () => router.push(href("/world"));
+  // A decoration bought with stars (Gadi 2026-11-01).
+  const buy = useCallback(async (kind: string): Promise<boolean> => {
+    if (demo || !user) {
+      if (bank.stars - bank.spent < DECOR_COST) return false;
+      setBank((b) => ({ ...b, spent: b.spent + DECOR_COST, decor: [...b.decor, { id: Math.random().toString(36).slice(2, 10), kind, at: Date.now() }] }));
+      return true;
+    }
+    try {
+      const r = await fetch("/api/world", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
+        body: JSON.stringify({ action: "buy", world: worldId, kind }),
+      });
+      if (!r.ok) return false;
+      const j = (await r.json()) as { decor: Decor; stars: number; spent: number };
+      setBank((b) => ({ stars: j.stars, spent: j.spent, decor: [...b.decor, j.decor] }));
+      return true;
+    } catch { return false; }
+  }, [demo, user, worldId, bank.stars, bank.spent]);
+
   // The child moved a word in the clearing: keep every word where it stands now.
   const saveLayout = useCallback((pos: Record<string, Pt>, size: { w: number; h: number }) => {
     const pct = (v: number, n: number) => Math.round((v / Math.max(1, n)) * 1000) / 10;
     setItems((cur) => cur.map((x) => { const p = pos[itemKey(x)]; return p ? { ...x, x: pct(p.x, size.w), y: pct(p.y, size.h) } : x; }));
+    setBank((b) => ({ ...b, decor: b.decor.map((d) => { const p = pos[`decor:${d.id}`]; return p ? { ...d, x: pct(p.x, size.w), y: pct(p.y, size.h) } : d; }) }));
     if (demo || !user) return;
     const list = Object.entries(pos).map(([k, p]) => { const i = k.indexOf(":"); return { lang: k.slice(0, i), w: k.slice(i + 1), x: pct(p.x, size.w), y: pct(p.y, size.h) }; });
     void user.getIdToken().then((token) => fetch("/api/world", {
@@ -834,7 +919,7 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
         />
       ) : null}
 
-      {phase === "clearing" ? <Clearing world={world} c={c} items={items} fresh={fresh} onNext={next} onBack={exit} ui={lang} onLayout={saveLayout} /> : null}
+      {phase === "clearing" ? <Clearing world={world} c={c} items={items} fresh={fresh} onNext={next} onBack={exit} ui={lang} onLayout={saveLayout} bank={{ left: Math.max(0, bank.stars - bank.spent), decor: bank.decor }} onBuy={buy} /> : null}
 
       {word && phase === "intro" ? (
         <div className="wt-intro-wrap">
@@ -945,6 +1030,8 @@ export const CSS = `
 .wt-slot.is-reveal{color:#c2410c;border-color:#c2410c}
 .wt-stars{background:#fffe;border-radius:999px;padding:8px 12px;font-weight:800;box-shadow:0 2px 8px #0002;white-space:nowrap}
 .wt-tip,.wt-toast{position:absolute;left:50%;transform:translateX(-50%);background:#fffffff2;border-radius:999px;padding:10px 18px;font-weight:700;font-size:17px;box-shadow:0 4px 14px #0003;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;z-index:4}
+.wt-toast{display:grid;justify-items:center;border-radius:22px;text-align:center}
+.wt-toast small{font-size:13px;font-weight:600;color:#5f6b73;white-space:normal}
 .wt-tip{top:calc(env(safe-area-inset-top,0px) + 66px)}
 .wt-toast{top:calc(env(safe-area-inset-top,0px) + 116px);animation:wt-popin .3s}
 .wt-gatepanel{position:absolute;left:10px;right:10px;top:calc(env(safe-area-inset-top,0px) + 64px);z-index:6;display:grid;gap:10px;justify-items:center;padding:14px 14px 12px;background:#fffffff2;border-radius:24px;box-shadow:0 8px 24px #0003;animation:wt-popin .35s ease-out;max-width:560px;margin-inline:auto}
@@ -993,6 +1080,20 @@ export const CSS = `
 .wt-friend.is-drag .wt-friend-pic{box-shadow:0 14px 28px #0006}
 .wt-friend-pic{width:clamp(58px,15vw,84px);height:clamp(58px,15vw,84px);border-radius:50%;border:4px solid #fff;background:#fff;box-shadow:0 6px 14px #0004;overflow:hidden;display:grid;place-items:center;font-size:32px}
 .wt-friend-pic img{width:100%;height:100%;object-fit:cover}
+.wt-friend.is-decor{display:block}
+.wt-friend.is-decor img{width:clamp(70px,18vw,104px);height:auto;filter:drop-shadow(0 6px 8px #0005);display:block}
+.wt-decor-btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:999px;background:#fff;color:#14202b;font:inherit;font-weight:800;font-size:16px;padding:8px 18px 8px 8px;box-shadow:0 4px 0 #0002,0 6px 14px #0003;cursor:pointer}
+.wt-decor-stars{background:#ffd23f;color:#6b4e00;border-radius:999px;padding:6px 12px}
+.wt-shop-wrap{position:absolute;inset:0;z-index:20;background:#0007;display:grid;align-items:end;justify-items:center}
+.wt-shop{width:min(560px,100%);max-height:80%;overflow:auto;background:#fff;color:#14202b;border-radius:24px 24px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));display:grid;gap:12px;justify-items:center;text-align:center}
+.wt-shop-title{font-size:21px}
+.wt-shop-sub{font-size:14px;color:#5f6b73}
+.wt-shop-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;width:100%}
+.wt-shop-item{display:grid;justify-items:center;gap:4px;padding:10px 6px;border:2px solid #e3ecea;border-radius:18px;background:#f7fbfa;font:inherit;font-weight:800;font-size:14px;cursor:pointer}
+.wt-shop-item img{width:72px;height:72px;object-fit:contain}
+.wt-shop-item:disabled{opacity:.45;cursor:default}
+.wt-shop-item:not(:disabled):active{transform:scale(.96)}
+.wt-shop-need{margin:0;font-size:14px;color:#b45309}
 .wt-friend-gift{position:absolute;top:-6px;inset-inline-end:-6px;font-size:20px;filter:drop-shadow(0 2px 2px #0005)}
 .wt-friend-name{background:#fffe;border-radius:999px;padding:1px 8px;font-weight:800;font-size:13px}
 .wt-friend.is-fresh{z-index:2;animation:wt-drop .8s cubic-bezier(.2,1.5,.4,1)}

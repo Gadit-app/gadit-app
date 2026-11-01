@@ -151,6 +151,12 @@ export const UNLOCK_WORDS = 5;
 /** Bump when the art files change: the service worker caches images by URL forever. */
 export const WORLD_ART_V = 3;
 
+/** Stars a decoration for the clearing costs (Gadi 2026-11-01). */
+export const DECOR_COST = 5;
+
+/** What a child can buy for a world's clearing: its own spots and animals. */
+export const decorKinds = (w: WorldDef): string[] => [...w.spots, ...w.animals];
+
 export function worldArt(w: WorldDef, name: string): string {
   return `${w.dir}/${name}.webp?v=${WORLD_ART_V}`;
 }

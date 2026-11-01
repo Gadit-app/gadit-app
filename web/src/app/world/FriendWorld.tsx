@@ -17,9 +17,9 @@ import { friendsCopy } from "@/lib/world/friends-i18n";
 import { RTL_SPELL } from "@/lib/world/letters";
 import { WaitText } from "@/components/WaitText";
 import { sfx } from "@/lib/game-sfx";
-import { Clearing, CSS, type WorldItem } from "./WorldClient";
+import { Clearing, CSS, type Decor, type WorldItem } from "./WorldClient";
 
-type Visit = { name: string; avatar: string | null; worlds: Record<string, { items: WorldItem[] }> };
+type Visit = { name: string; avatar: string | null; worlds: Record<string, { items: WorldItem[]; decor?: Decor[] }> };
 
 export function FriendWorld({ uid, demo }: { uid: string; demo?: { visit: Visit; mine: WorldItem[] } }) {
   const { user, loading, promptLogin } = useAuth();
@@ -60,7 +60,7 @@ export function FriendWorld({ uid, demo }: { uid: string; demo?: { visit: Visit;
     return () => { alive = false; };
   }, [demo, loading, user, uid, promptLogin, c.mapTitle]);
 
-  const withWords = useMemo(() => WORLD_ORDER.filter((k) => isWorldId(k) && (visit?.worlds[k]?.items?.length ?? 0) > 0) as WorldId[], [visit]);
+  const withWords = useMemo(() => WORLD_ORDER.filter((k) => isWorldId(k) && ((visit?.worlds[k]?.items?.length ?? 0) + (visit?.worlds[k]?.decor?.length ?? 0)) > 0) as WorldId[], [visit]);
   const worldId: WorldId = picked ?? withWords[0] ?? "jungle";
   const items = visit?.worlds[worldId]?.items ?? [];
 
@@ -123,6 +123,7 @@ export function FriendWorld({ uid, demo }: { uid: string; demo?: { visit: Visit;
         ui={lang}
         onLayout={() => undefined}
         visit={{ title: `${WORLD_ICON[worldId]} ${fc.friendWorld(visit.name)}`, foot }}
+        bank={{ left: 0, decor: visit.worlds[worldId]?.decor ?? [] }}
       />
       {picking ? (
         <div className="fw-sheet-wrap" onClick={() => setPicking(false)}>

@@ -44,6 +44,16 @@ export type WorldCopy = {
   noWords: string;
   skip: string;
   foundStar: string;
+  /** Under "you found a star": what stars are for. */
+  starUse: string;
+  /** Clearing: the button that opens the decorations. */
+  decorate: string;
+  decorTitle: string;
+  /** "{n}" = the stars the child has to spend in this world. */
+  decorHave: string;
+  /** "{n}" = the price of one decoration. */
+  decorCost: string;
+  decorNeed: string;
   orType: string;
   /** Above the language choice on the world map. */
   spellIn: string;
@@ -77,6 +87,12 @@ const en: WorldCopy = {
   noWords: "We couldn't find words for the trail. Try again in a moment",
   skip: "Skip",
   foundStar: "You found a star!",
+  starUse: "5 stars buy a decoration for your world",
+  decorate: "Decorate my world",
+  decorTitle: "Decorate your world",
+  decorHave: "You have {n} stars to spend here",
+  decorCost: "{n} stars each",
+  decorNeed: "Find more stars on the trail to buy this",
   orType: "Or type it on the keyboard",
   spellIn: "Which language are we spelling in?",
   mapTitle: "Word Worlds",
@@ -115,6 +131,12 @@ const he: WorldCopy = {
   noWords: "לא מצאנו מילים למסלול. נסו שוב עוד רגע",
   skip: "דילוג",
   foundStar: "מצאתם כוכב!",
+  starUse: "בכל 5 כוכבים קונים קישוט לעולם שלכם",
+  decorate: "לקשט את העולם שלי",
+  decorTitle: "קשטו את העולם שלכם",
+  decorHave: "יש לכם {n} כוכבים לבזבז כאן",
+  decorCost: "{n} כוכבים כל אחד",
+  decorNeed: "אספו עוד כוכבים בשביל כדי לקנות את זה",
   orType: "או הקלידו במקלדת",
   spellIn: "באיזו שפה מאייתים?",
   mapTitle: "עולמות המילים",

@@ -22,7 +22,7 @@ export const dynamic = "force-dynamic";
  */
 
 type WorldItem = { w: string; lang: string; t: string; pic: string | null; at: number; x?: number; y?: number; from?: string };
-type WorldState = { items?: WorldItem[]; stars?: number };
+type WorldState = { items?: WorldItem[]; stars?: number; decor?: Array<{ id: string; kind: string; at: number; x?: number; y?: number }> };
 type Gift = { from: string; fromName: string; fromAvatar: string | null; w: string; lang: string; t: string; pic: string | null; at: number; openedAt?: number };
 
 const DAY = 86_400_000;
@@ -89,10 +89,16 @@ export async function POST(req: NextRequest) {
     const [p, snap] = await Promise.all([profileOf(other), db.collection("users").doc(other).get()]);
     const all = (snap.get("world") as Record<string, WorldState> | undefined) ?? {};
     // Only the words and where they stand: nothing else about the friend.
-    const worlds: Record<string, { items: WorldItem[] }> = {};
+    const worlds: Record<string, { items: WorldItem[]; decor: Array<{ id: string; kind: string; at: number; x?: number; y?: number }> }> = {};
     for (const [k, v] of Object.entries(all)) {
-      if (!isWorldId(k) || !Array.isArray(v.items)) continue;
-      worlds[k] = { items: v.items.map((x) => ({ w: x.w, lang: x.lang, t: x.t, pic: x.pic, at: x.at, x: x.x, y: x.y, from: x.from })) };
+      if (!isWorldId(k)) continue;
+      const items = Array.isArray(v.items) ? v.items : [];
+      const decor = Array.isArray(v.decor) ? v.decor : [];
+      if (!items.length && !decor.length) continue;
+      worlds[k] = {
+        items: items.map((x) => ({ w: x.w, lang: x.lang, t: x.t, pic: x.pic, at: x.at, x: x.x, y: x.y, from: x.from })),
+        decor: decor.map((d) => ({ id: d.id, kind: d.kind, at: d.at, x: d.x, y: d.y })),
+      };
     }
     return NextResponse.json({ name: p.name, avatar: p.avatar, worlds });
   }

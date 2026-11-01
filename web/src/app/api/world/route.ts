@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
-import { isWorldId } from "@/lib/world/worlds";
+import { DECOR_COST, WORLDS, isWorldId } from "@/lib/world/worlds";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,11 +15,17 @@ export const dynamic = "force-dynamic";
  *   GET                                   → { worlds: { jungle: { items, stars } } }
  *   POST { world, w, lang, t, pic, stars } → { ok, items: n, isNew }
  *   POST { action: "layout", world, items: [{ w, lang, x, y }] } → { ok }
- *        where the child dragged the words in the clearing (% of the meadow)
+ *        where the child dragged the words in the clearing (% of the meadow);
+ *        a decoration is { lang: "decor", w: <its id> }
+ *   POST { action: "buy", world, kind } → { ok, decor, stars, spent } | { error: "stars" }
+ *        a decoration for the clearing, DECOR_COST stars (Gadi 2026-11-01:
+ *        "what does a star give me?"). Stars are earned and spent per world.
  */
 
+
 type Item = { w: string; lang: string; t: string; pic: string | null; at: number; x?: number; y?: number };
-type WorldState = { items?: Item[]; stars?: number };
+type Decor = { id: string; kind: string; at: number; x?: number; y?: number };
+type WorldState = { items?: Item[]; stars?: number; spent?: number; decor?: Decor[] };
 
 async function uidOf(req: NextRequest): Promise<string | null> {
   const h = req.headers.get("Authorization") || "";
@@ -57,11 +63,29 @@ export async function POST(req: NextRequest) {
     await getAdminDb().runTransaction(async (tx) => {
       const snap = await tx.get(ref);
       const cur = ((snap.get("world") as Record<string, WorldState> | undefined) ?? {})[world] ?? {};
-      if (!Array.isArray(cur.items)) return;
-      const items = cur.items.map((x) => { const p = pos.get(`${x.lang}:${x.w}`); return p ? { ...x, ...p } : x; });
-      tx.set(ref, { world: { [world]: { items } } }, { merge: true });
+      const items = (cur.items ?? []).map((x) => { const p = pos.get(`${x.lang}:${x.w}`); return p ? { ...x, ...p } : x; });
+      const decor = (cur.decor ?? []).map((d) => { const p = pos.get(`decor:${d.id}`); return p ? { ...d, ...p } : d; });
+      tx.set(ref, { world: { [world]: { items, decor } } }, { merge: true });
     });
     return NextResponse.json({ ok: true });
+  }
+  if (body?.action === "buy") {
+    const kind = str(body.kind, 24);
+    const def = WORLDS[world];
+    if (![...def.spots, ...def.animals].includes(kind)) return NextResponse.json({ error: "unknown_kind" }, { status: 400 });
+    const ref = getAdminDb().collection("users").doc(uid);
+    const out = await getAdminDb().runTransaction(async (tx) => {
+      const snap = await tx.get(ref);
+      const cur = ((snap.get("world") as Record<string, WorldState> | undefined) ?? {})[world] ?? {};
+      const stars = cur.stars ?? 0, spent = cur.spent ?? 0;
+      if (stars - spent < DECOR_COST) return null;
+      const d: Decor = { id: Math.random().toString(36).slice(2, 10), kind, at: Date.now() };
+      const decor = [...(cur.decor ?? []), d].slice(-60);
+      tx.set(ref, { world: { [world]: { decor, spent: spent + DECOR_COST } } }, { merge: true });
+      return { decor: d, stars, spent: spent + DECOR_COST };
+    });
+    if (!out) return NextResponse.json({ error: "stars" }, { status: 402 });
+    return NextResponse.json({ ok: true, ...out });
   }
   const w = str(body?.w, 40);
   const lang = str(body?.lang, 8);
