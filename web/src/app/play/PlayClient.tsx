@@ -3562,7 +3562,7 @@ const FOCUS_GAMES: GameId[] = ["flashcards", "flashdefs", "quiz", "memory", "ana
  *  Add an id here once its picture is in place; others keep their icon. */
 const GAME_COVERS = new Set<GameId>([
   "flashcards", "flashdefs", "quiz", "fillblank", "memory", "anagram", "speed",
-  "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "truefalse",
+  "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "truefalse", "context",
 ]);
 
 /** A pool that is sure to include the focus word: the word first, then
@@ -4243,7 +4243,9 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
       .map((g) => ({ id: g.id, title: g.title, cover: `/play/${g.id}.webp`, build: () => buildDuelFor(g.id) }));
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-        <DuelHub pool={gamePool} lang={lang} dir={dir} onExit={() => setStage({ kind: "menu" })} initialCode={stage.code} preset={stage.preset} games={duelGames} />
+        <WorldStage game="duel">
+          <DuelHub pool={gamePool} lang={lang} dir={dir} onExit={() => setStage({ kind: "menu" })} initialCode={stage.code} preset={stage.preset} games={duelGames} />
+        </WorldStage>
       </div>
     );
   }
@@ -4514,7 +4516,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
                       <li key="duel">
                         <button type="button" className="wb-play-card wb-play-card-duel wb-play-cat-notebook has-cover" onClick={() => setStage({ kind: "duel" })}>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img className="wb-play-card-cover is-mascot" src="/play/duel-mascot.webp" alt="" loading="lazy" width={720} height={480} />
+                          <img className="wb-play-card-cover" src="/play/duel.webp" alt="" loading="lazy" width={720} height={480} />
                           <span className="wb-play-card-text">
                             <span className="wb-play-card-title">{dc.playThisVs}</span>
                             <span className="wb-play-card-desc">{dc.bannerDesc}</span>

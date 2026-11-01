@@ -172,6 +172,42 @@ ${S} .wb-play-countdown-eyebrow { color: #fff; text-shadow: 0 2px 6px #0009; }
 /* lessons: the step bar on a white strip so it reads over the world */
 ${S} .wb-lesson-steps { background: #fffe; border-radius: 999px; padding: 6px 12px; box-shadow: 0 2px 8px #0003; margin: calc(env(safe-area-inset-top, 0px) + 10px) 12px 0; }
 
+/* Word Duel: cards are signs, answers are chunky buttons. The --d-* tokens
+   are forced light here, because the world (not the kid skin) is behind. */
+${S} .duel { --d-surface: #fffdf6; --d-ink: #2b1d0e; --d-soft: #6b4e2a; --d-muted: #8a7458; --d-line: #e8d3a8; --d-line-2: #d9b98a; --d-line-soft: #efe2c4;
+  --d-strong: #0a7472; --d-btn: #0a7472; --d-on-btn: #fff; --d-tint: #d6f2ee; --d-panel: #f6e9c8; --d-good: #1f6b2f; --d-good-bg: #2f9e44; --d-good-line: #2f9e44;
+  --d-bad: #c92a2a; --d-bad-bg: #fa5252; --d-bad-line: #fa5252; --d-warm: #7a4a14; --d-warm-bg: #fff3d6; --d-vs: #e67700; --d-gold: #f59f00;
+  --d-win: #ffe8a3; --d-lose: #dbeafe; --d-tie: #d6f2ee; --d-pass: #f6e9c8; --d-shadow: 0 0 0 3px #5e3a17, 0 14px 30px #0006; color-scheme: light; color: #2b1d0e;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 12px); }
+${S} .duel-top { gap: 10px; }
+${S} .duel-title { display: inline-flex; align-items: center; gap: 6px; background: #fffe; color: #14202b; border-radius: 999px; padding: 6px 16px 6px 8px; font-size: 17px; box-shadow: 0 2px 8px #0003; min-width: 0; }
+${S} .duel-link { background: #fffe; color: #0a7472; border-radius: 999px; padding: 9px 16px; box-shadow: 0 2px 8px #0003; }
+${S} .duel-card { background: linear-gradient(#fdf4dc, #f6e5bd); border: 7px solid #8a5a2b; border-radius: 22px; box-shadow: var(--d-shadow); }
+${S} .duel-final, ${S} .duel-code, ${S} .duel-count { color: #e67700; text-shadow: 0 3px 0 #ffd8a8; }
+${S} .duel-btn { box-shadow: 0 4px 0 #075452, 0 8px 16px #0004; font-size: 17px; }
+${S} .duel-btn.is-soft { background: #fff; color: #0a7472; box-shadow: 0 0 0 2px #0a7472 inset, 0 6px 14px #0003; }
+${S} .duel-mode, ${S} .duel-game { background: #fff; border: 3px solid #0a7472; box-shadow: 0 4px 0 #075452, 0 8px 14px #0003; }
+${S} .duel-mode:nth-child(4n+2) { border-color: #f08c00; box-shadow: 0 4px 0 #b86a00, 0 8px 14px #0003; }
+${S} .duel-mode:nth-child(4n+3) { border-color: #7048e8; box-shadow: 0 4px 0 #5332b8, 0 8px 14px #0003; }
+${S} .duel-mode:nth-child(4n+4) { border-color: #e64980; box-shadow: 0 4px 0 #b02d5e, 0 8px 14px #0003; }
+${S} .duel-opt { --c: #0a7472; --d: #075452; background: #fff; border: 3px solid var(--c); border-radius: 18px; color: #14202b; font-weight: 800; box-shadow: 0 5px 0 var(--d), 0 9px 16px #0003; }
+${S} .duel-opt:nth-child(4n+2) { --c: #f08c00; --d: #b86a00; }
+${S} .duel-opt:nth-child(4n+3) { --c: #7048e8; --d: #5332b8; }
+${S} .duel-opt:nth-child(4n+4) { --c: #e64980; --d: #b02d5e; }
+${S} .duel-opt:hover:not(:disabled):not([aria-disabled="true"]) { border-color: var(--c); transform: translateY(-1px); }
+${S} .duel-opt:active:not(:disabled):not([aria-disabled="true"]) { transform: translateY(4px); box-shadow: 0 1px 0 var(--d), 0 3px 8px #0003; }
+${S} .duel-opt.is-picked { background: #fff3d6; }
+${S} .duel-opt.is-right { background: #2f9e44; border-color: #2f9e44; color: #fff; box-shadow: 0 5px 0 #1f6b2f, 0 9px 16px #0003; }
+${S} .duel-opt.is-wrong { background: #fa5252; border-color: #fa5252; color: #fff; box-shadow: 0 5px 0 #c92a2a, 0 9px 16px #0003; }
+${S} .duel-chip, ${S} .duel-end-player { background: #fff; box-shadow: 0 3px 0 #d9b98a; }
+${S} .duel-chip.is-me, ${S} .duel-end-player.is-me { background: #d6f2ee; }
+@media (max-width: 480px) { ${S} .duel-chip { flex-wrap: wrap; justify-content: center; gap: 4px 8px; padding: 8px; } ${S} .duel-chip .duel-score { flex-basis: 100%; text-align: center; } ${S} .duel-chip .duel-face { width: 32px; height: 32px; font-size: 15px; } }
+${S} .duel-pass { background: linear-gradient(#fdf4dc, #f6e5bd); border: 7px solid #8a5a2b; box-shadow: var(--d-shadow); }
+${S} .duel-timer { background: #fff; box-shadow: inset 0 0 0 2px #e8d3a8; height: 12px; }
+${S} .duel-timer span { background: linear-gradient(90deg, #ffd23f, #f08c00); }
+${S} .duel-input, ${S} .duel-names input { background: #fff; color: #14202b; }
+${S} .duel-rtable-wrap { background: #fffdf6; }
+
 /* the avatar stands on the ground and reacts */
 ${S} .wst-avatar { position: absolute; z-index: 2; inset-inline-start: 14px; bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); width: clamp(64px, 18vw, 92px); aspect-ratio: 1; border-radius: 50%; border: 4px solid #fff; background: #fff; box-shadow: 0 6px 14px #0004; overflow: hidden; display: grid; place-items: center; font-size: 40px; pointer-events: none; }
 ${S} .wst-avatar img { width: 100%; height: 100%; object-fit: cover; }
