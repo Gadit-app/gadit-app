@@ -5,6 +5,7 @@ import { internalUids } from "./internal-accounts";
 import { INDIVIDUAL_PRICE_IDS } from "./individual-prices";
 import { NEW_SCHOOLS_PRICE_IDS } from "./schools-prices";
 import { applyDiscounts, subHasCard } from "./admin-revenue";
+import type { ActivationKey } from "./email-drip/activation-content";
 
 /**
  * Subscriber health (Gadi 2026-10-21): every paying or trialing subscriber,
@@ -68,6 +69,14 @@ export type HealthRow = {
   signupMs: number | null;
   signupDays: number | null;
   stripeCustomerId: string | null;
+  /** The language their emails go out in (activationLang). */
+  lang: string;
+  /** Unsubscribed from emails: nothing can be sent. */
+  suppressed: boolean;
+  /** Every nudge sent so far, newest first ({ key, at ISO }). */
+  nudges: { key: string; at: string }[];
+  /** The message that fits them now (Gadi 2026-11-01), null when active. */
+  recommended: ActivationKey | null;
 };
 
 export type HealthSegmentSummary = {
@@ -181,6 +190,21 @@ async function listLiveSubs(stripe: Stripe): Promise<Stripe.Subscription[]> {
     }),
   );
   return out;
+}
+
+/** The message that fits a subscriber now (Gadi 2026-11-01). Active people
+ *  get none. A Family with no child: add a child. Never used at all: the
+ *  first-word email, then the "one word, five minutes" one. Everyone else
+ *  quiet: the return email. */
+export function recommendNudge(r: { segment: HealthSegment; status: string; isFamily: boolean; kids: number; nudges: { key: string }[] }): ActivationKey | null {
+  if (r.segment === "A") return null;
+  const sent = new Set(r.nudges.map((n) => n.key));
+  if (r.isFamily && r.kids === 0) return "act-add-child";
+  if (r.segment === "D") {
+    const first: ActivationKey = r.isFamily ? "act-first-word-family" : "act-first-word-indiv";
+    return sent.has(first) ? "act-first-word-2" : first;
+  }
+  return r.isFamily ? "act-return-family" : "act-return-indiv";
 }
 
 export async function buildHealthReport(db: Firestore, auth: Auth, stripe: Stripe): Promise<HealthReport> {
@@ -422,6 +446,19 @@ export async function buildHealthReport(db: Firestore, auth: Auth, stripe: Strip
       cust?.name ||
       null;
     const signupMs = a?.createdMs ?? toMs(d.createdAt);
+
+    // Nudges already sent: the history list, plus the older one-per-key ledger.
+    const nudges: { key: string; at: string }[] = [];
+    const hist = Array.isArray(d.activationHistory) ? (d.activationHistory as unknown[]) : [];
+    for (const h of hist) {
+      const x = h as { key?: unknown; at?: unknown };
+      if (typeof x.key === "string" && typeof x.at === "string") nudges.push({ key: x.key, at: x.at });
+    }
+    for (const [key, at] of Object.entries((d.activationSent as Record<string, unknown> | undefined) ?? {})) {
+      if (typeof at === "string" && !nudges.some((n) => n.key === key && n.at === at)) nudges.push({ key, at });
+    }
+    nudges.sort((x, y) => (x.at < y.at ? 1 : -1));
+    const isFamily = !!d.familyId;
     const status = s?.status ?? (typeof d.subscriptionStatus === "string" ? d.subscriptionStatus : "unknown");
 
     return {
@@ -454,6 +491,10 @@ export async function buildHealthReport(db: Firestore, auth: Auth, stripe: Strip
       signupMs,
       signupDays: signupMs != null ? Math.max(0, Math.floor((now - signupMs) / DAY)) : null,
       stripeCustomerId: typeof d.stripeCustomerId === "string" ? d.stripeCustomerId : cust?.id ?? null,
+      lang: typeof d.uiLang === "string" && d.uiLang ? d.uiLang : d.dripLang === "he" || d.country === "IL" ? "he" : "en",
+      suppressed: d.emailSuppressed === true,
+      nudges,
+      recommended: recommendNudge({ segment, status, isFamily, kids, nudges }),
     };
   });
 

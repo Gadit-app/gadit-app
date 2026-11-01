@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { useAdminContext, type AdminLang } from "../admin-context";
 
 /**
@@ -43,7 +43,41 @@ type Row = {
   signupMs: number | null;
   signupDays: number | null;
   stripeCustomerId: string | null;
+  lang: string;
+  suppressed: boolean;
+  nudges: { key: string; at: string }[];
+  recommended: NudgeKey | null;
 };
+
+type NudgeKey = "act-first-word-family" | "act-first-word-indiv" | "act-first-word-2" | "act-add-child" | "act-return-family" | "act-return-indiv";
+const NUDGE_KEYS: NudgeKey[] = ["act-return-family", "act-return-indiv", "act-add-child", "act-first-word-family", "act-first-word-indiv", "act-first-word-2"];
+const NUDGE_LABEL: Record<AdminLang, Record<string, string>> = {
+  he: {
+    "act-return-family": "חזרה לשימוש · Family",
+    "act-return-indiv": "חזרה לשימוש · Individual",
+    "act-add-child": "להוסיף ילד",
+    "act-first-word-family": "המילה הראשונה · Family",
+    "act-first-word-indiv": "המילה הראשונה · Individual",
+    "act-first-word-2": "המילה הראשונה, שוב",
+    custom: "הודעה אישית",
+  },
+  en: {
+    "act-return-family": "Come back · Family",
+    "act-return-indiv": "Come back · Individual",
+    "act-add-child": "Add a child",
+    "act-first-word-family": "First word · Family",
+    "act-first-word-indiv": "First word · Individual",
+    "act-first-word-2": "First word, again",
+    custom: "Personal message",
+  },
+};
+/** Most inactive first: never used, dormant, fading, active; then days since use. */
+const SEG_ORDER: Record<Segment, number> = { D: 0, C: 1, B: 2, A: 3 };
+const byInactivity = (a: Row, b: Row) =>
+  SEG_ORDER[a.segment] - SEG_ORDER[b.segment] ||
+  (b.daysSinceUse ?? 1e9) - (a.daysSinceUse ?? 1e9) ||
+  a.c30 - b.c30 ||
+  a.c7 - b.c7;
 
 type SegSummary = { count: number; paying: number; trialing: number; payingMonthlyUsd: number; trialMonthlyUsd: number; share: number };
 
@@ -113,6 +147,35 @@ const STRINGS = {
     yearly: "year",
     empty: "No subscribers in this segment",
     sortHint: "Sort by next charge",
+    sortRisk: "Least active first",
+    sortCharge: "By next charge",
+    colMsg: "Message",
+    noNeed: "Active, no message needed",
+    lastSent: (k: string, d: string) => `Last sent: ${k} · ${d}`,
+    sentTimes: (n: number) => `${n} sent so far`,
+    noEmail: "No email address",
+    unsub: "Unsubscribed",
+    preview: "Preview",
+    sendNow: "Send now",
+    sending: "Sending…",
+    sentOk: "Sent",
+    failed: "Failed",
+    selected: (n: number) => `${n} selected`,
+    selectQuiet: "Select everyone who is not active",
+    clearSel: "Clear",
+    whichMsg: "Message",
+    autoMsg: "The recommended message for each one",
+    sendSelected: "Send to selected",
+    confirm: (n: number, m: string) => `Send "${m}" to ${n} subscribers now?`,
+    yesSend: "Yes, send",
+    cancel: "Cancel",
+    customSubject: "Subject",
+    customBody: "Message ({name} = first name)",
+    customCta: "Button text",
+    customHint: "Hebrew text goes out right to left. The button opens Gadit in the person's language.",
+    done: (ok: number, skip: number, fail: number) => `Sent ${ok}${skip ? ` · skipped ${skip}` : ""}${fail ? ` · failed ${fail}` : ""}`,
+    close: "Close",
+    groupHead: { D: "Never used, start here", C: "Dormant, 30+ days", B: "Fading, 8 to 30 days", A: "Active" } as Record<Segment, string>,
   },
   he: {
     title: "בריאות מנויים",
@@ -160,6 +223,35 @@ const STRINGS = {
     yearly: "שנה",
     empty: "אין מנויים בקבוצה הזו",
     sortHint: "מיון לפי חיוב הבא",
+    sortRisk: "הכי לא פעילים קודם",
+    sortCharge: "לפי חיוב הבא",
+    colMsg: "הודעה",
+    noNeed: "פעילים, אין צורך בהודעה",
+    lastSent: (k: string, d: string) => `נשלח לאחרונה: ${k} · ${d}`,
+    sentTimes: (n: number) => `${n} הודעות עד היום`,
+    noEmail: "אין כתובת מייל",
+    unsub: "ביטלו קבלת מיילים",
+    preview: "תצוגה",
+    sendNow: "לשלוח עכשיו",
+    sending: "שולח…",
+    sentOk: "נשלח",
+    failed: "נכשל",
+    selected: (n: number) => `${n} נבחרו`,
+    selectQuiet: "לבחור את כל מי שלא פעיל",
+    clearSel: "ניקוי",
+    whichMsg: "הודעה",
+    autoMsg: "ההודעה המומלצת לכל אחד",
+    sendSelected: "לשלוח לנבחרים",
+    confirm: (n: number, m: string) => `לשלוח "${m}" ל-${n} מנויים עכשיו?`,
+    yesSend: "כן, לשלוח",
+    cancel: "ביטול",
+    customSubject: "נושא",
+    customBody: "ההודעה ({שם} = השם הפרטי)",
+    customCta: "טקסט הכפתור",
+    customHint: "הודעה בעברית יוצאת מימין לשמאל. הכפתור פותח את Gadit בשפה של המנוי.",
+    done: (ok: number, skip: number, fail: number) => `נשלחו ${ok}${skip ? ` · דולגו ${skip}` : ""}${fail ? ` · נכשלו ${fail}` : ""}`,
+    close: "סגירה",
+    groupHead: { D: "אף פעם לא השתמשו, להתחיל כאן", C: "רדומים, 30 ימים ומעלה", B: "דועכים, 8 עד 30 ימים", A: "פעילים" } as Record<Segment, string>,
   },
 } as const;
 
@@ -196,6 +288,15 @@ export default function AdminHealthClient() {
   const [error, setError] = useState<string | null>(null);
   const [tab, setTab] = useState<Segment | "all">("all");
   const [sortAsc, setSortAsc] = useState(true);
+  const [sortMode, setSortMode] = useState<"risk" | "charge">("risk");
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [rowState, setRowState] = useState<Record<string, "sending" | "sent" | "failed">>({});
+  const [extraNudges, setExtraNudges] = useState<Record<string, { key: string; at: string }[]>>({});
+  const [choice, setChoice] = useState<"auto" | NudgeKey | "custom">("auto");
+  const [custom, setCustom] = useState({ subject: "", body: "", cta: "" });
+  const [pending, setPending] = useState<{ rows: Row[]; bulk: boolean } | null>(null);
+  const [preview, setPreview] = useState<{ email: string; subject: string; html: string } | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   // setState only inside the promise callbacks, so the first load can run
   // from the effect without a synchronous render cascade.
@@ -232,6 +333,7 @@ export default function AdminHealthClient() {
   const rows = useMemo(() => {
     if (!data) return [];
     const list = tab === "all" ? data.rows.slice() : data.rows.filter((r) => r.segment === tab);
+    if (sortMode === "risk") return list.sort(byInactivity);
     const key = (r: Row) => r.nextChargeMs ?? r.endsMs;
     list.sort((a, b) => {
       const ka = key(a), kb = key(b);
@@ -241,7 +343,63 @@ export default function AdminHealthClient() {
       return sortAsc ? ka - kb : kb - ka;
     });
     return list;
-  }, [data, tab, sortAsc]);
+  }, [data, tab, sortAsc, sortMode]);
+
+  const nudgesOf = (r: Row) => [...(extraNudges[r.uid] ?? []), ...r.nudges];
+  const keyFor = (r: Row, c: "auto" | NudgeKey | "custom"): string | null => (c === "auto" ? r.recommended : c);
+  const sendable = (r: Row) => !!r.email && !r.suppressed;
+
+  const api = (body: object) =>
+    fetch(`/api/admin/activation-send?secret=${encodeURIComponent(secret)}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      .then((r) => r.json() as Promise<{ ok?: boolean; error?: string; preview?: { email: string; subject: string; html: string }; results?: { email: string; status: string; key?: string }[] }>);
+
+  const customBody = () => ({ custom: { subject: custom.subject, body: custom.body, cta: custom.cta } });
+  const customReady = custom.subject.trim() !== "" && custom.body.trim() !== "";
+
+  const showPreview = (r: Row, c: "auto" | NudgeKey | "custom") => {
+    const k = keyFor(r, c);
+    if (!k || !r.email) return;
+    if (k === "custom" && !customReady) return;
+    api({ emails: [r.email], preview: true, ...(k === "custom" ? customBody() : { key: k }) })
+      .then((j) => { if (j.preview) setPreview(j.preview); else setNotice(j.error ?? "error"); })
+      .catch((e) => setNotice(String(e)));
+  };
+
+  /** Send now: one request per message type, resend allowed (Gadi decides). */
+  const doSend = async (list: Row[], c: "auto" | NudgeKey | "custom") => {
+    setPending(null);
+    const groups = new Map<string, Row[]>();
+    for (const r of list) {
+      const k = keyFor(r, c);
+      if (!k || !sendable(r)) continue;
+      if (!groups.has(k)) groups.set(k, []);
+      groups.get(k)!.push(r);
+    }
+    let ok = 0, skip = list.length, fail = 0;
+    for (const [k, rs] of groups) {
+      setRowState((m) => ({ ...m, ...Object.fromEntries(rs.map((r) => [r.uid, "sending" as const])) }));
+      try {
+        const j = await api({ emails: rs.map((r) => r.email), send: true, force: true, ...(k === "custom" ? customBody() : { key: k }) });
+        const at = new Date().toISOString();
+        for (const r of rs) {
+          const res = j.results?.find((x) => x.email === r.email!.toLowerCase());
+          const good = res?.status === "sent";
+          skip -= 1;
+          if (good) ok += 1; else fail += 1;
+          setRowState((m) => ({ ...m, [r.uid]: good ? "sent" : "failed" }));
+          if (good) setExtraNudges((m) => ({ ...m, [r.uid]: [{ key: k, at }, ...(m[r.uid] ?? [])] }));
+        }
+      } catch {
+        fail += rs.length; skip -= rs.length;
+        setRowState((m) => ({ ...m, ...Object.fromEntries(rs.map((r) => [r.uid, "failed" as const])) }));
+      }
+    }
+    setSelected(new Set());
+    setNotice(t.done(ok, skip, fail));
+  };
+
+  const toggle = (uid: string) => setSelected((s) => { const n = new Set(s); if (n.has(uid)) n.delete(uid); else n.add(uid); return n; });
+  const choiceLabel = (c: "auto" | NudgeKey | "custom") => (c === "auto" ? t.autoMsg : NUDGE_LABEL[lang][c]);
 
   return (
     <>
@@ -336,6 +494,61 @@ export default function AdminHealthClient() {
                 );
               })}
             </nav>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 12 }}>
+              {(["risk", "charge"] as const).map((m) => (
+                <button key={m} type="button" onClick={() => setSortMode(m)} style={{ ...pillStyle, ...(sortMode === m ? pillOn : {}) }}>
+                  {m === "risk" ? t.sortRisk : t.sortCharge}
+                </button>
+              ))}
+              <span style={{ flex: 1 }} />
+              <button type="button" onClick={() => setSelected(new Set(rows.filter((r) => r.segment !== "A" && sendable(r)).map((r) => r.uid)))} style={pillStyle}>{t.selectQuiet}</button>
+            </div>
+
+            {/* Bulk send bar */}
+            <div style={{ background: "#F8FAFC", border: "1px solid #E5E7EB", borderRadius: 10, padding: 12, marginBottom: 12, display: "flex", flexDirection: "column", gap: 10 }}>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+                <strong style={{ fontSize: 13, color: "#111827" }}>{t.selected(selected.size)}</strong>
+                {selected.size > 0 && <button type="button" onClick={() => setSelected(new Set())} style={{ ...pillStyle, padding: "4px 10px" }}>{t.clearSel}</button>}
+                <label style={{ fontSize: 13, color: "#374151", display: "inline-flex", gap: 6, alignItems: "center" }}>
+                  {t.whichMsg}
+                  <select value={choice} onChange={(e) => setChoice(e.target.value as typeof choice)} style={{ padding: "6px 8px", borderRadius: 8, border: "1px solid #D1D5DB", fontFamily: "inherit", fontSize: 13 }}>
+                    <option value="auto">{t.autoMsg}</option>
+                    {NUDGE_KEYS.map((k) => <option key={k} value={k}>{NUDGE_LABEL[lang][k]}</option>)}
+                    <option value="custom">{NUDGE_LABEL[lang].custom}</option>
+                  </select>
+                </label>
+                <button
+                  type="button"
+                  disabled={selected.size === 0 || (choice === "custom" && !customReady)}
+                  onClick={() => setPending({ rows: data.rows.filter((r) => selected.has(r.uid)), bulk: true })}
+                  style={{ ...sendBtn, opacity: selected.size === 0 || (choice === "custom" && !customReady) ? 0.45 : 1 }}
+                >
+                  {t.sendSelected}
+                </button>
+              </div>
+              {choice === "custom" && (
+                <div style={{ display: "grid", gap: 8 }}>
+                  <input dir="auto" placeholder={t.customSubject} value={custom.subject} onChange={(e) => setCustom({ ...custom, subject: e.target.value })} style={inputStyle} />
+                  <textarea dir="auto" placeholder={t.customBody} rows={6} value={custom.body} onChange={(e) => setCustom({ ...custom, body: e.target.value })} style={{ ...inputStyle, resize: "vertical", lineHeight: 1.5 }} />
+                  <input dir="auto" placeholder={t.customCta} value={custom.cta} onChange={(e) => setCustom({ ...custom, cta: e.target.value })} style={inputStyle} />
+                  <div style={{ fontSize: 12, color: "#6B7280" }}>{t.customHint}</div>
+                </div>
+              )}
+              {pending?.bulk && (
+                <div style={{ background: "#FFFBEB", border: "1px solid #F59E0B", borderRadius: 8, padding: 10, display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+                  <span style={{ fontSize: 13.5, fontWeight: 600, color: "#92400E" }}>{t.confirm(pending.rows.filter((r) => sendable(r) && keyFor(r, choice)).length, choiceLabel(choice))}</span>
+                  <button type="button" onClick={() => doSend(pending.rows, choice)} style={sendBtn}>{t.yesSend}</button>
+                  <button type="button" onClick={() => setPending(null)} style={pillStyle}>{t.cancel}</button>
+                </div>
+              )}
+              {notice && (
+                <div style={{ fontSize: 13, color: "#0F6F6C", fontWeight: 600, display: "flex", gap: 8, alignItems: "center" }}>
+                  {notice}
+                  <button type="button" onClick={() => setNotice(null)} style={{ ...pillStyle, padding: "2px 8px", fontSize: 12 }}>{t.close}</button>
+                </div>
+              )}
+            </div>
+
             {rows.length === 0 ? (
               <div style={{ color: "#9CA3AF", fontSize: 13, padding: "12px 0" }}>{t.empty}</div>
             ) : (
@@ -343,7 +556,16 @@ export default function AdminHealthClient() {
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                   <thead>
                     <tr style={{ borderBottom: "1px solid #E5E7EB" }}>
+                      <Th>
+                        <input
+                          type="checkbox"
+                          aria-label="all"
+                          checked={rows.length > 0 && rows.every((r) => !sendable(r) || selected.has(r.uid))}
+                          onChange={(e) => setSelected(e.target.checked ? new Set(rows.filter(sendable).map((r) => r.uid)) : new Set())}
+                        />
+                      </Th>
                       <Th>{t.colUser}</Th>
+                      <Th>{t.colMsg}</Th>
                       <Th>{t.colPlan}</Th>
                       <Th>{t.colStatus}</Th>
                       <Th center>{t.colKids}</Th>
@@ -361,7 +583,33 @@ export default function AdminHealthClient() {
                     </tr>
                   </thead>
                   <tbody>
-                    {rows.map((r) => <HealthTableRow key={r.uid} r={r} t={t} now={now} />)}
+                    {rows.map((r, i) => (
+                      <Fragment key={r.uid}>
+                        {sortMode === "risk" && (i === 0 || rows[i - 1].segment !== r.segment) && (
+                          <tr>
+                            <td colSpan={12} style={{ padding: "14px 12px 6px", fontSize: 13, fontWeight: 700, color: SEG_COLOR[r.segment].fg, background: SEG_COLOR[r.segment].bg }}>
+                              {t.groupHead[r.segment]} · {rows.filter((x) => x.segment === r.segment).length}
+                            </td>
+                          </tr>
+                        )}
+                        <HealthTableRow
+                          r={r}
+                          t={t}
+                          now={now}
+                          lang={lang}
+                          checked={selected.has(r.uid)}
+                          onCheck={() => toggle(r.uid)}
+                          nudges={nudgesOf(r)}
+                          state={rowState[r.uid]}
+                          canSend={sendable(r)}
+                          onPreview={() => showPreview(r, "auto")}
+                          onSend={() => setPending({ rows: [r], bulk: false })}
+                          pending={!!pending && !pending.bulk && pending.rows[0]?.uid === r.uid}
+                          onConfirm={() => doSend([r], "auto")}
+                          onCancel={() => setPending(null)}
+                        />
+                      </Fragment>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -369,11 +617,36 @@ export default function AdminHealthClient() {
           </div>
         </>
       )}
+
+      {preview && (
+        <div role="dialog" onClick={() => setPreview(null)} style={{ position: "fixed", inset: 0, background: "rgba(17,24,39,.55)", zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 14, width: "min(680px, 100%)", maxHeight: "90vh", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+            <div style={{ padding: "12px 16px", borderBottom: "1px solid #E5E7EB", display: "flex", gap: 10, alignItems: "center" }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 700, color: "#111827", unicodeBidi: "plaintext" }}>{preview.subject}</div>
+                <div style={{ fontSize: 12, color: "#6B7280", direction: "ltr", textAlign: "start" }}>{preview.email}</div>
+              </div>
+              <button type="button" onClick={() => setPreview(null)} style={pillStyle}>{t.close}</button>
+            </div>
+            <iframe title="preview" srcDoc={preview.html} sandbox="" style={{ border: 0, width: "100%", height: "70vh" }} />
+          </div>
+        </div>
+      )}
     </>
   );
 }
 
-function HealthTableRow({ r, t, now }: { r: Row; t: T; now: number }) {
+type RowProps = {
+  r: Row; t: T; now: number; lang: AdminLang;
+  checked: boolean; onCheck: () => void;
+  nudges: { key: string; at: string }[];
+  state?: "sending" | "sent" | "failed";
+  canSend: boolean;
+  onPreview: () => void; onSend: () => void;
+  pending: boolean; onConfirm: () => void; onCancel: () => void;
+};
+
+function HealthTableRow({ r, t, now, lang, checked, onCheck, nudges, state, canSend, onPreview, onSend, pending, onConfirm, onCancel }: RowProps) {
   const seg = SEG_COLOR[r.segment];
   const kb = KIND_BADGE[r.kind];
   const statusColor = r.status === "past_due" ? "#DC2626" : r.status === "trialing" ? "#0891B2" : "#0E7490";
@@ -381,10 +654,46 @@ function HealthTableRow({ r, t, now }: { r: Row; t: T; now: number }) {
   const center: React.CSSProperties = { ...cell, textAlign: "center" };
   const when = r.nextChargeMs ?? r.endsMs;
   return (
-    <tr style={{ borderBottom: "1px solid #F3F4F6" }}>
+    <tr style={{ borderBottom: "1px solid #F3F4F6", background: checked ? "#F0FDFA" : undefined }}>
       <td style={{ ...cell, borderInlineStart: `3px solid ${seg.bar}` }}>
+        <input type="checkbox" checked={checked} disabled={!canSend} onChange={onCheck} aria-label={r.email ?? r.uid} />
+      </td>
+      <td style={cell}>
         <div style={{ color: "#111827", fontWeight: 600, direction: "ltr", textAlign: "start", unicodeBidi: "plaintext" }}>{r.email ?? r.uid}</div>
         {r.name && <div style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>{r.name}</div>}
+        <div style={{ fontSize: 11, color: "#9CA3AF", marginTop: 2 }}>{r.lang.toUpperCase()}</div>
+      </td>
+      <td style={{ ...cell, minWidth: 220 }}>
+        {r.recommended ? (
+          <div style={{ fontWeight: 700, color: "#111827", fontSize: 12.5 }}>{NUDGE_LABEL[lang][r.recommended]}</div>
+        ) : (
+          <div style={{ color: "#9CA3AF", fontSize: 12 }}>{t.noNeed}</div>
+        )}
+        {nudges[0] && (
+          <div style={{ fontSize: 11.5, color: "#6B7280", marginTop: 3 }}>
+            {t.lastSent(NUDGE_LABEL[lang][nudges[0].key] ?? nudges[0].key, fmtDate(Date.parse(nudges[0].at)))}
+            {nudges.length > 1 ? ` · ${t.sentTimes(nudges.length)}` : ""}
+          </div>
+        )}
+        {!r.email && <div style={{ fontSize: 11.5, color: "#DC2626", marginTop: 3 }}>{t.noEmail}</div>}
+        {r.suppressed && <div style={{ fontSize: 11.5, color: "#DC2626", marginTop: 3 }}>{t.unsub}</div>}
+        {r.recommended && canSend && (
+          pending ? (
+            <div style={{ display: "flex", gap: 6, marginTop: 6, flexWrap: "wrap" }}>
+              <button type="button" onClick={onConfirm} style={{ ...sendBtn, padding: "4px 10px", fontSize: 12 }}>{t.yesSend}</button>
+              <button type="button" onClick={onCancel} style={{ ...pillStyle, padding: "4px 10px", fontSize: 12 }}>{t.cancel}</button>
+            </div>
+          ) : (
+            <div style={{ display: "flex", gap: 6, marginTop: 6, flexWrap: "wrap", alignItems: "center" }}>
+              <button type="button" onClick={onPreview} style={{ ...pillStyle, padding: "4px 10px", fontSize: 12 }}>{t.preview}</button>
+              <button type="button" onClick={onSend} disabled={state === "sending"} style={{ ...sendBtn, padding: "4px 10px", fontSize: 12 }}>
+                {state === "sending" ? t.sending : t.sendNow}
+              </button>
+              {state === "sent" && <span style={{ fontSize: 12, fontWeight: 700, color: "#166534" }}>{t.sentOk}</span>}
+              {state === "failed" && <span style={{ fontSize: 12, fontWeight: 700, color: "#DC2626" }}>{t.failed}</span>}
+            </div>
+          )
+        )}
       </td>
       <td style={cell}>
         <span style={{ background: kb.bg, color: kb.fg, padding: "2px 8px", borderRadius: 4, fontSize: 11, fontWeight: 600, whiteSpace: "nowrap" }}>{t.kind[r.kind]}</span>
@@ -502,6 +811,11 @@ function IconSort({ asc }: { asc: boolean }) {
     </svg>
   );
 }
+
+const pillStyle: React.CSSProperties = { padding: "6px 12px", borderRadius: 999, border: "1px solid #D1D5DB", background: "#fff", color: "#374151", fontWeight: 600, fontSize: 13, cursor: "pointer", fontFamily: "inherit" };
+const pillOn: React.CSSProperties = { background: "#0F6F6C", borderColor: "#0F6F6C", color: "#fff" };
+const sendBtn: React.CSSProperties = { padding: "7px 14px", borderRadius: 8, border: "none", background: "#0F6F6C", color: "#fff", fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "inherit" };
+const inputStyle: React.CSSProperties = { padding: "8px 10px", borderRadius: 8, border: "1px solid #D1D5DB", fontFamily: "inherit", fontSize: 13.5, width: "100%", boxSizing: "border-box", unicodeBidi: "plaintext" };
 
 const cardStyle: React.CSSProperties = {
   background: "white",
