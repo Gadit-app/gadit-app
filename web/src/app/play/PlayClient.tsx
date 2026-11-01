@@ -4437,12 +4437,15 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
             doesn't have 4+ words; the other three categories are
             curated-content and always show. */}
         {(() => {
-          const sections: Array<{ id: GameCategory; label: string }> = [
-            { id: "notebook", label: t.catNotebook },
+          const notebookSection = { id: "notebook" as GameCategory, label: t.catNotebook };
+          const wordSections: Array<{ id: GameCategory; label: string }> = [
             { id: "origin", label: t.catOrigin },
             { id: "precision", label: t.catPrecision },
             { id: "structure", label: t.catStructure },
           ];
+          // Grown-ups see the word games first, kids see their own words first
+          // (council 2026-11-01). Only the order changes, never the art.
+          const sections = kidsMode || isKidPlayer ? [notebookSection, ...wordSections] : [...wordSections, notebookSection];
           return <div className="wb-play-sections">{sections.map((section) => {
             // When Kids Mode is on, filter to games we've curated for
             // younger players. The 5 notebook games always qualify
