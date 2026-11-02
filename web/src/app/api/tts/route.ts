@@ -227,6 +227,42 @@ function realtimeSpeech(text: string, instructions: string, apiKey: string): Pro
   });
 }
 
+/*
+ * The Realtime voice sometimes changes a word in a sentence ("the warm" came
+ * out "a warm", 2026-11-02). A child reads along, so every sentence is heard
+ * back with gpt-transcribe and compared word by word; a reading that drifts is
+ * read again once, and then left to the fallback voice. Single words are not
+ * checked (none drifted in the tests).
+ */
+const normWords = (t: string): string[] =>
+  t.toLowerCase().normalize("NFKD").replace(/[\p{M}]/gu, "").replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/).filter(Boolean);
+function lcs(a: string[], b: string[]): number {
+  const dp = new Array(b.length + 1).fill(0);
+  for (let i = 1; i <= a.length; i++) {
+    let prev = 0;
+    for (let j = 1; j <= b.length; j++) {
+      const tmp = dp[j];
+      dp[j] = a[i - 1] === b[j - 1] ? prev + 1 : Math.max(dp[j], dp[j - 1]);
+      prev = tmp;
+    }
+  }
+  return dp[b.length];
+}
+// Languages the transcriber takes by code; telling it the language keeps it from hearing Arabic as Russian.
+const STT_LANGS = new Set(["en", "es", "fr", "de", "it", "pt", "ru", "ar", "ja", "ko", "nl", "pl", "tr", "uk", "cs", "sk", "el", "hu", "da", "id", "vi", "th", "hi", "fa"]);
+async function readsExactly(wav: Buffer, text: string, apiKey: string, lang?: string): Promise<{ ok: boolean; heard: string; costUsd: number }> {
+  const fd = new FormData();
+  fd.append("model", "gpt-transcribe");
+  fd.append("file", new Blob([new Uint8Array(wav)], { type: "audio/wav" }), "a.wav");
+  if (lang && STT_LANGS.has(lang)) fd.append("language", lang);
+  const r = await fetch("https://api.openai.com/v1/audio/transcriptions", { method: "POST", headers: { Authorization: `Bearer ${apiKey}` }, body: fd });
+  if (!r.ok) return { ok: true, heard: "", costUsd: 0 }; // cannot check: keep the reading
+  const j = (await r.json()) as { text?: string; usage?: { seconds?: number } };
+  const want = normWords(text), got = normWords(j.text ?? "");
+  const ratio = want.length ? lcs(want, got) / Math.max(want.length, got.length) : 1;
+  return { ok: ratio >= 0.92, heard: j.text ?? "", costUsd: ((j.usage?.seconds ?? wav.length / 48000) / 60) * 0.0045 };
+}
+
 export async function POST(req: NextRequest) {
   // Tier gate
   const authHeader = req.headers.get("Authorization") || "";
@@ -339,7 +375,24 @@ export async function POST(req: NextRequest) {
       console.warn("[tts] storage read failed (marin):", err);
     }
     try {
-      const { wav, costUsd } = await realtimeSpeech(text, ttsInstructions, process.env.OPENAI_API_KEY);
+      const key = process.env.OPENAI_API_KEY;
+      let { wav, costUsd } = await realtimeSpeech(text, ttsInstructions, key);
+      if (!singleWord) {
+        let check = await readsExactly(wav, text, key, lang);
+        costUsd += check.costUsd;
+        if (!check.ok) {
+          console.warn("[tts] marin drifted, reading again:", JSON.stringify({ text: text.slice(0, 80), heard: check.heard.slice(0, 80) }));
+          const again = await realtimeSpeech(text, ttsInstructions, key);
+          costUsd += again.costUsd;
+          check = await readsExactly(again.wav, text, key, lang);
+          costUsd += check.costUsd;
+          if (!check.ok) {
+            void logAiUsage({ feature: "tts", model: RT_MODEL, costUsd, plan: userInfo.plan });
+            throw new Error("rt_drift");
+          }
+          wav = again.wav;
+        }
+      }
       void logAiUsage({ feature: lang === "he" ? "tts_he_fallback" : "tts", model: RT_MODEL, costUsd, plan: userInfo.plan });
       void getDefaultBucket()
         .file(rPath)
