@@ -125,6 +125,9 @@ interface AuthContextType {
   kidsAccess: boolean;
   /** On the Individual plan (Gadi 2026-10-06), shown as "Individual". */
   isIndividual: boolean;
+  /** A game tester (Gadi 2026-11-02: Osher and Din): sees games before
+   *  everyone else and a feedback button inside them. users/{uid}.tester. */
+  tester: boolean;
   /** For a paired KID: their picked illustrated avatar id + uploaded photo,
    *  read from their own member doc so their identity (the topbar avatar,
    *  etc.) shows the character they chose. null for everyone else. */
@@ -199,6 +202,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [schoolId, setSchoolId] = useState<string | null>(null);
   const [familyRole, setFamilyRole] = useState<"kid" | "parent" | null>(null);
   const [priceId, setPriceId] = useState<string | null>(null);
+  const [tester, setTester] = useState(false);
   const [avatarId, setAvatarId] = useState<string | null>(null);
   const [avatarPhotoUrl, setAvatarPhotoUrl] = useState<string | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -338,6 +342,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setSchoolId(schId);
         setFamilyRole(fr);
         setPriceId((data?.priceId as string) ?? null);
+        setTester(data?.tester === true);
         setPastDue(subStatus === "past_due");
         setGraceUntil(grace);
         setPlanReady(true);
@@ -668,6 +673,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       user, loading, plan, planReady, pastDue, graceUntil, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl,
       kidsAccess,
       isIndividual: !familyId && !schoolId && isIndividualPriceId(priceId),
+      tester,
       signInWithGoogle, signInWithApple, signInWithEmail, signUpWithEmail, sendPasswordReset, logout,
       showLoginModal, setShowLoginModal,
       loginReason, loginMode, promptLogin,

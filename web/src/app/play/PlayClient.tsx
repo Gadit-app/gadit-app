@@ -69,6 +69,7 @@ import { GameMeaningLens } from "@/components/play/GameMeaningLens";
 import { GameEtymologyArtist } from "@/components/play/GameEtymologyArtist";
 import { DuelHub } from "@/components/play/duel/DuelHub";
 import { worldCardCopy } from "@/lib/world/world-card-i18n";
+import { catchCopy } from "@/app/catch/catch-i18n";
 import { setAnswerListener } from "@/lib/learn/report";
 import { setDuelLauncher } from "@/lib/duel-launch";
 import { duelCopy } from "@/components/play/duel/duel-i18n";
@@ -3583,7 +3584,7 @@ function focusPool(pool: PlayWord[], word: string, game: GameId): PlayWord[] {
  *  a loading screen, not the games menu, until the lesson arrives (Gadi
  *  2026-10-17: "Continue" flashed the games and then jumped). */
 export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } = {}) {
-  const { user, plan, planReady, loading, promptLogin, familyRole, kidsAccess } = useAuth();
+  const { user, plan, planReady, loading, promptLogin, familyRole, kidsAccess, tester } = useAuth();
   const isKidPlayer = familyRole === "kid";
   const { lang, dir } = useLang();
   const router = useRouter();
@@ -4512,6 +4513,19 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
                         <span className="wb-play-card-text">
                           <span className="wb-play-card-title">🌴 {worldCardCopy(lang).mapTitle}</span>
                           <span className="wb-play-card-desc">{worldCardCopy(lang).cardDesc}</span>
+                        </span>
+                      </Link>
+                    </li>
+                  )}
+                  {/* Letter Fireflies (Gadi 2026-11-02): testers see it first. */}
+                  {tester && section.id === "notebook" && (
+                    <li key="catch">
+                      <Link href={href("/catch")} className="wb-play-card wb-play-cat-notebook has-cover">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img className="wb-play-card-cover" src="/catch/fireflies/cover.webp?v=1" alt="" loading="lazy" width={720} height={480} />
+                        <span className="wb-play-card-text">
+                          <span className="wb-play-card-title">🧪 {catchCopy(lang).title}</span>
+                          <span className="wb-play-card-desc">{catchCopy(lang).cardDesc}</span>
                         </span>
                       </Link>
                     </li>

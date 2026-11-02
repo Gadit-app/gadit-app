@@ -57,7 +57,7 @@ const hashOf = (s: string) => { let h = 2166136261; for (const ch of s) { h ^= c
 /* sounds: the shared kit in lib/game-sfx.ts (2026-10-31) */
 
 /* ---------- words ---------- */
-async function loadWords(token: string, ui: string, choice: string | null): Promise<{ words: TrailWord[]; reads: string | null }> {
+export async function loadWords(token: string, ui: string, choice: string | null): Promise<{ words: TrailWord[]; reads: string | null }> {
   // Any language with letters (Gadi 2026-11-01): the world's own word track.
   if (choice && isBankSpell(ui, choice)) {
     const r = await fetch(`/api/world/words?lang=${encodeURIComponent(choice)}&ui=${encodeURIComponent(ui)}`, { headers: { Authorization: `Bearer ${token}` } });
@@ -85,7 +85,7 @@ async function loadWords(token: string, ui: string, choice: string | null): Prom
   return { words, reads: j?.profile?.reads ?? null };
 }
 
-async function fetchPics(token: string, words: string[], generate: boolean): Promise<Record<string, string>> {
+export async function fetchPics(token: string, words: string[], generate: boolean): Promise<Record<string, string>> {
   const list = [...new Set(words.filter(Boolean))];
   if (!list.length) return {};
   try {
