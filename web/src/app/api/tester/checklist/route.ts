@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { FieldValue } from "firebase-admin/firestore";
+import { FieldPath, FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { CHECK_IDS } from "@/lib/tester-checklist";
 
@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
   const b = (await req.json().catch(() => null)) as { id?: string; done?: boolean } | null;
   const id = String(b?.id ?? "");
   if (!CHECK_IDS.includes(id)) return NextResponse.json({ error: "bad request" }, { status: 400 });
-  await getAdminDb().collection("users").doc(uid).update({ [`testerChecks.${id}`]: b?.done ? Date.now() : FieldValue.delete() });
+  // ids hold a dot ("start.me"): a FieldPath keeps it one key, not a nested map
+  await getAdminDb().collection("users").doc(uid).update(new FieldPath("testerChecks", id), b?.done ? Date.now() : FieldValue.delete());
   return NextResponse.json({ ok: true });
 }
