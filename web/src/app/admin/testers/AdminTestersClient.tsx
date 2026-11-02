@@ -11,7 +11,7 @@ import type { PaySlip } from "@/lib/tester-pay";
  *   A bug → "approve" (pays 10, Claude may fix it). An idea → "liked" (pays
  *   5) or "build it" (pays 5, Claude may build it), and "built" (+50). A
  *   duplicate or nonsense → "not for pay". Claude acts only on approved notes.
- * Pay: each child's weekly pay slip, computed from what they did, and a
+ * Pay: each child's MONTHLY pay, computed from what they did, and a
  *   "paid in Yooniz" button.
  */
 
@@ -28,9 +28,9 @@ const S: Record<AdminLang, Record<string, string>> = {
     approveBug: "🐞 לאשר באג (+10)", likeIdea: "💡 אהבתי (+5)", buildIdea: "🛠️ לבנות את זה (+5, ל-Claude)", built: "🚀 נבנה (+50)", fixed: "✅ תוקן",
     asBug: "🐞 לאשר כבאג (+10)", asIdea: "💡 לאשר כרעיון (+5)", skipBtn: "לא לתשלום (כפול או לא רלוונטי)", reset: "להחזיר לחדשות",
     rating: "דירוג (נספר כבדיקת משחק)", word: "מילה", page: "עמוד", voiceX: "הקלטה: פי 1.5",
-    week: "שבוע", thisWeek: "השבוע", earned: "הרוויח", tax: "לקופה (10%)", net: "להעביר ב-Yooniz", pending: "מחכה לאישור",
+    week: "חודש", thisWeek: "החודש", earned: "הרוויח", tax: "לקופה (10%)", net: "להעביר ב-Yooniz", pending: "מחכה לאישור",
     paidBtn: "✅ סימנתי ששילמתי ב-Yooniz", paidAt: "שולם ב-Yooniz", copy: "📋 להעתיק תלוש", copied: "הועתק", noKids: "אין ילדים בודקים",
-    capped: "הגיע לתקרה (150)", run: "🎮 בדיקת משחק", bug: "🐞 באג", idea: "💡 רעיון", builtRow: "🚀 רעיון שנבנה", team: "🤝 בונוס צוות", note: "🎤 הקלטה",
+    capped: "הגיע לתקרה השבועית (150) באחד השבועות", run: "🎮 בדיקת משחק", bug: "🐞 באג", idea: "💡 רעיון", builtRow: "🚀 רעיון שנבנה", team: "🤝 בונוס צוות", note: "🎤 הקלטה",
     rowPaid: "", rowWait: "מחכה", rowNo: "לא נספר",
     levels: "junior:🐣 בודק מתחיל|tester:🛠️ בודק|senior:⭐ בודק בכיר|lead:👑 ראש צוות",
   },
@@ -41,9 +41,9 @@ const S: Record<AdminLang, Record<string, string>> = {
     approveBug: "🐞 Approve bug (+10)", likeIdea: "💡 Liked it (+5)", buildIdea: "🛠️ Build it (+5, for Claude)", built: "🚀 Built (+50)", fixed: "✅ Fixed",
     asBug: "🐞 Approve as bug (+10)", asIdea: "💡 Approve as idea (+5)", skipBtn: "Not for pay (duplicate or off)", reset: "Back to new",
     rating: "Rating (counts as a test run)", word: "word", page: "page", voiceX: "Voice note: ×1.5",
-    week: "Week", thisWeek: "This week", earned: "Earned", tax: "Family pot (10%)", net: "To pay in Yooniz", pending: "Waiting for approval",
+    week: "Month", thisWeek: "This month", earned: "Earned", tax: "Family pot (10%)", net: "To pay in Yooniz", pending: "Waiting for approval",
     paidBtn: "✅ I paid it in Yooniz", paidAt: "Paid in Yooniz", copy: "📋 Copy pay slip", copied: "Copied", noKids: "No child testers",
-    capped: "Hit the cap (150)", run: "🎮 Test run", bug: "🐞 Bug", idea: "💡 Idea", builtRow: "🚀 Idea built", team: "🤝 Team bonus", note: "🎤 Voice note",
+    capped: "Hit the weekly cap (150) in one of the weeks", run: "🎮 Test run", bug: "🐞 Bug", idea: "💡 Idea", builtRow: "🚀 Idea built", team: "🤝 Team bonus", note: "🎤 Voice note",
     rowPaid: "", rowWait: "waiting", rowNo: "didn't count",
     levels: "junior:🐣 Junior|tester:🛠️ Tester|senior:⭐ Senior|lead:👑 Lead",
   },
@@ -52,7 +52,7 @@ const S: Record<AdminLang, Record<string, string>> = {
 const STATUS_COLOR: Record<string, [string, string]> = {
   new: ["#EEF2FF", "#4338CA"], approved: ["#DCFCE7", "#166534"], liked: ["#FEF9C3", "#854D0E"], done: ["#F3F4F6", "#6B7280"], skip: ["#FEE2E2", "#991B1B"],
 };
-const addDays = (day: string, n: number) => { const d = new Date(`${day}T12:00:00Z`); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+const addMonths = (month: string, n: number) => { const [y, m] = month.split("-").map(Number); const d = new Date(Date.UTC(y, m - 1 + n, 15)); return d.toISOString().slice(0, 7); };
 
 export default function AdminTestersClient() {
   const { secret, lang } = useAdminContext();
@@ -81,10 +81,10 @@ export default function AdminTestersClient() {
     if (!secret) return;
     setSlips(null);
     try {
-      const r = await fetch(api(`&pay=1${w ? `&week=${w}` : ""}`));
-      const j = (await r.json()) as { week: string; thisWeek: string; slips: PaySlip[]; error?: string };
+      const r = await fetch(api(`&pay=1${w ? `&month=${w}` : ""}`));
+      const j = (await r.json()) as { month: string; thisMonth: string; slips: PaySlip[]; error?: string };
       if (!r.ok) throw new Error(j.error ?? `HTTP ${r.status}`);
-      setWeek(j.week); setThisWeek(j.thisWeek); setSlips(j.slips);
+      setWeek(j.month); setThisWeek(j.thisMonth); setSlips(j.slips);
     } catch (e) { setError(String(e instanceof Error ? e.message : e)); }
   }, [secret, api]);
   useEffect(() => {
@@ -106,12 +106,12 @@ export default function AdminTestersClient() {
   };
   const markPaid = async (s: PaySlip) => {
     setSlips((ss) => ss?.map((x) => (x.uid === s.uid ? { ...x, paid: { at: Date.now(), net: s.net } } : x)) ?? ss);
-    await fetch(api(), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "paid", uid: s.uid, week: s.week, net: s.net }) }).catch(() => undefined);
+    await fetch(api(), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "paid", uid: s.uid, month: s.month, net: s.net }) }).catch(() => undefined);
   };
   const slipText = (s: PaySlip) => {
     const L = lang === "he" ? "he" : "en";
     const lines = s.rows.filter((r) => r.state === "paid").map((r) => `${t[r.type === "built" ? "builtRow" : r.type]}${r.ticket ? ` #${r.ticket}` : ""} · ${gameName(r.game, L)}: +${r.yoon}`);
-    return [`🧪 ${s.name} · ${t.week} ${s.week.slice(8, 10)}/${s.week.slice(5, 7)}`, ...lines, `${t.earned}: ${s.earned} Yoon`, `${t.tax}: ${s.tax}`, `${t.net}: ${s.net} Yoon`].join("\n");
+    return [`🧪 ${s.name} · ${t.week} ${s.month.slice(5, 7)}/${s.month.slice(0, 4)}`, ...lines, `${t.earned}: ${s.earned} Yoon`, `${t.tax}: ${s.tax}`, `${t.net}: ${s.net} Yoon`].join("\n");
   };
   const copy = async (s: PaySlip) => {
     try { await navigator.clipboard.writeText(slipText(s)); setCopied(s.uid); setTimeout(() => setCopied(null), 1500); } catch { /* fine */ }
@@ -201,9 +201,9 @@ export default function AdminTestersClient() {
         <>
           {week ? (
             <div style={{ display: "flex", alignItems: "center", gap: 10, fontWeight: 700, color: "#111827" }}>
-              <button type="button" style={btn} onClick={() => { setSlips(null); setWeek(addDays(week, -7)); }}>{lang === "he" ? "›" : "‹"}</button>
-              <span>{week === thisWeek ? t.thisWeek : `${t.week} ${week.slice(8, 10)}/${week.slice(5, 7)}`}</span>
-              <button type="button" style={btn} disabled={week === thisWeek} onClick={() => { setSlips(null); setWeek(addDays(week, 7)); }}>{lang === "he" ? "‹" : "›"}</button>
+              <button type="button" style={btn} onClick={() => { setSlips(null); setWeek(addMonths(week, -1)); }}>{lang === "he" ? "›" : "‹"}</button>
+              <span>{week === thisWeek ? t.thisWeek : `${t.week} ${week.slice(5, 7)}/${week.slice(0, 4)}`}</span>
+              <button type="button" style={btn} disabled={week === thisWeek} onClick={() => { setSlips(null); setWeek(addMonths(week, 1)); }}>{lang === "he" ? "‹" : "›"}</button>
             </div>
           ) : null}
           {!slips ? <p style={{ color: "#6B7280" }}>…</p> : !slips.length ? <p style={{ color: "#6B7280" }}>{t.noKids}</p> : null}

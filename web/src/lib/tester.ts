@@ -38,7 +38,7 @@ const HE: TesterCopy = {
   sayBug: "ספרו מה הבאג: מה עשיתם ומה קרה",
   sayIdea: "ספרו את הרעיון",
   sayAny: "ספרו מה רוצים להגיד",
-  myPay: "💰 התלוש שלי",
+  myPay: "💰 התשלום החודשי שלי",
   kinds: { fun: "כיף", boring: "משעמם", hard: "קשה מדי", easy: "קל מדי", bug: "יש באג", idea: "יש לי רעיון", voice: "להגיד משהו" },
 };
 const EN: TesterCopy = {
@@ -55,7 +55,7 @@ const EN: TesterCopy = {
   sayBug: "Tell us the bug: what you did and what happened",
   sayIdea: "Tell us your idea",
   sayAny: "Tell us what you want to say",
-  myPay: "💰 My pay slip",
+  myPay: "💰 My monthly pay",
   kinds: { fun: "Fun", boring: "Boring", hard: "Too hard", easy: "Too easy", bug: "Found a bug", idea: "I have an idea", voice: "Say something" },
 };
 

@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * My pay slip (Gadi 2026-11-02): a game tester's week, for Osher (12) and
+ * My monthly pay (Gadi 2026-11-02): a game tester's month, for Osher (12) and
  * Din (8). Built only on things they DID: test runs, bugs, ideas. Ideas from
  * the developers' world: every note is a numbered ticket with a status, a
  * tester level by approved tickets, and a "fixed thanks to you" list.
@@ -20,10 +20,10 @@ import type { PayRow, PaySlip } from "@/lib/tester-pay";
 type L = "he" | "en";
 const T = {
   he: {
-    title: "התלוש שלי", back: "חזרה למשחקים", thisWeek: "השבוע", lastWeek: "שבוע קודם", loading: "טוענים את התלוש",
-    earned: "הרווחת השבוע", pot: "לקופה המשפחתית (10%)", toYou: "לך ב-Yooniz", paid: "✅ שולם ב-Yooniz", notPaid: "⏳ עוד לא שולם",
-    pending: (n: number) => `⏳ מחכה לאישור: עוד ${n} Yoon`, cap: (n: number, c: number) => `${n} מתוך ${c} Yoon לשבוע`, capped: "הגעת לתקרה של השבוע 🎉",
-    did: "מה עשית השבוע", none: "עוד אין כלום השבוע. נכנסים למשחק, משחקים, ושולחים 🧪",
+    title: "התשלום החודשי שלי", back: "חזרה למשחקים", thisWeek: "החודש", lastWeek: "חודש קודם", loading: "טוענים את התשלום",
+    earned: "הרווחת החודש", pot: "לקופה המשפחתית (10%)", toYou: "לך ב-Yooniz", paid: "✅ שולם ב-Yooniz", notPaid: "⏳ עוד לא שולם",
+    pending: (n: number) => `⏳ מחכה לאישור: עוד ${n} Yoon`, cap: (_n: number, c: number) => `אפשר להרוויח עד ${c} Yoon בכל שבוע`, capped: "באחד השבועות הגעת לתקרה 🎉",
+    did: "מה עשית החודש", none: "עוד אין כלום החודש. נכנסים למשחק, משחקים, ושולחים 🧪",
     how: "איך מרוויחים", rules: [["🎮", "בדיקת משחק: שיחקת 5 סיבובים ודירגת ב-🧪", 5], ["🐞", "באג שאושר", 10], ["💡", "רעיון שאהבו", 5], ["🎤", "עם הקלטה: פי 1.5", "×1.5"], ["🚀", "רעיון שנבנה", 50], ["🤝", "שניכם מצאתם דברים באותו משחק", 5]] as [string, string, number | string][],
     fixed: "תוקן בזכותך 🚀", levelNext: (n: number) => `עוד ${n} כרטיסים לדרגה הבאה`, levelTop: "הדרגה הכי גבוהה!",
     levels: { junior: "🐣 בודק מתחיל", tester: "🛠️ בודק", senior: "⭐ בודק בכיר", lead: "👑 ראש צוות בדיקות" },
@@ -31,10 +31,10 @@ const T = {
     playMore: (n: number) => `עוד ${n} סיבובים היום וזה נספר`, noCount: "לא נספר", notPaidRow: "לא לתשלום", waiting: "מחכה",
   },
   en: {
-    title: "My pay slip", back: "Back to games", thisWeek: "This week", lastWeek: "Last week", loading: "Loading your pay slip",
-    earned: "You earned this week", pot: "Family pot (10%)", toYou: "To you in Yooniz", paid: "✅ Paid in Yooniz", notPaid: "⏳ Not paid yet",
-    pending: (n: number) => `⏳ Waiting for approval: ${n} more Yoon`, cap: (n: number, c: number) => `${n} of ${c} Yoon this week`, capped: "You hit this week's top! 🎉",
-    did: "What you did this week", none: "Nothing yet this week. Open a game, play, and send a 🧪",
+    title: "My monthly pay", back: "Back to games", thisWeek: "This month", lastWeek: "Last month", loading: "Loading your pay",
+    earned: "You earned this month", pot: "Family pot (10%)", toYou: "To you in Yooniz", paid: "✅ Paid in Yooniz", notPaid: "⏳ Not paid yet",
+    pending: (n: number) => `⏳ Waiting for approval: ${n} more Yoon`, cap: (_n: number, c: number) => `You can earn up to ${c} Yoon each week`, capped: "You hit the top in one of the weeks! 🎉",
+    did: "What you did this month", none: "Nothing yet this month. Open a game, play, and send a 🧪",
     how: "How to earn", rules: [["🎮", "Test run: play 5 rounds and rate it with 🧪", 5], ["🐞", "A bug that was approved", 10], ["💡", "An idea we liked", 5], ["🎤", "With a voice note: ×1.5", "×1.5"], ["🚀", "An idea that got built", 50], ["🤝", "You both found things in the same game", 5]] as [string, string, number | string][],
     fixed: "Fixed thanks to you 🚀", levelNext: (n: number) => `${n} more tickets to the next level`, levelTop: "The top level!",
     levels: { junior: "🐣 Junior Tester", tester: "🛠️ Tester", senior: "⭐ Senior Tester", lead: "👑 Lead Tester" },
@@ -44,7 +44,7 @@ const T = {
 };
 
 const LS = "gadit-tester-lang";
-const addDays = (day: string, n: number) => { const d = new Date(`${day}T12:00:00Z`); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+const addMonths = (month: string, n: number) => { const [y, m] = month.split("-").map(Number); const d = new Date(Date.UTC(y, m - 1 + n, 15)); return d.toISOString().slice(0, 7); };
 
 export function TesterPayClient() {
   const { user, tester, planReady, loading: authLoading, promptLogin } = useAuth();
@@ -60,7 +60,7 @@ export function TesterPayClient() {
   const dir = l === "he" ? "rtl" : "ltr";
 
   const [week, setWeek] = useState<string | null>(null);
-  const [thisWeek, setThisWeek] = useState<string | null>(null);
+  const [thisWeek, setThisWeek] = useState<string | null>(null); // months (YYYY-MM)
   const [slip, setSlip] = useState<PaySlip | null>(null);
   const [err, setErr] = useState(false);
 
@@ -73,10 +73,10 @@ export function TesterPayClient() {
     if (!user) return;
     setSlip(null);
     try {
-      const r = await fetch(`/api/tester/pay${w ? `?week=${w}` : ""}`, { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+      const r = await fetch(`/api/tester/pay${w ? `?month=${w}` : ""}`, { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
       if (!r.ok) { setErr(true); return; }
-      const j = (await r.json()) as { slip: PaySlip; thisWeek: string };
-      setSlip(j.slip); setThisWeek(j.thisWeek); setWeek(j.slip.week);
+      const j = (await r.json()) as { slip: PaySlip; thisMonth: string };
+      setSlip(j.slip); setThisWeek(j.thisMonth); setWeek(j.slip.month);
     } catch { setErr(true); }
   }, [user]);
   useEffect(() => {
@@ -123,9 +123,9 @@ export function TesterPayClient() {
 
         {week ? (
           <div className="tp-weeknav">
-            <button type="button" onClick={() => load(addDays(week, -7))} aria-label={t.lastWeek}>{dir === "rtl" ? "›" : "‹"}</button>
-            <span>{isThis ? t.thisWeek : `${week.slice(8, 10)}/${week.slice(5, 7)} ${l === "he" ? "עד" : "to"} ${addDays(week, 6).slice(8, 10)}/${addDays(week, 6).slice(5, 7)}`}</span>
-            <button type="button" onClick={() => load(addDays(week, 7))} disabled={!!isThis} aria-label={t.thisWeek}>{dir === "rtl" ? "‹" : "›"}</button>
+            <button type="button" onClick={() => load(addMonths(week, -1))} aria-label={t.lastWeek}>{dir === "rtl" ? "›" : "‹"}</button>
+            <span>{isThis ? t.thisWeek : new Date(`${week}-15T12:00:00Z`).toLocaleDateString(l === "he" ? "he-IL" : "en-GB", { month: "long", year: "numeric" })}</span>
+            <button type="button" onClick={() => load(addMonths(week, 1))} disabled={!!isThis} aria-label={t.thisWeek}>{dir === "rtl" ? "‹" : "›"}</button>
           </div>
         ) : null}
 
@@ -140,7 +140,6 @@ export function TesterPayClient() {
                 <span>🏦 {t.pot}: <b>{slip.tax}</b></span>
                 <span>💰 {t.toYou}: <b>{slip.net}</b></span>
               </div>
-              <div className="tp-bar"><i style={{ width: `${Math.min(100, (slip.earned / 150) * 100)}%` }} /></div>
               <span className="tp-small">{slip.capped ? t.capped : t.cap(slip.earned, 150)}</span>
               {slip.pending ? <span className="tp-pending">{t.pending(slip.pending)}</span> : null}
               <span className={`tp-paid${slip.paid ? " is-paid" : ""}`}>{slip.paid ? t.paid : t.notPaid}</span>

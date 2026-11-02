@@ -4539,8 +4539,8 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
                     <li key="tester-pay">
                       <Link href={href("/tester")} className="wb-play-card wb-play-cat-notebook">
                         <span className="wb-play-card-text">
-                          <span className="wb-play-card-title">💰 {lang === "he" ? "התלוש שלי" : "My pay slip"}</span>
-                          <span className="wb-play-card-desc">{lang === "he" ? "כמה Yoon הרווחת השבוע כבודק משחקים" : "How many Yoon you earned this week as a game tester"}</span>
+                          <span className="wb-play-card-title">💰 {lang === "he" ? "התשלום החודשי שלי" : "My monthly pay"}</span>
+                          <span className="wb-play-card-desc">{lang === "he" ? "כמה Yoon הרווחת החודש כבודק משחקים" : "How many Yoon you earned this month as a game tester"}</span>
                         </span>
                       </Link>
                     </li>

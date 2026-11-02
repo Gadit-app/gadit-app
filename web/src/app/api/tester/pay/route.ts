@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
-import { kidTesters, paySlips, weekOf, PAY } from "@/lib/tester-pay";
+import { kidTesters, monthOf, paySlips, PAY } from "@/lib/tester-pay";
 
 /**
- * A tester's own pay slip (Gadi 2026-11-02): GET ?week=YYYY-MM-DD (a
- * Sunday; default this week), Bearer token. Testers only.
+ * A tester's monthly pay (Gadi 2026-11-02): GET ?month=YYYY-MM (default
+ * this month), Bearer token. Testers only.
  */
 export const maxDuration = 30;
 
@@ -16,11 +16,11 @@ export async function GET(req: NextRequest) {
   }
   const u = (await getAdminDb().collection("users").doc(uid).get()).data();
   if (u?.tester !== true) return NextResponse.json({ error: "not a tester" }, { status: 403 });
-  const q = req.nextUrl.searchParams.get("week") ?? "";
-  const week = /^\d{4}-\d{2}-\d{2}$/.test(q) ? weekOf(new Date(`${q}T12:00:00Z`)) : weekOf();
+  const q = req.nextUrl.searchParams.get("month") ?? "";
+  const month = /^\d{4}-\d{2}$/.test(q) ? q : monthOf();
   // the team bonus needs every child tester's week
   const ids = await kidTesters();
-  const slips = await paySlips(ids.includes(uid) ? ids : [...ids, uid], week);
+  const slips = await paySlips(ids.includes(uid) ? ids : [...ids, uid], month);
   const mine = slips.find((s) => s.uid === uid)!;
-  return NextResponse.json({ slip: mine, thisWeek: weekOf(), pay: PAY });
+  return NextResponse.json({ slip: mine, thisMonth: monthOf(), pay: PAY });
 }
