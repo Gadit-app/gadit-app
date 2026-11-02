@@ -211,12 +211,20 @@ export function TesterFab() {
   const segs = pathname.split("/").filter(Boolean);
   const first = segs.length && LANG_SEG.test(segs[0]) && !GAME_PATHS.has(segs[0]) ? segs[1] : segs[0];
   if (!first || !GAME_PATHS.has(first)) return null;
-  return <TesterButton game={first} floating />;
+  const lang = segs.length && LANG_SEG.test(segs[0]) && !GAME_PATHS.has(segs[0]) ? segs[0] : "";
+  // My monthly pay sits right above the 🧪, not among the games (Gadi 2026-11-02)
+  return (
+    <>
+      <a className="tst-fab is-pay" href={`${lang ? `/${lang}` : ""}/tester`} aria-label={lang === "he" ? "התשלום החודשי שלי" : "My monthly pay"} title={lang === "he" ? "התשלום החודשי שלי" : "My monthly pay"}>💰</a>
+      <TesterButton game={first} floating />
+    </>
+  );
 }
 
 const CSS = `
 .tst-btn{width:44px;height:44px;flex:0 0 44px;border-radius:50%;border:0;background:#fffe;box-shadow:0 2px 8px #0002;font-size:20px;display:grid;place-items:center;cursor:pointer}
 .tst-fab{position:fixed;z-index:95;inset-inline-start:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);width:46px;height:46px;border-radius:50%;border:2px solid #c4b5fd;background:#f5f3ff;box-shadow:0 4px 14px #0003;font-size:21px;display:grid;place-items:center;cursor:pointer}
+.tst-fab.is-pay{bottom:calc(env(safe-area-inset-bottom,0px) + 140px);text-decoration:none;border-color:#fcd34d;background:#fffbeb}
 .tst-wrap{position:fixed;inset:0;z-index:100;background:#0008;display:grid;place-items:center;padding:16px}
 .tst-card{width:min(420px,100%);background:#fff;color:#14202b;border-radius:26px;padding:18px 16px;display:grid;gap:12px;justify-items:center;text-align:center;box-shadow:0 18px 50px #0006;font-family:inherit}
 .tst-badge{background:#ede9fe;color:#5b21b6;border-radius:999px;padding:4px 12px;font-weight:800;font-size:13px}

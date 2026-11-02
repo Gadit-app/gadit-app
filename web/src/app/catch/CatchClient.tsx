@@ -418,7 +418,7 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
             <strong className="ct-card-word" dir={RTL_SPELL.has(word.lang) ? "rtl" : "ltr"}>{word.nq || (word.native ? word.raw : word.w)}</strong>
             {word.t ? <span className="ct-card-t">{word.t}</span> : null}
             <span ref={introSay}>
-              <TTSButton text={word.native ? word.raw : word.w} audioLang={word.lang === "he" ? "he-IL" : word.lang === "en" ? "en-US" : word.lang} ariaLabel={c.hear} className="ct-tts-btn" rate={0.85} />
+              <TTSButton text={word.nq || (word.native ? word.raw : word.w)} audioLang={word.lang === "he" ? "he-IL" : word.lang === "en" ? "en-US" : word.lang} ariaLabel={c.hear} className="ct-tts-btn" rate={0.85} />
             </span>
             <p className="ct-card-goal">{scene === "coaster" ? c.coasterGoal : scene === "fair" ? c.stallGoal[stall] : c.goal}</p>
             <button type="button" className="ct-btn" onClick={() => { sfx.whoosh(); setPhase("play"); }}>{c.go}</button>

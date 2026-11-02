@@ -370,7 +370,7 @@ export function PeekTrail({ world, c, ui, word, pic, avatar, onWordDone, onMap, 
               // eslint-disable-next-line @next/next/no-img-element
               <img className="wt-slots-pic" src={pic} alt="" />
             ) : null}
-            <span className="wt-slots-say"><TTSButton text={word.native ? word.raw : word.w} audioLang={audioLang} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} /></span>
+            <span className="wt-slots-say"><TTSButton text={word.nq || (word.native ? word.raw : word.w)} audioLang={audioLang} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} /></span>
             {letters.map((l, i) => (
               <span key={i} className={`wt-slot${i < step ? " is-filled" : ""}${i === step && phase !== "card" ? " pk-now" : ""}`}>{i < step ? <Glyph ch={l} /> : null}</span>
             ))}
@@ -410,7 +410,7 @@ export function PeekTrail({ world, c, ui, word, pic, avatar, onWordDone, onMap, 
             <strong className="pk-card-word" dir={RTL_SPELL.has(word.lang) ? "rtl" : "ltr"}>{word.nq || (word.native ? word.raw : word.w)}</strong>
             {word.t ? <span className="wt-intro-t">{word.t}</span> : null}
             <span ref={cardSay}>
-              <TTSButton text={word.native ? word.raw : word.w} audioLang={audioLang} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} />
+              <TTSButton text={word.nq || (word.native ? word.raw : word.w)} audioLang={audioLang} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} />
             </span>
             <button type="button" className="wt-btn" onClick={() => { sfx.whoosh(); goStop(stopRef.current + 1); }}>{walked ? pc.go : c.go}</button>
           </div>

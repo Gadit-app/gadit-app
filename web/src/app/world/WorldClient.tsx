@@ -435,7 +435,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
             <img className="wt-slots-pic" src={pic} alt="" />
           ) : null}
           {/* Hear the word: it sits on the word itself, so it is clear what it reads. */}
-          <span className="wt-slots-say"><TTSButton text={word.native ? word.raw : word.w} audioLang={audioLang} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} /></span>
+          <span className="wt-slots-say"><TTSButton text={word.nq || (word.native ? word.raw : word.w)} audioLang={audioLang} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} /></span>
           {letters.map((l, i) => {
             const fromGate = phase !== "walk" ? (reveal ? l : (tiles[typed[i]] ?? (phase === "open" ? l : ""))) : "";
             const ch = phase === "walk" ? (shown(i) ? l : "") : fromGate;
@@ -984,7 +984,7 @@ export function WorldClient({ worldId = "jungle", demo, peekDemo }: { worldId?: 
             <strong className="wt-intro-word" dir={RTL_SPELL.has(word.lang) ? "rtl" : "ltr"}>{word.nq || (word.native ? word.raw : word.w)}</strong>
             {word.t ? <span className="wt-intro-t">{word.t}</span> : null}
             <span ref={introSay} className="wt-intro-say">
-              <TTSButton text={word.native ? word.raw : word.w} audioLang={word.lang === "he" ? "he-IL" : word.lang === "en" ? "en-US" : word.lang} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} />
+              <TTSButton text={word.nq || (word.native ? word.raw : word.w)} audioLang={word.lang === "he" ? "he-IL" : word.lang === "en" ? "en-US" : word.lang} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} />
             </span>
             <div className="wt-intro-goal">
               {worldGoal(lang, word.nq || (word.native ? word.raw : word.w)).map((line, i) => <p key={i}>{line}</p>)}

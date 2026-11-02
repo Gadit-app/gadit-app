@@ -27,7 +27,7 @@ export function CatchHud({ word, letters, step, pic, c, game, onExit }: {
             // eslint-disable-next-line @next/next/no-img-element
             <img className="ct-slots-pic" src={pic} alt="" />
           ) : null}
-          <span className="ct-slots-say"><TTSButton text={word.native ? word.raw : word.w} audioLang={audioLang} ariaLabel={c.hear} className="ct-tts-btn" rate={0.85} /></span>
+          <span className="ct-slots-say"><TTSButton text={word.nq || (word.native ? word.raw : word.w)} audioLang={audioLang} ariaLabel={c.hear} className="ct-tts-btn" rate={0.85} /></span>
           {letters.map((l, i) => (
             <span key={i} className={`ct-slot${i < step ? " is-filled" : ""}${i === step && !done ? " is-now" : ""}`}>{i < step ? <Glyph ch={l} /> : null}</span>
           ))}
