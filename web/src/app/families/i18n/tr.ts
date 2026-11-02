@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["5 çocuğa kadar", "Her anlam için bir resim", "Bir ebeveyn paneli"],
-    devices: ["Telefon", "Tablet", "Bilgisayar"],
+    devices: ["Bilgisayar", "Tablet", "Telefon"],
     cardsKicker: "Kelime dağarcığını geliştiren akıllı ve görsel bir sözlük",
     cardsTitle: "Her kelime çocuğunun seviyesinde açıklanır",
     safeKicker: "Güvenlik",

@@ -23,6 +23,7 @@ import { LANGUAGES, type Lang, langNameIn } from "@/lib/i18n";
 import { toggleLangGroup } from "@/lib/lang-groups";
 import { LangSearchList } from "@/components/LangSearch";
 import Link from "next/link";
+import { TokushohoLink } from "@/components/legal/TokushohoLink";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
@@ -4863,6 +4864,8 @@ export function PricingPageRoute() {
                 <TierCard id="deep" name="Family" tagline={planCopy(lang, "prFamSub")} price={famPrice} period={period} subPrice={famSub}
                   badge={planCopy(lang, "prFamBadge")} features={list("f")} cta={planCopy(lang, "prTrialCta")} ctaSub={terms(famPrice)} onCta={clickFamily} />
               </div>
+              {/* Japan: the 特定商取引法 disclosure sits right under the prices (ja only). */}
+              <TokushohoLink style={{ display: "block", textAlign: "center", margin: "16px 0 0", fontSize: 13, color: "var(--ink-soft, #6B7280)", textDecoration: "underline" }} />
             </>
           );
         })()}
@@ -5015,6 +5018,7 @@ export function PricingPageRoute() {
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>
         <Link href={href("/terms")}>{v2(lang, "footerTerms")}</Link>
+        <TokushohoLink separator />
       </footer>
     </div>
   );

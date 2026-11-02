@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Kufika kubantfwana labangu-5", "Sitfombe senchazelo ngayinye", "Libhodi lemtali"],
-    devices: ["Lifoni", "Ithebhulethi", "Ikhompyutha"],
+    devices: ["Ikhompyutha", "Ithebhulethi", "Lifoni"],
     cardsKicker: "Sichazamagama lesihlakaniphile lesinetitfombe lesakha emagama",
     cardsTitle: "Onkhe ligama lichazwa ezingeni lemntfwana wakho",
     safeKicker: "Kuphepha",

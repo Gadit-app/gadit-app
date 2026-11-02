@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["아이 최대 5명", "뜻마다 그림", "부모 보드"],
-    devices: ["휴대폰", "태블릿", "컴퓨터"],
+    devices: ["컴퓨터", "태블릿", "휴대폰"],
     cardsKicker: "어휘를 키우는 똑똑한 그림 사전",
     cardsTitle: "모든 단어를 아이 눈높이로 설명해요",
     safeKicker: "안전",

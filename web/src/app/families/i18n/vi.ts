@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Tối đa 5 con", "Một hình ảnh cho mỗi nghĩa", "Bảng theo dõi cho phụ huynh"],
-    devices: ["Điện thoại", "Máy tính bảng", "Máy tính"],
+    devices: ["Máy tính", "Máy tính bảng", "Điện thoại"],
     cardsKicker: "Từ điển hình ảnh thông minh giúp mở rộng vốn từ",
     cardsTitle: "Mọi từ được giải thích vừa với trình độ của con",
     safeKicker: "An toàn",

@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["最多 5 位孩子", "每個詞義一張圖", "家長面板"],
-    devices: ["手機", "平板", "電腦"],
+    devices: ["電腦", "平板", "手機"],
     cardsKicker: "一本累積詞彙的智慧視覺化字典",
     cardsTitle: "每個詞都依孩子的程度解釋",
     safeKicker: "安全",

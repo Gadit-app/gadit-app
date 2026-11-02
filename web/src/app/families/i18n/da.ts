@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Op til 5 børn", "Et billede til hver betydning", "En forældreoversigt"],
-    devices: ["Telefon", "Tablet", "Computer"],
+    devices: ["Computer", "Tablet", "Telefon"],
     cardsKicker: "En smart billedordbog der bygger ordforrådet op",
     cardsTitle: "Hvert ord forklaret på dit barns niveau",
     safeKicker: "Sikkerhed",

@@ -10,7 +10,7 @@
  *
  * Words come from the same learning engine as Word Worlds (/api/learn, or the
  * world word bank for other languages), and results go back to it.
- * Testers only for now (users/{uid}.tester): Osher and Din test it first.
+ * Open to every player (Gadi 2026-11-02); Osher and Din test it.
  *
  * Plain DOM: one requestAnimationFrame loop moves the fireflies through refs;
  * React renders only when a firefly is born, caught or leaves.
@@ -263,19 +263,18 @@ function Sky({ word, c, level, avatar, onDone, onExit, pic }: {
 
 /* ---------- the page ---------- */
 export function CatchClient({ demo }: { demo?: TrailWord[] }) {
-  const { user, planReady, loading, promptLogin, avatarId, avatarPhotoUrl, tester } = useAuth();
+  const { user, planReady, loading, promptLogin, avatarId, avatarPhotoUrl } = useAuth();
   const { lang } = useLang();
   const href = useHref();
   const router = useRouter();
   const c = catchCopy(lang);
   const dir = lang === "he" || lang === "ar" || lang === "fa" ? "rtl" : "ltr";
 
-  // Testers only for now (Gadi 2026-11-02).
+  // Open to every signed-in player (Gadi 2026-11-02); the testers still test it.
   useEffect(() => {
     if (demo || loading) return;
-    if (!user) { promptLogin(c.title); return; }
-    if (planReady && !tester) router.replace(href("/play"));
-  }, [demo, loading, user, planReady, tester, promptLogin, router, href, c.title]);
+    if (!user) promptLogin(c.title);
+  }, [demo, loading, user, promptLogin, c.title]);
 
   const [queue, setQueue] = useState<TrailWord[] | null>(null);
   const [failed, setFailed] = useState(false);
@@ -345,11 +344,11 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
     } catch { setFailed(true); }
   }, [demo, user, lang]);
   useEffect(() => {
-    if (!demo && (loading || !user || !planReady || !tester)) return;
+    if (!demo && (loading || !user || !planReady)) return;
     let alive = true;
     (async () => { if (alive) await load(); })();
     return () => { alive = false; };
-  }, [demo, loading, user, planReady, tester, load]);
+  }, [demo, loading, user, planReady, load]);
 
   const word = queue?.[idx] ?? null;
   const avatar = avatarUrl(avatarId) ?? avatarPhotoUrl ?? "/avatars/look-hoodie-1.webp";

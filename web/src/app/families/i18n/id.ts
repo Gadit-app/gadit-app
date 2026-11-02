@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Hingga 5 anak", "Gambar untuk setiap arti", "Dasbor orang tua"],
-    devices: ["Ponsel", "Tablet", "Komputer"],
+    devices: ["Komputer", "Tablet", "Ponsel"],
     cardsKicker: "Kamus visual pintar yang membangun kosakata",
     cardsTitle: "Setiap kata dijelaskan sesuai tingkat anak Anda",
     safeKicker: "Keamanan",

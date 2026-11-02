@@ -6,6 +6,7 @@ import { INDIVIDUAL_MONTHLY, INDIVIDUAL_YEARLY, INDIVIDUAL_MONTHLY_V1, INDIVIDUA
 import { miscUi } from "@/lib/misc-ui-i18n";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { TokushohoLink } from "@/components/legal/TokushohoLink";
 import { useSearchParams } from "next/navigation";
 import {
   loadStripe,
@@ -1028,6 +1029,7 @@ export default function CheckoutClient() {
                 <span>{c.secureNote}</span>
               </p>
               <p style={styles.cancelNote}>{c.cancelNote}</p>
+              <TokushohoLink style={{ display: "block", textAlign: "center", fontSize: 12, color: "#64748B", marginTop: 8, textDecoration: "underline" }} />
             </>
           )}
         </div>

@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["U swika kha vhana vha 5", "Tshifanyiso kha ndeme iṅwe na iṅwe", "Tshikirini tsha vhabebi"],
-    devices: ["Founu", "Thebuleti", "Khomphiyutha"],
+    devices: ["Khomphiyutha", "Thebuleti", "Founu"],
     cardsKicker: "Bugu ya maipfi ya vhuṱali i re na zwifanyiso ine ya fhaṱa maipfi",
     cardsTitle: "Ipfi ḽiṅwe na ḽiṅwe ḽo ṱalutshedzwa kha vhuimo ha ṅwana waṋu",
     safeKicker: "Tsireledzo",

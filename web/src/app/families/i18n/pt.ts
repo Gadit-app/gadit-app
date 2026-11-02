@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Até 5 filhos", "Uma imagem para cada significado", "Um painel dos pais"],
-    devices: ["Celular", "Tablet", "Computador"],
+    devices: ["Computador", "Tablet", "Celular"],
     cardsKicker: "Um dicionário visual inteligente que constrói vocabulário",
     cardsTitle: "Cada palavra explicada no nível do seu filho",
     safeKicker: "Segurança",

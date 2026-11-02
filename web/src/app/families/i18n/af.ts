@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Tot 5 kinders", "'n Prent vir elke betekenis", "'n Ouer-paneelbord"],
-    devices: ["Foon", "Tablet", "Rekenaar"],
+    devices: ["Rekenaar", "Tablet", "Foon"],
     cardsKicker: "'n Slim visuele woordeboek wat woordeskat bou",
     cardsTitle: "Elke woord verduidelik op jou kind se vlak",
     safeKicker: "Veiligheid",

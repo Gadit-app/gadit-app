@@ -10,6 +10,7 @@
 import { GaditIcon } from "@/components/design/GaditIcon";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
+import { TokushohoLink } from "@/components/legal/TokushohoLink";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { useAuth } from "@/lib/auth-context";
@@ -90,6 +91,7 @@ export function ToolPage({ active, title, titleExtra, sub, width = 880, children
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>
         <Link href={href("/terms")}>{v2(lang, "footerTerms")}</Link>
+        <TokushohoLink separator />
       </footer>
     </div>
   );

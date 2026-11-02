@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Až 5 dětí", "Obrázek ke každému významu", "Rodičovský přehled"],
-    devices: ["Telefon", "Tablet", "Počítač"],
+    devices: ["Počítač", "Tablet", "Telefon"],
     cardsKicker: "Chytrý obrázkový slovník pro bohatší slovní zásobu",
     cardsTitle: "Každé slovo vysvětlené na úrovni vašeho dítěte",
     safeKicker: "Bezpečnost",

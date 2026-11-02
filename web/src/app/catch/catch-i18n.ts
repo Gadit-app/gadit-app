@@ -1,7 +1,11 @@
 /**
- * Letter Fireflies copy (Gadi 2026-11-02). Testers only for now: Hebrew and
- * English; every other language reads English until the game opens to all.
+ * Letter Catch copy (Gadi 2026-11-02): fireflies, roller coaster, funfair.
+ * Open to everyone: Hebrew and English here, the other UI languages in
+ * catch-i18n-more.ts; an unknown language falls back to English.
  */
+
+import { MORE_CATCH_COPY } from "./catch-i18n-more";
+
 export type CatchCopy = {
   title: string; sub: string; start: string; loading: string; noWords: string; back: string; hear: string;
   yourWord: (n: number, of: number) => string; goal: string; go: string;
@@ -92,4 +96,6 @@ const EN: CatchCopy = {
   },
 };
 
-export const catchCopy = (lang: string): CatchCopy => (lang === "he" ? HE : EN);
+const COPY: Record<string, CatchCopy> = { ...MORE_CATCH_COPY, en: EN, he: HE };
+
+export const catchCopy = (lang: string): CatchCopy => COPY[lang] ?? EN;

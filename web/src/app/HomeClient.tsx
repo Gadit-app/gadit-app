@@ -15,6 +15,7 @@ import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import { planCopy } from "@/lib/plan-copy";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { TokushohoLink } from "@/components/legal/TokushohoLink";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
 import { v2 } from "@/lib/i18n-v2";
@@ -494,6 +495,7 @@ export function HomePage() {
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>
         <Link href={href("/terms")}>{v2(lang, "footerTerms")}</Link>
+        <TokushohoLink separator />
         {/* Product sales decks (Gadi 2026-08-18), static HTML in /public/decks.
             EN + HE only; other UI languages fall back to the English deck.
             Tagged gd-buy — sales collateral is hidden in the Play app. */}

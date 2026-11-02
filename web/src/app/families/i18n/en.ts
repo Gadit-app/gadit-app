@@ -170,7 +170,7 @@ const en: FamI18n = {
   },
   real: {
     heroPoints: ["Up to 5 children", "A picture for every meaning", "A parent dashboard"],
-    devices: ["Phone", "Tablet", "Computer"],
+    devices: ["Computer", "Tablet", "Phone"],
     cardsKicker: "A smart visual dictionary that builds vocabulary",
     cardsTitle: "Every word explained at your child's level",
     safeKicker: "Safety",

@@ -142,9 +142,13 @@ const BACK_LABEL: Record<string, string> = {
 export default function LegalPage({
   locales,
   lastUpdated,
+  bindingNotice = true,
 }: {
   locales: Partial<Record<Lang, LocaleContent>>;
   lastUpdated: string;
+  /** false for a document whose binding text is not English (the Japanese
+   *  特定商取引法 disclosure), so the "English version governs" line is hidden. */
+  bindingNotice?: boolean;
 }) {
   const { lang: uiLang } = useLang();
   const href = useHref();
@@ -169,7 +173,7 @@ export default function LegalPage({
   // language, so every visitor understands that the English version governs.
   const noticeLang: Lang = locale !== "en" ? locale : uiLang;
   const notice = FALLBACK_NOTICE[noticeLang] ?? FALLBACK_NOTICE.en;
-  const showNotice = locale !== "en" || uiLang !== "en";
+  const showNotice = bindingNotice && (locale !== "en" || uiLang !== "en");
 
   // Languages available for this doc (in the same order as LANGUAGES)
   const available = LANGUAGES.filter((l) => locales[l.code]);

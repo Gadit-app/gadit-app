@@ -14,6 +14,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { TokushohoLink } from "@/components/legal/TokushohoLink";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
@@ -1711,6 +1712,7 @@ function SchoolsLanding({ standalone = false }: { standalone?: boolean } = {}) {
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>
         <Link href={href("/terms")}>{v2(lang, "footerTerms")}</Link>
+        <TokushohoLink separator />
       </footer>
     </div>
   );

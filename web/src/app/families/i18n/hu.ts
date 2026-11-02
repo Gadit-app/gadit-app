@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Legfeljebb 5 gyerek", "Minden jelentéshez egy kép", "Szülői irányítópult"],
-    devices: ["Telefon", "Táblagép", "Számítógép"],
+    devices: ["Számítógép", "Táblagép", "Telefon"],
     cardsKicker: "Okos képes szótár a szókincs építéséhez",
     cardsTitle: "Minden szó a gyereked szintjén elmagyarázva",
     safeKicker: "Biztonság",

@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Hadi watoto 5", "Picha kwa kila maana", "Ubao wa mzazi"],
-    devices: ["Simu", "Tableti", "Kompyuta"],
+    devices: ["Kompyuta", "Tableti", "Simu"],
     cardsKicker: "Kamusi mahiri yenye picha inayojenga msamiati",
     cardsTitle: "Kila neno linaelezwa kwa kiwango cha mtoto wako",
     safeKicker: "Usalama",

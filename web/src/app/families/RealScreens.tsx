@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 
 /**
  * Real app screens for the Families landing page (Gadi 2026-09-28, after the
@@ -46,13 +47,15 @@ export type RealCopy = {
   homework?: RealHomework;
   /** Games and sibling duels, on a warm band (Gadi 2026-10-12). */
   games?: RealTool;
+  /** A computer playing a real game, how to play, and the games themselves (Gadi 2026-11-02). */
+  gamesShow?: { video: string; poster: string; videoLabel: string; steps: string[]; cardsTitle: string; cards: { img: string; t: string }[] };
   shotAlt: string;
 };
 
 export const REAL_COPY: Record<string, RealCopy> = {
   he: {
     heroPoints: ["עד 5 ילדים", "תמונה לכל משמעות", "לוח בקרה להורה"],
-    devices: ["בטלפון", "בטאבלט", "במחשב"],
+    devices: ["במחשב", "בטאבלט", "בטלפון"],
     cardsKicker: "מילון חזותי וחכם שבונה אוצר מילים",
     cardsTitle: "כל מילה מוסברת בגובה העיניים של הילד",
     safeKicker: "בטיחות",
@@ -81,7 +84,7 @@ export const REAL_COPY: Record<string, RealCopy> = {
     shotAlt: "מסך אמיתי מתוך Gadit",
     steps: [
       { t: "מוסיפים את\nבני המשפחה", s: "ההורה השני ועד 5 ילדים", b: "לכל ילד שם, גיל וצבע. זה לוקח פחות מדקה. עד 5 ילדים וגם ההורה השני.", img: "add" },
-      { t: "מחברים את\nהמכשירים", s: "טלפון, טאבלט או מחשב", b: "הילד נכנס מהטלפון או מהטאבלט שלו עם קוד QR או קוד בן 6 ספרות, בלי סיסמה. אין לו מכשיר משלו? יש מסך משותף לילדים.", img: "pair" },
+      { t: "מחברים את\nהמכשירים", s: "מחשב, טאבלט או טלפון", b: "הילד נכנס מהמחשב, מהטאבלט או מהטלפון שלו עם קוד QR או קוד בן 6 ספרות, בלי סיסמה. אין לו מכשיר משלו? יש מסך משותף לילדים.", img: "pair" },
       { t: "הילדים מתחילים\nלהבין", s: "פירושים, דוגמאות ותמונות", b: "כל מילה מוסברת בשפה של ילדים עם תמונה לכל משמעות, דוגמאות ומקור המילה.", img: "word" },
       { t: "מתרגלים עד שהמילה\nנכנסת לזיכרון", s: "משחקי מילים ותרגולים", b: "משחקים וחידונים שנבנים מהמילים שהילד עצמו חיפש.", img: "play" },
       { t: "כל מילה\nנשמרת", s: "אוצר המילים גדל מיום ליום", b: "בלי ללחוץ על כלום. המחברת גדלה מילה אחרי מילה עם רצף ימים ויעד שבועי.", img: "notebook" },
@@ -128,10 +131,27 @@ export const REAL_COPY: Record<string, RealCopy> = {
     games: {
       kicker: "משחקים ותרגול",
       title: "המילים נשארות בזיכרון כי משחקים בהן",
-      body: "כל משחק נבנה מהמילים שהילד עצמו חיפש. אפשר לשחק דו-קרב מול אח או אחות, על אותו מכשיר או עם קוד הזמנה. ואתם מקבלים הודעה מי ניצח.",
+      body: "כל משחק נבנה מהמילים שהילד עצמו חיפש. משחקים במחשב, בטאבלט או בטלפון. אפשר לשחק דו-קרב מול אח או אחות, ואתם מקבלים הודעה מי ניצח.",
       points: ["יעד שבועי ורצף ימים", "דו-קרב בין אחים או נגד רובוט המילים", "הודעה להורה עם התוצאה"],
       img: "duel",
       img2: "play",
+    },
+    gamesShow: {
+      video: "/fam/video/worlds-he.mp4",
+      poster: "/fam/video/worlds-he-poster.webp",
+      videoLabel: "סרטון: משחק בעולמות המילים על מחשב",
+      steps: ["בוחרים בכל דלת את האות הבאה במילה", "מאייתים את המילה בשער", "המילה עוברת לגור בעולם של הילד"],
+      cardsTitle: "חלק מהמשחקים שמחכים לילדים",
+      cards: [
+        { img: "/worlds/jungle/clearing.webp?v=3", t: "עולמות המילים" },
+        { img: "/catch/coaster/jungle/card.webp", t: "רכבת הרים" },
+        { img: "/catch/fair/cans/card.webp", t: "לונה פארק" },
+        { img: "/catch/fireflies/cover.webp", t: "גחליליות האותיות" },
+        { img: "/play/duel.webp", t: "דו-קרב מילים" },
+        { img: "/play/context.webp", t: "בלש ההקשר" },
+        { img: "/play/twin.webp", t: "מלכודת תאומים" },
+        { img: "/play/memory.webp", t: "זיכרון" },
+      ],
     },
   },
   en: {
@@ -217,6 +237,69 @@ export function Lines({ text }: { text: string }) {
   );
 }
 
+/** Languages that have computer + tablet screens (Gadi 2026-11-02: many children
+ *  use a computer or a tablet, not a phone). Others keep the phone shots. */
+export const DESK_SHOT_LANGS = new Set(["he"]);
+
+/** A laptop with a real Gadit screen (2560x1600 capture of a 1280x800 window). */
+export function LaptopShot({ lang, name, alt, priority = false }: { lang: string; name: string; alt: string; priority?: boolean }) {
+  return (
+    <div className="fam-laptop">
+      <div className="fam-laptop-lid">
+        <div className="fam-laptop-screen">
+          <Image src={`/fam/screens/${lang}/desk-${name}.webp`} alt={alt} width={1600} height={1000} sizes="(max-width: 760px) 92vw, 640px" priority={priority} />
+        </div>
+      </div>
+      <div className="fam-laptop-base" aria-hidden />
+    </div>
+  );
+}
+
+/** A tablet standing upright with a real Gadit screen (820x1180 window). */
+export function TabletShot({ lang, name, alt, priority = false }: { lang: string; name: string; alt: string; priority?: boolean }) {
+  return (
+    <div className="fam-tablet">
+      <div className="fam-tablet-screen">
+        <Image src={`/fam/screens/${lang}/tab-${name}.webp`} alt={alt} width={820} height={1180} sizes="(max-width: 760px) 60vw, 340px" priority={priority} />
+      </div>
+    </div>
+  );
+}
+
+/** Screens captured at tablet size (public/fam/screens/<lang>/tab-<name>.webp). */
+const TAB_SCREENS = new Set(["notebook", "word", "play", "family"]);
+
+/** The tablet when this language has that screen at tablet size, the phone otherwise. */
+export function DeviceShot({ lang, name, alt, priority = false }: { lang: string; name: string; alt: string; priority?: boolean }) {
+  return DESK_SHOT_LANGS.has(lang) && TAB_SCREENS.has(name)
+    ? <TabletShot lang={lang} name={name} alt={alt} priority={priority} />
+    : <PhoneShot lang={lang} name={name} alt={alt} priority={priority} />;
+}
+
+/** A laptop playing a short silent clip of a real game; it plays only while on screen. */
+export function LaptopVideo({ src, poster, label }: { src: string; poster: string; label: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { v.preload = "auto"; void v.play().catch(() => undefined); } else v.pause();
+    }, { threshold: 0.35 });
+    io.observe(v);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div className="fam-laptop">
+      <div className="fam-laptop-lid">
+        <div className="fam-laptop-screen">
+          <video ref={ref} src={src} poster={poster} muted loop playsInline preload="none" aria-label={label} />
+        </div>
+      </div>
+      <div className="fam-laptop-base" aria-hidden />
+    </div>
+  );
+}
+
 export function PhoneShot({ lang, name, alt, priority = false }: { lang: string; name: string; alt: string; priority?: boolean }) {
   return (
     <div className="fam-phone">
@@ -245,6 +328,48 @@ export const REAL_CSS = `
   box-shadow: 0 24px 56px rgba(11,18,32,0.22), 0 6px 16px rgba(11,18,32,0.12);
 }
 .fam-phone-screen { border-radius: 30px; overflow: hidden; line-height: 0; background: #F2F6F4; aspect-ratio: 390 / 844; }
+/* The games band: a computer playing a real game (Gadi 2026-11-02). */
+.fam-games-show { max-width: 1100px; margin: 0 auto; display: grid; gap: 28px; justify-items: center; text-align: center; padding-inline: 20px; box-sizing: border-box; }
+.fam-games-show .fam-h2, .fam-games-show .fam-body { text-align: center; }
+.fam-games-stage { width: 100%; max-width: 860px; }
+.fam-games-stage .fam-laptop { max-width: 860px; }
+.fam-games-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; width: 100%; max-width: 860px; counter-reset: gs; }
+.fam-games-steps li { counter-increment: gs; background: #fff; border-radius: 18px; padding: 14px 16px; font-weight: 700; font-size: 16px; color: #1e293b; box-shadow: 0 6px 18px rgba(120,80,0,0.10); display: flex; gap: 10px; align-items: center; text-align: start; }
+.fam-games-steps li::before { content: counter(gs); flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; background: #F59E0B; color: #fff; display: grid; place-items: center; font-weight: 800; }
+.fam-games-cards-title { font-size: 20px; font-weight: 800; color: #1e293b; margin: 8px 0 0; }
+.fam-games-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; width: 100%; }
+.fam-games-cards li { background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 6px 18px rgba(120,80,0,0.12); }
+.fam-games-cards img { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; display: block; }
+.fam-games-cards span { display: block; padding: 10px 12px 12px; font-weight: 800; font-size: 15px; color: #1e293b; }
+@media (max-width: 760px) {
+  .fam-games-steps { grid-template-columns: 1fr; }
+  .fam-games-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+}
+/* Computer + tablet frames (Gadi 2026-11-02). */
+.fam-laptop { width: 100%; max-width: 640px; margin: 0 auto; filter: drop-shadow(0 34px 50px rgba(16,40,60,0.28)); }
+.fam-laptop-lid { background: #11151a; border-radius: 18px 18px 6px 6px; padding: 2.2% 2.2% 3%; position: relative; }
+.fam-laptop-lid::before { content: ""; position: absolute; top: 0.9%; left: 50%; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%; background: #2b333b; }
+.fam-laptop-screen { border-radius: 6px; overflow: hidden; line-height: 0; background: #F2F6F4; aspect-ratio: 16 / 10; }
+.fam-laptop-screen img, .fam-laptop-screen video { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.fam-laptop-base { height: 14px; margin: 0 -7%; background: linear-gradient(#d9dee3, #aeb6be); border-radius: 0 0 16px 16px; position: relative; }
+.fam-laptop-base::before { content: ""; position: absolute; top: 0; left: 50%; width: 16%; height: 5px; transform: translateX(-50%); background: #9aa3ac; border-radius: 0 0 8px 8px; }
+.fam-tablet { width: 100%; max-width: 300px; background: #11151a; border-radius: 26px; padding: 12px; box-shadow: 0 30px 60px -22px rgba(16,40,60,0.5), 0 8px 20px rgba(16,40,60,0.12); }
+.fam-tablet-screen { border-radius: 16px; overflow: hidden; line-height: 0; background: #F2F6F4; aspect-ratio: 820 / 1180; }
+.fam-tablet-screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+/* Laptop with a tablet leaning in front of it, at the hero and in the bands. */
+.fam-devices { position: relative; width: 100%; max-width: 680px; margin: 0 auto; padding-bottom: 6%; }
+.fam-devices > .fam-laptop { max-width: 88%; margin-inline-start: 0; margin-inline-end: auto; }
+.fam-devices > .fam-tablet, .fam-devices > .fam-phone { position: absolute; bottom: 0; inset-inline-end: 0; width: 30%; max-width: none; padding: 2%; border-radius: 18px; }
+.fam-devices > .fam-phone { width: 24%; }
+.fam-devices > .fam-tablet .fam-tablet-screen { border-radius: 11px; }
+.fam-real-pair .fam-tablet { max-width: 240px; }
+.fam-games-stage.fam-devices { max-width: 900px; }
+.fam-devices-hero { max-width: 620px; }
+@media (max-width: 760px) {
+  .fam-tablet { max-width: 240px; border-radius: 20px; padding: 9px; }
+  .fam-real-pair .fam-tablet { max-width: 46%; }
+  .fam-devices > .fam-tablet { width: 34%; }
+}
 .fam-phone-screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
 .fam-real-hero { display: flex; justify-content: center; align-items: center; max-width: 560px; margin: 0 auto; padding: 18px 0 26px; }
 .fam-real-hero .fam-phone { max-width: 250px; flex: 1 1 0; }

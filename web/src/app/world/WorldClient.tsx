@@ -721,16 +721,16 @@ export function Clearing({ world, c, items: words, fresh, onNext, onBack, ui, on
 }
 
 /* ---------- the page ---------- */
-/** peekDemo: the local preview shows the testers' peeking trail without a signed-in tester. */
-export function WorldClient({ worldId = "jungle", demo, peekDemo }: { worldId?: WorldId; demo?: TrailWord[]; peekDemo?: boolean }) {
+/** peekDemo: kept for the local preview; the peeking trail is open to everyone now. */
+export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; demo?: TrailWord[]; peekDemo?: boolean }) {
   const world = WORLDS[worldId];
-  const { user, plan, planReady, loading, promptLogin, avatarId, avatarPhotoUrl, tester } = useAuth();
+  const { user, plan, planReady, loading, promptLogin, avatarId, avatarPhotoUrl } = useAuth();
   const { lang } = useLang();
   const href = useHref();
   const router = useRouter();
   const c = worldCopy(lang);
-  // Testers (Gadi 2026-11-02) also get the peeking letters trail.
-  const canPeek = tester || !!peekDemo;
+  // The peeking letters trail is open to every player (Gadi 2026-11-02).
+  const canPeek = true;
   const [mode, setMode] = useState<"doors" | "peek">("doors");
   const wn = c.worlds[world.id];
 
@@ -797,6 +797,8 @@ export function WorldClient({ worldId = "jungle", demo, peekDemo }: { worldId?: 
     return () => { alive = false; };
   }, [demo, loading, user, planReady, plan, load]);
 
+  // A preview (demo) word may carry its picture's address itself.
+  const picOf = (k: string): string | null => pics[k] ?? (demo && /^https:\/\//.test(k) ? k : null);
   const word = queue?.[idx] ?? null;
   const doors = reads === "yes" ? 3 : reads === "no" || reads === "little" ? 2 : (word && lettersOf(word.w, word.lang).length >= 5 ? 3 : 2);
   const avatar = avatarUrl(avatarId) ?? avatarPhotoUrl ?? null;
@@ -819,7 +821,7 @@ export function WorldClient({ worldId = "jungle", demo, peekDemo }: { worldId?: 
   const saveWord = useCallback(async (word: TrailWord, ok: boolean, wrongs: number, stars: number) => {
     const r = { wrongs, stars };
     const total = lettersOf(word.w, word.lang).length;
-    const pic = pics[word.pic] ?? null;
+    const pic = picOf(word.pic);
     if (demo || !user) {
       setItems((cur) => (cur.some((x) => x.w === word.w && x.lang === word.lang) ? cur : [...cur, { w: word.w, lang: word.lang, t: word.t, pic, at: Date.now() }]));
     } else try {
@@ -962,7 +964,7 @@ export function WorldClient({ worldId = "jungle", demo, peekDemo }: { worldId?: 
           avatar={avatar}
           doors={doors}
           started={phase === "trail"}
-          pic={pics[word.pic] ?? null}
+          pic={picOf(word.pic)}
           onDone={finish}
           onExit={exit}
         />
@@ -974,7 +976,7 @@ export function WorldClient({ worldId = "jungle", demo, peekDemo }: { worldId?: 
           c={c}
           ui={lang}
           word={word}
-          pic={word ? pics[word.pic] ?? null : null}
+          pic={word ? picOf(word.pic) : null}
           avatar={avatar}
           onWordDone={peekDone}
           onMap={() => setPhase("clearing")}
@@ -1020,7 +1022,7 @@ export function WorldClient({ worldId = "jungle", demo, peekDemo }: { worldId?: 
           <div className="wt-door-title">
             <strong>{wn.title}</strong>
             <button type="button" className="wt-btn is-big" disabled={!word} onClick={(e) => { e.stopPropagation(); enter(); }}>{word ? wn.enter : <WaitText text={c.loading} />}</button>
-            {canPeek ? <button type="button" className="wt-btn is-ghost" disabled={!word} onClick={(e) => { e.stopPropagation(); enterPeek(); }}>🧪 {peekCopy(lang).start}</button> : null}
+            {canPeek ? <button type="button" className="wt-btn is-ghost" disabled={!word} onClick={(e) => { e.stopPropagation(); enterPeek(); }}>{peekCopy(lang).start}</button> : null}
             <button type="button" className="wt-link" onClick={(e) => { e.stopPropagation(); exit(); }}>{c.back}</button>
           </div>
         ) : null}

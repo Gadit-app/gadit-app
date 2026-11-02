@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Bis zu 5 Kinder", "Ein Bild für jede Bedeutung", "Eine Elternübersicht"],
-    devices: ["Handy", "Tablet", "Computer"],
+    devices: ["Computer", "Tablet", "Handy"],
     cardsKicker: "Ein smartes Bildwörterbuch für mehr Wortschatz",
     cardsTitle: "Jedes Wort erklärt auf dem Niveau deines Kindes",
     safeKicker: "Sicherheit",

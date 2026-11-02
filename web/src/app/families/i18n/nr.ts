@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Abantwana abafika ku-5", "Isithombe sehlathululo ngayinye", "Ideshibhodi yababelethi"],
-    devices: ["Ifowuni", "Ithebulethi", "Ikhomphyutha"],
+    devices: ["Ikhomphyutha", "Ithebulethi", "Ifowuni"],
     cardsKicker: "Isihlathululimezwi esihlakaniphileko esinezithombe esakha amezwi",
     cardsTitle: "Ilizwi ngalinye lihlathululwa ezingeni lomntwana wakho",
     safeKicker: "Ukuphepha",

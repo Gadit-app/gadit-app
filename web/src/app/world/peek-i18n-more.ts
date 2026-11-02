@@ -1,0 +1,48 @@
+import type { PeekCopy } from "./PeekTrail";
+
+/**
+ * Peeking letters trail copy in the other UI languages (Gadi 2026-11-02),
+ * open to everyone. Kid-facing, short and warm. No dashes anywhere; "Gadit"
+ * stays Latin. Terms follow lib/world/world-i18n-more.ts in every language.
+ */
+export const MORE_PEEK_COPY: Record<string, PeekCopy> = {
+  ar: { start: "درب الحروف التي تطل", tip: "اضغط على الحرف التالي عندما يطل", walked: (n) => `كلمات في هذه الجولة: ${n}`, next: "الكلمة التالية في الطريق", go: "نواصل المشي", gotIt: "رائع! جمعت الكلمة" },
+  ru: { start: "Тропинка выглядывающих букв", tip: "Нажми на следующую букву, когда она выглянет", walked: (n) => `Слов на прогулке: ${n}`, next: "Следующее слово на тропинке", go: "Идём дальше", gotIt: "Есть! Слово собрано" },
+  uk: { start: "Стежка літер, що визирають", tip: "Натисни на наступну літеру, коли вона визирне", walked: (n) => `Слів на прогулянці: ${n}`, next: "Наступне слово на стежці", go: "Ідемо далі", gotIt: "Є! Слово зібрано" },
+  es: { start: "Camino de las letras que se asoman", tip: "Toca la siguiente letra cuando se asome", walked: (n) => `Palabras en este paseo: ${n}`, next: "Siguiente palabra del camino", go: "Seguir caminando", gotIt: "¡Bien! Palabra conseguida" },
+  pt: { start: "Trilha das letras que espiam", tip: "Toque na próxima letra quando ela espiar", walked: (n) => `Palavras neste passeio: ${n}`, next: "Próxima palavra da trilha", go: "Continuar andando", gotIt: "Isso! Palavra coletada" },
+  fr: { start: "Le chemin des lettres qui se cachent", tip: "Appuie sur la lettre suivante quand elle sort la tête", walked: (n) => `Mots de cette balade : ${n}`, next: "Mot suivant sur le chemin", go: "On continue", gotIt: "Bravo ! Mot ramassé" },
+  de: { start: "Pfad der Versteck-Buchstaben", tip: "Tippe auf den nächsten Buchstaben, wenn er hervorguckt", walked: (n) => `Wörter auf diesem Weg: ${n}`, next: "Nächstes Wort auf dem Pfad", go: "Weiterlaufen", gotIt: "Geschafft! Wort gesammelt" },
+  cs: { start: "Stezka vykukujících písmen", tip: "Ťukni na další písmeno, když vykoukne", walked: (n) => `Slova na této procházce: ${n}`, next: "Další slovo na stezce", go: "Jdeme dál", gotIt: "Hurá! Slovo je sebrané" },
+  sk: { start: "Chodník vykúkajúcich písmen", tip: "Ťukni na ďalšie písmeno, keď vykukne", walked: (n) => `Slová na tejto prechádzke: ${n}`, next: "Ďalšie slovo na chodníku", go: "Ideme ďalej", gotIt: "Hurá! Slovo je zozbierané" },
+  pl: { start: "Ścieżka zerkających liter", tip: "Dotknij następnej litery, gdy wyjrzy", walked: (n) => `Słowa na tym spacerze: ${n}`, next: "Następne słowo na ścieżce", go: "Idziemy dalej", gotIt: "Jest! Słowo zebrane" },
+  it: { start: "Sentiero delle lettere che sbirciano", tip: "Tocca la lettera successiva quando sbircia fuori", walked: (n) => `Parole in questa passeggiata: ${n}`, next: "Prossima parola del sentiero", go: "Continuiamo a camminare", gotIt: "Fatto! Parola raccolta" },
+  nl: { start: "Pad van de gluurletters", tip: "Tik op de volgende letter als hij tevoorschijn gluurt", walked: (n) => `Woorden op deze wandeling: ${n}`, next: "Volgend woord op het pad", go: "Verder lopen", gotIt: "Gelukt! Woord verzameld" },
+  da: { start: "Stien med kiggebogstaver", tip: "Tryk på det næste bogstav, når det kigger frem", walked: (n) => `Ord på denne tur: ${n}`, next: "Næste ord på stien", go: "Gå videre", gotIt: "Sådan! Ordet er samlet" },
+  el: { start: "Μονοπάτι με γράμματα που κρυφοκοιτάζουν", tip: "Πάτησε το επόμενο γράμμα όταν κρυφοκοιτάζει", walked: (n) => `Λέξεις σε αυτή τη βόλτα: ${n}`, next: "Επόμενη λέξη στο μονοπάτι", go: "Συνεχίζουμε", gotIt: "Ναι! Η λέξη μαζεύτηκε" },
+  hu: { start: "A kukucskáló betűk ösvénye", tip: "Koppints a következő betűre, amikor kikukucskál", walked: (n) => `Szavak ezen a sétán: ${n}`, next: "A következő szó az ösvényen", go: "Megyünk tovább", gotIt: "Megvan! A szó összegyűlt" },
+  tr: { start: "Saklambaççı harfler yolu", tip: "Sıradaki harf başını uzattığında ona dokun", walked: (n) => `Bu yürüyüşteki kelimeler: ${n}`, next: "Yoldaki sıradaki kelime", go: "Yürümeye devam", gotIt: "Oldu! Kelime toplandı" },
+  id: { start: "Jalan huruf yang mengintip", tip: "Ketuk huruf berikutnya saat ia mengintip", walked: (n) => `Kata di perjalanan ini: ${n}`, next: "Kata berikutnya di jalan", go: "Terus berjalan", gotIt: "Dapat! Kata terkumpul" },
+  vi: { start: "Con đường chữ cái ló đầu", tip: "Chạm vào chữ cái tiếp theo khi nó ló ra", walked: (n) => `Số từ trên đường đi: ${n}`, next: "Từ tiếp theo trên đường", go: "Đi tiếp", gotIt: "Được rồi! Đã nhặt được từ" },
+  fil: { start: "Daan ng mga sumisilip na titik", tip: "Pindutin ang susunod na titik kapag sumilip ito", walked: (n) => `Mga salita sa lakad na ito: ${n}`, next: "Susunod na salita sa daan", go: "Tuloy ang lakad", gotIt: "Ayos! Nakuha ang salita" },
+  af: { start: "Paadjie van die loerletters", tip: "Raak die volgende letter wanneer dit uitloer", walked: (n) => `Woorde op hierdie stap: ${n}`, next: "Volgende woord op die paadjie", go: "Loop verder", gotIt: "Mooi so! Woord versamel" },
+  sw: { start: "Njia ya herufi zinazochungulia", tip: "Gusa herufi inayofuata inapochungulia", walked: (n) => `Maneno katika matembezi haya: ${n}`, next: "Neno linalofuata njiani", go: "Endelea kutembea", gotIt: "Safi! Neno limekusanywa" },
+  ja: { start: "もじが のぞく みち", tip: "つぎの文字が のぞいたら タップしよう", walked: (n) => `このおさんぽの ことば: ${n}`, next: "みちの つぎのことば", go: "あるきつづける", gotIt: "やったね！ことばを あつめたよ" },
+  "zh-CN": { start: "偷看字母小路", tip: "下一个字母探出头时，点一下它", walked: (n) => `这次散步的单词：${n}`, next: "小路上的下一个单词", go: "继续走", gotIt: "抓到啦！单词收集好了" },
+  "zh-TW": { start: "偷看字母小路", tip: "下一個字母探出頭時，點一下它", walked: (n) => `這次散步的單字：${n}`, next: "小路上的下一個單字", go: "繼續走", gotIt: "抓到囉！單字收集好了" },
+  ko: { start: "빼꼼 글자 길", tip: "다음 글자가 빼꼼 나올 때 눌러 봐", walked: (n) => `이번 산책의 단어: ${n}`, next: "길 위의 다음 단어", go: "계속 걷기", gotIt: "좋아! 단어를 모았어" },
+  th: { start: "เส้นทางตัวอักษรแอบมอง", tip: "แตะตัวอักษรถัดไปตอนที่มันโผล่หน้าออกมา", walked: (n) => `คำในการเดินรอบนี้: ${n}`, next: "คำถัดไปบนเส้นทาง", go: "เดินต่อ", gotIt: "เย้! เก็บคำได้แล้ว" },
+  hi: { start: "झाँकते अक्षरों का रास्ता", tip: "अगला अक्षर झाँके तो उसे दबाओ", walked: (n) => `इस सैर के शब्द: ${n}`, next: "रास्ते का अगला शब्द", go: "चलते रहो", gotIt: "मिल गया! शब्द जमा हो गया" },
+  bn: { start: "উঁকি দেওয়া অক্ষরের পথ", tip: "পরের অক্ষরটা উঁকি দিলেই ট্যাপ করো", walked: (n) => `এই হাঁটায় শব্দ: ${n}`, next: "পথের পরের শব্দ", go: "হাঁটতে থাকো", gotIt: "পেয়েছি! শব্দটা জমা হলো" },
+  am: { start: "የሚያጮልቁ ፊደሎች መንገድ", tip: "ቀጣዩ ፊደል ሲያጮልቅ ንካው", walked: (n) => `በዚህ ጉዞ ቃላት: ${n}`, next: "በመንገዱ ላይ ቀጣዩ ቃል", go: "መሄድ ቀጥል", gotIt: "ጎበዝ! ቃሉ ተሰበሰበ" },
+  fa: { start: "مسیر حرف‌های سرک‌کش", tip: "وقتی حرف بعدی سرک کشید، رویش بزن", walked: (n) => `کلمه‌های این پیاده‌روی: ${n}`, next: "کلمه‌ی بعدی مسیر", go: "ادامه بده", gotIt: "آفرین! کلمه جمع شد" },
+  zu: { start: "Indlela Yezinhlamvu Ezilunguzayo", tip: "Thepha uhlamvu olulandelayo uma lulunguza", walked: (n) => `Amagama kulolu hambo: ${n}`, next: "Igama elilandelayo endleleni", go: "Qhubeka uhambe", gotIt: "Yebo! Igama liqoqiwe" },
+  xh: { start: "Indlela Yoonobumba Abalunguzayo", tip: "Cofa unobumba olandelayo xa elunguza", walked: (n) => `Amagama kolu hambo: ${n}`, next: "Igama elilandelayo endleleni", go: "Qhubeka uhambe", gotIt: "Ewe! Igama liqokelelwe" },
+  nso: { start: "Tsela ya ditlhaka tše di ipatago", tip: "Tobetsa tlhaka ye e latelago ge e tšwelela", walked: (n) => `Mantšu leetong le: ${n}`, next: "Lentšu le le latelago tseleng", go: "Tšwela pele o sepele", gotIt: "Ee! Lentšu le kgobokeditšwe" },
+  tn: { start: "Tsela ya ditlhaka tse di iphitlhang", tip: "Tlanya tlhaka e e latelang fa e tlhagelela", walked: (n) => `Mafoko mo loetong lono: ${n}`, next: "Lefoko le le latelang mo tseleng", go: "Tswelela o tsamaya", gotIt: "Ee! Lefoko le kokoantswe" },
+  st: { start: "Tsela ya ditlhaku tse ipatang", tip: "Tobetsa tlhaku e latelang ha e hlaha", walked: (n) => `Mantswe leetong lena: ${n}`, next: "Lentswe le latelang tseleng", go: "Tswela pele o tsamaya", gotIt: "E! Lentswe le bokelletswe" },
+  ts: { start: "Ndlela ya maletere lama tumbelaka", tip: "Tlanya letere leri landzelaka loko ri humelela", walked: (n) => `Marito eka riendzo leri: ${n}`, next: "Rito leri landzelaka endleleni", go: "Yisa emahlweni u famba", gotIt: "Ina! Rito ri hlengeletiwile" },
+  ss: { start: "Indlela Yetinhlavu Letilunguzako", tip: "Tsintsa luhlamvu lolulandzelako nalulunguza", walked: (n) => `Emagama kulolu luhambo: ${n}`, next: "Ligama lelilandzelako endleleni", go: "Chubeka uhambe", gotIt: "Yebo! Ligama libuthiwe" },
+  ve: { start: "Nḓila ya maletere a dzumbamaho", tip: "Kwama ḽeḓere ḽi tevhelaho musi ḽi tshi bvelela", walked: (n) => `Maipfi kha lwendo uyu: ${n}`, next: "Ipfi ḽi tevhelaho nḓilani", go: "Bvela phanḓa u tshi tshimbila", gotIt: "Ee! Ipfi ḽo kuvhanganywa" },
+  nr: { start: "Indlela Yeenhlamvu Ezilunguzako", tip: "Thinta ilitlhaka elilandelako nalilunguza", walked: (n) => `Amezwi ekhambeni leli: ${n}`, next: "Ilizwi elilandelako endleleni", go: "Ragela phambili ukhambe", gotIt: "Iye! Ilizwi libuthelelwe" },
+};

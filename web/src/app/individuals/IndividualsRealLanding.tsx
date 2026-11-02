@@ -3,6 +3,7 @@
 import { usePricing } from "@/lib/use-pricing";
 import Image from "next/image";
 import Link from "next/link";
+import { TokushohoLink } from "@/components/legal/TokushohoLink";
 import { Lines } from "../families/RealScreens";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { useHref } from "@/lib/href";
@@ -259,6 +260,7 @@ export function IndividualsRealLanding({ copy = HE, lang = "he" }: { copy?: IndC
         <a href={href("/terms")} style={{ color: "inherit" }}>{C.terms}</a>
         <span style={{ margin: "0 10px" }}>·</span>
         <a href={href("/privacy")} style={{ color: "inherit" }}>{C.privacy}</a>
+        <TokushohoLink separator sepStyle={{ margin: "0 10px" }} style={{ color: "inherit" }} />
         <span style={{ margin: "0 10px" }}>·</span>
         <span dir="ltr">© Gadit 2026</span>
       </footer>

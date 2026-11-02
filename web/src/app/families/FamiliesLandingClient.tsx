@@ -6,11 +6,12 @@ import type { FamI18n } from "./i18n/types";
 import { fillDeep, landingPrices, screensLang } from "@/lib/landing-i18n";
 import { INDIVIDUAL_DISPLAY, INDIVIDUAL_MONTHLY } from "@/lib/individual-prices";
 import { planCopy } from "@/lib/plan-copy";
-import { REAL_COPY, REAL_CSS, PhoneShot, Lines, type RealTool } from "./RealScreens";
+import { REAL_COPY, REAL_CSS, PhoneShot, DeviceShot, LaptopShot, LaptopVideo, TabletShot, DESK_SHOT_LANGS, Lines, type RealTool } from "./RealScreens";
 import { SubjectsScreenMock, SubjectsLines, subjectsBandCopy } from "./SubjectsShowcase";
 import { subjectsBandLangFor } from "@/lib/subjects-langs";
 import { Fragment, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { TokushohoLink } from "@/components/legal/TokushohoLink";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
@@ -1306,6 +1307,8 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
   // `classic` = the pre-2026-09-28 illustrated page, kept at /families/landing-old.
   const real = i18n ? fillDeep(i18n.real, prices) : !classic && lang === "he" ? REAL_COPY.he : undefined;
   const shotLang = i18n ? screensLang(lang) : lang;
+  // Computer + tablet screens where this language has them (Gadi 2026-11-02).
+  const desk = DESK_SHOT_LANGS.has(shotLang);
   // The Subjects band: only in the languages that have the feature (he, en, de, ar).
   const subjUi = subjectsBandLangFor(lang);
 
@@ -1436,11 +1439,11 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
           <div className="fam-feature-visual">
             {f.img2 ? (
               <div className="fam-real-pair">
-                <PhoneShot lang={shotLang} name={f.img} alt={real.shotAlt} />
-                <PhoneShot lang={shotLang} name={f.img2} alt={real.shotAlt} />
+                <DeviceShot lang={shotLang} name={f.img} alt={real.shotAlt} />
+                {!desk && <PhoneShot lang={shotLang} name={f.img2} alt={real.shotAlt} />}
               </div>
             ) : (
-              <PhoneShot lang={shotLang} name={f.img} alt={real.shotAlt} />
+              <DeviceShot lang={shotLang} name={f.img} alt={real.shotAlt} />
             )}
           </div>
         </div>
@@ -1623,9 +1626,9 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
               {/* Works everywhere, like the Yooniz hero (Gadi 2026-10-19). */}
               {real?.devices && (
                 <ul className="fam-devices">
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.2" /><path d="M10.5 18.5h3" /></svg><span>{real.devices[0]}</span></li>
+                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="3.5" width="19" height="13" rx="1.8" /><path d="M8 20.5h8M12 16.5v4" /></svg><span>{real.devices[0]}</span></li>
                   <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="2.5" width="17" height="19" rx="2.2" /><path d="M10.5 18.5h3" /></svg><span>{real.devices[1]}</span></li>
-                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="3.5" width="19" height="13" rx="1.8" /><path d="M8 20.5h8M12 16.5v4" /></svg><span>{real.devices[2]}</span></li>
+                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.2" /><path d="M10.5 18.5h3" /></svg><span>{real.devices[2]}</span></li>
                 </ul>
               )}
               {real ? (
@@ -1656,10 +1659,17 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
             </div>
             <div className="fam-hero-visual">
               {real ? (
+                desk ? (
+                  <div className="fam-devices fam-devices-hero">
+                    <LaptopShot lang={shotLang} name="word" alt={real.shotAlt} priority />
+                    <TabletShot lang={shotLang} name="notebook" alt={real.shotAlt} priority />
+                  </div>
+                ) : (
                 <div className="fam-real-hero">
                   <PhoneShot lang={shotLang} name="notebook" alt={real.shotAlt} priority />
                   <PhoneShot lang={shotLang} name="word" alt={real.shotAlt} priority />
                 </div>
+                )
               ) : (
               <div className="fam-hero-stage">
                 <div className="fam-hero-panel" aria-hidden />
@@ -1762,10 +1772,17 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
                   </ul>
                 </div>
                 <div className="fam-feature-visual">
+                  {desk ? (
+                    <div className="fam-devices">
+                      <LaptopShot lang={shotLang} name={real.dash.img} alt={real.shotAlt} />
+                      {real.dash.img2 && <PhoneShot lang={shotLang} name={real.dash.img2} alt={real.shotAlt} />}
+                    </div>
+                  ) : (
                   <div className="fam-real-pair">
                     <PhoneShot lang={shotLang} name={real.dash.img} alt={real.shotAlt} />
                     {real.dash.img2 && <PhoneShot lang={shotLang} name={real.dash.img2} alt={real.shotAlt} />}
                   </div>
+                  )}
                 </div>
               </div>
             </section>
@@ -1804,8 +1821,8 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
                   ))}
                 </ol>
                 <div className="fam-real-pair">
-                  <PhoneShot lang={shotLang} name={real.homework.img} alt={real.shotAlt} />
-                  <PhoneShot lang={shotLang} name={real.homework.img2} alt={real.shotAlt} />
+                  <DeviceShot lang={shotLang} name={real.homework.img} alt={real.shotAlt} />
+                  {!desk && <PhoneShot lang={shotLang} name={real.homework.img2} alt={real.shotAlt} />}
                 </div>
               </div>
             </div>
@@ -1836,7 +1853,34 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
         {real && real.tools.filter((t) => !t.afterGames).map((f, i) => toolSection(f, i))}
 
         {/* Games and sibling duels, on a warm band (Gadi 2026-10-12). */}
-        {real?.games && (
+        {real?.games && desk && real.gamesShow && (
+          <section className="fam-band fam-band-sun">
+            <div className="fam-games-show">
+              <Image src="/play/duel-mascot.webp" alt="" width={240} height={240} className="fam-games-mascot" />
+              <div className="fam-kicker">{real.games.kicker}</div>
+              <h2 className="fam-h2">{real.games.title}</h2>
+              <p className="fam-body"><Lines text={real.games.body} /></p>
+              <div className="fam-games-stage fam-devices">
+                <LaptopVideo src={real.gamesShow.video} poster={real.gamesShow.poster} label={real.gamesShow.videoLabel} />
+                <TabletShot lang={shotLang} name="play" alt={real.shotAlt} />
+              </div>
+              <ol className="fam-games-steps">
+                {real.gamesShow.steps.map((t, j) => <li key={j}>{t}</li>)}
+              </ol>
+              <h3 className="fam-games-cards-title">{real.gamesShow.cardsTitle}</h3>
+              <ul className="fam-games-cards">
+                {real.gamesShow.cards.map((cd, j) => (
+                  <li key={j}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={cd.img} alt="" loading="lazy" width={360} height={240} />
+                    <span>{cd.t}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
+        {real?.games && !(desk && real.gamesShow) && (
           <section className="fam-band fam-band-sun">
             <div className="fam-feature">
               <div className="fam-feature-text">
@@ -2198,6 +2242,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
         <span>© Gadit {new Date().getFullYear()}</span>
         <Link href={href("/terms")}>{c.footerTerms}</Link>
         <Link href={href("/privacy")}>{c.footerPrivacy}</Link>
+        <TokushohoLink />
       </footer>
     </div>
   );

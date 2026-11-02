@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Ho fihlela bana ba 5", "Setshwantsho bakeng sa moelelo ka mong", "Leqephe la taolo la motswadi"],
-    devices: ["Mohala", "Thebulete", "Khomputara"],
+    devices: ["Khomputara", "Thebulete", "Mohala"],
     cardsKicker: "Bukantswe e bohlale ya ditshwantsho e hodisang tlotlontswe",
     cardsTitle: "Lentswe le leng le le leng le hlaloswa boemong ba ngwana wa hao",
     safeKicker: "Polokeho",

@@ -34,7 +34,9 @@ const PLAY_COOKIE = "gadit_play";
 // not offered inside the apps either (iOS App Review 3.1.1, 2026-10-19).
 // /features is laid out by plan (Basic / Clear / Deep / Family, "upgrade in a
 // tap"), a plan comparison in all but name, so it goes too.
-const BLOCKED_IN_PLAY = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew", "partners", "partner", "affiliate", "affiliates", "features"]);
+// /tokushoho (Japan's 特定商取引法 disclosure) lists the yen prices, so it is a
+// price page for the store rules too.
+const BLOCKED_IN_PLAY = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew", "partners", "partner", "affiliate", "affiliates", "features", "tokushoho"]);
 // Variants of a sales page ("families-v2", a future "pricing-new") are blocked
 // with it: a segment matches when it IS a blocked name or starts with "<name>-".
 function blockedInPlay(segment: string | undefined): boolean {
@@ -58,7 +60,9 @@ const PAY_HOST = "gadit.app";
 // "partner" / "partners": a partner opening their dashboard link on a phone
 // with the app installed landed on the app's home page (Maayan, 2026-10-22);
 // the partner area is not allowed inside the app, so it lives here too.
-const PAY_ROUTES = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew", "account", "auth", "partner", "partners"]);
+// "tokushoho": linked from /pricing and /checkout for Japanese visitors, so the
+// purchase host serves it too (else a blocked-in-app bounce to it would loop).
+const PAY_ROUTES = new Set(["pricing", "checkout", "families", "individuals", "schools", "renew", "account", "auth", "partner", "partners", "tokushoho"]);
 
 // The iOS App Store app (ios-app/, an Expo WebView) is ALWAYS Play mode: Apple
 // App Review 3.1.1 forbids prices, plans and any "buy on the website" inside

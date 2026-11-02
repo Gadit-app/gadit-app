@@ -22,6 +22,7 @@ import { LANGUAGES, langNameIn as uiLangName } from "@/lib/i18n";
 import { toggleLangGroup } from "@/lib/lang-groups";
 import { LangSearchList } from "@/components/LangSearch";
 import Link from "next/link";
+import { TokushohoLink } from "@/components/legal/TokushohoLink";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
@@ -4546,14 +4547,14 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
                       </Link>
                     </li>
                   )}
-                  {/* Letter Fireflies (Gadi 2026-11-02): testers see it first. */}
-                  {tester && section.id === "notebook" && (
+                  {/* Catch letters (Gadi 2026-11-02): open to every player. */}
+                  {section.id === "notebook" && (
                     <li key="catch">
                       <Link href={href("/catch")} className="wb-play-card wb-play-cat-notebook has-cover">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img className="wb-play-card-cover" src="/catch/fireflies/cover.webp?v=1" alt="" loading="lazy" width={720} height={480} />
                         <span className="wb-play-card-text">
-                          <span className="wb-play-card-title">🧪 {catchCopy(lang).gameTitle}</span>
+                          <span className="wb-play-card-title">{catchCopy(lang).gameTitle}</span>
                           <span className="wb-play-card-desc">{catchCopy(lang).cardDesc}</span>
                         </span>
                       </Link>
@@ -4613,6 +4614,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>
         <Link href={href("/terms")}>{v2(lang, "footerTerms")}</Link>
+        <TokushohoLink separator />
       </footer>
     </div>
   );

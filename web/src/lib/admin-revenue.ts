@@ -155,6 +155,11 @@ const FX_TO_USD: Record<string, number> = {
   // Local prices 2026-10-24 (approx. USD per unit):
   chf: 1.13, aud: 0.65, cad: 0.72, aed: 0.272, sar: 0.267,
   mxn: 0.052, try: 0.024, ron: 0.22, uah: 0.024,
+  // App Store storefronts with no Stripe price (2026-11-02): without a rate
+  // one Japanese subscriber at 480 yen counted as 480 dollars of MRR.
+  jpy: 0.0066, krw: 0.00072, inr: 0.012, brl: 0.18, cny: 0.14, twd: 0.031,
+  hkd: 0.128, sgd: 0.74, nzd: 0.59, sek: 0.094, nok: 0.091, dkk: 0.145,
+  pln: 0.25, czk: 0.043, huf: 0.0027, thb: 0.028, php: 0.017, idr: 0.000062, vnd: 0.000039,
 };
 function toUsd(amount: number, currency: string): number {
   return amount * (FX_TO_USD[currency.toLowerCase()] ?? 1);

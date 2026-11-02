@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Izingane ezifika ku-5", "Isithombe sencazelo ngayinye", "Ideshibhodi yomzali"],
-    devices: ["Ifoni", "Ithebhulethi", "Ikhompyutha"],
+    devices: ["Ikhompyutha", "Ithebhulethi", "Ifoni"],
     cardsKicker: "Isichazamazwi esihlakaniphile esinezithombe esakha isilulumagama",
     cardsTitle: "Lonke igama lichazwa ezingeni lengane yakho",
     safeKicker: "Ukuphepha",

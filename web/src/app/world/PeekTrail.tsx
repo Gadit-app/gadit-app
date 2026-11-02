@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Peeking letters (Gadi 2026-11-02, testers first). Like a Roblox obby: the
+ * Peeking letters (Gadi 2026-11-02, open to everyone). Like a Roblox obby: the
  * child is always on the trail and always moving on. At each stop three
  * things stand on the path; letters peek out from behind them for a moment
  * and duck back. The child taps the NEXT letter of the word while it peeks.
@@ -24,9 +24,10 @@ import { decoysFor, keyMatches, lettersOf, RTL_SPELL } from "@/lib/world/letters
 import { worldArt, type WorldDef } from "@/lib/world/worlds";
 import type { WorldCopy } from "@/lib/world/world-i18n";
 import { Glyph } from "./Glyph";
+import { MORE_PEEK_COPY } from "./peek-i18n-more";
 import type { TrailWord } from "./WorldClient";
 
-type PeekCopy = { start: string; tip: string; walked: (n: number) => string; next: string; go: string; gotIt: string };
+export type PeekCopy = { start: string; tip: string; walked: (n: number) => string; next: string; go: string; gotIt: string };
 const PEEK_HE: PeekCopy = {
   start: "מסלול האותיות המציצות",
   tip: "תופסים את האות הבאה כשהיא מציצה",
@@ -43,8 +44,9 @@ const PEEK_EN: PeekCopy = {
   go: "Keep walking",
   gotIt: "Got it! Word collected",
 };
-/** Testers only for now: Hebrew, else English. */
-export const peekCopy = (lang: string): PeekCopy => (lang === "he" ? PEEK_HE : PEEK_EN);
+/** Hebrew and English here, the other UI languages in peek-i18n-more.ts; else English. */
+const PEEK_COPY: Record<string, PeekCopy> = { ...MORE_PEEK_COPY, en: PEEK_EN, he: PEEK_HE };
+export const peekCopy = (lang: string): PeekCopy => PEEK_COPY[lang] ?? PEEK_EN;
 
 const iso = (s: string) => `⁨${s}⁩`;
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));

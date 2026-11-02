@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["子ども最大5人", "意味ごとに画像", "保護者ボード"],
-    devices: ["スマホ", "タブレット", "パソコン"],
+    devices: ["パソコン", "タブレット", "スマホ"],
     cardsKicker: "語彙を育てるスマートなビジュアル辞書",
     cardsTitle: "どの単語もお子さまのレベルで説明",
     safeKicker: "安全",

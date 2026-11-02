@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Tot 5 kinderen", "Een afbeelding bij elke betekenis", "Een ouderdashboard"],
-    devices: ["Telefoon", "Tablet", "Computer"],
+    devices: ["Computer", "Tablet", "Telefoon"],
     cardsKicker: "Een slim beeldwoordenboek dat de woordenschat laat groeien",
     cardsTitle: "Elk woord uitgelegd op het niveau van je kind",
     safeKicker: "Veiligheid",

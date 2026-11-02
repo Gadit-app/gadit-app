@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Hanggang 5 anak", "Larawan para sa bawat kahulugan", "Dashboard ng magulang"],
-    devices: ["Telepono", "Tablet", "Computer"],
+    devices: ["Computer", "Tablet", "Telepono"],
     cardsKicker: "Isang matalino at biswal na diksiyonaryo na nagpapalawak ng bokabularyo",
     cardsTitle: "Bawat salita ay ipinapaliwanag sa level ng anak mo",
     safeKicker: "Kaligtasan",

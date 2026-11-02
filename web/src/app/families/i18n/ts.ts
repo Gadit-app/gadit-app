@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["Ku fika eka vana va 5", "Xifaniso eka nhlamuselo yin'wana na yin'wana", "Dashibodo ya mutswari"],
-    devices: ["Riqingho", "Thebulete", "Khompyuta"],
+    devices: ["Khompyuta", "Thebulete", "Riqingho"],
     cardsKicker: "Dikixinari ya vutlhari ya swifaniso leyi akaka vutivi bya marito",
     cardsTitle: "Rito rin'wana na rin'wana ri hlamuseriwa hi xiyimo xa n'wana wa n'wina",
     safeKicker: "Vuhlayiseki",

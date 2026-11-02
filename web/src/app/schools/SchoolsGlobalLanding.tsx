@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { TokushohoLink } from "@/components/legal/TokushohoLink";
 import { useState } from "react";
 import { Lines } from "../families/RealScreens";
 import { SCH_PAGE_CSS } from "./SchoolsRealLanding";
@@ -237,6 +238,7 @@ export function SchoolsGlobalLanding({ copy: C, lang }: { copy: SchCopy; lang: s
         <a href={href("/terms")} style={{ color: "inherit" }}>{C.terms}</a>
         <span style={{ margin: "0 10px" }}>·</span>
         <a href={href("/privacy")} style={{ color: "inherit" }}>{C.privacy}</a>
+        <TokushohoLink separator sepStyle={{ margin: "0 10px" }} style={{ color: "inherit" }} />
         <span style={{ margin: "0 10px" }}>·</span>
         <span dir="ltr">© Gadit 2026</span>
       </footer>

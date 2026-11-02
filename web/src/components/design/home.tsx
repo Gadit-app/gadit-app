@@ -576,9 +576,12 @@ export function HomeFooter() {
     // Partners moved out of the top nav to the footer (Gadi 2026-08-20).
     { label: v2(lang, "navAffiliates"), href: href("/partners"), buy: true },
   ];
-  const legalLinks: Array<{ label: string; href: string }> = [
+  const legalLinks: Array<{ label: string; href: string; buy?: boolean }> = [
     { label: v2(lang, "footerPrivacy"), href: href("/privacy") },
     { label: v2(lang, "footerTerms"), href: href("/terms") },
+    // Japan's 特定商取引法 disclosure: Japanese visitors only; it lists prices,
+    // so it is hidden in the apps like every sales link.
+    ...(lang === "ja" ? [{ label: "特定商取引法に基づく表記", href: href("/tokushoho"), buy: true }] : []),
     { label: v2(lang, "footerContact"), href: href("/contact") },
   ];
 
@@ -683,7 +686,7 @@ export function HomeFooter() {
             </Eyebrow>
             <ul className="mt-3 space-y-2 gd-font-sans-ui">
               {legalLinks.map((it) => (
-                <li key={it.href}>
+                <li key={it.href} className={it.buy ? "gd-buy" : undefined}>
                   <Link
                     href={it.href}
                     className="hover:text-white transition-colors"

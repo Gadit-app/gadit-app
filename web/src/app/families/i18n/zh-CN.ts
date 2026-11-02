@@ -165,7 +165,7 @@ const copy: FamI18n = {
   },
   real: {
     heroPoints: ["最多 5 个孩子", "每个释义一张图", "家长面板"],
-    devices: ["手机", "平板", "电脑"],
+    devices: ["电脑", "平板", "手机"],
     cardsKicker: "一本积累词汇的智能可视化词典",
     cardsTitle: "每个词都按孩子的水平讲解",
     safeKicker: "安全",
