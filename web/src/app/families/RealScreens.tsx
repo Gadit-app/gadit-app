@@ -47,6 +47,8 @@ export type RealCopy = {
   homework?: RealHomework;
   /** Games and sibling duels, on a warm band (Gadi 2026-10-12). */
   games?: RealTool;
+  /** What a parent sees on the phone: Gadit notifications on the lock screen (Gadi 2026-11-02). */
+  dashNotes?: { time: string; date: string; items: { t: string; b: string; when: string }[] };
   /** A computer playing a real game, how to play, and the games themselves (Gadi 2026-11-02). */
   gamesShow?: { video: string; poster: string; videoLabel: string; steps: string[]; cardsTitle: string; cards: { img: string; t: string }[] };
   shotAlt: string;
@@ -135,6 +137,15 @@ export const REAL_COPY: Record<string, RealCopy> = {
       points: ["יעד שבועי ורצף ימים", "דו-קרב בין אחים או נגד רובוט המילים", "הודעה להורה עם התוצאה"],
       img: "duel",
       img2: "play",
+    },
+    dashNotes: {
+      time: "16:42",
+      date: "יום שלישי, 3 בנובמבר",
+      items: [
+        { t: "נועה חיפשה מילה חדשה", b: "הרפתקה · נשמרה במחברת שלה", when: "עכשיו" },
+        { t: "איתי סיים דו-קרב מילים", b: "8 מתוך 10 נכון מול נועה", when: "לפני 12 דק׳" },
+        { t: "נועה סיימה תרגול הכתבה", b: "9 מתוך 10 נכון · 3 מילים חדשות", when: "לפני שעה" },
+      ],
     },
     gamesShow: {
       video: "/fam/video/worlds-he.mp4",
@@ -276,6 +287,33 @@ export function DeviceShot({ lang, name, alt, priority = false }: { lang: string
     : <PhoneShot lang={lang} name={name} alt={alt} priority={priority} />;
 }
 
+/** A phone lock screen with Gadit notifications to the parent. */
+export function PhoneNotes({ notes }: { notes: NonNullable<RealCopy["dashNotes"]> }) {
+  return (
+    <div className="fam-phone fam-phone-notes" role="img" aria-label={notes.items.map((n) => n.t).join(". ")}>
+      <div className="fam-phone-screen">
+        <div className="fam-notes-wall">
+          <div className="fam-notes-time">{notes.time}</div>
+          <div className="fam-notes-date">{notes.date}</div>
+          <ul className="fam-notes-list">
+            {notes.items.map((n, i) => (
+              <li key={i} className="fam-note">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/icon-192.png" alt="" width={40} height={40} className="fam-note-icon" />
+                <div className="fam-note-text">
+                  <div className="fam-note-head"><b>Gadit</b><span>{n.when}</span></div>
+                  <div className="fam-note-t">{n.t}</div>
+                  <div className="fam-note-b">{n.b}</div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /** A laptop playing a short silent clip of a real game; it plays only while on screen. */
 export function LaptopVideo({ src, poster, label }: { src: string; poster: string; label: string }) {
   const ref = useRef<HTMLVideoElement>(null);
@@ -322,12 +360,14 @@ export const REAL_CSS = `
   width: 100%;
   max-width: 290px;
   margin: 0 auto;
-  background: #0E1116;
-  border-radius: 38px;
-  padding: 9px;
-  box-shadow: 0 24px 56px rgba(11,18,32,0.22), 0 6px 16px rgba(11,18,32,0.12);
+  background: linear-gradient(160deg, #262a30, #101316);
+  /* thin bezel and corners in proportion (Gadi 2026-11-02: like a real phone) */
+  border-radius: 14% / 6.6%;
+  padding: 0;
+  container-type: inline-size;
+  box-shadow: inset 0 0 0 1px #3a4047, 0 24px 56px rgba(11,18,32,0.22), 0 6px 16px rgba(11,18,32,0.12);
 }
-.fam-phone-screen { border-radius: 30px; overflow: hidden; line-height: 0; background: #F2F6F4; aspect-ratio: 390 / 844; }
+.fam-phone-screen { margin: 3.4cqw; border-radius: 11.5% / 5.4%; overflow: hidden; line-height: 0; background: #F2F6F4; aspect-ratio: 390 / 844; }
 /* The games band: a computer playing a real game (Gadi 2026-11-02). */
 .fam-games-show { max-width: 1100px; margin: 0 auto; display: grid; gap: 28px; justify-items: center; text-align: center; padding-inline: 20px; box-sizing: border-box; }
 .fam-games-show .fam-h2, .fam-games-show .fam-body { text-align: center; }
@@ -345,38 +385,59 @@ export const REAL_CSS = `
   .fam-games-steps { grid-template-columns: 1fr; }
   .fam-games-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 }
-/* Computer + tablet frames (Gadi 2026-11-02). */
-.fam-laptop { width: 100%; max-width: 640px; margin: 0 auto; filter: drop-shadow(0 34px 50px rgba(16,40,60,0.28)); }
-.fam-laptop-lid { background: #11151a; border-radius: 18px 18px 6px 6px; padding: 2.2% 2.2% 3%; position: relative; }
-.fam-laptop-lid::before { content: ""; position: absolute; top: 0.9%; left: 50%; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%; background: #2b333b; }
-.fam-laptop-screen { border-radius: 6px; overflow: hidden; line-height: 0; background: #F2F6F4; aspect-ratio: 16 / 10; }
+/* Computer + tablet frames (Gadi 2026-11-02): thin bezels and corners in
+   proportion to the device, so they read as real devices at any size. */
+.fam-laptop { width: 100%; max-width: 640px; margin: 0 auto; filter: drop-shadow(0 30px 44px rgba(16,40,60,0.24)); }
+.fam-laptop-lid { background: linear-gradient(180deg, #23272d, #111418); border-radius: 2.6% / 4%; padding: 0; container-type: inline-size; position: relative; box-shadow: inset 0 0 0 1px #3a4047; }
+.fam-laptop-lid::before { content: ""; position: absolute; top: 0.55%; left: 50%; width: 0.7%; aspect-ratio: 1; transform: translateX(-50%); border-radius: 50%; background: #3b434b; }
+.fam-laptop-screen { margin: 1.5cqw 1.5cqw 2.3cqw; border-radius: 0.6% / 1%; overflow: hidden; line-height: 0; background: #F2F6F4; aspect-ratio: 16 / 10; }
 .fam-laptop-screen img, .fam-laptop-screen video { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
-.fam-laptop-base { height: 14px; margin: 0 -7%; background: linear-gradient(#d9dee3, #aeb6be); border-radius: 0 0 16px 16px; position: relative; }
-.fam-laptop-base::before { content: ""; position: absolute; top: 0; left: 50%; width: 16%; height: 5px; transform: translateX(-50%); background: #9aa3ac; border-radius: 0 0 8px 8px; }
-.fam-tablet { width: 100%; max-width: 300px; background: #11151a; border-radius: 26px; padding: 12px; box-shadow: 0 30px 60px -22px rgba(16,40,60,0.5), 0 8px 20px rgba(16,40,60,0.12); }
-.fam-tablet-screen { border-radius: 16px; overflow: hidden; line-height: 0; background: #F2F6F4; aspect-ratio: 820 / 1180; }
+.fam-laptop-base { height: 0; padding-bottom: 2.6%; margin: 0 -7%; background: linear-gradient(180deg, #eef0f3 0%, #d3d8de 45%, #a9b1ba 100%); border-radius: 0 0 50% 50% / 0 0 100% 100%; position: relative; }
+.fam-laptop-base::before { content: ""; position: absolute; top: 0; left: 50%; width: 13%; height: 45%; transform: translateX(-50%); background: #b7bec6; border-radius: 0 0 40% 40% / 0 0 100% 100%; }
+.fam-tablet { width: 100%; max-width: 300px; background: linear-gradient(160deg, #262a30, #121519); border-radius: 7.5% / 5.2%; padding: 0; container-type: inline-size; box-shadow: inset 0 0 0 1px #3a4047, 0 28px 54px -22px rgba(16,40,60,0.5), 0 8px 18px rgba(16,40,60,0.12); }
+.fam-tablet-screen { margin: 3.8cqw; border-radius: 3.2% / 2.2%; overflow: hidden; line-height: 0; background: #F2F6F4; aspect-ratio: 820 / 1180; }
 .fam-tablet-screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
-/* Laptop with a tablet leaning in front of it, at the hero and in the bands. */
+/* Laptop with a tablet in front of it, at the hero and in the bands. */
 .fam-devices { position: relative; width: 100%; max-width: 680px; margin: 0 auto; padding-bottom: 6%; }
-.fam-devices > .fam-laptop { max-width: 88%; margin-inline-start: 0; margin-inline-end: auto; }
-.fam-devices > .fam-tablet, .fam-devices > .fam-phone { position: absolute; bottom: 0; inset-inline-end: 0; width: 30%; max-width: none; padding: 2%; border-radius: 18px; }
-.fam-devices > .fam-phone { width: 21%; padding: 1.3%; border-radius: 22px; }
-.fam-devices > .fam-phone .fam-phone-screen { border-radius: 16px; }
-.fam-devices > .fam-tablet .fam-tablet-screen { border-radius: 11px; }
+.fam-devices > .fam-laptop { max-width: 86%; margin-inline-start: 0; margin-inline-end: auto; }
+.fam-devices > .fam-tablet, .fam-devices > .fam-phone { position: absolute; bottom: 0; inset-inline-end: 0; max-width: none; margin: 0; }
+.fam-devices > .fam-tablet { width: 30%; }
+.fam-devices > .fam-phone { width: 23%; }
 .fam-real-pair .fam-tablet { max-width: 240px; }
 .fam-tablet.is-land, .fam-premium .fam-feature-visual > .fam-tablet.is-land { width: 100%; max-width: 560px; }
 .fam-real-pair .fam-tablet.is-land { max-width: 100%; }
 .fam-tablet.is-land .fam-tablet-screen { aspect-ratio: 1640 / 1320; }
-.fam-hw-laptop { width: 100%; max-width: 620px; margin: 0 auto; }
+.fam-tablet.is-land { border-radius: 4.6% / 5.8%; }
+.fam-tablet.is-land .fam-tablet-screen { margin: 2.7cqw; }
+.fam-tablet.is-land .fam-tablet-screen { border-radius: 1.8% / 2.3%; }
+
 .fam-games-stage.fam-devices { max-width: 900px; }
-.fam-devices-hero { max-width: 660px; padding-bottom: 9%; }
-/* The hero shows all three (Gadi 2026-11-02): tablet on the left, phone on the right. */
-.fam-devices-hero > .fam-laptop { max-width: 78%; margin-inline: auto; }
-.fam-devices-hero > .fam-phone { inset-inline-start: 0; inset-inline-end: auto; width: 17%; border-radius: 18px; }
-.fam-devices-hero > .fam-phone .fam-phone-screen { border-radius: 13px; }
+/* The hero shows all three, big (Gadi 2026-11-02): tablet on the left, phone on the right. */
+.fam-devices-hero { max-width: 760px; padding-bottom: 10%; }
+.fam-devices-hero > .fam-laptop { max-width: 80%; margin-inline: auto; }
+.fam-devices-hero > .fam-phone { inset-inline-start: 0; inset-inline-end: auto; width: 16%; }
 .fam-devices-hero > .fam-tablet { width: 27%; }
+.fam-hero-real .fam-hero-grid.has-devices { max-width: 1320px; }
+@media (min-width: 880px) { .fam-hero-real .fam-hero-grid.has-devices { grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr); gap: 28px; } }
+/* The parent's phone: Gadit notifications on the lock screen (sizes follow the phone, cqw). */
+.fam-devices > .fam-phone.fam-phone-notes { width: 31%; }
+.fam-phone-notes .fam-phone-screen { background: linear-gradient(170deg, #1f6f6e 0%, #0e4a55 55%, #13273a 100%); line-height: 1.3; }
+.fam-notes-wall { height: 100%; display: flex; flex-direction: column; align-items: center; padding: 14cqw 4.5cqw 0; color: #fff; text-align: center; box-sizing: border-box; }
+.fam-notes-time { font-size: 17cqw; font-weight: 300; letter-spacing: .02em; line-height: 1; }
+.fam-notes-date { font-size: 4.6cqw; opacity: .85; margin-top: 2.5cqw; }
+.fam-notes-list { list-style: none; padding: 0; margin: 11cqw 0 0; width: 100%; display: grid; gap: 3.2cqw; }
+.fam-note { display: flex; gap: 3cqw; align-items: flex-start; background: rgba(255,255,255,0.9); color: #111827; border-radius: 4.5cqw; padding: 3.4cqw 3.4cqw; text-align: start; box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+.fam-phone-screen img.fam-note-icon { width: 11cqw; height: 11cqw; border-radius: 2.6cqw; flex: none; object-fit: contain; }
+.fam-note-text { min-width: 0; flex: 1; }
+.fam-note-head { display: flex; justify-content: space-between; gap: 2cqw; font-size: 3.5cqw; color: #4b5563; }
+.fam-note-head b { color: #111827; }
+.fam-note-t { font-weight: 800; font-size: 4.4cqw; margin-top: 0.6cqw; }
+.fam-note-b { font-size: 3.9cqw; color: #374151; }
+/* Homework: the laptop with the photographed page on a tablet beside it. */
+.fam-hw-devices { width: 100%; max-width: 640px; margin: 0 auto; }
+.fam-hw-devices > .fam-tablet { width: 46%; }
 @media (max-width: 760px) {
-  .fam-tablet { max-width: 240px; border-radius: 20px; padding: 9px; }
+  .fam-tablet { max-width: 240px; }
   .fam-real-pair .fam-tablet { max-width: 46%; }
   .fam-devices > .fam-tablet { width: 34%; }
 }
@@ -617,7 +678,7 @@ export const REAL_CSS = `
 .fam-premium:lang(he) .fam-h1 { font-family: "Rubik Display", var(--font-rubik), "Rubik", system-ui, sans-serif; font-weight: 800; }
 /* Languages on Inter: the same heavy headline (Inter is declared 300-600 site-wide). */
 .fam-premium:not(:lang(he)):not(:lang(ar)):not(:lang(fa)):not(:lang(ja)):not(:lang(hi)):not(:lang(am)):not(:lang(zh)):not(:lang(ko)):not(:lang(th)):not(:lang(bn)) .fam-h1 { font-family: "Inter Display", var(--font-inter), "Inter", system-ui, sans-serif; font-weight: 800; }
-.fam-hw-row { display: grid; grid-template-columns: minmax(0, 520px) auto; justify-content: center; gap: 48px; align-items: center; }
+.fam-hw-row { display: grid; grid-template-columns: minmax(0, 390px) minmax(0, 640px); justify-content: center; gap: 44px; align-items: center; }
 .fam-hw .fam-kicker { color: #99F6E4; text-align: start; }
 .fam-premium .fam-hw .fam-h2 { color: #fff; }
 .fam-premium .fam-hw .fam-body { color: rgba(255,255,255,0.88); }

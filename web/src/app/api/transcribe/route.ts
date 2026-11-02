@@ -115,11 +115,13 @@ export async function POST(req: NextRequest) {
       : "webm";
     upstreamForm.append("file", audioFile, `audio.${ext}`);
     const viaWhisper = !langHint || (WHISPER_LANGS.has(langHint) && !PREFER_4O.has(langHint));
-    const model = viaWhisper ? "whisper-1" : "gpt-4o-transcribe";
+    // gpt-transcribe for every language (Gadi 2026-11-02): whisper-1 and
+    // gpt-4o-transcribe shut off 2027-02-26. It takes the same language code and
+    // prompt, is 25% cheaper ($0.0045 a minute) and answered the tests exactly.
+    const model = "gpt-transcribe";
     upstreamForm.append("model", model);
     if (viaWhisper) {
-      // verbose_json adds the audio duration, which prices the call.
-      upstreamForm.append("response_format", "verbose_json");
+      upstreamForm.append("response_format", "json");
       if (langHint) upstreamForm.append("language", langHint);
       const wp = typeof uiLangRaw === "string" ? WHISPER_PROMPT[uiLangRaw] : undefined;
       if (wp) upstreamForm.append("prompt", wp);
@@ -145,11 +147,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const data = (await res.json()) as { text?: string; duration?: number; usage?: { input_tokens?: number; output_tokens?: number } };
-    // gpt-4o-transcribe bills tokens: audio in about $6 per million, text out $10 per million.
-    const costUsd = viaWhisper
-      ? whisperCostUsd(Number(data.duration ?? 0))
-      : (Number(data.usage?.input_tokens ?? 0) * 6 + Number(data.usage?.output_tokens ?? 0) * 10) / 1e6;
+    const data = (await res.json()) as { text?: string; duration?: number; usage?: { seconds?: number; input_tokens?: number; output_tokens?: number } };
+    // gpt-transcribe bills the audio's seconds: $0.0045 a minute.
+    const costUsd = data.usage?.seconds != null
+      ? (Number(data.usage.seconds) / 60) * 0.0045
+      : data.usage?.input_tokens != null
+        ? (Number(data.usage.input_tokens) * 6 + Number(data.usage.output_tokens ?? 0) * 10) / 1e6
+        : whisperCostUsd(Number(data.duration ?? 0)) * 0.75;
     void logAiUsage({ feature: "transcribe", model, costUsd, plan: userInfo.plan });
     return NextResponse.json({ text: (data.text || "").trim() });
   } catch (err) {

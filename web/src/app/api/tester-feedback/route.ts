@@ -39,8 +39,8 @@ async function transcribe(audio: Blob, lang: string): Promise<string> {
   if (!process.env.OPENAI_API_KEY) return "";
   const f = new FormData();
   f.append("file", audio, `note.${extOf(audio.type)}`);
-  f.append("model", "whisper-1");
-  f.append("response_format", "verbose_json");
+  f.append("model", "gpt-transcribe");
+  f.append("response_format", "json");
   if (lang === "he" || lang === "en") f.append("language", lang);
   try {
     const r = await fetch("https://api.openai.com/v1/audio/transcriptions", {
@@ -49,8 +49,8 @@ async function transcribe(audio: Blob, lang: string): Promise<string> {
       body: f,
     });
     if (!r.ok) return "";
-    const d = (await r.json()) as { text?: string; duration?: number };
-    void logAiUsage({ feature: "tester-voice", model: "whisper-1", costUsd: whisperCostUsd(Number(d.duration ?? 0)), plan: "deep" });
+    const d = (await r.json()) as { text?: string; duration?: number; usage?: { seconds?: number } };
+    void logAiUsage({ feature: "tester-voice", model: "gpt-transcribe", costUsd: d.usage?.seconds != null ? (d.usage.seconds / 60) * 0.0045 : whisperCostUsd(Number(d.duration ?? 0)), plan: "deep" });
     return (d.text ?? "").trim();
   } catch { return ""; }
 }

@@ -6,7 +6,7 @@ import type { FamI18n } from "./i18n/types";
 import { fillDeep, landingPrices, screensLang } from "@/lib/landing-i18n";
 import { INDIVIDUAL_DISPLAY, INDIVIDUAL_MONTHLY } from "@/lib/individual-prices";
 import { planCopy } from "@/lib/plan-copy";
-import { REAL_COPY, REAL_CSS, PhoneShot, DeviceShot, LaptopShot, LaptopVideo, TabletShot, DESK_SHOT_LANGS, Lines, type RealTool } from "./RealScreens";
+import { REAL_COPY, REAL_CSS, PhoneShot, PhoneNotes, DeviceShot, LaptopShot, LaptopVideo, TabletShot, DESK_SHOT_LANGS, Lines, type RealTool } from "./RealScreens";
 import { SubjectsScreenMock, SubjectsLines, subjectsBandCopy } from "./SubjectsShowcase";
 import { subjectsBandLangFor } from "@/lib/subjects-langs";
 import { Fragment, useEffect, useRef, useState } from "react";
@@ -1435,8 +1435,8 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
             </ul>
           </div>
           <div className="fam-feature-visual">
-            {desk && f.img === "read" ? (
-              <TabletShot lang={shotLang} name="read" alt={real.shotAlt} land />
+            {desk && (f.img === "read" || f.img === "say") ? (
+              <TabletShot lang={shotLang} name={f.img} alt={real.shotAlt} land />
             ) : f.img2 ? (
               <div className="fam-real-pair">
                 <DeviceShot lang={shotLang} name={f.img} alt={real.shotAlt} />
@@ -1609,7 +1609,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
              the product itself on a phone so it is instantly clear
              this is a word app, not an abstract idea. */}
         <section className={`fam-hero${real ? " fam-hero-real" : ""}`}>
-          <div className="fam-hero-grid">
+          <div className={`fam-hero-grid${real && desk ? " has-devices" : ""}`}>
             <div className="fam-hero-text">
               {real && (
                 <div className="fam-cred-pill">
@@ -1624,7 +1624,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
               <h1 className="fam-h1">{hero.h1}</h1>
               <p className="fam-whatis">{real ? <Lines text={c.whatIs} /> : c.whatIs}</p>
               {/* Works everywhere, like the Yooniz hero (Gadi 2026-10-19). */}
-              {real?.devices && (
+              {real?.devices && !desk && (
                 <ul className="fam-devices">
                   <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="3.5" width="19" height="13" rx="1.8" /><path d="M8 20.5h8M12 16.5v4" /></svg><span>{real.devices[0]}</span></li>
                   <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="2.5" width="17" height="19" rx="2.2" /><path d="M10.5 18.5h3" /></svg><span>{real.devices[1]}</span></li>
@@ -1780,7 +1780,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
                   {desk ? (
                     <div className="fam-devices">
                       <LaptopShot lang={shotLang} name={real.dash.img} alt={real.shotAlt} />
-                      {real.dash.img2 && <PhoneShot lang={shotLang} name={real.dash.img2} alt={real.shotAlt} />}
+                      {real.dashNotes ? <PhoneNotes notes={real.dashNotes} /> : real.dash.img2 && <PhoneShot lang={shotLang} name={real.dash.img2} alt={real.shotAlt} />}
                     </div>
                   ) : (
                   <div className="fam-real-pair">
@@ -1826,7 +1826,10 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
                   ))}
                 </ol>
                 {desk ? (
-                  <div className="fam-hw-laptop"><LaptopShot lang={shotLang} name="homework" alt={real.shotAlt} /></div>
+                  <div className="fam-devices fam-hw-devices">
+                    <LaptopShot lang={shotLang} name="homework" alt={real.shotAlt} />
+                    <TabletShot lang={shotLang} name="read" alt={real.shotAlt} land />
+                  </div>
                 ) : (
                 <div className="fam-real-pair">
                   <PhoneShot lang={shotLang} name={real.homework.img} alt={real.shotAlt} />
