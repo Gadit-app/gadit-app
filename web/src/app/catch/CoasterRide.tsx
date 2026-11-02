@@ -70,7 +70,7 @@ function buildTrack(seed: number): Seg[] {
   // a dip or a climb every few seconds, and a bend every few more
   const hill = (i: number) =>
     2200 * Math.sin((2 * Math.PI * i * 15) / N + r(1) * 6) +
-    1100 * Math.sin((2 * Math.PI * i * 34) / N + r(2) * 6) +
+    600 * Math.sin((2 * Math.PI * i * 34) / N + r(2) * 6) +
     3000 * Math.sin((2 * Math.PI * i * 4) / N + r(3) * 6);
   const curve = (i: number) =>
     6 * Math.sin((2 * Math.PI * i * 11) / N + r(4) * 6) +
@@ -127,6 +127,9 @@ export function CoasterRide({ world, word, c, level, avatar, pic, onDone, onExit
   // ride state (refs, no re-render per frame)
   const pos = useRef(0);
   const bgX = useRef(0);
+  // the camera height and the speed follow the track softly (Gadi 2026-11-02: it shook)
+  const camYs = useRef<number | null>(null);
+  const vS = useRef<number | null>(null);
   const signs = useRef<Sign[]>([]);
   const drawn = useRef<Drawn[]>([]);
   const nextId = useRef(1);
@@ -198,7 +201,9 @@ export function CoasterRide({ world, word, c, level, avatar, pic, onDone, onExit
       let near = Infinity;
       for (const s of signs.current) if (s.state === "go") near = Math.min(near, s.seg - b0);
       const ease = near === Infinity ? 1 : 0.55 + 0.45 * Math.max(0, Math.min(1, (near - 8) / 34));
-      const v = base * ease * (1 + Math.max(-0.22, Math.min(0.4, -slope * 2.2)));
+      const vWant = base * ease * (1 + Math.max(-0.22, Math.min(0.4, -slope * 2.2)));
+      vS.current = vS.current == null ? vWant : vS.current + (vWant - vS.current) * Math.min(1, dt * 2.5);
+      const v = vS.current;
       pos.current += v * dt;
       bgX.current += cur.curve * v * dt * 0.00012;
 
@@ -214,7 +219,9 @@ export function CoasterRide({ world, word, c, level, avatar, pic, onDone, onExit
       }
 
       /* sky: the panorama loop, sliding on curves and a touch with the hills */
-      const camY = lerp(cur.y1, cur.y2, (pos.current % SEG) / SEG) + CAM_H;
+      const camYWant = lerp(cur.y1, cur.y2, (pos.current % SEG) / SEG) + CAM_H;
+      camYs.current = camYs.current == null ? camYWant : camYs.current + (camYWant - camYs.current) * Math.min(1, dt * 6);
+      const camY = camYs.current;
       ctx.fillStyle = look.fog;
       ctx.fillRect(0, 0, W, H);
       const pano = art.pano;
@@ -231,13 +238,16 @@ export function CoasterRide({ world, word, c, level, avatar, pic, onDone, onExit
       const pct = (pos.current % SEG) / SEG;
       let maxy = H;
       let x = 0;
-      let dx = -(track[((baseI % N) + N) % N].curve * pct);
+      const c0 = track[((baseI % N) + N) % N].curve;
+      let dx = -(c0 * pct);
+      // without this the near track and signs jump sideways each time a segment passes
+      const xFix = c0 * pct * pct;
       const proj: { x1: number; y1: number; w1: number; x2: number; y2: number; w2: number; s1: number; clip: number; ok: boolean }[] = [];
       for (let n = 0; n < DRAW; n++) {
         const gi = baseI + n;
         const sg = track[((gi % N) + N) % N];
         const z1 = gi * SEG - pos.current, z2 = (gi + 1) * SEG - pos.current;
-        const camX = -x, camX2 = -x - dx;
+        const camX = -x - xFix, camX2 = -x - dx - xFix;
         const s1 = DEPTH / Math.max(1, z1), s2 = DEPTH / Math.max(1, z2);
         const X1 = W / 2 + s1 * camX * U, Y1 = horizon - s1 * (sg.y1 - camY) * U, W1 = s1 * ROAD * U;
         const X2 = W / 2 + s2 * camX2 * U, Y2 = horizon - s2 * (sg.y2 - camY) * U, W2 = s2 * ROAD * U;
