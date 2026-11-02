@@ -127,6 +127,8 @@ export function CoasterRide({ world, word, c, level, avatar, pic, onDone, onExit
   // ride state (refs, no re-render per frame)
   const pos = useRef(0);
   const bgX = useRef(0);
+  // how fast the sky slides on a bend, eased so it never jumps (Gadi 2026-11-02: the clouds raced)
+  const bgV = useRef(0);
   // the camera height and the speed follow the track softly (Gadi 2026-11-02: it shook)
   const camYs = useRef<number | null>(null);
   const vS = useRef<number | null>(null);
@@ -205,7 +207,9 @@ export function CoasterRide({ world, word, c, level, avatar, pic, onDone, onExit
       vS.current = vS.current == null ? vWant : vS.current + (vWant - vS.current) * Math.min(1, dt * 2.5);
       const v = vS.current;
       pos.current += v * dt;
-      bgX.current += cur.curve * v * dt * 0.00012;
+      const bgWant = cur.curve * v * 0.0000022; // a sharp bend slides the sky about a tenth of the screen a second
+      bgV.current += (bgWant - bgV.current) * Math.min(1, dt * 1.5);
+      bgX.current += bgV.current * dt;
 
       // pairs of signs
       if (!doneRef.current) {
