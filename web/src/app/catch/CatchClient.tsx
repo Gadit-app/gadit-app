@@ -359,6 +359,9 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
         else fetch("/api/learn", { method: "POST", headers, body: JSON.stringify({ action: "results", lang: word.lang, results: [{ w: word.raw, ok }] }) }).catch(() => undefined);
         const total = lettersOf(word.w, word.lang).length;
         void notifyActivity(user, { kind: "game", label: `${sceneName} · ${word.w}`, score: Math.max(0, total - wrongCount), total });
+        // royalties for the child who invented this game (Gadi 2026-11-02)
+        const playId = scene === "fair" ? `catch-fair-${stall}` : scene === "coaster" ? `catch-coaster-${world}` : "catch";
+        fetch("/api/game-play", { method: "POST", headers, body: JSON.stringify({ game: playId }) }).catch(() => undefined);
       } catch { /* the game goes on */ }
     }
     if (filled.length % ROUND === 0) { sfx.win(); setPhase("summary"); return; }
@@ -375,7 +378,7 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
       setPhase("intro");
       await load();
     }
-  }, [word, jar, user, demo, sceneName, idx, queue, pics, load]);
+  }, [word, jar, user, demo, sceneName, scene, stall, world, idx, queue, pics, load]);
 
   const more = async () => {
     setRound((r) => r + 1);

@@ -9,17 +9,19 @@ import { getAdminDb } from "@/lib/firebase-admin";
  *   - an idea Gadi liked                                                                        5
  *   - a recorded note pays x1.5 (a bug 15, an idea 8)
  *   - an idea that was built                                                                   +50
- *   - team bonus: both found different things in the same game this week                     +5 each
+ *   - team bonus: both found different things in the same game this month                    +5 each
+ *   - royalties: a game the child invented: 1 per NEW child who plays it, up to 100 a month
+ *     (gameOwners/{prefix}; players in gamePlayers/{prefix}/players, see /api/game-play)
  * Shown and paid per MONTH (Gadi: "my monthly payment"); the cap stays 150
  * a week (Sunday to Saturday, Israel time). 10% goes to the family pot; the
  * rest is paid in Yooniz. Notes marked `test` (Gadi trying a button) never count.
  */
 
-export const PAY = { run: 5, bug: 10, idea: 5, built: 50, team: 5, voiceX: 1.5, cap: 150, tax: 0.1, runRounds: 5 } as const;
+export const PAY = { run: 5, bug: 10, idea: 5, built: 50, team: 5, voiceX: 1.5, cap: 150, tax: 0.1, runRounds: 5, royalty: 1, royaltyCap: 100 } as const;
 const RATINGS = new Set(["fun", "boring", "hard", "easy"]);
 
 export type PayRow = {
-  id: string; day: string; type: "run" | "bug" | "idea" | "built" | "team" | "note";
+  id: string; day: string; type: "run" | "bug" | "idea" | "built" | "team" | "note" | "royalty";
   game: string; word: string; text: string; audio: boolean; ticket: number | null;
   yoon: number; state: "paid" | "pending" | "no"; need?: number;
 };
@@ -29,7 +31,20 @@ export type PaySlip = {
   level: { key: "junior" | "tester" | "senior" | "lead"; tickets: number; next: number | null };
   shipped: { id: string; type: "bug" | "idea"; game: string; text: string; day: string }[];
   paid: { at: number; net: number } | null;
+  /** games this child invented: players so far, new this month, open to everyone yet */
+  games: { prefix: string; he: string; en: string; players: number; month: number; isPublic: boolean }[];
 };
+
+export type GameOwner = { prefix: string; uid: string; he: string; en: string; isPublic: boolean };
+let ownersCache: { at: number; list: GameOwner[] } | null = null;
+/** Who invented which game (gameOwners/{prefix}), cached for 5 minutes. */
+export async function gameOwners(): Promise<GameOwner[]> {
+  if (ownersCache && Date.now() - ownersCache.at < 300000) return ownersCache.list;
+  const snap = await getAdminDb().collection("gameOwners").get();
+  const list = snap.docs.map((d) => { const x = d.data(); return { prefix: d.id, uid: String(x.uid ?? ""), he: String(x.he ?? d.id), en: String(x.en ?? d.id), isPublic: x.isPublic === true }; });
+  ownersCache = { at: Date.now(), list };
+  return list;
+}
 
 const IL = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jerusalem", year: "numeric", month: "2-digit", day: "2-digit" });
 export const ilDay = (d: Date) => IL.format(d);
@@ -133,13 +148,25 @@ export async function paySlips(uids: string[], month: string): Promise<PaySlip[]
       const others = [...paidGames.entries()].some(([u, gs]) => u !== t.uid && gs.has(g));
       if (others) rows.push({ id: `team-${g}`, day: week, type: "team", game: g, word: "", text: "", audio: false, ticket: null, yoon: PAY.team, state: "paid" });
     }
+    // royalties: new players of the games this child invented
+    const games: PaySlip["games"] = [];
+    for (const o of (await gameOwners()).filter((x) => x.uid === t.uid)) {
+      const col = db.collection("gamePlayers").doc(o.prefix).collection("players");
+      const [all, mo] = await Promise.all([
+        col.count().get(),
+        col.where("firstAt", ">=", Timestamp.fromDate(new Date(`${week}T00:00:00+02:00`))).where("firstAt", "<", Timestamp.fromDate(new Date(`${end}T00:00:00+02:00`))).count().get(),
+      ]);
+      const players = all.data().count, month = mo.data().count;
+      games.push({ prefix: o.prefix, he: o.he, en: o.en, players, month, isPublic: o.isPublic });
+      if (month > 0) rows.push({ id: `royalty-${o.prefix}`, day: week, type: "royalty", game: o.prefix, word: "", text: "", audio: false, ticket: null, yoon: Math.min(PAY.royaltyCap, month * PAY.royalty), state: "paid" });
+    }
     rows.sort((a, b) => (a.day < b.day ? 1 : a.day > b.day ? -1 : 0));
     // the cap is per week (team bonuses ride on top)
     const perWeek = new Map<string, number>();
     let team = 0;
     for (const r of rows) {
       if (r.state !== "paid") continue;
-      if (r.type === "team") { team += r.yoon; continue; }
+      if (r.type === "team" || r.type === "royalty") { team += r.yoon; continue; }
       const w = weekOf(new Date(`${r.day}T12:00:00Z`));
       perWeek.set(w, (perWeek.get(w) ?? 0) + r.yoon);
     }
@@ -157,6 +184,7 @@ export async function paySlips(uids: string[], month: string): Promise<PaySlip[]
       uid: t.uid, name: t.name, month, rows, earned, capped, tax, net: earned - tax, pending,
       level: { key: lv, tickets, next }, shipped,
       paid: pr?.paidAt ? { at: Number(pr.paidAt), net: Number(pr.net ?? 0) } : null,
+      games,
     } satisfies PaySlip;
   }));
 }

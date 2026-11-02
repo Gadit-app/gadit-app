@@ -27,7 +27,8 @@ const T = {
     how: "איך מרוויחים", rules: [["🎮", "בדיקת משחק: שיחקת 5 סיבובים ודירגת ב-🧪", 5], ["🐞", "באג שאושר", 10], ["💡", "רעיון שאהבו", 5], ["🎤", "עם הקלטה: פי 1.5", "×1.5"], ["🚀", "רעיון שנבנה", 50], ["🤝", "שניכם מצאתם דברים באותו משחק", 5]] as [string, string, number | string][],
     fixed: "תוקן בזכותך 🚀", levelNext: (n: number) => `עוד ${n} כרטיסים לדרגה הבאה`, levelTop: "הדרגה הכי גבוהה!",
     levels: { junior: "🐣 בודק מתחיל", tester: "🛠️ בודק", senior: "⭐ בודק בכיר", lead: "👑 ראש צוות בדיקות" },
-    type: { run: "🎮 בדיקת משחק", bug: "🐞 באג", idea: "💡 רעיון", built: "🚀 הרעיון נבנה!", team: "🤝 בונוס צוות", note: "🎤 הקלטה" },
+    type: { run: "🎮 בדיקת משחק", bug: "🐞 באג", idea: "💡 רעיון", built: "🚀 הרעיון נבנה!", team: "🤝 בונוס צוות", note: "🎤 הקלטה", royalty: "🎡 תמלוגים מהמשחק שלך" },
+    myGame: "🎡 המשחק שהמצאת", players: "ילדים שיחקו בו", newMonth: "חדשים החודש", notOpen: "עוד לא פתוח לכולם, רק לבודקים. כשייפתח, כל ילד חדש שמשחק בו = Yoon", royaltyRule: "כל ילד חדש שמשחק = Yoon (עד 100 בחודש)",
     playMore: (n: number) => `עוד ${n} סיבובים היום וזה נספר`, noCount: "לא נספר", notPaidRow: "לא לתשלום", waiting: "מחכה",
   },
   en: {
@@ -38,7 +39,8 @@ const T = {
     how: "How to earn", rules: [["🎮", "Test run: play 5 rounds and rate it with 🧪", 5], ["🐞", "A bug that was approved", 10], ["💡", "An idea we liked", 5], ["🎤", "With a voice note: ×1.5", "×1.5"], ["🚀", "An idea that got built", 50], ["🤝", "You both found things in the same game", 5]] as [string, string, number | string][],
     fixed: "Fixed thanks to you 🚀", levelNext: (n: number) => `${n} more tickets to the next level`, levelTop: "The top level!",
     levels: { junior: "🐣 Junior Tester", tester: "🛠️ Tester", senior: "⭐ Senior Tester", lead: "👑 Lead Tester" },
-    type: { run: "🎮 Test run", bug: "🐞 Bug", idea: "💡 Idea", built: "🚀 Your idea got built!", team: "🤝 Team bonus", note: "🎤 Voice note" },
+    type: { run: "🎮 Test run", bug: "🐞 Bug", idea: "💡 Idea", built: "🚀 Your idea got built!", team: "🤝 Team bonus", note: "🎤 Voice note", royalty: "🎡 Royalties from your game" },
+    myGame: "🎡 The game you invented", players: "kids played it", newMonth: "new this month", notOpen: "Not open to everyone yet, only testers. Once it opens, every new kid who plays it = 1 Yoon", royaltyRule: "Every new kid who plays = 1 Yoon (up to 100 a month)",
     playMore: (n: number) => `${n} more rounds today and it counts`, noCount: "Didn't count", notPaidRow: "Not paid", waiting: "Waiting",
   },
 };
@@ -166,6 +168,18 @@ export function TesterPayClient() {
               )}
             </section>
 
+            {slip.games.map((g) => (
+              <section key={g.prefix} className="tp-card is-game">
+                <h2>{t.myGame}: {l === "he" ? g.he : g.en}</h2>
+                <div className="tp-game-stats">
+                  <div><b>{g.players}</b><span>{t.players}</span></div>
+                  <div><b>{g.month}</b><span>{t.newMonth}</span></div>
+                  <div><b>{Math.min(100, g.month)}</b><span>Yoon</span></div>
+                </div>
+                <p className="tp-muted">{g.isPublic ? t.royaltyRule : t.notOpen}</p>
+              </section>
+            ))}
+
             {slip.shipped.length ? (
               <section className="tp-card is-ship">
                 <h2>{t.fixed}</h2>
@@ -221,6 +235,11 @@ const CSS = `
 .tp-card{background:#fff;border-radius:22px;padding:14px 16px;box-shadow:0 4px 16px #1e1b4b12}
 .tp-card h2{margin:0 0 10px;font-size:18px}
 .tp-card.is-ship{background:#ecfdf5}
+.tp-card.is-game{background:#fff7ed}
+.tp-game-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center;margin-bottom:8px}
+.tp-game-stats div{background:#fff;border-radius:14px;padding:10px 4px;display:grid;gap:2px}
+.tp-game-stats b{font-size:28px;color:#c2410c}
+.tp-game-stats span{font-size:12px;color:#6b7280}
 .tp-rows,.tp-rules,.tp-ship{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .tp-row{display:flex;gap:10px;align-items:center;justify-content:space-between;border:2px solid #eef2ff;border-radius:16px;padding:10px 12px}
 .tp-row-main{display:grid;gap:2px;min-width:0}
