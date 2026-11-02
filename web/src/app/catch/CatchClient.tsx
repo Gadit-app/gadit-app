@@ -33,16 +33,19 @@ import { fetchPics, loadWords, type TrailWord } from "../world/WorldClient";
 import { catchCopy, type CatchCopy } from "./catch-i18n";
 import { CatchHud } from "./CatchHud";
 import { CoasterRide, COASTER_ART, COASTER_CSS, COASTER_WORLDS, type CoasterWorld } from "./CoasterRide";
+import { FairRide, FAIR_ART, FAIR_CSS, FAIR_STALLS, type FairStall } from "./FairStall";
 
 const ART = "/catch/fireflies";
 const ROUND = 5;
 
 /* The scene the child picks on the door (Gadi 2026-11-02: fireflies, or a
    roller coaster in snow, jungle or space). Remembered on the device. */
-type Scene = "fireflies" | "coaster";
+type Scene = "fireflies" | "coaster" | "fair";
 const SCENE_KEY = "gadit-catch-scene";
 const WORLD_KEY = "gadit-catch-coaster";
-const readScene = (): Scene => { try { return localStorage.getItem(SCENE_KEY) === "coaster" ? "coaster" : "fireflies"; } catch { return "fireflies"; } };
+const STALL_KEY = "gadit-catch-fair";
+const readScene = (): Scene => { try { const s = localStorage.getItem(SCENE_KEY); return s === "coaster" || s === "fair" ? s : "fireflies"; } catch { return "fireflies"; } };
+const readStall = (): FairStall => { try { const s = localStorage.getItem(STALL_KEY); return s === "balloons" || s === "target" ? s : "cans"; } catch { return "cans"; } };
 const readWorld = (): CoasterWorld => { try { const w = localStorage.getItem(WORLD_KEY); return w === "jungle" || w === "space" ? w : "snow"; } catch { return "snow"; } };
 const iso = (s: string) => `⁨${s}⁩`;
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
@@ -285,14 +288,24 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
   // The last scene picked on this device (read after mount: no server mismatch).
   const [world, setWorld] = useState<CoasterWorld>("snow");
   const [worldPick, setWorldPick] = useState(false);
+  const [stall, setStall] = useState<FairStall>("cans");
+  const [stallPick, setStallPick] = useState(false);
   // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { setScene(readScene()); setWorld(readWorld()); }, []);
-  const sceneName = scene === "coaster" ? `${c.sceneCoaster} · ${c.worlds[world]}` : c.sceneFireflies;
+  useEffect(() => { setScene(readScene()); setWorld(readWorld()); setStall(readStall()); }, []);
+  const sceneName = scene === "coaster" ? `${c.sceneCoaster} · ${c.worlds[world]}` : scene === "fair" ? `${c.sceneFair} · ${c.stalls[stall]}` : c.sceneFireflies;
   const pickScene = (s: Scene) => {
     setScene(s);
     try { localStorage.setItem(SCENE_KEY, s); } catch { /* fine */ }
     sfx.whoosh();
     if (s === "coaster") { setWorldPick(true); return; }
+    if (s === "fair") { setStallPick(true); return; }
+    setPhase("intro");
+  };
+  const pickStall = (s: FairStall) => {
+    setStall(s);
+    try { localStorage.setItem(STALL_KEY, s); } catch { /* fine */ }
+    sfx.whoosh();
+    setStallPick(false);
     setPhase("intro");
   };
   const pickWorld = (w: CoasterWorld) => {
@@ -376,15 +389,19 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
   const roundJar = jar.slice(Math.floor(Math.max(0, jar.length - 1) / ROUND) * ROUND);
 
   return (
-    <div className={`ct-root is-${scene}`} style={scene === "coaster" && phase !== "door" ? { backgroundImage: `url(${COASTER_ART}/${world}/card.webp)` } : undefined}>
+    <div className={`ct-root is-${scene}`} style={scene === "coaster" && phase !== "door" ? { backgroundImage: `url(${COASTER_ART}/${world}/card.webp)` } : scene === "fair" && phase !== "door" ? { backgroundImage: `url(${FAIR_ART}/${stall}/card.webp)` } : undefined}>
       <style>{CSS}</style>
       <style>{COASTER_CSS}</style>
+      <style>{FAIR_CSS}</style>
 
       {word && phase === "play" && scene === "fireflies" ? (
         <Sky key={`${round}:${idx}:${word.w}`} word={word} c={c} level={level} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={exit} />
       ) : null}
       {word && phase === "play" && scene === "coaster" ? (
         <CoasterRide key={`${round}:${idx}:${word.w}`} world={world} word={word} c={c} level={level} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={exit} />
+      ) : null}
+      {word && phase === "play" && scene === "fair" ? (
+        <FairRide key={`${round}:${idx}:${word.w}:${stall}`} stall={stall} word={word} c={c} level={level} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={exit} />
       ) : null}
 
       {word && phase === "intro" ? (
@@ -400,7 +417,7 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
             <span ref={introSay}>
               <TTSButton text={word.native ? word.raw : word.w} audioLang={word.lang === "he" ? "he-IL" : word.lang === "en" ? "en-US" : word.lang} ariaLabel={c.hear} className="ct-tts-btn" rate={0.85} />
             </span>
-            <p className="ct-card-goal">{scene === "coaster" ? c.coasterGoal : c.goal}</p>
+            <p className="ct-card-goal">{scene === "coaster" ? c.coasterGoal : scene === "fair" ? c.stallGoal[stall] : c.goal}</p>
             <button type="button" className="ct-btn" onClick={() => { sfx.whoosh(); setPhase("play"); }}>{c.go}</button>
           </div>
         </div>
@@ -410,8 +427,8 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
         <div className="ct-card-wrap" dir={dir}>
           <div className="ct-card">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className={scene === "coaster" ? "ct-jar is-card" : "ct-jar"} src={scene === "coaster" ? `${COASTER_ART}/${world}/card.webp` : `${ART}/jar.webp`} alt="" />
-            <strong className="ct-card-title">{scene === "coaster" ? c.coasterFull : c.jarFull}</strong>
+            <img className={scene === "fireflies" ? "ct-jar" : "ct-jar is-card"} src={scene === "coaster" ? `${COASTER_ART}/${world}/card.webp` : scene === "fair" ? `${FAIR_ART}/${stall}/card.webp` : `${ART}/jar.webp`} alt="" />
+            <strong className="ct-card-title">{scene === "coaster" ? c.coasterFull : scene === "fair" ? c.fairFull : c.jarFull}</strong>
             <div className="ct-jar-words">
               {roundJar.map((w, i) => (
                 <span key={i} className="ct-jar-word" dir={RTL_SPELL.has(w.lang) ? "rtl" : "ltr"}>
@@ -435,7 +452,21 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
         <div className="ct-door" dir={dir} style={{ backgroundImage: `url(${ART}/curtain.webp)` }}>
           <div className="ct-door-box">
             <strong>{c.gameTitle}</strong>
-            {worldPick ? (
+            {stallPick ? (
+              <>
+                <span>{c.pickStall}</span>
+                <div className="ct-scenes is-three">
+                  {FAIR_STALLS.map((s) => (
+                    <button key={s} type="button" className={`ct-scene${stall === s ? " is-last" : ""}`} disabled={!word} onClick={() => pickStall(s)}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={`${FAIR_ART}/${s}/card.webp?v=1`} alt="" />
+                      <span className="ct-scene-name">{c.stalls[s]}</span>
+                    </button>
+                  ))}
+                </div>
+                <button type="button" className="ct-link" onClick={() => setStallPick(false)}>{c.back}</button>
+              </>
+            ) : worldPick ? (
               <>
                 <span>{c.pickWorld}</span>
                 <div className="ct-scenes is-three">
@@ -452,20 +483,20 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
             ) : (
               <>
                 <span>{c.pickScene}</span>
-                <div className="ct-scenes">
-                  {(["fireflies", "coaster"] as const).map((s) => (
+                <div className="ct-scenes is-three">
+                  {(["fireflies", "coaster", "fair"] as const).map((s) => (
                     <button key={s} type="button" className={`ct-scene${scene === s ? " is-last" : ""}`} disabled={!word} onClick={() => pickScene(s)}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={s === "coaster" ? `${COASTER_ART}/${world}/card.webp?v=1` : `${ART}/cover.webp?v=1`} alt="" />
-                      <span className="ct-scene-name">{s === "coaster" ? c.sceneCoaster : c.sceneFireflies}</span>
-                      <span className="ct-scene-sub">{s === "coaster" ? c.coasterSub : c.sub}</span>
+                      <img src={s === "coaster" ? `${COASTER_ART}/${world}/card.webp?v=1` : s === "fair" ? `${FAIR_ART}/${stall}/card.webp?v=1` : `${ART}/cover.webp?v=1`} alt="" />
+                      <span className="ct-scene-name">{s === "coaster" ? c.sceneCoaster : s === "fair" ? c.sceneFair : c.sceneFireflies}</span>
+                      <span className="ct-scene-sub">{s === "coaster" ? c.coasterSub : s === "fair" ? c.fairSub : c.sub}</span>
                     </button>
                   ))}
                 </div>
               </>
             )}
             {!word && !failed ? <span className="ct-door-wait"><WaitText text={c.loading} /></span> : null}
-            {!worldPick ? <button type="button" className="ct-link" onClick={exit}>{c.back}</button> : null}
+            {!worldPick && !stallPick ? <button type="button" className="ct-link" onClick={exit}>{c.back}</button> : null}
           </div>
         </div>
       ) : null}

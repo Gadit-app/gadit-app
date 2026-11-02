@@ -11,6 +11,10 @@ export type CatchCopy = {
   gameTitle: string; pickScene: string; sceneFireflies: string; sceneCoaster: string;
   coasterSub: string; coasterGoal: string; coasterFull: string; pickWorld: string;
   worlds: Record<"snow" | "jungle" | "space", string>;
+  /* the funfair (Gadi 2026-11-02): three gentle stalls */
+  sceneFair: string; fairSub: string; pickStall: string; fairFull: string;
+  stalls: Record<"cans" | "balloons" | "target", string>;
+  stallGoal: Record<"cans" | "balloons" | "target", string>;
 };
 
 const HE: CatchCopy = {
@@ -39,6 +43,16 @@ const HE: CatchCopy = {
   coasterFull: "איזו נסיעה! חמש מילים",
   pickWorld: "לאן נוסעים?",
   worlds: { snow: "שלג", jungle: "ג'ונגל", space: "חלל" },
+  sceneFair: "לונה פארק",
+  fairSub: "פוגעים באות הבאה במילה",
+  pickStall: "באיזה דוכן משחקים?",
+  fairFull: "איזו קליעה! חמש מילים",
+  stalls: { cans: "פחיות", balloons: "בלונים", target: "מטרה" },
+  stallGoal: {
+    cans: "זורקים כדור על הפחית עם האות הבאה במילה",
+    balloons: "יורים בועה על הבלון עם האות הבאה במילה",
+    target: "יורים חץ על העיגול עם האות הבאה במילה",
+  },
 };
 const EN: CatchCopy = {
   title: "Letter Fireflies",
@@ -66,6 +80,16 @@ const EN: CatchCopy = {
   coasterFull: "What a ride! Five words",
   pickWorld: "Where are we riding?",
   worlds: { snow: "Snow", jungle: "Jungle", space: "Space" },
+  sceneFair: "Funfair",
+  fairSub: "Hit the next letter of the word",
+  pickStall: "Which stall do you want to play?",
+  fairFull: "Great shooting! Five words",
+  stalls: { cans: "Cans", balloons: "Balloons", target: "Target" },
+  stallGoal: {
+    cans: "Throw a ball at the can with the next letter of the word",
+    balloons: "Shoot a bubble at the balloon with the next letter of the word",
+    target: "Shoot an arrow at the disc with the next letter of the word",
+  },
 };
 
 export const catchCopy = (lang: string): CatchCopy => (lang === "he" ? HE : EN);
