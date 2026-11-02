@@ -1,32 +1,66 @@
 /**
- * Game testers (Gadi 2026-11-02: his sons Osher and Din test new games).
+ * Game testers (Gadi 2026-11-02: his sons Osher and Din test the games).
  * A tester has users/{uid}.tester = true: they see games before everyone
- * else and a small feedback button inside them (fixed choices, no typing).
+ * else, every game in Kids Mode too, and a 🧪 button in every game with
+ * fixed choices and a microphone for a voice note (never typed text).
  */
 
-export const TESTER_KINDS = ["fun", "boring", "hard", "easy", "bug", "idea"] as const;
+export const TESTER_KINDS = ["fun", "boring", "hard", "easy", "bug", "idea", "voice"] as const;
 export type TesterKind = (typeof TESTER_KINDS)[number];
+/** The choices on the panel (a voice note is the microphone button). */
+export const TESTER_CHOICES = ["fun", "boring", "hard", "easy", "bug", "idea"] as const;
+/** These open the microphone first: a bug or an idea is best told in words. */
+export const TESTER_SAY_FIRST = new Set<TesterKind>(["bug", "idea"]);
 
 export const TESTER_EMOJI: Record<TesterKind, string> = {
-  fun: "😍", boring: "😴", hard: "😵", easy: "🥱", bug: "🐞", idea: "💡",
+  fun: "😍", boring: "😴", hard: "😵", easy: "🥱", bug: "🐞", idea: "💡", voice: "🎤",
 };
 
-type TesterCopy = { badge: string; title: string; thanks: string; close: string; kinds: Record<TesterKind, string> };
+export type TesterCopy = {
+  badge: string; title: string; thanks: string; close: string; heard: string;
+  record: string; stop: string; sending: string; sendPlain: string; noMic: string;
+  sayBug: string; sayIdea: string; sayAny: string;
+  kinds: Record<TesterKind, string>;
+};
 
 const HE: TesterCopy = {
   badge: "בודק משחקים",
-  title: "מה דעתכם על המשחק?",
-  thanks: "תודה! ההערה נשלחה לצוות",
+  title: "מה דעתכם?",
+  thanks: "תודה! ההערה נשלחה",
   close: "סגירה",
-  kinds: { fun: "כיף", boring: "משעמם", hard: "קשה מדי", easy: "קל מדי", bug: "יש באג", idea: "יש לי רעיון" },
+  heard: "שמענו:",
+  record: "🎤 להקליט",
+  stop: "לעצור ולשלוח",
+  sending: "שולחים",
+  sendPlain: "לשלוח בלי הקלטה",
+  noMic: "אין גישה למיקרופון. אפשר לשלוח בלי הקלטה",
+  sayBug: "ספרו מה הבאג: מה עשיתם ומה קרה",
+  sayIdea: "ספרו את הרעיון",
+  sayAny: "ספרו מה רוצים להגיד",
+  kinds: { fun: "כיף", boring: "משעמם", hard: "קשה מדי", easy: "קל מדי", bug: "יש באג", idea: "יש לי רעיון", voice: "להגיד משהו" },
 };
 const EN: TesterCopy = {
   badge: "Game tester",
-  title: "What do you think of this game?",
-  thanks: "Thanks! The team got your note",
+  title: "What do you think?",
+  thanks: "Thanks! Your note was sent",
   close: "Close",
-  kinds: { fun: "Fun", boring: "Boring", hard: "Too hard", easy: "Too easy", bug: "Found a bug", idea: "I have an idea" },
+  heard: "We heard:",
+  record: "🎤 Record",
+  stop: "Stop and send",
+  sending: "Sending",
+  sendPlain: "Send without recording",
+  noMic: "No access to the microphone. You can send without recording",
+  sayBug: "Tell us the bug: what you did and what happened",
+  sayIdea: "Tell us your idea",
+  sayAny: "Tell us what you want to say",
+  kinds: { fun: "Fun", boring: "Boring", hard: "Too hard", easy: "Too easy", bug: "Found a bug", idea: "I have an idea", voice: "Say something" },
 };
 
 /** Testers are a small group for now: Hebrew, else English. */
 export const testerCopy = (lang: string): TesterCopy => (lang === "he" ? HE : EN);
+
+/* The game on screen right now, for notes sent from the floating button
+   (pages without their own 🧪 set it: /play sets the game being played). */
+let current: { game: string; word?: string } = { game: "" };
+export const setTesterGame = (game: string, word?: string) => { current = { game, word }; };
+export const testerGame = () => current;

@@ -7,6 +7,9 @@ export type CatchCopy = {
   yourWord: (n: number, of: number) => string; goal: string; go: string;
   catchNext: string; caughtAll: string; thats: (l: string) => string;
   jarFull: string; more: string; cardDesc: string;
+  /* the scenes (Gadi 2026-11-02: fireflies, and the city train) */
+  gameTitle: string; pickScene: string; sceneFireflies: string; sceneTrain: string;
+  trainSub: string; trainGoal: string; trainFull: string;
 };
 
 const HE: CatchCopy = {
@@ -26,6 +29,13 @@ const HE: CatchCopy = {
   jarFull: "הצנצנת מלאה!",
   more: "עוד סיבוב",
   cardDesc: "תופסים את האות הבאה במילה",
+  gameTitle: "תופסים אותיות",
+  pickScene: "איפה תופסים היום?",
+  sceneFireflies: "גחליליות האותיות",
+  sceneTrain: "רכבת העיר",
+  trainSub: "בכל תחנה עוברות שתי אותיות",
+  trainGoal: "בכל תחנה עוברים שני שלטים. לוחצים על השלט עם האות הבאה במילה",
+  trainFull: "הגעתם לתחנה האחרונה!",
 };
 const EN: CatchCopy = {
   title: "Letter Fireflies",
@@ -44,6 +54,13 @@ const EN: CatchCopy = {
   jarFull: "The jar is full!",
   more: "One more round",
   cardDesc: "Catch the next letter of the word",
+  gameTitle: "Letter Catch",
+  pickScene: "Where do you want to catch today?",
+  sceneFireflies: "Letter Fireflies",
+  sceneTrain: "City Train",
+  trainSub: "At every station, two letters go by",
+  trainGoal: "Two signs pass at every station. Tap the sign with the next letter of the word",
+  trainFull: "You reached the last station!",
 };
 
 export const catchCopy = (lang: string): CatchCopy => (lang === "he" ? HE : EN);

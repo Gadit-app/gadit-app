@@ -70,6 +70,7 @@ import { GameEtymologyArtist } from "@/components/play/GameEtymologyArtist";
 import { DuelHub } from "@/components/play/duel/DuelHub";
 import { worldCardCopy } from "@/lib/world/world-card-i18n";
 import { catchCopy } from "@/app/catch/catch-i18n";
+import { setTesterGame } from "@/lib/tester";
 import { setAnswerListener } from "@/lib/learn/report";
 import { setDuelLauncher } from "@/lib/duel-launch";
 import { duelCopy } from "@/components/play/duel/duel-i18n";
@@ -3594,6 +3595,8 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
   type Stage = { kind: "menu" } | { kind: "lesson"; lesson: Lesson; learnLang: string; preReader?: boolean } | { kind: "playing"; game: GameId } | { kind: "duel"; code?: string; preset?: { title: string; questions: DuelQuestion[] } };
   const [stage, setStage] = useState<Stage>({ kind: "menu" });
   const [lessonPending, setLessonPending] = useState(openingLesson);
+  // The tester's 🧪 note names the game on screen (Gadi 2026-11-02).
+  useEffect(() => { setTesterGame(stage.kind === "playing" ? stage.game : stage.kind === "menu" ? "play-menu" : stage.kind); }, [stage]);
   // "Practice this word" from the notebook (Gadi 2026-10-09):
   // /play?game=<id>&word=<word> opens that game with the word in it.
   const [focus, setFocus] = useState<{ game: GameId; word: string } | null>(null);
@@ -4456,7 +4459,8 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
             // (auto-adapt from the child's own vocabulary); the 4
             // curated games with kids content join them.
             const sectionGames = games.filter(
-              (g) => g.category === section.id && (!kidsMode || g.kidsFriendly),
+              // Testers see every game, Kids Mode too (Gadi 2026-11-02).
+              (g) => g.category === section.id && (!kidsMode || g.kidsFriendly || tester),
             );
             if (sectionGames.length === 0) return null;
             // Notebook section always shows now — the effectivePool
@@ -4524,7 +4528,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img className="wb-play-card-cover" src="/catch/fireflies/cover.webp?v=1" alt="" loading="lazy" width={720} height={480} />
                         <span className="wb-play-card-text">
-                          <span className="wb-play-card-title">🧪 {catchCopy(lang).title}</span>
+                          <span className="wb-play-card-title">🧪 {catchCopy(lang).gameTitle}</span>
                           <span className="wb-play-card-desc">{catchCopy(lang).cardDesc}</span>
                         </span>
                       </Link>

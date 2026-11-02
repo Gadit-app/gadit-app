@@ -20,8 +20,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { WaitText } from "@/components/WaitText";
 import { TTSButton } from "@/components/design/TTSButton";
-import { SfxToggle } from "@/components/SfxToggle";
-import { TesterButton } from "@/components/TesterButton";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -33,9 +31,16 @@ import { readSpellChoice } from "@/lib/world/spell-choice";
 import { Glyph } from "../world/Glyph";
 import { fetchPics, loadWords, type TrailWord } from "../world/WorldClient";
 import { catchCopy, type CatchCopy } from "./catch-i18n";
+import { CatchHud } from "./CatchHud";
+import { TrainRide, TRAIN_ART, TRAIN_CSS } from "./TrainRide";
 
 const ART = "/catch/fireflies";
 const ROUND = 5;
+
+/* The scene the child picks on the door (Gadi 2026-11-02: fireflies, or the city train). */
+type Scene = "fireflies" | "train";
+const SCENE_KEY = "gadit-catch-scene";
+const readScene = (): Scene => { try { return localStorage.getItem(SCENE_KEY) === "train" ? "train" : "fireflies"; } catch { return "fireflies"; } };
 const iso = (s: string) => `⁨${s}⁩`;
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 const rnd = (a: number, b: number) => a + Math.random() * (b - a);
@@ -48,9 +53,7 @@ function Sky({ word, c, level, avatar, onDone, onExit, pic }: {
   word: TrailWord; c: CatchCopy; level: number; avatar: string; pic: string | null;
   onDone: (wrongs: number) => void; onExit: () => void;
 }) {
-  const rtl = RTL_SPELL.has(word.lang);
   const letters = useMemo(() => lettersOf(word.w, word.lang), [word]);
-  const audioLang = word.lang === "he" ? "he-IL" : word.lang === "en" ? "en-US" : word.lang;
 
   const rootRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ w: 390, h: 740 });
@@ -206,7 +209,6 @@ function Sky({ word, c, level, avatar, onDone, onExit, pic }: {
   }, [letters, tap, word.lang]);
 
   const target = letters[step];
-  const done = step >= letters.length;
 
   return (
     <div className="ct-stage" ref={rootRef}>
@@ -248,27 +250,7 @@ function Sky({ word, c, level, avatar, onDone, onExit, pic }: {
         ) : null}
       </div>
 
-      <div className="ct-hud">
-        <div className="ct-hud-side">
-          <button type="button" className="ct-round" onClick={onExit} aria-label={c.back}>✕</button>
-          <SfxToggle className="ct-round" />
-        </div>
-        <div className="ct-slots" dir={rtl ? "rtl" : "ltr"}>
-          {pic ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img className="ct-slots-pic" src={pic} alt="" />
-          ) : null}
-          <span className="ct-slots-say"><TTSButton text={word.native ? word.raw : word.w} audioLang={audioLang} ariaLabel={c.hear} className="ct-tts-btn" rate={0.85} /></span>
-          {letters.map((l, i) => (
-            <span key={i} className={`ct-slot${i < step ? " is-filled" : ""}${i === step && !done ? " is-now" : ""}`}>{i < step ? <Glyph ch={l} /> : null}</span>
-          ))}
-        </div>
-        <div className="ct-hud-side is-end">
-          <TesterButton game="catch" word={word.w} className="ct-round" />
-        </div>
-      </div>
-
-      <div className="ct-tip">{done ? c.caughtAll : c.catchNext}</div>
+      <CatchHud word={word} letters={letters} step={step} pic={pic} c={c} game="catch" onExit={onExit} />
     </div>
   );
 }
@@ -296,6 +278,17 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
   const [phase, setPhase] = useState<"door" | "intro" | "play" | "summary">("door");
   const [jar, setJar] = useState<TrailWord[]>([]);
   const [round, setRound] = useState(0);
+  const [scene, setScene] = useState<Scene>("fireflies");
+  // The last scene picked on this device (read after mount: no server mismatch).
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setScene(readScene()); }, []);
+  const sceneName = scene === "train" ? c.sceneTrain : c.sceneFireflies;
+  const pickScene = (s: Scene) => {
+    setScene(s);
+    try { localStorage.setItem(SCENE_KEY, s); } catch { /* fine */ }
+    sfx.whoosh();
+    setPhase("intro");
+  };
   const introSay = useRef<HTMLSpanElement>(null);
 
   const load = useCallback(async () => {
@@ -339,7 +332,7 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
         if (word.native) fetch("/api/world/words", { method: "POST", headers, body: JSON.stringify({ lang: word.lang, results: [{ w: word.raw, ok }] }) }).catch(() => undefined);
         else fetch("/api/learn", { method: "POST", headers, body: JSON.stringify({ action: "results", lang: word.lang, results: [{ w: word.raw, ok }] }) }).catch(() => undefined);
         const total = lettersOf(word.w, word.lang).length;
-        void notifyActivity(user, { kind: "game", label: `${c.title} · ${word.w}`, score: Math.max(0, total - wrongCount), total });
+        void notifyActivity(user, { kind: "game", label: `${sceneName} · ${word.w}`, score: Math.max(0, total - wrongCount), total });
       } catch { /* the game goes on */ }
     }
     if (filled.length % ROUND === 0) { sfx.win(); setPhase("summary"); return; }
@@ -356,7 +349,7 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
       setPhase("intro");
       await load();
     }
-  }, [word, jar, user, demo, c.title, idx, queue, pics, load]);
+  }, [word, jar, user, demo, sceneName, idx, queue, pics, load]);
 
   const more = async () => {
     setRound((r) => r + 1);
@@ -370,11 +363,15 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
   const roundJar = jar.slice(Math.floor(Math.max(0, jar.length - 1) / ROUND) * ROUND);
 
   return (
-    <div className="ct-root" style={{ backgroundImage: `url(${ART}/bg-tall.webp)` }}>
+    <div className={`ct-root is-${scene}`}>
       <style>{CSS}</style>
+      <style>{TRAIN_CSS}</style>
 
-      {word && phase === "play" ? (
+      {word && phase === "play" && scene === "fireflies" ? (
         <Sky key={`${round}:${idx}:${word.w}`} word={word} c={c} level={level} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={exit} />
+      ) : null}
+      {word && phase === "play" && scene === "train" ? (
+        <TrainRide key={`${round}:${idx}:${word.w}`} word={word} c={c} level={level} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={exit} />
       ) : null}
 
       {word && phase === "intro" ? (
@@ -390,7 +387,7 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
             <span ref={introSay}>
               <TTSButton text={word.native ? word.raw : word.w} audioLang={word.lang === "he" ? "he-IL" : word.lang === "en" ? "en-US" : word.lang} ariaLabel={c.hear} className="ct-tts-btn" rate={0.85} />
             </span>
-            <p className="ct-card-goal">{c.goal}</p>
+            <p className="ct-card-goal">{scene === "train" ? c.trainGoal : c.goal}</p>
             <button type="button" className="ct-btn" onClick={() => { sfx.whoosh(); setPhase("play"); }}>{c.go}</button>
           </div>
         </div>
@@ -400,8 +397,8 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
         <div className="ct-card-wrap" dir={dir}>
           <div className="ct-card">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="ct-jar" src={`${ART}/jar.webp`} alt="" />
-            <strong className="ct-card-title">{c.jarFull}</strong>
+            <img className="ct-jar" src={scene === "train" ? `${TRAIN_ART}/train.webp` : `${ART}/jar.webp`} alt="" />
+            <strong className="ct-card-title">{scene === "train" ? c.trainFull : c.jarFull}</strong>
             <div className="ct-jar-words">
               {roundJar.map((w, i) => (
                 <span key={i} className="ct-jar-word" dir={RTL_SPELL.has(w.lang) ? "rtl" : "ltr"}>
@@ -422,13 +419,21 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
       ) : null}
 
       {phase === "door" ? (
-        <div className="ct-door" dir={dir} style={{ backgroundImage: `url(${ART}/curtain.webp)` }}>
+        <div className="ct-door" dir={dir} style={{ backgroundImage: `url(${scene === "train" ? TRAIN_ART : ART}/curtain.webp)` }}>
           <div className="ct-door-box">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="ct-door-fly" src={`${ART}/firefly.webp`} alt="" />
-            <strong>{c.title}</strong>
-            <span>{c.sub}</span>
-            <button type="button" className="ct-btn is-big" disabled={!word} onClick={() => { sfx.whoosh(); setPhase("intro"); }}>{word ? c.start : <WaitText text={c.loading} />}</button>
+            <strong>{c.gameTitle}</strong>
+            <span>{c.pickScene}</span>
+            <div className="ct-scenes">
+              {(["fireflies", "train"] as const).map((s) => (
+                <button key={s} type="button" className={`ct-scene${scene === s ? " is-last" : ""}`} disabled={!word} onClick={() => pickScene(s)}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={`${s === "train" ? TRAIN_ART : ART}/cover.webp?v=1`} alt="" />
+                  <span className="ct-scene-name">{s === "train" ? c.sceneTrain : c.sceneFireflies}</span>
+                  <span className="ct-scene-sub">{s === "train" ? c.trainSub : c.sub}</span>
+                </button>
+              ))}
+            </div>
+            {!word && !failed ? <span className="ct-door-wait"><WaitText text={c.loading} /></span> : null}
             <button type="button" className="ct-link" onClick={exit}>{c.back}</button>
           </div>
         </div>
@@ -446,8 +451,18 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
 }
 
 const CSS = `
-.ct-root{position:fixed;inset:0;z-index:60;overflow:hidden;background:#1e1b4b center bottom/cover no-repeat;color:#14202b;-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-@media (min-aspect-ratio:1/1){.ct-root{background-image:url(${ART}/bg-wide.webp)!important}}
+.ct-root{position:fixed;inset:0;z-index:60;overflow:hidden;background:#1e1b4b url(${ART}/bg-tall.webp) center bottom/cover no-repeat;color:#14202b;-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+@media (min-aspect-ratio:1/1){.ct-root{background-image:url(${ART}/bg-wide.webp)}}
+.ct-root.is-train{background:#f8d9b4 url(${TRAIN_ART}/bg-loop.webp) left bottom/auto 100% repeat-x}
+.ct-scenes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%}
+.ct-scene{display:grid;gap:4px;justify-items:center;padding:8px 8px 12px;border:3px solid #fff8;border-radius:22px;background:#ffffffeb;color:#14202b;font:inherit;cursor:pointer;box-shadow:0 6px 18px #0005;text-align:center}
+.ct-scene.is-last{border-color:#ffd23f}
+.ct-scene:disabled{opacity:.6;cursor:default}
+.ct-scene:not(:disabled):active{transform:scale(.97)}
+.ct-scene img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:16px;max-width:100%}
+.ct-scene-name{font-weight:900;font-size:18px}
+.ct-scene-sub{font-size:13px;color:#5f6b73;line-height:1.35}
+.ct-door-wait{color:#fff;font-weight:700}
 .ct-stage{position:absolute;inset:0;overflow:hidden}
 .ct-fly{position:absolute;left:0;top:0;border:0;background:none;padding:0;cursor:pointer;will-change:transform;touch-action:none}
 .ct-fly img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;filter:drop-shadow(0 0 14px #ffd76a99);animation:ct-flap .35s ease-in-out infinite alternate}
@@ -499,10 +514,9 @@ const CSS = `
 .ct-btn.is-big{font-size:22px;padding:16px 34px}
 .ct-link{border:0;background:none;color:#fff;font:inherit;font-weight:700;text-decoration:underline;cursor:pointer;text-shadow:0 1px 4px #000a}
 .ct-door{position:absolute;inset:0;z-index:20;background-size:cover;background-position:center;display:grid;place-items:center;padding:16px}
-.ct-door-box{display:grid;gap:14px;justify-items:center;text-align:center;background:#0000005e;padding:22px 26px;border-radius:28px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);max-width:420px}
-.ct-door-box strong{font-size:clamp(32px,9vw,54px);color:#fff;text-shadow:0 3px 0 #312e81,0 6px 18px #000a;line-height:1.1}
-.ct-door-box span{color:#fff;font-size:17px;font-weight:600;text-shadow:0 1px 6px #000c}
-.ct-door-fly{width:120px;animation:ct-hover 1.6s ease-in-out infinite alternate;filter:drop-shadow(0 0 18px #ffd76a)}
+.ct-door-box{display:grid;gap:14px;justify-items:center;text-align:center;background:#0000005e;padding:22px 18px;border-radius:28px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);max-width:520px;width:100%}
+.ct-door-box>strong{font-size:clamp(32px,9vw,54px);color:#fff;text-shadow:0 3px 0 #312e81,0 6px 18px #000a;line-height:1.1}
+.ct-door-box>span{color:#fff;font-size:17px;font-weight:600;text-shadow:0 1px 6px #000c}
 .ct-loading{position:absolute;inset:0;z-index:7;display:grid;place-items:center;align-content:center;gap:14px;font-weight:700;font-size:18px;color:#fff;text-align:center;padding:16px;text-shadow:0 1px 6px #000a}
 @keyframes ct-flap{from{transform:translateY(0) rotate(-4deg)}to{transform:translateY(-4px) rotate(4deg)}}
 @keyframes ct-throb{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(1.18)}}

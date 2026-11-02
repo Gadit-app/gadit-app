@@ -6,6 +6,7 @@ import "./globals.css";
 import { CjkFonts } from "@/components/CjkFonts";
 import { cjkHref } from "@/lib/cjk-fonts";
 import { AuthProvider } from "@/lib/auth-context";
+import { TesterFab } from "@/components/TesterButton";
 import { SkinFx } from "@/components/SkinFx";
 import { LangProvider } from "@/lib/lang-context";
 import { CoachSessionBanner } from "@/components/CoachSessionBanner";
@@ -501,6 +502,8 @@ export default async function RootLayout({
               <KidsModeBar />
               <SkinFx />
               {children}
+              {/* Game testers' 🧪 note button (Gadi 2026-11-02), testers only. */}
+              <TesterFab />
               <VoiceAssistant />
               <GuideOverlay />
               {!iosApp && <InstallPwaPrompt />}

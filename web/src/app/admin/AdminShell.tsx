@@ -66,6 +66,7 @@ const STRINGS = {
     tabUsers: "Subscribers",
     tabDeleted: "Deleted",
     tabHealth: "Subscriber health",
+    tabTesters: "Game testers",
     tabLog: "Log & statistics",
     tabTopWords: "Top words",
     tabSchools: "Schools",
@@ -122,6 +123,7 @@ const STRINGS = {
     tabUsers: "מנויים",
     tabDeleted: "נמחקו",
     tabHealth: "בריאות מנויים",
+    tabTesters: "בודקי משחקים",
     tabLog: "לוג וסטטיסטיקות",
     tabTopWords: "מילים מובילות",
     tabSchools: "בתי ספר",
@@ -182,6 +184,7 @@ const NAV_GROUPS: NavGroup[] = [
   { labelKey: "gSupport", icon: <IconFlag />, tabs: [
     { href: "/admin/reports", labelKey: "tabReports" },
     { href: "/admin/learn-reports", labelKey: "tabLearnReports" },
+    { href: "/admin/testers", labelKey: "tabTesters" },
     { href: "/admin/auth-errors", labelKey: "authErrors" },
   ] },
 ];

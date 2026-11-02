@@ -38,6 +38,7 @@ import { DECOR_COST, decorKinds, WORLDS, worldArt, type WorldDef, type WorldId }
 import { forkLetters, gateTiles, keyMatches, lettersOf, registerAlphabet, spellable, spellForm, RTL_SPELL, type SpellLang } from "@/lib/world/letters";
 import { isBankSpell, readSpellChoice } from "@/lib/world/spell-choice";
 import { Glyph } from "./Glyph";
+import { PeekTrail, peekCopy } from "./PeekTrail";
 import { friendsCopy } from "@/lib/world/friends-i18n";
 import { worldCopy, type WorldCopy } from "@/lib/world/world-i18n";
 import { worldGoal } from "@/lib/world/world-goal-i18n";
@@ -720,13 +721,17 @@ export function Clearing({ world, c, items: words, fresh, onNext, onBack, ui, on
 }
 
 /* ---------- the page ---------- */
-export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; demo?: TrailWord[] }) {
+/** peekDemo: the local preview shows the testers' peeking trail without a signed-in tester. */
+export function WorldClient({ worldId = "jungle", demo, peekDemo }: { worldId?: WorldId; demo?: TrailWord[]; peekDemo?: boolean }) {
   const world = WORLDS[worldId];
-  const { user, plan, planReady, loading, promptLogin, avatarId, avatarPhotoUrl } = useAuth();
+  const { user, plan, planReady, loading, promptLogin, avatarId, avatarPhotoUrl, tester } = useAuth();
   const { lang } = useLang();
   const href = useHref();
   const router = useRouter();
   const c = worldCopy(lang);
+  // Testers (Gadi 2026-11-02) also get the peeking letters trail.
+  const canPeek = tester || !!peekDemo;
+  const [mode, setMode] = useState<"doors" | "peek">("doors");
   const wn = c.worlds[world.id];
 
   useEffect(() => {
@@ -743,7 +748,7 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
   const [pics, setPics] = useState<Record<string, string>>({});
   const [items, setItems] = useState<WorldItem[]>([]);
   const [bank, setBank] = useState<{ stars: number; spent: number; decor: Decor[] }>({ stars: 0, spent: 0, decor: [] });
-  const [phase, setPhase] = useState<"door" | "intro" | "trail" | "closing" | "clearing">("door");
+  const [phase, setPhase] = useState<"door" | "intro" | "trail" | "closing" | "clearing" | "peek">("door");
   const [curtainOpen, setCurtainOpen] = useState(false);
   const [fresh, setFresh] = useState<string | null>(null);
   const [round, setRound] = useState(0);
@@ -810,14 +815,10 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
     setPhase("intro");
   };
 
-  const finish = useCallback(async (r: TrailResult) => {
-    if (!word || (!user && !demo)) return;
-    // Through the gate, the new area is already on screen: no curtain.
-    if (!r.portal) setCurtainOpen(false);
-    setPhase("closing");
-    const ok = r.gateFirstTry && r.wrongs <= 1;
+  /* Save one finished word: the learning engine, the parent, the child's world. */
+  const saveWord = useCallback(async (word: TrailWord, ok: boolean, wrongs: number, stars: number) => {
+    const r = { wrongs, stars };
     const total = lettersOf(word.w, word.lang).length;
-    const key = `${word.lang}:${word.w}`;
     const pic = pics[word.pic] ?? null;
     if (demo || !user) {
       setItems((cur) => (cur.some((x) => x.w === word.w && x.lang === word.lang) ? cur : [...cur, { w: word.w, lang: word.lang, t: word.t, pic, at: Date.now() }]));
@@ -839,13 +840,25 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
         try { window.history.replaceState(null, "", window.location.pathname); } catch { /* fine */ }
       }
     } catch { /* the world still opens */ }
+  }, [demo, user, pics, wn.title, worldId]);
+
+  const finish = useCallback(async (r: TrailResult) => {
+    if (!word || (!user && !demo)) return;
+    // Through the gate, the new area is already on screen: no curtain.
+    if (!r.portal) setCurtainOpen(false);
+    setPhase("closing");
+    const ok = r.gateFirstTry && r.wrongs <= 1;
+    const key = `${word.lang}:${word.w}`;
+    await saveWord(word, ok, r.wrongs, r.stars);
     setFresh(key);
     if (r.portal) { setPhase("clearing"); setCurtainOpen(true); }
     else setTimeout(() => { setPhase("clearing"); setCurtainOpen(true); sfx.whoosh(); }, 900);
-  }, [demo, user, word, pics, wn.title, worldId]);
+  }, [demo, user, word, saveWord]);
 
   const next = useCallback(async () => {
     setFresh(null);
+    // Back from the clearing to the peeking trail: the same word waits there.
+    if (mode === "peek") { setPhase("peek"); return; }
     const n = idx + 1;
     if (queue && n < queue.length) {
       setIdx(n);
@@ -864,7 +877,32 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
       setRound((x) => x + 1);
       await load();
     }
-  }, [idx, queue, user, pics, load]);
+  }, [idx, queue, user, pics, load, mode]);
+
+  /* the peeking trail: a word is done, save it and walk on to the next one */
+  const peekDone = useCallback(async (wrongs: number) => {
+    if (!word) return;
+    void saveWord(word, wrongs <= 1, wrongs, 0);
+    setFresh(`${word.lang}:${word.w}`);
+    const n = idx + 1;
+    if (queue && n < queue.length) {
+      setIdx(n);
+      if (user) {
+        const ahead = queue.slice(n, n + 4).map((x) => x.pic).filter((p) => p && !pics[p]);
+        if (ahead.length) void fetchPics(await user.getIdToken(), ahead, true).then((got) => setPics((p) => ({ ...p, ...got })));
+      }
+    } else {
+      setQueue(null);
+      await load();
+    }
+  }, [word, saveWord, idx, queue, user, pics, load]);
+  const enterPeek = () => {
+    if (!word) return;
+    sfx.whoosh();
+    setMode("peek");
+    setCurtainOpen(true);
+    setPhase("peek");
+  };
 
   const exit = () => router.push(href("/world"));
   // A decoration bought with stars (Gadi 2026-11-01).
@@ -919,6 +957,20 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
         />
       ) : null}
 
+      {phase === "peek" ? (
+        <PeekTrail
+          world={world}
+          c={c}
+          ui={lang}
+          word={word}
+          pic={word ? pics[word.pic] ?? null : null}
+          avatar={avatar}
+          onWordDone={peekDone}
+          onMap={() => setPhase("clearing")}
+          onExit={exit}
+        />
+      ) : null}
+
       {phase === "clearing" ? <Clearing world={world} c={c} items={items} fresh={fresh} onNext={next} onBack={exit} ui={lang} onLayout={saveLayout} bank={{ left: Math.max(0, bank.stars - bank.spent), decor: bank.decor }} onBuy={buy} /> : null}
 
       {word && phase === "intro" ? (
@@ -942,7 +994,7 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
         </div>
       ) : null}
 
-      {!queue && !failed && phase !== "clearing" ? <div className="wt-loading"><WaitText text={c.loading} live /></div> : null}
+      {!queue && !failed && phase !== "clearing" && phase !== "peek" ? <div className="wt-loading"><WaitText text={c.loading} live /></div> : null}
       {failed && phase !== "clearing" ? (
         <div className="wt-loading">
           <p>{c.noWords}</p>
@@ -955,6 +1007,7 @@ export function WorldClient({ worldId = "jungle", demo }: { worldId?: WorldId; d
           <div className="wt-door-title">
             <strong>{wn.title}</strong>
             <button type="button" className="wt-btn is-big" disabled={!word} onClick={(e) => { e.stopPropagation(); enter(); }}>{word ? wn.enter : <WaitText text={c.loading} />}</button>
+            {canPeek ? <button type="button" className="wt-btn is-ghost" disabled={!word} onClick={(e) => { e.stopPropagation(); enterPeek(); }}>🧪 {peekCopy(lang).start}</button> : null}
             <button type="button" className="wt-link" onClick={(e) => { e.stopPropagation(); exit(); }}>{c.back}</button>
           </div>
         ) : null}

@@ -25,6 +25,8 @@ export type MailMsg = {
   replyTo?: string;
   /** Sent by a cron on its own, not by someone's action: waits out Shabbat. */
   scheduled?: boolean;
+  /** Files sent with the mail (e.g. a tester's voice note). Never on scheduled mail. */
+  attachments?: { filename: string; content: Buffer; contentType?: string }[];
 };
 
 type MailResult = {
@@ -40,6 +42,7 @@ async function sendNow(key: string, msg: MailMsg): Promise<MailResult> {
     subject: msg.subject,
     html: msg.html,
     ...(msg.replyTo ? { replyTo: msg.replyTo } : {}),
+    ...(msg.attachments?.length ? { attachments: msg.attachments } : {}),
   });
   return {
     data: r.data ? { id: r.data.id } : null,
