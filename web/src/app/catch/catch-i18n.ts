@@ -7,9 +7,10 @@ export type CatchCopy = {
   yourWord: (n: number, of: number) => string; goal: string; go: string;
   catchNext: string; caughtAll: string; thats: (l: string) => string;
   jarFull: string; more: string; cardDesc: string;
-  /* the scenes (Gadi 2026-11-02: fireflies, and the city train) */
-  gameTitle: string; pickScene: string; sceneFireflies: string; sceneTrain: string;
-  trainSub: string; trainGoal: string; trainFull: string;
+  /* the scenes (Gadi 2026-11-02: fireflies, and a roller coaster in three worlds) */
+  gameTitle: string; pickScene: string; sceneFireflies: string; sceneCoaster: string;
+  coasterSub: string; coasterGoal: string; coasterFull: string; pickWorld: string;
+  worlds: Record<"snow" | "jungle" | "space", string>;
 };
 
 const HE: CatchCopy = {
@@ -32,10 +33,12 @@ const HE: CatchCopy = {
   gameTitle: "תופסים אותיות",
   pickScene: "איפה תופסים היום?",
   sceneFireflies: "גחליליות האותיות",
-  sceneTrain: "רכבת העיר",
-  trainSub: "בכל תחנה עוברות שתי אותיות",
-  trainGoal: "בכל תחנה עוברים שני שלטים. לוחצים על השלט עם האות הבאה במילה",
-  trainFull: "הגעתם לתחנה האחרונה!",
+  sceneCoaster: "רכבת הרים",
+  coasterSub: "נוסעים קדימה ותופסים אותיות משני הצדדים",
+  coasterGoal: "בכל צד של המסילה מופיע שלט. לוחצים על השלט עם האות הבאה במילה",
+  coasterFull: "איזו נסיעה! חמש מילים",
+  pickWorld: "לאן נוסעים?",
+  worlds: { snow: "שלג", jungle: "ג'ונגל", space: "חלל" },
 };
 const EN: CatchCopy = {
   title: "Letter Fireflies",
@@ -57,10 +60,12 @@ const EN: CatchCopy = {
   gameTitle: "Letter Catch",
   pickScene: "Where do you want to catch today?",
   sceneFireflies: "Letter Fireflies",
-  sceneTrain: "City Train",
-  trainSub: "At every station, two letters go by",
-  trainGoal: "Two signs pass at every station. Tap the sign with the next letter of the word",
-  trainFull: "You reached the last station!",
+  sceneCoaster: "Roller Coaster",
+  coasterSub: "Ride forward and catch letters on both sides",
+  coasterGoal: "A sign comes up on each side of the track. Tap the sign with the next letter of the word",
+  coasterFull: "What a ride! Five words",
+  pickWorld: "Where are we riding?",
+  worlds: { snow: "Snow", jungle: "Jungle", space: "Space" },
 };
 
 export const catchCopy = (lang: string): CatchCopy => (lang === "he" ? HE : EN);
