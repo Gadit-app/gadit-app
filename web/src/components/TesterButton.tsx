@@ -161,6 +161,7 @@ export function TesterButton({ game, word, className, floating }: { game: string
                     </button>
                   ))}
                 </div>
+                <a className="tst-pay" href={`${lang === "en" ? "" : `/${lang}`}/tester`}>{c.myPay}</a>
                 <button type="button" className="tst-close" onClick={close}>{c.close}</button>
               </>
             ) : null}
@@ -232,6 +233,7 @@ const CSS = `
 .tst-nomic{margin:0;color:#b45309;font-size:14px}
 .tst-heard{margin:0;background:#f5f3ff;border-radius:14px;padding:10px 14px;font-size:16px;line-height:1.5}
 .tst-sent{font-size:54px;animation:tst-pop .4s}
+.tst-pay{color:#4338ca;font-weight:800;text-decoration:none;background:#eef2ff;border-radius:999px;padding:8px 16px}
 .tst-close{border:0;background:none;color:#5f6b73;font:inherit;font-weight:700;text-decoration:underline;cursor:pointer}
 @keyframes tst-pop{from{transform:scale(.4)}to{transform:scale(1)}}
 @keyframes tst-blink{50%{opacity:.25}}

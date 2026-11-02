@@ -1,0 +1,42 @@
+/** Friendly names for the game ids testers' notes carry (Gadi 2026-11-02). */
+const NAMES: Record<string, [string, string]> = {
+  catch: ["גחליליות האותיות", "Letter Fireflies"],
+  "catch-coaster-snow": ["רכבת הרים: שלג", "Roller coaster: snow"],
+  "catch-coaster-jungle": ["רכבת הרים: ג'ונגל", "Roller coaster: jungle"],
+  "catch-coaster-space": ["רכבת הרים: חלל", "Roller coaster: space"],
+  "catch-fair-cans": ["לונה פארק: פחיות", "Funfair: cans"],
+  "catch-fair-balloons": ["לונה פארק: בלונים", "Funfair: balloons"],
+  "catch-fair-target": ["לונה פארק: מטרה", "Funfair: target"],
+  "world-peek": ["מסלול האותיות המציצות", "Peeking letters trail"],
+  world: ["עולמות המילים", "Word Worlds"],
+  "play-menu": ["עמוד המשחקים", "Games page"],
+  play: ["משחקים", "Games"],
+  spell: ["הכתבה", "Spelling"],
+  say: ["תגידו את זה", "Say it"],
+  read: ["קריאה", "Reading"],
+  duel: ["דו קרב מילים", "Word Duel"],
+  lesson: ["שיעור", "Lesson"],
+  twin: ["מלכודת תאומים", "Twin Trap"],
+  time: ["מסע בזמן", "Time Travel"],
+  passport: ["דרכון מילים", "Word Passport"],
+  context: ["בלש ההקשר", "Context Detective"],
+  quiz: ["חידון", "Quiz"],
+  flashcards: ["כרטיסי מילים", "Word cards"],
+  flashdefs: ["כרטיסי הגדרות", "Definition cards"],
+  truefalse: ["נכון או לא", "True or false"],
+  fillblank: ["השלימו את החסר", "Fill the blank"],
+  memory: ["זיכרון", "Memory"],
+  anagram: ["ערבוב אותיות", "Anagram"],
+  speed: ["מרוץ מילים", "Speed round"],
+  friends: ["חברים מזויפים", "False friends"],
+  root: ["מרוץ השורשים", "Root rush"],
+  shade: ["גווני משמעות", "Shade slider"],
+  build: ["בונים מילה", "Build a word"],
+  idiom: ["מפענחים ביטויים", "Idiom decoder"],
+  lens: ["עדשת המשמעות", "Meaning lens"],
+  artist: ["אמן האטימולוגיה", "Etymology artist"],
+};
+export function gameName(id: string, lang: string): string {
+  const n = NAMES[id];
+  return n ? n[lang === "he" ? 0 : 1] : id;
+}

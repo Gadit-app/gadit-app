@@ -4,6 +4,7 @@ import { getAdminAuth, getAdminDb, getDefaultBucket } from "@/lib/firebase-admin
 import { sendMail } from "@/lib/mail";
 import { logAiUsage, whisperCostUsd } from "@/lib/ai-cost";
 import { TESTER_KINDS, type TesterKind } from "@/lib/tester";
+import { gameName } from "@/lib/tester-games";
 
 /**
  * A game tester's note from inside a game (Gadi 2026-11-02: Osher and Din
@@ -128,9 +129,9 @@ export async function POST(req: NextRequest) {
     await sendMail({
       from: "Gadit <notify@gadit.app>",
       to: process.env.NOTIFY_EMAIL,
-      subject: `🧪 ${name}: ${KIND_HE[kind]} (${game})${transcript ? `: ${transcript.slice(0, 60)}` : ""}`,
+      subject: `🧪 ${name}: ${KIND_HE[kind]} (${gameName(game, "he")})${transcript ? `: ${transcript.slice(0, 60)}` : ""}`,
       html: `<div dir="rtl" style="font-family:Arial,sans-serif;font-size:15px;line-height:1.7">
-<p><b>${esc(name)}</b> בודק את <b>${esc(game)}</b> וסימן: <b>${KIND_HE[kind]}</b>${word ? `, במילה ⁨${esc(word)}⁩` : ""}.</p>
+<p><b>${esc(name)}</b> בודק את <b>${esc(gameName(game, "he"))}</b> וסימן: <b>${KIND_HE[kind]}</b>${word ? `, במילה ⁨${esc(word)}⁩` : ""}.</p>
 ${transcript ? `<p style="background:#f5f3ff;border-radius:12px;padding:12px 16px;font-size:17px">🎤 "${esc(transcript)}"</p>` : audio ? `<p>🎤 יש הקלטה מצורפת (התמלול לא הצליח).</p>` : ""}
 ${path ? `<p style="color:#666;font-size:13px">עמוד: ${esc(path)}</p>` : ""}
 <p><a href="https://www.gadit.app/admin/testers">כל ההערות, ולאשר ל-Claude לטפל</a></p>
