@@ -147,6 +147,7 @@ export function TesterButton({ game, word, className, floating }: { game: string
       {open ? (
         <div className="tst-wrap" onClick={(e) => { e.stopPropagation(); if (!recording) close(); }} dir={lang === "he" ? "rtl" : "ltr"}>
           <div className="tst-card" role="dialog" aria-label={c.title} onClick={(e) => e.stopPropagation()}>
+            {!recording ? <button type="button" className="tst-x" onClick={close} aria-label={c.close}>✕</button> : null}
             <span className="tst-badge">🧪 {c.badge}</span>
 
             {view === "pick" ? (
@@ -226,7 +227,8 @@ const CSS = `
 .tst-fab{position:fixed;z-index:95;inset-inline-start:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);width:46px;height:46px;border-radius:50%;border:2px solid #c4b5fd;background:#f5f3ff;box-shadow:0 4px 14px #0003;font-size:21px;display:grid;place-items:center;cursor:pointer}
 .tst-fab.is-pay{bottom:calc(env(safe-area-inset-bottom,0px) + 140px);text-decoration:none;border-color:#fcd34d;background:#fffbeb}
 .tst-wrap{position:fixed;inset:0;z-index:100;background:#0008;display:grid;place-items:center;padding:16px}
-.tst-card{width:min(420px,100%);background:#fff;color:#14202b;border-radius:26px;padding:18px 16px;display:grid;gap:12px;justify-items:center;text-align:center;box-shadow:0 18px 50px #0006;font-family:inherit}
+.tst-x{position:absolute;top:10px;inset-inline-start:10px;width:36px;height:36px;border-radius:50%;border:0;background:#f3f4f6;color:#14202b;font-size:16px;cursor:pointer;display:grid;place-items:center}
+.tst-card{position:relative;width:min(420px,100%);background:#fff;color:#14202b;border-radius:26px;padding:18px 16px;display:grid;gap:12px;justify-items:center;text-align:center;box-shadow:0 18px 50px #0006;font-family:inherit}
 .tst-badge{background:#ede9fe;color:#5b21b6;border-radius:999px;padding:4px 12px;font-weight:800;font-size:13px}
 .tst-title{font-size:20px;line-height:1.35}
 .tst-mic-big{width:100%;border:0;border-radius:18px;background:#7c3aed;color:#fff;font:inherit;font-weight:800;font-size:19px;padding:14px;cursor:pointer;box-shadow:0 4px 0 #5b21b6}

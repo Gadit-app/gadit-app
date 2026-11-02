@@ -409,6 +409,8 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
 
       {word && phase === "intro" ? (
         <div className="ct-card-wrap" dir={dir}>
+          {/* the same ✕ as in the game, top corner (Gadi 2026-11-02) */}
+          <button type="button" className="ct-round ct-x" onClick={exit} aria-label={c.back}>✕</button>
           <div className="ct-card">
             <span className="ct-card-label">{c.yourWord(jar.length % ROUND + 1, ROUND)}</span>
             {pics[word.pic] ? (
@@ -428,6 +430,8 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
 
       {phase === "summary" ? (
         <div className="ct-card-wrap" dir={dir}>
+          {/* the same ✕ as in the game, top corner (Gadi 2026-11-02) */}
+          <button type="button" className="ct-round ct-x" onClick={exit} aria-label={c.back}>✕</button>
           <div className="ct-card">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className={scene === "fireflies" ? "ct-jar" : "ct-jar is-card"} src={scene === "coaster" ? `${COASTER_ART}/${world}/card.webp` : scene === "fair" ? `${FAIR_ART}/${stall}/card.webp` : `${ART}/jar.webp`} alt="" />
@@ -562,6 +566,7 @@ const CSS = `
 .ct-slot.is-now{border-color:#f59e0b;animation:ct-blink 1s ease-in-out infinite}
 .ct-slot.is-filled{border-color:#4338ca;color:#4338ca;animation:ct-pop .35s}
 .ct-tip{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 68px);transform:translateX(-50%);background:#ffffffe8;border-radius:999px;padding:8px 16px;font-weight:700;font-size:16px;box-shadow:0 4px 14px #0004;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;z-index:4}
+.ct-x{position:absolute;top:calc(env(safe-area-inset-top,0px) + 10px);inset-inline-start:10px;z-index:2}
 .ct-card-wrap{position:absolute;inset:0;z-index:8;display:grid;place-items:center;padding:16px;background:#0b0a2a66}
 .ct-card{display:grid;gap:12px;justify-items:center;text-align:center;background:#fff;border-radius:28px;padding:22px 24px;box-shadow:0 14px 40px #0007;max-width:380px;width:100%;animation:ct-popin .35s cubic-bezier(.2,1.4,.4,1)}
 .ct-card-label{color:#5f6b73;font-weight:700}

@@ -975,6 +975,8 @@ export function WorldClient({ worldId = "jungle", demo, peekDemo }: { worldId?: 
 
       {word && phase === "intro" ? (
         <div className="wt-intro-wrap">
+          {/* the same ✕ as on the trail, top corner (Gadi 2026-11-02) */}
+          <button type="button" className="wt-round wt-x" onClick={exit} aria-label={c.back}>✕</button>
           <div className="wt-intro">
             <span className="wt-intro-label">{word.gift ? `🎁 ${friendsCopy(lang).giftFrom(word.gift.from)}` : c.yourWord}</span>
             {pics[word.pic] ? (
@@ -1115,6 +1117,7 @@ export const CSS = `
 .wt-curtain-body{position:absolute;inset:0;display:grid;place-items:center;padding:16px}
 .wt-door-title{display:grid;gap:18px;justify-items:center;text-align:center;background:#00000059;padding:22px 26px;border-radius:28px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .wt-door-title strong{font-size:clamp(34px,9vw,58px);color:#fff;text-shadow:0 3px 0 #1f5130,0 6px 18px #000a;line-height:1.1}
+.wt-x{position:absolute;top:calc(env(safe-area-inset-top,0px) + 10px);inset-inline-start:10px;z-index:2}
 .wt-intro-wrap{position:absolute;inset:0;z-index:8;display:grid;place-items:center;padding:16px;background:#0003}
 .wt-intro{display:grid;gap:12px;justify-items:center;text-align:center;background:#fff;border-radius:28px;padding:22px 26px;box-shadow:0 14px 40px #0005;max-width:360px;width:100%;animation:wt-popin .35s cubic-bezier(.2,1.4,.4,1)}
 .wt-intro-label{color:#5f6b73;font-weight:700}

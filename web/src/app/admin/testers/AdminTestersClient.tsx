@@ -214,6 +214,7 @@ export default function AdminTestersClient() {
                   <strong style={{ fontSize: 18, color: "#111827" }}>{s.name}</strong>
                   <span style={{ background: "#FEF3C7", color: "#92400E", borderRadius: 999, padding: "2px 10px", fontSize: 13, fontWeight: 700 }}>{levels[s.level.key]} · {s.level.tickets}</span>
                 </div>
+                <span style={{ fontSize: 14, color: "#047857", fontWeight: 700 }}>✅ {lang === "he" ? "רשימת בדיקות" : "Checklist"}: {s.checks.done}/{s.checks.total}</span>
                 <div style={{ display: "grid", gap: 4 }}>
                   {s.rows.map((r) => (
                     <div key={r.id} style={{ display: "flex", justifyContent: "space-between", gap: 8, fontSize: 14, color: r.state === "no" ? "#9CA3AF" : "#111827" }}>

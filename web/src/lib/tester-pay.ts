@@ -1,5 +1,6 @@
 import { Timestamp } from "firebase-admin/firestore";
 import { getAdminDb } from "@/lib/firebase-admin";
+import { CHECK_IDS, CHECK_TOTAL } from "@/lib/tester-checklist";
 
 /**
  * Testers' pay (Gadi 2026-11-02): Osher and Din earn Yoon (the Yooniz coin)
@@ -33,6 +34,8 @@ export type PaySlip = {
   paid: { at: number; net: number } | null;
   /** games this child invented: players so far, new this month, open to everyone yet */
   games: { prefix: string; he: string; en: string; players: number; month: number; isPublic: boolean }[];
+  /** the QA checklist: ticked items out of all */
+  checks: { done: number; total: number };
 };
 
 export type GameOwner = { prefix: string; uid: string; he: string; en: string; isPublic: boolean };
@@ -180,11 +183,14 @@ export async function paySlips(uids: string[], month: string): Promise<PaySlip[]
     const shipped = t.notes.filter((n) => n.status === "done" && payType(n)).slice(-6).reverse()
       .map((n) => ({ id: n.id, type: payType(n)!, game: n.game, text: n.transcript || n.word, day: n.day }));
     const pr = (await db.collection("testerPayroll").doc(`${t.uid}_${month}`).get()).data();
+    const ticks = ((await db.collection("users").doc(t.uid).get()).data()?.testerChecks ?? {}) as Record<string, number>;
+    const done = CHECK_IDS.filter((id) => ticks[id]).length;
     return {
       uid: t.uid, name: t.name, month, rows, earned, capped, tax, net: earned - tax, pending,
       level: { key: lv, tickets, next }, shipped,
       paid: pr?.paidAt ? { at: Number(pr.paidAt), net: Number(pr.net ?? 0) } : null,
       games,
+      checks: { done, total: CHECK_TOTAL },
     } satisfies PaySlip;
   }));
 }

@@ -16,10 +16,12 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { gameName } from "@/lib/tester-games";
 import type { PayRow, PaySlip } from "@/lib/tester-pay";
+import { TesterChecklist } from "./TesterChecklist";
 
 type L = "he" | "en";
 const T = {
   he: {
+    tabPay: "💰 התשלום שלי", tabChecks: "✅ רשימת הבדיקות",
     title: "התשלום החודשי שלי", back: "חזרה למשחקים", thisWeek: "החודש", lastWeek: "חודש קודם", loading: "טוענים את התשלום",
     earned: "הרווחת החודש", pot: "לקופה המשפחתית (10%)", toYou: "לך ב-Yooniz", paid: "✅ שולם ב-Yooniz", notPaid: "⏳ עוד לא שולם",
     pending: (n: number) => `⏳ מחכה לאישור: עוד ${n} Yoon`, cap: (_n: number, c: number) => `אפשר להרוויח עד ${c} Yoon בכל שבוע`, capped: "באחד השבועות הגעת לתקרה 🎉",
@@ -32,6 +34,7 @@ const T = {
     playMore: (n: number) => `עוד ${n} סיבובים היום וזה נספר`, noCount: "לא נספר", notPaidRow: "לא לתשלום", waiting: "מחכה",
   },
   en: {
+    tabPay: "💰 My pay", tabChecks: "✅ My checklist",
     title: "My monthly pay", back: "Back to games", thisWeek: "This month", lastWeek: "Last month", loading: "Loading your pay",
     earned: "You earned this month", pot: "Family pot (10%)", toYou: "To you in Yooniz", paid: "✅ Paid in Yooniz", notPaid: "⏳ Not paid yet",
     pending: (n: number) => `⏳ Waiting for approval: ${n} more Yoon`, cap: (_n: number, c: number) => `You can earn up to ${c} Yoon each week`, capped: "You hit the top in one of the weeks! 🎉",
@@ -65,6 +68,7 @@ export function TesterPayClient() {
   const [thisWeek, setThisWeek] = useState<string | null>(null); // months (YYYY-MM)
   const [slip, setSlip] = useState<PaySlip | null>(null);
   const [err, setErr] = useState(false);
+  const [tab, setTab] = useState<"pay" | "checks">("pay");
 
   const router = useRouter();
   useEffect(() => { if (!authLoading && !user) promptLogin(t.title); }, [authLoading, user, promptLogin, t.title]);
@@ -114,6 +118,12 @@ export function TesterPayClient() {
           </div>
         </div>
 
+        <div className="tp-tabs" role="tablist">
+          <button type="button" role="tab" aria-selected={tab === "pay"} className={tab === "pay" ? "is-on" : ""} onClick={() => setTab("pay")}>{t.tabPay}</button>
+          <button type="button" role="tab" aria-selected={tab === "checks"} className={tab === "checks" ? "is-on" : ""} onClick={() => setTab("checks")}>{t.tabChecks}</button>
+        </div>
+        {tab === "checks" && user ? <TesterChecklist user={user} l={l} /> : null}
+        {tab === "pay" ? <>
         <h1 className="tp-title">🧪 {t.title}</h1>
         {slip ? (
           <div className="tp-who">
@@ -199,6 +209,7 @@ export function TesterPayClient() {
             </section>
           </>
         ) : null}
+        </> : null}
       </div>
     </div>
   );
@@ -213,6 +224,9 @@ const CSS = `
 .tp-lang button{border:0;background:none;border-radius:999px;padding:6px 14px;font:inherit;font-weight:800;color:#4338ca;cursor:pointer}
 .tp-lang button.is-on{background:#4338ca;color:#fff}
 .tp-title{margin:0;font-size:30px;text-align:center}
+.tp-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#e0e7ff;border-radius:999px;padding:4px}
+.tp-tabs button{border:0;background:none;border-radius:999px;padding:10px 8px;font:inherit;font-weight:800;font-size:15px;color:#4338ca;cursor:pointer}
+.tp-tabs button.is-on{background:#fff;box-shadow:0 2px 8px #4338ca22}
 .tp-who{display:grid;justify-items:center;gap:4px;text-align:center}
 .tp-who strong{font-size:20px}
 .tp-level{background:#fef3c7;color:#92400e;border-radius:999px;padding:4px 14px;font-weight:800}
