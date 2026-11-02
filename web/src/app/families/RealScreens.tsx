@@ -256,11 +256,11 @@ export function LaptopShot({ lang, name, alt, priority = false }: { lang: string
 }
 
 /** A tablet standing upright with a real Gadit screen (820x1180 window). */
-export function TabletShot({ lang, name, alt, priority = false }: { lang: string; name: string; alt: string; priority?: boolean }) {
+export function TabletShot({ lang, name, alt, priority = false, land = false }: { lang: string; name: string; alt: string; priority?: boolean; /** Turned on its side (the top of a 820x1180 capture). */ land?: boolean }) {
   return (
-    <div className="fam-tablet">
+    <div className={land ? "fam-tablet is-land" : "fam-tablet"}>
       <div className="fam-tablet-screen">
-        <Image src={`/fam/screens/${lang}/tab-${name}.webp`} alt={alt} width={820} height={1180} sizes="(max-width: 760px) 60vw, 340px" priority={priority} />
+        <Image src={`/fam/screens/${lang}/${land ? "tabl" : "tab"}-${name}.webp`} alt={alt} width={land ? 1640 : 820} height={land ? 1320 : 1180} sizes={land ? "(max-width: 760px) 92vw, 560px" : "(max-width: 760px) 60vw, 340px"} priority={priority} />
       </div>
     </div>
   );
@@ -360,11 +360,21 @@ export const REAL_CSS = `
 .fam-devices { position: relative; width: 100%; max-width: 680px; margin: 0 auto; padding-bottom: 6%; }
 .fam-devices > .fam-laptop { max-width: 88%; margin-inline-start: 0; margin-inline-end: auto; }
 .fam-devices > .fam-tablet, .fam-devices > .fam-phone { position: absolute; bottom: 0; inset-inline-end: 0; width: 30%; max-width: none; padding: 2%; border-radius: 18px; }
-.fam-devices > .fam-phone { width: 24%; }
+.fam-devices > .fam-phone { width: 21%; padding: 1.3%; border-radius: 22px; }
+.fam-devices > .fam-phone .fam-phone-screen { border-radius: 16px; }
 .fam-devices > .fam-tablet .fam-tablet-screen { border-radius: 11px; }
 .fam-real-pair .fam-tablet { max-width: 240px; }
+.fam-tablet.is-land, .fam-premium .fam-feature-visual > .fam-tablet.is-land { width: 100%; max-width: 560px; }
+.fam-real-pair .fam-tablet.is-land { max-width: 100%; }
+.fam-tablet.is-land .fam-tablet-screen { aspect-ratio: 1640 / 1320; }
+.fam-hw-laptop { width: 100%; max-width: 620px; margin: 0 auto; }
 .fam-games-stage.fam-devices { max-width: 900px; }
-.fam-devices-hero { max-width: 620px; }
+.fam-devices-hero { max-width: 660px; padding-bottom: 9%; }
+/* The hero shows all three (Gadi 2026-11-02): tablet on the left, phone on the right. */
+.fam-devices-hero > .fam-laptop { max-width: 78%; margin-inline: auto; }
+.fam-devices-hero > .fam-phone { inset-inline-start: 0; inset-inline-end: auto; width: 17%; border-radius: 18px; }
+.fam-devices-hero > .fam-phone .fam-phone-screen { border-radius: 13px; }
+.fam-devices-hero > .fam-tablet { width: 27%; }
 @media (max-width: 760px) {
   .fam-tablet { max-width: 240px; border-radius: 20px; padding: 9px; }
   .fam-real-pair .fam-tablet { max-width: 46%; }

@@ -1106,12 +1106,10 @@ function PhoneMock({ lang }: { lang: string }) {
 function MockSearch({ lang }: { lang: string }) {
   const m = famMock(lang);
   return (
+    // The search bar sits where it does on every other card; Kids Mode moved
+    // up beside the section heading (Gadi 2026-11-02).
     <div className="fam-mock">
-      <div className="fam-mock-toggle">
-        <span className="fam-mock-toggle-pill">{m.kidsLabel}</span>
-        <span className="fam-mock-toggle-on" />
-      </div>
-      <div className="fam-mock-search fam-mock-search-lg">
+      <div className="fam-mock-search">
         <SearchIcon />
         <span>{m.dreamWord}</span>
         <span className="fam-mock-caret" aria-hidden />
@@ -1437,7 +1435,9 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
             </ul>
           </div>
           <div className="fam-feature-visual">
-            {f.img2 ? (
+            {desk && f.img === "read" ? (
+              <TabletShot lang={shotLang} name="read" alt={real.shotAlt} land />
+            ) : f.img2 ? (
               <div className="fam-real-pair">
                 <DeviceShot lang={shotLang} name={f.img} alt={real.shotAlt} />
                 {!desk && <PhoneShot lang={shotLang} name={f.img2} alt={real.shotAlt} />}
@@ -1663,6 +1663,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
                   <div className="fam-devices fam-devices-hero">
                     <LaptopShot lang={shotLang} name="word" alt={real.shotAlt} priority />
                     <TabletShot lang={shotLang} name="notebook" alt={real.shotAlt} priority />
+                    <PhoneShot lang={shotLang} name="play" alt={real.shotAlt} priority />
                   </div>
                 ) : (
                 <div className="fam-real-hero">
@@ -1725,6 +1726,10 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
               <div className="fam-section fam-center fam-section-wide">
                 {real.cardsKicker && <div className="fam-kicker">{real.cardsKicker}</div>}
                 <h2 className="fam-h2">{real.cardsTitle ?? c.chainTitle}</h2>
+                <div className="fam-mock-toggle fam-cards-kids" aria-hidden>
+                  <span className="fam-mock-toggle-pill">{famMock(lang).kidsLabel}</span>
+                  <span className="fam-mock-toggle-on" />
+                </div>
                 <div className="fam-how-steps">
                   {HOW_MOCKS.map((_, i) => i).map((i, n) => {
                     const blk = c.howBlocks[i];
@@ -1820,10 +1825,14 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
                     </li>
                   ))}
                 </ol>
+                {desk ? (
+                  <div className="fam-hw-laptop"><LaptopShot lang={shotLang} name="homework" alt={real.shotAlt} /></div>
+                ) : (
                 <div className="fam-real-pair">
-                  <DeviceShot lang={shotLang} name={real.homework.img} alt={real.shotAlt} />
-                  {!desk && <PhoneShot lang={shotLang} name={real.homework.img2} alt={real.shotAlt} />}
+                  <PhoneShot lang={shotLang} name={real.homework.img} alt={real.shotAlt} />
+                  <PhoneShot lang={shotLang} name={real.homework.img2} alt={real.shotAlt} />
                 </div>
+                )}
               </div>
             </div>
           </section>
@@ -1843,7 +1852,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
                   <SubjectsLines copy={sc} pClass="fam-body" noteClass="fam-subj-note" />
                 </div>
                 <div className="fam-feature-visual">
-                  <SubjectsScreenMock ui={subjUi} />
+                  {desk ? <LaptopShot lang={shotLang} name="subjects" alt={real.shotAlt} /> : <SubjectsScreenMock ui={subjUi} />}
                 </div>
               </div>
             </section>
@@ -2022,7 +2031,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
             {real?.safeKicker && <div className="fam-kicker fam-kicker-light">{real.safeKicker}</div>}
             <h2 className="fam-h2">{real?.safeTitle ?? c.safeTitle}</h2>
             <div className="fam-inline-img">
-              <Image src="/fam/safe.webp" alt="" width={1200} height={800} sizes="(max-width: 760px) 92vw, 560px" />
+              <Image src={desk ? "/fam/safe-tablet.webp" : "/fam/safe.webp"} alt="" width={1200} height={800} sizes="(max-width: 760px) 92vw, 560px" />
             </div>
             <p className="fam-body fam-body-center">{real ? <Lines text={c.safeBody} /> : c.safeBody}</p>
             <p className="fam-safe-line">{c.safeLine}</p>
@@ -2987,7 +2996,9 @@ const FAM_CSS = `
 .fam-mock-game-a { background: linear-gradient(160deg, rgba(14,165,165,0.16), rgba(14,165,165,0.05)); color: #0B6F6F; }
 .fam-mock-game-b { background: linear-gradient(160deg, rgba(124,58,237,0.16), rgba(124,58,237,0.05)); color: #5B2BB5; animation-delay: -1.8s; }
 .fam-mock-game-img { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 12px; display: block; }
-.fam-mock-score { width: 100%; display: flex; justify-content: center; }
+.fam-mock-games { align-content: flex-start; }
+.fam-mock-score { width: 100%; display: flex; justify-content: center; align-items: center; margin-top: 4px; }
+.fam-cards-kids { justify-content: center; margin: -6px 0 26px; }
 .fam-mock-score span {
   display: inline-block;
   font-weight: 700; font-size: 13px; color: #b45309;

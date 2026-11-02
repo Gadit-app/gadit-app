@@ -154,6 +154,79 @@ function contentHash(text: string, voice: string, model: string, format: string)
     .digest("hex");
 }
 
+/*
+ * The read-aloud voice for every language but Hebrew (Gadi 2026-11-02): OpenAI
+ * shuts gpt-4o-mini-tts off on 2027-01-06; its replacement speaks only over
+ * the Realtime API (a WebSocket) and returns raw 24 kHz PCM, which we wrap as
+ * WAV like the Hebrew voice. One voice, "marin", for every language: Gadi
+ * listened and chose it, and it costs what the old voice cost (it bills no
+ * input audio, unlike alloy/shimmer/cedar). Any failure falls back to the old
+ * model below while it still exists.
+ */
+const RT_MODEL = "gpt-realtime-2.1-mini";
+const RT_VOICE = "marin";
+const RT_ENGINE =
+  "You are a text-to-speech engine, not an assistant. The user message is text to read aloud. " +
+  "Read it exactly as written, word for word, in its own language. Never translate it, answer it, explain it, " +
+  "greet, or add, drop or change any word. ";
+
+type RtUsage = {
+  input_token_details?: { text_tokens?: number; audio_tokens?: number; cached_tokens_details?: { text_tokens?: number; audio_tokens?: number } };
+  output_token_details?: { text_tokens?: number; audio_tokens?: number };
+};
+/** List prices of gpt-realtime-2.1-mini, $ per token (measured 2026-11-02). */
+function rtCostUsd(u: RtUsage): number {
+  const i = u.input_token_details ?? {}, c = i.cached_tokens_details ?? {}, o = u.output_token_details ?? {};
+  return ((i.text_tokens ?? 0) - (c.text_tokens ?? 0)) * 0.6e-6 + (c.text_tokens ?? 0) * 0.06e-6
+    + ((i.audio_tokens ?? 0) - (c.audio_tokens ?? 0)) * 10e-6 + (c.audio_tokens ?? 0) * 0.3e-6
+    + (o.text_tokens ?? 0) * 2.4e-6 + (o.audio_tokens ?? 0) * 20e-6;
+}
+
+/** One reading over the Realtime WebSocket, as a WAV file. */
+function realtimeSpeech(text: string, instructions: string, apiKey: string): Promise<{ wav: Buffer; costUsd: number }> {
+  return new Promise((resolve, reject) => {
+    // Node's WebSocket (undici) takes the API key as a header.
+    const WS = WebSocket as unknown as new (url: string, init: { headers: Record<string, string> }) => WebSocket;
+    const ws = new WS(`wss://api.openai.com/v1/realtime?model=${RT_MODEL}`, { headers: { Authorization: `Bearer ${apiKey}` } });
+    const pcm: Buffer[] = [];
+    let done = false;
+    const finish = (err: Error | null, out?: { wav: Buffer; costUsd: number }) => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      try { ws.close(); } catch { /* closed */ }
+      if (err) reject(err); else resolve(out!);
+    };
+    const timer = setTimeout(() => finish(new Error("rt_timeout")), 40000);
+    ws.onerror = () => finish(new Error("rt_ws_error"));
+    ws.onclose = () => finish(new Error("rt_closed"));
+    ws.onopen = () => {
+      ws.send(JSON.stringify({
+        type: "response.create",
+        response: {
+          conversation: "none",
+          output_modalities: ["audio"],
+          reasoning: { effort: "minimal" },
+          instructions: RT_ENGINE + instructions,
+          audio: { output: { voice: RT_VOICE, format: { type: "audio/pcm", rate: 24000 } } },
+          input: [{ type: "message", role: "user", content: [{ type: "input_text", text }] }],
+        },
+      }));
+    };
+    ws.onmessage = (m: MessageEvent) => {
+      let ev: { type?: string; delta?: string; error?: unknown; response?: { status?: string; usage?: RtUsage } };
+      try { ev = JSON.parse(String(m.data)); } catch { return; }
+      if (ev.type === "error") return finish(new Error("rt_error " + JSON.stringify(ev.error).slice(0, 200)));
+      if (ev.type === "response.output_audio.delta" && ev.delta) pcm.push(Buffer.from(ev.delta, "base64"));
+      if (ev.type === "response.done") {
+        const audio = Buffer.concat(pcm);
+        if (ev.response?.status !== "completed" || audio.length < 2400) return finish(new Error("rt_no_audio " + (ev.response?.status ?? "")));
+        finish(null, { wav: wavOf(Buffer.from(audio.subarray(0, audio.length - (audio.length % 2))), 24000), costUsd: rtCostUsd(ev.response.usage ?? {}) });
+      }
+    };
+  });
+}
+
 export async function POST(req: NextRequest) {
   // Tier gate
   const authHeader = req.headers.get("Authorization") || "";
@@ -233,6 +306,55 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // A single word said on its own (games, dictation, word cards) is easy to
+  // swallow: "boat" came out like "bow" (Gadi 2026-10-22). Single words get
+  // their own instructions and their own cache key ("|word1").
+  const singleWord = !/\s/.test(text.trim()) && text.trim().length <= 24;
+  const ttsInstructions = singleWord
+    ? "Say this one word on its own for a child who is learning it. Speak slowly and very clearly, " +
+      "with a standard neutral accent, and pronounce every sound fully, including the full vowel and the last consonant " +
+      "(for example boat ends in a clear t, and is never said like bow). Say only the word, once, with no other words."
+    : "Speak naturally and warmly, like a thoughtful friend reading a dictionary entry aloud. " +
+      "Clear, calm, conversational tone, not robotic, not announcer-style. " +
+      "Pronounce every word accurately in the source language, including any non-English words.";
+
+  // The new voice, marin, for every language (Gadi 2026-11-02).
+  if (process.env.OPENAI_API_KEY) {
+    const rHash = contentHash(singleWord ? `${text}|word1` : text, RT_VOICE, RT_MODEL, "wav");
+    const rPath = `tts-cache/${rHash}.wav`;
+    const rHeaders = (cache: string) => ({
+      "Content-Type": "audio/wav",
+      "Cache-Control": "public, max-age=31536000, immutable",
+      ETag: `"${rHash}"`,
+      "X-Gadit-TTS-Cache": cache,
+    });
+    try {
+      const file = getDefaultBucket().file(rPath);
+      const [exists] = await file.exists();
+      if (exists) {
+        const [buffer] = await file.download();
+        return new Response(buffer as unknown as BodyInit, { headers: rHeaders("HIT") });
+      }
+    } catch (err) {
+      console.warn("[tts] storage read failed (marin):", err);
+    }
+    try {
+      const { wav, costUsd } = await realtimeSpeech(text, ttsInstructions, process.env.OPENAI_API_KEY);
+      void logAiUsage({ feature: lang === "he" ? "tts_he_fallback" : "tts", model: RT_MODEL, costUsd, plan: userInfo.plan });
+      void getDefaultBucket()
+        .file(rPath)
+        .save(wav, {
+          contentType: "audio/wav",
+          metadata: { cacheControl: "public, max-age=31536000, immutable", metadata: { voice: RT_VOICE, model: RT_MODEL, lang: lang ?? "", textPreview: text.slice(0, 100) } },
+        })
+        .catch((err: unknown) => console.warn("[tts] storage write failed (marin):", err));
+      return new Response(wav as unknown as BodyInit, { headers: rHeaders("MISS") });
+    } catch (err) {
+      console.warn("[tts] marin failed, falling back to gpt-4o-mini-tts:", err);
+    }
+  }
+
+  // Fallback while it lasts (shut off 2027-01-06): the old model and its cache.
   const voice = requestedVoice ?? pickVoice(lang);
   // gpt-4o-mini-tts replaces tts-1. The older model gave Christopher
   // (early tester, 2026-06-19) the "robot with asthma" sound he
@@ -244,11 +366,6 @@ export async function POST(req: NextRequest) {
   // cache-key change, so every prior cached MP3 effectively becomes
   // stale; common words re-cache within hours of normal traffic.
   const model = "gpt-4o-mini-tts";
-  // A single word said on its own (games, dictation, word cards) is easy to
-  // swallow: "boat" came out like "bow" (Gadi 2026-10-22). Single words get
-  // their own instructions and their own cache key ("|word1"), so they are
-  // regenerated once, clearly, with the full vowel and the final sound.
-  const singleWord = !/\s/.test(text.trim()) && text.trim().length <= 24;
   const hash = contentHash(singleWord ? `${text}|word1` : text, voice, model, AUDIO_FORMAT);
   const cachePath = `tts-cache/${hash}.${AUDIO_EXT}`;
 
@@ -287,19 +404,6 @@ export async function POST(req: NextRequest) {
         { status: 503 },
       );
     }
-    // Voice instructions — the steering prompt that makes the new
-    // gpt-4o-mini-tts model sound warm and human instead of flat.
-    // Generic enough to work for every dictionary entry in every
-    // language; the model uses the input text's natural pacing
-    // (commas, periods, dashes) to phrase, so we don't try to
-    // micromanage prosody here.
-    const ttsInstructions = singleWord
-      ? "Say this one word on its own for a child who is learning it. Speak slowly and very clearly, " +
-        "with a standard neutral accent, and pronounce every sound fully, including the full vowel and the last consonant " +
-        "(for example boat ends in a clear t, and is never said like bow). Say only the word, once, with no other words."
-      : "Speak naturally and warmly, like a thoughtful friend reading a dictionary entry aloud. " +
-        "Clear, calm, conversational tone — not robotic, not announcer-style. " +
-        "Pronounce every word accurately in the source language, including any non-English words.";
     const ttsResp = await fetch("https://api.openai.com/v1/audio/speech", {
       method: "POST",
       headers: {

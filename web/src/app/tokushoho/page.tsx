@@ -15,14 +15,12 @@ const TOKUSHOHO_LABEL = "特定商取引法に基づく表記";
  * Japanese is the primary text; English is the other locale in the picker.
  */
 
-// ── FILL IN BEFORE PUBLISHING ────────────────────────────────────────
-// The suite/unit, city, ZIP and phone are NOT confirmed yet. Replace the
-// [BRACKETED] parts here; this is the only place they are written.
+// The seller details (Gadi 2026-11-02); this is the only place they are written.
 const SELLER = {
   name: "Lavi Learning and Training Technologies LLC",
   responsible: "Gadi Ben Lavi",
-  address: "700 Starkey Road, [SUITE], [CITY], FL [ZIP], USA",
-  phone: "[PHONE]",
+  address: "700 Starkey Rd., Largo, FL 33771, USA",
+  phone: "+972-52-653-2883",
   email: "support@gadit.app",
 };
 
