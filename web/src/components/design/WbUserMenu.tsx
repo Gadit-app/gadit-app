@@ -169,7 +169,7 @@ import { FamilyProfileSwitcher, prefetchSwitchMembers } from "./FamilyProfileSwi
 const COACH_LINK: Record<string, string> = {"en": "My students", "he": "התלמידים שלי", "ar": "طلابي", "ru": "Мои ученики", "es": "Mis alumnos", "pt": "Meus alunos", "fr": "Mes élèves", "de": "Meine Schüler", "cs": "Moji žáci", "sk": "Moji žiaci", "it": "I miei studenti", "ja": "私の生徒", "hi": "मेरे छात्र", "am": "የእኔ ተማሪዎች", "uk": "Мої учні", "tr": "Öğrencilerim", "pl": "Moi uczniowie", "fa": "شاگردان من", "id": "Murid saya", "nl": "Mijn leerlingen", "el": "Οι μαθητές μου", "zu": "Abafundi bami", "xh": "Abafundi bam", "nso": "Baithuti ba ka", "tn": "Baithuti ba me", "st": "Baithuti ba ka", "ts": "Vadyondzi va mina", "ss": "Bafundzi bami", "ve": "Vhagudi vhanga", "nr": "Abafundi bami", "vi": "Học sinh của tôi", "fil": "Aking mga estudyante", "af": "My leerders", "sw": "Wanafunzi wangu", "zh-CN": "我的学生", "zh-TW": "我的學生", "ko": "내 학생", "th": "นักเรียนของฉัน", "bn": "আমার শিক্ষার্থীরা", "da": "Mine elever", "hu": "Tanítványaim"};
 
 export function WbUserMenu() {
-  const { user, plan, planReady, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl, logout, isIndividual } = useAuth();
+  const { user, plan, planReady, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl, memberName, logout, isIndividual } = useAuth();
   const { lang, dir } = useLang();
   const [theme, setTheme] = useTheme();
   const router = useRouter();
@@ -363,6 +363,22 @@ export function WbUserMenu() {
       >
         {tier.label}
       </button>
+      )}
+      {/* Whose profile is open: the kid's name by the avatar (Gadi 2026-11-02). */}
+      {memberName && (
+        <button
+          type="button"
+          onClick={toggleOpen}
+          aria-label={c.openMenu}
+          className="wb-avatar-name"
+          style={{
+            border: "none", background: "none", padding: "0 2px", cursor: "pointer",
+            color: "var(--ink, #111827)", fontWeight: 700, fontSize: 14, whiteSpace: "nowrap",
+            maxWidth: 110, overflow: "hidden", textOverflow: "ellipsis", fontFamily: "inherit",
+          }}
+        >
+          {memberName}
+        </button>
       )}
       <button
         type="button"

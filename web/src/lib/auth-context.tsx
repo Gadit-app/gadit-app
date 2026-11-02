@@ -133,6 +133,10 @@ interface AuthContextType {
    *  etc.) shows the character they chose. null for everyone else. */
   avatarId: string | null;
   avatarPhotoUrl: string | null;
+  /** A paired kid's own name (their member doc), shown next to the topbar
+   *  avatar so a parent switching profiles sees whose profile is open
+   *  (Gadi 2026-11-02). null for everyone else. */
+  memberName: string | null;
   signInWithGoogle: () => Promise<void>;
   /** Sign in with Apple through the iOS app's native sheet. Only offered
    *  inside the iOS app (lib/native-auth.ts nativeAuthAvailable("apple")). */
@@ -205,6 +209,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [tester, setTester] = useState(false);
   const [avatarId, setAvatarId] = useState<string | null>(null);
   const [avatarPhotoUrl, setAvatarPhotoUrl] = useState<string | null>(null);
+  const [memberName, setMemberName] = useState<string | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginReason, setLoginReason] = useState("");
   const [loginMode, setLoginMode] = useState<AuthMode>("signin");
@@ -382,6 +387,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!user || familyRole !== "kid" || !familyId) {
       setAvatarId(null);
       setAvatarPhotoUrl(null);
+      setMemberName(null);
       return;
     }
     let unsub: (() => void) | undefined;
@@ -400,8 +406,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const d = snap.data();
             setAvatarId((d?.avatarId as string) ?? null);
             setAvatarPhotoUrl((d?.avatarPhotoUrl as string) ?? null);
+            setMemberName((d?.name as string) ?? null);
           },
-          () => { setAvatarId(null); setAvatarPhotoUrl(null); },
+          () => { setAvatarId(null); setAvatarPhotoUrl(null); setMemberName(null); },
         );
       } catch {
         /* nice-to-have */
@@ -670,7 +677,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider value={{
-      user, loading, plan, planReady, pastDue, graceUntil, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl,
+      user, loading, plan, planReady, pastDue, graceUntil, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl, memberName,
       kidsAccess,
       isIndividual: !familyId && !schoolId && isIndividualPriceId(priceId),
       tester,
