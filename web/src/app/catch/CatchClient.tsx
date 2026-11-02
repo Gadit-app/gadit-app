@@ -291,7 +291,21 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
   const [stall, setStall] = useState<FairStall>("cans");
   const [stallPick, setStallPick] = useState(false);
   // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { setScene(readScene()); setWorld(readWorld()); setStall(readStall()); }, []);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setScene(readScene()); setWorld(readWorld()); setStall(readStall());
+    // A scene's own link (Gadi 2026-11-02): /catch?scene=coaster&world=snow, ?scene=fair&stall=cans
+    try {
+      const q = new URLSearchParams(window.location.search);
+      const s = q.get("scene");
+      if (s !== "fireflies" && s !== "coaster" && s !== "fair") return;
+      setScene(s);
+      const w = q.get("world"), st = q.get("stall");
+      if (w === "snow" || w === "jungle" || w === "space") setWorld(w);
+      if (st === "cans" || st === "balloons" || st === "target") setStall(st);
+      setPhase("intro");
+    } catch { /* fine */ }
+  }, []);
   const sceneName = scene === "coaster" ? `${c.sceneCoaster} · ${c.worlds[world]}` : scene === "fair" ? `${c.sceneFair} · ${c.stalls[stall]}` : c.sceneFireflies;
   const pickScene = (s: Scene) => {
     setScene(s);

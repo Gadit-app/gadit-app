@@ -7,7 +7,7 @@
  */
 
 export type CheckItem = { id: string; he: string; en: string };
-export type CheckSection = { id: string; he: string; en: string; where: { he: string; en: string }; together?: boolean; items: CheckItem[] };
+export type CheckSection = { id: string; he: string; en: string; where: { he: string; en: string }; together?: boolean; items: CheckItem[]; link?: string };
 
 /** The checks every game gets, around its own. */
 function game(id: string, he: string, en: string, where: { he: string; en: string }, own: [string, string][], together = false): CheckSection {
@@ -229,6 +229,25 @@ export const CHECKLIST: CheckSection[] = [
     ],
   },
 ];
+
+/** Each section opens its game straight away (Gadi 2026-11-02); every game has its own link. */
+const PLAY_IDS = new Set(["flashcards", "flashdefs", "truefalse", "quiz", "fillblank", "context", "memory", "anagram", "speed", "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist"]);
+export function sectionLink(id: string): string {
+  if (id === "start") return "/play";
+  if (id === "fireflies") return "/catch?scene=fireflies";
+  if (id.startsWith("coaster-")) return `/catch?scene=coaster&world=${id.slice(8)}`;
+  if (id.startsWith("fair-")) return `/catch?scene=fair&stall=${id.slice(5)}`;
+  if (id === "worlds-peek") return "/world/jungle?mode=peek";
+  if (id === "worlds-stars") return "/world/jungle";
+  if (id.startsWith("world-")) return `/world/${id.slice(6)}`;
+  if (id.startsWith("worlds-")) return "/world";
+  if (PLAY_IDS.has(id)) return `/play?game=${id}`;
+  if (id.startsWith("duel-")) return "/play?game=duel";
+  if (id === "spell") return "/homework";
+  if (id === "say") return "/say";
+  return "/";
+}
+for (const s of CHECKLIST) s.link = sectionLink(s.id);
 
 export const CHECK_IDS: string[] = CHECKLIST.flatMap((s) => s.items.map((i) => i.id));
 export const CHECK_TOTAL = CHECK_IDS.length;

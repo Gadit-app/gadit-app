@@ -7,17 +7,20 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { User } from "firebase/auth";
+import Link from "next/link";
+import { useHref } from "@/lib/href";
 import { sfx } from "@/lib/game-sfx";
 import { CHECKLIST, CHECK_TOTAL } from "@/lib/tester-checklist";
 
 type L = "he" | "en";
 const T = {
-  he: { done: (n: number, t: number) => `סימנת ${n} מתוך ${t} בדיקות`, where: "איפה:", together: "👥 עם האח", open: "לפתוח", close: "לסגור", all: "✅ הכול בוצע!", left: (n: number) => `נשארו ${n}`, tip: "משחקים, בודקים, ומסמנים. כל דבר שמוצאים שולחים ב-🧪.", loading: "טוענים את הרשימה" },
-  en: { done: (n: number, t: number) => `You ticked ${n} of ${t} checks`, where: "Where:", together: "👥 With your brother", open: "Open", close: "Close", all: "✅ All done!", left: (n: number) => `${n} left`, tip: "Play, check, and tick. Send anything you find with 🧪.", loading: "Loading the list" },
+  he: { done: (n: number, t: number) => `סימנת ${n} מתוך ${t} בדיקות`, where: "איפה:", together: "👥 עם האח", go: "▶ למשחק", open: "לפתוח", close: "לסגור", all: "✅ הכול בוצע!", left: (n: number) => `נשארו ${n}`, tip: "משחקים, בודקים, ומסמנים. כל דבר שמוצאים שולחים ב-🧪.", loading: "טוענים את הרשימה" },
+  en: { done: (n: number, t: number) => `You ticked ${n} of ${t} checks`, where: "Where:", together: "👥 With your brother", go: "▶ Open the game", open: "Open", close: "Close", all: "✅ All done!", left: (n: number) => `${n} left`, tip: "Play, check, and tick. Send anything you find with 🧪.", loading: "Loading the list" },
 };
 
 export function TesterChecklist({ user, l }: { user: User; l: L }) {
   const t = T[l];
+  const href = useHref();
   const [checks, setChecks] = useState<Record<string, number> | null>(null);
   const [open, setOpen] = useState<string | null>(null);
 
@@ -80,7 +83,10 @@ export function TesterChecklist({ user, l }: { user: User; l: L }) {
             </button>
             {isOpen ? (
               <div className="tc-body">
-                <span className="tc-where">{t.where} {l === "he" ? s.where.he : s.where.en}</span>
+                <div className="tc-go-row">
+                  {s.link ? <Link href={href(s.link)} className="tc-go">{t.go}</Link> : null}
+                  <span className="tc-where">{t.where} {l === "he" ? s.where.he : s.where.en}</span>
+                </div>
                 <ul>
                   {s.items.map((i) => (
                     <li key={i.id}>
@@ -118,6 +124,9 @@ const CSS = `
 .tc-chev{flex:0 0 auto;color:#6b7280}
 .tc-body{padding:0 14px 14px;display:grid;gap:8px}
 .tc-where{font-size:13px;color:#6b7280}
+.tc-go-row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.tc-go{background:#4338ca;color:#fff;border-radius:999px;padding:8px 16px;font-weight:800;text-decoration:none;box-shadow:0 3px 0 #312e81}
+.tc-go:active{transform:translateY(2px);box-shadow:0 1px 0 #312e81}
 .tc-body ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
 .tc-item{position:relative;display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:center;border:2px solid #eef2ff;border-radius:14px;padding:10px 12px;cursor:pointer;font-size:16px}
 .tc-item input{position:absolute;opacity:0;pointer-events:none}

@@ -3559,6 +3559,8 @@ function langNameIn(code: string, ui: string): string {
 
 /** Games that can open on one notebook word (/play?game=<id>&word=<w>). */
 const FOCUS_GAMES: GameId[] = ["flashcards", "flashdefs", "quiz", "memory", "anagram"];
+/** Every game has its own link, /play?game=<id> (Gadi 2026-11-02: to send one game to a parent). */
+const LINK_GAMES: string[] = ["quiz", "flashcards", "flashdefs", "truefalse", "fillblank", "context", "memory", "anagram", "speed", "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "duel"];
 
 /** Games with a cover picture in public/play/<id>.webp (Gadi 2026-10-09).
  *  Add an id here once its picture is in place; others keep their icon. */
@@ -3600,12 +3602,14 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
   // "Practice this word" from the notebook (Gadi 2026-10-09):
   // /play?game=<id>&word=<word> opens that game with the word in it.
   const [focus, setFocus] = useState<{ game: GameId; word: string } | null>(null);
+  const [linkGame, setLinkGame] = useState<string | null>(null);
   useEffect(() => {
     try {
       const q = new URLSearchParams(window.location.search);
       const g = q.get("game") as GameId | null;
       const w = (q.get("word") ?? "").trim();
       if (g && w && FOCUS_GAMES.includes(g)) setFocus({ game: g, word: w });
+      else if (g && LINK_GAMES.includes(g)) setLinkGame(g);
     } catch { /* no URL */ }
   }, []);
   const [pool, setPool] = useState<PlayWord[] | null>(null);
@@ -3851,6 +3855,27 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
   }, [user, lang]);
   // Signed out: there is no lesson to open, show the page.
   useEffect(() => { if (!loading && !user) setLessonPending(false); }, [loading, user]);
+  // A game's own link: open it once the words have loaded.
+  const linkStartedRef = useRef(false);
+  useEffect(() => {
+    if (!linkGame || linkStartedRef.current || pool === null) return;
+    linkStartedRef.current = true;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (linkGame === "duel") setStage({ kind: "duel" });
+    else setStage({ kind: "playing", game: linkGame as GameId });
+  }, [linkGame, pool]);
+  // The address bar always shows the game on screen, so its link can be copied
+  // and sent; back on the menu it is the plain games page again.
+  useEffect(() => {
+    try {
+      const u = new URL(window.location.href);
+      const g = stage.kind === "playing" ? stage.game : stage.kind === "duel" ? "duel" : null;
+      if (g) { if (u.searchParams.get("game") === g) return; u.searchParams.set("game", g); u.searchParams.delete("word"); }
+      else if (stage.kind === "menu" && u.searchParams.has("game")) { u.searchParams.delete("game"); u.searchParams.delete("word"); }
+      else return;
+      window.history.replaceState(window.history.state, "", u.pathname + u.search);
+    } catch { /* fine */ }
+  }, [stage]);
   // Open the focus game once the notebook has loaded (so the word is in it).
   const focusStartedRef = useRef(false);
   useEffect(() => {

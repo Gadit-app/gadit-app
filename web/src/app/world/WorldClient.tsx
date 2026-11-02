@@ -903,6 +903,17 @@ export function WorldClient({ worldId = "jungle", demo, peekDemo }: { worldId?: 
     setCurtainOpen(true);
     setPhase("peek");
   };
+  // the trail's own link: /world/<id>?mode=peek (Gadi 2026-11-02)
+  const peekLinkRef = useRef(false);
+  useEffect(() => {
+    if (peekLinkRef.current || !canPeek || !word || phase !== "door") return;
+    try { if (new URLSearchParams(window.location.search).get("mode") !== "peek") return; } catch { return; }
+    peekLinkRef.current = true;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMode("peek");
+    setCurtainOpen(true);
+    setPhase("peek");
+  }, [canPeek, word, phase]);
 
   const exit = () => router.push(href("/world"));
   // A decoration bought with stars (Gadi 2026-11-01).
