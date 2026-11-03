@@ -3,6 +3,7 @@ import { ttqTrack } from "@/lib/tiktok-pixel";
 import { AudienceQuestion } from "@/components/AudienceQuestion";
 import { isIndividualPriceId } from "@/lib/individual-prices";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   User,
   onAuthStateChanged,
@@ -246,8 +247,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Async-import keeps the helper out of the auth bundle for users
     // who arrive without any UTM params (the common case).
-    void import("./utm").then((m) => m.captureUtmFromUrl());
+    void import("./utm").then((m) => { m.captureUtmFromUrl(); m.captureVisit(); });
   }, []);
+  // The page a signup happens on (shown in the signup email, Gadi 2026-11-03).
+  const routePath = usePathname();
+  useEffect(() => {
+    void import("./utm").then((m) => m.noteCurrentPage());
+  }, [routePath]);
 
   useEffect(() => {
     const auth = getFirebaseAuth();
@@ -428,8 +434,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function notifySignupSafely(u: User) {
     try {
       const token = await u.getIdToken();
-      const { getStoredUtms, clearStoredUtms } = await import("./utm");
+      const { getStoredUtms, clearStoredUtms, getVisitInfo } = await import("./utm");
       const utm = getStoredUtms();
+      const visit = getVisitInfo();
       // Current UI language from the gadit-lang cookie (set by lang-context)
       // so the server can persist it and send every email / alert in the
       // user's own language, not English.
@@ -438,6 +445,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const lang = langMatch ? decodeURIComponent(langMatch[1]) : undefined;
       const payload: Record<string, unknown> = {};
       if (utm) payload.utm = utm;
+      if (visit) payload.visit = visit;
       if (lang) payload.lang = lang;
       // Android Play app only: the iOS app never triggers the upgrade email.
       try { if (!isIosApp() && sessionStorage.getItem("gadit_play_tab") === "1") payload.play = true; } catch { /* storage blocked */ }

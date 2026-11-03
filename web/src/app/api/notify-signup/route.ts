@@ -47,6 +47,7 @@ export async function POST(req: NextRequest) {
     // Persisted on the user doc so /admin/campaigns can attribute the
     // signup to its source. Body is JSON; client may also send no body
     // (older clients), so parse defensively.
+    let visit: { landingPath?: string; from?: string; signupPage?: string } | null = null;
     let utm: {
       source?: string; medium?: string; campaign?: string;
       term?: string; content?: string; landingPath?: string;
@@ -63,6 +64,13 @@ export async function POST(req: NextRequest) {
       if (body && typeof body === "object" && body.play === true && !isIosAppUA(req.headers.get("user-agent"))) fromPlay = true;
       if (body && typeof body === "object" && typeof body.gaClientId === "string" && /^\d{1,12}\.\d{1,12}$/.test(body.gaClientId)) {
         gaClientId = body.gaClientId;
+      }
+      // Where the visit came from, for every signup (Gadi 2026-11-03).
+      if (body && typeof body === "object" && body.visit && typeof body.visit === "object") {
+        const v = body.visit as Record<string, unknown>;
+        const s = (k: string, n: number) => (typeof v[k] === "string" && (v[k] as string).length > 0 ? (v[k] as string).slice(0, n) : undefined);
+        visit = { landingPath: s("landingPath", 200), from: s("from", 60), signupPage: s("signupPage", 200) };
+        if (!visit.landingPath && !visit.from && !visit.signupPage) visit = null;
       }
       if (body && typeof body === "object" && body.utm) {
         const u = body.utm as Record<string, unknown>;
@@ -115,6 +123,19 @@ export async function POST(req: NextRequest) {
           ...(utm.content ? { utmContent: utm.content } : {}),
           ...(utm.landingPath ? { utmLandingPath: utm.landingPath } : {}),
           utmCapturedAt: FieldValue.serverTimestamp(),
+        },
+        { merge: true },
+      );
+    }
+
+    // First page, source and signup page: only for a new account (this route
+    // is also called on later logins), written once.
+    if (visit && data.notifiedSignup !== true && !data.signupFrom && !data.signupLandingPath) {
+      await userRef.set(
+        {
+          ...(visit.landingPath ? { signupLandingPath: visit.landingPath } : {}),
+          ...(visit.from ? { signupFrom: visit.from } : {}),
+          ...(visit.signupPage ? { signupPage: visit.signupPage } : {}),
         },
         { merge: true },
       );
@@ -282,6 +303,14 @@ export async function POST(req: NextRequest) {
         )
       : "🌐";
 
+    // Paths are shown decoded (/he/word/רוח, not %D7%A8...).
+    const showPath = (p?: string) => { if (!p) return ""; try { return decodeURIComponent(p); } catch { return p; } };
+    const fromLabel = utm?.source ? `${utm.source}${utm.medium ? ` / ${utm.medium}` : ""}${utm.campaign ? ` / ${utm.campaign}` : ""}` : visit?.from;
+    const row = (k: string, v?: string) =>
+      v ? `<tr><td style="padding:8px 0;color:#6B7280;">${k}</td><td style="padding:8px 0;color:#111827;" dir="ltr">${escapeHtml(v)}</td></tr>` : "";
+    const visitRows =
+      row("Came from", fromLabel) + row("First page", showPath(visit?.landingPath ?? utm?.landingPath)) + row("Signed up on", showPath(visit?.signupPage));
+
     const html = `
 <!DOCTYPE html>
 <html lang="en">
@@ -296,6 +325,7 @@ export async function POST(req: NextRequest) {
       <table style="width:100%;border-collapse:collapse;font-size:14px;">
         <tr><td style="padding:8px 0;color:#6B7280;width:120px;">Email</td><td style="padding:8px 0;color:#111827;font-weight:500;">${escapeHtml(email ?? "(none)")}</td></tr>
         <tr><td style="padding:8px 0;color:#6B7280;">Signed up via</td><td style="padding:8px 0;color:#111827;">${escapeHtml(providers.join(", "))}</td></tr>
+${visitRows}
         <tr><td style="padding:8px 0;color:#6B7280;">Country</td><td style="padding:8px 0;color:#111827;">${flagEmoji} ${escapeHtml(country ?? "unknown")}</td></tr>
         <tr><td style="padding:8px 0;color:#6B7280;">When</td><td style="padding:8px 0;color:#111827;">${escapeHtml(signupTimeStr)} (Israel time)</td></tr>
         <tr><td style="padding:8px 0;color:#6B7280;">UID</td><td style="padding:8px 0;color:#9CA3AF;font-family:ui-monospace,monospace;font-size:12px;">${escapeHtml(uid)}</td></tr>

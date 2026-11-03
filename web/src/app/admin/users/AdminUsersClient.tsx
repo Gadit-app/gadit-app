@@ -23,6 +23,9 @@ type AdminUserRow = {
   isFamily?: boolean;
   isSchool?: boolean;
   country: string | null;
+  signupFrom?: string | null;
+  signupLandingPath?: string | null;
+  signupPage?: string | null;
   lastSeenAt: string | null;
   searchCount: number;
   lastSearchAt: string | null;
@@ -218,6 +221,12 @@ const SECRET_KEY = "gadit_admin_secret_v1";
 // strings like "10 Jun 2026" which the RTL layout then visually
 // reversed into "Jun 2026 10" — the fix is to format dates IN Hebrew
 // when in Hebrew mode so the string is RTL-native and renders correctly.
+/** A stored page path, readable (/he/word/רוח, not %D7%A8...). */
+function showPath(p?: string | null): string {
+  if (!p) return "";
+  try { return decodeURIComponent(p); } catch { return p; }
+}
+
 function formatRelative(iso: string | null, lang: AdminLang): string {
   if (!iso) return ", ";
   const d = new Date(iso);
@@ -867,6 +876,17 @@ export default function AdminUsersClient() {
                         <div style={{ fontSize: 11, color: "#9CA3AF", marginTop: 2 }}>
                           {formatRelative(u.createdAt, adminLang)}
                         </div>
+                        {(u.signupFrom || u.signupLandingPath || u.signupPage) && (
+                          <div
+                            dir="ltr"
+                            style={{ fontSize: 11, color: "#0E7490", marginTop: 3, maxWidth: 220, whiteSpace: "normal", textAlign: "start" }}
+                            title={adminLang === "he" ? "הגיע מ · עמוד ראשון · נרשם בעמוד" : "Came from · first page · signed up on"}
+                          >
+                            {[u.signupFrom, showPath(u.signupLandingPath), u.signupPage && u.signupPage !== u.signupLandingPath ? "→ " + showPath(u.signupPage) : ""]
+                              .filter(Boolean)
+                              .join(" · ")}
+                          </div>
+                        )}
                       </td>
                       <td
                         style={{ padding: "12px 16px", color: "#111827", whiteSpace: "nowrap", textAlign: "start" }}

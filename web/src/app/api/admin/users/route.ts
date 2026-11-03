@@ -53,6 +53,10 @@ type AdminUserRow = {
   isSchool: boolean;               // has a schoolId -> paying Schools owner
   comp: boolean;                   // internal/comp account -> excluded from paying counts
   country: string | null;
+  /** Where the signup came from (notify-signup, since 2026-11-03): source, first page, signup page. */
+  signupFrom: string | null;
+  signupLandingPath: string | null;
+  signupPage: string | null;
   lastSeenAt: string | null;       // ISO (Firestore Timestamp.toDate)
   searchCount: number;
   lastSearchAt: string | null;     // ISO
@@ -165,6 +169,9 @@ export async function GET(req: NextRequest) {
       isSchool: !!d.schoolId,
       comp: d.comp === true,
       country: (d.country as string) ?? null,
+      signupFrom: (d.signupFrom as string) ?? (d.utmSource as string) ?? null,
+      signupLandingPath: (d.signupLandingPath as string) ?? (d.utmLandingPath as string) ?? null,
+      signupPage: (d.signupPage as string) ?? null,
       lastSeenAt: tsToIso(d.lastSeenAt),
       searchCount: typeof d.searchCount === "number" ? d.searchCount : 0,
       lastSearchAt: tsToIso(d.lastSearchAt),

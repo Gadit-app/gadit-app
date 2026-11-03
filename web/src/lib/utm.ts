@@ -165,3 +165,84 @@ export function getCheckoutUtm(): UtmData | null {
   } catch { /* storage blocked or bad JSON */ }
   return getStoredUtms();
 }
+
+/*
+ * Where every signup came from, tagged link or not (Gadi 2026-11-03: "how do
+ * I know if they came from the Family page or the Individual page?"). Kept
+ * for every visitor, unlike the UTM record above:
+ *   - first page seen and where the visit came from (first touch, 30 days)
+ *   - the page they were on when they signed up (last page this tab saw)
+ * Page paths and a site name only, nothing personal. Sent once with
+ * /api/notify-signup and shown in the signup email and /admin/users.
+ */
+const VISIT_KEY = "gadit_visit_v1";
+const LAST_PAGE_KEY = "gadit_last_page_v1";
+
+export type VisitInfo = { landingPath?: string; from?: string; signupPage?: string };
+
+/** "google", "whatsapp", "facebook", a campaign's utm_source, another site's name, or "direct". */
+function visitSource(): string {
+  try {
+    const utm = new URLSearchParams(window.location.search).get("utm_source");
+    if (utm) return utm.slice(0, 60);
+    const app = detectInAppBrowser();
+    if (app) return app.toLowerCase();
+    const ref = document.referrer ? new URL(document.referrer).hostname.toLowerCase() : "";
+    if (!ref || /(^|\.)gadit\.app$/.test(ref)) return "direct";
+    if (/(^|\.)google\./.test(ref)) return "google";
+    if (/(^|\.)bing\.com$/.test(ref)) return "bing";
+    if (/whatsapp|(^|\.)wa\.me$/.test(ref)) return "whatsapp";
+    if (/facebook\.com$|fb\.com$|fb\.me$/.test(ref)) return "facebook";
+    if (/instagram\.com$/.test(ref)) return "instagram";
+    if (/(^|\.)t\.co$|twitter\.com$|x\.com$/.test(ref)) return "x";
+    if (/youtube\.com$|youtu\.be$/.test(ref)) return "youtube";
+    if (/chatgpt\.com$|openai\.com$/.test(ref)) return "chatgpt";
+    return ref.replace(/^www\./, "").slice(0, 60);
+  } catch {
+    return "direct";
+  }
+}
+
+/** Call on every page load: stores the first page + source once per 30 days. */
+export function captureVisit(): void {
+  if (typeof window === "undefined") return;
+  try {
+    const raw = window.localStorage.getItem(VISIT_KEY);
+    const cur = raw ? (JSON.parse(raw) as { at?: number }) : null;
+    if (cur && typeof cur.at === "number" && Date.now() - cur.at < UTM_TTL_MS) return;
+    window.localStorage.setItem(
+      VISIT_KEY,
+      JSON.stringify({ landingPath: window.location.pathname.slice(0, 200), from: visitSource(), at: Date.now() }),
+    );
+  } catch { /* storage blocked */ }
+}
+
+/** Call on every route change: the page a signup happens on. Sign-in screens are skipped. */
+export function noteCurrentPage(): void {
+  if (typeof window === "undefined") return;
+  const p = window.location.pathname;
+  if (/^\/(?:[a-z]{2}(?:-[A-Z]{2})?\/)?(auth|api)(\/|$)/.test(p)) return;
+  try { window.sessionStorage.setItem(LAST_PAGE_KEY, p.slice(0, 200)); } catch { /* storage blocked */ }
+}
+
+export function getVisitInfo(): VisitInfo | null {
+  if (typeof window === "undefined") return null;
+  const out: VisitInfo = {};
+  try {
+    const raw = window.localStorage.getItem(VISIT_KEY);
+    if (raw) {
+      const v = JSON.parse(raw) as { landingPath?: unknown; from?: unknown };
+      if (typeof v.landingPath === "string") out.landingPath = v.landingPath;
+      if (typeof v.from === "string") out.from = v.from;
+    }
+  } catch { /* bad JSON */ }
+  try {
+    const here = window.location.pathname;
+    // An email sign-in link can open in a new tab (no session page): then the
+    // page is unknown rather than "/auth/finish".
+    out.signupPage =
+      window.sessionStorage.getItem(LAST_PAGE_KEY) ??
+      (/\/(auth|api)(\/|$)/.test(here) ? undefined : here.slice(0, 200));
+  } catch { /* storage blocked */ }
+  return out.landingPath || out.from || out.signupPage ? out : null;
+}
