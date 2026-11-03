@@ -112,6 +112,8 @@ export async function POST(req: NextRequest) {
       ? "mp3"
       : contentType.includes("ogg")
       ? "ogg"
+      : contentType.includes("wav")
+      ? "wav"
       : "webm";
     upstreamForm.append("file", audioFile, `audio.${ext}`);
     const viaWhisper = !langHint || (WHISPER_LANGS.has(langHint) && !PREFER_4O.has(langHint));

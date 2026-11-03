@@ -2242,6 +2242,18 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
 .wordbook .wb-mexample + .wb-mexample {
   margin-top: 8px;
 }
+/* English examples on another language's page: same rows, read left to right. */
+.wordbook .wb-mexamples-en-label {
+  font-family: var(--wb-he);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+.wordbook .wb-mexamples-en .wb-mexample {
+  font-family: var(--font-inter), var(--wb-he);
+}
 
 /* Idioms block — no card surface, just labeled text on the card. */
 .wordbook .wb-midiom {

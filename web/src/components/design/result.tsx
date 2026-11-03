@@ -79,6 +79,11 @@ export interface Meaning {
   opposite?: string | null;
   kidsExplanation?: KidsExplanation;
   idioms?: Idiom[];
+  /** English example sentences for an English word shown on another
+   *  language's page (the Hebrew page of "certain"). Written by
+   *  scripts/seo/english-examples.mjs (Gadi 2026-11-03): a reader who
+   *  searched "certain תרגום" wants to see the word used in English. */
+  examplesEn?: string[];
 }
 
 export interface Etymology {
@@ -531,6 +536,13 @@ function TabIcon({ name }: { name: RowTabId }) {
 // so the slot is now a word-games panel. The TabId stays 'compare'
 // for now to avoid a wide rename across the result/i18n/unlock
 // tables; only the visible label and the panel body change.
+/** Label above the English example sentences (Meaning.examplesEn). */
+const EN_EXAMPLES_LABEL: Record<string, string> = {
+  he: "דוגמאות באנגלית",
+  es: "Ejemplos en inglés",
+  ar: "أمثلة بالإنجليزية",
+};
+
 const TAB_LABELS: Record<string, Record<RowTabId, string>> = {
   he: { image: "תמונה",       kids: "הסבר לילדים",      quiz: "חידון",        compare: "משחקי מילים" },
   en: { image: "Image",   kids: "Kids' explanation", quiz: "Quiz",         compare: "Word games" },
@@ -829,6 +841,17 @@ function MeaningEntry({
                   all its per-word spans collapse to a single flex child,
                   so the gap fires once (between bullet and text) instead
                   of once between every word. */}
+              <span><TappableText text={ex} skipWord={word} /></span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {!awaitingKids && (meaning.examplesEn ?? []).length > 0 && lang !== "en" && (
+        <div className="wb-mexamples wb-mexamples-en">
+          <div className="wb-mexamples-en-label">{EN_EXAMPLES_LABEL[lang] ?? "In English"}</div>
+          {(meaning.examplesEn ?? []).map((ex, j) => (
+            <div className="wb-mexample" key={j} dir="ltr" lang="en">
               <span><TappableText text={ex} skipWord={word} /></span>
             </div>
           ))}

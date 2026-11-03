@@ -25,7 +25,9 @@ type Tpl = { same: string[]; foreign: string[] };
 const BASE_TITLES: Record<string, Tpl> = {
   he: {
     same: ["{w}: פירוש, משמעויות ודוגמאות", "{w}: פירוש ומשמעויות", "{w}: משמעויות"],
-    foreign: ["{w} בעברית: {t}, פירוש ודוגמאות", "{w} בעברית: {t}, פירוש", "{w} בעברית: {t}"],
+    // "תרגום לעברית": Hebrew searchers type "certain תרגום" (Search Console,
+    // Gadi 2026-11-03); the old "בעברית" titles got those impressions and no clicks.
+    foreign: ["{w} תרגום לעברית: {t}, פירוש ודוגמאות", "{w} תרגום לעברית: {t}, פירוש", "{w} תרגום לעברית: {t}", "{w} בעברית: {t}"],
   },
   en: {
     same: ["{w}: meaning, definitions and examples", "{w}: meaning and definitions", "{w}: definitions"],
