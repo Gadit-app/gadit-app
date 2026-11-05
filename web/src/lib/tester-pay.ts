@@ -13,12 +13,12 @@ import { CHECK_IDS, CHECK_TOTAL } from "@/lib/tester-checklist";
  *   - team bonus: both found different things in the same game this month                    +5 each
  *   - royalties: a game the child invented: 1 per NEW child who plays it, up to 100 a month
  *     (gameOwners/{prefix}; players in gamePlayers/{prefix}/players, see /api/game-play)
- * Shown and paid per MONTH (Gadi: "my monthly payment"); the cap is 250
- * a week (Sunday to Saturday, Israel time). Everything they earn is theirs, paid in
+ * Shown and paid per MONTH (Gadi: "my monthly payment"); no weekly cap (Gadi 2026-11-05:
+ * "let them work as much as they want and earn as much as they want"). Everything they earn is theirs, paid in
  * Yooniz (Gadi 2026-11-05 dropped the 10% family pot). Notes marked `test` (Gadi trying a button) never count.
  */
 
-export const PAY = { run: 5, bug: 10, idea: 5, built: 50, team: 5, voiceX: 1.5, cap: 250, tax: 0, runRounds: 5, royalty: 1, royaltyCap: 100 } as const;
+export const PAY = { run: 5, bug: 10, idea: 5, built: 50, team: 5, voiceX: 1.5, cap: Infinity, tax: 0, runRounds: 5, royalty: 1, royaltyCap: 100 } as const;
 const RATINGS = new Set(["fun", "boring", "hard", "easy"]);
 
 export type PayRow = {
