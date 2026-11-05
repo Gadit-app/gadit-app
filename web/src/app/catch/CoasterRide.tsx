@@ -198,7 +198,7 @@ export function CoasterRide({ world, word, c, level, avatar, pic, onDone, onExit
       const b0 = baseSeg();
       const cur = track[((b0 % N) + N) % N];
       const slope = (cur.y2 - cur.y1) / SEG;
-      const base = (24 + Math.min(14, levelRef.current * 2)) * SEG;
+      const base = (24 + Math.min(22, levelRef.current * 2)) * SEG;
       // the ride eases off while a pair of signs comes close, so small hands have time
       let near = Infinity;
       for (const s of signs.current) if (s.state === "go") near = Math.min(near, s.seg - b0);
@@ -313,6 +313,8 @@ export function CoasterRide({ world, word, c, level, avatar, pic, onDone, onExit
           if (s.state === "hit") { const k = 1 + s.t * 1.4; sx -= (w * k - w) / 2; sy -= (h * k - h) / 2; w *= k; h *= k; alpha = Math.max(0, 1 - s.t / 0.5); }
           if (s.state === "miss") { rot = (s.off < 0 ? -1 : 1) * s.t * 2.2; sy += s.t * s.t * H * 0.8; alpha = Math.max(0, 1 - s.t / 0.7); }
           if (s.state === "spent") alpha = Math.max(0, 1 - s.t / 0.4) * 0.6;
+          // after two misses the other sign fades (Din 2026-11-05: the hint must be plain to see)
+          if (s.state === "go" && glow && s.letter !== target) alpha *= 0.35;
           if (alpha <= 0) continue;
           ctx.save();
           ctx.globalAlpha = alpha;
@@ -323,6 +325,17 @@ export function CoasterRide({ world, word, c, level, avatar, pic, onDone, onExit
           if (lit) { ctx.shadowColor = "#ffe066"; ctx.shadowBlur = Math.max(18, w * 0.35); }
           if (im.complete && im.naturalWidth) ctx.drawImage(im, sx, sy, w, h);
           ctx.shadowBlur = 0;
+          if (lit) {
+            // a pulsing ring around the right sign's plate
+            const pulse = 0.5 + 0.5 * Math.sin(t / 130);
+            ctx.beginPath();
+            ctx.arc(sx + w * hd.cx, sy + h * hd.cy, w * hd.r * (1.2 + pulse * 0.18), 0, Math.PI * 2);
+            ctx.lineWidth = Math.max(3, w * 0.05);
+            ctx.strokeStyle = "#ffe066";
+            ctx.shadowColor = "#ffd23f"; ctx.shadowBlur = Math.max(14, w * 0.25);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+          }
           // the letter, centred by its ink on the plate
           const fs = w * hd.r * 1.25;
           if (fs > 3) {

@@ -32,6 +32,7 @@ import { Glyph } from "../world/Glyph";
 import { fetchPics, loadWords, type TrailWord } from "../world/WorldClient";
 import { catchCopy, type CatchCopy } from "./catch-i18n";
 import { CatchHud } from "./CatchHud";
+import { PACE_ICON, PACE_MAX_DECOYS, PACE_TARGET_CHANCE, paceLabels, paceLevel, readPace, savePace, type Pace } from "./catch-pace";
 import { CoasterRide, COASTER_ART, COASTER_CSS, COASTER_WORLDS, type CoasterWorld } from "./CoasterRide";
 import { FairRide, FAIR_ART, FAIR_CSS, FAIR_STALLS, type FairStall } from "./FairStall";
 
@@ -55,8 +56,8 @@ type Fly = { id: number; letter: string; state: "fly" | "caught" | "flee" };
 type Motion = { x: number; y0: number; vx: number; amp: number; freq: number; ph: number; t: number; vy: number; y: number };
 
 /* ---------- one word: the night sky ---------- */
-function Sky({ word, c, level, avatar, onDone, onExit, pic }: {
-  word: TrailWord; c: CatchCopy; level: number; avatar: string; pic: string | null;
+function Sky({ word, c, level, pace, avatar, onDone, onExit, pic }: {
+  word: TrailWord; c: CatchCopy; level: number; pace: Pace; avatar: string; pic: string | null;
   onDone: (wrongs: number) => void; onExit: () => void;
 }) {
   const letters = useMemo(() => lettersOf(word.w, word.lang), [word]);
@@ -74,7 +75,7 @@ function Sky({ word, c, level, avatar, onDone, onExit, pic }: {
     const W = size.w, H = size.h;
     const S = clamp(Math.min(W * 0.26, H * 0.17), 92, 150);
     // Crossing the screen: gentle at first, a little faster every word.
-    const cross = clamp(8 - level * 0.45, 4.6, 8);
+    const cross = clamp(8 - level * 0.45, 3.8, 8);
     return { W, H, S, top: Math.max(96, H * 0.16), bottom: H * 0.66 - S, speed: (W + 2 * S) / cross, maxOn: Math.min(3 + Math.floor(level / 2), 5) + (W > 900 ? 1 : 0), gap: cross / 3.2 };
   }, [size, level]);
   const geoRef = useRef(geo);
@@ -96,6 +97,8 @@ function Sky({ word, c, level, avatar, onDone, onExit, pic }: {
   const [net, setNet] = useState<{ x: number; y: number; k: number } | null>(null);
 
   const commit = (list: Fly[]) => { fliesRef.current = list; setFlies(list); };
+  // decoys born in a row while no firefly carries the right letter (the pace sets how many)
+  const decoysInRow = useRef(0);
 
   const spawn = useCallback(() => {
     const g = geoRef.current;
@@ -104,11 +107,16 @@ function Sky({ word, c, level, avatar, onDone, onExit, pic }: {
     const live = fliesRef.current.filter((f) => f.state === "fly");
     const hasTarget = live.some((f) => f.letter === target);
     let letter = target;
-    if (hasTarget) {
+    // Not always the right letter first (Din's mother 2026-11-05: "it almost
+    // always offers the letter he needs"): on normal and fast a few decoys
+    // can come before it.
+    const decoyFirst = !hasTarget && decoysInRow.current < PACE_MAX_DECOYS[pace] && Math.random() >= PACE_TARGET_CHANCE[pace];
+    if (hasTarget || decoyFirst) {
       const onScreen = new Set(live.map((f) => f.letter));
       const pool = decoysFor(target, word.lang, 4).filter((l) => !onScreen.has(l));
       letter = pool[0] ?? decoysFor(target, word.lang, 1)[0] ?? target;
     }
+    decoysInRow.current = letter === target ? 0 : hasTarget ? decoysInRow.current : decoysInRow.current + 1;
     const id = nextId.current++;
     const dir = Math.random() < 0.5 ? 1 : -1;
     const y0 = rnd(g.top, Math.max(g.top + 10, g.bottom));
@@ -117,7 +125,7 @@ function Sky({ word, c, level, avatar, onDone, onExit, pic }: {
       vx: dir * g.speed * rnd(0.85, 1.15), amp: rnd(8, 26), freq: rnd(1.2, 2.2), ph: rnd(0, 6.28), t: 0, vy: 0,
     });
     commit([...fliesRef.current, { id, letter, state: "fly" }]);
-  }, [letters, word.lang]);
+  }, [letters, word.lang, pace]);
 
   const remove = useCallback((id: number) => {
     motion.current.delete(id);
@@ -223,7 +231,7 @@ function Sky({ word, c, level, avatar, onDone, onExit, pic }: {
           key={f.id}
           type="button"
           ref={(el) => { if (el) els.current.set(f.id, el); else els.current.delete(f.id); }}
-          className={`ct-fly is-${f.state}${miss >= 2 && f.state === "fly" && f.letter === target ? " is-glow" : ""}`}
+          className={`ct-fly is-${f.state}${miss >= 2 && f.state === "fly" ? (f.letter === target ? " is-glow" : " is-dim") : ""}`}
           style={{ width: geo.S, height: geo.S }}
           onPointerDown={(e) => { e.preventDefault(); tap(f.id); }}
           aria-label={f.letter}
@@ -289,10 +297,12 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
   const [worldPick, setWorldPick] = useState(false);
   const [stall, setStall] = useState<FairStall>("cans");
   const [stallPick, setStallPick] = useState(false);
+  const [pace, setPace] = useState<Pace>(1);
+  const pickPace = (p: Pace) => { setPace(p); savePace(p); sfx.tap(); };
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setScene(readScene()); setWorld(readWorld()); setStall(readStall());
+    setScene(readScene()); setWorld(readWorld()); setStall(readStall()); setPace(readPace());
     // A scene's own link (Gadi 2026-11-02): /catch?scene=coaster&world=snow, ?scene=fair&stall=cans
     try {
       const q = new URLSearchParams(window.location.search);
@@ -411,13 +421,13 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
       <style>{FAIR_CSS}</style>
 
       {word && phase === "play" && scene === "fireflies" ? (
-        <Sky key={`${round}:${idx}:${word.w}`} word={word} c={c} level={level} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={exit} />
+        <Sky key={`${round}:${idx}:${word.w}`} word={word} c={c} level={paceLevel(level, pace)} pace={pace} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={exit} />
       ) : null}
       {word && phase === "play" && scene === "coaster" ? (
-        <CoasterRide key={`${round}:${idx}:${word.w}`} world={world} word={word} c={c} level={level} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={exit} />
+        <CoasterRide key={`${round}:${idx}:${word.w}`} world={world} word={word} c={c} level={paceLevel(level, pace)} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={exit} />
       ) : null}
       {word && phase === "play" && scene === "fair" ? (
-        <FairRide key={`${round}:${idx}:${word.w}:${stall}`} stall={stall} word={word} c={c} level={level} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={exit} />
+        <FairRide key={`${round}:${idx}:${word.w}:${stall}`} stall={stall} word={word} c={c} level={paceLevel(level, pace)} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={exit} />
       ) : null}
 
       {word && phase === "intro" ? (
@@ -436,6 +446,13 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
               <TTSButton text={word.nq || (word.native ? word.raw : word.w)} audioLang={word.lang === "he" ? "he-IL" : word.lang === "en" ? "en-US" : word.lang} ariaLabel={c.hear} className="ct-tts-btn" rate={0.85} />
             </span>
             <p className="ct-card-goal">{scene === "coaster" ? c.coasterGoal : scene === "fair" ? c.stallGoal[stall] : c.goal}</p>
+            <div className="ct-pace" role="radiogroup">
+              {([0, 1, 2] as Pace[]).map((p) => (
+                <button key={p} type="button" role="radio" aria-checked={pace === p} className={pace === p ? "is-on" : ""} onClick={() => pickPace(p)}>
+                  <span aria-hidden="true">{PACE_ICON[p]}</span> {paceLabels(lang)[p]}
+                </button>
+              ))}
+            </div>
             <button type="button" className="ct-btn" onClick={() => { sfx.whoosh(); setPhase("play"); }}>{c.go}</button>
           </div>
         </div>
@@ -536,6 +553,9 @@ const CSS = `
 .ct-root{position:fixed;inset:0;z-index:60;overflow:hidden;background:#1e1b4b url(${ART}/bg-tall.webp) center bottom/cover no-repeat;color:#14202b;-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 @media (min-aspect-ratio:1/1){.ct-root{background-image:url(${ART}/bg-wide.webp)}}
 .ct-root.is-coaster{background-color:#9cc3e8;background-size:cover;background-position:center}
+.ct-pace{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;width:100%;background:#eef2f6;border-radius:999px;padding:4px}
+.ct-pace button{border:0;background:none;border-radius:999px;padding:9px 4px;font:inherit;font-weight:800;font-size:15px;color:#3b4a56;cursor:pointer;white-space:nowrap}
+.ct-pace button.is-on{background:#fff;color:#14202b;box-shadow:0 2px 8px #0002}
 .ct-scenes.is-three{grid-template-columns:repeat(3,minmax(0,1fr))}
 .ct-jar.is-card{width:200px;border-radius:18px;filter:none;box-shadow:0 6px 18px #0003}
 .ct-scenes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%}
@@ -552,7 +572,11 @@ const CSS = `
 .ct-fly img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;filter:drop-shadow(0 0 14px #ffd76a99);animation:ct-flap .35s ease-in-out infinite alternate}
 .ct-fly-letter{position:absolute;left:50%;top:63%;transform:translate(-50%,-50%);font-weight:900;line-height:1;color:#5a3a00;text-shadow:0 1px 0 #fff8;pointer-events:none;font-family:inherit}
 .ct-fly.is-glow img{filter:drop-shadow(0 0 10px #fff) drop-shadow(0 0 26px #ffe066) drop-shadow(0 0 40px #ffd23f)}
-.ct-fly.is-glow .ct-fly-letter{animation:ct-throb .7s ease-in-out infinite alternate}
+.ct-fly.is-glow .ct-fly-letter{animation:ct-throb .7s ease-in-out infinite alternate;color:#b45309}
+/* the hint after two misses must be plain to see (Din 2026-11-05: "it does not light up"): a ring around the right one, the others fade */
+.ct-fly.is-glow::after{content:"";position:absolute;inset:-12%;border-radius:50%;border:5px solid #ffe066;box-shadow:0 0 26px #ffd23f,inset 0 0 22px #ffd23f99;animation:ct-ring .8s ease-in-out infinite alternate;pointer-events:none}
+.ct-fly.is-dim{opacity:.35}
+@keyframes ct-ring{from{transform:scale(.9);opacity:.75}to{transform:scale(1.08);opacity:1}}
 .ct-fly.is-caught{pointer-events:none}
 .ct-fly.is-caught img,.ct-fly.is-caught .ct-fly-letter{animation:ct-caught .6s ease-in forwards}
 .ct-fly.is-flee{pointer-events:none;opacity:.85}

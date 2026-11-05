@@ -4216,7 +4216,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
   // the cards, they hid the pictures).
   const buildDuelFor = (id: GameId) => {
     const tf = TF_COPY[lang] ?? TF_COPY.en;
-    return duelQuestionsFor(id, { pool: gamePool, lang, kids: kidsMode, yes: tf.yes, no: tf.no, real: t.friendsTrue, trap: t.friendsFalse });
+    return duelQuestionsFor(id, { pool: gamePool, lang, kids: kidsMode || isKidPlayer, yes: tf.yes, no: tf.no, real: t.friendsTrue, trap: t.friendsFalse });
   };
   const playingGame = stage.kind === "playing" ? stage.game : null;
   const playingTitle = playingGame ? games.find((g) => g.id === playingGame)?.title ?? "" : "";
@@ -4231,7 +4231,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
     });
     return () => setDuelLauncher(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playingGame, isPaid, lang, gamePool, kidsMode, playingTitle]);
+  }, [playingGame, isPaid, lang, gamePool, kidsMode, isKidPlayer, playingTitle]);
 
   // ─── A lesson from workbook pages (Gadi 2026-10-11) ─────────────
   if (stage.kind === "menu" && lessonPending) {

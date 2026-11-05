@@ -17,7 +17,8 @@
 import { DICTATION_SETS } from "@/lib/dictation-sets";
 
 export const DUEL_ROUNDS = 8;
-export const ROUND_MS = 15_000;
+// 20 seconds a round (was 15): time to read the options (Din's mother 2026-11-05).
+export const ROUND_MS = 20_000;
 export const REVEAL_MS = 2_500;
 export const COUNTDOWN_MS = 3_500;
 /** A room nobody joined, or a finished one, is gone after this. */

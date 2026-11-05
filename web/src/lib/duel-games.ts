@@ -73,6 +73,35 @@ const DUEL_Q: Record<string, [string, string]> = {
 };
 
 
+/** Titles and short forms ("Mr", "Dr.", "etc") are not words to duel on (Din 2026-11-05). */
+const NOT_A_DUEL_WORD = /^(mr|mrs|ms|dr|st|jr|sr|etc|vs|prof|mt|ft)\.?$/i;
+const duelWord = (w: string) => !NOT_A_DUEL_WORD.test(w.trim()) && !/\.$/.test(w.trim());
+
+/**
+ * A meaning short enough for a child to read against the clock (Din's
+ * mother 2026-11-05: four long definitions are too much reading). The first
+ * clause, and at most 10 words.
+ */
+export function kidMeaning(m: string): string {
+  let s = m.trim().split(/\s*(?:;|:|\(|\. )\s*/)[0].replace(/[.,\s]+$/, "");
+  let words = s.split(/\s+/);
+  if (words.length > 10) {
+    const comma = s.indexOf(", ");
+    if (comma > 0 && s.slice(0, comma).split(/\s+/).length >= 4) { s = s.slice(0, comma); words = s.split(/\s+/); }
+  }
+  if (words.length > 10) s = words.slice(0, 10).join(" ").replace(/[,\s]+$/, "") + "…";
+  return s || m;
+}
+
+/** Kids get three options, not four: less to read (Din's mother 2026-11-05). */
+function threeOptions(q: DuelQuestion): DuelQuestion {
+  if (q.options.length <= 3) return q;
+  const wrong = q.options.map((_, i) => i).filter((i) => i !== q.correctIdx);
+  const drop = wrong[Math.floor(Math.random() * wrong.length)];
+  const options = q.options.filter((_, i) => i !== drop);
+  return { ...q, options, correctIdx: options.indexOf(q.options[q.correctIdx]) };
+}
+
 /** Shuffle the options of a question and keep the right answer right. */
 function mix(prompt: string, options: readonly string[], correctIdx: number): DuelQuestion {
   const right = options[correctIdx];
@@ -85,7 +114,10 @@ export function duelQuestionsFor(
   ctx: { pool: PlayWord[]; lang: string; kids: boolean; yes: string; no: string; real: string; trap: string },
 ): DuelQuestion[] | null {
   const n = DUEL_ROUNDS;
-  const { pool, lang, kids } = ctx;
+  const { lang, kids } = ctx;
+  const pool = ctx.pool
+    .filter((p) => duelWord(p.word))
+    .map((p) => (kids ? { ...p, meaning: kidMeaning(p.meaning) } : p));
   let qs: DuelQuestion[] = [];
   switch (game) {
     case "quiz":
@@ -165,5 +197,6 @@ export function duelQuestionsFor(
       return null;
   }
   qs = qs.filter((q) => q.prompt && q.options.length >= 2 && q.correctIdx >= 0).slice(0, n);
+  if (kids) qs = qs.map(threeOptions);
   return qs.length >= 3 ? qs : null;
 }

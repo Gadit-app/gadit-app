@@ -71,7 +71,7 @@ export function FairRide({ stall, word, c, level, avatar, pic, onDone, onExit }:
   const geo = useMemo(() => {
     const W = size.w, H = size.h;
     const count = Math.min(3 + Math.floor(level / 2), 5);
-    const speed = Math.min(1 + level * 0.08, 1.5);
+    const speed = Math.min(1 + level * 0.08, 1.8);
     const canW = clamp(Math.min(W * 0.2, H * 0.125), 64, 118);
     const balW = clamp(Math.min(W * 0.23, H * 0.125), 74, 132);
     const R = Math.min(W * 0.44, H * 0.27, 330);
@@ -437,7 +437,7 @@ export function FairRide({ stall, word, c, level, avatar, pic, onDone, onExit }:
         <div
           key={t.id}
           ref={(el) => { if (el) els.current.set(t.id, el); else els.current.delete(t.id); }}
-          className={`fr-t is-${t.state}${miss >= 2 && t.state === "live" && t.letter === tgtNow ? " is-glow" : ""}`}
+          className={`fr-t is-${t.state}${miss >= 2 && (t.state === "live" || t.state === "tried") ? (t.letter === tgtNow && t.state === "live" ? " is-glow" : " is-dim") : ""}`}
           style={{ width: t.w, height: t.h, transform: `translate3d(${t.x - t.w / 2}px,${t.y - t.h / 2}px,0)` }}
           onPointerDown={(e) => { e.preventDefault(); shoot(t.id); }}
           role="button"
@@ -500,7 +500,11 @@ export const FAIR_CSS = `
 .fr-stage.is-target .fr-letter{color:#7a2410}
 .fr-t.is-tried{opacity:.55;filter:grayscale(.5)}
 .fr-t.is-glow img{filter:drop-shadow(0 0 10px #fff) drop-shadow(0 0 24px #ffe066) drop-shadow(0 0 38px #ffd23f)}
-.fr-t.is-glow .fr-letter{animation:fr-throb .7s ease-in-out infinite alternate}
+.fr-t.is-glow .fr-letter{animation:fr-throb .7s ease-in-out infinite alternate;color:#b45309}
+/* the hint after two misses must be plain to see (Din 2026-11-05): a ring around the right one, the others fade */
+.fr-t.is-glow::after{content:"";position:absolute;inset:-10%;border-radius:50%;border:5px solid #ffe066;box-shadow:0 0 26px #ffd23f,inset 0 0 22px #ffd23f99;animation:fr-ring .8s ease-in-out infinite alternate;pointer-events:none}
+.fr-t.is-dim{opacity:.35}
+@keyframes fr-ring{from{transform:scale(.9);opacity:.75}to{transform:scale(1.08);opacity:1}}
 .fr-t.is-hit,.fr-t.is-flee{pointer-events:none}
 .fr-stage.is-target .fr-t.is-hit img{filter:drop-shadow(0 0 12px #fff) drop-shadow(0 0 26px #7dff9b)}
 .fr-shot{position:absolute;left:0;top:0;z-index:4;pointer-events:none;filter:drop-shadow(0 6px 8px #0005)}
