@@ -50,6 +50,7 @@ import { TTSButton } from "@/components/design/TTSButton";
 import { TappableText } from "@/components/design/TappableText";
 import { ImageLightbox } from "@/components/design/ImageLightbox";
 import { useKidsMode } from "@/lib/use-kids-mode";
+import { simpleWordsLabel, useSimpleWords } from "@/lib/use-simple-words";
 import { formatPos } from "@/lib/format-pos";
 
 // ─── Types matching the live /api/define schema ────────────────
@@ -620,15 +621,18 @@ function MeaningEntry({
   // is a free re-render, no re-fetch. Same cached server response
   // carries both versions — see route.ts for the rationale.
   const [kidsOn] = useKidsMode();
+  // "In simple words" shows the same short text, without the rest of Kids Mode (Gadi 2026-11-05).
+  const [simpleOn] = useSimpleWords();
+  const plainOn = kidsOn || simpleOn;
   // Kids text for THIS sense, if it has streamed in yet.
   const kidsText = meaning.kidsExplanation?.explanation?.trim() || "";
-  const showKids = kidsOn && !!kidsText;
+  const showKids = plainOn && !!kidsText;
   // In Kids Mode, while the kids text has NOT arrived yet AND we're still
   // streaming, WITHHOLD the adult definition instead of showing it and then
   // swapping — a child should never watch the grown-up text get typed out.
   // Once the stream is done with still no kids version (rare: old cache), we
   // fall back to the adult text so the card is never empty.
-  const awaitingKids = kidsOn && !kidsText && streaming;
+  const awaitingKids = plainOn && !kidsText && streaming;
   // POS badge — shown on EVERY meaning that has a pos value (the LLM
   // Council 2026-06-20 ruled: it's not a configuration, it's part of
   // what a dictionary entry IS). Translated into the UI language by
@@ -1016,7 +1020,12 @@ export function MeaningsBlock({
   onReport?: (section: string) => void;
 }) {
   const { lang } = useLang();
+  const [kidsOn] = useKidsMode();
+  const [simpleOn, setSimpleOn] = useSimpleWords();
   if (!meanings || meanings.length === 0) return null;
+  // "In simple words" right by the definitions (Gadi 2026-11-05), for paid
+  // plans; hidden while Kids Mode is on (it already shows the simple text).
+  const canSimple = (plan === "clear" || plan === "deep") && !kidsOn && meanings.some((m) => m.kidsExplanation?.explanation?.trim());
   return (
     <div className="wb-meanings">
       <div className="wb-eyebrow">
@@ -1027,6 +1036,12 @@ export function MeaningsBlock({
             <span className="wb-eyebrow-count"> ({meanings.length})</span>
           )}
         </span>
+        {canSimple && (
+          <button type="button" role="switch" aria-checked={simpleOn} className={`wb-simple-chip${simpleOn ? " is-on" : ""}`} onClick={() => setSimpleOn(!simpleOn)}>
+            <span>{simpleWordsLabel(lang)}</span>
+            <span className="wb-kids-mini-track" aria-hidden="true"><span /></span>
+          </button>
+        )}
       </div>
       <div className="wb-meanings-stack">
         {meanings.map((m, i) => (
@@ -1078,7 +1093,9 @@ export function IdiomsSection({
   plan?: Plan;
 }) {
   const { lang } = useLang();
-  const [kidsOn] = useKidsMode();
+  const [kidsModeOn] = useKidsMode();
+  const [simpleOn] = useSimpleWords();
+  const kidsOn = kidsModeOn || simpleOn;
   const { user } = useAuth();
 
   // Idioms embedded in the define result — instant, but the big-prompt model
@@ -1190,7 +1207,9 @@ export function IdiomsSection({
 // ─── OriginCard (renamed from EtymologyCard) ───────────────────
 export function OriginCard({ etymology, onReport, plan = "basic" }: { etymology: Etymology | string | undefined; onReport?: (section: string) => void; plan?: Plan }) {
   const { lang } = useLang();
-  const [kidsOn] = useKidsMode();
+  const [kidsModeOn] = useKidsMode();
+  const [simpleOn] = useSimpleWords();
+  const kidsOn = kidsModeOn || simpleOn;
   const ttsUseAI = plan === "clear" || plan === "deep";
   if (!etymology) return null;
 

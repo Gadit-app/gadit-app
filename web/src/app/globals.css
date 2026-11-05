@@ -11806,6 +11806,38 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
   .wordbook .wb-kids-mini img { width: 28px; height: 28px; }
   .wordbook .wb-kids-mini-label { display: none; }
 }
+/* "In simple words" (Gadi 2026-11-05): the same switch as Kids Mode, a speech bubble for the mascot. */
+.wordbook .wb-simple-mini-icon { width: 30px; height: 30px; display: grid; place-items: center; color: var(--teal-deep, #0E7490); flex: none; }
+.wordbook .wb-simple-mini:not(.is-on) .wb-simple-mini-icon { color: var(--ink-soft, #64748B); }
+.wordbook .wb-simple-mini .wb-kids-mini-label { white-space: nowrap; }
+@media (max-width: 640px) {
+  .wordbook .wb-simple-mini-icon { width: 26px; height: 26px; }
+}
+/* The same switch beside the definitions heading. */
+.wordbook .wb-simple-chip { margin-inline-start: auto; display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px 0 12px; border-radius: 999px; border: 1px solid var(--rule, #E2E8F0); background: var(--surface, #fff); color: var(--ink-soft, #475569); font: inherit; font-size: 14px; font-weight: 700; letter-spacing: 0; cursor: pointer; white-space: nowrap; }
+.wordbook .wb-simple-chip.is-on { color: var(--ink, #0f172a); border-color: color-mix(in srgb, var(--accent, #0EA5A5) 50%, transparent); background: color-mix(in srgb, var(--accent, #0EA5A5) 10%, var(--surface, #fff)); }
+.wordbook .wb-simple-chip.is-on .wb-kids-mini-track { background: var(--accent, #0EA5A5); }
+.wordbook .wb-simple-chip.is-on .wb-kids-mini-track span { inset-inline-start: 16px; }
+.wordbook .wb-simple-chip:focus-visible { outline: 2px solid var(--accent, #0EA5A5); outline-offset: 2px; }
+@media (max-width: 420px) {
+  .wordbook .wb-simple-chip { font-size: 13px; height: 32px; padding: 0 8px 0 10px; gap: 6px; }
+}
+
+/* Tablet landscape (1024 to 1439px): the centred nav ran into the side items
+   (Din on a tablet, 2026-11-05: the menu sat on the Kids switch and the
+   appearance button). Here the nav sits in the row and gives way instead. */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .wordbook .wb-shell-topbar { padding-inline: 20px; gap: 14px; }
+  .wordbook .wb-shell-topbar > .wb-shell-nav { position: static; transform: none; flex: 1 1 auto; min-width: 0; justify-content: center; gap: 14px; margin-inline-start: 0; overflow-x: auto; scrollbar-width: none; }
+  .wordbook .wb-shell-topbar > .wb-shell-nav::-webkit-scrollbar { display: none; }
+  .wordbook .wb-shell-topbar > .wb-kids-mini { margin-inline-start: 4px; margin-inline-end: 0; }
+  .wordbook .wb-shell-nav a, .wordbook .wb-shell-nav .wb-shell-navlink { font-size: 13.5px; }
+}
+@media (min-width: 1024px) and (max-width: 1239px) {
+  .wordbook .wb-shell-topbar > .wb-shell-nav { gap: 11px; }
+  .wordbook .wb-shell-topbar > .wb-kids-mini .wb-kids-mini-label { display: none; }
+}
+
 .wordbook .wb-play-card-cover.is-mascot { object-fit: contain; background: linear-gradient(160deg, #FFF6DA, #FFFFFF); padding: 10px; box-sizing: border-box; }
 
 /* Homework: four identical cards, one teal accent (Gadi 2026-10-12). */

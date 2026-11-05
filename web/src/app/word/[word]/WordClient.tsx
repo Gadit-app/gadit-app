@@ -57,6 +57,7 @@ import { toggleLangGroup } from "@/lib/lang-groups";
 import { LangSearchList } from "@/components/LangSearch";
 import { track } from "@/lib/track";
 import { useKidsMode } from "@/lib/use-kids-mode";
+import { useSimpleWords } from "@/lib/use-simple-words";
 
 import { MarketingHeader } from "@/components/design/MarketingHeader";
 import { ClassroomTopbar } from "@/components/design/ClassroomTopbar";
@@ -907,6 +908,8 @@ export function WordClient({
   // masthead, the effect below picks up the new value and re-fetches
   // the entry under the new prompt + cache key.
   const [kidsMode] = useKidsMode();
+  // "In simple words" shows the same short text (vowel points follow it).
+  const [simpleWords] = useSimpleWords();
   // Persistent search bar sitting between the masthead and the result.
   // Lives in WordClient (not chrome) so the input doesn't reset every
   // time the masthead re-renders for share/lang/menu toggles.
@@ -1203,7 +1206,7 @@ export function WordClient({
         const add = (s?: string) => { if (isHeb(s)) texts.push(s as string); };
         add(result.word);
         for (const m of result.meanings ?? []) {
-          if (kidsMode && m.kidsExplanation) {
+          if ((kidsMode || simpleWords) && m.kidsExplanation) {
             add(m.kidsExplanation.intro);
             add(m.kidsExplanation.explanation);
             for (const ex of m.kidsExplanation.examples ?? []) add(ex);
@@ -1253,7 +1256,7 @@ export function WordClient({
       }
     })();
     return () => { cancelled = true; };
-  }, [niqqud, isHebrewWord, isArabicWord, result, user, kidsMode, loading]);
+  }, [niqqud, isHebrewWord, isArabicWord, result, user, kidsMode, simpleWords, loading]);
   const displayResult = niqqud && niqResult ? niqResult : result;
   const [reportContext, setReportContext] = useState<ReportContext | null>(
     null

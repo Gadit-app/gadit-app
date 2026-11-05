@@ -10,6 +10,31 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useKidsMode } from "@/lib/use-kids-mode";
 import { KIDS_BANNER_COPY } from "@/lib/kids-banner-copy";
+import { simpleWordsLabel, useSimpleWords } from "@/lib/use-simple-words";
+
+/** A small speech bubble with two short lines: plain talk. */
+function SimpleIcon() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M4 5.5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-9l-4.5 3.5V16.5H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1z" />
+      <path d="M7.5 9.5h9M7.5 12.8h5.5" />
+    </svg>
+  );
+}
+
+/** "In simple words" for paid accounts without Kids Mode (Individual), Gadi 2026-11-05. */
+export function SimpleWordsToggle({ compact }: { compact?: boolean }) {
+  const { lang } = useLang();
+  const [on, setOn] = useSimpleWords();
+  const label = simpleWordsLabel(lang);
+  return (
+    <button type="button" role="switch" aria-checked={on} aria-label={label} title={label} className={`wb-kids-mini wb-simple-mini${on ? " is-on" : ""}${compact ? " is-compact" : ""}`} onClick={() => setOn(!on)}>
+      <span className="wb-simple-mini-icon"><SimpleIcon /></span>
+      <span className="wb-kids-mini-label">{label}</span>
+      <span className="wb-kids-mini-track" aria-hidden="true"><span /></span>
+    </button>
+  );
+}
 
 /** Just "Kids" (Gadi 2026-10-12: "Mode" dropped, the switch says the rest). */
 const NAME: Record<string, string> = {
@@ -25,7 +50,9 @@ export function ToolKidsToggle() {
   const { user, plan, kidsAccess } = useAuth();
   const { lang } = useLang();
   const [on, setOn] = useKidsMode();
-  if (!user || !kidsAccess || (plan !== "clear" && plan !== "deep")) return null;
+  if (!user || (plan !== "clear" && plan !== "deep")) return null;
+  // Individual and other paid accounts without Kids Mode get "In simple words" here.
+  if (!kidsAccess) return <SimpleWordsToggle />;
   const c = KIDS_BANNER_COPY[lang] ?? KIDS_BANNER_COPY.en;
   const state = (on ? c.onTitle : c.offTitle).replace(/^✓\s*/, "");
   return (
