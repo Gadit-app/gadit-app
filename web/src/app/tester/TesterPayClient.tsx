@@ -8,7 +8,7 @@
  * Hebrew and English, with a switch (Din reads English).
  */
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
@@ -68,7 +68,14 @@ export function TesterPayClient() {
   const [thisWeek, setThisWeek] = useState<string | null>(null); // months (YYYY-MM)
   const [slip, setSlip] = useState<PaySlip | null>(null);
   const [err, setErr] = useState(false);
-  const [tab, setTab] = useState<"pay" | "checks">("pay");
+  // The ✅ button opens /tester#checks straight on the checklist.
+  const hash = useSyncExternalStore(
+    (f) => { window.addEventListener("hashchange", f); return () => window.removeEventListener("hashchange", f); },
+    () => window.location.hash,
+    () => "",
+  );
+  const [picked, setTab] = useState<"pay" | "checks" | null>(null);
+  const tab = picked ?? (hash === "#checks" ? "checks" : "pay");
 
   const router = useRouter();
   useEffect(() => { if (!authLoading && !user) promptLogin(t.title); }, [authLoading, user, promptLogin, t.title]);

@@ -210,14 +210,21 @@ export function TesterFab() {
   const inlineCount = useSyncExternalStore(subscribe, () => inline, () => 0);
   if (!tester || inlineCount > 0) return null;
   const segs = pathname.split("/").filter(Boolean);
-  const first = segs.length && LANG_SEG.test(segs[0]) && !GAME_PATHS.has(segs[0]) ? segs[1] : segs[0];
-  if (!first || !GAME_PATHS.has(first)) return null;
-  const lang = segs.length && LANG_SEG.test(segs[0]) && !GAME_PATHS.has(segs[0]) ? segs[0] : "";
-  // My monthly pay sits right above the 🧪, not among the games (Gadi 2026-11-02)
+  const hasLang = segs.length > 0 && LANG_SEG.test(segs[0]) && !GAME_PATHS.has(segs[0]);
+  const first = (hasLang ? segs[1] : segs[0]) ?? "";
+  // On every screen, not only in the games: Din tests on a tablet and starts
+  // from the home screen (Gadi 2026-11-05). Not on the pay page itself,
+  // the admin or the sign-in screens.
+  if (first === "tester" || first === "admin" || first === "auth") return null;
+  const lang = hasLang ? segs[0] : "";
+  const base = `${lang ? `/${lang}` : ""}/tester`;
+  const he = lang === "he";
+  // My checklist and my monthly pay sit right above the 🧪 (Gadi 2026-11-02)
   return (
     <>
-      <a className="tst-fab is-pay" href={`${lang ? `/${lang}` : ""}/tester`} aria-label={lang === "he" ? "התשלום החודשי שלי" : "My monthly pay"} title={lang === "he" ? "התשלום החודשי שלי" : "My monthly pay"}>💰</a>
-      <TesterButton game={first} floating />
+      <a className="tst-fab is-checks" href={`${base}#checks`} aria-label={he ? "רשימת הבדיקות שלי" : "My checklist"} title={he ? "רשימת הבדיקות שלי" : "My checklist"}>✅</a>
+      <a className="tst-fab is-pay" href={base} aria-label={he ? "התשלום החודשי שלי" : "My monthly pay"} title={he ? "התשלום החודשי שלי" : "My monthly pay"}>💰</a>
+      <TesterButton game={first || "home"} floating />
     </>
   );
 }
@@ -226,6 +233,7 @@ const CSS = `
 .tst-btn{width:44px;height:44px;flex:0 0 44px;border-radius:50%;border:0;background:#fffe;box-shadow:0 2px 8px #0002;font-size:20px;display:grid;place-items:center;cursor:pointer}
 .tst-fab{position:fixed;z-index:95;inset-inline-start:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);width:46px;height:46px;border-radius:50%;border:2px solid #c4b5fd;background:#f5f3ff;box-shadow:0 4px 14px #0003;font-size:21px;display:grid;place-items:center;cursor:pointer}
 .tst-fab.is-pay{bottom:calc(env(safe-area-inset-bottom,0px) + 140px);text-decoration:none;border-color:#fcd34d;background:#fffbeb}
+.tst-fab.is-checks{bottom:calc(env(safe-area-inset-bottom,0px) + 196px);text-decoration:none;border-color:#86efac;background:#f0fdf4}
 .tst-wrap{position:fixed;inset:0;z-index:100;background:#0008;display:grid;place-items:center;padding:16px}
 .tst-x{position:absolute;top:10px;inset-inline-start:10px;width:36px;height:36px;border-radius:50%;border:0;background:#f3f4f6;color:#14202b;font-size:16px;cursor:pointer;display:grid;place-items:center}
 .tst-card{position:relative;width:min(420px,100%);background:#fff;color:#14202b;border-radius:26px;padding:18px 16px;display:grid;gap:12px;justify-items:center;text-align:center;box-shadow:0 18px 50px #0006;font-family:inherit}
