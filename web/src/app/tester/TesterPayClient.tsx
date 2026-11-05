@@ -159,7 +159,7 @@ export function TesterPayClient() {
                 <span>🏦 {t.pot}: <b>{slip.tax}</b></span>
                 <span>💰 {t.toYou}: <b>{slip.net}</b></span>
               </div>
-              <span className="tp-small">{slip.capped ? t.capped : t.cap(slip.earned, 150)}</span>
+              <span className="tp-small">{slip.capped ? t.capped : t.cap(slip.earned, 250)}</span>
               {slip.pending ? <span className="tp-pending">{t.pending(slip.pending)}</span> : null}
               <span className={`tp-paid${slip.paid ? " is-paid" : ""}`}>{slip.paid ? t.paid : t.notPaid}</span>
             </section>
