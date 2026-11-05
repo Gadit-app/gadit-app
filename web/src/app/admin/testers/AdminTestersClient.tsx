@@ -28,7 +28,7 @@ const S: Record<AdminLang, Record<string, string>> = {
     approveBug: "🐞 לאשר באג (+10)", likeIdea: "💡 אהבתי (+5)", buildIdea: "🛠️ לבנות את זה (+5, ל-Claude)", built: "🚀 נבנה (+50)", fixed: "✅ תוקן",
     asBug: "🐞 לאשר כבאג (+10)", asIdea: "💡 לאשר כרעיון (+5)", skipBtn: "לא לתשלום (כפול או לא רלוונטי)", reset: "להחזיר לחדשות",
     rating: "דירוג (נספר כבדיקת משחק)", word: "מילה", page: "עמוד", voiceX: "הקלטה: פי 1.5",
-    week: "חודש", thisWeek: "החודש", earned: "הרוויח", tax: "לקופה (10%)", net: "להעביר ב-Yooniz", pending: "מחכה לאישור",
+    week: "חודש", thisWeek: "החודש", earned: "הרוויח", net: "להעביר ב-Yooniz", pending: "מחכה לאישור",
     paidBtn: "✅ סימנתי ששילמתי ב-Yooniz", paidAt: "שולם ב-Yooniz", copy: "📋 להעתיק תלוש", copied: "הועתק", noKids: "אין ילדים בודקים",
     capped: "הגיע לתקרה השבועית (250) באחד השבועות", run: "🎮 בדיקת משחק", bug: "🐞 באג", idea: "💡 רעיון", builtRow: "🚀 רעיון שנבנה", team: "🤝 בונוס צוות", note: "🎤 הקלטה", royalty: "🎡 תמלוגים",
     rowPaid: "", rowWait: "מחכה", rowNo: "לא נספר",
@@ -41,7 +41,7 @@ const S: Record<AdminLang, Record<string, string>> = {
     approveBug: "🐞 Approve bug (+10)", likeIdea: "💡 Liked it (+5)", buildIdea: "🛠️ Build it (+5, for Claude)", built: "🚀 Built (+50)", fixed: "✅ Fixed",
     asBug: "🐞 Approve as bug (+10)", asIdea: "💡 Approve as idea (+5)", skipBtn: "Not for pay (duplicate or off)", reset: "Back to new",
     rating: "Rating (counts as a test run)", word: "word", page: "page", voiceX: "Voice note: ×1.5",
-    week: "Month", thisWeek: "This month", earned: "Earned", tax: "Family pot (10%)", net: "To pay in Yooniz", pending: "Waiting for approval",
+    week: "Month", thisWeek: "This month", earned: "Earned", net: "To pay in Yooniz", pending: "Waiting for approval",
     paidBtn: "✅ I paid it in Yooniz", paidAt: "Paid in Yooniz", copy: "📋 Copy pay slip", copied: "Copied", noKids: "No child testers",
     capped: "Hit the weekly cap (250) in one of the weeks", run: "🎮 Test run", bug: "🐞 Bug", idea: "💡 Idea", builtRow: "🚀 Idea built", team: "🤝 Team bonus", note: "🎤 Voice note", royalty: "🎡 Royalties",
     rowPaid: "", rowWait: "waiting", rowNo: "didn't count",
@@ -111,7 +111,7 @@ export default function AdminTestersClient() {
   const slipText = (s: PaySlip) => {
     const L = lang === "he" ? "he" : "en";
     const lines = s.rows.filter((r) => r.state === "paid").map((r) => `${t[r.type === "built" ? "builtRow" : r.type]}${r.ticket ? ` #${r.ticket}` : ""} · ${gameName(r.game, L)}: +${r.yoon}`);
-    return [`🧪 ${s.name} · ${t.week} ${s.month.slice(5, 7)}/${s.month.slice(0, 4)}`, ...lines, `${t.earned}: ${s.earned} Yoon`, `${t.tax}: ${s.tax}`, `${t.net}: ${s.net} Yoon`].join("\n");
+    return [`🧪 ${s.name} · ${t.week} ${s.month.slice(5, 7)}/${s.month.slice(0, 4)}`, ...lines, `${t.earned}: ${s.earned} Yoon`, `${t.net}: ${s.net} Yoon`].join("\n");
   };
   const copy = async (s: PaySlip) => {
     try { await navigator.clipboard.writeText(slipText(s)); setCopied(s.uid); setTimeout(() => setCopied(null), 1500); } catch { /* fine */ }
@@ -225,7 +225,6 @@ export default function AdminTestersClient() {
                 </div>
                 <div style={{ borderTop: "1px solid #E5E7EB", paddingTop: 8, display: "grid", gap: 2, fontSize: 15, color: "#111827" }}>
                   <span>{t.earned}: <b>{s.earned}</b> Yoon{s.capped ? ` · ${t.capped}` : ""}</span>
-                  <span>{t.tax}: <b>{s.tax}</b></span>
                   <span style={{ fontSize: 18 }}>{t.net}: <b style={{ color: "#4338CA" }}>{s.net} Yoon</b></span>
                   {s.pending ? <span style={{ color: "#92400E", fontSize: 13 }}>{t.pending}: {s.pending}</span> : null}
                 </div>

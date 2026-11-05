@@ -23,7 +23,7 @@ const T = {
   he: {
     tabPay: "💰 התשלום שלי", tabChecks: "✅ רשימת הבדיקות",
     title: "התשלום החודשי שלי", back: "חזרה למשחקים", thisWeek: "החודש", lastWeek: "חודש קודם", loading: "טוענים את התשלום",
-    earned: "הרווחת החודש", pot: "לקופה המשפחתית (10%)", toYou: "לך ב-Yooniz", paid: "✅ שולם ב-Yooniz", notPaid: "⏳ עוד לא שולם",
+    earned: "הרווחת החודש", toYou: "לך ב-Yooniz", paid: "✅ שולם ב-Yooniz", notPaid: "⏳ עוד לא שולם",
     pending: (n: number) => `⏳ מחכה לאישור: עוד ${n} Yoon`, cap: (_n: number, c: number) => `אפשר להרוויח עד ${c} Yoon בכל שבוע`, capped: "באחד השבועות הגעת לתקרה 🎉",
     did: "מה עשית החודש", none: "עוד אין כלום החודש. נכנסים למשחק, משחקים, ושולחים 🧪",
     how: "איך מרוויחים", rules: [["🎮", "בדיקת משחק: שיחקת 5 סיבובים ודירגת ב-🧪", 5], ["🐞", "באג שאושר", 10], ["💡", "רעיון שאהבו", 5], ["🎤", "עם הקלטה: פי 1.5", "×1.5"], ["🚀", "רעיון שנבנה", 50], ["🤝", "שניכם מצאתם דברים באותו משחק", 5]] as [string, string, number | string][],
@@ -36,7 +36,7 @@ const T = {
   en: {
     tabPay: "💰 My pay", tabChecks: "✅ My checklist",
     title: "My monthly pay", back: "Back to games", thisWeek: "This month", lastWeek: "Last month", loading: "Loading your pay",
-    earned: "You earned this month", pot: "Family pot (10%)", toYou: "To you in Yooniz", paid: "✅ Paid in Yooniz", notPaid: "⏳ Not paid yet",
+    earned: "You earned this month", toYou: "To you in Yooniz", paid: "✅ Paid in Yooniz", notPaid: "⏳ Not paid yet",
     pending: (n: number) => `⏳ Waiting for approval: ${n} more Yoon`, cap: (_n: number, c: number) => `You can earn up to ${c} Yoon each week`, capped: "You hit the top in one of the weeks! 🎉",
     did: "What you did this month", none: "Nothing yet this month. Open a game, play, and send a 🧪",
     how: "How to earn", rules: [["🎮", "Test run: play 5 rounds and rate it with 🧪", 5], ["🐞", "A bug that was approved", 10], ["💡", "An idea we liked", 5], ["🎤", "With a voice note: ×1.5", "×1.5"], ["🚀", "An idea that got built", 50], ["🤝", "You both found things in the same game", 5]] as [string, string, number | string][],
@@ -156,7 +156,6 @@ export function TesterPayClient() {
               <span className="tp-money-label">{t.earned}</span>
               <span className="tp-money-big">{slip.earned} <small>Yoon</small></span>
               <div className="tp-split">
-                <span>🏦 {t.pot}: <b>{slip.tax}</b></span>
                 <span>💰 {t.toYou}: <b>{slip.net}</b></span>
               </div>
               <span className="tp-small">{slip.capped ? t.capped : t.cap(slip.earned, 250)}</span>
