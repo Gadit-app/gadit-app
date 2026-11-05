@@ -82,6 +82,8 @@ const HE_CARDS: Record<SubjectAge, Card[]> = {
     card("homeland-society-and-civics", "מולדת"),
     card("geography", "גאוגרפיה"),
     card("bible", "תנ\"ך"),
+    // Gemara for everyone, younger and older (Gadi 2026-11-05)
+    card("gemara", "גמרא"),
     card("history", "היסטוריה"),
   ],
   older: [
@@ -92,6 +94,7 @@ const HE_CARDS: Record<SubjectAge, Card[]> = {
     card("biology", "ביולוגיה"),
     card("history", "היסטוריה"),
     card("geography", "גאוגרפיה"),
+    card("gemara", "גמרא"),
   ],
 };
 /** The geometry topics of mathematics, by their catalog titles. */
