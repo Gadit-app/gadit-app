@@ -12470,3 +12470,6 @@ html[data-theme="dark"] .wordbook .wb-word-sentence-input::placeholder { color: 
   text-align: start;
 }
 /* ── end Language picker search ── */
+
+/* "+" under the idioms: three more at a time, up to nine (2026-11-05). */
+.wordbook .wb-idioms-card .wb-idioms-more { padding-top: 10px; border-top: 1px dashed var(--rule); margin-top: 9px; }

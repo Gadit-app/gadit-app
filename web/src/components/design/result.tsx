@@ -51,6 +51,7 @@ import { TappableText } from "@/components/design/TappableText";
 import { ImageLightbox } from "@/components/design/ImageLightbox";
 import { useKidsMode } from "@/lib/use-kids-mode";
 import { simpleWordsLabel, useSimpleWords } from "@/lib/use-simple-words";
+import { idiomsMoreLabel } from "@/lib/idioms-more-i18n";
 import { formatPos } from "@/lib/format-pos";
 
 // ─── Types matching the live /api/define schema ────────────────
@@ -1068,6 +1069,9 @@ export function MeaningsBlock({
   );
 }
 
+const IDIOMS_STEP = 3;
+const IDIOMS_MAX = 9;
+
 // ─── IdiomsSection — collects per-meaning + general idioms ──────
 // Renders as a standalone section between Meanings and Origin, mirroring
 // the Meanings/Origin pattern (eyebrow OUTSIDE the card).
@@ -1141,9 +1145,16 @@ export function IdiomsSection({
     return () => { cancelled = true; };
   }, [user, word, lang, wordLang, streaming]);
 
+  // Show the three most common first; "+" adds three more, up to nine
+  // (Gadi 2026-11-05: like the examples, never a long list at once). The
+  // dedicated set arrives ranked, most common first.
+  const [shownFor, setShownFor] = useState<{ word: string; n: number }>({ word, n: IDIOMS_STEP });
+  const shown = shownFor.word === word ? shownFor.n : IDIOMS_STEP;
+
   // Prefer the dedicated set when it arrives non-empty; otherwise define's.
-  const all = fetched && fetched.length > 0 ? fetched : defineIdioms;
-  if (all.length === 0) return null;
+  const full = (fetched && fetched.length > 0 ? fetched : defineIdioms).slice(0, IDIOMS_MAX);
+  if (full.length === 0) return null;
+  const all = full.slice(0, shown);
 
   // A speaker PER idiom (Gadi 2026-08-12: not one button that reads them
   // all). OpenAI voice for paying users handles the mixed phrase-language
@@ -1199,6 +1210,14 @@ export function IdiomsSection({
             </div>
           );
         })}
+        {full.length > shown && (
+          <div className="wb-idioms-more">
+            <button type="button" className="wb-mlink" onClick={() => setShownFor({ word, n: shown + IDIOMS_STEP })}>
+              <span aria-hidden="true">+</span>
+              <span>{idiomsMoreLabel(lang)}</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

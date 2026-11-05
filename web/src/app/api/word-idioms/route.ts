@@ -34,6 +34,9 @@ const LANG_NAME: Record<string, string> = {
 
 type Idiom = { phrase: string; meaning: string; kidsMeaning: string };
 
+/** The card shows 3, then "+" adds 3 at a time, up to 9 (Gadi 2026-11-05). */
+const MAX_IDIOMS = 9;
+
 /** Drop a phrase that belongs to a sound-alike word (Gadi 2026-10-08: the
  *  idioms for "whether" were the idioms of "weather"). Only a phrase written
  *  in the word's own alphabet is judged, and it is kept when it holds the
@@ -77,7 +80,8 @@ Return STRICT JSON: {"idioms":[{"phrase":"...","meaning":"...","kidsMeaning":"..
 - "meaning": what it actually means, in ${uiLangName}. Plain and clear.
 - "kidsMeaning": the SAME meaning for a child of about 8, in ${uiLangName}: very simple everyday words, no hard or abstract vocabulary (e.g. replace "illegible" with "so messy it is hard to read").
 
-BE COMPLETE for idiom-rich words (animals, body parts, common verbs, colors, weather): list ALL the expressions a fluent speaker would recognize, commonly 4 to 8. For "chicken" that includes: chicken out, chicken feed, chicken scratch, count your chickens before they hatch, don't count your chickens before they hatch, running around like a chicken with its head cut off, spring chicken, chicken and egg. Only return few or none for words that genuinely have no real expressions. NEVER invent an expression that no one actually uses.
+BE COMPLETE for idiom-rich words (animals, body parts, common verbs, colors, weather): list the expressions a fluent speaker would recognize, commonly 4 to 9, never more than 9.
+ORDER the list from the MOST common to the least: the first three must be the ones an ordinary adult hears and uses most often in everyday speech. Rare, old-fashioned, regional or far-fetched expressions go last. For "chicken" that includes: chicken out, chicken feed, chicken scratch, count your chickens before they hatch, don't count your chickens before they hatch, running around like a chicken with its head cut off, spring chicken, chicken and egg. Only return few or none for words that genuinely have no real expressions. NEVER invent an expression that no one actually uses.
 EVERY phrase must contain the given word itself (or an inflected form of it). NEVER list expressions of a different word that sounds or looks similar: "whether" is not "weather", "their" is not "there", "flour" is not "flower". If the word has no expressions of its own, return {"idioms":[]}. For a ${wordLangName} word, prefer ${wordLangName} expressions.
 
 No foreign scripts beyond light transliteration. Everything must be safe for children. Output ONLY the JSON object.`,
@@ -105,7 +109,45 @@ No foreign scripts beyond light transliteration. Everything must be safe for chi
       };
     })
     .filter((i) => i.phrase && i.meaning)
-    .slice(0, 10);
+    .slice(0, MAX_IDIOMS);
+}
+
+/** Lists cached before 2026-11-05 are in no particular order. The card now
+ *  shows only the first three (Gadi: the most common ones, never the rare or
+ *  far-fetched), so an old list is ranked once by how common each phrase is
+ *  and saved back. About 0.06c a word, once. A failed call keeps the order. */
+async function rankByCommon(word: string, idioms: Idiom[]): Promise<Idiom[]> {
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+    body: JSON.stringify({
+      model: TEXT_MODEL_FAST,
+      max_completion_tokens: 200,
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content: `You rank idioms and fixed expressions by how common they are in everyday speech. Put first the ones an ordinary adult hears and uses most often; put last the rare, old-fashioned, regional or far-fetched ones. Return STRICT JSON {"order":[numbers]} listing every number exactly once, most common first.`,
+        },
+        { role: "user", content: `Word: ${word}\n` + idioms.map((i, n) => `${n + 1}. ${i.phrase}`).join("\n") },
+      ],
+    }),
+  });
+  if (!res.ok) throw new Error("openai_" + res.status);
+  const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
+  const u = usageFrom(json);
+  void logAiUsage({ feature: "word_idioms", model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
+  let order: unknown = [];
+  try { order = (JSON.parse(json.choices?.[0]?.message?.content ?? "{}") as { order?: unknown }).order; } catch { /* keep */ }
+  if (!Array.isArray(order)) throw new Error("bad_order");
+  const out: Idiom[] = [];
+  const used = new Set<number>();
+  for (const n of order) {
+    const k = Number(n) - 1;
+    if (Number.isInteger(k) && idioms[k] && !used.has(k)) { used.add(k); out.push(idioms[k]); }
+  }
+  idioms.forEach((i, k) => { if (!used.has(k)) out.push(i); });
+  return out;
 }
 
 export async function POST(req: NextRequest) {
@@ -142,15 +184,24 @@ export async function POST(req: NextRequest) {
     try {
       const snap = await ref.get();
       if (snap.exists) {
-        const d = snap.data() as { idioms?: Idiom[] };
-        if (Array.isArray(d.idioms)) return NextResponse.json({ idioms: idiomsForWord(word, d.idioms), cached: true });
+        const d = snap.data() as { idioms?: Idiom[]; ranked?: boolean };
+        if (Array.isArray(d.idioms)) {
+          let list = d.idioms;
+          if (!d.ranked && list.length > 3) {
+            try {
+              list = await rankByCommon(word, list);
+              try { await ref.update({ idioms: list, ranked: true }); } catch { /* ignore */ }
+            } catch { /* keep the old order */ }
+          }
+          return NextResponse.json({ idioms: idiomsForWord(word, list).slice(0, MAX_IDIOMS), cached: true });
+        }
       }
     } catch { /* cache read best-effort */ }
   }
 
   try {
     const idioms = idiomsForWord(word, await generate(word, LANG_NAME[lang], wordLangName || LANG_NAME[lang]));
-    try { await ref.set({ lang, word, idioms, at: new Date().toISOString() }); } catch { /* ignore */ }
+    try { await ref.set({ lang, word, idioms, ranked: true, at: new Date().toISOString() }); } catch { /* ignore */ }
     return NextResponse.json({ idioms });
   } catch {
     return NextResponse.json({ error: "generate_failed" }, { status: 502 });
