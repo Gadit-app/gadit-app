@@ -5270,11 +5270,11 @@ html[data-theme="dark"] .wordbook .wb-verb-stamp-pos {
   padding-bottom: 12px;
   transition: box-shadow 160ms ease;
 }
-/* On phones the topbar is position:relative and scrolls away, so the
-   64px offset left the pill floating with a visible gap above it.
-   Stick flush to the viewport top instead. Launch QA 2026-07-03. */
-@media (max-width: 767px) {
-  .wordbook .wb-word-searchbar-stage { top: 0; }
+/* On phones the topbar is sticky too now (64px plus the notch inset), so
+   the search pill sticks right under it. With top:0 it slid under the bar
+   and only the sentence box stayed visible (night QA 2026-11-07). */
+@media (max-width: 1023px) {
+  .wordbook .wb-word-searchbar-stage { top: calc(64px + env(safe-area-inset-top, 0px)); }
 }
 /* Dark mode: the fog gradient must fade to the dark page ground, not the
    hardcoded light #F9FAFB, which otherwise showed a light band under the

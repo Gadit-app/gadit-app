@@ -438,7 +438,7 @@ const COPY: Record<string, {
   uk: {
     trialTerms: "14 днів безкоштовно, потім {price}. Скасуйте будь-коли до завершення, і списання не буде.",
     trialTermsFull: "Усі платні тарифи починаються з 14 безкоштовних днів. Під час пробного періоду кошти не списуються. Коли він завершиться, з картки спишеться вказана ціна за обраний тариф і період оплати, і підписка подовжуватиметься щоперіоду, доки ви її не скасуєте. Скасувати можна будь-коли до кінця пробного періоду, у своєму акаунті одним натисканням, і списання не буде.",
-    heroTitle: "Почни безкоштовно.",
+    heroTitle: "Почни безкоштовно",
     heroSub: "Переходь на вищий рівень лише тоді, коли хочеш глибини.",
     monthly: "Щомісяця", yearly: "Щороку",
     save: "Заощаджуй 17%",
@@ -518,7 +518,7 @@ const COPY: Record<string, {
   tr: {
     trialTerms: "14 gün ücretsiz deneme, ardından {price}. Bitmeden önce istediğin zaman iptal et, ücret alınmaz.",
     trialTermsFull: "Tüm ücretli planlar 14 günlük ücretsiz denemeyle başlar. Deneme süresince ücret alınmaz. Deneme bittiğinde, seçtiğin plan ve ödeme dönemi için gösterilen fiyat kartından tahsil edilir ve iptal edene kadar her dönem yenilenir. Deneme bitmeden önce istediğin zaman hesabından tek tıkla iptal edebilirsin, ücret alınmaz.",
-    heroTitle: "Ücretsiz başla.",
+    heroTitle: "Ücretsiz başla",
     heroSub: "Yalnızca derinlik istediğinde yükselt.",
     monthly: "Aylık", yearly: "Yıllık",
     save: "%17 tasarruf",
@@ -598,7 +598,7 @@ const COPY: Record<string, {
   pl: {
     trialTerms: "14 dni za darmo, potem {price}. Anuluj w dowolnym momencie przed końcem, a nic nie zapłacisz.",
     trialTermsFull: "Wszystkie płatne plany zaczynają się od 14-dniowego bezpłatnego okresu próbnego. W okresie próbnym nic nie pobieramy. Po jego zakończeniu z Twojej karty zostanie pobrana podana cena za wybrany plan i okres rozliczeniowy, a subskrypcja odnawia się co okres, dopóki jej nie anulujesz. Możesz anulować w dowolnym momencie przed końcem okresu próbnego, na swoim koncie jednym kliknięciem, i nic nie zapłacisz.",
-    heroTitle: "Zacznij za darmo.",
+    heroTitle: "Zacznij za darmo",
     heroSub: "Przejdź na wyższy plan, gdy zechcesz głębi.",
     monthly: "Miesięcznie", yearly: "Rocznie",
     save: "Oszczędź 17%",
@@ -678,7 +678,7 @@ const COPY: Record<string, {
   fa: {
     trialTerms: "14 روز آزمایش رایگان، سپس {price}. هر زمان پیش از پایان لغو کنید، هزینه‌ای کسر نمی‌شود.",
     trialTermsFull: "همه طرح‌های پولی با 14 روز آزمایش رایگان شروع می‌شوند. در دوره آزمایشی هزینه‌ای از شما کسر نمی‌شود. پس از پایان آن، قیمت نمایش‌داده‌شده برای طرح و دوره پرداختی که انتخاب کرده‌اید از کارت شما کسر می‌شود و اشتراک در هر دوره تمدید می‌شود تا زمانی که لغوش کنید. هر زمان پیش از پایان دوره آزمایشی می‌توانید از حساب خود با یک کلیک لغو کنید، و هزینه‌ای کسر نمی‌شود.",
-    heroTitle: "رایگان شروع کن.",
+    heroTitle: "رایگان شروع کن",
     heroSub: "فقط وقتی عمق بیشتری خواستی ارتقا بده.",
     monthly: "ماهانه", yearly: "سالانه",
     save: "۱۷٪ صرفه‌جویی",
@@ -758,7 +758,7 @@ const COPY: Record<string, {
   id: {
     trialTerms: "Uji coba gratis 14 hari, lalu {price}. Batalkan kapan saja sebelum berakhir dan Anda tidak akan ditagih.",
     trialTermsFull: "Semua paket berbayar dimulai dengan uji coba gratis 14 hari. Anda tidak ditagih selama uji coba. Setelah berakhir, kartu Anda ditagih sesuai harga yang ditampilkan untuk paket dan siklus penagihan yang Anda pilih, dan langganan diperpanjang setiap periode sampai Anda membatalkannya. Batalkan kapan saja sebelum uji coba berakhir, dari akun Anda dengan satu klik, dan Anda tidak akan ditagih.",
-    heroTitle: "Mulai gratis.",
+    heroTitle: "Mulai gratis",
     heroSub: "Tingkatkan hanya saat kamu ingin lebih mendalam.",
     monthly: "Bulanan", yearly: "Tahunan",
     save: "Hemat 17%",
@@ -838,7 +838,7 @@ const COPY: Record<string, {
   nl: {
     trialTerms: "14 dagen gratis proberen, daarna {price}. Zeg op elk moment op voor het einde en je betaalt niets.",
     trialTermsFull: "Alle betaalde abonnementen beginnen met een gratis proefperiode van 14 dagen. Tijdens de proefperiode betaal je niets. Daarna wordt de getoonde prijs voor het gekozen abonnement en de gekozen betaalperiode van je kaart afgeschreven, en het abonnement wordt elke periode verlengd tot je opzegt. Je kunt op elk moment voor het einde van de proefperiode opzeggen, met één klik in je account, en je betaalt niets.",
-    heroTitle: "Begin gratis.",
+    heroTitle: "Begin gratis",
     heroSub: "Upgrade alleen wanneer je diepgang wilt.",
     monthly: "Maandelijks", yearly: "Jaarlijks",
     save: "Bespaar 17%",
@@ -998,7 +998,7 @@ const COPY: Record<string, {
     },
   },
   en: {
-    heroTitle: "Start free.",
+    heroTitle: "Start free",
     heroSub: "Upgrade only when you want depth.",
     monthly: "Monthly", yearly: "Yearly",
     save: "Save 17%",
@@ -1082,7 +1082,7 @@ const COPY: Record<string, {
   zu: {
     trialTerms: "Izinsuku ezingu-14 zokuzama mahhala, bese {price}. Khansela noma nini ngaphambi kokuthi ziphele futhi ngeke ukhokhiswe.",
     trialTermsFull: "Wonke amapulani akhokhelwayo aqala ngezinsuku ezingu-14 zokuzama mahhala. Awukhokhiswa lutho ngesikhathi sokuzama. Uma kuphela, ikhadi lakho likhokhiswa inani elikhonjisiwe lepulani nomjikelezo wokukhokha owukhethile, futhi kuvuseleleka isikhathi ngasinye uze ukhansele. Khansela noma nini ngaphambi kokuthi isikhathi sokuzama siphele, ku-akhawunti yakho ngokuchofoza kanye, futhi ngeke ukhokhiswe.",
-    heroTitle: "Qala mahhala.",
+    heroTitle: "Qala mahhala",
     heroSub: "Khuphukela ezingeni eliphezulu kuphela lapho ufuna ukujula.",
     monthly: "Nyanga zonke", yearly: "Nyaka zonke",
     save: "Onga u-17%",
@@ -1160,7 +1160,7 @@ const COPY: Record<string, {
     },
   },
   xh: {
-    heroTitle: "Qalisa simahla.",
+    heroTitle: "Qalisa simahla",
     heroSub: "Nyusela kuphela xa ufuna ubunzulu.",
     monthly: "Ngenyanga", yearly: "Ngonyaka",
     save: "Gcina i-17%",
@@ -1242,7 +1242,7 @@ const COPY: Record<string, {
     },
   },
   nso: {
-    heroTitle: "Thoma ka mahala.",
+    heroTitle: "Thoma ka mahala",
     heroSub: "Kaonafatša fela ge o nyaka botebo.",
     monthly: "Kgwedi le kgwedi", yearly: "Ngwaga le ngwaga",
     save: "Boloka 17%",
@@ -1324,7 +1324,7 @@ const COPY: Record<string, {
     },
   },
   tn: {
-    heroTitle: "Simolola ka mahala.",
+    heroTitle: "Simolola ka mahala",
     heroSub: "Tlhatlosa fa fela o batla botlalo.",
     monthly: "Kgwedi le kgwedi", yearly: "Ngwaga le ngwaga",
     save: "Boloka 17%",
@@ -1406,7 +1406,7 @@ const COPY: Record<string, {
     },
   },
   st: {
-    heroTitle: "Qala mahala.",
+    heroTitle: "Qala mahala",
     heroSub: "Ntlafatsa feela ha o batla botebo.",
     monthly: "Ka kgwedi", yearly: "Ka selemo",
     save: "Boloka 17%",
@@ -1488,7 +1488,7 @@ const COPY: Record<string, {
     },
   },
   ts: {
-    heroTitle: "Sungulani mahala.",
+    heroTitle: "Sungulani mahala",
     heroSub: "Tlakusani ntsena loko mi lava ku nghena hi le ndzeni.",
     monthly: "Hi n'hweti", yearly: "Hi lembe",
     save: "Hlayisa 17%",
@@ -1570,7 +1570,7 @@ const COPY: Record<string, {
     },
   },
   ss: {
-    heroTitle: "Cala mahhala.",
+    heroTitle: "Cala mahhala",
     heroSub: "Khuphula kuphela nawufuna kujula.",
     monthly: "Ngenyanga", yearly: "Ngemnyaka",
     save: "Longa 17%",
@@ -1652,7 +1652,7 @@ const COPY: Record<string, {
     },
   },
   ve: {
-    heroTitle: "Thomani mahala.",
+    heroTitle: "Thomani mahala",
     heroSub: "Khwinifhadzani musi fhedzi ni tshi ṱoḓa u dzhena nga ngomu.",
     monthly: "Nga ṅwedzi", yearly: "Nga ṅwaha",
     save: "Vhulungani 17%",
@@ -1734,7 +1734,7 @@ const COPY: Record<string, {
     },
   },
   nr: {
-    heroTitle: "Thoma mahala.",
+    heroTitle: "Thoma mahala",
     heroSub: "Thuthukisa kwaphela nawufuna ukungena ekhabolo.",
     monthly: "Ngenyanga", yearly: "Ngomnyaka",
     save: "Onga ama-17%",
@@ -1818,7 +1818,7 @@ const COPY: Record<string, {
   el: {
     trialTerms: "14 ημέρες δωρεάν δοκιμή, μετά {price}. Ακύρωσε οποιαδήποτε στιγμή πριν λήξει και δεν θα χρεωθείς.",
     trialTermsFull: "Όλα τα επί πληρωμή προγράμματα ξεκινούν με 14 ημέρες δωρεάν δοκιμή. Κατά τη δοκιμή δεν χρεώνεσαι. Όταν λήξει, η κάρτα σου χρεώνεται την τιμή που εμφανίζεται για το πρόγραμμα και τον κύκλο χρέωσης που επέλεξες, και η συνδρομή ανανεώνεται κάθε περίοδο μέχρι να την ακυρώσεις. Μπορείς να ακυρώσεις οποιαδήποτε στιγμή πριν λήξει η δοκιμή, από τον λογαριασμό σου με ένα κλικ, και δεν θα χρεωθείς.",
-    heroTitle: "Ξεκίνα δωρεάν.",
+    heroTitle: "Ξεκίνα δωρεάν",
     heroSub: "Αναβάθμισε μόνο όταν θέλεις βάθος.",
     monthly: "Μηνιαία", yearly: "Ετήσια",
     save: "Εξοικονόμησε 17%",
@@ -1912,7 +1912,7 @@ const COPY: Record<string, {
         "فاتورة يمكنك تقديمها لإدارة المدرسة",
       ],
     },
-    heroTitle: "ابدأ مجانًا.",
+    heroTitle: "ابدأ مجانًا",
     heroSub: "ارتقِ متى أردت التعمّق.",
     monthly: "شهري", yearly: "سنوي",
     save: "وفّر 17%",
@@ -1979,7 +1979,7 @@ const COPY: Record<string, {
         "Счёт, который можно передать администрации школы",
       ],
     },
-    heroTitle: "Начните бесплатно.",
+    heroTitle: "Начните бесплатно",
     heroSub: "Обновите подписку, когда захотите углубиться.",
     monthly: "Ежемесячно", yearly: "Ежегодно",
     save: "Экономия 17%",
@@ -2046,7 +2046,7 @@ const COPY: Record<string, {
         "Factura que puedes entregar a la administración del colegio",
       ],
     },
-    heroTitle: "Empieza gratis.",
+    heroTitle: "Empieza gratis",
     heroSub: "Actualiza solo cuando quieras profundizar.",
     monthly: "Mensual", yearly: "Anual",
     save: "Ahorra 17%",
@@ -2113,7 +2113,7 @@ const COPY: Record<string, {
         "Fatura que pode entregar à administração da escola",
       ],
     },
-    heroTitle: "Comece grátis.",
+    heroTitle: "Comece grátis",
     heroSub: "Atualize só quando quiser aprofundar.",
     monthly: "Mensal", yearly: "Anual",
     save: "Economize 17%",
@@ -2180,7 +2180,7 @@ const COPY: Record<string, {
         "Une facture à remettre à l'administration de l'école",
       ],
     },
-    heroTitle: "Commencez gratuitement.",
+    heroTitle: "Commencez gratuitement",
     heroSub: "Passez au supérieur seulement quand vous voulez approfondir.",
     monthly: "Mensuel", yearly: "Annuel",
     save: "Économisez 17%",
@@ -2247,7 +2247,7 @@ const COPY: Record<string, {
         "Eine Rechnung, die Sie der Schulverwaltung vorlegen können",
       ],
     },
-    heroTitle: "Kostenlos starten.",
+    heroTitle: "Kostenlos starten",
     heroSub: "Upgrade nur, wenn du tiefer eintauchen willst.",
     monthly: "Monatlich", yearly: "Jährlich",
     save: "17% sparen",
@@ -2314,7 +2314,7 @@ const COPY: Record<string, {
         "Faktura, kterou můžete předat vedení školy",
       ],
     },
-    heroTitle: "Začni zdarma.",
+    heroTitle: "Začni zdarma",
     heroSub: "Upgraduj, jen když budeš chtít jít hlouběji.",
     monthly: "Měsíčně", yearly: "Ročně",
     save: "Ušetři 17%",
@@ -2381,7 +2381,7 @@ const COPY: Record<string, {
         "Faktúra, ktorú môžete odovzdať vedeniu školy",
       ],
     },
-    heroTitle: "Začni zadarmo.",
+    heroTitle: "Začni zadarmo",
     heroSub: "Upgraduj, len keď budeš chcieť ísť hlbšie.",
     monthly: "Mesačne", yearly: "Ročne",
     save: "Ušetri 17%",
@@ -2434,7 +2434,7 @@ const COPY: Record<string, {
   it: {
     trialTerms: "14 giorni di prova gratuita, poi {price}. Annulla quando vuoi prima della fine e non ti verrà addebitato nulla.",
     trialTermsFull: "Tutti i piani a pagamento iniziano con 14 giorni di prova gratuita. Durante la prova non ti viene addebitato nulla. Alla fine, sulla tua carta viene addebitato il prezzo indicato per il piano e il ciclo di fatturazione che hai scelto, e l'abbonamento si rinnova a ogni periodo finché non annulli. Puoi annullare quando vuoi prima della fine della prova, dal tuo account con un clic, e non ti verrà addebitato nulla.",
-    heroTitle: "Inizia gratis.",
+    heroTitle: "Inizia gratis",
     heroSub: "Fai l'upgrade solo quando vuoi andare più a fondo.",
     monthly: "Mensile", yearly: "Annuale",
     save: "Risparmia il 17%",
@@ -2514,7 +2514,7 @@ const COPY: Record<string, {
   ja: {
     trialTerms: "14日間の無料トライアル後、{price}。終了前にいつでも解約でき、料金はかかりません。",
     trialTermsFull: "すべての有料プランは14日間の無料トライアルから始まります。トライアル中は料金はかかりません。終了後、選択したプランと請求サイクルに表示された料金がカードに請求され、解約するまで期間ごとに自動更新されます。トライアル終了前ならいつでも、アカウントからワンクリックで解約でき、料金はかかりません。",
-    heroTitle: "無料で始めましょう。",
+    heroTitle: "無料で始めましょう",
     heroSub: "もっと深く学びたくなったときに、アップグレードしてください。",
     monthly: "月払い", yearly: "年払い",
     save: "17%お得",
@@ -2594,7 +2594,7 @@ const COPY: Record<string, {
   hi: {
     trialTerms: "14 दिन का मुफ़्त ट्रायल, फिर {price}। ख़त्म होने से पहले कभी भी रद्द करें, कोई शुल्क नहीं लगेगा।",
     trialTermsFull: "सभी पेड प्लान 14 दिन के मुफ़्त ट्रायल से शुरू होते हैं। ट्रायल के दौरान कोई शुल्क नहीं लिया जाता। ट्रायल ख़त्म होने पर आपके चुने हुए प्लान और बिलिंग अवधि की दिखाई गई कीमत आपके कार्ड से ली जाती है, और रद्द करने तक हर अवधि में नवीनीकरण होता है। ट्रायल ख़त्म होने से पहले कभी भी अपने खाते से एक क्लिक में रद्द करें, कोई शुल्क नहीं लगेगा।",
-    heroTitle: "मुफ्त शुरू करें।",
+    heroTitle: "मुफ्त शुरू करें",
     heroSub: "अपग्रेड सिर्फ़ तब करें जब आप गहराई चाहें।",
     monthly: "मासिक", yearly: "सालाना",
     save: "17% बचत",
@@ -2674,7 +2674,7 @@ const COPY: Record<string, {
   am: {
     trialTerms: "የ14 ቀን ነጻ ሙከራ፣ ከዚያ {price}። ከማብቃቱ በፊት በማንኛውም ጊዜ ይሰርዙ፣ ክፍያ አይጠየቁም።",
     trialTermsFull: "ሁሉም የሚከፈልባቸው ዕቅዶች በ14 ቀን ነጻ ሙከራ ይጀምራሉ። በሙከራው ወቅት ምንም ክፍያ አይጠየቁም። ሲያበቃ ለመረጡት ዕቅድና የክፍያ ዑደት የሚታየው ዋጋ ከካርድዎ ይቆረጣል፣ እስኪሰርዙም ድረስ በየጊዜው ይታደሳል። ሙከራው ከማብቃቱ በፊት በማንኛውም ጊዜ ከመለያዎ በአንድ ጠቅታ መሰረዝ ይችላሉ፣ ክፍያም አይጠየቁም።",
-    heroTitle: "በነጻ ይጀምሩ።",
+    heroTitle: "በነጻ ይጀምሩ",
     heroSub: "ጥልቀት ሲፈልጉ ብቻ ያሻሽሉ።",
     monthly: "ወርሃዊ", yearly: "ዓመታዊ",
     save: "17% ይቆጥቡ",
@@ -2752,7 +2752,7 @@ const COPY: Record<string, {
     },
   },
   vi: {
-    heroTitle: "Bắt đầu miễn phí.",
+    heroTitle: "Bắt đầu miễn phí",
     heroSub: "Chỉ nâng cấp khi bạn muốn học sâu hơn.",
     monthly: "Hằng tháng", yearly: "Hằng năm",
     save: "Tiết kiệm 17%",
@@ -2834,7 +2834,7 @@ const COPY: Record<string, {
     },
   },
   fil: {
-    heroTitle: "Magsimula nang libre.",
+    heroTitle: "Magsimula nang libre",
     heroSub: "Mag-upgrade lang kapag gusto mo nang mas malalim.",
     monthly: "Buwanan", yearly: "Taunan",
     save: "Makatipid ng 17%",
@@ -2916,7 +2916,7 @@ const COPY: Record<string, {
     },
   },
   af: {
-    heroTitle: "Begin gratis.",
+    heroTitle: "Begin gratis",
     heroSub: "Gradeer net op wanneer jy dieper wil gaan.",
     monthly: "Maandeliks", yearly: "Jaarliks",
     save: "Spaar 17%",
@@ -2998,7 +2998,7 @@ const COPY: Record<string, {
     },
   },
   sw: {
-    heroTitle: "Anza bure.",
+    heroTitle: "Anza bure",
     heroSub: "Pandisha kiwango tu unapotaka kina zaidi.",
     monthly: "Kila mwezi", yearly: "Kila mwaka",
     save: "Okoa 17%",
@@ -3080,7 +3080,7 @@ const COPY: Record<string, {
     },
   },
   "zh-CN": {
-    heroTitle: "免费开始。",
+    heroTitle: "免费开始",
     heroSub: "想学得更深入时再升级。",
     monthly: "按月", yearly: "按年",
     save: "省 17%",
@@ -3162,7 +3162,7 @@ const COPY: Record<string, {
     },
   },
   "zh-TW": {
-    heroTitle: "免費開始。",
+    heroTitle: "免費開始",
     heroSub: "想學得更深入時再升級。",
     monthly: "按月", yearly: "按年",
     save: "省 17%",
@@ -3244,7 +3244,7 @@ const COPY: Record<string, {
     },
   },
   ko: {
-    heroTitle: "무료로 시작하세요.",
+    heroTitle: "무료로 시작하세요",
     heroSub: "더 깊이 배우고 싶을 때만 업그레이드하세요.",
     monthly: "월간", yearly: "연간",
     save: "17% 할인",
@@ -3408,7 +3408,7 @@ const COPY: Record<string, {
     },
   },
   bn: {
-    heroTitle: "বিনামূল্যে শুরু করুন।",
+    heroTitle: "বিনামূল্যে শুরু করুন",
     heroSub: "আরও গভীরে যেতে চাইলে তবেই আপগ্রেড করুন।",
     monthly: "মাসিক", yearly: "বার্ষিক",
     save: "১৭% সাশ্রয়",
@@ -3490,7 +3490,7 @@ const COPY: Record<string, {
     },
   },
   da: {
-    heroTitle: "Start gratis.",
+    heroTitle: "Start gratis",
     heroSub: "Opgrader kun, når du vil gå i dybden.",
     monthly: "Månedligt", yearly: "Årligt",
     save: "Spar 17%",
@@ -3572,7 +3572,7 @@ const COPY: Record<string, {
     },
   },
   hu: {
-    heroTitle: "Kezdd ingyen.",
+    heroTitle: "Kezdd ingyen",
     heroSub: "Csak akkor válts magasabb csomagra, ha mélyebbre szeretnél menni.",
     monthly: "Havi", yearly: "Éves",
     save: "17% megtakarítás",
@@ -4871,7 +4871,9 @@ export function PricingPageRoute() {
         })()}
 
         <h2 className="wb-pricing-section-h">{sh.sch}</h2>
-        <div className="wb-section-toggle">{billingToggle}</div>
+        {/* Hebrew schools pay per school year only (₪ order form), so a
+            monthly/yearly switch there changes nothing: hide it. */}
+        {lang !== "he" && <div className="wb-section-toggle">{billingToggle}</div>}
         {/* Schools — fifth tier, sits below Family. Mustard accent
             (#CA8A04) deliberately distant from the four tiers above
             (Basic gray / Clear teal / Deep purple / Family blue) so a

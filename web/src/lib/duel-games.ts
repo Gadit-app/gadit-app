@@ -83,7 +83,9 @@ const duelWord = (w: string) => !NOT_A_DUEL_WORD.test(w.trim()) && !/\.$/.test(w
  * clause, and at most 10 words.
  */
 export function kidMeaning(m: string): string {
-  let s = m.trim().split(/\s*(?:;|:|\(|\. )\s*/)[0].replace(/[.,\s]+$/, "");
+  // Meanings may open with a field label, "(math) ...": drop it first, or the
+  // split below returns an empty first clause and the full meaning comes back.
+  let s = m.trim().replace(/^\([^)]*\)\s*/, "").split(/\s*(?:;|:|\(|\. )\s*/)[0].replace(/[.,\s]+$/, "");
   let words = s.split(/\s+/);
   if (words.length > 10) {
     const comma = s.indexOf(", ");
@@ -196,7 +198,8 @@ export function duelQuestionsFor(
     default:
       return null;
   }
-  qs = qs.filter((q) => q.prompt && q.options.length >= 2 && q.correctIdx >= 0).slice(0, n);
+  // A shortened kid meaning can make two options read the same: skip those.
+  qs = qs.filter((q) => q.prompt && q.options.length >= 2 && q.correctIdx >= 0 && new Set(q.options).size === q.options.length).slice(0, n);
   if (kids) qs = qs.map(threeOptions);
   return qs.length >= 3 ? qs : null;
 }

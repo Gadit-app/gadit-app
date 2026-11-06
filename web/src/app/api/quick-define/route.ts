@@ -200,6 +200,11 @@ export async function GET(req: NextRequest) {
   if (!word) {
     return NextResponse.json({ error: "word_required" }, { status: 400 });
   }
+  // A tapped word or short phrase, never a paragraph: no paid generation for
+  // arbitrary long strings from an open endpoint.
+  if (word.length > 60) {
+    return NextResponse.json({ error: "word_too_long" }, { status: 400 });
+  }
   if (!lang) {
     return NextResponse.json({ error: "invalid_lang" }, { status: 400 });
   }

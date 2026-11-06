@@ -191,7 +191,11 @@ export async function POST(req: NextRequest) {
             try {
               list = await rankByCommon(word, list);
               try { await ref.update({ idioms: list, ranked: true }); } catch { /* ignore */ }
-            } catch { /* keep the old order */ }
+            } catch {
+              // Keep the old order, and mark it tried so later views don't
+              // call the model (and wait) again for the same list.
+              try { await ref.update({ ranked: true }); } catch { /* ignore */ }
+            }
           }
           return NextResponse.json({ idioms: idiomsForWord(word, list).slice(0, MAX_IDIOMS), cached: true });
         }

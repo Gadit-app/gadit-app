@@ -1125,7 +1125,11 @@ export function IdiomsSection({
   // The dedicated /api/word-idioms set — reliable and complete (loads a moment
   // after the page). Replaces the sparse define set once it arrives; a failed
   // or empty fetch leaves the define idioms in place. Signed-in only.
-  const [fetched, setFetched] = useState<Idiom[] | null>(null);
+  // Keyed by word + languages, so the previous word's list never shows on
+  // the next word (while it streams, or if its fetch fails).
+  const fetchKey = `${word}|${lang}|${wordLang ?? ""}`;
+  const [fetchedFor, setFetchedFor] = useState<{ key: string; idioms: Idiom[] } | null>(null);
+  const fetched = fetchedFor && fetchedFor.key === fetchKey ? fetchedFor.idioms : null;
   useEffect(() => {
     let cancelled = false;
     if (!user || !word || streaming) return;
@@ -1139,11 +1143,11 @@ export function IdiomsSection({
         });
         if (!res.ok || cancelled) return;
         const data = (await res.json()) as { idioms?: Idiom[] };
-        if (!cancelled && Array.isArray(data.idioms)) setFetched(data.idioms);
+        if (!cancelled && Array.isArray(data.idioms)) setFetchedFor({ key: fetchKey, idioms: data.idioms });
       } catch { /* keep the define idioms */ }
     })();
     return () => { cancelled = true; };
-  }, [user, word, lang, wordLang, streaming]);
+  }, [user, word, lang, wordLang, streaming, fetchKey]);
 
   // Show the three most common first; "+" adds three more, up to nine
   // (Gadi 2026-11-05: like the examples, never a long list at once). The
