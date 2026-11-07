@@ -46,6 +46,16 @@ export function dropRepeatedOrigin<T>(result: T): T {
   return { ...(r as object), etymology: { ...r.etymology, originalMeaning: "" } } as unknown as T;
 }
 
+/** Latin-letter words in the origin sentences that are not the source word,
+ *  a transliteration in brackets, or a language name in brackets. */
+function leaksEnglish(e: Ety, source?: string): boolean {
+  const ok = new Set(words(String(source ?? "")));
+  const text = [e.originalMeaning, e.historyNote].join(" ").replace(/\([^)]*\)/g, " ");
+  const latin = text.match(/[A-Za-z]{4,}/g) ?? [];
+  const common = /^(attested|meaning|from|word|which|that|with|english|democracy|derived|literally|originally)$/i;
+  return latin.some((w) => common.test(w) && !ok.has(w.toLowerCase()));
+}
+
 const strip = (s: unknown) => String(s ?? "").normalize("NFC").replace(/[֑-ׇ]/g, "").replace(/[–—]/g, ",").trim();
 
 /** True when the origin line is empty and no repair was tried yet: entries
@@ -79,7 +89,10 @@ async function repairEtymology<T>(result: T, word: string, uiLangName: string): 
  "originalMeaning": "<one sentence: the source word or the ROOT (for Hebrew/Arabic in dotted form, e.g. ס.מ.ר) and its original concrete sense, and the path it took. NEVER repeat or paraphrase the current definitions>",
  "historyNote": "<1-3 sentences: first appearance (Bible, Mishnah, Talmud, a coiner) and sister-language cognates. Never a law, a school subject or today's usage. Empty if unknown>",
  "confidence": "<high: the etymology standard dictionaries (Even-Shoshan, Klein, Wiktionary) give. medium: the accepted scholarly view or the clearly likely one, and then the originalMeaning says so ('כנראה' / 'probably'). low: a guess>"}
-No niqqud. Never invent: a guessed origin is worse than none, so a guess is low.`;
+No niqqud. Never invent: a guessed origin is worse than none, so a guess is low.
+Write every sentence fully in ${uiLangName}: the only foreign words allowed are the source word itself and its transliteration (never an English word like "attested" or "democracy" inside the sentence).
+Name a cognate in another language only when standard dictionaries list it as a cognate; if unsure, leave it out.
+Known traps: "understand" is under (= between, among) + stand, never "stand under"; the science word "atom" is Greek atomos "uncuttable", never the Hebrew root א.ט.ם; the Arabic root of "zero" (ṣifr) is ص.ف.ر, never ס.פ.ר.`;
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -105,6 +118,11 @@ No niqqud. Never invent: a guessed origin is worse than none, so a guess is low.
       originalMeaning: strip(j.originalMeaning),
       historyNote: strip(j.historyNote),
     };
+    // An English word inside a Hebrew or Arabic sentence (2026-11-07: "attested"
+    // in a Hebrew origin): show no rewrite rather than a broken one.
+    if (/^(Hebrew|Arabic|Persian)/i.test(uiLangName) && leaksEnglish(fixed, j.originalWord)) {
+      return dropped;
+    }
     // Still a repeat, or empty: keep the source language, drop the repeat.
     if (!fixed.originalMeaning || repeatsDefinition({ meanings: r.meanings, etymology: fixed })) {
       return dropped;
