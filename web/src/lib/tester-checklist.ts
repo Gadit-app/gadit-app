@@ -42,11 +42,32 @@ export const CHECKLIST: CheckSection[] = [
     ],
   },
 
+  // What was built from the testers' own notes (Gadi 2026-11-07): one
+  // section per fixed game, so a tester can tick that the fix really works.
+  {
+    id: "fixed-catch", he: "חדש! תיקנו לפי מה שביקשתם: גחליליות", en: "New! Fixed from your notes: Fireflies", where: CATCH,
+    items: [
+      { id: "fixed-catch.pace", he: "בכרטיס המילה בחרתי 🐢 איטי, 🙂 רגיל ו-🚀 מהיר, והגחליליות באמת זזו לאט או מהר", en: "On the word card I picked 🐢 slow, 🙂 normal and 🚀 fast, and the fireflies really moved slow or fast" },
+      { id: "fixed-catch.decoys", he: "ב-🙂 רגיל וב-🚀 מהיר באו קודם אותיות לא נכונות, האות הנכונה לא הגיעה מיד", en: "On 🙂 normal and 🚀 fast, wrong letters came first, the right letter did not come straight away" },
+      { id: "fixed-catch.ring", he: "טעיתי פעמיים בכוונה: טבעת הבהבה סביב האות הנכונה והשאר החווירו", en: "I made two mistakes on purpose: a ring blinked around the right letter and the others went pale" },
+      { id: "fixed-catch.ok", he: "הכול עובד כמו שביקשתי (אם לא, שלחתי הקלטה ב-🧪)", en: "It all works the way I asked (if not, I sent a voice note with 🧪)" },
+    ],
+  },
+  {
+    id: "fixed-duel", he: "חדש! תיקנו לפי מה שביקשתם: דו קרב", en: "New! Fixed from your notes: Duel", where: DUEL, together: true,
+    items: [
+      { id: "fixed-duel.short", he: "ההגדרות קצרות ומספיקים לקרוא אותן", en: "The meanings are short and I have time to read them" },
+      { id: "fixed-duel.three", he: "יש 3 תשובות לבחירה ולא 4", en: "There are 3 answers to pick from, not 4" },
+      { id: "fixed-duel.time", he: "לכל שאלה יש 20 שניות", en: "Each question has 20 seconds" },
+      { id: "fixed-duel.ok", he: "הכול עובד כמו שביקשתי (אם לא, שלחתי הקלטה ב-🧪)", en: "It all works the way I asked (if not, I sent a voice note with 🧪)" },
+    ],
+  },
+
   // Letter Catch
   game("fireflies", "תופסים אותיות: גחליליות", "Letter Catch: Fireflies", CATCH, [
     ["האות הנכונה תמיד מופיעה בסוף", "The right letter always shows up in the end"],
     ["טעיתי בכוונה: הינשוף או הצפרדע אמרו איזו אות זאת", "I made a mistake on purpose: the owl or frog said which letter it was"],
-    ["אחרי שתי טעויות האות הנכונה זהרה", "After two mistakes the right letter glowed"],
+    ["אחרי שתי טעויות טבעת הבהבה סביב האות הנכונה", "After two mistakes a ring blinked around the right letter"],
     ["אחרי 5 מילים הצנצנת התמלאה", "After 5 words the jar filled up"],
   ]),
   game("coaster-snow", "רכבת הרים: שלג", "Roller coaster: Snow", CATCH, [
@@ -235,6 +256,8 @@ const PLAY_IDS = new Set(["flashcards", "flashdefs", "truefalse", "quiz", "fillb
 export function sectionLink(id: string): string {
   if (id === "start") return "/play";
   if (id === "fireflies") return "/catch?scene=fireflies";
+  if (id === "fixed-catch") return "/catch?scene=fireflies";
+  if (id === "fixed-duel") return "/play?game=duel";
   if (id.startsWith("coaster-")) return `/catch?scene=coaster&world=${id.slice(8)}`;
   if (id.startsWith("fair-")) return `/catch?scene=fair&stall=${id.slice(5)}`;
   if (id === "worlds-peek") return "/world/jungle?mode=peek";
