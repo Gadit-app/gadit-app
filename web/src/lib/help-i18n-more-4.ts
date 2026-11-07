@@ -31,16 +31,17 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Làm sao để hủy gói đăng ký?",
             a: [
               "Bạn tự làm được, bất cứ lúc nào. Đăng nhập, mở Tài khoản và chạm vào Hủy gói đăng ký bên dưới gói của bạn.",
-              "Bạn vẫn được sử dụng đến hết kỳ đã thanh toán. Sau đó tài khoản sẽ trở về gói Basic (miễn phí). Các từ đã lưu, lịch sử và sổ tay của bạn vẫn được giữ an toàn và truy cập được.",
-              "Nếu bạn lỡ hủy hoặc đổi ý, bạn có thể tiếp tục gói đăng ký ngay trên cùng trang đó trước khi kỳ hiện tại kết thúc.",
+              "Với gói trả phí, bạn vẫn được sử dụng đến hết kỳ đã thanh toán. Sau đó tài khoản chuyển về Basic (miễn phí). Các từ đã lưu và lịch sử của bạn vẫn được giữ an toàn.",
+              "Trong 14 ngày dùng thử miễn phí, việc hủy sẽ kết thúc bản dùng thử ngay lập tức và bạn không bị tính phí gì. Nếu điều bạn lo chỉ là khoản phí tự động, hãy chọn lý do đó trong cửa sổ hủy, khi đó bạn có thể tắt gia hạn thay vì hủy và vẫn giữ bản dùng thử đến ngày cuối cùng.",
+              "Nếu bạn lỡ hủy gói trả phí hoặc đổi ý, bạn có thể tiếp tục gói ngay trên cùng trang đó trước khi kỳ hiện tại kết thúc.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Làm sao để chuyển từ Clear sang Deep (hoặc ngược lại)?",
+            q: "Làm sao để chuyển giữa Individual và Family?",
             a: [
-              "Vào Tài khoản, rồi Quản lý thanh toán, rồi Cập nhật gói đăng ký. Chọn gói mới.",
-              "Stripe tự động tính phần chênh lệch giá, theo tỷ lệ số ngày còn lại trong kỳ hiện tại. Nếu bạn nâng cấp, bạn chỉ bị tính phần chênh lệch cho thời gian còn lại của kỳ. Nếu bạn chuyển xuống gói thấp hơn, khoản tín dụng sẽ được trừ vào hóa đơn tiếp theo.",
+              "Để chuyển sang Family, hãy mở trang Tài khoản và nhấn \"Chuyển sang gói Family\". Gói đăng ký hiện tại của bạn được cập nhật trên cùng thẻ, không cần nhập lại.",
+              "Stripe tính phần chênh lệch theo số ngày còn lại của kỳ hiện tại, nên bạn chỉ trả phần chênh lệch. Để chuyển từ Family về Individual, hãy viết cho chúng tôi từ trang này và đội ngũ sẽ chuyển giúp bạn.",
             ],
           },
           {
@@ -77,9 +78,9 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "unknown-charge",
-            q: "Tôi thấy một khoản phí mà tôi không nhận ra.",
+            q: "Khoản phí này trên thẻ của tôi là gì?",
             a: [
-              "Các khoản phí hiển thị là GADIT hoặc GADIT.APP với số tiền $2.99 (Clear hằng tháng), $4.99 (Deep hằng tháng), $29.99 (Clear hằng năm) hoặc $49.99 (Deep hằng năm). Nếu không khớp, có thể đó là khoản phí từ một dịch vụ khác.",
+              "Các khoản phí hiển thị là GADIT hoặc GADIT.APP. Số tiền khớp với gói của bạn (Individual hoặc Family, hằng tháng hoặc hằng năm) bằng đơn vị tiền tệ của quốc gia bạn, như trên trang bảng giá. Các gói đăng ký bắt đầu trước tháng 10 năm 2026 vẫn giữ mức giá ban đầu. Nếu số tiền không khớp, có thể đó là khoản phí từ một dịch vụ khác.",
               "Nếu bạn chắc chắn đó không phải khoản phí của mình, đừng vội khiếu nại qua ngân hàng. Hãy viết trực tiếp cho chúng tôi trước, kèm ngày và số tiền. Đội ngũ sẽ tìm ra khoản phí, giải thích đó là gì và hoàn tiền nếu cần. Khiếu nại qua ngân hàng có thể khiến việc thanh toán sau này khó khăn hơn, nên giải quyết qua bộ phận hỗ trợ thường nhanh và an toàn hơn.",
             ],
           },
@@ -93,11 +94,11 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "plan-comparison",
-            q: "Basic, Clear và Deep khác nhau thế nào?",
+            q: "Basic, Individual và Family khác nhau thế nào?",
             a: [
-              "Basic (miễn phí): tối đa 20 lượt tra từ mỗi ngày, mọi nghĩa của từ, ví dụ cho từng nghĩa, thành ngữ và nguồn gốc từ. Không cần đăng ký để tra cứu cơ bản.",
-              "Clear ($2.99/tháng hoặc $29.99/năm): tra không giới hạn, giải thích thân thiện với trẻ em, một hình ảnh cho mỗi từ (30/tháng), tự đặt câu và nhận phản hồi, chi tiết thành ngữ và 30 ngày lịch sử tìm kiếm.",
-              "Deep ($4.99/tháng hoặc $49.99/năm): mọi thứ trong Clear, cộng thêm bài kiểm tra luyện tập, sổ tay cá nhân với luyện tập lặp lại ngắt quãng thông minh, phân biệt các từ giống nhau và hạn mức hình ảnh lớn hơn (100/tháng).",
+              "Basic (miễn phí): tối đa 10 lượt tra từ mỗi ngày, mọi nghĩa, ví dụ, thành ngữ, nguồn gốc của từ, nghĩa đúng theo câu và sổ tay tối đa 30 từ.",
+              "Individual: cho một người, đủ mọi công cụ học. Tra cứu không giới hạn, hình ảnh cho mọi nghĩa, thêm ví dụ và câu hỏi cho mọi từ, đặt câu và nhận nhận xét, Mọi từ, Nói thử, giọng đọc tự nhiên và tìm kiếm bằng giọng nói, dùng ngoại tuyến, trò chơi, câu đố và đấu từ, cùng luyện tập thông minh với ôn thi và chính tả.",
+              "Family: mọi thứ trong Individual cho tối đa 5 trẻ em và cha mẹ, thêm chế độ trẻ em, không gian riêng cho từng trẻ, hỗ trợ bài tập về nhà và bảng điều khiển cho phụ huynh với thông báo cho mỗi từ. Trường học có gói riêng. Giá cho quốc gia của bạn và 14 ngày dùng thử miễn phí có trên trang bảng giá.",
             ],
           },
         ],
@@ -109,7 +110,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
         items: [
           {
             id: "no-verification-email",
-            q: "Tôi không nhận được email xác minh.",
+            q: "Tôi không nhận được email xác minh",
             a: [
               "Trước tiên hãy kiểm tra thư mục spam và quảng cáo. Gmail và Outlook đôi khi chuyển email tài khoản vào đó cho đến khi bạn đánh dấu một email là \"Không phải spam\".",
               "Nếu không có ở đó, có thể email đã bị gõ sai khi đăng ký. Hãy thử đăng ký lại và kiểm tra kỹ địa chỉ. Nếu bạn đăng ký bằng Google thì không cần email xác minh.",
@@ -117,7 +118,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "forgot-password",
-            q: "Tôi quên mật khẩu.",
+            q: "Tôi quên mật khẩu",
             a: [
               "Mở hộp thoại đăng nhập và nhấn \"Quên mật khẩu?\". Nhập email bạn dùng cho Gadit và bạn sẽ nhận được liên kết đặt lại trong vòng một hai phút.",
               "Nếu email không đến, hãy kiểm tra thư mục spam. Nếu vẫn không thấy, có thể bạn đã đăng ký bằng Google thay vì email và mật khẩu. Hãy thử nút \"Tiếp tục với Google\".",
@@ -125,7 +126,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "wrong-credentials",
-            q: "Tôi chắc chắn mật khẩu đúng nhưng hệ thống báo \"Sai email hoặc mật khẩu\".",
+            q: "Tôi chắc chắn mật khẩu đúng nhưng hệ thống báo \"Sai email hoặc mật khẩu\"",
             a: [
               "Có ba điều cần kiểm tra. Thứ nhất, phím Caps Lock. Thứ hai, khoảng trắng thừa ở cuối khi sao chép và dán. Thứ ba, bạn đã đăng ký bằng Google chứ không phải bằng mật khẩu (hãy dùng \"Tiếp tục với Google\").",
               "Vẫn chưa được? Hãy đặt lại mật khẩu ngay trong hộp thoại đó. Mọi thứ sẽ được thiết lập lại sạch sẽ.",
@@ -133,7 +134,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "google-fails",
-            q: "Đăng nhập bằng Google không hoạt động.",
+            q: "Đăng nhập bằng Google không hoạt động",
             a: [
               "Nguyên nhân thường gặp nhất: trình duyệt của bạn đang chặn cookie của bên thứ ba hoặc cửa sổ bật lên cho gadit.app. Hãy cho phép chúng trong phần quyền trên thanh địa chỉ rồi thử lại.",
               "Nếu bạn đang ở chế độ ẩn danh, đăng nhập bằng Google bị hạn chế có chủ đích. Hãy chuyển sang cửa sổ trình duyệt thông thường.",
@@ -159,8 +160,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "share-account",
             q: "Người bạn đời hoặc con tôi có thể dùng chung tài khoản của tôi không?",
             a: [
-              "Mỗi tài khoản chỉ có một người đăng nhập tại một thời điểm. Chế độ trẻ em cho phép một tài khoản Clear hoặc Deep phục vụ cả cha mẹ và con: bật nút gạt và các định nghĩa sẽ hiển thị theo cách thân thiện với trẻ em mà không cần đăng nhập riêng.",
-              "Với hai người lớn đều muốn có sổ tay và tiến độ riêng, hãy tạo hai tài khoản. Clear có giá $2.99 mỗi tháng cho mỗi tài khoản.",
+              "Mỗi tài khoản chỉ có một người đăng nhập tại một thời điểm. Với cả gia đình, gói Family được tạo ra cho việc này: tối đa 5 trẻ em và cha mẹ, mỗi người có không gian riêng, sổ tay và tiến độ riêng, cùng chế độ trẻ em cho các con và bảng điều khiển cho phụ huynh.",
+              "Với một người lớn dùng riêng, gói Individual dành cho một người với đủ mọi công cụ học. Hãy so sánh các gói và giá cho quốc gia của bạn trên trang bảng giá.",
             ],
           },
           {
@@ -188,25 +189,25 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "kids-not-working",
-            q: "Chế độ trẻ em không thay đổi phần giải thích.",
+            q: "Chế độ trẻ em không thay đổi phần giải thích",
             a: [
-              "Chế độ trẻ em chỉ đổi văn bản khi từ đó đã có sẵn phần giải thích thân thiện với trẻ em. Với những từ hoàn toàn mới bạn vừa tra, hãy đợi 10 đến 15 giây. Phiên bản cho trẻ em được tạo ngay lập tức vào lần đầu tiên.",
-              "Ngoài ra: chế độ trẻ em yêu cầu gói Clear hoặc Deep. Nếu bạn đang dùng Basic, nút gạt sẽ gợi ý bạn nâng cấp. Người dùng chưa đăng nhập sẽ được gợi ý đăng ký.",
+              "Chế độ trẻ em chỉ đổi văn bản khi từ đó đã có phần giải thích thân thiện với trẻ em. Với một từ bạn vừa tra lần đầu, hãy đợi 10 đến 15 giây trong lúc phiên bản cho trẻ em được chuẩn bị.",
+              "Chế độ trẻ em là một phần của gói Family. Ở Basic, ở Individual hoặc khi chưa có tài khoản, nút gạt sẽ hiển thị gói Family thay vì bật lên. Những người đăng ký Clear hoặc Deep trước tháng 10 năm 2026 vẫn giữ chế độ trẻ em. Để có tính năng này, hãy xem gói Family trên trang bảng giá.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Tìm kiếm bằng giọng nói không hoạt động.",
+            q: "Tìm kiếm bằng giọng nói không hoạt động",
             a: [
               "Tìm kiếm bằng giọng nói cần quyền truy cập micrô. Hầu hết trình duyệt hỏi một lần cho mỗi trang web. Nếu bạn lỡ nhấn Chặn, bạn cần bật lại thủ công: nhấn vào biểu tượng ổ khóa hoặc thông tin bên cạnh gadit.app trên thanh địa chỉ, rồi Cài đặt trang web, rồi Micrô, rồi Cho phép.",
-              "Trên Safari iOS, quyền truy cập micrô còn cần bật trong Cài đặt → Safari → Micrô. Giọng nói hiện là tính năng của Clear và Deep: người dùng Basic sẽ thấy gợi ý nâng cấp, khách chưa đăng nhập sẽ thấy gợi ý đăng nhập.",
+              "Trên Safari cho iPhone và iPad, quyền truy cập micrô còn cần bật trong Cài đặt → Safari → Micrô. Tìm kiếm bằng giọng nói là một phần của gói Individual và Family: ở Basic bạn sẽ thấy các gói thay vào đó, còn khách chưa đăng nhập sẽ được mời đăng nhập. Để nâng cấp, hãy mở trang bảng giá.",
             ],
           },
           {
             id: "no-image",
-            q: "Tôi không tạo được hình ảnh cho từ.",
+            q: "Tôi không lấy được hình ảnh cho từ",
             a: [
-              "Tạo hình ảnh là tính năng của Clear hoặc Deep với hạn mức hằng tháng. Clear có 30 hình mỗi tháng, Deep có 100. Nếu đã dùng hết hạn mức, bạn sẽ thấy thông báo chặn. Hạn mức được đặt lại vào ngày 1 hằng tháng.",
+              "Hình ảnh là một phần của gói Individual và Family, với tối đa 100 hình mới mỗi tháng. Hình đã có sẵn cho nghĩa đó sẽ mở ra mà không bị tính. Gói Clear cũ có 30 hình mỗi tháng, còn Basic không bao gồm hình ảnh. Khi dùng hết số hình của tháng, bạn sẽ thấy thông báo, và số lượt được tính lại từ đầu vào đầu mỗi tháng.",
               "Nếu bạn chưa dùng hết hạn mức mà vẫn gặp lỗi, thường đó chỉ là lỗi tạm thời. Hãy thử lại sau 30 giây. Lỗi kéo dài là một lỗi hệ thống. Vui lòng báo cáo từ trang của từ đó.",
             ],
           },
@@ -214,21 +215,21 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "save-word",
             q: "Làm sao để lưu một từ vào sổ tay?",
             a: [
-              "Trên bất kỳ trang kết quả nào, nhấn Lưu vào sổ tay gần tiêu đề. Sổ tay là tính năng của Clear và Deep, nơi bạn có thể ôn lại các từ đã lưu sau này, xem chúng ở chế độ thiên hà và chạy các buổi luyện tập thông minh (Deep).",
-              "Những từ bạn đã lưu và mở ít nhất một lần sẽ dùng được ngoại tuyến từ bộ nhớ đệm cục bộ. Gói ngoại tuyến cũng lưu sẵn những từ phổ biến nhất trong ngôn ngữ của bạn để bạn sẵn sàng ngay cả khi không có internet.",
+              "Bạn không cần làm gì cả. Khi bạn đã đăng nhập, mọi từ bạn tra đều tự động được lưu vào sổ tay. Ở Basic, sổ tay chứa tối đa 30 từ. Ở Individual và Family, sổ tay không giới hạn và có luyện tập thông minh, giúp đưa các từ của bạn quay lại để ôn đúng lúc.",
+              "Ở Individual và Family, các từ bạn tra cũng được giữ trên thiết bị, nên chúng mở được cả khi không có internet. Để xem các từ của bạn, hãy mở sổ tay từ menu.",
             ],
           },
           {
             id: "offline",
             q: "Chế độ ngoại tuyến hoạt động thế nào?",
             a: [
-              "Những từ bạn đã xem được lưu trong bộ nhớ đệm cục bộ. Mở lại chúng khi không có internet và chúng sẽ tải ngay lập tức. Gói ngoại tuyến đầy đủ (các từ hàng đầu trong ngôn ngữ của bạn) được tải xuống theo yêu cầu từ trang sổ tay.",
-              "Tìm một từ hoàn toàn mới vẫn cần kết nối mạng, vì Gadit phải tạo định nghĩa từ đầu. Bộ nhớ đệm ngoại tuyến dành cho những từ bạn đã tìm hiểu.",
+              "Dùng ngoại tuyến là một phần của gói Individual và Family. Mọi từ bạn tra đều được giữ trên thiết bị, nên lần sau chúng mở lại ngay lập tức mà không cần internet. Bạn cũng có thể tải một gói gồm những từ phổ biến nhất trong ngôn ngữ của bạn từ trang Tài khoản.",
+              "Tra một từ hoàn toàn mới vẫn cần kết nối mạng, vì Gadit phải chuẩn bị đầy đủ kết quả cho từ đó. Bản ngoại tuyến bao gồm những từ đã có trên thiết bị của bạn. Nếu bạn đang dùng Basic, hãy xem các gói trên trang bảng giá.",
             ],
           },
           {
             id: "slow",
-            q: "Ứng dụng có vẻ chậm.",
+            q: "Ứng dụng có vẻ chậm",
             a: [
               "Lần tra đầu tiên của một từ là chậm nhất vì Gadit tạo toàn bộ kết quả từ đầu: thường mất vài giây, đôi khi lâu hơn với những từ phức tạp. Những lần tra sau của cùng từ đó hiện ra ngay lập tức, lấy từ bộ nhớ đệm.",
               "Nếu mọi thứ đều chậm, hãy thử làm mới hoàn toàn: Cmd+Shift+R trên Mac, Ctrl+Shift+R trên Windows. Nếu tình trạng chậm vẫn kéo dài trên nhiều trang, vui lòng gửi email cho chúng tôi kèm quốc gia và trình duyệt của bạn để đội ngũ kiểm tra đường truyền mạng từ khu vực của bạn đến máy chủ của chúng tôi.",
@@ -246,7 +247,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "change-language",
             q: "Làm sao để thay đổi ngôn ngữ giao diện?",
             a: [
-              "Ở góc trên bên phải của mọi trang, bạn sẽ thấy một biểu tượng lá cờ nhỏ (hoặc tên ngôn ngữ hiện tại). Nhấn vào đó và chọn trong hơn 30 ngôn ngữ: tiếng Anh, tiếng Hy Lạp, tiếng Do Thái, tiếng Ả Rập, tiếng Nga, tiếng Tây Ban Nha, tiếng Bồ Đào Nha, tiếng Pháp, tiếng Đức, tiếng Séc, tiếng Slovakia, tiếng Ý, tiếng Nhật, tiếng Hindi, tiếng Amhara, tiếng Zulu.",
+              "Ở góc trên bên phải của mọi trang, bạn sẽ thấy một biểu tượng lá cờ nhỏ (hoặc tên ngôn ngữ hiện tại). Nhấn vào đó và chọn trong 41 ngôn ngữ.",
               "Lựa chọn của bạn được lưu trên thiết bị này. Mọi thứ sẽ tải lại bằng ngôn ngữ mới: giao diện, các menu, định nghĩa từ sau này, ví dụ, phần giải thích cho trẻ em, thậm chí cả từ nguyên. Những kết quả đã lưu trong bộ nhớ đệm bằng ngôn ngữ cũ vẫn giữ nguyên cho đến khi bạn tìm lại những từ đó.",
             ],
           },
@@ -284,7 +285,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "empty-dashboard",
-            q: "Tôi đã tham gia nhưng bảng điều khiển trống trơn.",
+            q: "Tôi đã tham gia nhưng bảng điều khiển trống trơn",
             a: [
               "Số liệu sẽ hiển thị sau lượt nhấp đầu tiên vào liên kết của bạn. Trống chỉ có nghĩa là chưa có ai nhấp. Hãy chia sẻ liên kết. Bảng điều khiển cập nhật gần như theo thời gian thực khi có hoạt động.",
               "Nếu bạn đã chia sẻ và có người đăng ký nhưng bảng điều khiển không phản ánh điều đó, hãy viết cho chúng tôi kèm thời gian đăng ký ước chừng, đội ngũ sẽ kiểm tra việc ghi nhận.",
@@ -300,7 +301,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "missing-commission",
-            q: "Có người đăng ký qua liên kết của tôi nhưng tôi không thấy hoa hồng.",
+            q: "Có người đăng ký qua liên kết của tôi nhưng tôi không thấy hoa hồng",
             a: [
               "Thường đây là vấn đề thời gian: lượt đăng ký hiện trong bảng điều khiển trong vòng vài phút, nhưng hoa hồng chỉ được ghi nhận khi gói đăng ký thực sự được thanh toán (có thể vài ngày sau nếu họ đang dùng thử miễn phí). Hãy kiểm tra lại sau khi thời gian dùng thử kết thúc.",
               "Nếu gói đăng ký đã được thanh toán mà sau 48 giờ bạn vẫn không thấy hoa hồng, hãy viết cho chúng tôi kèm thời gian đăng ký ước chừng và email hoặc tên gần đúng của người đăng ký nếu bạn biết. Đội ngũ sẽ kiểm tra chuỗi ghi nhận và khắc phục thủ công mọi thiếu sót.",
@@ -317,16 +318,16 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "what-is-gadit",
             q: "Gadit là gì?",
             a: [
-              "Một từ điển đa ngôn ngữ được tạo ra để giúp bạn thật sự hiểu một từ, không chỉ đưa ra định nghĩa một dòng. Mỗi từ mở ra với tất cả các nghĩa, ví dụ thực tế cho từng nghĩa, thành ngữ, từ nguyên, một hình ảnh tùy chọn, và (với Clear và Deep) phần giải thích thân thiện với trẻ em, tự đặt câu và nhận phản hồi, cùng các bài kiểm tra.",
-              "Hiện có hơn 30 ngôn ngữ giao diện. Trong nội bộ, đội ngũ gọi đó là GAD một từ: hiểu một từ đến tận cùng, không chỉ dịch nó.",
+              "Gadit giúp bạn hiểu mọi từ đến tận cùng, không chỉ nhận một định nghĩa một dòng. Mỗi từ mở ra với tất cả các nghĩa, ví dụ thực tế cho từng nghĩa, thành ngữ và nguồn gốc của từ. Các gói trả phí có thêm hình ảnh cho mọi nghĩa, luyện tập, trò chơi và nhiều hơn nữa, còn Family có thêm chế độ trẻ em và không gian riêng cho từng trẻ.",
+              "Gadit hoạt động bằng 41 ngôn ngữ. Trong nội bộ, đội ngũ gọi đó là GAD một từ: hiểu một từ đến tận cùng, không chỉ dịch nó. Để xem mỗi gói gồm những gì, hãy mở trang bảng giá.",
             ],
           },
           {
             id: "languages",
             q: "Các bạn hỗ trợ những ngôn ngữ nào?",
             a: [
-              "Giao diện: tiếng Anh, tiếng Hy Lạp, tiếng Do Thái, tiếng Ả Rập, tiếng Nga, tiếng Tây Ban Nha, tiếng Bồ Đào Nha, tiếng Pháp, tiếng Đức, tiếng Séc, tiếng Slovakia, tiếng Ý, tiếng Nhật, tiếng Zulu.",
-              "Bạn có thể tra một từ bằng bất kỳ ngôn ngữ nào trong số đó và nhận định nghĩa, ví dụ và mọi thứ khác bằng ngôn ngữ giao diện bạn đã chọn. Tiếng Do Thái và tiếng Ả Rập hiển thị hoàn toàn từ phải sang trái (RTL) và dùng phông chữ bản địa của chúng.",
+              "Gadit hoạt động bằng 41 ngôn ngữ, trong đó có tiếng Anh, tiếng Do Thái, tiếng Ả Rập, tiếng Tây Ban Nha, tiếng Pháp, tiếng Đức, tiếng Nga, tiếng Trung, tiếng Nhật, tiếng Hindi, tiếng Zulu, tiếng Xhosa và tiếng Afrikaans.",
+              "Bạn có thể tra một từ bằng bất kỳ ngôn ngữ nào trong số đó và nhận các nghĩa, ví dụ và mọi thứ khác bằng ngôn ngữ bạn đã chọn cho giao diện. Tiếng Do Thái, tiếng Ả Rập và tiếng Ba Tư được đọc từ phải sang trái, với phông chữ riêng. Để đổi ngôn ngữ, hãy nhấn nút ngôn ngữ ở đầu bất kỳ trang nào.",
             ],
           },
           {
@@ -334,7 +335,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Gadit có an toàn cho trẻ em không?",
             a: [
               "Gadit được thiết kế để cha mẹ sử dụng an toàn cùng với con. Chế độ trẻ em tạo ra các phần giải thích đơn giản, cụ thể và phù hợp với lứa tuổi (khoảng mức 5 đến 10 tuổi), dùng cùng công cụ tạo nội dung cho người lớn với hướng dẫn rõ ràng để đơn giản hóa. Nội dung do người dùng tạo không bao giờ được hiển thị cho trẻ em.",
-              "Theo chính sách của chúng tôi và các quy định về quyền riêng tư của trẻ em trên khắp thế giới, chỉ người từ 13 tuổi trở lên mới được sở hữu tài khoản độc lập. Cách dùng tiêu chuẩn là tài khoản của cha mẹ mà cha mẹ dùng cùng với con, đó chính là điều chế độ trẻ em được xây dựng để phục vụ.",
+              "Theo chính sách của chúng tôi và các quy định về quyền riêng tư của trẻ em trên khắp thế giới, tài khoản riêng dành cho người từ 13 tuổi trở lên. Trẻ em dùng Gadit thông qua cha mẹ: với gói Family, cha mẹ thêm từng con từ trang Family, mỗi trẻ có không gian riêng với chế độ trẻ em, và bảng điều khiển cho phụ huynh cho thấy những từ mỗi trẻ tra. Để thiết lập, hãy bắt đầu với gói Family trên trang bảng giá.",
             ],
           },
           {
@@ -342,7 +343,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Dữ liệu của tôi được lưu ở đâu? Các bạn có bán nó không?",
             a: [
               "Tài khoản, lịch sử, sổ tay và hình ảnh đã tạo được lưu trữ an toàn trên Firebase, được mã hóa khi lưu trữ. Chúng tôi không bán dữ liệu của bạn cho bất kỳ ai. Chúng tôi chỉ chia sẻ những gì cần thiết để vận hành Gadit (lưu trữ, thanh toán, nhà cung cấp nội dung), như đã nêu rõ trong Chính sách quyền riêng tư.",
-              "Bạn có thể xuất sổ tay hoặc xóa tài khoản bất cứ lúc nào từ trang Tài khoản.",
+              "Bạn có thể xóa tài khoản bất cứ lúc nào từ trang Tài khoản. Để nhận bản sao sổ tay hoặc bất kỳ dữ liệu nào khác mà chúng tôi lưu giữ, hãy viết cho chúng tôi từ trang này.",
             ],
           },
           {
@@ -385,16 +386,17 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Paano ko ika-cancel ang subscription ko?",
             a: [
               "Kaya mo itong gawin mismo, anumang oras. Mag-sign in, buksan ang Account, at i-tap ang Kanselahin ang subscription sa ilalim ng iyong plan.",
-              "Tuloy ang access mo hanggang matapos ang period na nabayaran mo na. Pagkatapos noon, babalik ang account sa Basic (libre). Ligtas at magagamit pa rin ang mga na-save mong salita, history, at notebook.",
-              "Kung na-cancel mo nang hindi sinasadya o nagbago ang isip mo, puwede mong ituloy ulit ang subscription mula sa parehong page bago matapos ang period.",
+              "Sa bayad na subscription, tuloy ang access mo hanggang matapos ang period na nabayaran mo na. Pagkatapos noon, lilipat ang account sa Basic (libre). Ligtas pa rin ang mga na-save mong salita at history.",
+              "Sa loob ng 14 na araw na libreng trial, kapag nag-cancel ka, matatapos agad ang trial at walang sisingilin. Kung ang awtomatikong singil lang ang inaalala mo, piliin ang dahilang iyon sa cancel window at puwede mong i-off na lang ang renewal, para tuloy ang trial hanggang sa huling araw nito.",
+              "Kung na-cancel mo ang bayad na subscription nang hindi sinasadya o nagbago ang isip mo, puwede mo itong ituloy ulit mula sa parehong page bago matapos ang period.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Paano lumipat mula Clear papuntang Deep (o pabalik)?",
+            q: "Paano lumipat sa pagitan ng Individual at Family?",
             a: [
-              "Account, tapos Manage billing, tapos Update subscription. Piliin ang bagong plan.",
-              "Awtomatikong kinukuwenta ng Stripe ang diperensya sa presyo, prorated ayon sa mga araw na natitira sa kasalukuyang period. Kung mag-a-upgrade ka, ang diperensya lang ang sisingilin para sa natitirang bahagi ng period. Kung lilipat ka sa mas mababang tier, ilalapat ang credit sa susunod mong bill.",
+              "Para lumipat sa Family, buksan ang page ng Account mo at i-tap ang \"Lumipat sa Family\". Ia-update ang kasalukuyan mong subscription sa parehong card, nang hindi na ito ilalagay ulit.",
+              "Kinukuwenta ng Stripe ang diperensya para sa mga araw na natitira sa kasalukuyang period, kaya ang diperensya lang ang babayaran mo. Para lumipat mula Family papuntang Individual, sumulat sa amin mula sa page na ito at ang team na ang maglilipat para sa iyo.",
             ],
           },
           {
@@ -431,9 +433,9 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "unknown-charge",
-            q: "May nakikita akong singil na hindi ko kilala.",
+            q: "Ano ang singil na ito sa card ko?",
             a: [
-              "Lumalabas ang mga singil bilang GADIT o GADIT.APP na may $2.99 (Clear monthly), $4.99 (Deep monthly), $29.99 (Clear yearly), o $49.99 (Deep yearly). Kung hindi tugma, baka galing ito sa ibang serbisyo.",
+              "Lumalabas ang mga singil bilang GADIT o GADIT.APP. Tugma ang halaga sa plan mo (Individual o Family, buwanan o taunan) sa currency ng bansa mo, gaya ng nasa page ng pricing. Ang mga subscription na nagsimula bago ang Oktubre 2026 ay mananatili sa presyong sinimulan nila. Kung hindi tugma ang halaga, baka galing ito sa ibang serbisyo.",
               "Kung sigurado kang hindi sa iyo ito, huwag munang mag-dispute sa bangko mo. Sumulat muna sa amin nang direkta, kasama ang petsa at halaga. Hahanapin ito ng team, ipapaliwanag kung ano ito, at magre-refund kung kailangan. Puwedeng pahirapan ng bank dispute ang mga susunod na billing, kaya kadalasang mas mabilis at mas ligtas na ayusin ito sa pamamagitan ng support.",
             ],
           },
@@ -447,11 +449,11 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "plan-comparison",
-            q: "Ano ang pagkakaiba ng Basic, Clear, at Deep?",
+            q: "Ano ang pagkakaiba ng Basic, Individual, at Family?",
             a: [
-              "Basic (libre): hanggang 20 word lookup kada araw, lahat ng kahulugan, mga halimbawa sa bawat kahulugan, mga idyoma, at pinagmulan ng salita. Hindi kailangang mag-sign up para sa mga basic na search.",
-              "Clear ($2.99/buwan o $29.99/taon): walang limitasyong lookup, mga paliwanag na pambata, isang larawan bawat salita (30/buwan), pagbuo ng sarili mong pangungusap na may feedback, detalye ng mga idyoma, at 30 araw ng search history.",
-              "Deep ($4.99/buwan o $49.99/taon): lahat ng nasa Clear, dagdag pa ang mga practice quiz, ang personal na notebook na may matalinong spaced-repetition practice, pagkilala sa pagitan ng magkakahawig na salita, at mas malaking quota ng larawan (100/buwan).",
+              "Basic (libre): hanggang 10 word lookup kada araw, lahat ng kahulugan, mga halimbawa, mga idyoma, pinagmulan ng salita, ang tamang kahulugan mula sa isang pangungusap, at kwaderno na may hanggang 30 salita.",
+              "Individual: isang tao, lahat ng learning tool. Walang limitasyong lookup, larawan sa bawat kahulugan, mas maraming halimbawa at tanong sa bawat salita, pagbuo ng pangungusap na may feedback, Bawat salita, Sabihin, natural na boses sa pagbasa nang malakas at voice search, offline na gamit, mga laro, quiz at word duel, at smart na practice na may test prep at dictation.",
+              "Family: lahat ng nasa Individual para sa hanggang 5 bata at mga magulang, dagdag pa ang Kids mode, sariling espasyo para sa bawat bata, tulong sa takdang-aralin, at board ng magulang na may alerto sa bawat salita. May sariling plan ang mga paaralan. Nasa page ng pricing ang mga presyo para sa bansa mo at ang 14 na araw na libreng trial.",
             ],
           },
         ],
@@ -463,7 +465,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
         items: [
           {
             id: "no-verification-email",
-            q: "Hindi ko natanggap ang verification email ko.",
+            q: "Hindi ko natanggap ang verification email ko",
             a: [
               "Tingnan muna ang spam at promotions folder. Minsan napupunta roon ang mga email ng account sa Gmail at Outlook hanggang markahan mo ang isa bilang \"Not spam\".",
               "Kung wala roon, baka mali ang pagkaka-type ng email noong nag-sign up ka. Subukang mag-sign up ulit at i-double check ang address. Kung Google sign-up ang ginamit mo, hindi kailangan ng verification email.",
@@ -471,7 +473,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "forgot-password",
-            q: "Nakalimutan ko ang password ko.",
+            q: "Nakalimutan ko ang password ko",
             a: [
               "Buksan ang sign-in dialog at i-click ang \"Forgot password?\". Ilagay ang email na ginagamit mo sa Gadit at makakatanggap ka ng reset link sa loob ng isa o dalawang minuto.",
               "Kung hindi dumating ang email, tingnan ang spam. Kung wala pa rin, baka sa Google ka nag-sign up sa halip na email at password. Subukan ang button na \"Continue with Google\".",
@@ -479,7 +481,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "wrong-credentials",
-            q: "Sigurado akong tama ang password ko pero sinasabing \"Wrong email or password\".",
+            q: "Sigurado akong tama ang password ko pero sinasabing \"Wrong email or password\"",
             a: [
               "Tatlong bagay ang dapat i-check. Una, ang Caps Lock. Pangalawa, may sobrang space sa dulo kapag nag-copy-paste. Pangatlo, sa Google ka nag-sign up at hindi gamit ang password (gamitin na lang ang \"Continue with Google\").",
               "May problema pa rin? I-reset ang password mula sa parehong dialog. Malinis na magsisimula ulit ang lahat.",
@@ -487,7 +489,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "google-fails",
-            q: "Hindi gumagana ang Google sign-in.",
+            q: "Hindi gumagana ang Google sign-in",
             a: [
               "Pinakakaraniwang dahilan: bina-block ng browser mo ang third-party cookies o mga pop-up para sa gadit.app. Payagan ang mga ito sa permissions sa address bar at subukan ulit.",
               "Kung naka-incognito mode ka, sadyang limitado ang Google sign-in. Lumipat sa normal na browser window.",
@@ -513,8 +515,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "share-account",
             q: "Puwede bang gamitin ng partner o anak ko ang account ko?",
             a: [
-              "Isang naka-sign in na user lang kada account sa isang pagkakataon. Sa Kids mode, puwedeng magamit ng magulang at anak ang iisang Clear o Deep account: i-on ang toggle at magiging pambata ang mga depinisyon nang hindi kailangan ng hiwalay na login.",
-              "Para sa dalawang adult na parehong gusto ng sariling notebook at progreso, gumawa ng dalawang account. Ang Clear ay $2.99 kada buwan bawat account.",
+              "Isang tao lang ang naka-sign in sa bawat account sa isang pagkakataon. Para sa isang pamilya, ginawa para dito ang Family plan: hanggang 5 bata at ang mga magulang, bawat isa ay may sariling espasyo, sariling kwaderno at progreso, dagdag pa ang Kids mode para sa mga bata at board ng magulang.",
+              "Para sa isang adult na mag-isa, sakop ng Individual ang isang tao na may lahat ng learning tool. Ikumpara ang mga plan at ang mga presyo para sa bansa mo sa page ng pricing.",
             ],
           },
           {
@@ -542,25 +544,25 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "kids-not-working",
-            q: "Hindi binabago ng Kids mode ang paliwanag.",
+            q: "Hindi binabago ng Kids mode ang paliwanag",
             a: [
-              "Binabago lang ng Kids mode ang teksto kapag may nagawa nang pambatang paliwanag para sa salita. Para sa mga bagong-bagong salitang kaka-lookup mo lang, maghintay ng 10 hanggang 15 segundo. Ginagawa agad ang pambatang bersyon sa unang pagkakataon.",
-              "Dagdag pa: kailangan ng Clear o Deep para sa Kids mode. Kung Basic ka, ipapaalala ng toggle na mag-upgrade ka. Ang mga hindi naka-sign in ay hihilingang mag-sign up.",
+              "Binabago lang ng Kids mode ang teksto kapag may pambatang paliwanag na ang salita. Para sa salitang kaka-lookup mo lang sa unang pagkakataon, maghintay ng 10 hanggang 15 segundo habang inihahanda ang pambatang bersyon.",
+              "Bahagi ng Family plan ang Kids mode. Sa Basic, sa Individual, o kapag walang account, ipinapakita ng toggle ang Family plan sa halip na mag-on. Nananatili ang Kids mode sa mga subscriber na sumali sa Clear o Deep bago ang Oktubre 2026. Para makuha ito, tingnan ang Family sa page ng pricing.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Hindi gumagana ang voice search.",
+            q: "Hindi gumagana ang voice search",
             a: [
               "Kailangan ng voice search ng pahintulot sa mikropono. Karamihan ng browser ay nagtatanong nang isang beses bawat site. Kung na-click mo ang Block nang hindi sinasadya, kailangan mo itong ibalik nang mano-mano: i-click ang lock o info icon sa tabi ng gadit.app sa address bar, tapos Site settings, tapos Microphone, tapos Allow.",
-              "Sa Safari iOS, kailangan ding i-on ang toggle sa Settings → Safari → Microphone para sa access sa mikropono. Sa ngayon, feature ng Clear at Deep ang voice: makakakita ng paalala na mag-upgrade ang mga Basic user, at paalala na mag-sign in ang mga bisitang hindi naka-sign in.",
+              "Sa Safari sa iPhone at iPad, kailangan ding payagan ang mikropono sa Settings → Safari → Microphone. Bahagi ng Individual at Family plan ang voice search: sa Basic, ang mga plan ang makikita mo sa halip, at hihilingang mag-sign in ang mga bisitang hindi naka-sign in. Para mag-upgrade, buksan ang page ng pricing.",
             ],
           },
           {
             id: "no-image",
-            q: "Hindi ako makagawa ng larawan para sa salita.",
+            q: "Hindi ako makakuha ng larawan para sa salita",
             a: [
-              "Feature ng Clear o Deep ang paggawa ng larawan, na may buwanang quota. May 30 larawan kada buwan ang Clear, at 100 ang Deep. Kung naubos mo na ang quota, makakakita ka ng harang. Nire-reset ito tuwing ika-1 ng bawat buwan.",
+              "Bahagi ng Individual at Family plan ang mga larawan, na may hanggang 100 bagong larawan kada buwan. Hindi nabibilang ang larawang mayroon na para sa kahulugang iyon. May 30 kada buwan ang lumang Clear plan, at walang kasamang larawan ang Basic. Kapag naubos na ang mga larawan para sa buwan, may lalabas na abiso, at magsisimula ulit ang bilang sa simula ng bawat buwan.",
               "Kung hindi mo pa naaabot ang quota at may failure pa rin, kadalasan ay pansamantala lang ito. Subukan ulit pagkalipas ng 30 segundo. Bug na kapag paulit-ulit ang failure. Paki-report mula sa page ng salita.",
             ],
           },
@@ -568,21 +570,21 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "save-word",
             q: "Paano mag-save ng salita sa notebook ko?",
             a: [
-              "Sa kahit anong result page ng salita, i-tap ang Save to notebook malapit sa pamagat. Feature ng Clear at Deep ang notebook, kung saan puwede mong balikan ang mga na-save na salita, tingnan ang mga ito sa galaxy view, at magpatakbo ng smart-practice session (Deep).",
-              "Magagamit offline mula sa local cache ang mga salitang na-save at nabuksan mo nang kahit isang beses. Naka-cache din sa offline pack ang mga pinakasikat na salita sa wika mo para handa ka kahit walang internet.",
+              "Hindi mo na kailangan. Kapag naka-sign in ka, kusang nase-save sa kwaderno mo ang bawat salitang hinahanap mo. Sa Basic, hanggang 30 salita ang laman ng kwaderno. Sa Individual at Family, walang limitasyon ito at may kasamang smart na practice, na ibinabalik ang mga salita mo para sa review sa tamang oras.",
+              "Sa Individual at Family, nakatago rin sa device mo ang mga salitang hinanap mo, kaya bumubukas ang mga ito kahit walang internet. Para makita ang mga salita mo, buksan ang Kwaderno mula sa menu.",
             ],
           },
           {
             id: "offline",
             q: "Paano gumagana ang offline mode?",
             a: [
-              "Naka-cache nang lokal ang mga salitang natingnan mo na. Buksan ulit ang mga ito nang walang internet at agad silang lalabas. Ang buong offline pack (mga nangungunang salita sa wika mo) ay dina-download kapag hiniling mo mula sa notebook page.",
-              "Kailangan pa rin ng koneksyon para mag-search ng bagong-bagong salita, dahil kailangang buuin ng Gadit ang depinisyon mula sa simula. Para sa mga salitang na-explore mo na ang offline cache.",
+              "Bahagi ng Individual at Family plan ang offline na gamit. Nakatago sa device mo ang bawat salitang hinahanap mo, kaya bumubukas ulit ito agad kahit walang internet. Puwede mo ring i-download mula sa page ng Account mo ang isang pack ng mga pinakasikat na salita sa wika mo.",
+              "Kailangan pa rin ng koneksyon para mag-lookup ng bagong-bagong salita, dahil kailangang ihanda ng Gadit ang buong resulta para dito. Sakop ng offline na kopya ang mga salitang nasa device mo na. Kung Basic ka, tingnan ang mga plan sa page ng pricing.",
             ],
           },
           {
             id: "slow",
-            q: "Parang mabagal ang app.",
+            q: "Parang mabagal ang app",
             a: [
               "Pinakamabagal ang unang lookup ng isang salita dahil binubuo ng Gadit ang buong resulta mula sa simula: kadalasan ilang segundo, minsan mas matagal para sa mga komplikadong salita. Agad-agad na ang mga susunod na lookup ng parehong salita, mula na sa cache.",
               "Kung mabagal ang lahat, subukan ang hard refresh: Cmd+Shift+R sa Mac, Ctrl+Shift+R sa Windows. Kung patuloy ang pagbagal sa iba't ibang page, paki-email kami kasama ang bansa at browser mo para ma-check ng team ang network route papunta sa mga server namin mula sa rehiyon mo.",
@@ -600,7 +602,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "change-language",
             q: "Paano palitan ang wika ng interface?",
             a: [
-              "Sa kanang itaas ng kahit anong page, makikita mo ang maliit na icon ng bandila (o ang pangalan ng kasalukuyang wika mo). I-tap ito at pumili mula sa 30+ na wika: Ingles, Griyego, Hebreo, Arabe, Ruso, Espanyol, Portuges, Pranses, Aleman, Czech, Slovak, Italyano, Hapon, Hindi, Amharic, Zulu.",
+              "Sa kanang itaas ng kahit anong page, makikita mo ang maliit na icon ng bandila (o ang pangalan ng kasalukuyang wika mo). I-tap ito at pumili mula sa 41 na wika.",
               "Naka-save ang pinili mo sa device na ito. Magre-reload ang lahat sa bagong wika: ang interface, ang mga menu, ang mga susunod na depinisyon ng salita, mga halimbawa, mga pambatang paliwanag, pati ang etimolohiya. Mananatili ang mga resultang naka-cache na sa lumang wika hanggang i-search mo ulit ang mga salitang iyon.",
             ],
           },
@@ -638,7 +640,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "empty-dashboard",
-            q: "Sumali ako pero walang laman ang dashboard ko.",
+            q: "Sumali ako pero walang laman ang dashboard ko",
             a: [
               "Lalabas ang stats pagkatapos ng unang click sa link mo. Kapag walang laman, ibig sabihin lang ay wala pang nagki-click. I-share mo na ang link. Halos real time ang update ng dashboard kapag nagsimula na ang aktibidad.",
               "Kung na-share mo na at may nag-sign up pero hindi ito makikita sa dashboard, sumulat sa amin kasama ang tantiyang oras ng sign-up at iche-check ng team ang attribution.",
@@ -654,7 +656,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "missing-commission",
-            q: "May nag-sign up gamit ang link ko pero hindi ko makita ang komisyon.",
+            q: "May nag-sign up gamit ang link ko pero hindi ko makita ang komisyon",
             a: [
               "Kadalasan, usapin ito ng timing: lumalabas ang sign-up sa dashboard sa loob ng ilang minuto, pero naitatala lang ang komisyon kapag talagang nabayaran na ang subscription (na puwedeng ilang araw pa kung naka-free trial sila). Balikan ito pagkatapos ng trial.",
               "Kung nabayaran na ang subscription pero wala ka pa ring nakikitang komisyon pagkalipas ng 48 oras, sumulat sa amin kasama ang tantiyang oras ng sign-up at ang email o tantiyang pangalan ng subscriber kung alam mo. Susuriin ng team ang attribution chain at mano-manong aayusin ang anumang nakaligtaan.",
@@ -671,16 +673,16 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "what-is-gadit",
             q: "Ano ang Gadit?",
             a: [
-              "Isang multilingual na diksyunaryo na ginawa para talagang maintindihan mo ang isang salita, hindi lang magbigay ng isang linyang depinisyon. Bawat salita ay bumubukas kasama ang lahat ng kahulugan nito, mga totoong halimbawa sa bawat kahulugan, mga idyoma, etimolohiya, opsyonal na larawan, at (sa Clear at Deep) pambatang paliwanag, pagbuo ng sarili mong pangungusap na may feedback, at mga quiz.",
-              "Sa ngayon, 30+ na wika ng interface. Sa loob ng team, tinatawag namin itong pag-GAD sa isang salita: maintindihan ang isang salita nang buong-buo, hindi lang isalin ito.",
+              "Tinutulungan ka ng Gadit na maintindihan ang bawat salita nang buong-buo, hindi lang makakuha ng isang linyang depinisyon. Bumubukas ang bawat salita kasama ang lahat ng kahulugan nito, mga totoong halimbawa sa bawat kahulugan, mga idyoma, at pinagmulan ng salita. Nagdadagdag ang mga bayad na plan ng larawan sa bawat kahulugan, practice, mga laro, at iba pa, at nagdadagdag ang Family ng Kids mode at sariling espasyo para sa bawat bata.",
+              "Gumagana ang Gadit sa 41 na wika. Sa loob ng team, tinatawag namin itong pag-GAD sa isang salita: maintindihan ang isang salita nang buong-buo, hindi lang isalin ito. Para makita kung ano ang kasama sa bawat plan, buksan ang page ng pricing.",
             ],
           },
           {
             id: "languages",
             q: "Anong mga wika ang sinusuportahan ninyo?",
             a: [
-              "Interface: Ingles, Griyego, Hebreo, Arabe, Ruso, Espanyol, Portuges, Pranses, Aleman, Czech, Slovak, Italyano, Hapon, Zulu.",
-              "Puwede kang mag-lookup ng salita sa alinman sa mga wikang iyon at makuha ang depinisyon, mga halimbawa, at lahat ng iba pa sa pinili mong wika ng interface. Ganap na RTL ang Hebreo at Arabe at gumagamit ng sarili nilang mga font.",
+              "Gumagana ang Gadit sa 41 na wika, kasama ang Ingles, Hebreo, Arabe, Espanyol, Pranses, Aleman, Ruso, Tsino, Hapon, Hindi, isiZulu, isiXhosa, at Afrikaans.",
+              "Puwede kang mag-lookup ng salita sa alinman sa mga wikang ito at makuha ang mga kahulugan, mga halimbawa, at lahat ng iba pa sa wikang pinili mo para sa interface. Binabasa mula kanan pakaliwa ang Hebreo, Arabe, at Persyano, gamit ang sarili nilang mga font. Para magpalit, i-tap ang language button sa itaas ng kahit anong page.",
             ],
           },
           {
@@ -688,7 +690,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Ligtas ba ang Gadit para sa mga bata?",
             a: [
               "Dinisenyo ang Gadit para ligtas na magamit ng magulang kasama ang anak. Gumagawa ang Kids mode ng mga paliwanag na simple, kongkreto, at angkop sa edad (mga antas ng 5 hanggang 10 taong gulang), gamit ang parehong engine na nagpapatakbo ng content para sa mga adult na may tahasang instruksyon na gawing simple. Hindi kailanman ipinapakita sa mga bata ang anumang content na gawa ng mga user.",
-              "Alinsunod sa aming mga patakaran at sa mga patakaran sa privacy ng mga bata sa buong mundo, 13 pataas lang ang puwedeng magkaroon ng sariling account. Ang karaniwang ayos ay account ng magulang na ginagamit ng magulang kasama ang anak niya, at iyon mismo ang dahilan kung bakit ginawa ang Kids mode.",
+              "Alinsunod sa aming mga patakaran at sa mga patakaran sa privacy ng mga bata sa buong mundo, para sa edad 13 pataas ang sariling account. Ginagamit ng mga bata ang Gadit sa pamamagitan ng magulang: sa Family plan, idinadagdag ng magulang ang bawat bata mula sa Family page, may sariling espasyo na may Kids mode ang bawat bata, at ipinapakita ng board ng magulang ang mga salitang hinahanap ng bawat bata. Para i-set up ito, magsimula sa Family sa page ng pricing.",
             ],
           },
           {
@@ -696,7 +698,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Saan naka-store ang data ko? Ibinebenta ba ninyo ito?",
             a: [
               "Ang account, history, notebook, at mga nagawang larawan ay ligtas na naka-store sa Firebase, naka-encrypt sa storage. Hindi namin ibinebenta ang data mo kaninuman. Ibinabahagi lang namin ang kailangan para patakbuhin ang Gadit (storage, bayad, mga content provider), gaya ng nakasaad sa Privacy Policy.",
-              "Puwede mong i-export ang notebook mo o burahin ang account mo anumang oras mula sa Account page.",
+              "Puwede mong burahin ang account mo anumang oras mula sa Account page. Para makakuha ng kopya ng notebook mo o ng anumang ibang data na hawak namin, sumulat sa amin mula sa page na ito.",
             ],
           },
           {
@@ -739,16 +741,17 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Hoe kanselleer ek my intekening?",
             a: [
               "Jy doen dit self, enige tyd. Meld aan, maak Rekening oop en tik op Kanselleer intekening onder jou plan.",
-              "Jou toegang duur voort tot aan die einde van die tydperk waarvoor jy reeds betaal het. Daarna val die rekening terug na Basic (gratis). Jou gestoorde woorde, geskiedenis en notaboek bly veilig en toeganklik.",
-              "As jy per ongeluk kanselleer of van plan verander, kan jy die intekening op dieselfde bladsy hervat voordat die tydperk eindig.",
+              "Op 'n betaalde intekening duur jou toegang voort tot aan die einde van die tydperk waarvoor jy reeds betaal het. Daarna skuif die rekening na Basic (gratis). Jou gestoorde woorde en geskiedenis bly veilig.",
+              "Tydens die gratis proeftydperk van 14 dae beëindig kansellering die proeftydperk dadelik, en niks word gehef nie. As die outomatiese heffing jou enigste bekommernis is, kies daardie rede in die kansellasievenster, dan kan jy eerder die hernuwing afskakel en die proeftydperk tot die laaste dag hou.",
+              "As jy 'n betaalde intekening per ongeluk kanselleer of van plan verander, kan jy dit op dieselfde bladsy hervat voordat die tydperk eindig.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Hoe skakel ek van Clear na Deep oor (of andersom)?",
+            q: "Hoe skakel ek tussen Individual en Family oor?",
             a: [
-              "Rekening, dan Bestuur betaling, dan Werk intekening by. Kies die nuwe plan.",
-              "Stripe bereken die prysverskil outomaties, pro rata volgens die dae wat in die huidige tydperk oorbly. As jy opgradeer, word jy net die verskil vir die res van die tydperk gehef. As jy na 'n laer vlak oorskakel, word die krediet op jou volgende rekening toegepas.",
+              "Om na Family oor te skakel, maak jou Rekening-bladsy oop en tik op \"Skakel oor na Family\". Jou huidige intekening word op dieselfde kaart opgedateer, sonder om dit weer in te voer.",
+              "Stripe werk die verskil uit vir die dae wat in die huidige tydperk oor is, so jy betaal net die verskil. Om van Family na Individual oor te skakel, skryf aan ons vanaf hierdie bladsy en die span skakel dit vir jou om.",
             ],
           },
           {
@@ -785,9 +788,9 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "unknown-charge",
-            q: "Ek sien 'n heffing wat ek nie herken nie.",
+            q: "Wat is hierdie heffing op my kaart?",
             a: [
-              "Heffings verskyn as GADIT of GADIT.APP met $2.99 (Clear maandeliks), $4.99 (Deep maandeliks), $29.99 (Clear jaarliks) of $49.99 (Deep jaarliks). As dit nie ooreenstem nie, kom dit dalk van 'n ander diens.",
+              "Heffings verskyn as GADIT of GADIT.APP. Die bedrag stem ooreen met jou plan (Individual of Family, maandeliks of jaarliks) in jou land se geldeenheid, soos op die prysblad gewys. Intekeninge wat voor Oktober 2026 begin het, behou die prys waarmee hulle begin het. As die bedrag nie ooreenstem nie, kan dit van 'n ander diens wees.",
               "As jy seker is dit is nie joune nie, moet dit nog nie deur jou bank betwis nie. Skryf eers direk aan ons met die datum en bedrag. Die span sal dit opspoor, verduidelik wat dit is en terugbetaal indien nodig. 'n Bankgeskil kan toekomstige betalings moeiliker maak, so om dit deur ondersteuning op te los is gewoonlik vinniger en veiliger.",
             ],
           },
@@ -801,11 +804,11 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "plan-comparison",
-            q: "Wat is die verskil tussen Basic, Clear en Deep?",
+            q: "Wat is die verskil tussen Basic, Individual en Family?",
             a: [
-              "Basic (gratis): tot 20 woordsoektogte per dag, elke betekenis, voorbeelde per betekenis, idiome en woordoorsprong. Geen registrasie nodig vir basiese soektogte nie.",
-              "Clear ($2.99/maand of $29.99/jaar): onbeperkte soektogte, kindervriendelike verduidelikings, 'n prent per woord (30/maand), skryf jou eie sin met terugvoer, idioombesonderhede en 30 dae se soekgeskiedenis.",
-              "Deep ($4.99/maand of $49.99/jaar): alles in Clear, plus oefenvasvrae, die persoonlike notaboek met slim gespasieerde herhalingsoefening, onderskeid tussen soortgelyke woorde en 'n groter prentkwota (100/maand).",
+              "Basic (gratis): tot 10 woordsoektogte per dag, elke betekenis, voorbeelde, idiome, die woord se oorsprong, die regte betekenis uit 'n sin, en 'n notaboek van tot 30 woorde.",
+              "Individual: een persoon, elke leerhulpmiddel. Onbeperkte soektogte, 'n prent vir elke betekenis, meer voorbeelde en vrae oor elke woord, skryf 'n sin met terugvoer, Elke woord, Sê dit, 'n natuurlike voorleesstem en stemsoektog, vanlyn gebruik, speletjies, vasvrae en woordduelle, en slim oefening met toetsvoorbereiding en diktee.",
+              "Family: alles in Individual vir tot 5 kinders en die ouers, plus Kindermodus, 'n eie plek vir elke kind, huiswerkhulp, en die ouerpaneel met 'n waarskuwing vir elke woord. Skole het hul eie plan. Die pryse vir jou land en die gratis proeftydperk van 14 dae is op die prysblad.",
             ],
           },
         ],
@@ -817,7 +820,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
         items: [
           {
             id: "no-verification-email",
-            q: "Ek het nie my verifikasie-e-pos ontvang nie.",
+            q: "Ek het nie my verifikasie-e-pos ontvang nie",
             a: [
               "Kyk eers in jou strooipos- en promosiesvouers. Gmail en Outlook stuur soms rekening-e-posse soontoe totdat jy een as \"Nie strooipos nie\" merk.",
               "As dit nie daar is nie, is die e-posadres dalk verkeerd getik by registrasie. Probeer weer registreer en kontroleer die adres noukeurig. As jy met Google geregistreer het, is geen verifikasie-e-pos nodig nie.",
@@ -825,7 +828,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "forgot-password",
-            q: "Ek het my wagwoord vergeet.",
+            q: "Ek het my wagwoord vergeet",
             a: [
               "Maak die aanmeldvenster oop en klik op \"Wagwoord vergeet?\". Voer die e-posadres in wat jy vir Gadit gebruik en jy kry binne 'n minuut of twee 'n herstelskakel.",
               "As die e-pos nie aankom nie, kyk in strooipos. As dit steeds nie aankom nie, het jy dalk met Google geregistreer in plaas van e-pos en wagwoord. Probeer die \"Gaan voort met Google\"-knoppie.",
@@ -833,7 +836,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "wrong-credentials",
-            q: "Ek is seker my wagwoord is reg, maar dit sê \"Verkeerde e-pos of wagwoord\".",
+            q: "Ek is seker my wagwoord is reg, maar dit sê \"Verkeerde e-pos of wagwoord\"",
             a: [
               "Drie dinge om na te gaan. Eerstens, Caps Lock. Tweedens, 'n spasie aan die einde wanneer jy kopieer en plak. Derdens, jy het met Google geregistreer eerder as met 'n wagwoord (gebruik eerder \"Gaan voort met Google\").",
               "Steeds vas? Stel die wagwoord in dieselfde venster terug. Dan begin alles skoon van voor af.",
@@ -841,7 +844,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "google-fails",
-            q: "Aanmelding met Google werk nie.",
+            q: "Aanmelding met Google werk nie",
             a: [
               "Mees algemene oorsaak: jou blaaier blokkeer derdeparty-koekies of opspringvensters vir gadit.app. Laat dit toe in die toestemmings by die adresbalk en probeer weer.",
               "As jy in incognito-modus is, word aanmelding met Google doelbewus beperk. Skakel oor na 'n gewone blaaiervenster.",
@@ -867,8 +870,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "share-account",
             q: "Kan my lewensmaat of kind my rekening deel?",
             a: [
-              "Een aangemelde gebruiker per rekening op 'n slag. Kindermodus laat een Clear- of Deep-rekening 'n ouer en kind bedien: skakel die skakelaar aan en definisies word kindervriendelik vertoon sonder aparte aanmeldings.",
-              "Vir twee volwassenes wat albei aparte notaboeke en vordering wil hê, skep twee rekeninge. Clear kos $2.99 per maand per rekening.",
+              "Elke rekening het een persoon op 'n slag aangemeld. Vir 'n huishouding is die Family-plan juis hiervoor gebou: tot 5 kinders en die ouers, elkeen met 'n eie plek, 'n eie notaboek en vordering, plus Kindermodus vir die kinders en 'n ouerpaneel.",
+              "Vir een volwassene alleen dek Individual een persoon met elke leerhulpmiddel. Vergelyk die planne en die pryse vir jou land op die prysblad.",
             ],
           },
           {
@@ -896,25 +899,25 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "kids-not-working",
-            q: "Kindermodus verander nie die verduideliking nie.",
+            q: "Kindermodus verander nie die verduideliking nie",
             a: [
-              "Kindermodus verander net teks waar die woord reeds 'n kindervriendelike verduideliking het. Vir splinternuwe woorde wat jy pas opgesoek het, gee dit 10 tot 15 sekondes. Die kindervriendelike weergawe word die eerste keer sommer dadelik geskep.",
-              "Ook: kindermodus vereis Clear of Deep. As jy op Basic is, sal die skakelaar jou vra om op te gradeer. Anonieme gebruikers word gevra om te registreer.",
+              "Kindermodus verander net die teks waar die woord reeds 'n kindervriendelike verduideliking het. Vir 'n woord wat jy pas vir die eerste keer opgesoek het, gee dit 10 tot 15 sekondes terwyl die kindervriendelike weergawe voorberei word.",
+              "Kindermodus is deel van die Family-plan. Op Basic, op Individual of sonder 'n rekening wys die skakelaar die Family-plan in plaas daarvan om aan te skakel. Intekenaars wat voor Oktober 2026 by Clear of Deep aangesluit het, behou Kindermodus. Om dit te kry, kyk na Family op die prysblad.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Stemsoektog werk nie.",
+            q: "Stemsoektog werk nie",
             a: [
               "Stemsoektog het mikrofoontoestemming nodig. Die meeste blaaiers vra een keer per webwerf. As jy per ongeluk op Blokkeer geklik het, moet jy dit self terugstel: klik op die slot- of inligtingsikoon langs gadit.app in die adresbalk, dan Werfinstellings, dan Mikrofoon, dan Laat toe.",
-              "Op Safari iOS vereis mikrofoontoegang ook 'n skakelaar by Instellings → Safari → Mikrofoon. Stem is tans 'n Clear- en Deep-funksie: Basic-gebruikers sien 'n opgraderingsversoek, afgemelde besoekers sien 'n aanmeldversoek.",
+              "Op Safari vir iPhone en iPad het mikrofoontoegang ook Instellings → Safari → Mikrofoon nodig. Stemsoektog is deel van die Individual- en Family-planne: op Basic sien jy eerder die planne, en besoekers wat nie aangemeld is nie, word gevra om aan te meld. Om op te gradeer, maak die prysblad oop.",
             ],
           },
           {
             id: "no-image",
-            q: "Ek kan nie 'n prent vir die woord skep nie.",
+            q: "Ek kan nie 'n prent vir die woord kry nie",
             a: [
-              "Prentskepping is 'n Clear- of Deep-funksie met 'n maandelikse kwota. Clear kry 30 prente per maand, Deep kry 100. As jy die kwota opgebruik het, sal jy 'n blokkering sien. Dit word op die 1ste van elke maand teruggestel.",
+              "Prente is deel van die Individual- en Family-planne, met tot 100 nuwe prente per maand. 'n Prent wat reeds vir daardie betekenis bestaan, maak oop sonder om te tel. Die ouer Clear-plan het 30 per maand, en Basic sluit nie prente in nie. Wanneer die maand se prente opgebruik is, sien jy 'n kennisgewing, en die telling begin weer aan die begin van elke maand.",
               "As jy onder die kwota is en steeds mislukkings sien, is dit gewoonlik tydelik. Probeer weer oor 30 sekondes. Aanhoudende mislukkings is 'n fout. Rapporteer dit asseblief vanaf die woordbladsy.",
             ],
           },
@@ -922,21 +925,21 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "save-word",
             q: "Hoe stoor ek 'n woord in my notaboek?",
             a: [
-              "Op enige woordresultaatbladsy, tik op Stoor in notaboek naby die titel. Die notaboek is 'n Clear- en Deep-funksie waar jy gestoorde woorde later kan hersien, hulle in 'n sterrestelselaansig kan sien en slim oefensessies kan doen (Deep).",
-              "Woorde wat jy gestoor en minstens een keer oopgemaak het, is vanlyn beskikbaar uit die plaaslike kas. Die vanlyn pakket stoor ook die gewildste woorde in jou taal sodat jy sonder internet gereed is.",
+              "Dit hoef jy nie te doen nie. Wanneer jy aangemeld is, word elke woord wat jy opsoek vanself in jou notaboek gestoor. Op Basic hou die notaboek tot 30 woorde. Op Individual en Family is daar geen beperking nie, en dit sluit slim oefening in, wat jou woorde op die regte tyd terugbring vir hersiening.",
+              "Op Individual en Family word die woorde wat jy opsoek ook op jou toestel gehou, so hulle maak sonder internet oop. Om jou woorde te sien, maak die notaboek vanuit die kieslys oop.",
             ],
           },
           {
             id: "offline",
             q: "Hoe werk vanlyn modus?",
             a: [
-              "Woorde wat jy reeds bekyk het, word plaaslik in die kas gestoor. Maak hulle weer sonder internet oop en hulle laai onmiddellik. Die volledige vanlyn pakket (topwoorde in jou taal) word op aanvraag vanaf die notaboekbladsy afgelaai.",
-              "Om 'n splinternuwe woord te soek, vereis steeds 'n verbinding, want Gadit moet die definisie van nuuts af skep. Die vanlyn kas is vir woorde wat jy reeds verken het.",
+              "Vanlyn gebruik is deel van die Individual- en Family-planne. Elke woord wat jy opsoek, word op jou toestel gehou, so dit maak weer onmiddellik sonder internet oop. Jy kan ook 'n pakket van die gewildste woorde in jou taal vanaf jou Rekening-bladsy aflaai.",
+              "Om 'n splinternuwe woord op te soek, vereis steeds 'n verbinding, want Gadit moet die volledige resultaat daarvoor voorberei. Die vanlyn kopie dek die woorde wat reeds op jou toestel is. As jy op Basic is, kyk na die planne op die prysblad.",
             ],
           },
           {
             id: "slow",
-            q: "Die toep voel stadig.",
+            q: "Die toep voel stadig",
             a: [
               "Die eerste soektog van 'n woord is die stadigste omdat Gadit die volledige resultaat van nuuts af skep: gewoonlik 'n paar sekondes, soms langer vir komplekse woorde. Latere soektogte van dieselfde woord is onmiddellik, uit die kas bedien.",
               "As alles stadig voel, probeer 'n harde herlaai: Cmd+Shift+R op Mac, Ctrl+Shift+R op Windows. As die stadigheid oor verskeie bladsye voortduur, e-pos ons asseblief met jou land en blaaier sodat die span die netwerkroete van jou streek na ons bedieners kan nagaan.",
@@ -954,7 +957,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "change-language",
             q: "Hoe verander ek die koppelvlaktaal?",
             a: [
-              "Regs bo op enige bladsy sien jy 'n klein vlagikoon (of die naam van jou huidige taal). Tik daarop en kies uit 30+ tale: Engels, Grieks, Hebreeus, Arabies, Russies, Spaans, Portugees, Frans, Duits, Tsjeggies, Slowaaks, Italiaans, Japannees, Hindi, Amharies, Zoeloe.",
+              "Regs bo op enige bladsy sien jy 'n klein vlagikoon (of die naam van jou huidige taal). Tik daarop en kies uit 41 tale.",
               "Jou keuse word op hierdie toestel gestoor. Alles herlaai in die nuwe taal: die koppelvlak, die kieslyste, toekomstige woorddefinisies, voorbeelde, kinderverduidelikings, selfs die etimologie. Resultate wat reeds in die ou taal in die kas is, bly totdat jy daardie woorde weer soek.",
             ],
           },
@@ -992,7 +995,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "empty-dashboard",
-            q: "Ek het aangesluit, maar my paneelbord is leeg.",
+            q: "Ek het aangesluit, maar my paneelbord is leeg",
             a: [
               "Statistieke verskyn na die eerste klik op jou skakel. Leeg beteken net dat nog niemand geklik het nie. Gaan deel die skakel. Die paneelbord werk byna intyds by sodra daar aktiwiteit is.",
               "As jy gedeel het en iemand geregistreer het, maar die paneelbord wys dit nie, skryf aan ons met die benaderde tyd van registrasie en die span sal die toeskrywing nagaan.",
@@ -1008,7 +1011,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "missing-commission",
-            q: "Iemand het deur my skakel geregistreer, maar ek sien nie die kommissie nie.",
+            q: "Iemand het deur my skakel geregistreer, maar ek sien nie die kommissie nie",
             a: [
               "Meestal gaan dit oor tydsberekening: die registrasie verskyn binne minute op die paneelbord, maar die kommissie word eers geboek wanneer die intekening werklik betaal is (wat dae later kan wees as hulle op 'n gratis proeftydperk is). Kyk weer nadat die proeftydperk verby is.",
               "As die intekening betaal is, maar jy sien ná 48 uur steeds nie die kommissie nie, skryf aan ons met die benaderde registrasietyd en die e-posadres of benaderde naam van die intekenaar as jy dit weet. Die span sal die toeskrywingsketting ondersoek en enige gemis self regstel.",
@@ -1025,16 +1028,16 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "what-is-gadit",
             q: "Wat is Gadit?",
             a: [
-              "'n Meertalige woordeboek wat gebou is om 'n woord regtig te laat insink, nie net om 'n eenreël-definisie te gee nie. Elke woord maak oop met al sy betekenisse, regte voorbeelde per betekenis, idiome, etimologie, 'n opsionele prent en (met Clear en Deep) 'n kindervriendelike verduideliking, skryf jou eie sin met terugvoer, en vasvrae.",
-              "Tans 30+ koppelvlaktale. Intern noem die span dit om 'n woord te GAD: om 'n woord deur en deur te verstaan, nie net te vertaal nie.",
+              "Gadit help jou om elke woord deur en deur te verstaan, nie net 'n eenreël-definisie te kry nie. Elke woord maak oop met al sy betekenisse, regte voorbeelde vir elke betekenis, idiome en die woord se oorsprong. Die betaalde planne voeg 'n prent vir elke betekenis, oefening, speletjies en meer by, en Family voeg Kindermodus en 'n eie plek vir elke kind by.",
+              "Gadit werk in 41 tale. Intern noem die span dit om 'n woord te GAD: om 'n woord deur en deur te verstaan, nie net te vertaal nie. Om te sien wat elke plan insluit, maak die prysblad oop.",
             ],
           },
           {
             id: "languages",
             q: "Watter tale ondersteun julle?",
             a: [
-              "Koppelvlak: Engels, Grieks, Hebreeus, Arabies, Russies, Spaans, Portugees, Frans, Duits, Tsjeggies, Slowaaks, Italiaans, Japannees, Zoeloe.",
-              "Jy kan 'n woord in enige van daardie tale opsoek en die definisie, voorbeelde en alles anders in jou gekose koppelvlaktaal kry. Hebreeus en Arabies is volledig RTL (van regs na links) en gebruik hul eie lettertipes.",
+              "Gadit werk in 41 tale, onder meer Engels, Hebreeus, Arabies, Spaans, Frans, Duits, Russies, Chinees, Japannees, Hindi, isiZulu, isiXhosa en Afrikaans.",
+              "Jy kan 'n woord in enige van hierdie tale opsoek en die betekenisse, voorbeelde en alles anders kry in die taal wat jy vir die koppelvlak gekies het. Hebreeus, Arabies en Persies lees van regs na links, met hul eie lettertipes. Om te verander, tik op die taalknoppie bo-aan enige bladsy.",
             ],
           },
           {
@@ -1042,7 +1045,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Is Gadit veilig vir kinders?",
             a: [
               "Gadit is ontwerp sodat 'n ouer dit veilig saam met 'n kind kan gebruik. Kindermodus lewer verduidelikings wat eenvoudig, konkreet en ouderdomsgepas is (rondom die vlak van 5 tot 10 jaar oud), met dieselfde enjin wat volwasse inhoud aandryf, maar met uitdruklike instruksies om te vereenvoudig. Geen gebruikersgegenereerde inhoud word ooit aan kinders gewys nie.",
-              "In ooreenstemming met ons beleid en kinderprivaatheidsreëls regoor die wêreld, is onafhanklike rekeningeienaarskap vir 13 jaar en ouer. Die standaardpatroon is 'n ouer se rekening wat die ouer saam met hul kind gebruik, en dit is presies waarvoor Kindermodus gebou is.",
+              "In ooreenstemming met ons beleid en kinderprivaatheidsreëls regoor die wêreld is 'n eie rekening vir 13 jaar en ouer. Kinders gebruik Gadit deur 'n ouer: op die Family-plan voeg die ouer elke kind vanaf die Family-bladsy by, elke kind kry 'n eie plek met Kindermodus, en die ouerpaneel wys die woorde wat elke kind opsoek. Om dit op te stel, begin met Family op die prysblad.",
             ],
           },
           {
@@ -1050,7 +1053,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Waar word my data gestoor? Verkoop julle dit?",
             a: [
               "Rekening, geskiedenis, notaboek en geskepte prente word veilig in Firebase gestoor, geënkripteer in berging. Ons verkoop nie jou data aan enigiemand nie. Ons deel net wat nodig is om Gadit te bedryf (berging, betalings, inhoudverskaffers), soos uiteengesit in die Privaatheidsbeleid.",
-              "Jy kan jou notaboek uitvoer of jou rekening enige tyd vanaf die Rekening-bladsy skrap.",
+              "Jy kan jou rekening enige tyd vanaf die Rekening-bladsy skrap. Om 'n kopie van jou notaboek of enige ander data wat ons hou te kry, skryf aan ons vanaf hierdie bladsy.",
             ],
           },
           {
@@ -1093,16 +1096,17 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Ninaghairi vipi usajili wangu?",
             a: [
               "Unaweza kufanya mwenyewe, wakati wowote. Ingia, fungua Akaunti, kisha gusa Ghairi usajili chini ya mpango wako.",
-              "Utaendelea kutumia huduma hadi mwisho wa kipindi ulichokwisha kulipia. Baada ya hapo akaunti inarudi kwenye Basic (bure). Maneno uliyohifadhi, historia, na daftari lako vinabaki salama na unaweza kuvifikia.",
-              "Ukighairi kwa makosa au ukibadili nia, unaweza kuendelea na usajili kutoka ukurasa huo huo kabla kipindi hakijaisha.",
+              "Kwenye usajili unaolipiwa, ufikiaji wako unaendelea hadi mwisho wa kipindi ulicholipia tayari. Baada ya hapo akaunti inahamia Basic (bila malipo). Maneno uliyohifadhi na historia yako yanabaki salama.",
+              "Wakati wa jaribio la bure la siku 14, kughairi kunamaliza jaribio papo hapo na hakuna malipo yoyote. Kama wasiwasi wako pekee ni malipo ya kiotomatiki, chagua sababu hiyo kwenye dirisha la kughairi na badala yake unaweza kuzima usasishaji, ukiendelea na jaribio hadi siku yake ya mwisho.",
+              "Ukighairi usajili unaolipiwa kwa makosa au ukibadilisha nia, unaweza kuuendeleza kutoka ukurasa huo huo kabla kipindi hakijaisha.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Ninahamaje kutoka Clear kwenda Deep (au kinyume chake)?",
+            q: "Ninahamaje kati ya Individual na Family?",
             a: [
-              "Akaunti, kisha Dhibiti malipo, kisha Sasisha usajili. Chagua mpango mpya.",
-              "Stripe hukokotoa tofauti ya bei kiotomatiki, kwa uwiano wa siku zilizobaki katika kipindi cha sasa. Ukipandisha daraja, utatozwa tofauti tu kwa sehemu iliyobaki ya kipindi. Ukihamia daraja la chini, salio litatumika kwenye bili yako inayofuata.",
+              "Ili kuhamia Family, fungua ukurasa wako wa Akaunti kisha uguse \"Badili hadi Family\". Usajili wako wa sasa unasasishwa kwenye kadi hiyo hiyo, bila kuiingiza tena.",
+              "Stripe hukokotoa tofauti kwa siku zilizobaki kwenye kipindi cha sasa, kwa hivyo unalipa tofauti tu. Ili kuhama kutoka Family kwenda Individual, tuandikie kutoka ukurasa huu na timu itakuhamisha.",
             ],
           },
           {
@@ -1139,9 +1143,9 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "unknown-charge",
-            q: "Ninaona malipo nisiyoyatambua.",
+            q: "Malipo haya kwenye kadi yangu ni ya nini?",
             a: [
-              "Malipo huonekana kama GADIT au GADIT.APP yakiwa $2.99 (Clear kila mwezi), $4.99 (Deep kila mwezi), $29.99 (Clear kila mwaka), au $49.99 (Deep kila mwaka). Ikiwa hayalingani, huenda yanatoka kwa huduma nyingine.",
+              "Malipo huonekana kama GADIT au GADIT.APP. Kiasi kinalingana na mpango wako (Individual au Family, kila mwezi au kila mwaka) kwa sarafu ya nchi yako, kama inavyoonyeshwa kwenye ukurasa wa bei. Usajili ulioanza kabla ya Oktoba 2026 unaendelea na bei uliyoanza nayo. Kama kiasi hakilingani, huenda ni cha huduma nyingine.",
               "Ikiwa una uhakika si yako, usiyapinge kupitia benki yako bado. Tuandikie moja kwa moja kwanza ukitaja tarehe na kiasi. Timu itayatafuta, itaeleza ni nini, na itarejesha pesa ikihitajika. Mgogoro wa benki unaweza kufanya malipo ya baadaye kuwa magumu zaidi, kwa hiyo kutatua kupitia huduma kwa wateja kwa kawaida ni haraka na salama zaidi.",
             ],
           },
@@ -1155,11 +1159,11 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "plan-comparison",
-            q: "Kuna tofauti gani kati ya Basic, Clear, na Deep?",
+            q: "Kuna tofauti gani kati ya Basic, Individual na Family?",
             a: [
-              "Basic (bure): hadi utafutaji wa maneno 20 kwa siku, kila maana, mifano kwa kila maana, nahau, na asili ya neno. Hakuna haja ya kujisajili kwa utafutaji wa msingi.",
-              "Clear ($2.99/mwezi au $29.99/mwaka): utafutaji bila kikomo, maelezo yanayofaa watoto, picha moja kwa kila neno (30/mwezi), tunga sentensi yako mwenyewe upate maoni, maelezo ya kina ya nahau, na siku 30 za historia ya utafutaji.",
-              "Deep ($4.99/mwezi au $49.99/mwaka): kila kitu kilicho kwenye Clear, pamoja na majaribio ya mazoezi, daftari binafsi lenye mazoezi mahiri ya kurudia kwa vipindi, kutofautisha maneno yanayofanana, na kiwango kikubwa zaidi cha picha (100/mwezi).",
+              "Basic (bila malipo): hadi utafutaji 10 wa maneno kwa siku, kila maana, mifano, nahau, chimbuko la neno, maana sahihi kutoka kwenye sentensi, na daftari la hadi maneno 30.",
+              "Individual: mtu mmoja, kila zana ya kujifunza. Utafutaji bila kikomo, picha kwa kila maana, mifano na maswali zaidi kuhusu kila neno, tunga sentensi ukipata maoni, Kila neno, Sema, sauti ya asili ya kusoma kwa sauti na utafutaji kwa sauti, matumizi bila intaneti, michezo, majaribio na duwa za maneno, na mazoezi mahiri yenye maandalizi ya mitihani na imla.",
+              "Family: kila kitu cha Individual kwa hadi watoto 5 na wazazi, pamoja na Hali ya Watoto, nafasi binafsi kwa kila mtoto, msaada wa kazi ya nyumbani, na ubao wa mzazi wenye arifa kwa kila neno. Shule zina mpango wao wenyewe. Bei za nchi yako na jaribio la bure la siku 14 ziko kwenye ukurasa wa bei.",
             ],
           },
         ],
@@ -1171,7 +1175,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
         items: [
           {
             id: "no-verification-email",
-            q: "Sikupokea barua pepe ya uthibitisho.",
+            q: "Sikupokea barua pepe ya uthibitisho",
             a: [
               "Angalia kwanza folda za barua taka na matangazo. Gmail na Outlook wakati mwingine hupeleka barua pepe za akaunti huko hadi utakapoweka alama kwenye moja kuwa \"Si barua taka\".",
               "Ikiwa haipo huko, huenda barua pepe iliandikwa vibaya wakati wa kujisajili. Jaribu kujisajili tena na uhakiki anwani kwa makini. Ikiwa ulijisajili kwa Google, hakuna haja ya barua pepe ya uthibitisho.",
@@ -1179,7 +1183,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "forgot-password",
-            q: "Nimesahau nenosiri langu.",
+            q: "Nimesahau nenosiri langu",
             a: [
               "Fungua dirisha la kuingia na ubofye \"Umesahau nenosiri?\". Weka barua pepe unayotumia kwa Gadit na utapata kiungo cha kuweka upya ndani ya dakika moja au mbili.",
               "Ikiwa barua pepe haifiki, angalia barua taka. Ikiwa bado haifiki, huenda ulijisajili kwa Google badala ya barua pepe na nenosiri. Jaribu kitufe cha \"Endelea na Google\".",
@@ -1187,7 +1191,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "wrong-credentials",
-            q: "Nina uhakika nenosiri langu ni sahihi lakini inasema \"Barua pepe au nenosiri si sahihi\".",
+            q: "Nina uhakika nenosiri langu ni sahihi lakini inasema \"Barua pepe au nenosiri si sahihi\"",
             a: [
               "Mambo matatu ya kukagua. Kwanza, Caps Lock. Pili, nafasi ya ziada mwishoni unaponakili na kubandika. Tatu, ulijisajili kwa Google badala ya nenosiri (tumia \"Endelea na Google\" badala yake).",
               "Bado umekwama? Weka upya nenosiri kutoka dirisha hilo hilo. Inakuanzisha upya kikamilifu.",
@@ -1195,7 +1199,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "google-fails",
-            q: "Kuingia kwa Google hakufanyi kazi.",
+            q: "Kuingia kwa Google hakufanyi kazi",
             a: [
               "Sababu ya kawaida zaidi: kivinjari chako kinazuia vidakuzi vya wahusika wengine au madirisha ibukizi kwa gadit.app. Viruhusu kwenye ruhusa za upau wa anwani kisha jaribu tena.",
               "Ikiwa uko kwenye hali fiche (incognito), kuingia kwa Google kumezuiwa kwa makusudi. Hamia kwenye dirisha la kawaida la kivinjari.",
@@ -1221,8 +1225,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "share-account",
             q: "Je, mwenzi wangu au mtoto wangu anaweza kutumia akaunti yangu pamoja nami?",
             a: [
-              "Mtumiaji mmoja aliyeingia kwa kila akaunti kwa wakati mmoja. Hali ya Watoto inaruhusu akaunti moja ya Clear au Deep kumhudumia mzazi na mtoto: washa kitufe na maana zitaonyeshwa kwa namna inayofaa watoto bila kuingia tofauti.",
-              "Kwa watu wazima wawili ambao kila mmoja anataka daftari na maendeleo yake, fungua akaunti mbili. Clear ni $2.99 kwa mwezi kwa kila akaunti.",
+              "Kila akaunti ina mtu mmoja aliyeingia kwa wakati mmoja. Kwa familia, mpango wa Family umejengwa kwa ajili ya hili: hadi watoto 5 na wazazi, kila mmoja akiwa na nafasi yake binafsi, daftari na maendeleo yake, pamoja na Hali ya Watoto kwa watoto na ubao wa mzazi.",
+              "Kwa mtu mzima mmoja peke yake, Individual inamhudumia mtu mmoja kwa kila zana ya kujifunza. Linganisha mipango na bei za nchi yako kwenye ukurasa wa bei.",
             ],
           },
           {
@@ -1250,25 +1254,25 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "kids-not-working",
-            q: "Hali ya Watoto haibadilishi maelezo.",
+            q: "Hali ya Watoto haibadilishi maelezo",
             a: [
-              "Hali ya Watoto hubadilisha maandishi tu pale ambapo neno tayari lina maelezo yanayofaa watoto. Kwa maneno mapya kabisa uliyotafuta sasa hivi, subiri sekunde 10 hadi 15. Toleo linalofaa watoto huundwa papo hapo mara ya kwanza.",
-              "Pia: Hali ya Watoto inahitaji Clear au Deep. Ikiwa uko kwenye Basic, kitufe kitakuomba upandishe daraja. Watumiaji wasiojulikana wataombwa kujisajili.",
+              "Hali ya Watoto hubadilisha maandishi tu pale ambapo neno tayari lina maelezo yanayofaa watoto. Kwa neno ambalo umelitafuta sasa hivi kwa mara ya kwanza, subiri sekunde 10 hadi 15 wakati toleo linalofaa watoto linaandaliwa.",
+              "Hali ya Watoto ni sehemu ya mpango wa Family. Kwenye Basic, kwenye Individual, au bila akaunti, kitufe kinaonyesha mpango wa Family badala ya kuwaka. Waliojisajili kwenye Clear au Deep kabla ya Oktoba 2026 wanaendelea kuwa na Hali ya Watoto. Ili kuipata, angalia Family kwenye ukurasa wa bei.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Utafutaji kwa sauti haufanyi kazi.",
+            q: "Utafutaji kwa sauti haufanyi kazi",
             a: [
               "Utafutaji kwa sauti unahitaji ruhusa ya kipaza sauti. Vivinjari vingi huuliza mara moja kwa kila tovuti. Ikiwa ulibofya Zuia kwa bahati mbaya, utahitaji kuirudisha mwenyewe: bofya aikoni ya kufuli au taarifa kando ya gadit.app kwenye upau wa anwani, kisha Mipangilio ya tovuti, kisha Kipaza sauti, kisha Ruhusu.",
-              "Kwenye Safari iOS, ufikiaji wa kipaza sauti pia unahitaji kuwasha kitufe kwenye Mipangilio → Safari → Kipaza sauti. Kwa sasa sauti ni kipengele cha Clear na Deep: watumiaji wa Basic wanaona ombi la kupandisha daraja, wageni ambao hawajaingia wanaona ombi la kuingia.",
+              "Kwenye Safari ya iPhone na iPad, ufikiaji wa kipaza sauti pia unahitaji Mipangilio → Safari → Kipaza sauti. Utafutaji kwa sauti ni sehemu ya mipango ya Individual na Family: kwenye Basic utaona mipango badala yake, na wageni ambao hawajaingia wanaombwa kuingia. Ili kupandisha daraja, fungua ukurasa wa bei.",
             ],
           },
           {
             id: "no-image",
-            q: "Siwezi kuunda picha ya neno.",
+            q: "Siwezi kupata picha ya neno",
             a: [
-              "Kuunda picha ni kipengele cha Clear au Deep chenye kiwango cha kila mwezi. Clear inapata picha 30 kwa mwezi, Deep inapata 100. Ukimaliza kiwango, utaona kizuizi. Kiwango huanza upya tarehe 1 ya kila mwezi.",
+              "Picha ni sehemu ya mipango ya Individual na Family, zikiwa hadi picha mpya 100 kwa mwezi. Picha ambayo tayari ipo kwa maana hiyo hufunguka bila kuhesabiwa. Mpango wa zamani wa Clear una picha 30 kwa mwezi, na Basic haina picha. Picha za mwezi zikiisha utaona taarifa, na hesabu huanza upya mwanzoni mwa kila mwezi.",
               "Ikiwa hujafikia kiwango na bado unaona hitilafu, kwa kawaida ni ya muda tu. Jaribu tena baada ya sekunde 30. Hitilafu zinazoendelea ni kasoro ya mfumo. Tafadhali ripoti kutoka ukurasa wa neno.",
             ],
           },
@@ -1276,21 +1280,21 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "save-word",
             q: "Ninahifadhije neno kwenye daftari langu?",
             a: [
-              "Kwenye ukurasa wowote wa matokeo ya neno, gusa Hifadhi kwenye daftari karibu na kichwa. Daftari ni kipengele cha Clear na Deep ambapo unaweza kupitia maneno uliyohifadhi baadaye, kuyaona kwenye mwonekano wa galaksi, na kufanya vipindi vya mazoezi mahiri (Deep).",
-              "Maneno uliyohifadhi na kuyafungua angalau mara moja yanapatikana nje ya mtandao kutoka kwenye akiba ya kifaa. Kifurushi cha nje ya mtandao pia huhifadhi maneno maarufu zaidi katika lugha yako ili uwe tayari hata bila intaneti.",
+              "Huhitaji kufanya hivyo. Ukiwa umeingia, kila neno unalotafuta huhifadhiwa kwenye daftari lako lenyewe. Kwenye Basic daftari linabeba hadi maneno 30. Kwenye Individual na Family halina kikomo na lina mazoezi mahiri, yanayorudisha maneno yako ili uyapitie kwa wakati unaofaa.",
+              "Kwenye Individual na Family, maneno unayotafuta pia huwekwa kwenye kifaa chako, kwa hivyo hufunguka bila intaneti. Ili kuona maneno yako, fungua daftari kutoka kwenye menyu.",
             ],
           },
           {
             id: "offline",
             q: "Hali ya nje ya mtandao inafanyaje kazi?",
             a: [
-              "Maneno uliyokwisha kuyaona huhifadhiwa kwenye akiba ya kifaa. Yafungue tena bila intaneti na yatafunguka papo hapo. Kifurushi kamili cha nje ya mtandao (maneno ya juu katika lugha yako) hupakuliwa unapokiomba kutoka ukurasa wa daftari.",
-              "Kutafuta neno jipya kabisa bado kunahitaji muunganisho, kwa sababu Gadit lazima iunde maana kuanzia mwanzo. Akiba ya nje ya mtandao ni kwa maneno uliyokwisha kuyachunguza.",
+              "Matumizi bila intaneti ni sehemu ya mipango ya Individual na Family. Kila neno unalotafuta huwekwa kwenye kifaa chako, kwa hivyo hufunguka tena papo hapo bila intaneti. Unaweza pia kupakua kifurushi cha maneno maarufu zaidi katika lugha yako kutoka ukurasa wako wa Akaunti.",
+              "Kutafuta neno jipya kabisa bado kunahitaji muunganisho, kwa sababu Gadit lazima iandae matokeo kamili ya neno hilo. Nakala ya nje ya mtandao inajumuisha maneno ambayo tayari yako kwenye kifaa chako. Kama uko kwenye Basic, angalia mipango kwenye ukurasa wa bei.",
             ],
           },
           {
             id: "slow",
-            q: "Programu inaonekana kuwa polepole.",
+            q: "Programu inaonekana kuwa polepole",
             a: [
               "Utafutaji wa kwanza wa neno ndio wa polepole zaidi kwa sababu Gadit huunda matokeo kamili kuanzia mwanzo: kwa kawaida sekunde chache, wakati mwingine zaidi kwa maneno magumu. Utafutaji unaofuata wa neno hilo hilo ni wa papo hapo, kutoka kwenye akiba.",
               "Ikiwa kila kitu kiko polepole, jaribu kupakia upya kikamilifu: Cmd+Shift+R kwenye Mac, Ctrl+Shift+R kwenye Windows. Ikiwa hali hiyo inaendelea kwenye kurasa nyingi, tafadhali tutumie barua pepe ukitaja nchi yako na kivinjari ili timu ikague njia ya mtandao kutoka eneo lako hadi kwenye seva zetu.",
@@ -1308,7 +1312,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "change-language",
             q: "Ninabadilishaje lugha ya kiolesura?",
             a: [
-              "Juu kulia mwa ukurasa wowote, utaona aikoni ndogo ya bendera (au jina la lugha yako ya sasa). Iguse na uchague kati ya lugha 30+: Kiingereza, Kigiriki, Kiebrania, Kiarabu, Kirusi, Kihispania, Kireno, Kifaransa, Kijerumani, Kicheki, Kislovakia, Kiitaliano, Kijapani, Kihindi, Kiamhari, Kizulu.",
+              "Juu kulia mwa ukurasa wowote, utaona aikoni ndogo ya bendera (au jina la lugha yako ya sasa). Iguse na uchague kati ya lugha 41.",
               "Chaguo lako huhifadhiwa kwenye kifaa hiki. Kila kitu hupakia upya kwa lugha mpya: kiolesura, menyu, maana za maneno za baadaye, mifano, maelezo ya watoto, hata etimolojia. Matokeo yaliyokwisha kuhifadhiwa kwenye akiba kwa lugha ya zamani yanabaki hadi utakapotafuta maneno hayo tena.",
             ],
           },
@@ -1346,7 +1350,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "empty-dashboard",
-            q: "Nimejiunga lakini dashibodi yangu haina kitu.",
+            q: "Nimejiunga lakini dashibodi yangu haina kitu",
             a: [
               "Takwimu huonekana baada ya mbofyo wa kwanza kwenye kiungo chako. Kuwa tupu kunamaanisha tu kwamba bado hakuna aliyebofya. Nenda ukashiriki kiungo. Dashibodi husasishwa karibu papo hapo shughuli zikianza.",
               "Ikiwa umeshiriki na mtu amejisajili lakini dashibodi haionyeshi hivyo, tuandikie ukitaja muda wa takriban wa kujisajili na timu itakagua uhusishaji.",
@@ -1362,7 +1366,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "missing-commission",
-            q: "Mtu amejisajili kupitia kiungo changu lakini sioni kamisheni.",
+            q: "Mtu amejisajili kupitia kiungo changu lakini sioni kamisheni",
             a: [
               "Mara nyingi ni suala la muda: usajili huonekana kwenye dashibodi ndani ya dakika chache, lakini kamisheni hurekodiwa tu usajili unapolipiwa kweli (jambo ambalo linaweza kuwa siku kadhaa baadaye ikiwa wako kwenye kipindi cha majaribio bila malipo). Angalia tena baada ya kipindi cha majaribio kuisha.",
               "Ikiwa usajili umelipiwa lakini bado huoni kamisheni baada ya saa 48, tuandikie ukitaja muda wa takriban wa kujisajili na barua pepe au jina la takriban la mteja ikiwa unalijua. Timu itachunguza mnyororo wa uhusishaji na kurekebisha kosa lolote yenyewe.",
@@ -1379,16 +1383,16 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "what-is-gadit",
             q: "Gadit ni nini?",
             a: [
-              "Kamusi ya lugha nyingi iliyojengwa ili ulielewe neno kweli, si kutoa tu maana ya mstari mmoja. Kila neno hufunguka na maana zake zote, mifano halisi kwa kila maana, nahau, etimolojia, picha ya hiari, na (kwa Clear na Deep) maelezo yanayofaa watoto, tunga sentensi yako mwenyewe upate maoni, na majaribio.",
-              "Kwa sasa kuna lugha 30+ za kiolesura. Ndani ya timu tunaita hivi kufanya GAD kwa neno: kuelewa neno hadi mwisho, si kulitafsiri tu.",
+              "Gadit inakusaidia kuelewa kila neno hadi mwisho, si kupata tu maana ya mstari mmoja. Kila neno hufunguka likiwa na maana zake zote, mifano halisi kwa kila maana, nahau na chimbuko la neno. Mipango ya kulipia inaongeza picha kwa kila maana, mazoezi, michezo na zaidi, na Family inaongeza Hali ya Watoto na nafasi binafsi kwa kila mtoto.",
+              "Gadit inafanya kazi katika lugha 41. Ndani ya timu tunaita hivi kufanya GAD kwa neno: kuelewa neno hadi mwisho, si kulitafsiri tu. Ili kuona kila mpango unajumuisha nini, fungua ukurasa wa bei.",
             ],
           },
           {
             id: "languages",
             q: "Mnaunga mkono lugha zipi?",
             a: [
-              "Kiolesura: Kiingereza, Kigiriki, Kiebrania, Kiarabu, Kirusi, Kihispania, Kireno, Kifaransa, Kijerumani, Kicheki, Kislovakia, Kiitaliano, Kijapani, Kizulu.",
-              "Unaweza kutafuta neno kwa lugha yoyote kati ya hizo na kupata maana, mifano, na kila kitu kingine kwa lugha ya kiolesura uliyochagua. Kiebrania na Kiarabu zinaonyeshwa kikamilifu kutoka kulia kwenda kushoto (RTL) na zinatumia fonti zao asilia.",
+              "Gadit inafanya kazi katika lugha 41, zikiwemo Kiingereza, Kiebrania, Kiarabu, Kihispania, Kifaransa, Kijerumani, Kirusi, Kichina, Kijapani, Kihindi, isiZulu, isiXhosa na Kiafrikana.",
+              "Unaweza kutafuta neno katika lugha yoyote kati ya hizi na kupata maana, mifano na kila kitu kingine katika lugha uliyochagua kwa kiolesura. Kiebrania, Kiarabu na Kiajemi husomwa kutoka kulia kwenda kushoto, kwa fonti zake. Ili kubadilisha, gusa kitufe cha lugha juu ya ukurasa wowote.",
             ],
           },
           {
@@ -1396,7 +1400,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Je, Gadit ni salama kwa watoto?",
             a: [
               "Gadit imeundwa ili mzazi aitumie kwa usalama pamoja na mtoto. Hali ya Watoto hutoa maelezo rahisi, yanayoeleweka, na yanayofaa umri (karibu kiwango cha miaka 5 hadi 10), ikitumia injini ile ile inayoendesha maudhui ya watu wazima ikiwa na maagizo ya wazi ya kurahisisha. Maudhui yanayoundwa na watumiaji hayaonyeshwi kamwe kwa watoto.",
-              "Kwa mujibu wa sera zetu na kanuni za faragha za watoto duniani kote, umiliki wa akaunti binafsi ni kwa miaka 13 na zaidi. Mpangilio wa kawaida ni akaunti ya mzazi ambayo mzazi huitumia pamoja na mtoto wake, na hicho ndicho hasa Hali ya Watoto imejengwa kwa ajili yake.",
+              "Kwa mujibu wa sera zetu na kanuni za faragha za watoto duniani kote, akaunti binafsi ni kwa wenye miaka 13 na zaidi. Watoto hutumia Gadit kupitia mzazi: kwenye mpango wa Family mzazi humwongeza kila mtoto kutoka ukurasa wa Family, kila mtoto anapata nafasi yake binafsi yenye Hali ya Watoto, na ubao wa mzazi unaonyesha maneno ambayo kila mtoto anatafuta. Ili kuweka mpangilio huu, anza na Family kwenye ukurasa wa bei.",
             ],
           },
           {
@@ -1404,7 +1408,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Data yangu inahifadhiwa wapi? Je, mnaiuza?",
             a: [
               "Akaunti, historia, daftari, na picha zilizoundwa huhifadhiwa kwa usalama kwenye Firebase, zikiwa zimesimbwa fiche katika hifadhi. Hatuuzi data yako kwa mtu yeyote. Tunashiriki tu kile kinachohitajika kuendesha Gadit (hifadhi, malipo, watoa maudhui), kama ilivyoelezwa kwenye Sera ya Faragha.",
-              "Unaweza kuhamisha daftari lako au kufuta akaunti yako wakati wowote kutoka ukurasa wa Akaunti.",
+              "Unaweza kufuta akaunti yako wakati wowote kutoka ukurasa wa Akaunti. Ili kupata nakala ya daftari lako au data nyingine yoyote tuliyonayo, tuandikie kutoka ukurasa huu.",
             ],
           },
           {
@@ -1447,16 +1451,17 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Hvordan opsiger jeg mit abonnement?",
             a: [
               "Du gør det selv, når som helst. Log ind, åbn Konto, og tryk på Opsig abonnement under din plan.",
-              "Din adgang fortsætter til udgangen af den periode, du allerede har betalt for. Derefter går kontoen tilbage til Basic (gratis). Dine gemte ord, din historik og din notesbog forbliver sikre og tilgængelige.",
-              "Hvis du opsiger ved en fejl eller fortryder, kan du genoptage abonnementet fra samme side, før perioden udløber.",
+              "På et betalt abonnement fortsætter din adgang til udgangen af den periode, du allerede har betalt for. Derefter går kontoen over til Basic (gratis). Dine gemte ord og din historik forbliver sikre.",
+              "I den gratis prøveperiode på 14 dage afslutter en opsigelse prøveperioden med det samme, og du bliver ikke opkrævet noget. Hvis det kun er den automatiske opkrævning, du er bekymret for, så vælg den grund i opsigelsesvinduet, så kan du i stedet slå fornyelsen fra og beholde prøveperioden til sidste dag.",
+              "Hvis du opsiger et betalt abonnement ved en fejl eller fortryder, kan du genoptage det fra samme side, før perioden slutter.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Hvordan skifter jeg fra Clear til Deep (eller omvendt)?",
+            q: "Hvordan skifter jeg mellem Individual og Family?",
             a: [
-              "Konto, derefter Administrer betaling, derefter Opdater abonnement. Vælg den nye plan.",
-              "Stripe beregner prisforskellen automatisk, forholdsmæssigt ud fra de dage, der er tilbage i den aktuelle periode. Hvis du opgraderer, bliver du kun opkrævet forskellen for resten af perioden. Hvis du skifter til et lavere niveau, bliver kreditten trukket fra din næste regning.",
+              "For at skifte til Family skal du åbne siden Konto og trykke på \"Skift til Family\". Dit nuværende abonnement opdateres på det samme kort, uden at du skal indtaste det igen.",
+              "Stripe regner forskellen ud for de dage, der er tilbage i den nuværende periode, så du kun betaler forskellen. For at skifte fra Family til Individual kan du skrive til os fra denne side, så skifter teamet det for dig.",
             ],
           },
           {
@@ -1493,9 +1498,9 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "unknown-charge",
-            q: "Jeg kan se en opkrævning, jeg ikke genkender.",
+            q: "Hvad er denne opkrævning på mit kort?",
             a: [
-              "Opkrævninger vises som GADIT eller GADIT.APP med $2.99 (Clear månedlig), $4.99 (Deep månedlig), $29.99 (Clear årlig) eller $49.99 (Deep årlig). Hvis det ikke passer, kan den komme fra en anden tjeneste.",
+              "Opkrævninger vises som GADIT eller GADIT.APP. Beløbet svarer til dit abonnement (Individual eller Family, månedligt eller årligt) i dit lands valuta, som vist på prissiden. Abonnementer, der startede før oktober 2026, beholder den pris, de startede med. Hvis beløbet ikke passer, kan det være fra en anden tjeneste.",
               "Hvis du er sikker på, at den ikke er din, så lad være med at gøre indsigelse via din bank endnu. Skriv først direkte til os med dato og beløb. Teamet finder den, forklarer, hvad det er, og refunderer om nødvendigt. En indsigelse via banken kan gøre fremtidige betalinger sværere, så det er som regel hurtigere og sikrere at løse det via support.",
             ],
           },
@@ -1509,11 +1514,11 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "plan-comparison",
-            q: "Hvad er forskellen på Basic, Clear og Deep?",
+            q: "Hvad er forskellen på Basic, Individual og Family?",
             a: [
-              "Basic (gratis): op til 20 ordopslag om dagen, alle betydninger, eksempler for hver betydning, idiomer og ordets oprindelse. Ingen tilmelding nødvendig til almindelige søgninger.",
-              "Clear ($2.99/måned eller $29.99/år): ubegrænsede opslag, børnevenlige forklaringer, et billede pr. ord (30/måned), skriv din egen sætning og få feedback, uddybning af idiomer og 30 dages søgehistorik.",
-              "Deep ($4.99/måned eller $49.99/år): alt i Clear plus øvequizzer, den personlige notesbog med smart øvelse med spredt gentagelse, skelnen mellem ord, der ligner hinanden, og en større billedkvote (100/måned).",
+              "Basic (gratis): op til 10 ordopslag om dagen, alle betydninger, eksempler, udtryk, ordets oprindelse, den rigtige betydning ud fra en sætning og en notesbog med op til 30 ord.",
+              "Individual: én person, alle læringsværktøjer. Ubegrænsede opslag, et billede til hver betydning, flere eksempler og spørgsmål til hvert ord, skriv en sætning med feedback, Hvert ord, Sig det, en naturlig oplæsningsstemme og stemmesøgning, offline brug, spil, quizzer og orddueller samt smart øvelse med testforberedelse og diktat.",
+              "Family: alt i Individual for op til 5 børn og forældrene plus børnetilstand, et eget område til hvert barn, hjælp til lektier og forældrepanelet med en besked for hvert ord. Skoler har deres eget abonnement. Priserne for dit land og den gratis prøveperiode på 14 dage finder du på prissiden.",
             ],
           },
         ],
@@ -1525,7 +1530,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
         items: [
           {
             id: "no-verification-email",
-            q: "Jeg har ikke fået min bekræftelsesmail.",
+            q: "Jeg har ikke fået min bekræftelsesmail",
             a: [
               "Tjek først mapperne for spam og kampagner. Gmail og Outlook sender nogle gange kontomails dertil, indtil du markerer en som \"Ikke spam\".",
               "Hvis den ikke er der, er e-mailen måske blevet stavet forkert ved tilmeldingen. Prøv at tilmelde dig igen, og dobbelttjek adressen. Hvis du tilmeldte dig med Google, er der ikke brug for en bekræftelsesmail.",
@@ -1533,7 +1538,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "forgot-password",
-            q: "Jeg har glemt min adgangskode.",
+            q: "Jeg har glemt min adgangskode",
             a: [
               "Åbn login-vinduet, og klik på \"Glemt adgangskode?\". Indtast den e-mail, du bruger til Gadit, så får du et nulstillingslink inden for et minut eller to.",
               "Hvis mailen ikke kommer, så tjek spam. Hvis den stadig ikke kommer, har du måske tilmeldt dig med Google i stedet for e-mail og adgangskode. Prøv knappen \"Fortsæt med Google\".",
@@ -1541,7 +1546,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "wrong-credentials",
-            q: "Jeg er sikker på, at min adgangskode er rigtig, men der står \"Forkert e-mail eller adgangskode\".",
+            q: "Jeg er sikker på, at min adgangskode er rigtig, men der står \"Forkert e-mail eller adgangskode\"",
             a: [
               "Tre ting at tjekke. For det første Caps Lock. For det andet et mellemrum til sidst, når du kopierer og indsætter. For det tredje om du tilmeldte dig med Google i stedet for en adgangskode (brug i så fald \"Fortsæt med Google\").",
               "Sidder du stadig fast? Nulstil adgangskoden fra samme vindue. Så starter du helt forfra.",
@@ -1549,7 +1554,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "google-fails",
-            q: "Login med Google virker ikke.",
+            q: "Login med Google virker ikke",
             a: [
               "Den mest almindelige årsag: din browser blokerer tredjepartscookies eller pop op-vinduer for gadit.app. Tillad dem under tilladelserne i adresselinjen, og prøv igen.",
               "Hvis du bruger inkognitotilstand, er login med Google bevidst begrænset. Skift til et almindeligt browservindue.",
@@ -1575,8 +1580,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "share-account",
             q: "Kan min partner eller mit barn dele min konto?",
             a: [
-              "Én logget ind bruger pr. konto ad gangen. Børnetilstand lader én Clear- eller Deep-konto betjene både en forælder og et barn: slå kontakten til, og definitionerne vises børnevenligt uden separate logins.",
-              "Til to voksne, der begge vil have hver deres notesbog og fremskridt, skal I oprette to konti. Clear koster $2.99 om måneden pr. konto.",
+              "Hver konto har én person logget ind ad gangen. Til en husstand er Family-abonnementet bygget til netop dette: op til 5 børn og forældrene, hver med sit eget område, sin egen notesbog og sine egne fremskridt, plus børnetilstand til børnene og et forældrepanel.",
+              "Til én voksen alene dækker Individual én person med alle læringsværktøjer. Sammenlign abonnementerne og priserne for dit land på prissiden.",
             ],
           },
           {
@@ -1604,25 +1609,25 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "kids-not-working",
-            q: "Børnetilstand ændrer ikke forklaringen.",
+            q: "Børnetilstand ændrer ikke forklaringen",
             a: [
-              "Børnetilstand skifter kun teksten, hvor ordet allerede har en børnevenlig forklaring. For helt nye ord, du lige har slået op, så giv det 10 til 15 sekunder. Den børnevenlige version bliver lavet med det samme første gang.",
-              "Desuden: børnetilstand kræver Clear eller Deep. Hvis du har Basic, vil kontakten bede dig om at opgradere. Anonyme brugere bliver bedt om at tilmelde sig.",
+              "Børnetilstand skifter kun teksten, hvor ordet allerede har en børnevenlig forklaring. For et ord, du lige har slået op for første gang, så giv det 10 til 15 sekunder, mens den børnevenlige version bliver gjort klar.",
+              "Børnetilstand er en del af Family-abonnementet. På Basic, på Individual eller uden konto viser kontakten Family-abonnementet i stedet for at slå til. Abonnenter, der tilmeldte sig Clear eller Deep før oktober 2026, beholder børnetilstand. Du får den ved at se Family på prissiden.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Stemmesøgning virker ikke.",
+            q: "Stemmesøgning virker ikke",
             a: [
               "Stemmesøgning kræver adgang til mikrofonen. De fleste browsere spørger én gang pr. websted. Hvis du ved et uheld klikkede på Bloker, skal du slå det til igen manuelt: klik på lås- eller info-ikonet ved siden af gadit.app i adresselinjen, derefter Webstedsindstillinger, derefter Mikrofon, derefter Tillad.",
-              "I Safari på iOS kræver mikrofonadgang også en kontakt under Indstillinger → Safari → Mikrofon. Stemme er i øjeblikket en Clear- og Deep-funktion: Basic-brugere ser en opfordring til at opgradere, besøgende, der ikke er logget ind, ser en opfordring til at logge ind.",
+              "I Safari på iPhone og iPad kræver mikrofonadgang også Indstillinger → Safari → Mikrofon. Stemmesøgning er en del af Individual- og Family-abonnementerne: på Basic ser du abonnementerne i stedet, og besøgende, der ikke er logget ind, bliver bedt om at logge ind. Åbn prissiden for at opgradere.",
             ],
           },
           {
             id: "no-image",
-            q: "Jeg kan ikke lave et billede til ordet.",
+            q: "Jeg kan ikke få et billede til ordet",
             a: [
-              "Billedgenerering er en Clear- eller Deep-funktion med en månedlig kvote. Clear får 30 billeder om måneden, Deep får 100. Hvis du har brugt kvoten op, ser du en spærring. Den nulstilles den 1. i hver måned.",
+              "Billeder er en del af Individual- og Family-abonnementerne med op til 100 nye billeder om måneden. Et billede, der allerede findes til den betydning, åbner uden at tælle med. Det ældre Clear-abonnement har 30 om måneden, og Basic indeholder ikke billeder. Når månedens billeder er brugt, ser du en besked, og optællingen starter forfra i begyndelsen af hver måned.",
               "Hvis du er under kvoten og stadig oplever fejl, er det som regel midlertidigt. Prøv igen om 30 sekunder. Vedvarende fejl er en fejl i systemet. Rapportér det venligst fra ordets side.",
             ],
           },
@@ -1630,21 +1635,21 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "save-word",
             q: "Hvordan gemmer jeg et ord i min notesbog?",
             a: [
-              "På enhver resultatside for et ord trykker du på Gem i notesbog ved titlen. Notesbogen er en Clear- og Deep-funktion, hvor du senere kan gennemgå gemte ord, se dem i en galaksevisning og køre smarte øvesessioner (Deep).",
-              "Ord, du har gemt og åbnet mindst én gang, er tilgængelige offline fra den lokale cache. Offlinepakken gemmer også de mest populære ord på dit sprog, så du er klar uden internet.",
+              "Det behøver du ikke. Når du er logget ind, bliver hvert ord, du slår op, gemt i din notesbog af sig selv. På Basic kan notesbogen rumme op til 30 ord. På Individual og Family er der ingen grænse, og den indeholder smart øvelse, som bringer dine ord tilbage til repetition på det rigtige tidspunkt.",
+              "På Individual og Family bliver de ord, du slår op, også gemt på din enhed, så de åbner uden internet. Du ser dine ord ved at åbne notesbogen fra menuen.",
             ],
           },
           {
             id: "offline",
             q: "Hvordan virker offlinetilstand?",
             a: [
-              "Ord, du allerede har set, bliver gemt lokalt i cachen. Åbn dem igen uden internet, og de indlæses med det samme. Den fulde offlinepakke (de mest brugte ord på dit sprog) downloades efter behov fra notesbogssiden.",
-              "At søge efter et helt nyt ord kræver stadig forbindelse, fordi Gadit skal lave definitionen fra bunden. Offlinecachen er til ord, du allerede har udforsket.",
+              "Offline brug er en del af Individual- og Family-abonnementerne. Hvert ord, du slår op, bliver gemt på din enhed, så det åbner igen med det samme uden internet. Du kan også downloade en pakke med de mest populære ord på dit sprog fra Konto-siden.",
+              "Et helt nyt ord kræver stadig forbindelse, fordi Gadit skal gøre hele resultatet klar til det. Offlinekopien dækker de ord, der allerede er på din enhed. Hvis du er på Basic, kan du se abonnementerne på prissiden.",
             ],
           },
           {
             id: "slow",
-            q: "Appen føles langsom.",
+            q: "Appen føles langsom",
             a: [
               "Det første opslag af et ord er det langsomste, fordi Gadit laver hele resultatet fra bunden: som regel et par sekunder, nogle gange længere for komplekse ord. Senere opslag af samme ord er øjeblikkelige og hentes fra cachen.",
               "Hvis alt føles langsomt, så prøv en hård genindlæsning: Cmd+Shift+R på Mac, Ctrl+Shift+R på Windows. Hvis langsommeligheden fortsætter på tværs af sider, så send os en e-mail med dit land og din browser, så teamet kan tjekke netværksruten fra din region til vores servere.",
@@ -1662,7 +1667,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "change-language",
             q: "Hvordan skifter jeg sprog i brugerfladen?",
             a: [
-              "Øverst til højre på alle sider ser du et lille flagikon (eller navnet på dit nuværende sprog). Tryk på det, og vælg mellem 30+ sprog: engelsk, græsk, hebraisk, arabisk, russisk, spansk, portugisisk, fransk, tysk, tjekkisk, slovakisk, italiensk, japansk, hindi, amharisk, zulu.",
+              "Øverst til højre på alle sider ser du et lille flagikon (eller navnet på dit nuværende sprog). Tryk på det, og vælg mellem 41 sprog.",
               "Dit valg bliver gemt på denne enhed. Alt indlæses igen på det nye sprog: brugerfladen, menuerne, fremtidige orddefinitioner, eksempler, børneforklaringer og endda etymologien. Resultater, der allerede ligger i cachen på det gamle sprog, bliver liggende, indtil du søger efter de ord igen.",
             ],
           },
@@ -1700,7 +1705,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "empty-dashboard",
-            q: "Jeg er tilmeldt, men mit dashboard er tomt.",
+            q: "Jeg er tilmeldt, men mit dashboard er tomt",
             a: [
               "Statistik vises efter det første klik på dit link. Tomt betyder bare, at ingen har klikket endnu. Gå ud og del linket. Dashboardet opdateres næsten i realtid, så snart der er aktivitet.",
               "Hvis du har delt linket, og nogen har tilmeldt sig, men dashboardet ikke viser det, så skriv til os med det omtrentlige tidspunkt for tilmeldingen, så tjekker teamet tilskrivningen.",
@@ -1716,7 +1721,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "missing-commission",
-            q: "Nogen har tilmeldt sig via mit link, men jeg kan ikke se provisionen.",
+            q: "Nogen har tilmeldt sig via mit link, men jeg kan ikke se provisionen",
             a: [
               "Oftest handler det om timing: tilmeldingen vises på dashboardet inden for få minutter, men provisionen bliver først bogført, når abonnementet faktisk er betalt (hvilket kan være dage senere, hvis de er på en gratis prøveperiode). Kig igen, når prøveperioden er slut.",
               "Hvis abonnementet er betalt, og du stadig ikke kan se provisionen efter 48 timer, så skriv til os med det omtrentlige tidspunkt for tilmeldingen og abonnentens e-mail eller omtrentlige navn, hvis du kender det. Teamet graver i tilskrivningskæden og retter manuelt eventuelle fejl.",
@@ -1733,16 +1738,16 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "what-is-gadit",
             q: "Hvad er Gadit?",
             a: [
-              "En flersproget ordbog bygget til at få et ord til at falde på plads, ikke bare give en definition på én linje. Hvert ord åbner med alle dets betydninger, rigtige eksempler for hver betydning, idiomer, etymologi, et valgfrit billede og (med Clear og Deep) en børnevenlig forklaring, skriv din egen sætning og få feedback, samt quizzer.",
-              "I øjeblikket 30+ sprog i brugerfladen. Internt kalder teamet det at GAD'e et ord: at forstå et ord helt til bunds, ikke bare oversætte det.",
+              "Gadit hjælper dig med at forstå hvert ord helt til bunds og ikke bare få en definition på én linje. Hvert ord åbner med alle sine betydninger, rigtige eksempler til hver betydning, udtryk og ordets oprindelse. De betalte abonnementer tilføjer et billede til hver betydning, øvelse, spil og mere, og Family tilføjer børnetilstand og et eget område til hvert barn.",
+              "Gadit fungerer på 41 sprog. Internt kalder teamet det at GAD'e et ord: at forstå et ord helt til bunds, ikke bare oversætte det. Du kan se, hvad hvert abonnement indeholder, på prissiden.",
             ],
           },
           {
             id: "languages",
             q: "Hvilke sprog understøtter I?",
             a: [
-              "Brugerflade: engelsk, græsk, hebraisk, arabisk, russisk, spansk, portugisisk, fransk, tysk, tjekkisk, slovakisk, italiensk, japansk, zulu.",
-              "Du kan slå et ord op på et hvilket som helst af disse sprog og få definitionen, eksemplerne og alt det andet på det sprog, du har valgt til brugerfladen. Hebraisk og arabisk vises fuldt ud fra højre mod venstre (RTL) og bruger deres egne skrifttyper.",
+              "Gadit fungerer på 41 sprog, blandt andet engelsk, hebraisk, arabisk, spansk, fransk, tysk, russisk, kinesisk, japansk, hindi, isiZulu, isiXhosa og afrikaans.",
+              "Du kan slå et ord op på et hvilket som helst af disse sprog og få betydningerne, eksemplerne og alt det andet på det sprog, du har valgt til brugerfladen. Hebraisk, arabisk og persisk læses fra højre mod venstre med deres egne skrifttyper. Du skifter sprog ved at trykke på sprogknappen øverst på enhver side.",
             ],
           },
           {
@@ -1750,7 +1755,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Er Gadit sikker for børn?",
             a: [
               "Gadit er designet, så en forælder trygt kan bruge den sammen med et barn. Børnetilstand giver forklaringer, der er enkle, konkrete og alderssvarende (omkring niveauet for 5 til 10 år), med den samme motor, der driver indholdet for voksne, men med klare instruktioner om at forenkle. Brugergenereret indhold bliver aldrig vist for børn.",
-              "I overensstemmelse med vores politikker og regler om børns privatliv verden over kræver selvstændigt ejerskab af en konto, at man er fyldt 13 år. Det almindelige mønster er en forælders konto, som forælderen bruger sammen med sit barn, og det er præcis det, børnetilstand er bygget til.",
+              "I overensstemmelse med vores politikker og regler om børns privatliv verden over er en egen konto for personer på 13 år og derover. Børn bruger Gadit gennem en forælder: på Family-abonnementet tilføjer forælderen hvert barn fra Family-siden, hvert barn får sit eget område med børnetilstand, og forældrepanelet viser de ord, hvert barn slår op. Start med Family på prissiden for at sætte det op.",
             ],
           },
           {
@@ -1758,7 +1763,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Hvor bliver mine data gemt? Sælger I dem?",
             a: [
               "Konto, historik, notesbog og genererede billeder bliver opbevaret sikkert i Firebase, krypteret i lageret. Vi sælger ikke dine data til nogen. Vi deler kun det, der er nødvendigt for at drive Gadit (lagring, betalinger, indholdsleverandører), som beskrevet i privatlivspolitikken.",
-              "Du kan eksportere din notesbog eller slette din konto når som helst fra Konto-siden.",
+              "Du kan slette din konto når som helst fra Konto-siden. Hvis du vil have en kopi af din notesbog eller andre data, vi har om dig, kan du skrive til os fra denne side.",
             ],
           },
           {
@@ -1801,16 +1806,17 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Hogyan mondhatom le az előfizetésemet?",
             a: [
               "Saját magad, bármikor. Jelentkezz be, nyisd meg a Fiók oldalt, és koppints a csomagod alatti Előfizetés lemondása gombra.",
-              "A hozzáférésed a már kifizetett időszak végéig megmarad. Ezután a fiók visszaáll Basic (ingyenes) csomagra. A mentett szavaid, az előzményeid és a füzeted biztonságban és elérhetők maradnak.",
-              "Ha véletlenül mondtad le, vagy meggondoltad magad, az időszak vége előtt ugyanazon az oldalon folytathatod az előfizetést.",
+              "Fizetős előfizetésnél a hozzáférésed a már kifizetett időszak végéig megmarad. Ezután a fiók Basic (ingyenes) csomagra vált. A mentett szavaid és az előzményeid biztonságban maradnak.",
+              "A 14 napos ingyenes próbaidőszak alatt a lemondás azonnal lezárja a próbaidőszakot, és semmit nem terhelünk. Ha csak az automatikus terhelés miatt aggódsz, válaszd ezt az okot a lemondási ablakban, és helyette kikapcsolhatod a megújítást, így a próbaidőszak az utolsó napjáig megmarad.",
+              "Ha tévedésből mondtad le a fizetős előfizetést, vagy meggondoltad magad, ugyanazon az oldalon újraindíthatod, mielőtt az időszak véget ér.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Hogyan válthatok Clear csomagról Deep csomagra (vagy fordítva)?",
+            q: "Hogyan válthatok az Individual és a Family között?",
             a: [
-              "Fiók, majd Számlázás kezelése, majd Előfizetés módosítása. Válaszd ki az új csomagot.",
-              "A Stripe automatikusan kiszámítja az árkülönbözetet, az aktuális időszakból hátralévő napok arányában. Ha magasabb csomagra váltasz, csak a különbözetet terheljük az időszak hátralévő részére. Ha alacsonyabb szintre váltasz, a jóváírás a következő számládon érvényesül.",
+              "A Family csomagra váltáshoz nyisd meg a Fiók oldalt, és koppints erre: „Váltás a Family csomagra”. A mostani előfizetésed ugyanazon a kártyán frissül, nem kell újra megadnod.",
+              "A Stripe kiszámolja a különbözetet az aktuális időszakból hátralévő napokra, így csak a különbözetet fizeted. Ha Family csomagról Individual csomagra váltanál, írj nekünk erről az oldalról, és a csapat átállítja neked.",
             ],
           },
           {
@@ -1847,9 +1853,9 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "unknown-charge",
-            q: "Olyan terhelést látok, amelyet nem ismerek fel.",
+            q: "Mi ez a terhelés a kártyámon?",
             a: [
-              "A terhelések GADIT vagy GADIT.APP néven jelennek meg, $2.99 (Clear havi), $4.99 (Deep havi), $29.99 (Clear éves) vagy $49.99 (Deep éves) összeggel. Ha nem egyezik, lehet, hogy egy másik szolgáltatástól származik.",
+              "A terhelések GADIT vagy GADIT.APP néven jelennek meg. Az összeg megfelel a csomagodnak (Individual vagy Family, havi vagy éves) az országod pénznemében, ahogy az árak oldalon látható. A 2026 októbere előtt indult előfizetések megtartják az induló árukat. Ha az összeg nem egyezik, lehet, hogy egy másik szolgáltatástól származik.",
               "Ha biztos vagy benne, hogy nem a tiéd, még ne indíts reklamációt a bankodnál. Először írj nekünk közvetlenül a dátummal és az összeggel. A csapat megkeresi, elmagyarázza, mi ez, és szükség esetén visszatéríti. A banki reklamáció megnehezítheti a későbbi számlázást, ezért az ügyfélszolgálaton keresztüli rendezés általában gyorsabb és biztonságosabb.",
             ],
           },
@@ -1863,11 +1869,11 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "plan-comparison",
-            q: "Mi a különbség a Basic, a Clear és a Deep között?",
+            q: "Mi a különbség a Basic, az Individual és a Family között?",
             a: [
-              "Basic (ingyenes): naponta legfeljebb 20 szókeresés, minden jelentés, példák minden jelentéshez, szólások és a szó eredete. Az alapkeresésekhez nem kell regisztrálni.",
-              "Clear ($2.99/hó vagy $29.99/év): korlátlan keresés, gyerekbarát magyarázatok, egy kép szavanként (30/hó), saját mondat írása visszajelzéssel, részletes szólások és 30 napnyi keresési előzmény.",
-              "Deep ($4.99/hó vagy $49.99/év): minden, ami a Clear csomagban, plusz gyakorló kvízek, a személyes füzet okos, időközönkénti ismétléses gyakorlással, a hasonló szavak megkülönböztetése és nagyobb képkeret (100/hó).",
+              "Basic (ingyenes): napi legfeljebb 10 szókeresés, minden jelentés, példák, szólások, a szó eredete, a helyes jelentés egy mondatból, és egy legfeljebb 30 szavas füzet.",
+              "Individual: egy személynek, az összes tanulási eszközzel. Korlátlan keresés, kép minden jelentéshez, több példa és kérdés minden szóhoz, mondatírás visszajelzéssel, Minden szó, Mondd ki, természetes felolvasó hang és hangalapú keresés, offline használat, játékok, kvízek és szópárbajok, valamint okos gyakorlás dolgozatra készüléssel és diktálással.",
+              "Family: minden, ami az Individual csomagban van, legfeljebb 5 gyereknek és a szülőknek, plusz Gyerek mód, saját tér minden gyereknek, segítség a házi feladathoz, és szülői panel értesítéssel minden szóról. Az iskoláknak saját csomagjuk van. Az országodra érvényes árakat és a 14 napos ingyenes próbaidőszakot az árak oldalon találod.",
             ],
           },
         ],
@@ -1879,7 +1885,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
         items: [
           {
             id: "no-verification-email",
-            q: "Nem kaptam meg a megerősítő e-mailt.",
+            q: "Nem kaptam meg a megerősítő e-mailt",
             a: [
               "Először nézd meg a spam és a promóciók mappát. A Gmail és az Outlook néha oda irányítja a fiókkal kapcsolatos e-maileket, amíg egyet meg nem jelölsz \"Nem spam\" címkével.",
               "Ha ott sincs, lehet, hogy regisztrációkor elgépelted az e-mail-címet. Próbálj meg újra regisztrálni, és ellenőrizd alaposan a címet. Ha Google-fiókkal regisztráltál, nincs szükség megerősítő e-mailre.",
@@ -1887,7 +1893,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "forgot-password",
-            q: "Elfelejtettem a jelszavamat.",
+            q: "Elfelejtettem a jelszavamat",
             a: [
               "Nyisd meg a bejelentkezési ablakot, és kattints az \"Elfelejtetted a jelszavad?\" lehetőségre. Add meg a Gadithoz használt e-mail-címedet, és egy-két percen belül megkapod a visszaállító linket.",
               "Ha az e-mail nem érkezik meg, nézd meg a spam mappát. Ha még mindig nem jön, lehet, hogy Google-lel regisztráltál, nem e-maillel és jelszóval. Próbáld a \"Folytatás Google-lel\" gombot.",
@@ -1895,7 +1901,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "wrong-credentials",
-            q: "Biztos vagyok benne, hogy jó a jelszavam, mégis azt írja: \"Hibás e-mail-cím vagy jelszó\".",
+            q: "Biztos vagyok benne, hogy jó a jelszavam, mégis azt írja: \"Hibás e-mail-cím vagy jelszó\"",
             a: [
               "Három dolgot érdemes ellenőrizni. Először a Caps Lockot. Másodszor a végén maradt szóközt másolás és beillesztés után. Harmadszor azt, hogy nem jelszóval, hanem Google-lel regisztráltál-e (ilyenkor használd a \"Folytatás Google-lel\" gombot).",
               "Még mindig nem megy? Állítsd vissza a jelszót ugyanabban az ablakban. Így tisztán indulhatsz újra.",
@@ -1903,7 +1909,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "google-fails",
-            q: "Nem működik a Google-bejelentkezés.",
+            q: "Nem működik a Google-bejelentkezés",
             a: [
               "A leggyakoribb ok: a böngésződ letiltja a harmadik féltől származó sütiket vagy a felugró ablakokat a gadit.app számára. Engedélyezd őket a címsor engedélyeinél, és próbáld újra.",
               "Inkognitó módban a Google-bejelentkezés szándékosan korlátozott. Válts normál böngészőablakra.",
@@ -1929,8 +1935,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "share-account",
             q: "Használhatja a társam vagy a gyerekem is a fiókomat?",
             a: [
-              "Egy fiókba egyszerre egy felhasználó lehet bejelentkezve. A Gyerek mód lehetővé teszi, hogy egyetlen Clear vagy Deep fiók egy szülőt és egy gyereket is kiszolgáljon: kapcsold be a kapcsolót, és a definíciók gyerekbarát formában jelennek meg, külön bejelentkezés nélkül.",
-              "Ha két felnőtt külön füzetet és saját haladást szeretne, hozzatok létre két fiókot. A Clear ára fiókonként havi $2.99.",
+              "Egy fiókba egyszerre egy ember lehet bejelentkezve. Egy háztartásnak éppen erre készült a Family csomag: legfeljebb 5 gyerek és a szülők, mindenkinek saját térrel, saját füzettel és haladással, plusz Gyerek mód a gyerekeknek és szülői panel.",
+              "Egyetlen felnőttnek az Individual csomag egy személyt fed le az összes tanulási eszközzel. Hasonlítsd össze a csomagokat és az országodra érvényes árakat az árak oldalon.",
             ],
           },
           {
@@ -1958,25 +1964,25 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "kids-not-working",
-            q: "A Gyerek mód nem változtatja meg a magyarázatot.",
+            q: "A Gyerek mód nem változtatja meg a magyarázatot",
             a: [
-              "A Gyerek mód csak akkor cseréli a szöveget, ha a szóhoz már elkészült a gyerekbarát magyarázat. A vadonatúj szavaknál, amelyeket épp most kerestél ki, adj neki 10-15 másodpercet. A gyerekbarát változat az első alkalommal menet közben készül el.",
-              "Továbbá: a Gyerek módhoz Clear vagy Deep csomag kell. Ha Basic csomagot használsz, a kapcsoló frissítést ajánl fel. A bejelentkezés nélküli felhasználókat regisztrációra kérjük.",
+              "A Gyerek mód csak akkor cseréli a szöveget, ha a szóhoz már van gyerekbarát magyarázat. Ha egy szót most kerestél ki először, adj neki 10-15 másodpercet, amíg elkészül a gyerekbarát változat.",
+              "A Gyerek mód a Family csomag része. Basic vagy Individual csomaggal, illetve fiók nélkül a kapcsoló bekapcsolás helyett a Family csomagot mutatja. Akik 2026 októbere előtt fizettek elő Clear vagy Deep csomagra, megtartják a Gyerek módot. Ha szeretnéd, nézd meg a Family csomagot az árak oldalon.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Nem működik a hangalapú keresés.",
+            q: "Nem működik a hangalapú keresés",
             a: [
               "A hangalapú kereséshez mikrofonengedély kell. A legtöbb böngésző oldalanként egyszer kérdez rá. Ha véletlenül a Letiltás gombra kattintottál, kézzel kell visszakapcsolnod: kattints a lakat vagy az információ ikonra a címsorban a gadit.app mellett, majd Webhelybeállítások, majd Mikrofon, majd Engedélyezés.",
-              "Safari iOS-en a mikrofonhozzáféréshez a Beállítások → Safari → Mikrofon kapcsolót is be kell kapcsolni. A hang jelenleg a Clear és a Deep csomag funkciója: a Basic felhasználók frissítési ajánlatot látnak, a kijelentkezett látogatók pedig bejelentkezési felszólítást.",
+              "iPhone-on és iPaden a Safariban a mikrofonhozzáféréshez a Beállítások → Safari → Mikrofon beállítás is kell. A hangalapú keresés az Individual és a Family csomag része: Basic csomaggal helyette a csomagokat látod, a be nem jelentkezett látogatókat pedig bejelentkezésre kérjük. A váltáshoz nyisd meg az árak oldalt.",
             ],
           },
           {
             id: "no-image",
-            q: "Nem tudok képet készíteni a szóhoz.",
+            q: "Nem kapok képet a szóhoz",
             a: [
-              "A képkészítés a Clear és a Deep csomag funkciója, havi kerettel. A Clear havi 30 képet kap, a Deep 100-at. Ha elhasználtad a keretet, egy korlátozó üzenetet látsz. A keret minden hónap 1-jén nullázódik.",
+              "A képek az Individual és a Family csomag részei, havonta legfeljebb 100 új képpel. Ha az adott jelentéshez már van kép, az beszámítás nélkül nyílik meg. A régebbi Clear csomagban havi 30 kép jár, a Basic pedig nem tartalmaz képeket. Ha elfogytak a hónap képei, értesítést látsz, és a számlálás minden hónap elején újraindul.",
               "Ha még a kereten belül vagy, és mégis hibát látsz, az általában átmeneti. Próbáld újra 30 másodperc múlva. A tartós hiba programhiba. Kérjük, jelentsd a szó oldaláról.",
             ],
           },
@@ -1984,21 +1990,21 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "save-word",
             q: "Hogyan menthetek el egy szót a füzetembe?",
             a: [
-              "Bármelyik szó találati oldalán koppints a cím melletti Mentés a füzetbe gombra. A füzet a Clear és a Deep csomag funkciója, ahol később átnézheted a mentett szavakat, galaxisnézetben láthatod őket, és okos gyakorlásokat indíthatsz (Deep).",
-              "Azok a szavak, amelyeket elmentettél és legalább egyszer megnyitottál, offline is elérhetők a helyi gyorsítótárból. Az offline csomag a nyelved legnépszerűbb szavait is eltárolja, így internet nélkül is készen állsz.",
+              "Nem kell külön mentened. Ha be vagy jelentkezve, minden kikeresett szó magától bekerül a füzetedbe. Basic csomaggal a füzetben legfeljebb 30 szó fér el. Individual és Family csomaggal nincs korlát, és okos gyakorlás is jár hozzá, amely a megfelelő időben hozza vissza a szavaidat ismétlésre.",
+              "Individual és Family csomaggal a kikeresett szavak az eszközödön is megmaradnak, így internet nélkül is megnyílnak. A szavaidat a füzetben látod, amelyet a menüből nyithatsz meg.",
             ],
           },
           {
             id: "offline",
             q: "Hogyan működik az offline mód?",
             a: [
-              "A már megtekintett szavak a helyi gyorsítótárba kerülnek. Ha internet nélkül újra megnyitod őket, azonnal betöltődnek. A teljes offline csomag (a nyelved leggyakoribb szavai) igény szerint letölthető a füzet oldaláról.",
-              "Egy vadonatúj szó kereséséhez továbbra is internetkapcsolat kell, mert a Gaditnak a nulláról kell elkészítenie a definíciót. Az offline gyorsítótár a már felfedezett szavakhoz való.",
+              "Az offline használat az Individual és a Family csomag része. Minden kikeresett szó megmarad az eszközödön, így internet nélkül is azonnal újra megnyílik. A Fiók oldalról letöltheted a nyelved legnépszerűbb szavainak csomagját is.",
+              "Egy vadonatúj szó kereséséhez továbbra is kapcsolat kell, mert a Gaditnak el kell készítenie hozzá a teljes találatot. Az offline másolat az eszközödön már meglévő szavakat tartalmazza. Ha Basic csomagod van, nézd meg a csomagokat az árak oldalon.",
             ],
           },
           {
             id: "slow",
-            q: "Lassúnak tűnik az alkalmazás.",
+            q: "Lassúnak tűnik az alkalmazás",
             a: [
               "Egy szó első keresése a leglassabb, mert a Gadit a nulláról készíti el a teljes találatot: általában néhány másodperc, összetett szavaknál néha több. Ugyanannak a szónak a későbbi keresései azonnaliak, a gyorsítótárból jönnek.",
               "Ha minden lassúnak tűnik, próbálj meg egy teljes frissítést: Cmd+Shift+R Macen, Ctrl+Shift+R Windowson. Ha a lassúság több oldalon is megmarad, írj nekünk e-mailt az országoddal és a böngésződdel, hogy a csapat ellenőrizhesse a hálózati útvonalat a régiódból a szervereinkig.",
@@ -2016,7 +2022,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "change-language",
             q: "Hogyan változtathatom meg a felület nyelvét?",
             a: [
-              "Bármelyik oldal jobb felső sarkában látsz egy kis zászló ikont (vagy a jelenlegi nyelved nevét). Koppints rá, és válassz a több mint 30 nyelv közül: angol, görög, héber, arab, orosz, spanyol, portugál, francia, német, cseh, szlovák, olasz, japán, hindi, amhara, zulu.",
+              "Bármelyik oldal jobb felső sarkában látsz egy kis zászló ikont (vagy a jelenlegi nyelved nevét). Koppints rá, és válassz 41 nyelv közül.",
               "A választásod ezen az eszközön mentődik el. Minden újratöltődik az új nyelven: a felület, a menük, a jövőbeli szódefiníciók, a példák, a gyerekmagyarázatok, sőt az etimológia is. A régi nyelven már gyorsítótárazott találatok megmaradnak, amíg újra rá nem keresel azokra a szavakra.",
             ],
           },
@@ -2054,7 +2060,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "empty-dashboard",
-            q: "Csatlakoztam, de üres az irányítópultom.",
+            q: "Csatlakoztam, de üres az irányítópultom",
             a: [
               "A statisztikák a linkedre érkező első kattintás után jelennek meg. Az üres irányítópult csak annyit jelent, hogy még senki nem kattintott. Oszd meg a linket. Amint elindul az aktivitás, az irányítópult szinte valós időben frissül.",
               "Ha már megosztottad, és valaki regisztrált, de az irányítópult nem mutatja, írj nekünk a regisztráció hozzávetőleges időpontjával, és a csapat ellenőrzi a hozzárendelést.",
@@ -2070,7 +2076,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "missing-commission",
-            q: "Valaki a linkemen keresztül regisztrált, de nem látom a jutalékot.",
+            q: "Valaki a linkemen keresztül regisztrált, de nem látom a jutalékot",
             a: [
               "Legtöbbször időzítésről van szó: a regisztráció perceken belül megjelenik az irányítópulton, de a jutalék csak akkor kerül könyvelésre, amikor az előfizetést ténylegesen kifizetik (ami napokkal később is lehet, ha ingyenes próbaidőszakot használnak). Nézz vissza a próbaidőszak vége után.",
               "Ha az előfizetést kifizették, de 48 óra után sem látod a jutalékot, írj nekünk a regisztráció hozzávetőleges időpontjával, valamint az előfizető e-mail-címével vagy hozzávetőleges nevével, ha tudod. A csapat utánajár a hozzárendelési láncnak, és kézzel pótol minden kimaradást.",
@@ -2087,16 +2093,16 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "what-is-gadit",
             q: "Mi az a Gadit?",
             a: [
-              "Egy többnyelvű szótár, amely arra készült, hogy egy szó tényleg a helyére kerüljön, ne csak egy egysoros definíciót adjon. Minden szó az összes jelentésével nyílik meg, valódi példákkal minden jelentéshez, szólásokkal, etimológiával, egy választható képpel, és (a Clear és a Deep csomaggal) gyerekbarát magyarázattal, saját mondat írásával és visszajelzéssel, valamint kvízekkel.",
-              "Jelenleg több mint 30 felületi nyelv. A csapaton belül ezt úgy hívjuk, hogy GAD-olni egy szót: a szót egészen a mélyéig megérteni, nem csak lefordítani.",
+              "A Gadit segít minden szót egészen a mélyéig megérteni, nem csak egy egysoros definíciót kapni. Minden szó az összes jelentésével nyílik meg, valódi példákkal minden jelentéshez, szólásokkal és a szó eredetével. A fizetős csomagokkal kép jár minden jelentéshez, gyakorlás, játékok és még sok más, a Family pedig Gyerek módot és saját teret ad minden gyereknek.",
+              "A Gadit 41 nyelven működik. A csapaton belül ezt úgy hívjuk, hogy GAD-olni egy szót: a szót egészen a mélyéig megérteni, nem csak lefordítani. Hogy melyik csomag mit tartalmaz, azt az árak oldalon látod.",
             ],
           },
           {
             id: "languages",
             q: "Milyen nyelveket támogattok?",
             a: [
-              "Felület: angol, görög, héber, arab, orosz, spanyol, portugál, francia, német, cseh, szlovák, olasz, japán, zulu.",
-              "Bármelyik nyelven kikereshetsz egy szót, és a definíciót, a példákat és minden mást a választott felületi nyelven kapod meg. A héber és az arab teljesen jobbról balra (RTL) jelenik meg, és a saját betűtípusaikat használja.",
+              "A Gadit 41 nyelven működik, köztük angolul, héberül, arabul, spanyolul, franciául, németül, oroszul, kínaiul, japánul, valamint hindi, zulu, xhosa és afrikaans nyelven.",
+              "Bármelyik nyelven kikereshetsz egy szót, és a jelentéseket, a példákat és minden mást azon a nyelven kapod meg, amelyet a felülethez választottál. A héber, az arab és a perzsa jobbról balra olvasható, saját betűtípussal. A váltáshoz koppints a nyelvválasztó gombra bármelyik oldal tetején.",
             ],
           },
           {
@@ -2104,7 +2110,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Biztonságos a Gadit gyerekeknek?",
             a: [
               "A Gadit úgy készült, hogy a szülő biztonságosan használhassa a gyerekével együtt. A Gyerek mód egyszerű, konkrét és életkornak megfelelő magyarázatokat ad (nagyjából 5-10 éves szinten), ugyanazzal a motorral, amely a felnőtt tartalmat is készíti, de kifejezett utasítással az egyszerűsítésre. Felhasználók által létrehozott tartalom soha nem jelenik meg a gyerekeknek.",
-              "Irányelveinkkel és a világszerte érvényes gyermekadatvédelmi szabályokkal összhangban önálló fiókot 13 éves kortól lehet birtokolni. A szokásos megoldás egy szülői fiók, amelyet a szülő a gyerekével együtt használ, és pontosan erre készült a Gyerek mód.",
+              "Irányelveinkkel és a világszerte érvényes gyermekadatvédelmi szabályokkal összhangban saját fiókot 13 éves kortól lehet használni. A gyerekek egy szülőn keresztül használják a Gaditot: a Family csomagban a szülő a Family oldalon adja hozzá a gyerekeket egyenként, minden gyerek saját teret kap Gyerek móddal, a szülői panel pedig megmutatja, melyik gyerek milyen szavakat keres ki. A beállításhoz kezdd a Family csomaggal az árak oldalon.",
             ],
           },
           {
@@ -2112,7 +2118,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Hol tároljátok az adataimat? Eladjátok őket?",
             a: [
               "A fiók, az előzmények, a füzet és a létrehozott képek biztonságosan, titkosítva tárolódnak a Firebase-ben. Az adataidat senkinek nem adjuk el. Csak azt osztjuk meg, ami a Gadit működtetéséhez szükséges (tárolás, fizetés, tartalomszolgáltatók), ahogy az Adatvédelmi szabályzat részletezi.",
-              "A füzetedet bármikor exportálhatod, vagy törölheted a fiókodat a Fiók oldalon.",
+              "A fiókodat bármikor törölheted a Fiók oldalon. Ha másolatot szeretnél a füzetedről vagy bármely más adatról, amelyet tárolunk rólad, írj nekünk erről az oldalról.",
             ],
           },
           {

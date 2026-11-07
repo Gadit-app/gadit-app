@@ -99,16 +99,17 @@ Object.assign(HELP, {
             q: "How do I cancel my subscription?",
             a: [
               "Self-serve, any time. Sign in, open Account, and tap Cancel subscription under your plan.",
-              "Your access continues until the end of the period you already paid for. After that the account drops back to Basic (free). Your saved words, history, and notebook stay safe and accessible.",
-              "If you cancel by mistake or change your mind, you can resume the subscription from the same page before the period ends.",
+              "On a paid subscription, your access continues until the end of the period you already paid for. After that the account moves to Basic (free). Your saved words and history stay safe.",
+              "During the 14-day free trial, cancelling ends the trial right away and nothing is charged. If the automatic charge is your only worry, pick that reason in the cancel window and you can turn off the renewal instead, keeping the trial until its last day.",
+              "If you cancel a paid subscription by mistake or change your mind, you can resume it from the same page before the period ends.",
             ],
           },
           {
             id: "switch-plan",
-            q: "How do I switch from Clear to Deep (or the other way)?",
+            q: "How do I switch between Individual and Family?",
             a: [
-              "Account, then Manage billing, then Update subscription. Pick the new plan.",
-              "Stripe calculates the price difference automatically, pro-rated by the days remaining in the current period. If you're upgrading, you'll be charged just the difference for the rest of the period. If you're switching to a lower tier, the credit applies to your next bill.",
+              "To move to Family, open your Account page and tap \"Switch to Family\". Your current subscription is updated on the same card, without entering it again.",
+              "Stripe works out the difference for the days left in the current period, so you only pay the difference. To move from Family to Individual, write to us from this page and the team will switch it for you.",
             ],
           },
           {
@@ -145,9 +146,9 @@ Object.assign(HELP, {
           },
           {
             id: "unknown-charge",
-            q: "I see a charge I don't recognise.",
+            q: "What is this charge on my card?",
             a: [
-              "Charges appear as GADIT or GADIT.APP with $2.99 (Clear monthly), $4.99 (Deep monthly), $29.99 (Clear yearly), or $49.99 (Deep yearly). If it doesn't match, it might be from a different service.",
+              "Charges appear as GADIT or GADIT.APP. The amount matches your plan (Individual or Family, monthly or yearly) in your country's currency, as shown on the pricing page. Subscriptions that started before October 2026 keep the price they started with. If the amount doesn't match, it may be from a different service.",
               "If you're certain it's not yours, don't dispute through your bank yet. Write to us directly first with the date and amount. The team will find it, explain what it is, and refund if needed. A bank dispute can make future billing harder, so resolving it through support is usually faster and safer.",
             ],
           },
@@ -161,11 +162,11 @@ Object.assign(HELP, {
           },
           {
             id: "plan-comparison",
-            q: "What's the difference between Basic, Clear, and Deep?",
+            q: "What's the difference between Basic, Individual and Family?",
             a: [
-              "Basic (free): up to 20 word lookups a day, every meaning, examples per meaning, idioms, and word origin. No signup required for basic searches.",
-              "Clear ($2.99/month or $29.99/year): unlimited lookups, kid-friendly explanations, an image per word (30/month), compose-your-own-sentence with feedback, idioms detail, and 30 days of search history.",
-              "Deep ($4.99/month or $49.99/year): everything in Clear, plus practice quizzes, the personal notebook with smart spaced-repetition practice, distinguishing similar words, and a larger image quota (100/month).",
+              "Basic (free): up to 10 word lookups a day, every meaning, examples, idioms, the word's origin, the right meaning from a sentence, and a notebook of up to 30 words.",
+              "Individual: one person, every learning tool. Unlimited lookups, a picture for every meaning, more examples and questions about every word, compose a sentence with feedback, Every Word, Say it, a natural read-aloud voice and voice search, offline use, games, quizzes and word duels, and smart practice with test prep and dictation.",
+              "Family: everything in Individual for up to 5 children and the parents, plus Kids Mode, a space of its own for every child, homework help, and the parent board with an alert for every word. Schools have a plan of their own. The prices for your country and the 14-day free trial are on the pricing page.",
             ],
           },
         ],
@@ -177,7 +178,7 @@ Object.assign(HELP, {
         items: [
           {
             id: "no-verification-email",
-            q: "I didn't receive my verification email.",
+            q: "I didn't receive my verification email",
             a: [
               "Check spam and promotions folders first. Gmail and Outlook sometimes route account emails there until you mark one as \"Not spam\".",
               "If it's not there, the email might have been mistyped at signup. Try signing up again and double-check the address. If you used Google sign-up, no verification email is needed.",
@@ -185,7 +186,7 @@ Object.assign(HELP, {
           },
           {
             id: "forgot-password",
-            q: "I forgot my password.",
+            q: "I forgot my password",
             a: [
               "Open the sign-in dialog and click \"Forgot password?\". Enter the email you use for Gadit and you'll get a reset link within a minute or two.",
               "If the email doesn't arrive, check spam. If it still doesn't arrive, you might have signed up with Google instead of email and password. Try the \"Continue with Google\" button.",
@@ -193,7 +194,7 @@ Object.assign(HELP, {
           },
           {
             id: "wrong-credentials",
-            q: "I'm sure my password is right but it says \"Wrong email or password\".",
+            q: "I'm sure my password is right but it says \"Wrong email or password\"",
             a: [
               "Three things to check. First, capslock. Second, trailing space when copy-pasting. Third, you signed up with Google rather than a password (use \"Continue with Google\" instead).",
               "Still stuck? Reset the password from the same dialog. It sets you up clean.",
@@ -201,7 +202,7 @@ Object.assign(HELP, {
           },
           {
             id: "google-fails",
-            q: "Google sign-in doesn't work.",
+            q: "Google sign-in doesn't work",
             a: [
               "Most common cause: your browser is blocking third-party cookies or pop-ups for gadit.app. Allow them in the address-bar permissions and try again.",
               "If you're in incognito mode, Google sign-in is restricted on purpose. Switch to a normal browser window.",
@@ -227,8 +228,8 @@ Object.assign(HELP, {
             id: "share-account",
             q: "Can my partner or child share my account?",
             a: [
-              "One signed-in user per account at a time. Kids mode lets a single Clear or Deep account serve a parent and child: flip the toggle and definitions render kid-friendly without separate logins.",
-              "For two adults who both want separate notebooks and progress, create two accounts. Clear is $2.99 a month per account.",
+              "Each account has one person signed in at a time. For a household, the Family plan is built for this: up to 5 children and the parents, each with a space of their own, their own notebook and progress, plus Kids Mode for the children and a parent board.",
+              "For one adult on their own, Individual covers one person with every learning tool. Compare the plans and the prices for your country on the pricing page.",
             ],
           },
           {
@@ -256,25 +257,25 @@ Object.assign(HELP, {
           },
           {
             id: "kids-not-working",
-            q: "Kids mode isn't changing the explanation.",
+            q: "Kids Mode isn't changing the explanation",
             a: [
-              "Kids mode only flips text where the word already has a kid-friendly explanation generated. For brand-new words you've just looked up, give it 10 to 15 seconds. The kid-friendly version is generated on the fly the first time.",
-              "Also: kids mode requires Clear or Deep. If you're on Basic, the toggle will prompt you to upgrade. Anonymous users get prompted to sign up.",
+              "Kids Mode only changes the text where the word already has a kid-friendly explanation. For a word you've just looked up for the first time, give it 10 to 15 seconds while the kid-friendly version is prepared.",
+              "Kids Mode is part of the Family plan. On Basic, on Individual, or without an account, the switch shows the Family plan instead of turning on. Subscribers who joined Clear or Deep before October 2026 keep Kids Mode. To get it, see Family on the pricing page.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Voice search doesn't work.",
+            q: "Voice search doesn't work",
             a: [
               "Voice search needs microphone permission. Most browsers ask once per site. If you accidentally clicked Block, you'll need to flip it back manually: click the lock or info icon next to gadit.app in the address bar, then Site settings, then Microphone, then Allow.",
-              "On Safari iOS, microphone access also requires a Settings → Safari → Microphone toggle. Voice is currently a Clear and Deep feature: Basic users see an upgrade prompt, signed-out visitors see a sign-in prompt.",
+              "On Safari for iPhone and iPad, microphone access also needs Settings → Safari → Microphone. Voice search is part of the Individual and Family plans: on Basic you'll see the plans instead, and visitors who aren't signed in are asked to sign in. To upgrade, open the pricing page.",
             ],
           },
           {
             id: "no-image",
-            q: "I can't generate an image for the word.",
+            q: "I can't get a picture for the word",
             a: [
-              "Image generation is a Clear or Deep feature with a monthly quota. Clear gets 30 images a month, Deep gets 100. If you've used up the quota, you'll see a wall. It resets on the 1st of every month.",
+              "Pictures are part of the Individual and Family plans, with up to 100 new pictures a month. A picture that already exists for that meaning opens without counting. The older Clear plan has 30 a month, and Basic doesn't include pictures. When the month's pictures are used up you'll see a notice, and the count starts again at the beginning of each month.",
               "If you're under the quota and still seeing failures, it's usually transient. Try again in 30 seconds. Persistent failures are a bug. Please report from the word page.",
             ],
           },
@@ -282,21 +283,21 @@ Object.assign(HELP, {
             id: "save-word",
             q: "How do I save a word to my notebook?",
             a: [
-              "On any word result page, tap Save to notebook near the title. The notebook is a Clear and Deep feature where you can review saved words later, see them on a galaxy view, and run smart-practice sessions (Deep).",
-              "Words you've saved and opened at least once are available offline from the local cache. The offline pack also caches the most popular words in your language so you're ready without internet.",
+              "You don't need to. When you're signed in, every word you look up is saved to your notebook on its own. On Basic the notebook holds up to 30 words. On Individual and Family it has no limit and includes smart practice, which brings your words back for review at the right time.",
+              "On Individual and Family, the words you look up are also kept on your device, so they open without internet. To see your words, open the notebook from the menu.",
             ],
           },
           {
             id: "offline",
             q: "How does offline mode work?",
             a: [
-              "Words you've already viewed are cached locally. Open them again without internet and they load instantly. The full offline pack (top words in your language) downloads on demand from the notebook page.",
-              "Searching for a brand-new word still requires connectivity, because Gadit has to generate the definition from scratch. The offline cache is for words you've already explored.",
+              "Offline use is part of the Individual and Family plans. Every word you look up is kept on your device, so it opens again instantly without internet. You can also download a pack of the most popular words in your language from your Account page.",
+              "Looking up a brand-new word still needs a connection, because Gadit has to prepare the full result for it. The offline copy covers the words already on your device. If you're on Basic, see the plans on the pricing page.",
             ],
           },
           {
             id: "slow",
-            q: "The app feels slow.",
+            q: "The app feels slow",
             a: [
               "The first lookup of a word is the slowest because Gadit generates the full result from scratch: usually a few seconds, sometimes longer for complex words. Subsequent lookups of the same word are instant, served from cache.",
               "If everything feels slow, try a hard refresh: Cmd+Shift+R on Mac, Ctrl+Shift+R on Windows. If the slowness persists across pages, please email us with your country and browser so the team can check the network route to our servers from your region.",
@@ -314,7 +315,7 @@ Object.assign(HELP, {
             id: "change-language",
             q: "How do I change the UI language?",
             a: [
-              "Top right of any page, you'll see a small flag icon (or your current language name). Tap it and pick from 30+ languages: English, Greek, Hebrew, Arabic, Russian, Spanish, Portuguese, French, German, Czech, Slovak, Italian, Japanese, Hindi, Amharic, Zulu.",
+              "Top right of any page, you'll see a small flag icon (or your current language name). Tap it and pick from 41 languages.",
               "Your choice is saved on this device. Everything reloads in the new language: the interface, the menus, future word definitions, examples, kid explanations, even the etymology. Already-cached results in the old language stay until you search those words again.",
             ],
           },
@@ -352,7 +353,7 @@ Object.assign(HELP, {
           },
           {
             id: "empty-dashboard",
-            q: "I joined but my dashboard is empty.",
+            q: "I joined but my dashboard is empty",
             a: [
               "Stats show after the first click on your link. Empty just means nobody's clicked yet. Go share the link. The dashboard updates in near real time once activity starts.",
               "If you've shared and someone's signed up but the dashboard isn't reflecting it, write to us with the rough time of signup and the team will check the attribution.",
@@ -368,7 +369,7 @@ Object.assign(HELP, {
           },
           {
             id: "missing-commission",
-            q: "Someone signed up through my link but I don't see the commission.",
+            q: "Someone signed up through my link but I don't see the commission",
             a: [
               "Most often this is timing: the signup shows up in the dashboard within minutes, but the commission only books once the subscription is actually paid (which can be days later if they're on a free trial). Check back after the trial ends.",
               "If the subscription paid but you still don't see the commission after 48 hours, write to us with the rough signup time and the email or rough name of the subscriber if you know it. The team will dig into the attribution chain and fix any miss manually.",
@@ -385,16 +386,16 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "What is Gadit?",
             a: [
-              "A multilingual dictionary built to make a word click, not just give a one-line definition. Every word opens with all its meanings, real examples per meaning, idioms, etymology, an optional image, and (with Clear and Deep) a kid-friendly explanation, compose-your-own-sentence with feedback, and quizzes.",
-              "Currently 30+ UI languages. Internally the team calls it GAD a word: to understand a word all the way through, not just translate it.",
+              "Gadit helps you understand every word all the way through, not just get a one-line definition. Every word opens with all its meanings, real examples for each meaning, idioms and the word's origin. The paid plans add a picture for every meaning, practice, games and more, and Family adds Kids Mode and a space for every child.",
+              "Gadit works in 41 languages. Internally the team calls it GAD a word: to understand a word all the way through, not just translate it. To see what each plan includes, open the pricing page.",
             ],
           },
           {
             id: "languages",
             q: "Which languages do you support?",
             a: [
-              "Interface: English, Greek, Hebrew, Arabic, Russian, Spanish, Portuguese, French, German, Czech, Slovak, Italian, Japanese, Zulu.",
-              "You can look up a word in any of those languages and get the definition, examples, and everything else in your chosen UI language. Hebrew and Arabic are fully RTL and use their native fonts.",
+              "Gadit works in 41 languages, including English, Hebrew, Arabic, Spanish, French, German, Russian, Chinese, Japanese, Hindi, isiZulu, isiXhosa and Afrikaans.",
+              "You can look up a word in any of these languages and get the meanings, examples and everything else in the language you chose for the interface. Hebrew, Arabic and Persian read right to left, with their own fonts. To switch, tap the language button at the top of any page.",
             ],
           },
           {
@@ -402,7 +403,7 @@ Object.assign(HELP, {
             q: "Is Gadit safe for kids?",
             a: [
               "Gadit is designed for a parent to use safely alongside a child. Kids mode produces explanations that are simple, concrete, and age-appropriate (around the 5 to 10 year old level), using the same engine that powers adult content with explicit instructions to simplify. No user-generated content is ever shown to kids.",
-              "In line with our policies and child-privacy rules around the world, independent account ownership is 13 and up. The standard pattern is a parent's account that the parent uses together with their kid, which is exactly what Kids mode is built for.",
+              "In line with our policies and child-privacy rules around the world, an account of your own is for ages 13 and up. Children use Gadit through a parent: on the Family plan the parent adds each child from the Family page, every child gets a space of their own with Kids Mode, and the parent board shows the words each child looks up. To set it up, start with Family on the pricing page.",
             ],
           },
           {
@@ -410,7 +411,7 @@ Object.assign(HELP, {
             q: "Where is my data stored? Do you sell it?",
             a: [
               "Account, history, notebook, and generated images are stored securely in Firebase, encrypted in storage. We don't sell your data to anyone. We only share what's needed to run Gadit (storage, payments, content providers), as spelled out in the Privacy Policy.",
-              "You can export your notebook or delete your account at any time from the Account page.",
+              "You can delete your account at any time from the Account page. To get a copy of your notebook or any other data we hold, write to us from this page.",
             ],
           },
           {
@@ -453,16 +454,17 @@ Object.assign(HELP, {
             q: "Ngikukhansela kanjani ukubhalisa kwami?",
             a: [
               "Ungakwenza wena, noma nini. Ngena ngemvume, vula i-Akhawunti, bese uthepha okuthi Khansela ukubhalisa ngaphansi kohlelo lwakho.",
-              "Ukufinyelela kwakho kuqhubeka kuze kube sekupheleni kwesikhathi osuvele usikhokhele. Ngemva kwalokho i-akhawunti ibuyela ku-Basic (yamahhala). Amagama akho awagcinile, umlando, nencwadi yamanothi kuhlala kuphephile futhi kufinyeleleka.",
-              "Uma ukhansela ngephutha noma ushintsha umqondo, ungaqhubeka nokubhalisa kusuka kuleli khasi elifanayo ngaphambi kokuphela kwesikhathi.",
+              "Uma unokubhalisa okukhokhelwayo, ukufinyelela kwakho kuqhubeka kuze kube sekupheleni kwesikhathi osuvele usikhokhele. Ngemva kwalokho i-akhawunti ibuyela ku-Basic (yamahhala). Amagama akho awagcinile nomlando kuhlala kuphephile.",
+              "Phakathi nesikhathi sokuzama samahhala sezinsuku ezingu-14, ukukhansela kuqeda isikhathi sokuzama ngokushesha futhi akukho okukhokhiswayo. Uma ukhathazeke ngenkokhelo ezenzakalelayo kuphela, khetha leso sizathu efasiteleni lokukhansela, bese ungavala ukuvuselela esikhundleni salokho, ugcine isikhathi sokuzama kuze kube usuku lwaso lokugcina.",
+              "Uma ukhansela ukubhalisa okukhokhelwayo ngephutha noma ushintsha umqondo, ungakuqhubeka kusuka kuleli khasi elifanayo ngaphambi kokuphela kwesikhathi.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Ngishintsha kanjani kusuka ku-Clear ngiya ku-Deep (noma okuphambene)?",
+            q: "Ngishintsha kanjani phakathi kwe-Individual ne-Family?",
             a: [
-              "I-Account, bese Manage billing, bese Update subscription. Khetha uhlelo olusha.",
-              "I-Stripe ibala umehluko wentengo ngokuzenzakalelayo, ngokwezinsuku ezisele esikhathini samanje. Uma uthuthukisa, uzokhokhiswa umehluko kuphela wesikhathi esisele. Uma ushintshela ezingeni eliphansi, isikweletu sisebenza esikweletini sakho esilandelayo.",
+              "Ukuze ushintshele ku-Family, vula ikhasi le-akhawunti yakho bese uthepha okuthi \"Shintshela ku-Family\". Ukubhalisa kwakho kwamanje kubuyekezwa ekhadini elifanayo, ngaphandle kokulifaka futhi.",
+              "I-Stripe ibala umehluko wezinsuku ezisele esikhathini samanje, ngakho ukhokha umehluko kuphela. Ukuze ushintshe kusuka ku-Family uye ku-Individual, sibhalele kuleli khasi futhi iqembu lizokushintshela.",
             ],
           },
           {
@@ -499,9 +501,9 @@ Object.assign(HELP, {
           },
           {
             id: "unknown-charge",
-            q: "Ngibona inkokhelo engingayazi.",
+            q: "Iyini le nkokhelo ekhadini lami?",
             a: [
-              "Izinkokhelo zivela njenge-GADIT noma i-GADIT.APP nge-$2.99 (Clear yanyanga), $4.99 (Deep yanyanga), $29.99 (Clear yonyaka), noma $49.99 (Deep yonyaka). Uma ingahambisani, kungenzeka ivela kwenye insizakalo.",
+              "Izinkokhelo zivela njenge-GADIT noma i-GADIT.APP. Inani lihambisana nohlelo lwakho (Individual noma Family, ngenyanga noma ngonyaka) ngemali yezwe lakho, njengoba kuboniswe ekhasini lamanani. Okubhaliswe ngaphambi kuka-Okthoba 2026 kugcina inani okuqale ngalo. Uma inani lingahambisani, kungenzeka ivela kwenye insizakalo.",
               "Uma uqinisekile ukuthi akuyona eyakho, ungaqali ngokuphikisa ngebhange lakho. Sibhalele ngqo kuqala ngosuku nenani. Iqembu lizoyithola, lichaze ukuthi iyini, futhi libuyisele uma kudingeka. Ukuphikisa ngebhange kungenza ukukhokha kwesikhathi esizayo kube nzima, ngakho ukukuxazulula ngosizo ngokuvamile kushesha futhi kuphephe kakhulu.",
             ],
           },
@@ -515,11 +517,11 @@ Object.assign(HELP, {
           },
           {
             id: "plan-comparison",
-            q: "Uyini umehluko phakathi kwe-Basic, Clear, ne-Deep?",
+            q: "Uyini umehluko phakathi kwe-Basic, Individual ne-Family?",
             a: [
-              "Basic (yamahhala): kufikela kumagama angu-20 owasesha ngosuku, zonke izincazelo, izibonelo ngencazelo ngayinye, izisho, nomsuka wegama. Akudingeki kubhalisa ukuze usesho olusisekelo.",
-              "Clear ($2.99/inyanga noma $29.99/unyaka): usesho olungenamkhawulo, izincazelo ezinobungane, isithombe ngegama ngalinye (30/inyanga), ukubumba owakho umusho ngempendulo, imininingwane yezisho, nezinsuku ezingu-30 zomlando wosesho.",
-              "Deep ($4.99/inyanga noma $49.99/unyaka): konke okuku-Clear, kanye nezivivinyo zokuzejwayeza, incwadi yamanothi yomuntu siqu enokuzejwayeza kokuphinda okuhlakaniphile, ukuhlukanisa amagama afanayo, kanye nesabelo esikhulu sezithombe (100/inyanga).",
+              "I-Basic (yamahhala): kufika ekubhekeni amagama angu-10 ngosuku, zonke izincazelo, izibonelo, izisho, umsuka wegama, incazelo efanele evela emshweni, nencwadi yamanothi enamagama afinyelela ku-30.",
+              "Individual: umuntu oyedwa, wonke amathuluzi okufunda. Ukubheka okungenamkhawulo, isithombe sencazelo ngayinye, izibonelo eziningi nemibuzo ngegama ngalinye, Bhala umusho uthole impendulo, Wonke amagama, Yisho, izwi lemvelo elifundayo nokusesha ngezwi, ukusebenzisa ungaxhunyiwe ku-inthanethi, imidlalo, ama-quiz nemiqhudelwano yamagama, nokuzijwayeza okuhlakaniphile nokulungiselela izivivinyo nedikiteshini.",
+              "Family: konke okuku-Individual kufika ezinganeni ezi-5 nabazali, kanye nemodi yezingane, indawo eyayo yengane ngayinye, usizo ngomsebenzi wasekhaya, nebhodi lomzali nesaziso segama ngalinye. Izikole zinohlelo lwazo. Amanani ezwe lakho nesikhathi sokuzama samahhala sezinsuku ezingu-14 akukhasi lamanani.",
             ],
           },
         ],
@@ -531,7 +533,7 @@ Object.assign(HELP, {
         items: [
           {
             id: "no-verification-email",
-            q: "Angiyitholanga i-imeyili yami yokuqinisekisa.",
+            q: "Angiyitholanga i-imeyili yami yokuqinisekisa",
             a: [
               "Hlola amafolda e-spam nawezikhangiso kuqala. I-Gmail ne-Outlook kwesinye isikhathi zithumela ama-imeyili e-akhawunti lapho kuze kube yilapho umaka elilodwa njenge \"Not spam\".",
               "Uma lingekho, kungenzeka i-imeyili yabhalwa ngephutha ngesikhathi sokubhalisa. Zama ukubhalisa futhi bese uhlola kabili ikheli. Uma usebenzise ukubhalisa nge-Google, akudingeki i-imeyili yokuqinisekisa.",
@@ -539,7 +541,7 @@ Object.assign(HELP, {
           },
           {
             id: "forgot-password",
-            q: "Ngiyikhohliwe iphasiwedi yami.",
+            q: "Ngiyikhohliwe iphasiwedi yami",
             a: [
               "Vula ibhokisi lokungena bese uchofoza \"Forgot password?\". Faka i-imeyili oyisebenzisela i-Gadit bese uthola isixhumanisi sokusetha kabusha phakathi komzuzu noma emibili.",
               "Uma i-imeyili ingafiki, hlola i-spam. Uma isengafiki, kungenzeka wabhalisa nge-Google esikhundleni se-imeyili nephasiwedi. Zama inkinobho ethi \"Continue with Google\".",
@@ -547,7 +549,7 @@ Object.assign(HELP, {
           },
           {
             id: "wrong-credentials",
-            q: "Ngiqinisekile ukuthi iphasiwedi yami ilungile kodwa ithi \"Wrong email or password\".",
+            q: "Ngiqinisekile ukuthi iphasiwedi yami ilungile kodwa ithi \"Wrong email or password\"",
             a: [
               "Izinto ezintathu okufanele uzihlole. Okokuqala, i-capslock. Okwesibili, isikhala esisemuva uma ukopisha unamathisela. Okwesithathu, wabhalisa nge-Google kunephasiwedi (sebenzisa \"Continue with Google\" esikhundleni salokho).",
               "Usabambekile? Setha kabusha iphasiwedi kusuka kubhokisi elifanayo. Kukubeka endaweni ecacile.",
@@ -555,7 +557,7 @@ Object.assign(HELP, {
           },
           {
             id: "google-fails",
-            q: "Ukungena nge-Google akusebenzi.",
+            q: "Ukungena nge-Google akusebenzi",
             a: [
               "Imbangela evame kakhulu: isiphequluli sakho sivimbela amakhukhi enkampani yesithathu noma ama-pop-up e-gadit.app. Wavumele ezimvumeni ezisebharini yekheli bese uzama futhi.",
               "Uma usemodini ye-incognito, ukungena nge-Google kuvinjelwe ngamabomu. Shintshela kuwindi elijwayelekile lesiphequluli.",
@@ -581,8 +583,8 @@ Object.assign(HELP, {
             id: "share-account",
             q: "Ingabe umlingani wami noma ingane yami bangayabelana nge-akhawunti yami?",
             a: [
-              "Umsebenzisi oyedwa ongenile nge-akhawunti ngasikhathi sinye. Imodi yezingane ivumela i-akhawunti eyodwa ye-Clear noma ye-Deep ukuthi isize umzali nengane: guqula i-toggle bese izincazelo zivela zinobungane ngaphandle kokungena okwehlukene.",
-              "Kubantu abadala ababili abafuna bobabili izincwadi zamanothi ezihlukene nenqubekela phambili, dala ama-akhawunti amabili. I-Clear ingu-$2.99 ngenyanga nge-akhawunti ngayinye.",
+              "I-akhawunti ngayinye inomuntu oyedwa ongene ngemvume ngesikhathi esisodwa. Ekhaya, uhlelo lwe-Family lwakhelwe lokhu: kufika ezinganeni ezi-5 nabazali, ngamunye enendawo yakhe, incwadi yakhe yamanothi nenqubekela phambili yakhe, kanye nemodi yezingane yezingane nebhodi lomzali.",
+              "Kumuntu omdala oyedwa, i-Individual ingeyomuntu oyedwa futhi inawo wonke amathuluzi okufunda. Qhathanisa amahlelo namanani ezwe lakho ekhasini lamanani.",
             ],
           },
           {
@@ -610,25 +612,25 @@ Object.assign(HELP, {
           },
           {
             id: "kids-not-working",
-            q: "Imodi yezingane ayiyishintshi incazelo.",
+            q: "Imodi yezingane ayiyishintshi incazelo",
             a: [
-              "Imodi yezingane iguqula umbhalo kuphela lapho igama selivele linencazelo enobungane ekhiqiziwe. Emagameni amasha owaqeda ukuwabheka, linike imizuzwana engu-10 kuya kwengu-15. Inguqulo enobungane ikhiqizwa khona lapho okokuqala.",
-              "Futhi: imodi yezingane idinga i-Clear noma i-Deep. Uma uku-Basic, i-toggle izokunxusa ukuthi uthuthukise. Abasebenzisi abangaziwa banxuswa ukuthi babhalise.",
+              "Imodi yezingane ishintsha umbhalo kuphela lapho igama selivele linencazelo elungele izingane. Egameni osanda kulibheka okokuqala, linika imizuzwana engu-10 kuya kwengu-15 ngenkathi kulungiswa inguqulo yezingane.",
+              "Imodi yezingane iyingxenye yohlelo lwe-Family. Ku-Basic, ku-Individual, noma ngaphandle kwe-akhawunti, i-toggle ikhombisa uhlelo lwe-Family esikhundleni sokuvula. Ababhalisile ku-Clear noma ku-Deep ngaphambi kuka-Okthoba 2026 bagcina imodi yezingane. Ukuze uyithole, bheka i-Family ekhasini lamanani.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Usesho ngezwi alusebenzi.",
+            q: "Usesho ngezwi alusebenzi",
             a: [
               "Usesho ngezwi ludinga imvume yemakrofoni. Iziphequluli eziningi zibuza kanye ngesayithi ngalinye. Uma ngengozi uchofoze u-Block, uzodinga ukukuguqula kabusha ngesandla: chofoza isikhiye noma isithonjana solwazi eduze kwe-gadit.app ebharini yekheli, bese Site settings, bese Microphone, bese Allow.",
-              "Ku-Safari iOS, ukufinyelela imakrofoni kudinga futhi i-toggle ku-Settings, Safari, Microphone. Izwi okwamanje liyisici se-Clear ne-Deep: abasebenzisi be-Basic babona isinxuso sokuthuthukisa, izivakashi ezingaphumile zibona isinxuso sokungena.",
+              "Ku-Safari ku-iPhone naku-iPad, ukufinyelela imakrofoni kudinga futhi i-Settings → Safari → Microphone. Usesho ngezwi luyingxenye yamahlelo e-Individual ne-Family: ku-Basic uzobona amahlelo esikhundleni salokho, futhi izivakashi ezingangenanga ngemvume zicelwa ukuthi zingene. Ukuze uthuthukise, vula ikhasi lamanani.",
             ],
           },
           {
             id: "no-image",
-            q: "Angikwazi ukukhiqiza isithombe segama.",
+            q: "Angikwazi ukuthola isithombe segama",
             a: [
-              "Ukukhiqiza izithombe kuyisici se-Clear noma se-Deep esinesabelo sanyanga. I-Clear ithola izithombe ezingu-30 ngenyanga, i-Deep ithola ezingu-100. Uma usisebenzise saphela isabelo, uzobona udonga. Sisetha kabusha ngo-1 wanyanga zonke.",
+              "Izithombe ziyingxenye yamahlelo e-Individual ne-Family, ezinezithombe ezintsha ezifika ku-100 ngenyanga. Isithombe esivele sikhona saleyo ncazelo siyavuleka ngaphandle kokubalwa. Uhlelo oludala lwe-Clear lunezingu-30 ngenyanga, futhi i-Basic ayinazo izithombe. Uma izithombe zenyanga seziphelile uzobona isaziso, futhi ukubala kuqala kabusha ekuqaleni kwenyanga ngayinye.",
               "Uma ungaphansi kwesabelo kodwa usabona ukwehluleka, ngokuvamile kuyedlula. Zama futhi ngemva kwemizuzwana engu-30. Ukwehluleka okuqhubekayo kuyiphutha lohlelo. Sicela ubike kusuka ekhasini legama.",
             ],
           },
@@ -636,21 +638,21 @@ Object.assign(HELP, {
             id: "save-word",
             q: "Ngiligcina kanjani igama encwadini yami yamanothi?",
             a: [
-              "Kunoma yiliphi ikhasi lomphumela wegama, cindezela Save to notebook eduze kwesihloko. Incwadi yamanothi iyisici se-Clear ne-Deep lapho ungabuyekeza khona amagama awagcinile kamuva, uwabone ngokubuka kwe-galaxy, futhi uqhube izikhathi zokuzejwayeza okuhlakaniphile (Deep).",
-              "Amagama owagcinile futhi wawavula okungenani kanye ayatholakala ungaxhunyiwe ku-inthanethi kusuka kunqolobane yasendaweni. Iphakethe lokungaxhunyiwe futhi ligcina amagama adume kakhulu ngolimi lwakho ukuze ulunge ngaphandle kwe-inthanethi.",
+              "Akudingeki. Uma ungene ngemvume, wonke amagama owabhekayo agcinwa encwadini yakho yamanothi ngokwawo. Ku-Basic incwadi yamanothi ithatha amagama afinyelela ku-30. Ku-Individual naku-Family ayinamkhawulo futhi inokuzijwayeza okuhlakaniphile, okubuyisa amagama akho ukuze uwabuyekeze ngesikhathi esifanele.",
+              "Ku-Individual naku-Family, amagama owabhekayo nawo agcinwa kudivayisi yakho, ngakho avuleka ngaphandle kwe-inthanethi. Ukuze ubone amagama akho, vula incwadi yamanothi kumenyu.",
             ],
           },
           {
             id: "offline",
             q: "Isebenza kanjani imodi yokungaxhunyiwe ku-inthanethi?",
             a: [
-              "Amagama osuwabukile agcinwa endaweni yasendaweni. Wavule futhi ngaphandle kwe-inthanethi bese elayisha ngokushesha. Iphakethe eligcwele lokungaxhunyiwe (amagama aphambili ngolimi lwakho) lilanda ngokudingeka kusuka ekhasini lencwadi yamanothi.",
-              "Ukusesha igama elisha ngokuphelele kusadinga uxhumano, ngoba i-Gadit kufanele ikhiqize incazelo kusukela ekuqaleni. Inqolobane yokungaxhunyiwe ingeyamagama osuwahlolile.",
+              "Ukusebenzisa ungaxhunyiwe ku-inthanethi kuyingxenye yamahlelo e-Individual ne-Family. Wonke amagama owabhekayo agcinwa kudivayisi yakho, ngakho avuleka futhi ngokushesha ngaphandle kwe-inthanethi. Ungalanda nephakethe lamagama adume kakhulu ngolimi lwakho ekhasini lakho le-Akhawunti.",
+              "Ukubheka igama elisha ngokuphelele kusadinga uxhumano, ngoba i-Gadit kufanele ilungiselele umphumela ogcwele walo. Ikhophi yokungaxhunyiwe imboza amagama asevele ekudivayisi yakho. Uma uku-Basic, bheka amahlelo ekhasini lamanani.",
             ],
           },
           {
             id: "slow",
-            q: "Uhlelo lokusebenza luzwakala luhamba kancane.",
+            q: "Uhlelo lokusebenza luzwakala luhamba kancane",
             a: [
               "Ukubheka kokuqala kwegama kuhamba kancane kakhulu ngoba i-Gadit ikhiqiza umphumela ophelele kusukela ekuqaleni: ngokuvamile imizuzwana embalwa, kwesinye isikhathi isikhathi eside kumagama ayinkimbinkimbi. Ukubheka okulandelayo kwegama elifanayo kusheshayo, kulethwa kusuka enqolobaneni.",
               "Uma konke kuzwakala kuhamba kancane, zama ukuvuselela okuqinile: Cmd+Shift+R ku-Mac, Ctrl+Shift+R ku-Windows. Uma ukuhamba kancane kuqhubeka kuwo wonke amakhasi, sicela usithumelele i-imeyili nezwe lakho nesiphequluli ukuze iqembu lihlole indlela yenethiwekhi eya kumaseva ethu kusuka esifundeni sakho.",
@@ -668,7 +670,7 @@ Object.assign(HELP, {
             id: "change-language",
             q: "Ngilushintsha kanjani ulimi lwesixhumi (UI)?",
             a: [
-              "Phezulu ngakwesokudla kwanoma yiliphi ikhasi, uzobona isithonjana esincane sefulege (noma igama lolimi lwakho lwamanje). Yicindezele bese ukhetha phakathi kwezilimi ezingu-21: isiNgisi, isiGreki, isiHeberu, isi-Arabhu, isiRashiya, isiSpanish, isiPutukezi, isiFulentshi, isiJalimane, isiCzech, isiSlovak, isiTaliyane, isiJaphane, isiHindi, isi-Amharic, isiZulu.",
+              "Phezulu ngakwesokudla kwanoma yiliphi ikhasi, uzobona isithonjana esincane sefulege (noma igama lolimi lwakho lwamanje). Sithephe bese ukhetha phakathi kwezilimi ezingu-41.",
               "Ukukhetha kwakho kugcinwa kule divayisi. Konke kulayisha kabusha ngolimi olusha: isixhumi, amamenyu, izincazelo zamagama zesikhathi esizayo, izibonelo, izincazelo zezingane, ngisho nomsuka wegama. Imiphumela esivele igciniwe ngolimi oludala ihlala kuze kube yilapho usesha lawo magama futhi.",
             ],
           },
@@ -706,7 +708,7 @@ Object.assign(HELP, {
           },
           {
             id: "empty-dashboard",
-            q: "Ngijoyinile kodwa ideshibhodi yami ayinalutho.",
+            q: "Ngijoyinile kodwa ideshibhodi yami ayinalutho",
             a: [
               "Izibalo zivela ngemva kokuchofoza kokuqala esixhumanisini sakho. Okungenalutho kusho nje ukuthi akekho osechofozile okwamanje. Hamba wabelane ngesixhumanisi. Ideshibhodi ibuyekeza cishe ngesikhathi sangempela uma umsebenzi uqala.",
               "Uma wabelane futhi othile ebhalisile kodwa ideshibhodi ingakubonisi, sibhalele ngesikhathi esilinganiselwe sokubhalisa futhi iqembu lizohlola ukwabelwa.",
@@ -722,7 +724,7 @@ Object.assign(HELP, {
           },
           {
             id: "missing-commission",
-            q: "Umuntu othile ubhalise ngesixhumanisi sami kodwa angiyiboni ikhomishini.",
+            q: "Umuntu othile ubhalise ngesixhumanisi sami kodwa angiyiboni ikhomishini",
             a: [
               "Ngokuvamile lokhu kungenxa yesikhathi: ukubhalisa kuvela kudeshibhodi phakathi kwemizuzu, kodwa ikhomishini ibhukwa kuphela uma ukubhalisa sekukhokhelwe ngempela (okungaba izinsuku kamuva uma besesikhathini sokulinga samahhala). Buyela emuva ngemva kokuphela kwesikhathi sokulinga.",
               "Uma ukubhalisa kukhokhelwe kodwa usangayiboni ikhomishini ngemva kwamahora angu-48, sibhalele ngesikhathi esilinganiselwe sokubhalisa kanye ne-imeyili noma igama elilinganiselwe lombhalisi uma ulazi. Iqembu lizophenya iketango lokwabelwa futhi lilungise noma yikuphi ukungatholakali ngesandla.",
@@ -739,16 +741,16 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "Yini i-Gadit?",
             a: [
-              "Isichazamazwi sezilimi eziningi esakhelwe ukwenza igama licace, hhayi nje ukunika incazelo yomugqa owodwa. Igama ngalinye livuleka nazo zonke izincazelo zalo, izibonelo zangempela ngencazelo ngayinye, izisho, umsuka wegama, isithombe ongazikhethela sona, kanye (nge-Clear ne-Deep) nencazelo enobungane, ukubumba owakho umusho ngempendulo, nezivivinyo.",
-              "Okwamanje izilimi ze-UI ezingu-14. Ngaphakathi iqembu likubiza ngokuthi uku-GAD igama: ukuqonda igama ngokuphelele, hhayi nje ukulihumusha.",
+              "I-Gadit ikusiza uqonde igama ngalinye ngokuphelele, hhayi nje ukuthola incazelo yomugqa owodwa. Igama ngalinye livuleka nazo zonke izincazelo zalo, izibonelo zangempela zencazelo ngayinye, izisho nomsuka wegama. Amahlelo akhokhelwayo engeza isithombe sencazelo ngayinye, ukuzijwayeza, imidlalo nokunye, futhi i-Family yengeza imodi yezingane nendawo yengane ngayinye.",
+              "I-Gadit isebenza ngezilimi ezingu-41. Ngaphakathi iqembu likubiza ngokuthi uku-GAD igama: ukuqonda igama ngokuphelele, hhayi nje ukulihumusha. Ukuze ubone ukuthi uhlelo ngalunye luneni, vula ikhasi lamanani.",
             ],
           },
           {
             id: "languages",
             q: "Yiziphi izilimi enizisekelayo?",
             a: [
-              "Isixhumi: isiNgisi, isiGreki, isiHeberu, isi-Arabhu, isiRashiya, isiSpanish, isiPutukezi, isiFulentshi, isiJalimane, isiCzech, isiSlovak, isiTaliyane, isiJaphane, isiZulu.",
-              "Ungabheka igama nganoma yiluphi lwalezo zilimi bese uthola incazelo, izibonelo, nakho konke okunye ngolimi lwe-UI olukhethile. IsiHeberu nesi-Arabhu zibhalwa ngokugcwele kusuka ngakwesokudla kuya ngakwesobunxele futhi zisebenzisa amafonti azo omdabu.",
+              "I-Gadit isebenza ngezilimi ezingu-41, kuhlanganise isiNgisi, isiHeberu, isi-Arabhu, isiSpanish, isiFulentshi, isiJalimane, isiRashiya, isiShayina, isiJaphane, isiHindi, isiZulu, isiXhosa nesiBhunu.",
+              "Ungabheka igama nganoma yiluphi lwalezi zilimi bese uthola izincazelo, izibonelo nakho konke okunye ngolimi olukhethele isixhumi. IsiHeberu, isi-Arabhu nesiPheresiya zibhalwa kusuka ngakwesokudla kuya ngakwesobunxele, ngamafonti azo. Ukuze ushintshe, thepha inkinobho yolimi phezulu kwanoma yiliphi ikhasi.",
             ],
           },
           {
@@ -756,7 +758,7 @@ Object.assign(HELP, {
             q: "Ingabe i-Gadit iphephile ezinganeni?",
             a: [
               "I-Gadit yakhelwe ukuthi umzali ayisebenzise ngokuphepha eceleni kwengane. Imodi yezingane ikhiqiza izincazelo ezilula, ezibonakalayo, nezifanele ubudala (cishe izinga leminyaka engu-5 kuya kwengu-10), isebenzisa injini efanayo enika amandla okuqukethwe kwabadala nemiyalo ecacile yokwenza kube lula. Akukho okuqukethwe okwenziwe umsebenzisi okuke kuboniswe ezinganeni.",
-              "Ngokuhambisana nezinqubomgomo zethu nemithetho yobumfihlo bezingane emhlabeni wonke, ubunikazi be-akhawunti ezimele bungobeminyaka engu-13 nangaphezulu. Iphethini ejwayelekile yi-akhawunti yomzali umzali ayisebenzisa kanye nengane yakhe, okuyikho kanye i-Kids mode eyakhelwe kona.",
+              "Ngokuhambisana nezinqubomgomo zethu nemithetho yobumfihlo bezingane emhlabeni wonke, i-akhawunti yakho siqu ingeyabaneminyaka engu-13 nangaphezulu. Izingane zisebenzisa i-Gadit ngomzali: kuhlelo lwe-Family umzali wengeza ingane ngayinye ekhasini le-Family, ingane ngayinye ithola indawo yayo enemodi yezingane, futhi ibhodi lomzali likhombisa amagama ingane ngayinye ewabhekayo. Ukuze ukusethe, qala nge-Family ekhasini lamanani.",
             ],
           },
           {
@@ -764,7 +766,7 @@ Object.assign(HELP, {
             q: "Idatha yami igcinwaphi? Ingabe niyayithengisa?",
             a: [
               "I-akhawunti, umlando, incwadi yamanothi, nezithombe ezikhiqiziwe zigcinwa ngokuphephile ku-Firebase, zibethelwe endaweni yokugcina. Asiyithengisi idatha yakho kunoma ubani. Sabelana kuphela ngalokho okudingekayo ukusebenzisa i-Gadit (indawo yokugcina, izinkokhelo, abahlinzeki bokuqukethwe), njengoba kuchaziwe kuNqubomgomo Yobumfihlo.",
-              "Ungakhipha incwadi yakho yamanothi noma ususe i-akhawunti yakho nganoma yisiphi isikhathi kusuka ekhasini le-Account.",
+              "Ungasusa i-akhawunti yakho nganoma yisiphi isikhathi ekhasini le-Akhawunti. Ukuze uthole ikhophi yencwadi yakho yamanothi noma enye idatha esinayo, sibhalele kuleli khasi.",
             ],
           },
           {
@@ -807,16 +809,17 @@ Object.assign(HELP, {
             q: "Ndiwurhoxisa njani umrhumo wam?",
             a: [
               "Uzenzela ngokwakho, nanini na. Ngena, vula iAkhawunti, uze ucofe Rhoxisa umrhumo phantsi kwesicwangciso sakho.",
-              "Ukufikelela kwakho kuyaqhubeka de kuphele ixesha osele ulihlawulele. Emva koko iakhawunti ibuyela kwi-Basic (simahla). Amagama akho agciniweyo, imbali nencwadi yakho zihlala zikhuselekile kwaye ziyafikeleleka.",
-              "Ukuba urhoxisa ngempazamo okanye utshintsha ingqondo, ungawuqhubela phambili umrhumo kwakwiphepha elo ngaphambi kokuba ixesha liphele.",
+              "Kumrhumo ohlawulelwayo, ukufikelela kwakho kuyaqhubeka de kuphele ixesha osele ulihlawulele. Emva koko iakhawunti ibuyela kwi-Basic (simahla). Amagama akho agciniweyo nembali yakho zihlala zikhuselekile.",
+              "Ngexesha lovavanyo lwasimahla lweentsuku ezili-14, ukurhoxisa kuphelisa uvavanyo ngoko nangoko kwaye akukho nto ihlawuliswayo. Ukuba ukhathazwa kuphela yintlawulo ezenzekelayo, khetha eso sizathu kwifestile yokurhoxisa, uze ucime ukuhlaziywa endaweni yoko, ugcine uvavanyo de kube lusuku lwalo lokugqibela.",
+              "Ukuba urhoxisa umrhumo ohlawulelwayo ngempazamo okanye utshintsha ingqondo, ungawuqhubela phambili kwakwiphepha elo ngaphambi kokuba ixesha liphele.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Nditshintsha njani ukusuka kwi-Clear ukuya kwi-Deep (okanye ngenye indlela)?",
+            q: "Nditshintsha njani phakathi kwe-Individual ne-Family?",
             a: [
-              "IAkhawunti, emva koko Lawula iintlawulo, emva koko Update subscription. Khetha isicwangciso esitsha.",
-              "I-Stripe ibala umahluko wexabiso ngokuzenzekelayo, ngokweentsuku ezisele kwixesha langoku. Ukuba uyanyusela, uhlawuliswa kuphela umahluko kwixesha eliseleyo. Ukuba utshintshela kwinqanaba eliphantsi, ikhredithi isetyenziswa kwibhili yakho elandelayo.",
+              "Ukuze utshintshele kwi-Family, vula iphepha leAkhawunti yakho uze ucofe \"Tshintshela kwi-Family\". Umrhumo wakho wangoku uhlaziywa kwikhadi elifanayo, ngaphandle kokuphinda ulifake.",
+              "I-Stripe ibala umahluko ngeentsuku ezisele kwixesha langoku, ngoko uhlawula umahluko kuphela. Ukuze utshintshe ukusuka kwi-Family ukuya kwi-Individual, sibhalele kweli phepha kwaye iqela liza kukutshintshela.",
             ],
           },
           {
@@ -853,9 +856,9 @@ Object.assign(HELP, {
           },
           {
             id: "unknown-charge",
-            q: "Ndibona intlawulo endingayaziyo.",
+            q: "Yintoni le ntlawulo ikwikhadi lam?",
             a: [
-              "Iintlawulo zivela njenge-GADIT okanye i-GADIT.APP ene-$2.99 (Clear ngenyanga), $4.99 (Deep ngenyanga), $29.99 (Clear ngonyaka), okanye $49.99 (Deep ngonyaka). Ukuba ayihambelani, isenokuba ivela kwenye inkonzo.",
+              "Iintlawulo zivela njenge-GADIT okanye i-GADIT.APP. Imali ihambelana nesicwangciso sakho (Individual okanye Family, ngenyanga okanye ngonyaka) ngemali yelizwe lakho, njengoko kubonisiwe kwiphepha lamaxabiso. Imirhumo eqale ngaphambi kuka-Okthobha 2026 igcina ixabiso eyaqala ngalo. Ukuba imali ayihambelani, isenokuba ivela kwenye inkonzo.",
               "Ukuba uqinisekile ukuba asiyiyo eyakho, musa ukuyiphikisa ngebhanki yakho okwangoku. Qala usibhalele ngqo ngomhla nemali. Iqela liza kuyifumana, likuchazele ukuba yintoni, kwaye libuyise imali ukuba kuyimfuneko. Ukuphikisa ngebhanki kunokwenza iintlawulo ezizayo zibe nzima, ngoko ukuyisombulula ngenkxaso kudla ngokukhawuleza nokukhuseleka ngakumbi.",
             ],
           },
@@ -869,11 +872,11 @@ Object.assign(HELP, {
           },
           {
             id: "plan-comparison",
-            q: "Yintoni umahluko phakathi kwe-Basic, Clear ne-Deep?",
+            q: "Yintoni umahluko phakathi kwe-Basic, Individual ne-Family?",
             a: [
-              "Basic (simahla): ukuya kukhangelo lwamagama olungama-20 ngosuku, zonke iintsingiselo, imizekelo kwintsingiselo nganye, izaci nemvelaphi yegama. Akufuneki kubhalisa ukuze ukhangele ngokusisiseko.",
-              "Clear ($2.99/ngenyanga okanye $29.99/ngonyaka): ukhangelo olungenamda, iinkcazelo ezilungele abantwana, umfanekiso wegama ngalinye (30/ngenyanga), ukubhala esakho isivakalisi nengxelo, iinkcukacha zezaci, kunye neentsuku ezingama-30 zembali yokukhangela.",
-              "Deep ($4.99/ngenyanga okanye $49.99/ngonyaka): yonke into ekwi-Clear, kunye nemibuzo yokuziqhelisa, incwadi yakho yamagama enokuziqhelisa okukrelekrele ngokuphinda ngamaxesha athile, ukwahlula amagama afanayo, nesabelo esikhulu semifanekiso (100/ngenyanga).",
+              "I-Basic (simahla): ukuya kutsho kukhangelo lwamagama oluli-10 ngosuku, zonke iintsingiselo, imizekelo, izaci, imvelaphi yegama, intsingiselo efanelekileyo ngokwesivakalisi, neNcwadi yamagama enamagama ukuya kutsho kuma-30.",
+              "Individual: umntu omnye, zonke izixhobo zokufunda. Ukukhangela okungenamda, umfanekiso kwintsingiselo nganye, imizekelo emininzi nemibuzo ngegama ngalinye, Yakha isivakalisi ufumane ingxelo, Lonke igama, Yithethe, ilizwi lendalo lokufunda ngokuvakalayo nokukhangela ngelizwi, ukusetyenziswa ngaphandle kwe-intanethi, imidlalo, iikhwizi namadabi amagama, nokuziqhelanisa okukrelekrele nokulungiselela uvavanyo nedikteshini.",
+              "Family: yonke into ekwi-Individual ukuya kutsho kubantwana aba-5 nabazali, kunye neMo yabantwana, indawo eyeyomntwana ngamnye, uncedo ngomsebenzi wasekhaya, nebhodi yomzali nesaziso kwigama ngalinye. Izikolo zinesicwangciso sazo. Amaxabiso elizwe lakho novavanyo lwasimahla lweentsuku ezili-14 akwiphepha lamaxabiso.",
             ],
           },
         ],
@@ -885,7 +888,7 @@ Object.assign(HELP, {
         items: [
           {
             id: "no-verification-email",
-            q: "Andiyifumananga i-imeyile yokuqinisekisa.",
+            q: "Andiyifumananga i-imeyile yokuqinisekisa",
             a: [
               "Qala ujonge kwiifolda ze-spam nezentengiso. I-Gmail ne-Outlook ngamanye amaxesha zithumela ii-imeyile zeakhawunti apho de uphawule enye njenge-\"Not spam\".",
               "Ukuba ayikho apho, i-imeyile isenokuba ichwethezwe ngempazamo xa ububhalisa. Zama ukubhalisa kwakhona uze uphinde ujonge idilesi. Ukuba ubhalise nge-Google, akufuneki imeyile yokuqinisekisa.",
@@ -893,7 +896,7 @@ Object.assign(HELP, {
           },
           {
             id: "forgot-password",
-            q: "Ndiyilibele iphasiwedi yam.",
+            q: "Ndiyilibele iphasiwedi yam",
             a: [
               "Vula ibhokisi yokungena uze ucofe \"Uyilibele iphasiwedi?\". Faka i-imeyile oyisebenzisela i-Gadit kwaye uza kufumana ilinki yokutshintsha iphasiwedi kwisithuba somzuzu okanye emibini.",
               "Ukuba i-imeyile ayifiki, jonga kwi-spam. Ukuba ayikafiki nangoko, usenokuba ubhalise nge-Google endaweni ye-imeyile nephasiwedi. Zama iqhosha elithi \"Qhubeka nge-Google\".",
@@ -901,7 +904,7 @@ Object.assign(HELP, {
           },
           {
             id: "wrong-credentials",
-            q: "Ndiqinisekile ukuba iphasiwedi yam ichanekile kodwa ithi \"I-imeyile okanye iphasiwedi ayichanekanga\".",
+            q: "Ndiqinisekile ukuba iphasiwedi yam ichanekile kodwa ithi \"I-imeyile okanye iphasiwedi ayichanekanga\"",
             a: [
               "Kukho izinto ezintathu zokujonga. Okokuqala, i-capslock. Okwesibini, isithuba esisekupheleni xa ukopa uncamathisela. Okwesithathu, ubhalise nge-Google kunokuba ubhalise ngephasiwedi (sebenzisa \"Qhubeka nge-Google\" endaweni yoko).",
               "Usabambekile? Tshintsha iphasiwedi kwakwibhokisi leyo. Oko kukulungiselela ngokutsha.",
@@ -909,7 +912,7 @@ Object.assign(HELP, {
           },
           {
             id: "google-fails",
-            q: "Ukungena nge-Google akusebenzi.",
+            q: "Ukungena nge-Google akusebenzi",
             a: [
               "Owona nobangela uqhelekileyo: ibhrawuza yakho ivimba ii-cookie zabantu besithathu okanye ii-pop-up ze-gadit.app. Zivumele kwiimvume zebha yedilesi uze uzame kwakhona.",
               "Ukuba ukwimo ye-incognito, ukungena nge-Google kuthintelwe ngabom. Tshintshela kwifestile eqhelekileyo yebhrawuza.",
@@ -935,8 +938,8 @@ Object.assign(HELP, {
             id: "share-account",
             q: "Ingaba iqabane lam okanye umntwana wam angabelana ngeakhawunti yam?",
             a: [
-              "Umsebenzisi omnye ongeneyo kwiakhawunti ngexesha. Imo yabantwana ivumela iakhawunti enye ye-Clear okanye ye-Deep ukuba isebenzele umzali nomntwana: tshintsha iswitshi kwaye iintsingiselo ziboniswa ngendlela elungele abantwana ngaphandle kokungena okwahlukileyo.",
-              "Kubantu abadala ababini abafuna iincwadi nenkqubela ezahlukeneyo, yenza iiakhawunti ezimbini. I-Clear yi-$2.99 ngenyanga kwiakhawunti nganye.",
+              "Kwiakhawunti nganye kungena umntu omnye ngexesha. Kusapho, isicwangciso se-Family senzelwe oku: ukuya kutsho kubantwana aba-5 nabazali, ngamnye enendawo yakhe, incwadi yakhe nenkqubela yakhe, kunye neMo yabantwana yabantwana nebhodi yomzali.",
+              "Kumntu omdala omnye, i-Individual yenzelwe umntu omnye kwaye inazo zonke izixhobo zokufunda. Thelekisa izicwangciso namaxabiso elizwe lakho kwiphepha lamaxabiso.",
             ],
           },
           {
@@ -964,25 +967,25 @@ Object.assign(HELP, {
           },
           {
             id: "kids-not-working",
-            q: "Imo yabantwana ayiyitshintshi inkcazelo.",
+            q: "Imo yabantwana ayiyitshintshi inkcazelo",
             a: [
-              "Imo yabantwana itshintsha kuphela isicatshulwa apho igama sele linenkcazelo elungele abantwana eyenziweyo. Kumagama amatsha osandula ukuwakhangela, nika imizuzwana eli-10 ukuya kweli-15. Uhlobo olulungele abantwana lwenziwa ngoko nangoko okokuqala.",
-              "Kwakhona: imo yabantwana ifuna i-Clear okanye i-Deep. Ukuba ukwi-Basic, iswitshi iza kukucela ukuba unyusele. Abasebenzisi abangaziwayo bacelwa ukuba babhalise.",
+              "Imo yabantwana itshintsha isicatshulwa kuphela apho igama sele linenkcazelo elungele abantwana. Kwigama osandula ukulikhangela okokuqala, linika imizuzwana eli-10 ukuya kweli-15 ngelixa kulungiswa inkcazelo yabantwana.",
+              "Imo yabantwana iyinxalenye yesicwangciso se-Family. Kwi-Basic, kwi-Individual, okanye ngaphandle kweakhawunti, iswitshi ibonisa isicwangciso se-Family endaweni yokuvula. Ababhalise kwi-Clear okanye kwi-Deep ngaphambi kuka-Okthobha 2026 bayayigcina iMo yabantwana. Ukuze uyifumane, jonga i-Family kwiphepha lamaxabiso.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Ukukhangela ngelizwi akusebenzi.",
+            q: "Ukukhangela ngelizwi akusebenzi",
             a: [
               "Ukukhangela ngelizwi kufuna imvume yemayikrofoni. Uninzi lweebhrawuza zibuza kanye kwisiza ngasinye. Ukuba ucofe ngempazamo uBlock, kuza kufuneka uyibuyisele ngesandla: cofa umqondiso wesitshixo okanye wolwazi ecaleni kwe-gadit.app kwibha yedilesi, emva koko Site settings, emva koko Microphone, emva koko Allow.",
-              "Kwi-Safari ye-iOS, ukufikelela kwimayikrofoni kukwafuna iswitshi kwi-Settings → Safari → Microphone. Ilizwi okwangoku luphawu lwe-Clear ne-Deep: abasebenzisi be-Basic babona isicelo sokunyusela, abatyeleli abangangenanga babona isicelo sokungena.",
+              "Kwi-Safari kwi-iPhone nakwi-iPad, ukufikelela kwimayikrofoni kukwafuna i-Settings → Safari → Microphone. Ukukhangela ngelizwi yinxalenye yezicwangciso ze-Individual ne-Family: kwi-Basic uza kubona izicwangciso endaweni yoko, kwaye abatyeleli abangangenanga bacelwa ukuba bangene. Ukuze unyusele, vula iphepha lamaxabiso.",
             ],
           },
           {
             id: "no-image",
-            q: "Andikwazi ukwenza umfanekiso wegama.",
+            q: "Andikwazi ukufumana umfanekiso wegama",
             a: [
-              "Ukwenza imifanekiso luphawu lwe-Clear okanye lwe-Deep olunesabelo senyanga. I-Clear ifumana imifanekiso engama-30 ngenyanga, i-Deep ifumana eli-100. Ukuba usisebenzisile isabelo sonke, uza kubona udonga. Siqala ngokutsha ngomhla woku-1 wenyanga nganye.",
+              "Imifanekiso yinxalenye yezicwangciso ze-Individual ne-Family, ngemifanekiso emitsha ukuya kutsho kwi-100 ngenyanga. Umfanekiso osele ukhona wale ntsingiselo uyavuleka ngaphandle kokubalwa. Isicwangciso esidala se-Clear sine-30 ngenyanga, kwaye i-Basic ayinayo imifanekiso. Xa imifanekiso yenyanga iphelile uza kubona isaziso, kwaye ukubala kuqala ngokutsha ekuqaleni kwenyanga nganye.",
               "Ukuba ungaphantsi kwesabelo kwaye usabona ukusilela, kudla ngokuba yingxaki yethutyana. Zama kwakhona emva kwemizuzwana engama-30. Ukusilela okuqhubekayo yimpazamo kwinkqubo. Nceda uyixele kwiphepha legama.",
             ],
           },
@@ -990,21 +993,21 @@ Object.assign(HELP, {
             id: "save-word",
             q: "Ndiligcina njani igama kwincwadi yam?",
             a: [
-              "Kulo naliphi na iphepha leziphumo zegama, cofa Gcina encwadini kufutshane nesihloko. Incwadi luphawu lwe-Clear ne-Deep apho unokuphinda ujonge amagama agciniweyo kamva, uwabone kwimbonakalo yomnyele, kwaye wenze iiseshoni zokuziqhelisa okukrelekrele (Deep).",
-              "Amagama owagcinileyo nowavule ubuncinane kanye ayafumaneka ungekho kwi-intanethi kwi-cache yesixhobo. Ipakethe yokufunda ungekho kwi-intanethi ikwagcina amagama athandwa kakhulu kulwimi lwakho ukuze ulungele ngaphandle kwe-intanethi.",
+              "Akufuneki. Xa ungene, lonke igama olikhangelayo ligcinwa kwincwadi yakho ngokwalo. Kwi-Basic incwadi ithatha amagama ukuya kutsho kuma-30. Kwi-Individual nakwi-Family ayinamda kwaye inokuziqhelanisa okukrelekrele, okubuyisa amagama akho ukuze uwaphinde ngexesha elifanelekileyo.",
+              "Kwi-Individual nakwi-Family, amagama owakhangelayo akwagcinwa kwisixhobo sakho, ngoko ayavuleka ngaphandle kwe-intanethi. Ukuze ubone amagama akho, vula incwadi kwimenyu.",
             ],
           },
           {
             id: "offline",
             q: "Isebenza njani imo yokungabikho kwi-intanethi?",
             a: [
-              "Amagama osele uwajongile agcinwa kwisixhobo sakho. Wavule kwakhona ngaphandle kwe-intanethi kwaye ayalayisha ngoko nangoko. Ipakethe epheleleyo yokufunda ungekho kwi-intanethi (amagama aphambili kulwimi lwakho) ikhutshelwa xa uyicela kwiphepha lencwadi.",
-              "Ukukhangela igama elitsha ngokupheleleyo kusafuna unxibelelwano, kuba i-Gadit kufuneka yenze intsingiselo ukusukela ekuqaleni. I-cache yokungabikho kwi-intanethi ingeyamagama osele uwaphononongile.",
+              "Ukusetyenziswa ngaphandle kwe-intanethi yinxalenye yezicwangciso ze-Individual ne-Family. Lonke igama olikhangelayo ligcinwa kwisixhobo sakho, ngoko liyavuleka kwakhona ngoko nangoko ngaphandle kwe-intanethi. Ungakhuphela nepakethe yamagama athandwa kakhulu kulwimi lwakho kwiphepha lakho leAkhawunti.",
+              "Ukukhangela igama elitsha ngokupheleleyo kusafuna unxibelelwano, kuba i-Gadit kufuneka ilungiselele isiphumo esipheleleyo salo. Ikopi engekho kwi-intanethi iquka amagama osele ekwisixhobo sakho. Ukuba ukwi-Basic, jonga izicwangciso kwiphepha lamaxabiso.",
             ],
           },
           {
             id: "slow",
-            q: "Iapp ibonakala icotha.",
+            q: "Iapp ibonakala icotha",
             a: [
               "Ukhangelo lokuqala lwegama lolona lucothayo kuba i-Gadit yenza isiphumo esipheleleyo ukusukela ekuqaleni: kudla ngokuba yimizuzwana embalwa, ngamanye amaxesha ixesha elide kumagama antsonkothileyo. Ukhangelo olulandelayo lwegama elo lukhawuleza kakhulu, luvela kwi-cache.",
               "Ukuba yonke into ibonakala icotha, zama ukuhlaziya ngokupheleleyo: Cmd+Shift+R kwi-Mac, Ctrl+Shift+R kwi-Windows. Ukuba ukucotha kuqhubeka kuwo onke amaphepha, nceda usithumelele i-imeyile ngelizwe lakho nebhrawuza yakho ukuze iqela lijonge indlela yenethiwekhi ukusuka kummandla wakho ukuya kwiiseva zethu.",
@@ -1022,7 +1025,7 @@ Object.assign(HELP, {
             id: "change-language",
             q: "Ndilutshintsha njani ulwimi lojongano?",
             a: [
-              "Phezulu ekunene kulo naliphi na iphepha, uza kubona umqondiso omncinci wefleyiki (okanye igama lolwimi lwakho lwangoku). Wucofe uze ukhethe kwiilwimi ezingaphezu kwama-30: isiNgesi, isiGrike, isiHebhere, isiArabhu, isiRashiya, isiSpanish, isiPhuthukezi, isiFrentshi, isiJamani, isiCzech, isiSlovak, isiTaliyane, isiJapan, isiHindi, isiAmharic, isiZulu.",
+              "Phezulu ekunene kulo naliphi na iphepha, uza kubona umqondiso omncinci wefleyiki (okanye igama lolwimi lwakho lwangoku). Wucofe uze ukhethe kwiilwimi ezingama-41.",
               "Ukhetho lwakho lugcinwa kwesi sixhobo. Yonke into iphinda ilayishe ngolwimi olutsha: ujongano, iimenyu, iintsingiselo zamagama ezizayo, imizekelo, iinkcazelo zabantwana, nkqu nemvelaphi. Iziphumo esele zigcinwe ngolwimi oludala zihlala de uphinde uwakhangele loo magama.",
             ],
           },
@@ -1060,7 +1063,7 @@ Object.assign(HELP, {
           },
           {
             id: "empty-dashboard",
-            q: "Ndijoyinile kodwa ibhodi yam ayinanto.",
+            q: "Ndijoyinile kodwa ibhodi yam ayinanto",
             a: [
               "Amanani avela emva kokucofa kokuqala kwilinki yakho. Ukungabi nanto kuthetha nje ukuba akukabikho mntu uyicofileyo. Hamba wabelane ngelinki. Ibhodi ihlaziywa phantse ngoko nangoko xa umsebenzi uqalisa.",
               "Ukuba wabelene kwaye umntu ebhalisile kodwa ibhodi ayibonisi oko, sibhalele ngexesha eliqikelelweyo lokubhalisa kwaye iqela liza kujonga ukuba kubalelwe ngubani.",
@@ -1076,7 +1079,7 @@ Object.assign(HELP, {
           },
           {
             id: "missing-commission",
-            q: "Umntu ubhalise ngelinki yam kodwa andiyiboni ikhomishini.",
+            q: "Umntu ubhalise ngelinki yam kodwa andiyiboni ikhomishini",
             a: [
               "Ixesha elininzi oku kungenxa yexesha: ukubhalisa kuvela kwibhodi kwimizuzu embalwa, kodwa ikhomishini ibhalwa kuphela xa umrhumo uhlawulwe ngokwenene (okunokuba ziintsuku kamva ukuba bakuvavanyo lwasimahla). Phinda ujonge emva kokuba uvavanyo luphele.",
               "Ukuba umrhumo uhlawulwe kodwa usayiboni ikhomishini emva kweeyure ezingama-48, sibhalele ngexesha eliqikelelweyo lokubhalisa kunye ne-imeyile okanye igama elimalunga lombhalisi ukuba uyalazi. Iqela liza kuphonononga ukulandelelana kokubalelwa kwaye lilungise nayiphi na into ephosiweyo ngesandla.",
@@ -1093,16 +1096,16 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "Yintoni i-Gadit?",
             a: [
-              "Isichazi-magama seelwimi ezininzi esakhelwe ukwenza igama liqondakale, hayi nje ukunika intsingiselo yomgca omnye. Igama ngalinye livuleka nazo zonke iintsingiselo zalo, imizekelo yokwenyani kwintsingiselo nganye, izaci, imvelaphi, umfanekiso ongenyanzelekanga, kunye (nge-Clear ne-Deep) nenkcazelo elungele abantwana, ukubhala esakho isivakalisi nengxelo, nemibuzo.",
-              "Okwangoku zingaphezu kwama-30 iilwimi zojongano. Ngaphakathi, iqela likubiza ngokuthi yenza i-GAD kwigama: ukuqonda igama ukuya esiphelweni, hayi nje ukuliguqulela.",
+              "I-Gadit ikunceda uqonde igama ngalinye ukuya esiphelweni, hayi nje ukufumana intsingiselo yomgca omnye. Igama ngalinye livuleka nazo zonke iintsingiselo zalo, imizekelo yokwenyani kwintsingiselo nganye, izaci nemvelaphi yegama. Izicwangciso ezihlawulelwayo zongeza umfanekiso kwintsingiselo nganye, ukuziqhelanisa, imidlalo nokunye, kwaye i-Family yongeza iMo yabantwana nendawo yomntwana ngamnye.",
+              "I-Gadit isebenza ngeelwimi ezingama-41. Ngaphakathi, iqela likubiza ngokuthi yenza i-GAD kwigama: ukuqonda igama ukuya esiphelweni, hayi nje ukuliguqulela. Ukuze ubone okukwisicwangciso ngasinye, vula iphepha lamaxabiso.",
             ],
           },
           {
             id: "languages",
             q: "Zeziphi iilwimi enizixhasayo?",
             a: [
-              "Ujongano: isiNgesi, isiGrike, isiHebhere, isiArabhu, isiRashiya, isiSpanish, isiPhuthukezi, isiFrentshi, isiJamani, isiCzech, isiSlovak, isiTaliyane, isiJapan, isiZulu.",
-              "Ungakhangela igama nangaluphi na kwezo lwimi uze ufumane intsingiselo, imizekelo nayo yonke enye into ngolwimi lojongano olukhethileyo. IsiHebhere nesiArabhu zibhalwa ngokupheleleyo ukusuka ekunene ukuya ekhohlo kwaye zisebenzisa oonobumba bazo bemveli.",
+              "I-Gadit isebenza ngeelwimi ezingama-41, kuquka isiNgesi, isiHebhere, isiArabhu, isiSpanish, isiFrentshi, isiJamani, isiRashiya, isiTshayina, isiJapan, isiHindi, isiZulu, isiXhosa nesiBhulu.",
+              "Ungakhangela igama nangaluphi na kwezi lwimi uze ufumane iintsingiselo, imizekelo nayo yonke enye into ngolwimi olukhethele ujongano. IsiHebhere, isiArabhu nesiPersi zibhalwa ukusuka ekunene ukuya ekhohlo, ngoonobumba bazo. Ukuze utshintshe, cofa iqhosha lolwimi phezulu kulo naliphi na iphepha.",
             ],
           },
           {
@@ -1110,7 +1113,7 @@ Object.assign(HELP, {
             q: "Ingaba i-Gadit ikhuselekile kubantwana?",
             a: [
               "Gadit yenzelwe ukuba umzali ayisebenzise ngokukhuselekileyo ecaleni komntwana. Imo yabantwana ivelisa iinkcazelo ezilula, ezicacileyo nezifanele ubudala (malunga nenqanaba leminyaka emi-5 ukuya kweli-10), isebenzisa injini efanayo eqhuba umxholo wabantu abadala enemiyalelo ecacileyo yokwenza lula. Akukho mxholo wenziwe ngabasebenzisi ukhe uboniswe abantwana.",
-              "Ngokuhambelana nemigaqo-nkqubo yethu nemithetho yobucala babantwana kwihlabathi liphela, ubunini beakhawunti obuzimeleyo bungowabaneminyaka eli-13 nangaphezulu. Indlela esemgangathweni yiakhawunti yomzali umzali ayisebenzisa kunye nomntwana wakhe, kwaye kanye yile nto iMo yabantwana yakhelwe yona.",
+              "Ngokuhambelana nemigaqo-nkqubo yethu nemithetho yobucala babantwana kwihlabathi liphela, iakhawunti yakho ngokwakho ingeyabaneminyaka eli-13 nangaphezulu. Abantwana basebenzisa i-Gadit ngomzali: kwisicwangciso se-Family umzali wongeza umntwana ngamnye kwiphepha le-Family, umntwana ngamnye ufumana indawo yakhe eneMo yabantwana, kwaye ibhodi yomzali ibonisa amagama akhangelwa ngumntwana ngamnye. Ukuze uqalise, qala nge-Family kwiphepha lamaxabiso.",
             ],
           },
           {
@@ -1118,7 +1121,7 @@ Object.assign(HELP, {
             q: "Zigcinwa phi iinkcukacha zam? Ingaba niyazithengisa?",
             a: [
               "Iakhawunti, imbali, incwadi nemifanekiso eyenziweyo zigcinwa ngokukhuselekileyo kwi-Firebase, zifihlwe ngekhowudi xa zigciniwe. Asizithengiseli mntu iinkcukacha zakho. Sabelana kuphela ngoko kufunekayo ukuqhuba i-Gadit (ukugcina, iintlawulo, ababoneleli bomxholo), njengoko kuchaziwe kuMgaqo-nkqubo wabucala.",
-              "Ungayikhupha incwadi yakho okanye ucime iakhawunti yakho nanini na kwiphepha leAkhawunti.",
+              "Ungayicima iakhawunti yakho nanini na kwiphepha leAkhawunti. Ukuze ufumane ikopi yencwadi yakho okanye nayiphi na enye inkcukacha esinayo, sibhalele kweli phepha.",
             ],
           },
           {
@@ -1161,16 +1164,17 @@ Object.assign(HELP, {
             q: "Nka khansela bjang peeletšo ya ka?",
             a: [
               "O itirela ka bowena, nako efe goba efe. Tsena, bula Akhaonto, gomme o kgotle Khansela peeletšo ka tlase ga leano la gago.",
-              "Phihlelelo ya gago e tšwela pele go fihla mafelelong a nako yeo o šetšego o e lefetše. Ka morago ga fao akhaonto e boela go Basic (mahala). Mantšu ao o a bolokilego, histori le puku ya mantšu di dula di bolokegile e bile di a hwetšagala.",
-              "Ge o khansela ka phošo goba o fetoša monagano, o ka tšwetša pele peeletšo go tšwa letlakaleng le le swanago pele nako e fela.",
+              "Ge o na le peeletšo ye o e lefelago, phihlelelo ya gago e tšwela pele go fihla mafelelong a nako yeo o šetšego o e lefetše. Ka morago ga fao akhaonto e fetogela go Basic (mahala). Mantšu ao o a bolokilego le histori di dula di bolokegile.",
+              "Nakong ya teko ya mahala ya matšatši a 14, go khansela go fediša teko gateetee gomme ga go na tefo. Ge o tshwenyega fela ka tefo ya go itiragalela, kgetha lebaka leo lefesetereng la go khansela, gomme o ka tima peeletšo ya go ipoeletša, wa boloka teko go fihla letšatšing la yona la mafelelo.",
+              "Ge o khansetše peeletšo ye o e lefelago ka phošo goba o fetoša monagano, o ka e tšwetša pele go tšwa letlakaleng le le swanago pele nako e fela.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Nka fetoga bjang go tloga go Clear go ya go Deep (goba ka tsela ye nngwe)?",
+            q: "Ke fetoga bjang magareng ga Individual le Family?",
             a: [
-              "Akhaonto, ke moka Laola ditefo, ke moka Update subscription. Kgetha leano le leswa.",
-              "Stripe e bala phapano ya theko ka bowona, go ya ka matšatši ao a šetšego nakong ya bjale. Ge o kaonafatša, o tla lefišwa fela phapano bakeng sa nako ye e šetšego. Ge o fetogela go legato la tlase, tšhelete ye e šetšego e šomišwa tefong ya gago ye e latelago.",
+              "Go fetogela go Family, bula letlakala la gago la Akhaonto gomme o kgotle \"Fetogela go Family\". Peeletšo ya gago ya bjale e mpshafatšwa ka karata ye e swanago, ntle le go e tsenya gape.",
+              "Stripe e bala phapano ya matšatši ao a šetšego a nako ya bjale, ka fao o lefa phapano fela. Go fetoga go tloga go Family go ya go Individual, re ngwalele go tšwa letlakaleng le, gomme sehlopha se tla go fetošetša.",
             ],
           },
           {
@@ -1207,9 +1211,9 @@ Object.assign(HELP, {
           },
           {
             id: "unknown-charge",
-            q: "Ke bona tefo ye ke sa e tsebego.",
+            q: "Tefo ye ka karateng ya ka ke eng?",
             a: [
-              "Ditefo di bonagala bjalo ka GADIT goba GADIT.APP ka $2.99 (Clear ya kgwedi), $4.99 (Deep ya kgwedi), $29.99 (Clear ya ngwaga), goba $49.99 (Deep ya ngwaga). Ge e sa sepelelane, e ka ba e tšwa tirelong ye nngwe.",
+              "Ditefo di tšwelela bjalo ka GADIT goba GADIT.APP. Tšhelete e swana le leano la gago (Individual goba Family, ka kgwedi goba ka ngwaga) ka tšhelete ya naga ya gago, bjalo ka ge go bontšhwa letlakaleng la ditheko. Dipeeletšo tšeo di thomilego pele ga October 2026 di boloka theko ye di thomilego ka yona. Ge tšhelete e sa swane, e ka ba e tšwa tirelong ye nngwe.",
               "Ge o kgonthišegile gore ga se ya gago, o se ke wa ganetša ka panka ya gago gabjale. Re ngwalele thwii pele ka letšatši le tšhelete. Sehlopha se tla e hwetša, sa hlaloša gore ke eng, gomme sa bušetša tšhelete ge go nyakega. Kganetšo ya panka e ka dira gore ditefo tša ka moso di be thata, ka fao go e rarolla ka thušo gantši go a akgofa e bile go bolokegile.",
             ],
           },
@@ -1223,11 +1227,11 @@ Object.assign(HELP, {
           },
           {
             id: "plan-comparison",
-            q: "Phapano ke eng magareng ga Basic, Clear le Deep?",
+            q: "Phapano magareng ga Basic, Individual le Family ke eng?",
             a: [
-              "Basic (mahala): go fihla go dinyakišišo tše 20 tša mantšu ka letšatši, ditlhalošo ka moka, mehlala ya tlhalošo ye nngwe le ye nngwe, dika, le mothopo wa lentšu. Ga go nyakege go ingwadiša bakeng sa dinyakišišo tša motheo.",
-              "Clear ($2.99/kgwedi goba $29.99/ngwaga): dinyakišišo tše di sa felego, ditlhalošo tše di loketšego bana, seswantšho sa lentšu le lengwe le le lengwe (30/kgwedi), go ngwala lefoko la gago le dikarabelo, dintlha tša dika, le histori ya dinyakišišo ya matšatši a 30.",
-              "Deep ($4.99/kgwedi goba $49.99/ngwaga): tšohle tša Clear, gape le ditlhahlobo tša tlwaetšo, puku ya mantšu ya motho ka noši le tlwaetšo ye bohlale ya poeletšo ka dikgaukano, go aroganya mantšu a a swanago, le diswantšho tše dintši (100/kgwedi).",
+              "Basic (mahala): go fihla go dinyakišišo tša mantšu tše 10 ka letšatši, ditlhalošo ka moka, mehlala, dika, mothopo wa lentšu, tlhalošo ye e nepagetšego go ya ka lefoko, le puku ya mantšu ya go fihla go mantšu a 30.",
+              "Individual: motho o tee, didirišwa ka moka tša go ithuta. Dinyakišišo tše di sa lekanyetšwego, seswantšho sa tlhalošo ye nngwe le ye nngwe, mehlala ye mentši le dipotšišo ka lentšu le lengwe le le lengwe, Bopa lefoko o hwetše dikarabelo, Lentšu le Lengwe le le Lengwe, E bolele, lentšu la tlhago la go balela godimo le go nyaka ka lentšu, tšhomišo ntle le inthanete, dipapadi, di-quiz le dintwa tša mantšu, le boitlwaetšo bja bohlale ka go itokišetša teko le diktesene.",
+              "Family: tšohle tša ka go Individual bakeng sa bana ba go fihla go ba 5 le batswadi, gotee le Mokgwa wa bana, sebaka sa gagwe sa ngwana yo mongwe le yo mongwe, thušo ka mošomo wa gae, le letlakala la taolo la motswadi le temošo ya lentšu le lengwe le le lengwe. Dikolo di na le leano la tšona. Ditheko tša naga ya gago le teko ya mahala ya matšatši a 14 di mo letlakaleng la ditheko.",
             ],
           },
         ],
@@ -1239,7 +1243,7 @@ Object.assign(HELP, {
         items: [
           {
             id: "no-verification-email",
-            q: "Ga ke a hwetša imeile ya ka ya go kgonthiša.",
+            q: "Ga ke a hwetša imeile ya ka ya go kgonthiša",
             a: [
               "Lekola pele difoltara tša spam le tša dipapatšo. Ka nako ye nngwe Gmail le Outlook di romela diimeile tša akhaonto moo go fihlela o swaya e nngwe bjalo ka \"Not spam\".",
               "Ge e se gona, imeile e ka ba e ngwadilwe ka phošo ge o ingwadiša. Leka go ingwadiša gape gomme o lekole aterese gabotse. Ge o ingwadišitše ka Google, ga go nyakege imeile ya go kgonthiša.",
@@ -1247,7 +1251,7 @@ Object.assign(HELP, {
           },
           {
             id: "forgot-password",
-            q: "Ke lebetše phasewete ya ka.",
+            q: "Ke lebetše phasewete ya ka",
             a: [
               "Bula lepokisi la go tsena gomme o kgotle \"O lebetše phasewete?\". Tsenya imeile ye o e šomišago go Gadit gomme o tla hwetša linki ya go fetoša phasewete ka gare ga motsotso goba ye mebedi.",
               "Ge imeile e sa fihle, lekola spam. Ge e sa fihle le gona, o ka ba o ingwadišitše ka Google go e na le imeile le phasewete. Leka konopo ya \"Tšwela pele ka Google\".",
@@ -1255,7 +1259,7 @@ Object.assign(HELP, {
           },
           {
             id: "wrong-credentials",
-            q: "Ke kgonthišegile gore phasewete ya ka e nepagetše eupša e re \"Imeile goba phasewete e fošagetše\".",
+            q: "Ke kgonthišegile gore phasewete ya ka e nepagetše eupša e re \"Imeile goba phasewete e fošagetše\"",
             a: [
               "Go na le dilo tše tharo tša go lekola. Sa pele, capslock. Sa bobedi, sekgoba mafelelong ge o kopiša le go kgomaretša. Sa boraro, o ingwadišitše ka Google go e na le phasewete (šomiša \"Tšwela pele ka Google\" go e na le moo).",
               "O sa kgomaretšwe? Fetoša phasewete go tšwa lepokising le le swanago. Go go thomiša lefsa gabotse.",
@@ -1263,7 +1267,7 @@ Object.assign(HELP, {
           },
           {
             id: "google-fails",
-            q: "Go tsena ka Google ga go šome.",
+            q: "Go tsena ka Google ga go šome",
             a: [
               "Lebaka le le tlwaelegilego kudu: sefetleki sa gago se thibela dikhukhi tša batho ba bangwe goba mafasetere a go tšwelela bakeng sa gadit.app. Di dumelele ditumelelong tša bara ya aterese gomme o leke gape.",
               "Ge o le mokgweng wa incognito, go tsena ka Google go thibetšwe ka morero. Fetogela go lefasetere la tlwaelo la sefetleki.",
@@ -1289,8 +1293,8 @@ Object.assign(HELP, {
             id: "share-account",
             q: "Na molekane wa ka goba ngwana wa ka a ka abelana akhaonto ya ka?",
             a: [
-              "Modiriši o tee yo a tsenego akhaontong ka nako. Mokgwa wa bana o dumelela akhaonto e tee ya Clear goba Deep go direla motswadi le ngwana: kgotla sefetoši gomme ditlhalošo di bonagala di loketše bana ntle le go tsena ka go arogana.",
-              "Bakeng sa batho ba babedi ba bagolo bao ba nyakago dipuku tša mantšu le tšwelopele tše di arogilego, bula diakhaonto tše pedi. Clear ke $2.99 ka kgwedi go akhaonto ye nngwe le ye nngwe.",
+              "Akhaonto ye nngwe le ye nngwe e na le motho o tee yo a tsenego ka nako. Bakeng sa lapa, leano la Family le dirilwe se: go fihla go bana ba 5 le batswadi, yo mongwe le yo mongwe a na le sebaka sa gagwe, puku ya gagwe ya mantšu le tšwelopele ya gagwe, gotee le Mokgwa wa bana bakeng sa bana le letlakala la taolo la motswadi.",
+              "Bakeng sa motho o tee yo mogolo a le noši, Individual e šomela motho o tee ka didirišwa ka moka tša go ithuta. Bapetša maano le ditheko tša naga ya gago letlakaleng la ditheko.",
             ],
           },
           {
@@ -1318,25 +1322,25 @@ Object.assign(HELP, {
           },
           {
             id: "kids-not-working",
-            q: "Mokgwa wa bana ga o fetoše tlhalošo.",
+            q: "Mokgwa wa bana ga o fetoše tlhalošo",
             a: [
-              "Mokgwa wa bana o fetoša fela sengwalwa moo lentšu le šetšego le na le tlhalošo ye e loketšego bana ye e dirilwego. Bakeng sa mantšu a mafsa ao o sa tšwago go a nyaka, e fe metsotswana ye 10 go ya go ye 15. Kgatišo ye e loketšego bana e dirwa gateetee ka lekga la mathomo.",
-              "Gape: Mokgwa wa bana o nyaka Clear goba Deep. Ge o le go Basic, sefetoši se tla go kgopela go kaonafatša. Badiriši bao ba sa tsebjego ba kgopelwa go ingwadiša.",
+              "Mokgwa wa bana o fetoša fela sengwalwa moo lentšu le šetšego le na le tlhalošo ye e loketšego bana. Bakeng sa lentšu leo o sa tšwago go le nyaka la mathomo, e fe metsotswana ye 10 go ya go ye 15 ge tlhalošo ya bana e lokišwa.",
+              "Mokgwa wa bana ke karolo ya leano la Family. Go Basic, go Individual, goba ntle le akhaonto, sefetoši se bontšha leano la Family go e na le go tšhuma. Batho bao ba ingwadišitšego go Clear goba Deep pele ga October 2026 ba boloka Mokgwa wa bana. Go o hwetša, bona Family letlakaleng la ditheko.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Go nyaka ka lentšu ga go šome.",
+            q: "Go nyaka ka lentšu ga go šome",
             a: [
               "Go nyaka ka lentšu go nyaka tumelelo ya maekrofouno. Bontši bja difetleki di botšiša gatee go weposaete ye nngwe le ye nngwe. Ge o kgotlile Block ka phošo, o tla swanela ke go e bušetša ka seatla: kgotla leswao la senotlelo goba la tshedimošo kgauswi le gadit.app bareng ya aterese, ke moka Site settings, ke moka Microphone, ke moka Allow.",
-              "Go Safari ya iOS, phihlelelo ya maekrofouno gape e nyaka sefetoši sa Settings → Safari → Microphone. Lentšu ga bjale ke karolo ya Clear le Deep: badiriši ba Basic ba bona kgopelo ya go kaonafatša, baeti bao ba sa tsenago ba bona kgopelo ya go tsena.",
+              "Go Safari ya iPhone le iPad, phihlelelo ya maekrofouno gape e nyaka Settings → Safari → Microphone. Go nyaka ka lentšu ke karolo ya maano a Individual le Family: go Basic o tla bona maano go e na le yona, gomme baeti bao ba sa tsenago ba kgopelwa go tsena. Go kaonafatša, bula letlakala la ditheko.",
             ],
           },
           {
             id: "no-image",
-            q: "Ga ke kgone go dira seswantšho sa lentšu.",
+            q: "Ga ke kgone go hwetša seswantšho sa lentšu",
             a: [
-              "Go dira diswantšho ke karolo ya Clear goba Deep ye e nago le palo ya kgwedi. Clear e hwetša diswantšho tše 30 ka kgwedi, Deep e hwetša tše 100. Ge o šomišitše palo ka moka, o tla bona lepheko. E thoma lefsa ka la 1 la kgwedi ye nngwe le ye nngwe.",
+              "Diswantšho ke karolo ya maano a Individual le Family, ka diswantšho tše diswa tše go fihla go 100 ka kgwedi. Seswantšho seo se šetšego se le gona bakeng sa tlhalošo yeo se a bulega ntle le go balwa. Leano la kgale la Clear le na le tše 30 ka kgwedi, gomme Basic ga e na diswantšho. Ge diswantšho tša kgwedi di fedile o tla bona tsebišo, gomme palo e thoma lefsa mathomong a kgwedi ye nngwe le ye nngwe.",
               "Ge o sa le ka tlase ga palo gomme o sa bona diphošo, gantši ke tša nakwana. Leka gape ka morago ga metsotswana ye 30. Diphošo tše di tšwelago pele ke bothata. Hle bega go tšwa letlakaleng la lentšu.",
             ],
           },
@@ -1344,21 +1348,21 @@ Object.assign(HELP, {
             id: "save-word",
             q: "Nka boloka bjang lentšu pukung ya ka ya mantšu?",
             a: [
-              "Letlakaleng lefe goba lefe la sephetho sa lentšu, kgotla Boloka pukung kgauswi le sehlogo. Puku ya mantšu ke karolo ya Clear le Deep moo o ka boeletšago mantšu ao o a bolokilego ka morago, wa a bona ka pono ya sehlopha sa dinaledi, le go dira ditlwaetšo tše bohlale (Deep).",
-              "Mantšu ao o a bolokilego gomme wa a bula bonyenyane gatee a hwetšagala ntle le inthanete go tšwa polokelong ya sedirišwa. Sephuthelwana sa ntle le inthanete gape se boloka mantšu ao a nyakwago kudu ka polelo ya gago gore o be o itokišitše ntle le inthanete.",
+              "Ga go nyakege. Ge o tsenile, lentšu le lengwe le le lengwe leo o le nyakago le bolokwa pukung ya gago ya mantšu ka bolona. Go Basic puku ya mantšu e swara go fihla go mantšu a 30. Go Individual le Family ga e na moedi gomme e na le boitlwaetšo bja bohlale, bjo bo bušetšago mantšu a gago gore o a boeletše ka nako ye e nepagetšego.",
+              "Go Individual le Family, mantšu ao o a nyakago gape a bolokwa sedirišweng sa gago, ka fao a bulega ntle le inthanete. Go bona mantšu a gago, bula puku ya mantšu go tšwa lenaneong.",
             ],
           },
           {
             id: "offline",
             q: "Mokgwa wa ntle le inthanete o šoma bjang?",
             a: [
-              "Mantšu ao o šetšego o a bone a bolokwa sedirišweng sa gago. A bule gape ntle le inthanete gomme a laišega gateetee. Sephuthelwana ka moka sa ntle le inthanete (mantšu a ka pele ka polelo ya gago) se laollwa ge o se nyaka go tšwa letlakaleng la puku ya mantšu.",
-              "Go nyaka lentšu le leswa go sa nyaka inthanete, ka gobane Gadit e swanetše go dira tlhalošo go tloga mathomong. Polokelo ya ntle le inthanete ke ya mantšu ao o šetšego o a hlahlobile.",
+              "Tšhomišo ntle le inthanete ke karolo ya maano a Individual le Family. Lentšu le lengwe le le lengwe leo o le nyakago le bolokwa sedirišweng sa gago, ka fao le bulega gape gateetee ntle le inthanete. O ka laolla gape sephuthelwana sa mantšu ao a nyakwago kudu ka polelo ya gago go tšwa letlakaleng la gago la Akhaonto.",
+              "Go nyaka lentšu le leswa ka botlalo go sa nyaka inthanete, ka gobane Gadit e swanetše go lokiša sephetho ka moka sa lona. Kopi ya ntle le inthanete e akaretša mantšu ao a šetšego a le sedirišweng sa gago. Ge o le go Basic, bona maano letlakaleng la ditheko.",
             ],
           },
           {
             id: "slow",
-            q: "Tirišo e bonagala e nanya.",
+            q: "Tirišo e bonagala e nanya",
             a: [
               "Nyakišišo ya mathomo ya lentšu ke yona ye e nanyago kudu ka gobane Gadit e dira sephetho ka moka go tloga mathomong: gantši metsotswana ye mmalwa, ka nako ye nngwe go feta bakeng sa mantšu a a raraganego. Dinyakišišo tše di latelago tša lentšu le le swanago di a akgofa, di tšwa polokelong.",
               "Ge tšohle di bonagala di nanya, leka go mpshafatša ka matla: Cmd+Shift+R go Mac, Ctrl+Shift+R go Windows. Ge go nanya go tšwela pele matlakaleng ka moka, hle re romele imeile ka naga ya gago le sefetleki gore sehlopha se lekole tsela ya neteweke go ya diseborong tša rena go tšwa tikologong ya gago.",
@@ -1376,7 +1380,7 @@ Object.assign(HELP, {
             id: "change-language",
             q: "Nka fetoša bjang polelo ya tšhebedišo?",
             a: [
-              "Godimo ka go le letona la letlakala lefe goba lefe, o tla bona leswao le lennyane la folaga (goba leina la polelo ya gago ya bjale). Le kgotle gomme o kgethe go tšwa dipolelong tše 30+: Seisemane, Segerika, Seheberu, Searabia, Serashia, Sepanish, Sepotokisi, Sefora, Sejeremane, Setšheke, Seslovakia, Setaliane, Sejapane, SeHindi, Seamhariki, Sezulu.",
+              "Godimo ka go le letona la letlakala lefe goba lefe, o tla bona leswao le lennyane la folaga (goba leina la polelo ya gago ya bjale). Le kgotle gomme o kgethe go tšwa dipolelong tše 41.",
               "Kgetho ya gago e bolokwa sedirišweng se. Tšohle di laišega gape ka polelo ye mpsha: tšhebedišo, mananeo, ditlhalošo tša mantšu tša ka moso, mehlala, ditlhalošo tša bana, le mothopo wa lentšu. Dipoelo tše di šetšego di bolokilwe ka polelo ya kgale di dula go fihlela o nyaka mantšu ao gape.",
             ],
           },
@@ -1414,7 +1418,7 @@ Object.assign(HELP, {
           },
           {
             id: "empty-dashboard",
-            q: "Ke tsene eupša letlakala la ka la taolo ga le na selo.",
+            q: "Ke tsene eupša letlakala la ka la taolo ga le na selo",
             a: [
               "Dipalo di bonagala ka morago ga kgotlo ya mathomo go linki ya gago. Go se be le selo go ra fela gore ga go eso be le yo a kgotlilego. Eya o abelane linki. Letlakala la taolo le mpshafala e ka ba gateetee ge mošomo o thoma.",
               "Ge o abelane gomme motho a ingwadišitše eupša letlakala la taolo le sa e bontšhe, re ngwalele ka nako ye e ka bago ya go ingwadiša gomme sehlopha se tla lekola go balelwa ga yona.",
@@ -1430,7 +1434,7 @@ Object.assign(HELP, {
           },
           {
             id: "missing-commission",
-            q: "Motho o ingwadišitše ka linki ya ka eupša ga ke bone khomišene.",
+            q: "Motho o ingwadišitše ka linki ya ka eupša ga ke bone khomišene",
             a: [
               "Gantši ke taba ya nako: go ingwadiša go bonagala letlakaleng la taolo ka gare ga metsotso, eupša khomišene e ngwalwa fela ge peeletšo e lefilwe ka nnete (se se ka tšea matšatši ge e ba a le tekong ya mahala). Lekola gape ka morago ga ge teko e fela.",
               "Ge peeletšo e lefilwe eupša o sa bone khomišene ka morago ga diiri tše 48, re ngwalele ka nako ye e ka bago ya go ingwadiša le imeile goba leina la mongwadiši ge o le tseba. Sehlopha se tla nyakišiša tatelano ya go balelwa gomme se lokiše phošo efe goba efe ka seatla.",
@@ -1447,16 +1451,16 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "Gadit ke eng?",
             a: [
-              "Pukuntšu ya dipolelo tše ntši ye e agetšwego go dira gore lentšu le kwagale, e sego fela go fa tlhalošo ya mothalo o tee. Lentšu le lengwe le le lengwe le bulega le na le ditlhalošo tša lona ka moka, mehlala ya nnete ya tlhalošo ye nngwe le ye nngwe, dika, mothopo wa lentšu, seswantšho se o ka se kgethago, le (ka Clear le Deep) tlhalošo ye e loketšego bana, go ngwala lefoko la gago le dikarabelo, le ditlhahlobo.",
-              "Ga bjale dipolelo tše 30+ tša tšhebedišo. Ka gare ga sehlopha re e bitša go GAD lentšu: go kwešiša lentšu ka botlalo, e sego fela go le fetolela.",
+              "Gadit e go thuša go kwešiša lentšu le lengwe le le lengwe ka botlalo, e sego fela go hwetša tlhalošo ya mothalo o tee. Lentšu le lengwe le le lengwe le bulega le na le ditlhalošo tša lona ka moka, mehlala ya nnete ya tlhalošo ye nngwe le ye nngwe, dika le mothopo wa lentšu. Maano ao a lefelwago a oketša seswantšho sa tlhalošo ye nngwe le ye nngwe, boitlwaetšo, dipapadi le tše dingwe, gomme Family e oketša Mokgwa wa bana le sebaka sa ngwana yo mongwe le yo mongwe.",
+              "Gadit e šoma ka dipolelo tše 41. Ka gare ga sehlopha re e bitša go GAD lentšu: go kwešiša lentšu ka botlalo, e sego fela go le fetolela. Go bona seo leano le lengwe le le lengwe le se akaretšago, bula letlakala la ditheko.",
             ],
           },
           {
             id: "languages",
             q: "Le thekga dipolelo dife?",
             a: [
-              "Tšhebedišo: Seisemane, Segerika, Seheberu, Searabia, Serashia, Sepanish, Sepotokisi, Sefora, Sejeremane, Setšheke, Seslovakia, Setaliane, Sejapane, Sezulu.",
-              "O ka nyaka lentšu ka efe goba efe ya dipolelo tšeo gomme wa hwetša tlhalošo, mehlala le tšohle tše dingwe ka polelo ya tšhebedišo ye o e kgethilego. Seheberu le Searabia di ngwalwa ka botlalo go tloga go le letona go ya go le letshadi gomme di šomiša difonte tša tšona.",
+              "Gadit e šoma ka dipolelo tše 41, go akaretša Seisemane, Seheberu, Searabia, Sepanish, Sefora, Sejeremane, Serashia, Setšhaena, Sejapane, SeHindi, Sezulu, Sexhosa le Seafrikanse.",
+              "O ka nyaka lentšu ka efe goba efe ya dipolelo tše gomme wa hwetša ditlhalošo, mehlala le tšohle tše dingwe ka polelo ye o e kgethilego ya tšhebedišo. Seheberu, Searabia le Sepersia di balwa go tloga go le letona go ya go le letshadi, ka difonte tša tšona. Go fetoša, kgotla konopo ya polelo godimo ga letlakala lefe goba lefe.",
             ],
           },
           {
@@ -1464,7 +1468,7 @@ Object.assign(HELP, {
             q: "Na Gadit e bolokegile bakeng sa bana?",
             a: [
               "Gadit e diretšwe gore motswadi a e šomiše ka polokego gotee le ngwana. Mokgwa wa bana o tšweletša ditlhalošo tše bonolo, tše di kwagalago le tše di loketšego mengwaga (maemong a mengwaga ye 5 go ya go ye 10), o šomiša enjene ye e swanago le ye e dirago diteng tša batho ba bagolo, ka ditaelo tše di kwagalago tša go nolofatša. Ga go diteng tše di dirilwego ke badiriši tšeo di kilego tša bontšhwa bana.",
-              "Go ya ka dipholisi tša rena le melao ya sephiri sa bana lefaseng ka bophara, go ba le akhaonto ka noši ke go tloga mengwageng ye 13 go ya godimo. Mokgwa wa tlwaelo ke akhaonto ya motswadi yeo motswadi a e šomišago gotee le ngwana wa gagwe, e lego seo Mokgwa wa bana o agetšwego sona.",
+              "Go ya ka dipholisi tša rena le melao ya sephiri sa bana lefaseng ka bophara, akhaonto ya gago ka noši ke ya mengwaga ye 13 go ya godimo. Bana ba šomiša Gadit ka motswadi: go leano la Family motswadi o oketša ngwana yo mongwe le yo mongwe go tšwa letlakaleng la Family, ngwana yo mongwe le yo mongwe o hwetša sebaka sa gagwe le Mokgwa wa bana, gomme letlakala la taolo la motswadi le bontšha mantšu ao ngwana yo mongwe le yo mongwe a a nyakago. Go thoma, thoma ka Family letlakaleng la ditheko.",
             ],
           },
           {
@@ -1472,7 +1476,7 @@ Object.assign(HELP, {
             q: "Tshedimošo ya ka e bolokwa kae? Na le a e rekiša?",
             a: [
               "Akhaonto, histori, puku ya mantšu le diswantšho tše di dirilwego di bolokwa ka polokego go Firebase, di notletšwe polokelong. Ga re rekišetše motho le ge e le ofe tshedimošo ya gago. Re abelana fela seo se nyakegago go šomiša Gadit (polokelo, ditefo, bafepi ba diteng), bjalo ka ge go hlalošitšwe ka go Pholisi ya Sephiri.",
-              "O ka ntšha puku ya gago ya mantšu goba wa phumola akhaonto ya gago nako efe goba efe go tšwa letlakaleng la Akhaonto.",
+              "O ka phumola akhaonto ya gago nako efe goba efe go tšwa letlakaleng la Akhaonto. Go hwetša kopi ya puku ya gago ya mantšu goba tshedimošo efe goba efe ye nngwe ye re e swerego, re ngwalele go tšwa letlakaleng le.",
             ],
           },
           {
@@ -1515,16 +1519,17 @@ Object.assign(HELP, {
             q: "Ke khansela jang ikwadiso ya me?",
             a: [
               "O itirela, nako nngwe le nngwe. Tsena, bula Akhaonto, mme o tobetse Khansela ikwadiso fa tlase ga leano la gago.",
-              "Phitlhelelo ya gago e tswelela go fitlha kwa bofelong jwa nako e o setseng o e duetse. Morago ga foo akhaonto e boela kwa Basic (mahala). Mafoko a o a bolokileng, hisitori, le bukana di nna di babalesegile mme di a fitlhelelwa.",
-              "Fa o khansela ka phoso kgotsa o fetola mogopolo, o ka tswelela ka ikwadiso mo tsebeng e e tshwanang pele nako e fela.",
+              "Fa o na le ikwadiso e o e duelelang, phitlhelelo ya gago e tswelela go fitlha kwa bofelong jwa nako e o setseng o e duetse. Morago ga foo akhaonto e fetogela go Basic (mahala). Mafoko a o a bolokileng le hisitori di nna di babalesegile.",
+              "Mo nakong ya teko ya mahala ya malatsi a le 14, go khansela go fetsa teko ka bonako mme ga go na tefo. Fa o tshwenyega fela ka tefo e e itirelang, tlhopha lebaka leo mo lefesetereng la go khansela, mme o ka tima go ntšhafala ga ikwadiso, wa tswelela ka teko go fitlha letsatsing la yone la bofelo.",
+              "Fa o khanseditse ikwadiso e o e duelelang ka phoso kgotsa o fetola mogopolo, o ka e tswelela mo tsebeng e e tshwanang pele nako e fela.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Ke fetola jang go tswa mo Clear go ya go Deep (kgotsa go boela morago)?",
+            q: "Ke fetola jang magareng ga Individual le Family?",
             a: [
-              "Akhaonto, morago Laola dituelo, morago Ntšhafatsa ikwadiso. Tlhopha leano le leša.",
-              "Stripe e bala pharologano ya tlhwatlhwa ka bo yone, go ya ka malatsi a a setseng mo nakong ya jaanong. Fa o tlhatlosa, o tla duedisiwa pharologano fela mo nakong e e setseng. Fa o fetolela kwa maemong a a kwa tlase, madi a a setseng a dirisiwa mo tefong ya gago e e latelang.",
+              "Go fetogela go Family, bula tsebe ya gago ya Akhaonto mme o tobetse \"Fetogela go Family\". Ikwadiso ya gago ya jaanong e ntšhafadiwa mo karateng e e tshwanang, o sa e tsenye gape.",
+              "Stripe e bala pharologano ya malatsi a a setseng a nako ya jaanong, ka jalo o duela pharologano fela. Go fetoga go tswa mo Family go ya go Individual, re kwalele go tswa mo tsebeng e, mme setlhopha se tla go fetolela.",
             ],
           },
           {
@@ -1561,9 +1566,9 @@ Object.assign(HELP, {
           },
           {
             id: "unknown-charge",
-            q: "Ke bona tefo e ke sa e itseng.",
+            q: "Tefo e mo karateng ya me ke eng?",
             a: [
-              "Dituelo di bonala e le GADIT kgotsa GADIT.APP ka $2.99 (Clear ya kgwedi), $4.99 (Deep ya kgwedi), $29.99 (Clear ya ngwaga), kgotsa $49.99 (Deep ya ngwaga). Fa e sa tsamaisane, e ka tswa e tswa mo tirelong e nngwe.",
+              "Dituelelo di bonala e le GADIT kgotsa GADIT.APP. Madi a tsamaisana le leano la gago (Individual kgotsa Family, ka kgwedi kgotsa ka ngwaga) mo mading a naga ya gago, jaaka go bontshiwa mo tsebeng ya ditlhwatlhwa. Dikwadiso tse di simologileng pele ga Diphalane 2026 di tswelela ka tlhwatlhwa e di simologileng ka yone. Fa madi a sa tsamaisane, go ka tswa e le tirelo e nngwe.",
               "Fa o tlhomamisegile gore ga se ya gago, o se ka wa ngongorega kwa bankeng ya gago jaanong. Pele re kwalele ka tlhamalalo ka letlha le palo ya madi. Setlhopha se tla e bona, se tlhalose gore ke eng, mme se busetse madi fa go tlhokega. Ngongorego ya banka e ka dira gore dituelo tsa isago di nne thata, ka jalo go e rarabolola ka thuso gantsi go bonako mme go babalesegile.",
             ],
           },
@@ -1577,11 +1582,11 @@ Object.assign(HELP, {
           },
           {
             id: "plan-comparison",
-            q: "Pharologano ke eng fa gare ga Basic, Clear, le Deep?",
+            q: "Pharologano ke eng magareng ga Basic, Individual le Family?",
             a: [
-              "Basic (mahala): go fitlha dipatlo tsa mafoko di le 20 ka letsatsi, ditlhaloso tsotlhe, dikai mo tlhalosong nngwe le nngwe, dikapolelo, le tshimologo ya lefoko. Ga go tlhokege go ikwadisa mo dipatlong tsa motheo.",
-              "Clear ($2.99/kgwedi kgotsa $29.99/ngwaga): dipatlo kwa ntle ga selekanyo, ditlhaloso tse di tshwanetseng bana, setshwantsho sa lefoko lengwe le lengwe (30/kgwedi), go kwala polelo ya gago o bone maikutlo, dintlha tsa dikapolelo, le hisitori ya dipatlo ya malatsi a le 30.",
-              "Deep ($4.99/kgwedi kgotsa $49.99/ngwaga): sengwe le sengwe se se mo Clear, mmogo le ditlhatlhobo tsa boikatiso, bukana ya gago e e nang le boikatiso jo botlhale jwa go boeletsa ka nako, go farologanya mafoko a a tshwanang, le ditshwantsho di le dintsi (100/kgwedi).",
+              "Basic (mahala): go fitlha dipatlo tsa mafoko di le 10 ka letsatsi, ditlhaloso tsotlhe, dikai, dikapolelo, tshimologo ya lefoko, bokao jo bo nepagetseng go ya ka polelo, le bukana ya go fitlha mafoko a le 30.",
+              "Individual: motho a le mongwe, didirisiwa tsotlhe tsa go ithuta. Dipatlo tse di sa lekanyediwang, setshwantsho sa tlhaloso nngwe le nngwe, dikai le dipotso tse dingwe ka lefoko lengwe le lengwe, Kwala polelo mme o amogele maikutlo, Lefoko Lengwe le Lengwe, E bue, lentswe la tlhago la go buisa le patlo ka lentswe, tiriso ntle le inthanete, metshameko, dipotso le dikgaisano tsa mafoko, le boikatiso jo botlhale ka ipaakanyetso ya teko le dikteshene.",
+              "Family: tsotlhe tsa Individual bakeng sa bana ba ka fitlha go 5 le batsadi, mmogo le Mokgwa wa bana, lefelo la gagwe la ngwana mongwe le mongwe, thuso ka tirogae, le lebota la batsadi le kitsiso ya lefoko lengwe le lengwe. Dikolo di na le leano la tsone. Ditlhwatlhwa tsa naga ya gago le teko ya mahala ya malatsi a le 14 di mo tsebeng ya ditlhwatlhwa.",
             ],
           },
         ],
@@ -1593,7 +1598,7 @@ Object.assign(HELP, {
         items: [
           {
             id: "no-verification-email",
-            q: "Ga ke a amogela imeile ya go netefatsa.",
+            q: "Ga ke a amogela imeile ya go netefatsa",
             a: [
               "Pele, tlhola mo difoleteng tsa spam le tsa dipapatso. Gmail le Outlook ka dinako tse dingwe di isa diimeile tsa akhaonto koo go fitlha o tshwaya nngwe e le \"Not spam\".",
               "Fa e se koo, imeile e ka tswa e kwadilwe phoso fa o ikwadisa. Leka go ikwadisa gape mme o tlhole aterese sentle. Fa o ikwadisitse ka Google, ga go tlhokege imeile ya go netefatsa.",
@@ -1601,7 +1606,7 @@ Object.assign(HELP, {
           },
           {
             id: "forgot-password",
-            q: "Ke lebetse lefoko la me la sephiri.",
+            q: "Ke lebetse lefoko la me la sephiri",
             a: [
               "Bula lebokoso la go tsena mme o tobetse \"A o lebetse lefoko la sephiri?\". Tsenya imeile e o e dirisang mo Gadit mme o tla amogela kgolagano ya go le fetola mo motsotsong kgotsa e le mebedi.",
               "Fa imeile e sa goroge, tlhola spam. Fa e sa ntse e sa goroge, o ka tswa o ikwadisitse ka Google go na le imeile le lefoko la sephiri. Leka konopo ya \"Tswelela ka Google\".",
@@ -1609,7 +1614,7 @@ Object.assign(HELP, {
           },
           {
             id: "wrong-credentials",
-            q: "Ke tlhomamisegile gore lefoko la me la sephiri le siame mme go kwadilwe \"Imeile kgotsa lefoko la sephiri ga di a siama\".",
+            q: "Ke tlhomamisegile gore lefoko la me la sephiri le siame mme go kwadilwe \"Imeile kgotsa lefoko la sephiri ga di a siama\"",
             a: [
               "Dilo di le tharo tsa go tlhola. Sa ntlha, capslock. Sa bobedi, sekgala kwa bofelong fa o kopolola. Sa boraro, o ikwadisitse ka Google go na le lefoko la sephiri (dirisa \"Tswelela ka Google\").",
               "A o sa ntse o kgoreletsegile? Fetola lefoko la sephiri mo lebokosong le le tshwanang. Go go simolodisa sešwa.",
@@ -1617,7 +1622,7 @@ Object.assign(HELP, {
           },
           {
             id: "google-fails",
-            q: "Go tsena ka Google ga go dire.",
+            q: "Go tsena ka Google ga go dire",
             a: [
               "Lebaka le le tlwaelegileng thata: sebatli sa gago se thibela di-cookie tsa batho ba bangwe kgotsa di-pop-up tsa gadit.app. Di letle mo ditetlelelong tsa mola wa aterese mme o leke gape.",
               "Fa o le mo mokgweng wa incognito, go tsena ka Google go thibetswe ka boomo. Fetolela kwa letlhabaphefong le le tlwaelegileng la sebatli.",
@@ -1643,8 +1648,8 @@ Object.assign(HELP, {
             id: "share-account",
             q: "A molekane wa me kgotsa ngwana wa me a ka abelana akhaonto ya me?",
             a: [
-              "Modirisi a le mongwe yo o tsenyeng mo akhaontong ka nako. Mokgwa wa bana o letla akhaonto e le nngwe ya Clear kgotsa Deep go direla motsadi le ngwana: fetola konopo mme ditlhaloso di bonala di tshwanetse bana kwa ntle ga go tsena go go farologaneng.",
-              "Mo bagolong ba babedi ba mongwe le mongwe a batlang bukana le kgatelopele ya gagwe, dirang diakhaonto di le pedi. Clear ke $2.99 ka kgwedi mo akhaontong nngwe le nngwe.",
+              "Akhaonto nngwe le nngwe e na le motho a le mongwe yo o tsenyeng ka nako. Bakeng sa lelapa, leano la Family le diretswe se: go fitlha bana ba le 5 le batsadi, mongwe le mongwe a na le lefelo la gagwe, bukana ya gagwe le kgatelopele ya gagwe, mmogo le Mokgwa wa bana bakeng sa bana le lebota la batsadi.",
+              "Bakeng sa mogolo a le mongwe a le esi, Individual e direla motho a le mongwe ka didirisiwa tsotlhe tsa go ithuta. Bapisa maano le ditlhwatlhwa tsa naga ya gago mo tsebeng ya ditlhwatlhwa.",
             ],
           },
           {
@@ -1672,25 +1677,25 @@ Object.assign(HELP, {
           },
           {
             id: "kids-not-working",
-            q: "Mokgwa wa bana ga o fetole tlhaloso.",
+            q: "Mokgwa wa bana ga o fetole tlhaloso",
             a: [
-              "Mokgwa wa bana o fetola mokwalo fela fa lefoko le setse le na le tlhaloso e e tshwanetseng bana e e dirilweng. Mo mafokong a mašwa a o sa tswang go a batla, ema metsotswana e le 10 go ya go 15. Kgatiso ya bana e dirwa ka nako eo la ntlha.",
-              "Gape: Mokgwa wa bana o tlhoka Clear kgotsa Deep. Fa o le mo Basic, konopo e tla go kopa go tlhatlosa. Badirisi ba ba sa itsiweng ba kopiwa go ikwadisa.",
+              "Mokgwa wa bana o fetola mokwalo fela fa lefoko le setse le na le tlhaloso e e tshwanetseng bana. Mo lefokong le o sa tswang go le batla la ntlha, ema metsotswana e le 10 go ya go 15 fa tlhaloso ya bana e ntse e baakanngwa.",
+              "Mokgwa wa bana ke karolo ya leano la Family. Mo Basic, mo Individual, kgotsa kwa ntle ga akhaonto, konopo e bontsha leano la Family go na le go tshuba. Ba ba ikwadisitseng mo Clear kgotsa Deep pele ga Diphalane 2026 ba tswelela ka Mokgwa wa bana. Go o bona, leba Family mo tsebeng ya ditlhwatlhwa.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Go batla ka lentswe ga go dire.",
+            q: "Go batla ka lentswe ga go dire",
             a: [
               "Go batla ka lentswe go tlhoka tetla ya maekerofouno. Bontsi jwa dibatli di kopa gangwe mo setsheng sengwe le sengwe. Fa o tobeditse Block ka phoso, o tla tlhoka go e fetola ka seatla: tobetsa setshwantshwana sa senotlolo kgotsa sa tshedimosetso fa thoko ga gadit.app mo moleng wa aterese, morago Site settings, morago Microphone, morago Allow.",
-              "Mo Safari ya iOS, phitlhelelo ya maekerofouno e tlhoka gape konopo ya Settings → Safari → Microphone. Lentswe ga jaana ke karolo ya Clear le Deep: badirisi ba Basic ba bona kopo ya go tlhatlosa, baeti ba ba sa tsenang ba bona kopo ya go tsena.",
+              "Mo Safari ya iPhone le iPad, phitlhelelo ya maekerofouno e tlhoka gape Settings → Safari → Microphone. Go batla ka lentswe ke karolo ya maano a Individual le Family: mo Basic o tla bona maano go na le gone, mme baeti ba ba sa tsenang ba kopiwa go tsena. Go tlhatlosa, bula tsebe ya ditlhwatlhwa.",
             ],
           },
           {
             id: "no-image",
-            q: "Ga ke kgone go dira setshwantsho sa lefoko.",
+            q: "Ga ke kgone go bona setshwantsho sa lefoko",
             a: [
-              "Go dira ditshwantsho ke karolo ya Clear kgotsa Deep e e nang le selekanyo sa kgwedi. Clear e bona ditshwantsho di le 30 ka kgwedi, Deep e bona di le 100. Fa o dirisitse selekanyo sotlhe, o tla bona kgoreletso. E simolola sešwa ka la ntlha la kgwedi nngwe le nngwe.",
+              "Ditshwantsho ke karolo ya maano a Individual le Family, ka ditshwantsho tse dišwa di ka fitlha go 100 ka kgwedi. Setshwantsho se se setseng se le teng sa tlhaloso eo se a bulega se sa balwe. Leano la kgale la Clear le na le di le 30 ka kgwedi, mme Basic ga e na ditshwantsho. Fa ditshwantsho tsa kgwedi di fedile o tla bona kitsiso, mme palo e simolola sešwa kwa tshimologong ya kgwedi nngwe le nngwe.",
               "Fa o le kwa tlase ga selekanyo mme o sa ntse o bona go palelwa, gantsi ke ga nakwana. Leka gape morago ga metsotswana e le 30. Go palelwa go go tswelelang ke phoso. Tsweetswee e bege go tswa mo tsebeng ya lefoko.",
             ],
           },
@@ -1698,21 +1703,21 @@ Object.assign(HELP, {
             id: "save-word",
             q: "Ke boloka jang lefoko mo bukaneng ya me?",
             a: [
-              "Mo tsebeng nngwe le nngwe ya dipholo tsa lefoko, tobetsa Boloka mo bukaneng gaufi le setlhogo. Bukana ke karolo ya Clear le Deep e o ka boeletsang mafoko a o a bolokileng mo go yone moragonyana, wa a bona mo ponalong ya dinaledi, le go dira boikatiso jo botlhale (Deep).",
-              "Mafoko a o a bolokileng mme wa a bula bonnye gangwe a fitlhelelwa kwa ntle ga inthanete go tswa mo polokelong ya sedirisiwa. Sephuthelo sa kwa ntle ga inthanete se boloka gape mafoko a a tumileng thata mo puong ya gago gore o nne o ipaakantse kwa ntle ga inthanete.",
+              "Ga o tlhoke go dira jalo. Fa o tsenye, lefoko lengwe le lengwe le o le batlang le bolokwa mo bukaneng ya gago ka bo lone. Mo Basic bukana e tshola go fitlha mafoko a le 30. Mo Individual le Family ga e na selekanyo mme e na le boikatiso jo botlhale, jo bo busetsang mafoko a gago gore o a boeletse ka nako e e siameng.",
+              "Mo Individual le Family, mafoko a o a batlang a bolokwa gape mo sedirisweng sa gago, ka jalo a bulega kwa ntle ga inthanete. Go bona mafoko a gago, bula bukana go tswa mo lenaaneng.",
             ],
           },
           {
             id: "offline",
             q: "Mokgwa wa kwa ntle ga inthanete o dira jang?",
             a: [
-              "Mafoko a o setseng o a lebeletse a bolokwa mo sedirisweng. A bule gape kwa ntle ga inthanete mme a laisega ka bonako. Sephuthelo se se feletseng sa kwa ntle ga inthanete (mafoko a a kwa godimo mo puong ya gago) se laolelwa fa o se kopa go tswa mo tsebeng ya bukana.",
-              "Go batla lefoko le leša go sa ntse go tlhoka inthanete, ka gonne Gadit e tshwanetse go dira tlhaloso go simolola kwa tshimologong. Polokelo ya kwa ntle ga inthanete ke ya mafoko a o setseng o a sekasekile.",
+              "Tiriso ntle le inthanete ke karolo ya maano a Individual le Family. Lefoko lengwe le lengwe le o le batlang le bolokwa mo sedirisweng sa gago, ka jalo le bulega gape ka bonako kwa ntle ga inthanete. O ka laolela gape sephuthelo sa mafoko a a tumileng thata mo puong ya gago go tswa mo tsebeng ya gago ya Akhaonto.",
+              "Go batla lefoko le leša gotlhelele go sa ntse go tlhoka inthanete, ka gonne Gadit e tshwanetse go baakanya dipholo tsotlhe tsa lone. Khopi ya kwa ntle ga inthanete e akaretsa mafoko a a setseng a le mo sedirisweng sa gago. Fa o le mo Basic, leba maano mo tsebeng ya ditlhwatlhwa.",
             ],
           },
           {
             id: "slow",
-            q: "Tiriso e bonala e le bonya.",
+            q: "Tiriso e bonala e le bonya",
             a: [
               "Patlo ya ntlha ya lefoko ke yone e e bonya thata ka gonne Gadit e dira dipholo tsotlhe go simolola kwa tshimologong: gantsi metsotswana e le mmalwa, ka dinako tse dingwe go feta mo mafokong a a raraaneng. Dipatlo tse di latelang tsa lefoko le le tshwanang di diragala ka bonako, go tswa mo polokelong.",
               "Fa sengwe le sengwe se bonala se le bonya, leka go simolola sešwa ka thata: Cmd+Shift+R mo Mac, Ctrl+Shift+R mo Windows. Fa bonya bo tswelela mo ditsebeng tsotlhe, tsweetswee re romelele imeile ka naga ya gago le sebatli gore setlhopha se tlhole tsela ya neteweke go ya kwa diserefareng tsa rona go tswa mo kgaolong ya gago.",
@@ -1730,7 +1735,7 @@ Object.assign(HELP, {
             id: "change-language",
             q: "Ke fetola jang puo ya tiriso?",
             a: [
-              "Kwa godimo ka fa mojeng mo tsebeng nngwe le nngwe, o tla bona setshwantshwana se sennye sa folaga (kgotsa leina la puo ya gago ya jaanong). Se tobetse mme o tlhophe mo dipuong di le 30+: Sekgoa, Segerika, Sehebera, Searabia, Serashia, Sesepanishe, Sepotokisi, Sefora, Sejeremane, Setšheke, Seslovakia, Setaliana, Sejapane, Sehindi, Seamhariki, Sezulu.",
+              "Kwa godimo ka fa mojeng mo tsebeng nngwe le nngwe, o tla bona setshwantshwana se sennye sa folaga (kgotsa leina la puo ya gago ya jaanong). Se tobetse mme o tlhophe mo dipuong di le 41.",
               "Tlhopho ya gago e bolokwa mo sedirisweng se. Sengwe le sengwe se laisega gape ka puo e ntšha: tiriso, malenaane, ditlhaloso tsa mafoko tsa isago, dikai, ditlhaloso tsa bana, le tshimologo ya lefoko. Dipholo tse di setseng di bolokilwe ka puo ya kgale di nna jalo go fitlha o batla mafoko ao gape.",
             ],
           },
@@ -1768,7 +1773,7 @@ Object.assign(HELP, {
           },
           {
             id: "empty-dashboard",
-            q: "Ke tsene mme lebota la me ga le na sepe.",
+            q: "Ke tsene mme lebota la me ga le na sepe",
             a: [
               "Dipalo di bonala morago ga go tobetsa ga ntlha mo kgolaganong ya gago. Fa go se na sepe go raya fela gore ga go ise go nne le ope yo o tobetsang. Ya o abelane kgolagano. Lebota le ntšhafala ka bonako fa tiro e simolola.",
               "Fa o abetse mme mongwe a ikwadisitse mme lebota le sa se bontshe, re kwalele ka nako e e ka nnang ya go ikwadisa mme setlhopha se tla tlhola gore e tsewa e le ya ga mang.",
@@ -1784,7 +1789,7 @@ Object.assign(HELP, {
           },
           {
             id: "missing-commission",
-            q: "Mongwe o ikwadisitse ka kgolagano ya me mme ga ke bone komishene.",
+            q: "Mongwe o ikwadisitse ka kgolagano ya me mme ga ke bone komishene",
             a: [
               "Gantsi se ke ka ntlha ya nako: go ikwadisa go bonala mo lebotong mo metsotsong, mme komishene e kwalwa fela fa ikwadiso e duetswe tota (se se ka diragala malatsi morago fa a le mo tekong ya mahala). Tlhola gape morago ga fa teko e fela.",
               "Fa ikwadiso e duetswe mme o sa ntse o sa bone komishene morago ga diura di le 48, re kwalele ka nako e e ka nnang ya go ikwadisa le imeile kgotsa leina la moikwadisi fa o le itse. Setlhopha se tla sekaseka sentle mme se baakanye phoso epe ka seatla.",
@@ -1801,16 +1806,16 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "Gadit ke eng?",
             a: [
-              "Thanodi ya dipuo di le dintsi e e agetsweng go dira gore lefoko le tlhaloganyesege, e seng go naya tlhaloso ya mola o le mongwe fela. Lefoko lengwe le lengwe le bulega le na le ditlhaloso tsotlhe, dikai tsa nnete mo tlhalosong nngwe le nngwe, dikapolelo, tshimologo ya lefoko, setshwantsho fa o batla, mme (ka Clear le Deep) tlhaloso e e tshwanetseng bana, go kwala polelo ya gago o bone maikutlo, le ditlhatlhobo.",
-              "Ga jaana go na le dipuo tsa tiriso di le 30+. Mo setlhopheng re e bitsa go GAD lefoko: go tlhaloganya lefoko go fitlha kwa bofelong, e seng go le fetolela fela.",
+              "Gadit e go thusa go tlhaloganya lefoko lengwe le lengwe go fitlha kwa bofelong, e seng go bona tlhaloso ya mola o le mongwe fela. Lefoko lengwe le lengwe le bulega le na le ditlhaloso tsotlhe tsa lone, dikai tsa nnete tsa tlhaloso nngwe le nngwe, dikapolelo le tshimologo ya lefoko. Maano a a duelelwang a oketsa setshwantsho sa tlhaloso nngwe le nngwe, boikatiso, metshameko le tse dingwe, mme Family e oketsa Mokgwa wa bana le lefelo la ngwana mongwe le mongwe.",
+              "Gadit e dira ka dipuo di le 41. Mo setlhopheng re e bitsa go GAD lefoko: go tlhaloganya lefoko go fitlha kwa bofelong, e seng go le fetolela fela. Go bona se leano lengwe le lengwe le se akaretsang, bula tsebe ya ditlhwatlhwa.",
             ],
           },
           {
             id: "languages",
             q: "Lo dirisa dipuo dife?",
             a: [
-              "Tiriso: Sekgoa, Segerika, Sehebera, Searabia, Serashia, Sesepanishe, Sepotokisi, Sefora, Sejeremane, Setšheke, Seslovakia, Setaliana, Sejapane, Sezulu.",
-              "O ka batla lefoko ka nngwe ya dipuo tseo mme o bone tlhaloso, dikai, le sengwe le sengwe se sengwe ka puo ya tiriso e o e tlhophileng. Sehebera le Searabia di kwalwa go tswa mojeng go ya molemeng ka botlalo mme di dirisa mekwalo ya tsone.",
+              "Gadit e dira ka dipuo di le 41, go akaretsa Sekgoa, Sehebera, Searabia, Sesepanishe, Sefora, Sejeremane, Serashia, Setšhaena, Sejapane, Sehindi, Sezulu, Sexhosa le Seaforikanse.",
+              "O ka batla lefoko ka nngwe ya dipuo tse mme o bone ditlhaloso, dikai le sengwe le sengwe se sengwe ka puo e o e tlhophileng ya tiriso. Sehebera, Searabia le Sepereshia di balwa go tswa mojeng go ya molemeng, ka mekwalo ya tsone. Go fetola, tobetsa konopo ya puo kwa godimo ga tsebe nngwe le nngwe.",
             ],
           },
           {
@@ -1818,7 +1823,7 @@ Object.assign(HELP, {
             q: "A Gadit e babalesegile mo baneng?",
             a: [
               "Gadit e diretswe gore motsadi a e dirise ka polokesego mmogo le ngwana. Mokgwa wa bana o dira ditlhaloso tse di bonolo, tse di tlhamaletseng, tse di tshwanetseng dingwaga (ka nna maemo a dingwaga di le 5 go ya go 10), o dirisa enjene e e tshwanang e e dirang dikagare tsa bagolo ka ditaelo tse di tlhamaletseng tsa go nolofatsa. Ga go na dikagare tse di kwadilweng ke badirisi tse di bontshiwang bana.",
-              "Go ya ka dipholisi tsa rona le melao ya sephiri sa bana mo lefatsheng lotlhe, go nna mong wa akhaonto a le esi ke go tloga ka dingwaga di le 13. Tsela e e tlwaelegileng ke akhaonto ya motsadi e motsadi a e dirisang mmogo le ngwana wa gagwe, e leng sone se Mokgwa wa bana o agetsweng sone.",
+              "Go ya ka dipholisi tsa rona le melao ya sephiri sa bana mo lefatsheng lotlhe, akhaonto ya gago a le esi ke ya dingwaga di le 13 le go feta. Bana ba dirisa Gadit ka motsadi: mo leanong la Family motsadi o oketsa ngwana mongwe le mongwe go tswa mo tsebeng ya Family, ngwana mongwe le mongwe o bona lefelo la gagwe le Mokgwa wa bana, mme lebota la batsadi le bontsha mafoko a ngwana mongwe le mongwe a a batlang. Go simolola, simolola ka Family mo tsebeng ya ditlhwatlhwa.",
             ],
           },
           {
@@ -1826,7 +1831,7 @@ Object.assign(HELP, {
             q: "Tshedimosetso ya me e bolokwa kae? A lo a e rekisa?",
             a: [
               "Akhaonto, hisitori, bukana, le ditshwantsho tse di dirilweng di bolokwa ka tsela e e sireletsegileng mo Firebase, di khoutilwe mo polokelong. Ga re rekisetse ope tshedimosetso ya gago. Re abelana fela se se tlhokegang go tsamaisa Gadit (polokelo, dituelo, batlamedi ba dikagare), jaaka go tlhalositswe mo Pholising ya Sephiri.",
-              "O ka ntsha bukana ya gago kgotsa wa phimola akhaonto ya gago nako nngwe le nngwe go tswa mo tsebeng ya Akhaonto.",
+              "O ka phimola akhaonto ya gago nako nngwe le nngwe go tswa mo tsebeng ya Akhaonto. Go bona khopi ya bukana ya gago kgotsa tshedimosetso epe e nngwe e re e tshotseng, re kwalele go tswa mo tsebeng e.",
             ],
           },
           {
@@ -1868,17 +1873,18 @@ Object.assign(HELP, {
             id: "cancel",
             q: "Nka emisa ngodiso ya ka jwang?",
             a: [
-              "O iketsetsa yona, nako efe kapa efe. Kena, bula Akhaonte, mme o tobetse Emisa ngodiso ka tlase ho moralo wa hao.",
-              "Phihlello ya hao e tswela pele ho fihlela qetellong ya nako eo o seng o e lefetse. Ka mora moo akhaonte e kgutlela ho Basic (mahala). Mantswe ao o a bolokileng, nalane, le bukana di dula di bolokehile mme di fumaneha.",
-              "Haeba o emisa ka phoso kapa o fetola mohopolo, o ka tswela pele ka ngodiso leqepheng lona leo pele nako e fela.",
+              "O iketsetsa yona, nako efe kapa efe. Kena, bula Akhaonte, mme o tobetse Emisa ngodiso ka tlase ho leano la hao.",
+              "Ha o na le ngodiso eo o e lefellang, phihlello ya hao e tswela pele ho fihlela qetellong ya nako eo o seng o e lefetse. Ka mora moo akhaonte e fetohela ho Basic (mahala). Mantswe ao o a bolokileng le nalane di dula di bolokehile.",
+              "Nakong ya teko ya mahala ya matsatsi a 14, ho emisa ho fedisa teko hang hang mme ha ho na tefo. Haeba o tshwenyeha feela ka tefo e iketsahallang, kgetha lebaka leo fensetereng ya ho emisa, mme o ka tima ntjhafatso ya ngodiso, wa boloka teko ho fihlela letsatsing la yona la ho qetela.",
+              "Haeba o emisitse ngodiso eo o e lefellang ka phoso kapa o fetola mohopolo, o ka e tswela pele leqepheng lona leo pele nako e fela.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Nka fetoha jwang ho tloha ho Clear ho ya ho Deep (kapa ka tsela e nngwe)?",
+            q: "Nka fetoha jwang pakeng tsa Individual le Family?",
             a: [
-              "Akhaonte, ebe Laola ditefo, ebe Update subscription. Kgetha moralo o motjha.",
-              "Stripe e bala phapang ya theko ka bo yona, ho ya ka matsatsi a setseng nakong ya hajwale. Haeba o ntlafatsa, o tla lefiswa phapang feela bakeng sa nako e setseng. Haeba o fetohela mokgahlelong o tlase, tjhelete e setseng e sebediswa tefong ya hao e latelang.",
+              "Ho fetohela ho Family, bula leqephe la hao la Akhaonte mme o tobetse \"Fetohela ho Family\". Ngodiso ya hao ya hajwale e ntjhafatswa karete e tshwanang, ntle le ho e kenya hape.",
+              "Stripe e bala phapang bakeng sa matsatsi a setseng nakong ya hajwale, kahoo o lefa phapang feela. Ho fetoha ho tloha ho Family ho ya ho Individual, re ngolle ho tswa leqepheng lena, mme sehlopha se tla o fetolela.",
             ],
           },
           {
@@ -1915,9 +1921,9 @@ Object.assign(HELP, {
           },
           {
             id: "unknown-charge",
-            q: "Ke bona tefo eo ke sa e tsebeng.",
+            q: "Tefo ena kareteng ya ka ke eng?",
             a: [
-              "Ditefo di hlaha e le GADIT kapa GADIT.APP ka $2.99 (Clear ka kgwedi), $4.99 (Deep ka kgwedi), $29.99 (Clear ka selemo), kapa $49.99 (Deep ka selemo). Haeba e sa tsamaisane, e kanna ya eba ya tshebeletso e nngwe.",
+              "Ditefo di hlaha e le GADIT kapa GADIT.APP. Tjhelete e tshwana le leano la hao (Individual kapa Family, ka kgwedi kapa ka selemo) ka tjhelete ya naha ya hao, jwalo ka ha ho bontshitswe leqepheng la ditheko. Dingodiso tse qadileng pele ho Mphalane 2026 di boloka theko eo di qadileng ka yona. Haeba tjhelete e sa tshwane, e ka nna ya ba ya tshebeletso e nngwe.",
               "Haeba o na le bonnete ba hore hase ya hao, o se ke wa e hanyetsa bankeng ya hao hajwale. Re ngolle pele ka kotloloho ka letsatsi le tjhelete. Sehlopha se tla e fumana, se hlalose hore ke eng, mme se kgutlise tjhelete ha ho hlokahala. Kganetso ya banka e ka thatafatsa ditefo tsa nakong e tlang, kahoo ho e rarolla ka thuso ya rona hangata ho potlakile ebile ho bolokehile haholwanyane.",
             ],
           },
@@ -1931,11 +1937,11 @@ Object.assign(HELP, {
           },
           {
             id: "plan-comparison",
-            q: "Phapang ke efe pakeng tsa Basic, Clear, le Deep?",
+            q: "Phapang ke efe pakeng tsa Basic, Individual le Family?",
             a: [
-              "Basic (mahala): ho fihlela dipatlo tsa mantswe tse 20 ka letsatsi, meelelo yohle, mehlala bakeng sa moelelo ka mong, dikapolelo, le tshimoloho ya lentswe. Ha ho hlokahale ho ngodisa bakeng sa dipatlo tsa motheo.",
-              "Clear ($2.99/kgwedi kapa $29.99/selemo): dipatlo tse se nang moeli, ditlhaloso tse loketseng bana, setshwantsho bakeng sa lentswe ka leng (30/kgwedi), ho ngola polelo ya hao ka maikutlo, dintlha tsa dikapolelo, le nalane ya dipatlo ya matsatsi a 30.",
-              "Deep ($4.99/kgwedi kapa $49.99/selemo): tsohle tse ho Clear, hammoho le dikwisi tsa boikwetliso, bukana ya hao e nang le boikwetliso bo bohlale ba ho pheta ka dinako tse arohaneng, ho arohanya mantswe a tshwanang, le ditshwantsho tse ngata haholwanyane (100/kgwedi).",
+              "Basic (mahala): ho fihla ho dipatlo tse 10 tsa mantswe ka letsatsi, meelelo yohle, mehlala, dikapolelo, tshimoloho ya lentswe, moelelo o nepahetseng ho ya ka polelo, le bukana ya ho fihla ho mantswe a 30.",
+              "Individual: motho a le mong, disebediswa tsohle tsa ho ithuta. Dipatlo tse sa lekanyetswang, setshwantsho bakeng sa moelelo o mong le o mong, mehlala le dipotso tse ngata ka lentswe ka leng, Ngola polelo mme o fumane maikutlo, Lentswe ka Leng, E bue, lentswe la tlhaho la ho balla hodimo le ho batla ka lentswe, tshebediso ntle le inthanete, dipapadi, dipotso le dintwa tsa mantswe, le boikwetliso bo bohlale ka boitokisetso ba teko le qolotso.",
+              "Family: tsohle tse ho Individual bakeng sa bana ba fihlang ho ba 5 le batswadi, hammoho le Mokgwa wa bana, sebaka sa hae bakeng sa ngwana e mong le e mong, thuso ka mosebetsi wa sekolo, le leqephe la taolo la motswadi le tsebiso bakeng sa lentswe ka leng. Dikolo di na le leano la tsona. Ditheko tsa naha ya hao le teko ya mahala ya matsatsi a 14 di leqepheng la ditheko.",
             ],
           },
         ],
@@ -1947,7 +1953,7 @@ Object.assign(HELP, {
         items: [
           {
             id: "no-verification-email",
-            q: "Ha ke a fumana imeile ya netefatso.",
+            q: "Ha ke a fumana imeile ya netefatso",
             a: [
               "Sheba pele difoldareng tsa spam le tsa dipapatso. Ka nako e nngwe Gmail le Outlook di isa diimeile tsa akhaonte moo ho fihlela o tshwaya e nngwe e le \"Not spam\".",
               "Haeba e le sieo moo, imeile e kanna ya ba e ngotswe hampe ha o ngodisa. Leka ho ngodisa hape mme o hlahlobe aterese habedi. Haeba o ngodisitse ka Google, ha ho hlokahale imeile ya netefatso.",
@@ -1955,7 +1961,7 @@ Object.assign(HELP, {
           },
           {
             id: "forgot-password",
-            q: "Ke lebetse phasewete ya ka.",
+            q: "Ke lebetse phasewete ya ka",
             a: [
               "Bula foromo ya ho kena mme o tobetse \"O lebetse phasewete?\". Kenya imeile eo o e sebedisang ho Gadit mme o tla fumana lehokela la ho seta phasewete botjha nakong ya motsotso kapa e mmedi.",
               "Haeba imeile e sa fihle, sheba spam. Haeba e ntse e sa fihle, o kanna wa ba o ngodisitse ka Google ho ena le imeile le phasewete. Leka konopo ya \"Tswela pele ka Google\".",
@@ -1963,7 +1969,7 @@ Object.assign(HELP, {
           },
           {
             id: "wrong-credentials",
-            q: "Ke na le bonnete ba hore phasewete ya ka e nepahetse empa e re \"Imeile kapa phasewete e fosahetse\".",
+            q: "Ke na le bonnete ba hore phasewete ya ka e nepahetse empa e re \"Imeile kapa phasewete e fosahetse\"",
             a: [
               "Dintho tse tharo tsa ho hlahloba. Ya pele, capslock. Ya bobedi, sebaka se setseng qetellong ha o kopitsa le ho kgomaretsa. Ya boraro, o ngodisitse ka Google ho ena le phasewete (sebedisa \"Tswela pele ka Google\").",
               "O ntse o thatafallwa? Seta phasewete botjha foromong yona eo. E o lokisetsa botjha.",
@@ -1971,7 +1977,7 @@ Object.assign(HELP, {
           },
           {
             id: "google-fails",
-            q: "Ho kena ka Google ha ho sebetse.",
+            q: "Ho kena ka Google ha ho sebetse",
             a: [
               "Sesosa se tlwaelehileng haholo: sebadi sa hao sa inthanete se thibela dikhukhi tsa batho ba bang kapa difensetere tse hlahang bakeng sa gadit.app. Di dumelle ditumellong tsa bara ya aterese mme o leke hape.",
               "Haeba o le mokgweng wa incognito, ho kena ka Google ho thibetswe ka boomo. Fetohela fensetereng e tlwaelehileng ya sebadi.",
@@ -1997,8 +2003,8 @@ Object.assign(HELP, {
             id: "share-account",
             q: "Na molekane wa ka kapa ngwana wa ka a ka arolelana akhaonte ya ka?",
             a: [
-              "Mosebedisi a le mong ya keneng akhaonteng ka nako. Mokgwa wa bana o dumella akhaonte e le nngwe ya Clear kapa Deep ho sebeletsa motswadi le ngwana: tobetsa konopo mme ditlhaloso di hlaha di loketse bana ntle le ho kena ka thoko.",
-              "Bakeng sa batho ba baholo ba babedi ba batlang dibukana le tswelopele tse arohileng, bula diakhaonte tse pedi. Clear ke $2.99 ka kgwedi bakeng sa akhaonte ka nngwe.",
+              "Akhaonte ka nngwe e na le motho a le mong ya keneng ka nako. Bakeng sa lelapa, leano la Family le etseditswe sena: ho fihla ho bana ba 5 le batswadi, e mong le e mong a na le sebaka sa hae, bukana ya hae le tswelopele ya hae, hammoho le Mokgwa wa bana bakeng sa bana le leqephe la taolo la motswadi.",
+              "Bakeng sa motho e moholo a le mong a le mong, Individual e sebeletsa motho a le mong ka disebediswa tsohle tsa ho ithuta. Bapisa maano le ditheko tsa naha ya hao leqepheng la ditheko.",
             ],
           },
           {
@@ -2026,25 +2032,25 @@ Object.assign(HELP, {
           },
           {
             id: "kids-not-working",
-            q: "Mokgwa wa bana ha o fetole tlhaloso.",
+            q: "Mokgwa wa bana ha o fetole tlhaloso",
             a: [
-              "Mokgwa wa bana o fetola feela sengolwa moo lentswe le seng le na le tlhaloso e loketseng bana e entsweng. Bakeng sa mantswe a matjha ao o sa tswang ho a batla, e fe metsotswana e 10 ho isa ho e 15. Mofuta o loketseng bana o etswa hang hang lekgetlong la pele.",
-              "Hape: Mokgwa wa bana o hloka Clear kapa Deep. Haeba o ho Basic, konopo e tla o kopa ho ntlafatsa. Basebedisi ba sa tsejweng ba kopuwa ho ngodisa.",
+              "Mokgwa wa bana o fetola feela sengolwa moo lentswe le seng le na le tlhaloso e loketseng bana. Bakeng sa lentswe leo o sa tswang ho le batla lekgetlo la pele, e fe metsotswana e 10 ho isa ho e 15 ha tlhaloso ya bana e ntse e lokiswa.",
+              "Mokgwa wa bana ke karolo ya leano la Family. Ho Basic, ho Individual, kapa ntle le akhaonte, konopo e bontsha leano la Family ho fapana le ho bulwa. Ba ngodisitseng ho Clear kapa Deep pele ho Mphalane 2026 ba boloka Mokgwa wa bana. Ho o fumana, sheba Family leqepheng la ditheko.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Ho batla ka lentswe ha ho sebetse.",
+            q: "Ho batla ka lentswe ha ho sebetse",
             a: [
               "Ho batla ka lentswe ho hloka tumello ya maekrofounu. Dibadi tse ngata di botsa hang bakeng sa wepesaete ka nngwe. Haeba o tobeditse Block ka phoso, o tla hloka ho e fetola ka letsoho: tobetsa letshwao la senotlolo kapa la tlhahisoleseding haufi le gadit.app bareng ya aterese, ebe Site settings, ebe Microphone, ebe Allow.",
-              "Ho Safari ya iOS, phihlello ya maekrofounu e boetse e hloka konopo ya Settings → Safari → Microphone. Lentswe hajwale ke karolo ya Clear le Deep: basebedisi ba Basic ba bona kopo ya ho ntlafatsa, baeti ba sa kenang ba bona kopo ya ho kena.",
+              "Ho Safari ya iPhone le iPad, phihlello ya maekrofounu e boetse e hloka Settings → Safari → Microphone. Ho batla ka lentswe ke karolo ya maano a Individual le Family: ho Basic o tla bona maano ho e na le hona, mme baeti ba sa kenang ba kopuwa ho kena. Ho ntlafatsa, bula leqephe la ditheko.",
             ],
           },
           {
             id: "no-image",
-            q: "Ha ke kgone ho etsa setshwantsho sa lentswe.",
+            q: "Ha ke kgone ho fumana setshwantsho sa lentswe",
             a: [
-              "Ho etsa ditshwantsho ke karolo ya Clear kapa Deep e nang le moeli wa kgwedi. Clear e fumana ditshwantsho tse 30 ka kgwedi, Deep e fumana tse 100. Haeba o sebedisitse moeli wohle, o tla bona lerako. Le qala botjha ka la 1 kgwedi le kgwedi.",
+              "Ditshwantsho ke karolo ya maano a Individual le Family, ka ditshwantsho tse ntjha tse ka fihlang ho 100 ka kgwedi. Setshwantsho se seng se le teng bakeng sa moelelo oo se a buleha ntle le ho balwa. Leano la kgale la Clear le na le tse 30 ka kgwedi, mme Basic ha e na ditshwantsho. Ha ditshwantsho tsa kgwedi di fedile o tla bona tsebiso, mme palo e qala botjha qalong ya kgwedi ka nngwe.",
               "Haeba o ka tlase ho moeli mme o ntse o bona ho hloleha, hangata ke ha nakwana. Leka hape ka mora metsotswana e 30. Ho hloleha ho phehellang ke phoso. Ka kopo tlaleha leqepheng la lentswe.",
             ],
           },
@@ -2052,21 +2058,21 @@ Object.assign(HELP, {
             id: "save-word",
             q: "Nka boloka lentswe bukaneng ya ka jwang?",
             a: [
-              "Leqepheng lefe kapa lefe la sephetho sa lentswe, tobetsa Boloka bukaneng haufi le sehlooho. Bukana ke karolo ya Clear le Deep moo o ka phetang mantswe a bolokilweng hamorao, wa a bona ka pono ya sehlopha sa dinaledi, mme wa etsa boikwetliso bo bohlale (Deep).",
-              "Mantswe ao o a bolokileng mme wa a bula bonyane hang a fumaneha ntle le inthanete ho tswa polokelong ya sesebediswa. Sephutheloana sa ntle le inthanete se boetse se boloka mantswe a ratwang haholo ka puo ya hao hore o itokisetse ntle le inthanete.",
+              "Ha ho hlokahale. Ha o kene, lentswe ka leng leo o le batlang le bolokwa bukaneng ya hao ka bo lona. Ho Basic bukana e tshwara ho fihla ho mantswe a 30. Ho Individual le Family ha e na moeli mme e na le boikwetliso bo bohlale, bo kgutlisang mantswe a hao hore o a phete ka nako e nepahetseng.",
+              "Ho Individual le Family, mantswe ao o a batlang a boetse a bolokwa sesebedisweng sa hao, kahoo a buleha ntle le inthanete. Ho bona mantswe a hao, bula bukana ho tswa lenaneng.",
             ],
           },
           {
             id: "offline",
             q: "Mokgwa wa ntle le inthanete o sebetsa jwang?",
             a: [
-              "Mantswe ao o seng o a shebile a bolokwa sesebedisweng sa hao. A bule hape ntle le inthanete mme a buleha hang hang. Sephutheloana se felletseng sa ntle le inthanete (mantswe a ka sehloohong ka puo ya hao) se jarollwa ha o se batla leqepheng la bukana.",
-              "Ho batla lentswe le letjha ho ntse ho hloka inthanete, hobane Gadit e tlameha ho etsa tlhaloso ho tloha qalong. Polokelo ya ntle le inthanete ke ya mantswe ao o seng o a hlahlobile.",
+              "Tshebediso ntle le inthanete ke karolo ya maano a Individual le Family. Lentswe ka leng leo o le batlang le bolokwa sesebedisweng sa hao, kahoo le buleha hape hang hang ntle le inthanete. O ka boela wa jarolla sephutheloana sa mantswe a ratwang haholo ka puo ya hao ho tswa leqepheng la hao la Akhaonte.",
+              "Ho batla lentswe le letjha ka ho fellang ho ntse ho hloka inthanete, hobane Gadit e tlameha ho lokisa sephetho sohle sa lona. Kopi ya ntle le inthanete e kenyeletsa mantswe a seng a le sesebedisweng sa hao. Haeba o ho Basic, sheba maano leqepheng la ditheko.",
             ],
           },
           {
             id: "slow",
-            q: "App e utlwahala e lieha.",
+            q: "App e utlwahala e lieha",
             a: [
               "Patlo ya pele ya lentswe ke yona e liehang ka ho fetisisa hobane Gadit e etsa sephetho se felletseng ho tloha qalong: hangata metsotswana e mmalwa, ka nako e nngwe ho feta bakeng sa mantswe a rarahaneng. Dipatlo tse latelang tsa lentswe lona leo di potlakile hang hang, di tswa polokelong.",
               "Haeba tsohle di utlwahala di lieha, leka ho nchafatsa ka matla: Cmd+Shift+R ho Mac, Ctrl+Shift+R ho Windows. Haeba ho lieha ho tswela pele maqepheng ohle, ka kopo re romele imeile ka naha ya hao le sebadi sa hao hore sehlopha se hlahlobe tsela ya marangrang ho ya diseva tsa rona ho tswa sebakeng sa hao.",
@@ -2084,7 +2090,7 @@ Object.assign(HELP, {
             id: "change-language",
             q: "Nka fetola puo ya sebopeho jwang?",
             a: [
-              "Hodimo ka ho le letona leqepheng lefe kapa lefe, o tla bona letshwao le lenyenyane la folaga (kapa lebitso la puo ya hao ya hajwale). Le tobetse mme o kgethe hara dipuo tse fetang 30: Senyesemane, Segerike, Seheberu, Searabia, Serashea, Sespanishe, Sepotokisi, Sefora, Sejeremane, Setjheke, Seslovakia, Setaliana, Sejapane, Sehindi, Seamhariki, Sezulu.",
+              "Hodimo ka ho le letona leqepheng lefe kapa lefe, o tla bona letshwao le lenyenyane la folaga (kapa lebitso la puo ya hao ya hajwale). Le tobetse mme o kgethe hara dipuo tse 41.",
               "Kgetho ya hao e bolokwa sesebedisweng sena. Tsohle di laela hape ka puo e ntjha: sebopeho, manane, ditlhaloso tsa mantswe tse tlang, mehlala, ditlhaloso tsa bana, esita le tshimoloho ya lentswe. Diphetho tse seng di bolokilwe ka puo ya kgale di dula ho fihlela o batla mantswe ao hape.",
             ],
           },
@@ -2122,7 +2128,7 @@ Object.assign(HELP, {
           },
           {
             id: "empty-dashboard",
-            q: "Ke kene empa leqephe la ka la taolo ha le na letho.",
+            q: "Ke kene empa leqephe la ka la taolo ha le na letho",
             a: [
               "Dipalo di hlaha ka mora ho tobetsa ha pele lehokeleng la hao. Ho se be le letho ho bolela feela hore ha ho eso be le ya tobetsang. Eya o arolelane lehokela. Leqephe la taolo le ntjhafala hoo e batlang e le hang hang hang ha mosebetsi o qala.",
               "Haeba o arolelane mme motho a ngodisitse empa leqephe la taolo le sa e bontshe, re ngolle ka nako e ka bang ya ngodiso mme sehlopha se tla hlahloba hore na e balwa ho mang.",
@@ -2138,7 +2144,7 @@ Object.assign(HELP, {
           },
           {
             id: "missing-commission",
-            q: "Motho o ngodisitse ka lehokela la ka empa ha ke bone khomishene.",
+            q: "Motho o ngodisitse ka lehokela la ka empa ha ke bone khomishene",
             a: [
               "Hangata ke taba ya nako: ngodiso e hlaha leqepheng la taolo nakong ya metsotso, empa khomishene e ngolwa feela hang ha ngodiso e lefilwe ka nnete (e leng ho ka nkang matsatsi haeba a le nakong ya teko ya mahala). Hlahloba hape ka mora hore nako ya teko e fele.",
               "Haeba ngodiso e lefilwe empa o ntse o sa bone khomishene ka mora dihora tse 48, re ngolle ka nako e ka bang ya ngodiso le imeile kapa lebitso la mongodisi haeba o le tseba. Sehlopha se tla batlisisa ketane ya ho balelwa mme se lokise phoso efe kapa efe ka letsoho.",
@@ -2155,16 +2161,16 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "Gadit ke eng?",
             a: [
-              "Bukantswe ya dipuo tse ngata e etseditsweng ho etsa hore lentswe le utlwahale, eseng feela ho fana ka tlhaloso ya mola o le mong. Lentswe le leng le le leng le buleha ka meelelo yohle ya lona, mehlala ya nnete bakeng sa moelelo ka mong, dikapolelo, tshimoloho ya lentswe, setshwantsho ha o rata, mme (ka Clear le Deep) tlhaloso e loketseng bana, ho ngola polelo ya hao ka maikutlo, le dikwisi.",
-              "Hajwale ho na le dipuo tsa sebopeho tse fetang 30. Ka hare sehlopha se e bitsa ho GAD lentswe: ho utlwisisa lentswe ka botlalo, eseng feela ho le fetolela.",
+              "Gadit e o thusa ho utlwisisa lentswe ka leng ka botlalo, eseng feela ho fumana tlhaloso ya mola o le mong. Lentswe ka leng le buleha ka meelelo yohle ya lona, mehlala ya nnete bakeng sa moelelo ka mong, dikapolelo le tshimoloho ya lentswe. Maano a lefellwang a eketsa setshwantsho bakeng sa moelelo ka mong, boikwetliso, dipapadi le tse ding, mme Family e eketsa Mokgwa wa bana le sebaka bakeng sa ngwana e mong le e mong.",
+              "Gadit e sebetsa ka dipuo tse 41. Ka hare sehlopha se e bitsa ho GAD lentswe: ho utlwisisa lentswe ka botlalo, eseng feela ho le fetolela. Ho bona seo leano ka leng le se kenyeletsang, bula leqephe la ditheko.",
             ],
           },
           {
             id: "languages",
             q: "Le tshehetsa dipuo dife?",
             a: [
-              "Sebopeho: Senyesemane, Segerike, Seheberu, Searabia, Serashea, Sespanishe, Sepotokisi, Sefora, Sejeremane, Setjheke, Seslovakia, Setaliana, Sejapane, Sezulu.",
-              "O ka batla lentswe ka efe kapa efe ya dipuo tseo mme o fumane tlhaloso, mehlala, le tsohle tse ding ka puo ya sebopeho eo o e kgethileng. Seheberu le Searabia di ngolwa ka botlalo ho tloha ka ho le letona ho ya ho le letshehadi mme di sebedisa difonte tsa tsona.",
+              "Gadit e sebetsa ka dipuo tse 41, ho kenyeletswa Senyesemane, Seheberu, Searabia, Sespanishe, Sefora, Sejeremane, Serashea, Setjhaena, Sejapane, Sehindi, Sezulu, Sexhosa le Seafrikanse.",
+              "O ka batla lentswe ka efe kapa efe ya dipuo tsena mme o fumane meelelo, mehlala le tsohle tse ding ka puo eo o e kgethileng bakeng sa sebopeho. Seheberu, Searabia le Sepersia di balwa ho tloha ka ho le letona ho ya ho le letshehadi, ka difonte tsa tsona. Ho fetola, tobetsa konopo ya puo hodimo leqepheng lefe kapa lefe.",
             ],
           },
           {
@@ -2172,7 +2178,7 @@ Object.assign(HELP, {
             q: "Na Gadit e bolokehile bakeng sa bana?",
             a: [
               "Gadit e etseditswe hore motswadi a e sebedise ka polokeho hammoho le ngwana. Mokgwa wa bana o etsa ditlhaloso tse bonolo, tse hlakileng, le tse loketseng dilemo (hoo e ka bang boemong ba dilemo tse 5 ho isa ho tse 10), o sebedisa enjene e tshwanang e etsang dikahare tsa batho ba baholo ka ditaelo tse hlakileng tsa ho nolofatsa. Ha ho dikahare tse etswang ke basebedisi tse kileng tsa bontshwa bana.",
-              "Ho ya ka maano a rona le melao ya lekunutu la bana lefatsheng ka bophara, ho ba mong wa akhaonte o ikemetseng ke ho tloha dilemong tse 13. Mokgwa o tlwaelehileng ke akhaonte ya motswadi eo motswadi a e sebedisang hammoho le ngwana wa hae, e leng hona seo Mokgwa wa bana o etseditsweng sona.",
+              "Ho ya ka maano a rona le melao ya lekunutu la bana lefatsheng ka bophara, akhaonte ya hao o le mong ke ya dilemo tse 13 le ho feta. Bana ba sebedisa Gadit ka motswadi: leanong la Family motswadi o eketsa ngwana e mong le e mong ho tswa leqepheng la Family, ngwana e mong le e mong o fumana sebaka sa hae le Mokgwa wa bana, mme leqephe la taolo la motswadi le bontsha mantswe ao ngwana e mong le e mong a a batlang. Ho qala, qala ka Family leqepheng la ditheko.",
             ],
           },
           {
@@ -2180,7 +2186,7 @@ Object.assign(HELP, {
             q: "Dintlha tsa ka di bolokwa kae? Na le a di rekisa?",
             a: [
               "Akhaonte, nalane, bukana, le ditshwantsho tse entsweng di bolokwa ka polokeho ho Firebase, di notletswe polokelong. Ha re rekisetse motho ofe kapa ofe dintlha tsa hao. Re arolelana feela se hlokahalang ho tsamaisa Gadit (polokelo, ditefo, bafani ba dikahare), jwalo ka ha ho hlalositswe Leanong la Lekunutu.",
-              "O ka ntsha bukana ya hao kapa wa hlakola akhaonte ya hao nako efe kapa efe leqepheng la Akhaonte.",
+              "O ka hlakola akhaonte ya hao nako efe kapa efe leqepheng la Akhaonte. Ho fumana kopi ya bukana ya hao kapa dintlha dife kapa dife tse ding tseo re di bolokileng, re ngolle ho tswa leqepheng lena.",
             ],
           },
           {
@@ -2223,16 +2229,17 @@ Object.assign(HELP, {
             q: "Ndzi khansela njhani mbhaliso wa mina?",
             a: [
               "Mi swi endla hi n'wexe, nkarhi wun'wana na wun'wana. Nghenani, pfulani Akhawunti, kutani mi thinta Khansela mbhaliso ehansi ka pulani ya n'wina.",
-              "Ku nghena ka n'wina ku ya emahlweni ku fikela emakumu ka nkarhi lowu mi wu hakeleke. Endzhaku ka sweswo akhawunti yi tlhelela eka Basic (mahala). Marito lawa mi ma hlayiseke, matimu na buku ya marito swi tshama swi hlayisekile naswona swi kumeka.",
-              "Loko mi khansela hi xihoxo kumbe mi cinca miehleketo, mi nga pfuxeta mbhaliso eka tluka rero emahlweni ka loko nkarhi wu hela.",
+              "Eka mbhaliso lowu hakeriwaka, ku nghena ka n'wina ku ya emahlweni ku fikela emakumu ka nkarhi lowu mi wu hakeleke. Endzhaku ka sweswo akhawunti yi tlhelela eka Basic (mahala). Marito lawa mi ma hlayiseke na matimu swi tshama swi hlayisekile.",
+              "Hi nkarhi wa ndzingo wa mahala wa masiku ya 14, ku khansela swi hetisa ndzingo hi ku hatlisa naswona a mi hakerisiwi nchumu. Loko mi vilela ntsena hi ku hakerisiwa hi ku tiendlela, hlawulani xivangelo xexo eka fasitere ro khansela, kutani mi nga tima ku pfuxetiwa, mi hlayisa ndzingo ku fikela siku ra wona ro hetelela.",
+              "Loko mi khansela mbhaliso lowu hakeriwaka hi xihoxo kumbe mi cinca miehleketo, mi nga wu pfuxeta eka tluka rero emahlweni ka loko nkarhi wu hela.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Ndzi cincela njhani ku suka eka Clear ku ya eka Deep (kumbe hi ndlela yin'wana)?",
+            q: "Ndzi cinca njhani exikarhi ka Individual na Family?",
             a: [
-              "Akhawunti, kutani Lawula ku hakela, kutani \"Update subscription\". Hlawulani pulani leyintshwa.",
-              "Stripe yi hlayela ku hambana ka nxavo hi ku tiendlela, hi ku ya hi masiku lama saleke eka nkarhi wa sweswi. Loko mi tlakusa, mi ta hakerisiwa ku hambana ntsena eka nkarhi lowu saleke. Loko mi cincela eka xiyimo xa le hansi, mali leyi saleke yi tirhisiwa eka rhisiti ya n'wina leyi landzelaka.",
+              "Ku ya eka Family, pfulani tluka ra n'wina ra Akhawunti kutani mi thinta \"Cinca u ya eka Family\". Mbhaliso wa n'wina wa sweswi wu pfuxetiwa eka khadi rero, handle ka ku ri nghenisa nakambe.",
+              "Stripe yi hlayela ku hambana ka masiku lama saleke eka nkarhi wa sweswi, hikwalaho mi hakela ku hambana ntsena. Ku suka eka Family ku ya eka Individual, hi tsaleleni ku suka eka tluka leri kutani ntlawa wu ta mi cincela.",
             ],
           },
           {
@@ -2269,9 +2276,9 @@ Object.assign(HELP, {
           },
           {
             id: "unknown-charge",
-            q: "Ndzi vona ku hakerisiwa loku ndzi nga ku tiviki.",
+            q: "Xana ku hakerisiwa loku eka khadi ra mina i ka yini?",
             a: [
-              "Ku hakerisiwa ku humelela tanihi GADIT kumbe GADIT.APP hi $2.99 (Clear hi n'hweti), $4.99 (Deep hi n'hweti), $29.99 (Clear hi lembe), kumbe $49.99 (Deep hi lembe). Loko swi nga fambelani, swi nga ha huma eka vukorhokeri byin'wana.",
+              "Ku hakerisiwa ku humelela tanihi GADIT kumbe GADIT.APP. Mali yi fambelana na pulani ya n'wina (Individual kumbe Family, hi n'hweti kumbe hi lembe) hi mali ya tiko ra n'wina, hilaha swi kombisiweke hakona eka tluka ra minxavo. Mimbhaliso leyi sunguleke emahlweni ka October 2026 yi tshama hi nxavo lowu yi sunguleke ha wona. Loko mali yi nga fambelani, swi nga ha huma eka vukorhokeri byin'wana.",
               "Loko mi tiyisile leswaku a hi ka n'wina, mi nga si kaneta hi bangi ya n'wina. Hi tsaleleni hi ku kongoma ku sungula, mi ri na siku na mali. Ntlawa wu ta ku kuma, wu hlamusela leswaku i yini, naswona wu vuyisa mali loko swi laveka. Ku kaneta hi bangi swi nga endla ku hakela ka nkarhi lowu taka ku tika, hikwalaho ku swi lulamisa hi mpfuno hi ntolovelo swa hatlisa naswona swi hlayisekile.",
             ],
           },
@@ -2285,11 +2292,11 @@ Object.assign(HELP, {
           },
           {
             id: "plan-comparison",
-            q: "Xana ku hambana exikarhi ka Basic, Clear na Deep i yini?",
+            q: "Ku hambana ka Basic, Individual na Family i yini?",
             a: [
-              "Basic (mahala): ku fika eka ku lava marito ka 20 hi siku, tinhlamuselo hinkwato, swikombiso eka nhlamuselo yin'wana na yin'wana, swivulavulelo, na masungulo ya rito. A ku laveki ku tsarisa eka ku lava ka le hansi.",
-              "Clear ($2.99/n'hweti kumbe $29.99/lembe): ku lava handle ka ndzilakano, tinhlamuselo leti vana va ti twisisaka, xifaniso eka rito rin'wana na rin'wana (30/n'hweti), ku tsala xivulwa xa n'wina mi kuma switsundzuxo, vuxokoxoko bya swivulavulelo, na masiku ya 30 ya matimu ya ku lava.",
-              "Deep ($4.99/n'hweti kumbe $49.99/lembe): hinkwaswo leswi nga eka Clear, ku engetela mavutiso yo titoloveta, buku ya marito ya n'wina na ntoloveto wa vutlhari wo vuyelela hi minkarhi leyi hambanaka, ku hambanisa marito lama fanaka, na swifaniso swo tala (100/n'hweti).",
+              "Basic (mahala): ku fika eka ku lava marito ka 10 hi siku, tinhlamuselo hinkwato, swikombiso, swivulavulelo, masungulo ya rito, nhlamuselo leyi lulameke hi ku ya hi xivulwa, na buku ya marito ya ku fika eka marito ya 30.",
+              "Individual: munhu un'we, switirhisiwa hinkwaswo swo dyondza. Ku lava loku nga pimiwangiki, xifaniso eka nhlamuselo yin'wana na yin'wana, swikombiso swo tala na swivutiso hi rito rin'wana na rin'wana, ku tsala xivulwa mi kuma switsundzuxo, Rito rin'wana na rin'wana, Swi vule, rito ra ntumbuluko ro hlaya na ku lava hi rito, ku tirhisa handle ka inthanete, mitlangu, swivutiso na mimpikizano ya marito, na ku titoloveta hi vutlhari ku lunghekela xikambelo na dikiteshini.",
+              "Family: hinkwaswo leswi nga eka Individual swa vana vo fika eka 5 na vatswari, ku katsa Xiyimo xa vana, ndhawu ya yena eka n'wana un'wana na un'wana, mpfuno eka ntirho wa le kaya, na dashibodo ya vatswari na xitsundzuxo eka rito rin'wana na rin'wana. Swikolo swi na pulani ya swona. Minxavo ya tiko ra n'wina na ndzingo wa mahala wa masiku ya 14 swi le tlukeni ra minxavo.",
             ],
           },
         ],
@@ -2301,7 +2308,7 @@ Object.assign(HELP, {
         items: [
           {
             id: "no-verification-email",
-            q: "A ndzi yi kumanga imeyili yo tiyisisa.",
+            q: "A ndzi yi kumanga imeyili yo tiyisisa",
             a: [
               "Kambelani tifolda ta spam na ta swinavelo ku sungula. Gmail na Outlook minkarhi yin'wana swi yisa timeyili ta tiakhawunti kwalaho ku fikela loko mi funga yin'we tanihi \"Not spam\".",
               "Loko yi nga ri kona, imeyili yi nga ha va yi tsariwe hi xihoxo loko mi tsarisa. Ringetani ku tsarisa nakambe mi kambela adirese kahle. Loko mi tsarise hi Google, a ku laveki imeyili yo tiyisisa.",
@@ -2309,7 +2316,7 @@ Object.assign(HELP, {
           },
           {
             id: "forgot-password",
-            q: "Ndzi rivele phasiwedi ya mina.",
+            q: "Ndzi rivele phasiwedi ya mina",
             a: [
               "Pfulani fasitere ro nghena kutani mi thinta \"Mi rivele phasiwedi?\". Tsalani imeyili leyi mi yi tirhisaka eka Gadit kutani mi ta kuma linki yo cinca phasiwedi endzhaku ka minete yin'we kumbe timbirhi.",
               "Loko imeyili yi nga fiki, kambelani spam. Loko yi nga si fika, mi nga ha va mi tsarise hi Google ematshan'wini ya imeyili na phasiwedi. Ringetani buthoni ya \"Yisa emahlweni hi Google\".",
@@ -2317,7 +2324,7 @@ Object.assign(HELP, {
           },
           {
             id: "wrong-credentials",
-            q: "Ndzi tiyisile leswaku phasiwedi ya mina yi lulamile kambe yi ri \"Imeyili kumbe phasiwedi a swi lulamanga\".",
+            q: "Ndzi tiyisile leswaku phasiwedi ya mina yi lulamile kambe yi ri \"Imeyili kumbe phasiwedi a swi lulamanga\"",
             a: [
               "Swilo swinharhu swo kambela. Xo sungula, capslock. Xa vumbirhi, ndhawu leyi nga riki na nchumu emakumu loko mi kopa no nameka. Xa vunharhu, mi tsarise hi Google ku nga ri hi phasiwedi (tirhisani \"Yisa emahlweni hi Google\" ematshan'wini ya sweswo).",
               "Xana ma ha khomekile? Cincani phasiwedi eka fasitere rero. Swi mi sungulisa nakambe kahle.",
@@ -2325,7 +2332,7 @@ Object.assign(HELP, {
           },
           {
             id: "google-fails",
-            q: "Ku nghena hi Google a ku tirhi.",
+            q: "Ku nghena hi Google a ku tirhi",
             a: [
               "Xivangelo lexi tolovelekeke ngopfu: bulawuza ya n'wina yi sivela ti-cookie ta van'wana kumbe ti-pop-up eka gadit.app. Ti pfumeleleni eka mpfumelelo wa bara ya adirese kutani mi ringeta nakambe.",
               "Loko mi ri eka xiyimo xa incognito, ku nghena hi Google ku sivelekile hi xikongomelo. Cincelani eka fasitere ra bulawuza ra ntolovelo.",
@@ -2351,8 +2358,8 @@ Object.assign(HELP, {
             id: "share-account",
             q: "Xana munghana wa mina wa vutomi kumbe n'wana wa mina a nga avelana akhawunti ya mina?",
             a: [
-              "Mutirhisi un'we loyi a ngheneke eka akhawunti hi nkarhi. Xiyimo xa vana xi pfumelela akhawunti yin'we ya Clear kumbe ya Deep ku tirhela mutswari na n'wana: cincani xilawuri kutani tinhlamuselo ti kombisiwa hi ndlela leyi vana va yi twisisaka handle ka ku nghena ko hambana.",
-              "Eka vanhu lavakulu vambirhi lava havambirhi va lavaka tibuku ta marito na ku ya emahlweni ko hambana, endlani tiakhawunti timbirhi. Clear i $2.99 hi n'hweti eka akhawunti yin'we.",
+              "Eka akhawunti yin'wana na yin'wana ku nghena munhu un'we hi nkarhi. Eka ndyangu, pulani ya Family yi endleriwe leswi: ku fika eka vana va 5 na vatswari, un'wana na un'wana a ri na ndhawu ya yena, buku ya yena ya marito na ku ya emahlweni ka yena, ku katsa Xiyimo xa vana xa vana na dashibodo ya vatswari.",
+              "Eka munhu lonkulu un'we a ri yexe, Individual yi tirhela munhu un'we na switirhisiwa hinkwaswo swo dyondza. Pimanisani tipulani na minxavo ya tiko ra n'wina eka tluka ra minxavo.",
             ],
           },
           {
@@ -2380,25 +2387,25 @@ Object.assign(HELP, {
           },
           {
             id: "kids-not-working",
-            q: "Xiyimo xa vana a xi cinci nhlamuselo.",
+            q: "Xiyimo xa vana a xi cinci nhlamuselo",
             a: [
-              "Xiyimo xa vana xi cinca tsalwa ntsena laha rito ri nga ni nhlamuselo leyi vana va yi twisisaka leyi se yi endliweke. Eka marito lamantshwa lawa mi ha ku ma lava, yimelani tisekoni ta 10 ku ya eka 15. Nhlamuselo ya vana yi endliwa hi ku hatlisa ro sungula.",
-              "Naswona: Xiyimo xa vana xi lava Clear kumbe Deep. Loko mi ri eka Basic, xilawuri xi ta mi kombela ku tlakusa. Vatirhisi lava nga tiviwiki va kombeliwa ku tsarisa.",
+              "Xiyimo xa vana xi cinca tsalwa ntsena laha rito ri se ri nga na nhlamuselo leyi vana va yi twisisaka. Eka rito leri mi ha ku ri lava ro sungula, yimelani tisekoni ta 10 ku ya eka 15 loko nhlamuselo ya vana yi ri karhi yi lunghiseleriwa.",
+              "Xiyimo xa vana i xiphemu xa pulani ya Family. Eka Basic, eka Individual, kumbe handle ka akhawunti, xilawuri xi kombisa pulani ya Family ematshan'wini yo pfuleka. Vatirhisi lava tsariseke eka Clear kumbe Deep emahlweni ka October 2026 va hlayisa Xiyimo xa vana. Ku xi kuma, langutani Family eka tluka ra minxavo.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Ku lava hi rito a ku tirhi.",
+            q: "Ku lava hi rito a ku tirhi",
             a: [
               "Ku lava hi rito ku lava mpfumelelo wa maykrofoni. Tibulawuza to tala ti vutisa kan'we eka websayiti yin'wana na yin'wana. Loko mi thintile Block hi xihoxo, mi ta fanela ku swi cinca hi voko: thintani aykhoni ya xilotlelo kumbe ya vuxokoxoko etlhelo ka gadit.app eka bara ya adirese, kutani Site settings, kutani Microphone, kutani Allow.",
-              "Eka Safari ya iOS, ku nghena eka maykrofoni na kona ku lava xilawuri xa Settings → Safari → Microphone. Sweswi rito i xihlawulekisi xa Clear na Deep: vatirhisi va Basic va vona xikombelo xo tlakusa, vaendzi lava nga ngheniki va vona xikombelo xo nghena.",
+              "Eka Safari ya iPhone na iPad, ku nghena eka maykrofoni na kona ku lava Settings → Safari → Microphone. Ku lava hi rito i xiphemu xa tipulani ta Individual na Family: eka Basic mi ta vona tipulani ematshan'wini ya sweswo, naswona vaendzi lava nga ngheniki va kombeliwa ku nghena. Ku tlakusa, pfulani tluka ra minxavo.",
             ],
           },
           {
             id: "no-image",
-            q: "A ndzi swi koti ku endla xifaniso xa rito.",
+            q: "A ndzi swi koti ku kuma xifaniso xa rito",
             a: [
-              "Ku endla swifaniso i xihlawulekisi xa Clear kumbe Deep lexi nga na ndzilakano wa n'hweti. Clear yi kuma swifaniso swa 30 hi n'hweti, Deep yi kuma 100. Loko mi tirhisile swifaniso hinkwaswo, mi ta vona xihingakanyo. Swi sungula nakambe hi siku ro sungula ra n'hweti yin'wana na yin'wana.",
+              "Swifaniso i xiphemu xa tipulani ta Individual na Family, ku fika eka swifaniso leswintshwa swa 100 hi n'hweti. Xifaniso lexi se xi nga kona xa nhlamuselo yoleyo xi pfuleka handle ko hlayiwa. Pulani ya khale ya Clear yi na 30 hi n'hweti, naswona Basic a yi katsi swifaniso. Loko swifaniso swa n'hweti swi herile mi ta vona xitsundzuxo, naswona nhlayo yi sungula nakambe eku sunguleni ka n'hweti yin'wana na yin'wana.",
               "Loko mi nga si fika eka ndzilakano naswona ma ha vona swi nga tirhi, hi ntolovelo i xiphiqo xa nkarhinyana. Ringetani nakambe endzhaku ka tisekoni ta 30. Swiphiqo leswi tshamaka i xihoxo xa sisiteme. Hi kombela mi xi vika ku suka eka tluka ra rito.",
             ],
           },
@@ -2406,21 +2413,21 @@ Object.assign(HELP, {
             id: "save-word",
             q: "Ndzi hlayisa njhani rito ebukwini ya mina ya marito?",
             a: [
-              "Eka tluka rin'wana na rin'wana ra mbuyelo wa rito, thintani Hlayisa ebukwini kusuhi na nhloko. Buku ya marito i xihlawulekisi xa Clear na Deep laha mi nga vuyelelaka marito lama hlayisiweke endzhaku, mi ma vona eka xiyimo xa ntlawa wa tinyeleti, na ku endla ntoloveto wa vutlhari (Deep).",
-              "Marito lawa mi ma hlayiseke naswona mi ma pfuleke kan'we kumbe ku tlula ma kumeka handle ka inthanete ku suka eka vuhlayiselo bya xitirhisiwa. Phakete yo tirhisa handle ka inthanete na yona yi hlayisa marito lama laviwaka ngopfu eka ririmi ra n'wina leswaku mi lunghekile handle ka inthanete.",
+              "A swi laveki. Loko mi nghenile, rito rin'wana na rin'wana leri mi ri lavaka ri hlayisiwa ebukwini ya marito hi ri ri ntsena. Eka Basic buku ya marito yi khoma ku fika eka marito ya 30. Eka Individual na Family a yi na ndzilakano naswona yi katsa ku titoloveta hi vutlhari, loku vuyisaka marito ya n'wina leswaku mi ma vuyelela hi nkarhi lowu faneleke.",
+              "Eka Individual na Family, marito lawa mi ma lavaka ma hlayisiwa na le ka xitirhisiwa xa n'wina, hikwalaho ma pfuleka handle ka inthanete. Ku vona marito ya n'wina, pfulani buku ya marito eka menyu.",
             ],
           },
           {
             id: "offline",
-            q: "Xana xiyimo xo tirhisa handle ka inthanete xi tirha njhani?",
+            q: "Xana ku tirhisa handle ka inthanete swi tirha njhani?",
             a: [
-              "Marito lawa mi se mi ma voneke ma hlayisiwa eka xitirhisiwa. Ma pfuleni nakambe handle ka inthanete kutani ma layicheka hi ku hatlisa. Phakete hinkwayo yo tirhisa handle ka inthanete (marito ya le henhla eka ririmi ra n'wina) yi dawunilodiwa loko mi yi lava eka tluka ra buku ya marito.",
-              "Ku lava rito lerintshwa ku ha lava inthanete, hikuva Gadit yi fanele ku endla nhlamuselo ku sukela eku sunguleni. Vuhlayiselo bya handle ka inthanete i bya marito lawa mi se mi ma lavisiseke.",
+              "Ku tirhisa handle ka inthanete i xiphemu xa tipulani ta Individual na Family. Rito rin'wana na rin'wana leri mi ri lavaka ri hlayisiwa eka xitirhisiwa xa n'wina, hikwalaho ri pfuleka nakambe hi ku hatlisa handle ka inthanete. Mi nga tlhela mi dawunilodi phakete ya marito lama tirhisiwaka ngopfu eka ririmi ra n'wina eka tluka ra n'wina ra Akhawunti.",
+              "Ku lava rito lerintshwa ku ha lava inthanete, hikuva Gadit yi fanele ku lunghiselela mbuyelo hinkwawo wa rona. Khopi ya handle ka inthanete yi katsa marito lama se ma nga eka xitirhisiwa xa n'wina. Loko mi ri eka Basic, langutani tipulani eka tluka ra minxavo.",
             ],
           },
           {
             id: "slow",
-            q: "App yi titwa yi nonoka.",
+            q: "App yi titwa yi nonoka",
             a: [
               "Ku lava ko sungula ka rito hi kona ku nonokaka ngopfu hikuva Gadit yi endla mbuyelo hinkwawo ku sukela eku sunguleni: hi ntolovelo tisekoni ti nga ri tingani, minkarhi yin'wana ku tlula eka marito yo tika. Ku lava loku landzelaka ka rito rero i ka xihatla, ku humaka eka vuhlayiselo.",
               "Loko hinkwaswo swi titwa swi nonoka, ringetani ku pfuxeta hi matimba: Cmd+Shift+R eka Mac, Ctrl+Shift+R eka Windows. Loko ku nonoka ku ya emahlweni eka matluka hinkwawo, hi kombela mi hi rhumela imeyili mi ri na tiko na bulawuza ya n'wina leswaku ntlawa wu kambela ndlela ya netiweke ku ya eka tisevha ta hina ku suka eka xifundzha xa n'wina.",
@@ -2438,7 +2445,7 @@ Object.assign(HELP, {
             id: "change-language",
             q: "Ndzi cinca njhani ririmi ra xitirhisiwa?",
             a: [
-              "Ehenhla exineneni ka tluka rin'wana na rin'wana, mi ta vona aykhoni yitsongo ya mbendzele (kumbe vito ra ririmi ra n'wina ra sweswi). Yi thinteni kutani mi hlawula eka tindzimi ta 30+: Xinghezi, Xigriki, Xiheberu, Xiarabu, Xirhaxiya, Xipaniya, Xiputukezi, Xifurwa, Xijarimani, Xicheki, Xislovaki, Xitaliyana, Xijapani, Xihindi, Xiamhariki, Xizulu.",
+              "Ehenhla exineneni ka tluka rin'wana na rin'wana, mi ta vona aykhoni yitsongo ya mbendzele (kumbe vito ra ririmi ra n'wina ra sweswi). Yi thinteni kutani mi hlawula eka tindzimi ta 41.",
               "Leswi mi swi hlawulaka swi hlayisiwa eka xitirhisiwa lexi. Hinkwaswo swi layicha nakambe hi ririmi lerintshwa: xitirhisiwa, timenyu, tinhlamuselo ta marito ta nkarhi lowu taka, swikombiso, tinhlamuselo ta vana, hambi ku ri masungulo. Mimbuyelo leyi se yi hlayisiweke hi ririmi ra khale yi tshama ku fikela loko mi lava marito wolawo nakambe.",
             ],
           },
@@ -2476,7 +2483,7 @@ Object.assign(HELP, {
           },
           {
             id: "empty-dashboard",
-            q: "Ndzi nghenile kambe dashibodo ya mina a yi na nchumu.",
+            q: "Ndzi nghenile kambe dashibodo ya mina a yi na nchumu",
             a: [
               "Tinomboro ti humelela endzhaku ka ku thinta ko sungula eka linki ya n'wina. Ku pfumala nchumu swi vula ntsena leswaku a ku si va na loyi a thinteke. Yanani mi avelana linki. Dashibodo yi pfuxetiwa kwalomu ka hi nkarhi wa xiviri loko ntirho wu sungula.",
               "Loko mi avelanile naswona munhu a tsarisile kambe dashibodo yi nga swi kombisi, hi tsaleleni mi ri na nkarhi wa kwalomu ka ku tsarisa kutani ntlawa wu ta kambela ku hlayeriwa.",
@@ -2492,7 +2499,7 @@ Object.assign(HELP, {
           },
           {
             id: "missing-commission",
-            q: "Munhu u tsarise hi linki ya mina kambe a ndzi voni khomixini.",
+            q: "Munhu u tsarise hi linki ya mina kambe a ndzi voni khomixini",
             a: [
               "Hakanyingi i swa nkarhi: ku tsarisa ku humelela eka dashibodo endzhaku ka timinete, kambe khomixini yi tsariwa ntsena loko mbhaliso wu hakeriwile hakunene (leswi swi nga teka masiku loko a ri eka ndzingo wa mahala). Languteni nakambe endzhaku ka loko ndzingo wu herile.",
               "Loko mbhaliso wu hakeriwile kambe ma ha nga voni khomixini endzhaku ka tiawara ta 48, hi tsaleleni mi ri na nkarhi wa kwalomu ka ku tsarisa na imeyili kumbe vito ra kwalomu ra mutsarisi loko mi ri tiva. Ntlawa wu ta lavisisa ndlela ya ku hlayeriwa naswona wu lulamisa xihoxo xin'wana na xin'wana hi voko.",
@@ -2509,16 +2516,16 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "Xana Gadit i yini?",
             a: [
-              "Dikixinari ya tindzimi to tala leyi akiweke leswaku rito ri twala hakunene, ku nga ri ku nyika nhlamuselo ya layini yin'we ntsena. Rito rin'wana na rin'wana ri pfuleka na tinhlamuselo ta rona hinkwato, swikombiso swa xiviri eka nhlamuselo yin'wana na yin'wana, swivulavulelo, masungulo, xifaniso lexi nga bohiki, na (hi Clear na Deep) nhlamuselo leyi vana va yi twisisaka, ku tsala xivulwa xa n'wina mi kuma switsundzuxo, na mavutiso.",
-              "Sweswi ku na tindzimi ta xitirhisiwa ta 30+. Endzeni ka ntlawa hi swi vitana ku GAD rito: ku twisisa rito ku fikela emakumu, ku nga ri ku ri hundzuluxela ntsena.",
+              "Gadit yi mi pfuna ku twisisa rito rin'wana na rin'wana ku fikela emakumu, ku nga ri ku kuma nhlamuselo ya layini yin'we ntsena. Rito rin'wana na rin'wana ri pfuleka na tinhlamuselo ta rona hinkwato, swikombiso swa xiviri eka nhlamuselo yin'wana na yin'wana, swivulavulelo na masungulo ya rito. Tipulani leti hakeriwaka ti engetela xifaniso eka nhlamuselo yin'wana na yin'wana, ku titoloveta, mitlangu na swin'wana, naswona Family yi engetela Xiyimo xa vana na ndhawu ya n'wana un'wana na un'wana.",
+              "Gadit yi tirha hi tindzimi ta 41. Endzeni ka ntlawa hi swi vitana ku GAD rito: ku twisisa rito ku fikela emakumu, ku nga ri ku ri hundzuluxela ntsena. Ku vona leswi pulani yin'wana na yin'wana yi swi katsaka, pfulani tluka ra minxavo.",
             ],
           },
           {
             id: "languages",
             q: "Xana mi seketela tindzimi tihi?",
             a: [
-              "Xitirhisiwa: Xinghezi, Xigriki, Xiheberu, Xiarabu, Xirhaxiya, Xipaniya, Xiputukezi, Xifurwa, Xijarimani, Xicheki, Xislovaki, Xitaliyana, Xijapani, Xizulu.",
-              "Mi nga lava rito hi ririmi rin'wana na rin'wana ra tindzimi teto kutani mi kuma nhlamuselo, swikombiso, na swin'wana hinkwaswo hi ririmi ra xitirhisiwa leri mi ri hlawuleke. Xiheberu na Xiarabu swi tsariwa hi ku helela ku suka exineneni ku ya eximatsini naswona swi tirhisa titsalwa ta swona.",
+              "Gadit yi tirha hi tindzimi ta 41, ku katsa Xinghezi, Xiheberu, Xiarabu, Xipaniya, Xifurwa, Xijarimani, Xirhaxiya, Xichayina, Xijapani, Xihindi, Xizulu, Xixhosa na Xibunu.",
+              "Mi nga lava rito hi ririmi rin'wana na rin'wana ra tindzimi teto kutani mi kuma tinhlamuselo, swikombiso na swin'wana hinkwaswo hi ririmi leri mi ri hlawuleke eka xitirhisiwa. Xiheberu, Xiarabu na Xiperesiya swi hlayiwa ku suka exineneni ku ya eximatsini, swi ri na titsalwa ta swona. Ku cinca, thintani buthoni ya ririmi ehenhla ka tluka rin'wana na rin'wana.",
             ],
           },
           {
@@ -2526,7 +2533,7 @@ Object.assign(HELP, {
             q: "Xana Gadit yi hlayisekile eka vana?",
             a: [
               "Gadit yi endleriwe leswaku mutswari a yi tirhisa hi ndlela leyi hlayisekeke a ri na n'wana. Xiyimo xa vana xi endla tinhlamuselo to olova, leti kongomeke, leti fambelanaka na malembe (kwalomu ka xiyimo xa malembe ya 5 ku ya eka 10), hi ku tirhisa njini leyi fanaka na leyi endlaka vuxokoxoko bya vanhu lavakulu yi ri na swiletelo swo kongoma swo olovisa. A ku na vuxokoxoko lebyi tsariweke hi vatirhisi lebyi kombisiwaka vana nikatsongo.",
-              "Hi ku landza tipholisi ta hina na milawu ya xihundla xa vana emisaveni hinkwayo, ku va na akhawunti hi wexe swi sungula hi malembe ya 13 ku ya ehenhla. Ndlela ya ntolovelo i akhawunti ya mutswari leyi mutswari a yi tirhisaka swin'we na n'wana wa yena, leswi hi swona Xiyimo xa vana xi endleriweke swona.",
+              "Hi ku landza tipholisi ta hina na milawu ya xihundla xa vana emisaveni hinkwayo, akhawunti ya wena hi wexe i ya malembe ya 13 ku ya ehenhla. Vana va tirhisa Gadit hi ku tirhisa mutswari: eka pulani ya Family mutswari u engetela n'wana un'wana na un'wana eka tluka ra Family, n'wana un'wana na un'wana u kuma ndhawu ya yena na Xiyimo xa vana, naswona dashibodo ya vatswari yi kombisa marito lawa n'wana un'wana na un'wana a ma lavaka. Ku swi lulamisa, sungulani hi Family eka tluka ra minxavo.",
             ],
           },
           {
@@ -2534,7 +2541,7 @@ Object.assign(HELP, {
             q: "Xana vuxokoxoko bya mina byi hlayisiwa kwihi? Xana ma byi xavisa?",
             a: [
               "Akhawunti, matimu, buku ya marito, na swifaniso leswi endliweke swi hlayisiwa hi ndlela leyi sirhelelekeke eka Firebase, swi fihliwile hi khodi eka vuhlayiselo. A hi xavisi vuxokoxoko bya n'wina eka munhu na un'we. Hi avelana ntsena leswi lavekaka ku tirhisa Gadit (vuhlayiselo, ku hakela, vanyiki va vuxokoxoko), hilaha swi hlamuseriweke hakona eka Pholisi ya Xihundla.",
-              "Mi nga humesa buku ya n'wina ya marito kumbe ku susa akhawunti ya n'wina nkarhi wun'wana na wun'wana eka tluka ra Akhawunti.",
+              "Mi nga susa akhawunti ya n'wina nkarhi wun'wana na wun'wana eka tluka ra Akhawunti. Ku kuma khopi ya buku ya n'wina ya marito kumbe vuxokoxoko byin'wana lebyi hi nga na byona, hi tsaleleni ku suka eka tluka leri.",
             ],
           },
           {
@@ -2577,16 +2584,17 @@ Object.assign(HELP, {
             q: "Ngikukhansela njani kubhalisa kwami?",
             a: [
               "Utentela wena, nobe nini. Ngena, vula i-Akhawunti, bese ucindzetela Khansela kubhalisa ngentasi kwelihlelo lakho.",
-              "Kungena kwakho kuchubeka kuze kuphele sikhatsi lesesikhokhele. Ngemuva kwaloko i-akhawunti ibuyela ku-Basic (mahhala). Emagama lowagcinile, umlandvo, nencwadzi kuhlala kuphephile futsi kuyatfolakala.",
-              "Uma ukhansela ngephutsa nobe ushintja umcondvo, ungachubeka nekubhalisa kulelo khasi ngaphambi kwekutsi sikhatsi siphele.",
+              "Kubhalisa lokukhokhelwako, kungena kwakho kuchubeka kuze kuphele sikhatsi lesesikhokhele. Ngemuva kwaloko i-akhawunti ibuyela ku-Basic (mahhala). Emagama lowagcinile nemlandvo kuhlala kuphephile.",
+              "Esikhatsini sekuzama samahhala semalanga langu-14, kukhansela kuphelisa kuzama khona manjalo futsi kute lokukhokhiswako. Nangabe ukhatsateke ngenkhokhelo letentekelako kuphela, khetsa leso sizatfu efasitelweni lekukhansela, bese ungacisha kuvuselela esikhundleni saloko, ugcine kuzama kuze kube lilanga lako lekugcina.",
+              "Uma ukhansela kubhalisa lokukhokhelwako ngephutsa nobe ushintja umcondvo, ungakuchubeka kulelo khasi ngaphambi kwekutsi sikhatsi siphele.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Ngishintja njani kusuka ku-Clear kuya ku-Deep (nobe ngalenye indlela)?",
+            q: "Ngishintja njani emkhatsini we-Individual ne-Family?",
             a: [
-              "I-Akhawunti, bese Phatsa tinkhokhelo, bese Vuselela kubhalisa. Khetsa lihlelo lelisha.",
-              "I-Stripe ibala umehluko wenani ngekwayo, ngekwemalanga lasele esikhatsini sanyalo. Uma ukhuphula, utawukhokhiswa umehluko kuphela kulesikhatsi lesisele. Uma wehlela kulizinga lelincane, imali lesele isetjentiswa enkhokhelweni yakho lelandzelako.",
+              "Kute ushintjele ku-Family, vula likhasi lakho le-Akhawunti bese ucindzetela \"Shintjela ku-Family\". Kubhalisa kwakho kwanyalo kuvuselelwa ngelikhadi lelifanako, ngaphandle kwekulifaka futsi.",
+              "I-Stripe ibala umehluko wemalanga lasele esikhatsini sanyalo, ngako ukhokha umehluko kuphela. Kute ushintje kusuka ku-Family kuya ku-Individual, sibhalele kulelikhasi futsi licembu litakushintjela.",
             ],
           },
           {
@@ -2623,9 +2631,9 @@ Object.assign(HELP, {
           },
           {
             id: "unknown-charge",
-            q: "Ngibona inkhokhelo lengingayati.",
+            q: "Iyini lenkhokhelo lesekhadini lami?",
             a: [
-              "Tinkhokhelo tivela njenge-GADIT nobe GADIT.APP ne-$2.99 (Clear ngenyanga), $4.99 (Deep ngenyanga), $29.99 (Clear ngemnyaka), nobe $49.99 (Deep ngemnyaka). Uma ingafanani, kungenteka ivela kulolunye lusito.",
+              "Tinkhokhelo tivela njenge-GADIT nobe GADIT.APP. Linani lihambisana nelihlelo lakho (Individual nobe Family, ngenyanga nobe ngemnyaka) ngemali yelive lakho, njengobe kukhonjiswe ekhasini lematengo. Kubhalisa lokwacala ngaphambi kwa-October 2026 kugcina intengo lokwacala ngayo. Uma linani lingafanani, kungenteka ivela kulolunye lusito.",
               "Uma uciniseka kutsi akusiyo yakho, ungakayiphikisi ebhange okwamanje. Sibhalele ngco kucala, usitjele lilanga nelinani lemali. Licembu litayitfola, lichaze kutsi iyini, futsi libuyisele imali uma kudzingeka. Kuphikisa ebhange kungenta tinkhokhelo letitako tibe lukhuni, ngako kuyilungisa ngelusito kuvame kusheshe futsi kuphephe kakhulu.",
             ],
           },
@@ -2639,11 +2647,11 @@ Object.assign(HELP, {
           },
           {
             id: "plan-comparison",
-            q: "Uyini umehluko emkhatsini we-Basic, Clear, ne-Deep?",
+            q: "Uyini umehluko emkhatsini we-Basic, Individual ne-Family?",
             a: [
-              "Basic (mahhala): kusesha emagama lokufika ku-20 ngelilanga, tonkhe tinchazelo, tibonelo kunchazelo ngayinye, tisho, nemvelaphi yeligama. Akudzingeki kubhalisa kusesha lokuyisisekelo.",
-              "Clear ($2.99/ngenyanga nobe $29.99/ngemnyaka): kusesha ngaphandle kwemkhawulo, tinchazelo letifanele bantfwana, sitfombe saligama ngalinye (30/ngenyanga), kubhala umusho wakho kanye nemibono, imininingwane yetisho, nemalanga langu-30 emlandvo wekusesha.",
-              "Deep ($4.99/ngenyanga nobe $49.99/ngemnyaka): konkhe lokuku-Clear, kanye nemibuto yekuticecesha, incwadzi yakho yemagama lenekuticecesha lokuhlakaniphile lokuphindza ngetikhatsi, kuhlukanisa emagama lafanako, nesabelo setitfombe lesikhulu (100/ngenyanga).",
+              "Basic (mahhala): kufika kusesha emagama la-10 ngelilanga, tonkhe tinchazelo, tibonelo, tisho, imvelaphi yeligama, inchazelo lefanele ngekwemusho, kanye nencwadzi yemagama lefika emagameni langu-30.",
+              "Individual: umuntfu munye, onkhe emathulusi ekufundza. Kusesha lokungapheli, sitfombe senchazelo ngayinye, tibonelo letinyenti nemibuto ngeligama ngalinye, Bhala umusho bese utfola imibono, Onkhe Emagama, Kusho, livi lemvelo lekufundza ngekuphimisela nekusesha ngekukhuluma, kusebenta ungekho ku-inthanethi, imidlalo, emakhwizi netincintiswano temagama, nekutiniketa lokuhlakaniphile nekulungiselela sivivinyo nedikiteshini.",
+              "Family: konkhe lokuku-Individual kubantfwana labafika ku-5 nebatali, kanye neSimo sebantfwana, indzawo yakhe yemntfwana ngamunye, lusito ngemsebenti wasekhaya, nelibhodi lemtali nesatiso ngeligama ngalinye. Tikolo tinelihlelo lato. Ematengo elive lakho nekuzama kwamahhala kwemalanga langu-14 akhona ekhasini lematengo.",
             ],
           },
         ],
@@ -2655,7 +2663,7 @@ Object.assign(HELP, {
         items: [
           {
             id: "no-verification-email",
-            q: "Angikayitfoli i-imeyili yekucinisekisa.",
+            q: "Angikayitfoli i-imeyili yekucinisekisa",
             a: [
               "Hlola emafolda e-spam ne-promotions kucala. I-Gmail ne-Outlook ngaletinye tikhatsi tiyisa ema-imeyili e-akhawunti lapho kuze uphawule leyinye njenge-\"Not spam\".",
               "Uma ingekho lapho, kungenteka i-imeyili ibhalwe kabi ekubhaliseni. Zama kubhalisa futsi uhlole kahle likheli. Uma ubhalise nge-Google, akudzingeki i-imeyili yekucinisekisa.",
@@ -2663,7 +2671,7 @@ Object.assign(HELP, {
           },
           {
             id: "forgot-password",
-            q: "Ngikhohlwe liphasiwedi lami.",
+            q: "Ngikhohlwe liphasiwedi lami",
             a: [
               "Vula libhokisi lekungena bese ucindzetela \"Ukhohlwe liphasiwedi?\". Faka i-imeyili loyisebentisela Gadit futsi utawutfola lilinki lekusetha kabusha ngekhatsi kwemzuzu munye nobe lemibili.",
               "Uma i-imeyili ingafiki, hlola ku-spam. Uma isangafiki, kungenteka ubhalise nge-Google esikhundleni se-imeyili neliphasiwedi. Zama inkinobho letsi \"Chubeka nge-Google\".",
@@ -2671,7 +2679,7 @@ Object.assign(HELP, {
           },
           {
             id: "wrong-credentials",
-            q: "Ngiciniseka kutsi liphasiwedi lami lilungile kodvwa kutsi \"I-imeyili nobe liphasiwedi akulungi\".",
+            q: "Ngiciniseka kutsi liphasiwedi lami lilungile kodvwa kutsi \"I-imeyili nobe liphasiwedi akulungi\"",
             a: [
               "Tintfo letintsatfu tekuhlola. Kwekucala, i-capslock. Kwesibili, sikhala ekugcineni nawukopisha uphindze unamatsisele. Kwesitsatfu, ubhalise nge-Google kunekutsi ubhalise ngeliphasiwedi (sebentisa \"Chubeka nge-Google\" esikhundleni saloko).",
               "Usabambekile? Setha kabusha liphasiwedi kulelo bhokisi. Kukucalisa kabusha kahle.",
@@ -2679,7 +2687,7 @@ Object.assign(HELP, {
           },
           {
             id: "google-fails",
-            q: "Kungena nge-Google akusebenti.",
+            q: "Kungena nge-Google akusebenti",
             a: [
               "Imbangela levame kakhulu: i-browser yakho ivimba ema-cookie langesiwo e-gadit.app nobe ema-pop-up. Kuvumele etimvumweni temugca wekheli bese uphindza uzama.",
               "Uma usesimeni se-incognito, kungena nge-Google kuvinjelwe ngenhloso. Shintjela efasiteleni le-browser lelijwayelekile.",
@@ -2705,8 +2713,8 @@ Object.assign(HELP, {
             id: "share-account",
             q: "Umlingani wami nobe umntfwana wami angayisebentisa nami i-akhawunti yami?",
             a: [
-              "Umsebentisi munye longenile nge-akhawunti ngasinye sikhatsi. Simo sebantfwana sivumela i-akhawunti yinye ye-Clear nobe ye-Deep kutsi isebentele umtali nemntfwana: shintja inkinobho futsi tinchazelo tivela tifanele bantfwana ngaphandle kwekungena lokwehlukene.",
-              "Kubantfu labadzala lababili labafuna tincwadzi nenchubekelembili lehlukene, vulani ema-akhawunti lamabili. Clear ngu-$2.99 ngenyanga nge-akhawunti ngayinye.",
+              "Ku-akhawunti ngayinye kungena umuntfu munye ngesikhatsi. Emndenini, lihlelo le-Family lakhelwe loku: kufika ebantfwaneni labangu-5 nebatali, ngamunye anendzawo yakhe, incwadzi yakhe nenchubekelembili yakhe, kanye neSimo sebantfwana sebantfwana nelibhodi lemtali.",
+              "Kumuntfu lomdzala munye, i-Individual yentelwe umuntfu munye futsi inawo onkhe emathulusi ekufundza. Catsanisa emahlelo nematengo elive lakho ekhasini lematengo.",
             ],
           },
           {
@@ -2734,25 +2742,25 @@ Object.assign(HELP, {
           },
           {
             id: "kids-not-working",
-            q: "Simo sebantfwana asiyishintji inchazelo.",
+            q: "Simo sebantfwana asiyishintji inchazelo",
             a: [
-              "Simo sebantfwana sishintja umbhalo kuphela lapho ligama selinenchazelo lefanele bantfwana leseyidaliwe. Emagameni lamasha nya losandza kuwasesha, linda imizuzwana lesuka ku-10 kuya ku-15. Inchazelo lefanele bantfwana idalwa khona lapho kwekucala.",
-              "Futsi: simo sebantfwana sidzinga i-Clear nobe i-Deep. Uma use-Basic, inkinobho itakucela kutsi ukhuphule. Basebentisi labangatiwa bacelwa kutsi babhalise.",
+              "Simo sebantfwana sishintja umbhalo kuphela lapho ligama selinenchazelo lefanele bantfwana. Eligameni losandza kulisesha kwekucala, linda imizuzwana lesuka ku-10 kuya ku-15 ngesikhatsi inchazelo yebantfwana ilungiswa.",
+              "Simo sebantfwana siyincenye yelihlelo le-Family. Ku-Basic, ku-Individual, nobe ngaphandle kwe-akhawunti, inkinobho ikhombisa lihlelo le-Family esikhundleni sekuvuleka. Labo lababhalisa ku-Clear nobe ku-Deep ngaphambi kwa-October 2026 bagcina Simo sebantfwana. Kute usitfole, buka i-Family ekhasini lematengo.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Kusesha ngelivi akusebenti.",
+            q: "Kusesha ngelivi akusebenti",
             a: [
               "Kusesha ngelivi kudzinga imvumo ye-microphone. Ema-browser lamanyenti abuta kanye kusayithi ngalinye. Uma ucindzetele Block ngephutsa, kutawudzingeka ukubuyisele ngesandla: cindzetela lithonjana lekhiye nobe lemininingwane eceleni kwa-gadit.app emugceni wekheli, bese Site settings, bese Microphone, bese Allow.",
-              "Ku-Safari ye-iOS, kungena kwe-microphone kudzinga nenkinobho ku-Settings → Safari → Microphone. Livi nyalo litfolakala ku-Clear nase-Deep: basebentisi be-Basic babona sicelo sekukhuphula, tivakashi letingakangeni tibona sicelo sekungena.",
+              "Ku-Safari ku-iPhone naku-iPad, kungena kwe-microphone kudzinga futsi i-Settings → Safari → Microphone. Kusesha ngelivi kuyincenye yemahlelo e-Individual ne-Family: ku-Basic utawubona emahlelo esikhundleni saloko, futsi tivakashi letingakangeni ticelwa kutsi tingene. Kute ukhuphule, vula likhasi lematengo.",
             ],
           },
           {
             id: "no-image",
-            q: "Angikhoni kudala sitfombe saleligama.",
+            q: "Angikhoni kutfola sitfombe saleligama",
             a: [
-              "Kudalwa kwetitfombe kutfolakala ku-Clear nobe ku-Deep kanye nesabelo senyanga. Clear itfola titfombe letingu-30 ngenyanga, Deep itfola leti-100. Uma usisebentisile sonkhe sabelo, utawubona ludvonga. Sicala kabusha mhla lu-1 enyangeni ngayinye.",
+              "Titfombe tiyincenye yemahlelo e-Individual ne-Family, ngetitfombe letinsha letifika ku-100 ngenyanga. Sitfombe lesesikhona salenchazelo siyavuleka ngaphandle kwekubalwa. Lihlelo lelidzala le-Clear linetingu-30 ngenyanga, futsi i-Basic ayinato titfombe. Uma titfombe tenyanga setiphelile utawubona satiso, futsi kubala kucala kabusha ekucaleni kwenyanga ngayinye.",
               "Uma ungakafiki esabelweni futsi usabona kwehluleka, kuvame kuba ngulokwesikhashana. Phindza uzame ngemuva kwemizuzwana lengu-30. Kwehluleka lokuchubekako kuyinkinga yesistimu. Sicela ubike kusuka ekhasini leligama.",
             ],
           },
@@ -2760,21 +2768,21 @@ Object.assign(HELP, {
             id: "save-word",
             q: "Ngiligcina njani ligama encwadzini yami?",
             a: [
-              "Kunobe nguliphi likhasi lemphumela weligama, cindzetela Gcina encwadzini eceleni kwesihloko. Incwadzi itfolakala ku-Clear nase-Deep, lapho ungabuyeketa khona emagama lowagcinile ngemuva, uwabone ekubukeni kwetinkhanyeti, futsi wente kuticecesha lokuhlakaniphile (Deep).",
-              "Emagama lowagcinile futsi lowavulile nangabe kanye ayatfolakala ngaphandle kwe-inthanethi kusuka ku-cache lesedivayisini. Liphakethe langaphandle kwe-inthanethi ligcina nemagama ladvume kakhulu elulwimini lwakho kute ulungele ngaphandle kwe-inthanethi.",
+              "Akudzingeki. Uma ungenile, ligama ngalinye loliseshako ligcinwa encwadzini yakho ngalokwalo. Ku-Basic incwadzi ingemukela emagama lafika ku-30. Ku-Individual naku-Family ayinamkhawulo futsi inekutiniketa lokuhlakaniphile, lokubuyisa emagama akho kute uwabuyeketa ngesikhatsi lesifanele.",
+              "Ku-Individual naku-Family, emagama lowaseshako agcinwa nasedivayisini yakho, ngako ayavuleka ngaphandle kwe-inthanethi. Kute ubone emagama akho, vula incwadzi kumenyu.",
             ],
           },
           {
             id: "offline",
             q: "Simo sangaphandle kwe-inthanethi sisebenta njani?",
             a: [
-              "Emagama losawabukile agcinwa edivayisini. Wavule futsi ngaphandle kwe-inthanethi futsi ayavuleka masinyane. Liphakethe lonkhe langaphandle kwe-inthanethi (emagama laphambili elulwimini lwakho) liyalandzwa uma ulicela ekhasini lencwadzi.",
-              "Kusesha ligama lelisha nya kusadzinga kuxhumana, ngobe Gadit kufanele idale inchazelo kusukela ekucaleni. Kugcinwa kwangaphandle kwe-inthanethi kwentelwe emagama losawahlolile.",
+              "Kusebenta ungekho ku-inthanethi kuyincenye yemahlelo e-Individual ne-Family. Ligama ngalinye loliseshako ligcinwa edivayisini yakho, ngako liyavuleka futsi masinyane ngaphandle kwe-inthanethi. Ungalandza neliphakethe lemagama ladvume kakhulu elulwimini lwakho ekhasini lakho le-Akhawunti.",
+              "Kusesha ligama lelisha nya kusadzinga kuxhumana, ngobe Gadit kufanele ilungise umphumela lophelele walo. Likhophi langaphandle kwe-inthanethi lifaka emagama lasesedivayisini yakho. Uma use-Basic, buka emahlelo ekhasini lematengo.",
             ],
           },
           {
             id: "slow",
-            q: "I-app ibonakala ihamba kancane.",
+            q: "I-app ibonakala ihamba kancane",
             a: [
               "Kusesha kwekucala kweligama kuhamba kancane kakhulu ngobe Gadit idala umphumela lophelele kusukela ekucaleni: imizuzwana lembalwa kuvamile, ngaletinye tikhatsi kudze kakhulu kumagama lalukhuni. Kusesha lokulandzelako kwaleligama lelifanako kwenteka masinyane, kusuka ku-cache.",
               "Uma konkhe kuhamba kancane, zama kuvuselela ngemandla: Cmd+Shift+R ku-Mac, Ctrl+Shift+R ku-Windows. Uma kuhamba kancane kuchubeka kuwo onkhe emakhasi, sicela usitfumelele i-imeyili unelive lakho ne-browser kute licembu lihlole indlela ye-network leya kuma-server etfu kusuka esifundzeni sakho.",
@@ -2792,7 +2800,7 @@ Object.assign(HELP, {
             id: "change-language",
             q: "Ngilushintja njani lulwimi lwesikrini?",
             a: [
-              "Etulu ngesekudla kunobe nguliphi likhasi, utawubona lithonjana lelincane lelifulegi (nobe libito lelulwimi lwakho lwanyalo). Licindzetele bese ukhetsa kuletilwimi letingetulu kwa-30: siNgisi, siGriki, siHebheru, si-Arabhu, siRashiya, siSpanishi, siPutukezi, siFulentshi, siJalimane, siCheki, siSlovaki, si-Italiya, siJaphani, siHindi, si-Amharic, siZulu.",
+              "Etulu ngesekudla kunobe nguliphi likhasi, utawubona lithonjana lelincane lelifulegi (nobe libito lelulwimi lwakho lwanyalo). Licindzetele bese ukhetsa kuletilwimi letingu-41.",
               "Lokukhetsile kugcinwa kulelithuluzi. Konkhe kulayisha kabusha ngelulwimi lolusha: sikrini, ema-menyu, tinchazelo temagama letitako, tibonelo, tinchazelo tebantfwana, ngisho nemvelaphi. Imiphumela lesigciniwe ngelulwimi lwangaphambilini ihlala kuze uphindze usesha lawo magama.",
             ],
           },
@@ -2830,7 +2838,7 @@ Object.assign(HELP, {
           },
           {
             id: "empty-dashboard",
-            q: "Ngijoyinile kodvwa libhodi lami alinalutfo.",
+            q: "Ngijoyinile kodvwa libhodi lami alinalutfo",
             a: [
               "Tibalo tivela ngemuva kwekucindzetelwa kwekucala kwelilinki lakho. Kungabi nalutfo kusho nje kutsi kute losacindzetele. Hamba wabelane ngelilinki. Libhodi liyavuseleleka cishe masinyane nangabe kusebenta sekucalile.",
               "Uma wabelene futsi umuntfu wabhalisa kodvwa libhodi lingakukhombisi, sibhalele usitjele sikhatsi lesilinganisiwe sekubhalisa futsi licembu litawuhlola kubalwa kwakho.",
@@ -2846,7 +2854,7 @@ Object.assign(HELP, {
           },
           {
             id: "missing-commission",
-            q: "Umuntfu ubhalise ngelilinki lami kodvwa angiyiboni ikhomishini.",
+            q: "Umuntfu ubhalise ngelilinki lami kodvwa angiyiboni ikhomishini",
             a: [
               "Kuvame kuba yindzaba yesikhatsi: kubhalisa kuvela elibhodini ngekhatsi kwemizuzu, kodvwa ikhomishini ibhalwa kuphela nangabe kubhalisa sekukhokhelwe ngempela (lokungaba ngemuva kwemalanga uma basekulingeni kwamahhala). Phindza uhlole ngemuva kwekuphela kwekulinga.",
               "Uma kubhalisa kukhokhelwe kodvwa usayiboni ikhomishini ngemuva kwemahora langu-48, sibhalele usitjele sikhatsi lesilinganisiwe sekubhalisa kanye ne-imeyili nobe libito lembhalisi uma ulati. Licembu litawuhlolisisa kubalwa futsi lilungise nobe yini lengekho ngesandla.",
@@ -2863,16 +2871,16 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "Iyini Gadit?",
             a: [
-              "Sichazamagama setilwimi letinyenti lesakhelwe kwenta ligama licace, hhayi kunika inchazelo yemugca munye nje. Ligama ngalinye livuleka nato tonkhe tinchazelo talo, tibonelo tangempela kunchazelo ngayinye, tisho, imvelaphi, sitfombe uma utsandza, kanye (nge-Clear ne-Deep) nenchazelo lefanele bantfwana, kubhala umusho wakho kanye nemibono, nemibuto.",
-              "Nyalo tilwimi tesikrini letingetulu kwa-30. Ngekhatsi licembu likubita ngekutsi ku-GAD ligama: kucondza ligama kuze kube sekugcineni, hhayi kulihumusha nje.",
+              "Gadit ikusita kutsi ucondze ligama ngalinye kuze kube sekugcineni, hhayi kutfola inchazelo yemugca munye nje. Ligama ngalinye livuleka nato tonkhe tinchazelo talo, tibonelo tangempela kunchazelo ngayinye, tisho nemvelaphi yeligama. Emahlelo lakhokhelwako engeta sitfombe kunchazelo ngayinye, kuticecesha, imidlalo nalokunye, futsi i-Family yengeta Simo sebantfwana nendzawo yemntfwana ngamunye.",
+              "Gadit isebenta ngetilwimi letingu-41. Ngekhatsi licembu likubita ngekutsi ku-GAD ligama: kucondza ligama kuze kube sekugcineni, hhayi kulihumusha nje. Kute ubone loko lokusehlelweni ngalinye, vula likhasi lematengo.",
             ],
           },
           {
             id: "languages",
             q: "Nisekela tiphi tilwimi?",
             a: [
-              "Sikrini: siNgisi, siGriki, siHebheru, si-Arabhu, siRashiya, siSpanishi, siPutukezi, siFulentshi, siJalimane, siCheki, siSlovaki, si-Italiya, siJaphani, siZulu.",
-              "Ungasesha ligama nganobe nguluphi kuleto tilwimi futsi utfole inchazelo, tibonelo, nako konkhe lokunye ngelulwimi lwesikrini lolukhetsile. SiHebheru nesi-Arabhu tibhalwa ngalokuphelele kusuka ngesekudla kuya ngesencele (RTL) futsi tisebentisa emafonti ato emdzabu.",
+              "Gadit isebenta ngetilwimi letingu-41, kufaka ekhatsi siNgisi, siHebheru, si-Arabhu, siSpanishi, siFulentshi, siJalimane, siRashiya, siShayina, siJaphani, siHindi, siZulu, siXhosa nesiBhunu.",
+              "Ungasesha ligama nganobe nguluphi kuleti tilwimi futsi utfole tinchazelo, tibonelo nako konkhe lokunye ngelulwimi lolukhetsele sikrini. SiHebheru, si-Arabhu nesiPheshiya tibhalwa kusuka ngesekudla kuya ngesencele, ngemafonti ato. Kute ushintje, cindzetela inkinobho yelulwimi etulu kunobe nguliphi likhasi.",
             ],
           },
           {
@@ -2880,7 +2888,7 @@ Object.assign(HELP, {
             q: "Gadit iphephile yini kubantfwana?",
             a: [
               "Gadit yakhelwe kutsi umtali ayisebentise ngekuphepha ahlanganyela nemntfwana. Simo sebantfwana sikhicita tinchazelo letilula, leticacile, letifanele iminyaka (cishe lizinga leminyaka lesuka ku-5 kuya ku-10), sisebentisa injini lefanako lesebentela lokucuketfwe kwebantfu labadzala kanye netinkhombandlela letibonakalako tekwenta kube lula. Kute lokucuketfwe lokubhalwe ngubasebentisi lokukhonjiswa bantfwana.",
-              "Ngekuvumelana netinchubomgomo tetfu nemitsetfo yemfihlo yebantfwana emhlabeni wonkhe, kuba ne-akhawunti yakho uwedvwa kuvumeleke kusukela eminyakeni leli-13 kuya etulu. Indlela lejwayelekile yi-akhawunti yemtali leyisebentiswa ngumtali nemntfwana wakhe ndzawonye, futsi yiloko kanye Simo sebantfwana lesakhelwe kona.",
+              "Ngekuvumelana netinchubomgomo tetfu nemitsetfo yemfihlo yebantfwana emhlabeni wonkhe, i-akhawunti yakho uwedvwa ingeyalabaneminyaka leli-13 kuya etulu. Bantfwana basebentisa Gadit ngemtali: kulihlelo le-Family umtali wengeta umntfwana ngamunye ekhasini le-Family, umntfwana ngamunye utfola indzawo yakhe lenaSimo sebantfwana, futsi libhodi lemtali likhombisa emagama umntfwana ngamunye lawaseshako. Kute ucale, cala nge-Family ekhasini lematengo.",
             ],
           },
           {
@@ -2888,7 +2896,7 @@ Object.assign(HELP, {
             q: "Imininingwane yami igcinwa kuphi? Niyayitsengisa yini?",
             a: [
               "I-akhawunti, umlandvo, incwadzi, netitfombe letidaliwe kugcinwa ngekuphepha ku-Firebase, kubetelwe ngekhodi ekugcinweni. Asiyitsengisi imininingwane yakho kunobe ngubani. Sabelana kuphela ngaloko lokudzingekako kute Gadit isebente (kugcina, tinkhokhelo, labanikela ngalokucuketfwe), njengobe kuchaziwe ku-Inchubomgomo Yemfihlo.",
-              "Ungakhipha incwadzi yakho nobe ucishe i-akhawunti yakho nobe nini ekhasini le-Akhawunti.",
+              "Ungacisha i-akhawunti yakho nobe nini ekhasini le-Akhawunti. Kute utfole likhophi lencwadzi yakho nobe leminye imininingwane lesinayo, sibhalele kulelikhasi.",
             ],
           },
           {
@@ -2931,16 +2939,17 @@ Object.assign(HELP, {
             q: "Ndi khansela hani ṅwaliso wanga?",
             a: [
               "Ni zwi ita inwi vhaṋe, tshifhinga tshiṅwe na tshiṅwe. Dzhenani, vulani Akhaunthu, ni kwame Khansela ṅwaliso fhasi ha pulane yaṋu.",
-              "Ni dzula ni tshi dzhena u swika magumoni a tshifhinga tshe na tshi badela. Nga murahu akhaunthu i humela kha Basic (mahala). Maipfi aṋu o vhulungwaho, zwe na ṱoḓa, na bugu zwi dzula zwo tsireledzea nahone zwi tshi wanala.",
-              "Arali na khansela nga vhukhakhi kana na shandula muhumbulo, ni nga bvela phanḓa na ṅwaliso kha siaṱari ḽeneḽo phanḓa ha musi tshifhinga tshi tshi fhela.",
+              "Kha ṅwaliso une wa badelwa, ni dzula ni tshi dzhena u swika magumoni a tshifhinga tshe na tshi badela. Nga murahu akhaunthu i humela kha Basic (mahala). Maipfi aṋu o vhulungwaho na zwe na ṱoḓa zwi dzula zwo tsireledzea.",
+              "Tshifhingani tsha nyingo ya mahala ya maḓuvha a 14, u khansela hu fhedza nyingo nga u ṱavhanya nahone a ni badeliswi tshithu. Arali ni tshi vhilaela fhedzi nga mbadelo ine ya ḓi ita yoṱhe, khethani tshiitisi itsho kha fasiṱere ḽa u khansela, nahone ni nga dzima u vusuluswa, ni dzula na nyingo u swika ḓuvha ḽayo ḽa u fhedza.",
+              "Arali na khansela ṅwaliso une wa badelwa nga vhukhakhi kana na shandula muhumbulo, ni nga u vusulula kha siaṱari ḽeneḽo phanḓa ha musi tshifhinga tshi tshi fhela.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Ndi shandukela hani u bva kha Clear u ya kha Deep (kana nga iṅwe nḓila)?",
+            q: "Ndi shandukela hani vhukati ha Individual na Family?",
             a: [
-              "Akhaunthu, nga murahu Langani mbadelo, nga murahu Update subscription. Khethani pulane ntswa.",
-              "Stripe i vhalela phambano ya mutengo nga yoṱhe, u ya nga maḓuvha o salaho kha tshifhinga tshi re hone. Arali ni tshi khwinifhadza, ni ḓo badelisa phambano fhedzi kha tshifhinga tsho salaho. Arali ni tshi shandukela kha pulane ya fhasi, tshelede yo salaho i ḓo shuma kha mbadelo yaṋu i tevhelaho.",
+              "U ya kha Family, vulani siaṱari ḽaṋu ḽa Akhaunthu ni kwame \"Shandukelani kha Family\". Ṅwaliso waṋu wa zwino u khwiniswa kha garaṱa yeneyo, ni sa ḓo i dzhenisa hafhu.",
+              "Stripe i vhalela phambano ya maḓuvha o salaho a tshifhinga tsha zwino, nga zwenezwo ni badela phambano fhedzi. U bva kha Family u ya kha Individual, ri ṅwaleleni u bva kha siaṱari iḽi nahone tshigwada tshi ḓo ni shandukisela.",
             ],
           },
           {
@@ -2977,9 +2986,9 @@ Object.assign(HELP, {
           },
           {
             id: "unknown-charge",
-            q: "Ndi vhona mbadelo ine nda sa i ḓivhe.",
+            q: "Ndi mbadelo ifhio iyi kha garaṱa yanga?",
             a: [
-              "Mbadelo dzi vhonala sa GADIT kana GADIT.APP dzi na $2.99 (Clear nga ṅwedzi), $4.99 (Deep nga ṅwedzi), $29.99 (Clear nga ṅwaha), kana $49.99 (Deep nga ṅwaha). Arali i sa tshimbilelani, i nga vha i tshi bva kha tshumelo iṅwe.",
+              "Mbadelo dzi vhonala sa GADIT kana GADIT.APP. Tshelede i tshimbilelana na pulane yaṋu (Individual kana Family, nga ṅwedzi kana nga ṅwaha) nga tshelede ya shango ḽaṋu, sa zwine zwa sumbedzwa kha siaṱari ḽa mitengo. Ṅwaliso wo thomaho phanḓa ha October 2026 u dzula nga mutengo we wa thoma ngawo. Arali tshelede i sa tshimbilelani, i nga vha i tshi bva kha tshumelo iṅwe.",
               "Arali no khwaṱha uri a si yaṋu, ni songo thoma u i hanedza nga bannga yaṋu. Ri ṅwaleleni u thoma ni tshi ri ṋea ḓuvha na tshelede. Tshigwada tshi ḓo i wana, tsha ṱalutshedza uri ndi mini, nahone tsha humisa tshelede arali zwi tshi ṱoḓea. U hanedza nga bannga zwi nga konḓisa mbadelo dza tshifhingani tshi ḓaho, ngauralo u zwi lugisa nga thuso kanzhi zwi a ṱavhanya nahone zwo tsireledzea.",
             ],
           },
@@ -2993,11 +3002,11 @@ Object.assign(HELP, {
           },
           {
             id: "plan-comparison",
-            q: "Phambano vhukati ha Basic, Clear, na Deep ndi ifhio?",
+            q: "Ndi phambano ifhio vhukati ha Basic, Individual na Family?",
             a: [
-              "Basic (mahala): u swika kha u ṱoḓa maipfi ha 20 nga ḓuvha, ndeme dzoṱhe, tsumbo kha ndeme iṅwe na iṅwe, mirero, na vhubvo ha ipfi. A hu ṱoḓei u ḓiṅwalisa kha u ṱoḓa ha fhasi.",
-              "Clear ($2.99/ṅwedzi kana $29.99/ṅwaha): u ṱoḓa hu si na mukano, ṱhalutshedzo dza vhana, tshifanyiso kha ipfi ḽiṅwe na ḽiṅwe (30/ṅwedzi), u ṅwala mutaladzi waṋu ni wane vhuṱanzi, zwidodombedzwa zwa mirero, na zwe na ṱoḓa kha maḓuvha a 30.",
-              "Deep ($4.99/ṅwedzi kana $49.99/ṅwaha): zwoṱhe zwi re kha Clear, hu tshi engedzwa mbudziso dza nḓowelo, bugu ya muṋe i na nḓowelo ya vhuṱali ine ya vhuyelela nga zwifhinga, u fhambanya maipfi a fanaho, na zwifanyiso zwinzhi (100/ṅwedzi).",
+              "Basic (mahala): u swika kha u ṱoḓa maipfi ha 10 nga ḓuvha, ndeme dzoṱhe, tsumbo, mirero, vhubvo ha ipfi, ndeme yo teaho u ya nga mutaladzi, na bugu ya u swika kha maipfi a 30.",
+              "Individual: muthu muthihi, zwishumiswa zwoṱhe zwa u guda. U ṱoḓa hu si na mikano, tshifanyiso kha ndeme iṅwe na iṅwe, tsumbo na mbudziso zwinzhi kha ipfi ḽiṅwe na ḽiṅwe, u vhumba mutaladzi ni wane vhuṱanzi, Ipfi ḽiṅwe na ḽiṅwe, Ḽi ambeni, ipfi ḽa mupo ḽa u vhala na u ṱoḓa nga ipfi, u shumisa hu si na inthanethe, mitambo, mbudziso na ndwa dza maipfi, na nḓowenḓowe ya vhuṱali ya u lugiselela mulingo na dikitesheni.",
+              "Family: zwoṱhe zwa kha Individual zwa vhana vha u swika kha 5 na vhabebi, hu tshi engedzwa Tshiimo tsha vhana, fhethu hawe ha ṅwana muṅwe na muṅwe, thuso ya mishumo ya hayani, na tshikirini tsha vhabebi na ndivhadzo kha ipfi ḽiṅwe na ḽiṅwe. Zwikolo zwi na pulane yazwo. Mitengo ya shango ḽaṋu na nyingo ya mahala ya maḓuvha a 14 zwi kha siaṱari ḽa mitengo.",
             ],
           },
         ],
@@ -3009,7 +3018,7 @@ Object.assign(HELP, {
         items: [
           {
             id: "no-verification-email",
-            q: "A tho ngo wana imeiḽi ya u khwaṱhisa.",
+            q: "A tho ngo wana imeiḽi ya u khwaṱhisa",
             a: [
               "Ṱolani u thoma kha spam na kha phuromoshini. Gmail na Outlook zwiṅwe zwifhinga dzi isa imeiḽi dza akhaunthu henefho u swika ni tshi swaya nthihi sa \"Not spam\".",
               "Arali i siho henefho, imeiḽi i nga vha yo ṅwalwa zwi si zwone musi ni tshi ḓiṅwalisa. Lingedzani u ḓiṅwalisa hafhu ni ṱole adiresi zwavhuḓi. Arali no ḓiṅwalisa nga Google, a hu ṱoḓei imeiḽi ya u khwaṱhisa.",
@@ -3017,7 +3026,7 @@ Object.assign(HELP, {
           },
           {
             id: "forgot-password",
-            q: "Ndo hangwa phasiwedi yanga.",
+            q: "Ndo hangwa phasiwedi yanga",
             a: [
               "Vulani fhethu ha u dzhena ni kiḽike \"No hangwa phasiwedi?\". Dzhenisani imeiḽi ine na i shumisa kha Gadit nahone ni ḓo wana vhukwamani ha u vusulusa nga minithi nthihi kana mbili.",
               "Arali imeiḽi i sa swiki, ṱolani kha spam. Arali i tshi kha ḓi sa swika, ni nga vha no ḓiṅwalisa nga Google hu si nga imeiḽi na phasiwedi. Lingedzani bathoni ya \"Bvelani phanḓa nga Google\".",
@@ -3025,7 +3034,7 @@ Object.assign(HELP, {
           },
           {
             id: "wrong-credentials",
-            q: "Ndo khwaṱha uri phasiwedi yanga ndi yone fhedzi i ri \"Imeiḽi kana phasiwedi yo khakhea\".",
+            q: "Ndo khwaṱha uri phasiwedi yanga ndi yone fhedzi i ri \"Imeiḽi kana phasiwedi yo khakhea\"",
             a: [
               "Hu na zwithu zwiraru zwa u ṱola. Tsha u thoma, capslock. Tsha vhuvhili, tshikhala magumoni musi ni tshi kopa na u dzhenisa. Tsha vhuraru, no ḓiṅwalisa nga Google hu si nga phasiwedi (shumisani \"Bvelani phanḓa nga Google\").",
               "Ni kha ḓi kundwa? Vusuluseni phasiwedi kha fhethu honoho. Zwi ni thomisa hafhu zwo kuna.",
@@ -3033,7 +3042,7 @@ Object.assign(HELP, {
           },
           {
             id: "google-fails",
-            q: "U dzhena nga Google a zwi shumi.",
+            q: "U dzhena nga Google a zwi shumi",
             a: [
               "Tshiitisi tshi ḓivheaho nga maanḓa: burausa yaṋu i khou thivhela cookies dza vhaṅwe kana pop-ups kha gadit.app. Zwi tendeleni kha thendelo dza bara ya adiresi ni lingedze hafhu.",
               "Arali ni kha tshiimo tsha incognito, u dzhena nga Google ho thivhelwa nga zwiṱoḓwa. Shandukelani kha windo ḽa burausa ḽa misi yoṱhe.",
@@ -3059,8 +3068,8 @@ Object.assign(HELP, {
             id: "share-account",
             q: "Naa mufarisi wanga kana ṅwana wanga a nga shumisa akhaunthu yanga?",
             a: [
-              "Mushumisi muthihi o dzhenaho kha akhaunthu nga tshifhinga. Tshiimo tsha vhana tshi tendela akhaunthu nthihi ya Clear kana Deep u shumela mubebi na ṅwana: shandukisani bathoni nahone ṱhalutshedzo dzi vha dza vhana hu si na u dzhena ho khethekanaho.",
-              "Kha vhahulwane vhavhili vhane vhoṱhe vha ṱoḓa bugu na mvelaphanḓa zwo khethekanaho, itani akhaunthu mbili. Clear ndi $2.99 nga ṅwedzi kha akhaunthu iṅwe na iṅwe.",
+              "Kha akhaunthu iṅwe na iṅwe hu dzhena muthu muthihi nga tshifhinga. Kha muṱa, pulane ya Family yo itelwa izwi: u swika kha vhana vha 5 na vhabebi, muṅwe na muṅwe e na fhethu hawe, bugu yawe na mvelaphanḓa yawe, hu tshi engedzwa Tshiimo tsha vhana tsha vhana na tshikirini tsha vhabebi.",
+              "Kha muhulwane muthihi e eṱhe, Individual i shumela muthu muthihi na zwishumiswa zwoṱhe zwa u guda. Vhambedzani pulane na mitengo ya shango ḽaṋu kha siaṱari ḽa mitengo.",
             ],
           },
           {
@@ -3088,25 +3097,25 @@ Object.assign(HELP, {
           },
           {
             id: "kids-not-working",
-            q: "Tshiimo tsha vhana a tshi khou shandukisa ṱhalutshedzo.",
+            q: "Tshiimo tsha vhana a tshi khou shandukisa ṱhalutshedzo",
             a: [
-              "Tshiimo tsha vhana tshi shandukisa ṱhaluso fhedzi hune ipfi ḽa vha ḽo no itelwa ṱhalutshedzo ya vhana. Kha maipfi maswa e na kha ḓi a ṱoḓa, lindani tshekoni dza 10 u swika 15. Ṱhalutshedzo ya vhana i itwa nga u ṱavhanya lwa u thoma.",
-              "Nahone: tshiimo tsha vhana tshi ṱoḓa Clear kana Deep. Arali ni kha Basic, bathoni i ḓo ni humbela u khwinifhadza. Vhashumisi vha sa ḓivhiwi vha humbelwa u ḓiṅwalisa.",
+              "Tshiimo tsha vhana tshi shandukisa maṅwalwa fhedzi hune ipfi ḽa vha ḽo no vha na ṱhalutshedzo ya vhana. Kha ipfi ḽe na kha ḓi ḽi ṱoḓa lwa u thoma, lindani tshekoni dza 10 u swika 15 musi ṱhalutshedzo ya vhana i tshi khou lugiselelwa.",
+              "Tshiimo tsha vhana ndi tshipiḓa tsha pulane ya Family. Kha Basic, kha Individual, kana hu si na akhaunthu, bathoni i sumbedza pulane ya Family nṱhani ha u vulea. Vhashumisi vhe vha ḓiṅwalisa kha Clear kana Deep phanḓa ha October 2026 vha dzula na Tshiimo tsha vhana. U tshi wana, sedzani Family kha siaṱari ḽa mitengo.",
             ],
           },
           {
             id: "voice-fails",
-            q: "U ṱoḓa nga ipfi a zwi shumi.",
+            q: "U ṱoḓa nga ipfi a zwi shumi",
             a: [
               "U ṱoḓa nga ipfi hu ṱoḓa thendelo ya maikhirofoni. Burausa nnzhi dzi vhudzisa luthihi kha saiti iṅwe na iṅwe. Arali no kiḽika Block nga vhukhakhi, ni ḓo fanela u zwi humisa nga tshanḓa: kiḽikani aikhoni ya khiyo kana ya mafhungo tsini na gadit.app kha bara ya adiresi, nga murahu Site settings, nga murahu Microphone, nga murahu Allow.",
-              "Kha Safari ya iOS, u dzhena ha maikhirofoni hu ṱoḓa na Settings → Safari → Microphone. Ipfi zwino ndi tshipiḓa tsha Clear na Deep: vhashumisi vha Basic vha vhona khumbelo ya u khwinifhadza, vhadaleli vha songo dzhenaho vha vhona khumbelo ya u dzhena.",
+              "Kha Safari ya iPhone na iPad, u dzhena ha maikhirofoni hu ṱoḓa na Settings → Safari → Microphone. U ṱoḓa nga ipfi ndi tshipiḓa tsha pulane dza Individual na Family: kha Basic ni ḓo vhona pulane nṱhani hazwo, nahone vhadaleli vha songo dzhenaho vha humbelwa u dzhena. U khwinifhadza, vulani siaṱari ḽa mitengo.",
             ],
           },
           {
             id: "no-image",
-            q: "A thi koni u ita tshifanyiso tsha ipfi.",
+            q: "A thi koni u wana tshifanyiso tsha ipfi",
             a: [
-              "U ita zwifanyiso ndi tshipiḓa tsha Clear kana Deep tshi re na mukano wa ṅwedzi. Clear i wana zwifanyiso zwa 30 nga ṅwedzi, Deep i wana 100. Arali no fhedza mukano, ni ḓo vhona luvhondo. Zwi thoma hafhu nga ḓuvha ḽa u thoma ḽa ṅwedzi muṅwe na muṅwe.",
+              "Zwifanyiso ndi tshipiḓa tsha pulane dza Individual na Family, u swika kha zwifanyiso zwiswa zwa 100 nga ṅwedzi. Tshifanyiso tshi re hone kale tsha ndeme iyo tshi vulea tshi sa vhalwi. Pulane ya kale ya Clear i na 30 nga ṅwedzi, nahone Basic a i na zwifanyiso. Musi zwifanyiso zwa ṅwedzi zwo fhela ni ḓo vhona ndivhadzo, nahone u vhala hu thoma hafhu mathomoni a ṅwedzi muṅwe na muṅwe.",
               "Arali ni fhasi ha mukano nahone ni tshi kha ḓi vhona u kundelwa, kanzhi ndi zwa tshifhinganyana. Lingedzani hafhu nga murahu ha tshekoni dza 30. U kundelwa hu sa fheli ndi vhukhakhi. Ri humbela ni vhige u bva kha siaṱari ḽa ipfi.",
             ],
           },
@@ -3114,21 +3123,21 @@ Object.assign(HELP, {
             id: "save-word",
             q: "Ndi vhulunga hani ipfi kha bugu yanga?",
             a: [
-              "Kha siaṱari ḽiṅwe na ḽiṅwe ḽa mvelelo ya ipfi, kwamani Vhulungani kha bugu tsini na ṱhoho. Bugu ndi tshipiḓa tsha Clear na Deep hune na nga sedza hafhu maipfi o vhulungwaho nga murahu, na a vhona kha tshivhonalo tsha galaxy, na u ita nḓowelo ya vhuṱali (Deep).",
-              "Maipfi e na a vhulunga nahone na a vula nga u fhungudza luthihi a a wanala hu si na inthanethe. Phakhethe ya hu si na inthanethe i vhulunga na maipfi a ḓivheaho nga maanḓa nga luambo lwaṋu uri ni vhe no lugela hu si na inthanethe.",
+              "A zwi ṱoḓei. Musi no dzhena, ipfi ḽiṅwe na ḽiṅwe ḽine na ḽi ṱoḓa ḽi vhulungwa kha bugu yaṋu ḽoṱhe. Kha Basic bugu i dzhenisa u swika kha maipfi a 30. Kha Individual na Family a i na mukano nahone i na nḓowenḓowe ya vhuṱali, ine ya humisa maipfi aṋu uri ni a dovhololole nga tshifhinga tsho teaho.",
+              "Kha Individual na Family, maipfi ane na a ṱoḓa a vhulungwa na kha tshishumiswa tshaṋu, nga zwenezwo a vulea hu si na inthanethe. U vhona maipfi aṋu, vulani bugu kha menyu.",
             ],
           },
           {
             id: "offline",
-            q: "Tshiimo tsha hu si na inthanethe tshi shuma hani?",
+            q: "U shumisa hu si na inthanethe zwi shuma hani?",
             a: [
-              "Maipfi e na no a vhona a vhulungwa kha tshishumiswa tshaṋu. A vuleni hafhu hu si na inthanethe nahone a ḓo vulea nga u ṱavhanya. Phakhethe yoṱhe ya hu si na inthanethe (maipfi a nṱha nga luambo lwaṋu) i ḓaunuḽodiwa musi ni tshi i ṱoḓa u bva kha siaṱari ḽa bugu.",
-              "U ṱoḓa ipfi ḽiswa tshoṱhe hu kha ḓi ṱoḓa inthanethe, ngauri Gadit i fanela u ita ṱhalutshedzo u bva mathomoni. Zwo vhulungwaho hu si na inthanethe ndi zwa maipfi e na no a ṱoḓisisa.",
+              "U shumisa hu si na inthanethe ndi tshipiḓa tsha pulane dza Individual na Family. Ipfi ḽiṅwe na ḽiṅwe ḽine na ḽi ṱoḓa ḽi vhulungwa kha tshishumiswa tshaṋu, nga zwenezwo ḽi vulea hafhu nga u ṱavhanya hu si na inthanethe. Ni nga dovha na ḓaunuḽoda phakhethe ya maipfi a shumiswaho nga maanḓa nga luambo lwaṋu u bva kha siaṱari ḽaṋu ḽa Akhaunthu.",
+              "U ṱoḓa ipfi ḽiswa tshoṱhe hu kha ḓi ṱoḓa inthanethe, ngauri Gadit i fanela u lugiselela mvelelo yoṱhe yaḽo. Khophi ya hu si na inthanethe i na maipfi o no vha kha tshishumiswa tshaṋu. Arali ni kha Basic, sedzani pulane kha siaṱari ḽa mitengo.",
             ],
           },
           {
             id: "slow",
-            q: "Apuḽikhesheni i a ongolowa.",
+            q: "Apuḽikhesheni i a ongolowa",
             a: [
               "U ṱoḓa ha u thoma ha ipfi ndi hone hu ongolowaho nga maanḓa ngauri Gadit i ita mvelelo yoṱhe u bva mathomoni: kanzhi tshekoni dzi si gathi, zwiṅwe zwifhinga zwi lapfa kha maipfi a konḓaho. U ṱoḓa hu tevhelaho ha ipfi ḽeneḽo hu a ṱavhanya, hu tshi bva kha zwo vhulungwaho.",
               "Arali zwoṱhe zwi tshi ongolowa, lingedzani u vusulusa nga maanḓa: Cmd+Shift+R kha Mac, Ctrl+Shift+R kha Windows. Arali u ongolowa hu tshi bvela phanḓa kha masiaṱari oṱhe, ri rumeleni imeiḽi ni tshi ri vhudza shango ḽaṋu na burausa uri tshigwada tshi ṱole nḓila ya inthanethe u bva tshiṱirikini tshaṋu u ya kha maseva ashu.",
@@ -3146,7 +3155,7 @@ Object.assign(HELP, {
             id: "change-language",
             q: "Ndi shandukisa hani luambo lwa tshikirini?",
             a: [
-              "Nṱha tshanḓa tshi ḽa kha siaṱari ḽiṅwe na ḽiṅwe, ni ḓo vhona aikhoni ṱhukhu ya fulaga (kana dzina ḽa luambo lwaṋu lwa zwino). I kwameni ni khethe kha nyambo dza 30+: Luisimane, Lugerika, Luheberu, Luarabu, Lurashia, Lusipenishi, Luphothugisi, Lufurentshi, Lujeremane, Lutsheke, Luslovakia, Lutaliana, Lujapani, Luhindi, Luamhariki, Luzulu.",
+              "Nṱha tshanḓa tshi ḽa kha siaṱari ḽiṅwe na ḽiṅwe, ni ḓo vhona aikhoni ṱhukhu ya fulaga (kana dzina ḽa luambo lwaṋu lwa zwino). I kwameni ni khethe kha nyambo dza 41.",
               "Khetho yaṋu i vhulungwa kha tshishumiswa itshi. Zwoṱhe zwi vulea hafhu nga luambo luswa: tshikirini, menyu, ṱhalutshedzo dza maipfi dza tshifhingani tshi ḓaho, tsumbo, ṱhalutshedzo dza vhana, na vhubvo ha ipfi. Mvelelo dzo no vhulungwaho nga luambo lwa kale dzi dzula u swika ni tshi ṱoḓa hafhu maipfi ayo.",
             ],
           },
@@ -3184,7 +3193,7 @@ Object.assign(HELP, {
           },
           {
             id: "empty-dashboard",
-            q: "Ndo dzhena fhedzi tshikirini tshanga a tshi na tshithu.",
+            q: "Ndo dzhena fhedzi tshikirini tshanga a tshi na tshithu",
             a: [
               "Zwiyelo zwi vhonala nga murahu ha u kwama ha u thoma kha vhukwamani haṋu. U sa vha na tshithu zwi amba uri a hu athu u vha na muthu o kwamaho. Iyani ni kovhekane vhukwamani. Tshikirini tshi vusuluswa nga u ṱavhanya musi mishumo i tshi thoma.",
               "Arali no kovhekana nahone muṅwe o ḓiṅwalisa fhedzi tshikirini tshi sa sumbedzi, ri ṅwaleleni ni tshi ri vhudza tshifhinga tsha u ḓiṅwalisa nahone tshigwada tshi ḓo ṱola.",
@@ -3200,7 +3209,7 @@ Object.assign(HELP, {
           },
           {
             id: "missing-commission",
-            q: "Muṅwe o ḓiṅwalisa nga vhukwamani hanga fhedzi a thi vhoni khomishini.",
+            q: "Muṅwe o ḓiṅwalisa nga vhukwamani hanga fhedzi a thi vhoni khomishini",
             a: [
               "Kanzhi ndi zwa tshifhinga: u ḓiṅwalisa hu vhonala kha tshikirini nga mitsini, fhedzi khomishini i ṅwaliwa fhedzi musi ṅwaliso wo badelwa vhukuma (zwine zwa nga dzhia maḓuvha arali vha kha tshilingo tsha mahala). Ṱolani hafhu nga murahu ha musi tshilingo tsho fhela.",
               "Arali ṅwaliso wo badelwa fhedzi ni sa athu u vhona khomishini nga murahu ha awara dza 48, ri ṅwaleleni ni tshi ri vhudza tshifhinga tsha u ḓiṅwalisa na imeiḽi kana dzina ḽa muṅwalisi arali ni tshi ḽi ḓivha. Tshigwada tshi ḓo ṱoḓisisa nahone tsha lugisa zwi si ho nga tshanḓa.",
@@ -3217,16 +3226,16 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "Gadit ndi mini?",
             a: [
-              "Bugu ya maipfi ya nyambo nnzhi yo itelwaho uri ipfi ḽi pfesesee, hu si u ṋea ṱhalutshedzo ya mutalo muthihi fhedzi. Ipfi ḽiṅwe na ḽiṅwe ḽi vulea na ndeme dzaḽo dzoṱhe, tsumbo dza vhukuma kha ndeme iṅwe na iṅwe, mirero, vhubvo ha ipfi, tshifanyiso tshi sa kombetshedzwi, na (nga Clear na Deep) ṱhalutshedzo ya vhana, u ṅwala mutaladzi waṋu ni wane vhuṱanzi, na mbudziso.",
-              "Zwino hu na nyambo dza tshikirini dza 30+. Ngomu tshigwada tshi zwi vhidza u GAD ipfi: u pfesesa ipfi u swika magumoni, hu si u ḽi ṱalutshedzela fhedzi.",
+              "Gadit i ni thusa u pfesesa ipfi ḽiṅwe na ḽiṅwe u swika magumoni, hu si u wana ṱhalutshedzo ya mutalo muthihi fhedzi. Ipfi ḽiṅwe na ḽiṅwe ḽi vulea na ndeme dzaḽo dzoṱhe, tsumbo dza vhukuma kha ndeme iṅwe na iṅwe, mirero na vhubvo ha ipfi. Pulane dzine dza badelwa dzi engedza tshifanyiso kha ndeme iṅwe na iṅwe, nḓowenḓowe, mitambo na zwiṅwe, nahone Family i engedza Tshiimo tsha vhana na fhethu ha ṅwana muṅwe na muṅwe.",
+              "Gadit i shuma nga nyambo dza 41. Ngomu tshigwada tshi zwi vhidza u GAD ipfi: u pfesesa ipfi u swika magumoni, hu si u ḽi ṱalutshedzela fhedzi. U vhona zwine pulane iṅwe na iṅwe ya vha nazwo, vulani siaṱari ḽa mitengo.",
             ],
           },
           {
             id: "languages",
             q: "Ni shuma nga nyambo dzifhio?",
             a: [
-              "Tshikirini: Luisimane, Lugerika, Luheberu, Luarabu, Lurashia, Lusipenishi, Luphothugisi, Lufurentshi, Lujeremane, Lutsheke, Luslovakia, Lutaliana, Lujapani, Luzulu.",
-              "Ni nga ṱoḓa ipfi nga luṅwe lwa nyambo idzo ni wane ṱhalutshedzo, tsumbo, na zwiṅwe zwoṱhe nga luambo lwa tshikirini lwe na lu khetha. Luheberu na Luarabu zwi ṅwalwa u bva tshanḓa tshi ḽa u ya tshanḓa tshi monyi tshoṱhe nahone zwi shumisa fonte dzazwo.",
+              "Gadit i shuma nga nyambo dza 41, hu tshi katelwa Luisimane, Luheberu, Luarabu, Lusipenishi, Lufurentshi, Lujeremane, Lurashia, Lushaina, Lujapani, Luhindi, Luzulu, Luxhosa na Luburu.",
+              "Ni nga ṱoḓa ipfi nga luṅwe lwa nyambo idzi ni wane ndeme, tsumbo na zwiṅwe zwoṱhe nga luambo lwe na lu khetha kha tshikirini. Luheberu, Luarabu na Luperesia zwi vhalwa u bva tshanḓa tshi ḽa u ya tshanḓa tshi monyi, nga fonte dzazwo. U shandukisa, kwamani bathoni ya luambo nṱha kha siaṱari ḽiṅwe na ḽiṅwe.",
             ],
           },
           {
@@ -3234,7 +3243,7 @@ Object.assign(HELP, {
             q: "Naa Gadit yo tsireledzea kha vhana?",
             a: [
               "Gadit yo itelwa uri mubebi a i shumise nga nḓila yo tsireledzeaho e na ṅwana. Tshiimo tsha vhana tshi ita ṱhalutshedzo dzo leluwaho, dzi pfeseseaho, nahone dzi tshimbilelanaho na miṅwaha (tsini na vhuimo ha miṅwaha ya 5 u swika 10), hu tshi shumiswa tshishumiswa tshine tsha ita zwithu zwa vhahulwane hu na ndaela dzo khetheaho dza u leludza. A hu na zwithu zwo ṅwalwaho nga vhashumisi zwine zwa sumbedzwa vhana.",
-              "U ya nga mbekanyamaitele dzashu na milayo ya tshiphiri tsha vhana shangoni ḽoṱhe, u vha muṋe wa akhaunthu e eṱhe ndi u bva kha miṅwaha ya 13. Nḓila ya misi yoṱhe ndi akhaunthu ya mubebi ine mubebi a i shumisa na ṅwana wawe, zwine ndi zwone zwe Tshiimo tsha vhana tsha itelwa zwone.",
+              "U ya nga mbekanyamaitele dzashu na milayo ya tshiphiri tsha vhana shangoni ḽoṱhe, akhaunthu ya muthu e eṱhe ndi ya miṅwaha ya 13 u ya nṱha. Vhana vha shumisa Gadit nga kha mubebi: kha pulane ya Family mubebi u engedza ṅwana muṅwe na muṅwe u bva kha siaṱari ḽa Family, ṅwana muṅwe na muṅwe u wana fhethu hawe na Tshiimo tsha vhana, nahone tshikirini tsha vhabebi tshi sumbedza maipfi ane ṅwana muṅwe na muṅwe a a ṱoḓa. U zwi thoma, thomani nga Family kha siaṱari ḽa mitengo.",
             ],
           },
           {
@@ -3242,7 +3251,7 @@ Object.assign(HELP, {
             q: "Mafhungo anga a vhulungwa ngafhi? Naa ni a rengisa?",
             a: [
               "Akhaunthu, zwe na ṱoḓa, bugu, na zwifanyiso zwo itwaho zwi vhulungwa nga nḓila yo tsireledzeaho kha Firebase, zwo dzumbiwa kha vhuvhulungelo. A ri rengisi mafhungo aṋu kha muthu. Ri kovhekana fhedzi zwine zwa ṱoḓea u shumisa Gadit (vhuvhulungelo, mbadelo, vhaṋei vha zwithu), sa zwo ṅwalwaho kha Mbekanyamaitele ya Tshiphiri.",
-              "Ni nga bvisa bugu yaṋu kana ni phumule akhaunthu yaṋu tshifhinga tshiṅwe na tshiṅwe u bva kha siaṱari ḽa Akhaunthu.",
+              "Ni nga phumula akhaunthu yaṋu tshifhinga tshiṅwe na tshiṅwe u bva kha siaṱari ḽa Akhaunthu. U wana khophi ya bugu yaṋu kana ya mafhungo maṅwe e ra a vhulunga, ri ṅwaleleni u bva kha siaṱari iḽi.",
             ],
           },
           {
@@ -3285,16 +3294,17 @@ Object.assign(HELP, {
             q: "Ngikukhansela njani ukubhalisela kwami?",
             a: [
               "Uzenzela wena, nanyana kunini. Ngena, vula i-Akhawunti, bese uthinta Khansela ukubhalisela ngaphasi kwehlelo lakho.",
-              "Ukungena kwakho kuragela phambili bekube kuphela isikhathi osele usibhadelele. Ngemva kwalokho i-akhawunti ibuyela ku-Basic (mahala). Amezwi owabulungileko, umlando nebhuku lakho lamezwi kuhlala kuphephile begodu kuyatholakala.",
-              "Nange ukhansele ngephutha namkha utjhentjha umkhumbulo, ungavuselela ukubhalisela ekhasini elifanako ngaphambi kobana isikhathi siphele.",
+              "Ekubhaliseleni okubhadelwako, ukungena kwakho kuragela phambili bekube kuphela isikhathi osele usibhadelele. Ngemva kwalokho i-akhawunti ibuyela ku-Basic (mahala). Amezwi owabulungileko nomlando wakho kuhlala kuphephile.",
+              "Ngesikhathi sokulinga samahala samalanga ali-14, ukukhansela kuqeda isikhathi sokulinga khonokho begodu awubhadeliswa litho. Nange ukhathazwa kwaphela kukubhadeliswa okuzenzakalelako, khetha isizathu leso efasiteleni lokukhansela, bese ungacima ukuvuselelwa kunalokho, ugcine isikhathi sokulinga bekube lilanga laso lokugcina.",
+              "Nange ukhansele ukubhalisela okubhadelwako ngephutha namkha utjhentjha umkhumbulo, ungakuvuselela ekhasini elifanako ngaphambi kobana isikhathi siphele.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Ngitjhentjha njani ukusuka ku-Clear ukuya ku-Deep (namkha ngokuphambeneko)?",
+            q: "Ngitjhentjha njani hlangana ne-Individual ne-Family?",
             a: [
-              "I-Akhawunti, bese Lawula ukubhadela, bese Vuselela ukubhalisela. Khetha ihlelo elitjha.",
-              "I-Stripe ibala umehluko wenani ngokuzenzakalela, ngokwamalanga asele esikhathini sanje. Nawuthuthukisako, ubhadeliswa umehluko kwaphela wesikhathi esiseleko. Nawutjhentjhela ezingeni eliphasi, imali eseleko isetjenziswa erhumweni lakho elilandelako.",
+              "Bona utjhentjhele ku-Family, vula ikhasi lakho le-Akhawunti bese uthinta \"Tjhentjhela ku-Family\". Ukubhalisela kwakho kwanje kubuyekezwa ekarada efanako, ngaphandle kokuyifaka godu.",
+              "I-Stripe ibala umehluko wamalanga asele esikhathini sanje, ngalokho ubhadela umehluko kwaphela. Bona utjhentjhe ukusuka ku-Family ukuya ku-Individual, sitlolele ekhasini leli begodu ithimba lizakutjhentjhela wena.",
             ],
           },
           {
@@ -3331,9 +3341,9 @@ Object.assign(HELP, {
           },
           {
             id: "unknown-charge",
-            q: "Ngibona ukubhadeliswa engingakwaziko.",
+            q: "Kuyini ukubhadeliswa lokhu ekaradeni yami?",
             a: [
-              "Ukubhadeliswa kuvela njenge-GADIT namkha i-GADIT.APP ne-$2.99 (Clear ngenyanga), $4.99 (Deep ngenyanga), $29.99 (Clear ngomnyaka), namkha $49.99 (Deep ngomnyaka). Nange kungafanelani, kungaba ngokwenye isevisi.",
+              "Ukubhadeliswa kuvela njenge-GADIT namkha i-GADIT.APP. Inani lifana nehlelo lakho (Individual namkha Family, ngenyanga namkha ngomnyaka) ngemali yelizwe lakho, njengokutjengiswa ekhasini lamanani. Ukubhalisela okwathoma ngaphambi kuka-Oktoba 2026 kugcina intengo eyaqala ngayo. Nange inani lingafani, kungenzeka livela kwenye isevisi.",
               "Nange uqinisekile bona akusikho kwakho, ungakuphikisi ebhanga lakho okwanje. Sitlolele ngokuqondileko kuqala ngelanga nenani. Ithimba lizakukuthola, lihlathulule bona kuyini, begodu libuyise imali nange kutlhogeka. Ukuphikisa ebhanga kungenza ukubhadela kwesikhathi esizako kube budisi, ngalokho ukukulungisa ngesizo kanengi kusheshe begodu kuphephile khulu.",
             ],
           },
@@ -3347,11 +3357,11 @@ Object.assign(HELP, {
           },
           {
             id: "plan-comparison",
-            q: "Umehluko uyini hlangana ne-Basic, i-Clear ne-Deep?",
+            q: "Uyini umehluko phakathi kwe-Basic, Individual ne-Family?",
             a: [
-              "I-Basic (mahala): ukufuna amezwi okufika ku-20 ngelanga, zoke iinhlathululo, izibonelo zehlathululo ngayinye, izaga, nomsuka welizwi. Akutlhogeki ukubhalisa ekufuneni okusisekelo.",
-              "I-Clear ($2.99/ngenyanga namkha $29.99/ngomnyaka): ukufuna ngaphandle komkhawulo, iinhlathululo ezifanele abantwana, isithombe selizwi ngalinye (30/ngenyanga), tlola umutjho wakho uthole amazwana, imininingwana yezaga, nomlando wokufuna wamalanga ama-30.",
-              "I-Deep ($4.99/ngenyanga namkha $49.99/ngomnyaka): koke okuku-Clear, kunye neenkhwizi zokuzilolonga, ibhuku lamezwi lakho elinokuzilolonga okuhlakaniphileko kokubuyekeza ngezikhathi, ukuhlukanisa amezwi afanako, nesabelo sezithombe esikhulu (100/ngenyanga).",
+              "I-Basic (mahala): ukufuna amezwi okufika ku-10 ngelanga, zoke iinhlathululo, izibonelo, izaga, umsuka welizwi, ihlathululo efaneleko ngokomutjho, nebhuku lamezwi elinamezwi afika ku-30.",
+              "Individual: umuntu oyedwa, woke amathulusi wokufunda. Ukufuna okungapheliko, isithombe sehlathululo ngayinye, izibonelo ezinengi nemibuzo ngelizwi ngalinye, tlola umutjho uthole amazwana, Ilizwi Ngalinye, Kutjho, iphimbo lemvelo lokufundela phezulu nokufuna ngelizwi, ukusebenzisa ngaphandle kwe-inthanethi, imidlalo, imibuzo nemincintiswano yamezwi, nokuzilolonga okuhlakaniphileko nokulungiselela iimvivinyo nedikitheyishini.",
+              "Family: koke okuku-Individual kwabantwana abafika ku-5 nababelethi, kunye neModi yabantwana, indawo yakhe yomntwana ngamunye, isizo ngomsebenzi wekhaya, nebhodi yababelethi enesaziso selizwi ngalinye. Iinkolo zinehlelo lazo. Amanani welizwe lakho kunye nesikhathi sokulinga samahala samalanga ali-14 kutholakala ekhasini lamanani.",
             ],
           },
         ],
@@ -3363,7 +3373,7 @@ Object.assign(HELP, {
         items: [
           {
             id: "no-verification-email",
-            q: "Angikayitholi i-imeyili yokuqinisekisa.",
+            q: "Angikayitholi i-imeyili yokuqinisekisa",
             a: [
               "Hlola kuqala iinqoqwana ze-spam nezokukhangisa. I-Gmail ne-Outlook kwesinye isikhathi zithumela ama-imeyili we-akhawunti lapho bekube uphawula enye njengethi \"Not spam\".",
               "Nange ingekho lapho, i-imeyili kungenzeka itlolwe ngephutha ekubhaliseni. Linga ukubhalisa godu bese uhlola ikheli kuhle. Nange ubhalise nge-Google, ayitlhogeki i-imeyili yokuqinisekisa.",
@@ -3371,7 +3381,7 @@ Object.assign(HELP, {
           },
           {
             id: "forgot-password",
-            q: "Ngikhohlwe iphasiwedi yami.",
+            q: "Ngikhohlwe iphasiwedi yami",
             a: [
               "Vula ibhokisi lokungena bese uqhwarhaza \"Ukhohlwe iphasiwedi?\". Tlola i-imeyili oyisebenzisela i-Gadit, uzakuthola ilinki yokutjhentjha phakathi komzuzu namkha emibili.",
               "Nange i-imeyili ingafiki, hlola i-spam. Nange isengafiki, kungenzeka ubhalise nge-Google esikhundleni se-imeyili nephasiwedi. Linga ikunupu ethi \"Raga nge-Google\".",
@@ -3379,7 +3389,7 @@ Object.assign(HELP, {
           },
           {
             id: "wrong-credentials",
-            q: "Ngiqinisekile bona iphasiwedi yami ilungile kodwana kuthiwa \"I-imeyili namkha iphasiwedi akukalungi\".",
+            q: "Ngiqinisekile bona iphasiwedi yami ilungile kodwana kuthiwa \"I-imeyili namkha iphasiwedi akukalungi\"",
             a: [
               "Izinto ezintathu okufuze uzihlole. Kokuthoma, i-capslock. Kwesibili, isikhala ekugcineni nawukopa begodu unamathisela. Kwesithathu, ubhalise nge-Google esikhundleni sephasiwedi (sebenzisa \"Raga nge-Google\" kunalokho).",
               "Usabambekile? Tjhentjha iphasiwedi ebhokisini elifanako. Kukulungisela kuhle butjha.",
@@ -3387,7 +3397,7 @@ Object.assign(HELP, {
           },
           {
             id: "google-fails",
-            q: "Ukungena nge-Google akusebenzi.",
+            q: "Ukungena nge-Google akusebenzi",
             a: [
               "Isizathu esivamileko khulu: ibhrawuza yakho ivimba ama-cookie wabantu bangaphandle namkha ama-pop-up we-gadit.app. Kuvumele emvumweni yebhawa lekheli bese ulinga godu.",
               "Nange useModini ye-incognito, ukungena nge-Google kuvinjelwe ngehloso. Tjhentjhela efasiteleni lebhrawuza elijayelekileko.",
@@ -3411,10 +3421,10 @@ Object.assign(HELP, {
           },
           {
             id: "share-account",
-            q: "Umlingani wami namkha umntwana wami angabelana nami nge-akhawunti?",
+            q: "Umlingani wami namkha umntwana wami angabelana nami nge-akhawunti yami?",
             a: [
-              "Umsebenzisi munye ongeneko ku-akhawunti ngesikhathi. Imodi yabantwana ivumela i-akhawunti yinye ye-Clear namkha ye-Deep bona isize umbelethi nomntwana: thinta isitjhintjhi, iinhlathululo zivele zifanele abantwana ngaphandle kokungena okuhlukeneko.",
-              "Kubantu abadala ababili abafuna boke amabhuku wamezwi nokuthuthuka okuhlukeneko, yenza ama-akhawunti amabili. I-Clear ingu-$2.99 ngenyanga nge-akhawunti ngayinye.",
+              "Ku-akhawunti ngayinye kungena umuntu munye ngesikhathi. Emndenini, ihlelo le-Family lakhelwe lokhu: abantwana abafika ku-5 nababelethi, ngamunye unendawo yakhe, ibhuku lakhe lamezwi nokuthuthuka kwakhe, kunye neModi yabantwana yabantwana nebhodi yababelethi.",
+              "Emuntwini omdala munye, i-Individual ifaka umuntu oyedwa nawo woke amathulusi wokufunda. Bona amahlelo namanani welizwe lakho ekhasini lamanani.",
             ],
           },
           {
@@ -3442,25 +3452,25 @@ Object.assign(HELP, {
           },
           {
             id: "kids-not-working",
-            q: "Imodi yabantwana ayitjhentjhi ihlathululo.",
+            q: "Imodi yabantwana ayitjhentjhi ihlathululo",
             a: [
-              "Imodi yabantwana itjhentjha umtlolo kwaphela lapho ilizwi sele linehlathululo efanele abantwana eyenziweko. Emezwini amatjha osanda kuwafuna, lindela imizuzwana eli-10 ukuya kwe-15. Ihlathululo efanele abantwana yenziwa khonokho ngesikhathi sokuthoma.",
-              "Godu: imodi yabantwana itlhoga i-Clear namkha i-Deep. Nange use-Basic, isitjhintjhi sizakukubawa bona uthuthukise. Abasebenzisi abangaziwako babawa bona babhalise.",
+              "Imodi yabantwana itjhentjha umtlolo kwaphela lapho ilizwi sele linehlathululo efanele abantwana. Elizwini osanda kulifuna kokuthoma, lindela imizuzwana eli-10 ukuya kwe-15 kusalungiswa ihlathululo yabantwana.",
+              "Imodi yabantwana iyingcenye yehlelo le-Family. Ku-Basic, ku-Individual namkha ngaphandle kwe-akhawunti, isitjhintjhi sitjengisa ihlelo le-Family kunokobana sivuleke. Ababhaliseli abajoyina i-Clear namkha i-Deep ngaphambi kuka-Oktoba 2026 bagcina iModi yabantwana. Bona uyithole, bona i-Family ekhasini lamanani.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Ukufuna ngelizwi akusebenzi.",
+            q: "Ukufuna ngelizwi akusebenzi",
             a: [
               "Ukufuna ngelizwi kutlhoga imvumo yemakrofoni. Amabhrawuza amanengi abuza kanye ngesayithi ngayinye. Nange uqhwarhaze Vimba ngephutha, kuzakufuze ukubuyisele ngesandla: qhwarhaza itjhwayo lekhiya namkha lemininingwana eceleni kwe-gadit.app ebhaweni lekheli, bese Iinlungiselelo zesayithi, bese iMakrofoni, bese Vumela.",
-              "Ku-Safari ye-iOS, ukungena kwemakrofoni godu kutlhoga isitjhintjhi se-Settings → Safari → Microphone. Ilizwi nje liyinzuzo ye-Clear ne-Deep: abasebenzisi be-Basic babona isimemo sokuthuthukisa, abavakatjheli abangakangeni babona isimemo sokungena.",
+              "Ku-Safari ye-iPhone ne-iPad, ukungena kwemakrofoni godu kutlhoga i-Settings → Safari → Microphone. Ukufuna ngelizwi kuyingcenye yamahlelo we-Individual ne-Family: ku-Basic uzakubona amahlelo kunalokho, begodu abavakatjheli abangakangeni babawa bona bangene. Bona uthuthukise, vula ikhasi lamanani.",
             ],
           },
           {
             id: "no-image",
-            q: "Angikghoni ukwenza isithombe selizwi.",
+            q: "Angikghoni ukuthola isithombe selizwi",
             a: [
-              "Ukwenza izithombe kuyinzuzo ye-Clear namkha ye-Deep enesabelo senyanga. I-Clear ithola izithombe ezima-30 ngenyanga, i-Deep ithola ezili-100. Nange usisebenzise soke isabelo, uzakubona umthangala. Sithoma butjha ngelanga lokuthoma lenyanga ngayinye.",
+              "Izithombe ziyingcenye yamahlelo we-Individual ne-Family, kufika ezithombeni ezitjha ezili-100 ngenyanga. Isithombe esele sikhona sehlathululo leyo siyavuleka ngaphandle kokubalwa. Ihlelo elidala le-Clear linezithombe ezima-30 ngenyanga, begodu i-Basic ayinazo izithombe. Nange izithombe zenyanga ziphelile uzakubona isaziso, begodu ukubala kuthoma butjha ekuthomeni kwenyanga ngayinye.",
               "Nange ungakafiki esabelweni kodwana usabona ukwehluleka, kanengi kwesikhatjhana. Linga godu ngemva kwemizuzwana ema-30. Ukwehluleka okuraga kungaba liphutha lesistimu. Sibawa ubike ekhasini lelizwi.",
             ],
           },
@@ -3468,21 +3478,21 @@ Object.assign(HELP, {
             id: "save-word",
             q: "Ngilibulunga njani ilizwi ebhukwini lami lamezwi?",
             a: [
-              "Ekhasini nanyana ngiliphi lomphumela welizwi, thinta Bulunga ebhukwini eduze nesihloko. Ibhuku lamezwi liyinzuzo ye-Clear ne-Deep lapho ungabuyekeza khona amezwi owabulungileko ngemva kwalokho, uwabone ekuboneni kweenkanyezi, begodu wenze izikhathi zokuzilolonga okuhlakaniphileko (Deep).",
-              "Amezwi owabulungileko begodu wawavula okungenani kanye ayatholakala ngaphandle kwe-inthanethi ku-cache yedivayisi. Iphakethe langaphandle kwe-inthanethi libulunga namezwi athandwa khulu ngelimi lakho bona ulunge ngaphandle kwe-inthanethi.",
+              "Akutlhogeki. Nawungenileko, ilizwi ngalinye olifunako libulungwa ebhukwini lakho lamezwi ngokwalo. Ku-Basic ibhuku lamezwi liphatha amezwi afika ku-30. Ku-Individual ne-Family alinamkhawulo begodu linokuzilolonga okuhlakaniphileko, okubuyisa amezwi wakho bona uwabuyekeze ngesikhathi esifaneleko.",
+              "Ku-Individual ne-Family, amezwi owafunako abulungwa nakudivayisi yakho, ngalokho avuleka ngaphandle kwe-inthanethi. Bona ubone amezwi wakho, vula ibhuku lamezwi kumenyu.",
             ],
           },
           {
             id: "offline",
             q: "Imodi yangaphandle kwe-inthanethi isebenza njani?",
             a: [
-              "Amezwi osele uwabonile abulungwa kudivayisi. Wavule godu ngaphandle kwe-inthanethi, azakulayitha khonokho. Iphakethe loke langaphandle kwe-inthanethi (amezwi aphambili ngelimi lakho) lidawunilodwa ngokufuna kwakho ekhasini lebhuku lamezwi.",
-              "Ukufuna ilizwi elitjha ngokupheleleko kusatlhoga i-inthanethi, ngombana i-Gadit kufuze yenze ihlathululo kusukela ekuthomeni. I-cache yangaphandle kwe-inthanethi ngeyamezwi osele uwahlolile.",
+              "Ukusebenzisa ngaphandle kwe-inthanethi kuyingcenye yamahlelo we-Individual ne-Family. Ilizwi ngalinye olifunako libulungwa kudivayisi yakho, ngalokho livuleka godu khonokho ngaphandle kwe-inthanethi. Ungadawuniloda nephakethe lamezwi athandwa khulu ngelimi lakho ekhasini lakho le-Akhawunti.",
+              "Ukufuna ilizwi elitjha ngokupheleleko kusatlhoga i-inthanethi, ngombana i-Gadit kufuze ilungiselele umphumela opheleleko walo. Ikhophi yangaphandle kwe-inthanethi ifaka amezwi asele akudivayisi yakho. Nange use-Basic, bona amahlelo ekhasini lamanani.",
             ],
           },
           {
             id: "slow",
-            q: "I-app ibonakala iphuza.",
+            q: "I-app ibonakala iphuza",
             a: [
               "Ukufuna kokuthoma kwelizwi kuphuza khulu ngombana i-Gadit yenza umphumela woke kusukela ekuthomeni: kanengi imizuzwana embalwa, kwesinye isikhathi kude kwamezwi abudisi. Ukufuna okulandelako kwelizwi elifanako kwenzeka khonokho, kuvela ku-cache.",
               "Nange koke kuphuza, linga ukuvuselela ngamandla: Cmd+Shift+R ku-Mac, Ctrl+Shift+R ku-Windows. Nange ukuphuza kuraga emakhasini woke, sibawa usithumelele i-imeyili ngenarha yakho nebhrawuza bona ithimba lihlole indlela ye-inthanethi ukuya emaseva wethu ukusuka esifundeni sakho.",
@@ -3500,7 +3510,7 @@ Object.assign(HELP, {
             id: "change-language",
             q: "Ngilitjhentjha njani ilimi lokusebenzisa?",
             a: [
-              "Phezulu kwesokudla kwekhasi nanyana ngiliphi, uzakubona itjhwayo elincani lefulege (namkha ibizo lelimi lakho lanje). Lithinte bese ukhetha emalimini angaphezu kwa-30: isiNgisi, isiGrigi, isiHebheru, isi-Arabhu, isiRhashiya, isiPanitjhi, isiPutukezi, isiFurentjhi, isiJarimani, isiTjheki, isiSlovakhi, isiTaliyana, isiJapani, isiHindi, isi-Amharic, isiZulu.",
+              "Phezulu kwesokudla kwekhasi nanyana ngiliphi, uzakubona itjhwayo elincani lefulege (namkha ibizo lelimi lakho lanje). Lithinte bese ukhetha emalimini ama-41.",
               "Ukhetho lwakho lubulungwa kudivayisi le. Koke kulayitha godu ngelimi elitjha: ukusebenzisa, iimenyu, iinhlathululo zamezwi ezizako, izibonelo, iinhlathululo zabantwana, ngitjho nomsuka welizwi. Imiphumela esele ibulungiwe ngelimi elidala ihlala bekube ufuna amezwi lawo godu.",
             ],
           },
@@ -3538,7 +3548,7 @@ Object.assign(HELP, {
           },
           {
             id: "empty-dashboard",
-            q: "Ngijoyinile kodwana ideshibhodi yami ayinalitho.",
+            q: "Ngijoyinile kodwana ideshibhodi yami ayinalitho",
             a: [
               "Iinomboro zivela ngemva kokuqhwarhaza kokuthoma elinkini yakho. Ukungabi nalitho kutjho bona akukho okhe waqhwarhaza okwanje. Iya uyokwabelana ngelinki. Ideshibhodi ivuseleleka ngokuseduze ngesikhathi sinye lokha ukusebenza nakuthomako.",
               "Nange wabelene begodu umuntu wabhalisa kodwana ideshibhodi ingakutjengisi, sitlolele ngesikhathi esiseduze sokubhalisa, ithimba lizakuhlola ukubalelwa.",
@@ -3554,7 +3564,7 @@ Object.assign(HELP, {
           },
           {
             id: "missing-commission",
-            q: "Umuntu ubhalise ngelinki yami kodwana angiyiboni ikhomitjhini.",
+            q: "Umuntu ubhalise ngelinki yami kodwana angiyiboni ikhomitjhini",
             a: [
               "Kanengi lokhu kusikhathi: ukubhalisa kuvela edeshibhodini phakathi kwemizuzu, kodwana ikhomitjhini ibhalwa kwaphela lokha ukubhalisela nakubhadelwe ngamambala (lokho okungaba ngemva kwamalanga nange basekulingeni kwamahala). Buyela uhlole ngemva kobana ukulinga kuphele.",
               "Nange ukubhalisela kubhadelwe kodwana usayiboni ikhomitjhini ngemva kwamahora ama-48, sitlolele ngesikhathi esiseduze sokubhalisa ne-imeyili namkha ibizo elisondeleko lombhaliseli nawulazi. Ithimba lizakuhlola ngokujulileko ukubalelwa bese lilungisa okuphosiweko ngesandla.",
@@ -3571,16 +3581,16 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "Iyini i-Gadit?",
             a: [
-              "Isihlathululimezwi samalimi amanengi esakhelwe bona ilizwi lizwisiseke ngamambala, ingasi ukunikela ihlathululo yomugca munye kwaphela. Ilizwi ngalinye livuleka nazo zoke iinhlathululo zalo, izibonelo zamambala zehlathululo ngayinye, izaga, umsuka welizwi, isithombe nawusifuna, begodu (nge-Clear ne-Deep) ihlathululo efanele abantwana, tlola umutjho wakho uthole amazwana, neenkhwizi.",
-              "Nje kunamalimi angaphezu kwa-30 wokusebenzisa. Ngaphakathi ithimba likubiza ngokuthi kwenza i-GAD elizwini: ukuzwisisa ilizwi ngokuzeleko, ingasi ukulitjhugulula kwaphela.",
+              "I-Gadit ikusiza uzwisise ilizwi ngalinye ngokuzeleko, ingasi ukufumana ihlathululo yomugca munye kwaphela. Ilizwi ngalinye livuleka nazo zoke iinhlathululo zalo, izibonelo zamambala zehlathululo ngayinye, izaga nomsuka welizwi. Amahlelo abhadelwako angezelela isithombe sehlathululo ngayinye, ukuzilolonga, imidlalo nokhunye okunengi, begodu i-Family ingezelela iModi yabantwana nendawo yomntwana ngamunye.",
+              "I-Gadit isebenza ngamalimi ama-41. Ngaphakathi ithimba likubiza ngokuthi kwenza i-GAD elizwini: ukuzwisisa ilizwi ngokuzeleko, ingasi ukulitjhugulula kwaphela. Bona ubone lokho ihlelo ngalinye elinakho, vula ikhasi lamanani.",
             ],
           },
           {
             id: "languages",
             q: "Nisekela maphi amalimi?",
             a: [
-              "Ukusebenzisa: isiNgisi, isiGrigi, isiHebheru, isi-Arabhu, isiRhashiya, isiPanitjhi, isiPutukezi, isiFurentjhi, isiJarimani, isiTjheki, isiSlovakhi, isiTaliyana, isiJapani, isiZulu.",
-              "Ungafuna ilizwi ngelinye nelinye lamalimi lawo bese uthola ihlathululo, izibonelo nakho koke okhunye ngelimi lokusebenzisa olikhethileko. IsiHebheru nesi-Arabhu zitlolwa ngokuzeleko kusukela kwesokudla ukuya kwesobunxele begodu zisebenzisa iimfonti zazo zamambala.",
+              "I-Gadit isebenza ngamalimi ama-41, kuhlanganise nesiNgisi, isiHebheru, isi-Arabhu, isiPanitjhi, isiFurentjhi, isiJarimani, isiRhashiya, isiTjhayina, isiJapani, isiHindi, isiZulu, isiXhosa ne-Afrikaans.",
+              "Ungafuna ilizwi ngelinye nelinye lamalimi lawo bese uthola iinhlathululo, izibonelo nakho koke okhunye ngelimi olikhethileko lokusebenzisa. IsiHebheru, isi-Arabhu nesiPheresiya zifundwa kusukela kwesokudla ukuya kwesobunxele, ngeemfonti zazo. Bona utjhentjhe, thinta itjhwayo lelimi phezulu kwekhasi nanyana ngiliphi.",
             ],
           },
           {
@@ -3588,7 +3598,7 @@ Object.assign(HELP, {
             q: "I-Gadit iphephile kubantwana?",
             a: [
               "I-Gadit yakhelwe bona umbelethi ayisebenzise ngokuphephileko kunye nomntwana. Imodi yabantwana yenza iinhlathululo ezilula, eziqondileko nezifanele ubudala (ezingeni leminyaka ema-5 ukuya kweli-10 ngokuseduze), isebenzisa injini efanako esebenzisela okuqukethwe kwabadala kunye neenyeleliso eziqondileko zokwenza kube lula. Okuqukethwe okwenziwe ngabasebenzisi akukhe kwatjengiswa abantwana.",
-              "Ngokuvumelana nemithetho yethu nemithetho yefihlo yabantwana ephasini loke, ukuba ne-akhawunti ngokwakho kungeyeminyaka eli-13 nangaphezulu. Indlela ejayelekileko yi-akhawunti yombelethi umbelethi ayisebenzisa kunye nomntwana wakhe, lokho kanye Imodi yabantwana eyakhelwe khona.",
+              "Ngokuvumelana nemithetho yethu nemithetho yefihlo yabantwana ephasini loke, i-akhawunti yakho ngokwakho ngeyeminyaka eli-13 nangaphezulu. Abantwana basebenzisa i-Gadit ngombelethi: ehlelweni le-Family umbelethi ufaka umntwana ngamunye ekhasini lomndeni, umntwana ngamunye uthola indawo yakhe eneModi yabantwana, begodu ibhodi yababelethi itjengisa amezwi umntwana ngamunye awafunako. Bona ukulungiselele, thoma nge-Family ekhasini lamanani.",
             ],
           },
           {
@@ -3596,7 +3606,7 @@ Object.assign(HELP, {
             q: "Imininingwana yami ibulungwa kuphi? Niyayithengisa?",
             a: [
               "I-akhawunti, umlando, ibhuku lamezwi nezithombe ezenziweko kubulungwa ngokuphephileko ku-Firebase, kubethelwe esitorweni. Asithengisi imininingwana yakho kunanyana ngubani. Sabelana kwaphela ngalokho okutlhogekako bona i-Gadit isebenze (ukubulunga, ukubhadela, abaletha okuqukethwe), njengokutlolwe eMthethomgomweni Wefihlo.",
-              "Ungakhupha ibhuku lakho lamezwi namkha usule i-akhawunti yakho nanyana kunini ekhasini le-Akhawunti.",
+              "Ungasula i-akhawunti yakho nanyana kunini ekhasini le-Akhawunti. Bona uthole ikhophi yebhuku lakho lamezwi namkha yenye imininingwana esinayo, sitlolele ekhasini leli.",
             ],
           },
           {
@@ -3638,17 +3648,18 @@ Object.assign(HELP, {
             id: "cancel",
             q: "Πώς ακυρώνω τη συνδρομή μου;",
             a: [
-              "Μόνοι σας, οποιαδήποτε στιγμή. Συνδεθείτε, ανοίξτε τον Λογαριασμό και πατήστε Ακύρωση συνδρομής κάτω από το πρόγραμμά σας.",
-              "Η πρόσβασή σου συνεχίζει μέχρι το τέλος της περιόδου που έχεις ήδη πληρώσει. Μετά, ο λογαριασμός επιστρέφει στο Basic (δωρεάν). Οι αποθηκευμένες λέξεις, το ιστορικό και το σημειωματάριό σου μένουν ασφαλή και προσβάσιμα.",
-              "Αν ακυρώσεις κατά λάθος ή αλλάξεις γνώμη, μπορείς να συνεχίσεις τη συνδρομή από την ίδια σελίδα πριν λήξει η περίοδος.",
+              "Μόνος σου, οποιαδήποτε στιγμή. Συνδέσου, άνοιξε τον Λογαριασμό και πάτησε Ακύρωση συνδρομής κάτω από το πλάνο σου.",
+              "Σε συνδρομή επί πληρωμή, η πρόσβασή σου συνεχίζεται μέχρι το τέλος της περιόδου που έχεις ήδη πληρώσει. Μετά ο λογαριασμός περνά στο Basic (δωρεάν). Οι αποθηκευμένες λέξεις σου και το ιστορικό σου μένουν ασφαλή.",
+              "Κατά τη δωρεάν δοκιμή 14 ημερών, η ακύρωση τερματίζει τη δοκιμή αμέσως και δεν γίνεται καμία χρέωση. Αν σε ανησυχεί μόνο η αυτόματη χρέωση, διάλεξε αυτόν τον λόγο στο παράθυρο ακύρωσης και μπορείς αντί γι' αυτό να απενεργοποιήσεις την ανανέωση, κρατώντας τη δοκιμή μέχρι την τελευταία της μέρα.",
+              "Αν ακυρώσεις μια συνδρομή επί πληρωμή κατά λάθος ή αλλάξεις γνώμη, μπορείς να τη συνεχίσεις από την ίδια σελίδα πριν λήξει η περίοδος.",
             ],
           },
           {
             id: "switch-plan",
-            q: "Πώς αλλάζω από Clear σε Deep (ή το αντίστροφο);",
+            q: "Πώς αλλάζω ανάμεσα σε Individual και Family;",
             a: [
-              "Λογαριασμός, μετά Διαχείριση χρέωσης, μετά Ενημέρωση συνδρομής. Διάλεξε το νέο πλάνο.",
-              "Το Stripe υπολογίζει αυτόματα τη διαφορά τιμής, αναλογικά με τις μέρες που απομένουν στην τρέχουσα περίοδο. Αν κάνεις αναβάθμιση, θα χρεωθείς μόνο τη διαφορά για το υπόλοιπο της περιόδου. Αν περνάς σε χαμηλότερο πλάνο, η πίστωση εφαρμόζεται στον επόμενο λογαριασμό σου.",
+              "Για να περάσεις στο Family, άνοιξε τη σελίδα Λογαριασμός και πάτησε «Άλλαξε σε Family». Η τωρινή συνδρομή σου ενημερώνεται στην ίδια κάρτα, χωρίς να την ξαναβάλεις.",
+              "Το Stripe υπολογίζει τη διαφορά για τις μέρες που απομένουν στην τρέχουσα περίοδο, οπότε πληρώνεις μόνο τη διαφορά. Για να περάσεις από Family σε Individual, γράψε μας από αυτή τη σελίδα και η ομάδα θα κάνει την αλλαγή για σένα.",
             ],
           },
           {
@@ -3685,9 +3696,9 @@ Object.assign(HELP, {
           },
           {
             id: "unknown-charge",
-            q: "Βλέπω μια χρέωση που δεν αναγνωρίζω.",
+            q: "Τι είναι αυτή η χρέωση στην κάρτα μου;",
             a: [
-              "Οι χρεώσεις εμφανίζονται ως GADIT ή GADIT.APP με $2.99 (Clear μηνιαίο), $4.99 (Deep μηνιαίο), $29.99 (Clear ετήσιο) ή $49.99 (Deep ετήσιο). Αν δεν ταιριάζει, μπορεί να προέρχεται από άλλη υπηρεσία.",
+              "Οι χρεώσεις εμφανίζονται ως GADIT ή GADIT.APP. Το ποσό αντιστοιχεί στο πλάνο σου (Individual ή Family, μηνιαίο ή ετήσιο) στο νόμισμα της χώρας σου, όπως φαίνεται στη σελίδα τιμών. Οι συνδρομές που ξεκίνησαν πριν τον Οκτώβριο του 2026 κρατούν την τιμή με την οποία ξεκίνησαν. Αν το ποσό δεν ταιριάζει, μπορεί να προέρχεται από άλλη υπηρεσία.",
               "Αν είσαι σίγουρος ότι δεν είναι δική σου, μην κάνεις ακόμα αμφισβήτηση μέσω της τράπεζάς σου. Γράψε μας πρώτα απευθείας με την ημερομηνία και το ποσό. Η ομάδα θα τη βρει, θα σου εξηγήσει τι είναι και θα κάνει επιστροφή αν χρειάζεται. Μια αμφισβήτηση στην τράπεζα μπορεί να δυσκολέψει τις μελλοντικές χρεώσεις, οπότε η επίλυση μέσω της υποστήριξης είναι συνήθως πιο γρήγορη και ασφαλής.",
             ],
           },
@@ -3701,11 +3712,11 @@ Object.assign(HELP, {
           },
           {
             id: "plan-comparison",
-            q: "Ποια είναι η διαφορά ανάμεσα σε Basic, Clear και Deep;",
+            q: "Ποια είναι η διαφορά ανάμεσα στα Basic, Individual και Family;",
             a: [
-              "Basic (δωρεάν): έως 20 αναζητήσεις λέξεων την ημέρα, όλες οι σημασίες, παραδείγματα ανά σημασία, ιδιωματισμοί και προέλευση της λέξης. Δεν απαιτείται εγγραφή για τις βασικές αναζητήσεις.",
-              "Clear ($2.99/μήνα ή $29.99/έτος): απεριόριστες αναζητήσεις, επεξηγήσεις φιλικές προς τα παιδιά, μία εικόνα ανά λέξη (30/μήνα), σύνθεση δικής σου πρότασης με ανατροφοδότηση, αναλυτικοί ιδιωματισμοί και 30 ημέρες ιστορικού αναζητήσεων.",
-              "Deep ($4.99/μήνα ή $49.99/έτος): όλα όσα έχει το Clear, συν κουίζ εξάσκησης, το προσωπικό σημειωματάριο με έξυπνη εξάσκηση διαστημικής επανάληψης, διάκριση παρόμοιων λέξεων και μεγαλύτερο όριο εικόνων (100/μήνα).",
+              "Basic (δωρεάν): έως 10 αναζητήσεις λέξεων τη μέρα, όλες οι σημασίες, παραδείγματα, ιδιωματισμοί, η προέλευση της λέξης, η σωστή σημασία μέσα από μια πρόταση και ένα τετράδιο με έως 30 λέξεις.",
+              "Individual: ένα άτομο, όλα τα εργαλεία μάθησης. Απεριόριστες αναζητήσεις, μια εικόνα για κάθε σημασία, περισσότερα παραδείγματα και ερωτήσεις για κάθε λέξη, σύνθεση πρότασης με σχόλια, Κάθε λέξη, Πες το, φυσική φωνή ανάγνωσης και φωνητική αναζήτηση, χρήση χωρίς σύνδεση, παιχνίδια, κουίζ και μονομαχίες λέξεων, και έξυπνη εξάσκηση με προετοιμασία για τεστ και ορθογραφία.",
+              "Family: όλα όσα έχει το Individual για έως 5 παιδιά και τους γονείς, συν τη λειτουργία για παιδιά, ξεχωριστό χώρο για κάθε παιδί, βοήθεια με τα μαθήματα και τον πίνακα γονέα με ειδοποίηση για κάθε λέξη. Τα σχολεία έχουν δικό τους πλάνο. Οι τιμές για τη χώρα σου και η δωρεάν δοκιμή 14 ημερών είναι στη σελίδα τιμών.",
             ],
           },
         ],
@@ -3717,7 +3728,7 @@ Object.assign(HELP, {
         items: [
           {
             id: "no-verification-email",
-            q: "Δεν έλαβα το email επιβεβαίωσης.",
+            q: "Δεν έλαβα το email επιβεβαίωσης",
             a: [
               "Έλεγξε πρώτα τους φακέλους ανεπιθύμητης αλληλογραφίας και προσφορών. Το Gmail και το Outlook μερικές φορές δρομολογούν εκεί τα emails λογαριασμού, μέχρι να επισημάνεις κάποιο ως \"Not spam\".",
               "Αν δεν είναι εκεί, ίσως το email γράφτηκε λάθος κατά την εγγραφή. Δοκίμασε να εγγραφείς ξανά και έλεγξε προσεκτικά τη διεύθυνση. Αν χρησιμοποίησες εγγραφή με Google, δεν χρειάζεται email επιβεβαίωσης.",
@@ -3725,7 +3736,7 @@ Object.assign(HELP, {
           },
           {
             id: "forgot-password",
-            q: "Ξέχασα τον κωδικό μου.",
+            q: "Ξέχασα τον κωδικό μου",
             a: [
               "Άνοιξε το παράθυρο σύνδεσης και πάτησε \"Ξέχασες τον κωδικό;\". Καταχώρισε το email που χρησιμοποιείς για το Gadit και θα λάβεις έναν σύνδεσμο επαναφοράς μέσα σε ένα ή δύο λεπτά.",
               "Αν το email δεν φτάσει, έλεγξε τα ανεπιθύμητα. Αν και πάλι δεν φτάσει, ίσως έκανες εγγραφή με Google αντί για email και κωδικό. Δοκίμασε το κουμπί \"Continue with Google\".",
@@ -3733,7 +3744,7 @@ Object.assign(HELP, {
           },
           {
             id: "wrong-credentials",
-            q: "Είμαι σίγουρος ότι ο κωδικός μου είναι σωστός αλλά λέει \"Λάθος email ή κωδικός\".",
+            q: "Είμαι σίγουρος ότι ο κωδικός μου είναι σωστός αλλά λέει \"Λάθος email ή κωδικός\"",
             a: [
               "Τρία πράγματα να ελέγξεις. Πρώτον, το Caps Lock. Δεύτερον, κενό στο τέλος όταν κάνεις αντιγραφή-επικόλληση. Τρίτον, έκανες εγγραφή με Google αντί για κωδικό (χρησιμοποίησε το \"Continue with Google\").",
               "Ακόμα κολλημένος; Κάνε επαναφορά του κωδικού από το ίδιο παράθυρο. Σε βάζει σε καθαρή αρχή.",
@@ -3741,7 +3752,7 @@ Object.assign(HELP, {
           },
           {
             id: "google-fails",
-            q: "Η σύνδεση με Google δεν λειτουργεί.",
+            q: "Η σύνδεση με Google δεν λειτουργεί",
             a: [
               "Η πιο συνηθισμένη αιτία: ο browser σου μπλοκάρει cookies τρίτων ή pop-ups για το gadit.app. Επίτρεψέ τα από τις άδειες στη γραμμή διευθύνσεων και δοκίμασε ξανά.",
               "Αν είσαι σε λειτουργία ανώνυμης περιήγησης, η σύνδεση με Google είναι περιορισμένη επίτηδες. Άλλαξε σε ένα κανονικό παράθυρο του browser.",
@@ -3767,8 +3778,8 @@ Object.assign(HELP, {
             id: "share-account",
             q: "Μπορεί ο σύντροφος ή το παιδί μου να μοιραστεί τον λογαριασμό μου;",
             a: [
-              "Ένας συνδεδεμένος χρήστης ανά λογαριασμό κάθε φορά. Η λειτουργία για παιδιά επιτρέπει σε έναν λογαριασμό Clear ή Deep να εξυπηρετεί έναν γονέα και ένα παιδί: γυρίζεις τον διακόπτη και οι ορισμοί εμφανίζονται φιλικά προς τα παιδιά χωρίς ξεχωριστές συνδέσεις.",
-              "Για δύο ενήλικες που θέλουν και οι δύο ξεχωριστά σημειωματάρια και πρόοδο, φτιάξτε δύο λογαριασμούς. Το Clear κοστίζει $2.99 τον μήνα ανά λογαριασμό.",
+              "Σε κάθε λογαριασμό είναι συνδεδεμένο ένα άτομο κάθε φορά. Για ένα νοικοκυριό, το πλάνο Family είναι φτιαγμένο ακριβώς γι' αυτό: έως 5 παιδιά και οι γονείς, ο καθένας με τον δικό του χώρο, το δικό του τετράδιο και τη δική του πρόοδο, συν τη λειτουργία για παιδιά για τα παιδιά και έναν πίνακα γονέα.",
+              "Για έναν ενήλικα μόνο του, το Individual καλύπτει ένα άτομο με όλα τα εργαλεία μάθησης. Σύγκρινε τα πλάνα και τις τιμές για τη χώρα σου στη σελίδα τιμών.",
             ],
           },
           {
@@ -3796,47 +3807,47 @@ Object.assign(HELP, {
           },
           {
             id: "kids-not-working",
-            q: "Η λειτουργία για παιδιά δεν αλλάζει την επεξήγηση.",
+            q: "Η λειτουργία για παιδιά δεν αλλάζει την επεξήγηση",
             a: [
-              "Η λειτουργία για παιδιά αλλάζει το κείμενο μόνο εκεί όπου η λέξη έχει ήδη μια δημιουργημένη επεξήγηση φιλική προς τα παιδιά. Για ολοκαίνουριες λέξεις που μόλις αναζήτησες, δώσ' του 10 με 15 δευτερόλεπτα. Η έκδοση για παιδιά δημιουργείται εκείνη τη στιγμή, την πρώτη φορά.",
-              "Επίσης: η λειτουργία για παιδιά απαιτεί Clear ή Deep. Αν είσαι στο Basic, ο διακόπτης θα σου προτείνει να αναβαθμίσεις. Στους ανώνυμους χρήστες προτείνεται να εγγραφούν.",
+              "Η λειτουργία για παιδιά αλλάζει το κείμενο μόνο όταν η λέξη έχει ήδη επεξήγηση φιλική προς τα παιδιά. Για μια λέξη που μόλις αναζήτησες για πρώτη φορά, δώσε 10 με 15 δευτερόλεπτα μέχρι να ετοιμαστεί η έκδοση για παιδιά.",
+              "Η λειτουργία για παιδιά είναι μέρος του πλάνου Family. Στο Basic, στο Individual ή χωρίς λογαριασμό, ο διακόπτης δείχνει το πλάνο Family αντί να ενεργοποιηθεί. Οι συνδρομητές που μπήκαν στο Clear ή στο Deep πριν τον Οκτώβριο του 2026 κρατούν τη λειτουργία για παιδιά. Για να την αποκτήσεις, δες το Family στη σελίδα τιμών.",
             ],
           },
           {
             id: "voice-fails",
-            q: "Η φωνητική αναζήτηση δεν λειτουργεί.",
+            q: "Η φωνητική αναζήτηση δεν λειτουργεί",
             a: [
               "Η φωνητική αναζήτηση χρειάζεται άδεια μικροφώνου. Οι περισσότεροι browsers ρωτούν μία φορά ανά ιστότοπο. Αν κατά λάθος πάτησες Αποκλεισμός, θα χρειαστεί να το αλλάξεις πίσω χειροκίνητα: πάτησε το εικονίδιο του λουκέτου ή των πληροφοριών δίπλα στο gadit.app στη γραμμή διευθύνσεων, μετά Ρυθμίσεις ιστότοπου, μετά Μικρόφωνο, μετά Να επιτρέπεται.",
-              "Στο Safari iOS, η πρόσβαση στο μικρόφωνο απαιτεί επίσης έναν διακόπτη στο Ρυθμίσεις → Safari → Μικρόφωνο. Η φωνή είναι προς το παρόν λειτουργία των Clear και Deep: οι χρήστες Basic βλέπουν πρόταση αναβάθμισης, οι αποσυνδεδεμένοι επισκέπτες βλέπουν πρόταση σύνδεσης.",
+              "Στο Safari για iPhone και iPad, η πρόσβαση στο μικρόφωνο χρειάζεται επίσης Ρυθμίσεις → Safari → Μικρόφωνο. Η φωνητική αναζήτηση είναι μέρος των πλάνων Individual και Family: στο Basic θα δεις τα πλάνα αντί γι' αυτήν, και οι επισκέπτες που δεν έχουν συνδεθεί καλούνται να συνδεθούν. Για αναβάθμιση, άνοιξε τη σελίδα τιμών.",
             ],
           },
           {
             id: "no-image",
-            q: "Δεν μπορώ να δημιουργήσω εικόνα για τη λέξη.",
+            q: "Δεν μπορώ να πάρω εικόνα για τη λέξη",
             a: [
-              "Η δημιουργία εικόνων είναι λειτουργία των Clear ή Deep με μηνιαίο όριο. Το Clear παίρνει 30 εικόνες τον μήνα, το Deep παίρνει 100. Αν έχεις εξαντλήσει το όριο, θα δεις ένα φράγμα. Επαναφέρεται την 1η κάθε μήνα.",
+              "Οι εικόνες είναι μέρος των πλάνων Individual και Family, με έως 100 νέες εικόνες τον μήνα. Μια εικόνα που υπάρχει ήδη για αυτή τη σημασία ανοίγει χωρίς να μετράει. Το παλαιότερο πλάνο Clear έχει 30 τον μήνα, και το Basic δεν περιλαμβάνει εικόνες. Όταν τελειώσουν οι εικόνες του μήνα θα δεις μια ειδοποίηση, και η μέτρηση ξεκινά ξανά στην αρχή κάθε μήνα.",
               "Αν είσαι κάτω από το όριο και εξακολουθείς να βλέπεις αποτυχίες, συνήθως είναι παροδικό. Δοκίμασε ξανά σε 30 δευτερόλεπτα. Οι επίμονες αποτυχίες είναι σφάλμα. Κάνε αναφορά από τη σελίδα της λέξης.",
             ],
           },
           {
             id: "save-word",
-            q: "Πώς αποθηκεύω μια λέξη στο σημειωματάριό μου;",
+            q: "Πώς αποθηκεύω μια λέξη στο τετράδιό μου;",
             a: [
-              "Σε οποιαδήποτε σελίδα αποτελέσματος λέξης, πάτησε Αποθήκευση στο σημειωματάριο κοντά στον τίτλο. Το σημειωματάριο είναι λειτουργία των Clear και Deep, όπου μπορείς να ξαναδείς αποθηκευμένες λέξεις αργότερα, να τις δεις σε προβολή γαλαξία και να τρέξεις συνεδρίες έξυπνης εξάσκησης (Deep).",
-              "Οι λέξεις που έχεις αποθηκεύσει και ανοίξει τουλάχιστον μία φορά είναι διαθέσιμες εκτός σύνδεσης από την τοπική μνήμη. Το πακέτο εκτός σύνδεσης αποθηκεύει επίσης τις πιο δημοφιλείς λέξεις στη γλώσσα σου, ώστε να είσαι έτοιμος και χωρίς ίντερνετ.",
+              "Δεν χρειάζεται. Όταν είσαι συνδεδεμένος, κάθε λέξη που αναζητάς αποθηκεύεται μόνη της στο τετράδιό σου. Στο Basic το τετράδιο χωράει έως 30 λέξεις. Στα Individual και Family δεν έχει όριο και περιλαμβάνει έξυπνη εξάσκηση, που σου φέρνει πίσω τις λέξεις σου για επανάληψη την κατάλληλη στιγμή.",
+              "Στα Individual και Family, οι λέξεις που αναζητάς κρατιούνται επίσης στη συσκευή σου, ώστε να ανοίγουν χωρίς ίντερνετ. Για να δεις τις λέξεις σου, άνοιξε το τετράδιο από το μενού.",
             ],
           },
           {
             id: "offline",
-            q: "Πώς λειτουργεί η λειτουργία εκτός σύνδεσης;",
+            q: "Πώς λειτουργεί η χρήση χωρίς σύνδεση;",
             a: [
-              "Οι λέξεις που έχεις ήδη δει αποθηκεύονται τοπικά. Άνοιξέ τες ξανά χωρίς ίντερνετ και φορτώνουν αμέσως. Το πλήρες πακέτο εκτός σύνδεσης (κορυφαίες λέξεις στη γλώσσα σου) κατεβαίνει κατ' απαίτηση από τη σελίδα του σημειωματαρίου.",
-              "Η αναζήτηση μιας ολοκαίνουριας λέξης εξακολουθεί να απαιτεί σύνδεση, γιατί το Gadit πρέπει να δημιουργήσει τον ορισμό από την αρχή. Η μνήμη εκτός σύνδεσης είναι για λέξεις που έχεις ήδη εξερευνήσει.",
+              "Η χρήση χωρίς σύνδεση είναι μέρος των πλάνων Individual και Family. Κάθε λέξη που αναζητάς κρατιέται στη συσκευή σου, ώστε να ανοίγει ξανά αμέσως χωρίς ίντερνετ. Μπορείς επίσης να κατεβάσεις ένα πακέτο με τις πιο δημοφιλείς λέξεις στη γλώσσα σου από τη σελίδα Λογαριασμός.",
+              "Η αναζήτηση μιας ολοκαίνουριας λέξης χρειάζεται ακόμα σύνδεση, γιατί το Gadit πρέπει να ετοιμάσει το πλήρες αποτέλεσμα γι' αυτήν. Το αντίγραφο χωρίς σύνδεση καλύπτει τις λέξεις που είναι ήδη στη συσκευή σου. Αν είσαι στο Basic, δες τα πλάνα στη σελίδα τιμών.",
             ],
           },
           {
             id: "slow",
-            q: "Η εφαρμογή μοιάζει αργή.",
+            q: "Η εφαρμογή μοιάζει αργή",
             a: [
               "Η πρώτη αναζήτηση μιας λέξης είναι η πιο αργή, γιατί το Gadit δημιουργεί ολόκληρο το αποτέλεσμα από την αρχή: συνήθως λίγα δευτερόλεπτα, μερικές φορές περισσότερο για σύνθετες λέξεις. Οι επόμενες αναζητήσεις της ίδιας λέξης είναι ακαριαίες, σερβίρονται από τη μνήμη.",
               "Αν όλα μοιάζουν αργά, δοκίμασε μια σκληρή ανανέωση: Cmd+Shift+R σε Mac, Ctrl+Shift+R σε Windows. Αν η βραδύτητα επιμένει σε όλες τις σελίδες, στείλε μας email με τη χώρα και τον browser σου, ώστε η ομάδα να ελέγξει τη διαδρομή του δικτύου προς τους διακομιστές μας από την περιοχή σου.",
@@ -3854,7 +3865,7 @@ Object.assign(HELP, {
             id: "change-language",
             q: "Πώς αλλάζω τη γλώσσα του περιβάλλοντος;",
             a: [
-              "Πάνω δεξιά σε κάθε σελίδα, θα δεις ένα μικρό εικονίδιο σημαίας (ή το όνομα της τρέχουσας γλώσσας σου). Πάτησέ το και διάλεξε ανάμεσα σε 30+ γλώσσες: Αγγλικά, Ελληνικά, Εβραϊκά, Αραβικά, Ρωσικά, Ισπανικά, Πορτογαλικά, Γαλλικά, Γερμανικά, Τσέχικα, Σλοβάκικα, Ιταλικά, Ιαπωνικά, Χίντι, Αμχαρικά.",
+              "Πάνω δεξιά σε κάθε σελίδα, θα δεις ένα μικρό εικονίδιο σημαίας (ή το όνομα της τρέχουσας γλώσσας σου). Πάτησέ το και διάλεξε ανάμεσα σε 41 γλώσσες.",
               "Η επιλογή σου αποθηκεύεται σε αυτή τη συσκευή. Όλα ξαναφορτώνουν στη νέα γλώσσα: το περιβάλλον, τα μενού, οι μελλοντικοί ορισμοί λέξεων, τα παραδείγματα, οι επεξηγήσεις για παιδιά, ακόμα και η ετυμολογία. Τα ήδη αποθηκευμένα αποτελέσματα στην παλιά γλώσσα παραμένουν μέχρι να αναζητήσεις ξανά αυτές τις λέξεις.",
             ],
           },
@@ -3892,7 +3903,7 @@ Object.assign(HELP, {
           },
           {
             id: "empty-dashboard",
-            q: "Εγγράφηκα αλλά ο πίνακάς μου είναι άδειος.",
+            q: "Εγγράφηκα αλλά ο πίνακάς μου είναι άδειος",
             a: [
               "Τα στατιστικά εμφανίζονται μετά το πρώτο κλικ στον σύνδεσμό σου. Άδειος σημαίνει απλώς ότι κανείς δεν έχει κάνει κλικ ακόμα. Πήγαινε να μοιραστείς τον σύνδεσμο. Ο πίνακας ενημερώνεται σχεδόν σε πραγματικό χρόνο μόλις ξεκινήσει η δραστηριότητα.",
               "Αν έχεις μοιραστεί τον σύνδεσμο και κάποιος έχει εγγραφεί αλλά ο πίνακας δεν το αντικατοπτρίζει, γράψε μας με τον κατά προσέγγιση χρόνο της εγγραφής και η ομάδα θα ελέγξει την απόδοση.",
@@ -3908,7 +3919,7 @@ Object.assign(HELP, {
           },
           {
             id: "missing-commission",
-            q: "Κάποιος εγγράφηκε μέσω του συνδέσμου μου αλλά δεν βλέπω την προμήθεια.",
+            q: "Κάποιος εγγράφηκε μέσω του συνδέσμου μου αλλά δεν βλέπω την προμήθεια",
             a: [
               "Τις περισσότερες φορές είναι θέμα χρονισμού: η εγγραφή εμφανίζεται στον πίνακα μέσα σε λεπτά, αλλά η προμήθεια καταχωρείται μόνο όταν η συνδρομή πληρωθεί πραγματικά (κάτι που μπορεί να αργήσει μέρες αν ο χρήστης είναι σε δωρεάν δοκιμή). Έλεγξε ξανά αφού λήξει η δοκιμή.",
               "Αν η συνδρομή πληρώθηκε αλλά εξακολουθείς να μη βλέπεις την προμήθεια μετά από 48 ώρες, γράψε μας με τον κατά προσέγγιση χρόνο εγγραφής και το email ή το κατά προσέγγιση όνομα του συνδρομητή, αν το γνωρίζεις. Η ομάδα θα ψάξει την αλυσίδα απόδοσης και θα διορθώσει χειροκίνητα οποιαδήποτε αστοχία.",
@@ -3925,16 +3936,16 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "Τι είναι το Gadit;",
             a: [
-              "Ένα πολύγλωσσο λεξικό φτιαγμένο για να κάνει μια λέξη να «κουμπώσει», όχι απλώς να δώσει έναν μονόγραμμο ορισμό. Κάθε λέξη ανοίγει με όλες τις σημασίες της, πραγματικά παραδείγματα ανά σημασία, ιδιωματισμούς, ετυμολογία, μια προαιρετική εικόνα και (με τα Clear και Deep) μια επεξήγηση φιλική προς τα παιδιά, σύνθεση δικής σου πρότασης με ανατροφοδότηση και κουίζ.",
-              "Αυτή τη στιγμή 30+ γλώσσες περιβάλλοντος. Εσωτερικά, η ομάδα το λέει «να κάνεις GAD σε μια λέξη»: να την καταλάβεις μέχρι το τέλος, όχι απλώς να τη μεταφράσεις.",
+              "Το Gadit σε βοηθά να καταλάβεις κάθε λέξη μέχρι το τέλος, όχι απλώς να πάρεις έναν ορισμό μιας γραμμής. Κάθε λέξη ανοίγει με όλες τις σημασίες της, πραγματικά παραδείγματα για κάθε σημασία, ιδιωματισμούς και την προέλευση της λέξης. Τα πλάνα επί πληρωμή προσθέτουν μια εικόνα για κάθε σημασία, εξάσκηση, παιχνίδια και πολλά άλλα, και το Family προσθέτει τη λειτουργία για παιδιά και έναν χώρο για κάθε παιδί.",
+              "Το Gadit λειτουργεί σε 41 γλώσσες. Εσωτερικά, η ομάδα το λέει «να κάνεις GAD σε μια λέξη»: να την καταλάβεις μέχρι το τέλος, όχι απλώς να τη μεταφράσεις. Για να δεις τι περιλαμβάνει κάθε πλάνο, άνοιξε τη σελίδα τιμών.",
             ],
           },
           {
             id: "languages",
             q: "Ποιες γλώσσες υποστηρίζετε;",
             a: [
-              "Περιβάλλον: Αγγλικά, Ελληνικά, Εβραϊκά, Αραβικά, Ρωσικά, Ισπανικά, Πορτογαλικά, Γαλλικά, Γερμανικά, Τσέχικα, Σλοβάκικα, Ιταλικά, Ιαπωνικά.",
-              "Μπορείς να αναζητήσεις μια λέξη σε οποιαδήποτε από αυτές τις γλώσσες και να πάρεις τον ορισμό, τα παραδείγματα και όλα τα υπόλοιπα στη γλώσσα περιβάλλοντος που διάλεξες. Τα Εβραϊκά και τα Αραβικά είναι πλήρως RTL και χρησιμοποιούν τις μητρικές τους γραμματοσειρές.",
+              "Το Gadit λειτουργεί σε 41 γλώσσες, ανάμεσά τους Αγγλικά, Εβραϊκά, Αραβικά, Ισπανικά, Γαλλικά, Γερμανικά, Ρωσικά, Κινεζικά, Ιαπωνικά, Χίντι, Ζουλού, Κόσα και Αφρικάανς.",
+              "Μπορείς να αναζητήσεις μια λέξη σε οποιαδήποτε από αυτές τις γλώσσες και να πάρεις τις σημασίες, τα παραδείγματα και όλα τα υπόλοιπα στη γλώσσα που διάλεξες για το περιβάλλον. Τα Εβραϊκά, τα Αραβικά και τα Περσικά διαβάζονται από δεξιά προς τα αριστερά, με τις δικές τους γραμματοσειρές. Για αλλαγή, πάτησε το κουμπί γλώσσας στο πάνω μέρος κάθε σελίδας.",
             ],
           },
           {
@@ -3942,15 +3953,15 @@ Object.assign(HELP, {
             q: "Είναι το Gadit ασφαλές για παιδιά;",
             a: [
               "Το Gadit σχεδιάστηκε για να το χρησιμοποιεί ένας γονέας με ασφάλεια δίπλα σε ένα παιδί. Η λειτουργία για παιδιά παράγει επεξηγήσεις που είναι απλές, συγκεκριμένες και κατάλληλες για την ηλικία (γύρω στο επίπεδο 5 με 10 ετών), χρησιμοποιώντας τον ίδιο μηχανισμό που τροφοδοτεί το περιεχόμενο για ενήλικες, με ρητές οδηγίες για απλοποίηση. Κανένα περιεχόμενο που δημιουργείται από χρήστες δεν εμφανίζεται ποτέ σε παιδιά.",
-              "Σύμφωνα με τις πολιτικές μας και τους κανόνες προστασίας της ιδιωτικότητας των παιδιών σε όλο τον κόσμο, η ανεξάρτητη κατοχή λογαριασμού είναι από 13 ετών και άνω. Το τυπικό μοτίβο είναι ένας λογαριασμός γονέα που ο γονέας χρησιμοποιεί μαζί με το παιδί του, κάτι που είναι ακριβώς αυτό για το οποίο φτιάχτηκε η λειτουργία για παιδιά.",
+              "Σύμφωνα με τις πολιτικές μας και τους κανόνες για την ιδιωτικότητα των παιδιών σε όλο τον κόσμο, ένας δικός σου λογαριασμός είναι για ηλικίες 13 και άνω. Τα παιδιά χρησιμοποιούν το Gadit μέσω ενός γονέα: στο πλάνο Family ο γονέας προσθέτει κάθε παιδί από τη σελίδα Οικογένεια, κάθε παιδί παίρνει τον δικό του χώρο με τη λειτουργία για παιδιά, και ο πίνακας γονέα δείχνει τις λέξεις που αναζητά κάθε παιδί. Για να το ρυθμίσεις, ξεκίνα με το Family στη σελίδα τιμών.",
             ],
           },
           {
             id: "data",
             q: "Πού αποθηκεύονται τα δεδομένα μου; Τα πουλάτε;",
             a: [
-              "Ο λογαριασμός, το ιστορικό, το σημειωματάριο και οι εικόνες που δημιουργήθηκαν αποθηκεύονται με ασφάλεια στο Firebase, κρυπτογραφημένα στην αποθήκευση. Δεν πουλάμε τα δεδομένα σου σε κανέναν. Μοιραζόμαστε μόνο ό,τι χρειάζεται για να λειτουργεί το Gadit (αποθήκευση, πληρωμές, πάροχοι περιεχομένου), όπως περιγράφεται στην Πολιτική Απορρήτου.",
-              "Μπορείς να εξαγάγεις το σημειωματάριό σου ή να διαγράψεις τον λογαριασμό σου οποιαδήποτε στιγμή από τη σελίδα του λογαριασμού.",
+              "Ο λογαριασμός, το ιστορικό, το τετράδιο και οι εικόνες που δημιουργήθηκαν αποθηκεύονται με ασφάλεια στο Firebase, κρυπτογραφημένα στην αποθήκευση. Δεν πουλάμε τα δεδομένα σου σε κανέναν. Μοιραζόμαστε μόνο ό,τι χρειάζεται για να λειτουργεί το Gadit (αποθήκευση, πληρωμές, πάροχοι περιεχομένου), όπως περιγράφεται στην Πολιτική Απορρήτου.",
+              "Μπορείς να διαγράψεις τον λογαριασμό σου οποιαδήποτε στιγμή από τη σελίδα Λογαριασμός. Για να πάρεις αντίγραφο του τετραδίου σου ή άλλων δεδομένων που κρατάμε, γράψε μας από αυτή τη σελίδα.",
             ],
           },
           {
@@ -3993,16 +4004,17 @@ Object.assign(HELP, {
             q: "איך מבטלים מנוי?",
             a: [
               "בעצמכם, בכל רגע. מתחברים, נכנסים לחשבון ולוחצים \"ביטול המנוי\" מתחת למסלול.",
-              "הגישה ממשיכה עד סוף התקופה ששילמתם עליה. אחר כך החשבון יורד ל-Basic (חינמי). המילים השמורות, היסטוריה והמחברת נשמרים ונשארים נגישים.",
-              "אם ביטלתם בטעות או שינתם דעתכם, אפשר לחדש את המנוי מאותו עמוד לפני שהתקופה מסתיימת.",
+              "במנוי בתשלום, הגישה ממשיכה עד סוף התקופה ששילמתם עליה. אחר כך החשבון עובר ל-Basic (חינמי), והמילים השמורות וההיסטוריה נשארות שמורות.",
+              "בתקופת הניסיון של 14 הימים, ביטול מסיים את הניסיון מיד, ולא יהיה שום חיוב. אם מה שמדאיג אתכם הוא רק החיוב האוטומטי, בחרו בסיבה הזאת בחלון הביטול, ותוכלו לכבות את החידוש ולהמשיך את הניסיון עד היום האחרון שלו.",
+              "ביטלתם מנוי בתשלום בטעות או שיניתם את דעתכם? אפשר לחדש אותו מאותו עמוד לפני שהתקופה מסתיימת.",
             ],
           },
           {
             id: "switch-plan",
-            q: "איך עוברים מ-Clear ל-Deep (או הפוך)?",
+            q: "איך עוברים בין Individual ל-Family?",
             a: [
-              "חשבון, ואז ניהול חיוב, ואז Update subscription. בחרו את המסלול החדש.",
-              "Stripe מחשב את ההפרש אוטומטית, לפי הימים שנותרו בתקופת החיוב. אם משדרגים, תחויבו רק על ההפרש לתקופה הנוכחית. אם עוברים למסלול נמוך יותר, הקרדיט יחול על החיוב הבא.",
+              "כדי לעבור ל-Family, היכנסו לעמוד החשבון ולחצו על \"מעבר ל-Family\". המנוי הנוכחי מתעדכן על אותו כרטיס, בלי להזין אותו מחדש.",
+              "Stripe מחשב את ההפרש לפי הימים שנשארו בתקופה הנוכחית, כך שתשלמו רק את ההפרש. כדי לעבור מ-Family ל-Individual, כתבו לנו מהעמוד הזה והצוות יעביר אתכם.",
             ],
           },
           {
@@ -4039,9 +4051,9 @@ Object.assign(HELP, {
           },
           {
             id: "unknown-charge",
-            q: "אני רואה חיוב שאני לא מזהה.",
+            q: "מה החיוב הזה בכרטיס שלי?",
             a: [
-              "חיובים מופיעים כ-GADIT או GADIT.APP עם $2.99 (Clear חודשי), $4.99 (Deep חודשי), $29.99 (Clear שנתי), או $49.99 (Deep שנתי). אם זה לא תואם, זה כנראה משירות אחר.",
+              "החיובים מופיעים בשם GADIT או GADIT.APP. בישראל החיוב בשקלים: Individual עולה ₪14.90 לחודש או ₪149 לשנה, ו-Family עולה ₪19.90 לחודש או ₪199 לשנה. מנויים שהתחילו לפני אוקטובר 2026 נשארים במחיר שבו התחילו. אם הסכום לא מתאים, ייתכן שהחיוב משירות אחר.",
               "אם אתם בטוחים שזה לא שלכם, אל תפנו לבנק עם מחלוקת עדיין. כתבו לנו קודם עם התאריך והסכום. הצוות ימצא, יסביר מה זה, ויחזיר אם צריך. פתיחת מחלוקת דרך הבנק עלולה לסבך את החיוב ואת החשבון שלכם בהמשך, לכן פנייה לתמיכה היא מהירה ובטוחה יותר.",
             ],
           },
@@ -4055,11 +4067,11 @@ Object.assign(HELP, {
           },
           {
             id: "plan-comparison",
-            q: "מה ההבדל בין Basic, Clear ו-Deep?",
+            q: "מה ההבדל בין Basic, Individual ו-Family?",
             a: [
-              "Basic (חינם): עד 20 חיפושי מילים ביום, כל המשמעויות, דוגמאות לכל משמעות, ניבים, ומקור המילה. לא נדרשת הרשמה לחיפושים בסיסיים.",
-              "Clear ($2.99 לחודש או $29.99 לשנה): חיפושים ללא הגבלה, הסברים ידידותיים לילדים, תמונה לכל מילה (30 בחודש), חיבור משפט משלכם עם פידבק, פירוט ניבים, ו-30 ימי היסטוריית חיפושים.",
-              "Deep ($4.99 לחודש או $49.99 לשנה): כל מה ש-Clear כולל, ובנוסף חידוני תרגול, המחברת האישית עם תרגול חכם בשיטת חזרה מרווחת, השוואה בין מילים דומות, ומכסה גדולה יותר של תמונות (100 בחודש).",
+              "Basic (חינם): עד 10 חיפושי מילים ביום, כל המשמעויות, דוגמאות, ניבים, מקור המילה, המשמעות הנכונה לפי המשפט, ומחברת של עד 30 מילים.",
+              "Individual (₪14.90 לחודש או ₪149 לשנה): לאדם אחד, כל כלי הלימוד. חיפושים ללא הגבלה, תמונה לכל משמעות, עוד דוגמאות ושאלות על כל מילה, חיבור משפט עם משוב, כל מילה, תגיד את זה, הקראה בקול טבעי וחיפוש בקול, שימוש בלי אינטרנט, משחקים, חידונים ודו-קרב מילים, ותרגול חכם עם הכנה למבחן והכתבה.",
+              "Family (₪19.90 לחודש או ₪199 לשנה): כל מה שיש ב-Individual לעד 5 ילדים ולהורים, ובנוסף מצב ילדים, אזור משלו לכל ילד, עזרה בשיעורי בית, ולוח הורה עם התראה על כל מילה. לבתי ספר יש מסלול נפרד. כל הפרטים ו-14 ימי הניסיון בחינם מחכים לכם בעמוד המחירים.",
             ],
           },
         ],
@@ -4071,7 +4083,7 @@ Object.assign(HELP, {
         items: [
           {
             id: "no-verification-email",
-            q: "לא קיבלתי מייל אימות.",
+            q: "לא קיבלתי מייל אימות",
             a: [
               "בדקו קודם את תיקיית הספאם והקידומים. Gmail ו-Outlook לפעמים מפנים מיילי חשבון לשם עד שמסמנים אחד כ\"לא ספאם\".",
               "אם זה לא שם, אולי הייתה טעות באימייל בהרשמה. נסו להירשם שוב ובדקו את הכתובת. אם נרשמתם דרך Google, לא נדרש מייל אימות.",
@@ -4079,7 +4091,7 @@ Object.assign(HELP, {
           },
           {
             id: "forgot-password",
-            q: "שכחתי סיסמה.",
+            q: "שכחתי סיסמה",
             a: [
               "פתחו את דיאלוג ההתחברות ולחצו \"שכחת סיסמה?\". הכניסו את האימייל שאתם משתמשים בו ב-Gadit ותקבלו לינק לאיפוס תוך דקה או שתיים.",
               "אם המייל לא מגיע, בדקו ספאם. אם הוא עדיין לא מגיע, אולי נרשמתם עם Google ולא עם אימייל וסיסמה. נסו את הכפתור \"Continue with Google\".",
@@ -4087,7 +4099,7 @@ Object.assign(HELP, {
           },
           {
             id: "wrong-credentials",
-            q: "אני בטוח שהסיסמה נכונה אבל מקבל \"אימייל או סיסמה שגויים\".",
+            q: "אני בטוח שהסיסמה נכונה אבל מקבל \"אימייל או סיסמה שגויים\"",
             a: [
               "שלושה דברים לבדוק. ראשית, Caps Lock. שנית, רווח מיותר אחרי העתקה. שלישית, נרשמתם עם Google ולא עם סיסמה (השתמשו ב-\"Continue with Google\").",
               "עדיין תקועים? אפסו את הסיסמה מאותו דיאלוג. זה מסדר אתכם נקי.",
@@ -4095,7 +4107,7 @@ Object.assign(HELP, {
           },
           {
             id: "google-fails",
-            q: "התחברות עם Google לא עובדת.",
+            q: "התחברות עם Google לא עובדת",
             a: [
               "הסיבה הנפוצה ביותר: הדפדפן חוסם cookies של צד שלישי או pop-ups עבור gadit.app. אפשרו אותם בהרשאות שורת הכתובת ונסו שוב.",
               "אם אתם במצב גלישה בסתר, התחברות Google מוגבלת בכוונה. עברו לחלון רגיל.",
@@ -4121,8 +4133,8 @@ Object.assign(HELP, {
             id: "share-account",
             q: "בן הזוג או הילד שלי יכולים לחלוק את החשבון שלי?",
             a: [
-              "משתמש מחובר אחד לחשבון בכל רגע. מצב ילדים מאפשר לחשבון Clear או Deep אחד לשרת הורה וילד יחד: לוחצים על הטוגל וההגדרות מוצגות באופן ידידותי לילד בלי לוגין נפרד.",
-              "לשני מבוגרים שרוצים מחברות והתקדמות נפרדות, פתחו שני חשבונות. Clear עולה $2.99 לחודש לכל חשבון.",
+              "בכל חשבון מחובר אדם אחד בכל רגע. למשפחה, מסלול Family בנוי בדיוק לזה: עד 5 ילדים וההורים, לכל אחד אזור משלו, מחברת והתקדמות משלו, ובנוסף מצב ילדים לילדים ולוח הורה.",
+              "למבוגר אחד לבד, Individual מתאים לאדם אחד עם כל כלי הלימוד. השוו בין המסלולים והמחירים בעמוד המחירים.",
             ],
           },
           {
@@ -4150,25 +4162,25 @@ Object.assign(HELP, {
           },
           {
             id: "kids-not-working",
-            q: "מצב ילדים לא מחליף את ההסבר.",
+            q: "מצב ילדים לא מחליף את ההסבר",
             a: [
-              "מצב ילדים מחליף טקסט רק היכן שלמילה כבר יש הסבר ידידותי לילד שנוצר. למילים חדשות שזה עתה חיפשתם, תנו לזה 10 עד 15 שניות. הגרסה לילדים נוצרת on-the-fly בפעם הראשונה.",
-              "כמו כן: מצב ילדים דורש Clear או Deep. אם אתם ב-Basic, הטוגל יזמין אתכם לשדרג. למשתמשים אנונימיים יוצע להירשם.",
+              "מצב ילדים מחליף את הטקסט רק כשלמילה כבר יש הסבר מותאם לילדים. אם חיפשתם מילה בפעם הראשונה, חכו 10 עד 15 שניות עד שההסבר לילדים יהיה מוכן.",
+              "מצב ילדים הוא חלק ממסלול Family. ב-Basic, ב-Individual או בלי חשבון, המתג מציג את מסלול Family במקום להידלק. מי שנרשמו ל-Clear או ל-Deep לפני אוקטובר 2026 ממשיכים ליהנות ממצב ילדים. כדי לקבל אותו, היכנסו ל-Family בעמוד המחירים.",
             ],
           },
           {
             id: "voice-fails",
-            q: "חיפוש קולי לא עובד.",
+            q: "חיפוש קולי לא עובד",
             a: [
               "חיפוש קולי דורש הרשאת מיקרופון. רוב הדפדפנים שואלים פעם אחת לאתר. אם בטעות אמרתם חסום, צריך להחזיר ידנית: לחצו על אייקון המנעול או המידע ליד gadit.app בשורת הכתובת, אחר כך Site settings, אחר כך Microphone, אחר כך Allow.",
-              "ב-Safari iOS, גישה למיקרופון דורשת גם הגדרה ב-Settings → Safari → Microphone. חיפוש קולי הוא כרגע פיצ'ר של Clear ו-Deep: משתמשי Basic יראו בקשה לשדרג מסלול, אורחים לא מחוברים יראו בקשה להירשם.",
+              "ב-Safari באייפון ובאייפד, גישה למיקרופון דורשת גם הגדרה ב-Settings → Safari → Microphone. חיפוש בקול הוא חלק ממסלולי Individual ו-Family: ב-Basic תראו את המסלולים במקום, ומי שלא מחוברים יתבקשו להתחבר. כדי לשדרג, היכנסו לעמוד המחירים.",
             ],
           },
           {
             id: "no-image",
-            q: "אני לא מצליח לייצר תמונה למילה.",
+            q: "לא מצליחים לקבל תמונה למילה",
             a: [
-              "יצירת תמונות היא פיצ'ר של Clear או Deep עם מכסה חודשית. Clear מקבל 30 תמונות לחודש, Deep מקבל 100. אם נגמרה המכסה, תראו חסימה. היא מתאפסת ב-1 לכל חודש.",
+              "תמונות הן חלק ממסלולי Individual ו-Family, עם עד 100 תמונות חדשות בחודש. תמונה שכבר קיימת למשמעות הזאת נפתחת בלי להיספר. במסלול Clear הישן יש 30 בחודש, ו-Basic לא כולל תמונות. כשהתמונות של החודש נגמרות תופיע הודעה, והספירה מתחילה מחדש בתחילת כל חודש.",
               "אם אתם מתחת למכסה ועדיין רואים כשלים, זה בדרך כלל זמני. נסו שוב בעוד 30 שניות. כשלים מתמשכים זה באג. אנא דווחו מעמוד המילה.",
             ],
           },
@@ -4176,21 +4188,21 @@ Object.assign(HELP, {
             id: "save-word",
             q: "איך שומרים מילה במחברת?",
             a: [
-              "בכל עמוד תוצאת מילה, לחצו על שמור במחברת ליד הכותרת. המחברת היא פיצ'ר של Clear ו-Deep, שבו תוכלו לסקור מילים שמורות מאוחר יותר, לראות אותן בתצוגת גלקסיה, ולהריץ אימוני חזרה חכמה (Deep).",
-              "מילים ששמרתם ופתחתם לפחות פעם אחת זמינות במצב לא־מקוון. בנוסף, חבילת האופליין שומרת במטמון את המילים הפופולריות בשפה שלכם, כדי שתהיו מוכנים גם בלי אינטרנט.",
+              "אין צורך. כשאתם מחוברים, כל מילה שאתם מחפשים נשמרת במחברת מעצמה. ב-Basic המחברת מכילה עד 30 מילים. ב-Individual וב-Family אין הגבלה, ויש גם תרגול חכם שמחזיר אליכם את המילים לחזרה בזמן הנכון.",
+              "ב-Individual וב-Family המילים שחיפשתם נשמרות גם במכשיר, כך שהן נפתחות גם בלי אינטרנט. כדי לראות את המילים שלכם, פתחו את המחברת מהתפריט.",
             ],
           },
           {
             id: "offline",
             q: "איך עובד המצב הלא־מקוון?",
             a: [
-              "מילים שראיתם כבר נשמרות במטמון מקומי. פתחו אותן שוב בלי אינטרנט והן יטענו מיידית. חבילת האופליין המלאה (מילים מובילות בשפה שלכם) יורדת לבקשתכם מעמוד המחברת.",
-              "חיפוש מילה חדשה לחלוטין עדיין דורש חיבור לאינטרנט, כי המערכת צריכה לייצר את ההגדרה מאפס. המטמון הלא־מקוון הוא למילים שכבר חקרתם.",
+              "שימוש בלי אינטרנט הוא חלק ממסלולי Individual ו-Family. כל מילה שאתם מחפשים נשמרת במכשיר, כך שהיא נפתחת שוב מיד גם בלי אינטרנט. אפשר גם להוריד מעמוד החשבון חבילה של המילים הנפוצות ביותר בשפה שלכם.",
+              "חיפוש של מילה חדשה לגמרי עדיין דורש חיבור, כי Gadit צריך להכין בשבילה את התוצאה המלאה. העותק במכשיר כולל את המילים שכבר נמצאות בו. אם אתם ב-Basic, הציצו במסלולים בעמוד המחירים.",
             ],
           },
           {
             id: "slow",
-            q: "האפליקציה מרגישה אטית.",
+            q: "האפליקציה מרגישה אטית",
             a: [
               "החיפוש הראשון של מילה הוא האטי ביותר, כי המערכת מייצרת את התוצאה המלאה מאפס. לרוב מדובר בכמה שניות, לפעמים יותר על מילים מורכבות. חיפושים חוזרים של אותה המילה מיידיים, כי הם מגיעים מהמטמון.",
               "אם הכל מרגיש אטי, נסו לרענן את הדף ברענון קשה: Cmd+Shift+R במק, או Ctrl+Shift+R בווינדוס. אם האיטיות נמשכת בכל העמודים, שלחו לנו מייל עם המדינה והדפדפן שלכם, כדי שהצוות יוכל לבדוק אם יש בעיית ניתוב מהאזור שלכם לשרתים.",
@@ -4208,7 +4220,7 @@ Object.assign(HELP, {
             id: "change-language",
             q: "איך משנים את שפת הממשק?",
             a: [
-              "בפינה הימנית-עליונה של כל עמוד תראו אייקון קטן של דגל (או את שם השפה הנוכחית). לחצו עליו ובחרו מתוך 30+ שפות: עברית, אנגלית, יוונית, ערבית, רוסית, ספרדית, פורטוגזית, צרפתית, גרמנית, צ'כית, סלובקית, איטלקית, יפנית, הינדי, אמהרית.",
+              "בפינה הימנית-עליונה של כל עמוד תראו אייקון קטן של דגל (או את שם השפה הנוכחית). לחצו עליו ובחרו מתוך 41 שפות.",
               "הבחירה נשמרת על המכשיר. הכל ייטען מחדש בשפה החדשה: הממשק, התפריטים, הגדרות מילים עתידיות, הדוגמאות, ההסבר לילדים ואפילו האטימולוגיה. תוצאות שכבר נשמרו במטמון בשפה הישנה יישארו כך עד שתחפשו אותן שוב.",
             ],
           },
@@ -4246,7 +4258,7 @@ Object.assign(HELP, {
           },
           {
             id: "empty-dashboard",
-            q: "נרשמתי אבל לוח השותפים שלי ריק.",
+            q: "נרשמתי אבל לוח השותפים שלי ריק",
             a: [
               "הסטטיסטיקות מופיעות אחרי הקליק הראשון על הלינק שלכם. ריק פירושו פשוט שאף אחד לא לחץ עדיין. צאו ושתפו את הלינק. לוח השותפים מתעדכן כמעט בזמן אמת ברגע שמתחילה פעילות.",
               "אם שיתפתם ומישהו נרשם אבל לוח השותפים לא משקף את זה, כתבו לנו עם הזמן המשוער שבו הוא נרשם, והצוות יבדוק את השיוך.",
@@ -4262,7 +4274,7 @@ Object.assign(HELP, {
           },
           {
             id: "missing-commission",
-            q: "מישהו נרשם דרך הלינק שלי אבל אני לא רואה עמלה.",
+            q: "מישהו נרשם דרך הלינק שלי אבל אני לא רואה עמלה",
             a: [
               "ברוב המקרים זה עניין של תזמון: הרישום מופיע בלוח השותפים תוך דקות, אבל העמלה נרשמת רק כשהמנוי משלם בפועל, וזה יכול להיות כמה ימים אחר כך אם הוא בתקופת ניסיון. תבדקו שוב אחרי שתקופת הניסיון נגמרת.",
               "אם המנוי שילם ועדיין אין עמלה אחרי 48 שעות, כתבו לנו עם הזמן המשוער של ההרשמה ועם האימייל או השם המשוער של הנרשם, אם אתם יודעים. הצוות יבדוק את שרשרת השיוך ויתקן ידנית כל פספוס.",
@@ -4279,16 +4291,16 @@ Object.assign(HELP, {
             id: "what-is-gadit",
             q: "מה זה Gadit?",
             a: [
-              "מילון רב־לשוני שבנוי כדי לגרום למילה להיתפס, לא רק לתת הגדרה של שורה אחת. כל מילה נפתחת עם כל המשמעויות שלה, דוגמאות אמיתיות לכל משמעות, ניבים, אטימולוגיה, תמונה אופציונלית, ו(עם Clear ו-Deep) הסבר ידידותי לילדים, חיבור משפט משלכם עם פידבק, וחידונים.",
-              "כרגע 30+ שפות ממשק. אצלנו אומרים לעשות GAD למילה, כלומר להבין אותה עד הסוף, לא רק לתרגם אותה.",
+              "Gadit עוזר להבין כל מילה עד הסוף, ולא רק לקבל הגדרה של שורה אחת. כל מילה נפתחת עם כל המשמעויות שלה, דוגמאות אמיתיות לכל משמעות, ניבים ומקור המילה. המסלולים בתשלום מוסיפים תמונה לכל משמעות, תרגול, משחקים ועוד, ו-Family מוסיף מצב ילדים ואזור משלו לכל ילד.",
+              "Gadit עובד ב-41 שפות. אצלנו אומרים לעשות GAD למילה, כלומר להבין אותה עד הסוף, לא רק לתרגם אותה. כדי לראות מה כולל כל מסלול, היכנסו לעמוד המחירים.",
             ],
           },
           {
             id: "languages",
-            q: "אילו שפות אתם תומכים?",
+            q: "באילו שפות Gadit עובד?",
             a: [
-              "ממשק: אנגלית, עברית, יוונית, ערבית, רוסית, ספרדית, פורטוגזית, צרפתית, גרמנית, צ'כית, סלובקית, איטלקית, יפנית.",
-              "אפשר לחפש מילה בכל אחת מהשפות הללו ולקבל הגדרה, דוגמאות, והכל ברירת מחדל בשפת הממשק שבחרתם. עברית וערבית הן RTL מלא ומשתמשות בפונטים הילידיים שלהן.",
+              "Gadit עובד ב-41 שפות, ביניהן עברית, אנגלית, ערבית, ספרדית, צרפתית, גרמנית, רוסית, סינית, יפנית, הינדי, זולו, קוסה ואפריקאנס.",
+              "אפשר לחפש מילה בכל אחת מהשפות האלה ולקבל את המשמעויות, הדוגמאות וכל השאר בשפה שבחרתם לממשק. עברית, ערבית ופרסית נכתבות מימין לשמאל, עם הגופנים שלהן. כדי להחליף שפה, לחצו על כפתור השפה בראש כל עמוד.",
             ],
           },
           {
@@ -4296,7 +4308,7 @@ Object.assign(HELP, {
             q: "Gadit בטוח לילדים?",
             a: [
               "Gadit נבנה כך שהורה יוכל להשתמש בו עם הילד בצורה בטוחה ומבוקרת. מצב ילדים מייצר הסברים פשוטים, קונקרטיים ומתאימים לגיל (רמת 5 עד 10 שנים), עם אותו מנוע שמייצר את התוכן למבוגרים, רק עם הוראות מפורשות לפישוט. אף תוכן שמשתמשים יוצרים לא מוצג לילדים.",
-              "בהתאם למדיניות שלנו ולכללי פרטיות ילדים בעולם, חשבון עצמאי מיועד לגיל 13 ומעלה. המודל הסטנדרטי הוא חשבון של ההורה שמשמש את ההורה יחד עם הילד, וזה בדיוק מה שמצב ילדים נועד לאפשר.",
+              "בהתאם למדיניות שלנו ולכללי פרטיות ילדים בעולם, חשבון עצמאי מיועד לגיל 13 ומעלה. ילדים משתמשים ב-Gadit דרך ההורה: במסלול Family ההורה מוסיף כל ילד מעמוד המשפחה, כל ילד מקבל אזור משלו עם מצב ילדים, ולוח ההורה מראה את המילים שכל ילד מחפש. כדי להתחיל, היכנסו ל-Family בעמוד המחירים.",
             ],
           },
           {
@@ -4304,7 +4316,7 @@ Object.assign(HELP, {
             q: "איפה הנתונים שלי שמורים? אתם מוכרים אותם?",
             a: [
               "חשבון, היסטוריה, מחברת ותמונות שנוצרו נשמרים באופן מאובטח אצל Firebase, מוצפנים באחסון. אנחנו לא מוכרים את הנתונים שלכם לאיש. אנחנו משתפים מידע רק עם השירותים שמפעילים את Gadit (אחסון, תשלומים, ספקי תוכן), בדיוק כפי שמפורט במדיניות הפרטיות.",
-              "אפשר לייצא את המחברת או למחוק חשבון בכל רגע מעמוד החשבון.",
+              "אפשר למחוק את החשבון בכל רגע מעמוד החשבון. כדי לקבל עותק של המחברת או של כל מידע אחר שנשמר אצלנו, כתבו לנו מהעמוד הזה.",
             ],
           },
           {

@@ -41,7 +41,10 @@ function keyboardHint(word: string, uiLangCode: string): string {
 //   broke. 2 anonymous → 20 registered is also a 10x jump, which is
 //   the whole signup pitch. Fixed 2026-07-08.
 // Paid (Clear/Deep) is unmetered — handled by an isPaid bypass below.
-const ANON_DAILY_LIMIT = 2;
+// 2 → 20 on 2026-11-07 (Gadi): counted per IP, so a home or school Wi-Fi
+// shares it; the real anonymous wall is 3 searches per device (WordClient).
+// This stays only as a cost backstop.
+const ANON_DAILY_LIMIT = 20;
 const BASIC_DAILY_LIMIT = 10; // 20 → 10 with the new plans (Gadi 2026-10-06)
 // A class code outside school hours: a basic dictionary for the whole class,
 // metered per class instead of per IP (Gadi 2026-10-05).
