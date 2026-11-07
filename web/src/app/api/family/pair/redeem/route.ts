@@ -2,7 +2,8 @@
  * POST /api/family/pair/redeem
  *
  * No auth. Anyone with a valid 6-digit code can redeem it. The code
- * itself is the secret (rate-limited by Vercel + Firestore writes).
+ * itself is the secret, so wrong guesses are capped: 10 per IP per
+ * 15 minutes and 300 across everyone per hour (rateLimits counters).
  *
  * Body: { code: string /* "048213" *\/ }
  * Response: { token: string, role: "kid" | "parent", familyId, memberId, name }
@@ -23,6 +24,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { syntheticUidFor, isParentRole, MemberRole } from "@/lib/family";
+import { requestIp, limitCount, limitBump } from "@/lib/rate-limit";
+
+const IP_FAILS_MAX = 10;
+const IP_WINDOW_SEC = 15 * 60;
+const ALL_FAILS_MAX = 300;
+const ALL_WINDOW_SEC = 60 * 60;
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,10 +38,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "invalid_code" }, { status: 400 });
     }
 
+    const ip = requestIp(req);
+    const [ipFails, allFails] = await Promise.all([
+      limitCount("pairFail", ip, IP_WINDOW_SEC),
+      limitCount("pairFail", "all", ALL_WINDOW_SEC),
+    ]);
+    if (ipFails >= IP_FAILS_MAX || allFails >= ALL_FAILS_MAX) {
+      return NextResponse.json({ error: "too_many_attempts" }, { status: 429 });
+    }
+
     const db = getAdminDb();
     const codeRef = db.collection("pairingCodes").doc(code);
     const codeSnap = await codeRef.get();
     if (!codeSnap.exists) {
+      await Promise.all([
+        limitBump("pairFail", ip, IP_WINDOW_SEC),
+        limitBump("pairFail", "all", ALL_WINDOW_SEC),
+      ]);
       return NextResponse.json({ error: "code_not_found" }, { status: 404 });
     }
     const codeData = codeSnap.data() as { familyId: string; memberId: string; expiresAt: number };

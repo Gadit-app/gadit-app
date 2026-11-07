@@ -47,7 +47,8 @@ async function requireAdmin(req: NextRequest): Promise<
   }
   try {
     const decoded = await getAdminAuth().verifyIdToken(idToken);
-    const email = decoded.email ?? "";
+    // A verified address only: an unverified account can carry any email.
+    const email = decoded.email_verified === true ? decoded.email ?? "" : "";
     if (!ADMIN_EMAILS.has(email)) {
       return {
         ok: false,

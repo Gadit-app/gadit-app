@@ -32,7 +32,7 @@ async function requireAdmin(req: NextRequest): Promise<{ ok: true } | { ok: fals
   if (!idToken) return { ok: false, response: NextResponse.json({ error: "login_required" }, { status: 401 }) };
   try {
     const decoded = await getAdminAuth().verifyIdToken(idToken);
-    if (!ADMIN_EMAILS.has(decoded.email ?? "")) return { ok: false, response: NextResponse.json({ error: "forbidden" }, { status: 403 }) };
+    if (decoded.email_verified !== true || !ADMIN_EMAILS.has(decoded.email ?? "")) return { ok: false, response: NextResponse.json({ error: "forbidden" }, { status: 403 }) };
     return { ok: true };
   } catch {
     return { ok: false, response: NextResponse.json({ error: "invalid_token" }, { status: 401 }) };

@@ -24,7 +24,9 @@ export async function POST(req: NextRequest) {
 
   let adminEmail = "";
   try {
-    adminEmail = (await getAdminAuth().verifyIdToken(idToken)).email ?? "";
+    // A verified address only: an unverified account can carry any email.
+    const d = await getAdminAuth().verifyIdToken(idToken);
+    adminEmail = d.email_verified === true ? d.email ?? "" : "";
   } catch {
     return NextResponse.json({ error: "invalid_token" }, { status: 401 });
   }

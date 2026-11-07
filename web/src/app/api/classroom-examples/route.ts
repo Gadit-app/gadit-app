@@ -37,7 +37,12 @@ function approvedQuote(q: unknown): ClassroomQuote | undefined {
  *   POST { word, set?|meaning?, uiLang? }
  * Returns { examples: string[], cached: boolean }.
  */
+import { limitBump, requestIp } from "@/lib/rate-limit";
+
 export const maxDuration = 30;
+
+// New example generations per caller per hour (cache hits are free).
+const GEN_PER_IP_HOUR = 60;
 
 async function resolve(params: {
   word?: string | null;
@@ -45,6 +50,7 @@ async function resolve(params: {
   setId?: string | null;
   uiLang?: string | null;
   m?: string | null;
+  ip?: string;
 }) {
   const word = (params.word ?? "").trim();
   if (!word) return { error: "word required", status: 400 as const };
@@ -84,7 +90,15 @@ async function resolve(params: {
     return { examples: [], cached: false, status: 200 as const };
   }
 
-  const res = await getOrGenerateExamples(word, meaning, uiLang, { generate: !isPilotTopicId(params.setId), audience });
+  const canGenerate = !isPilotTopicId(params.setId);
+  let res = await getOrGenerateExamples(word, meaning, uiLang, { generate: false, audience });
+  if (!res.examples.length && canGenerate) {
+    // A meaning can come from the browser, so new generations are capped per caller.
+    if ((await limitBump("clsEx", params.ip ?? "unknown", 3600)) > GEN_PER_IP_HOUR) {
+      return { examples: [], cached: false, status: 200 as const };
+    }
+    res = await getOrGenerateExamples(word, meaning, uiLang, { generate: true, audience });
+  }
   return { examples: res.examples, cached: res.cached, status: 200 as const };
 }
 
@@ -99,6 +113,7 @@ export async function GET(req: NextRequest) {
     setId: sp.get("set"),
     uiLang: sp.get("uiLang"),
     m: sp.get("m"),
+    ip: requestIp(req),
   });
   if ("error" in out && out.error) {
     return NextResponse.json({ error: out.error }, { status: out.status });
@@ -123,6 +138,7 @@ export async function POST(req: NextRequest) {
     setId: body.set,
     uiLang: body.uiLang,
     m: body.m,
+    ip: requestIp(req),
   });
   if ("error" in out && out.error) {
     return NextResponse.json({ error: out.error }, { status: out.status });

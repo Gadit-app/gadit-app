@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useAuth } from "./auth-context";
 
 /**
  * "In simple words" (Gadi 2026-11-05): grown-ups want simple definitions too.
@@ -10,6 +11,8 @@ import { useCallback, useEffect, useState } from "react";
  * every paid plan, Individual included; Kids Mode stays a Family tool.
  *
  * Kept on the device, like Kids Mode, and synced across components and tabs.
+ * Counts as on only for a paid plan, so a switch left on from a paid account
+ * (or set by hand in storage) does nothing on a free one.
  */
 const KEY = "gadit-simple-words";
 const EVENT_NAME = "gadit-simple-words-change";
@@ -19,6 +22,8 @@ const read = () => {
 };
 
 export function useSimpleWords(): [boolean, (next: boolean) => void] {
+  const { plan } = useAuth();
+  const paid = plan === "clear" || plan === "deep";
   const [on, setOn] = useState<boolean>(read);
   useEffect(() => {
     const sync = () => setOn(read());
@@ -37,7 +42,7 @@ export function useSimpleWords(): [boolean, (next: boolean) => void] {
     } catch { /* storage blocked */ }
     window.dispatchEvent(new Event(EVENT_NAME));
   }, []);
-  return [on, set];
+  return [on && paid, set];
 }
 
 /** The switch's name in every UI language. */
