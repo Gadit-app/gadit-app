@@ -442,7 +442,9 @@ export const REAL_CSS = `
   .fam-devices > .fam-tablet { width: 34%; }
 }
 .fam-phone-screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
-.fam-real-hero { display: flex; justify-content: center; align-items: center; max-width: 560px; margin: 0 auto; padding: 18px 0 26px; }
+/* width: 100% because the phones measure their own width (container-type), so a
+   shrink-to-fit parent would collapse them to nothing (2026-11-08). */
+.fam-real-hero { display: flex; justify-content: center; align-items: center; width: 100%; max-width: 560px; margin: 0 auto; padding: 18px 0 26px; }
 .fam-real-hero .fam-phone { max-width: 250px; flex: 1 1 0; }
 .fam-real-hero .fam-phone:first-child { transform: rotate(5deg) translateY(10px); z-index: 2; margin-inline-end: -36px; }
 .fam-real-hero .fam-phone:last-child { transform: rotate(-6deg) translateY(34px); z-index: 1; }
