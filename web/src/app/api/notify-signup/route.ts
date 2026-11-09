@@ -388,8 +388,13 @@ ${visitRows}
     // The welcome fires in the user's real UI language (33-lang path), falling
     // back to English inside getDripForLang. Fire it now rather than waiting for
     // the daily cron — a 24-hour first-impression delay costs too much.
+    // The language sent with this very call first: `data` was read before it
+    // was saved above, so on a new account data.uiLang is still empty and an
+    // Arabic speaker in Israel got the Hebrew welcome (2026-11-09).
     const generalLang: string =
-      typeof data.uiLang === "string" && data.uiLang
+      signupLang
+        ? signupLang
+        : typeof data.uiLang === "string" && data.uiLang
         ? (data.uiLang as string)
         : country?.toUpperCase() === "IL"
           ? "he"
