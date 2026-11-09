@@ -4657,8 +4657,9 @@ export function PricingPageRoute() {
   function clickSchoolsTier(tier: SchoolsTierKey) {
     // Hebrew schools go through the ₪ order form on /schools (Invoice4U
     // bank transfer + Israeli tax invoice — the main Israeli channel).
+    // Arabic too: Arab schools are Israeli schools (Gadi 2026-11-09).
     // Everyone else self-serves in USD via the in-app Payment Element.
-    if (lang === "he") {
+    if (lang === "he" || lang === "ar") {
       window.location.href = href("/schools");
       return;
     }
@@ -4886,9 +4887,12 @@ export function PricingPageRoute() {
           // Hebrew schools buy through the ₪ order form on /schools, per school
           // year with VAT (QA 2026-10-18: the cards showed $97/$297/$497 and the
           // button opened ₪3,950/₪6,950/₪9,950). Show the price they will see.
-          const ilOf = (k: string) => (lang === "he" ? IL_SCHOOL_PRICES.find((p) => p.key === k) : undefined);
+          // Arabic = Arab schools in Israel: the same ₪ offer (Gadi 2026-11-09).
+          const ilOf = (k: string) => (lang === "he" || lang === "ar" ? IL_SCHOOL_PRICES.find((p) => p.key === k) : undefined);
+          const ilYear = lang === "ar" ? "للسنة الدراسية" : "לשנת לימודים";
+          const ilVat = lang === "ar" ? "شامل ضريبة القيمة المضافة" : "כולל מע״מ";
           const priceOf = (t: (typeof SCHOOLS_TIER_LIST)[number]) => { const il = ilOf(t.key); return il ? `₪${il.yearly.toLocaleString("en-US")}` : billing === "yearly" ? t.usdYearly : t.usdMonthly; };
-          const periodOf = (t: (typeof SCHOOLS_TIER_LIST)[number]) => (ilOf(t.key) ? "לשנת לימודים" : period);
+          const periodOf = (t: (typeof SCHOOLS_TIER_LIST)[number]) => (ilOf(t.key) ? ilYear : period);
           return (
             <>
               {/* Desktop: one mustard comparison table, mirroring the
@@ -4912,7 +4916,7 @@ export function PricingPageRoute() {
                         <span className="wb-sc-per">{periodOf(t)}</span>
                       </div>
                       <div className="wb-sc-sub">
-                        {ilOf(t.key) ? "כולל מע״מ" : billing === "yearly" ? `≈ ${t.usdYearlyPerMonth} ${c.mo}` : " "}
+                        {ilOf(t.key) ? ilVat : billing === "yearly" ? `≈ ${t.usdYearlyPerMonth} ${c.mo}` : " "}
                       </div>
                       <button
                         type="button"
@@ -4967,7 +4971,7 @@ export function PricingPageRoute() {
                           <span className="wb-school-period">{periodOf(t)}</span>
                         </div>
                         <div className="wb-school-subprice">
-                          {ilOf(t.key) ? "כולל מע״מ · " : billing === "yearly" ? `≈ ${t.usdYearlyPerMonth} ${c.mo} · ` : ""}
+                          {ilOf(t.key) ? `${ilVat} · ` : billing === "yearly" ? `≈ ${t.usdYearlyPerMonth} ${c.mo} · ` : ""}
                           {studentsUpTo(t.maxStudents, lang)}
                         </div>
                         <button

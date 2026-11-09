@@ -11,5 +11,5 @@ import { SchoolsRealLanding } from "./SchoolsRealLanding";
  */
 export function SchoolsLandingSwitch({ standalone = false }: { standalone?: boolean }) {
   const { lang } = useLang();
-  return lang === "he" ? <SchoolsRealLanding /> : <SchoolsLandingClient standalone={standalone} />;
+  return lang === "he" || lang === "ar" ? <SchoolsRealLanding lang={lang} /> : <SchoolsLandingClient standalone={standalone} />;
 }

@@ -17,7 +17,7 @@ import { sendDripEmail } from "@/lib/email-drip/send";
 import { trialReminderDue, buildTrialReminder } from "@/lib/email-drip/trial-reminder";
 import { playUpgradeDue, buildPlayUpgrade } from "@/lib/email-drip/play-upgrade";
 import { loginReminderDue, buildLoginReminder } from "@/lib/email-drip/login-reminder";
-import { SCHOOL_DRIP, SCHOOL_SERIES_LIVE, SCHOOL_SERIES_FROM, schoolLang, buildSchoolMail } from "@/lib/email-drip/school-drip";
+import { SCHOOL_DRIP, SCHOOL_SERIES_LIVE, SCHOOL_SERIES_FROM, schoolDripLang, buildSchoolMail } from "@/lib/email-drip/school-drip";
 import { isInternalEmail } from "@/lib/internal-accounts";
 import { seriesGateSkips } from "@/lib/email-drip/series-gates";
 import { announcedOnIlDay } from "@/lib/email-drip/announce-send";
@@ -311,7 +311,7 @@ export async function GET(req: NextRequest) {
         if (!cand || m.dayOffset > cand.dayOffset) cand = m;
       }
       if (cand) {
-        const built = buildSchoolMail(cand, schoolLang(curriculum), buildUnsubUrl(u.uid));
+        const built = buildSchoolMail(cand, schoolDripLang(curriculum), buildUnsubUrl(u.uid));
         if (dryRun) {
           results.push({ uid: u.uid, email, mailKey: cand.key, status: "skipped", reason: "dryRun" });
         } else {

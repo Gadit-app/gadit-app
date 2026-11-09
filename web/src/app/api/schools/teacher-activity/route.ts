@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { SET_SUBJECTS } from "@/lib/word-sets";
+import { arGradeLabel, arTopic, catalogOfTopic, catalogView } from "@/lib/curriculum-catalog";
 
 /**
  * GET /api/schools/teacher-activity  (school account only)
@@ -15,7 +16,23 @@ export const maxDuration = 30;
 
 type Row = { kind: string; word: string; setId: string; subject?: string; title?: string; grade?: string; day: string; count?: number };
 
-const subjectName = (s: string) => SET_SUBJECTS.find((x) => x.key === s)?.he ?? s;
+// The subject in its own catalog's language: an Arabic school's unit showed
+// its raw key ("science-and-technology") because only the Hebrew list was
+// searched (2026-11-09).
+const subjectName = (s: string, setId: string) => {
+  const cat = catalogOfTopic(setId);
+  if (cat && cat !== "il-he") {
+    const v = catalogView(cat).subjects.find((x) => x.key === s);
+    if (v) return v.name;
+  }
+  return SET_SUBJECTS.find((x) => x.key === s)?.he ?? s;
+};
+// Same for the grade: a Hebrew or English unit of the Arab catalog kept its
+// unit's own label ("כיתות ז-ט", "Grades 7 to 9"); the catalog's Arabic one.
+const gradeName = (g: string, setId: string) => {
+  const t = setId.startsWith("cur-ar-") ? arTopic(setId) : undefined;
+  return (t && arGradeLabel(t.g)) || g;
+};
 
 function weekStart(day: string): string {
   const d = new Date(`${day}T12:00:00Z`);
@@ -49,7 +66,7 @@ export async function GET(req: NextRequest) {
   const lessons = new Map<string, { day: string; setId: string; title: string; subject: string; grade: string; words: Set<string>; quizzes: number }>();
   for (const r of rows) {
     const k = `${r.day}|${r.setId}`;
-    const l = lessons.get(k) ?? { day: r.day, setId: r.setId, title: r.title ?? "", subject: subjectName(r.subject ?? ""), grade: r.grade ?? "", words: new Set<string>(), quizzes: 0 };
+    const l = lessons.get(k) ?? { day: r.day, setId: r.setId, title: r.title ?? "", subject: subjectName(r.subject ?? "", r.setId ?? ""), grade: gradeName(r.grade ?? "", r.setId ?? ""), words: new Set<string>(), quizzes: 0 };
     if (r.kind === "word") l.words.add(r.word);
     else l.quizzes += 1;
     lessons.set(k, l);

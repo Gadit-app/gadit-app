@@ -7,7 +7,7 @@ import { EMAIL_BASE } from "./family-content";
  * per email, one sentence per line so the email breathes. Day 0 is the day
  * the series first meets the school (schoolSeriesStart). Saturdays are not
  * series days, like the Family series. Hebrew for Israeli curricula,
- * English for the rest.
+ * Arabic for the Arab curriculum (il-ar, 2026-11-09), English for the rest.
  *
  * Written for what the product really is today: one school login that the
  * teachers share (there are no teacher accounts), and for Israeli schools no
@@ -21,7 +21,8 @@ export const SCHOOL_SERIES_LIVE = true;
 export const SCHOOL_SERIES_FROM = "2026-10-11";
 
 type Content = { subject: string; body: string; cta: string };
-export type SchoolMail = { key: string; dayOffset: number; path: string; he: Content; en: Content };
+export type SchoolMail = { key: string; dayOffset: number; path: string; he: Content; en: Content; ar: Content };
+export type SchoolDripLang = "he" | "en" | "ar";
 
 const P = (...lines: string[]) => lines.join("\n\n");
 
@@ -44,6 +45,14 @@ export const SCHOOL_DRIP: SchoolMail[] = [
       "First: open the school dashboard and choose your curriculum and school type.",
       "Second: on the \"Classes\" tab, add the classes taking part in the pilot, each with the name of its teacher.",
       "After that, every subject and unit for your grades is ready to project.") },
+    ar: { subject: "أهلًا بكم في تجربة Gadit", cta: "إلى لوحة التحكم", body: P(
+      "مرحبًا،",
+      "يسعدنا أنكم معنا.",
+      "خلال الثلاثين يومًا القادمة سنساعدكم على إدخال Gadit إلى الدروس خطوة بعد خطوة.",
+      "لليوم خطوتان قصيرتان.",
+      "الأولى: الدخول إلى لوحة التحكم الخاصة بالمدرسة واختيار المنهج الدراسي ونوع المدرسة.",
+      "الثانية: في تبويب \"الصفوف\" إضافة الصفوف المشاركة في التجربة، ولكل صف اسم المعلّم الذي يدرّس فيه.",
+      "بعد ذلك تكون كل المواد والوحدات لطبقاتكم جاهزة للعرض.") },
   },
   {
     key: "sch-first-lesson", dayOffset: 1, path: "/sets",
@@ -59,6 +68,12 @@ export const SCHOOL_DRIP: SchoolMail[] = [
       "Each word appears on the big screen, with a picture, a definition that fits the lesson, and examples.",
       "You can play it aloud too.",
       "Start with a topic the class is learning this week.") },
+    ar: { subject: "الدرس الأول في خمس دقائق", cta: "إلى مجموعات الكلمات", body: P(
+      "حان الوقت لعرض الكلمات الأولى في الصف.",
+      "افتحوا مجموعات الكلمات واختاروا مادة وموضوعًا واضغطوا على \"عرض على الصفّ\".",
+      "تظهر كل كلمة على الشاشة الكبيرة مع صورة وتعريف يناسب الدرس وأمثلة.",
+      "يمكن الاستماع إليها، وفي الصفوف الدنيا عرضها بالتشكيل.",
+      "يُفضَّل البدء بموضوع يتعلّمه الصف هذا الأسبوع.") },
   },
   {
     key: "sch-teachers", dayOffset: 3, path: "/schools/manage",
@@ -76,6 +91,13 @@ export const SCHOOL_DRIP: SchoolMail[] = [
       "Start with two or three teachers who begin a new topic this week.",
       "Ask them to project the words at the start of the lesson.",
       "All a classroom needs is a computer and a projector or screen.") },
+    ar: { subject: "إدخال المعلّمين", cta: "إلى لوحة التحكم", body: P(
+      "Gadit في المدرسة هو أداة المعلّم.",
+      "لا يحتاج الطلاب إلى أجهزة أو حسابات.",
+      "يدخل كل المعلّمين في الطبقات المشاركة ببيانات الدخول الخاصة بالمدرسة ويحصلون على كل المواد.",
+      "يجدر البدء بمعلّمَين أو ثلاثة يبدؤون هذا الأسبوع موضوعًا جديدًا.",
+      "اطلبوا منهم عرض الكلمات في بداية الدرس.",
+      "كل ما يحتاجه الصف هو حاسوب وجهاز عرض أو شاشة.") },
   },
   {
     key: "sch-quiz", dayOffset: 6, path: "/sets",
@@ -95,6 +117,14 @@ export const SCHOOL_DRIP: SchoolMail[] = [
       "\"Class game\" is true or false, against the clock.",
       "The class answers together, and the screen shows how many they got right.",
       "Five minutes at the end of the lesson, and the words stay.") },
+    ar: { subject: "أمثلة واختبار ولعبة للصف كلّه", cta: "إلى مجموعات الكلمات", body: P(
+      "بعد عرض الكلمات يجدر التأكّد من أن الطلاب فهموها فعلًا.",
+      "في شاشة العرض ثلاثة أزرار.",
+      "\"أمثلة\" يعرض جملًا فيها الكلمة، واحدة بعد الأخرى.",
+      "\"اختبار للصف\" هو ثلاثة أسئلة عن الكلمة.",
+      "\"لعبة للصف\" هي صح أو خطأ في سباق مع الوقت.",
+      "يجيب الصف معًا، وتُظهر الشاشة كم إجابة صحيحة كانت.",
+      "خمس دقائق في نهاية الدرس، والكلمات تبقى.") },
   },
   {
     key: "sch-dictionary", dayOffset: 10, path: "/sets",
@@ -108,6 +138,11 @@ export const SCHOOL_DRIP: SchoolMail[] = [
       "The screen shows \"Your class: N words\", with a rank and the goal for the next one.",
       "When the class moves up a rank, the screen celebrates with them.",
       "It's a good moment to tell the students how many words they already know.") },
+    ar: { subject: "قاموس الصف يمتلئ", cta: "إلى مجموعات الكلمات", body: P(
+      "كل كلمة عُرضت في الصف تدخل إلى قاموس المدرسة.",
+      "تظهر على الشاشة عبارة \"صفّكم: N كلمة\" مع درجة وهدف للدرجة التالية.",
+      "عندما يصعد الصف درجة تحتفل الشاشة معه.",
+      "هذه لحظة جيدة لتخبروا الطلاب كم كلمة يعرفون الآن.") },
   },
   {
     key: "sch-halfway", dayOffset: 14, path: "/schools/manage",
@@ -121,6 +156,11 @@ export const SCHOOL_DRIP: SchoolMail[] = [
       "The simple measure: how many words are in the class dictionary, and how many teachers are using it.",
       "Ask two teachers too: do students understand the material better, and do they use the words in class?",
       "If you can, project a quiz on a topic taught a week ago, and see what stayed.") },
+    ar: { subject: "منتصف الطريق: كيف نقيس التحسّن", cta: "إلى لوحة التحكم", body: P(
+      "مرّ أسبوعان منذ بداية التجربة.",
+      "الطريقة البسيطة للقياس: كم كلمة في قاموس الصف، وكم معلّمًا يستخدم Gadit.",
+      "يُفضَّل أيضًا سؤال معلّمَين: هل يفهم الطلاب المادة أكثر، وهل يستخدمون الكلمات في الدرس؟",
+      "وإن أمكن، اعرضوا اختبارًا عن موضوع تعلّمه الصف قبل أسبوع وانظروا ماذا بقي.") },
   },
   {
     key: "sch-ending", dayOffset: 25, path: "https://gadit.app/he/schools/landing#pricing",
@@ -134,6 +174,12 @@ export const SCHOOL_DRIP: SchoolMail[] = [
       "The pilot is nearly over, and it's time to wrap up.",
       "We'd love a short call: what worked, what didn't, and how to continue for the school year.",
       "Just reply to this email and we'll get back to you.") },
+    ar: { subject: "التجربة تنتهي بعد خمسة أيام", cta: "إلى الأسعار", body: P(
+      "التجربة تقترب من نهايتها، وهذا وقت التلخيص.",
+      "يسعدنا تحديد مكالمة قصيرة: ما الذي نجح وما الذي نجح أقلّ وكيف نستمرّ في السنة الدراسية.",
+      "السعر يُحدَّد حسب عدد الطلاب في الطبقات المشاركة.",
+      "الدفع بتحويل بنكي مقابل فاتورة ضريبية.",
+      "يمكنكم ببساطة الردّ على هذه الرسالة وسنعود إليكم.") },
   },
 ];
 
@@ -141,11 +187,18 @@ export function schoolLang(curriculum: string | undefined): "he" | "en" {
   return (curriculum ?? "").startsWith("il-") || curriculum === "all" || !curriculum ? "he" : "en";
 }
 
-export function buildSchoolMail(m: SchoolMail, lang: "he" | "en", unsubscribeUrl: string): { subject: string; html: string } {
+/** The pilot emails' language: Arabic for the Arab curriculum (an Arab
+ *  school in Israel), else the curriculum rule above (2026-11-09). */
+export function schoolDripLang(curriculum: string | undefined): SchoolDripLang {
+  return curriculum === "il-ar" ? "ar" : schoolLang(curriculum);
+}
+
+export function buildSchoolMail(m: SchoolMail, lang: SchoolDripLang, unsubscribeUrl: string): { subject: string; html: string } {
   const c = m[lang];
   const base = lang === "en" ? EMAIL_BASE : `${EMAIL_BASE}/${lang}`;
   let url = m.path.startsWith("http") ? m.path : `${base}${m.path}`;
   if (lang === "en" && m.key === "sch-ending") url = "https://gadit.app/schools/landing";
+  if (lang === "ar" && m.key === "sch-ending") url = "https://gadit.app/ar/schools/landing#pricing";
   return {
     subject: c.subject,
     html: renderEmailHtmlV2({

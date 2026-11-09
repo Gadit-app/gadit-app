@@ -113,6 +113,7 @@ export async function POST(req: NextRequest) {
 <b>Size (participating grades):</b> ${esc(SIZE_LABELS[size] || size || "(none)")}<br/>
 <b>Start grade:</b> ${esc(grade || "(none)")}<br/>
 <b>School type:</b> ${esc(schoolType || "(none)")}<br/>
+<b>Page language:</b> ${lang === "ar" ? "Arabic (an Arab school in Israel: reply in Arabic)" : esc(lang)}<br/>
 <b>Notes:</b> ${esc(notes || "(none)")}</p>
 ${partner ? `<p><b>Came through partner:</b> ${esc(partner.name)} (${esc(partner.code)}). When the school pays, book the partner's share: /admin/partners, "Manual commission".</p>` : ""}
 <p>Next: open the school account + one-time code, and send the tax invoice.</p>`,

@@ -10,6 +10,8 @@ import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { useHref } from "@/lib/href";
 import { useAuth } from "@/lib/auth-context";
 import { track } from "@/lib/track";
+import { landingFont } from "@/lib/landing-i18n";
+import { C_AR } from "./il-ar-copy";
 
 /**
  * The Hebrew Schools landing (Gadi 2026-10-05), built like the Families
@@ -32,7 +34,7 @@ type Tool = { kicker: string; title: string; body: string; points: string[]; img
 // shared with /pricing (QA 2026-10-18).
 export { IL_SCHOOL_PRICES };
 
-const C = {
+const C_HE = {
   topCta: "פיילוט חינם",
   dashCta: "ללוח הבקרה",
   credPill: "לפי תוכניות הלימודים, מגן ועד י״ב",
@@ -144,14 +146,19 @@ const C = {
   finalTitle: "בשיעור הבא, המילים של השיעור כבר יכולות להיות על המסך.",
   finalBody: "ההקמה לוקחת כמה דקות.\nבלי התקנה, בלי צוות מחשוב, ובלי חשבונות לתלמידים.",
   finalCta: "לתיאום פיילוט חינם",
+  terms: "תנאי שימוש",
+  privacy: "מדיניות פרטיות",
 };
 
-function Shot({ name, phone, priority = false }: { name: string; phone?: boolean; priority?: boolean }) {
+/** The page copy; Arabic (il-ar-copy.ts) has the same shape plus its own tier labels. */
+export type SchRealCopy = typeof C_HE & { tierLabels?: Record<string, string> };
+
+function Shot({ name, phone, priority = false, base, alt }: { name: string; phone?: boolean; priority?: boolean; base: string; alt: string }) {
   if (phone) {
     return (
       <div className="sch-phone">
         <div className="sch-phone-screen">
-          <Image src={`/sch/screens/he/${name}.webp`} alt={C.shotAlt} width={780} height={1688} sizes="(max-width: 760px) 62vw, 270px" priority={priority} />
+          <Image src={`/sch/screens/${base}/${name}.webp`} alt={alt} width={780} height={1688} sizes="(max-width: 760px) 62vw, 270px" priority={priority} />
         </div>
       </div>
     );
@@ -159,7 +166,7 @@ function Shot({ name, phone, priority = false }: { name: string; phone?: boolean
   return (
     <div className="sch-laptop">
       <div className="sch-laptop-screen">
-        <Image src={`/sch/screens/he/${name}.webp`} alt={C.shotAlt} width={1600} height={1000} sizes="(max-width: 760px) 92vw, 620px" priority={priority} />
+        <Image src={`/sch/screens/${base}/${name}.webp`} alt={alt} width={1600} height={1000} sizes="(max-width: 760px) 92vw, 620px" priority={priority} />
       </div>
       <div className="sch-laptop-base" aria-hidden />
     </div>
@@ -175,17 +182,23 @@ function Check() {
   );
 }
 
-export function SchoolsRealLanding() {
+/**
+ * Hebrew, and since 2026-11-09 Arabic too: Arab schools are Israeli schools,
+ * so the Arabic page sells the same pilot and ₪ offer (Gadi), not the USD page.
+ */
+export function SchoolsRealLanding({ lang = "he" }: { lang?: "he" | "ar" }) {
+  const C: SchRealCopy = lang === "ar" ? C_AR : C_HE;
+  const base = lang === "ar" ? "il-ar" : "he";
   const href = useHref();
   // A school that already subscribes gets its dashboard in the top bar.
   const { schoolId } = useAuth();
   const toOrder = (where: string, kind: "pilot" | "order" = "pilot") => {
-    track("schools_order_click", { where, kind, page: "schools-real" });
+    track("schools_order_click", { where, kind, page: lang === "ar" ? "schools-real-ar" : "schools-real" });
     window.dispatchEvent(new CustomEvent("gadit-school-order-kind", { detail: kind }));
     document.getElementById("order")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
   return (
-    <div className="sch" dir="rtl" lang="he">
+    <div className="sch" dir="rtl" lang={lang} style={lang === "ar" ? { fontFamily: landingFont("ar") } : undefined}>
       <style>{CSS + CSS2}</style>
       <header className="sch-top">
         <Link href={href("/")} className="sch-logo" aria-label="Gadit" dir="ltr" translate="no">
@@ -221,7 +234,7 @@ export function SchoolsRealLanding() {
               </ul>
             </div>
             <div className="sch-hero-visual">
-              <Shot name="stage" priority />
+              <Shot base={base} alt={C.shotAlt} name="stage" priority />
             </div>
           </div>
         </section>
@@ -246,7 +259,7 @@ export function SchoolsRealLanding() {
                   <h3 className="sch-h3">{s.t}</h3>
                   <p className="sch-body"><Lines text={s.b} /></p>
                 </div>
-                <Shot name={s.img} phone={s.phone} />
+                <Shot base={base} alt={C.shotAlt} name={s.img} phone={s.phone} />
               </div>
             ))}
           </div>
@@ -269,7 +282,7 @@ export function SchoolsRealLanding() {
                 <p className="sch-body"><Lines text={t.body} /></p>
                 <ul className="sch-list">{t.points.map((p) => <li key={p}>{p}</li>)}</ul>
               </div>
-              <div className="sch-feature-visual"><Shot name={t.img} phone={t.phone} /></div>
+              <div className="sch-feature-visual"><Shot base={base} alt={C.shotAlt} name={t.img} phone={t.phone} /></div>
             </div>
           </section>
         ))}
@@ -290,12 +303,14 @@ export function SchoolsRealLanding() {
           </div>
         </section>
 
-        {/* Real words from a teacher (Gadi 2026-10-12). */}
-        <section className="sch-band sch-white">
-          <div className="sch-narrow">
-            <Testimonials kicker="מהכיתה" title="מה מספרת המורה" items={SCHOOL_TESTIMONIALS_HE} />
-          </div>
-        </section>
+        {/* Real words from a teacher (Gadi 2026-10-12), in Hebrew only. */}
+        {lang === "he" && (
+          <section className="sch-band sch-white">
+            <div className="sch-narrow">
+              <Testimonials kicker="מהכיתה" title="מה מספרת המורה" items={SCHOOL_TESTIMONIALS_HE} />
+            </div>
+          </section>
+        )}
 
         <section className="sch-band sch-tint">
           <div className="sch-narrow">
@@ -315,7 +330,7 @@ export function SchoolsRealLanding() {
           <div className="sch-tiers">
             {IL_SCHOOL_PRICES.map((t) => (
               <div key={t.key} className="sch-tier">
-                <div className="sch-tier-label">{t.label}</div>
+                <div className="sch-tier-label">{C.tierLabels?.[t.key] ?? t.label}</div>
                 <div className="sch-tier-price"><span dir="ltr">₪{t.yearly.toLocaleString("en-US")}</span> <small>{C.perYear}</small></div>
                 <div className="sch-tier-year">{C.inclVat}</div>
               </div>
@@ -337,7 +352,7 @@ export function SchoolsRealLanding() {
           <div className="sch-order">
             <h2 className="sch-h2 sch-center">{C.orderTitle}</h2>
             <p className="sch-body sch-center">{C.orderSub}</p>
-            <SchoolOrderForm />
+            <SchoolOrderForm lang={lang} />
           </div>
         </section>
 
@@ -364,9 +379,9 @@ export function SchoolsRealLanding() {
       </main>
       {/* Legal links on a page that starts a trial / collects details (QA 2026-10-07). */}
       <footer style={{ textAlign: "center", padding: "26px 16px 34px", fontSize: 13.5, color: "#6B7A80" }}>
-        <a href={href("/terms")} style={{ color: "inherit" }}>תנאי שימוש</a>
+        <a href={href("/terms")} style={{ color: "inherit" }}>{C.terms}</a>
         <span style={{ margin: "0 10px" }}>·</span>
-        <a href={href("/privacy")} style={{ color: "inherit" }}>מדיניות פרטיות</a>
+        <a href={href("/privacy")} style={{ color: "inherit" }}>{C.privacy}</a>
         <span style={{ margin: "0 10px" }}>·</span>
         <span dir="ltr">© Gadit 2026</span>
       </footer>

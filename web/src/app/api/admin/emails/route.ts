@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { LANGUAGES } from "@/lib/i18n";
 import { isInternalEmail } from "@/lib/internal-accounts";
-import { schoolLang } from "@/lib/email-drip/school-drip";
+import { schoolDripLang } from "@/lib/email-drip/school-drip";
 import { dunningLang } from "@/lib/dunning-email";
 import {
   LEDGER_SERIES,
@@ -131,7 +131,7 @@ export async function GET(req: NextRequest) {
         if (!e.sent && !e.at) continue;
         const { key, lang } = splitLang(rawKey);
         const lng =
-          lang ?? (series === "school" ? schoolLang(curriculumBySchool.get(doc.id)) : docLang);
+          lang ?? (series === "school" ? schoolDripLang(curriculumBySchool.get(doc.id)) : docLang);
         sends.push({ series, key, rawKey, lang: lng, at: e.at, ...(e.sent ? {} : { skipped: true }) });
       }
     }
