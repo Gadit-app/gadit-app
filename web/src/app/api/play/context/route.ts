@@ -5,27 +5,69 @@
  * Context Detective (2026-11-01): 3 short stories in the words' language,
  * each with 2 (kids) or 3 blanks that the child's own practice words fill,
  * plus 2 distractors per story and a one-line "why" per blank in the UI
- * language. One gpt call writes all 3 stories; the result is cached in
+ * language. One gpt call writes 4 or 5 stories with 4 distractors each, then
+ * each story is solved blind (without the answers) by its own call, which also
+ * writes the "why" lines; only the stories solved exactly are played, with the
+ * distractors the check found wrong (lib/context-game.ts, 2026-11-09). The result is cached in
  * `contextGameCache` by (lang, ui, kids, sorted words) so the same set is
- * never paid for twice. Broken stories are dropped (lib/context-game.ts).
+ * never paid for twice.
  */
 import crypto from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 import { hardCapReached } from "@/lib/ai-budget";
-import { contextMessages, parseContextRounds, type ContextRound } from "@/lib/context-game";
+import {
+  CONTEXT_ROUNDS, applyContextCheck, contextCheckMessages, contextMessages, parseContextRounds, type ContextRound,
+} from "@/lib/context-game";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 60;
+// Writing + the blind check take 15 to 35 s; a retry and a slow call fit in 120.
+export const maxDuration = 120;
 
 const MAX_WORDS = 9;
 const CODE = /^[a-zA-Z]{2,3}(-[a-zA-Z]{2,4})?$/;
 
 function cacheKey(lang: string, ui: string, kids: boolean, words: string[]): string {
   const sorted = words.map((w) => w.normalize("NFC").toLowerCase()).sort();
-  return crypto.createHash("sha256").update(`v1|${lang}|${ui}|${kids ? 1 : 0}|${sorted.join("|")}`).digest("hex").slice(0, 40);
+  // v2 (2026-11-09): stories now pass the blind check; v1 sets were never checked.
+  return crypto.createHash("sha256").update(`v2|${lang}|${ui}|${kids ? 1 : 0}|${sorted.join("|")}`).digest("hex").slice(0, 40);
+}
+
+async function chat(messages: { role: string; content: string }[], temperature: number, feature: string, plan: string, timeoutMs: number): Promise<string> {
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    signal: AbortSignal.timeout(timeoutMs),
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+    body: JSON.stringify({
+      model: TEXT_MODEL_FAST,
+      temperature,
+      max_completion_tokens: 3000,
+      response_format: { type: "json_object" },
+      messages,
+    }),
+  });
+  if (!res.ok) throw new Error(`openai ${res.status}`);
+  const data = await res.json();
+  const u = usageFrom(data);
+  void logAiUsage({ feature, model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut, plan });
+  return String(data.choices?.[0]?.message?.content ?? "");
+}
+
+/** Write the stories, solve each one blind (in parallel, so the child waits
+ *  for one story's check, not five), keep the ones solved exactly. */
+async function writeChecked(words: string[], lang: string, ui: string, kids: boolean, plan: string): Promise<ContextRound[]> {
+  const written = parseContextRounds(await chat(contextMessages(words, lang, kids), 0.5, "context_game", plan, 45_000), words, lang);
+  const checked = await Promise.all(
+    written.map((r) =>
+      // A check that hangs drops only its own story.
+      chat(contextCheckMessages([r], lang, ui, kids), 0, "context_game_check", plan, 25_000)
+        .then((c) => applyContextCheck([r], c))
+        .catch(() => []),
+    ),
+  );
+  return checked.flat();
 }
 
 export async function POST(req: NextRequest) {
@@ -75,29 +117,22 @@ export async function POST(req: NextRequest) {
 
   let rounds: ContextRound[] = [];
   try {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-      body: JSON.stringify({
-        model: TEXT_MODEL_FAST,
-        temperature: 0.7,
-        max_completion_tokens: 3000,
-        response_format: { type: "json_object" },
-        messages: contextMessages(words, lang, ui, kids),
-      }),
-    });
-    if (!res.ok) return NextResponse.json({ error: "generation_failed" }, { status: 502 });
-    const data = await res.json();
-    const u = usageFrom(data);
-    void logAiUsage({ feature: "context_game", model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut, plan: user.plan });
-    rounds = parseContextRounds(String(data.choices?.[0]?.message?.content ?? ""), words, lang);
+    const t0 = Date.now();
+    rounds = await writeChecked(words, lang, ui, kids, user.plan);
+    // Too few passed: one more batch, so the child still gets a full game
+    // (only when there is time left before the 120 s limit).
+    if (rounds.length < 2 && Date.now() - t0 < 40_000) rounds = [...rounds, ...(await writeChecked(words, lang, ui, kids, user.plan))];
   } catch {
-    return NextResponse.json({ error: "generation_failed" }, { status: 502 });
+    if (!rounds.length) return NextResponse.json({ error: "generation_failed" }, { status: 502 });
   }
+  rounds = rounds.slice(0, CONTEXT_ROUNDS);
   if (rounds.length < 1) return NextResponse.json({ error: "generation_failed" }, { status: 502 });
 
-  try {
-    await ref.set({ rounds, lang, ui, kids, words, at: new Date().toISOString() });
-  } catch { /* the game still plays */ }
+  // A short set (1 story) still plays, but is not kept: the next try may do better.
+  if (rounds.length >= 2) {
+    try {
+      await ref.set({ rounds, lang, ui, kids, words, at: new Date().toISOString() });
+    } catch { /* the game still plays */ }
+  }
   return NextResponse.json({ rounds });
 }

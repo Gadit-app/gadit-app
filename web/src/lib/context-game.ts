@@ -17,11 +17,15 @@ export type ContextRound = {
   base: string[];
   /** answers + 2 distractors, shuffled. */
   options: string[];
-  /** One short line per blank, in the UI language: why the answer fits. */
+  /** One short line per blank, in the UI language: why the answer fits.
+   *  Written by the blind check (contextCheckMessages), not by the writer. */
   why: string[];
 };
 
 export const CONTEXT_ROUNDS = 3;
+/** Most stories the writer makes: spares, since the blind check drops some
+ *  (5 short ones in Kids Mode, 4 longer ones otherwise, to keep the wait short). */
+export const CONTEXT_WRITE = CONTEXT_ROUNDS + 2;
 
 const LANG_NAME: Record<string, string> = {
   he: "Hebrew", en: "English", ar: "Arabic", ru: "Russian", es: "Spanish", pt: "Portuguese", fr: "French",
@@ -42,29 +46,28 @@ export function langName(code: string): string {
  *  in the story" check is a plain substring test there. */
 const NO_SPACES = new Set(["ja", "zh-CN", "zh-TW", "th"]);
 
-export function contextMessages(words: string[], lang: string, ui: string, kids: boolean) {
+export function contextMessages(words: string[], lang: string, kids: boolean) {
   const L = langName(lang);
-  const U = langName(ui);
   const blanks = kids ? 2 : 3;
   const needed = blanks * CONTEXT_ROUNDS;
   const reader = kids ? "children aged 6 to 9" : "learners aged 10 and up (often children)";
   const length = kids ? "exactly 2 short, simple sentences" : "3 or 4 sentences";
-  const heb = ui === "he" ? "\nThe explanations are in Hebrew: when they speak to the reader, use the plural (אתם), never the singular." : "";
+  const count = kids ? CONTEXT_WRITE : CONTEXT_WRITE - 1;
   const system = `You write a reading game for ${reader}. Return JSON only.
 
-Write ${CONTEXT_ROUNDS} different short stories in ${L}. Each story is ${length} and has exactly ${blanks} blanks. Write the whole story with the answers in it, and put each answer inside double square brackets, like this: She [[stumbled]] on a stone. Every story has exactly ${blanks} words in double square brackets, no more and no fewer.
-The answer of every blank is one of the practice words below, in the form the sentence needs (a past tense, a plural, an ending). The story is natural, correct ${L}: change the form of the word whenever the grammar needs it, never bend the sentence around the given form. Inside one story every blank has a different practice word. Use each practice word once in the whole game when there are at least ${needed} words; only when there are fewer may a word come back in another story.
+Write ${count} different short stories in ${L}. Each story is ${length} and has exactly ${blanks} blanks. Write the whole story with the answers in it, and put each answer inside double square brackets, like this: She [[stumbled]] on a stone. Every story has exactly ${blanks} words in double square brackets, no more and no fewer.
+The answer of every blank is one of the practice words below, in the form the sentence needs (a past tense, a plural, an ending). The story is natural, correct ${L}: change the form of the word whenever the grammar needs it, never bend the sentence around the given form. Inside one story every blank has a different practice word. Spread the practice words over the stories (with ${needed} or more words, use each one once), but never force a word into a story where it does not sit naturally: skip that word.
+Use for the blanks only words whose meaning a reader can work out from a story. Leave out numbers, names of people, places or brands, greetings and small grammar words (like "the", "of", "את", "של"), and build the stories from the other words. The brackets hold the whole word with its endings, never part of a word.
 The answer of a blank never appears anywhere else in its story, outside its brackets.
 Each story makes only one answer right for each blank, and the clues are spread over the whole story, so the reader has to read all of it, not only the sentence with the blank.
+Before you finish a story, read it the way the child will: answers hidden, the whole word bar in front of you. The clue must point to the answer, never away from it (a coat goes with a cold morning, so a coat is never a clue for "warm"). If a reader who does not already know the answer could pick another word from the bar, rewrite the story.
 
-For each story give 2 distractors in ${L}. A good distractor has the same part of speech and form as one of the blanks, so it would sound fine if you read only that one sentence, but a clue in another sentence of the story makes it clearly wrong (for "stumbled" in a story where she almost fell: "jumped" or "danced"). A distractor is a word of the same kind with a different meaning, never a synonym of an answer, and it fits no blank once the whole story is read.
-
-For each blank give "why": one short sentence in ${U} that tells the reader why the answer fits, pointing at the clue in the story, for example: "stumbled fits because she almost fell". Quote the answer as it is written in the story.${heb}
+For each story give 4 distractors in ${L}. A good distractor has the same part of speech and form as one of the blanks, so it would sound fine if you read only that one sentence, but a clue in another sentence of the story makes it clearly wrong (for "stumbled" in a story where she almost fell: "jumped" or "danced"). A distractor is a word of the same kind with a different meaning, never a synonym of an answer, and it fits no blank once the whole story is read. When you are not sure a distractor is wrong, choose another one.
 
 Content is safe and kind for children: everyday life, school, family, animals, nature, play. No violence, fear, romance, brands or real people; use simple invented first names. Never use long dashes (— or –).
 
 JSON shape:
-{"stories":[{"text":"the story with each answer in [[double brackets]]","base":["the practice word of the 1st bracket, as given in the list","..."],"distractors":["d1","d2"],"why":["why for the 1st bracket","why for the 2nd bracket"]}]}`;
+{"stories":[{"text":"the story with each answer in [[double brackets]]","base":["the practice word of the 1st bracket, as given in the list","..."],"distractors":["d1","d2","d3","d4"]}]}`;
   const user = `Practice words (${L}): ${words.join(", ")}`;
   return [
     { role: "system", content: system },
@@ -97,10 +100,39 @@ function appearsIn(text: string, answer: string, lang: string): boolean {
   return new RegExp(`(?<![\\p{L}\\p{M}])${escapeRe(a)}(?![\\p{L}\\p{M}])`, "u").test(t);
 }
 
+/** Letters only, for comparing word forms: no vowel marks, Hebrew final
+ *  letters and Arabic letter variants folded to one shape. */
+function fold(s: string): string {
+  return norm(s)
+    .replace(/[\u0591-\u05C7\u064B-\u0652\u0670\u0640]/g, "")
+    .replace(/[ךםןףץ]/g, (c) => ({ "ך": "כ", "ם": "מ", "ן": "נ", "ף": "פ", "ץ": "צ" })[c] ?? c)
+    .replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي")
+    .replace(/[^\p{L}\p{M}]/gu, "");
+}
+
+/** True when `answer` is a form of the practice word `base` ("served" of
+ *  "serve", "בהתמדה" of "התמדה", "مكتوب" of "كتب"): the base's letters show
+ *  in order inside the answer, one may be missing on longer words. Stops the
+ *  writer from swapping in a word of its own ("נזהרו" claimed as "ירא"). */
+function isFormOf(answer: string, base: string, lang: string): boolean {
+  const a = fold(answer);
+  const b = fold(base);
+  if (!a || !b) return false;
+  if (a.includes(b) || b.includes(a)) return true;
+  let at = 0;
+  let missing = 0;
+  for (const ch of b) {
+    const k = a.indexOf(ch, at);
+    if (k < 0) { missing++; continue; }
+    at = k + 1;
+  }
+  return missing <= (b.length >= 4 || NO_SPACES.has(lang) ? 1 : 0);
+}
+
 /** Checks one story from the model; null when it is broken. */
 function cleanStory(raw: unknown, words: string[], lang: string): ContextRound | null {
   if (!raw || typeof raw !== "object") return null;
-  const o = raw as { text?: unknown; base?: unknown; distractors?: unknown; why?: unknown };
+  const o = raw as { text?: unknown; base?: unknown; distractors?: unknown };
   const text = clean(o.text, 900);
   // The story comes whole, each answer in [[double brackets]]: the brackets
   // become the blanks, so the text and its answers can never disagree.
@@ -114,16 +146,23 @@ function cleanStory(raw: unknown, words: string[], lang: string): ContextRound |
   const answers = parts.filter((_, i) => i % 2 === 1).map((a) => a.trim());
   if (segments.some((s) => /\[\[|\]\]|_{3,}/.test(s))) return null;
   const arr = (x: unknown) => (Array.isArray(x) ? x.map((v) => clean(v, 60)) : []);
-  const distractors = arr(o.distractors);
-  const why = (Array.isArray(o.why) ? o.why : []).map((v) => clean(v, 200).replace(/\[\[|\]\]/g, ""));
   const baseIn = arr(o.base);
   if (answers.length < 2 || answers.length > 3) return null;
   if (segments.length !== answers.length + 1) return null;
-  if (distractors.length < 2 || why.length !== answers.length) return null;
-  if (answers.some((a) => !a) || why.some((w) => !w)) return null;
-  const options = [...answers, ...distractors.slice(0, 2)];
-  if (options.some((x) => !x)) return null;
-  if (new Set(options.map(norm)).size !== options.length) return null;
+  if (answers.some((a) => !a)) return null;
+  if (new Set(answers.map(norm)).size !== answers.length) return null;
+  // A blank that holds only part of a word ("[[אל]]יה") reads as a broken word.
+  if (!NO_SPACES.has(lang) && segments.slice(1).some((s) => /^[\p{L}\p{M}]/u.test(s))) return null;
+  // Up to 4 distractors: the blind check removes any that also fit a blank.
+  const seen = new Set(answers.map(norm));
+  const distractors = arr(o.distractors).filter((d) => {
+    const k = norm(d);
+    if (!k || seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  }).slice(0, 4);
+  if (distractors.length < 2) return null;
+  const options = [...answers, ...distractors];
   const joined = segments.join(" ");
   if (answers.some((a) => appearsIn(joined, a, lang))) return null;
   // The practice word of each blank: the model's own "base" when it is one
@@ -138,10 +177,13 @@ function cleanStory(raw: unknown, words: string[], lang: string): ContextRound |
     const pre = words.find((w) => norm(a).startsWith(norm(w)) || norm(w).startsWith(norm(a)));
     return pre ?? a;
   });
-  return { segments, answers, base, options: shuffle(options), why };
+  // Every blank practices one of the child's words, never a word the writer chose.
+  if (base.some((b, i) => !sent.has(norm(b)) || !isFormOf(answers[i], b, lang))) return null;
+  return { segments, answers, base, options: shuffle(options), why: [] };
 }
 
-/** The model's JSON → the rounds that pass every check. */
+/** The writer's JSON → the stories that pass the shape checks (up to
+ *  CONTEXT_WRITE), still without "why": the blind check comes next. */
 export function parseContextRounds(content: string, words: string[], lang: string): ContextRound[] {
   let parsed: unknown;
   try { parsed = JSON.parse(content); } catch { return []; }
@@ -150,5 +192,88 @@ export function parseContextRounds(content: string, words: string[], lang: strin
   return stories
     .map((s) => cleanStory(s, words, lang))
     .filter((r): r is ContextRound => r !== null)
-    .slice(0, CONTEXT_ROUNDS);
+    .slice(0, CONTEXT_WRITE);
+}
+
+/**
+ * The blind check (2026-11-09, after a parent's report: "Mia put on her coat
+ * because the morning was [warm]", with "cold" marked wrong). A second call
+ * gets each story with its blanks numbered and its word bar, but not the
+ * answers, and solves it like a child would. It also writes the "why" from
+ * the clue it used, so the explanation names a real clue in the story.
+ */
+export function contextCheckMessages(rounds: ContextRound[], lang: string, ui: string, kids: boolean) {
+  const L = langName(lang);
+  const U = langName(ui);
+  const reader = kids ? "children aged 6 to 9" : "learners aged 10 and up (often children)";
+  const heb = ui === "he" ? "\nThe \"why\" lines are in Hebrew. Tell about the people in the story in the third person; only when a line speaks to the reader, use the plural (אתם), never the singular." : "";
+  const system = `You check a reading game for ${reader} before a child sees it. Return JSON only.
+
+Each story below is in ${L} and has numbered blanks ([1], [2], ...). Under it is its word bar: every word the child can put in a blank. The game says each blank has exactly one right word in the bar.
+
+Solve each story as a careful reader who has never seen it: read the whole story, then choose for each blank the word from the bar that fits best.
+Then list for each blank in "alsoFits" every OTHER word in the bar that would also make a correct, sensible story in that blank, even if it is less likely. Be strict: when nothing in the story rules a word out, it also fits (in "Tom ate a [1] apple" with "red" and "green" in the bar, both fit). A word that breaks the grammar of the sentence does not fit.
+Set "storyOk" to false when the story itself would confuse a child: it does not make sense, has a language mistake, or uses a word from the bar in a wrong or strange way once the right words are in. Otherwise set it to true.
+For each blank write "why": one short, simple sentence in ${U} for the child, that names the clue in the story and how it leads to the word you chose, for example: "cold fits because Mia put on her coat, and we wear a coat when it is cold". Quote the word as it is written in the bar. The "why" talks only about this word: it never names another word or says that another word could also fit. Never write a "why" that only repeats the story or says that the story says so. Never use long dashes.${heb}
+
+JSON shape, one entry per story in order, one entry per blank in order:
+{"stories":[{"storyOk":true,"blanks":[{"pick":"a word from the bar","alsoFits":[],"why":"..."}]}]}`;
+  const user = rounds
+    .map((r, i) => {
+      let text = r.segments[0];
+      r.answers.forEach((_, j) => { text += `[${j + 1}]` + r.segments[j + 1]; });
+      return `Story ${i + 1}: ${text}\nWord bar: ${r.options.join(", ")}`;
+    })
+    .join("\n\n");
+  return [
+    { role: "system", content: system },
+    { role: "user", content: user },
+  ];
+}
+
+const unquote = (s: string) => s.replace(/^["'“”„«»‘’]+|["'“”„«»‘’.,!?;:]+$/g, "").trim();
+
+/** Keeps only the stories the blind reader found sound and solved exactly
+ *  (its pick is the answer for every blank, and no other answer also fits a
+ *  blank), with its "why" lines attached. A distractor it says also fits a
+ *  blank leaves the word bar; a story needs 2 distractors left to play. */
+export function applyContextCheck(rounds: ContextRound[], content: string): ContextRound[] {
+  let parsed: unknown;
+  try { parsed = JSON.parse(content); } catch { return []; }
+  const stories = (parsed as { stories?: unknown })?.stories;
+  if (!Array.isArray(stories)) return [];
+  const out: ContextRound[] = [];
+  rounds.forEach((r, i) => {
+    const st = stories[i] as { blanks?: unknown; storyOk?: unknown } | undefined;
+    if (st?.storyOk !== true) return;
+    const blanks = st.blanks;
+    if (!Array.isArray(blanks) || blanks.length !== r.answers.length) return;
+    const bar = new Set(r.options.map(norm));
+    const answers = r.answers.map(norm);
+    const story = norm(r.segments.map((seg, k) => seg + (r.answers[k] ?? "")).join(""));
+    const alsoFit = new Set<string>();
+    const why: string[] = [];
+    for (let j = 0; j < answers.length; j++) {
+      const b = (blanks[j] ?? {}) as { pick?: unknown; alsoFits?: unknown; why?: unknown };
+      if (norm(unquote(clean(b.pick, 60))) !== answers[j]) return;
+      const also = (Array.isArray(b.alsoFits) ? b.alsoFits : [])
+        .map((x) => norm(unquote(clean(x, 60))))
+        .filter((x) => x && x !== answers[j] && bar.has(x));
+      if (also.some((x) => answers.includes(x))) return;
+      also.forEach((x) => alsoFit.add(x));
+      const w = clean(b.why, 200);
+      if (!w) return;
+      // A quoted word must be an answer or come from the story: a "why"
+      // that brings in an outside word ("London could fit too") confuses.
+      for (const m of w.matchAll(/["“”„«»]([^"“”„«»]{1,40})["“”„«»]/g)) {
+        const q = norm(m[1]);
+        if (!answers.includes(q) && !story.includes(q)) return;
+      }
+      why.push(w);
+    }
+    const distractors = r.options.filter((o) => !answers.includes(norm(o)) && !alsoFit.has(norm(o)));
+    if (distractors.length < 2) return;
+    out.push({ ...r, options: shuffle([...r.answers, ...distractors.slice(0, 2)]), why });
+  });
+  return out;
 }
