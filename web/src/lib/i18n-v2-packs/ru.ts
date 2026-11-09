@@ -259,7 +259,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Скачать офлайн-пакет",
  "offlineDownloadingPack": "Скачиваем…",
  "offlinePackHeader": "Офлайн-пакет",
- "offlinePackDescription": "Добавляет самые популярные слова вашего языка в тетрадь, и делает их доступными без интернета.",
+ "offlinePackDescription": "Сохраняет слова нашего словаря на этом устройстве, чтобы их можно было искать даже без интернета.",
  "savedAgoTemplate": (t) => `Сохранено · ${t}`,
  "shareLabel": "Поделиться",
  "backLabel": "Назад",

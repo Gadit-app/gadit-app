@@ -240,7 +240,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Pakua kifurushi cha nje ya mtandao",
  "offlineDownloadingPack": "Inapakua…",
  "offlinePackHeader": "Kifurushi cha nje ya mtandao",
- "offlinePackDescription": "Huongeza maneno yanayotafutwa zaidi katika lugha yako kwenye Daftari lako, na kuyaweka yanapatikana bila WiFi kwa masomo ya nje ya mtandao.",
+ "offlinePackDescription": "Huhifadhi maneno ya kamusi yetu kwenye kifaa hiki, ili uweze kuyatafuta hata bila intaneti.",
  "shareLabel": "Shiriki",
  "backLabel": "Rudi",
  "composeTitleTemplate": (w) => `Andika sentensi yako mwenyewe ukitumia ${w}`,

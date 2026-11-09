@@ -240,7 +240,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "ดาวน์โหลดชุดออฟไลน์",
  "offlineDownloadingPack": "กำลังดาวน์โหลด…",
  "offlinePackHeader": "ชุดออฟไลน์",
- "offlinePackDescription": "เพิ่มคำที่ค้นหามากที่สุดในภาษาของคุณลงในสมุด และเก็บไว้ให้ใช้ได้โดยไม่ต้องมี WiFi เพื่อเรียนแบบออฟไลน์",
+ "offlinePackDescription": "บันทึกคำในพจนานุกรมของเราไว้ในอุปกรณ์นี้ เพื่อให้คุณค้นหาได้แม้ไม่มีอินเทอร์เน็ต",
  "shareLabel": "แชร์",
  "backLabel": "ย้อนกลับ",
  "composeTitleTemplate": (w) => `แต่งประโยคของคุณเองด้วยคำว่า ${w}`,

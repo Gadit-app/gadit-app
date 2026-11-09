@@ -253,7 +253,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Offline-Paket herunterladen",
  "offlineDownloadingPack": "Lädt…",
  "offlinePackHeader": "Offline-Paket",
- "offlinePackDescription": "Fügt die meistgesuchten Wörter in deiner Sprache zu deinem Notizbuch hinzu, und hält sie ohne WLAN zum Offline-Lernen bereit.",
+ "offlinePackDescription": "Speichert die Wörter unseres Wörterbuchs auf diesem Gerät, damit du sie auch ohne Internet nachschlagen kannst.",
  "savedAgoTemplate": (t) => `Gespeichert · ${t}`,
  "shareLabel": "Teilen",
  "backLabel": "Zurück",

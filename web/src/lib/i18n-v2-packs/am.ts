@@ -256,7 +256,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "የመስመር ውጭ ጥቅል ያውርዱ",
  "offlineDownloadingPack": "በማውረድ ላይ…",
  "offlinePackHeader": "የመስመር ውጭ ጥቅል",
- "offlinePackDescription": "በቋንቋዎ በብዛት የሚፈለጉትን ቃላት ወደ ደብተርዎ ይጨምራል እና ያለ WiFi ከመስመር ውጭ ለማጥናት ዝግጁ ያደርጋቸዋል።",
+ "offlinePackDescription": "የመዝገበ ቃላታችንን ቃላት በዚህ መሣሪያ ላይ ያስቀምጣል፣ ስለዚህ ያለ ኢንተርኔትም ሊፈልጓቸው ይችላሉ።",
 };
 
 export default t;

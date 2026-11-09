@@ -254,7 +254,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "オフラインパックをダウンロード",
  "offlineDownloadingPack": "ダウンロード中…",
  "offlinePackHeader": "オフラインパック",
- "offlinePackDescription": "あなたの言語で最も検索されている単語をノートに追加し、Wi-Fi なしでもオフライン学習できるようにします。",
+ "offlinePackDescription": "辞書の単語をこの端末に保存し、インターネットがなくても調べられるようにします。",
 };
 
 export default t;

@@ -240,7 +240,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Tải gói ngoại tuyến",
  "offlineDownloadingPack": "Đang tải…",
  "offlinePackHeader": "Gói ngoại tuyến",
- "offlinePackDescription": "Thêm những từ được tra nhiều nhất trong ngôn ngữ của bạn vào sổ tay, và giữ chúng dùng được cả khi không có WiFi để học ngoại tuyến.",
+ "offlinePackDescription": "Lưu các từ trong từ điển của chúng tôi vào thiết bị này, để bạn tra cứu được cả khi không có internet.",
  "shareLabel": "Chia sẻ",
  "backLabel": "Quay lại",
  "composeTitleTemplate": (w) => `Tự viết một câu với ${w}`,

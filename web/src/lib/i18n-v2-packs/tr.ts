@@ -253,7 +253,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Çevrimdışı paketi indir",
  "offlineDownloadingPack": "İndiriliyor…",
  "offlinePackHeader": "Çevrimdışı paket",
- "offlinePackDescription": "Dilindeki en çok aranan kelimeleri Defterine ekler ve çevrimdışı çalışma için WiFi olmadan kullanılabilir tutar.",
+ "offlinePackDescription": "Sözlüğümüzdeki kelimeleri bu cihaza kaydeder, böylece internet olmadan da arayabilirsin.",
  "savedAgoTemplate": (t) => `Kaydedildi · ${t}`,
  "shareLabel": "Paylaş",
  "backLabel": "Geri",

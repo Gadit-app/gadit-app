@@ -252,7 +252,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Dawuniloda iphakethe langaphandle kwe-inthanethi",
  "offlineDownloadingPack": "Kuyadawunilodwa…",
  "offlinePackHeader": "Iphakethe langaphandle kwe-inthanethi",
- "offlinePackDescription": "Lifaka amezwi afunwa khulu ngelimi lakho eBhukwini lakho lamezwi, begodu liwagcina atholakala ngaphandle kwe-WiFi bona ufunde ngaphandle kwe-inthanethi.",
+ "offlinePackDescription": "Ligcina amezwi wesichazamezwi sethu kilesi sisetjenziswa, bona ukghone ukuwafuna ngitjho ngaphandle kwe-inthanethi.",
  "shareLabel": "Abelana",
  "backLabel": "Emuva",
 };

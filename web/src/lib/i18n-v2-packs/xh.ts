@@ -252,7 +252,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Khuphela ipakethe yokufunda ungekho kwi-intanethi",
  "offlineDownloadingPack": "Siyakhuphela…",
  "offlinePackHeader": "Ipakethe yokufunda ungekho kwi-intanethi",
- "offlinePackDescription": "Yongeza amagama akhangelwa kakhulu kulwimi lwakho kwiNcwadi yakho, kwaye iwagcine efumaneka ngaphandle kwe-WiFi ukuze ufunde ungekho kwi-intanethi.",
+ "offlinePackDescription": "Igcina amagama esichazi-magama sethu kwesi sixhobo, ukuze ukwazi ukuwakhangela nangona ungenayo i-intanethi.",
  "shareLabel": "Yabelana",
  "backLabel": "Buyela umva",
 };

@@ -256,7 +256,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "ऑफ़लाइन पैक डाउनलोड करें",
  "offlineDownloadingPack": "डाउनलोड हो रहा है…",
  "offlinePackHeader": "ऑफ़लाइन पैक",
- "offlinePackDescription": "आपकी भाषा में सबसे ज़्यादा खोजे गए शब्दों को आपकी नोटबुक में जोड़ता है और बिना WiFi ऑफ़लाइन अध्ययन के लिए उपलब्ध रखता है।",
+ "offlinePackDescription": "हमारे शब्दकोश के शब्द इस डिवाइस पर सहेजता है, ताकि आप उन्हें बिना इंटरनेट के भी खोज सकें।",
 };
 
 export default t;

@@ -252,7 +252,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Laolla sephuthelwana sa ntle le inthanete",
  "offlineDownloadingPack": "Re a laolla…",
  "offlinePackHeader": "Sephuthelwana sa ntle le inthanete",
- "offlinePackDescription": "E oketša mantšu ao a nyakwago kudu ka polelo ya gago Pukung ya gago ya mantšu, gomme e dira gore a hwetšagale ntle le WiFi gore o ithute ntle le inthanete.",
+ "offlinePackDescription": "E boloka mantšu a pukuntšu ya rena sedirišweng se, gore o kgone go a nyaka le ge o se na inthanete.",
  "shareLabel": "Abelana",
  "backLabel": "Morago",
 };

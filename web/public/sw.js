@@ -21,7 +21,8 @@
 // the pre-fix bundle. Bump wipes it.
 // v20 → v21 (2026-11-01): game covers were redrawn under the same names, and
 // the cache-first rule kept showing the old ones on every returning device.
-const CACHE_VERSION = "gadit-v21";
+// v21 → v22 (2026-11-09): precache the offline dictionary page.
+const CACHE_VERSION = "gadit-v22";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const PAGE_CACHE = `${CACHE_VERSION}-pages`;
 
@@ -34,6 +35,7 @@ const PRECACHE_URLS = [
   "/apple-touch-icon.png",
   "/favicon-32x32.png",
   "/favicon.ico",
+  "/offline.html",
 ];
 
 self.addEventListener("install", (event) => {
@@ -105,12 +107,16 @@ self.addEventListener("fetch", (event) => {
           caches.open(PAGE_CACHE).then((cache) => cache.put(req, copy));
           return res;
         })
+        // Offline: the saved copy of this page, else the offline dictionary
+        // page (public/offline.html, reads the words saved on the device and
+        // shows the word from a /word/ URL), else the home page.
         .catch(() =>
           caches.match(req).then(
             (cached) =>
               cached ||
               caches
-                .match("/")
+                .match("/offline.html")
+                .then((off) => off || caches.match("/"))
                 .then(
                   (root) =>
                     root ||

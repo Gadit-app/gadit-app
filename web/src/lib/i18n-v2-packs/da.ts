@@ -240,7 +240,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Hent offline-pakke",
  "offlineDownloadingPack": "Henter…",
  "offlinePackHeader": "Offline-pakke",
- "offlinePackDescription": "Tilføjer de mest søgte ord på dit sprog til din notesbog og holder dem tilgængelige uden WiFi til offline-studie.",
+ "offlinePackDescription": "Gemmer vores ordbogs ord på denne enhed, så du kan slå dem op, selv uden internet.",
  "shareLabel": "Del",
  "backLabel": "Tilbage",
  "composeTitleTemplate": (w) => `Skriv din egen sætning med ${w}`,

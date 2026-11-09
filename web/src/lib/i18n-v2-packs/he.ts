@@ -257,7 +257,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "הורדת חבילת אופליין",
  "offlineDownloadingPack": "מוריד...",
  "offlinePackHeader": "חבילת אופליין",
- "offlinePackDescription": "מוסיף את המילים הנפוצות ביותר בשפה שלכם למחברת, וזמינות גם בלי אינטרנט ללימוד אופליין.",
+ "offlinePackDescription": "שומר את מילות המילון במכשיר הזה, כדי שתוכלו לחפש מילים גם בלי אינטרנט.",
  "savedAgoTemplate": (t) => `נשמר · ${t}`,
  "shareLabel": "שתפו",
  "backLabel": "חזרה",

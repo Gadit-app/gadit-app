@@ -253,7 +253,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Κατέβασε πακέτο εκτός σύνδεσης",
  "offlineDownloadingPack": "Γίνεται λήψη…",
  "offlinePackHeader": "Πακέτο εκτός σύνδεσης",
- "offlinePackDescription": "Προσθέτει τις πιο αναζητημένες λέξεις στη γλώσσα σου στο τετράδιό σου, και τις κρατά διαθέσιμες χωρίς WiFi για μελέτη εκτός σύνδεσης.",
+ "offlinePackDescription": "Αποθηκεύει τις λέξεις του λεξικού μας σε αυτή τη συσκευή, ώστε να τις βρίσκεις ακόμη και χωρίς ίντερνετ.",
  "savedAgoTemplate": (t) => `Αποθηκεύτηκε · ${t}`,
  "shareLabel": "Μοιράσου",
  "backLabel": "Πίσω",

@@ -240,7 +240,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Laai vanlyn-pak af",
  "offlineDownloadingPack": "Laai tans af…",
  "offlinePackHeader": "Vanlyn-pak",
- "offlinePackDescription": "Voeg die mees gesoekte woorde in jou taal by jou Boekie, en hou hulle beskikbaar sonder WiFi vir vanlyn studie.",
+ "offlinePackDescription": "Stoor ons woordeboek se woorde op hierdie toestel, sodat jy hulle selfs sonder internet kan opsoek.",
  "shareLabel": "Deel",
  "backLabel": "Terug",
  "composeTitleTemplate": (w) => `Skryf jou eie sin met ${w}`,

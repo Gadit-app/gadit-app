@@ -253,7 +253,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Landa iphakethe lokungaxhumeki",
  "offlineDownloadingPack": "Iyalanda…",
  "offlinePackHeader": "Iphakethe lokungaxhumeki",
- "offlinePackDescription": "Kungeza amagama aseshwa kakhulu ngolimi lwakho encwadini yakho yamanothi, futhi awagcina etholakala ngaphandle kwe-WiFi ukuze uwafunde ungaxhunyiwe.",
+ "offlinePackDescription": "Igcina amagama esichazamazwi sethu kule divayisi, ukuze ukwazi ukuwasesha ngisho ungenayo i-inthanethi.",
  "savedAgoTemplate": (t) => `Kugcinwe · ${t}`,
  "shareLabel": "Yabelana",
  "backLabel": "Emuva",

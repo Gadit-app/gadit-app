@@ -253,7 +253,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Завантажити офлайн-набір",
  "offlineDownloadingPack": "Завантаження…",
  "offlinePackHeader": "Офлайн-набір",
- "offlinePackDescription": "Додає до твого зошита найпопулярніші слова твоєю мовою і зберігає їх доступними без WiFi для офлайн-навчання.",
+ "offlinePackDescription": "Зберігає слова нашого словника на цьому пристрої, щоб шукати їх можна було навіть без інтернету.",
  "savedAgoTemplate": (t) => `Збережено · ${t}`,
  "shareLabel": "Поділитися",
  "backLabel": "Назад",

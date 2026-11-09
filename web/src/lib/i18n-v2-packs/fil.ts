@@ -240,7 +240,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "I-download ang offline pack",
  "offlineDownloadingPack": "Dina-download…",
  "offlinePackHeader": "Offline pack",
- "offlinePackDescription": "Idinaragdag ang pinakamadalas hanapin na mga salita sa iyong wika sa iyong Kwaderno, at pinapanatili itong available kahit walang WiFi para sa pag-aaral offline.",
+ "offlinePackDescription": "Sine-save ang mga salita ng aming diksiyonaryo sa device na ito, para mahanap mo ang mga ito kahit walang internet.",
  "shareLabel": "Ibahagi",
  "backLabel": "Bumalik",
  "composeTitleTemplate": (w) => `Sumulat ng sarili mong pangungusap gamit ang ${w}`,

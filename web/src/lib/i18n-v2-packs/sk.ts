@@ -253,7 +253,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Stiahnuť offline balík",
  "offlineDownloadingPack": "Sťahujem…",
  "offlinePackHeader": "Offline balík",
- "offlinePackDescription": "Pridá najhľadanejšie slová v tvojom jazyku do zošita, a udržuje ich dostupné bez Wi-Fi pre offline štúdium.",
+ "offlinePackDescription": "Uloží slová nášho slovníka do tohto zariadenia, takže ich nájdeš aj bez internetu.",
  "shareLabel": "Zdieľať",
  "backLabel": "Späť",
  "savedAgoTemplate": (t) => `Uložené · ${t}`,

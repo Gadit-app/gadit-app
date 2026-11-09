@@ -252,7 +252,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Landza liphakethe lekufundza ngaphandle kwe-inthanethi",
  "offlineDownloadingPack": "Kuyalandzwa…",
  "offlinePackHeader": "Liphakethe langaphandle kwe-inthanethi",
- "offlinePackDescription": "Lengeta emagama lasheshwa kakhulu elulwimini lwakho eNcwadzini yakho, futsi liwagcine atfolakala ngaphandle kwe-WiFi kute ufundze ngaphandle kwe-inthanethi.",
+ "offlinePackDescription": "Igcina emagama esichazamagama setfu kulesi sisetjentiswa, kute ukhone kuwafuna ngisho ungenayo i-inthanethi.",
  "shareLabel": "Yabelana",
  "backLabel": "Emuva",
 };

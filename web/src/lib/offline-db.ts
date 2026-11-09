@@ -142,6 +142,44 @@ export async function setCachedWord(
 }
 
 /**
+ * Write a page of the offline dictionary in one transaction (thousands of
+ * words, so one transaction per word would be slow). Pack words are pinned
+ * and keep lastViewedAt 0, so they never crowd the "recently viewed" list;
+ * a word the user already viewed keeps its own dates.
+ */
+export async function setCachedWordsBulk(
+  lang: string,
+  entries: Array<{ word: string; result: unknown }>,
+): Promise<void> {
+  if (!isSupported() || !entries.length) return;
+  const db = await openDB();
+  const now = Date.now();
+  await new Promise<void>((resolve, reject) => {
+    const tx = db.transaction(STORE_WORDS, "readwrite");
+    const store = tx.objectStore(STORE_WORDS);
+    for (const e of entries) {
+      const key = makeKey(lang, e.word);
+      const get = store.get(key);
+      get.onsuccess = () => {
+        const old = get.result as CachedWordResult | undefined;
+        store.put({
+          key,
+          lang,
+          word: e.word,
+          result: e.result,
+          savedAt: old?.savedAt ?? now,
+          lastViewedAt: old?.lastViewedAt ?? 0,
+          pinned: true,
+        } satisfies CachedWordResult);
+      };
+    }
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error);
+  });
+}
+
+/**
  * List the N most-recently-viewed cached entries — drives the offline
  * "your downloaded words" view. Ordered newest first.
  */

@@ -256,7 +256,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Scarica pacchetto offline",
  "offlineDownloadingPack": "Download in corso…",
  "offlinePackHeader": "Pacchetto offline",
- "offlinePackDescription": "Aggiunge le parole più cercate nella tua lingua al tuo quaderno e le mantiene disponibili senza WiFi per lo studio offline.",
+ "offlinePackDescription": "Salva le parole del nostro dizionario su questo dispositivo, così puoi cercarle anche senza internet.",
 };
 
 export default t;

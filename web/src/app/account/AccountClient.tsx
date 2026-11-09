@@ -43,7 +43,7 @@ import { useHref } from "@/lib/href";
 import { isIosApp } from "@/lib/native-app";
 import { nativeManageSubscriptions } from "@/lib/native-iap";
 import { subscribeCopy } from "@/lib/subscribe-copy";
-import { countCached, setCachedWord } from "@/lib/offline-db";
+import { countCached, setCachedWordsBulk } from "@/lib/offline-db";
 
 // Upgrade button label template.
 const UPGRADE_TO_COPY: Record<Lang, string> = {
@@ -225,96 +225,6 @@ const WORDS_UNIT_COPY: Record<Lang, string> = {
   nr: "amezwi",
 };
 
-// Offline pack success line.
-const PACK_ADDED_COPY: Record<Lang, string> = {
-  en: "✓ Added to your Notebook",
-  he: "✓ נוסף למחברת שלכם",
-  ar: "✓ تمت الإضافة إلى دفترك",
-  ru: "✓ Добавлено в тетрадь",
-  es: "✓ Añadido a tu cuaderno",
-  pt: "✓ Adicionado ao seu caderno",
-  fr: "✓ Ajouté à votre carnet",
-  de: "✓ Zum Notizbuch hinzugefügt",
-  cs: "✓ Přidáno do sešitu",
-  sk: "✓ Pridané do zošita",
-  it: "✓ Aggiunto al tuo quaderno",
-  ja: "✓ ノートに追加されました",
-  hi: "✓ आपकी नोटबुक में जोड़ा गया",
-  am: "✓ ወደ ማስታወሻ ደብተርዎ ታክሏል",
-  uk: "✓ Додано до зошита",
-  tr: "✓ Defterine eklendi",
-  pl: "✓ Dodano do zeszytu",
-  fa: "✓ به دفترچه‌ات اضافه شد",
-  id: "✓ Ditambahkan ke Buku Catatan",
-  nl: "✓ Toegevoegd aan je schrift",
-  el: "✓ Προστέθηκε στο τετράδιό σας",
-  zu: "✓ Kungezwe encwadini yakho yokubhala",
-  vi: "✓ Đã thêm vào sổ tay",
-  fil: "✓ Naidagdag sa iyong Notebook",
-  af: "✓ By jou notaboek gevoeg",
-  sw: "✓ Imeongezwa kwenye daftari lako",
-  "zh-CN": "✓ 已加入你的单词本",
-  "zh-TW": "✓ 已加入你的單字本",
-  ko: "✓ 노트에 추가되었어요",
-  th: "✓ เพิ่มลงในสมุดแล้ว",
-  bn: "✓ আপনার নোটবুকে যোগ হয়েছে",
-  da: "✓ Tilføjet til din notesbog",
-  hu: "✓ Hozzáadva a füzetedhez",
-  xh: "✓ Yongezwe encwadini yakho",
-  nso: "✓ E okeditšwe Pukung ya gago ya mantšu",
-  tn: "✓ E okeditswe mo Bukaneng ya gago",
-  st: "✓ E kentswe Bukaneng ya hao",
-  ts: "✓ Ku engeteriwile eka Buku ya n'wina ya marito",
-  ss: "✓ Kungetwe encwadzini yakho",
-  ve: "✓ Zwo engedzwa kha Bugu yaṋu",
-  nr: "✓ Kungezelelwe ebhukwini lakho lamezwi",
-};
-
-// Link from the offline-pack success line to /notebook.
-const OPEN_NOTEBOOK_COPY: Record<Lang, string> = {
-  en: "Open Notebook →",
-  he: "פתח את המחברת ←",
-  ar: "← افتح الدفتر",
-  ru: "Открыть тетрадь →",
-  es: "Abrir cuaderno →",
-  pt: "Abrir caderno →",
-  fr: "Ouvrir le carnet →",
-  de: "Notizbuch öffnen →",
-  cs: "Otevřít sešit →",
-  sk: "Otvoriť zošit →",
-  it: "Apri il quaderno →",
-  ja: "ノートを開く →",
-  hi: "नोटबुक खोलें →",
-  am: "ማስታወሻ ደብተሩን ክፈት →",
-  uk: "Відкрити зошит →",
-  tr: "Defteri aç →",
-  pl: "Otwórz zeszyt →",
-  fa: "← باز کردن دفترچه",
-  id: "Buka Buku Catatan →",
-  nl: "Schrift openen →",
-  el: "Άνοιγμα τετραδίου →",
-  zu: "Vula incwadi yokubhala →",
-  vi: "Mở sổ tay →",
-  fil: "Buksan ang Notebook →",
-  af: "Maak notaboek oop →",
-  sw: "Fungua daftari →",
-  "zh-CN": "打开单词本 →",
-  "zh-TW": "打開單字本 →",
-  ko: "노트 열기 →",
-  th: "เปิดสมุด →",
-  bn: "নোটবুক খুলুন →",
-  da: "Åbn notesbog →",
-  hu: "Füzet megnyitása →",
-  xh: "Vula Incwadi →",
-  nso: "Bula Puku ya mantšu →",
-  tn: "Bula Bukana →",
-  st: "Bula Bukana →",
-  ts: "Pfula Buku ya marito →",
-  ss: "Vula Incwadzi →",
-  ve: "Vulani Bugu →",
-  nr: "Vula Ibhuku lamezwi →",
-};
-
 type Plan = "basic" | "clear" | "deep";
 
 // Monthly price ids for the in-account upgrade buttons. A Basic user who wants
@@ -476,65 +386,52 @@ export function AccountPage() {
   // fail (e.g. an offline → tap → still offline situation).
   const [packState, setPackState] = useState<"idle" | "downloading" | "done">("idle");
   const [packError, setPackError] = useState<string | null>(null);
+  // Size of the offline dictionary for this language, shown under the button.
+  const [packInfo, setPackInfo] = useState<{ total: number; approxMB: number } | null>(null);
+  const [packProgress, setPackProgress] = useState(0);
   useEffect(() => {
     if (!user) return;
     void countCached().then((n) => setOfflineCount(n));
   }, [user]);
+  useEffect(() => {
+    if (!user || (plan !== "clear" && plan !== "deep")) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        const res = await fetch(`/api/popular-words?lang=${encodeURIComponent(lang)}&count=1`, { headers: { Authorization: `Bearer ${idToken}` } });
+        if (res.ok && !cancelled) setPackInfo((await res.json()) as { total: number; approxMB: number });
+      } catch { /* the size line is optional */ }
+    })();
+    return () => { cancelled = true; };
+  }, [user, plan, lang]);
 
+  // The offline dictionary (Gadi 2026-11-09): every word in the shared cache
+  // for this language goes into IndexedDB, page by page, so the offline page
+  // (public/offline.html) can show any of them with no internet. It no longer
+  // adds the words to the Notebook (20,000 words would flood it).
   async function handleDownloadPack() {
     if (!user) return;
     setPackState("downloading");
     setPackError(null);
+    setPackProgress(0);
     try {
-      const idToken = await user.getIdToken();
-      const res = await fetch(`/api/popular-words?lang=${encodeURIComponent(lang)}&limit=500`, {
-        headers: { Authorization: `Bearer ${idToken}` },
-      });
-      if (!res.ok) {
-        const j = (await res.json().catch(() => ({}))) as { error?: string; message?: string };
-        throw new Error(j.message ?? j.error ?? `HTTP ${res.status}`);
-      }
-      const data = (await res.json()) as {
-        words: Array<{
-          word: string;
-          language: string;
-          result: { meanings?: Array<{ meaning?: string }> } & Record<string, unknown>;
-        }>;
-      };
-      // Two writes per word:
-      // 1. IndexedDB so the full result is available offline (pinned=true
-      //    protects it from any future auto-prune).
-      // 2. The user's Firestore Notebook so the words actually SHOW UP
-      //    somewhere the user can browse them — without this they would
-      //    sit invisibly in IDB with no UI surface.
-      const notebookEntries: Array<{ word: string; language: string; meaning: string }> = [];
-      for (const w of data.words) {
-        await setCachedWord(lang, w.word, w.result, { pinned: true });
-        // Short meaning for the Notebook card — use the first meaning
-        // line, trimmed. Same shape the per-word save path uses.
-        const firstMeaning = w.result?.meanings?.[0]?.meaning ?? "";
-        if (firstMeaning) {
-          notebookEntries.push({
-            word: w.word,
-            language: w.language || "",
-            meaning: firstMeaning,
-          });
+      let after: string | null = null;
+      let saved = 0;
+      do {
+        const idToken = await user.getIdToken();
+        const qs: string = `lang=${encodeURIComponent(lang)}${after ? `&after=${encodeURIComponent(after)}` : ""}`;
+        const res = await fetch(`/api/popular-words?${qs}`, { headers: { Authorization: `Bearer ${idToken}` } });
+        if (!res.ok) {
+          const j = (await res.json().catch(() => ({}))) as { error?: string; message?: string };
+          throw new Error(j.message ?? j.error ?? `HTTP ${res.status}`);
         }
-      }
-      // Bulk-add to the Notebook via PUT /api/notebook. Chunked to 500
-      // to match the endpoint's per-request cap (it'll reject larger).
-      const CHUNK = 500;
-      for (let i = 0; i < notebookEntries.length; i += CHUNK) {
-        const slice = notebookEntries.slice(i, i + CHUNK);
-        await fetch("/api/notebook", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${idToken}`,
-          },
-          body: JSON.stringify({ entries: slice }),
-        });
-      }
+        const page = (await res.json()) as { words: Array<{ word: string; result: unknown }>; next: string | null };
+        await setCachedWordsBulk(lang, page.words);
+        saved += page.words.length;
+        setPackProgress(saved);
+        after = page.next;
+      } while (after);
       const fresh = await countCached();
       setOfflineCount(fresh);
       setPackState("done");
@@ -854,6 +751,9 @@ export function AccountPage() {
                   data={data}
                   packState={packState}
                   packError={packError}
+                  packInfo={packInfo}
+                  packProgress={packProgress}
+                  offlineCount={offlineCount}
                   onDownloadPack={handleDownloadPack}
                 />
               </SectionCard>
@@ -1208,16 +1108,29 @@ function OfflinePackSection({
   data,
   packState,
   packError,
+  packInfo,
+  packProgress,
+  offlineCount,
   onDownloadPack,
 }: {
   data: AccountData;
   packState: "idle" | "downloading" | "done";
   packError: string | null;
+  packInfo: { total: number; approxMB: number } | null;
+  packProgress: number;
+  offlineCount: number | null;
   onDownloadPack: () => void;
 }) {
   const { lang } = useLang();
-  const href = useHref();
   if (data.plan === "basic") return null;
+  const unit = WORDS_UNIT_COPY[lang] ?? WORDS_UNIT_COPY.en;
+  // Numbers only, so the line needs no new translations.
+  const sizeLine =
+    packState === "downloading" && packInfo
+      ? `${packProgress.toLocaleString()} / ${packInfo.total.toLocaleString()} ${unit}`
+      : packState === "idle" && packInfo && packInfo.total > 0
+        ? `${packInfo.total.toLocaleString()} ${unit} · ~${packInfo.approxMB} MB`
+        : null;
   return (
     <section style={{ fontFamily: fontBody(lang) }}>
       <SectionLabel>{v2(lang, "offlinePackHeader")}</SectionLabel>
@@ -1233,25 +1146,10 @@ function OfflinePackSection({
           drifted off-axis on some viewports. */}
       <div style={{ display: "flex", justifyContent: "flex-start" }}>
         {packState === "done" ? (
-            // After a successful download, swap the button for a confirmation
-            // line + a direct link to /notebook so the user sees where the
-            // words actually went. The whole 'download offline pack' flow
-            // is meaningless without this hand-off — the user just spent a
-            // tap on something and needs the payoff visible.
-            <div style={{ fontSize: 13, color: "var(--ink-muted)", lineHeight: 1.5 }}>
-              <div style={{ color: tierColor(data.plan), fontWeight: 600, marginBottom: 6 }}>
-                {PACK_ADDED_COPY[lang] ?? PACK_ADDED_COPY.en}
-              </div>
-              <a
-                href={href("/notebook")}
-                style={{
-                  color: tierColor(data.plan),
-                  textDecoration: "underline",
-                  fontWeight: 500,
-                }}
-              >
-                {OPEN_NOTEBOOK_COPY[lang] ?? OPEN_NOTEBOOK_COPY.en}
-              </a>
+            // After the download: how many words this device now has offline.
+            <div style={{ fontSize: 14, color: tierColor(data.plan), fontWeight: 600, lineHeight: 1.5 }}>
+              ✓ {OFFLINE_AVAILABLE_COPY[lang] ?? OFFLINE_AVAILABLE_COPY.en}
+              {offlineCount !== null ? ` · ${offlineCount.toLocaleString()} ${unit}` : ""}
             </div>
           ) : (
             <button
@@ -1276,6 +1174,11 @@ function OfflinePackSection({
             </button>
           )}
       </div>
+      {sizeLine && (
+        <div style={{ fontSize: 12, color: "var(--ink-muted, #6B7280)", marginTop: 8, fontVariantNumeric: "tabular-nums" }}>
+          {sizeLine}
+        </div>
+      )}
     </section>
   );
 }

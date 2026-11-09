@@ -252,7 +252,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Dawuniloda phakete yo tirhisa handle ka inthanete",
  "offlineDownloadingPack": "Ku dawuniloda…",
  "offlinePackHeader": "Phakete yo tirhisa handle ka inthanete",
- "offlinePackDescription": "Yi engetela marito lama laviwaka ngopfu eka ririmi ra n'wina eBukwini ya n'wina ya marito, naswona yi ma hlayisa ma kumeka handle ka WiFi leswaku mi dyondza handle ka inthanete.",
+ "offlinePackDescription": "Yi hlayisa marito ya xihlamusela-marito xa hina eka xitirhisiwa lexi, leswaku mi kota ku ma lava hambi mi nga ri na inthanete.",
  "shareLabel": "Avelana",
  "backLabel": "Endzhaku",
 };

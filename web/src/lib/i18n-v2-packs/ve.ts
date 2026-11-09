@@ -252,7 +252,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Ḓaunuḽodani phakhethe ya hu si na inthanethe",
  "offlineDownloadingPack": "Ri khou ḓaunuḽoda…",
  "offlinePackHeader": "Phakhethe ya hu si na inthanethe",
- "offlinePackDescription": "I engedza maipfi ane a ṱoḓwa nga maanḓa nga luambo lwaṋu kha Bugu yaṋu, nahone i a vhulunga uri a wanale hu si na WiFi u itela u guda hu si na inthanethe.",
+ "offlinePackDescription": "I vhulunga maipfi a ḓikishinari yashu kha tshishumiswa itshi, uri ni kone u a ṱoḓa naho hu si na inthanethe.",
  "shareLabel": "Kovhekanyani",
  "backLabel": "Murahu",
 };

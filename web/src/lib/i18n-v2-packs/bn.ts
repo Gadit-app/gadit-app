@@ -240,7 +240,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "অফলাইন প্যাক ডাউনলোড করুন",
  "offlineDownloadingPack": "ডাউনলোড হচ্ছে…",
  "offlinePackHeader": "অফলাইন প্যাক",
- "offlinePackDescription": "আপনার ভাষায় সবচেয়ে বেশি খোঁজা শব্দগুলো আপনার নোটবুকে যোগ করে, আর অফলাইনে পড়ার জন্য WiFi ছাড়াই সেগুলো রেখে দেয়।",
+ "offlinePackDescription": "আমাদের অভিধানের শব্দগুলো এই ডিভাইসে সংরক্ষণ করে, যাতে ইন্টারনেট ছাড়াও আপনি সেগুলো খুঁজতে পারেন।",
  "shareLabel": "শেয়ার করুন",
  "backLabel": "ফিরে যান",
  "composeTitleTemplate": (w) => `${w} দিয়ে নিজের একটি বাক্য লিখুন`,

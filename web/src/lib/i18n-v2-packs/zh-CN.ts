@@ -240,7 +240,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "下载离线词包",
  "offlineDownloadingPack": "下载中……",
  "offlinePackHeader": "离线词包",
- "offlinePackDescription": "把你所用语言里查得最多的词加入生词本，没有 WiFi 也能随时离线学习。",
+ "offlinePackDescription": "把我们词典里的词保存到这台设备上，没有网络也能查。",
  "shareLabel": "分享",
  "backLabel": "返回",
  "composeTitleTemplate": (w) => `用 ${w} 自己造一个句子`,

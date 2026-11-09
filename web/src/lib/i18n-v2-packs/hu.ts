@@ -240,7 +240,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Offline csomag letöltése",
  "offlineDownloadingPack": "Letöltés…",
  "offlinePackHeader": "Offline csomag",
- "offlinePackDescription": "A nyelveden leggyakrabban keresett szavakat hozzáadja a füzetedhez, és WiFi nélkül is elérhetővé teszi őket offline tanuláshoz.",
+ "offlinePackDescription": "Elmenti a szótárunk szavait erre az eszközre, így internet nélkül is kikeresheted őket.",
  "shareLabel": "Megosztás",
  "backLabel": "Vissza",
  "composeTitleTemplate": (w) => `Írj saját mondatot ezzel: ${w}`,

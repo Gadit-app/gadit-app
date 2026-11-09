@@ -273,7 +273,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "تنزيل حزمة بلا إنترنت",
  "offlineDownloadingPack": "جارٍ التنزيل…",
  "offlinePackHeader": "حزمة بلا إنترنت",
- "offlinePackDescription": "تُضاف الكلمات الأكثر بحثًا بلغتك إلى دفترك, متاحة أيضًا بدون إنترنت للدراسة بلا واي فاي.",
+ "offlinePackDescription": "يحفظ كلمات قاموسنا على هذا الجهاز، لتتمكن من البحث عنها حتى بدون إنترنت.",
  "savedAgoTemplate": (t) => `محفوظ · ${t}`,
  "shareLabel": "مشاركة",
  "backLabel": "رجوع",

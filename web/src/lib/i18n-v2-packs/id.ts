@@ -253,7 +253,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Unduh paket offline",
  "offlineDownloadingPack": "Mengunduh…",
  "offlinePackHeader": "Paket offline",
- "offlinePackDescription": "Menambahkan kata-kata yang paling banyak dicari dalam bahasamu ke Buku Catatanmu, dan menjaganya tetap tersedia tanpa WiFi untuk belajar offline.",
+ "offlinePackDescription": "Menyimpan kata-kata kamus kami di perangkat ini, supaya kamu bisa mencarinya bahkan tanpa internet.",
  "savedAgoTemplate": (t) => `Disimpan · ${t}`,
  "shareLabel": "Bagikan",
  "backLabel": "Kembali",

@@ -253,7 +253,7 @@ const t: V2Strings = {
  "offlineDownloadPack": "Download offline pack",
  "offlineDownloadingPack": "Downloading…",
  "offlinePackHeader": "Offline pack",
- "offlinePackDescription": "Adds the most-searched words in your language to your Notebook, and keeps them available without WiFi for offline study.",
+ "offlinePackDescription": "Saves our dictionary's words on this device, so you can look them up even without internet.",
  "savedAgoTemplate": (t) => `Saved · ${t}`,
  "shareLabel": "Share",
  "backLabel": "Back",

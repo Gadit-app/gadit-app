@@ -240,7 +240,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "오프라인 팩 다운로드",
  "offlineDownloadingPack": "다운로드 중…",
  "offlinePackHeader": "오프라인 팩",
- "offlinePackDescription": "당신의 언어에서 가장 많이 검색된 단어를 단어장에 추가하고, WiFi 없이도 오프라인으로 학습할 수 있게 보관해요.",
+ "offlinePackDescription": "사전의 단어를 이 기기에 저장해서 인터넷이 없어도 찾아볼 수 있어요.",
  "shareLabel": "공유",
  "backLabel": "뒤로",
  "composeTitleTemplate": (w) => `${w}(으)로 나만의 문장 쓰기`,

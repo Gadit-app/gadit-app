@@ -257,7 +257,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Télécharger le pack hors ligne",
  "offlineDownloadingPack": "Téléchargement…",
  "offlinePackHeader": "Pack hors ligne",
- "offlinePackDescription": "Ajoute les mots les plus recherchés dans votre langue à votre carnet, disponibles aussi sans WiFi pour étudier hors ligne.",
+ "offlinePackDescription": "Enregistre les mots de notre dictionnaire sur cet appareil, pour les consulter même sans internet.",
  "savedAgoTemplate": (t) => `Enregistré · ${t}`,
  "shareLabel": "Partager",
  "backLabel": "Retour",

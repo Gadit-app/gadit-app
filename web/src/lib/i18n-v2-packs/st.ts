@@ -252,7 +252,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "Jarolla sephutheloana sa ntle le inthanete",
  "offlineDownloadingPack": "Re a jarolla…",
  "offlinePackHeader": "Sephutheloana sa ntle le inthanete",
- "offlinePackDescription": "E eketsa mantswe a batlwang haholo ka puo ya hao Bukaneng ya hao, mme e a boloka a fumaneha ntle le WiFi hore o ithute ntle le inthanete.",
+ "offlinePackDescription": "E boloka mantswe a bukantswe ya rona sesebedisweng sena, hore o kgone ho a batla le ha o se na inthanete.",
  "shareLabel": "Arolelana",
  "backLabel": "Morao",
 };

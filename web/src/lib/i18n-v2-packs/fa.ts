@@ -253,7 +253,7 @@ const t: Partial<V2Strings> = {
  "offlineDownloadPack": "دانلود بسته آفلاین",
  "offlineDownloadingPack": "در حال دانلود…",
  "offlinePackHeader": "بسته آفلاین",
- "offlinePackDescription": "پرجستجوترین واژه‌های زبانت را به دفترچه‌ات می‌افزاید و آن‌ها را بدون WiFi برای مطالعه آفلاین در دسترس نگه می‌دارد.",
+ "offlinePackDescription": "واژه‌های فرهنگ لغت ما را روی این دستگاه ذخیره می‌کند تا حتی بدون اینترنت هم بتوانی آن‌ها را جستجو کنی.",
  "savedAgoTemplate": (t) => `ذخیره‌شده · ${t}`,
  "shareLabel": "هم‌رسانی",
  "backLabel": "بازگشت",
