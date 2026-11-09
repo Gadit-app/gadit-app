@@ -70,6 +70,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, voided, status: updated.status, nextCharge: new Date(until * 1000).toISOString() });
     }
 
+    // A card-update link that needs no login (for customers who can't sign in,
+    // e.g. a forgotten password). Stripe's hosted page, valid 23 hours. On
+    // success /api/card-saved makes the new card the subscription's card and
+    // pays any open invoice. Gadi 2026-11-09 (Ilanit).
+    //   {"action":"card_link","customer":"cus_..."}
+    if (body.action === "card_link") {
+      const customer = String(body.customer || "");
+      if (!customer.startsWith("cus_")) return NextResponse.json({ error: "customer required" }, { status: 400 });
+      const session = await stripe.checkout.sessions.create({
+        mode: "setup",
+        customer,
+        payment_method_types: ["card"],
+        expires_at: Math.floor(Date.now() / 1000) + 23 * 3600,
+        metadata: { purpose: "card_update" },
+        success_url: "https://www.gadit.app/api/card-saved?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url: "https://www.gadit.app/",
+      });
+      return NextResponse.json({ ok: true, url: session.url, expiresAt: new Date(session.expires_at * 1000).toISOString() });
+    }
+
     return NextResponse.json({ error: "unknown action" }, { status: 400 });
   } catch (e) {
     return NextResponse.json({ error: String(e).slice(0, 500) }, { status: 500 });
