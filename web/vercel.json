@@ -45,6 +45,10 @@
       "schedule": "5 * * * *"
     },
     {
+      "path": "/api/cron/school-checkout-alert",
+      "schedule": "*/15 * * * *"
+    },
+    {
       "path": "/api/cron/vet-words",
       "schedule": "15 3 * * 1"
     }

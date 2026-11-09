@@ -262,7 +262,8 @@ export async function POST(req: NextRequest) {
       metadata: {
         userId,
         ...(isFamily && { isFamily: "1" }),
-        ...(isSchools && { isSchools: "1" }),
+        // lang: the page language, for the abandoned-school-checkout alert to Gadi.
+        ...(isSchools && { isSchools: "1", lang }),
         ...(utmMeta ?? {}),
       },
       // Without a trial the subscription still carries the campaign tag.
