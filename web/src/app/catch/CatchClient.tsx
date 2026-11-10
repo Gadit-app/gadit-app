@@ -685,6 +685,8 @@ const CSS = `
 .ct-door-box{display:grid;gap:14px;justify-items:center;text-align:center;background:#0000005e;padding:22px 18px;border-radius:28px;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);max-width:520px;width:100%}
 .ct-door-box>strong{font-size:clamp(32px,9vw,54px);color:#fff;text-shadow:0 3px 0 #312e81,0 6px 18px #000a;line-height:1.1}
 .ct-door-box>span{color:#fff;font-size:17px;font-weight:600;text-shadow:0 1px 6px #000c}
+.ct-door .wm-spell{margin-bottom:4px}
+.ct-door .wm-spell-q{color:#fff;text-shadow:0 1px 6px #000c}
 .ct-loading{position:absolute;inset:0;z-index:7;display:grid;place-items:center;align-content:center;gap:14px;font-weight:700;font-size:18px;color:#fff;text-align:center;padding:16px;text-shadow:0 1px 6px #000a}
 @keyframes ct-flap{from{transform:translateY(0) rotate(-4deg)}to{transform:translateY(-4px) rotate(4deg)}}
 @keyframes ct-throb{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(1.18)}}
