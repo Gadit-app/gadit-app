@@ -3,7 +3,7 @@ import type { IndCopy } from "./types";
 /** The Hebrew Individuals page copy (moved here 2026-10-17; aligned with the Families page 2026-10-19: no commas or periods in headings, two-line step titles with a short line, the device row). Prices are placeholders, see lib/landing-i18n.ts. */
 const he: IndCopy = {
   topCta: "ניסיון חינם",
-  credPill: "הצוות של Gadit לימד יותר מ-15,000 לומדים ב-15 שנה",
+  credPill: "הצוות של Gadit לימד מעל 15,000 לומדים ב-15 שנים",
   h1: "להבין כל מילה עד הסוף",
   whatIs: "נתקעתם על מילה במכתב מהבנק, במאמר או בחוזה? תקבלו את כל המשמעויות, דוגמאות ומקור המילה, בהסבר בשפה שלכם. כל מילה נשמרת במחברת, ו-Gadit מחזיר אותה עד שהיא נשארת.",
   heroCta: "התחילו 14 ימי ניסיון חינם",

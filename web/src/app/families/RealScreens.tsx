@@ -62,7 +62,7 @@ export const REAL_COPY: Record<string, RealCopy> = {
     cardsTitle: "כל מילה מוסברת בגובה העיניים של הילד",
     safeKicker: "בטיחות",
     safeTitle: "מקום בטוח לילד בלי פרסומות ובלי צ'אט פתוח",
-    credPill: "הצוות של Gadit לימד יותר מ-15,000 לומדים ב-15 שנה",
+    credPill: "הצוות של Gadit לימד מעל 15,000 לומדים ב-15 שנים",
     olim: {
       kicker: "הסבר בשפת הבית",
       title: "הילד מבין כל מילה גם כשאתם לא יודעים להסביר אותה בעברית",
