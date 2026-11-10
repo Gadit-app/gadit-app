@@ -3600,6 +3600,8 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
   const [lessonPending, setLessonPending] = useState(openingLesson);
   // The tester's 🧪 note names the game on screen (Gadi 2026-11-02).
   useEffect(() => { setTesterGame(stage.kind === "playing" ? stage.game : stage.kind === "menu" ? "play-menu" : stage.kind); }, [stage]);
+  // leaving /play: the next page names its own game (notes from /catch said "play-menu")
+  useEffect(() => () => setTesterGame(""), []);
   // "Practice this word" from the notebook (Gadi 2026-10-09):
   // /play?game=<id>&word=<word> opens that game with the word in it.
   const [focus, setFocus] = useState<{ game: GameId; word: string } | null>(null);

@@ -439,7 +439,7 @@ function Trail({ word, world, c, avatar, doors, started, pic, onDone, onExit }: 
           {letters.map((l, i) => {
             const fromGate = phase !== "walk" ? (reveal ? l : (tiles[typed[i]] ?? (phase === "open" ? l : ""))) : "";
             const ch = phase === "walk" ? (shown(i) ? l : "") : fromGate;
-            return <span key={i} className={`wt-slot${ch ? " is-filled" : ""}${reveal ? " is-reveal" : ""}`}>{ch ? <Glyph ch={ch} /> : null}</span>;
+            return <span key={i} className={`wt-slot${ch ? " is-filled" : ""}${reveal ? " is-reveal" : ""}`}>{ch || null}</span>;
           })}
         </div>
         <div className="wt-hud-side is-end">

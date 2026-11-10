@@ -4,7 +4,6 @@ import { TTSButton } from "@/components/design/TTSButton";
 import { SfxToggle } from "@/components/SfxToggle";
 import { TesterButton } from "@/components/TesterButton";
 import { RTL_SPELL } from "@/lib/world/letters";
-import { Glyph } from "../world/Glyph";
 import type { TrailWord } from "../world/WorldClient";
 import type { CatchCopy } from "./catch-i18n";
 
@@ -28,8 +27,10 @@ export function CatchHud({ word, letters, step, pic, c, game, onExit }: {
             <img className="ct-slots-pic" src={pic} alt="" />
           ) : null}
           <span className="ct-slots-say"><TTSButton text={word.nq || (word.native ? word.raw : word.w)} audioLang={audioLang} ariaLabel={c.hear} className="ct-tts-btn" rate={0.85} /></span>
+          {/* plain text, not Glyph: a word's letters share one baseline (Osher 2026-11-10: in
+              "above" the letters jumped up and down, because Glyph centres each letter's ink) */}
           {letters.map((l, i) => (
-            <span key={i} className={`ct-slot${i < step ? " is-filled" : ""}${i === step && !done ? " is-now" : ""}`}>{i < step ? <Glyph ch={l} /> : null}</span>
+            <span key={i} className={`ct-slot${i < step ? " is-filled" : ""}${i === step && !done ? " is-now" : ""}`}>{i < step ? l : null}</span>
           ))}
         </div>
         <div className="ct-hud-side is-end">

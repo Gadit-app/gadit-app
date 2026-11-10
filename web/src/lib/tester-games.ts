@@ -1,6 +1,7 @@
 /** Friendly names for the game ids testers' notes carry (Gadi 2026-11-02). */
 const NAMES: Record<string, [string, string]> = {
   catch: ["גחליליות האותיות", "Letter Fireflies"],
+  "catch-door": ["תופסים אותיות: בחירת משחק", "Letter Catch: picking a scene"],
   "catch-coaster-snow": ["רכבת הרים: שלג", "Roller coaster: snow"],
   "catch-coaster-jungle": ["רכבת הרים: ג'ונגל", "Roller coaster: jungle"],
   "catch-coaster-space": ["רכבת הרים: חלל", "Roller coaster: space"],

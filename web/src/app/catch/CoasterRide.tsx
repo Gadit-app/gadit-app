@@ -24,6 +24,7 @@ import { inkOffset } from "../world/Glyph";
 import type { TrailWord } from "../world/WorldClient";
 import type { CatchCopy } from "./catch-i18n";
 import { CatchHud } from "./CatchHud";
+import { PACE_SPEED, type Pace } from "./catch-pace";
 
 export type CoasterWorld = "snow" | "jungle" | "space";
 export const COASTER_WORLDS: CoasterWorld[] = ["snow", "jungle", "space"];
@@ -86,8 +87,8 @@ type Drawn = { id: number; letter: string; x: number; y: number; w: number; h: n
 
 const loadImg = (src: string) => { const im = new Image(); im.src = src; return im; };
 
-export function CoasterRide({ world, word, c, level, avatar, pic, onDone, onExit }: {
-  world: CoasterWorld; word: TrailWord; c: CatchCopy; level: number; avatar: string; pic: string | null;
+export function CoasterRide({ world, word, c, level, pace, avatar, pic, onDone, onExit }: {
+  world: CoasterWorld; word: TrailWord; c: CatchCopy; level: number; pace: Pace; avatar: string; pic: string | null;
   onDone: (wrongs: number) => void; onExit: () => void;
 }) {
   const look = LOOK[world];
@@ -139,6 +140,8 @@ export function CoasterRide({ world, word, c, level, avatar, pic, onDone, onExit
   const pending = useRef(true);
   const levelRef = useRef(level);
   useEffect(() => { levelRef.current = level; }, [level]);
+  const paceRef = useRef(pace);
+  useEffect(() => { paceRef.current = pace; }, [pace]);
 
   const baseSeg = () => Math.floor(pos.current / SEG);
 
@@ -198,11 +201,13 @@ export function CoasterRide({ world, word, c, level, avatar, pic, onDone, onExit
       const b0 = baseSeg();
       const cur = track[((b0 % N) + N) % N];
       const slope = (cur.y2 - cur.y1) / SEG;
-      const base = (24 + Math.min(22, levelRef.current * 2)) * SEG;
+      const base = (24 + Math.min(22, levelRef.current * 2)) * SEG * PACE_SPEED.coaster[paceRef.current];
       // the ride eases off while a pair of signs comes close, so small hands have time
+      // (less on fast: Osher 2026-11-10, normal and fast felt the same)
       let near = Infinity;
       for (const s of signs.current) if (s.state === "go") near = Math.min(near, s.seg - b0);
-      const ease = near === Infinity ? 1 : 0.55 + 0.45 * Math.max(0, Math.min(1, (near - 8) / 34));
+      const floor = paceRef.current === 2 ? 0.7 : 0.55;
+      const ease = near === Infinity ? 1 : floor + (1 - floor) * Math.max(0, Math.min(1, (near - 8) / 34));
       const vWant = base * ease * (1 + Math.max(-0.22, Math.min(0.4, -slope * 2.2)));
       vS.current = vS.current == null ? vWant : vS.current + (vWant - vS.current) * Math.min(1, dt * 2.5);
       const v = vS.current;

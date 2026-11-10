@@ -19,6 +19,15 @@ export const savePace = (p: Pace) => { try { localStorage.setItem(PACE_KEY, Stri
 /** The words played so far, as the scenes count them for speed. */
 export const paceLevel = (level: number, pace: Pace) => (pace === 0 ? Math.min(level, 2) * 0.5 : pace === 1 ? level + 3 : level + 7);
 
+/** How much faster each pace runs, per scene (Osher 2026-11-10: slow and
+ *  normal felt the same in Fireflies, normal and fast felt the same on the
+ *  coaster, and the whole wheel at the funfair was too slow). */
+export const PACE_SPEED: Record<"fireflies" | "coaster" | "target", Record<Pace, number>> = {
+  fireflies: { 0: 1, 1: 1.3, 2: 1.5 },
+  coaster: { 0: 1, 1: 1.1, 2: 1.45 },
+  target: { 0: 1.5, 1: 1.9, 2: 2.5 },
+};
+
 /** Fireflies: the chance the next firefly carries the right letter while none on screen does, and the most decoys in a row before it must. */
 export const PACE_TARGET_CHANCE: Record<Pace, number> = { 0: 1, 1: 0.5, 2: 0.33 };
 export const PACE_MAX_DECOYS: Record<Pace, number> = { 0: 0, 1: 2, 2: 3 };

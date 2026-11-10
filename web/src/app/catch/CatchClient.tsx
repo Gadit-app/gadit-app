@@ -32,7 +32,8 @@ import { Glyph } from "../world/Glyph";
 import { fetchPics, loadWords, type TrailWord } from "../world/WorldClient";
 import { catchCopy, type CatchCopy } from "./catch-i18n";
 import { CatchHud } from "./CatchHud";
-import { PACE_ICON, PACE_MAX_DECOYS, PACE_TARGET_CHANCE, paceLabels, paceLevel, readPace, savePace, type Pace } from "./catch-pace";
+import { PACE_ICON, PACE_MAX_DECOYS, PACE_SPEED, PACE_TARGET_CHANCE, paceLabels, paceLevel, readPace, savePace, type Pace } from "./catch-pace";
+import { setTesterGame } from "@/lib/tester";
 import { CoasterRide, COASTER_ART, COASTER_CSS, COASTER_WORLDS, type CoasterWorld } from "./CoasterRide";
 import { FairRide, FAIR_ART, FAIR_CSS, FAIR_STALLS, type FairStall } from "./FairStall";
 
@@ -74,10 +75,10 @@ function Sky({ word, c, level, pace, avatar, onDone, onExit, pic }: {
   const geo = useMemo(() => {
     const W = size.w, H = size.h;
     const S = clamp(Math.min(W * 0.26, H * 0.17), 92, 150);
-    // Crossing the screen: gentle at first, a little faster every word.
-    const cross = clamp(8 - level * 0.45, 3.8, 8);
+    // Crossing the screen: gentle at first, a little faster every word; the pace makes it faster still.
+    const cross = clamp(8 - level * 0.45, 3.8, 8) / PACE_SPEED.fireflies[pace];
     return { W, H, S, top: Math.max(96, H * 0.16), bottom: H * 0.66 - S, speed: (W + 2 * S) / cross, maxOn: Math.min(3 + Math.floor(level / 2), 5) + (W > 900 ? 1 : 0), gap: cross / 3.2 };
-  }, [size, level]);
+  }, [size, level, pace]);
   const geoRef = useRef(geo);
   useEffect(() => { geoRef.current = geo; }, [geo]);
 
@@ -316,27 +317,64 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
     } catch { /* fine */ }
   }, []);
   const sceneName = scene === "coaster" ? `${c.sceneCoaster} · ${c.worlds[world]}` : scene === "fair" ? `${c.sceneFair} · ${c.stalls[stall]}` : c.sceneFireflies;
+
+  /* A scene is its own step in the browser history (Osher 2026-11-10): the ✕
+     or the phone's back button inside a scene returns to the scene picker,
+     and only the picker's own back leaves Letter Catch. */
+  const pushed = useRef(false);
+  const toDoor = useCallback(() => { setPhase("door"); setWorldPick(false); setStallPick(false); }, []);
+  const openScene = (q: Record<string, string>) => {
+    setPhase("intro");
+    try {
+      const u = new URL(window.location.href);
+      for (const k of ["scene", "world", "stall"]) u.searchParams.delete(k);
+      for (const [k, v] of Object.entries(q)) u.searchParams.set(k, v);
+      window.history.pushState({ ct: q.scene }, "", u.toString());
+      pushed.current = true;
+    } catch { /* the scene still opens */ }
+  };
+  const backToDoor = () => {
+    sfx.whoosh();
+    toDoor();
+    if (pushed.current) { pushed.current = false; window.history.back(); return; }
+    // came in on a scene's own link: drop it from the address instead
+    try {
+      const u = new URL(window.location.href);
+      for (const k of ["scene", "world", "stall"]) u.searchParams.delete(k);
+      window.history.replaceState(window.history.state, "", u.toString());
+    } catch { /* fine */ }
+  };
+  useEffect(() => {
+    const onPop = () => {
+      if (new URLSearchParams(window.location.search).get("scene")) return;
+      pushed.current = false;
+      toDoor();
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, [toDoor]);
+
   const pickScene = (s: Scene) => {
     setScene(s);
     try { localStorage.setItem(SCENE_KEY, s); } catch { /* fine */ }
     sfx.whoosh();
     if (s === "coaster") { setWorldPick(true); return; }
     if (s === "fair") { setStallPick(true); return; }
-    setPhase("intro");
+    openScene({ scene: s });
   };
   const pickStall = (s: FairStall) => {
     setStall(s);
     try { localStorage.setItem(STALL_KEY, s); } catch { /* fine */ }
     sfx.whoosh();
     setStallPick(false);
-    setPhase("intro");
+    openScene({ scene: "fair", stall: s });
   };
   const pickWorld = (w: CoasterWorld) => {
     setWorld(w);
     try { localStorage.setItem(WORLD_KEY, w); } catch { /* fine */ }
     sfx.whoosh();
     setWorldPick(false);
-    setPhase("intro");
+    openScene({ scene: "coaster", world: w });
   };
   const introSay = useRef<HTMLSpanElement>(null);
 
@@ -412,6 +450,11 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
 
   const exit = () => router.push(href("/play"));
   const level = jar.length;
+
+  // Notes from the floating 🧪 name the scene on screen (they all said "play-menu").
+  const testerId = phase === "door" ? "catch-door" : scene === "fair" ? `catch-fair-${stall}` : scene === "coaster" ? `catch-coaster-${world}` : "catch";
+  useEffect(() => { setTesterGame(testerId, phase === "door" ? undefined : word?.w); }, [testerId, phase, word]);
+  useEffect(() => () => setTesterGame(""), []);
   const roundJar = jar.slice(Math.floor(Math.max(0, jar.length - 1) / ROUND) * ROUND);
 
   return (
@@ -421,19 +464,19 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
       <style>{FAIR_CSS}</style>
 
       {word && phase === "play" && scene === "fireflies" ? (
-        <Sky key={`${round}:${idx}:${word.w}`} word={word} c={c} level={paceLevel(level, pace)} pace={pace} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={exit} />
+        <Sky key={`${round}:${idx}:${word.w}`} word={word} c={c} level={paceLevel(level, pace)} pace={pace} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={backToDoor} />
       ) : null}
       {word && phase === "play" && scene === "coaster" ? (
-        <CoasterRide key={`${round}:${idx}:${word.w}`} world={world} word={word} c={c} level={paceLevel(level, pace)} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={exit} />
+        <CoasterRide key={`${round}:${idx}:${word.w}`} world={world} word={word} c={c} level={paceLevel(level, pace)} pace={pace} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={backToDoor} />
       ) : null}
       {word && phase === "play" && scene === "fair" ? (
-        <FairRide key={`${round}:${idx}:${word.w}:${stall}`} stall={stall} word={word} c={c} level={paceLevel(level, pace)} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={exit} />
+        <FairRide key={`${round}:${idx}:${word.w}:${stall}`} stall={stall} word={word} c={c} level={paceLevel(level, pace)} pace={pace} avatar={avatar} pic={pics[word.pic] ?? null} onDone={finish} onExit={backToDoor} />
       ) : null}
 
       {word && phase === "intro" ? (
         <div className="ct-card-wrap" dir={dir}>
-          {/* the same ✕ as in the game, top corner (Gadi 2026-11-02) */}
-          <button type="button" className="ct-round ct-x" onClick={exit} aria-label={c.back}>✕</button>
+          {/* the same ✕ as in the game, top corner (Gadi 2026-11-02); it goes back to the scene picker */}
+          <button type="button" className="ct-round ct-x" onClick={backToDoor} aria-label={c.back}>✕</button>
           <div className="ct-card">
             <span className="ct-card-label">{c.yourWord(jar.length % ROUND + 1, ROUND)}</span>
             {pics[word.pic] ? (
@@ -461,7 +504,7 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
       {phase === "summary" ? (
         <div className="ct-card-wrap" dir={dir}>
           {/* the same ✕ as in the game, top corner (Gadi 2026-11-02) */}
-          <button type="button" className="ct-round ct-x" onClick={exit} aria-label={c.back}>✕</button>
+          <button type="button" className="ct-round ct-x" onClick={backToDoor} aria-label={c.back}>✕</button>
           <div className="ct-card">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className={scene === "fireflies" ? "ct-jar" : "ct-jar is-card"} src={scene === "coaster" ? `${COASTER_ART}/${world}/card.webp` : scene === "fair" ? `${FAIR_ART}/${stall}/card.webp` : `${ART}/jar.webp`} alt="" />
@@ -479,7 +522,7 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
             </div>
             <div className="ct-row">
               <button type="button" className="ct-btn" onClick={more}>{c.more}</button>
-              <button type="button" className="ct-btn is-ghost" onClick={exit}>{c.back}</button>
+              <button type="button" className="ct-btn is-ghost" onClick={backToDoor}>{c.back}</button>
             </div>
           </div>
         </div>

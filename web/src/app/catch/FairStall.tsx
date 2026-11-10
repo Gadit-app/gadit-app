@@ -26,6 +26,7 @@ import { Glyph } from "../world/Glyph";
 import type { TrailWord } from "../world/WorldClient";
 import type { CatchCopy } from "./catch-i18n";
 import { CatchHud } from "./CatchHud";
+import { PACE_SPEED, type Pace } from "./catch-pace";
 
 export type FairStall = "cans" | "balloons" | "target";
 export const FAIR_STALLS: FairStall[] = ["cans", "balloons", "target"];
@@ -44,10 +45,10 @@ type T = {
   vy: number; amp: number; freq: number; ph: number; x0: number; hue: number;
   ang: number;
 };
-type Shot = { id: number; target: number; t: number; dur: number; fx: number; fy: number; x: number; y: number; rot: number; state: "fly" | "bounce" | "stuck"; vx: number; vy: number; life: number };
+type Shot = { id: number; target: number; t: number; dur: number; fx: number; fy: number; x: number; y: number; rot: number; state: "fly" | "bounce" | "stuck" | "cling"; vx: number; vy: number; life: number };
 
-export function FairRide({ stall, word, c, level, avatar, pic, onDone, onExit }: {
-  stall: FairStall; word: TrailWord; c: CatchCopy; level: number; avatar: string; pic: string | null;
+export function FairRide({ stall, word, c, level, pace, avatar, pic, onDone, onExit }: {
+  stall: FairStall; word: TrailWord; c: CatchCopy; level: number; pace: Pace; avatar: string; pic: string | null;
   onDone: (wrongs: number) => void; onExit: () => void;
 }) {
   const rtl = RTL_SPELL.has(word.lang);
@@ -71,7 +72,8 @@ export function FairRide({ stall, word, c, level, avatar, pic, onDone, onExit }:
   const geo = useMemo(() => {
     const W = size.w, H = size.h;
     const count = Math.min(3 + Math.floor(level / 2), 5);
-    const speed = Math.min(1 + level * 0.08, 1.8);
+    // the wheel turns faster on every pace (Osher 2026-11-10: even fast was too slow)
+    const speed = Math.min(1 + level * 0.08, 1.8) * (stall === "target" ? PACE_SPEED.target[pace] : 1);
     const canW = clamp(Math.min(W * 0.2, H * 0.125), 64, 118);
     const balW = clamp(Math.min(W * 0.23, H * 0.125), 74, 132);
     const R = Math.min(W * 0.44, H * 0.27, 330);
@@ -84,7 +86,7 @@ export function FairRide({ stall, word, c, level, avatar, pic, onDone, onExit }:
       shelves: [H * 0.43, H * 0.66], wheel: { x: W / 2, y: Math.max(130 + R, H * 0.42) },
       launchW, launchH, lx: W / 2, ly,
     };
-  }, [size, level, stall]);
+  }, [size, level, stall, pace]);
   const geoRef = useRef(geo);
   useEffect(() => { geoRef.current = geo; }, [geo]);
 
@@ -106,7 +108,8 @@ export function FairRide({ stall, word, c, level, avatar, pic, onDone, onExit }:
   const peekTm = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [confetti, setConfetti] = useState<{ id: number; x: number; y: number; hue: number }[]>([]);
   const spawnIn = useRef(0.1);
-  const wheel = useRef({ th: 0, om: 0.6, want: 0.6, flipIn: rnd(5, 8) });
+  // flipIn 0: the first frame sets the speed from the pace (it used to start at one slow speed for 5-8 seconds)
+  const wheel = useRef({ th: 0, om: 0, want: 0, flipIn: 0 });
   const reassignIn = useRef(-1);
 
   const target = () => lettersRef.current[stepRef.current];
@@ -217,7 +220,8 @@ export function FairRide({ stall, word, c, level, avatar, pic, onDone, onExit }:
       t.state = stall === "balloons" ? "flee" : "miss"; t.t = 0;
       if (stall === "balloons") { s.vx = rnd(-60, 60); s.vy = -420; s.life = 0.5; }
       else if (stall === "cans") { s.vx = (s.x < g.W / 2 ? -1 : 1) * 140; s.vy = 160; s.life = 0.6; }
-      else { s.vx = rnd(-50, 50); s.vy = 60; s.life = 0.7; }
+      // a suction cup holds even on the wrong disc: it wobbles, then lets go (Osher 2026-11-10)
+      else { s.state = "cling"; s.life = 0.7; }
       setPeek({ letter: t.letter, who: wrongs.current % 2 ? "bear" : "parrot" });
       clearTimeout(peekTm.current);
       peekTm.current = setTimeout(() => setPeek(null), 1400);
@@ -361,13 +365,22 @@ export function FairRide({ stall, word, c, level, avatar, pic, onDone, onExit }:
           s.x += s.vx * dt; s.y += s.vy * dt;
           s.rot += dt * (stall === "target" ? 260 : 540);
           if (s.life <= 0) shot.current = null;
-        } else if (s.state === "stuck") {
+        } else if (s.state === "stuck" || s.state === "cling") {
+          // the cup sits on the middle of the disc and the arrow hangs straight down from it,
+          // riding the wheel (Osher 2026-11-10: the arrows fell off and stood crooked)
           const tg = ts.current.find((x) => x.id === s.target);
-          if (tg) { s.x = tg.x; s.y = tg.y - g.discW * 0.28; }
+          const h = (se.offsetHeight || 120) * 0.65;
+          if (tg) { s.x = tg.x; s.y = tg.y + h * 0.4; }
+          s.rot = 0;
+          if (s.state === "cling") {
+            s.life -= dt;
+            s.rot = Math.sin((0.7 - s.life) * 32) * 12 * clamp((s.life - 0.2) / 0.5, 0, 1);
+            if (s.life <= 0) shot.current = null;
+          }
         }
         const sc = s.state === "fly" ? 1 - 0.35 * Math.min(1, s.t) : 0.65;
         se.style.transform = `translate3d(${s.x}px,${s.y}px,0) translate(-50%,-50%) rotate(${s.rot}deg) scale(${sc})`;
-        se.style.opacity = s.state === "bounce" ? String(clamp(s.life * 2.5, 0, 1)) : "1";
+        se.style.opacity = s.state === "bounce" ? String(clamp(s.life * 2.5, 0, 1)) : s.state === "cling" ? String(clamp(s.life * 5, 0, 1)) : "1";
         se.style.display = "block";
       } else if (se) se.style.display = "none";
 

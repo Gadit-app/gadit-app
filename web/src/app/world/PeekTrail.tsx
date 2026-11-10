@@ -374,7 +374,7 @@ export function PeekTrail({ world, c, ui, word, pic, avatar, onWordDone, onMap, 
             ) : null}
             <span className="wt-slots-say"><TTSButton text={word.nq || (word.native ? word.raw : word.w)} audioLang={audioLang} ariaLabel={c.hear} className="wt-tts-btn" rate={0.85} /></span>
             {letters.map((l, i) => (
-              <span key={i} className={`wt-slot${i < step ? " is-filled" : ""}${i === step && phase !== "card" ? " pk-now" : ""}`}>{i < step ? <Glyph ch={l} /> : null}</span>
+              <span key={i} className={`wt-slot${i < step ? " is-filled" : ""}${i === step && phase !== "card" ? " pk-now" : ""}`}>{i < step ? l : null}</span>
             ))}
           </div>
         ) : <div />}
