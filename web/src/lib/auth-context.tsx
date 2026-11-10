@@ -29,6 +29,7 @@ type FirestoreMod = typeof import("firebase/firestore");
 // Through lib/firebase first, so local emulator runs keep connecting the database there.
 const loadFirestore = () => import("./firebase").then(() => import("firebase/firestore"));
 import { track } from "@/lib/track";
+import { hasAffonsoReferral, ensureAffonsoPixel } from "@/lib/affonso";
 import { isBlockedSignupEmail } from "@/lib/signup-guard";
 import { nativeAuthAvailable, requestNativeAuth, type NativeAuthProvider } from "@/lib/native-auth";
 import { isIosApp } from "@/lib/native-app";
@@ -482,6 +483,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // genuinely-new users (returning logins would create duplicate leads).
   function trackAffonsoSignup(u: User) {
     if (typeof window === "undefined") return;
+    // Only a visitor who came through an Affonso affiliate link carries this
+    // cookie. Everyone else: nothing is loaded and nothing is sent (Gadi 10/11).
+    if (!hasAffonsoReferral()) return;
+    ensureAffonsoPixel();
     type AffonsoApi = {
       signup: (
         data: { email?: string; externalUserId?: string; name?: string },
@@ -501,7 +506,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
         return;
       }
-      if (attempt >= 5) return;
+      if (attempt >= 10) return;
       window.setTimeout(() => fire(attempt + 1), 500);
     };
     fire(0);

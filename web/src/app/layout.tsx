@@ -31,7 +31,7 @@ import { isIosAppUA } from "@/lib/native-app";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import MetaPixel from "@/components/MetaPixel";
 import TikTokPixel from "@/components/TikTokPixel";
-import Script from "next/script";
+import AffonsoPixel from "@/components/AffonsoPixel";
 
 // Fonts are SELF-HOSTED from /public/fonts via ./fonts.css (downloaded once
 // from Google Fonts, 2026-09-30). The build used to fetch them from
@@ -517,29 +517,15 @@ export default async function RootLayout({
               {/* Meta Pixel: same scope (lib/ad-scope.ts), inside the auth
                   provider so it knows a kid profile from a parent. */}
               {!iosApp && <MetaPixel />}
+              {/* Affonso affiliate pixel: landing pages only (Gadi 10/11),
+                  never for a child. See components/AffonsoPixel.tsx. */}
+              {!iosApp && <AffonsoPixel />}
             </AuthProvider>
           </LangProvider>
           <ServiceWorkerRegister />
           <AutoUpdater />
           <RefCapture />
           <Analytics />
-          {/* Affonso affiliate-tracking pixel. RESTORED 2026-08-05: the
-              embed DASHBOARD was retired (bad API key) and /affiliate now
-              redirects to the in-house /partners portal, but Affonso's
-              MARKETPLACE keeps bringing international affiliates Gadi never
-              recruited, and this pixel is what credits their referrals. It
-              runs IN PARALLEL with the in-house program: our RefCapture
-              ignores codes that aren't in-house partners, Affonso ignores
-              codes that aren't its own, so there is no double-attribution.
-              First-party delivery via the /r/* rewrites in next.config.ts
-              (defeats ad blockers). Program ID is public. */}
-          {!iosApp && <Script
-            src="/r/pixel.js"
-            strategy="afterInteractive"
-            data-affonso="cmq3oz349000p11r2lloq0xb2"
-            data-cookie_duration="60"
-            data-api-base="/r"
-          />}
         </body>
     </html>
   );
