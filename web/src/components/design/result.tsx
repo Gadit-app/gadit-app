@@ -117,6 +117,9 @@ export interface WordResult {
   /** When the searched word was a misspelling the model auto-corrected: the
    *  original (wrong) spelling as typed. `word` holds the correct spelling. */
   correctedFrom?: string | null;
+  /** When a Hebrew inflected form ("עורקים") was answered from its headword's
+   *  entry (`word` = "עורק"): the form as typed (define API, 2026-11-10). */
+  inflectedFrom?: string | null;
 }
 
 // Actions the page hands to WordClient through onAction: the quiz tab
@@ -166,6 +169,15 @@ const LANG_NAMES: Record<string, string[]> = {
   bn: ["bengali", "bangla", "বাংলা"],
   da: ["danish", "dansk"],
   hu: ["hungarian", "magyar"],
+};
+
+/** "{form} is a form of {word}": the typed inflected form and its headword. */
+const FORM_OF_COPY: Record<string, string> = {
+  en: "{form} is a form of {word}", he: "{form} היא צורה של {word}", ar: "{form} صيغة من {word}", ru: "{form}: форма слова {word}",
+  es: "{form} es una forma de {word}", pt: "{form} é uma forma de {word}", fr: "{form} est une forme de {word}", de: "{form} ist eine Form von {word}",
+  it: "{form} è una forma di {word}", nl: "{form} is een vorm van {word}", uk: "{form}: форма слова {word}", pl: "{form} to forma słowa {word}",
+  tr: "{form}, {word} sözcüğünün bir biçimidir", fa: "{form} شکلی از {word} است", id: "{form} adalah bentuk dari {word}", el: "{form} είναι τύπος του {word}",
+  cs: "{form} je tvar slova {word}", sk: "{form} je tvar slova {word}", hi: "{form}, {word} का एक रूप है", am: "{form} የ{word} ቅርጽ ነው", ja: "{form} は {word} の活用形です",
 };
 
 const SPELLING_FIX_COPY: Record<string, string> = {
@@ -1515,6 +1527,24 @@ export function ResultView({
           <span dir="auto" style={{ textDecoration: "line-through", color: "#B45309" }}>{result.correctedFrom}</span>
           <span aria-hidden="true" style={{ color: "var(--ink-muted,#9CA3AF)" }}>→</span>
           <span dir="auto" style={{ fontWeight: 800, color: "var(--ink,#0B1220)" }}>{result.word}</span>
+        </div>
+      )}
+
+      {/* An inflected form answered from its headword: "עורקים היא צורה של עורק". */}
+      {result.inflectedFrom &&
+        result.inflectedFrom.trim().toLowerCase() !== (result.word || "").trim().toLowerCase() && (
+        <div
+          dir={dir}
+          style={{
+            display: "inline-flex", alignItems: "center", gap: 6, flexWrap: "wrap",
+            margin: "2px 0 4px", padding: "7px 13px", borderRadius: 999,
+            background: "var(--teal-soft,#E6F4F1)", border: "1px solid var(--teal-line,#B9DED6)", fontSize: 13.5, color: "var(--ink-muted,#3F5A55)",
+          }}
+        >
+          {(FORM_OF_COPY[lang] ?? FORM_OF_COPY.en).split(/(\{form\}|\{word\})/).map((part, i) =>
+            part === "{form}" ? <span key={i} dir="auto" style={{ fontWeight: 800, color: "var(--ink,#0B1220)" }}>{result.inflectedFrom}</span>
+            : part === "{word}" ? <span key={i} dir="auto" style={{ fontWeight: 800, color: "var(--ink,#0B1220)" }}>{result.word}</span>
+            : part ? <span key={i}>{part}</span> : null)}
         </div>
       )}
 

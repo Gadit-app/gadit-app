@@ -911,6 +911,55 @@ async function deleteCachedResult(key: string) {
   }
 }
 
+/**
+ * A kids-tier entry served to a free reader: the same definitions, without
+ * the kids text, which is a paid feature (Gadi 2026-11-10: the seeded Hebrew
+ * dictionary was written for the kids tier, and free readers should get it
+ * too instead of a fresh generation).
+ */
+function withoutKidsText(r: Record<string, unknown>): Record<string, unknown> {
+  const noKidsIdioms = (list: unknown) => (Array.isArray(list) ? list.map((i) => (i && typeof i === "object" ? { ...(i as Record<string, unknown>), kidsMeaning: "" } : i)) : list);
+  const meanings = Array.isArray(r.meanings)
+    ? r.meanings.map((m) => (m && typeof m === "object" ? { ...(m as Record<string, unknown>), kidsExplanation: null, idioms: noKidsIdioms((m as { idioms?: unknown }).idioms) } : m))
+    : r.meanings;
+  const etymology = r.etymology && typeof r.etymology === "object" ? { ...(r.etymology as Record<string, unknown>), kidsExplanation: "" } : r.etymology;
+  return { ...r, meanings, etymology, generalIdioms: noKidsIdioms(r.generalIdioms) };
+}
+
+const HEBREW_FORM = /^[א-ת]{2,}$/;
+/** Prefix letters a Hebrew word carries (and, with, to, from, that, as, the), longest first. */
+const HE_PREFIXES = ["וה", "וב", "ול", "וכ", "ומ", "וש", "שה", "כש", "מה", "ו", "ה", "ב", "ל", "מ", "ש", "כ"];
+
+/**
+ * The dictionary headwords a typed Hebrew form belongs to: "עורקים" → עורק,
+ * "ובמהלך" → מהלך. The `heForms` collection (built 2026-11-10 from a
+ * 150k-form frequency list) holds a doc per form with its headwords `h`, and
+ * a doc per headword marked `head`, which never routes. A form the list does
+ * not know is tried once more without one prefix, when the rest is a known
+ * form or headword. Returns [] for anything else, and the lookup then
+ * generates as before.
+ */
+async function hebrewHeads(typed: string): Promise<string[]> {
+  const form = typed.normalize("NFC").replace(/[֑-ׇ]/g, "").trim();
+  if (!HEBREW_FORM.test(form)) return [];
+  type FormDoc = { h?: string[]; head?: boolean };
+  const col = getAdminDb().collection("heForms");
+  try {
+    const own = (await col.doc(form).get()).data() as FormDoc | undefined;
+    if (own) return own.head ? [] : (own.h ?? []).filter((h) => h !== form);
+    const rests = HE_PREFIXES.filter((p) => form.startsWith(p) && form.length - p.length >= 3).map((p) => form.slice(p.length));
+    if (!rests.length) return [];
+    const snaps = await getAdminDb().getAll(...rests.map((r) => col.doc(r)));
+    for (let i = 0; i < snaps.length; i++) {
+      const d = snaps[i].data() as FormDoc | undefined;
+      if (d) return d.head ? [rests[i]] : (d.h ?? []);
+    }
+  } catch (e) {
+    console.error("heForms lookup error:", e);
+  }
+  return [];
+}
+
 // Loose JSON schema for OpenAI Structured Outputs. The current prompt
 // already produces this exact shape; the schema acts as a hard
 // guardrail so the model can't drift into half-formed JSON during
@@ -1689,17 +1738,48 @@ export async function POST(req: NextRequest) {
     // Raw per-event feed for /admin/activity (who searched what, when).
     if (!isRefresh) void recordActivity({ kind: "word", word, lang: uiLangCode, uid: userInfo?.userId ?? null, plan: userInfo?.plan ?? "anon", country: req.headers.get("x-vercel-ip-country"), ua: req.headers.get("user-agent"), impersonating: userInfo?.impersonating });
 
-    const cached = isRefresh ? null : await getCachedResult(cacheKey);
+    // The cache lookup. A miss falls back twice before anything is generated
+    // (Gadi 2026-11-10, "cover all of Hebrew"):
+    //   1. a free reader gets the kids-tier entry of the same word without
+    //      its kids text: the seeded dictionary was written for that tier;
+    //   2. a Hebrew inflected form is served from its headword's entry
+    //      ("עורקים" from עורק, "ובמהלך" from מהלך), marked inflectedFrom,
+    //      so one cached word serves all its forms.
+    // hitKey/headWord name the entry that answered; cacheKey stays the typed
+    // word's key, where a fresh generation is written.
+    let hitKey = cacheKey;
+    let headWord = String(word);
+    let stripKids = false;
+    let cached = isRefresh ? null : await getCachedResult(cacheKey);
+    if (!cached && !isRefresh) {
+      const kidsKeyOf = (k: string) => (tierKey === "base" ? k.replace("_base_", "_kids_") : null);
+      const kidsKey = kidsKeyOf(cacheKey);
+      if (kidsKey) {
+        cached = await getCachedResult(kidsKey);
+        if (cached) { hitKey = kidsKey; stripKids = true; }
+      }
+      if (!cached && !contextSentence) {
+        for (const head of await hebrewHeads(String(word))) {
+          const base = `auto2_${uiLangCode}_${tierKey}_${head.toLowerCase()}`;
+          for (const k of [base, kidsKeyOf(base)]) {
+            if (!k) continue;
+            const hit = await getCachedResult(k);
+            if (hit) { cached = hit; hitKey = k; headWord = head; stripKids = k !== base; break; }
+          }
+          if (cached) break;
+        }
+      }
+    }
     if (cached) {
       // Validate cached result against the same guard we apply to
       // fresh generations. Cache entries written before the guard
       // existed (or before guard heuristics were tightened) may carry
       // mojibake. If so, drop the corrupted entry and fall through to
       // the live-generation path so the user gets a clean result.
-      const cachedVerdict = isDegenerate(cached, word, uiLangCode);
+      const cachedVerdict = isDegenerate(cached, headWord, uiLangCode);
       if (cachedVerdict.degenerate) {
-        console.warn(`Dropping corrupted cache entry [${cacheKey}]: ${cachedVerdict.reason}`);
-        await deleteCachedResult(cacheKey);
+        console.warn(`Dropping corrupted cache entry [${hitKey}]: ${cachedVerdict.reason}`);
+        await deleteCachedResult(hitKey);
       } else {
         // Lazy backfill of the cross-language gloss for pre-existing cache
         // entries that predate the `translation` field. If the word is in a
@@ -1711,10 +1791,10 @@ export async function POST(req: NextRequest) {
         const sameLang = !!wordLangName && wordLangName.toLowerCase().includes(uiLangName.toLowerCase());
         const hasGloss = typeof cached.translation === "string" && cached.translation.trim().length > 0;
         if (wordLangName && !sameLang && !hasGloss && !contextSentence) {
-          const t = await backfillTranslation(word, wordLangName, uiLangName);
+          const t = await backfillTranslation(headWord, wordLangName, uiLangName);
           if (t && !isEtymologyFieldGarbled("originalMeaning", t)) {
             (cached as Record<string, unknown>).translation = t;
-            void getAdminDb().collection("cache").doc(cacheKey).set({ translation: t }, { merge: true });
+            void getAdminDb().collection("cache").doc(hitKey).set({ translation: t }, { merge: true });
           }
         }
         // Entries cached before the etymology guard (2026-10-14) can still
@@ -1727,15 +1807,16 @@ export async function POST(req: NextRequest) {
           served = repeats ? dropRepeatedOrigin(cached) : cached;
           const shown = served;
           after(async () => {
-            if (repeats) await setCachedResult(cacheKey, shown);
-            await setCachedResult(cacheKey, await fixEtymology(cached, word, uiLangName, { force: true }));
+            if (repeats) await setCachedResult(hitKey, shown);
+            await setCachedResult(hitKey, await fixEtymology(cached, headWord, uiLangName, { force: true }));
           });
         }
+        if (stripKids) served = withoutKidsText(served as Record<string, unknown>);
         // Every finished lookup goes to the notebook, even when the person
         // leaves before the page saves it (Gadi 2026-10-22).
         if (userInfo && !userInfo.impersonating) after(() => saveLookupToNotebook(userInfo.userId, userInfo.plan, served as Parameters<typeof saveLookupToNotebook>[2]).catch(() => {}));
         // Cached response — send as a single SSE event so the client can use one code path
-        const payload = { ...served, fromCache: true };
+        const payload = { ...served, fromCache: true, ...(headWord !== String(word) ? { inflectedFrom: String(word).trim() } : {}) };
         const body = `data: ${JSON.stringify({ type: "done", result: payload })}\n\n`;
         return new Response(body, {
           headers: {
