@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { sfx } from "@/lib/game-sfx";
-import { TESTER_CHOICES, TESTER_EMOJI, TESTER_SAY_FIRST, testerCopy, testerGame, type TesterKind } from "@/lib/tester";
+import { TESTER_CHOICES, TESTER_EMOJI, TESTER_RATINGS, TESTER_SAY_FIRST, testerCopy, testerGame, type TesterKind } from "@/lib/tester";
 
 /**
  * The tester's 🧪 button (Gadi 2026-11-02). Only testers see it. Fixed
@@ -132,7 +132,7 @@ export function TesterButton({ game, word, className, floating }: { game: string
     else void send(k);
   };
 
-  const prompt = kind === "bug" ? c.sayBug : kind === "idea" ? c.sayIdea : c.sayAny;
+  const prompt = kind === "bug" ? c.sayBug : kind === "idea" ? c.sayIdea : TESTER_RATINGS.has(kind) ? c.sayBetter : c.sayAny;
 
   return (
     <>

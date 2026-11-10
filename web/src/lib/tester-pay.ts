@@ -130,12 +130,14 @@ export async function paySlips(uids: string[], month: string): Promise<PaySlip[]
       const text = n.transcript || n.word;
       if (RATINGS.has(n.kind)) {
         const key = `${n.day}:${n.game}`;
-        if (seenRun.has(key)) continue;
-        seenRun.add(key);
-        const played = t.rounds[n.day] ?? 0;
-        const ok = played >= PAY.runRounds;
-        rows.push({ id: n.id, day: n.day, type: "run", game: n.game, word: n.word, text: "", audio: false, ticket: null, yoon: ok ? PAY.run : 0, state: ok ? "paid" : n.day === today ? "pending" : "no", ...(ok ? {} : { need: PAY.runRounds - played }) });
-        continue;
+        if (!seenRun.has(key)) {
+          seenRun.add(key);
+          const played = t.rounds[n.day] ?? 0;
+          const ok = played >= PAY.runRounds;
+          rows.push({ id: n.id, day: n.day, type: "run", game: n.game, word: n.word, text: "", audio: false, ticket: null, yoon: ok ? PAY.run : 0, state: ok ? "paid" : n.day === today ? "pending" : "no", ...(ok ? {} : { need: PAY.runRounds - played }) });
+        }
+        // the improvement recorded with a rating pays once Gadi takes it as an idea or a bug (Gadi 2026-11-10)
+        if (!n.audio || (n.payAs !== "bug" && n.payAs !== "idea")) continue;
       }
       const pt = payType(n);
       if (!pt && n.kind !== "voice") continue;

@@ -124,7 +124,8 @@ export default function AdminTestersClient() {
 
   const actions = (n: Note) => {
     const b: [string, () => void, boolean?][] = [];
-    if (RATINGS.has(n.kind)) return b;
+    // a rating counts as a test run; one with a recorded improvement can also be paid as an idea or a bug (Gadi 2026-11-10)
+    if (RATINGS.has(n.kind) && !n.hasAudio) return b;
     const type = n.payAs ?? (n.kind === "bug" ? "bug" : n.kind === "idea" ? "idea" : null);
     if (type === "bug") {
       if (n.status !== "approved" && n.status !== "done") b.push([t.approveBug, () => setStatus(n.id, "approved", "bug"), true]);
@@ -176,7 +177,7 @@ export default function AdminTestersClient() {
                     <span style={{ background: "#F3F4F6", borderRadius: 999, padding: "2px 10px", fontSize: 13, color: "#374151" }}>{gameName(n.game, L)}</span>
                     {n.word ? <span style={{ fontSize: 13, color: "#6B7280" }}>{t.word}: <bdi>{n.word}</bdi></span> : null}
                     <span style={{ marginInlineStart: "auto", fontSize: 13, color: "#6B7280" }}>{fmt(n.at)}</span>
-                    {!RATINGS.has(n.kind) ? <span style={{ background: bg, color: fg, borderRadius: 999, padding: "2px 10px", fontSize: 12, fontWeight: 700 }}>{t[n.status] ?? n.status}</span> : null}
+                    {!RATINGS.has(n.kind) || n.hasAudio ? <span style={{ background: bg, color: fg, borderRadius: 999, padding: "2px 10px", fontSize: 12, fontWeight: 700 }}>{t[n.status] ?? n.status}</span> : null}
                   </div>
                   {RATINGS.has(n.kind) ? <span style={{ fontSize: 13, color: "#6B7280" }}>{t.rating}</span> : null}
                   {n.transcript ? <p style={{ margin: 0, background: "#F5F3FF", borderRadius: 10, padding: "8px 12px", fontSize: 16, color: "#111827" }}>🎤 &quot;{n.transcript}&quot;</p> : null}

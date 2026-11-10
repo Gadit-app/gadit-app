@@ -35,6 +35,9 @@ const KIND_HE: Record<TesterKind, string> = {
 const extOf = (t: string) => (t.includes("mp4") ? "m4a" : t.includes("mpeg") ? "mp3" : t.includes("ogg") ? "ogg" : t.includes("wav") ? "wav" : "webm");
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
+const TESTER_PROMPT_HE = "ילד בודק משחקים ב-Gadit ומספר על באג, רעיון או מה היה משפר את המשחק. תופסים אותיות, גחליליות, רכבת הרים, ג'ונגל, חלל, שלג, לונה פארק, פחיות, בלונים, מטרה, גלגל, חצים, עולמות המילים, דו-קרב. איטי, רגיל, מהיר. לפעמים מאיית מילים באנגלית.";
+const TESTER_PROMPT_EN = "A child testing Gadit's games tells us about a bug, an idea or what would make a game better: Letter Catch, Fireflies, roller coaster, funfair, cans, balloons, target, Word Worlds, Word Duel. Slow, normal, fast.";
+
 async function transcribe(audio: Blob, lang: string): Promise<string> {
   if (!process.env.OPENAI_API_KEY) return "";
   const f = new FormData();
@@ -42,6 +45,9 @@ async function transcribe(audio: Blob, lang: string): Promise<string> {
   f.append("model", "gpt-transcribe");
   f.append("response_format", "json");
   if (lang === "he" || lang === "en") f.append("language", lang);
+  // the games' own words, so a child's "החצים" is not heard as "החתים" (Osher's notes 2026-11-10)
+  const prompt = lang === "he" ? TESTER_PROMPT_HE : TESTER_PROMPT_EN;
+  f.append("prompt", prompt);
   try {
     const r = await fetch("https://api.openai.com/v1/audio/transcriptions", {
       method: "POST",
@@ -51,7 +57,11 @@ async function transcribe(audio: Blob, lang: string): Promise<string> {
     if (!r.ok) return "";
     const d = (await r.json()) as { text?: string; duration?: number; usage?: { seconds?: number } };
     void logAiUsage({ feature: "tester-voice", model: "gpt-transcribe", costUsd: d.usage?.seconds != null ? (d.usage.seconds / 60) * 0.0045 : whisperCostUsd(Number(d.duration ?? 0)), plan: "deep" });
-    return (d.text ?? "").trim();
+    const text = (d.text ?? "").trim();
+    // a silent clip comes back as the prompt itself (or a lone "תודה.")
+    const bare = text.replace(/[.\s]+$/, "");
+    if (!bare || (bare.length >= 20 && prompt.includes(bare)) || /^(תודה|thank you)$/i.test(bare)) return "";
+    return text;
   } catch { return ""; }
 }
 

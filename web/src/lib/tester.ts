@@ -9,8 +9,11 @@ export const TESTER_KINDS = ["fun", "boring", "hard", "easy", "bug", "idea", "vo
 export type TesterKind = (typeof TESTER_KINDS)[number];
 /** The choices on the panel (a voice note is the microphone button). */
 export const TESTER_CHOICES = ["fun", "boring", "hard", "easy", "bug", "idea"] as const;
-/** These open the microphone first: a bug or an idea is best told in words. */
-export const TESTER_SAY_FIRST = new Set<TesterKind>(["bug", "idea"]);
+/** These open the microphone first: a bug or an idea is best told in words,
+ *  and a rating asks what would make the game better (Gadi 2026-11-10: "only
+ *  four stars" is not a note without a suggestion). */
+export const TESTER_SAY_FIRST = new Set<TesterKind>(["bug", "idea", "fun", "boring", "hard", "easy"]);
+export const TESTER_RATINGS = new Set<TesterKind>(["fun", "boring", "hard", "easy"]);
 
 export const TESTER_EMOJI: Record<TesterKind, string> = {
   fun: "😍", boring: "😴", hard: "😵", easy: "🥱", bug: "🐞", idea: "💡", voice: "🎤",
@@ -19,7 +22,7 @@ export const TESTER_EMOJI: Record<TesterKind, string> = {
 export type TesterCopy = {
   badge: string; title: string; thanks: string; close: string; heard: string;
   record: string; stop: string; sending: string; sendPlain: string; noMic: string;
-  sayBug: string; sayIdea: string; sayAny: string;
+  sayBug: string; sayIdea: string; sayAny: string; sayBetter: string;
   myPay: string;
   kinds: Record<TesterKind, string>;
 };
@@ -38,6 +41,7 @@ const HE: TesterCopy = {
   sayBug: "ספרו מה הבאג: מה עשיתם ומה קרה",
   sayIdea: "ספרו את הרעיון",
   sayAny: "ספרו מה רוצים להגיד",
+  sayBetter: "מה היה הופך את המשחק ל-5 כוכבים? ספרו לנו",
   myPay: "💰 התשלום החודשי שלי",
   kinds: { fun: "כיף", boring: "משעמם", hard: "קשה מדי", easy: "קל מדי", bug: "יש באג", idea: "יש לי רעיון", voice: "להגיד משהו" },
 };
@@ -55,6 +59,7 @@ const EN: TesterCopy = {
   sayBug: "Tell us the bug: what you did and what happened",
   sayIdea: "Tell us your idea",
   sayAny: "Tell us what you want to say",
+  sayBetter: "What would make this game 5 stars? Tell us",
   myPay: "💰 My monthly pay",
   kinds: { fun: "Fun", boring: "Boring", hard: "Too hard", easy: "Too easy", bug: "Found a bug", idea: "I have an idea", voice: "Say something" },
 };
