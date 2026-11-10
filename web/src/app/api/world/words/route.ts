@@ -6,6 +6,7 @@ import { HEBREW_BANK } from "@/lib/learn/hebrew-bank";
 import { ENGLISH_BANK_T } from "@/lib/learn/english-bank-langs";
 import { alphabetFrom, lettersOf, spellable, NO_SPELL_LANGS } from "@/lib/world/letters";
 import { LANGUAGES } from "@/lib/i18n";
+import { spellingFor, toSpelling } from "@/lib/spelling-variant";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -103,7 +104,10 @@ export async function GET(req: NextRequest) {
   const t = (x: LearnItem) => (ui === lang || !ui || !x.en ? "" : inUi(x.en, ui));
   // Hebrew bank rows carry their own Arabic and Russian.
   const heRow = lang === "he" && (ui === "ar" || ui === "ru") ? new Map(HEBREW_BANK.map((x) => [x.w, x[ui]])) : null;
-  return NextResponse.json({ pool: pool.map((x) => ({ w: x.w, t: heRow?.get(x.w) ?? t(x), nq: x.nq, en: x.en })), alphabet, reads });
+  // English in the spelling of the player's country (lib/spelling-variant).
+  const spelling = spellingFor(req.headers.get("x-vercel-ip-country"));
+  const shown = (w: string) => (lang === "en" ? toSpelling(w, spelling) : w);
+  return NextResponse.json({ pool: pool.map((x) => ({ w: shown(x.w), t: heRow?.get(x.w) ?? t(x), nq: x.nq, en: x.en })), alphabet, reads });
 }
 
 export async function POST(req: NextRequest) {

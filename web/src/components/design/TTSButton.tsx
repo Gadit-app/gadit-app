@@ -230,9 +230,14 @@ export function TTSButton({
   // OpenAI TTS (device-independent) for a signed-in user, so listen always
   // makes a sound. Gadi 2026-09-09.
   const playSmart = useCallback(async () => {
-    const sub = toBcp47(audioLang).split("-")[0].toLowerCase();
+    const tag = toBcp47(audioLang).toLowerCase();
+    const sub = tag.split("-")[0];
     const voices = await getVoicesAsync();
-    const match = voices.find((v) => v.lang?.toLowerCase().startsWith(sub));
+    // The exact locale first (en-US). The first "en" voice a tablet lists is
+    // often Australian or British, which drop the r: "tower" came out as
+    // "tow-uh" in the fireflies (Osher 2026-11-10).
+    const langOf = (v: SpeechSynthesisVoice) => (v.lang ?? "").toLowerCase().replace("_", "-");
+    const match = voices.find((v) => langOf(v) === tag) ?? voices.find((v) => langOf(v).startsWith(sub));
     if (match) {
       playWebSpeech(match);
     } else if (user) {

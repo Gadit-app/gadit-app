@@ -13,6 +13,7 @@
 import { ENGLISH_BANK, ENGLISH_TOPICS } from "./english-bank";
 import { HEBREW_BANK, HEBREW_TOPICS } from "./hebrew-bank";
 import { ENGLISH_BANK_T } from "./english-bank-langs";
+import { toAmerican } from "../spelling-variant";
 
 export type LearnLang = "en" | "he";
 export type Reads = "no" | "little" | "yes";
@@ -51,7 +52,9 @@ export function topicsFor(lang: LearnLang) {
   return lang === "en" ? ENGLISH_TOPICS : HEBREW_TOPICS;
 }
 
-export const wordKey = (lang: string, w: string) => `${lang}_${w.trim().toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "_").slice(0, 60)}`;
+/** One record per word whichever spelling the player saw (colour and color
+ *  are the same bank word, lib/spelling-variant). */
+export const wordKey = (lang: string, w: string) => `${lang}_${(lang === "en" ? toAmerican(w) : w).trim().toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "_").slice(0, 60)}`;
 
 /** One answer: the word's box and the hidden pointer move. */
 export function applyAnswer(prev: WordState | undefined, ok: boolean, now: number, d?: number): WordState {

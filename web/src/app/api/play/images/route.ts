@@ -20,6 +20,7 @@
 import { NextRequest, NextResponse, after } from "next/server";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { pickImage } from "@/lib/classroom-image";
+import { toAmerican } from "@/lib/spelling-variant";
 
 const GEN_PER_CALL = 12;
 const GEN_PER_DAY = 40;
@@ -68,9 +69,12 @@ export async function POST(req: NextRequest) {
   }
   if (words.length === 0) return NextResponse.json({ images: {} });
 
-  // The cache stores the word as it was looked up; ask for it as given and
-  // lowercased, then answer under the caller's spelling.
-  const variants = [...new Set(words.flatMap((w) => [w, w.toLowerCase()]))];
+  // The cache stores the word as it was looked up; ask for it as given,
+  // lowercased and in American spelling (a British "colour" in the games is
+  // the bank's "color", lib/spelling-variant), then answer under the
+  // caller's spelling.
+  const us = (w: string) => toAmerican(w.toLowerCase());
+  const variants = [...new Set(words.flatMap((w) => [w, w.toLowerCase(), us(w)]))];
   const best = new Map<string, { url: string; r: number }>();
   const db = getAdminDb();
   try {
@@ -91,12 +95,13 @@ export async function POST(req: NextRequest) {
   }
   const images: Record<string, string> = {};
   for (const w of words) {
-    const hit = best.get(w.toLowerCase());
+    const hit = best.get(w.toLowerCase()) ?? best.get(us(w));
     if (hit) images[w] = hit.url;
   }
   // Draw the missing English pictures after answering (never for anonymous).
+  // Drawn under the American word, so one picture serves every spelling.
   if (generate && !pick) {
-    const missing = [...new Set(words.filter((w) => !images[w] && ENGLISH_WORD.test(w)).map((w) => w.trim()))].slice(0, GEN_PER_CALL);
+    const missing = [...new Set(words.filter((w) => !images[w] && ENGLISH_WORD.test(w)).map((w) => toAmerican(w.trim())))].slice(0, GEN_PER_CALL);
     if (missing.length) {
       after(async () => {
         const ref = db.collection("users").doc(user.userId);

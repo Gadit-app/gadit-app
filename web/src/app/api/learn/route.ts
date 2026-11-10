@@ -8,6 +8,7 @@ import {
 import { lessonData, lessonList } from "@/lib/learn/lessons";
 import { LANG_NAME, listTranslateMessages, parseList } from "@/lib/learn/list";
 import { setupLearn } from "@/lib/learn/setup";
+import { spellingFor, toSpelling } from "@/lib/spelling-variant";
 
 /**
  * Learning mode (Gadi 2026-10-11): "what are you learning now?" for a kid
@@ -97,7 +98,11 @@ export async function GET(req: NextRequest) {
     ? doc.list.items.map((x): LearnItem => ({ w: x.w, t: x.t, nq: x.nq, d: 0, topic: "list", src: "list" }))
     : undefined;
   const d = doc?.d?.[lang] ?? 1;
-  const pool = pickSession(items, states, lang, d, now, 16, list);
+  // Bank words in the spelling of the player's country (colour in South
+  // Africa, color in Israel); a school list stays as the parent typed it.
+  const spelling = spellingFor(req.headers.get("x-vercel-ip-country"));
+  const pool = pickSession(items, states, lang, d, now, 16, list)
+    .map((x) => (lang === "en" && x.src === "bank" ? { ...x, w: toSpelling(x.w, spelling) } : x));
   const vals = Object.values(states);
   const weekAgo = now - 7 * DAY;
   const stats = {
