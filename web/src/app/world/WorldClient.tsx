@@ -36,7 +36,7 @@ import { SfxToggle } from "@/components/SfxToggle";
 import { sfx } from "@/lib/game-sfx";
 import { DECOR_COST, decorKinds, WORLDS, worldArt, type WorldDef, type WorldId } from "@/lib/world/worlds";
 import { forkLetters, gateTiles, keyMatches, lettersOf, registerAlphabet, spellable, spellForm, RTL_SPELL, type SpellLang } from "@/lib/world/letters";
-import { isBankSpell, readSpellChoice } from "@/lib/world/spell-choice";
+import { defaultSpellLang, isBankSpell, readSpellChoice } from "@/lib/world/spell-choice";
 import { Glyph } from "./Glyph";
 import { PeekTrail, peekCopy } from "./PeekTrail";
 import { friendsCopy } from "@/lib/world/friends-i18n";
@@ -58,32 +58,43 @@ const hashOf = (s: string) => { let h = 2166136261; for (const ch of s) { h ^= c
 /* sounds: the shared kit in lib/game-sfx.ts (2026-10-31) */
 
 /* ---------- words ---------- */
-export async function loadWords(token: string, ui: string, choice: string | null): Promise<{ words: TrailWord[]; reads: string | null }> {
-  // Any language with letters (Gadi 2026-11-01): the world's own word track.
-  if (choice && isBankSpell(ui, choice)) {
-    const r = await fetch(`/api/world/words?lang=${encodeURIComponent(choice)}&ui=${encodeURIComponent(ui)}`, { headers: { Authorization: `Bearer ${token}` } });
-    const j = r.ok ? ((await r.json()) as { pool?: LearnPoolItem[]; alphabet?: string[]; reads?: string | null }) : null;
-    registerAlphabet(choice, j?.alphabet ?? []);
-    const words = (j?.pool ?? [])
-      .filter((x) => spellable(x.w, choice))
-      .map((x) => ({ raw: x.w, w: spellForm(x.w, choice), nq: x.nq, t: x.t ?? "", pic: x.en ?? "", lang: choice, native: true }));
-    return { words, reads: j?.reads ?? null };
-  }
+/** The next words to spell. `choice` is the child's pick (lib/world/spell-choice);
+ *  with none, the learning-mode language, else the child's own language
+ *  (Gadi 2026-11-10: a Hebrew app gave English words). `lang` is the
+ *  language the words came in. */
+export async function loadWords(token: string, ui: string, choice: string | null): Promise<{ words: TrailWord[]; reads: string | null; lang: SpellLang }> {
+  type LearnResp = { profile?: { lang?: SpellLang | null; reads?: string | null }; pool?: LearnPoolItem[] };
   const get = async (q: string) => {
     const r = await fetch(`/api/learn?ui=${encodeURIComponent(ui)}${q}`, { headers: { Authorization: `Bearer ${token}` } });
-    return r.ok ? ((await r.json()) as { profile?: { lang?: SpellLang | null; reads?: string | null }; pool?: LearnPoolItem[] }) : null;
+    return r.ok ? ((await r.json()) as LearnResp) : null;
   };
-  let j = await get(choice ? `&lang=${choice}` : "");
-  let lang = choice ?? j?.profile?.lang ?? null;
-  if (!lang || !j?.pool?.length) {
+  let lang: SpellLang = choice ?? "";
+  let learn: LearnResp | null = null;
+  if (!lang) {
+    learn = await get("");
+    lang = defaultSpellLang(ui, learn?.profile?.lang);
+  }
+  // Any language with letters (Gadi 2026-11-01): the world's own word track.
+  if (isBankSpell(ui, lang)) {
+    const r = await fetch(`/api/world/words?lang=${encodeURIComponent(lang)}&ui=${encodeURIComponent(ui)}`, { headers: { Authorization: `Bearer ${token}` } });
+    const j = r.ok ? ((await r.json()) as { pool?: LearnPoolItem[]; alphabet?: string[]; reads?: string | null }) : null;
+    registerAlphabet(lang, j?.alphabet ?? []);
+    const l = lang;
+    const words = (j?.pool ?? [])
+      .filter((x) => spellable(x.w, l))
+      .map((x) => ({ raw: x.w, w: spellForm(x.w, l), nq: x.nq, t: x.t ?? "", pic: x.en ?? "", lang: l, native: true }));
+    return { words, reads: j?.reads ?? null, lang };
+  }
+  let j = learn && learn.profile?.lang === lang && learn.pool?.length ? learn : await get(`&lang=${lang}`);
+  if (!j?.pool?.length) {
     lang = learnTargets(ui)[0] as SpellLang;
     j = await get(`&lang=${lang}`);
   }
-  const l = lang as SpellLang;
+  const l = lang;
   const words = (j?.pool ?? [])
     .filter((x) => spellable(x.w, l))
     .map((x) => ({ raw: x.w, w: spellForm(x.w, l), nq: x.nq, t: x.t, pic: l === "en" ? x.w : (x.en ?? ""), lang: l }));
-  return { words, reads: j?.profile?.reads ?? null };
+  return { words, reads: j?.profile?.reads ?? null, lang };
 }
 
 export async function fetchPics(token: string, words: string[], generate: boolean): Promise<Record<string, string>> {

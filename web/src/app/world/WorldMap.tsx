@@ -17,13 +17,9 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { WORLDS, WORLD_ICON, WORLD_ORDER, isWorldId, worldArt, wordsToOpen } from "@/lib/world/worlds";
 import { worldCopy } from "@/lib/world/world-i18n";
-import { langNameIn, type Lang } from "@/lib/i18n";
-import { toggleLangGroup } from "@/lib/lang-groups";
-import { LangSearchList } from "@/components/LangSearch";
-import { NO_SPELL_LANGS } from "@/lib/world/letters";
 import { FriendGifts, FriendsPanel, useFriends, type FriendsData } from "./FriendsPanel";
-import { learnTargets } from "@/lib/learn/targets";
-import { readSpellChoice, spellOptions, writeSpellChoice } from "@/lib/world/spell-choice";
+import { defaultSpellLang, readSpellChoice, writeSpellChoice } from "@/lib/world/spell-choice";
+import { SpellLangPicker } from "./SpellLangPicker";
 
 type Counts = Partial<Record<string, number>>;
 
@@ -38,34 +34,23 @@ export function WorldMap({ demo, demoFriends }: { demo?: Counts; demoFriends?: F
   // A gift is opened in the newest world the child has open.
   const giftWorld = [...WORLD_ORDER].reverse().find((k) => isWorldId(k) && counts && wordsToOpen(k, counts) === 0) ?? "jungle";
   // The language the child spells in (Gadi 2026-11-01): any language with letters.
-  const opts = spellOptions();
   const [spell, setSpell] = useState<string | null>(demo ? lang : null);
-  const [pickerOpen, setPickerOpen] = useState(false);
   useEffect(() => {
     if (demo || !user) return;
     let alive = true;
     (async () => {
       const saved = readSpellChoice(user.uid, lang);
       if (saved) { setSpell(saved); return; }
-      // No pick yet: the game uses the learning-mode language, so the map shows it.
+      // No pick yet: the games use the learning-mode language, else the child's own, so the map shows that.
       try {
         const r = await fetch(`/api/learn?ui=${encodeURIComponent(lang)}`, { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
         const j = r.ok ? ((await r.json()) as { profile?: { lang?: string | null } }) : null;
-        const l = j?.profile?.lang;
-        if (alive) setSpell(l && opts.includes(l) ? l : learnTargets(lang)[0] ?? opts[0]);
-      } catch { if (alive) setSpell(learnTargets(lang)[0] ?? opts[0]); }
+        if (alive) setSpell(defaultSpellLang(lang, j?.profile?.lang));
+      } catch { if (alive) setSpell(defaultSpellLang(lang, null)); }
     })();
     return () => { alive = false; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [demo, user, lang]);
-  const pickSpell = (l: string) => { setSpell(l); setPickerOpen(false); if (user) writeSpellChoice(user.uid, lang, l); };
-  useEffect(() => {
-    if (!pickerOpen) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setPickerOpen(false); };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [pickerOpen]);
-  const nameOf = (l: string) => { const n = langNameIn(l, lang); return n.charAt(0).toLocaleUpperCase(lang) + n.slice(1); };
+  const pickSpell = (l: string) => { setSpell(l); if (user) writeSpellChoice(user.uid, lang, l); };
 
   useEffect(() => {
     if (demo || loading) return;
@@ -95,46 +80,7 @@ export function WorldMap({ demo, demoFriends }: { demo?: Counts; demoFriends?: F
           <p>{c.mapSub}</p>
         </div>
       </header>
-      {demo || user ? (
-        <div className="wm-spell">
-          <span className="wm-spell-q" id="wm-spell-q">{c.spellIn}</span>
-          <button type="button" className="wm-spell-btn" aria-haspopup="listbox" aria-expanded={pickerOpen} aria-labelledby="wm-spell-q" disabled={!spell} onClick={() => setPickerOpen((o) => !o)}>
-            <span aria-hidden="true">🌐</span>
-            <span>{spell ? nameOf(spell) : "…"}</span>
-            <span className="wm-spell-caret" aria-hidden="true">▾</span>
-          </button>
-          {pickerOpen ? (
-            <>
-              <div className="wm-spell-scrim" onClick={() => setPickerOpen(false)} aria-hidden="true" />
-              <div className="wm-spell-list" role="listbox" aria-labelledby="wm-spell-q">
-                <LangSearchList lang={lang} item="div" onPick={(code) => { if (opts.includes(code)) pickSpell(code); }} onClose={() => setPickerOpen(false)}>
-                  {(rows) => [
-                    // The child's own language, then the ones they learn, then A to Z.
-                    ...rows.filter((r) => !r.group && (r.code === lang || learnTargets(lang).includes(r.code as "en" | "he"))).sort((x) => (x.code === lang ? -1 : 1)),
-                    ...rows.filter((r) => r.group || (r.code !== lang && !learnTargets(lang).includes(r.code as "en" | "he"))),
-                  ].map((l) => {
-                    if (!l.group && NO_SPELL_LANGS.has(l.code)) return null;
-                    const name = langNameIn(l.code, lang);
-                    return (
-                      <button
-                        key={l.code}
-                        type="button"
-                        role={l.group ? undefined : "option"}
-                        aria-selected={l.group ? undefined : spell === l.code}
-                        className={`wm-spell-row${spell === l.code ? " is-on" : ""}${l.group ? " is-group" : ""}`}
-                        onClick={() => { if (toggleLangGroup(l.code)) return; pickSpell(l.code as Lang); }}
-                      >
-                        <span>{name}</span>
-                        {!l.group && name !== l.label ? <span className="wm-spell-native" dir={l.dir}>{l.label}</span> : null}
-                      </button>
-                    );
-                  })}
-                </LangSearchList>
-              </div>
-            </>
-          ) : null}
-        </div>
-      ) : null}
+      {demo || user ? <SpellLangPicker lang={lang} spell={spell} label={c.spellIn} onPick={pickSpell} /> : null}
       <FriendGifts data={friends.data} lang={lang} giftWorld={giftWorld} />
       <ol className="wm-path">
         {WORLD_ORDER.map((k, i) => {
@@ -196,16 +142,4 @@ const CSS = `
 .wm-stop.is-open .wm-note{color:#5f6b73;opacity:1}
 .wm-play{background:#0a7472;color:#fff;border-radius:999px;padding:10px 18px;font-weight:800;box-shadow:0 4px 0 #075452}
 .wm-stop.is-soon .wm-card{opacity:.7}
-.wm-spell{max-width:620px;margin:0 auto 20px;display:grid;gap:10px;justify-items:center;text-align:center;position:relative}
-.wm-spell-q{font-size:16px;font-weight:700}
-.wm-spell-btn{min-height:48px;display:inline-flex;align-items:center;gap:10px;padding:10px 22px;border-radius:999px;border:2px solid #fff;background:#fff;color:#0a7472;font:inherit;font-size:18px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #0005}
-.wm-spell-btn:disabled{opacity:.6}
-.wm-spell-caret{font-size:13px;opacity:.7}
-.wm-spell-scrim{position:fixed;inset:0;z-index:40}
-.wm-spell-list{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);z-index:41;width:min(320px,calc(100vw - 32px));max-height:min(60vh,440px);overflow-y:auto;background:#fff;color:#14202b;border-radius:18px;padding:6px;box-shadow:0 18px 40px #0008;text-align:start}
-.wm-spell-row{display:flex;flex-direction:column;align-items:flex-start;width:100%;padding:9px 14px;border:0;border-radius:10px;background:transparent;color:inherit;font:inherit;font-size:16px;cursor:pointer;text-align:start;line-height:1.25}
-.wm-spell-row:hover{background:#eef6f5}
-.wm-spell-row.is-on{background:#0a7472;color:#fff}
-.wm-spell-row.is-group{font-weight:800}
-.wm-spell-native{font-size:12px;opacity:.6;unicode-bidi:isolate}
 `;

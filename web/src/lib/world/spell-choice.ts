@@ -30,3 +30,16 @@ export function writeSpellChoice(uid: string, ui: string, lang: string): void {
 
 /** Words from /api/world/words (not the learning engine): any pick but a learned English or Hebrew. */
 export const isBankSpell = (ui: string, lang: string) => !learnTargets(ui).includes(lang as "en" | "he");
+
+/**
+ * The language the games spell in when the child has not picked one: the
+ * learning-mode language when one is set, otherwise the child's OWN
+ * language (Gadi 2026-11-10: a Hebrew app gave English words in the
+ * fireflies and the coaster), unless it has no letters (then the first
+ * learning target).
+ */
+export function defaultSpellLang(ui: string, profileLang: string | null | undefined): string {
+  if (profileLang && learnTargets(ui).includes(profileLang as "en" | "he")) return profileLang;
+  if (!NO_SPELL_LANGS.has(ui) && spellOptions().includes(ui)) return ui;
+  return learnTargets(ui)[0] ?? "en";
+}

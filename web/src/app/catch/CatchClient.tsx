@@ -27,7 +27,9 @@ import { avatarUrl } from "@/lib/family";
 import { notifyActivity } from "@/lib/notify-activity-client";
 import { sfx } from "@/lib/game-sfx";
 import { decoysFor, keyMatches, lettersOf, RTL_SPELL } from "@/lib/world/letters";
-import { readSpellChoice } from "@/lib/world/spell-choice";
+import { readSpellChoice, writeSpellChoice } from "@/lib/world/spell-choice";
+import { SpellLangPicker } from "../world/SpellLangPicker";
+import { worldCopy } from "@/lib/world/world-i18n";
 import { Glyph } from "../world/Glyph";
 import { fetchPics, loadWords, type TrailWord } from "../world/WorldClient";
 import { catchCopy, type CatchCopy } from "./catch-i18n";
@@ -378,19 +380,32 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
   };
   const introSay = useRef<HTMLSpanElement>(null);
 
+  // The language of the words (Gadi 2026-11-10: the Hebrew app gave English
+  // words): the child's pick, shared with Word Worlds, or the default from
+  // loadWords. The door shows it with the same picker as the world map.
+  const [spell, setSpell] = useState<string | null>(null);
+  const [wordsLang, setWordsLang] = useState<string | null>(null);
+  const pickSpell = (l: string) => {
+    if (user) writeSpellChoice(user.uid, lang, l);
+    setSpell(l);
+    setQueue(null);
+    setFailed(false);
+  };
+
   const load = useCallback(async () => {
     if (demo) { setQueue(demo); setIdx(0); return; }
     if (!user) return;
     try {
       const token = await user.getIdToken();
-      const { words } = await loadWords(token, lang, readSpellChoice(user.uid, lang));
+      const { words, lang: used } = await loadWords(token, lang, spell ?? readSpellChoice(user.uid, lang));
+      setWordsLang(used);
       setQueue(words);
       setIdx(0);
       setFailed(!words.length);
       const got = await fetchPics(token, words.slice(0, ROUND + 1).map((x) => x.pic), true);
       setPics((p) => ({ ...p, ...got }));
     } catch { setFailed(true); }
-  }, [demo, user, lang]);
+  }, [demo, user, lang, spell]);
   useEffect(() => {
     if (!demo && (loading || !user || !planReady)) return;
     let alive = true;
@@ -562,6 +577,7 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
               </>
             ) : (
               <>
+                {!demo && user ? <SpellLangPicker lang={lang} spell={spell ?? wordsLang} label={worldCopy(lang).spellIn} onPick={pickSpell} /> : null}
                 <span>{c.pickScene}</span>
                 <div className="ct-scenes is-three">
                   {(["fireflies", "coaster", "fair"] as const).map((s) => (
