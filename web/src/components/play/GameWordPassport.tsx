@@ -12,6 +12,7 @@
 
 import { useState, useMemo } from "react";
 import { sfx } from "@/lib/game-sfx";
+import { useNiqqud } from "@/lib/niqqud-display";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
@@ -61,6 +62,7 @@ export function GameWordPassport({
   const rounds = built.rounds;
   const contentLang = built.contentLang;
   const contentDir = dirForLang(contentLang);
+  const { nq } = useNiqqud();
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -125,7 +127,7 @@ export function GameWordPassport({
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow"><QText text={t.passportPrompt} /></div>
         <div className="wb-play-prompt wb-play-prompt-word" lang={contentLang} dir={contentDir}>
-          {r.word}
+          {nq(r.word)}
         </div>
       </div>
       <div className="wb-play-options wb-play-options-passport">
@@ -163,7 +165,7 @@ export function GameWordPassport({
       {picked !== null && (
         <>
           <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-            <QText text={r.story} wordLang={contentLang} />
+            <QText text={nq(r.story)} wordLang={contentLang} />
           </div>
           <button type="button" className="wb-play-next" onClick={advance}>
             {idx + 1 >= rounds.length ? t.playFinish : t.playNext}

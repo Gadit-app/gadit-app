@@ -139,6 +139,10 @@ interface AuthContextType {
    *  avatar so a parent switching profiles sees whose profile is open
    *  (Gadi 2026-11-02). null for everyone else. */
   memberName: string | null;
+  /** A paired kid's age from their member doc (optional, set when the
+   *  parent added them), for age defaults such as niqqud on for grades 1-2
+   *  (Gadi 2026-11-11). null when unknown or not a kid. */
+  memberAge: number | null;
   signInWithGoogle: () => Promise<void>;
   /** Sign in with Apple through the iOS app's native sheet. Only offered
    *  inside the iOS app (lib/native-auth.ts nativeAuthAvailable("apple")). */
@@ -212,6 +216,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [avatarId, setAvatarId] = useState<string | null>(null);
   const [avatarPhotoUrl, setAvatarPhotoUrl] = useState<string | null>(null);
   const [memberName, setMemberName] = useState<string | null>(null);
+  const [memberAge, setMemberAge] = useState<number | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginReason, setLoginReason] = useState("");
   const [loginMode, setLoginMode] = useState<AuthMode>("signin");
@@ -395,6 +400,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setAvatarId(null);
       setAvatarPhotoUrl(null);
       setMemberName(null);
+      setMemberAge(null);
       return;
     }
     let unsub: (() => void) | undefined;
@@ -414,8 +420,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setAvatarId((d?.avatarId as string) ?? null);
             setAvatarPhotoUrl((d?.avatarPhotoUrl as string) ?? null);
             setMemberName((d?.name as string) ?? null);
+            const age = Number(d?.age);
+            setMemberAge(Number.isFinite(age) && age > 0 ? age : null);
           },
-          () => { setAvatarId(null); setAvatarPhotoUrl(null); setMemberName(null); },
+          () => { setAvatarId(null); setAvatarPhotoUrl(null); setMemberName(null); setMemberAge(null); },
         );
       } catch {
         /* nice-to-have */
@@ -690,7 +698,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider value={{
-      user, loading, plan, planReady, pastDue, graceUntil, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl, memberName,
+      user, loading, plan, planReady, pastDue, graceUntil, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl, memberName, memberAge,
       kidsAccess,
       isIndividual: !familyId && !schoolId && isIndividualPriceId(priceId),
       tester,

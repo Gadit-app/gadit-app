@@ -15,6 +15,7 @@
 
 import { useState, useMemo } from "react";
 import { sfx } from "@/lib/game-sfx";
+import { useNiqqud } from "@/lib/niqqud-display";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
@@ -67,6 +68,7 @@ export function GameTwinTrap({
   const rounds = built.rounds;
   const contentLang = built.contentLang;
   const contentDir = dirForLang(contentLang);
+  const { nq } = useNiqqud();
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -149,7 +151,7 @@ export function GameTwinTrap({
         >
           {parts.map((part, i) => (
             <span key={i}>
-              <QText text={part} skip={[...r.displayed]} context={parts.join(" ")} />
+              <QText text={nq(part)} skip={[...r.displayed]} context={parts.join(" ")} />
               {i < parts.length - 1 && (
                 <span className="wb-play-blank" aria-label="blank" />
               )}
@@ -180,8 +182,8 @@ export function GameTwinTrap({
               dir="ltr"
             >
               {picked !== null
-                ? <QText text={caseOpt(opt)} wordLang="en" context={r.sentence.replace("____", opt)} />
-                : caseOpt(opt)}
+                ? <QText text={nq(caseOpt(opt))} wordLang="en" context={r.sentence.replace("____", opt)} />
+                : nq(caseOpt(opt))}
             </button>
           );
         })}
@@ -189,7 +191,7 @@ export function GameTwinTrap({
       {picked !== null && (
         <>
           <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-            <QText text={r.explain} wordLang={contentLang} />
+            <QText text={nq(r.explain)} wordLang={contentLang} />
           </div>
           <button type="button" className="wb-play-next" onClick={advance}>
             {idx + 1 >= rounds.length ? t.playFinish : t.playNext}

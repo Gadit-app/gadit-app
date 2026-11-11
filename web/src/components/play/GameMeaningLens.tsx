@@ -12,6 +12,7 @@
 
 import { useState, useMemo } from "react";
 import { sfx } from "@/lib/game-sfx";
+import { useNiqqud } from "@/lib/niqqud-display";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
@@ -64,6 +65,7 @@ export function GameMeaningLens({
   const rounds = built.rounds;
   const contentLang = built.contentLang;
   const contentDir = dirForLang(contentLang);
+  const { nq } = useNiqqud();
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -137,10 +139,10 @@ export function GameMeaningLens({
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow"><QText text={t.lensPrompt} /></div>
         <div className="wb-play-lens-word" lang={contentLang} dir={contentDir}>
-          {r.word}
+          {nq(r.word)}
         </div>
         <div className="wb-play-lens-sentence" lang={contentLang} dir={contentDir}>
-          <QText text={r.sentence} skip={[r.word]} />
+          <QText text={nq(r.sentence)} skip={[r.word]} />
         </div>
       </div>
       <div className="wb-play-options">
@@ -165,7 +167,7 @@ export function GameMeaningLens({
               lang={contentLang}
               dir={contentDir}
             >
-              <QText text={caseOpt(opt)} skip={[r.word]} wordLang={contentLang} />
+              <QText text={nq(caseOpt(opt))} skip={[r.word]} wordLang={contentLang} />
             </button>
           );
         })}
@@ -173,7 +175,7 @@ export function GameMeaningLens({
       {picked !== null && (
         <>
           <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-            <QText text={r.story} wordLang={contentLang} />
+            <QText text={nq(r.story)} wordLang={contentLang} />
           </div>
           <button type="button" className="wb-play-next" onClick={advance}>
             {idx + 1 >= rounds.length ? t.playFinish : t.playNext}

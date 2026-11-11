@@ -13,6 +13,7 @@
 
 import { useEffect, type ReactNode } from "react";
 import { sfx } from "@/lib/game-sfx";
+import { useNiqqud } from "@/lib/niqqud-display";
 import { useAuth } from "@/lib/auth-context";
 import { recordPlay } from "@/lib/play-streak";
 import { dirForLang } from "@/lib/play-engine";
@@ -48,6 +49,7 @@ export function GameResult({
 }) {
   const lessonNext = getLessonNext();
   const { user } = useAuth();
+  const { nq } = useNiqqud();
   useEffect(() => {
     // The end of a game: a fanfare for a perfect round, a magic chime for the rest (always a celebration).
     const p = data.total > 0 ? data.score / data.total : 0;
@@ -100,9 +102,9 @@ export function GameResult({
           <ul className="wb-play-result-missed-list">
             {data.missed.map((m, i) => (
               <li key={i}>
-                <span className="wb-play-result-missed-word">{m.word}</span>
+                <span className="wb-play-result-missed-word">{nq(m.word)}</span>
                 <span className="wb-play-result-missed-sep">·</span>
-                <span className="wb-play-result-missed-mean"><QText text={m.meaning} /></span>
+                <span className="wb-play-result-missed-mean"><QText text={nq(m.meaning)} /></span>
               </li>
             ))}
           </ul>

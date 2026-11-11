@@ -4257,6 +4257,8 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
         <WorldStage game="lesson">
+        {/* Niqqud on what the lesson shows (also when Hebrew is the language learned). */}
+        <NiqqudProvider lang={lang} available={lang === "he" || lang === "ar" || stage.learnLang === "he"}>
         <LessonPath lesson={stage.lesson} learnLang={stage.learnLang} preReader={stage.preReader} lang={lang} t={t} onDone={() => void markDone()} onExit={() => {
           void flushLearn();
           // Back to where the lesson was opened (Gadi 2026-10-12, navigation QA):
@@ -4266,6 +4268,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
           // A grown-up's Practice (Gadi 2026-10-22) goes back to its language card.
           router.push(href(from === "practice" ? "/exercises?v=learn" : from === "learn" ? "/homework?v=learn" : "/homework"));
         }} />
+        </NiqqudProvider>
         </WorldStage>
       </div>
     );
@@ -4279,7 +4282,9 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
         <WorldStage game="duel">
-          <DuelHub pool={gamePool} lang={lang} dir={dir} onExit={() => setStage({ kind: "menu" })} initialCode={stage.code} preset={stage.preset} games={duelGames} />
+          <NiqqudProvider lang={lang} available={lang === "he" || lang === "ar"}>
+            <DuelHub pool={gamePool} lang={lang} dir={dir} onExit={() => setStage({ kind: "menu" })} initialCode={stage.code} preset={stage.preset} games={duelGames} />
+          </NiqqudProvider>
         </WorldStage>
       </div>
     );
@@ -4294,73 +4299,28 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
       setStage({ kind: "menu" });
     };
     const curatedProps = { onExit: exit, lang, t };
-    if (stage.game === "twin") {
+    // The curated games (not notebook-driven), with optional niqqud on what
+    // they show (Gadi 2026-11-11: niqqud in every game).
+    const CURATED = {
+      twin: <GameTwinTrap {...curatedProps} />,
+      time: <GameTimeTraveler {...curatedProps} />,
+      passport: <GameWordPassport {...curatedProps} />,
+      friends: <GameFalseFriends {...curatedProps} />,
+      root: <GameRootRush {...curatedProps} />,
+      shade: <GameShadeSlider {...curatedProps} />,
+      build: <GameBuildAWord {...curatedProps} />,
+      idiom: <GameIdiomDecoder {...curatedProps} />,
+      lens: <GameMeaningLens {...curatedProps} />,
+      artist: <GameEtymologyArtist {...curatedProps} />,
+    };
+    if (stage.game in CURATED) {
       return (
         <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <WorldStage game={stage.game}><GameTwinTrap {...curatedProps} /></WorldStage>
-        </div>
-      );
-    }
-    if (stage.game === "time") {
-      return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <WorldStage game={stage.game}><GameTimeTraveler {...curatedProps} /></WorldStage>
-        </div>
-      );
-    }
-    if (stage.game === "passport") {
-      return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <WorldStage game={stage.game}><GameWordPassport {...curatedProps} /></WorldStage>
-        </div>
-      );
-    }
-    if (stage.game === "friends") {
-      return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <WorldStage game={stage.game}><GameFalseFriends {...curatedProps} /></WorldStage>
-        </div>
-      );
-    }
-    if (stage.game === "root") {
-      return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <WorldStage game={stage.game}><GameRootRush {...curatedProps} /></WorldStage>
-        </div>
-      );
-    }
-    if (stage.game === "shade") {
-      return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <WorldStage game={stage.game}><GameShadeSlider {...curatedProps} /></WorldStage>
-        </div>
-      );
-    }
-    if (stage.game === "build") {
-      return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <WorldStage game={stage.game}><GameBuildAWord {...curatedProps} /></WorldStage>
-        </div>
-      );
-    }
-    if (stage.game === "idiom") {
-      return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <WorldStage game={stage.game}><GameIdiomDecoder {...curatedProps} /></WorldStage>
-        </div>
-      );
-    }
-    if (stage.game === "lens") {
-      return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <WorldStage game={stage.game}><GameMeaningLens {...curatedProps} /></WorldStage>
-        </div>
-      );
-    }
-    if (stage.game === "artist") {
-      return (
-        <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
-          <WorldStage game={stage.game}><GameEtymologyArtist {...curatedProps} /></WorldStage>
+          <WorldStage game={stage.game}>
+            <NiqqudProvider lang={lang} available={lang === "he" || lang === "ar"}>
+              {CURATED[stage.game as keyof typeof CURATED]}
+            </NiqqudProvider>
+          </WorldStage>
         </div>
       );
     }

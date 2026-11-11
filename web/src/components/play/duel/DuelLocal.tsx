@@ -2,6 +2,7 @@
 
 import { DuelPrompt, DuelOptText } from "./DuelPrompt";
 import { sfx } from "@/lib/game-sfx";
+import { NiqqudToggle } from "@/lib/niqqud-display";
 import { useEffect, useRef, useState } from "react";
 import { ROUND_MS, roundPoints, type DuelQuestion } from "@/lib/duel";
 import { duelCopy } from "./duel-i18n";
@@ -74,6 +75,7 @@ export function DuelLocal({ questions, lang, dir, onExit, defaultNames }: {
       <div className="duel-top">
         <button type="button" className="duel-link" onClick={onExit}>{t.back}</button>
         <span className="duel-title">{t.title}</span>
+        <NiqqudToggle />
       </div>
 
       {step.kind === "names" && (

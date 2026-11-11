@@ -8,6 +8,7 @@
  */
 import { useMemo, useState } from "react";
 import { sfx } from "@/lib/game-sfx";
+import { useNiqqud } from "@/lib/niqqud-display";
 import { shuffle } from "@/lib/play-engine";
 import { PlayHeader, type PlayT } from "../GameQuiz";
 import { GameResult } from "../GameResult";
@@ -41,6 +42,7 @@ export function GameSentenceBuilder({ sentences, onExit, lang, t, audioLang }: {
   audioLang: string;
 }) {
   const c = lessonCopy(lang);
+  const { nq } = useNiqqud();
   const [seed, setSeed] = useState(0);
   const rounds = useMemo(() => makeRounds(sentences), [sentences, seed]); // eslint-disable-line react-hooks/exhaustive-deps
   const [idx, setIdx] = useState(0);
@@ -94,14 +96,14 @@ export function GameSentenceBuilder({ sentences, onExit, lang, t, audioLang }: {
         <div className={`wb-sb-line${verdict ? ` is-${verdict}` : ""}`} dir={textDir} lang={audioLang}>
           {placed.length === 0 && <span className="wb-sb-hint">…</span>}
           {placed.map((id, pos) => (
-            <button key={id} type="button" className={`wb-sb-tile is-placed${verdict ? ` is-${verdict}` : ""}`} onClick={() => unplace(pos)} disabled={!!verdict}>{byId.get(id)}</button>
+            <button key={id} type="button" className={`wb-sb-tile is-placed${verdict ? ` is-${verdict}` : ""}`} onClick={() => unplace(pos)} disabled={!!verdict}>{nq(byId.get(id) ?? "")}</button>
           ))}
         </div>
       </div>
       {!verdict && (
         <div className="wb-sb-pool" dir={textDir} lang={audioLang}>
           {r.tiles.filter((x) => !placed.includes(x.id)).map((x) => (
-            <button key={x.id} type="button" className="wb-sb-tile" onClick={() => tap(x.id)}>{x.w}</button>
+            <button key={x.id} type="button" className="wb-sb-tile" onClick={() => tap(x.id)}>{nq(x.w)}</button>
           ))}
         </div>
       )}
@@ -109,7 +111,7 @@ export function GameSentenceBuilder({ sentences, onExit, lang, t, audioLang }: {
         <div className="wb-sb-reveal">
           <div className={verdict === "right" ? "wb-sb-right" : "wb-sb-wrong"}>{verdict === "right" ? c.buildRight : c.buildWrong}</div>
           <div className="wb-sb-answer" dir={textDir} lang={audioLang}>
-            <span><QText text={r.sentence} wordLang={audioLang} /></span>
+            <span><QText text={nq(r.sentence)} wordLang={audioLang} /></span>
             <TTSButton text={r.sentence} audioLang={audioLang} useOpenAI ariaLabel={r.sentence} className="wb-word-act-icon wb-play-speak" />
           </div>
           <button type="button" className="wb-play-next" onClick={next}>{c.nextBtn}</button>

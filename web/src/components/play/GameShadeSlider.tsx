@@ -16,6 +16,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { sfx } from "@/lib/game-sfx";
+import { useNiqqud } from "@/lib/niqqud-display";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
@@ -68,6 +69,7 @@ export function GameShadeSlider({
   const rounds = built.rounds;
   const contentLang = built.contentLang;
   const contentDir = dirForLang(contentLang);
+  const { nq } = useNiqqud();
   const [idx, setIdx] = useState(0);
   /** Order the player has placed so far, mildest → strongest. */
   const [placed, setPlaced] = useState<string[]>([]);
@@ -153,7 +155,7 @@ export function GameShadeSlider({
       <div className="wb-play-question wb-play-question-shade">
         <div className="wb-play-question-eyebrow"><QText text={t.shadePrompt} /></div>
         <div className="wb-play-shade-axis" lang={contentLang} dir={contentDir}>
-          <QText text={r.axis} />
+          <QText text={nq(r.axis)} />
         </div>
         <div className="wb-play-shade-axis-labels">
           <span>{t.shadeMild}</span>
@@ -188,7 +190,7 @@ export function GameShadeSlider({
                 lang={contentLang}
                 dir={contentDir}
               >
-                {word}
+                {nq(word)}
               </button>
             </li>
           );
@@ -210,7 +212,7 @@ export function GameShadeSlider({
               lang={contentLang}
               dir={contentDir}
             >
-              {word}
+              {nq(word)}
             </button>
           );
         })}
@@ -222,14 +224,14 @@ export function GameShadeSlider({
             <div className="wb-play-shade-canonical-row">
               {r.canonical.map((w, i) => (
                 <span key={i} className="wb-play-shade-canonical-word">
-                  <QText text={w} wordLang={contentLang} context={r.canonical.join(", ")} />
+                  <QText text={nq(w)} wordLang={contentLang} context={r.canonical.join(", ")} />
                   {i < 4 && <span className="wb-play-shade-canonical-sep">→</span>}
                 </span>
               ))}
             </div>
           </div>
           <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-            <QText text={r.story} wordLang={contentLang} />
+            <QText text={nq(r.story)} wordLang={contentLang} />
           </div>
           <button type="button" className="wb-play-next" onClick={advance}>
             {idx + 1 >= rounds.length ? t.playFinish : t.playNext}

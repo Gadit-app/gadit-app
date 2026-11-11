@@ -7,6 +7,7 @@
  */
 import { useState } from "react";
 import { sfx } from "@/lib/game-sfx";
+import { useNiqqud } from "@/lib/niqqud-display";
 import { PlayHeader, type PlayT } from "../GameQuiz";
 import { GameResult } from "../GameResult";
 import { TTSButton } from "@/components/design/TTSButton";
@@ -23,6 +24,7 @@ export function GameReading({ reading, onExit, lang, t, audioLang, dirText }: {
   dirText: "rtl" | "ltr";
 }) {
   const c = lessonCopy(lang);
+  const { nq } = useNiqqud();
   const [idx, setIdx] = useState(0);
   const [answer, setAnswer] = useState<boolean | null>(null);
   const [score, setScore] = useState(0);
@@ -54,16 +56,16 @@ export function GameReading({ reading, onExit, lang, t, audioLang, dirText }: {
       <PlayHeader title={c.readingTitle} progress={`${idx + 1}/${checks.length}`} score={score} onExit={onExit} t={t} />
       <div className="wb-play-question" style={{ textAlign: "start" }}>
         <div className="wb-play-question-eyebrow" style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "center" }}>
-          <span><QText text={reading.title} wordLang={audioLang} /></span>
+          <span><QText text={nq(reading.title)} wordLang={audioLang} /></span>
           <TTSButton text={reading.text} audioLang={audioLang} useOpenAI ariaLabel={reading.title} className="wb-word-act-icon wb-play-speak" />
         </div>
         <p className="wb-play-sentence" dir={dirText} lang={audioLang} style={{ margin: "10px 0 0", lineHeight: 1.8 }}>
-          <QText text={reading.text} />
+          <QText text={nq(reading.text)} />
         </p>
       </div>
       <div className="wb-play-question" style={{ marginTop: 14 }}>
         <div className="wb-play-question-eyebrow">{c.readingAsk}</div>
-        <div className="wb-play-prompt wb-play-prompt-sentence" dir={dirText} lang={audioLang}><QText text={ch.s} wordLang={audioLang} /></div>
+        <div className="wb-play-prompt wb-play-prompt-sentence" dir={dirText} lang={audioLang}><QText text={nq(ch.s)} wordLang={audioLang} /></div>
       </div>
       <div className="wb-play-options wb-play-options-pair">
         {[true, false].map((v) => {

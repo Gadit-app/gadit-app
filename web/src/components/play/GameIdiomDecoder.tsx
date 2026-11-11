@@ -12,6 +12,7 @@
 
 import { useState, useMemo } from "react";
 import { sfx } from "@/lib/game-sfx";
+import { useNiqqud } from "@/lib/niqqud-display";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
@@ -64,6 +65,7 @@ export function GameIdiomDecoder({
   const rounds = built.rounds;
   const contentLang = built.contentLang;
   const contentDir = dirForLang(contentLang);
+  const { nq } = useNiqqud();
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -128,11 +130,11 @@ export function GameIdiomDecoder({
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow"><QText text={t.idiomPrompt} /></div>
         <div className="wb-play-idiom-literal" lang={contentLang} dir={contentDir}>
-          <QText text={r.literal} />
+          <QText text={nq(r.literal)} />
         </div>
         {picked !== null && (
           <div className="wb-play-idiom-reveal" lang={contentLang} dir={contentDir}>
-            &ldquo;<QText text={r.idiom} wordLang={contentLang} />&rdquo;
+            &ldquo;<QText text={nq(r.idiom)} wordLang={contentLang} />&rdquo;
           </div>
         )}
       </div>
@@ -158,7 +160,7 @@ export function GameIdiomDecoder({
               lang={contentLang}
               dir={contentDir}
             >
-              <QText text={caseOpt(opt)} wordLang={contentLang} />
+              <QText text={nq(caseOpt(opt))} wordLang={contentLang} />
             </button>
           );
         })}
@@ -166,7 +168,7 @@ export function GameIdiomDecoder({
       {picked !== null && (
         <>
           <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-            <QText text={r.story} wordLang={contentLang} />
+            <QText text={nq(r.story)} wordLang={contentLang} />
           </div>
           <button type="button" className="wb-play-next" onClick={advance}>
             {idx + 1 >= rounds.length ? t.playFinish : t.playNext}

@@ -17,6 +17,7 @@
 
 import { useState, useMemo } from "react";
 import { sfx } from "@/lib/game-sfx";
+import { useNiqqud } from "@/lib/niqqud-display";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
@@ -68,6 +69,7 @@ export function GameTimeTraveler({
   const rounds = built.rounds;
   const contentLang = built.contentLang;
   const contentDir = dirForLang(contentLang);
+  const { nq } = useNiqqud();
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -133,7 +135,7 @@ export function GameTimeTraveler({
         <div className="wb-play-question-eyebrow"><QText text={t.timePrompt} /></div>
         <div className="wb-play-era">{r.era}</div>
         <div className="wb-play-old-meaning" lang={contentLang} dir={contentDir}>
-          &ldquo;<QText text={r.oldMeaning} skip={[r.displayed[r.correctIdx]]} />&rdquo;
+          &ldquo;<QText text={nq(r.oldMeaning)} skip={[r.displayed[r.correctIdx]]} />&rdquo;
         </div>
       </div>
       <div className="wb-play-options">
@@ -158,7 +160,7 @@ export function GameTimeTraveler({
               lang={contentLang}
               dir={contentDir}
             >
-              {picked !== null ? <QText text={caseOpt(opt)} wordLang={contentLang} /> : caseOpt(opt)}
+              {picked !== null ? <QText text={nq(caseOpt(opt))} wordLang={contentLang} /> : nq(caseOpt(opt))}
             </button>
           );
         })}
@@ -166,7 +168,7 @@ export function GameTimeTraveler({
       {picked !== null && (
         <>
           <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-            <QText text={r.story} wordLang={contentLang} />
+            <QText text={nq(r.story)} wordLang={contentLang} />
           </div>
           <button type="button" className="wb-play-next" onClick={advance}>
             {idx + 1 >= rounds.length ? t.playFinish : t.playNext}

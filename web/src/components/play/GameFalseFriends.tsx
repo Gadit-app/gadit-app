@@ -13,6 +13,7 @@
 
 import { useState, useMemo } from "react";
 import { sfx } from "@/lib/game-sfx";
+import { useNiqqud } from "@/lib/niqqud-display";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, dirForLang } from "@/lib/play-engine";
@@ -38,6 +39,7 @@ export function GameFalseFriends({
   const rounds = built.rounds;
   const contentLang = built.contentLang;
   const contentDir = dirForLang(contentLang);
+  const { nq } = useNiqqud();
   const [idx, setIdx] = useState(0);
   /** Picked: 0 = TRUE button, 1 = FALSE button, null = not yet. */
   const [picked, setPicked] = useState<number | null>(null);
@@ -128,7 +130,7 @@ export function GameFalseFriends({
           </div>
           <div className="wb-play-friends-arrow" aria-hidden="true">≈</div>
           <div className="wb-play-friends-english" lang={contentLang} dir={contentDir}>
-            {picked !== null ? <QText text={r.englishTwin} wordLang={contentLang} /> : r.englishTwin}
+            {picked !== null ? <QText text={nq(r.englishTwin)} wordLang={contentLang} /> : nq(r.englishTwin)}
           </div>
         </div>
       </div>
@@ -158,7 +160,7 @@ export function GameFalseFriends({
       {picked !== null && (
         <>
           <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-            <QText text={r.story} wordLang={contentLang} />
+            <QText text={nq(r.story)} wordLang={contentLang} />
           </div>
           <button type="button" className="wb-play-next" onClick={advance}>
             {idx + 1 >= rounds.length ? t.playFinish : t.playNext}

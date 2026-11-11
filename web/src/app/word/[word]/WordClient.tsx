@@ -31,6 +31,7 @@ import Link from "next/link";
 import { BackLink } from "@/components/BackLink";
 
 import { useAuth } from "@/lib/auth-context";
+import { readNiqqudPref, writeNiqqudPref } from "@/lib/niqqud-display";
 import { useLang } from "@/lib/lang-context";
 import { detectWrongKeyboard } from "@/lib/keyboard-layout";
 import { v2 } from "@/lib/i18n-v2";
@@ -898,7 +899,7 @@ export function WordClient({
   initialResult?: WordResult | null;
   preloadLang?: string;
 }) {
-  const { user, loading: authLoading, plan: authPlan, promptLogin, familyRole, schoolId } = useAuth();
+  const { user, loading: authLoading, plan: authPlan, promptLogin, familyRole, schoolId, memberAge } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -1178,13 +1179,15 @@ export function WordClient({
   const [niqResult, setNiqResult] = useState<WordResult | null>(null);
   const isHebrewWord = !!result && /[֐-׿]/.test(result.word || "");
   const isArabicWord = !!result && /[؀-ۿ]/.test(result.word || "");
+  // Per profile, on by default for a young child (lib/niqqud-display, 2026-11-11).
   useEffect(() => {
-    try { setNiqqud(localStorage.getItem("gadit-niqqud") === "1"); } catch { /* ignore */ }
-  }, []);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- re-reads the stored preference
+    setNiqqud(readNiqqudPref(user?.uid, memberAge));
+  }, [user?.uid, memberAge]);
   function toggleNiqqud() {
     setNiqqud((v) => {
       const next = !v;
-      try { localStorage.setItem("gadit-niqqud", next ? "1" : "0"); } catch { /* ignore */ }
+      writeNiqqudPref(user?.uid, next);
       return next;
     });
   }

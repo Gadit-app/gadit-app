@@ -7,6 +7,7 @@
  */
 import { useMemo, useState } from "react";
 import { sfx } from "@/lib/game-sfx";
+import { useNiqqud } from "@/lib/niqqud-display";
 import { shuffle } from "@/lib/play-engine";
 import { PlayHeader, type PlayT } from "../GameQuiz";
 import { GameResult } from "../GameResult";
@@ -22,6 +23,7 @@ export function GamePronoun({ items, onExit, lang, t, audioLang }: {
   audioLang: string;
 }) {
   const c = lessonCopy(lang);
+  const { nq } = useNiqqud();
   const [seed, setSeed] = useState(0);
   const rounds = useMemo(() => shuffle(items).slice(0, 8), [items, seed]); // eslint-disable-line react-hooks/exhaustive-deps
   // The choices: the pronouns this unit uses, at least He / She / It.
@@ -70,7 +72,7 @@ export function GamePronoun({ items, onExit, lang, t, audioLang }: {
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow">{c.pronounPrompt}</div>
         <div className="wb-play-prompt wb-play-prompt-word" dir={textDir} lang={audioLang}>
-          <span><QText text={r.phrase} wordLang={audioLang} /></span>
+          <span><QText text={nq(r.phrase)} wordLang={audioLang} /></span>
           <TTSButton text={r.phrase} audioLang={audioLang} useOpenAI ariaLabel={r.phrase} className="wb-word-act-icon wb-play-speak" />
         </div>
       </div>
@@ -84,7 +86,7 @@ export function GamePronoun({ items, onExit, lang, t, audioLang }: {
           }
           return (
             <button key={`${idx}-${p}`} type="button" className={cls} onClick={() => pick(p)} disabled={!!picked} style={{ textAlign: "center", fontSize: 20, fontWeight: 700 }}>
-              {p}
+              {nq(p)}
             </button>
           );
         })}

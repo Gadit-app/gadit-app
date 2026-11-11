@@ -21,6 +21,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { sfx } from "@/lib/game-sfx";
+import { NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
 import { useAuth } from "@/lib/auth-context";
 import type { PlayWord } from "@/lib/play-engine";
 import { dirForLang, sample, shuffle, wordLangOf } from "@/lib/play-engine";
@@ -102,6 +103,7 @@ export function CtxWorld({ worldId, onExit, exitLabel, progress, score, mood, ch
         <div className="ctx-hud-side">
           <button type="button" className="ctx-round" onClick={onExit} aria-label={exitLabel}>✕</button>
           <SfxToggle className="ctx-round" />
+          <NiqqudToggle />
         </div>
         {progress ? <span className="ctx-pill">{progress}{score != null ? <> · ⭐ {score}</> : null}</span> : null}
       </div>
@@ -260,6 +262,7 @@ export function ContextStory({
   initialChecked?: boolean;
 }) {
   const n = round.answers.length;
+  const { nq } = useNiqqud();
   const [fills, setFills] = useState<Array<number | null>>(() => initialFills ?? round.answers.map(() => null));
   const [sel, setSel] = useState<number | null>(() => {
     const f = initialFills ?? [];
@@ -328,7 +331,7 @@ export function ContextStory({
         <div className="ctx-story" dir={dir} lang={wordLang}>
           {round.segments.map((seg, i) => (
             <span key={i}>
-              <QText text={seg} skip={round.options} context={context} wordLang={wordLang} />
+              <QText text={nq(seg)} skip={round.options} context={context} wordLang={wordLang} />
               {i < n && (() => {
                 const f = fills[i];
                 let cls = "ctx-blank";
@@ -348,10 +351,10 @@ export function ContextStory({
                   >
                     {checked && !oks[i] ? (
                       <>
-                        <s className="ctx-blank-chosen">{f !== null ? round.options[f] : ""}</s>
-                        <span className="ctx-blank-fix">{round.answers[i]}</span>
+                        <s className="ctx-blank-chosen">{f !== null ? nq(round.options[f]) : ""}</s>
+                        <span className="ctx-blank-fix">{nq(round.answers[i])}</span>
                       </>
-                    ) : f !== null ? round.options[f] : <span className="ctx-blank-num" aria-hidden="true">{i + 1}</span>}
+                    ) : f !== null ? nq(round.options[f]) : <span className="ctx-blank-num" aria-hidden="true">{i + 1}</span>}
                   </button>
                 );
               })()}
@@ -374,7 +377,7 @@ export function ContextStory({
                   disabled={isUsed}
                   aria-hidden={isUsed || undefined}
                 >
-                  {opt}
+                  {nq(opt)}
                 </button>
               );
             })}
@@ -395,11 +398,11 @@ export function ContextStory({
               <li key={i} className={oks[i] ? "is-right" : "is-wrong"}>
                 <span className="ctx-why-mark" aria-hidden="true">{oks[i] ? "✓" : "✗"}</span>
                 <span className="ctx-why-body">
-                  <span className="ctx-why-word" dir={dir} lang={wordLang}>{a}</span>
+                  <span className="ctx-why-word" dir={dir} lang={wordLang}>{nq(a)}</span>
                   {!oks[i] && fills[i] !== null && (
-                    <span className="ctx-why-chose">{c.youChose} <span dir={dir} lang={wordLang}>{round.options[fills[i] as number]}</span></span>
+                    <span className="ctx-why-chose">{c.youChose} <span dir={dir} lang={wordLang}>{nq(round.options[fills[i] as number])}</span></span>
                   )}
-                  <span className="ctx-why-text" dir="auto"><QText text={round.why[i]} /></span>
+                  <span className="ctx-why-text" dir="auto"><QText text={nq(round.why[i])} /></span>
                 </span>
               </li>
             ))}

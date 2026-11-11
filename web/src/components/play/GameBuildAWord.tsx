@@ -17,6 +17,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { sfx } from "@/lib/game-sfx";
+import { useNiqqud } from "@/lib/niqqud-display";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { GameResult, type GameResultData } from "./GameResult";
 import { SESSION_SIZE, shuffle, dirForLang } from "@/lib/play-engine";
@@ -61,6 +62,7 @@ export function GameBuildAWord({
   const rounds = built.rounds;
   const contentLang = built.contentLang;
   const contentDir = dirForLang(contentLang);
+  const { nq } = useNiqqud();
   const [idx, setIdx] = useState(0);
   /** Morphemes the player has placed in order. */
   const [placed, setPlaced] = useState<string[]>([]);
@@ -152,7 +154,7 @@ export function GameBuildAWord({
       <div className="wb-play-question wb-play-question-build">
         <div className="wb-play-question-eyebrow"><QText text={t.buildPrompt} /></div>
         <div className="wb-play-build-clue" lang={contentLang} dir={contentDir}>
-          &ldquo;<QText text={r.clue} skip={[r.target]} />&rdquo;
+          &ldquo;<QText text={nq(r.clue)} skip={[r.target]} />&rdquo;
         </div>
       </div>
       {/* Slot row */}
@@ -190,7 +192,7 @@ export function GameBuildAWord({
       </div>
       {revealed && (
         <div className={`wb-play-build-result ${isCorrect ? "is-correct" : "is-wrong"}`} lang={contentLang} dir={contentDir}>
-          {builtWord === r.target ? r.target : `${builtWord} ≠ ${r.target}`}
+          {builtWord === r.target ? nq(r.target) : `${nq(builtWord)} ≠ ${nq(r.target)}`}
         </div>
       )}
       {/* Morpheme pool */}
@@ -209,7 +211,7 @@ export function GameBuildAWord({
               lang={contentLang}
               dir={contentDir}
             >
-              {morpheme}
+              {nq(morpheme)}
             </button>
           );
         })}
@@ -217,7 +219,7 @@ export function GameBuildAWord({
       {revealed && (
         <>
           <div className="wb-play-explain" lang={contentLang} dir={contentDir}>
-            <QText text={r.story} wordLang={contentLang} />
+            <QText text={nq(r.story)} wordLang={contentLang} />
           </div>
           <button type="button" className="wb-play-next" onClick={advance}>
             {idx + 1 >= rounds.length ? t.playFinish : t.playNext}

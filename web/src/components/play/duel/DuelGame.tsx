@@ -2,6 +2,7 @@
 
 import { WaitText, WaitDots } from "@/components/WaitText";
 import { sfx } from "@/lib/game-sfx";
+import { NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
 import { ReportQuestionButton } from "../ReportQuestionButton";
 import { DuelPrompt, DuelOptText } from "./DuelPrompt";
 import { QText } from "../QText";
@@ -26,6 +27,7 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
 }) {
   const { user } = useAuth();
   const t = duelCopy(lang);
+  const { nq } = useNiqqud();
   const [view, setView] = useState<DuelView | null>(null);
   const [error, setError] = useState("");
   const [picked, setPicked] = useState<{ round: number; choice: number } | null>(null);
@@ -147,6 +149,7 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
       <div className="duel-top">
         <button type="button" className="duel-link" onClick={onExit}>{t.back}</button>
         <span className="duel-title">{t.title}</span>
+        <NiqqudToggle />
       </div>
 
       {ph.kind === "waiting" && view.rematchOf && (
@@ -227,7 +230,7 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
           const pts = s === "a" ? r.aPoints : r.bPoints;
           if (choice == null) return <span className="duel-mark is-none" title={t.noAnswer}>⏱</span>;
           if (choice === r.correctIdx) return <span className="duel-mark is-good">✓{pts ? <small>+{pts}</small> : null}</span>;
-          return <span className="duel-mark is-bad">✗{text ? <small><bdi>{text}</bdi></small> : null}</span>;
+          return <span className="duel-mark is-bad">✗{text ? <small><bdi>{nq(text)}</bdi></small> : null}</span>;
         };
         return (
         <div className="duel-card duel-end">
@@ -259,8 +262,8 @@ export function DuelGame({ code: firstCode, lang, dir, onExit, onAgain }: {
                 <tbody>
                   {view.recap.map((r, i) => (
                     <tr key={i}>
-                      <td className="duel-rt-word"><bdi><QText text={r.prompt} /></bdi></td>
-                      <td><bdi><QText text={r.answer} context={r.prompt} /></bdi></td>
+                      <td className="duel-rt-word"><bdi><QText text={nq(r.prompt)} /></bdi></td>
+                      <td><bdi><QText text={nq(r.answer)} context={r.prompt} /></bdi></td>
                       <td>{mark(r, me)}</td>
                       <td>{mark(r, other)}</td>
                     </tr>

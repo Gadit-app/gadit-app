@@ -1,6 +1,7 @@
 "use client";
 
 import { QText } from "../QText";
+import { useNiqqud } from "@/lib/niqqud-display";
 import { caseOpt } from "@/lib/play-engine";
 
 /**
@@ -11,15 +12,16 @@ import { caseOpt } from "@/lib/play-engine";
  * Once the answer is shown (`revealed`) every word opens.
  */
 export function DuelPrompt({ prompt, options, revealed = false }: { prompt: string; options: string[]; revealed?: boolean }) {
+  const { nq } = useNiqqud();
   const cls = `duel-prompt${prompt.length > 40 ? " is-long" : ""}`;
-  if (!/\s/.test(prompt.trim())) return <div className={cls} dir="auto">{revealed ? <QText text={prompt} /> : prompt}</div>;
+  if (!/\s/.test(prompt.trim())) return <div className={cls} dir="auto">{revealed ? <QText text={nq(prompt)} /> : nq(prompt)}</div>;
   const nl = prompt.indexOf("\n");
   const head = nl >= 0 ? prompt.slice(0, nl + 1) : "";
   const body = nl >= 0 ? prompt.slice(nl + 1) : prompt;
   return (
     <div className={cls} dir="auto">
-      {revealed && head ? <QText text={head} context={prompt} /> : head}
-      <QText text={body} skip={revealed ? [] : options} context={prompt} />
+      {revealed && head ? <QText text={nq(head)} context={prompt} /> : nq(head)}
+      <QText text={nq(body)} skip={revealed ? [] : options} context={prompt} />
     </div>
   );
 }
@@ -31,10 +33,11 @@ export function DuelPrompt({ prompt, options, revealed = false }: { prompt: stri
  * since a tapped word would give its meaning away.
  */
 export function DuelOptText({ prompt, option, revealed = false }: { prompt: string; option: string; revealed?: boolean }) {
+  const { nq } = useNiqqud();
   const text = duelOpt(option);
   const wordPrompt = !/\s/.test(prompt.trim());
-  if (!revealed && !wordPrompt) return <>{text}</>;
-  return <QText text={text} skip={revealed ? [] : [prompt.trim()]} />;
+  if (!revealed && !wordPrompt) return <>{nq(text)}</>;
+  return <QText text={nq(text)} skip={revealed ? [] : [prompt.trim()]} />;
 }
 
 /** The options of a duel question, in one casing. */
