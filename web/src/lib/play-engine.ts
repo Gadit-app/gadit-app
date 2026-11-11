@@ -29,6 +29,7 @@ export type GameId =
   | "syllables" // Reading in syllables: sound out a Hebrew bank word stone by stone (no notebook)
   | "wordsearch" // Word search: the practice words hidden in a letter grid (bank fallback)
   | "crossword"  // Crossword: the practice words crossing, meanings and pictures as clues
+  | "arrowword"  // Arrowword: a crossword with the clues inside the grid, newspaper style
   // ─── Curated-content games (no notebook dependency) ─────────
   // These run on hand-picked content from web/src/lib/play-content/
   // rather than the user's notebook. Always enabled — never gated on
@@ -70,6 +71,7 @@ export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
   syllables: 0,
   wordsearch: 0,
   crossword: 0,
+  arrowword: 0,
   quiz: 4,
   flashcards: 1,
   flashdefs: 1,
@@ -97,6 +99,7 @@ export const SESSION_SIZE: Record<GameId, number> = {
   syllables: 6,
   wordsearch: 8,
   crossword: 8,
+  arrowword: 8,
   quiz: 5,
   flashcards: 10,
   flashdefs: 10,
