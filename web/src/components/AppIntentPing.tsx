@@ -45,7 +45,7 @@ export function AppIntentPing({ feature }: { feature: string }) {
   }, [user, feature]);
   if (!canBuy) return null;
   return (
-    <Link href={href("/subscribe")} className="wb-learn-simple-go" style={{ display: "inline-block", marginTop: 12, textDecoration: "none", maxWidth: 320 }}>
+    <Link href={href("/subscribe")} className="wb-learn-simple-go" style={{ display: "inline-block", marginTop: 12, textDecoration: "none", maxWidth: 320, textAlign: "center" }}>
       {subscribeCopy(lang).seePlans}
     </Link>
   );
