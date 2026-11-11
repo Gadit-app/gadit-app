@@ -30,8 +30,8 @@ import { QText } from "./QText";
 
 type Copy = { title: string; desc: string; hint: string; done: string; solved: (n: number, of: number) => string; picClue: string; tap: string };
 const COPY: Record<string, Copy> = {
-  he: { title: "תשחץ", desc: "ההגדרות בתוך הלוח, עם חץ לכיוון המילה. כמו בעיתון, עם המילים שלכם", hint: "אות", done: "פתרתם את התשחץ", solved: (n, of) => `${n} מתוך ${of}`, picClue: "מה רואים בתמונה?", tap: "לוחצים על הגדרה או על משבצת" },
-  en: { title: "Arrowword", desc: "The clues sit inside the grid, with an arrow to the word. Like a newspaper, with your words", hint: "Letter", done: "You solved the arrowword", solved: (n, of) => `${n} of ${of}`, picClue: "What is in the picture?", tap: "Tap a clue or a square" },
+  he: { title: "תשחצים", desc: "ההגדרות בתוך הלוח, עם חץ לכיוון המילה. כמו בעיתון, עם המילים שלכם", hint: "אות", done: "פתרתם את התשחץ", solved: (n, of) => `${n} מתוך ${of}`, picClue: "מה רואים בתמונה?", tap: "לוחצים על הגדרה או על משבצת" },
+  en: { title: "Arrowwords", desc: "The clues sit inside the grid, with an arrow to the word. Like a newspaper, with your words", hint: "Letter", done: "You solved the arrowword", solved: (n, of) => `${n} of ${of}`, picClue: "What is in the picture?", tap: "Tap a clue or a square" },
   ar: { title: "الكلمات المسهّمة", desc: "التعريفات داخل الشبكة، مع سهم نحو الكلمة. كما في الجريدة، بكلماتك", hint: "حرف", done: "حللت اللغز", solved: (n, of) => `${n} من ${of}`, picClue: "ماذا ترى في الصورة؟", tap: "اضغط على تعريف أو مربع" },
   ru: { title: "Сканворд", desc: "Подсказки внутри сетки, со стрелкой к слову. Как в газете, с твоими словами", hint: "Буква", done: "Ты решил сканворд", solved: (n, of) => `${n} из ${of}`, picClue: "Что на картинке?", tap: "Нажми на подсказку или клетку" },
 };
@@ -256,8 +256,8 @@ export function GameArrowword({ pool, onExit, lang, t }: { pool: PlayWord[]; onE
 const AW_CSS = `
 .aw .aw-q { display: grid; gap: 12px; justify-items: center; }
 .aw-panel { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; text-align: center; max-width: 56ch; min-height: 40px; }
-.aw-panel-text { font-size: 18px; line-height: 1.5; font-weight: 700; color: var(--wb-ink, #0f172a); }
-.aw-panel-len { font-size: 12px; font-weight: 800; color: #fff; background: var(--accent, #0EA5A5); border-radius: 999px; padding: 2px 8px; }
+.aw-panel-text { font-size: 18px; line-height: 1.5; font-weight: 700; color: #14202b; }
+.aw-panel-len { font-size: 12px; font-weight: 800; color: #fff; background: #0a7472; border-radius: 999px; padding: 2px 8px; }
 .aw-pic { width: 96px; height: 96px; border-radius: 14px; box-shadow: 0 8px 18px #0003; object-fit: cover; }
 .aw-grid { display: grid; gap: 2px; width: min(94vw, 520px); padding: 6px; border-radius: 14px; background: #e9e3d4; box-shadow: inset 0 2px 8px #0002; }
 .aw-void { aspect-ratio: 1; }
@@ -279,9 +279,9 @@ const AW_CSS = `
 .aw-arrow.is-down-straight, .aw-arrow.is-across-bent { bottom: 1px; }
 .aw-keys { display: grid; gap: 6px; width: min(96vw, 520px); }
 .aw-keyrow { display: flex; justify-content: center; gap: 5px; }
-.aw-key { flex: 1 1 0; max-width: 46px; min-height: 44px; border: 0; border-radius: 9px; background: #fff; box-shadow: 0 2px 0 #0002; font: inherit; font-weight: 700; font-size: 19px; color: var(--wb-ink, #0f172a); cursor: pointer; }
+.aw-key { flex: 1 1 0; max-width: 46px; min-height: 44px; border: 0; border-radius: 9px; background: #fff; box-shadow: 0 2px 0 #0002; font: inherit; font-weight: 700; font-size: 19px; color: #14202b; cursor: pointer; }
 .aw-key:active { transform: translateY(1px); box-shadow: none; }
 .aw-key.is-wide { max-width: 70px; }
-.aw-key.is-hint { flex: 0 0 auto; max-width: none; padding: 0 18px; background: transparent; box-shadow: none; border: 1.5px solid var(--accent, #0EA5A5); color: var(--accent, #0EA5A5); border-radius: 999px; }
+.aw-key.is-hint { flex: 0 0 auto; max-width: none; padding: 0 18px; background: transparent; box-shadow: none; border: 1.5px solid #0a7472; color: #0a7472; border-radius: 999px; }
 @media (prefers-reduced-motion: reduce) { .aw-cell.is-shake { animation: none; } }
 `;

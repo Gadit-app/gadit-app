@@ -29,8 +29,8 @@ import { QText } from "./QText";
 
 type Copy = { title: string; desc: string; across: string; down: string; hint: string; done: string; solved: (n: number, of: number) => string; tapCell: string; picClue: string };
 const COPY: Record<string, Copy> = {
-  he: { title: "תשבץ", desc: "המילים שלכם משתלבות זו בזו. ההגדרה היא המשמעות, ולפעמים תמונה", across: "מאוזן", down: "מאונך", hint: "אות", done: "פתרתם את התשבץ", solved: (n, of) => `${n} מתוך ${of}`, tapCell: "לוחצים על משבצת כדי לראות את ההגדרה", picClue: "מה רואים בתמונה?" },
-  en: { title: "Crossword", desc: "Your words cross each other. The clue is the meaning, sometimes a picture", across: "Across", down: "Down", hint: "Letter", done: "You solved the crossword", solved: (n, of) => `${n} of ${of}`, tapCell: "Tap a square to see its clue", picClue: "What is in the picture?" },
+  he: { title: "תשבצים", desc: "המילים שלכם משתלבות זו בזו. ההגדרה היא המשמעות, ולפעמים תמונה", across: "מאוזן", down: "מאונך", hint: "אות", done: "פתרתם את התשבץ", solved: (n, of) => `${n} מתוך ${of}`, tapCell: "לוחצים על משבצת כדי לראות את ההגדרה", picClue: "מה רואים בתמונה?" },
+  en: { title: "Crosswords", desc: "Your words cross each other. The clue is the meaning, sometimes a picture", across: "Across", down: "Down", hint: "Letter", done: "You solved the crossword", solved: (n, of) => `${n} of ${of}`, tapCell: "Tap a square to see its clue", picClue: "What is in the picture?" },
   ar: { title: "الكلمات المتقاطعة", desc: "كلماتك تتقاطع. التعريف هو المعنى، وأحيانًا صورة", across: "أفقي", down: "عمودي", hint: "حرف", done: "حللت الكلمات المتقاطعة", solved: (n, of) => `${n} من ${of}`, tapCell: "اضغط على مربع لترى التعريف", picClue: "ماذا ترى في الصورة؟" },
   ru: { title: "Кроссворд", desc: "Твои слова пересекаются. Подсказка — значение, иногда картинка", across: "По горизонтали", down: "По вертикали", hint: "Буква", done: "Ты решил кроссворд", solved: (n, of) => `${n} из ${of}`, tapCell: "Нажми на клетку, чтобы увидеть подсказку", picClue: "Что на картинке?" },
 };
@@ -235,8 +235,8 @@ export function GameCrossword({ pool, onExit, lang, t }: { pool: PlayWord[]; onE
 const CW_CSS = `
 .cw .cw-q { display: grid; gap: 12px; justify-items: center; }
 .cw-clue { display: grid; justify-items: center; gap: 6px; text-align: center; max-width: 52ch; }
-.cw-clue-num { font-size: 13px; font-weight: 800; color: var(--accent, #0EA5A5); letter-spacing: 0.02em; }
-.cw-clue-text { font-size: 18px; line-height: 1.5; color: var(--wb-ink, #0f172a); font-weight: 600; }
+.cw-clue-num { font-size: 13px; font-weight: 800; color: #0a7472; letter-spacing: 0.02em; }
+.cw-clue-text { font-size: 18px; line-height: 1.5; color: #14202b; font-weight: 600; }
 .cw-clue-pic { width: 120px; height: 120px; border-radius: 16px; box-shadow: 0 8px 18px #0003; object-fit: cover; }
 .cw-grid { display: grid; gap: 3px; width: min(92vw, 460px); padding: 8px; border-radius: 16px; background: #e9e3d4; box-shadow: inset 0 2px 8px #0002; }
 .cw-void { aspect-ratio: 1; }
@@ -249,9 +249,9 @@ const CW_CSS = `
 .cw-num { position: absolute; top: 2px; inset-inline-start: 4px; font-style: normal; font-size: 9px; font-weight: 700; color: #7a5326; line-height: 1; }
 .cw-keys { display: grid; gap: 6px; width: min(96vw, 520px); }
 .cw-keyrow { display: flex; justify-content: center; gap: 5px; }
-.cw-key { flex: 1 1 0; max-width: 46px; min-height: 44px; border: 0; border-radius: 9px; background: #fff; box-shadow: 0 2px 0 #0002; font: inherit; font-weight: 700; font-size: 19px; color: var(--wb-ink, #0f172a); cursor: pointer; }
+.cw-key { flex: 1 1 0; max-width: 46px; min-height: 44px; border: 0; border-radius: 9px; background: #fff; box-shadow: 0 2px 0 #0002; font: inherit; font-weight: 700; font-size: 19px; color: #14202b; cursor: pointer; }
 .cw-key:active { transform: translateY(1px); box-shadow: none; }
 .cw-key.is-wide { max-width: 70px; }
-.cw-key.is-hint { flex: 0 0 auto; max-width: none; padding: 0 18px; background: transparent; box-shadow: none; border: 1.5px solid var(--accent, #0EA5A5); color: var(--accent, #0EA5A5); border-radius: 999px; }
+.cw-key.is-hint { flex: 0 0 auto; max-width: none; padding: 0 18px; background: transparent; box-shadow: none; border: 1.5px solid #0a7472; color: #0a7472; border-radius: 999px; }
 @media (prefers-reduced-motion: reduce) { .cw-cell.is-shake { animation: none; } }
 `;

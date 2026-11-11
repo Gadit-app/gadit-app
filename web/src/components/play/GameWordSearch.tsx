@@ -26,8 +26,8 @@ import { TTSButton } from "@/components/design/TTSButton";
 
 type Copy = { title: string; desc: string; prompt: string; found: (n: number, of: number) => string; hint: string; done: string; wordsToFind: string };
 const COPY: Record<string, Copy> = {
-  he: { title: "תפזורת", desc: "המילים שלכם מוסתרות בלוח. גוררים אצבע על מילה כדי למצוא אותה", prompt: "גוררים אצבע על מילה שמצאתם בלוח", found: (n, of) => `נמצאו ${n} מתוך ${of}`, hint: "רמז", done: "מצאתם את כל המילים", wordsToFind: "המילים שמסתתרות" },
-  en: { title: "Word Search", desc: "Your words are hidden in the grid. Drag a finger along a word to find it", prompt: "Drag your finger along a word you spot in the grid", found: (n, of) => `Found ${n} of ${of}`, hint: "Hint", done: "You found every word", wordsToFind: "Hidden words" },
+  he: { title: "תפזורות", desc: "המילים שלכם מוסתרות בלוח. גוררים אצבע על מילה כדי למצוא אותה", prompt: "גוררים אצבע על מילה שמצאתם בלוח", found: (n, of) => `נמצאו ${n} מתוך ${of}`, hint: "רמז", done: "מצאתם את כל המילים", wordsToFind: "המילים שמסתתרות" },
+  en: { title: "Word Searches", desc: "Your words are hidden in the grid. Drag a finger along a word to find it", prompt: "Drag your finger along a word you spot in the grid", found: (n, of) => `Found ${n} of ${of}`, hint: "Hint", done: "You found every word", wordsToFind: "Hidden words" },
   ar: { title: "البحث عن الكلمات", desc: "كلماتك مخفية في الشبكة. اسحب إصبعك على كلمة لتجدها", prompt: "اسحب إصبعك على كلمة تراها في الشبكة", found: (n, of) => `وجدت ${n} من ${of}`, hint: "تلميح", done: "وجدت كل الكلمات", wordsToFind: "الكلمات المخفية" },
   ru: { title: "Найди слово", desc: "Твои слова спрятаны в сетке. Проведи пальцем по слову, чтобы найти его", prompt: "Проведи пальцем по слову, которое заметил в сетке", found: (n, of) => `Найдено ${n} из ${of}`, hint: "Подсказка", done: "Ты нашёл все слова", wordsToFind: "Спрятанные слова" },
 };
@@ -197,13 +197,13 @@ const WS_CSS = `
 .ws-cell.is-found { color: #fff; }
 .ws-cell.is-hint { animation: ws-blink 0.45s ease-in-out 4; }
 @keyframes ws-blink { 50% { background: #ffd23f; transform: scale(1.1); } }
-.ws-flash { min-height: 44px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 18px; color: var(--wb-ink, #0f172a); opacity: 0; transition: opacity 200ms; max-width: 60ch; text-align: center; }
+.ws-flash { min-height: 44px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 18px; color: #14202b; opacity: 0; transition: opacity 200ms; max-width: 60ch; text-align: center; }
 .ws-flash.is-on { opacity: 1; }
 .ws-flash b { font-size: 24px; }
 .ws-words { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 520px; }
-.ws-words-label { align-self: center; font-size: 14px; color: var(--wb-ink-soft, #6B7280); font-weight: 700; }
-.ws-chip { padding: 6px 12px; border-radius: 999px; background: #fff; border: 1px solid var(--wb-border, #D1D5DB); font-weight: 700; font-size: 16px; color: var(--wb-ink, #0f172a); }
+.ws-words-label { align-self: center; font-size: 14px; color: #4b5563; font-weight: 700; }
+.ws-chip { padding: 6px 12px; border-radius: 999px; background: #fff; color: #14202b; border: 1px solid #cfc8b8; font-weight: 700; font-size: 16px; color: #14202b; }
 .ws-chip.is-found { color: #fff; border-color: transparent; text-decoration: line-through; opacity: 0.85; }
-.ws-hint { font: inherit; font-weight: 700; padding: 8px 18px; border-radius: 999px; border: 1.5px solid var(--accent, #0EA5A5); background: transparent; color: var(--accent, #0EA5A5); cursor: pointer; }
+.ws-hint { font: inherit; font-weight: 700; padding: 8px 18px; border-radius: 999px; border: 1.5px solid #0a7472; background: transparent; color: #0a7472; cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { .ws-cell { transition: none; } .ws-cell.is-hint { animation: none; background: #ffd23f; } }
 `;

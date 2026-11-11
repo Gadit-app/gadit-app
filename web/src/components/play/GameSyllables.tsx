@@ -401,7 +401,7 @@ const SYL_CSS = `
 .syl-steps { display: inline-flex; gap: 8px; }
 .syl-steps span { width: 12px; height: 12px; border-radius: 50%; background: #d7d2c6; }
 .syl-steps span.is-done { background: #10B981; }
-.syl-steps span.is-on { background: var(--accent, #0EA5A5); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent, #0EA5A5) 30%, transparent); }
+.syl-steps span.is-on { background: #0a7472; box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent, #0EA5A5) 30%, transparent); }
 .syl-stones { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 6px; }
 .syl-choices { margin-top: 10px; padding-top: 14px; border-top: 2px dashed #d7d2c6; width: 100%; }
 /* a syllable is a stone on the ground, like the words in Context Detective */
@@ -415,7 +415,7 @@ const SYL_CSS = `
 .syl-reveal { display: grid; justify-items: center; gap: 12px; min-height: 40px; }
 .syl-pic { width: clamp(140px, 40vw, 200px); height: auto; border-radius: 22px; box-shadow: 0 10px 24px #0004; opacity: 0; transform: scale(0.85); transition: opacity 400ms, transform 400ms; }
 .syl-pic.is-shown { opacity: 1; transform: scale(1); }
-.syl-word { font-family: var(--wb-font-display, inherit); font-size: clamp(34px, 9vw, 48px); font-weight: 800; color: var(--wb-ink, #0f172a); line-height: 1.3; }
+.syl-word { font-family: var(--wb-font-display, inherit); font-size: clamp(34px, 9vw, 48px); font-weight: 800; color: #14202b; line-height: 1.3; }
 .syl-word-big { font-size: clamp(44px, 12vw, 64px); display: flex; gap: 0.18em; padding: 10px 18px; }
 .syl-part { position: relative; }
 .syl-part + .syl-part::before { content: "·"; position: absolute; inset-inline-start: -0.2em; top: 0.1em; font-size: 0.5em; color: #b8b0a0; }

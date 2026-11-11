@@ -3575,6 +3575,7 @@ const COVER_V = 2;
 const GAME_COVERS = new Set<GameId>([
   "flashcards", "flashdefs", "quiz", "fillblank", "memory", "anagram", "speed",
   "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "truefalse", "context",
+  "syllables", "wordsearch", "crossword", "arrowword",
 ]);
 
 /** A pool that is sure to include the focus word: the word first, then
