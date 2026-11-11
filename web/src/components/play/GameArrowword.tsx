@@ -30,10 +30,10 @@ import { QText } from "./QText";
 
 type Copy = { title: string; desc: string; hint: string; done: string; solved: (n: number, of: number) => string; picClue: string; tap: string };
 const COPY: Record<string, Copy> = {
-  he: { title: "תשחצים", desc: "ההגדרות בתוך הלוח, עם חץ לכיוון המילה. כמו בעיתון, עם המילים שלכם", hint: "אות", done: "פתרתם את התשחץ", solved: (n, of) => `${n} מתוך ${of}`, picClue: "מה רואים בתמונה?", tap: "לוחצים על הגדרה או על משבצת" },
-  en: { title: "Arrowwords", desc: "The clues sit inside the grid, with an arrow to the word. Like a newspaper, with your words", hint: "Letter", done: "You solved the arrowword", solved: (n, of) => `${n} of ${of}`, picClue: "What is in the picture?", tap: "Tap a clue or a square" },
-  ar: { title: "الكلمات المسهّمة", desc: "التعريفات داخل الشبكة، مع سهم نحو الكلمة. كما في الجريدة، بكلماتك", hint: "حرف", done: "حللت اللغز", solved: (n, of) => `${n} من ${of}`, picClue: "ماذا ترى في الصورة؟", tap: "اضغط على تعريف أو مربع" },
-  ru: { title: "Сканворд", desc: "Подсказки внутри сетки, со стрелкой к слову. Как в газете, с твоими словами", hint: "Буква", done: "Ты решил сканворд", solved: (n, of) => `${n} из ${of}`, picClue: "Что на картинке?", tap: "Нажми на подсказку или клетку" },
+  he: { title: "תשחצים", desc: "ההגדרות בתוך הלוח, עם חץ לכיוון המילה. כמו בעיתון, עם המילים שלכם", hint: "רמז", done: "פתרתם את התשחץ", solved: (n, of) => `${n} מתוך ${of}`, picClue: "מה רואים בתמונה?", tap: "לוחצים על הגדרה או על משבצת" },
+  en: { title: "Arrowwords", desc: "The clues sit inside the grid, with an arrow to the word. Like a newspaper, with your words", hint: "Hint", done: "You solved the arrowword", solved: (n, of) => `${n} of ${of}`, picClue: "What is in the picture?", tap: "Tap a clue or a square" },
+  ar: { title: "الكلمات المسهّمة", desc: "التعريفات داخل الشبكة، مع سهم نحو الكلمة. كما في الجريدة، بكلماتك", hint: "تلميح", done: "حللت اللغز", solved: (n, of) => `${n} من ${of}`, picClue: "ماذا ترى في الصورة؟", tap: "اضغط على تعريف أو مربع" },
+  ru: { title: "Сканворд", desc: "Подсказки внутри сетки, со стрелкой к слову. Как в газете, с твоими словами", hint: "Подсказка", done: "Ты решил сканворд", solved: (n, of) => `${n} из ${of}`, picClue: "Что на картинке?", tap: "Нажми на подсказку или клетку" },
 };
 export const arrowwordCopy = (lang: string): Copy => COPY[lang] ?? COPY.en;
 
