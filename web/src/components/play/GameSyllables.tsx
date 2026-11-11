@@ -212,11 +212,12 @@ export function GameSyllables({ onExit, lang, t }: { onExit: () => void; lang: s
   }, [user, session]);
 
   // The next word's sounds are fetched while this one plays.
+  const warm = speech.warm;
   useEffect(() => {
     const w = session[idx]; const n = session[idx + 1];
-    if (w) speech.warm([...w.syl, w.nq]);
-    if (n) speech.warm([...n.syl, n.nq]);
-  }, [idx, session, speech]);
+    if (w) warm([...w.syl, w.nq]);
+    if (n) warm([...n.syl, n.nq]);
+  }, [idx, session, warm]);
 
   const finishWord = () => {
     if (idx + 1 >= session.length) {
@@ -329,7 +330,11 @@ function StepBuild({ word, others, pic, c, speech, onDone }: { word: Item; other
       return shuffle([s, d]);
     });
   }, [word, others]);
-  useEffect(() => { const tm = setTimeout(() => void speech.speak(word.nq), 400); return () => clearTimeout(tm); }, [word, speech]);
+  // Depends on `speak` (stable), never on the whole `speech` object: that one is
+  // new on every render, and the word then restarted every 0.4s and cut off
+  // every tap (Shirli, 2026-11-11).
+  const speak = speech.speak;
+  useEffect(() => { const tm = setTimeout(() => void speak(word.nq), 400); return () => clearTimeout(tm); }, [word, speak]);
   const pick = async (s: string) => {
     if (busy.current || complete) return;
     busy.current = true;
