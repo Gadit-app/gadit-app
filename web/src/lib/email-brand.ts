@@ -6,8 +6,10 @@
  */
 
 export const EMAIL_SITE = "https://www.gadit.app";
-/** 92x45 CSS px, rendered at 3x from the site's wordmark (Inter 600 + teal italic "it"). */
-export const EMAIL_LOGO_URL = `${EMAIL_SITE}/email/gadit-logo.png`;
+/** The wordmark (Inter 600 + teal italic "it") on a WHITE rounded tile, 112x56 CSS px
+ *  rendered at 3x. The tile is part of the image because dark-mode mail clients
+ *  (Gmail on Android) paint the card dark and the ink "Gad" vanished (Gadi 2026-11-11). */
+export const EMAIL_LOGO_URL = `${EMAIL_SITE}/email/gadit-logo-tile.png`;
 /** Outer background around the white card. */
 export const EMAIL_BG = "#EEF5F3";
 export const EMAIL_CARD_MAX = 600;
@@ -15,7 +17,7 @@ export const EMAIL_CARD_MAX = 600;
 /** Centered logo on white + divider. Goes first inside the white card. */
 export function emailHeaderHtml(): string {
   return `<div style="text-align:center;padding:28px 24px 22px;background:#FFFFFF;">
-      <a href="${EMAIL_SITE}" style="text-decoration:none;"><img src="${EMAIL_LOGO_URL}" width="92" height="45" alt="Gadit" style="display:inline-block;width:92px;height:45px;border:0;outline:none;text-decoration:none;" /></a>
+      <a href="${EMAIL_SITE}" style="text-decoration:none;"><img src="${EMAIL_LOGO_URL}" width="112" height="56" alt="Gadit" style="display:inline-block;width:112px;height:56px;border:0;outline:none;text-decoration:none;" /></a>
     </div>
     <div style="height:1px;line-height:1px;font-size:0;background:#E6ECEA;margin:0 32px;">&nbsp;</div>`;
 }
