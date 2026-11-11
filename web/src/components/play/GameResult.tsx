@@ -32,6 +32,8 @@ export type GameResultData = {
   missed?: Array<{ word: string; meaning: string }>;
   /** Custom headline override (Speed game uses this for "X words!"). */
   headline?: string;
+  /** A quiet line under the headline (the puzzles: how many hints were used). */
+  note?: string;
 };
 
 export function GameResult({
@@ -88,6 +90,7 @@ export function GameResult({
   return (
     <div className="wb-play-stage wb-play-result" lang={lang} dir={dirForLang(lang)}>
       <div className="wb-play-result-headline">{headline}</div>
+      {data.note && <div className="wb-play-result-note" style={{ fontSize: 16, fontWeight: 600, color: "#374151", textAlign: "center" }}>{data.note}</div>}
       <div className="wb-play-result-score">
         <span className="wb-play-result-score-num">{data.score}</span>
         {data.total > 0 && (

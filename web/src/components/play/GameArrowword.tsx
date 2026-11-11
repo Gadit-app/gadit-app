@@ -16,17 +16,15 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { sfx } from "@/lib/game-sfx";
 import type { PlayWord } from "@/lib/play-engine";
-import { dirForLang, shuffle, wordLangOf } from "@/lib/play-engine";
-import { readKidsMode } from "@/lib/use-kids-mode";
-import { HEBREW_BANK } from "@/lib/learn/hebrew-bank";
-import { ENGLISH_BANK } from "@/lib/learn/english-bank";
-import { gridLetters } from "@/lib/puzzles/word-search";
+import { dirForLang } from "@/lib/play-engine";
 import type { Entry } from "@/lib/puzzles/crossword";
 import { makeArrowword, type ArrowKind } from "@/lib/puzzles/arrowword";
 import { useNiqqud } from "@/lib/niqqud-display";
 import { GameResult } from "./GameResult";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { QText } from "./QText";
+import { LEVEL_CSS, LevelChip, LevelChooser, clueCandidates, clueItems, clueSettings, levelCopy, useCluePics, usePuzzleLevel, type ClueItem, type PuzzleLevel } from "./puzzle-levels";
+import { WaitText } from "@/components/WaitText";
 
 type Copy = { title: string; desc: string; hint: string; done: string; solved: (n: number, of: number) => string; picClue: string; tap: string };
 const COPY: Record<string, Copy> = {
@@ -37,46 +35,13 @@ const COPY: Record<string, Copy> = {
 };
 export const arrowwordCopy = (lang: string): Copy => COPY[lang] ?? COPY.en;
 
-type Item = { word: string; lang: "he" | "en"; clue: string; pic?: string };
 const FINAL: Record<string, string> = { "ך": "כ", "ם": "מ", "ן": "נ", "ף": "פ", "ץ": "צ" };
 const base = (ch: string) => FINAL[ch] ?? ch.toUpperCase();
 const HE_KEYS = ["קראטופ", "שדגכעיחל", "זסבהנמצת"];
 const EN_KEYS = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
 
-function shortClue(meaning: string): string {
-  const m = meaning.replace(/\s+/g, " ").trim();
-  const cut = m.split(/[.;:!?]|, /)[0].trim();
-  const words = cut.split(" ");
-  return words.length > 12 ? words.slice(0, 12).join(" ") + "…" : cut;
-}
 /** What fits in a clue cell: the arrowword clue, else the first words of the meaning. */
 const cellClue = (short: string | undefined, clue: string) => short || clue.split(" ").slice(0, 3).join(" ");
-
-function pickItems(pool: PlayWord[], ui: string, maxLen: number, n: number): Item[] {
-  const groups = new Map<"he" | "en", Item[]>();
-  for (const p of pool) {
-    const w = p.word.trim();
-    const l = wordLangOf(p);
-    if (!/^[\p{L}֑-ׇ]+$/u.test(w) || (l !== "he" && l !== "en")) continue;
-    const len = gridLetters(w, l === "he").length;
-    if (len < 3 || len > maxLen) continue;
-    const clue = shortClue(p.meaning ?? "");
-    const pic = p.picWord ?? (l === "en" ? w : undefined);
-    if (!clue && !pic) continue;
-    const g = groups.get(l) ?? [];
-    if (!g.some((x) => x.word.toLowerCase() === w.toLowerCase())) g.push({ word: w, lang: l, clue, pic });
-    groups.set(l, g);
-  }
-  let best: Item[] = [];
-  for (const [l, g] of groups) if (g.length > best.length || (g.length === best.length && l === ui)) best = g;
-  if (best.length >= 5) return shuffle(best).slice(0, n + 4);
-  const he = ui === "he";
-  const bank: Item[] = he
-    ? HEBREW_BANK.filter((x) => !/[\s-]/.test(x.w) && x.en).map((x) => ({ word: x.w, lang: "he" as const, clue: "", pic: x.en }))
-    : ENGLISH_BANK.filter((x) => !/[\s'-]/.test(x.w)).map((x) => ({ word: x.w, lang: "en" as const, clue: ui === "ar" ? x.ar : ui === "ru" ? x.ru : "", pic: x.w }));
-  const fits = bank.filter((x) => { const k = gridLetters(x.word, x.lang === "he").length; return k >= 3 && k <= maxLen; });
-  return shuffle([...best, ...shuffle(fits).slice(0, n + 4)]).slice(0, n + 2);
-}
 
 const cellKey = (r: number, c: number) => `${r},${c}`;
 const cellsOf = (e: Entry) => e.letters.map((_, k) => (e.dir === "across" ? cellKey(e.row, e.col + k) : cellKey(e.row + k, e.col)));
@@ -93,51 +58,58 @@ function Arrow({ dir, kind, rtl }: { dir: "across" | "down"; kind: ArrowKind; rt
   return <svg className={`aw-arrow is-${dir}-${kind}`} viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={d} /></svg>;
 }
 
-export function GameArrowword({ pool, onExit, lang, t }: { pool: PlayWord[]; onExit: () => void; lang: string; t: PlayT }) {
+export function GameArrowword(props: { pool: PlayWord[]; onExit: () => void; lang: string; t: PlayT }) {
+  const lv = usePuzzleLevel();
+  if (!lv.level) return <LevelChooser title={arrowwordCopy(props.lang).title} kind="clue" suggested={lv.suggested} onPick={lv.choose} onExit={props.onExit} lang={props.lang} t={props.t} />;
+  return <ArrowwordBoard key={lv.level} {...props} level={lv.level} kids={lv.kids} onLevel={lv.reopen} />;
+}
+
+const EMPTY = makeArrowword([], { rtl: false, maxSide: 5 });
+
+function ArrowwordBoard({ pool, onExit, lang, t, level, kids, onLevel }: { pool: PlayWord[]; onExit: () => void; lang: string; t: PlayT; level: PuzzleLevel; kids: boolean; onLevel: () => void }) {
   const c = arrowwordCopy(lang);
+  const lc = levelCopy(lang);
   const { user } = useAuth();
   const { nq } = useNiqqud();
-  const [kids] = useState(() => readKidsMode());
-  const maxSide = kids ? 9 : 13;
+  // one more row and column than the crossword of the level: the clue cells
+  const set = useMemo(() => { const x = clueSettings(level, kids, 12); return { ...x, maxSide: x.maxSide + 1 }; }, [level, kids]);
   const [seed, setSeed] = useState(0);
   const [startPool] = useState(pool);
+  const cands = useMemo(() => clueCandidates(startPool, lang, level, set), [startPool, lang, level, set, seed]); // eslint-disable-line react-hooks/exhaustive-deps
+  const { pics, ready } = useCluePics(user, cands);
   const puzzle = useMemo(() => {
-    const items = pickItems(startPool, lang, kids ? 6 : maxSide - 1, kids ? 5 : 8);
+    if (!ready) return { aw: EMPTY, rtl: lang === "he", byWord: new Map<string, ClueItem>() };
+    const items = clueItems(cands, pics, level, set.n);
     const rtl = (items[0]?.lang ?? (lang === "he" ? "he" : "en")) === "he";
-    const aw = makeArrowword(items.map((x) => x.word), { rtl, maxSide });
+    const aw = makeArrowword(items.map((x) => x.word), { rtl, maxSide: set.maxSide });
     const byWord = new Map(items.map((x) => [x.word, x]));
     return { aw, rtl, byWord };
-  }, [startPool, lang, maxSide, kids, seed]);
+  }, [ready, cands, pics, level, set, lang]);
+  const [stage, setStage] = useState<Map<string, number>>(new Map()); // word → hints asked for it
+  const [hintsUsed, setHintsUsed] = useState(0);
   const { aw, rtl } = puzzle;
   const [typed, setTyped] = useState<Map<string, string>>(new Map());
   const [solved, setSolved] = useState<Set<string>>(new Set());
   const [sel, setSel] = useState(0);
   const [cursor, setCursor] = useState<string | null>(null);
   const [shake, setShake] = useState<string | null>(null);
-  const [pics, setPics] = useState<Record<string, string>>({});
   const [short, setShort] = useState<Record<string, string>>({});
   const wordLang = rtl ? "he" : "en";
 
-  // pictures and the short in-grid clues, both cached on the server
+  // the short in-grid clues, cached on the server
   useEffect(() => {
-    if (!user) return;
+    if (!user || !ready) return;
     let alive = true;
     const words = aw.entries.map((e) => e.word);
-    const want = [...new Set(words.map((w) => puzzle.byWord.get(w)?.pic).filter((x): x is string => !!x))];
+    if (!words.length) return;
     void (async () => {
       try {
-        const tok = await user.getIdToken();
-        const [pr, cr] = await Promise.all([
-          want.length ? fetch("/api/play/images", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${tok}` }, body: JSON.stringify({ words: want }) }) : null,
-          fetch("/api/play/arrow-clues", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${tok}` }, body: JSON.stringify({ words, lang: wordLang }) }),
-        ]);
-        if (!alive) return;
-        if (pr?.ok) { const got = ((await pr.json()) as { images?: Record<string, string> }).images ?? {}; const out: Record<string, string> = {}; for (const [k, v] of Object.entries(got)) out[k.toLowerCase()] = v; setPics(out); }
-        if (cr.ok) setShort(((await cr.json()) as { clues?: Record<string, string> }).clues ?? {});
+        const cr = await fetch("/api/play/arrow-clues", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` }, body: JSON.stringify({ words, lang: wordLang }) });
+        if (alive && cr.ok) setShort(((await cr.json()) as { clues?: Record<string, string> }).clues ?? {});
       } catch { /* the meaning's first words stand in */ }
     })();
     return () => { alive = false; };
-  }, [user, aw, puzzle.byWord, wordLang]);
+  }, [user, ready, aw, wordLang]);
 
   useEffect(() => { const e = aw.entries[0]; if (e) { setSel(0); setCursor(cellsOf(e)[0]); } }, [aw]);
 
@@ -184,34 +156,55 @@ export function GameArrowword({ pool, onExit, lang, t }: { pool: PlayWord[]; onE
   };
   const hint = () => {
     if (!entry) return;
+    // Staged: 1 = the first letter; 2 = the picture, or a sentence with the word left out; then a letter a press.
+    const n = (stage.get(entry.word) ?? 0) + 1;
+    setStage((m) => new Map(m).set(entry.word, n));
+    setHintsUsed((h) => h + 1);
+    const it = puzzle.byWord.get(entry.word);
+    const hiddenPic = level === "hard" && !!it?.clue && !!it?.pic && !!pics[it.pic.toLowerCase()];
+    if (n === 2 && (hiddenPic || it?.example)) { sfx.tick(); return; }
     const ks = cellsOf(entry);
-    const k = (cursor && !lockedCells.has(cursor) && base(typed.get(cursor) ?? "") !== base(entry.letters[ks.indexOf(cursor)])) ? cursor : ks.find((x, i) => !lockedCells.has(x) && base(typed.get(x) ?? "") !== base(entry.letters[i]));
+    const wrong = (x: string, i: number) => !lockedCells.has(x) && base(typed.get(x) ?? "") !== base(entry.letters[i]);
+    const k = n === 1 ? ks.find(wrong) : (cursor && wrong(cursor, ks.indexOf(cursor))) ? cursor : ks.find(wrong);
     if (!k) return;
-    const next = new Map(typed); next.set(k, entry.letters[ks.indexOf(k)]); setTyped(next); sfx.tick();
+    const next = new Map(typed); next.set(k, entry.letters[ks.indexOf(k)]);
+    setTyped(next); sfx.tick();
     checkEntry(entry, next);
   };
 
   const total = aw.entries.length;
   if (total > 0 && solved.size === total) {
-    return <GameResult data={{ title: c.title, score: total, total, headline: c.done }} onExit={onExit} onReplay={() => { setTyped(new Map()); setSolved(new Set()); setSeed((s) => s + 1); }} lang={lang} t={t} />;
+    return <GameResult data={{ title: c.title, score: total, total, headline: c.done, note: lc.hints(hintsUsed) }} onExit={onExit} onReplay={() => { setTyped(new Map()); setSolved(new Set()); setStage(new Map()); setHintsUsed(0); setSeed((s) => s + 1); }} lang={lang} t={t} />;
   }
+  if (!ready) return (
+    <div className="wb-play-stage aw">
+      <style>{AW_CSS + LEVEL_CSS}</style>
+      <PlayHeader title={c.title} onExit={onExit} t={t} />
+      <div className="pz-wait" dir={dirForLang(lang)}><WaitText text={lc.building} live /></div>
+    </div>
+  );
   if (!entry) return null;
   const item = puzzle.byWord.get(entry.word);
-  const pic = item?.pic ? pics[item.pic.toLowerCase()] : undefined;
+  const picUrl = item?.pic ? pics[item.pic.toLowerCase()] : undefined;
+  const asked = stage.get(entry.word) ?? 0;
+  const pic = picUrl && (level !== "hard" || !item?.clue || asked >= 2) ? picUrl : undefined;
+  const sentence = asked >= 2 && !(level === "hard" && item?.clue && picUrl) ? item?.example : undefined;
   const keys = rtl ? HE_KEYS : EN_KEYS;
   const panelClue = short[entry.word] || item?.clue || "";
   return (
     <div className="wb-play-stage aw">
-      <style>{AW_CSS}</style>
+      <style>{AW_CSS + LEVEL_CSS}</style>
       <PlayHeader title={c.title} progress={c.solved(solved.size, total)} onExit={onExit} t={t} />
       <div className="wb-play-question aw-q">
-        <div className="aw-panel" dir={dirForLang(lang)}>
+        <LevelChip level={level} onChange={onLevel} lang={lang} />
+        <div className={`aw-panel${level === "easy" && pic ? " is-pic-first" : ""}`} dir={dirForLang(lang)}>
           {panelClue ? <span className="aw-panel-text" lang={wordLang} dir={dirForLang(wordLang)}><QText text={nq(panelClue)} skip={[entry.word]} /></span> : <span className="aw-panel-text">{pic ? c.picClue : c.tap}</span>}
           <span className="aw-panel-len">{entry.letters.length}</span>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           {pic && <img className="aw-pic" src={pic} alt="" width={96} height={96} draggable={false} />}
+          {sentence && <span className="pz-hintbox" lang={wordLang} dir={dirForLang(wordLang)}><small dir={dirForLang(lang)}>{lc.sentence}</small>{nq(sentence)}</span>}
         </div>
-        <div className="aw-grid" dir={rtl ? "rtl" : "ltr"} lang={wordLang} style={{ gridTemplateColumns: `repeat(${aw.cols}, 1fr)`, ["--cols" as string]: aw.cols }}>
+        <div className="aw-grid" dir={rtl ? "rtl" : "ltr"} lang={wordLang} style={{ gridTemplateColumns: `repeat(${aw.cols}, minmax(0, 1fr))`, ["--cols" as string]: aw.cols }}>
           {aw.cells.map((row, r) => row.map((ch, cc) => {
             const k = cellKey(r, cc);
             const slots = aw.clueCells.get(k);
@@ -261,14 +254,14 @@ const AW_CSS = `
 .aw-pic { width: 96px; height: 96px; border-radius: 14px; box-shadow: 0 8px 18px #0003; object-fit: cover; }
 .aw-grid { display: grid; gap: 2px; width: min(94vw, 520px); padding: 6px; border-radius: 14px; background: #e9e3d4; box-shadow: inset 0 2px 8px #0002; }
 .aw-void { aspect-ratio: 1; }
-.aw-cell { position: relative; aspect-ratio: 1; display: grid; place-items: center; padding: 0; border: 0; border-radius: 5px; background: #fffdf6; font-family: var(--wb-font-display, inherit); font-weight: 800; font-size: clamp(13px, calc(58vw / var(--cols)), 26px); color: #2b2418; line-height: 1; cursor: pointer; box-shadow: 0 1px 0 #0001; }
+.aw-cell { position: relative; aspect-ratio: 1; min-width: 0; min-height: 0; display: grid; place-items: center; padding: 0; border: 0; border-radius: 5px; background: #fffdf6; font-family: var(--wb-font-display, inherit); font-weight: 800; font-size: clamp(13px, calc(58vw / var(--cols)), 26px); color: #2b2418; line-height: 1; cursor: pointer; box-shadow: 0 1px 0 #0001; }
 .aw-cell.is-entry { background: #fff3c4; }
 .aw-cell.is-cursor { outline: 3px solid #f2b705; outline-offset: -3px; }
 .aw-cell.is-solved { background: #d1fae5; color: #065f46; }
 .aw-cell.is-shake { animation: aw-shake 0.45s; }
 @keyframes aw-shake { 20% { transform: translateX(-4px); } 40% { transform: translateX(4px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(3px); } }
 /* a clue cell: shaded, tiny text, the arrow in the corner nearest the word */
-.aw-clue { aspect-ratio: 1; display: grid; border-radius: 5px; background: #d6ccb6; overflow: hidden; }
+.aw-clue { aspect-ratio: 1; min-width: 0; min-height: 0; display: grid; border-radius: 5px; background: #d6ccb6; overflow: hidden; }
 .aw-clue.is-two { grid-template-rows: 1fr 1fr; }
 .aw-clue-part { position: relative; display: grid; place-items: center; padding: 2px 3px; border: 0; background: transparent; color: #3d2f17; cursor: pointer; min-height: 0; }
 .aw-clue.is-two .aw-clue-part + .aw-clue-part { border-top: 1px solid #b9ad92; }

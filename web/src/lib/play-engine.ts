@@ -55,6 +55,8 @@ export type PlayWord = {
   uiLang: string; // the UI lang the word was cached under, for IDB lookups
   /** The word whose picture to show, when the word itself is ambiguous. */
   picWord?: string;
+  /** The stored "in simple words" explanation of the first meaning, when the offline cache has it. */
+  simple?: string;
 };
 
 /** Notebook list shape returned by GET /api/notebook. */
@@ -185,6 +187,7 @@ export async function loadPlayWords(
         meaning: it.meaning,
         examples: allExamples,
         uiLang,
+        simple: result?.meanings?.[0]?.kidsExplanation?.explanation?.trim() || undefined,
       };
     }),
   );

@@ -14,7 +14,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { sfx } from "@/lib/game-sfx";
 import type { PlayWord } from "@/lib/play-engine";
 import { dirForLang, shuffle, wordLangOf } from "@/lib/play-engine";
-import { readKidsMode } from "@/lib/use-kids-mode";
 import { HEBREW_BANK } from "@/lib/learn/hebrew-bank";
 import { ENGLISH_BANK } from "@/lib/learn/english-bank";
 import { gridLetters, lineBetween, makeWordSearch, matchLine, type Cell, type PlacedWord } from "@/lib/puzzles/word-search";
@@ -22,6 +21,7 @@ import { useNiqqud } from "@/lib/niqqud-display";
 import { GameResult } from "./GameResult";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 import { QText } from "./QText";
+import { LEVEL_CSS, LevelChip, LevelChooser, usePuzzleLevel, type PuzzleLevel } from "./puzzle-levels";
 import { TTSButton } from "@/components/design/TTSButton";
 
 type Copy = { title: string; desc: string; prompt: string; found: (n: number, of: number) => string; hint: string; done: string; wordsToFind: string };
@@ -36,9 +36,9 @@ export const wordSearchCopy = (lang: string): Copy => COPY[lang] ?? COPY.en;
 type Item = { word: string; meaning: string; lang: string };
 
 /** Single words of one language from the pool (the language with the most), else the bank. */
-function pickItems(pool: PlayWord[], ui: string, maxLen: number, n: number): Item[] {
+function pickItems(pool: PlayWord[], ui: string, maxLen: number, n: number, bankOnly: boolean): Item[] {
   const groups = new Map<string, Item[]>();
-  for (const p of pool) {
+  for (const p of bankOnly ? [] : pool) {
     const w = p.word.trim();
     const l = wordLangOf(p);
     if (!/^[\p{L}֑-ׇ]+$/u.test(w) || (l !== "he" && l !== "en")) continue;
@@ -53,29 +53,36 @@ function pickItems(pool: PlayWord[], ui: string, maxLen: number, n: number): Ite
   // The bank of the UI language (English for every other UI), child-friendly words.
   const he = ui === "he";
   const bank: Item[] = he
-    ? HEBREW_BANK.filter((x) => !/[\s-]/.test(x.w)).map((x) => ({ word: x.w, meaning: "", lang: "he" }))
-    : ENGLISH_BANK.filter((x) => !/[\s'-]/.test(x.w)).map((x) => ({ word: x.w, meaning: ui === "ar" ? x.ar : ui === "ru" ? x.ru : ui === "he" ? x.he : "", lang: "en" }));
+    ? HEBREW_BANK.filter((x) => !/[\s-]/.test(x.w) && (!bankOnly || x.d <= 2)).map((x) => ({ word: x.w, meaning: "", lang: "he" }))
+    : ENGLISH_BANK.filter((x) => !/[\s'-]/.test(x.w) && (!bankOnly || x.d <= 2)).map((x) => ({ word: x.w, meaning: ui === "ar" ? x.ar : ui === "ru" ? x.ru : ui === "he" ? x.he : "", lang: "en" }));
   const fits = bank.filter((x) => { const k = gridLetters(x.word, x.lang === "he").length; return k >= 3 && k <= maxLen; });
   return shuffle([...best, ...shuffle(fits).slice(0, n)]).slice(0, n);
 }
 
 const COLORS = ["#0EA5A5", "#F59E0B", "#8B5CF6", "#EC4899", "#22C55E", "#3B82F6", "#EF4444", "#14B8A6", "#F97316", "#6366F1"];
 
-export function GameWordSearch({ pool, onExit, lang, t }: { pool: PlayWord[]; onExit: () => void; lang: string; t: PlayT }) {
+export function GameWordSearch(props: { pool: PlayWord[]; onExit: () => void; lang: string; t: PlayT }) {
+  const lv = usePuzzleLevel();
+  if (!lv.level) return <LevelChooser title={wordSearchCopy(props.lang).title} kind="search" suggested={lv.suggested} onPick={lv.choose} onExit={props.onExit} lang={props.lang} t={props.t} />;
+  return <WordSearchBoard key={lv.level} {...props} level={lv.level} onLevel={lv.reopen} />;
+}
+
+function WordSearchBoard({ pool, onExit, lang, t, level, onLevel }: { pool: PlayWord[]; onExit: () => void; lang: string; t: PlayT; level: PuzzleLevel; onLevel: () => void }) {
   const c = wordSearchCopy(lang);
   const { nq } = useNiqqud();
-  const [kids] = useState(() => readKidsMode());
-  const size = kids ? 8 : 10;
+  // easy: a small grid of short first words; medium: the kids grid; hard: the big grid, words backwards too
+  const size = level === "easy" ? 6 : level === "medium" ? 8 : 10;
+  const count = level === "easy" ? 4 : level === "medium" ? 6 : 8;
   const [seed, setSeed] = useState(0);
   // The pool as it was when the game opened: a notebook refresh mid-game must not redraw the grid.
   const [startPool] = useState(pool);
   const puzzle = useMemo(() => {
-    const items = pickItems(startPool, lang, size, kids ? 6 : 8);
+    const items = pickItems(startPool, lang, level === "easy" ? 4 : size, count, level === "easy");
     const rtl = (items[0]?.lang ?? (lang === "he" ? "he" : "en")) === "he";
-    const ws = makeWordSearch(items.map((x) => x.word), size, { rtl, backwards: !kids });
+    const ws = makeWordSearch(items.map((x) => x.word), size, { rtl, backwards: level === "hard" });
     const byWord = new Map(items.map((x) => [x.word, x]));
     return { ...ws, rtl, items: ws.placed.map((p) => byWord.get(p.word)!).filter(Boolean) };
-  }, [startPool, lang, size, kids, seed]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [startPool, lang, size, count, level, seed]); // eslint-disable-line react-hooks/exhaustive-deps
   const [found, setFound] = useState<Map<string, number>>(new Map()); // word → colour index
   const [path, setPath] = useState<Cell[]>([]);
   const [flash, setFlash] = useState<Item | null>(null);
@@ -148,14 +155,15 @@ export function GameWordSearch({ pool, onExit, lang, t }: { pool: PlayWord[]; on
   const inPath = new Set(path.map(([r, cc]) => `${r},${cc}`));
   return (
     <div className="wb-play-stage ws">
-      <style>{WS_CSS}</style>
+      <style>{WS_CSS + LEVEL_CSS}</style>
       <PlayHeader title={c.title} progress={c.found(found.size, total)} onExit={onExit} t={t} />
       <div className="wb-play-question ws-q">
+        <LevelChip level={level} onChange={onLevel} lang={lang} />
         <div className="wb-play-question-eyebrow">{c.prompt}</div>
         <div
           ref={gridRef}
           className="ws-grid"
-          style={{ gridTemplateColumns: `repeat(${size}, 1fr)` }}
+          style={{ gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))` }}
           dir="ltr"
           lang={wordLang}
           onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
