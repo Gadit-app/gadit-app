@@ -70,6 +70,7 @@ import { GameMeaningLens } from "@/components/play/GameMeaningLens";
 import { GameEtymologyArtist } from "@/components/play/GameEtymologyArtist";
 import { DuelHub } from "@/components/play/duel/DuelHub";
 import { GameSyllables, syllablesCopy } from "@/components/play/GameSyllables";
+import { GameWordSearch, wordSearchCopy } from "@/components/play/GameWordSearch";
 import { worldCardCopy } from "@/lib/world/world-card-i18n";
 import { catchCopy } from "@/app/catch/catch-i18n";
 import { setTesterGame } from "@/lib/tester";
@@ -3562,7 +3563,7 @@ function langNameIn(code: string, ui: string): string {
 /** Games that can open on one notebook word (/play?game=<id>&word=<w>). */
 const FOCUS_GAMES: GameId[] = ["flashcards", "flashdefs", "quiz", "memory", "anagram"];
 /** Every game has its own link, /play?game=<id> (Gadi 2026-11-02: to send one game to a parent). */
-const LINK_GAMES: string[] = ["quiz", "flashcards", "flashdefs", "truefalse", "fillblank", "context", "memory", "anagram", "speed", "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "syllables", "duel"];
+const LINK_GAMES: string[] = ["quiz", "flashcards", "flashdefs", "truefalse", "fillblank", "context", "memory", "anagram", "speed", "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "syllables", "wordsearch", "duel"];
 
 /** Games with a cover picture in public/play/<id>.webp (Gadi 2026-10-09).
  *  Add an id here once its picture is in place; others keep their icon. */
@@ -3936,6 +3937,23 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
           <path d="M4 15c0-2 1.5-3.5 3.5-3.5S11 13 11 15s-1.5 3-3.5 3S4 17 4 15z" />
           <path d="M13 11c0-2 1.5-3.5 3.5-3.5S20 9 20 11s-1.5 3-3.5 3S13 13 13 11z" />
           <path d="M9 6c0-1.2.9-2 2-2s2 .8 2 2-.9 2-2 2-2-.8-2-2z" />
+        </svg>
+      ),
+    },
+    {
+      // Word search (Gadi 2026-11-11, Osher's idea): the practice words hidden in
+      // a grid; the UI language's bank fills in when the notebook is small.
+      id: "wordsearch",
+      title: wordSearchCopy(lang).title,
+      desc: wordSearchCopy(lang).desc,
+      enabled: true,
+      accent: "lime",
+      category: "notebook",
+      kidsFriendly: true,
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="3" />
+          <path d="M9 3v18M15 3v18M3 9h18M3 15h18" />
         </svg>
       ),
     },
@@ -4364,6 +4382,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
           {stage.game === "fillblank" && <GameFillBlank {...props} />}
           {stage.game === "context" && <GameContextDetective {...props} kids={kidsMode} />}
           {stage.game === "memory" && <GameMemory {...props} />}
+          {stage.game === "wordsearch" && <GameWordSearch {...props} />}
           {stage.game === "anagram" && <GameAnagram {...props} />}
           {stage.game === "speed" && <GameSpeed {...props} />}
         </NiqqudProvider>
