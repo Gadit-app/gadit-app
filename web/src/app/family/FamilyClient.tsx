@@ -3959,6 +3959,27 @@ const FAM_DASH_CSS = `
   grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
   gap: 18px;
 }
+/* "No child connected yet" card (Gadi 2026-10-12); it had no styles until
+   Eyal's TestFlight screenshot on 2026-11-11 showed its three lines run together. */
+.fam-connect-card {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  background: #fff;
+  border: 1px solid rgba(31,41,55,0.09);
+  border-radius: 22px;
+  padding: 22px 24px;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 24px rgba(31,41,55,0.06);
+  border-inline-start: 5px solid var(--teal, #0E8A85);
+}
+.fam-connect-card b { font-size: 18px; font-weight: 800; color: var(--ink, #0B1220); text-wrap: balance; }
+.fam-connect-card span { font-size: 15px; line-height: 1.55; color: var(--ink-soft, #4B5563); max-width: 48ch; }
+.fam-connect-go {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px; border-radius: 999px;
+  background: var(--teal, #0E8A85); color: #fff; font-weight: 700; text-decoration: none;
+}
+.fam-connect-go:hover { filter: brightness(1.05); }
 .fam-dash-card {
   background: #fff;
   border: 1px solid rgba(31,41,55,0.09);
