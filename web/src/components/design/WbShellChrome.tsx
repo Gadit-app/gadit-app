@@ -45,6 +45,7 @@ import { useHref } from "@/lib/href";
 import { isPwaInstalledOrDone } from "@/components/InstallPwaPrompt";
 import { requestInstallOpen } from "@/lib/install-bus";
 import { isInAppBrowser } from "@/lib/in-app-browser";
+import { isIosApp } from "@/lib/native-app";
 import { track } from "@/lib/track";
 import { practiceNav } from "@/lib/practice-i18n";
 import { subjectsLangFor, SUBJECTS_NAV } from "@/lib/subjects-langs";
@@ -479,7 +480,8 @@ export function WbShellBurger({
     const ua = navigator.userAgent.toLowerCase();
     const isMobile = /iphone|ipod|ipad|android/.test(ua) ||
       (/mac/.test(ua) && navigator.maxTouchPoints > 1);
-    setShowInstall(isMobile && !isPwaInstalledOrDone() && !isInAppBrowser());
+    // Never inside the native iOS app: it IS the installed app (App Review, 2026-11-11).
+    setShowInstall(isMobile && !isPwaInstalledOrDone() && !isInAppBrowser() && !isIosApp());
   }, []);
   const burgerRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
