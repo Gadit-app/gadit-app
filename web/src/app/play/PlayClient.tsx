@@ -69,6 +69,7 @@ import { GameIdiomDecoder } from "@/components/play/GameIdiomDecoder";
 import { GameMeaningLens } from "@/components/play/GameMeaningLens";
 import { GameEtymologyArtist } from "@/components/play/GameEtymologyArtist";
 import { DuelHub } from "@/components/play/duel/DuelHub";
+import { GameSyllables, syllablesCopy } from "@/components/play/GameSyllables";
 import { worldCardCopy } from "@/lib/world/world-card-i18n";
 import { catchCopy } from "@/app/catch/catch-i18n";
 import { setTesterGame } from "@/lib/tester";
@@ -3561,7 +3562,7 @@ function langNameIn(code: string, ui: string): string {
 /** Games that can open on one notebook word (/play?game=<id>&word=<w>). */
 const FOCUS_GAMES: GameId[] = ["flashcards", "flashdefs", "quiz", "memory", "anagram"];
 /** Every game has its own link, /play?game=<id> (Gadi 2026-11-02: to send one game to a parent). */
-const LINK_GAMES: string[] = ["quiz", "flashcards", "flashdefs", "truefalse", "fillblank", "context", "memory", "anagram", "speed", "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "duel"];
+const LINK_GAMES: string[] = ["quiz", "flashcards", "flashdefs", "truefalse", "fillblank", "context", "memory", "anagram", "speed", "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "syllables", "duel"];
 
 /** Games with a cover picture in public/play/<id>.webp (Gadi 2026-10-09).
  *  Add an id here once its picture is in place; others keep their icon. */
@@ -3919,6 +3920,25 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
      *  is on, the menu shows only these games. */
     kidsFriendly?: boolean;
   }> = [
+    {
+      // Reading in syllables (Gadi 2026-11-11): for a child who knows the letters
+      // and vowel signs but cannot blend them yet. Hebrew bank words, so it needs
+      // no notebook; shown to the Hebrew UI.
+      id: "syllables",
+      title: syllablesCopy(lang).title,
+      desc: syllablesCopy(lang).desc,
+      enabled: lang === "he",
+      accent: "amber",
+      category: "notebook",
+      kidsFriendly: true,
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 15c0-2 1.5-3.5 3.5-3.5S11 13 11 15s-1.5 3-3.5 3S4 17 4 15z" />
+          <path d="M13 11c0-2 1.5-3.5 3.5-3.5S20 9 20 11s-1.5 3-3.5 3S13 13 13 11z" />
+          <path d="M9 6c0-1.2.9-2 2-2s2 .8 2 2-.9 2-2 2-2-.8-2-2z" />
+        </svg>
+      ),
+    },
     {
       id: "flashcards",
       title: flashCopy(lang).wordsTitle,
@@ -4312,6 +4332,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
       idiom: <GameIdiomDecoder {...curatedProps} />,
       lens: <GameMeaningLens {...curatedProps} />,
       artist: <GameEtymologyArtist {...curatedProps} />,
+      syllables: <GameSyllables {...curatedProps} />,
     };
     if (stage.game in CURATED) {
       return (

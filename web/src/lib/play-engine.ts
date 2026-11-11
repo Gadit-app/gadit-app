@@ -26,6 +26,7 @@ export type GameId =
   | "memory"
   | "anagram"
   | "speed"
+  | "syllables" // Reading in syllables: sound out a Hebrew bank word stone by stone (no notebook)
   // ─── Curated-content games (no notebook dependency) ─────────
   // These run on hand-picked content from web/src/lib/play-content/
   // rather than the user's notebook. Always enabled — never gated on
@@ -64,6 +65,7 @@ type NotebookItem = {
  *  Curated-content games (twin, time) use 0 — they ship with their own
  *  content and don't depend on the notebook. */
 export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
+  syllables: 0,
   quiz: 4,
   flashcards: 1,
   flashdefs: 1,
@@ -88,6 +90,7 @@ export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
 /** How many rounds per session. Curated games pick from their content
  *  pool; notebook games scale down if the pool is smaller. */
 export const SESSION_SIZE: Record<GameId, number> = {
+  syllables: 6,
   quiz: 5,
   flashcards: 10,
   flashdefs: 10,
