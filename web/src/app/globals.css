@@ -11863,6 +11863,9 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
 .wordbook .wb-hw-tiles .wb-play-card.has-cover .wb-play-card-title { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 @media (min-width: 600px) { .wordbook .wb-hw-tiles .wb-play-card.has-cover .wb-play-card-text { min-height: 84px; } }
 .wordbook .wb-hw-tiles .wb-play-card:disabled { cursor: progress; }
+/* Getting ready for a test: the one question above the tiles. */
+.wordbook .wb-learn-home .wb-test-q { margin: 6px 0 14px; font-size: 20px; font-weight: 800; text-align: center !important; color: var(--ink, #0B1220); }
+@media (min-width: 900px) { .wordbook .wb-play-grid.wb-test-tiles { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; } }
 /* What opens from a tile (all the lessons, choosing the language): one full
    row under the tiles. */
 .wordbook .wb-play-grid li.wb-hw-tile-row { grid-column: 1 / -1; order: 99; flex-direction: column; align-items: center; gap: 14px; margin-top: 18px; }

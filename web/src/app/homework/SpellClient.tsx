@@ -10,6 +10,8 @@
  * dictations). Finger-trace mode is a planned phase 2.
  */
 
+import { testKindsCopy } from "@/lib/test-kinds-i18n";
+import { subjectsLangFor, SUBJECTS_NAV } from "@/lib/subjects-langs";
 import { AppIntentPing } from "@/components/AppIntentPing";
 import { WaitText, WaitDots } from "@/components/WaitText";
 import { GaditIcon } from "@/components/design/GaditIcon";
@@ -533,8 +535,11 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
   // its own view; the browser's back button returns to the sections.
   type HwView = "hub" | "test" | "learn" | "add" | "dict";
   const [hw, setHwState] = useState<HwView>("hub");
+  // Getting ready for a test: first which test (the tiles), then the list box.
+  const [testKind, setTestKind] = useState<null | "list">(null);
   const setHw = useCallback((v: HwView) => {
     setHwState(v);
+    if (v !== "test") setTestKind(null);
     try {
       const u = new URL(window.location.href);
       if (v === "hub") u.searchParams.delete("v"); else u.searchParams.set("v", v);
@@ -1289,7 +1294,7 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
   // looks like every other tool's.
   return (
     // Learning words is a grid of tiles as wide as the games' grid (four in a row).
-    <ToolPage active={navKey} width={phase === "pick" && !setupFor && ((hw === "learn" && !adult) || (hw === "hub" && adult && listTools)) ? 880 : 640} title={phase !== "pick" || hw === "hub" ? (adult ? pr.nav : hc.title) : setupFor || hw === "dict" ? (drill === "pic" ? pc.name : drill === "pick" ? dc.pickName : adult ? pr.dict : dc.name) : hw === "add" ? ic.add : adult ? (hw === "learn" ? pr.lang : pr.test) : hc[hw]} sub={phase === "pick" && hw === "hub" ? (adult ? pr.sub : hc.sub) : undefined}>
+    <ToolPage active={navKey} width={phase === "pick" && !setupFor && ((hw === "learn" && !adult) || (hw === "test" && !testKind) || (hw === "hub" && adult && listTools)) ? 880 : 640} title={phase !== "pick" || hw === "hub" ? (adult ? pr.nav : hc.title) : setupFor || hw === "dict" ? (drill === "pic" ? pc.name : drill === "pick" ? dc.pickName : adult ? pr.dict : dc.name) : hw === "add" ? ic.add : adult ? (hw === "learn" ? pr.lang : pr.test) : hc[hw]} sub={phase === "pick" && hw === "hub" ? (adult ? pr.sub : hc.sub) : undefined}>
       <div style={{ fontFamily: '"Rubik", system-ui, sans-serif' }}>
         {phase === "pick" && hw === "hub" && adult && (
           <div className="wb-hw-hub">
@@ -1408,6 +1413,8 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
             ? { label: here, go: () => setPhase("pick") }
             : setupFor
             ? { label: here, go: () => setSetupFor(null) }
+            : hw === "test" && testKind
+              ? { label: here, go: () => setTestKind(null) }
             : hw === "dict" && !adult
               ? { label: hc.learn, go: () => setHw("learn") }
               : { label: all, go: () => setHw("hub") };
@@ -1726,7 +1733,55 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
         )}
 
         {/* Getting ready for a test: paste or photograph the word list. */}
-        {phase === "pick" && !setupFor && hw === "test" && (
+        {/* Which test? (Gadi 2026-11-12, after the AI panel): five tiles with
+            pictures, each one opens the tool that fits that test. */}
+        {phase === "pick" && !setupFor && hw === "test" && !testKind && (
+          <div className="wb-learn-home">
+            <h2 className="wb-test-q">{testKindsCopy(lang).q}</h2>
+            <ul className="wb-play-grid wb-hw-tiles wb-test-tiles">
+              <li>
+                <button type="button" className="wb-play-card has-cover wb-play-cat-precision" onClick={() => { setDrill("spell"); setHw("dict"); }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="wb-play-card-cover" src="/play/hw-dict.webp" alt="" width={720} height={480} />
+                  <span className="wb-play-card-text"><span className="wb-play-card-title">{dc.name}</span></span>
+                </button>
+              </li>
+              {lang !== "en" && (
+                <li>
+                  <button type="button" className="wb-play-card has-cover wb-play-cat-notebook" onClick={() => setTestKind("list")}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img className="wb-play-card-cover" src="/play/hw-test-english.webp" alt="" width={720} height={480} />
+                    <span className="wb-play-card-text"><span className="wb-play-card-title">{englishName}</span></span>
+                  </button>
+                </li>
+              )}
+              <li>
+                <Link href={href(`/read?from=${adult ? "practice" : "homework"}`)} className="wb-play-card has-cover wb-play-cat-origin">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="wb-play-card-cover" src="/play/hw-read.webp" alt="" width={720} height={480} />
+                  <span className="wb-play-card-text"><span className="wb-play-card-title">{adult ? pr.read : hc.read}</span></span>
+                </Link>
+              </li>
+              {subjectsLangFor(lang) && (
+                <li>
+                  <Link href={href("/subjects")} className="wb-play-card has-cover wb-play-cat-structure">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img className="wb-play-card-cover" src="/play/hw-test-subject.webp" alt="" width={720} height={480} />
+                    <span className="wb-play-card-text"><span className="wb-play-card-title">{SUBJECTS_NAV[subjectsLangFor(lang)!]}</span></span>
+                  </Link>
+                </li>
+              )}
+              <li>
+                <button type="button" className="wb-play-card has-cover wb-play-cat-origin" onClick={() => setTestKind("list")}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="wb-play-card-cover" src="/play/hw-test.webp" alt="" width={720} height={480} />
+                  <span className="wb-play-card-text"><span className="wb-play-card-title">{testKindsCopy(lang).other}</span></span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        )}
+        {phase === "pick" && !setupFor && hw === "test" && testKind && (
           <>
             <div style={{ marginTop: 4, marginBottom: 4, background: "var(--surface,#fff)", border: "1px solid var(--hairline,#E5E7EB)", borderRadius: 16, padding: "16px 16px 14px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>

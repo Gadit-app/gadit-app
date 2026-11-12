@@ -3581,6 +3581,11 @@ const GAME_COVERS = new Set<GameId>([
   "syllables", "wheel", "wordsearch", "crossword", "arrowword",
 ]);
 
+/** Games whose cover has a second drawing for children (Gadi 2026-11-12: the
+ *  library-style covers stay for adults; a child sees a bright one). */
+const KIDS_COVERS = new Set<GameId>(["twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist"]);
+const coverSrc = (id: GameId, kid: boolean) => `/play/${kid && KIDS_COVERS.has(id) ? "kids/" : ""}${id}.webp?v=${COVER_V}`;
+
 /** A pool that is sure to include the focus word: the word first, then
  *  random others, sized to one session so the game's builder uses them all. */
 const FOCUS_POOLS = new WeakMap<PlayWord[], Map<string, PlayWord[]>>();
@@ -4395,7 +4400,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
   if (stage.kind === "duel") {
     const duelGames = games
       .filter((g) => g.enabled && DUEL_GAMES.has(g.id) && (!kidsMode || g.kidsFriendly))
-      .map((g) => ({ id: g.id, title: g.title, cover: `/play/${g.id}.webp?v=${COVER_V}`, build: () => buildDuelFor(g.id) }));
+      .map((g) => ({ id: g.id, title: g.title, cover: coverSrc(g.id, kidsMode || isKidPlayer), build: () => buildDuelFor(g.id) }));
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
         <WorldStage game="duel">
@@ -4685,7 +4690,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                       >
                         {GAME_COVERS.has(g.id) ? (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img className="wb-play-card-cover" src={`/play/${g.id}.webp?v=${COVER_V}`} alt="" loading="lazy" width={720} height={480} />
+                          <img className="wb-play-card-cover" src={coverSrc(g.id, kidsMode || isKidPlayer)} alt="" loading="lazy" width={720} height={480} />
                         ) : (
                           <span className="wb-play-card-icon">{g.icon}</span>
                         )}
