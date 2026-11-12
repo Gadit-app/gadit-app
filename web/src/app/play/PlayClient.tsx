@@ -3605,7 +3605,7 @@ function focusPool(pool: PlayWord[], word: string, game: GameId): PlayWord[] {
 /** openingLesson: the page was opened to play a lesson (?lesson=), so it shows
  *  a loading screen, not the games menu, until the lesson arrives (Gadi
  *  2026-10-17: "Continue" flashed the games and then jumped). */
-export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } = {}) {
+export function PlayPage({ openingLesson = false, openingGame = false }: { openingLesson?: boolean; openingGame?: boolean } = {}) {
   const { user, plan, planReady, loading, promptLogin, familyRole, kidsAccess, tester } = useAuth();
   const isKidPlayer = familyRole === "kid";
   const { lang, dir } = useLang();
@@ -3616,6 +3616,10 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
   type Stage = { kind: "menu" } | { kind: "lesson"; lesson: Lesson; learnLang: string; preReader?: boolean } | { kind: "playing"; game: GameId } | { kind: "duel"; code?: string; preset?: { title: string; questions: DuelQuestion[] } };
   const [stage, setStage] = useState<Stage>({ kind: "menu" });
   const [lessonPending, setLessonPending] = useState(openingLesson);
+  // A game's own link (/play?game=...): the same quiet loading screen until the
+  // game opens, instead of the games menu flashing by for a few seconds on every
+  // refresh (Gadi 2026-11-12).
+  const [gamePending, setGamePending] = useState(openingGame);
   // The tester's 🧪 note names the game on screen (Gadi 2026-11-02).
   useEffect(() => { setTesterGame(stage.kind === "playing" ? stage.game : stage.kind === "menu" ? "play-menu" : stage.kind); }, [stage]);
   // leaving /play: the next page names its own game (notes from /catch said "play-menu")
@@ -3631,7 +3635,9 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
       const w = (q.get("word") ?? "").trim();
       if (g && w && FOCUS_GAMES.includes(g)) setFocus({ game: g, word: w });
       else if (g && LINK_GAMES.includes(g)) setLinkGame(g);
-    } catch { /* no URL */ }
+      // not a game we open by link (or a word link, which opens on its own): show the page
+      if (!(g && !w && LINK_GAMES.includes(g))) setGamePending(false);
+    } catch { setGamePending(false); }
   }, []);
   const [pool, setPool] = useState<PlayWord[] | null>(null);
   const [fetchError, setFetchError] = useState<string>("");
@@ -3875,12 +3881,15 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
     })();
   }, [user, lang]);
   // Signed out: there is no lesson to open, show the page.
-  useEffect(() => { if (!loading && !user) setLessonPending(false); }, [loading, user]);
+  useEffect(() => { if (!loading && !user) { setLessonPending(false); setGamePending(false); } }, [loading, user]);
+  // Never hold the page for long: if the words did not come, the menu shows.
+  useEffect(() => { if (!gamePending) return; const tm = setTimeout(() => setGamePending(false), 12000); return () => clearTimeout(tm); }, [gamePending]);
   // A game's own link: open it once the words have loaded.
   const linkStartedRef = useRef(false);
   useEffect(() => {
     if (!linkGame || linkStartedRef.current || pool === null) return;
     linkStartedRef.current = true;
+    setGamePending(false);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (linkGame === "duel") setStage({ kind: "duel" });
     else setStage({ kind: "playing", game: linkGame as GameId });
@@ -4344,7 +4353,7 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
   }, [playingGame, isPaid, lang, gamePool, kidsMode, isKidPlayer, playingTitle]);
 
   // ─── A lesson from workbook pages (Gadi 2026-10-11) ─────────────
-  if (stage.kind === "menu" && lessonPending) {
+  if (stage.kind === "menu" && (lessonPending || gamePending)) {
     return (
       <div className={`wordbook wb-play-page${isKidPlayer ? " wb-kid-area" : ""}${kidsMode ? " is-kids-mode" : ""}`} dir={dir}>
         <div className="wb-play-loading"><WaitDots className="gd-wait-big" /></div>

@@ -22,6 +22,7 @@ export function generateMetadata(): Promise<Metadata> {
 
 export default async function PlayRoute({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   // A lesson link (/play?lesson=...) opens on a loading screen, not the games menu.
-  const { lesson } = await searchParams;
-  return <PlayPage openingLesson={!!lesson} />;
+  const { lesson, game, word } = await searchParams;
+  // A game link (/play?game=...) opens on the same loading screen, so a refresh inside a game does not show the menu first.
+  return <PlayPage openingLesson={!!lesson} openingGame={typeof game === "string" && !!game && !word} />;
 }
