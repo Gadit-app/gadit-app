@@ -25,6 +25,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { syntheticUidFor, isParentRole, MemberRole } from "@/lib/family";
 import { requestIp, limitCount, limitBump } from "@/lib/rate-limit";
+import { planForFamilyMember } from "@/lib/family-plan-sync";
 
 const IP_FAILS_MAX = 10;
 const IP_WINDOW_SEC = 15 * 60;
@@ -87,13 +88,15 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Ensure users/{syntheticUid} exists with plan:"deep" so existing
-    // feature gates (notebook, kids mode, quizzes) pass for this member.
+    // The member's plan follows the family owner's (lib/family-plan-sync.ts):
+    // the paid features pass for a paying family, and a family nobody pays
+    // for gets Basic. null = the member has a plan of their own; keep it.
+    const memberPlan = await planForFamilyMember(familyId, syntheticUid);
     const userRef = db.collection("users").doc(syntheticUid);
     const userSnap = await userRef.get();
     if (!userSnap.exists) {
       await userRef.set({
-        plan: "deep",
+        plan: memberPlan ?? "basic",
         familyId,
         memberId,
         memberRole: member.role,
@@ -101,11 +104,8 @@ export async function POST(req: NextRequest) {
         createdAt: new Date().toISOString(),
       });
     } else {
-      // Member's feature plan is governed by the family subscription,
-      // so we always reset to "deep" on re-pair. If the family's
-      // subscription lapses, downstream banner code handles UX.
       await userRef.set(
-        { plan: "deep", familyId, memberId, memberRole: member.role, familyRole: role },
+        { ...(memberPlan ? { plan: memberPlan, planFromFamily: true } : {}), familyId, memberId, memberRole: member.role, familyRole: role },
         { merge: true }
       );
     }

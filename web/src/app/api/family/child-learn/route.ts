@@ -1,3 +1,4 @@
+import { ownMemberUid } from "@/lib/family";
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { isLearnLang, learnTargets, type Reads } from "@/lib/learn/engine";
@@ -33,9 +34,10 @@ export async function POST(req: NextRequest) {
   const member = (await fam.collection("members").doc(memberId).get()).data() as { userId?: string | null; role?: string } | undefined;
   if (!member) return NextResponse.json({ error: "not_found" }, { status: 404 });
   if (member.role === "father" || member.role === "mother") return NextResponse.json({ error: "not_a_child" }, { status: 400 });
-  if (!member.userId) return NextResponse.json({ error: "not_linked" }, { status: 409 });
+  const childUid = ownMemberUid(user.userId, member.userId);
+  if (!childUid) return NextResponse.json({ error: "not_linked" }, { status: 409 });
 
-  const ref = db.collection("users").doc(member.userId);
+  const ref = db.collection("users").doc(childUid);
   const childUi = ((await ref.get()).get("uiLang") as string | undefined) || (typeof b.ui === "string" ? b.ui.slice(0, 8) : "he");
   const lang = b.lang === null ? null : isLearnLang(b.lang) ? b.lang : undefined;
   if (lang === undefined) return NextResponse.json({ error: "lang_required" }, { status: 400 });

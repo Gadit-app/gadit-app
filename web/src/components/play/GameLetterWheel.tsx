@@ -178,6 +178,9 @@ export function GameLetterWheel({ onExit, lang, t }: { onExit: () => void; lang:
   const [misses, setMisses] = useState(0);
   const [done, setDone] = useState(false);
   const alive = useRef(true);
+  // Set when the child turns the microphone off, so a listen that was cut by
+  // that tap does not come back and say "we did not hear you".
+  const micOff = useRef(false);
   useEffect(() => { alive.current = true; return () => { alive.current = false; }; }, []);
 
 
@@ -200,14 +203,14 @@ export function GameLetterWheel({ onExit, lang, t }: { onExit: () => void; lang:
   const hear = async () => {
     setPhase("listening");
     const clip = await listen();
-    if (!alive.current) return;
+    if (!alive.current || micOff.current) return;
     if (!clip || !user) { setPhase("silent"); return; }
     setPhase("checking");
     try {
       const fd = new FormData(); fd.append("audio", clip); fd.append("want", want);
       const r = await fetch("/api/play/say-vowel", { method: "POST", headers: { Authorization: `Bearer ${await user.getIdToken()}` }, body: fd });
       if (!alive.current) return;
-      if (!r.ok) { setMic(false); setPhase("self"); return; } // no ear right now: the child checks themselves
+      if (!r.ok) { closeEar(); setMic(false); setPhase("self"); return; } // no ear right now: the child checks themselves
       const j = (await r.json()) as { ok?: boolean; vowel?: Vowel | null };
       if (j.ok) {
         setScore((n) => n + 1);
@@ -264,12 +267,14 @@ export function GameLetterWheel({ onExit, lang, t }: { onExit: () => void; lang:
   const again = () => { stopSpeech(); setPhase("say"); };
   const toggleMic = async () => {
     if (mic) {
+      micOff.current = true;
       cancelEar(); closeEar(); setMic(false);
       try { localStorage.setItem(MODE_KEY, "off"); } catch { /* this visit */ }
       if (land && phase !== "ready" && phase !== "spinning") setPhase("self");
       return;
     }
     if (await openEar()) {
+      micOff.current = false;
       setMic(true);
       try { localStorage.removeItem(MODE_KEY); } catch { /* this visit */ }
       if (land && (phase === "self" || phase === "selfHeard")) setPhase("say");

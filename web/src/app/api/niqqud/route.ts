@@ -12,6 +12,7 @@
  *
  * Auth: any signed-in user (a light gate so the Dicta proxy isn't public).
  */
+import { limitBump } from "@/lib/rate-limit";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
@@ -129,16 +130,20 @@ export async function POST(req: NextRequest) {
   const authHeader = req.headers.get("authorization") || "";
   const idToken = authHeader.toLowerCase().startsWith("bearer ") ? authHeader.slice(7).trim() : "";
   if (!idToken) return NextResponse.json({ error: "login_required" }, { status: 401 });
+  let uid = "";
   try {
-    await getAdminAuth().verifyIdToken(idToken);
+    uid = (await getAdminAuth().verifyIdToken(idToken)).uid;
   } catch {
     return NextResponse.json({ error: "login_required" }, { status: 401 });
   }
+  // A ceiling per account per day, far above real use: a signed-in script
+  // must not be able to run the model without end (night QA 2026-11-13).
+  if ((await limitBump("niqqud", uid, 86400)) > 2000) return NextResponse.json({ error: "rate_limited" }, { status: 429 });
 
   let texts: string[] = [];
   try {
     const b = (await req.json()) as { texts?: unknown };
-    if (Array.isArray(b.texts)) texts = b.texts.filter((x): x is string => typeof x === "string").slice(0, 40);
+    if (Array.isArray(b.texts)) texts = b.texts.filter((x): x is string => typeof x === "string").slice(0, 40).map((x) => x.slice(0, 3000));
   } catch {
     return NextResponse.json({ error: "bad_body" }, { status: 400 });
   }

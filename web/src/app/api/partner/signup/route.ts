@@ -15,6 +15,7 @@
 import { PAY_ORIGIN } from "@/lib/pay-url";
 import { NextRequest, NextResponse } from "next/server";
 import { sendMail } from "@/lib/mail";
+import { limitBump, requestIp } from "@/lib/rate-limit";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { sendPartnerWelcome } from "@/lib/partner-email";
 import {
@@ -45,6 +46,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "invalid_email" }, { status: 400 });
     }
 
+    // Each call sends an email, so one address cannot be used to flood others.
+    if ((await limitBump("partner-signup", requestIp(req), 3600)) > 8) {
+      return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+    }
+
     const db = getAdminDb();
 
     // Idempotent by email — return the existing partner instead of a dup.
@@ -56,11 +62,11 @@ export async function POST(req: NextRequest) {
     if (!existing.empty) {
       const p = { id: existing.docs[0].id, ...(existing.docs[0].data() as Omit<Partner, "id">) };
       await sendPartnerWelcome(p, lang);
-      return NextResponse.json({
-        code: p.code,
-        dashboardUrl: `${PAY_ORIGIN}/partner/dashboard?t=${p.dashboardToken}`,
-        existing: true,
-      });
+      // The dashboard link is the partner's only credential (it shows their
+      // earnings and sets the payout address), so for an email that already
+      // has an account it goes ONLY to that inbox, never back to whoever
+      // typed the address (night QA 2026-11-13). The code is public anyway.
+      return NextResponse.json({ code: p.code, existing: true });
     }
 
     // Mint a unique code (retry on the vanishing chance of collision).
@@ -107,7 +113,7 @@ export async function POST(req: NextRequest) {
           from: "Gadit <notify@gadit.app>",
           to: notifyTo,
           subject: `🤝 New partner: ${name || email}`,
-          html: `<p>New Gadit partner joined.</p><p><b>Name:</b> ${name || "(none)"}<br/><b>Email:</b> ${email}<br/><b>Code:</b> ${code}<br/><b>Audience:</b> ${(audience || "(none)").replace(/</g, "&lt;")}</p>`,
+          html: `<p>New Gadit partner joined.</p><p><b>Name:</b> ${(name || "(none)").replace(/</g, "&lt;")}<br/><b>Email:</b> ${email.replace(/</g, "&lt;")}<br/><b>Code:</b> ${code}<br/><b>Audience:</b> ${(audience || "(none)").replace(/</g, "&lt;")}</p>`,
         });
       }
     } catch { /* non-blocking */ }

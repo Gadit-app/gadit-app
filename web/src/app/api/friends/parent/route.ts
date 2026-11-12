@@ -1,3 +1,4 @@
+import { ownMemberUid } from "@/lib/family";
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { friendshipOf, friendshipsOf, isParentOf, pairId, profileOf, uidOf } from "@/lib/world/friends-server";
@@ -23,8 +24,9 @@ async function kidsOf(caller: string): Promise<string[]> {
   const snap = await db.collection("families").doc(familyId).collection("members").get();
   return snap.docs
     .map((d) => d.data() as { role?: string; userId?: string | null })
-    .filter((m) => (m.role === "boy" || m.role === "girl") && m.userId)
-    .map((m) => m.userId as string);
+    .filter((m) => m.role === "boy" || m.role === "girl")
+    .map((m) => ownMemberUid(familyId, m.userId))
+    .filter((u): u is string => !!u);
 }
 
 export async function GET(req: NextRequest) {

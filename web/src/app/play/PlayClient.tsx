@@ -4577,7 +4577,10 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
             // curated games with kids content join them.
             const sectionGames = games.filter(
               // Testers see every game, Kids Mode too (Gadi 2026-11-02).
-              (g) => g.category === section.id && (!kidsMode || g.kidsFriendly || tester),
+              (g) => g.category === section.id && (!kidsMode || g.kidsFriendly || tester)
+                // The two Hebrew reading games are not offered in another
+                // language at all; they used to sit there as "Coming soon".
+                && !((g.id === "syllables" || g.id === "wheel") && lang !== "he"),
             );
             if (sectionGames.length === 0) return null;
             // Notebook section always shows now — the effectivePool

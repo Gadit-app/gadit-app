@@ -1,3 +1,4 @@
+import { limitBump } from "@/lib/rate-limit";
 import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
@@ -79,6 +80,9 @@ export async function POST(req: NextRequest) {
   const count = d.gameIdeaDay === day ? Number(d.gameIdeaCount ?? 0) : 0;
   if (count >= DAILY_MAX) return NextResponse.json({ error: "daily_limit" }, { status: 429 });
 
+  // Every recording is transcribed (paid) before it counts as an idea, so the
+  // attempts have a ceiling of their own.
+  if (audio && (await limitBump("game-idea-try", uid, 86400)) > 30) return NextResponse.json({ error: "daily_limit" }, { status: 429 });
   const transcript = audio ? await transcribe(audio, lang, user.plan) : "";
   const idea = [text, transcript].filter(Boolean).join("\n");
   // A recording nobody could make out: the child is asked to say it again.

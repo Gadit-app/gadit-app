@@ -80,7 +80,10 @@ export function GameIdea({ lang, dir }: { lang: string; dir: "ltr" | "rtl" }) {
     if (timer.current) { clearInterval(timer.current); timer.current = null; }
     stream.current?.getTracks().forEach((t) => t.stop()); stream.current = null;
   };
-  useEffect(() => () => { try { rec.current?.stop(); } catch { /* not recording */ } release(); }, []);
+  // Closed while the browser was still asking for the microphone: the answer
+  // must not start a recording nobody can see.
+  const gone = useRef(false);
+  useEffect(() => { gone.current = false; return () => { gone.current = true; try { rec.current?.stop(); } catch { /* not recording */ } release(); }; }, []);
 
   const stop = () => { try { rec.current?.stop(); } catch { /* not recording */ } };
   const start = async () => {
@@ -89,6 +92,7 @@ export function GameIdea({ lang, dir }: { lang: string; dir: "ltr" | "rtl" }) {
     try {
       stream.current = await navigator.mediaDevices.getUserMedia({ audio: true });
     } catch { setNote(c.noMic); return; }
+    if (gone.current) { release(); return; }
     const mime = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4"].find((m) => MediaRecorder.isTypeSupported?.(m)) ?? "";
     let r: MediaRecorder;
     try { r = new MediaRecorder(stream.current, mime ? { mimeType: mime } : undefined); } catch { release(); setNote(c.noMic); return; }

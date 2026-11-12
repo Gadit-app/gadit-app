@@ -1,3 +1,4 @@
+import { ownMemberUid } from "@/lib/family";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { type RankKey } from "@/lib/gamification";
 import { getRankState } from "@/lib/rank-points";
@@ -135,7 +136,7 @@ export async function loadFamilyProgress(ownerUid: string): Promise<FamilyProgre
           rankKey: "scout",
           weekList: [],
         };
-        const uid = m.userId;
+        const uid = ownMemberUid(ownerUid, m.userId);
         if (!uid) return base;
         const lr = await learningOf(uid).catch(() => null);
         base.learning = lr?.learning ?? null;

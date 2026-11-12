@@ -1,3 +1,4 @@
+import { limitBump, requestIp } from "@/lib/rate-limit";
 import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminDb } from "@/lib/firebase-admin";
@@ -44,6 +45,12 @@ export async function POST(req: NextRequest) {
   }
   if (!word) {
     return NextResponse.json({ error: "no_word" }, { status: 400 });
+  }
+  // A class code is on the classroom screen for everyone to see, so the log
+  // has a ceiling per address and per class, well above a full computer room
+  // (night QA 2026-11-13). Over it, the search still works; it is not logged.
+  if ((await limitBump("class-log-ip", requestIp(req), 3600)) > 3000 || (await limitBump("class-log", code, 3600)) > 5000) {
+    return NextResponse.json({ ok: true, logged: false });
   }
 
   const db = getAdminDb();

@@ -19,6 +19,7 @@
  * (lang, text) so re-taps don't re-bill. Auth: any signed-in user (the Reader is
  * a paid feature; this is a light gate so the endpoint isn't public). Gadi 2026-09-09.
  */
+import { limitBump } from "@/lib/rate-limit";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
@@ -107,11 +108,15 @@ export async function POST(req: NextRequest) {
   const authHeader = req.headers.get("authorization") || "";
   const idToken = authHeader.toLowerCase().startsWith("bearer ") ? authHeader.slice(7).trim() : "";
   if (!idToken) return NextResponse.json({ error: "login_required" }, { status: 401 });
+  let uid = "";
   try {
-    await getAdminAuth().verifyIdToken(idToken);
+    uid = (await getAdminAuth().verifyIdToken(idToken)).uid;
   } catch {
     return NextResponse.json({ error: "login_required" }, { status: 401 });
   }
+  // A ceiling per account per day, far above real use: a signed-in script
+  // must not be able to run the model without end (night QA 2026-11-13).
+  if ((await limitBump("passage-words", uid, 86400)) > 200) return NextResponse.json({ error: "rate_limited" }, { status: 429 });
 
   let text = "";
   let lang = "en";

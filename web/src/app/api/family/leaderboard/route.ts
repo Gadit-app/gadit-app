@@ -1,3 +1,4 @@
+import { ownMemberUid } from "@/lib/family";
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { type RankKey } from "@/lib/gamification";
@@ -80,7 +81,7 @@ export async function GET(req: NextRequest) {
     const members = membersSnap.docs.map((d): MemberDoc => ({ id: d.id, ...(d.data() as Omit<MemberDoc, "id">) }));
     // The owner's uid IS the family id; other members carry `userId` once
     // their device (or the shared-device switcher) linked them.
-    const uidOf = (m: MemberDoc): string | null => (m.isOwner ? familyId : m.userId || null);
+    const uidOf = (m: MemberDoc): string | null => (m.isOwner ? familyId : ownMemberUid(familyId!, m.userId));
 
     // The caller must belong to this family.
     if (uid !== familyId && !members.some((m) => uidOf(m) === uid)) {

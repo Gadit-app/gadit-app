@@ -24,6 +24,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { syntheticUidFor, isParentRole, type MemberRole } from "@/lib/family";
+import { planForFamilyMember } from "@/lib/family-plan-sync";
 
 async function resolveFamily(req: NextRequest): Promise<{ familyId: string } | null> {
   const authHeader = req.headers.get("authorization") || "";
@@ -113,8 +114,9 @@ export async function POST(req: NextRequest) {
   } catch {
     await auth.createUser({ uid: syntheticUid, displayName: member.name || undefined });
   }
+  const memberPlan = await planForFamilyMember(ctx.familyId, syntheticUid);
   await db.collection("users").doc(syntheticUid).set(
-    { plan: "deep", familyId: ctx.familyId, memberId, memberRole: member.role, familyRole: role },
+    { ...(memberPlan ? { plan: memberPlan, planFromFamily: true } : {}), familyId: ctx.familyId, memberId, memberRole: member.role, familyRole: role },
     { merge: true },
   );
   await memberRef.set({ userId: syntheticUid, deviceLinkedAt: new Date().toISOString() }, { merge: true });

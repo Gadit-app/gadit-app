@@ -114,7 +114,13 @@ function pickSession(items: Item[], level: number): Item[] {
   const at = shuffle(items.filter((x) => x.level === level));
   const below = shuffle(items.filter((x) => x.level === level - 1));
   const picked = [...at.slice(0, WORDS_PER_SESSION - 2), ...below.slice(0, 2)];
-  if (picked.length < WORDS_PER_SESSION) picked.push(...shuffle(items.filter((x) => !picked.includes(x))).slice(0, WORDS_PER_SESSION - picked.length));
+  // Too few words at this level (level 1 has none below it): fill from the
+  // nearest levels, never from the whole bank, where most words are long ones
+  // a beginner cannot read yet (night QA 2026-11-13).
+  if (picked.length < WORDS_PER_SESSION) {
+    const rest = shuffle(items.filter((x) => !picked.includes(x))).sort((a, b) => Math.abs(a.level - level) - Math.abs(b.level - level));
+    picked.push(...rest.slice(0, WORDS_PER_SESSION - picked.length));
+  }
   return picked.slice(0, WORDS_PER_SESSION).sort((a, b) => a.level - b.level || a.syl.length - b.syl.length);
 }
 
@@ -178,6 +184,9 @@ export function useSpeech() {
       } catch { return null; }
     })();
     cache.current.set(text, p);
+    // One failed call must not pin this text to the device voice for the whole
+    // visit: the next tap asks again.
+    void p.then((u) => { if (!u && cache.current.get(text) === p) cache.current.delete(text); });
     return p;
   }, [user]);
 
@@ -185,7 +194,12 @@ export function useSpeech() {
   // so a cut sound used to hold the stones for the full 6 seconds).
   const cut = useRef<(() => void) | null>(null);
   const closed = useRef(false);
+  // Counts every stop: a sound still being fetched when it was stopped must
+  // not start afterwards (it used to play into the open microphone, or on top
+  // of the next sound).
+  const gen = useRef(0);
   const stop = useCallback(() => {
+    gen.current++;
     if (current.current) { current.current.pause(); current.current = null; }
     try { window.speechSynthesis?.cancel(); } catch { /* no engine */ }
     const c = cut.current; cut.current = null; c?.();
@@ -197,9 +211,10 @@ export function useSpeech() {
   const speak = useCallback(async (text: string): Promise<boolean> => {
     if (closed.current) return false;
     stop();
+    const mine = gen.current;
     setSpeaking(text);
     const url = await fetchUrl(text);
-    if (closed.current) return false;
+    if (closed.current || gen.current !== mine) return false;
     let whole = true;
     // Never wait on a sound that does not end (a device voice with no Hebrew,
     // a blocked autoplay): the game moves on after a short while regardless.

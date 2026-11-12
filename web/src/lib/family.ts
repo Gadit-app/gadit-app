@@ -147,6 +147,17 @@ export function syntheticUidFor(familyId: string, memberId: string): string {
   return `${familyId}_${memberId}`;
 }
 
+/**
+ * A member doc's `userId`, but only when it is an account of THIS family.
+ * Member docs can be written from the owner's browser, so the stored value is
+ * not trusted: every linked member account is `<familyId>_<memberId>`, and
+ * anything else (another person's uid typed into the field) reads as "not
+ * linked" (night QA 2026-11-13).
+ */
+export function ownMemberUid(familyId: string, userId: unknown): string | null {
+  return typeof userId === "string" && userId.startsWith(`${familyId}_`) ? userId : null;
+}
+
 /** Default member name when the parent leaves the field blank. */
 const DEFAULT_MEMBER_NAMES: Record<string, Record<MemberRole, string>> = {
   en: { father: "Dad", mother: "Mom", boy: "My son", girl: "My daughter" },

@@ -932,7 +932,7 @@ export function WordClient({
   const backWord = searchParams?.get("back")?.trim() || "";
   // Came from another screen (the notebook, 2026-10-21): a Back chip to it.
   // Only a path on this site, never an outside address.
-  const fromPath = (() => { const f = searchParams?.get("from") || ""; return f.startsWith("/") && !f.startsWith("//") ? f : ""; })();
+  const fromPath = (() => { const f = searchParams?.get("from") || ""; return f.startsWith("/") && !f.startsWith("//") && !f.includes("\\") ? f : ""; })();
   // ?cls=<CODE> set by the /c/<CODE> kid landing page. When present,
   // this search came from a classroom — fire-and-forget log it to the
   // classroom's search log so the teacher can see what their class

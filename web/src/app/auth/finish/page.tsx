@@ -27,7 +27,7 @@ export default function AuthFinish() {
     try {
       await signInWithEmailLink(auth, addr.trim(), window.location.href);
       const next = new URLSearchParams(window.location.search).get("next") || "";
-      window.location.replace(next.startsWith("/") && !next.startsWith("//") ? next : href("/"));
+      window.location.replace(next.startsWith("/") && !next.startsWith("//") && !next.includes("\\") ? next : href("/"));
     } catch {
       setState("failed");
     }
@@ -41,7 +41,7 @@ export default function AuthFinish() {
       signInWithCustomToken(auth, ct)
         .then(() => {
           const next = new URLSearchParams(window.location.search).get("next") || "";
-          window.location.replace(next.startsWith("/") && !next.startsWith("//") ? next : href("/"));
+          window.location.replace(next.startsWith("/") && !next.startsWith("//") && !next.includes("\\") ? next : href("/"));
         })
         .catch(() => setState("failed"));
       return;

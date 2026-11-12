@@ -1,3 +1,4 @@
+import { ownMemberUid } from "@/lib/family";
 import { NextRequest, NextResponse } from "next/server";
 import type { DocumentData } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
@@ -100,7 +101,7 @@ export async function GET(req: NextRequest) {
     docs.set(uid, d);
     for (const u of linkedSnap.docs) docs.set(u.id, u.data());
     for (const m of members) {
-      const mu = typeof m.userId === "string" && m.userId ? m.userId : null;
+      const mu = ownMemberUid(uid, m.userId);
       if (mu && !docs.has(mu)) docs.set(mu, undefined);
     }
     const missing = [...docs.entries()].filter(([, v]) => v === undefined).map(([k]) => k);

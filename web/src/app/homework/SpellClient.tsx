@@ -552,7 +552,7 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
       const v = new URLSearchParams(window.location.search).get("v");
       // The browser's back button also leaves an exercise or the setup screen,
       // so the page always matches the address (navigation QA, 2026-10-12).
-      if (e) { setSetupFor(null); setPhase("pick"); }
+      if (e) { setSetupFor(null); setPhase("pick"); setTestKind(null); }
       // ?v=dict and ?v=langs were the old four cards' views.
       setHwState(v === "test" ? "test" : v === "add" ? "add" : v === "dict" ? "dict" : v === "learn" || v === "langs" ? "learn" : "hub");
     };

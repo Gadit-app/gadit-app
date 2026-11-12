@@ -61,3 +61,28 @@ export async function auditPaidAccess(apply: boolean): Promise<{ fixedMembers: s
   }
   return { fixedMembers, unexplained };
 }
+
+/**
+ * The plan a family member's own account gets when it is paired or switched
+ * into: the owner's plan while the owner is covered (the same test as the
+ * daily audit above), Basic otherwise. `null` = leave the member's plan alone
+ * (they pay for their own, or we set it by hand).
+ *
+ * Before 2026-11-13 pairing and switching always wrote "deep", and a family
+ * can be created from the browser, so any free account could mint itself a
+ * paid profile and re-arm it after each daily audit (night QA).
+ */
+export async function planForFamilyMember(familyId: string, memberUid: string): Promise<"basic" | "clear" | "deep" | null> {
+  const db = getAdminDb();
+  const live = (s: unknown) => s === "active" || s === "trialing" || s === "past_due";
+  const internal = (e: unknown) => typeof e === "string" && /@gadit\.app$/i.test(e);
+  const covered = (x: FirebaseFirestore.DocumentData | undefined) => !!x && (live(x.subscriptionStatus) || x.planSetBy === "admin" || x.comp === true || internal(x.email));
+  const [ownerSnap, memberSnap] = await Promise.all([db.collection("users").doc(familyId).get(), db.collection("users").doc(memberUid).get()]);
+  const me = memberSnap.data();
+  if (me && (live(me.subscriptionStatus) || me.planSetBy === "admin")) return null;
+  const owner = ownerSnap.data();
+  let ok = covered(owner);
+  if (!ok && owner?.schoolId) ok = covered((await db.collection("users").doc(String(owner.schoolId)).get()).data());
+  if (!ok) return "basic";
+  return owner?.plan === "deep" || owner?.plan === "clear" ? owner.plan : "basic";
+}

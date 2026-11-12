@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
+import { limitBump, requestIp } from "@/lib/rate-limit";
 
 /**
  * Quick-define — the lightweight popover sibling of /api/define.
@@ -163,6 +164,7 @@ async function cachedPreview(
   context: string | undefined,
   feature: string,
   kids = false,
+  ip = "",
 ): Promise<{ meaning: string; example: string; translation: string } | null> {
   const db = getAdminDb();
   const key = crypto
@@ -178,6 +180,11 @@ async function cachedPreview(
       if (d && (d.meaning || d.example)) return { meaning: d.meaning ?? "", example: d.example ?? "", translation: d.translation ?? "" };
     }
   } catch { /* cache read best-effort */ }
+  // This endpoint is open, and every new (word, context) pair is a paid model
+  // call plus a stored document. A saved preview stays free; NEW ones are
+  // capped per address per day, far above a full class reading together
+  // (night QA 2026-11-13).
+  if (ip && (await limitBump("qdef", ip, 86400)) > 800) return null;
   const preview = await generatePreview(word, lang, context, feature, kids);
   if (preview && (preview.meaning || preview.example)) {
     try {
@@ -196,6 +203,7 @@ export async function GET(req: NextRequest) {
   const context = (url.searchParams.get("context") ?? "").trim().slice(0, 300);
   // Kids Mode: the popover must answer in child-friendly language too.
   const kids = url.searchParams.get("kids") === "1";
+  const ip = requestIp(req);
 
   if (!word) {
     return NextResponse.json({ error: "word_required" }, { status: 400 });
@@ -216,7 +224,7 @@ export async function GET(req: NextRequest) {
   // it directly, bypassing the cache. gpt-4o-mini keeps this cheap; the response
   // is CDN-cached per (word, context) so re-taps don't re-bill.
   if (context) {
-    const preview = await cachedPreview(word, lang, context, "reader_word_tap", kids);
+    const preview = await cachedPreview(word, lang, context, "reader_word_tap", kids, ip);
     if (preview && (preview.meaning || preview.example)) {
       return NextResponse.json(
         { word, language: "", meaning: preview.meaning, example: preview.example, translation: preview.translation, hasMore: false, generated: true, contextual: true },
@@ -249,7 +257,7 @@ export async function GET(req: NextRequest) {
         }
       }
     } catch { /* fall through to generation */ }
-    const preview = await cachedPreview(word, lang, undefined, "quick_define_kids", true);
+    const preview = await cachedPreview(word, lang, undefined, "quick_define_kids", true, ip);
     if (preview && (preview.meaning || preview.example)) {
       return NextResponse.json(
         { word, language: "", meaning: preview.meaning, example: preview.example, translation: preview.translation, hasMore: false, generated: true },
@@ -283,7 +291,7 @@ export async function GET(req: NextRequest) {
       // because the popover was supposed to BE the definition. The
       // generated reply is intentionally short (no etymology, idioms,
       // examples > 1) — anyone wanting depth taps "Open full".
-      const preview = await cachedPreview(word, lang, undefined, "quick_define_miss");
+      const preview = await cachedPreview(word, lang, undefined, "quick_define_miss", false, ip);
       if (preview && (preview.meaning || preview.example)) {
         return NextResponse.json(
           {

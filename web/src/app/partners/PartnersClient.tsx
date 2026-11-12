@@ -2320,7 +2320,7 @@ export function PartnersClient() {
   const [signupLang, setSignupLang] = useState<string>(lang);
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [errMsg, setErrMsg] = useState("");
-  const [result, setResult] = useState<{ code: string; dashboardUrl: string } | null>(null);
+  const [result, setResult] = useState<{ code: string; dashboardUrl?: string } | null>(null);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -2460,7 +2460,7 @@ export function PartnersClient() {
               <p style={S.successBody}>{t.successBody}</p>
               <div style={S.successLinkLabel}>{t.successLinkLabel}</div>
               <div style={S.successLink} dir="ltr">{link}</div>
-              <a href={result.dashboardUrl} style={S.heroCta}>{t.successDash}</a>
+              {result.dashboardUrl && <a href={result.dashboardUrl} style={S.heroCta}>{t.successDash}</a>}
             </div>
           ) : (
             <form onSubmit={submit}>

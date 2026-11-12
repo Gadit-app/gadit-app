@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     const b = (await req.json()) as { email?: unknown; lang?: unknown; next?: unknown };
     if (typeof b.email === "string") email = b.email.trim().toLowerCase().slice(0, 200);
     if (typeof b.lang === "string" && /^[a-zA-Z-]{2,6}$/.test(b.lang)) lang = b.lang;
-    if (typeof b.next === "string" && b.next.startsWith("/") && !b.next.startsWith("//")) next = b.next.slice(0, 300);
+    if (typeof b.next === "string" && b.next.startsWith("/") && !b.next.startsWith("//") && !b.next.includes("\\")) next = b.next.slice(0, 300);
   } catch {
     return NextResponse.json({ error: "bad_body" }, { status: 400 });
   }
