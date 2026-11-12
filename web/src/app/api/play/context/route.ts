@@ -19,6 +19,17 @@
  *   {"round":{...}} ... then {"done":true} or {"error":"generation_failed"}
  * Same model, same prompts, same number of calls. A cached set, and a caller
  * that does not ask for a stream, get the one JSON answer as before.
+ *
+ * The story store (2026-11-12, Gadi: the first story still took 15 to 31 s,
+ * the model spends that time before it writes anything). Every checked story
+ * is also kept on its own in `contextStories`, and the client now sends the
+ * child's whole word list as { pool, seen }. A game is first put together from
+ * stored stories whose practice words are all in the pool: no model call, no
+ * wait. When the store has fewer than a full game, what it has goes out at
+ * once and only the rest is written live. Stories written live are saved too,
+ * so the store grows with use; scripts/context-stories-seed.mts fills it ahead
+ * for the built-in words. An empty store, or a caller without `pool`, gets
+ * exactly the old behaviour.
  */
 import crypto from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
@@ -27,6 +38,7 @@ import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 import { hardCapReached } from "@/lib/ai-budget";
 import {
   CONTEXT_ROUNDS, applyContextCheck, contextCheckMessages, contextMessages, contextStoryScanner, parseContextRounds, type ContextRound,
+  CONTEXT_POOL_MAX, CONTEXT_STORE, pickStories, storedRound, storyDoc, storyKey,
 } from "@/lib/context-game";
 
 export const runtime = "nodejs";
@@ -144,24 +156,56 @@ async function writeChecked(words: string[], lang: string, ui: string, kids: boo
   }
 }
 
-/** A whole set: up to CONTEXT_ROUNDS checked stories, kept in the cache. */
-async function makeSet(words: string[], lang: string, ui: string, kids: boolean, plan: string, ref: FirebaseFirestore.DocumentReference, onRound?: (r: ContextRound) => void): Promise<ContextRound[]> {
+/** Up to `want` stored stories for this child, none when the store has nothing
+ *  (or the lookup failed: the game then runs as it did before the store). */
+async function fromStore(pool: string[], prefer: string[], seen: string[], lang: string, ui: string, kids: boolean, want: number): Promise<ContextRound[]> {
+  try {
+    const col = getAdminDb().collection(CONTEXT_STORE);
+    const keys = pool.map((w) => storyKey(lang, ui, kids, w));
+    const lookups: Promise<FirebaseFirestore.QuerySnapshot>[] = [];
+    // array-contains-any takes 30 values; 80 docs a lookup keeps a game start under 250 reads.
+    for (let i = 0; i < keys.length; i += 30) lookups.push(col.where("keys", "array-contains-any", keys.slice(i, i + 30)).limit(80).get());
+    const cands: ContextRound[] = [];
+    for (const snap of await Promise.all(lookups)) {
+      for (const d of snap.docs) {
+        const r = storedRound(d.id, d.data());
+        if (r) cands.push(r);
+      }
+    }
+    return pickStories(cands, pool, prefer, seen, want);
+  } catch {
+    return [];
+  }
+}
+
+/** A whole set: up to `want` checked stories. Each one goes into the story
+ *  store; the set as a whole goes into the per-set cache when `ref` is given. */
+async function makeSet(words: string[], lang: string, ui: string, kids: boolean, plan: string, ref: FirebaseFirestore.DocumentReference | null, onRound?: (r: ContextRound) => void, want: number = CONTEXT_ROUNDS): Promise<ContextRound[]> {
   const rounds: ContextRound[] = [];
-  const add = (r: ContextRound) => { rounds.push(r); onRound?.(r); };
-  const room = () => CONTEXT_ROUNDS - rounds.length;
+  const saves: Promise<unknown>[] = [];
+  const add = (r: ContextRound) => {
+    const doc = storyDoc(r, lang, ui, kids, "live");
+    const round = { ...r, id: doc.id };
+    rounds.push(round);
+    onRound?.(round);
+    try { saves.push(getAdminDb().collection(CONTEXT_STORE).doc(doc.id).set(doc.data).catch(() => { /* the game still plays */ })); } catch { /* same */ }
+  };
+  const room = () => want - rounds.length;
   try {
     const t0 = Date.now();
     await writeChecked(words, lang, ui, kids, plan, add, room);
     // Too few passed: one more batch, so the child still gets a full game
     // (only when there is time left before the 120 s limit).
-    if (rounds.length < 2 && Date.now() - t0 < 40_000) await writeChecked(words, lang, ui, kids, plan, add, room);
+    if (rounds.length < Math.min(2, want) && Date.now() - t0 < 40_000) await writeChecked(words, lang, ui, kids, plan, add, room);
   } catch { /* what passed so far still plays */ }
   // A short set (1 story) still plays, but is not kept: the next try may do better.
-  if (rounds.length >= 2) {
+  if (ref && rounds.length >= 2) {
     try {
       await ref.set({ rounds, lang, ui, kids, words, at: new Date().toISOString() });
     } catch { /* the game still plays */ }
   }
+  // The function may be frozen once the answer is out: the saves finish first.
+  await Promise.all(saves);
   return rounds;
 }
 
@@ -174,12 +218,16 @@ export async function POST(req: NextRequest) {
   if (user.plan === "basic" || user.plan === "clear") return NextResponse.json({ error: "plan_required" }, { status: 403 });
 
   const words: string[] = [];
+  // The child's whole word list in the game's language, and the ids of the
+  // stories already played on this device (oldest first): the story store.
+  const pool: string[] = [];
+  const seen: string[] = [];
   let lang = "en";
   let ui = "en";
   let kids = false;
   let stream = false;
   try {
-    const b = (await req.json()) as { words?: unknown; lang?: unknown; ui?: unknown; kids?: unknown; stream?: unknown };
+    const b = (await req.json()) as { words?: unknown; lang?: unknown; ui?: unknown; kids?: unknown; stream?: unknown; pool?: unknown; seen?: unknown };
     stream = b.stream === true;
     if (typeof b.lang === "string" && CODE.test(b.lang)) lang = b.lang;
     if (typeof b.ui === "string" && CODE.test(b.ui)) ui = b.ui;
@@ -196,12 +244,67 @@ export async function POST(req: NextRequest) {
         if (words.length >= MAX_WORDS) break;
       }
     }
+    if (Array.isArray(b.pool)) {
+      const had = new Set<string>();
+      for (const x of b.pool) {
+        if (typeof x !== "string") continue;
+        const w = x.replace(/\s+/g, " ").trim().slice(0, 60);
+        const k = w.toLowerCase();
+        if (!w || had.has(k)) continue;
+        had.add(k);
+        pool.push(w);
+        if (pool.length >= CONTEXT_POOL_MAX) break;
+      }
+    }
+    if (Array.isArray(b.seen)) {
+      for (const x of b.seen.slice(-300)) if (typeof x === "string" && /^[0-9a-f]{8,64}$/.test(x)) seen.push(x);
+    }
   } catch {
     return NextResponse.json({ error: "bad_body" }, { status: 400 });
   }
   if (words.length < 2) return NextResponse.json({ error: "too_few_words" }, { status: 400 });
 
   const db = getAdminDb();
+  // The story store first: a full game from it starts at once.
+  const stored = pool.length ? await fromStore(pool, words, seen, lang, ui, kids, CONTEXT_ROUNDS) : [];
+  if (stored.length >= CONTEXT_ROUNDS) return NextResponse.json({ rounds: stored, cached: true });
+  if (stored.length) {
+    // Part of a game: these go out at once, the rest is written live, on
+    // words the stored stories do not already practice.
+    const taken = new Set(stored.flatMap((r) => r.base.map((w) => w.toLowerCase())));
+    const rest = [...words, ...pool.filter((w) => !words.some((x) => x.toLowerCase() === w.toLowerCase()))]
+      .filter((w) => !taken.has(w.toLowerCase()))
+      .slice(0, MAX_WORDS);
+    const want = CONTEXT_ROUNDS - stored.length;
+    // No way to write more right now: the stored stories are the game.
+    if (rest.length < 2 || !process.env.OPENAI_API_KEY || (await hardCapReached())) return NextResponse.json({ rounds: stored, cached: true });
+    if (!stream) {
+      const more = await makeSet(rest, lang, ui, kids, user.plan, null, undefined, want);
+      return NextResponse.json({ rounds: [...stored, ...more] });
+    }
+    const enc = new TextEncoder();
+    const body = new ReadableStream<Uint8Array>({
+      async start(controller) {
+        let open = true;
+        const send = (o: unknown) => {
+          if (!open) return;
+          try { controller.enqueue(enc.encode(JSON.stringify(o) + "\n")); } catch { open = false; }
+        };
+        for (const round of stored) send({ round });
+        await makeSet(rest, lang, ui, kids, user.plan, null, (round) => send({ round }), want).catch(() => [] as ContextRound[]);
+        send({ done: true });
+        if (open) { try { controller.close(); } catch { /* already closed */ } }
+      },
+    });
+    return new Response(body, {
+      headers: {
+        "Content-Type": "application/x-ndjson; charset=utf-8",
+        "Cache-Control": "no-store, no-transform",
+        "X-Accel-Buffering": "no",
+      },
+    });
+  }
+
   const ref = db.collection("contextGameCache").doc(cacheKey(lang, ui, kids, words));
   try {
     const snap = await ref.get();

@@ -20,6 +20,8 @@ export type ContextRound = {
   /** One short line per blank, in the UI language: why the answer fits.
    *  Written by the blind check (contextCheckMessages), not by the writer. */
   why: string[];
+  /** Set on a story that lives in the story store (`contextStories`). */
+  id?: string;
 };
 
 export const CONTEXT_ROUNDS = 3;
@@ -323,5 +325,96 @@ export function applyContextCheck(rounds: ContextRound[], content: string): Cont
     if (distractors.length < 2) return;
     out.push({ ...r, options: shuffle([...r.answers, ...distractors.slice(0, 2)]), why });
   });
+  return out;
+}
+
+/*
+ * The story store (2026-11-12, Gadi: even with streaming the first story took
+ * 15 to 31 s, so the game now starts from stories written and checked ahead).
+ * One Firestore doc per checked story in `contextStories`. A story fits a
+ * child when every word it practices is in the child's pool, so it carries one
+ * key per practice word, "lang|ui|kids|word": the language, the UI language of
+ * its "why" lines and Kids Mode sit inside the key, and one array-contains-any
+ * query on `keys` finds the candidates with the automatic single-field index
+ * (no composite index to deploy).
+ */
+export const CONTEXT_STORE = "contextStories";
+/** Most pool words the route looks up: 3 queries of 30 keys (Firestore's limit per query). */
+export const CONTEXT_POOL_MAX = 90;
+
+export function storyKey(lang: string, ui: string, kids: boolean, word: string): string {
+  return `${lang}|${ui}|${kids ? 1 : 0}|${norm(word)}`;
+}
+
+/** A short hash without node:crypto, since this file also loads in the browser. */
+function hash32x2(str: string, seed: number): string {
+  let h1 = 0xdeadbeef ^ seed;
+  let h2 = 0x41c6ce57 ^ seed;
+  for (let i = 0; i < str.length; i++) {
+    const ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (h2 >>> 0).toString(16).padStart(8, "0") + (h1 >>> 0).toString(16).padStart(8, "0");
+}
+
+/** The doc of one checked story: the same text for the same reader is the same doc. */
+export function storyDoc(r: ContextRound, lang: string, ui: string, kids: boolean, src: "seed" | "live") {
+  const text = r.segments.map((seg, i) => seg + (r.answers[i] ?? "")).join("");
+  const sig = `v1|${lang}|${ui}|${kids ? 1 : 0}|${norm(text)}`;
+  const id = hash32x2(sig, 1) + hash32x2(sig, 2);
+  const base = [...new Set(r.base.map(norm))];
+  const round = { segments: r.segments, answers: r.answers, base: r.base, options: r.options, why: r.why };
+  return { id, data: { v: 1, lang, ui, kids, base, keys: base.map((b) => storyKey(lang, ui, kids, b)), round, src, at: new Date().toISOString() } };
+}
+
+/** A stored doc back to a round; null when it is not a whole story. */
+export function storedRound(id: string, data: unknown): ContextRound | null {
+  const r = (data as { round?: Partial<ContextRound> } | undefined)?.round;
+  if (!r) return null;
+  const strs = (x: unknown): x is string[] => Array.isArray(x) && x.every((v) => typeof v === "string" && v !== "");
+  const { segments, answers, base, options, why } = r;
+  if (!Array.isArray(segments) || !segments.every((v) => typeof v === "string")) return null;
+  if (!strs(answers) || !strs(base) || !strs(options) || !strs(why)) return null;
+  if (answers.length < 2 || segments.length !== answers.length + 1) return null;
+  if (base.length !== answers.length || why.length !== answers.length || options.length < answers.length + 2) return null;
+  return { segments, answers, base, options, why, id };
+}
+
+/**
+ * The stories of one game out of the stored candidates: every practice word is
+ * in the child's pool, and no word is practiced twice in a game. Stories the
+ * child has not played come first, the ones on the session's `prefer` words
+ * (the newest notebook words) before the others. When the child has played
+ * them all, the one played longest ago still comes back alone, so the game
+ * opens at once while new stories are written (`seen` runs oldest to newest).
+ */
+export function pickStories(cands: ContextRound[], pool: string[], prefer: string[], seen: string[], want: number): ContextRound[] {
+  const inPool = new Set(pool.map(norm));
+  const liked = new Set(prefer.map(norm));
+  const ids = new Set<string>();
+  const usable = cands.filter((r) => {
+    if (!r.id || ids.has(r.id) || !r.base.every((b) => inPool.has(norm(b)))) return false;
+    ids.add(r.id);
+    return true;
+  });
+  const seenAt = new Map(seen.map((id, i) => [id, i]));
+  const score = (r: ContextRound) => r.base.filter((b) => liked.has(norm(b))).length;
+  const fresh = shuffle(usable.filter((r) => !seenAt.has(r.id as string))).sort((a, b) => score(b) - score(a));
+  const used = new Set<string>();
+  const out: ContextRound[] = [];
+  for (const r of fresh) {
+    if (out.length >= want) break;
+    const b = r.base.map(norm);
+    if (b.some((w) => used.has(w))) continue;
+    b.forEach((w) => used.add(w));
+    out.push(r);
+  }
+  if (!out.length && want > 0) {
+    const old = usable.sort((a, b) => (seenAt.get(a.id as string) ?? 0) - (seenAt.get(b.id as string) ?? 0))[0];
+    if (old) out.push(old);
+  }
   return out;
 }

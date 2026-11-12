@@ -14,6 +14,9 @@
  * The stories come from /api/play/context (cached per word set). A new set
  * streams in story by story: the game starts on the first one while the
  * others are still being written (Gadi 2026-11-12, the wait was about 20 s).
+ * Since the same day the route first looks in its store of ready, checked
+ * stories for ones that practice only this child's words, so it also gets the
+ * whole word list (`pool`) and the stories this device already played (`seen`).
  *
  * Played inside a word world (Gadi 2026-11-01: "every game with graphics
  * like the worlds"): the child's newest world is the backdrop, the story
@@ -27,7 +30,7 @@ import { NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
 import { useAuth } from "@/lib/auth-context";
 import type { PlayWord } from "@/lib/play-engine";
 import { dirForLang, sample, shuffle, wordLangOf } from "@/lib/play-engine";
-import { CONTEXT_ROUNDS, type ContextRound } from "@/lib/context-game";
+import { CONTEXT_POOL_MAX, CONTEXT_ROUNDS, type ContextRound } from "@/lib/context-game";
 import { GameResult } from "./GameResult";
 import { reportAnswer } from "@/lib/learn/report";
 import type { PlayT } from "./GameQuiz";
@@ -46,7 +49,7 @@ const same = (a: string, b: string) => a.normalize("NFC").trim().toLowerCase() =
 
 /** The words for one session: the language with the most words in the pool
  *  (the UI language wins a tie), then a random handful of its words. */
-function pickWords(pool: PlayWord[], ui: string, kids: boolean): { words: string[]; wordLang: string } {
+function pickWords(pool: PlayWord[], ui: string, kids: boolean): { words: string[]; all: string[]; wordLang: string } {
   const groups = new Map<string, string[]>();
   for (const p of pool) {
     const w = p.word.trim();
@@ -65,7 +68,24 @@ function pickWords(pool: PlayWord[], ui: string, kids: boolean): { words: string
   const g = groups.get(best) ?? [];
   const n = kids ? 6 : 9;
   const fresh = g.slice(0, Math.min(g.length, n * 2));
-  return { words: sample(fresh, n), wordLang: best || ui };
+  // `all`: every word of that language, for the ready stories (2026-11-12).
+  return { words: sample(fresh, n), all: g.slice(0, CONTEXT_POOL_MAX), wordLang: best || ui };
+}
+
+/** The ready stories this device already played, oldest first, so the route
+ *  gives new ones before it repeats one. Best-effort: private mode has none. */
+const SEEN_KEY = "gadit.ctx.seen";
+function readSeen(): string[] {
+  try {
+    const v: unknown = JSON.parse(localStorage.getItem(SEEN_KEY) ?? "[]");
+    return Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : [];
+  } catch { return []; }
+}
+function markSeen(id: string | undefined) {
+  if (!id) return;
+  try {
+    localStorage.setItem(SEEN_KEY, JSON.stringify([...readSeen().filter((x) => x !== id), id].slice(-300)));
+  } catch { /* private mode */ }
 }
 
 /** `more`: the rest of the stories are still on their way. */
@@ -163,7 +183,7 @@ export function GameContextDetective({
         const r = await fetch("/api/play/context", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
-          body: JSON.stringify({ words: pick.words, lang: pick.wordLang, ui: lang, kids, stream: true }),
+          body: JSON.stringify({ words: pick.words, pool: pick.all, seen: readSeen(), lang: pick.wordLang, ui: lang, kids, stream: true }),
           signal: stop.signal,
         });
         if (r.ok && r.body && (r.headers.get("content-type") ?? "").includes("ndjson")) {
@@ -266,6 +286,7 @@ export function GameContextDetective({
         nextLabel={last ? t.playFinish : t.playNext}
         onChecked={(oks) => {
           const r = rounds[idx];
+          markSeen(r.id);
           setScore((n) => n + oks.filter(Boolean).length);
           setTotal((n) => n + oks.length);
           setMood(oks.every(Boolean) ? "happy" : "oops");
