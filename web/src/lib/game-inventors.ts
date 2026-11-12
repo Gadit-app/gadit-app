@@ -8,7 +8,7 @@ export const GAME_INVENTORS: Record<string, { he: string; en: string }> = {
   // Only games a child truly invented (Gadi 2026-11-12): word searches, crosswords and
   // arrowwords existed long before, so they carry no name.
   // Din's funfair in Letter Catch: the cans, the balloons and the darts (Gadi 2026-11-12).
-  "catch-fair": { he: "דין", en: "Din" },
+  "catch-fair": { he: "דין", en: "Dean" },
   // Noam and his mother Shirli made the wheel out of paper and filmed it (2026-11-12).
   wheel: { he: "נועם לב", en: "Noam Lev" },
   // The dictation trainer grew out of Ziv's weekly school dictation (2026-09-19).
@@ -16,13 +16,13 @@ export const GAME_INVENTORS: Record<string, { he: string; en: string }> = {
 };
 
 const BY: Record<string, (name: string) => string> = {
-  he: (n) => `הרעיון של ${n}`,
-  en: (n) => `${n}'s idea`,
+  he: (n) => `רעיון: ${n}`,
+  en: (n) => `By ${n}`,
   ar: (n) => `فكرة ${n}`,
   ru: (n) => `Идея: ${n}`,
 };
 
-/** "Osher's idea" for a game card, or null when no child invented the game. */
+/** "By Dean" for a game card, or null when no child invented the game. */
 export function inventedBy(gameId: string, lang: string): string | null {
   const who = GAME_INVENTORS[gameId];
   if (!who) return null;
