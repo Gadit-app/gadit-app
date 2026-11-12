@@ -71,6 +71,8 @@ import { GameEtymologyArtist } from "@/components/play/GameEtymologyArtist";
 import { DuelHub } from "@/components/play/duel/DuelHub";
 import { GameSyllables, syllablesCopy } from "@/components/play/GameSyllables";
 import { GameLetterWheel, letterWheelCopy } from "@/components/play/GameLetterWheel";
+import { GameIdea } from "@/components/play/GameIdea";
+import { inventedBy } from "@/lib/game-inventors";
 import { GameWordSearch, wordSearchCopy } from "@/components/play/GameWordSearch";
 import { GameCrossword, crosswordCopy } from "@/components/play/GameCrossword";
 import { GameArrowword, arrowwordCopy } from "@/components/play/GameArrowword";
@@ -4542,6 +4544,8 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
             above its games. Notebook games hide entirely when the user
             doesn't have 4+ words; the other three categories are
             curated-content and always show. */}
+        {/* Invent your learning game (Gadi 2026-11-12): subscribers tell us a game idea. */}
+        {isPaid && planReady ? <GameIdea lang={lang} dir={dir} /> : null}
         {(() => {
           const notebookSection = { id: "notebook" as GameCategory, label: t.catNotebook };
           const wordSections: Array<{ id: GameCategory; label: string }> = [
@@ -4665,6 +4669,8 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
                         <span className="wb-play-card-text">
                           <span className="wb-play-card-title">{g.title}</span>
                           <span className="wb-play-card-desc">{g.desc}</span>
+                          {/* a game a child invented carries the child's name (Gadi 2026-11-12) */}
+                          {inventedBy(g.id, lang) ? <span className="wb-play-card-by">💡 {inventedBy(g.id, lang)}</span> : null}
                         </span>
                         {!g.enabled && (
                           <span className="wb-play-card-locked">{t.comingSoon}</span>

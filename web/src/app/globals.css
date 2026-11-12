@@ -12473,3 +12473,7 @@ html[data-theme="dark"] .wordbook .wb-word-sentence-input::placeholder { color: 
 
 /* "+" under the idioms: three more at a time, up to nine (2026-11-05). */
 .wordbook .wb-idioms-card .wb-idioms-more { padding-top: 12px; }
+
+/* "Osher's idea": a game a child invented carries the name (2026-11-12). Fixed colours, it sits on every theme and on covers. */
+.wordbook .wb-play-card { position: relative; }
+.wordbook .wb-play-card .wb-play-card-text .wb-play-card-by { position: absolute; top: 10px; inset-inline-start: 10px; margin: 0; padding: 3px 11px; border-radius: 999px; background: #fff3c4; color: #5b3a00; font-size: 13px; font-weight: 800; line-height: 1.5; white-space: nowrap; box-shadow: 0 2px 8px #0004; display: block; -webkit-line-clamp: none; }

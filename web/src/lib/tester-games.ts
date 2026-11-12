@@ -18,6 +18,7 @@ const NAMES: Record<string, [string, string]> = {
   read: ["קריאה", "Reading"],
   duel: ["דו קרב מילים", "Word Duel"],
   lesson: ["שיעור", "Lesson"],
+  "new-game": ["רעיון למשחק חדש", "New game idea"],
   twin: ["מלכודת תאומים", "Twin Trap"],
   time: ["מסע בזמן", "Time Travel"],
   passport: ["דרכון מילים", "Word Passport"],
