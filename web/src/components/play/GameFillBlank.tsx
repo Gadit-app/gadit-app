@@ -10,6 +10,7 @@
  */
 
 import { useState, useMemo } from "react";
+import { useFrozenPool } from "./use-frozen-pool";
 import { sfx } from "@/lib/game-sfx";
 import type { PlayWord, FillBlankQuestion } from "@/lib/play-engine";
 import { buildFillBlankQuestions, SESSION_SIZE } from "@/lib/play-engine";
@@ -35,9 +36,10 @@ export function GameFillBlank({
   t: PlayT;
 }) {
   const { nq } = useNiqqud(); // display-only vowel points
+  const { pool: startPool, touch } = useFrozenPool(pool);
   const questions = useMemo(
-    () => buildFillBlankQuestions(pool, SESSION_SIZE.fillblank, distractorWords),
-    [pool, distractorWords],
+    () => buildFillBlankQuestions(startPool, SESSION_SIZE.fillblank, distractorWords),
+    [startPool, distractorWords],
   );
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
@@ -86,7 +88,7 @@ export function GameFillBlank({
   // Split the sentence so we can highlight the blank.
   const parts = q.sentence.split("____");
   return (
-    <div className="wb-play-stage">
+    <div className="wb-play-stage" onPointerDownCapture={touch} onKeyDownCapture={touch}>
       <PlayHeader title={t.fillblankTitle} progress={`${idx + 1}/${questions.length}`} score={score} onExit={onExit} t={t} />
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow"><QText text={t.fillblankPrompt} /></div>

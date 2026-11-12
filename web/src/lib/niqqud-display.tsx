@@ -138,7 +138,7 @@ export function NiqqudToggle() {
       }}
     >
       {on && <span aria-hidden="true">✓</span>}
-      {lang === "ar" ? "تشكيل" : "ניקוד"}
+      {lang === "ar" ? "تشكيل" : lang === "he" ? "ניקוד" : lang === "ru" ? "Огласовки" : "Vowel marks"}
     </button>
   );
 }

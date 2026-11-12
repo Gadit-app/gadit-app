@@ -134,9 +134,17 @@ function ArrowwordBoard({ pool, onExit, lang, t, level, kids, onLevel }: { pool:
     const ok = ks.every((k, i) => lockedCells.has(k) || base(letters.get(k) ?? "") === base(e.letters[i]));
     if (ok) {
       sfx.correct();
-      setSolved((s) => { const n = new Set(s); n.add(e.word); return n; });
-      const idx = aw.entries.findIndex((x, i) => i !== sel && !solved.has(x.word) && x.word !== e.word);
-      if (idx >= 0) { setSel(idx); setCursor(cellsOf(aw.entries[idx]).find((k) => !lockedCells.has(k)) ?? null); }
+      // A crossing word completed by these locked cells is solved too (see the crossword).
+      const ns = new Set(solved); ns.add(e.word);
+      const nl = new Set<string>();
+      for (let grew = true; grew;) {
+        grew = false; nl.clear();
+        for (const x of aw.entries) if (ns.has(x.word)) for (const k of cellsOf(x)) nl.add(k);
+        for (const x of aw.entries) if (!ns.has(x.word) && cellsOf(x).every((k, i) => nl.has(k) || base(letters.get(k) ?? "") === base(x.letters[i]))) { ns.add(x.word); grew = true; }
+      }
+      setSolved(ns);
+      const idx = aw.entries.findIndex((x) => !ns.has(x.word));
+      if (idx >= 0) { setSel(idx); setCursor(cellsOf(aw.entries[idx]).find((k) => !nl.has(k)) ?? null); }
     } else { sfx.wrong(); setShake(e.word); setTimeout(() => setShake(null), 500); }
   };
   const type = (ch: string) => {
@@ -247,12 +255,14 @@ function ArrowwordBoard({ pool, onExit, lang, t, level, kids, onLevel }: { pool:
 }
 
 const AW_CSS = `
-.aw .aw-q { display: grid; gap: 12px; justify-items: center; }
+/* On a phone the board is as wide as the panel lets it be: sized in vw it was wider than the panel and its far side was cut off. */
+.aw .aw-q { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; justify-items: center; }
+html body .wordbook .wst .aw-q { padding-inline: 8px; }
 .aw-panel { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; text-align: center; max-width: 56ch; min-height: 40px; }
 .aw-panel-text { font-size: 18px; line-height: 1.5; font-weight: 700; color: #14202b; }
 .aw-panel-len { font-size: 12px; font-weight: 800; color: #fff; background: #0a7472; border-radius: 999px; padding: 2px 8px; }
 .aw-pic { width: 96px; height: 96px; border-radius: 14px; box-shadow: 0 8px 18px #0003; object-fit: cover; }
-.aw-grid { display: grid; gap: 2px; width: min(94vw, 520px); padding: 6px; border-radius: 14px; background: #e9e3d4; box-shadow: inset 0 2px 8px #0002; }
+.aw-grid { display: grid; gap: 2px; width: min(100%, 520px); padding: 6px; border-radius: 14px; background: #e9e3d4; box-shadow: inset 0 2px 8px #0002; }
 .aw-void { aspect-ratio: 1; }
 .aw-cell { position: relative; aspect-ratio: 1; min-width: 0; min-height: 0; display: grid; place-items: center; padding: 0; border: 0; border-radius: 5px; background: #fffdf6; font-family: var(--wb-font-display, inherit); font-weight: 800; font-size: clamp(13px, calc(58vw / var(--cols)), 26px); color: #2b2418; line-height: 1; cursor: pointer; box-shadow: 0 1px 0 #0001; }
 .aw-cell.is-entry { background: #fff3c4; }
@@ -270,7 +280,8 @@ const AW_CSS = `
 .aw-clue-text { font-size: clamp(7px, calc(14vw / var(--cols)), 11px); font-weight: 700; line-height: 1.1; text-align: center; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; word-break: break-word; }
 .aw-arrow { position: absolute; bottom: 1px; inset-inline-end: 1px; opacity: 0.9; }
 .aw-arrow.is-down-straight, .aw-arrow.is-across-bent { bottom: 1px; }
-.aw-keys { display: grid; gap: 6px; width: min(96vw, 520px); }
+.aw-keys { display: grid; gap: 6px; width: min(100%, 520px); }
+.aw-key { min-width: 0; }
 .aw-keyrow { display: flex; justify-content: center; gap: 5px; }
 .aw-key { flex: 1 1 0; max-width: 46px; min-height: 44px; border: 0; border-radius: 9px; background: #fff; box-shadow: 0 2px 0 #0002; font: inherit; font-weight: 700; font-size: 19px; color: #14202b; cursor: pointer; }
 .aw-key:active { transform: translateY(1px); box-shadow: none; }

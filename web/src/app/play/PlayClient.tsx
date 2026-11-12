@@ -95,27 +95,27 @@ const LANGS = LANGUAGES;
 export const COPY: Record<string, PlayT> = {
   he: {
     menuTitle: "משחקי מילים",
-    menuLede: "חיזוק האוצר שלך בכיף · בלי קליקים מיותרים",
+    menuLede: "מחזקים את אוצר המילים בכיף · בלי קליקים מיותרים",
     streakOne: "יום אחד ברצף",
     streakMany: (n) => `${n} ימים ברצף`,
     bestEver: (n) => `שיא אישי: ${n}`,
     notEnoughWords: "צריך עוד קצת מילים כדי להתחיל",
-    notEnoughHint: "שמור 4 מילים במחברת ונחזור הנה.",
+    notEnoughHint: "שמרו 4 מילים במחברת וחזרו לכאן.",
     goNotebook: "פתיחת המחברת",
     comingSoon: "בקרוב",
     quizTitle: "חידון הגדרות",
-    quizDesc: "מילה והגדרה, מצא את ההתאמה הנכונה",
-    fillblankTitle: "השלם את המשפט",
+    quizDesc: "מילה והגדרה, מוצאים את ההתאמה הנכונה",
+    fillblankTitle: "משלימים את המשפט",
     fillblankDesc: "המילה החסרה במשפט, מי היא?",
     memoryTitle: "משחק זיכרון",
-    memoryDesc: "התאם זוגות של מילה והגדרה",
+    memoryDesc: "מתאימים זוגות של מילה והגדרה",
     anagramTitle: "ערבול אותיות",
-    anagramDesc: "סדר את האותיות לפי הרמז",
+    anagramDesc: "מסדרים את האותיות לפי הרמז",
     speedTitle: "חידון מהיר",
-    speedDesc: "כמה מילים תזהה ב-60 שניות?",
+    speedDesc: "כמה מילים תזהו ב-60 שניות?",
     twinTitle: "מלכודת תאומים",
     twinDesc: "effect או affect? lay או lie?",
-    twinPrompt: "בחר את המילה המתאימה",
+    twinPrompt: "בחרו את המילה המתאימה",
     timeTitle: "מסע בזמן",
     timeDesc: "מה המילה הזו הייתה אומרת פעם?",
     timePrompt: "פעם זו הייתה המשמעות:",
@@ -128,21 +128,21 @@ export const COPY: Record<string, PlayT> = {
     friendsTrue: "אמיתי",
     friendsFalse: "מלכודת",
     rootTitle: "ציד שורשים",
-    rootDesc: "מצא 3 מילים שצמחו מאותו שורש",
+    rootDesc: "מוצאים 3 מילים שצמחו מאותו שורש",
     rootPrompt: "השורש הזה ילד שלוש מילים מודרניות",
-    rootProgress: (n) => n === 0 ? "מצא 3 מילים" : n === 3 ? "כל השלוש נמצאו!" : `${n}/3 נמצאו`,
+    rootProgress: (n) => n === 0 ? "מצאו 3 מילים" : n === 3 ? "כל השלוש נמצאו!" : `${n}/3 נמצאו`,
     shadeTitle: "סולם עוצמה",
-    shadeDesc: "סדר 5 מילים מעדין לעוצמתי",
-    shadePrompt: "מהמתון לחזק ביותר. לחץ לפי הסדר.",
+    shadeDesc: "מסדרים 5 מילים מעדין לעוצמתי",
+    shadePrompt: "מהמתון לחזק ביותר. לחצו לפי הסדר.",
     shadeMild: "מתון",
     shadeStrong: "חזק",
     shadeReveal: "הסדר הנכון",
-    buildTitle: "בנה מילה",
-    buildDesc: "הרכב מילה מקידומת, שורש וסיומת",
-    buildPrompt: "בנה את המילה שמתאימה לרמז",
+    buildTitle: "בונים מילה",
+    buildDesc: "מרכיבים מילה מקידומת, שורש וסיומת",
+    buildPrompt: "בנו את המילה שמתאימה לרמז",
     idiomTitle: "מפענח ניבים",
     idiomDesc: "תיאור מילולי של ניב, מה הוא באמת אומר?",
-    idiomPrompt: "אם נקח את הניב מילולית. מה הוא באמת אומר?",
+    idiomPrompt: "אם ניקח את הניב מילולית. מה הוא באמת אומר?",
     lensTitle: "עדשת משמעות",
     lensDesc: "אותה מילה, ארבע משמעויות, איזו במשפט?",
     lensPrompt: "באיזו משמעות המילה משמשת כאן?",
@@ -156,21 +156,21 @@ export const COPY: Record<string, PlayT> = {
     exit: "סגירה",
     quizPromptWord: "מה המשמעות של המילה",
     quizPromptMeaning: "איזו מילה מתאימה להגדרה",
-    fillblankPrompt: "השלם את המילה החסרה",
-    anagramPrompt: "סדר את האותיות",
+    fillblankPrompt: "השלימו את המילה החסרה",
+    anagramPrompt: "סדרו את האותיות",
     anagramHint: "רמז:",
     anagramSubmit: "בדיקה",
     anagramReset: "איפוס",
-    speedReady: "מוכן?",
-    speedGo: "צא!",
+    speedReady: "מוכנים?",
+    speedGo: "צאו!",
     speedSeconds: (n) => n === 1 ? "מילה אחת!" : `${n} מילים!`,
-    memoryFlipPrompt: "התאם כל מילה עם ההגדרה שלה, הפוך 2 קלפים בכל פעם",
+    memoryFlipPrompt: "התאימו כל מילה להגדרה שלה, הפכו 2 קלפים בכל פעם",
     memoryMoves: (n) => n === 1 ? "מהלך אחד" : `${n} מהלכים`,
     resultGreat: "נהדר!",
-    resultGood: "יפה.",
-    resultKeepGoing: "ממשיכים להתאמן.",
+    resultGood: "יפה",
+    resultKeepGoing: "ממשיכים להתאמן",
     resultYouMissed: "מילים לחזרה",
-    resultPlayAgain: "שחק שוב",
+    resultPlayAgain: "משחקים שוב",
     resultBackToGames: "חזרה למשחקים",
     resultFinalScore: (s) => `${s} נקודות`,
     playNext: "הבא",
@@ -250,8 +250,8 @@ export const COPY: Record<string, PlayT> = {
     memoryFlipPrompt: "Match each word with its meaning, flip 2 cards at a time",
     memoryMoves: (n) => n === 1 ? "1 move" : `${n} moves`,
     resultGreat: "Great job!",
-    resultGood: "Nice work.",
-    resultKeepGoing: "Keep practicing.",
+    resultGood: "Nice work",
+    resultKeepGoing: "Keep practicing",
     resultYouMissed: "Words to review",
     resultPlayAgain: "Play again",
     resultBackToGames: "Back to games",
@@ -3580,13 +3580,23 @@ const GAME_COVERS = new Set<GameId>([
 
 /** A pool that is sure to include the focus word: the word first, then
  *  random others, sized to one session so the game's builder uses them all. */
+const FOCUS_POOLS = new WeakMap<PlayWord[], Map<string, PlayWord[]>>();
 function focusPool(pool: PlayWord[], word: string, game: GameId): PlayWord[] {
   const key = word.trim().toLowerCase();
   const hit = pool.find((p) => p.word.trim().toLowerCase() === key);
   if (!hit || game === "flashcards" || game === "flashdefs") return pool;
+  // Called during render: the same pool, word and game must give the SAME array,
+  // or the game rebuilds its questions on every re-render of the page.
+  const made = FOCUS_POOLS.get(pool) ?? new Map<string, PlayWord[]>();
+  FOCUS_POOLS.set(pool, made);
+  const id = `${game}|${key}`;
+  const kept = made.get(id);
+  if (kept) return kept;
   const others = pool.filter((p) => p !== hit).sort(() => Math.random() - 0.5);
   const size = Math.max(SESSION_SIZE[game], MIN_WORDS_FOR_GAME[game]);
-  return [hit, ...others.slice(0, Math.max(0, size - 1))];
+  const out = [hit, ...others.slice(0, Math.max(0, size - 1))];
+  made.set(id, out);
+  return out;
 }
 
 /** openingLesson: the page was opened to play a lesson (?lesson=), so it shows

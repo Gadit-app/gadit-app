@@ -9,6 +9,7 @@
  */
 
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useFrozenPool } from "./use-frozen-pool";
 import { sfx } from "@/lib/game-sfx";
 import type { PlayWord, MemoryCard } from "@/lib/play-engine";
 import { buildMemoryDeck, SESSION_SIZE } from "@/lib/play-engine";
@@ -30,9 +31,10 @@ export function GameMemory({
   t: PlayT;
 }) {
   const { nq } = useNiqqud(); // display-only vowel points
+  const { pool: startPool, touch } = useFrozenPool(pool);
   const deck = useMemo(
-    () => buildMemoryDeck(pool, SESSION_SIZE.memory),
-    [pool],
+    () => buildMemoryDeck(startPool, SESSION_SIZE.memory),
+    [startPool],
   );
   // Derive the pair count from the actual deck: buildMemoryDeck dedups
   // duplicate words/meanings, so it can legitimately return fewer than
@@ -109,7 +111,7 @@ export function GameMemory({
   }
 
   return (
-    <div className="wb-play-stage">
+    <div className="wb-play-stage" onPointerDownCapture={touch} onKeyDownCapture={touch}>
       <PlayHeader title={t.memoryTitle} progress={`${matched.length}/${totalPairs}`} score={moves} onExit={onExit} t={t} />
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow"><QText text={t.memoryFlipPrompt} /></div>

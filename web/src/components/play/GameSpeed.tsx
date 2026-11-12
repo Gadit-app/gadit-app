@@ -13,6 +13,7 @@
  */
 
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useFrozenPool } from "./use-frozen-pool";
 import { sfx } from "@/lib/game-sfx";
 import type { PlayWord, QuizQuestion } from "@/lib/play-engine";
 import { buildSpeedDeck } from "@/lib/play-engine";
@@ -38,7 +39,8 @@ export function GameSpeed({
   t: PlayT;
 }) {
   const { nq } = useNiqqud(); // display-only vowel points
-  const deck = useMemo(() => buildSpeedDeck(pool), [pool]);
+  const { pool: startPool, touch } = useFrozenPool(pool);
+  const deck = useMemo(() => buildSpeedDeck(startPool), [startPool]);
   const [stage, setStage] = useState<"countdown" | "playing" | "done">("countdown");
   const [countdown, setCountdown] = useState(3);
   const [timeLeft, setTimeLeft] = useState(DURATION);
@@ -135,7 +137,7 @@ export function GameSpeed({
   // Defensive: empty deck (degenerate pool) — never crash the render.
   if (!q) return null;
   return (
-    <div className="wb-play-stage">
+    <div className="wb-play-stage" onPointerDownCapture={touch} onKeyDownCapture={touch}>
       <PlayHeader title={t.speedTitle} timeLeft={timeLeft} score={score} onExit={onExit} t={t} />
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow">

@@ -106,10 +106,20 @@ function CrosswordBoard({ pool, onExit, lang, t, level, kids, onLevel }: { pool:
     const ok = ks.every((k, i) => lockedCells.has(k) || base(letters.get(k) ?? "") === base(e.letters[i]));
     if (ok) {
       sfx.correct();
-      setSolved((s) => { const n = new Set(s); n.add(e.word); return n; });
-      // on to the next unsolved entry
-      const idx = cw.entries.findIndex((x, i) => i !== sel && !solved.has(x.word) && x.word !== e.word);
-      if (idx >= 0) { setSel(idx); setCursor(cellsOf(cw.entries[idx]).find((k) => !lockedCells.has(k)) ?? null); }
+      // Solving a word locks its cells, and that can complete a crossing word whose
+      // other letters were already right: it counts as solved too (it used to stay
+      // open forever, and the result screen never came).
+      const ns = new Set(solved); ns.add(e.word);
+      const nl = new Set<string>();
+      for (let grew = true; grew;) {
+        grew = false; nl.clear();
+        for (const x of cw.entries) if (ns.has(x.word)) for (const k of cellsOf(x)) nl.add(k);
+        for (const x of cw.entries) if (!ns.has(x.word) && cellsOf(x).every((k, i) => nl.has(k) || base(letters.get(k) ?? "") === base(x.letters[i]))) { ns.add(x.word); grew = true; }
+      }
+      setSolved(ns);
+      // on to the next unsolved entry, on a cell that can still be typed in
+      const idx = cw.entries.findIndex((x) => !ns.has(x.word));
+      if (idx >= 0) { setSel(idx); setCursor(cellsOf(cw.entries[idx]).find((k) => !nl.has(k)) ?? null); }
     } else {
       sfx.wrong();
       setShake(e.word); setTimeout(() => setShake(null), 500);
@@ -212,14 +222,16 @@ function CrosswordBoard({ pool, onExit, lang, t, level, kids, onLevel }: { pool:
 }
 
 const CW_CSS = `
-.cw .cw-q { display: grid; gap: 12px; justify-items: center; }
+/* On a phone the board is as wide as the panel lets it be: sized in vw it was wider than the panel and its far side was cut off. */
+.cw .cw-q { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; justify-items: center; }
+html body .wordbook .wst .cw-q { padding-inline: 10px; }
 .cw-clue { display: grid; justify-items: center; gap: 6px; text-align: center; max-width: 52ch; }
 .cw-clue-num { font-size: 13px; font-weight: 800; color: #0a7472; letter-spacing: 0.02em; }
 .cw-clue-text { font-size: 18px; line-height: 1.5; color: #14202b; font-weight: 600; }
 .cw-clue.is-pic-first .cw-clue-pic { order: -1; width: 150px; height: 150px; }
 .cw-clue.is-pic-first .cw-clue-text { font-size: 15px; font-weight: 600; color: #374151; }
 .cw-clue-pic { width: 120px; height: 120px; border-radius: 16px; box-shadow: 0 8px 18px #0003; object-fit: cover; }
-.cw-grid { display: grid; gap: 3px; width: min(92vw, 460px); padding: 8px; border-radius: 16px; background: #e9e3d4; box-shadow: inset 0 2px 8px #0002; }
+.cw-grid { display: grid; gap: 3px; width: min(100%, 460px); padding: 8px; border-radius: 16px; background: #e9e3d4; box-shadow: inset 0 2px 8px #0002; }
 .cw-void { aspect-ratio: 1; }
 .cw-cell { position: relative; aspect-ratio: 1; min-width: 0; min-height: 0; display: grid; place-items: center; padding: 0; border: 0; border-radius: 7px; background: #fffdf6; font-family: var(--wb-font-display, inherit); font-weight: 800; font-size: clamp(14px, calc(60vw / var(--cols)), 28px); color: #2b2418; line-height: 1; cursor: pointer; box-shadow: 0 1px 0 #0001; }
 .cw-cell.is-entry { background: #fff3c4; }
@@ -228,7 +240,8 @@ const CW_CSS = `
 .cw-cell.is-shake { animation: cw-shake 0.45s; }
 @keyframes cw-shake { 20% { transform: translateX(-4px); } 40% { transform: translateX(4px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(3px); } }
 .cw-num { position: absolute; top: 2px; inset-inline-start: 4px; font-style: normal; font-size: 9px; font-weight: 700; color: #7a5326; line-height: 1; }
-.cw-keys { display: grid; gap: 6px; width: min(96vw, 520px); }
+.cw-keys { display: grid; gap: 6px; width: min(100%, 520px); }
+.cw-key { min-width: 0; }
 .cw-keyrow { display: flex; justify-content: center; gap: 5px; }
 .cw-key { flex: 1 1 0; max-width: 46px; min-height: 44px; border: 0; border-radius: 9px; background: #fff; box-shadow: 0 2px 0 #0002; font: inherit; font-weight: 700; font-size: 19px; color: #14202b; cursor: pointer; }
 .cw-key:active { transform: translateY(1px); box-shadow: none; }

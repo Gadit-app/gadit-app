@@ -144,6 +144,20 @@ ${S} .wb-play-cta-duel { box-shadow: 0 6px 14px #0003; }
 /* result: on glass too, with a big gold score */
 ${S} .wb-play-result { margin-top: 10px; background: rgba(255,255,255,.84); -webkit-backdrop-filter: blur(16px) saturate(1.3); backdrop-filter: blur(16px) saturate(1.3); border: 1.5px solid rgba(255,255,255,.95); box-shadow: 0 18px 44px rgba(10,30,40,.30); border-radius: 28px; padding: 28px 18px; min-height: 0; }
 ${S} .wb-play-result-headline, ${S} .wb-play-result-sub, ${S} .wb-play-result-missed-label, ${S} .wb-play-result-missed-word, ${S} .wb-play-result-missed-mean { color: #14202b; }
+/* The stage's panels are always light, whatever the skin: inside them the colour
+   tokens are the light ones, so text that reads a token (the old meaning, the
+   false-friend word, hints, the score's "/5") never turns light on a light panel.
+   Found by the night QA of 2026-11-12: in the dark theme these were invisible. */
+${S} .wb-play-question, ${S} .wb-play-result, ${S} .wb-play-explain, ${S} .wb-play-anagram-hint, ${S} .wb-lesson-steps {
+  --ink: #0B0F19; --ink-soft: #3A3F4B; --ink-muted: #5C6270; --ink-faint: #6F7685;
+  --wb-ink: #0B0F19; --wb-ink-soft: #3A3F4B; --wb-border: #E2E5EA;
+  --surface: #FFFFFF; --mist: #EAF1EE; --rule: #E2E5EA; --rule-soft: #EAECF1; --rule-faint: #F1F2F6; }
+/* labels whose dark-skin colours were chosen for a dark card, and the green that was too pale in every theme */
+${S} .wb-play-artist-origin { color: #9d174d; background: #fce7f3; }
+${S} .wb-play-root-progress { color: #3f6212; }
+/* the review list sits on its own card: keep it light too, the ink above is dark in every theme */
+${S} .wb-play-result-missed { background: #fff; border-color: #e3e8ec; color: #14202b; }
+${S} .wb-play-result-missed-sep { color: #5b6770; }
 ${S} .wb-play-result-score-num { color: #e67700; text-shadow: none; }
 
 /* letters (anagram, build a word): stones, like the gate of the worlds */
@@ -244,6 +258,8 @@ ${T} .wb-play-question::before, ${T} .wb-play-question::after { content: none; }
 ${T} .wb-play-question-eyebrow { color: #8a6a3a; font-weight: 700; letter-spacing: 0.04em; font-size: 13px; }
 ${T} .wb-play-prompt, ${T} .wb-play-prompt-word, ${T} .wb-tf-meaning, ${T} .wb-play-sentence,
 ${T} .wb-play-result-headline, ${T} .wb-play-result-sub, ${T} .wb-play-result-missed-label, ${T} .wb-play-result-missed-word, ${T} .wb-play-result-missed-mean { color: #1f2a30; }
+${T} .wb-play-result-missed { background: #fffdf8; border-color: #e3d9c6; color: #1f2a30; }
+${T} .wb-play-result-missed-sep { color: #6b5a44; }
 ${T} .wb-play-result-score-num { color: #0a7472; text-shadow: none; }
 ${T} .wb-play-explain, ${T} .wb-play-anagram-hint { background: #fffdf8; border: 1px solid #e3d9c6; border-radius: 12px; color: #1f2a30; box-shadow: 0 6px 18px #0004; }
 ${T} .wb-play-option, ${T} .wb-play-root-tile, ${T} .wb-play-shade-pool button, ${T} .wb-play-anagram-tile, ${T} .wb-play-build-pool button {

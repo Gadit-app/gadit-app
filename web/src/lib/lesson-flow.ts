@@ -14,3 +14,9 @@ export function setLessonNext(label: string | null) {
 export function getLessonNext(): string | null {
   return nextLabel;
 }
+
+/** Inside a lesson, "Play again" restarts only the current step: the games' own
+ *  replay reloads the page, which threw the child back to step 1 of the lesson. */
+let replayStep: (() => void) | null = null;
+export function setLessonReplay(fn: (() => void) | null) { replayStep = fn; }
+export function getLessonReplay(): (() => void) | null { return replayStep; }

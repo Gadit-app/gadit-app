@@ -20,7 +20,7 @@ import { GameReading } from "./GameReading";
 import { GamePicturePick } from "./GamePicturePick";
 import { LearnWordFlag } from "./LearnWordFlag";
 import { picCopy } from "@/lib/picture-pick-i18n";
-import { setLessonNext } from "@/lib/lesson-flow";
+import { setLessonNext, setLessonReplay } from "@/lib/lesson-flow";
 import { lessonCopy } from "./lesson-i18n";
 // The banks themselves, not bankFor: the fill-in step needs only the words
 // and topics, and bankFor would pull every UI language's translations into
@@ -93,6 +93,8 @@ export function LessonPath({ lesson, learnLang, preReader, lang, t, onExit, onDo
   }, [pool, lesson, preReader]);
 
   const [i, setI] = useState(0);
+  const [round, setRound] = useState(0); // "play again" on a step's result: the step alone starts over
+  useEffect(() => { setLessonReplay(() => setRound((r) => r + 1)); return () => setLessonReplay(null); }, []);
   const done = i >= steps.length;
   useEffect(() => { if (done) onDone?.(); }, [done]); // eslint-disable-line react-hooks/exhaustive-deps
   // The results screen of each game offers the next step.
@@ -104,10 +106,13 @@ export function LessonPath({ lesson, learnLang, preReader, lang, t, onExit, onDo
   if (done) {
     return (
       <div className="wb-play-stage" style={{ textAlign: "center", paddingTop: 40 }}>
-        <div style={{ fontSize: 56 }} aria-hidden="true">🎉</div>
-        <h2 style={{ fontSize: 26, fontWeight: 800, margin: "10px 0 6px", color: "var(--wb-ink)" }}>{c.doneTitle}</h2>
-        <p style={{ color: "var(--wb-ink-soft)", fontSize: 16, maxWidth: 420, margin: "0 auto 22px", lineHeight: 1.6 }}>{c.doneBody}</p>
-        <button type="button" className="wb-play-cta-primary" onClick={onExit}>{c.back}</button>
+        {/* On the light result panel, with fixed dark ink: the text used to sit straight on the world picture in the skin's colour. */}
+        <div className="wb-play-result" style={{ maxWidth: 520, margin: "0 auto" }}>
+          <div style={{ fontSize: 56 }} aria-hidden="true">🎉</div>
+          <h2 style={{ fontSize: 26, fontWeight: 800, margin: "10px 0 6px", color: "#14202b" }}>{c.doneTitle}</h2>
+          <p style={{ color: "#3d4a54", fontSize: 16, maxWidth: 420, margin: "0 auto 22px", lineHeight: 1.6 }}>{c.doneBody}</p>
+          <button type="button" className="wb-play-cta-primary" onClick={onExit}>{c.back}</button>
+        </div>
       </div>
     );
   }
@@ -134,7 +139,7 @@ export function LessonPath({ lesson, learnLang, preReader, lang, t, onExit, onDo
         <button type="button" className="wb-lesson-close" onClick={onExit} aria-label={c.back}>×</button>
       </div>
       <style>{LESSON_CSS}</style>
-      <div key={step}>
+      <div key={`${step}-${round}`}>
         {step === "cards" && <GameFlashcards {...props} mode="meanings" skipPicker preReader={preReader} wordFlag={flag} />}
         {step === "pictures" && <GamePicturePick items={lesson.items} learnLang={learnLang} lang={lang} t={t} title={picCopy(lang).name} onExit={next} />}
         {step === "match" && <GameQuiz {...props} />}
@@ -151,6 +156,8 @@ export function LessonPath({ lesson, learnLang, preReader, lang, t, onExit, onDo
 const LESSON_CSS = `
 .wb-lesson-steps { display: flex; align-items: center; gap: 12px; max-width: 720px; margin: 12px auto 0; padding: 8px 16px; }
 .wb-lesson-step-label { font-size: 14px; font-weight: 700; color: var(--wb-ink, #0f172a); }
+.wst .wb-lesson-step-label { color: #14202b; }
+.wst .wb-lesson-close { background: #fff; color: #14202b; border-color: #d1d5db; }
 .wb-lesson-dots { display: inline-flex; gap: 6px; margin-inline-start: auto; }
 .wb-lesson-dots span { width: 10px; height: 10px; border-radius: 50%; background: var(--wb-border, #D1D5DB); }
 .wb-lesson-dots span.is-done { background: #10B981; }

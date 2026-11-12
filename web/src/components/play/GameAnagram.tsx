@@ -11,6 +11,7 @@
  */
 
 import { useState, useEffect, useMemo } from "react";
+import { useFrozenPool } from "./use-frozen-pool";
 import { sfx } from "@/lib/game-sfx";
 import type { PlayWord, AnagramRound } from "@/lib/play-engine";
 import { buildAnagramRounds, SESSION_SIZE } from "@/lib/play-engine";
@@ -38,9 +39,10 @@ export function GameAnagram({
   lang: string;
   t: PlayT;
 }) {
+  const { pool: startPool, touch } = useFrozenPool(pool);
   const rounds = useMemo(
-    () => buildAnagramRounds(pool, SESSION_SIZE.anagram),
-    [pool],
+    () => buildAnagramRounds(startPool, SESSION_SIZE.anagram),
+    [startPool],
   );
   const [roundIdx, setRoundIdx] = useState(0);
   // Defensive: if buildAnagramRounds returned an empty pool (which the
@@ -148,7 +150,7 @@ export function GameAnagram({
   const tray = tiles.filter((t) => t.slot < 0);
 
   return (
-    <div className="wb-play-stage">
+    <div className="wb-play-stage" onPointerDownCapture={touch} onKeyDownCapture={touch}>
       <PlayHeader title={t.anagramTitle} progress={`${roundIdx + 1}/${rounds.length}`} score={score} onExit={onExit} t={t} />
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow"><QText text={t.anagramPrompt} /></div>

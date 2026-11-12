@@ -51,11 +51,14 @@ function pickItems(pool: PlayWord[], ui: string, maxLen: number, n: number, bank
   for (const [l, g] of groups) if (g.length > best.length || (g.length === best.length && l === ui)) best = g;
   if (best.length >= 5) return shuffle(best).slice(0, n);
   // The bank of the UI language (English for every other UI), child-friendly words.
-  const he = ui === "he";
+  // When the child has a few words, the bank fills in in THEIR language (a grid holds one
+  // script), and never a word that is already there (found words are counted by their text).
+  const he = best.length ? best[0].lang === "he" : ui === "he";
+  const have = new Set(best.map((x) => x.word.toLowerCase()));
   const bank: Item[] = he
     ? HEBREW_BANK.filter((x) => !/[\s-]/.test(x.w) && (!bankOnly || x.d <= 2)).map((x) => ({ word: x.w, meaning: "", lang: "he" }))
     : ENGLISH_BANK.filter((x) => !/[\s'-]/.test(x.w) && (!bankOnly || x.d <= 2)).map((x) => ({ word: x.w, meaning: ui === "ar" ? x.ar : ui === "ru" ? x.ru : ui === "he" ? x.he : "", lang: "en" }));
-  const fits = bank.filter((x) => { const k = gridLetters(x.word, x.lang === "he").length; return k >= 3 && k <= maxLen; });
+  const fits = bank.filter((x) => { const k = gridLetters(x.word, x.lang === "he").length; return k >= 3 && k <= maxLen && !have.has(x.word.toLowerCase()); });
   return shuffle([...best, ...shuffle(fits).slice(0, n)]).slice(0, n);
 }
 
@@ -198,8 +201,10 @@ function WordSearchBoard({ pool, onExit, lang, t, level, onLevel }: { pool: Play
 }
 
 const WS_CSS = `
-.ws .ws-q { display: grid; gap: 12px; justify-items: center; }
-.ws-grid { display: grid; gap: 3px; width: min(92vw, 460px); aspect-ratio: 1; touch-action: none; user-select: none; -webkit-user-select: none; padding: 8px; border-radius: 16px; background: #e9e3d4; box-shadow: inset 0 2px 8px #0002; }
+/* On a phone the board is as wide as the panel lets it be: sized in vw it was wider than the panel and its far side was cut off. */
+.ws .ws-q { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; justify-items: center; }
+html body .wordbook .wst .ws-q { padding-inline: 10px; }
+.ws-grid { display: grid; gap: 3px; width: min(100%, 460px); aspect-ratio: 1; touch-action: none; user-select: none; -webkit-user-select: none; padding: 8px; border-radius: 16px; background: #e9e3d4; box-shadow: inset 0 2px 8px #0002; }
 .ws-cell { display: grid; place-items: center; border-radius: 8px; background: #fffdf6; font-family: var(--wb-font-display, inherit); font-weight: 800; font-size: clamp(16px, 4.2vw, 26px); color: #2b2418; line-height: 1; transition: background 120ms, transform 120ms; }
 .ws-cell.is-path { background: #ffe58a; transform: scale(0.94); }
 .ws-cell.is-found { color: #fff; }

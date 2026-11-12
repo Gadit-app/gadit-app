@@ -145,6 +145,11 @@ export function blankExample(word: string, examples: string[] | undefined): stri
     const plain = ex.replace(NIQQUD, "");
     const at = plain.toLowerCase().indexOf(w);
     if (at < 0 || plain.length > 140) continue;
+    // The whole word only: "cat" inside "category" gave the hint "____egory". A Hebrew
+    // word may carry a prefix letter before it (בבית), never more letters after it.
+    const letter = /\p{L}/u;
+    const before = plain[at - 1] ?? " ", after = plain[at + w.length] ?? " ";
+    if (letter.test(after) || (letter.test(before) && !/[א-ת]/.test(w))) continue;
     const out = plain.slice(0, at) + "____" + plain.slice(at + w.length);
     if (!out.toLowerCase().includes(w)) return out;
   }
@@ -159,10 +164,10 @@ export function clueSettings(level: PuzzleLevel, kids: boolean, hardSide: number
   return { maxLen: hardSide, n: 8, maxSide: hardSide };
 }
 
-function bankItems(ui: string, maxD: number, maxLen: number): ClueItem[] {
-  const all: ClueItem[] = ui === "he"
+function bankItems(ui: string, maxD: number, maxLen: number, of: "he" | "en" = ui === "he" ? "he" : "en"): ClueItem[] {
+  const all: ClueItem[] = of === "he"
     ? HEBREW_BANK.filter((x) => !/[\s-]/.test(x.w) && x.en && x.d <= maxD).map((x) => ({ word: x.w, lang: "he" as const, clue: "", pic: x.en }))
-    : ENGLISH_BANK.filter((x) => !/[\s'-]/.test(x.w) && x.d <= maxD).map((x) => ({ word: x.w, lang: "en" as const, clue: ui === "ar" ? x.ar : ui === "ru" ? x.ru : "", pic: x.w }));
+    : ENGLISH_BANK.filter((x) => !/[\s'-]/.test(x.w) && x.d <= maxD).map((x) => ({ word: x.w, lang: "en" as const, clue: ui === "ar" ? x.ar : ui === "ru" ? x.ru : ui === "he" ? x.he : "", pic: x.w }));
   return all.filter((x) => { const k = gridLetters(x.word, x.lang === "he").length; return k >= 3 && k <= maxLen; });
 }
 
@@ -186,7 +191,10 @@ export function clueCandidates(pool: PlayWord[], ui: string, level: PuzzleLevel,
   let best: ClueItem[] = [];
   for (const [l, g] of groups) if (g.length > best.length || (g.length === best.length && l === ui)) best = g;
   if (best.length >= 5) return shuffle(best).slice(0, s.n + 6);
-  const fits = bankItems(ui, level === "medium" ? 3 : 5, s.maxLen);
+  // Too few of the child's words: the bank fills in, in the language of those words (a grid
+  // holds one language), and never a word that is already there (a double could not be finished).
+  const have = new Set(best.map((x) => x.word.toLowerCase()));
+  const fits = bankItems(ui, level === "medium" ? 3 : 5, s.maxLen, best[0]?.lang).filter((x) => !have.has(x.word.toLowerCase()));
   return [...shuffle(best), ...shuffle(fits).slice(0, 24)];
 }
 
@@ -206,7 +214,9 @@ export function useCluePics(user: User | null, cands: ClueItem[]): { pics: Recor
   const want = useMemo(() => [...new Set(cands.map((x) => x.pic).filter((x): x is string => !!x))].slice(0, 60), [cands]);
   useEffect(() => {
     let alive = true;
-    const done = (pics: Record<string, string>) => { if (alive) setState({ for: cands, pics }); };
+    // Once only: an answer that arrives after the 6s give-up must not redraw a grid being solved.
+    let settled = false;
+    const done = (pics: Record<string, string>) => { if (alive && !settled) { settled = true; setState({ for: cands, pics }); } };
     if (!user || !want.length) { done({}); return; }
     const giveUp = setTimeout(() => done({}), 6000);
     void (async () => {

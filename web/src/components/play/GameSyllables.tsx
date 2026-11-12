@@ -136,22 +136,33 @@ function useSpeech() {
     return p;
   }, [user]);
 
+  // The sound playing now: `cut` ends its wait at once (pause() never fires "ended",
+  // so a cut sound used to hold the stones for the full 6 seconds).
+  const cut = useRef<(() => void) | null>(null);
+  const closed = useRef(false);
   const stop = useCallback(() => {
     if (current.current) { current.current.pause(); current.current = null; }
     try { window.speechSynthesis?.cancel(); } catch { /* no engine */ }
+    const c = cut.current; cut.current = null; c?.();
     setSpeaking(null);
   }, []);
 
-  /** Speaks `text` and resolves when it ends. */
-  const speak = useCallback(async (text: string) => {
+  /** Speaks `text` and resolves when it ends: true when it played to the end,
+   *  false when another sound (or leaving the game) cut it short. */
+  const speak = useCallback(async (text: string): Promise<boolean> => {
+    if (closed.current) return false;
     stop();
     setSpeaking(text);
     const url = await fetchUrl(text);
+    if (closed.current) return false;
+    let whole = true;
     // Never wait on a sound that does not end (a device voice with no Hebrew,
     // a blocked autoplay): the game moves on after a short while regardless.
     await new Promise<void>((resolve) => {
-      const tm = setTimeout(resolve, url ? 6000 : 2500);
-      const done = () => { clearTimeout(tm); resolve(); };
+      const tm = setTimeout(() => { cut.current = null; resolve(); }, url ? 6000 : 2500);
+      const done = () => { clearTimeout(tm); if (cut.current === stopped) cut.current = null; resolve(); };
+      const stopped = () => { whole = false; clearTimeout(tm); resolve(); };
+      cut.current = stopped;
       if (url) {
         const a = new Audio(url);
         current.current = a;
@@ -168,11 +179,12 @@ function useSpeech() {
         window.speechSynthesis.speak(u);
       } catch { done(); }
     });
-    setSpeaking((s) => (s === text ? null : s));
+    if (!closed.current) setSpeaking((s) => (s === text ? null : s));
+    return whole;
   }, [fetchUrl, stop]);
 
   const warm = useCallback((texts: string[]) => { for (const t of texts) void fetchUrl(t); }, [fetchUrl]);
-  useEffect(() => () => stop(), [stop]);
+  useEffect(() => { closed.current = false; return () => { closed.current = true; stop(); }; }, [stop]);
   return { speak, stop, warm, speaking };
 }
 
@@ -180,7 +192,7 @@ export function GameSyllables({ onExit, lang, t }: { onExit: () => void; lang: s
   const c = syllablesCopy(lang);
   const { user } = useAuth();
   const items = useMemo(bankItems, []);
-  const [level] = useState(() => readLevel(user?.uid));
+  const [level, setLevel] = useState(() => readLevel(user?.uid));
   const [seed, setSeed] = useState(0);
   const session = useMemo(() => pickSession(items, level), [items, level, seed]); // eslint-disable-line react-hooks/exhaustive-deps
   const [idx, setIdx] = useState(0);
@@ -231,7 +243,7 @@ export function GameSyllables({ onExit, lang, t }: { onExit: () => void; lang: s
       <GameResult
         data={{ title: c.title, score: session.length, total: session.length, headline: c.done.replace("{n}", String(session.length)) }}
         onExit={onExit}
-        onReplay={() => { setSeed((s) => s + 1); setIdx(0); setStep(1); setDone(false); }}
+        onReplay={() => { setLevel(readLevel(user?.uid)); setSeed((s) => s + 1); setIdx(0); setStep(1); setDone(false); }}
         lang={lang}
         t={t}
       />
@@ -240,6 +252,7 @@ export function GameSyllables({ onExit, lang, t }: { onExit: () => void; lang: s
   if (!word) return null;
   const pic = pics[word.en.toLowerCase()];
   const stepLabel = step === 1 ? c.listen : step === 2 ? c.build : c.read;
+  const fwd = lang === "he" || lang === "ar" || lang === "fa" ? "←" : "→";
   return (
     <div className="wb-play-stage syl">
       <style>{SYL_CSS}</style>
@@ -249,8 +262,8 @@ export function GameSyllables({ onExit, lang, t }: { onExit: () => void; lang: s
           {[1, 2, 3].map((n) => <span key={n} className={n < step ? "is-done" : n === step ? "is-on" : ""} />)}
         </div>
         <div className="wb-play-question-eyebrow">{step === 1 ? c.listenHint : step === 2 ? c.buildHint : c.readHint}</div>
-        {step === 1 && <StepListen key={`l${idx}`} word={word} pic={pic} c={c} speech={speech} onDone={() => setStep(2)} />}
-        {step === 2 && <StepBuild key={`b${idx}`} word={word} others={session.filter((x) => x !== word)} pic={pic} c={c} speech={speech} onDone={() => setStep(3)} />}
+        {step === 1 && <StepListen key={`l${idx}`} word={word} pic={pic} c={c} fwd={fwd} speech={speech} onDone={() => setStep(2)} />}
+        {step === 2 && <StepBuild key={`b${idx}`} word={word} others={session} pic={pic} c={c} fwd={fwd} speech={speech} onDone={() => setStep(3)} />}
         {step === 3 && <StepRead key={`r${idx}`} word={word} pic={pic} c={c} speech={speech} last={idx + 1 >= session.length} onAgain={() => setStep(1)} onDone={finishWord} />}
       </div>
     </div>
@@ -274,7 +287,7 @@ function Picture({ pic, nq, shown }: { pic?: string; nq: string; shown: boolean 
 }
 
 /** Step 1: tap the stones in order; each sounds; then the whole word and its picture. */
-function StepListen({ word, pic, c, speech, onDone }: { word: Item; pic?: string; c: Copy; speech: Speech; onDone: () => void }) {
+function StepListen({ word, pic, c, fwd, speech, onDone }: { word: Item; pic?: string; c: Copy; fwd: string; speech: Speech; onDone: () => void }) {
   const [lit, setLit] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const busy = useRef(false);
@@ -308,7 +321,7 @@ function StepListen({ word, pic, c, speech, onDone }: { word: Item; pic?: string
             <div className="syl-word" lang="he" dir="rtl">{word.nq}</div>
             <div className="syl-row">
               <button type="button" className="syl-btn is-ghost" onClick={() => void speech.speak(word.nq)}>{c.hear}</button>
-              <button type="button" className="syl-btn" onClick={onDone}>{c.build} ←</button>
+              <button type="button" className="syl-btn" onClick={onDone}>{c.build} {fwd}</button>
             </div>
           </>
         )}
@@ -318,18 +331,20 @@ function StepListen({ word, pic, c, speech, onDone }: { word: Item; pic?: string
 }
 
 /** Step 2: hear the word, then pick each next syllable out of two. */
-function StepBuild({ word, others, pic, c, speech, onDone }: { word: Item; others: Item[]; pic?: string; c: Copy; speech: Speech; onDone: () => void }) {
+function StepBuild({ word, others, pic, c, fwd, speech, onDone }: { word: Item; others: Item[]; pic?: string; c: Copy; fwd: string; speech: Speech; onDone: () => void }) {
   const [placed, setPlaced] = useState(0);
   const [complete, setComplete] = useState(false);
   const busy = useRef(false);
   // The two stones for each slot: the right syllable and one from another word of the session.
-  const choices = useMemo(() => {
-    const pool = others.flatMap((x) => x.syl).filter((s) => !word.syl.includes(s));
+  // Drawn once per word (the step is keyed by the word): a memo on the props reshuffled
+  // the stones every time a sound started or ended, because the parent re-renders then.
+  const [choices] = useState(() => {
+    const pool = others.filter((x) => x !== word).flatMap((x) => x.syl).filter((s) => !word.syl.includes(s));
     return word.syl.map((s, k) => {
       const d = pool.length ? pool[(k * 7 + word.nq.length) % pool.length] : word.syl[(k + 1) % word.syl.length];
       return shuffle([s, d]);
     });
-  }, [word, others]);
+  });
   // Depends on `speak` (stable), never on the whole `speech` object: that one is
   // new on every render, and the word then restarted every 0.4s and cut off
   // every tap (Shirli, 2026-11-11).
@@ -339,14 +354,15 @@ function StepBuild({ word, others, pic, c, speech, onDone }: { word: Item; other
     if (busy.current || complete) return;
     busy.current = true;
     const want = word.syl[placed];
-    await speech.speak(s);
+    const heard = await speech.speak(s);
     if (s === want) {
       sfx.correct();
       const n = placed + 1;
       setPlaced(n);
       if (n === word.syl.length) { await speech.speak(word.nq); setComplete(true); sfx.magic(); }
-    } else {
-      // Not red, not a buzzer: the right syllable is simply heard right after.
+    } else if (heard) {
+      // Not red, not a buzzer: the right syllable is simply heard right after
+      // (unless the child already asked for another sound).
       await speech.speak(want);
     }
     busy.current = false;
@@ -370,7 +386,7 @@ function StepBuild({ word, others, pic, c, speech, onDone }: { word: Item; other
         <Picture pic={pic} nq={word.nq} shown={complete} />
         {complete && (
           <div className="syl-row">
-            <button type="button" className="syl-btn" onClick={onDone}>{c.read} ←</button>
+            <button type="button" className="syl-btn" onClick={onDone}>{c.read} {fwd}</button>
           </div>
         )}
       </div>

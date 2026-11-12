@@ -11,6 +11,7 @@
  */
 
 import { ReportQuestionButton } from "./ReportQuestionButton";
+import { useFrozenPool } from "./use-frozen-pool";
 import { sfx } from "@/lib/game-sfx";
 import { SfxToggle } from "@/components/SfxToggle";
 import { useState, useMemo, useEffect } from "react";
@@ -37,9 +38,10 @@ export function GameQuiz({
   t: PlayT;
 }) {
   const { nq } = useNiqqud(); // display-only vowel points
+  const { pool: startPool, touch } = useFrozenPool(pool);
   const questions = useMemo(
-    () => buildQuizQuestions(pool, SESSION_SIZE.quiz),
-    [pool],
+    () => buildQuizQuestions(startPool, SESSION_SIZE.quiz),
+    [startPool],
   );
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
@@ -80,7 +82,7 @@ export function GameQuiz({
   // should prevent it, but never render q.promptKind off undefined.
   if (!q) return null;
   return (
-    <div className="wb-play-stage">
+    <div className="wb-play-stage" onPointerDownCapture={touch} onKeyDownCapture={touch}>
       <PlayHeader title={t.quizTitle} progress={`${idx + 1}/${questions.length}`} score={score} onExit={onExit} t={t} />
       <div className="wb-play-question">
         <div className="wb-play-question-eyebrow">

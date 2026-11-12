@@ -134,7 +134,9 @@ const LANG_CODE: Record<string, string> = {
 };
 
 function langLabel(name: string, ui: string): string {
-  const code = LANG_CODE[name];
+  // Some notebook entries carry the language as a code ("en"), others as a name
+  // ("English"): the prompt used to read "How do you say it in en?".
+  const code = LANG_CODE[name] ?? (/^[a-z]{2,3}(-[A-Za-z]{2,4})?$/.test(name) ? name : undefined);
   if (!code) return name;
   try {
     return new Intl.DisplayNames([ui], { type: "language" }).of(code) ?? name;

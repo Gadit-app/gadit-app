@@ -32,7 +32,9 @@ function units(word: string): Unit[] {
   for (const ch of word.normalize("NFC")) {
     if (LETTER.test(ch)) out.push({ letter: ch, marks: "", vowel: false, shva: false, text: ch });
     else if (MARK.test(ch) && out.length) { const u = out[out.length - 1]; u.marks += ch; u.text += ch; }
-    // anything else (punctuation, geresh) is dropped from the sound-out
+    // a geresh changes the sound of its letter (ג' is "j"), so it stays on the tile
+    else if ((ch === "'" || ch === "׳" || ch === "’") && out.length) out[out.length - 1].text += ch;
+    // anything else (punctuation) is dropped from the sound-out
   }
   for (const u of out) {
     u.vowel = VOWEL_MARKS.test(u.marks);
@@ -69,6 +71,9 @@ export function syllabify(word: string): string[] {
       else cur = open(u, true);
       continue;
     }
+    // A furtive patah (תַּפּוּחַ, יָרֵחַ, לְהַגִּיעַ) is read before its letter, "ach", so the
+    // letter stays on the syllable before it: alone, the tile חַ would be read "cha".
+    if (last && cur && cur.hasVowel && i > 0 && /[חעה]/.test(u.letter) && u.marks.includes("ַ")) { attach(cur, u); cur.closed = true; continue; }
     if (u.vowel) {
       if (cur && !cur.hasVowel) { attach(cur, u); cur.hasVowel = true; } // a letter with no sign before it (אוֹ…)
       else cur = open(u, true);
@@ -83,7 +88,9 @@ export function syllabify(word: string): string[] {
     // No sign on the letter.
     const silentEnd = last && SILENT_AT_END.has(u.letter);
     // NFC puts the dagesh after the vowel sign, so look anywhere in the marks.
-    const mater = u.letter === "י" && !!cur && cur.hasVowel && /[ִ-ָ]/.test(us[i - 1]?.marks ?? "");
+    // A bare yod after a vowel is part of that vowel (גִּי, בֵּי), unless it carries a dagesh or
+    // opens the next syllable with a vav vowel: then it is a consonant (טִ · יּוּל, אַחְ · רָ · יוּת).
+    const mater = u.letter === "י" && !u.marks && !!cur && cur.hasVowel && /[ִ-ָ]/.test(us[i - 1]?.marks ?? "") && !(us[i + 1]?.letter === "ו" && (HOLAM.test(us[i + 1].marks) || us[i + 1].marks.includes(DAGESH)));
     if (cur && (silentEnd || mater || FINAL_LETTERS.has(u.letter) || last)) { attach(cur, u); if (!silentEnd && !mater) cur.closed = true; continue; }
     if (cur && cur.hasVowel && !cur.closed && !us[i + 1]?.vowel && !isVavVowel(us[i + 1] ?? u)) { attach(cur, u); cur.closed = true; continue; }
     // A consonant that starts the next syllable (its vowel is on the next letter, e.g. a vav letter).

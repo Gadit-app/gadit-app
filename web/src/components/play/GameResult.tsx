@@ -19,7 +19,7 @@ import { recordPlay } from "@/lib/play-streak";
 import { dirForLang } from "@/lib/play-engine";
 import type { PlayT } from "./GameQuiz";
 import { getDuelLauncher } from "@/lib/duel-launch";
-import { getLessonNext } from "@/lib/lesson-flow";
+import { getLessonNext, getLessonReplay } from "@/lib/lesson-flow";
 import { notifyActivity } from "@/lib/notify-activity-client";
 import { QText } from "./QText";
 
@@ -120,7 +120,7 @@ export function GameResult({
           <button type="button" className="wb-play-cta-primary" onClick={onExit}>
             {lessonNext}
           </button>
-          <button type="button" className="wb-play-cta-ghost" onClick={onReplay}>
+          <button type="button" className="wb-play-cta-ghost" onClick={getLessonReplay() ?? onReplay}>
             {t.resultPlayAgain}
           </button>
         </div>
