@@ -51,6 +51,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
   const [showAll, setShowAll] = useState(false);
   const [targets, setTargets] = useState<LearnLang[]>([]);
   const [state, setState] = useState<LearnState | null>(null);
+  const [tried, setTried] = useState(false);
   const [step, setStep] = useState<"view" | "pick" | "reads" | "list">("view");
   const [choice, setChoice] = useState<LearnLang | null>(null);
   const [text, setText] = useState("");
@@ -79,7 +80,7 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
       const s: LearnState = { lang: j.profile?.lang ?? null, reads: j.profile?.reads ?? null, pool: j.pool ?? [], stats: j.stats ?? null, lesson: j.lesson ?? null, lessons: j.lessons ?? null };
       setState(s);
       onStateRef.current(s);
-    } catch { /* the card stays as it was */ }
+    } catch { /* the card stays as it was */ } finally { setTried(true); }
   }, [user, lang, auth]);
 
   useEffect(() => { void load(); }, [load, refreshKey]);
@@ -152,6 +153,17 @@ export function LearnCard({ lang, dir, refreshKey, onState, onLesson, simple, ti
     } catch { setMsg(t.error); } finally { setBusy(false); }
   };
 
+  // The tile keeps its place while the state loads: it used to appear a moment
+  // after the other tiles and push them aside (Gadi 2026-11-12).
+  if (tile && user && !tried) return (
+    <li aria-hidden="true">
+      <span className="wb-play-card has-cover wb-play-cat-notebook" aria-busy="true">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="wb-play-card-cover" src="/play/hw-lessons.webp" alt="" width={720} height={480} />
+        <span className="wb-play-card-text"><span className="wb-play-card-title">&nbsp;</span><span className="wb-play-card-desc">&nbsp;</span></span>
+      </span>
+    </li>
+  );
   if (!targets.length || !state) return null;
   const name = (l: LearnLang) => (l === "en" ? t.english : t.hebrew);
 
