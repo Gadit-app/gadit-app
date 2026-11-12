@@ -12,6 +12,7 @@
  * notebook has too few single words.
  */
 
+import { inventedBy } from "@/lib/game-inventors";
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { sfx } from "@/lib/game-sfx";
@@ -167,7 +168,7 @@ function CrosswordBoard({ pool, onExit, lang, t, level, kids, onLevel }: { pool:
   if (!ready) return (
     <div className="wb-play-stage cw">
       <style>{CW_CSS + LEVEL_CSS}</style>
-      <PlayHeader title={c.title} onExit={onExit} t={t} />
+      <PlayHeader by={inventedBy("crossword", lang)} title={c.title} onExit={onExit} t={t} />
       <div className="pz-wait" dir={dirForLang(lang)}><WaitText text={lc.building} live /></div>
     </div>
   );
@@ -182,7 +183,7 @@ function CrosswordBoard({ pool, onExit, lang, t, level, kids, onLevel }: { pool:
   return (
     <div className="wb-play-stage cw">
       <style>{CW_CSS + LEVEL_CSS}</style>
-      <PlayHeader title={c.title} progress={c.solved(solved.size, total)} onExit={onExit} t={t} />
+      <PlayHeader by={inventedBy("crossword", lang)} title={c.title} progress={c.solved(solved.size, total)} onExit={onExit} t={t} />
       <div className="wb-play-question cw-q">
         <LevelChip level={level} onChange={onLevel} lang={lang} />
         <div className={`cw-clue${level === "easy" && pic ? " is-pic-first" : ""}`} dir={dirForLang(lang)}>

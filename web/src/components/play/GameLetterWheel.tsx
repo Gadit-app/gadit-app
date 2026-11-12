@@ -16,6 +16,7 @@
  * for every letter and sign on the wheels.
  */
 
+import { inventedBy } from "@/lib/game-inventors";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { sfx } from "@/lib/game-sfx";
@@ -295,7 +296,7 @@ export function GameLetterWheel({ onExit, lang, t }: { onExit: () => void; lang:
   return (
     <div className="wb-play-stage lwh">
       <style>{LWH_CSS}</style>
-      <PlayHeader title={c.title} progress={c.round(round + 1, ROUNDS)} score={score} onExit={onExit} t={t} />
+      <PlayHeader by={inventedBy("wheel", lang)} title={c.title} progress={c.round(round + 1, ROUNDS)} score={score} onExit={onExit} t={t} />
       <div className="wb-play-question lwh-q">
         <div className="lwh-wheel" aria-hidden="true">
           <div className="lwh-pointer" />

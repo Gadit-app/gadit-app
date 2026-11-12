@@ -12,6 +12,7 @@
  * on-screen keyboard, the gentle checking and the hint are the crossword's.
  */
 
+import { inventedBy } from "@/lib/game-inventors";
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { sfx } from "@/lib/game-sfx";
@@ -187,7 +188,7 @@ function ArrowwordBoard({ pool, onExit, lang, t, level, kids, onLevel }: { pool:
   if (!ready) return (
     <div className="wb-play-stage aw">
       <style>{AW_CSS + LEVEL_CSS}</style>
-      <PlayHeader title={c.title} onExit={onExit} t={t} />
+      <PlayHeader by={inventedBy("arrowword", lang)} title={c.title} onExit={onExit} t={t} />
       <div className="pz-wait" dir={dirForLang(lang)}><WaitText text={lc.building} live /></div>
     </div>
   );
@@ -202,7 +203,7 @@ function ArrowwordBoard({ pool, onExit, lang, t, level, kids, onLevel }: { pool:
   return (
     <div className="wb-play-stage aw">
       <style>{AW_CSS + LEVEL_CSS}</style>
-      <PlayHeader title={c.title} progress={c.solved(solved.size, total)} onExit={onExit} t={t} />
+      <PlayHeader by={inventedBy("arrowword", lang)} title={c.title} progress={c.solved(solved.size, total)} onExit={onExit} t={t} />
       <div className="wb-play-question aw-q">
         <LevelChip level={level} onChange={onLevel} lang={lang} />
         <div className={`aw-panel${level === "easy" && pic ? " is-pic-first" : ""}`} dir={dirForLang(lang)}>

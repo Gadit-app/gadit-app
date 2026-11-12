@@ -10,6 +10,7 @@
  * has a puzzle. A found word shows its meaning for a moment.
  */
 
+import { inventedBy } from "@/lib/game-inventors";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { sfx } from "@/lib/game-sfx";
 import type { PlayWord } from "@/lib/play-engine";
@@ -164,7 +165,7 @@ function WordSearchBoard({ pool, onExit, lang, t, level, onLevel }: { pool: Play
   return (
     <div className="wb-play-stage ws">
       <style>{WS_CSS + LEVEL_CSS}</style>
-      <PlayHeader title={c.title} progress={c.found(found.size, total)} onExit={onExit} t={t} />
+      <PlayHeader by={inventedBy("wordsearch", lang)} title={c.title} progress={c.found(found.size, total)} onExit={onExit} t={t} />
       <div className="wb-play-question ws-q">
         <LevelChip level={level} onChange={onLevel} lang={lang} />
         <div className="wb-play-question-eyebrow">{c.prompt}</div>

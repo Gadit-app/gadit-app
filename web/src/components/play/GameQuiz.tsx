@@ -144,7 +144,10 @@ export function PlayHeader({
   timeLeft,
   onExit,
   t,
+  by,
 }: {
+  /** Whose idea the game was, for a game a child invented (Gadi 2026-11-12). */
+  by?: string | null;
   title: string;
   progress?: string;
   score?: number;
@@ -169,7 +172,7 @@ export function PlayHeader({
           <path d="M18 6 6 18M6 6l12 12" />
         </svg>
       </button>
-      <div className="wb-play-header-title">{title}</div>
+      <div className="wb-play-header-title">{title}{by ? <span className="wb-play-header-by">💡 {by}</span> : null}</div>
       <div className="wb-play-header-meta">
         <ReportQuestionButton where={title} />
         <SfxToggle style={{ background: "none", border: 0, padding: "2px 4px", fontSize: 18, lineHeight: 1, cursor: "pointer" }} />
