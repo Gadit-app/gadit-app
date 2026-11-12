@@ -129,7 +129,7 @@ const writeLevel = (uid: string | undefined, n: number) => { try { localStorage.
  * spelling that sounds the same and passed the check; the stone still shows
  * the syllable as it is written in the word.
  */
-const SAY_AS: Record<string, string> = { "צִ": "צִי", "צְ": "צֵ", "כָן": "חָן", "הוּם": "הוּם!", "פֶר": "ףֶר", "פֶה": "ףֶה", "פוּרְ": "ףוּרְ", "פֵא": "ףֵא", "פֹה": "ףֹה", "בוּ": "וֻ", "בוּלְ": "וֻל", "בָה": "וָא", "פָה": "פָֿה" };
+const SAY_AS: Record<string, string> = { "צִ": "צִי", "צְ": "צֵ", "כָן": "חָן", "הוּם": "הוּם!", "פֶר": "ףֶר", "פֶה": "ףֶה", "פוּרְ": "ףוּרְ", "פֵא": "ףֵא", "פֹה": "ףֹה", "בוּ": "וֻ", "בוּלְ": "וֻל", "בָה": "וָא", "פָה": "פָֿה", "בוּעַ": "וֻעַ" };
 
 /**
  * What the voice is asked to say for `text` (Gadi 2026-11-12: the stone בַע
