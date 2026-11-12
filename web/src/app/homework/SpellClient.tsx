@@ -46,6 +46,7 @@ import { misc } from "@/lib/misc-i18n";
 import { ml } from "@/lib/my-lists-i18n";
 import { playNotActive } from "@/lib/play-copy";
 import { ocrForm } from "@/lib/ocr-upload";
+import { inventedBy } from "@/lib/game-inventors";
 
 // Internal direction ids: "he2en" = native → English, "en2he" = English →
 // native. The "he" in the name is legacy — the non-English side is the
@@ -1265,6 +1266,8 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
           <div style={{ textAlign: "center", marginTop: 70 }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>✍️</div>
             <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--ink,#0B1220)", marginBottom: 8 }}>{adult ? pr.nav : t("title", lang)}</h1>
+            {/* whose idea the dictation trainer was (Gadi 2026-11-12) */}
+            {!adult && inventedBy("spell", lang) ? <div style={{ display: "inline-block", margin: "0 0 10px", padding: "2px 12px", borderRadius: 999, background: "#fff3c4", color: "#5b3a00", fontSize: 13, fontWeight: 800 }}>💡 {inventedBy("spell", lang)}</div> : null}
             {/* Inside the Play / iOS app: one neutral line, no plan or link. */}
             <p className="gd-buy" style={{ fontSize: 15, color: "var(--ink-muted,#6B7280)", maxWidth: "42ch", margin: "0 auto 20px" }}>
               {adult ? pr.gate : misc("spellGate", lang)}
