@@ -16,6 +16,7 @@
  * React renders only when a firefly is born, caught or leaves.
  */
 
+import { inventedBy } from "@/lib/game-inventors";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { WaitText } from "@/components/WaitText";
@@ -586,6 +587,7 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
                       <img src={s === "coaster" ? `${COASTER_ART}/${world}/card.webp?v=1` : s === "fair" ? `${FAIR_ART}/${stall}/card.webp?v=1` : `${ART}/cover.webp?v=1`} alt="" />
                       <span className="ct-scene-name">{s === "coaster" ? c.sceneCoaster : s === "fair" ? c.sceneFair : c.sceneFireflies}</span>
                       <span className="ct-scene-sub">{s === "coaster" ? c.coasterSub : s === "fair" ? c.fairSub : c.sub}</span>
+                      {s === "fair" && inventedBy("catch-fair", lang) ? <span className="ct-scene-by">💡 {inventedBy("catch-fair", lang)}</span> : null}
                     </button>
                   ))}
                 </div>
@@ -625,6 +627,8 @@ const CSS = `
 .ct-scene img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:16px;max-width:100%}
 .ct-scene-name{font-weight:900;font-size:18px}
 .ct-scene-sub{font-size:13px;color:#5f6b73;line-height:1.35}
+.ct-scene{position:relative}
+.ct-scene-by{position:absolute;top:-10px;inset-inline-end:10px;padding:2px 10px;border-radius:999px;background:#fff3c4;color:#5b3a00;font-size:12px;font-weight:800;line-height:1.5;white-space:nowrap;box-shadow:0 2px 8px #0005}
 /* a phone held upright (Gadi 2026-11-12: three cards side by side were cramped): one card under the other, picture beside the text */
 @media (max-width:560px) and (orientation:portrait){.ct-scenes.is-three{grid-template-columns:minmax(0,1fr);gap:10px}.ct-scenes.is-three .ct-scene{grid-template-columns:116px minmax(0,1fr);column-gap:14px;row-gap:2px;align-items:center;justify-items:start;padding:8px 14px 8px 8px;text-align:start}.ct-scenes.is-three .ct-scene img{grid-row:1/3;width:116px}.ct-scenes.is-three .ct-scene-name{align-self:end;font-size:20px}.ct-scenes.is-three .ct-scene-name:last-child{grid-row:1/3;align-self:center}.ct-scenes.is-three .ct-scene-sub{align-self:start;font-size:14px}}
 .ct-door-wait{color:#fff;font-weight:700}

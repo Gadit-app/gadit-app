@@ -9,6 +9,8 @@ export const GAME_INVENTORS: Record<string, { he: string; en: string }> = {
   wordsearch: { he: "אושר", en: "Osher" },
   crossword: { he: "אושר", en: "Osher" },
   arrowword: { he: "אושר", en: "Osher" },
+  // Din's funfair in Letter Catch: the cans, the balloons and the darts (Gadi 2026-11-12).
+  "catch-fair": { he: "דין", en: "Din" },
 };
 
 const BY: Record<string, (name: string) => string> = {
