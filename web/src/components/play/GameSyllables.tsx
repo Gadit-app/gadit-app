@@ -45,8 +45,8 @@ const COPY: Record<string, Copy> = {
     title: "קוראים בהברות", desc: "מילה אחת, הברה אחרי הברה: שומעים, בונים, וקוראים לבד",
     listen: "שומעים", listenHint: "לוחצים על האבנים לפי הסדר ושומעים כל הברה",
     build: "בונים", buildHint: "שמעו את המילה. איזו הברה באה עכשיו?",
-    read: "קוראים", readHint: "קראו את המילה בקול. אחר כך לחצו ושמעו",
-    hear: "לשמוע שוב", heardMe: "קראתי, עכשיו תשמיעו לי", yesRead: "קראתי נכון", again: "עוד פעם מההתחלה",
+    read: "קוראים", readHint: "עכשיו לבד: קראו את המילה בקול, ואז לחצו כדי לבדוק אם קראתם נכון",
+    hear: "לשמוע שוב", heardMe: "קראתי, בואו נבדוק", yesRead: "קראתי נכון", again: "עוד פעם מההתחלה",
     next: "למילה הבאה", finish: "סיימנו", inSentence: "לשמוע במשפט", done: "קראתם {n} מילים לבד",
     step: (n, of) => `מילה ${n} מתוך ${of}`, level: (n) => `רמה ${n}`,
   },
@@ -54,7 +54,7 @@ const COPY: Record<string, Copy> = {
     title: "Syllable Reader", desc: "One word, syllable by syllable: listen, build, then read it yourself",
     listen: "Listen", listenHint: "Tap the stones in order and hear each syllable",
     build: "Build", buildHint: "Hear the word. Which syllable comes next?",
-    read: "Read", readHint: "Read the word out loud, then tap to hear it",
+    read: "Read", readHint: "Now on your own: read the word out loud, then tap to check",
     hear: "Hear it again", heardMe: "I read it, now play it", yesRead: "I read it right", again: "Once more from the start",
     next: "Next word", finish: "Done", inSentence: "Hear it in a sentence", done: "You read {n} words by yourself",
     step: (n, of) => `Word ${n} of ${of}`, level: (n) => `Level ${n}`,
@@ -129,7 +129,28 @@ const writeLevel = (uid: string | undefined, n: number) => { try { localStorage.
  * spelling that sounds the same and passed the check; the stone still shows
  * the syllable as it is written in the word.
  */
-const SAY_AS: Record<string, string> = { "צִ": "צִי", "צְ": "צֵ", "כָן": "חָן", "הוּם": "הוּם!" };
+const SAY_AS: Record<string, string> = { "צִ": "צִי", "צְ": "צֵ", "כָן": "חָן", "הוּם": "הוּם!", "פֶר": "ףֶר", "פֶה": "ףֶה", "פוּרְ": "ףוּרְ", "פֵא": "ףֵא", "פֹה": "ףֹה" };
+
+/**
+ * What the voice is asked to say for `text` (Gadi 2026-11-12: the stone בַע
+ * was read "ba"). Alone, the voice reads a soft ב as "b" and a soft כ as "k",
+ * so a syllable that begins with one is said through the letter that sounds
+ * the same: ו for ב, ח for כ. Only a lone vowelized syllable is touched: a
+ * whole word never begins with a soft ב or כ in the bank, and a sentence has
+ * spaces. 37 of the bank's 47 such syllables were recorded this way and heard
+ * back with the right consonant.
+ */
+function sayAs(text: string): string {
+  const fixed = SAY_AS[text];
+  if (fixed) return fixed;
+  if (/\s/.test(text) || !/[\u05B0-\u05BC]/.test(text)) return text;
+  const first = text[0];
+  const marks = text.slice(1).match(/^[\u0591-\u05C7]*/)?.[0] ?? "";
+  if (marks.includes("\u05BC")) return text;
+  if (first === "ב") return "ו" + text.slice(1);
+  if (first === "כ") return "ח" + text.slice(1);
+  return text;
+}
 
 /**
  * Hebrew speech for short strings: the app's voice when the account has it,
@@ -150,7 +171,7 @@ export function useSpeech() {
         const res = await fetch("/api/tts", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
-          body: JSON.stringify({ text: SAY_AS[text] ?? text, lang: "he" }),
+          body: JSON.stringify({ text: sayAs(text), lang: "he" }),
         });
         if (!res.ok) return null;
         return URL.createObjectURL(await res.blob());
@@ -196,7 +217,7 @@ export function useSpeech() {
         return;
       }
       try {
-        const u = new SpeechSynthesisUtterance(SAY_AS[text] ?? text);
+        const u = new SpeechSynthesisUtterance(sayAs(text));
         u.lang = "he-IL"; u.rate = 0.8;
         u.onend = done; u.onerror = done;
         window.speechSynthesis.cancel();
@@ -404,7 +425,13 @@ function StepBuild({ word, others, pic, c, fwd, speech, onDone }: { word: Item; 
       sfx.correct();
       const n = placed + 1;
       setPlaced(n);
-      if (n === word.syl.length) { await speech.speak(word.nq); setComplete(true); sfx.magic(); }
+      if (n === word.syl.length) {
+        // The word is built: it is heard once, and the game moves on to reading by
+        // itself. The picture and the sentence were just seen in the first step, so
+        // showing them again here read as the same screen twice (Gadi 2026-11-12).
+        await speech.speak(word.nq); setComplete(true); sfx.magic();
+        setTimeout(onDone, 900);
+      }
     } else if (heard) {
       // Not red, not a buzzer: the right syllable is simply heard right after
       // (unless the child already asked for another sound).
@@ -427,17 +454,6 @@ function StepBuild({ word, others, pic, c, fwd, speech, onDone }: { word: Item; 
           {choices[placed].map((s) => <Stone key={s} text={s} speaking={speech.speaking === s} state="idle" onTap={() => void pick(s)} />)}
         </div>
       )}
-      <div className="syl-reveal">
-        <Picture pic={pic} nq={word.nq} shown={complete} />
-        {complete && (
-          <>
-            <InSentence word={word} c={c} speech={speech} />
-            <div className="syl-row">
-              <button type="button" className="syl-btn" onClick={onDone}>{c.read} {fwd}</button>
-            </div>
-          </>
-        )}
-      </div>
     </>
   );
 }
@@ -450,14 +466,15 @@ function StepRead({ word, pic, c, speech, last, onAgain, onDone }: { word: Item;
       <div className="syl-word syl-word-big" lang="he" dir="rtl">
         {word.syl.map((s, k) => <span key={k} className="syl-part">{s}</span>)}
       </div>
-      <Picture pic={pic} nq={word.nq} shown={heard} />
       {!heard ? (
         <div className="syl-row">
           <button type="button" className="syl-btn" onClick={() => { void speech.speak(word.nq).then(() => setHeard(true)); }}>🔊 {c.heardMe}</button>
         </div>
       ) : (
         <>
-        <InSentence word={word} c={c} speech={speech} />
+        <div className="syl-row">
+          <button type="button" className="syl-btn is-ghost" onClick={() => void speech.speak(word.nq)}>🔊 {c.hear}</button>
+        </div>
         <div className="syl-row">
           <button type="button" className="syl-btn is-ghost" onClick={onAgain}>{c.again}</button>
           <button type="button" className="syl-btn" onClick={() => { sfx.correct(); onDone(); }}>{c.yesRead} · {last ? c.finish : c.next}</button>
