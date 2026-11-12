@@ -6463,11 +6463,20 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
 }
 
 .wordbook .wb-play-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 0;
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  /* the same room on both sides, so the title is centred whatever sits in the corner */
+  padding: 8px 54px;
 }
+.wordbook .wb-play-header > .wb-play-exit { position: absolute; top: 6px; right: 0; }
+/* the numbers row may use the full width: only the title has to clear the corner button */
+.wordbook .wb-play-header > .wb-play-header-meta { margin-inline: -50px; max-width: calc(100% + 100px); flex-wrap: nowrap; white-space: nowrap; gap: 8px; }
+.wordbook .wb-play-header-report { position: fixed; left: 10px; bottom: calc(env(safe-area-inset-bottom, 0px) + 10px); z-index: 40; }
+.wordbook .wb-play-header-report .wb-report-q-btn { height: 26px; padding: 0 9px 0 7px; font-size: 12px; font-weight: 600; background: #ffffffd9; border: 1px solid #0f172a26; color: #4b5563; box-shadow: 0 1px 4px #0002; }
+.wordbook .wb-play-header-report .wb-report-q-btn:hover { background: #fff; border-color: #0f172a4d; }
+.wordbook .wb-play-header-report .wb-report-q-thanks { top: auto; bottom: calc(100% + 6px); inset-inline-end: auto; left: 0; }
 .wordbook .wb-play-exit {
   width: 36px;
   height: 36px;
@@ -6493,11 +6502,13 @@ html[data-theme] .wordbook .wb-play-langs-label { color: var(--ink-soft, #5C6B66
   font-size: 15px;
   font-weight: 600;
   color: var(--wb-ink);
-  flex: 1;
+  max-width: 100%;
   text-align: center;
 }
 .wordbook .wb-play-header-meta {
   display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: 10px;
   font-size: 13px;

@@ -173,10 +173,10 @@ export function PlayHeader({
         </svg>
       </button>
       <div className="wb-play-header-title">{title}{by ? <span className="wb-play-header-by">💡 {by}</span> : null}</div>
+      {/* One centred column (Gadi 2026-11-12): the title, and under it the round's
+          numbers with the two small switches. The close button keeps a fixed corner,
+          and "found a mistake?" sits quietly at the bottom of the screen. */}
       <div className="wb-play-header-meta">
-        <ReportQuestionButton where={title} />
-        <SfxToggle style={{ background: "none", border: 0, padding: "2px 4px", fontSize: 18, lineHeight: 1, cursor: "pointer" }} />
-        <NiqqudToggle />
         {progress && <span className="wb-play-progress">{progress}</span>}
         {typeof timeLeft === "number" && (
           <span className={`wb-play-timer ${timeLeft <= 10 ? "is-urgent" : ""}`}>
@@ -184,7 +184,10 @@ export function PlayHeader({
           </span>
         )}
         {typeof score === "number" && <span className="wb-play-score">{score}</span>}
+        <SfxToggle style={{ background: "none", border: 0, padding: "2px 4px", fontSize: 18, lineHeight: 1, cursor: "pointer" }} />
+        <NiqqudToggle />
       </div>
+      <span className="wb-play-header-report"><ReportQuestionButton where={title} /></span>
     </div>
   );
 }

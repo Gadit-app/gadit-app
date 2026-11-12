@@ -12,7 +12,7 @@ export const GAME_INVENTORS: Record<string, { he: string; en: string }> = {
   // Din's funfair in Letter Catch: the cans, the balloons and the darts (Gadi 2026-11-12).
   "catch-fair": { he: "דין", en: "Din" },
   // Noam and his mother Shirli made the wheel out of paper and filmed it (2026-11-12).
-  wheel: { he: "נועם", en: "Noam" },
+  wheel: { he: "נועם לב", en: "Noam Lev" },
   // The dictation trainer grew out of Ziv's weekly school dictation (2026-09-19).
   spell: { he: "זיו", en: "Ziv" },
 };

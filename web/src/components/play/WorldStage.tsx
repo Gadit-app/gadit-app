@@ -107,10 +107,11 @@ ${S} .wst-scroll { position: absolute; inset: 0; overflow-y: auto; overscroll-be
 ${S} .wb-play-stage { min-height: 0; padding: calc(env(safe-area-inset-top, 0px) + 12px) 16px 24px; gap: 16px; position: relative; }
 
 /* header: round white buttons and pills, like the worlds */
-${S} .wb-play-header { gap: 10px; padding: 0; flex-wrap: wrap; }
+${S} .wb-play-header { gap: 8px; padding: 0 54px; }
+${S} .wb-play-header > .wb-play-exit { top: 0; }
 ${S} .wb-play-exit { width: 44px; height: 44px; border: 0; background: #fffe; color: #14202b; box-shadow: 0 2px 8px #0003; }
-${S} .wb-play-header-title { flex: 1 1 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: #fffe; color: #14202b; border-radius: 999px; padding: 9px 16px; font-size: 15px; font-weight: 800; box-shadow: 0 2px 8px #0003; text-align: center; min-width: 0; }
-${S} .wb-play-header-meta { margin-inline-start: auto; background: #fffe; color: #14202b; border-radius: 999px; padding: 8px 12px; font-weight: 800; box-shadow: 0 2px 8px #0003; font-size: 14px; }
+${S} .wb-play-header-title { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: #fffe; color: #14202b; border-radius: 22px; padding: 9px 26px; font-size: 15px; font-weight: 800; box-shadow: 0 2px 8px #0003; text-align: center; min-width: 0; }
+${S} .wb-play-header-meta { background: #fffe; color: #14202b; border-radius: 999px; padding: 8px 12px; font-weight: 800; box-shadow: 0 2px 8px #0003; font-size: 14px; }
 ${S} .wb-play-score { color: #b45309; }
 ${S} .wb-play-score::before { content: "⭐ "; }
 ${S} .wb-play-timer { background: #ffd23f; color: #6b4e00; }

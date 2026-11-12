@@ -15,47 +15,47 @@ import { useAuth } from "@/lib/auth-context";
 const MAX_SECONDS = 90;
 
 type Copy = {
-  banner: string; bannerSub: string; title: string; lead: string; record: string; stop: string; recorded: string; redo: string;
+  banner: string; bannerSub: string; title: string; lead: string; lead2: string; record: string; stop: string; recorded: string; redo: string;
   or: string; placeholder: string; send: string; sending: string; thanks: string; thanksSub: string; close: string;
   notHeard: string; limit: string; failed: string; noMic: string; privacy: string; seconds: (n: number) => string;
 };
 const COPY: Record<string, Copy> = {
   he: {
-    banner: "יש לכם רעיון למשחק?", bannerSub: "ספרו לנו איך הייתם רוצים ללמוד, ואולי נבנה את המשחק שלכם",
-    title: "המציאו משחק לימודי", lead: "איך משחקים? מה רואים על המסך? מה לומדים? ספרו בקול או כתבו",
-    record: "מקליטים", stop: "סיימתי", recorded: "ההקלטה מוכנה", redo: "להקליט שוב",
-    or: "או כותבים", placeholder: "המשחק שלי הוא", send: "שולחים את הרעיון", sending: "שולחים",
-    thanks: "הרעיון נשלח", thanksSub: "אם נבנה את המשחק, השם שלכם יופיע עליו", close: "סגירה",
+    banner: "יש לכם רעיון למשחק?", bannerSub: "ספרו לנו איך הייתם רוצים ללמוד, ונבנה את המשחק שלכם",
+    title: "המציאו משחק לימודי", lead: "הסבירו איך משחקים, מה רואים על המסך ומה לומדים", lead2: "ספרו בקול או כתבו",
+    record: "הקליטו", stop: "סיימתי", recorded: "ההקלטה מוכנה", redo: "להקליט שוב",
+    or: "או כתבו", placeholder: "המשחק שלי הוא", send: "שלחו את הרעיון", sending: "שולחים",
+    thanks: "הרעיון נשלח", thanksSub: "כשנבנה את המשחק, השם שלכם יופיע עליו", close: "סגירה",
     notHeard: "לא הצלחנו לשמוע. נסו להקליט שוב, קרוב למכשיר", limit: "שלחתם כבר חמישה רעיונות היום. מחר אפשר עוד",
     failed: "משהו השתבש. נסו שוב", noMic: "המיקרופון לא זמין. אפשר לכתוב את הרעיון",
     privacy: "ההקלטה לא נשמרת. נשמר רק הטקסט של הרעיון", seconds: (n) => `${n} שניות`,
   },
   en: {
-    banner: "Got an idea for a game?", bannerSub: "Tell us how you would like to learn, and we may build your game",
-    title: "Invent a learning game", lead: "How do you play? What is on the screen? What do you learn? Say it or write it",
+    banner: "Got an idea for a game?", bannerSub: "Tell us how you would like to learn, and we will build your game",
+    title: "Invent a learning game", lead: "Explain how you play, what is on the screen and what you learn", lead2: "Say it or write it",
     record: "Record", stop: "Done", recorded: "The recording is ready", redo: "Record again",
     or: "or write it", placeholder: "My game is", send: "Send the idea", sending: "Sending",
-    thanks: "Your idea was sent", thanksSub: "If we build the game, your name will be on it", close: "Close",
+    thanks: "Your idea was sent", thanksSub: "When we build the game, your name will be on it", close: "Close",
     notHeard: "We could not hear it. Try recording again, close to the device", limit: "You sent five ideas today. More tomorrow",
     failed: "Something went wrong. Try again", noMic: "The microphone is not available. You can write the idea",
     privacy: "The recording is not kept. Only the words of the idea are saved", seconds: (n) => `${n} seconds`,
   },
   ar: {
-    banner: "عندك فكرة للعبة؟", bannerSub: "أخبرنا كيف تحب أن تتعلم، وربما نبني لعبتك",
-    title: "اخترع لعبة تعليمية", lead: "كيف نلعب؟ ماذا نرى على الشاشة؟ ماذا نتعلم؟ قلها بصوتك أو اكتبها",
+    banner: "عندك فكرة للعبة؟", bannerSub: "أخبرنا كيف تحب أن تتعلم، وسنبني لعبتك",
+    title: "اخترع لعبة تعليمية", lead: "اشرح كيف نلعب، ماذا نرى على الشاشة وماذا نتعلم", lead2: "قلها بصوتك أو اكتبها",
     record: "تسجيل", stop: "انتهيت", recorded: "التسجيل جاهز", redo: "سجّل من جديد",
     or: "أو اكتب", placeholder: "لعبتي هي", send: "إرسال الفكرة", sending: "جارٍ الإرسال",
-    thanks: "تم إرسال الفكرة", thanksSub: "إذا بنينا اللعبة، سيظهر اسمك عليها", close: "إغلاق",
+    thanks: "تم إرسال الفكرة", thanksSub: "عندما نبني اللعبة، سيظهر اسمك عليها", close: "إغلاق",
     notHeard: "لم نسمع جيدًا. حاول التسجيل مرة أخرى قريبًا من الجهاز", limit: "أرسلت خمس أفكار اليوم. غدًا يمكن المزيد",
     failed: "حدث خطأ. حاول مرة أخرى", noMic: "الميكروفون غير متاح. يمكنك كتابة الفكرة",
     privacy: "لا نحتفظ بالتسجيل. نحفظ نص الفكرة فقط", seconds: (n) => `${n} ثانية`,
   },
   ru: {
-    banner: "Есть идея игры?", bannerSub: "Расскажи, как тебе хочется учиться, и мы, может быть, сделаем твою игру",
-    title: "Придумай обучающую игру", lead: "Как играть? Что на экране? Чему учимся? Расскажи вслух или напиши",
+    banner: "Есть идея игры?", bannerSub: "Расскажи, как тебе хочется учиться, и мы сделаем твою игру",
+    title: "Придумай обучающую игру", lead: "Объясни, как играть, что на экране и чему мы учимся", lead2: "Расскажи вслух или напиши",
     record: "Записать", stop: "Готово", recorded: "Запись готова", redo: "Записать ещё раз",
     or: "или напиши", placeholder: "Моя игра", send: "Отправить идею", sending: "Отправляем",
-    thanks: "Идея отправлена", thanksSub: "Если мы сделаем игру, на ней будет твоё имя", close: "Закрыть",
+    thanks: "Идея отправлена", thanksSub: "Когда мы сделаем игру, на ней будет твоё имя", close: "Закрыть",
     notHeard: "Не удалось расслышать. Запиши ещё раз, ближе к устройству", limit: "Сегодня уже пять идей. Завтра можно ещё",
     failed: "Что-то пошло не так. Попробуй ещё раз", noMic: "Микрофон недоступен. Идею можно написать",
     privacy: "Запись не сохраняется. Сохраняется только текст идеи", seconds: (n) => `${n} с`,
@@ -144,6 +144,7 @@ export function GameIdea({ lang, dir }: { lang: string; dir: "ltr" | "rtl" }) {
                 <div className="gi-big" aria-hidden="true">💡</div>
                 <h2>{c.title}</h2>
                 <p>{c.lead}</p>
+                <p className="gi-lead2">{c.lead2}</p>
                 {recording ? (
                   <button type="button" className="gi-btn is-rec" onClick={stop}>⏹ {c.stop} · {c.seconds(secs)}</button>
                 ) : clip ? (
@@ -183,6 +184,7 @@ const CSS = `
 .gi-box h2 { margin: 0; font-size: 24px; font-weight: 800; color: #14202b; }
 .gi-box p { margin: 0; font-size: 16px; line-height: 1.5; color: #3d4852; }
 .gi-big { font-size: 44px; line-height: 1; }
+.gi-box .gi-lead2 { font-weight: 700; color: #14202b; }
 .gi-x { position: absolute; top: 10px; inset-inline-end: 10px; width: 40px; height: 40px; border: 0; border-radius: 50%; background: #eef1f4; color: #14202b; font-size: 16px; cursor: pointer; }
 .gi-btn { min-height: 52px; padding: 12px 26px; border: 0; border-radius: 999px; background: #0a7472; color: #fff; font: inherit; font-weight: 800; font-size: 18px; cursor: pointer; box-shadow: 0 4px 0 #075452; }
 .gi-btn:disabled { opacity: 0.5; cursor: default; }
