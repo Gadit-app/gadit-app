@@ -45,6 +45,9 @@ export const PRICING: Record<string, { in: number; out: number }> = {
   // Hebrew read-aloud voice (2026-10-10). ESTIMATE from gemini-2.5-flash-tts
   // list prices (text in $0.50/M, audio out $10/M): about 0.6c a sentence.
   "gemini-3.8-flash-tts": { in: 0.5, out: 10 },
+  // The Letter Wheel listener (2026-11-12). ESTIMATE, not a quoted price: audio in
+  // about $1/M, text out (thinking included) about $3/M. A check is ~150 tokens.
+  "gemini-3.8-flash": { in: 1, out: 3 },
   "gpt-5.4": { in: 2.5, out: 15 },
   "gpt-5.4-mini": { in: 0.75, out: 4.5 },
 };

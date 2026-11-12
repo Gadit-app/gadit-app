@@ -34,6 +34,8 @@ export type Lesson = {
   topic: string;
   items: Array<{ w: string; t: string; nq?: string; en?: string }>;
   sentences: string[];
+  /** Other word orders of those sentences that are also right (sentence builder). */
+  alt?: string[];
   pronouns: Array<{ phrase: string; answer: string }>;
   reading?: { title: string; text: string; checks: Array<{ s: string; yes: boolean }> } | null;
 };
@@ -147,7 +149,7 @@ export function LessonPath({ lesson, learnLang, preReader, lang, t, onExit, onDo
         {step === "truefalse" && <GameTrueFalse {...props} />}
         {step === "reading" && lesson.reading && <GameReading reading={lesson.reading} onExit={next} lang={lang} t={t} audioLang={audioLang} dirText={learnLang === "he" ? "rtl" : "ltr"} />}
         {step === "pronoun" && <GamePronoun items={lesson.pronouns} onExit={next} lang={lang} t={t} audioLang={audioLang} />}
-        {step === "build" && <GameSentenceBuilder sentences={lesson.sentences} onExit={next} lang={lang} t={t} audioLang={audioLang} />}
+        {step === "build" && <GameSentenceBuilder sentences={lesson.sentences} alt={lesson.alt} onExit={next} lang={lang} t={t} audioLang={audioLang} />}
       </div>
     </div>
   );

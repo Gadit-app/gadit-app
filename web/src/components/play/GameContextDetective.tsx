@@ -11,7 +11,9 @@
  * back. "Check" marks each blank and explains it in the UI language, then
  * the finished story is read aloud. 3 stories per session.
  *
- * The stories come from /api/play/context (one call, cached per word set).
+ * The stories come from /api/play/context (cached per word set). A new set
+ * streams in story by story: the game starts on the first one while the
+ * others are still being written (Gadi 2026-11-12, the wait was about 20 s).
  *
  * Played inside a word world (Gadi 2026-11-01: "every game with graphics
  * like the worlds"): the child's newest world is the backdrop, the story
@@ -25,7 +27,7 @@ import { NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
 import { useAuth } from "@/lib/auth-context";
 import type { PlayWord } from "@/lib/play-engine";
 import { dirForLang, sample, shuffle, wordLangOf } from "@/lib/play-engine";
-import type { ContextRound } from "@/lib/context-game";
+import { CONTEXT_ROUNDS, type ContextRound } from "@/lib/context-game";
 import { GameResult } from "./GameResult";
 import { reportAnswer } from "@/lib/learn/report";
 import type { PlayT } from "./GameQuiz";
@@ -66,7 +68,8 @@ function pickWords(pool: PlayWord[], ui: string, kids: boolean): { words: string
   return { words: sample(fresh, n), wordLang: best || ui };
 }
 
-type Load = { session: number; rounds?: ContextRound[]; error?: boolean };
+/** `more`: the rest of the stories are still on their way. */
+type Load = { session: number; rounds?: ContextRound[]; error?: boolean; more?: boolean };
 type Mood = "idle" | "happy" | "oops";
 
 /** The child's newest open world (the backdrop), jungle until we know. */
@@ -152,24 +155,56 @@ export function GameContextDetective({
     if (!user) return;
     let alive = true;
     const s = session;
+    const got: ContextRound[] = [];
+    const stop = new AbortController();
     void (async () => {
       try {
         if (pick.words.length < 2) throw new Error("too_few");
         const r = await fetch("/api/play/context", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
-          body: JSON.stringify({ words: pick.words, lang: pick.wordLang, ui: lang, kids }),
+          body: JSON.stringify({ words: pick.words, lang: pick.wordLang, ui: lang, kids, stream: true }),
+          signal: stop.signal,
         });
+        if (r.ok && r.body && (r.headers.get("content-type") ?? "").includes("ndjson")) {
+          // A new set: one line per story, the moment it is ready.
+          const reader = r.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = "";
+          let finished = false;
+          while (!finished) {
+            const { done, value } = await reader.read();
+            buffer += done ? decoder.decode() : decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            buffer = done ? "" : lines.pop() ?? "";
+            for (const line of lines) {
+              if (!line.trim()) continue;
+              let m: { round?: ContextRound; done?: boolean; error?: string };
+              try { m = JSON.parse(line); } catch { continue; }
+              if (m.round && Array.isArray(m.round.options)) {
+                const round = { ...m.round, options: shuffle(m.round.options) };
+                got.push(round);
+                if (alive) setLoad({ session: s, rounds: got.slice(), more: got.length < CONTEXT_ROUNDS });
+              }
+              if (m.done || m.error) finished = true;
+            }
+            if (done) break;
+          }
+          if (!got.length) throw new Error("no_rounds");
+          if (alive) setLoad({ session: s, rounds: got.slice() });
+          return;
+        }
         const j = (await r.json()) as { rounds?: ContextRound[] };
         if (!r.ok || !Array.isArray(j.rounds) || !j.rounds.length) throw new Error("no_rounds");
         // A cached set comes back in the same order: shuffle the word bar each time.
         const rounds = j.rounds.map((x) => ({ ...x, options: shuffle(x.options) }));
         if (alive) setLoad({ session: s, rounds });
       } catch {
-        if (alive) setLoad({ session: s, error: true });
+        // A line that broke in the middle: the stories that arrived still play.
+        if (alive) setLoad(got.length ? { session: s, rounds: got.slice() } : { session: s, error: true });
       }
     })();
-    return () => { alive = false; };
+    return () => { alive = false; stop.abort(); };
   }, [user, session, pick, lang, kids]);
 
   function restart() {
@@ -179,8 +214,11 @@ export function GameContextDetective({
 
   const ready = load && load.session === session ? load : null;
   const rounds = ready?.rounds ?? [];
+  const more = !!ready?.more;
+  // The child got ahead of the writer and no further story came: that was the last one.
+  const ranOut = !!ready && !more && rounds.length > 0 && idx >= rounds.length;
 
-  if (done) {
+  if (done || ranOut) {
     const meaningOf = (w: string) => startPool.find((p) => same(p.word, w))?.meaning ?? "";
     return (
       <GameResult
@@ -194,10 +232,11 @@ export function GameContextDetective({
   }
 
   if (!ready || ready.error || !rounds[idx]) {
+    const waiting = !ready || (more && !ready.error);
     return (
       <CtxWorld worldId={worldId} onExit={onExit} exitLabel={t.resultBackToGames} mood="idle">
         <div className="ctx-sign ctx-state">
-          {!ready ? (
+          {waiting ? (
             <div className="ctx-loading"><WaitText text={c.loading} live /></div>
           ) : (
             <>
@@ -216,9 +255,9 @@ export function GameContextDetective({
     );
   }
 
-  const last = idx + 1 >= rounds.length;
+  const last = !more && idx + 1 >= rounds.length;
   return (
-    <CtxWorld worldId={worldId} onExit={onExit} exitLabel={t.resultBackToGames} progress={`${c.title} · ${idx + 1}/${rounds.length}`} score={score} mood={mood}>
+    <CtxWorld worldId={worldId} onExit={onExit} exitLabel={t.resultBackToGames} progress={`${c.title} · ${idx + 1}/${more ? Math.max(rounds.length, CONTEXT_ROUNDS) : rounds.length}`} score={score} mood={mood}>
       <ContextStory
         key={`${session}-${idx}`}
         round={rounds[idx]}

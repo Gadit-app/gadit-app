@@ -128,6 +128,8 @@ function WordSearchBoard({ pool, onExit, lang, t, level, onLevel }: { pool: Play
     sfx.correct();
     const idx = found.size % COLORS.length;
     setFound((m) => new Map(m).set(hit.word, idx));
+    // A hint still glowing has done its job (or points at the word just found).
+    setHintCell(null);
     const it = puzzle.items.find((x) => x.word === hit.word) ?? null;
     setFlash(it);
   };
@@ -138,8 +140,11 @@ function WordSearchBoard({ pool, onExit, lang, t, level, onLevel }: { pool: Play
     if (!left.length) return;
     const p = left[Math.floor(Math.random() * left.length)];
     setHintCell(p.cells[0]); sfx.tick();
-    setTimeout(() => setHintCell(null), 1800);
   };
+  // The hint glows for 1.8s. The timer lives in an effect (2026-11-12): started in the click
+  // it was never cleared, so a second hint was put out early by the first one's timer, a hint
+  // stayed on a word already found, and the timer still ran after the game was closed.
+  useEffect(() => { if (!hintCell) return; const tm = setTimeout(() => setHintCell(null), 1800); return () => clearTimeout(tm); }, [hintCell]);
 
   const total = puzzle.placed.length;
   if (total > 0 && found.size === total) {
@@ -147,7 +152,7 @@ function WordSearchBoard({ pool, onExit, lang, t, level, onLevel }: { pool: Play
       <GameResult
         data={{ title: c.title, score: total, total, headline: c.done }}
         onExit={onExit}
-        onReplay={() => { setFound(new Map()); setSeed((s) => s + 1); }}
+        onReplay={() => { setFound(new Map()); setHintCell(null); setFlash(null); setSeed((s) => s + 1); }}
         lang={lang}
         t={t}
       />

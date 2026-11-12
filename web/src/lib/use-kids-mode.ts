@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
 /**
  * useKidsMode — persistent "render every definition in a kid-friendly
@@ -32,26 +32,29 @@ export function setKidsModeGate(closed: boolean) {
   if (typeof window !== "undefined") window.dispatchEvent(new Event(EVENT_NAME));
 }
 
-export function useKidsMode(): [boolean, (next: boolean) => void] {
-  // Lazy initializer reads localStorage synchronously, so the very first render
-  // already has the real value — no OFF-then-ON flash on kids-mode surfaces
-  // (Gadi 2026-08-27). SSR returns false; the client hydrates with the real one.
-  const [on, setOn] = useState<boolean>(() => readKidsMode() && !gateClosed);
+// Cross-tab ('storage') and same-tab (the custom event) updates.
+function subscribeKidsMode(onChange: () => void): () => void {
+  window.addEventListener("storage", onChange);
+  window.addEventListener(EVENT_NAME, onChange);
+  return () => {
+    window.removeEventListener("storage", onChange);
+    window.removeEventListener(EVENT_NAME, onChange);
+  };
+}
+function kidsModeNow(): boolean {
+  try { return window.localStorage.getItem(KEY) === "1" && !gateClosed; } catch { return false; }
+}
+const kidsModeOnServer = () => false;
 
-  // Re-sync on mount + listen for cross-tab and same-tab updates.
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    setOn(window.localStorage.getItem(KEY) === "1" && !gateClosed);
-    const onChange = () => {
-      setOn(window.localStorage.getItem(KEY) === "1" && !gateClosed);
-    };
-    window.addEventListener("storage", onChange);
-    window.addEventListener(EVENT_NAME, onChange);
-    return () => {
-      window.removeEventListener("storage", onChange);
-      window.removeEventListener(EVENT_NAME, onChange);
-    };
-  }, []);
+export function useKidsMode(): [boolean, (next: boolean) => void] {
+  // The stored value is read through useSyncExternalStore (2026-11-12). It used to be a lazy
+  // useState initializer, so on a full page load the first client render already said ON
+  // while the server's HTML said OFF: on /play a child (Kids Mode is their default) got the
+  // games in another order and number than the server sent, and React gave up on hydration
+  // (error #418, seen on the live site). Now hydration renders OFF like the server and React
+  // switches to the stored value right after; a page opened by a link inside the app still
+  // has the real value on its very first render, so no OFF-then-ON flash (Gadi 2026-08-27).
+  const on = useSyncExternalStore(subscribeKidsMode, kidsModeNow, kidsModeOnServer);
 
   const set = useCallback((next: boolean) => {
     if (typeof window === "undefined") return;

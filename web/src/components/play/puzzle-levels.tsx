@@ -126,7 +126,11 @@ export function LevelChip({ level, onChange, lang }: { level: PuzzleLevel; onCha
 
 // ─── The words of a clue puzzle (crossword, arrowword) ──────────
 
-export type ClueItem = { word: string; lang: "he" | "en"; clue: string; pic?: string; example?: string };
+export type ClueItem = {
+  word: string; lang: "he" | "en"; clue: string; pic?: string; example?: string;
+  /** Easy level only: one of the child's own words, kept aside for when the pictures do not come. */
+  spare?: boolean;
+};
 
 /** The first clause of a meaning, short enough for a clue. */
 export function shortClue(meaning: string): string {
@@ -171,23 +175,39 @@ function bankItems(ui: string, maxD: number, maxLen: number, of: "he" | "en" = u
   return all.filter((x) => { const k = gridLetters(x.word, x.lang === "he").length; return k >= 3 && k <= maxLen; });
 }
 
-/** Candidate words for a clue puzzle, more than the grid needs: some may have no picture or not cross in. */
-export function clueCandidates(pool: PlayWord[], ui: string, level: PuzzleLevel, s: ClueSettings): ClueItem[] {
-  if (level === "easy") return shuffle(bankItems(ui, 2, s.maxLen)).slice(0, 48);
+/** The child's own words that fit the grid, by language, each with its clue in words and its picture word. */
+function ownItems(pool: PlayWord[], simple: boolean, maxLen: number): Map<"he" | "en", ClueItem[]> {
   const groups = new Map<"he" | "en", ClueItem[]>();
   for (const p of pool) {
     const w = p.word.trim();
     const l = wordLangOf(p);
     if (!/^[\p{L}֑-ׇ]+$/u.test(w) || (l !== "he" && l !== "en")) continue;
     const len = gridLetters(w, l === "he").length;
-    if (len < 3 || len > s.maxLen) continue;
-    const clue = shortClue((level === "medium" && p.simple) || p.meaning || "");
+    if (len < 3 || len > maxLen) continue;
+    const clue = shortClue((simple && p.simple) || p.meaning || "");
     const pic = p.picWord ?? (l === "en" ? w : undefined);
     if (!clue && !pic) continue;
     const g = groups.get(l) ?? [];
     if (!g.some((x) => x.word.toLowerCase() === w.toLowerCase())) g.push({ word: w, lang: l, clue, pic, example: blankExample(w, p.examples) });
     groups.set(l, g);
   }
+  return groups;
+}
+
+/** Candidate words for a clue puzzle, more than the grid needs: some may have no picture or not cross in. */
+export function clueCandidates(pool: PlayWord[], ui: string, level: PuzzleLevel, s: ClueSettings): ClueItem[] {
+  if (level === "easy") {
+    const bank = shuffle(bankItems(ui, 2, s.maxLen)).slice(0, 48);
+    // When the pictures do not come (the lookup failed), a bank word has nothing to show as
+    // its clue. The child's own short words stand by with their meaning in simple words, so
+    // the puzzle is built from words that have a clue (Gadi 2026-11-12).
+    const have = new Set(bank.map((x) => x.word.toLowerCase()));
+    const own = (bank[0] ? ownItems(pool, true, s.maxLen).get(bank[0].lang) ?? [] : [])
+      .filter((x) => x.clue && !have.has(x.word.toLowerCase()))
+      .map((x): ClueItem => ({ ...x, pic: undefined, spare: true }));
+    return [...bank, ...shuffle(own).slice(0, 12)];
+  }
+  const groups = ownItems(pool, level === "medium", s.maxLen);
   let best: ClueItem[] = [];
   for (const [l, g] of groups) if (g.length > best.length || (g.length === best.length && l === ui)) best = g;
   if (best.length >= 5) return shuffle(best).slice(0, s.n + 6);
@@ -201,7 +221,8 @@ export function clueCandidates(pool: PlayWord[], ui: string, level: PuzzleLevel,
 /** The words the grid is built from: only words that have a clue to show (easy: a picture). */
 export function clueItems(cands: ClueItem[], pics: Record<string, string>, level: PuzzleLevel, n: number): ClueItem[] {
   const hasPic = (x: ClueItem) => !!x.pic && !!pics[x.pic.toLowerCase()];
-  const withPic = cands.filter(hasPic);
+  const withPic = cands.filter((x) => !x.spare && hasPic(x));
+  // Easy without (enough) pictures: every word that has a clue in words, never a word with no clue at all.
   const usable = level === "easy" && withPic.length >= 3 ? withPic : cands.filter((x) => x.clue || hasPic(x));
   const from = usable.length >= 3 ? usable : cands;
   const one = from[0]?.lang;

@@ -139,6 +139,9 @@ const LISTEN: Record<string, string> = {
   hu: "Meghallgatás",
 };
 
+/* The one popover on screen: opening another closes it (2026-11-12). */
+let closeOpenPopover: (() => void) | null = null;
+
 export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTab, wordLang, onClose }: Props) {
   const { dir } = useLang();
   const href = useHref();
@@ -194,6 +197,19 @@ export function WordPopover({ word, anchor, lang, fromWord, context, fullInNewTa
     })();
     return () => { cancelled = true; };
   }, [lookupWord, lang, context, kidsOn]);
+
+  // One popover at a time (Gadi 2026-11-12: word popups stacked on top of each other). A tap
+  // elsewhere already closes this one, but a word opened from the keyboard or by a screen
+  // reader sends no pointer event, and each text on the screen keeps its own popover.
+  const closeRef = useRef(onClose);
+  useEffect(() => { closeRef.current = onClose; });
+  useEffect(() => {
+    const mine = () => closeRef.current();
+    const earlier = closeOpenPopover;
+    closeOpenPopover = mine;
+    earlier?.();
+    return () => { if (closeOpenPopover === mine) closeOpenPopover = null; };
+  }, []);
 
   // Close on outside click + Escape
   useEffect(() => {

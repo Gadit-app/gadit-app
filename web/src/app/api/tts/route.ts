@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
-import { verifyUserAndGetPlan, getDefaultBucket } from "@/lib/firebase-admin";
+import { verifyUserAndGetPlan, getDefaultBucket, getAdminApp } from "@/lib/firebase-admin";
 import { logAiUsage, ttsCostUsd } from "@/lib/ai-cost";
 
 /**
@@ -84,18 +84,41 @@ const HEBREW_RE = /[א-ת]/;
 
 /** Gemini speech for `text` as a WAV file (Gemini returns raw 24 kHz 16-bit
  *  mono PCM, which every browser plays once it has a WAV header). */
-async function geminiSpeech(text: string, apiKey: string): Promise<{ wav: Buffer; tokensIn: number; tokensOut: number }> {
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_TTS_MODEL}:generateContent?key=${apiKey}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text }] }],
-        generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: GEMINI_VOICE } } } },
-      }),
-    },
-  );
+/*
+ * Where the Hebrew voice is asked for (Gadi 2026-11-12). The API key is capped
+ * at 100 readings a day for the whole site; after that every new Hebrew text
+ * fell back to the OpenAI voice. Vertex AI serves the same model and the same
+ * voice with no daily cap, signed in with the site's own service account (it
+ * holds "Vertex AI User" on the Gemini project). Vertex is asked first; the
+ * key stays as the second try, and OpenAI as the last.
+ */
+const VERTEX_PROJECT = process.env.VERTEX_PROJECT || "gen-lang-client-0395022300";
+async function geminiSpeech(text: string, apiKey: string | undefined): Promise<{ wav: Buffer; tokensIn: number; tokensOut: number }> {
+  const body = JSON.stringify({
+    contents: [{ role: "user", parts: [{ text }] }],
+    generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: GEMINI_VOICE } } } },
+  });
+  let res: Response | null = null;
+  try {
+    const token = await getAdminApp().options.credential?.getAccessToken();
+    if (token?.access_token) {
+      res = await fetch(
+        `https://aiplatform.googleapis.com/v1/projects/${VERTEX_PROJECT}/locations/global/publishers/google/models/${GEMINI_TTS_MODEL}:generateContent`,
+        { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token.access_token}` }, body },
+      );
+      if (!res.ok) { console.warn("[tts] vertex failed:", res.status); res = null; }
+    }
+  } catch (err) {
+    console.warn("[tts] vertex failed:", err);
+    res = null;
+  }
+  if (!res) {
+    if (!apiKey) throw new Error("gemini_no_route");
+    res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_TTS_MODEL}:generateContent?key=${apiKey}`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body },
+    );
+  }
   if (!res.ok) throw new Error(`gemini_${res.status}`);
   const json = (await res.json()) as {
     candidates?: Array<{ content?: { parts?: Array<{ inlineData?: { data?: string; mimeType?: string } }> } }>;
@@ -304,7 +327,7 @@ export async function POST(req: NextRequest) {
   // text only: a style instruction in the prompt was sometimes read aloud.
   // Any failure (the key's rate limit, an outage) falls through to OpenAI
   // below, so the speaker always plays something.
-  if (!requestedVoice && (lang === "he" || HEBREW_RE.test(text)) && process.env.GEMINI_API_KEY) {
+  if (!requestedVoice && (lang === "he" || HEBREW_RE.test(text))) {
     const gHash = contentHash(text, GEMINI_VOICE, GEMINI_TTS_MODEL, "wav");
     const gPath = `tts-cache/${gHash}.wav`;
     const audioHeaders = (cache: string) => ({

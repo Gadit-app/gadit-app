@@ -625,6 +625,8 @@ const CSS = `
 .ct-scene img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:16px;max-width:100%}
 .ct-scene-name{font-weight:900;font-size:18px}
 .ct-scene-sub{font-size:13px;color:#5f6b73;line-height:1.35}
+/* a phone held upright (Gadi 2026-11-12: three cards side by side were cramped): one card under the other, picture beside the text */
+@media (max-width:560px) and (orientation:portrait){.ct-scenes.is-three{grid-template-columns:minmax(0,1fr);gap:10px}.ct-scenes.is-three .ct-scene{grid-template-columns:116px minmax(0,1fr);column-gap:14px;row-gap:2px;align-items:center;justify-items:start;padding:8px 14px 8px 8px;text-align:start}.ct-scenes.is-three .ct-scene img{grid-row:1/3;width:116px}.ct-scenes.is-three .ct-scene-name{align-self:end;font-size:20px}.ct-scenes.is-three .ct-scene-name:last-child{grid-row:1/3;align-self:center}.ct-scenes.is-three .ct-scene-sub{align-self:start;font-size:14px}}
 .ct-door-wait{color:#fff;font-weight:700}
 .ct-stage{position:absolute;inset:0;overflow:hidden}
 .ct-fly{position:absolute;left:0;top:0;border:0;background:none;padding:0;cursor:pointer;will-change:transform;touch-action:none}

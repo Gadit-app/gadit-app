@@ -5,6 +5,10 @@
  * grandmother / is / She"). The words of a sentence from the child's own
  * workbook come shuffled; tapping puts them in order. One try per sentence,
  * then the right sentence is shown and read aloud.
+ *
+ * The full stop (or ? / !) is not on a tile, it gave the last word away: it
+ * waits at the end of the line. A lesson may list other right word orders
+ * (`alt`), since Hebrew allows several (2026-11-12).
  */
 import { useMemo, useState } from "react";
 import { sfx } from "@/lib/game-sfx";
@@ -16,7 +20,10 @@ import { TTSButton } from "@/components/design/TTSButton";
 import { lessonCopy } from "./lesson-i18n";
 import { QText } from "@/components/play/QText";
 
-type Round = { sentence: string; tiles: Array<{ id: number; w: string }> };
+type Round = { sentence: string; end: string; tiles: Array<{ id: number; w: string }> };
+
+/** One spacing for comparing a built sentence with the written ones. */
+const norm = (s: string) => s.trim().split(/\s+/).join(" ");
 
 function makeRounds(sentences: string[]): Round[] {
   // One sentence per round: a workbook line with two sentences is split,
@@ -25,16 +32,20 @@ function makeRounds(sentences: string[]): Round[] {
     .map((x) => x.trim())
     .filter((x) => { const n = x.split(/\s+/).length; return n >= 3 && n <= 8; });
   return shuffle(single.length >= 4 ? single : sentences).slice(0, 8).map((sentence) => {
-    const words = sentence.split(/\s+/).filter(Boolean);
+    // The closing punctuation leaves the last tile and is shown on its own.
+    const end = sentence.match(/[.!?…]+$/)?.[0] ?? "";
+    const words = sentence.slice(0, sentence.length - end.length).split(/\s+/).filter(Boolean);
     const tiles = words.map((w, id) => ({ id, w }));
     let mixed = shuffle(tiles);
     for (let k = 0; k < 5 && mixed.every((t, i) => t.id === i); k++) mixed = shuffle(tiles);
-    return { sentence, tiles: mixed };
+    return { sentence, end, tiles: mixed };
   });
 }
 
-export function GameSentenceBuilder({ sentences, onExit, lang, t, audioLang }: {
+export function GameSentenceBuilder({ sentences, alt, onExit, lang, t, audioLang }: {
   sentences: string[];
+  /** Other word orders that are also right, as whole sentences. */
+  alt?: string[];
   onExit: () => void;
   lang: string;
   t: PlayT;
@@ -48,6 +59,9 @@ export function GameSentenceBuilder({ sentences, onExit, lang, t, audioLang }: {
   const [idx, setIdx] = useState(0);
   const [placed, setPlaced] = useState<number[]>([]);
   const [verdict, setVerdict] = useState<"right" | "wrong" | null>(null);
+  const accepted = useMemo(() => new Set((alt ?? []).map(norm)), [alt]);
+  // What the child built, when it was right in another order than the workbook's.
+  const [builtRight, setBuiltRight] = useState<string | null>(null);
   // Hebrew is built right to left (Gadi's son, 2026-10-17: the sentence came out reversed).
   const textDir = audioLang.startsWith("he") ? "rtl" : "ltr";
   const [score, setScore] = useState(0);
@@ -58,7 +72,7 @@ export function GameSentenceBuilder({ sentences, onExit, lang, t, audioLang }: {
       <GameResult
         data={{ title: c.buildTitle, score, total: rounds.length, missed: missed.map((m) => ({ word: m, meaning: "" })) }}
         onExit={onExit}
-        onReplay={() => { setSeed((x) => x + 1); setIdx(0); setPlaced([]); setVerdict(null); setScore(0); setMissed([]); }}
+        onReplay={() => { setSeed((x) => x + 1); setIdx(0); setPlaced([]); setVerdict(null); setBuiltRight(null); setScore(0); setMissed([]); }}
         lang={lang}
         t={t}
       />
@@ -73,9 +87,10 @@ export function GameSentenceBuilder({ sentences, onExit, lang, t, audioLang }: {
     sfx.letter(placed.length);
     setPlaced(next);
     if (next.length === r.tiles.length) {
-      const built = next.map((i) => byId.get(i)).join(" ");
-      const ok = built === r.sentence;
+      const built = next.map((i) => byId.get(i)).join(" ") + r.end;
+      const ok = built === norm(r.sentence) || accepted.has(built);
       setVerdict(ok ? "right" : "wrong");
+      setBuiltRight(ok ? built : null);
       setTimeout(() => (ok ? sfx.correct() : sfx.wrong()), 200);
       if (ok) setScore((s) => s + 1);
       else setMissed((m) => [...m, r.sentence]);
@@ -85,7 +100,8 @@ export function GameSentenceBuilder({ sentences, onExit, lang, t, audioLang }: {
     if (verdict) return;
     setPlaced(placed.filter((_, i) => i !== pos));
   };
-  const next = () => { setIdx((i) => i + 1); setPlaced([]); setVerdict(null); };
+  const next = () => { setIdx((i) => i + 1); setPlaced([]); setVerdict(null); setBuiltRight(null); };
+  const shown = builtRight ?? r.sentence;
 
   return (
     <div className="wb-play-stage">
@@ -98,6 +114,7 @@ export function GameSentenceBuilder({ sentences, onExit, lang, t, audioLang }: {
           {placed.map((id, pos) => (
             <button key={id} type="button" className={`wb-sb-tile is-placed${verdict ? ` is-${verdict}` : ""}`} onClick={() => unplace(pos)} disabled={!!verdict}>{nq(byId.get(id) ?? "")}</button>
           ))}
+          {r.end && <span className="wb-sb-end" aria-hidden="true">{r.end}</span>}
         </div>
       </div>
       {!verdict && (
@@ -111,8 +128,8 @@ export function GameSentenceBuilder({ sentences, onExit, lang, t, audioLang }: {
         <div className="wb-sb-reveal">
           <div className={verdict === "right" ? "wb-sb-right" : "wb-sb-wrong"}>{verdict === "right" ? c.buildRight : c.buildWrong}</div>
           <div className="wb-sb-answer" dir={textDir} lang={audioLang}>
-            <span><QText text={nq(r.sentence)} wordLang={audioLang} /></span>
-            <TTSButton text={r.sentence} audioLang={audioLang} useOpenAI ariaLabel={r.sentence} className="wb-word-act-icon wb-play-speak" />
+            <span><QText text={nq(shown)} wordLang={audioLang} /></span>
+            <TTSButton text={shown} audioLang={audioLang} useOpenAI ariaLabel={shown} className="wb-word-act-icon wb-play-speak" />
           </div>
           <button type="button" className="wb-play-next" onClick={next}>{c.nextBtn}</button>
         </div>
@@ -126,6 +143,7 @@ const SB_CSS = `
 .wb-sb-line.is-right { border-style: solid; border-color: #10B981; }
 .wb-sb-line.is-wrong { border-style: solid; border-color: #F43F5E; }
 .wb-sb-hint { color: var(--wb-ink-soft, #6B7280); font-size: 20px; }
+.wb-sb-end { font-size: 24px; font-weight: 800; color: var(--wb-ink, #0f172a); }
 .wb-sb-pool { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 18px; }
 .wb-sb-tile { font: inherit; font-size: 19px; font-weight: 700; min-height: 48px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--wb-border, #D1D5DB); background: var(--surface, #fff); color: var(--wb-ink, #0f172a); cursor: pointer; box-shadow: 0 2px 0 rgba(15,23,42,0.08); }
 /* Placed tiles: a calm blue that no kid skin turns pink (pink and red read as a mistake); green when right, red when wrong. */

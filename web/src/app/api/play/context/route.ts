@@ -11,6 +11,14 @@
  * distractors the check found wrong (lib/context-game.ts, 2026-11-09). The result is cached in
  * `contextGameCache` by (lang, ui, kids, sorted words) so the same set is
  * never paid for twice.
+ *
+ * With { stream: true } (2026-11-12, Gadi: the child waited about 20 s before
+ * the game started) a new set comes back as lines of JSON, one story per line
+ * the moment it passes its check, so the game starts on the first story while
+ * the others are still being written:
+ *   {"round":{...}} ... then {"done":true} or {"error":"generation_failed"}
+ * Same model, same prompts, same number of calls. A cached set, and a caller
+ * that does not ask for a stream, get the one JSON answer as before.
  */
 import crypto from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
@@ -18,7 +26,7 @@ import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
 import { hardCapReached } from "@/lib/ai-budget";
 import {
-  CONTEXT_ROUNDS, applyContextCheck, contextCheckMessages, contextMessages, parseContextRounds, type ContextRound,
+  CONTEXT_ROUNDS, applyContextCheck, contextCheckMessages, contextMessages, contextStoryScanner, parseContextRounds, type ContextRound,
 } from "@/lib/context-game";
 
 export const runtime = "nodejs";
@@ -55,19 +63,106 @@ async function chat(messages: { role: string; content: string }[], temperature: 
   return String(data.choices?.[0]?.message?.content ?? "");
 }
 
-/** Write the stories, solve each one blind (in parallel, so the child waits
- *  for one story's check, not five), keep the ones solved exactly. */
-async function writeChecked(words: string[], lang: string, ui: string, kids: boolean, plan: string): Promise<ContextRound[]> {
-  const written = parseContextRounds(await chat(contextMessages(words, lang, kids), 0.5, "context_game", plan, 45_000), words, lang);
-  const checked = await Promise.all(
-    written.map((r) =>
+/** The writer refused to stream (not a timeout): the one-answer call still works. */
+class StreamRefused extends Error {}
+
+/** The writer call, streamed: `onText` gets the answer piece by piece. */
+async function writeStream(messages: { role: string; content: string }[], plan: string, timeoutMs: number, onText: (piece: string) => void): Promise<void> {
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    signal: AbortSignal.timeout(timeoutMs),
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+    body: JSON.stringify({
+      model: TEXT_MODEL_FAST,
+      temperature: 0.5,
+      max_completion_tokens: 3000,
+      response_format: { type: "json_object" },
+      messages,
+      stream: true,
+      // The last piece carries the token counts for the cost log.
+      stream_options: { include_usage: true },
+    }),
+  });
+  if (!res.ok || !res.body) throw new StreamRefused(`openai ${res.status}`);
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let usage: unknown = null;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    let nl: number;
+    while ((nl = buffer.indexOf("\n")) >= 0) {
+      const line = buffer.slice(0, nl).trim();
+      buffer = buffer.slice(nl + 1);
+      if (!line.startsWith("data:")) continue;
+      const payload = line.slice(5).trim();
+      if (!payload || payload === "[DONE]") continue;
+      try {
+        const j = JSON.parse(payload) as { choices?: { delta?: { content?: unknown } }[]; usage?: unknown };
+        const piece = j.choices?.[0]?.delta?.content;
+        if (typeof piece === "string" && piece) onText(piece);
+        if (j.usage) usage = j;
+      } catch { /* a broken line is skipped */ }
+    }
+  }
+  if (usage) {
+    const u = usageFrom(usage);
+    void logAiUsage({ feature: "context_game", model: TEXT_MODEL_FAST, tokensIn: u.tokensIn, tokensOut: u.tokensOut, plan });
+  }
+}
+
+/** Write the stories and solve each one blind, keep the ones solved exactly.
+ *  Each story goes to its check the moment the writer finishes it, and
+ *  `onRound` hears of each one that passes, so the child waits for the first
+ *  story only, not for all five. */
+async function writeChecked(words: string[], lang: string, ui: string, kids: boolean, plan: string, onRound: (r: ContextRound) => void, room: () => number): Promise<void> {
+  const checks: Promise<void>[] = [];
+  const check = (r: ContextRound) => {
+    // Enough stories already passed: a spare is not worth its check.
+    if (room() <= 0) return;
+    checks.push(
       // A check that hangs drops only its own story.
       chat(contextCheckMessages([r], lang, ui, kids), 0, "context_game_check", plan, 25_000)
         .then((c) => applyContextCheck([r], c))
-        .catch(() => []),
-    ),
-  );
-  return checked.flat();
+        .catch(() => [] as ContextRound[])
+        .then((ok) => { for (const x of ok) if (room() > 0) onRound(x); }),
+    );
+  };
+  try {
+    const scan = contextStoryScanner(words, lang);
+    try {
+      await writeStream(contextMessages(words, lang, kids), plan, 45_000, (piece) => scan.push(piece).forEach(check));
+    } catch (e) {
+      if (!(e instanceof StreamRefused)) throw e;
+      parseContextRounds(await chat(contextMessages(words, lang, kids), 0.5, "context_game", plan, 45_000), words, lang).forEach(check);
+    }
+  } finally {
+    // Also when the writer broke off in the middle: the stories it finished still count.
+    await Promise.all(checks);
+  }
+}
+
+/** A whole set: up to CONTEXT_ROUNDS checked stories, kept in the cache. */
+async function makeSet(words: string[], lang: string, ui: string, kids: boolean, plan: string, ref: FirebaseFirestore.DocumentReference, onRound?: (r: ContextRound) => void): Promise<ContextRound[]> {
+  const rounds: ContextRound[] = [];
+  const add = (r: ContextRound) => { rounds.push(r); onRound?.(r); };
+  const room = () => CONTEXT_ROUNDS - rounds.length;
+  try {
+    const t0 = Date.now();
+    await writeChecked(words, lang, ui, kids, plan, add, room);
+    // Too few passed: one more batch, so the child still gets a full game
+    // (only when there is time left before the 120 s limit).
+    if (rounds.length < 2 && Date.now() - t0 < 40_000) await writeChecked(words, lang, ui, kids, plan, add, room);
+  } catch { /* what passed so far still plays */ }
+  // A short set (1 story) still plays, but is not kept: the next try may do better.
+  if (rounds.length >= 2) {
+    try {
+      await ref.set({ rounds, lang, ui, kids, words, at: new Date().toISOString() });
+    } catch { /* the game still plays */ }
+  }
+  return rounds;
 }
 
 export async function POST(req: NextRequest) {
@@ -82,8 +177,10 @@ export async function POST(req: NextRequest) {
   let lang = "en";
   let ui = "en";
   let kids = false;
+  let stream = false;
   try {
-    const b = (await req.json()) as { words?: unknown; lang?: unknown; ui?: unknown; kids?: unknown };
+    const b = (await req.json()) as { words?: unknown; lang?: unknown; ui?: unknown; kids?: unknown; stream?: unknown };
+    stream = b.stream === true;
     if (typeof b.lang === "string" && CODE.test(b.lang)) lang = b.lang;
     if (typeof b.ui === "string" && CODE.test(b.ui)) ui = b.ui;
     kids = b.kids === true;
@@ -115,24 +212,31 @@ export async function POST(req: NextRequest) {
   if (!process.env.OPENAI_API_KEY) return NextResponse.json({ error: "unavailable" }, { status: 503 });
   if (await hardCapReached()) return NextResponse.json({ error: "busy" }, { status: 503 });
 
-  let rounds: ContextRound[] = [];
-  try {
-    const t0 = Date.now();
-    rounds = await writeChecked(words, lang, ui, kids, user.plan);
-    // Too few passed: one more batch, so the child still gets a full game
-    // (only when there is time left before the 120 s limit).
-    if (rounds.length < 2 && Date.now() - t0 < 40_000) rounds = [...rounds, ...(await writeChecked(words, lang, ui, kids, user.plan))];
-  } catch {
-    if (!rounds.length) return NextResponse.json({ error: "generation_failed" }, { status: 502 });
+  if (stream) {
+    const enc = new TextEncoder();
+    const body = new ReadableStream<Uint8Array>({
+      async start(controller) {
+        // The child may leave in the middle: the set is still finished and cached.
+        let open = true;
+        const send = (o: unknown) => {
+          if (!open) return;
+          try { controller.enqueue(enc.encode(JSON.stringify(o) + "\n")); } catch { open = false; }
+        };
+        const rounds = await makeSet(words, lang, ui, kids, user.plan, ref, (round) => send({ round })).catch(() => [] as ContextRound[]);
+        send(rounds.length ? { done: true } : { error: "generation_failed" });
+        if (open) { try { controller.close(); } catch { /* already closed */ } }
+      },
+    });
+    return new Response(body, {
+      headers: {
+        "Content-Type": "application/x-ndjson; charset=utf-8",
+        "Cache-Control": "no-store, no-transform",
+        "X-Accel-Buffering": "no",
+      },
+    });
   }
-  rounds = rounds.slice(0, CONTEXT_ROUNDS);
-  if (rounds.length < 1) return NextResponse.json({ error: "generation_failed" }, { status: 502 });
 
-  // A short set (1 story) still plays, but is not kept: the next try may do better.
-  if (rounds.length >= 2) {
-    try {
-      await ref.set({ rounds, lang, ui, kids, words, at: new Date().toISOString() });
-    } catch { /* the game still plays */ }
-  }
+  const rounds = await makeSet(words, lang, ui, kids, user.plan, ref);
+  if (rounds.length < 1) return NextResponse.json({ error: "generation_failed" }, { status: 502 });
   return NextResponse.json({ rounds });
 }

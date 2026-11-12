@@ -27,6 +27,7 @@ import { sfx } from "@/lib/game-sfx";
 import { shuffle } from "@/lib/play-engine";
 import { HEBREW_BANK } from "@/lib/learn/hebrew-bank";
 import { readingLevel, syllabify } from "@/lib/hebrew-syllables";
+import lessonsHe from "@/lib/learn/lessons-he.json";
 import { GameResult } from "./GameResult";
 import { PlayHeader, type PlayT } from "./GameQuiz";
 
@@ -37,7 +38,7 @@ type Copy = {
   title: string; desc: string;
   listen: string; listenHint: string; build: string; buildHint: string; read: string; readHint: string;
   hear: string; heardMe: string; yesRead: string; again: string; next: string; finish: string;
-  done: string; step: (n: number, of: number) => string; level: (n: number) => string;
+  inSentence: string; done: string; step: (n: number, of: number) => string; level: (n: number) => string;
 };
 const COPY: Record<string, Copy> = {
   he: {
@@ -46,7 +47,7 @@ const COPY: Record<string, Copy> = {
     build: "בונים", buildHint: "שמעו את המילה. איזו הברה באה עכשיו?",
     read: "קוראים", readHint: "קראו את המילה בקול. אחר כך לחצו ושמעו",
     hear: "לשמוע שוב", heardMe: "קראתי, עכשיו תשמיעו לי", yesRead: "קראתי נכון", again: "עוד פעם מההתחלה",
-    next: "למילה הבאה", finish: "סיימנו", done: "קראתם {n} מילים לבד",
+    next: "למילה הבאה", finish: "סיימנו", inSentence: "לשמוע במשפט", done: "קראתם {n} מילים לבד",
     step: (n, of) => `מילה ${n} מתוך ${of}`, level: (n) => `רמה ${n}`,
   },
   en: {
@@ -55,7 +56,7 @@ const COPY: Record<string, Copy> = {
     build: "Build", buildHint: "Hear the word. Which syllable comes next?",
     read: "Read", readHint: "Read the word out loud, then tap to hear it",
     hear: "Hear it again", heardMe: "I read it, now play it", yesRead: "I read it right", again: "Once more from the start",
-    next: "Next word", finish: "Done", done: "You read {n} words by yourself",
+    next: "Next word", finish: "Done", inSentence: "Hear it in a sentence", done: "You read {n} words by yourself",
     step: (n, of) => `Word ${n} of ${of}`, level: (n) => `Level ${n}`,
   },
   ar: {
@@ -64,7 +65,7 @@ const COPY: Record<string, Copy> = {
     build: "نبني", buildHint: "اسمع الكلمة. أي مقطع يأتي الآن؟",
     read: "نقرأ", readHint: "اقرأ الكلمة بصوت عالٍ، ثم اضغط لتسمعها",
     hear: "اسمع مرة أخرى", heardMe: "قرأتها، شغّلها الآن", yesRead: "قرأتها صحيحة", again: "مرة أخرى من البداية",
-    next: "الكلمة التالية", finish: "انتهينا", done: "قرأت {n} كلمات وحدك",
+    next: "الكلمة التالية", finish: "انتهينا", inSentence: "اسمعها في جملة", done: "قرأت {n} كلمات وحدك",
     step: (n, of) => `الكلمة ${n} من ${of}`, level: (n) => `المستوى ${n}`,
   },
   ru: {
@@ -73,13 +74,28 @@ const COPY: Record<string, Copy> = {
     build: "Собираем", buildHint: "Послушай слово. Какой слог следующий?",
     read: "Читаем", readHint: "Прочитай слово вслух, потом нажми и послушай",
     hear: "Послушать ещё раз", heardMe: "Я прочитал, теперь включи", yesRead: "Я прочитал правильно", again: "Ещё раз сначала",
-    next: "Следующее слово", finish: "Готово", done: "Ты сам прочитал {n} слов",
+    next: "Следующее слово", finish: "Готово", inSentence: "Послушать в предложении", done: "Ты сам прочитал {n} слов",
     step: (n, of) => `Слово ${n} из ${of}`, level: (n) => `Уровень ${n}`,
   },
 };
 export const syllablesCopy = (lang: string): Copy => COPY[lang] ?? COPY.en;
 
-type Item = { w: string; nq: string; en: string; syl: string[]; level: number };
+type Item = { w: string; nq: string; en: string; syl: string[]; level: number; sentence?: string };
+
+/**
+ * A sentence for each word (Shirli 2026-11-12: a word said on its own is not
+ * always clear, the stress can fall on the wrong syllable and "כמה" sounds
+ * like "קמה"; in a sentence the child knows which word it is). The sentences
+ * are the lessons' own; the shortest one that holds the word, as a whole word
+ * or behind a prefix letter.
+ */
+const SENTENCES: string[] = (lessonsHe as Array<{ sentences?: string[] }>).flatMap((l) => l.sentences ?? []).sort((a, b) => a.length - b.length);
+function sentenceFor(w: string): string | undefined {
+  const esc = w.replace(/[^א-ת"' ]/g, "");
+  const whole = new RegExp(`(^|[^א-ת])${esc}($|[^א-ת])`);
+  const prefixed = new RegExp(`(^|[^א-ת])[הבלומכש]${esc}($|[^א-ת])`);
+  return SENTENCES.find((x) => whole.test(x)) ?? SENTENCES.find((x) => prefixed.test(x));
+}
 
 /** The bank words a child can sound out: one word, two syllables or more, with a picture word. */
 function bankItems(): Item[] {
@@ -88,7 +104,7 @@ function bankItems(): Item[] {
     if (!x.nq || /[\s-]/.test(x.nq) || !x.en) continue;
     const syl = syllabify(x.nq);
     if (syl.length < 2) continue;
-    out.push({ w: x.w, nq: x.nq, en: x.en, syl, level: readingLevel(syl) });
+    out.push({ w: x.w, nq: x.nq, en: x.en, syl, level: readingLevel(syl), sentence: sentenceFor(x.w) });
   }
   return out;
 }
@@ -111,7 +127,7 @@ const writeLevel = (uid: string | undefined, n: number) => { try { localStorage.
  * Hebrew speech for short strings: the app's voice when the account has it,
  * else the device's. Each string is fetched once per visit.
  */
-function useSpeech() {
+export function useSpeech() {
   const { user } = useAuth();
   const cache = useRef(new Map<string, Promise<string | null>>());
   const current = useRef<HTMLAudioElement | null>(null);
@@ -227,13 +243,18 @@ export function GameSyllables({ onExit, lang, t }: { onExit: () => void; lang: s
   const warm = speech.warm;
   useEffect(() => {
     const w = session[idx]; const n = session[idx + 1];
-    if (w) warm([...w.syl, w.nq]);
+    if (w) warm([...w.syl, w.nq, ...(w.sentence ? [w.sentence] : [])]);
     if (n) warm([...n.syl, n.nq]);
   }, [idx, session, warm]);
 
+  // The level follows the child both ways (2026-11-12; it only ever climbed):
+  // a session with at most one "once more" goes up, one where half the words
+  // needed another round goes down, anything between stays.
+  const retries = useRef(0);
   const finishWord = () => {
     if (idx + 1 >= session.length) {
-      writeLevel(user?.uid, Math.min(5, level + 1));
+      const r = retries.current;
+      writeLevel(user?.uid, r <= 1 ? Math.min(5, level + 1) : r >= session.length / 2 ? Math.max(1, level - 1) : level);
       setDone(true);
     } else { setIdx((i) => i + 1); setStep(1); }
   };
@@ -243,7 +264,7 @@ export function GameSyllables({ onExit, lang, t }: { onExit: () => void; lang: s
       <GameResult
         data={{ title: c.title, score: session.length, total: session.length, headline: c.done.replace("{n}", String(session.length)) }}
         onExit={onExit}
-        onReplay={() => { setLevel(readLevel(user?.uid)); setSeed((s) => s + 1); setIdx(0); setStep(1); setDone(false); }}
+        onReplay={() => { retries.current = 0; setLevel(readLevel(user?.uid)); setSeed((s) => s + 1); setIdx(0); setStep(1); setDone(false); }}
         lang={lang}
         t={t}
       />
@@ -264,7 +285,7 @@ export function GameSyllables({ onExit, lang, t }: { onExit: () => void; lang: s
         <div className="wb-play-question-eyebrow">{step === 1 ? c.listenHint : step === 2 ? c.buildHint : c.readHint}</div>
         {step === 1 && <StepListen key={`l${idx}`} word={word} pic={pic} c={c} fwd={fwd} speech={speech} onDone={() => setStep(2)} />}
         {step === 2 && <StepBuild key={`b${idx}`} word={word} others={session} pic={pic} c={c} fwd={fwd} speech={speech} onDone={() => setStep(3)} />}
-        {step === 3 && <StepRead key={`r${idx}`} word={word} pic={pic} c={c} speech={speech} last={idx + 1 >= session.length} onAgain={() => setStep(1)} onDone={finishWord} />}
+        {step === 3 && <StepRead key={`r${idx}`} word={word} pic={pic} c={c} speech={speech} last={idx + 1 >= session.length} onAgain={() => { retries.current += 1; setStep(1); }} onDone={finishWord} />}
       </div>
     </div>
   );
@@ -286,6 +307,17 @@ function Picture({ pic, nq, shown }: { pic?: string; nq: string; shown: boolean 
   return <img className={`syl-pic${shown ? " is-shown" : ""}`} src={pic} alt={nq} width={200} height={200} draggable={false} />;
 }
 
+/** The word inside a sentence: shown, and read aloud on a tap. */
+function InSentence({ word, c, speech }: { word: Item; c: Copy; speech: Speech }) {
+  if (!word.sentence) return null;
+  return (
+    <button type="button" className={`syl-sentence${speech.speaking === word.sentence ? " is-speaking" : ""}`} onClick={() => void speech.speak(word.sentence!)} aria-label={c.inSentence}>
+      <span className="syl-sentence-ic" aria-hidden="true">🔊</span>
+      <span lang="he" dir="rtl">{word.sentence}</span>
+    </button>
+  );
+}
+
 /** Step 1: tap the stones in order; each sounds; then the whole word and its picture. */
 function StepListen({ word, pic, c, fwd, speech, onDone }: { word: Item; pic?: string; c: Copy; fwd: string; speech: Speech; onDone: () => void }) {
   const [lit, setLit] = useState(0);
@@ -300,9 +332,13 @@ function StepListen({ word, pic, c, fwd, speech, onDone }: { word: Item; pic?: s
       const n = lit + 1;
       setLit(n);
       if (n === word.syl.length) {
-        await speech.speak(word.nq);
+        const whole = await speech.speak(word.nq);
         setRevealed(true);
         sfx.magic();
+        busy.current = false;
+        // The word is then heard once inside a sentence (not if the child cut it short).
+        if (whole && word.sentence) void speech.speak(word.sentence);
+        return;
       }
     }
     busy.current = false;
@@ -319,6 +355,7 @@ function StepListen({ word, pic, c, fwd, speech, onDone }: { word: Item; pic?: s
         {revealed && (
           <>
             <div className="syl-word" lang="he" dir="rtl">{word.nq}</div>
+            <InSentence word={word} c={c} speech={speech} />
             <div className="syl-row">
               <button type="button" className="syl-btn is-ghost" onClick={() => void speech.speak(word.nq)}>{c.hear}</button>
               <button type="button" className="syl-btn" onClick={onDone}>{c.build} {fwd}</button>
@@ -385,9 +422,12 @@ function StepBuild({ word, others, pic, c, fwd, speech, onDone }: { word: Item; 
       <div className="syl-reveal">
         <Picture pic={pic} nq={word.nq} shown={complete} />
         {complete && (
-          <div className="syl-row">
-            <button type="button" className="syl-btn" onClick={onDone}>{c.read} {fwd}</button>
-          </div>
+          <>
+            <InSentence word={word} c={c} speech={speech} />
+            <div className="syl-row">
+              <button type="button" className="syl-btn" onClick={onDone}>{c.read} {fwd}</button>
+            </div>
+          </>
         )}
       </div>
     </>
@@ -408,10 +448,13 @@ function StepRead({ word, pic, c, speech, last, onAgain, onDone }: { word: Item;
           <button type="button" className="syl-btn" onClick={() => { void speech.speak(word.nq).then(() => setHeard(true)); }}>🔊 {c.heardMe}</button>
         </div>
       ) : (
+        <>
+        <InSentence word={word} c={c} speech={speech} />
         <div className="syl-row">
           <button type="button" className="syl-btn is-ghost" onClick={onAgain}>{c.again}</button>
           <button type="button" className="syl-btn" onClick={() => { sfx.correct(); onDone(); }}>{c.yesRead} · {last ? c.finish : c.next}</button>
         </div>
+        </>
       )}
     </>
   );
@@ -440,6 +483,9 @@ const SYL_CSS = `
 .syl-word-big { font-size: clamp(44px, 12vw, 64px); display: flex; gap: 0.18em; padding: 10px 18px; }
 .syl-part { position: relative; }
 .syl-part + .syl-part::before { content: "·"; position: absolute; inset-inline-start: -0.2em; top: 0.1em; font-size: 0.5em; color: #b8b0a0; }
+.syl-sentence { display: inline-flex; align-items: center; gap: 10px; max-width: 100%; padding: 10px 18px; border: 0; border-radius: 18px; background: #fff7df; color: #14202b; font: inherit; font-size: clamp(18px, 4.6vw, 22px); font-weight: 600; line-height: 1.5; cursor: pointer; box-shadow: 0 0 0 2px #f1dfa6 inset; text-align: start; }
+.syl-sentence.is-speaking { background: #ffeeb3; }
+.syl-sentence-ic { flex: none; }
 .syl-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .syl-row-top { margin-bottom: 4px; }
 .syl-btn { min-height: 52px; padding: 12px 26px; border: 0; border-radius: 999px; background: #0a7472; color: #fff; font: inherit; font-weight: 800; font-size: 18px; cursor: pointer; box-shadow: 0 4px 0 #075452, 0 8px 16px #0004; }

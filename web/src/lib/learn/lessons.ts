@@ -12,7 +12,10 @@ import { bankFor, topicsFor, type LearnLang } from "./engine";
 export type LessonReading = { title: string; text: string; checks: Array<{ s: string; yes: boolean }> };
 type LessonDoc = {
   id: string; topic: string; part: number; d: number; words: string[];
-  sentences: string[]; pronouns: Array<{ phrase: string; answer: string }>; reading: LessonReading | null;
+  sentences: string[];
+  /** Other word orders the sentence builder accepts as right (Hebrew: "היום אני שמח" / "אני שמח היום"). */
+  alt?: string[];
+  pronouns: Array<{ phrase: string; answer: string }>; reading: LessonReading | null;
 };
 
 const ALL: Record<LearnLang, LessonDoc[]> = { en: LESSONS_EN as LessonDoc[], he: LESSONS_HE as LessonDoc[] };
@@ -46,5 +49,5 @@ export function lessonData(lang: LearnLang, ui: string, id: string) {
     return b?.t ? [{ w: b.w, t: b.t, ...(b.nq ? { nq: b.nq } : {}), ...(en ? { en } : {}) }] : [];
   });
   const t = topicName(lang, l.topic, ui);
-  return { id: l.id, topic: `${t.name} ${l.part}`, items, sentences: l.sentences, pronouns: l.pronouns, reading: l.reading };
+  return { id: l.id, topic: `${t.name} ${l.part}`, items, sentences: l.sentences, ...(l.alt?.length ? { alt: l.alt } : {}), pronouns: l.pronouns, reading: l.reading };
 }

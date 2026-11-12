@@ -196,6 +196,54 @@ export function parseContextRounds(content: string, words: string[], lang: strin
 }
 
 /**
+ * The writer's JSON as it is still being written (2026-11-12, Gadi: the child
+ * waited about 20 s for all the stories before the first one showed). Feed it
+ * the text as it streams in; it gives back each story the moment its closing
+ * brace arrives, already through the shape checks, so the blind check of the
+ * first story can start while the writer is still on the second.
+ */
+export function contextStoryScanner(words: string[], lang: string): { push: (chunk: string) => ContextRound[] } {
+  let text = "";
+  let at = 0;
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+  let start = -1;
+  let taken = 0;
+  return {
+    push(chunk: string): ContextRound[] {
+      text += chunk;
+      const out: ContextRound[] = [];
+      for (; at < text.length; at++) {
+        const ch = text[at];
+        if (inString) {
+          if (escaped) escaped = false;
+          else if (ch === "\\") escaped = true;
+          else if (ch === '"') inString = false;
+          continue;
+        }
+        if (ch === '"') inString = true;
+        else if (ch === "{") {
+          depth++;
+          // Depth 1 is the whole answer, depth 2 is one story.
+          if (depth === 2) start = at;
+        } else if (ch === "}") {
+          if (depth === 2 && start >= 0) {
+            let raw: unknown = null;
+            try { raw = JSON.parse(text.slice(start, at + 1)); } catch { /* a broken story is skipped */ }
+            const r = taken < CONTEXT_WRITE ? cleanStory(raw, words, lang) : null;
+            if (r) { taken++; out.push(r); }
+            start = -1;
+          }
+          depth--;
+        }
+      }
+      return out;
+    },
+  };
+}
+
+/**
  * The blind check (2026-11-09, after a parent's report: "Mia put on her coat
  * because the morning was [warm]", with "cold" marked wrong). A second call
  * gets each story with its blanks numbered and its word bar, but not the

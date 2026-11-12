@@ -5,7 +5,7 @@ import { getStorage } from "firebase-admin/storage";
 
 let adminApp: App | null = null;
 
-function getAdminApp(): App {
+export function getAdminApp(): App {
   if (adminApp) return adminApp;
 
   const existing = getApps();

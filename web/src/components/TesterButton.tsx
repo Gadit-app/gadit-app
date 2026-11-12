@@ -234,6 +234,13 @@ const CSS = `
 .tst-fab{position:fixed;z-index:95;inset-inline-start:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 84px);width:46px;height:46px;border-radius:50%;border:2px solid #c4b5fd;background:#f5f3ff;box-shadow:0 4px 14px #0003;font-size:21px;display:grid;place-items:center;cursor:pointer}
 .tst-fab.is-pay{bottom:calc(env(safe-area-inset-bottom,0px) + 140px);text-decoration:none;border-color:#fcd34d;background:#fffbeb}
 .tst-fab.is-checks{bottom:calc(env(safe-area-inset-bottom,0px) + 196px);text-decoration:none;border-color:#86efac;background:#f0fdf4}
+/* A puzzle keyboard on screen (crossword, arrowword): the three buttons covered its side keys on a
+   phone. They move into a row at the bottom corner, and the stage stops scrolling above that row,
+   so nothing of the game can pass under them (Gadi 2026-11-12). */
+body:has(.cw-keys,.aw-keys) .tst-fab{width:40px;height:40px;font-size:18px;inset-inline-start:auto;inset-inline-end:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 6px)}
+body:has(.cw-keys,.aw-keys) .tst-fab.is-pay{inset-inline-end:56px}
+body:has(.cw-keys,.aw-keys) .tst-fab.is-checks{inset-inline-end:102px}
+html body .wordbook .wst:has(.cw-keys,.aw-keys) .wst-scroll{bottom:calc(env(safe-area-inset-bottom,0px) + 52px)}
 .tst-wrap{position:fixed;inset:0;z-index:100;background:#0008;display:grid;place-items:center;padding:16px}
 .tst-x{position:absolute;top:10px;inset-inline-start:10px;width:36px;height:36px;border-radius:50%;border:0;background:#f3f4f6;color:#14202b;font-size:16px;cursor:pointer;display:grid;place-items:center}
 .tst-card{position:relative;width:min(420px,100%);background:#fff;color:#14202b;border-radius:26px;padding:18px 16px;display:grid;gap:12px;justify-items:center;text-align:center;box-shadow:0 18px 50px #0006;font-family:inherit}
