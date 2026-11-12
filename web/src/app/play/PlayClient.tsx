@@ -72,7 +72,7 @@ import { DuelHub } from "@/components/play/duel/DuelHub";
 import { GameSyllables, syllablesCopy } from "@/components/play/GameSyllables";
 import { GameLetterWheel, letterWheelCopy } from "@/components/play/GameLetterWheel";
 import { GameIdea } from "@/components/play/GameIdea";
-import { inventedBy } from "@/lib/game-inventors";
+import { inventedBy, inventorName } from "@/lib/game-inventors";
 import { GameWordSearch, wordSearchCopy } from "@/components/play/GameWordSearch";
 import { GameCrossword, crosswordCopy } from "@/components/play/GameCrossword";
 import { GameArrowword, arrowwordCopy } from "@/components/play/GameArrowword";
@@ -4655,7 +4655,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                         <span className="wb-play-card-text">
                           <span className="wb-play-card-title">{catchCopy(lang).sceneFair}</span>
                           <span className="wb-play-card-desc">{catchCopy(lang).fairSub}</span>
-                          {inventedBy("catch-fair", lang) ? <span className="wb-play-card-by">💡 {inventedBy("catch-fair", lang)}</span> : null}
+                          {inventorName("catch-fair", lang) ? <span className="wb-play-card-by" title={inventedBy("catch-fair", lang) ?? undefined}>💡 {inventorName("catch-fair", lang)}</span> : null}
                         </span>
                       </Link>
                     </li>
@@ -4693,7 +4693,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                           <span className="wb-play-card-title">{g.title}</span>
                           <span className="wb-play-card-desc">{g.desc}</span>
                           {/* a game a child invented carries the child's name (Gadi 2026-11-12) */}
-                          {inventedBy(g.id, lang) ? <span className="wb-play-card-by">💡 {inventedBy(g.id, lang)}</span> : null}
+                          {inventorName(g.id, lang) ? <span className="wb-play-card-by" title={inventedBy(g.id, lang) ?? undefined}>💡 {inventorName(g.id, lang)}</span> : null}
                         </span>
                         {!g.enabled && (
                           <span className="wb-play-card-locked">{t.comingSoon}</span>

@@ -5,10 +5,8 @@
  * Letter Catch card).
  */
 export const GAME_INVENTORS: Record<string, { he: string; en: string }> = {
-  // Osher wanted a תשחץ (2026-11-11); it became the three puzzles.
-  wordsearch: { he: "אושר", en: "Osher" },
-  crossword: { he: "אושר", en: "Osher" },
-  arrowword: { he: "אושר", en: "Osher" },
+  // Only games a child truly invented (Gadi 2026-11-12): word searches, crosswords and
+  // arrowwords existed long before, so they carry no name.
   // Din's funfair in Letter Catch: the cans, the balloons and the darts (Gadi 2026-11-12).
   "catch-fair": { he: "דין", en: "Din" },
   // Noam and his mother Shirli made the wheel out of paper and filmed it (2026-11-12).
@@ -29,4 +27,10 @@ export function inventedBy(gameId: string, lang: string): string | null {
   const who = GAME_INVENTORS[gameId];
   if (!who) return null;
   return (BY[lang] ?? BY.en)(lang === "he" ? who.he : who.en);
+}
+
+/** The inventor's first name alone, for the small tag on a menu card. */
+export function inventorName(gameId: string, lang: string): string | null {
+  const who = GAME_INVENTORS[gameId];
+  return who ? (lang === "he" ? who.he : who.en) : null;
 }
