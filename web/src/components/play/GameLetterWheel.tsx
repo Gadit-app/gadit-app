@@ -375,17 +375,18 @@ export function GameLetterWheel({ onExit, lang, t }: { onExit: () => void; lang:
 
 const LWH_CSS = `
 .lwh .lwh-q { display: grid; gap: 14px; justify-items: center; }
-.lwh-wheel { --lwh-r: min(40vw, 170px); position: relative; width: calc(var(--lwh-r) * 2); height: calc(var(--lwh-r) * 2); margin-top: 18px; }
+/* as big as the screen allows (Gadi 2026-11-12: it was small on a computer, with room to spare) */
+.lwh-wheel { --lwh-r: min(40vw, 31vh, 250px); position: relative; width: calc(var(--lwh-r) * 2); height: calc(var(--lwh-r) * 2); margin-top: 18px; }
 .lwh-ring { position: absolute; border-radius: 50%; transition: transform 2600ms cubic-bezier(0.12, 0.72, 0.1, 1); }
 .lwh-outer { inset: 0; background: repeating-conic-gradient(from -8.1818deg, #fff3c9 0 16.3636deg, #ffe08a 16.3636deg 32.7272deg); box-shadow: 0 0 0 6px #c2410c, 0 10px 24px #0006, inset 0 0 0 2px #fff8; }
 .lwh-inner { inset: calc(var(--lwh-r) * 0.36); background: repeating-conic-gradient(from -22.5deg, #d9f3ff 0 45deg, #a9defa 45deg 90deg); box-shadow: 0 0 0 5px #0369a1, 0 4px 12px #0005; }
-.lwh-slot { position: absolute; left: 50%; top: 50%; width: 0; height: 0; display: grid; place-items: center; font-family: var(--wb-font-display, inherit); font-weight: 800; font-size: calc(var(--lwh-r) * 0.17); line-height: 1; color: #3b2a12; white-space: nowrap; }
-.lwh-sign { font-size: calc(var(--lwh-r) * 0.2); color: #0c3a5a; }
+.lwh-slot { position: absolute; left: 50%; top: 50%; width: 0; height: 0; display: grid; place-items: center; font-family: var(--wb-font-display, inherit); font-weight: 800; font-size: calc(var(--lwh-r) * 0.195); line-height: 1; color: #3b2a12; white-space: nowrap; }
+.lwh-sign { font-size: calc(var(--lwh-r) * 0.23); color: #0c3a5a; }
 .lwh-glyph { width: 1.2em; height: 1.38em; display: block; }
 .lwh-slot.is-on { color: #b91c1c; }
 .lwh-hub { position: absolute; left: 50%; top: 50%; width: calc(var(--lwh-r) * 0.2); height: calc(var(--lwh-r) * 0.2); margin: calc(var(--lwh-r) * -0.1); border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #f59e0b 60%, #b45309); box-shadow: 0 3px 8px #0006; }
 .lwh-pointer { position: absolute; left: 50%; top: -18px; z-index: 2; width: 0; height: 0; margin-left: -13px; border-left: 13px solid transparent; border-right: 13px solid transparent; border-top: 26px solid #dc2626; filter: drop-shadow(0 3px 3px #0006); }
-.lwh-under { display: grid; justify-items: center; gap: 10px; min-height: 170px; align-content: start; }
+.lwh-under { display: grid; justify-items: center; gap: 10px; min-height: 150px; align-content: start; }
 .lwh-syl { font-family: var(--wb-font-display, inherit); font-size: clamp(64px, 20vw, 96px); font-weight: 800; line-height: 1.5; color: #14202b; padding: 0 28px; border-radius: 24px; background: #fff; box-shadow: 0 0 0 3px #e7dfc8 inset; }
 .lwh-syl.is-right { background: #dcfce7; box-shadow: 0 0 0 3px #4ade80 inset; }
 .lwh-note { font-size: 18px; font-weight: 700; color: #14202b; text-align: center; display: inline-flex; align-items: center; gap: 8px; }
