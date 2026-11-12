@@ -30,7 +30,7 @@ const COPY: Record<string, Copy> = {
   he: { title: "תשבצים", desc: "המילים שלכם משתלבות זו בזו. ההגדרה היא המשמעות, ולפעמים תמונה", across: "מאוזן", down: "מאונך", hint: "רמז", done: "פתרתם את התשבץ", solved: (n, of) => `${n} מתוך ${of}`, tapCell: "לוחצים על משבצת כדי לראות את ההגדרה", picClue: "מה רואים בתמונה?" },
   en: { title: "Crosswords", desc: "Your words cross each other. The clue is the meaning, sometimes a picture", across: "Across", down: "Down", hint: "Hint", done: "You solved the crossword", solved: (n, of) => `${n} of ${of}`, tapCell: "Tap a square to see its clue", picClue: "What is in the picture?" },
   ar: { title: "الكلمات المتقاطعة", desc: "كلماتك تتقاطع. التعريف هو المعنى، وأحيانًا صورة", across: "أفقي", down: "عمودي", hint: "تلميح", done: "حللت الكلمات المتقاطعة", solved: (n, of) => `${n} من ${of}`, tapCell: "اضغط على مربع لترى التعريف", picClue: "ماذا ترى في الصورة؟" },
-  ru: { title: "Кроссворд", desc: "Твои слова пересекаются. Подсказка — значение, иногда картинка", across: "По горизонтали", down: "По вертикали", hint: "Подсказка", done: "Ты решил кроссворд", solved: (n, of) => `${n} из ${of}`, tapCell: "Нажми на клетку, чтобы увидеть подсказку", picClue: "Что на картинке?" },
+  ru: { title: "Кроссворд", desc: "Твои слова пересекаются. Подсказка: значение, иногда картинка", across: "По горизонтали", down: "По вертикали", hint: "Подсказка", done: "Ты решил кроссворд", solved: (n, of) => `${n} из ${of}`, tapCell: "Нажми на клетку, чтобы увидеть подсказку", picClue: "Что на картинке?" },
 };
 export const crosswordCopy = (lang: string): Copy => COPY[lang] ?? COPY.en;
 

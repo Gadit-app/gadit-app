@@ -124,6 +124,14 @@ const readLevel = (uid: string | undefined): number => {
 const writeLevel = (uid: string | undefined, n: number) => { try { localStorage.setItem(`${LEVEL_KEY}:${uid ?? "anon"}`, String(n)); } catch { /* this visit only */ } };
 
 /**
+ * Four syllables the voice gets wrong when they stand alone (each failed the
+ * recording check four or five times, 2026-11-12). They are said through a
+ * spelling that sounds the same and passed the check; the stone still shows
+ * the syllable as it is written in the word.
+ */
+const SAY_AS: Record<string, string> = { "צִ": "צִי", "צְ": "צֵ", "כָן": "חָן", "הוּם": "הוּם!" };
+
+/**
  * Hebrew speech for short strings: the app's voice when the account has it,
  * else the device's. Each string is fetched once per visit.
  */
@@ -142,7 +150,7 @@ export function useSpeech() {
         const res = await fetch("/api/tts", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
-          body: JSON.stringify({ text, lang: "he" }),
+          body: JSON.stringify({ text: SAY_AS[text] ?? text, lang: "he" }),
         });
         if (!res.ok) return null;
         return URL.createObjectURL(await res.blob());
@@ -188,7 +196,7 @@ export function useSpeech() {
         return;
       }
       try {
-        const u = new SpeechSynthesisUtterance(text);
+        const u = new SpeechSynthesisUtterance(SAY_AS[text] ?? text);
         u.lang = "he-IL"; u.rate = 0.8;
         u.onend = done; u.onerror = done;
         window.speechSynthesis.cancel();

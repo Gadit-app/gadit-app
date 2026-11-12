@@ -3578,7 +3578,7 @@ const COVER_V = 2;
 const GAME_COVERS = new Set<GameId>([
   "flashcards", "flashdefs", "quiz", "fillblank", "memory", "anagram", "speed",
   "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "truefalse", "context",
-  "syllables", "wordsearch", "crossword", "arrowword",
+  "syllables", "wheel", "wordsearch", "crossword", "arrowword",
 ]);
 
 /** A pool that is sure to include the focus word: the word first, then
@@ -4633,6 +4633,20 @@ export function PlayPage({ openingLesson = false }: { openingLesson?: boolean } 
                         <span className="wb-play-card-text">
                           <span className="wb-play-card-title">{catchCopy(lang).gameTitle}</span>
                           <span className="wb-play-card-desc">{catchCopy(lang).cardDesc}</span>
+                        </span>
+                      </Link>
+                    </li>
+                  )}
+                  {/* Din's funfair has its own card (Gadi 2026-11-12): it opens Letter Catch straight on the funfair. */}
+                  {section.id === "notebook" && (
+                    <li key="catch-fair">
+                      <Link href={`${href("/catch")}?scene=fair`} className="wb-play-card wb-play-cat-notebook has-cover">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img className="wb-play-card-cover" src="/catch/fair/cans/card.webp?v=1" alt="" loading="lazy" width={720} height={480} />
+                        <span className="wb-play-card-text">
+                          <span className="wb-play-card-title">{catchCopy(lang).sceneFair}</span>
+                          <span className="wb-play-card-desc">{catchCopy(lang).fairSub}</span>
+                          {inventedBy("catch-fair", lang) ? <span className="wb-play-card-by">💡 {inventedBy("catch-fair", lang)}</span> : null}
                         </span>
                       </Link>
                     </li>
