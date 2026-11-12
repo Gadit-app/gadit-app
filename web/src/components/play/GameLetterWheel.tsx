@@ -182,9 +182,19 @@ export function GameLetterWheel({ onExit, lang, t }: { onExit: () => void; lang:
 
   const syllable = land ? LETTERS[land.l] + SIGNS[land.s].mark : "";
   const want: Vowel = land ? SIGNS[land.s].v : "a";
-  // What the voice is asked to say. A lone hirik comes out clipped ("d" for דִ),
-  // so it is said with its yod (דִי), which sounds the same and is clear.
-  const sayText = land && SIGNS[land.s].mark === "ִ" ? `${syllable}י` : syllable;
+  // What the voice is asked to say, where the written syllable comes out wrong
+  // (each checked against the recordings, 2026-11-12): a lone hirik is clipped
+  // ("d" for דִ), so it is said with its yod; a kubutz with no letter after it is
+  // read as another vowel, so it is said as the shuruk it sounds like; and צֶ
+  // came back silent five times, so it is said as צֵ, the same sound.
+  const sayText = ((): string => {
+    if (!land) return "";
+    const letter = LETTERS[land.l], mark = SIGNS[land.s].mark;
+    if (mark === "ִ") return `${syllable}י`;
+    if (mark === "ֻ" && letter !== "ו") return `${letter}וּ`;
+    if (letter === "צ" && mark === "ֶ") return `${letter}ֵ`;
+    return syllable;
+  })();
 
   const hear = async () => {
     setPhase("listening");
