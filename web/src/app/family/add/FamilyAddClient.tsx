@@ -28,6 +28,7 @@ import { useHref } from "@/lib/href";
 import { BackLink } from "@/components/BackLink";
 import { db } from "@/lib/firebase";
 import { MemberRole, MEMBER_COLORS, MAX_KIDS_PER_FAMILY, isParentRole, kidLimitFor } from "@/lib/family";
+import { MAX_GRADE, bandCopy, gradeFromAge, gradeName } from "@/lib/grade-bands";
 
 const COPY: Record<string, {
   title: string;
@@ -813,6 +814,8 @@ export function FamilyAddClient() {
   const [role, setRole] = useState<MemberRole | null>(null);
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
+  // The school grade ("" = not chosen yet: the one that fits the age is offered).
+  const [grade, setGrade] = useState("");
   const [colorIndex, setColorIndex] = useState(0);
   const [saving, setSaving] = useState(false);
   const [childCount, setChildCount] = useState<number | null>(null);
@@ -857,11 +860,12 @@ export function FamilyAddClient() {
       // Age is only meaningful for a child, and it's optional. Stored so we
       // can tune reading level / defaults by age later (Gadi 2026-09-19).
       const ageNum = !isParentRole(role) && age.trim() ? Math.max(3, Math.min(18, parseInt(age, 10) || 0)) : 0;
+      const gradeNum = isParentRole(role) ? null : grade !== "" ? Number(grade) : gradeFromAge(ageNum || null);
       // Written by the server, which checks the fields and the child limit.
       const res = await fetch("/api/family/member", {
         method: "POST",
         headers: { Authorization: `Bearer ${await user.getIdToken()}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ role, name: name.trim(), colorIndex, ...(ageNum ? { age: ageNum } : {}) }),
+        body: JSON.stringify({ role, name: name.trim(), colorIndex, ...(ageNum ? { age: ageNum } : {}), ...(gradeNum !== null ? { grade: gradeNum } : {}) }),
       });
       const ref = (await res.json().catch(() => ({}))) as { id?: string };
       if (!res.ok || !ref.id) throw new Error(`add member ${res.status}`);
@@ -941,6 +945,20 @@ export function FamilyAddClient() {
                   className="wb-family-field-input"
                   style={{ maxWidth: 120 }}
                 />
+              </label>
+            )}
+            {role !== null && !isParentRole(role) && (
+              <label className="wb-family-field">
+                <span className="wb-family-field-label">{bandCopy(lang).gradeLabel}</span>
+                <select
+                  value={grade !== "" ? grade : String(gradeFromAge(parseInt(age, 10)) ?? "")}
+                  onChange={(e) => setGrade(e.target.value)}
+                  className="wb-family-field-input"
+                  style={{ maxWidth: 260 }}
+                >
+                  <option value="">{bandCopy(lang).noGrade}</option>
+                  {Array.from({ length: MAX_GRADE + 1 }, (_, g) => <option key={g} value={g}>{gradeName(lang, g)}</option>)}
+                </select>
               </label>
             )}
 

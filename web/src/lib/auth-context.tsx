@@ -1,5 +1,6 @@
 "use client";
 import { ttqTrack } from "@/lib/tiktok-pixel";
+import { bandOfMember, type Band } from "./grade-bands";
 import { AudienceQuestion } from "@/components/AudienceQuestion";
 import { isIndividualPriceId } from "@/lib/individual-prices";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
@@ -143,6 +144,9 @@ interface AuthContextType {
    *  parent added them), for age defaults such as niqqud on for grades 1-2
    *  (Gadi 2026-11-11). null when unknown or not a kid. */
   memberAge: number | null;
+  /** A paired kid's games band (grade-bands.ts): the level a parent set, else
+   *  the grade, else the age. null when unknown or not a kid. */
+  memberBand: Band | null;
   signInWithGoogle: () => Promise<void>;
   /** Sign in with Apple through the iOS app's native sheet. Only offered
    *  inside the iOS app (lib/native-auth.ts nativeAuthAvailable("apple")). */
@@ -217,6 +221,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [avatarPhotoUrl, setAvatarPhotoUrl] = useState<string | null>(null);
   const [memberName, setMemberName] = useState<string | null>(null);
   const [memberAge, setMemberAge] = useState<number | null>(null);
+  const [memberBand, setMemberBand] = useState<Band | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginReason, setLoginReason] = useState("");
   const [loginMode, setLoginMode] = useState<AuthMode>("signin");
@@ -401,6 +406,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setAvatarPhotoUrl(null);
       setMemberName(null);
       setMemberAge(null);
+      setMemberBand(null);
       return;
     }
     let unsub: (() => void) | undefined;
@@ -422,8 +428,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setMemberName((d?.name as string) ?? null);
             const age = Number(d?.age);
             setMemberAge(Number.isFinite(age) && age > 0 ? age : null);
+            setMemberBand(bandOfMember(d));
           },
-          () => { setAvatarId(null); setAvatarPhotoUrl(null); setMemberName(null); setMemberAge(null); },
+          () => { setAvatarId(null); setAvatarPhotoUrl(null); setMemberName(null); setMemberAge(null); setMemberBand(null); },
         );
       } catch {
         /* nice-to-have */
@@ -698,7 +705,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider value={{
-      user, loading, plan, planReady, pastDue, graceUntil, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl, memberName, memberAge,
+      user, loading, plan, planReady, pastDue, graceUntil, familyId, schoolId, familyRole, avatarId, avatarPhotoUrl, memberName, memberAge, memberBand,
       kidsAccess,
       isIndividual: !familyId && !schoolId && isIndividualPriceId(priceId),
       tester,

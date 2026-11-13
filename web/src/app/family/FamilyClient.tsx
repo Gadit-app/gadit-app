@@ -35,6 +35,7 @@ import { LANGUAGES } from "@/lib/i18n";
 import { FriendRequests } from "./FriendRequests";
 import { FamilySetupChecklist } from "./FamilySetupChecklist";
 import { ageLabelFor } from "./add/FamilyAddClient";
+import { BANDS, MAX_GRADE, bandCopy, gradeFromAge, gradeName, gradeNow } from "@/lib/grade-bands";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { CoachesSection } from "@/components/design/CoachesSection";
 import { FamilyLeaderboard } from "@/components/design/FamilyLeaderboard";
@@ -2114,6 +2115,10 @@ export function FamilyClient() {
   // A child's age, editable after adding (Gadi 2026-10-22: a grandmother
   // could not fix a grandchild's age). "" = not set.
   const [editAge, setEditAge] = useState<string>("");
+  // A child's school grade ("" = not chosen) and the games level a parent may
+  // set apart from it ("" = by the grade). See lib/grade-bands.ts.
+  const [editGrade, setEditGrade] = useState<string>("");
+  const [editLevel, setEditLevel] = useState<string>("");
 
   const isWelcome = search.get("welcome") === "1";
   const pt = PROGRESS_COPY[lang] ?? PROGRESS_COPY.en;
@@ -2258,6 +2263,14 @@ export function FamilyClient() {
         setEditPhoto(m.avatarPhotoUrl || "");
         setEditAvatarId(m.avatarId || "");
         setEditAge(typeof (m as { age?: unknown }).age === "number" ? String((m as { age?: number }).age) : "");
+        {
+          // The saved grade, moved up for the school years since; with no grade
+          // yet, the one that fits the age is offered and saving confirms it.
+          const mm = m as { age?: number; grade?: number | null; gradeSetAt?: string | null; level?: string | null };
+          const g = typeof mm.grade === "number" ? gradeNow(mm.grade, mm.gradeSetAt) : gradeFromAge(mm.age);
+          setEditGrade(g === null ? "" : String(g));
+          setEditLevel(mm.level ?? "");
+        }
         setEditOpen(true);
       }}
       editLabel={familyUi(lang).edit}
@@ -2288,7 +2301,11 @@ export function FamilyClient() {
           avatarId: editAvatarId || null,
           // Only a child has an age (3 to 18); clearing the field removes it.
           ...(!isParentRole(editRole)
-            ? { age: editAge.trim() ? Math.max(3, Math.min(18, parseInt(editAge, 10) || 0)) || null : null }
+            ? {
+                age: editAge.trim() ? Math.max(3, Math.min(18, parseInt(editAge, 10) || 0)) || null : null,
+                grade: editGrade === "" ? null : Number(editGrade),
+                level: editLevel || null,
+              }
             : {}),
         }),
       });
@@ -2438,11 +2455,34 @@ export function FamilyClient() {
                   min={3}
                   max={18}
                   value={editAge}
-                  onChange={(e) => setEditAge(e.target.value)}
+                  onChange={(e) => {
+                    setEditAge(e.target.value);
+                    // No grade chosen yet: offer the one that fits the age.
+                    if (editGrade === "") { const g = gradeFromAge(parseInt(e.target.value, 10)); if (g !== null) setEditGrade(String(g)); }
+                  }}
                   dir="ltr"
                   style={{ width: 120, padding: "10px 12px", borderRadius: 10, border: "1px solid rgba(17,24,39,0.18)", fontSize: 15, fontFamily: "inherit", boxSizing: "border-box", background: "var(--surface)", color: "var(--ink)" }}
                 />
               </label>
+            )}
+            {!isParentRole(editRole) && (
+              <>
+                <label style={{ display: "block", marginBottom: 12 }}>
+                  <span style={{ display: "block", fontSize: 13, fontWeight: 700, color: "var(--ink-soft)", marginBottom: 4 }}>{bandCopy(lang).gradeLabel}</span>
+                  <select value={editGrade} onChange={(e) => setEditGrade(e.target.value)} style={{ width: "100%", maxWidth: 260, padding: "10px 12px", borderRadius: 10, border: "1px solid rgba(17,24,39,0.18)", fontSize: 15, fontFamily: "inherit", boxSizing: "border-box", background: "var(--surface)", color: "var(--ink)" }}>
+                    <option value="">{bandCopy(lang).noGrade}</option>
+                    {Array.from({ length: MAX_GRADE + 1 }, (_, g) => <option key={g} value={g}>{gradeName(lang, g)}</option>)}
+                  </select>
+                </label>
+                <label style={{ display: "block", marginBottom: 12 }}>
+                  <span style={{ display: "block", fontSize: 13, fontWeight: 700, color: "var(--ink-soft)", marginBottom: 4 }}>{bandCopy(lang).levelLabel}</span>
+                  <select value={editLevel} onChange={(e) => setEditLevel(e.target.value)} style={{ width: "100%", maxWidth: 260, padding: "10px 12px", borderRadius: 10, border: "1px solid rgba(17,24,39,0.18)", fontSize: 15, fontFamily: "inherit", boxSizing: "border-box", background: "var(--surface)", color: "var(--ink)" }}>
+                    <option value="">{bandCopy(lang).levelByGrade}</option>
+                    {BANDS.map((b) => <option key={b} value={b}>{bandCopy(lang).bands[b]}</option>)}
+                  </select>
+                  <span style={{ display: "block", fontSize: 12.5, color: "var(--ink-muted)", marginTop: 4, lineHeight: 1.5 }}>{bandCopy(lang).levelHint}</span>
+                </label>
+              </>
             )}
             <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
               {(isParentRole(editRole) ? (["father", "mother"] as const) : (["boy", "girl"] as const)).map((r) => (

@@ -17,7 +17,8 @@ import { GaditIcon } from "@/components/design/GaditIcon";
 import { ml } from "@/lib/my-lists-i18n";
 import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import { planCopy } from "@/lib/plan-copy";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { BANDS, bandCopy, isBand, shelfOf, type Band } from "@/lib/grade-bands";
 import { LANGUAGES, langNameIn as uiLangName } from "@/lib/i18n";
 import { toggleLangGroup } from "@/lib/lang-groups";
 import { LangSearchList } from "@/components/LangSearch";
@@ -3611,9 +3612,27 @@ function focusPool(pool: PlayWord[], word: string, game: GameId): PlayWord[] {
 /** openingLesson: the page was opened to play a lesson (?lesson=), so it shows
  *  a loading screen, not the games menu, until the lesson arrives (Gadi
  *  2026-10-17: "Continue" flashed the games and then jumped). */
+// The band a grown-up chose to browse the games by ("all" when none), kept on
+// this device. A child's band comes from their profile, never from here.
+const BAND_KEY = "gadit-play-band";
+const bandListeners = new Set<() => void>();
+function usePickedBand(): [Band | null, (b: Band | null) => void] {
+  const v = useSyncExternalStore(
+    (cb) => { bandListeners.add(cb); return () => { bandListeners.delete(cb); }; },
+    () => { try { return localStorage.getItem(BAND_KEY); } catch { return null; } },
+    () => null,
+  );
+  const set = (b: Band | null) => {
+    try { if (b) localStorage.setItem(BAND_KEY, b); else localStorage.removeItem(BAND_KEY); } catch { /* this visit */ }
+    bandListeners.forEach((f) => f());
+  };
+  return [isBand(v) ? v : null, set];
+}
+
 export function PlayPage({ openingLesson = false, openingGame = false }: { openingLesson?: boolean; openingGame?: boolean } = {}) {
-  const { user, plan, planReady, loading, promptLogin, familyRole, kidsAccess, tester } = useAuth();
+  const { user, plan, planReady, loading, promptLogin, familyRole, kidsAccess, tester, memberBand } = useAuth();
   const isKidPlayer = familyRole === "kid";
+  const [pickedBand, setPickedBand] = usePickedBand();
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -4590,26 +4609,54 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
           ];
           // Grown-ups see the word games first, kids see their own words first
           // (council 2026-11-01). Only the order changes, never the art.
-          const sections = kidsMode || isKidPlayer ? [notebookSection, ...wordSections] : [...wordSections, notebookSection];
-          return <div className="wb-play-sections">{sections.map((section) => {
+          // By school grade (Gadi 2026-11-13): a child's profile, or the band a
+          // grown-up picked, arranges the same games on four shelves. Nothing
+          // is hidden or locked, only the order changes. The child sees "my
+          // games", never the name of a grade.
+          const band: Band | null = isKidPlayer ? memberBand : pickedBand;
+          const bc = bandCopy(lang);
+          const sections: Array<{ id: string; label: string }> = band
+            ? [
+                { id: "fit", label: isKidPlayer ? bc.mine : bc.fits(bc.bands[band]) },
+                { id: "warm", label: bc.warm },
+                { id: "challenge", label: bc.challenge },
+                { id: "more", label: bc.more },
+              ]
+            : kidsMode || isKidPlayer ? [notebookSection, ...wordSections] : [...wordSections, notebookSection];
+          // The section that carries the word-source pickers, and where a game
+          // (or one of the four cards outside the catalog) sits.
+          const homeId = band ? "fit" : "notebook";
+          const secOf = (id: string, category: string) => (band ? shelfOf(id, band) : category);
+          const extraCards = ["catch", "catch-fair", ...(isPaid ? ["world", "duel"] : [])];
+          const chooser = !isKidPlayer && !kidsMode ? (
+            <div className="wb-play-langs" role="radiogroup" aria-label={bc.showFor} style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: 8, margin: "0 auto 14px" }}>
+              <span className="wb-play-langs-label">{bc.showFor}</span>
+              {([null, ...BANDS] as Array<Band | null>).map((b) => (
+                <button key={b ?? "all"} type="button" role="radio" aria-checked={pickedBand === b} className={`wb-play-lang${pickedBand === b ? " is-on" : ""}`} onClick={() => setPickedBand(b)}>
+                  {b ? bc.bands[b] : bc.all}
+                </button>
+              ))}
+            </div>
+          ) : null;
+          return <>{chooser}<div className="wb-play-sections">{sections.map((section) => {
             // When Kids Mode is on, filter to games we've curated for
             // younger players. The 5 notebook games always qualify
             // (auto-adapt from the child's own vocabulary); the 4
             // curated games with kids content join them.
             const sectionGames = games.filter(
               // Testers see every game, Kids Mode too (Gadi 2026-11-02).
-              (g) => g.category === section.id && (!kidsMode || g.kidsFriendly || tester)
+              (g) => secOf(g.id, g.category) === section.id && (!kidsMode || g.kidsFriendly || tester)
                 // The two Hebrew reading games are not offered in another
                 // language at all; they used to sit there as "Coming soon".
                 && !((g.id === "syllables" || g.id === "wheel" || g.id === "vowels") && lang !== "he"),
             );
-            if (sectionGames.length === 0) return null;
+            if (sectionGames.length === 0 && !extraCards.some((id) => secOf(id, "notebook") === section.id)) return null;
             // Notebook section always shows now — the effectivePool
             // fallback means these games are always playable, even
             // with an empty notebook.
             return (
               <section key={section.id} className={`wb-play-section wb-play-span-${Math.min(sectionGames.length, 4)}`}>
-                {section.id === "notebook" && ((pool?.length ?? 0) > 40 || lists.length > 0) && (
+                {section.id === homeId && ((pool?.length ?? 0) > 40 || lists.length > 0) && (
                   <div className="wb-play-langs" role="radiogroup" aria-label={ml("playOn", lang)} style={{ gridColumn: "1 / -1", width: "100%", maxWidth: "none", display: "flex", flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "flex-start", gap: 8, marginBottom: 12 }}>
                     <span className="wb-play-langs-label">{ml("playOn", lang)}</span>
                     {[["smart", ml("srcSmart", lang)], ["all", ml("srcAll", lang)], ...lists.map((l) => [`list:${l.setId}`, l.title] as [string, string])].map(([v, label]) => (
@@ -4626,7 +4673,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                     ))}
                   </div>
                 )}
-                {section.id === "notebook" && langCounts.length >= 2 && !listMode ? (
+                {section.id === homeId && langCounts.length >= 2 && !listMode ? (
                   <div className="wb-play-section-head">
                     <h2 className="wb-play-section-heading">{section.label}</h2>
                     <div className="wb-play-langs" role="radiogroup" aria-label={wordsInLabel(lang)}>
@@ -4650,7 +4697,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                 )}
                 <ul className="wb-play-grid">
                   {/* The world game (Gadi 2026-10-30): first card, a world to walk in. */}
-                  {isPaid && section.id === "notebook" && (
+                  {isPaid && secOf("world", "notebook") === section.id && (
                     <li key="world">
                       <Link href={href("/world")} className="wb-play-card wb-play-card-world wb-play-cat-notebook has-cover">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -4663,7 +4710,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                     </li>
                   )}
                   {/* Catch letters (Gadi 2026-11-02): open to every player. */}
-                  {section.id === "notebook" && (
+                  {secOf("catch", "notebook") === section.id && (
                     <li key="catch">
                       <Link href={href("/catch")} className="wb-play-card wb-play-cat-notebook has-cover">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -4676,7 +4723,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                     </li>
                   )}
                   {/* Din's funfair has its own card (Gadi 2026-11-12): it opens Letter Catch straight on the funfair. */}
-                  {section.id === "notebook" && (
+                  {secOf("catch-fair", "notebook") === section.id && (
                     <li key="catch-fair">
                       <Link href={`${href("/catch")}?scene=fair`} className="wb-play-card wb-play-cat-notebook has-cover">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -4689,7 +4736,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                       </Link>
                     </li>
                   )}
-                  {isPaid && section.id === "notebook" && (() => {
+                  {isPaid && secOf("duel", "notebook") === section.id && (() => {
                     const dc = duelCopy(lang);
                     return (
                       <li key="duel">
@@ -4733,7 +4780,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                 </ul>
               </section>
             );
-          })}</div>;
+          })}</div></>;
         })()}
       </main>
 

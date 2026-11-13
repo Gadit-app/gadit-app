@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { FieldValue } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { MEMBER_COLORS, isParentRole, kidLimitFor, type MemberRole } from "@/lib/family";
+import { cleanGrade, isBand } from "@/lib/grade-bands";
 
 /**
  * POST /api/family/member
@@ -11,8 +12,12 @@ import { MEMBER_COLORS, isParentRole, kidLimitFor, type MemberRole } from "@/lib
  * owner store any field on a member doc and skip the child limit. Here only
  * the known fields are written, each one checked (2026-11-13).
  *
- *   add:  { role, name, colorIndex, age? }                         -> { id }
- *   edit: { memberId, role, name, avatarPhotoUrl, avatarId, age? } -> { ok }
+ *   add:  { role, name, colorIndex, age?, grade? }                 -> { id }
+ *   edit: { memberId, role, name, avatarPhotoUrl, avatarId, age?, grade?, level? } -> { ok }
+ *
+ * A child's `grade` (0 = not in 1st grade yet, 1 to 12) is saved with the day
+ * it was set, so it moves up with each school year; `level` is the games band
+ * a parent chose apart from the grade (grade-bands.ts).
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -68,12 +73,14 @@ export async function POST(req: NextRequest) {
     if (kid && (await kidsNow()) >= (await limit())) return NextResponse.json({ error: "kid_cap" }, { status: 403 });
     const ci = Math.floor(Number(body.colorIndex));
     const age = kid ? cleanAge(body.age) : null;
+    const grade = kid ? cleanGrade(body.grade) : null;
     const ref = await members.add({
       role,
       name,
       colorIndex: Number.isFinite(ci) && ci >= 0 && ci < MEMBER_COLORS.length ? ci : 0,
       isOwner: false,
       ...(age ? { age } : {}),
+      ...(grade !== null ? { grade, gradeSetAt: new Date().toISOString() } : {}),
       createdAt: FieldValue.serverTimestamp(),
     });
     return NextResponse.json({ id: ref.id });
@@ -83,7 +90,7 @@ export async function POST(req: NextRequest) {
   const ref = members.doc(memberId);
   const snap = await ref.get();
   if (!snap.exists) return NextResponse.json({ error: "member_not_found" }, { status: 404 });
-  const was = snap.data() as { role?: MemberRole; avatarPhotoUrl?: string | null; isOwner?: boolean };
+  const was = snap.data() as { role?: MemberRole; avatarPhotoUrl?: string | null; isOwner?: boolean; grade?: number | null };
   // A parent profile turned into a child counts against the child limit.
   if (kid && !was.isOwner && was.role && isParentRole(was.role) && (await kidsNow(memberId)) >= (await limit())) {
     return NextResponse.json({ error: "kid_cap" }, { status: 403 });
@@ -103,6 +110,12 @@ export async function POST(req: NextRequest) {
     avatarPhotoUrl: photo,
     avatarId,
     ...(kid ? { age: cleanAge(body.age) } : {}),
+    // The grade keeps the day it was set unless the parent changes it; a page
+    // that does not send these two fields leaves them as they are.
+    ...(kid && "grade" in body
+      ? (() => { const g = cleanGrade(body.grade); return g === null ? { grade: null, gradeSetAt: null } : g === was.grade ? {} : { grade: g, gradeSetAt: new Date().toISOString() }; })()
+      : {}),
+    ...(kid && "level" in body ? { level: isBand(body.level) ? body.level : null } : {}),
   });
   return NextResponse.json({ ok: true });
 }
