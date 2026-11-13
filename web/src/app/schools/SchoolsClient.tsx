@@ -25,7 +25,7 @@ import { useEffect, useRef, useState } from "react";
 import { miscUi } from "@/lib/misc-ui-i18n";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { collection, doc, onSnapshot, orderBy, query, updateDoc } from "firebase/firestore";
+import { collection, doc, onSnapshot, orderBy, query } from "firebase/firestore";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { PrincipalOverview } from "./PrincipalOverview";
@@ -2770,12 +2770,24 @@ export function SchoolsClient() {
     }
   }
 
+  // The school's own edits go through the server, which checks each field;
+  // the live listener then shows the saved value.
+  async function saveSchool(body: Record<string, unknown>) {
+    if (!user) return;
+    const res = await fetch("/api/schools/update", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${await user.getIdToken()}`, "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) throw new Error(`school update ${res.status}`);
+  }
+
   // Daily-summary preference. Opt-out model: a missing value = on.
   async function saveDigest(patch: { enabled?: boolean; hour?: number }) {
     if (!user) return;
     const current = school?.dailyDigest ?? {};
     try {
-      await updateDoc(doc(db, "schools", user.uid), {
+      await saveSchool({
         dailyDigest: { enabled: current.enabled !== false, hour: typeof current.hour === "number" ? current.hour : 15, ...patch },
       });
     } catch { /* non-critical */ }
@@ -2887,10 +2899,7 @@ export function SchoolsClient() {
     if (next === school.name) return;
     setNameSaving(true);
     try {
-      await updateDoc(doc(db, "schools", user.uid), {
-        name: next,
-        updatedAt: new Date().toISOString(),
-      });
+      await saveSchool({ name: next });
     } catch (err) {
       console.error("save school name failed:", err);
     } finally {
@@ -2924,15 +2933,7 @@ export function SchoolsClient() {
     }
     setEditingId(null);
     try {
-      await updateDoc(
-        doc(db, "schools", user.uid, "classrooms", classroomId),
-        {
-          name,
-          teacherName: teacherName || null,
-          colorIndex,
-          students,
-        }
-      );
+      await saveSchool({ classroom: { id: classroomId, name, teacherName, colorIndex, students } });
     } catch (err) {
       console.error("save classroom edit failed:", err);
     }

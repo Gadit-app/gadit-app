@@ -224,7 +224,8 @@ export function clueItems(cands: ClueItem[], pics: Record<string, string>, level
   const withPic = cands.filter((x) => !x.spare && hasPic(x));
   // Easy without (enough) pictures: every word that has a clue in words, never a word with no clue at all.
   const usable = level === "easy" && withPic.length >= 3 ? withPic : cands.filter((x) => x.clue || hasPic(x));
-  const from = usable.length >= 3 ? usable : cands;
+  // Never back to all the candidates: that placed words with nothing to go on. A small puzzle is fine.
+  const from = usable;
   const one = from[0]?.lang;
   return from.filter((x) => x.lang === one).slice(0, n + 3);
 }

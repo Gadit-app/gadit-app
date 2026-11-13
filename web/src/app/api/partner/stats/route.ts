@@ -12,6 +12,8 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
+import { limitBump } from "@/lib/rate-limit";
+import { sendPartnerWelcome } from "@/lib/partner-email";
 import { Partner, Commission, commissionState, PAYOUT_MINIMUM_MINOR, EARNED_TIER_PAYING, EARNED_LIFETIME_RATE, FIRST_SALE_BONUS_MINOR, FIRST_SALE_BONUS_UNTIL, firstSaleBonusActive } from "@/lib/partners";
 
 export const maxDuration = 30;
@@ -43,7 +45,16 @@ export async function GET(req: NextRequest) {
       .where("dashboardToken", "==", token)
       .limit(1)
       .get();
-    if (snap.empty) return NextResponse.json({ error: "not_found" }, { status: 404 });
+    if (snap.empty) {
+      // A link we replaced: it shows nothing, and the current link goes to
+      // the partner's own inbox (twice a day at most), so a partner with an
+      // old email or bookmark is never locked out (2026-11-13).
+      const old = await db.collection("partners").where("prevDashboardToken", "==", token).limit(1).get();
+      if (old.empty) return NextResponse.json({ error: "not_found" }, { status: 404 });
+      const p = { id: old.docs[0].id, ...(old.docs[0].data() as Omit<Partner, "id">) };
+      if ((await limitBump("plink", p.id, 86400)) <= 2) await sendPartnerWelcome(p, p.lang || "en");
+      return NextResponse.json({ error: "replaced" }, { status: 410 });
+    }
 
     const partner = { id: snap.docs[0].id, ...(snap.docs[0].data() as Omit<Partner, "id">) };
 

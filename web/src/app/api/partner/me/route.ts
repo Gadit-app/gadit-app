@@ -25,7 +25,10 @@ export async function GET(req: NextRequest) {
   let email = "";
   try {
     const decoded = await getAdminAuth().verifyIdToken(idToken);
-    email = (decoded.email || "").toLowerCase().trim();
+    // Only a proven address opens a partner's dashboard: a password account
+    // can be opened with anyone's address (2026-11-13). An unproven one goes
+    // to the partners page, where the link is sent to the inbox.
+    email = decoded.email_verified === true ? (decoded.email || "").toLowerCase().trim() : "";
   } catch {
     return NextResponse.json({ isPartner: false }, { status: 401 });
   }

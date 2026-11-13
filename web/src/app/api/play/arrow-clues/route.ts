@@ -13,6 +13,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { logAiUsage, usageFrom, TEXT_MODEL_FAST } from "@/lib/ai-cost";
+import { limitBump } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -94,7 +95,9 @@ export async function POST(req: NextRequest) {
   const missing: string[] = [];
   snaps.forEach((s, i) => { const c = s.get("clue"); if (typeof c === "string" && c) clues[words[i]] = c; else missing.push(words[i]); });
 
-  if (missing.length && process.env.OPENAI_API_KEY) {
+  // Stored clues always come back; writing new ones has a daily ceiling per
+  // profile, far above real play.
+  if (missing.length && process.env.OPENAI_API_KEY && (await limitBump("arrowclues", user.userId, 86400)) <= 300) {
     try {
       const fresh = await writeClues(missing, lang, user.plan);
       const batch = db.batch();

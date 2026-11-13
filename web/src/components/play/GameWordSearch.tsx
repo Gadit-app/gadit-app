@@ -87,7 +87,7 @@ function WordSearchBoard({ pool, onExit, lang, t, level, onLevel }: { pool: Play
     const byWord = new Map(items.map((x) => [x.word, x]));
     return { ...ws, rtl, items: ws.placed.map((p) => byWord.get(p.word)!).filter(Boolean) };
   }, [startPool, lang, size, count, level, seed]); // eslint-disable-line react-hooks/exhaustive-deps
-  const [found, setFound] = useState<Map<string, number>>(new Map()); // word → colour index
+  const [found, setFound] = useState<Map<string, { ci: number; cells: Cell[] }>>(new Map()); // word → colour index, and the cells it was traced on
   const [path, setPath] = useState<Cell[]>([]);
   const [flash, setFlash] = useState<Item | null>(null);
   const [hintCell, setHintCell] = useState<Cell | null>(null);
@@ -123,12 +123,12 @@ function WordSearchBoard({ pool, onExit, lang, t, level, onLevel }: { pool: Play
   const onUp = () => {
     if (!start.current) return;
     const line = pathRef.current;
-    const hit = line.length >= 2 ? matchLine(line, puzzle.placed) : null;
+    const hit = line.length >= 2 ? matchLine(line, puzzle.placed, puzzle.grid) : null;
     start.current = null; pathRef.current = []; setPath([]);
     if (!hit || found.has(hit.word)) return;
     sfx.correct();
     const idx = found.size % COLORS.length;
-    setFound((m) => new Map(m).set(hit.word, idx));
+    setFound((m) => new Map(m).set(hit.word, { ci: idx, cells: hit.cells }));
     // A hint still glowing has done its job (or points at the word just found).
     setHintCell(null);
     const it = puzzle.items.find((x) => x.word === hit.word) ?? null;
@@ -160,7 +160,7 @@ function WordSearchBoard({ pool, onExit, lang, t, level, onLevel }: { pool: Play
     );
   }
   const colorOf = new Map<string, number>();
-  for (const p of puzzle.placed) { const ci = found.get(p.word); if (ci !== undefined) for (const [r, cc] of p.cells) colorOf.set(`${r},${cc}`, ci); }
+  for (const f of found.values()) for (const [r, cc] of f.cells) colorOf.set(`${r},${cc}`, f.ci);
   const inPath = new Set(path.map(([r, cc]) => `${r},${cc}`));
   return (
     <div className="wb-play-stage ws">
@@ -196,7 +196,7 @@ function WordSearchBoard({ pool, onExit, lang, t, level, onLevel }: { pool: Play
         <div className="ws-words" dir={dirForLang(wordLang)} lang={wordLang}>
           <span className="ws-words-label">{c.wordsToFind}:</span>
           {puzzle.items.map((it) => {
-            const ci = found.get(it.word);
+            const ci = found.get(it.word)?.ci;
             return <span key={it.word} className={`ws-chip${ci !== undefined ? " is-found" : ""}`} style={ci !== undefined ? { background: COLORS[ci] } : undefined}>{nq(it.word)}</span>;
           })}
         </div>

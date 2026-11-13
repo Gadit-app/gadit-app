@@ -4,7 +4,7 @@
  * Auth: Firebase ID token; matched to grants by the caller's verified email.
  */
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminDb } from "@/lib/firebase-admin";
+import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { verifyCoach, bearer, coachHasPlan, familyIsPaying } from "@/lib/coach";
 import { isParentRole, type MemberRole } from "@/lib/family";
 
@@ -13,7 +13,14 @@ export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   const coach = await verifyCoach(bearer(req));
-  if (!coach) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  if (!coach) {
+    // Signed in, but the address was never proven: the page asks to confirm it.
+    try {
+      const d = await getAdminAuth().verifyIdToken(bearer(req) ?? "");
+      if (d.email && d.email_verified !== true) return NextResponse.json({ students: [], needsVerify: true });
+    } catch { /* not signed in */ }
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
 
   const db = getAdminDb();
   const snap = await db

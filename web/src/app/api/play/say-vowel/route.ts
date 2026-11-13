@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyUserAndGetPlan, getAdminApp } from "@/lib/firebase-admin";
 import { logAiUsage } from "@/lib/ai-cost";
+import { limitBump } from "@/lib/rate-limit";
 
 /**
  * The ear of the Letter Wheel game (Gadi 2026-11-12, Shirli's idea): the child
@@ -102,6 +103,9 @@ export async function POST(req: NextRequest) {
     if (!(audio instanceof Blob) || audio.size === 0) return NextResponse.json({ error: "no_audio" }, { status: 400 });
     if (audio.size > 2 * 1024 * 1024) return NextResponse.json({ error: "audio_too_large" }, { status: 413 });
     if (!VOWELS.includes(want)) return NextResponse.json({ error: "bad_want" }, { status: 400 });
+    // A daily ceiling per profile, far above a child's real practice. Past
+    // it the game falls back to "check yourselves", as when the ear is down.
+    if ((await limitBump("sayvowel", userInfo.userId, 86400)) > 1500) return NextResponse.json({ error: "daily_limit" }, { status: 429 });
 
     const type = (audio.type || "audio/webm").split(";")[0];
     const ext = type.includes("mp4") ? "m4a" : type.includes("ogg") ? "ogg" : type.includes("wav") ? "wav" : "webm";

@@ -11,6 +11,7 @@ import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { memberColorFor, avatarUrl } from "@/lib/family";
 import { playNotActive } from "@/lib/play-copy";
+import { sendEmailVerification } from "firebase/auth";
 
 type Student = {
   grantId: string;
@@ -570,6 +571,15 @@ const NEEDS_PLAN: Record<string, [string, string]> = {
   hu: ["Ahhoz, hogy a Gaditban tanítványokkal foglalkozzatok, Individual vagy Family előfizetés kell.", "Előfizetés választása"],
 };
 
+// A coach is found by their email address, so it has to be a proven one.
+// [line, button, after sending]
+const NEEDS_VERIFY: Record<string, [string, string, (email: string) => string]> = {
+  he: ["כדי לראות את התלמידים צריך קודם לאשר את כתובת המייל", "שלחו לי קישור לאישור", (e) => `שלחנו קישור אל ${e}. אחרי האישור רעננו את הדף`],
+  en: ["To see your students, confirm your email address first", "Send me a confirmation link", (e) => `We sent a link to ${e}. After you confirm, refresh this page`],
+  ar: ["لرؤية طلابكم يجب أولًا تأكيد عنوان البريد الإلكتروني", "أرسلوا لي رابط التأكيد", (e) => `أرسلنا رابطًا إلى ${e}. بعد التأكيد حدّثوا الصفحة`],
+  ru: ["Чтобы увидеть учеников, сначала подтвердите адрес почты", "Отправьте мне ссылку", (e) => `Мы отправили ссылку на ${e}. После подтверждения обновите страницу`],
+};
+
 function t(lang: string) { return T[lang] ?? T.en; }
 
 export function CoachClient() {
@@ -584,17 +594,28 @@ export function CoachClient() {
   const [entering, setEntering] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [needsPlan, setNeedsPlan] = useState(false);
+  const [needsVerify, setNeedsVerify] = useState(false);
+  const [verifySent, setVerifySent] = useState(false);
 
   const load = useCallback(async () => {
     if (!user) { setLoading(false); return; }
     setLoading(true);
     try {
-      const idToken = await user.getIdToken();
-      const res = await fetch("/api/coach/students", { headers: { Authorization: `Bearer ${idToken}` } });
-      if (!res.ok) throw new Error(String(res.status));
-      const data = (await res.json()) as { students?: Student[]; needsPlan?: boolean };
+      const ask = async (fresh: boolean) => {
+        const res = await fetch("/api/coach/students", { headers: { Authorization: `Bearer ${await user.getIdToken(fresh)}` } });
+        if (!res.ok) throw new Error(String(res.status));
+        return (await res.json()) as { students?: Student[]; needsPlan?: boolean; needsVerify?: boolean };
+      };
+      let data = await ask(false);
+      if (data.needsVerify) {
+        // The address may have been confirmed since this sign-in: look again
+        // with a fresh token before asking.
+        await user.reload().catch(() => {});
+        if (user.emailVerified) data = await ask(true);
+      }
       setStudents(data.students ?? []);
       setNeedsPlan(!!data.needsPlan);
+      setNeedsVerify(!!data.needsVerify);
     } catch {
       setError(c.err);
       setStudents([]);
@@ -653,6 +674,21 @@ export function CoachClient() {
           </button>
         ) : loading ? (
           <div style={{ color: "var(--ink-muted)", padding: "24px 0" }}><WaitDots className="gd-wait-big" /></div>
+        ) : needsVerify ? (
+          <div style={{ background: "var(--surface, #fff)", border: "1px solid var(--rule)", borderRadius: 16, padding: "20px 20px 18px", display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
+            <div style={{ fontSize: 16, fontWeight: 700, color: "var(--ink)", lineHeight: 1.6 }}>{(NEEDS_VERIFY[lang] ?? NEEDS_VERIFY.en)[0]}</div>
+            {verifySent ? (
+              <div style={{ fontSize: 14, color: "var(--ink-muted)", lineHeight: 1.6 }}>{(NEEDS_VERIFY[lang] ?? NEEDS_VERIFY.en)[2](user.email ?? "")}</div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => { void sendEmailVerification(user).then(() => setVerifySent(true)).catch(() => setError(c.err)); }}
+                style={{ background: "#0EA5A5", color: "#fff", border: "none", borderRadius: 12, padding: "12px 22px", fontSize: 15, fontWeight: 800, cursor: "pointer", fontFamily: "inherit" }}
+              >
+                {(NEEDS_VERIFY[lang] ?? NEEDS_VERIFY.en)[1]}
+              </button>
+            )}
+          </div>
         ) : needsPlan && students && students.length > 0 ? (
           <div style={{ background: "var(--surface, #fff)", border: "1px solid var(--rule)", borderRadius: 16, padding: "20px 20px 18px", display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
             {/* Inside the Play / iOS app: no plan names (store rules). */}

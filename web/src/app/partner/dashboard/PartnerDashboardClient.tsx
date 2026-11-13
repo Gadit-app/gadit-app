@@ -1830,6 +1830,18 @@ function OfferCard({ lang, stats }: { lang: string; stats: Stats }) {
   );
 }
 
+// A link we replaced with a new one: the new link was just sent by email.
+const REPLACED: Record<string, string> = {
+  he: "החלפנו את הקישור הזה בקישור חדש, כדי לשמור על החשבון. שלחנו עכשיו את הקישור החדש לכתובת המייל של החשבון.",
+  en: "We replaced this link with a new one to keep the account safe. We have just sent the new link to the account's email address.",
+  ar: "استبدلنا هذا الرابط برابط جديد حفاظًا على الحساب. أرسلنا الآن الرابط الجديد إلى عنوان البريد الإلكتروني للحساب.",
+  ru: "Мы заменили эту ссылку новой, чтобы защитить аккаунт. Новая ссылка только что отправлена на почту аккаунта.",
+  es: "Hemos sustituido este enlace por uno nuevo para proteger la cuenta. Acabamos de enviar el nuevo enlace al correo de la cuenta.",
+  fr: "Nous avons remplacé ce lien par un nouveau pour protéger le compte. Nous venons d'envoyer le nouveau lien à l'adresse e-mail du compte.",
+  pt: "Substituímos este link por um novo para proteger a conta. Acabamos de enviar o novo link para o e-mail da conta.",
+  de: "Wir haben diesen Link durch einen neuen ersetzt, um das Konto zu schützen. Der neue Link wurde gerade an die E-Mail-Adresse des Kontos gesendet.",
+};
+
 export function PartnerDashboardClient() {
   const { lang } = useLang();
   const href = useHref();
@@ -1838,7 +1850,7 @@ export function PartnerDashboardClient() {
   const dir = t.dir;
 
   const [stats, setStats] = useState<Stats | null>(null);
-  const [state, setState] = useState<"loading" | "ready" | "error">("loading");
+  const [state, setState] = useState<"loading" | "ready" | "error" | "replaced">("loading");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [linkLang, setLinkLang] = useState<string>(lang); // language for the shared links
   const [tab, setTab] = useState<"home" | "marketing" | "payments">("home");
@@ -1856,14 +1868,14 @@ export function PartnerDashboardClient() {
     }
     setToken(tk);
     fetch(`/api/partner/stats?t=${encodeURIComponent(tk)}`)
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then((d: Stats) => {
         setStats(d);
         setPayoutEmail(d.payoutEmail || "");
         setSavedEmail(d.payoutEmail || "");
         setState("ready");
       })
-      .catch(() => setState("error"));
+      .catch((status) => setState(status === 410 ? "replaced" : "error"));
   }, []);
 
   async function copyLink(product: ProductKey) {
@@ -1932,6 +1944,7 @@ export function PartnerDashboardClient() {
       <div style={S.shell}>
         {state === "loading" && <div style={S.muted}><WaitText text={t.loading} live /></div>}
         {state === "error" && <div style={S.errorBox}>{t.notFound}</div>}
+        {state === "replaced" && <div style={S.errorBox}>{REPLACED[lang] ?? REPLACED.en}</div>}
 
         {state === "ready" && stats && (
           <>

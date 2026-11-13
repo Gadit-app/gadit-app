@@ -89,8 +89,17 @@ export function lineBetween(a: Cell, b: Cell): Cell[] | null {
 
 const key = (cells: Cell[]) => cells.map((c) => `${c[0]},${c[1]}`).join("|");
 
-/** The hidden word whose cells are exactly this line (either way round), or null. */
-export function matchLine(cells: Cell[], placed: PlacedWord[]): PlacedWord | null {
+/**
+ * The hidden word whose cells are exactly this line (either way round), or null.
+ * With the grid, also a hidden word that the line spells somewhere else (the fill letters
+ * and the other words can spell it a second time); it comes back with the cells of the line.
+ */
+export function matchLine(cells: Cell[], placed: PlacedWord[], grid?: string[][]): PlacedWord | null {
   const k = key(cells), kr = key(cells.slice().reverse());
-  return placed.find((p) => { const pk = key(p.cells); return pk === k || pk === kr; }) ?? null;
+  const exact = placed.find((p) => { const pk = key(p.cells); return pk === k || pk === kr; });
+  if (exact || !grid) return exact ?? null;
+  const read = (cs: Cell[]) => cs.map(([r, c]) => grid[r][c]).join("|");
+  const s = read(cells), sr = read(cells.slice().reverse());
+  const twin = placed.find((p) => { const ps = read(p.cells); return ps === s || ps === sr; });
+  return twin ? { word: twin.word, cells } : null;
 }

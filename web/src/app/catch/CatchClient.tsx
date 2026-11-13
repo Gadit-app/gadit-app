@@ -393,19 +393,23 @@ export function CatchClient({ demo }: { demo?: TrailWord[] }) {
     setFailed(false);
   };
 
+  // Only the latest load may land: an answer for the language chosen before could come late and put the old words back.
+  const loadSeq = useRef(0);
   const load = useCallback(async () => {
+    const seq = ++loadSeq.current;
     if (demo) { setQueue(demo); setIdx(0); return; }
     if (!user) return;
     try {
       const token = await user.getIdToken();
       const { words, lang: used } = await loadWords(token, lang, spell ?? readSpellChoice(user.uid, lang));
+      if (seq !== loadSeq.current) return;
       setWordsLang(used);
       setQueue(words);
       setIdx(0);
       setFailed(!words.length);
       const got = await fetchPics(token, words.slice(0, ROUND + 1).map((x) => x.pic), true);
       setPics((p) => ({ ...p, ...got }));
-    } catch { setFailed(true); }
+    } catch { if (seq === loadSeq.current) setFailed(true); }
   }, [demo, user, lang, spell]);
   useEffect(() => {
     if (!demo && (loading || !user || !planReady)) return;

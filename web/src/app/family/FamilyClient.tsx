@@ -24,7 +24,7 @@ import { useEffect, useState } from "react";
 import { familyUi } from "@/lib/family-ui-i18n";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { collection, doc, getDoc, onSnapshot, orderBy, query, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, onSnapshot, orderBy, query } from "firebase/firestore";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -2274,18 +2274,25 @@ export function FamilyClient() {
     if (!user || !editMemberId || editSaving) return;
     setEditSaving(true);
     try {
-      await updateDoc(doc(db, "families", user.uid, "members", editMemberId), {
-        name: editName.trim(),
-        role: editRole,
-        // "" clears the photo back to the colored chip. A resized data URL
-        // (~10-20KB) sits comfortably inside the 1MB Firestore doc limit.
-        avatarPhotoUrl: editPhoto || null,
-        avatarId: editAvatarId || null,
-        // Only a child has an age (3 to 18); clearing the field removes it.
-        ...(!isParentRole(editRole)
-          ? { age: editAge.trim() ? Math.max(3, Math.min(18, parseInt(editAge, 10) || 0)) || null : null }
-          : {}),
+      // Written by the server, which checks each field.
+      const res = await fetch("/api/family/member", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${await user.getIdToken()}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          memberId: editMemberId,
+          name: editName.trim(),
+          role: editRole,
+          // "" clears the photo back to the colored chip. A resized data URL
+          // (~10-20KB) sits comfortably inside the 1MB Firestore doc limit.
+          avatarPhotoUrl: editPhoto || null,
+          avatarId: editAvatarId || null,
+          // Only a child has an age (3 to 18); clearing the field removes it.
+          ...(!isParentRole(editRole)
+            ? { age: editAge.trim() ? Math.max(3, Math.min(18, parseInt(editAge, 10) || 0)) || null : null }
+            : {}),
+        }),
       });
+      if (!res.ok) throw new Error(`edit member ${res.status}`);
       setEditOpen(false);
     } catch (e) {
       console.error("edit member failed:", e);

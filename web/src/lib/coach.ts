@@ -30,7 +30,10 @@ export async function verifyCoach(idToken: string | null): Promise<{ uid: string
   try {
     const decoded = await getAdminAuth().verifyIdToken(idToken);
     const email = (decoded.email || "").toLowerCase().trim();
-    if (!email) return null;
+    // The address must be proven (Google sign-in, or a link sent to it): a
+    // password account can be opened with anyone's address, and a grant is
+    // found by address alone (2026-11-13).
+    if (!email || decoded.email_verified !== true) return null;
     return { uid: decoded.uid, email };
   } catch {
     return null;

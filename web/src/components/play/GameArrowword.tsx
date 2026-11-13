@@ -192,14 +192,25 @@ function ArrowwordBoard({ pool, onExit, lang, t, level, kids, onLevel }: { pool:
       <div className="pz-wait" dir={dirForLang(lang)}><WaitText text={lc.building} live /></div>
     </div>
   );
-  if (!entry) return null;
+  // No word has a clue (the pictures did not come, no words of the child's own): a way out and another level, not an empty screen.
+  if (!entry) return (
+    <div className="wb-play-stage aw">
+      <style>{AW_CSS + LEVEL_CSS}</style>
+      <PlayHeader by={inventedBy("arrowword", lang)} title={c.title} onExit={onExit} t={t} />
+      <div className="wb-play-question aw-q">
+        <LevelChip level={level} onChange={onLevel} lang={lang} />
+        <div className="pz-wait" dir={dirForLang(lang)}>{t.notEnoughWords}</div>
+      </div>
+    </div>
+  );
   const item = puzzle.byWord.get(entry.word);
   const picUrl = item?.pic ? pics[item.pic.toLowerCase()] : undefined;
   const asked = stage.get(entry.word) ?? 0;
   const pic = picUrl && (level !== "hard" || !item?.clue || asked >= 2) ? picUrl : undefined;
   const sentence = asked >= 2 && !(level === "hard" && item?.clue && picUrl) ? item?.example : undefined;
   const keys = rtl ? HE_KEYS : EN_KEYS;
-  const panelClue = short[entry.word] || item?.clue || "";
+  // The panel has room for the full clue; the short one is for the cell (and stands in when there is no full one).
+  const panelClue = item?.clue || short[entry.word] || "";
   return (
     <div className="wb-play-stage aw">
       <style>{AW_CSS + LEVEL_CSS}</style>

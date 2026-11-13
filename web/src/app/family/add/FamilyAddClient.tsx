@@ -21,7 +21,7 @@ import { WaitText, WaitDots } from "@/components/WaitText";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { addDoc, collection, doc, getDoc, getDocs, serverTimestamp } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -857,14 +857,14 @@ export function FamilyAddClient() {
       // Age is only meaningful for a child, and it's optional. Stored so we
       // can tune reading level / defaults by age later (Gadi 2026-09-19).
       const ageNum = !isParentRole(role) && age.trim() ? Math.max(3, Math.min(18, parseInt(age, 10) || 0)) : 0;
-      const ref = await addDoc(collection(db, "families", user.uid, "members"), {
-        role,
-        name: name.trim(),
-        colorIndex,
-        isOwner: false,
-        ...(ageNum ? { age: ageNum } : {}),
-        createdAt: serverTimestamp(),
+      // Written by the server, which checks the fields and the child limit.
+      const res = await fetch("/api/family/member", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${await user.getIdToken()}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ role, name: name.trim(), colorIndex, ...(ageNum ? { age: ageNum } : {}) }),
       });
+      const ref = (await res.json().catch(() => ({}))) as { id?: string };
+      if (!res.ok || !ref.id) throw new Error(`add member ${res.status}`);
       // replace: the filled-in form is finished, so Back from the pairing
       // screen returns to the family page, not to a stale add form.
       router.replace(href(`/family/${ref.id}/pair`));

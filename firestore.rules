@@ -4,7 +4,7 @@
 // automatically, so this is the source of truth — keep this file
 // in sync with what's actually live in the console.
 //
-// Last updated: 2026-06-27 — added Schools + classroomCodes model.
+// Last updated: 2026-11-13: families and schools are read only from the browser.
 
 rules_version = '2';
 
@@ -54,22 +54,24 @@ service cloud.firestore {
     }
 
     // ─── families/{familyId} ────────────────────────────────────────
-    // Owner has full control. Paired members can read the family doc
-    // (so they can show their family identity in the UI) but not write.
+    // Read only from the browser (2026-11-13). The owner and paired members
+    // read the family doc; every write goes through the server (Admin SDK):
+    // /api/family/member adds and edits a member, the pairing routes do the
+    // rest. A browser write here let an owner store any field and skip the
+    // child limit.
     match /families/{familyId} {
       allow read: if isOwnerOf(familyId) || isMemberOf(familyId);
-      allow create, update: if isOwnerOf(familyId);
-      allow delete: if false;
+      allow write: if false;
 
       // families/{familyId}/members/{memberId}
-      // Owner: full CRUD on every member.
+      // Owner: reads every member.
       // Member (kid/parent): can read their own member doc.
       // Member (parent): can read all member docs in the family.
       match /members/{memberId} {
         allow read: if isOwnerOf(familyId)
           || (isMemberOf(familyId) && request.auth.token.role == "parent")
           || (isMemberOf(familyId) && request.auth.token.memberId == memberId);
-        allow create, update, delete: if isOwnerOf(familyId);
+        allow write: if false;
       }
     }
 
@@ -84,25 +86,21 @@ service cloud.firestore {
     // ─── schools/{schoolId} ─────────────────────────────────────────
     // The school owner (principal/coordinator) has uid === schoolId.
     // Schools don't pair students — kids reach /c/<CODE> WITHOUT auth.
-    // So only the owner gets read/write on the school doc + every
-    // classroom + every search log. Clients writing classroom + log
-    // docs go through server endpoints (Admin SDK) so we can keep this
-    // strict.
+    // So only the owner reads the school doc + every classroom + every
+    // search log. Read only from the browser (2026-11-13): the owner's
+    // edits (name, daily summary, classroom details) go through
+    // /api/schools/update, and the rest through the other server routes.
     match /schools/{schoolId} {
       allow read: if isOwnerOf(schoolId);
-      allow create, update: if isOwnerOf(schoolId);
-      allow delete: if false;
+      allow write: if false;
 
-      // Classrooms: owner reads, owner can edit name/grade/teacherName
-      // client-side. Creation MUST go through /api/schools/create-classroom
-      // because that endpoint generates a unique code + the lookup doc
-      // atomically. Deleting classrooms requires a server endpoint too
-      // (to remove the matching classroomCodes doc), so client write
-      // is locked to merge-updates only.
+      // Classrooms: owner reads. Creation goes through
+      // /api/schools/create-classroom (unique code + lookup doc written
+      // together), edits through /api/schools/update, deletion through
+      // its own server route.
       match /classrooms/{classroomId} {
         allow read: if isOwnerOf(schoolId);
-        allow update: if isOwnerOf(schoolId);
-        allow create, delete: if false;
+        allow write: if false;
 
         // Search logs: owner reads (this is the teacher view at
         // /classroom/{id}). All writes happen through the Admin SDK

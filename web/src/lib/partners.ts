@@ -45,6 +45,9 @@ export interface Partner {
   rateLifetime: number;
   status: PartnerStatus;
   dashboardToken: string;  // secret that opens /partner/dashboard (no password)
+  /** The link before the last replacement. It opens nothing: using it only
+   *  sends the current link to the partner's own inbox. */
+  prevDashboardToken?: string | null;
   lang?: string | null;    // the partner's language — every email we send them
                            // (welcome, future payout notices) renders in it.
                            // Set at creation; defaults to "en" if unknown.
@@ -148,8 +151,12 @@ export function generatePartnerCode(): string {
 export function generateDashboardToken(): string {
   const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let out = "";
+  // The link is the partner's only credential, so the token comes from the
+  // secure random source, not Math.random (2026-11-13).
+  const r = new Uint32Array(40);
+  globalThis.crypto.getRandomValues(r);
   for (let i = 0; i < 40; i++) {
-    out += alphabet[Math.floor(Math.random() * alphabet.length)];
+    out += alphabet[r[i] % alphabet.length];
   }
   return out;
 }

@@ -172,7 +172,17 @@ function CrosswordBoard({ pool, onExit, lang, t, level, kids, onLevel }: { pool:
       <div className="pz-wait" dir={dirForLang(lang)}><WaitText text={lc.building} live /></div>
     </div>
   );
-  if (!entry) return null;
+  // No word has a clue (the pictures did not come, no words of the child's own): a way out and another level, not an empty screen.
+  if (!entry) return (
+    <div className="wb-play-stage cw">
+      <style>{CW_CSS + LEVEL_CSS}</style>
+      <PlayHeader by={inventedBy("crossword", lang)} title={c.title} onExit={onExit} t={t} />
+      <div className="wb-play-question cw-q">
+        <LevelChip level={level} onChange={onLevel} lang={lang} />
+        <div className="pz-wait" dir={dirForLang(lang)}>{t.notEnoughWords}</div>
+      </div>
+    </div>
+  );
   const item = puzzle.byWord.get(entry.word);
   const picUrl = item?.pic ? pics[item.pic.toLowerCase()] : undefined;
   const asked = stage.get(entry.word) ?? 0;

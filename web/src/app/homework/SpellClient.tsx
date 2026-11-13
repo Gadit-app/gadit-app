@@ -537,8 +537,11 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
   const [hw, setHwState] = useState<HwView>("hub");
   // Getting ready for a test: first which test (the tiles), then the list box.
   const [testKind, setTestKind] = useState<null | "list">(null);
-  const setHw = useCallback((v: HwView) => {
+  // Dictation opened from the test tiles: its back button returns to them, not to Learning words.
+  const [dictFromTest, setDictFromTest] = useState(false);
+  const setHw = useCallback((v: HwView, fromTest = false) => {
     setHwState(v);
+    setDictFromTest(v === "dict" && fromTest);
     if (v !== "test") setTestKind(null);
     try {
       const u = new URL(window.location.href);
@@ -1415,6 +1418,8 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
             ? { label: here, go: () => setSetupFor(null) }
             : hw === "test" && testKind
               ? { label: here, go: () => setTestKind(null) }
+            : hw === "dict" && dictFromTest
+              ? { label: adult ? pr.test : hc.test, go: () => setHw("test") }
             : hw === "dict" && !adult
               ? { label: hc.learn, go: () => setHw("learn") }
               : { label: all, go: () => setHw("hub") };
@@ -1740,7 +1745,7 @@ export function SpellClient({ area = "homework" }: { area?: "homework" | "practi
             <h2 className="wb-test-q">{testKindsCopy(lang).q}</h2>
             <ul className="wb-play-grid wb-hw-tiles wb-test-tiles">
               <li>
-                <button type="button" className="wb-play-card has-cover wb-play-cat-precision" onClick={() => { setDrill("spell"); setHw("dict"); }}>
+                <button type="button" className="wb-play-card has-cover wb-play-cat-precision" onClick={() => { setDrill("spell"); setHw("dict", true); }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img className="wb-play-card-cover" src="/play/hw-dict.webp" alt="" width={720} height={480} />
                   <span className="wb-play-card-text"><span className="wb-play-card-title">{dc.name}</span></span>
