@@ -71,6 +71,7 @@ import { GameEtymologyArtist } from "@/components/play/GameEtymologyArtist";
 import { DuelHub } from "@/components/play/duel/DuelHub";
 import { GameSyllables, syllablesCopy } from "@/components/play/GameSyllables";
 import { GameLetterWheel, letterWheelCopy } from "@/components/play/GameLetterWheel";
+import { GameVowelSteps, vowelStepsCopy } from "@/components/play/GameVowelSteps";
 import { GameIdea } from "@/components/play/GameIdea";
 import { inventedBy, inventorName } from "@/lib/game-inventors";
 import { GameWordSearch, wordSearchCopy } from "@/components/play/GameWordSearch";
@@ -3568,7 +3569,7 @@ function langNameIn(code: string, ui: string): string {
 /** Games that can open on one notebook word (/play?game=<id>&word=<w>). */
 const FOCUS_GAMES: GameId[] = ["flashcards", "flashdefs", "quiz", "memory", "anagram"];
 /** Every game has its own link, /play?game=<id> (Gadi 2026-11-02: to send one game to a parent). */
-const LINK_GAMES: string[] = ["quiz", "flashcards", "flashdefs", "truefalse", "fillblank", "context", "memory", "anagram", "speed", "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "syllables", "wheel", "wordsearch", "crossword", "arrowword", "duel"];
+const LINK_GAMES: string[] = ["quiz", "flashcards", "flashdefs", "truefalse", "fillblank", "context", "memory", "anagram", "speed", "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "vowels", "syllables", "wheel", "wordsearch", "crossword", "arrowword", "duel"];
 
 /** Games with a cover picture in public/play/<id>.webp (Gadi 2026-10-09).
  *  Add an id here once its picture is in place; others keep their icon. */
@@ -3951,6 +3952,25 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
      *  is on, the menu shows only these games. */
     kidsFriendly?: boolean;
   }> = [
+    {
+      // The sound of the vowel signs (Gadi 2026-11-13): the step below the wheel,
+      // for a child who reads every word with patah. One vowel at a time, by ear
+      // first. Hebrew letters, so shown to the Hebrew UI.
+      id: "vowels",
+      title: vowelStepsCopy(lang).title,
+      desc: vowelStepsCopy(lang).desc,
+      enabled: lang === "he",
+      accent: "amber",
+      category: "notebook",
+      kidsFriendly: true,
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="6" y="3" width="12" height="12" rx="3" />
+          <path d="M8 19h8" />
+          <path d="M12 19v2.5" />
+        </svg>
+      ),
+    },
     {
       // Reading in syllables (Gadi 2026-11-11): for a child who knows the letters
       // and vowel signs but cannot blend them yet. Hebrew bank words, so it needs
@@ -4436,6 +4456,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
       artist: <GameEtymologyArtist {...curatedProps} />,
       syllables: <GameSyllables {...curatedProps} />,
       wheel: <GameLetterWheel {...curatedProps} />,
+      vowels: <GameVowelSteps {...curatedProps} />,
     };
     if (stage.game in CURATED) {
       return (
@@ -4580,7 +4601,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
               (g) => g.category === section.id && (!kidsMode || g.kidsFriendly || tester)
                 // The two Hebrew reading games are not offered in another
                 // language at all; they used to sit there as "Coming soon".
-                && !((g.id === "syllables" || g.id === "wheel") && lang !== "he"),
+                && !((g.id === "syllables" || g.id === "wheel" || g.id === "vowels") && lang !== "he"),
             );
             if (sectionGames.length === 0) return null;
             // Notebook section always shows now — the effectivePool
