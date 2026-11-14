@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
+import { getAdminAuth, getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
+import { gradeOfMember, nextLevelWords } from "@/lib/journey/level-words";
 import { isNotFoundMeaning } from "@/lib/not-a-word";
 import {
-  answer, coinsOf, dayKeyOf, dueToday, frameOf, isKnown, newCard, pickFormat, summary, usedOn,
-  DAILY_MAX, FRAME_COINS, STARS_TO_KNOW, type Card,
+  addDays, answer, coinsOf, dayKeyOf, dueToday, frameOf, isDue, isKnown, newCard, pickFormat, summary, usedOn,
+  DAILY_MAX, FRAME_COINS, NEW_PER_DAY, STARS_TO_KNOW, type Card,
 } from "@/lib/journey/scheduler";
 
 /**
@@ -13,10 +14,14 @@ import {
  * word it stands for (word, language, meaning, foundDay). The id is the
  * notebook id of the word, so a word has one card. Written by the server only.
  *
- * GET  /api/journey?tz=<IANA zone>
+ * GET  /api/journey?tz=<IANA zone>&ui=<interface language>
  *   Makes a card for every notebook word that has none (face down, found on
  *   the day the word entered the notebook), and returns all the cards, the
  *   cards of today with the format to ask each in, the numbers and the coins.
+ *   A child whose day is short of words also gets words of the school grade
+ *   (lib/journey/level-words.ts), so a fortress never stands empty because
+ *   the notebook is: enough unopened words to fill a day, and on a day with
+ *   little else to do up to LEVEL_DAY of them are asked.
  * POST /api/journey  { id, choice, format, tz }
  *   `choice` is the id of the card the child picked as the answer. The
  *   scheduler decides what the answer does; the card after it is returned.
@@ -27,6 +32,20 @@ export const dynamic = "force-dynamic";
 
 const FORMATS = ["meaning", "word"];
 const MAX_CARDS = 500;
+/** The words a fortress keeps on a day with nothing else to ask. */
+const LEVEL_DAY = 6;
+const UI_LANG = /^[a-z]{2}(-[A-Z]{2})?$/;
+
+/** The school grade of the profile behind a token: its family member doc. */
+async function gradeOf(token: string | null): Promise<number | null> {
+  if (!token) return null;
+  try {
+    const d = await getAdminAuth().verifyIdToken(token);
+    if (typeof d.familyId !== "string" || typeof d.memberId !== "string") return null;
+    const m = await getAdminDb().collection("families").doc(d.familyId).collection("members").doc(d.memberId).get();
+    return m.exists ? gradeOfMember(m.data()) : null;
+  } catch { return null; }
+}
 
 const bearer = (req: NextRequest) => {
   const h = req.headers.get("authorization") || "";
@@ -98,8 +117,29 @@ export async function GET(req: NextRequest) {
   }
   cards.push(...fresh);
 
+  // Words of the school grade, when the day is short of words. They are
+  // found "yesterday", so they can be opened today.
   const used = usedOn(cards, today);
-  const todays = dueToday(cards, today, { usedToday: used }).map((c) => ({ id: c.id, format: pickFormat(c, FORMATS) }));
+  const ui = str(req.nextUrl.searchParams.get("ui"));
+  const unopened = cards.filter((c) => !isKnown(c) && c.stars === 0).length;
+  if (UI_LANG.test(ui) && unopened < DAILY_MAX && cards.length < MAX_CARDS) {
+    const grade = await gradeOf(bearer(req));
+    if (grade !== null) {
+      const level = await nextLevelWords(ui, grade, have, cards.map((c) => c.word), Math.min(DAILY_MAX - unopened, MAX_CARDS - cards.length));
+      const found = addDays(today, -1);
+      const add: Stored[] = level.map((w) => ({ ...newCard(w.id, found), word: w.word, language: w.language, meaning: w.meaning, foundDay: found }));
+      if (add.length && !user.impersonating) {
+        const batch = db.batch();
+        for (const c of add) { const { id, ...rest } = c; batch.create(cardsOf(user.userId).doc(id), { ...rest, source: "level" }); }
+        try { await batch.commit(); } catch (e) { console.warn("journey: level cards not created", String(e)); }
+      }
+      cards.push(...add);
+    }
+  }
+  // A day with little to review asks more unopened words than the usual three.
+  const older = cards.filter((c) => isDue(c, today) && (isKnown(c) || c.stars > 0)).length;
+  const newMax = Math.max(NEW_PER_DAY, LEVEL_DAY - older);
+  const todays = dueToday(cards, today, { usedToday: used, newMax }).map((c) => ({ id: c.id, format: pickFormat(c, FORMATS) }));
   return NextResponse.json({
     today, dailyMax: DAILY_MAX, usedToday: used, starsToKnow: STARS_TO_KNOW,
     cards: cards.map((c) => view(c, today)), todays,

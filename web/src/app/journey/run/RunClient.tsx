@@ -118,13 +118,13 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   const load = useCallback(async () => {
     if (!user) return;
     try {
-      const res = await fetch(`/api/journey?tz=${encodeURIComponent(zone())}`, { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+      const res = await fetch(`/api/journey?tz=${encodeURIComponent(zone())}&ui=${encodeURIComponent(lang)}`, { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
       if (!res.ok) throw new Error(String(res.status));
       setData((await res.json()) as Data);
       try { setStage(Number(window.localStorage.getItem(`gadit-journey-stage:${user.uid}`)) || 0); } catch { /* the first fortress */ }
       setState("ready");
     } catch { setState("failed"); }
-  }, [user]);
+  }, [user, lang]);
   useEffect(() => { const id = window.setTimeout(() => { void load(); }, 0); return () => window.clearTimeout(id); }, [load]);
 
   const questions = useMemo(() => {
