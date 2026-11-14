@@ -18,6 +18,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { sfx } from "@/lib/game-sfx";
+import { useKidsMode } from "@/lib/use-kids-mode";
 
 type Frame = "plain" | "silver" | "gold" | "rainbow" | "diamond";
 const FRAMES: Frame[] = ["plain", "silver", "gold", "rainbow", "diamond"];
@@ -78,9 +79,21 @@ function scriptOf(text: string): string {
   return "other";
 }
 
+/** A meaning as an answer: its first sentence only, so the three answers are of a like length (Gadi 2026-11-14). */
+export function shortMeaning(meaning: string): string {
+  const m = meaning.trim();
+  const end = m.search(/[.!?。؟](\s|$)/u);
+  const first = end > 20 ? m.slice(0, end + 1) : m;
+  return first.length > 160 ? first.slice(0, 157).trimEnd() + "…" : first;
+}
+
+/** A meaning the dictionary marks as rude: never offered to a child as a wrong answer (Gadi 2026-11-14). */
+const RUDE = /(?<!\p{L})(vulgar|obscene|profan\p{L}*|offensive|swear ?word|curse word|expletive|sexual\p{L}*|genital\p{L}*|excrement|feces|גס|גסה|גסים|גסות|בוטה|קללה|מגונה|וולגרי|וולגרית|מיני|מינית|вульгар\p{L}*|бранн\p{L}*|нецензур\p{L}*|بذيء|بذيئة|شتيمة|فاحش)(?!\p{L})/iu;
+const isRude = (c: CardView) => RUDE.test(c.meaning);
+
 /** The question of one card: the card and two others that differ from it in both the word and the meaning. */
-function makeQuestion(card: CardView, format: string | null, all: CardView[]): Question | null {
-  const others = shuffle(all.filter((c) => c.id !== card.id && c.word !== card.word && c.meaning !== card.meaning));
+function makeQuestion(card: CardView, format: string | null, all: CardView[], forChild: boolean): Question | null {
+  const others = shuffle(all.filter((c) => c.id !== card.id && c.word !== card.word && c.meaning !== card.meaning && !(forChild && isRude(c))));
   // The three answers are written in one script: a meaning in another
   // language gives the answer away (Gadi 2026-11-14). Among those, words of
   // the card's own language come first.
@@ -129,7 +142,9 @@ function demoResult(q: Question, right: boolean): Result {
 }
 
 export function JourneyClient({ demo = false }: { demo?: boolean }) {
-  const { user: realUser, loading: authLoading } = useAuth();
+  const { user: realUser, loading: authLoading, familyRole } = useAuth();
+  const [kidsMode] = useKidsMode();
+  const forChild = familyRole === "kid" || kidsMode;
   const user = demo ? null : realUser;
   const { lang, dir } = useLang();
   const c = COPY[lang] ?? COPY.en;
@@ -156,8 +171,8 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
   const byId = useMemo(() => new Map((data?.cards ?? []).map((x) => [x.id, x])), [data]);
   const questions = useMemo(() => {
     if (!data) return [];
-    return data.todays.map((t) => { const card = byId.get(t.id); return card ? makeQuestion(card, t.format, data.cards) : null; }).filter((q): q is Question => !!q);
-  }, [data, byId]);
+    return data.todays.map((t) => { const card = byId.get(t.id); return card ? makeQuestion(card, t.format, data.cards, forChild) : null; }).filter((q): q is Question => !!q);
+  }, [data, byId, forChild]);
 
   const start = () => { sfx.tap(); setQueue(questions); setAt(0); setPicked(null); setResult(null); };
   const q = queue?.[at] ?? null;
@@ -223,14 +238,14 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
           <section className="jrn-play" aria-live="polite">
             <div className="jrn-step">{c.of(at + 1, queue!.length)}</div>
             <div className="jrn-ask">{q.format === "meaning" ? c.whichMeaning : c.whichWord}</div>
-            <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "meaning" ? q.card.word : q.card.meaning}</div>
+            <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "meaning" ? q.card.word : shortMeaning(q.card.meaning)}</div>
             <div className="jrn-options">
               {q.options.map((o) => {
                 const isRight = !!picked && o.id === q.card.id;
                 const isWrong = picked === o.id && o.id !== q.card.id;
                 return (
                   <button key={o.id} type="button" className={`jrn-option${q.format === "word" ? " is-word" : ""}${isRight ? " is-right" : ""}${isWrong ? " is-other" : ""}`} onClick={() => void choose(o)} aria-disabled={!!picked || undefined} dir="auto">
-                    {q.format === "meaning" ? o.meaning : o.word}
+                    {q.format === "meaning" ? shortMeaning(o.meaning) : o.word}
                   </button>
                 );
               })}
