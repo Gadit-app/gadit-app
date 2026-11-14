@@ -73,7 +73,7 @@ const niceDay = (d: string, lang: string) => { try { return new Date(d + "T12:00
 function scriptOf(text: string): string {
   const ch = text.match(/\p{L}/u)?.[0] ?? "";
   for (const sc of ["Hebrew", "Arabic", "Cyrillic", "Latin", "Greek", "Devanagari", "Thai", "Han", "Hiragana", "Katakana", "Hangul", "Bengali", "Ethiopic"]) {
-    if (new RegExp("\p{Script=" + sc + "}", "u").test(ch)) return sc;
+    if (new RegExp(String.raw`\p{Script=` + sc + "}", "u").test(ch)) return sc;
   }
   return "other";
 }
