@@ -2,6 +2,11 @@
 // Gadi 2026-10-06). READ-ONLY by default: writes a report, changes nothing.
 //   node scripts/seo/vet-public-words.mjs            -> report only
 //   node scripts/seo/vet-public-words.mjs --apply    -> copy approved docs to base
+// A batch of the richest unpublished definitions of one language (Gadi
+// 2026-11-14, after the Search Console check: Google rejects thin word pages,
+// so only rich definitions are published, a few hundred at a time):
+//   node scripts/seo/vet-public-words.mjs --loose --lang he --hebrew-only --min-chars 1200 --min-meanings 2 --max 10
+//   (add --apply to publish; the cost of the checks is printed at the end)
 // Needs GOOGLE_APPLICATION_CREDENTIALS (service account, runtime only) and
 // OPENAI_API_KEY in .env.local.
 //
@@ -31,6 +36,18 @@ const KEY = (env.match(/^OPENAI_API_KEY=(.*)$/m)?.[1] ?? "").trim().replace(/^["
 const APPLY = process.argv.includes("--apply");
 // --loose: skip rule 4 (allow words whose searches predate the activity log).
 const LOOSE = process.argv.includes("--loose");
+const arg = (name) => { const i = process.argv.indexOf(name); return i > 0 ? process.argv[i + 1] : null; };
+const ONLY_LANG = arg("--lang");
+const HEBREW_ONLY = process.argv.includes("--hebrew-only");
+const MIN_CHARS = Number(arg("--min-chars") || 0);
+const MIN_MEANINGS = Number(arg("--min-meanings") || 0);
+const MAX = Number(arg("--max") || 0);
+// Cost of the checks, from the usage OpenAI returns (USD per 1M tokens).
+const PRICE = { "gpt-4o-mini": [0.15, 0.6], "gpt-4o": [2.5, 10] };
+let spentUsd = 0;
+const addUsage = (model, j) => { const u = j && j.usage; if (u) spentUsd += (u.prompt_tokens * PRICE[model][0] + u.completion_tokens * PRICE[model][1]) / 1e6; };
+// The size of what a public page shows: the definition without the kids text.
+const textLen = (v, k) => (k === "kidsExplanation" ? 0 : typeof v === "string" ? v.length : Array.isArray(v) ? v.reduce((n, x) => n + textLen(x), 0) : v && typeof v === "object" ? Object.entries(v).reduce((n, [kk, x]) => n + textLen(x, kk), 0) : 0);
 const OUT = process.env.VET_OUT || path.join(HERE, "vet-report.json");
 
 admin.initializeApp({ credential: admin.credential.applicationDefault() });
@@ -75,6 +92,7 @@ async function classify(batch) {
     }),
   });
   const j = await res.json();
+  addUsage("gpt-4o-mini", j);
   try {
     const obj = JSON.parse(j.choices[0].message.content);
     const map = obj.labels && typeof obj.labels === "object" ? obj.labels : obj;
@@ -114,8 +132,12 @@ for (const d of snap.docs) {
   if (!m) continue;
   const [, lang, word] = m;
   if (ids.has(`auto2_${lang}_base_${word}`)) continue; // already public
+  if (ONLY_LANG && lang !== ONLY_LANG) continue;
+  if (HEBREW_ONLY && !/[\u05d0-\u05ea]/.test(word)) continue;
   const data = d.data();
-  cands.push({ id: d.id, lang, word, wordLanguage: data.language || "", meanings: Array.isArray(data.meanings) ? data.meanings.length : 0, data });
+  const chars = textLen(data.meanings) + textLen(data.etymology) + textLen(data.generalIdioms);
+  if (chars < MIN_CHARS || (Array.isArray(data.meanings) ? data.meanings.length : 0) < MIN_MEANINGS) continue;
+  cands.push({ chars, id: d.id, lang, word, wordLanguage: data.language || "", meanings: Array.isArray(data.meanings) ? data.meanings.length : 0, data });
 }
 
 // Rules 1, 3, 4, 5 first (free), then the language check on what is left.
@@ -125,6 +147,12 @@ for (const c of cands) {
   else if (!c.meanings || !c.wordLanguage) c.block = "incomplete_definition";
   else if (childWords.has(c.word)) c.block = "searched_by_child_or_class";
   else if (!adultWords.has(c.word) && !LOOSE) c.block = "no_known_search_history";
+}
+// A batch: the richest definitions first, only as many as asked for. The
+// free rules ran already, so a blocked word never takes a place in the batch.
+if (MAX) {
+  const keep = new Set(cands.filter((c) => !c.block).sort((a, b) => b.chars - a.chars).slice(0, MAX));
+  for (const c of cands) if (!c.block && !keep.has(c)) c.block = "not_in_this_batch";
 }
 const toCheck = [];
 const seen = new Map();
@@ -158,6 +186,7 @@ async function spellCheck(batch) {
     }),
   });
   const j = await res.json();
+  addUsage("gpt-4o", j);
   try {
     const map = JSON.parse(j.choices[0].message.content);
     return batch.map((_, i) => String(map[String(i + 1)] ?? "unknown").toLowerCase());
@@ -190,13 +219,13 @@ const report = {
   sampleBlocked: pick(blocked, 20).map((c) => ({ lang: c.lang, word: c.word, reason: c.block })),
 };
 fs.writeFileSync(OUT, JSON.stringify(report, null, 1));
-console.log(JSON.stringify({ candidates: report.candidates, pass: report.pass, blocked: report.blocked, reasons }, null, 1));
+console.log(JSON.stringify({ candidates: report.candidates, pass: report.pass, blocked: report.blocked, reasons, checksUsd: Number(spentUsd.toFixed(4)) }, null, 1));
 
 if (APPLY) {
   let n = 0;
   for (const c of pass) {
     const { cachedAt, ...def } = c.data;
-    await db.collection("cache").doc(`auto2_${c.lang}_base_${c.word}`).set({ ...def, cachedAt: cachedAt ?? Date.now(), publishedFromPaid: true }, { merge: false });
+    await db.collection("cache").doc(`auto2_${c.lang}_base_${c.word}`).set({ ...def, cachedAt: cachedAt ?? Date.now(), publishedFromPaid: true, indexOk: true }, { merge: false });
     n++;
   }
   console.log("published", n);
