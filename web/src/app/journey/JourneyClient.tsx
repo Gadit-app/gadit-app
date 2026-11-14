@@ -110,8 +110,17 @@ export function makeQuestion(card: CardView, format: string | null, all: CardVie
 }
 
 /** A sample index for ?demo=1: what a child's collection looks like after a few months. Nothing is read or saved. */
-export function demoData(): Data {
-  const W: Array<[string, string, number, Frame | null]> = [
+/** The sample words in English: everything on the screen is in the language of the platform (Gadi 2026-11-14). */
+const DEMO_EN: Array<[string, string]> = [
+  ["root", "The part of a plant that grows in the ground and drinks water from it"], ["journey", "A long way that you travel from one place to another"],
+  ["courage", "The strength to do something even when you are afraid"], ["map", "A drawing of a place that shows where everything is"],
+  ["generous", "Happy to give to other people"], ["curious", "Wanting to know and to find out more"], ["bridge", "A road that is built over a river or another road"],
+  ["sunrise", "The moment in the morning when the sun comes up"], ["compass", "A tool that shows where north is"], ["persist", "To keep doing something again and again without giving up"],
+  ["adventure", "Something new and exciting that happens to us"], ["trail", "A narrow path that people walk on"], ["footprints", "The marks that stay on the ground after someone walks there"], ["cave", "A large hole inside a mountain or under the ground"],
+  ["treasure", "Precious things that are kept in a hidden place"], ["lighthouse", "A tower with a light that shows ships the way"], ["cliff", "A high and steep rock"], ["oasis", "A green place with water in the middle of the desert"],
+];
+export function demoData(lang = "he"): Data {
+  const HE: Array<[string, string, number, Frame | null]> = [
     ["שורש", "החלק של הצמח שנמצא באדמה ושותה ממנה מים", 3, "diamond"], ["מסע", "דרך ארוכה שעוברים ממקום למקום", 3, "rainbow"],
     ["אומץ", "הכוח לעשות דבר גם כשמפחדים", 3, "gold"], ["מפה", "ציור של מקום שמראה איפה כל דבר נמצא", 3, "gold"],
     ["נדיב", "מי שנותן לאחרים בשמחה", 3, "silver"], ["סקרן", "מי שרוצה לדעת ולגלות עוד", 3, "silver"], ["גשר", "דרך שבנויה מעל נהר או כביש", 3, "silver"],
@@ -119,9 +128,10 @@ export function demoData(): Data {
     ["הרפתקה", "משהו מרגש וחדש שקורה לנו", 2, null], ["שביל", "דרך צרה שהולכים בה ברגל", 2, null], ["עקבות", "הסימנים שנשארים על האדמה אחרי שהולכים", 1, null], ["מערה", "חלל גדול בתוך הר או סלע", 1, null],
     ["אוצר", "דברים יקרים ששמורים במקום נסתר", 0, null], ["מגדלור", "מגדל עם אור שמראה לספינות את הדרך", 0, null], ["צוק", "סלע גבוה ותלול", 0, null], ["נווה", "מקום ירוק עם מים באמצע המדבר", 0, null],
   ];
+  const W = lang === "he" ? HE : HE.map(([, , stars, frame], i) => [DEMO_EN[i % DEMO_EN.length][0], DEMO_EN[i % DEMO_EN.length][1], stars, frame] as [string, string, number, Frame | null]);
   const today = "2026-11-14";
   const cards: CardView[] = W.map(([word, meaning, stars, frame], i) => ({
-    id: "demo" + i, word, language: "Hebrew", meaning, foundDay: "2026-0" + (1 + (i % 9)) + "-1" + (i % 9),
+    id: "demo" + i, word, language: lang === "he" ? "Hebrew" : "English", meaning, foundDay: "2026-0" + (1 + (i % 9)) + "-1" + (i % 9),
     stars, known: !!frame, frame: frame ?? "plain", dueDay: i % 3 === 0 || !frame ? today : "2027-01-01", due: (i % 3 === 0 || !frame) && i !== 17,
   }));
   const frameCoins: Record<Frame, number> = { plain: 10, silver: 30, gold: 70, rainbow: 150, diamond: 310 };
@@ -148,7 +158,9 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
   const user = demo ? null : realUser;
   const { lang, dir } = useLang();
   const c = COPY[lang] ?? COPY.en;
-  const [data, setData] = useState<Data | null>(() => (demo ? demoData() : null));
+  const [realData, setData] = useState<Data | null>(null);
+  const demoSet = useMemo(() => demoData(lang), [lang]);
+  const data = demo ? demoSet : realData;
   const [state, setState] = useState<"loading" | "ready" | "failed">(demo ? "ready" : "loading");
   const [queue, setQueue] = useState<Question[] | null>(null);
   const [at, setAt] = useState(0);

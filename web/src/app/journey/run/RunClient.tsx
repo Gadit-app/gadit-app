@@ -93,7 +93,9 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   const { lang, dir } = useLang();
   const c = COPY[lang] ?? COPY.en;
 
-  const [data, setData] = useState<Data | null>(() => (demo ? demoData() : null));
+  const [realData, setData] = useState<Data | null>(null);
+  const demoSet = useMemo(() => demoData(lang), [lang]);
+  const data = demo ? demoSet : realData;
   const [state, setState] = useState<"loading" | "ready" | "failed">(demo ? "ready" : "loading");
   const [phase, setPhase] = useState<"intro" | "run" | "fort" | "open">("intro");
   const [stage, setStage] = useState(0);
@@ -206,7 +208,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     if (stageKey) { try { window.localStorage.setItem(stageKey, String(stage + 1)); } catch { /* the stage is kept for this visit only */ } }
     setPhase("open");
   };
-  const nextFort = () => { sfx.tap(); setStage(stage + 1); setData(demoData()); setPhase("intro"); };
+  const nextFort = () => { sfx.tap(); setStage(stage + 1); setPhase("intro"); };
 
   const freedN = marks.filter(Boolean).length;
   const ready = (user || demo) && data && state === "ready";
