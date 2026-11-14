@@ -25,9 +25,10 @@ type Stage = "script" | "final";
 type Kind = "print" | "script";
 type PairCard = { id: string; pairKey: string; glyph: string; kind: Kind; say: string };
 
-/** The name of each letter as the voice is asked to say it. */
+/** The name of each letter as the voice is asked to say it. Vav is spelled with a
+ *  bet: written with two vavs the voice said "wow" (Gadi 2026-11-14, checked by ear). */
 const NAMES: Record<string, string> = {
-  א: "אָלֶף", ב: "בֵּית", ג: "גִּימֶל", ד: "דָּלֶת", ה: "הֵא", ו: "וָו", ז: "זַיִן", ח: "חֵית", ט: "טֵית", י: "יוֹד",
+  א: "אָלֶף", ב: "בֵּית", ג: "גִּימֶל", ד: "דָּלֶת", ה: "הֵא", ו: "וָב", ז: "זַיִן", ח: "חֵית", ט: "טֵית", י: "יוֹד",
   כ: "כָּף", ל: "לָמֶד", מ: "מֵם", נ: "נוּן", ס: "סָמֶךְ", ע: "עַיִן", פ: "פֵּא", צ: "צָדִי", ק: "קוֹף", ר: "רֵישׁ", ש: "שִׁין", ת: "תָּו",
   ך: "כָּף סוֹפִית", ם: "מֵם סוֹפִית", ן: "נוּן סוֹפִית", ף: "פֵּא סוֹפִית", ץ: "צָדִי סוֹפִית",
 };

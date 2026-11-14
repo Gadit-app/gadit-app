@@ -3573,6 +3573,9 @@ const FOCUS_GAMES: GameId[] = ["flashcards", "flashdefs", "quiz", "memory", "ana
 /** Every game has its own link, /play?game=<id> (Gadi 2026-11-02: to send one game to a parent). */
 const LINK_GAMES: string[] = ["quiz", "flashcards", "flashdefs", "truefalse", "fillblank", "context", "memory", "anagram", "speed", "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "letterpairs", "vowels", "syllables", "wheel", "wordsearch", "crossword", "arrowword", "duel"];
 
+/** The first-reader games, shown together as "Letters and vowel signs". */
+const LETTER_GAMES = new Set<string>(["letterpairs", "vowels", "syllables", "wheel"]);
+
 /** Games with a cover picture in public/play/<id>.webp (Gadi 2026-10-09).
  *  Add an id here once its picture is in place; others keep their icon. */
 /** Bump when covers are redrawn under the same file names (the service worker
@@ -3581,7 +3584,7 @@ const COVER_V = 2;
 const GAME_COVERS = new Set<GameId>([
   "flashcards", "flashdefs", "quiz", "fillblank", "memory", "anagram", "speed",
   "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "truefalse", "context",
-  "syllables", "wheel", "wordsearch", "crossword", "arrowword",
+  "syllables", "wheel", "wordsearch", "crossword", "arrowword", "letterpairs", "vowels",
 ]);
 
 /** Games whose cover has a second drawing for children (Gadi 2026-11-12: the
@@ -4643,10 +4646,20 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                 { id: "more", label: bc.more },
               ]
             : kidsMode || isKidPlayer ? [notebookSection, ...wordSections] : [...wordSections, notebookSection];
+          // Letters and vowel signs (Gadi 2026-11-14): the first-reader games sit
+          // together in a section of their own. With a grade it holds the ones
+          // that fit the grade, and it comes first for the youngest two bands;
+          // without a grade it follows the child's own words.
+          const lettersSection = { id: "letters", label: lang === "he" ? "אותיות וניקוד" : "Letters and vowel signs" };
+          if (band === "pre1" || band === "g12") sections.unshift(lettersSection);
+          else sections.splice(band ? 1 : sections.findIndex((x) => x.id === "notebook") + 1, 0, lettersSection);
           // The section that carries the word-source pickers, and where a game
           // (or one of the four cards outside the catalog) sits.
           const homeId = band ? "fit" : "notebook";
-          const secOf = (id: string, category: string) => (band ? shelfOf(id, band) : category);
+          const secOf = (id: string, category: string) => {
+            const shelf = band ? shelfOf(id, band) : category;
+            return LETTER_GAMES.has(id) && (!band || shelf === "fit") ? "letters" : shelf;
+          };
           const extraCards = ["catch", "catch-fair", ...(isPaid ? ["world", "duel"] : [])];
           const chooser = !isKidPlayer && !kidsMode ? (
             <div className="wb-play-langs" role="radiogroup" aria-label={bc.showFor} style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: 8, margin: "0 auto 14px" }}>
