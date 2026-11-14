@@ -58,6 +58,8 @@ export type Card = {
   right: number;
   wrong: number;
   lastDay: string | null;
+  /** The last day the card was one of the day's cards and was answered. */
+  creditDay: string | null;
 };
 
 export type AnswerEvent =
@@ -101,7 +103,7 @@ export function newCard(id: string, foundDay: string): Card {
   return {
     id, stars: 0, starDays: [], formats: [], knownDay: null,
     dueDay: addDays(foundDay, 1), gapStep: 0, relearn: false, gapFrom: null,
-    longestGap: 0, right: 0, wrong: 0, lastDay: null,
+    longestGap: 0, right: 0, wrong: 0, lastDay: null, creditDay: null,
   };
 }
 
@@ -111,6 +113,7 @@ export function answer(card: Card, a: { correct: boolean; format: string; day: s
   if (a.correct) c.right++; else c.wrong++;
   // Not one of the day's cards (not due yet, or already answered for credit on this day).
   if (!isDue(card, a.day)) return { card: c, event: "practice", frameUp: null };
+  c.creditDay = a.day;
 
   if (!a.correct) {
     c.dueDay = addDays(a.day, 1);
@@ -185,4 +188,19 @@ export function summary(cards: Card[], today: string): { index: number; started:
     if (isDue(c, today)) due++;
   }
   return { index, started, fresh, due, frames };
+}
+
+/** Coins come only from words in the index: each card is worth its frame. */
+export const FRAME_COINS: Record<Frame, number> = { plain: 10, silver: 30, gold: 70, rainbow: 150, diamond: 310 };
+export function coinsOf(cards: Card[]): number {
+  let n = 0;
+  for (const c of cards) if (isKnown(c)) n += FRAME_COINS[frameOf(c.longestGap)];
+  return n;
+}
+
+/** How many of the day's cards the child already answered for credit today. */
+export function usedOn(cards: Card[], today: string): number {
+  let n = 0;
+  for (const c of cards) if (c.creditDay === today) n++;
+  return n;
 }

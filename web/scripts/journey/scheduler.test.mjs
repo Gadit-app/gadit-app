@@ -1,7 +1,7 @@
 // node --test scripts/journey/scheduler.test.mjs
 import test from "node:test";
 import assert from "node:assert/strict";
-import { newCard, answer, dueToday, pickFormat, summary, frameOf, dayKeyOf, addDays, diffDays, isKnown, DAILY_MAX } from "../../src/lib/journey/scheduler.ts";
+import { newCard, answer, dueToday, pickFormat, summary, frameOf, dayKeyOf, addDays, diffDays, isKnown, DAILY_MAX, coinsOf, usedOn } from "../../src/lib/journey/scheduler.ts";
 
 const D0 = "2026-11-14";
 const day = (n) => addDays(D0, n);
@@ -158,4 +158,18 @@ test("a year of a child who plays three days a week never loses a star or a fram
   assert.equal(s.index, 40);
   assert.ok(s.frames.gold + s.frames.rainbow > 0);
   for (const c of cards) assert.equal(new Set(c.starDays).size, 3);
+});
+
+test("coins come only from index cards, by their frame", () => {
+  const started = ok(newCard("a", D0), day(1)).card;
+  assert.equal(coinsOf([started, newCard("b", D0)]), 0);
+  assert.equal(coinsOf([known()]), 10);
+  assert.equal(coinsOf([known(), { ...ok(known(), day(11)).card, id: "w2" }, started]), 40);
+});
+
+test("the cards used today: answered for credit, right or wrong, never a practice answer", () => {
+  const a = ok(newCard("a", D0), day(1)).card, b = no(newCard("b", D0), day(1)).card;
+  const c = ok(newCard("c", day(1)), day(1)).card; // not due yet: practice
+  assert.equal(usedOn([a, b, c, newCard("d", D0)], day(1)), 2);
+  assert.equal(dueToday([a, b, newCard("d", D0)], day(1), { usedToday: usedOn([a, b], day(1)) }).length, 1);
 });
