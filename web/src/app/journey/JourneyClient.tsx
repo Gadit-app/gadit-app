@@ -69,12 +69,26 @@ const shuffle = <T,>(a: T[]): T[] => { const b = a.slice(); for (let i = b.lengt
 const zone = () => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"; } catch { return "UTC"; } };
 const niceDay = (d: string, lang: string) => { try { return new Date(d + "T12:00:00Z").toLocaleDateString(lang, { day: "numeric", month: "long", year: "numeric" }); } catch { return d; } };
 
+/** The script a text is mostly written in (its first letter decides). */
+function scriptOf(text: string): string {
+  const ch = text.match(/\p{L}/u)?.[0] ?? "";
+  for (const sc of ["Hebrew", "Arabic", "Cyrillic", "Latin", "Greek", "Devanagari", "Thai", "Han", "Hiragana", "Katakana", "Hangul", "Bengali", "Ethiopic"]) {
+    if (new RegExp("\p{Script=" + sc + "}", "u").test(ch)) return sc;
+  }
+  return "other";
+}
+
 /** The question of one card: the card and two others that differ from it in both the word and the meaning. */
 function makeQuestion(card: CardView, format: string | null, all: CardView[]): Question | null {
   const others = shuffle(all.filter((c) => c.id !== card.id && c.word !== card.word && c.meaning !== card.meaning));
-  const same = others.filter((c) => c.language === card.language);
+  // The three answers are written in one script: a meaning in another
+  // language gives the answer away (Gadi 2026-11-14). Among those, words of
+  // the card's own language come first.
+  const asked = format === "word" ? card.word : card.meaning;
+  const alike = others.filter((c) => scriptOf(format === "word" ? c.word : c.meaning) === scriptOf(asked));
+  const same = alike.filter((c) => c.language === card.language);
   const picks: CardView[] = [];
-  for (const c of [...same, ...others]) {
+  for (const c of [...same, ...alike, ...others]) {
     if (picks.length === 2) break;
     if (!picks.some((p) => p.id === c.id || p.word === c.word || p.meaning === c.meaning)) picks.push(c);
   }
