@@ -28,7 +28,7 @@ import { startRun, THEMES, type RunHandle } from "./engine";
 type Copy = {
   title: string; demo: string; holds: (name: string, n: number) => string; goFree: string; how: string; go: string;
   sparks: string; place: (p: number, of: number) => string; left: string; right: string; jump: string; exit: string;
-  arrived: (name: string) => string; whichMeaning: string; whichWord: string; freed: string; held: (name: string) => string;
+  arrived: (name: string) => string; whichMeaning: string; whichWord: string; whichOdd: string; freed: string; held: (name: string) => string;
   nextWord: string; openGate: string; opened: string; freedCount: (n: number, of: number) => string; nextFort: string; backIndex: string;
   noneToday: string; fewWords: string; signIn: string; loading: string; failed: string; retry: string;
   monsters: string[]; sample: string;
@@ -39,7 +39,7 @@ const COPY: Record<string, Copy> = {
     holds: (name, n) => (n === 1 ? `${name} מחזיקה מילה אחת במבצר` : `${name} מחזיקה ${n} מילים במבצר`), goFree: "רוצו אל המבצר ושחררו אותן",
     how: "מזיזים את הדמות ימינה ושמאלה, קופצים מעל המכשולים ואוספים ניצוצות", go: "רצים",
     sparks: "ניצוצות", place: (p, of) => `מקום ${p} מתוך ${of}`, left: "שמאלה", right: "ימינה", jump: "קפיצה", exit: "יציאה",
-    arrived: (name) => `הגעתם למבצר של ${name}`, whichMeaning: "מה הפירוש של המילה?", whichWord: "איזו מילה מתאימה לפירוש?",
+    arrived: (name) => `הגעתם למבצר של ${name}`, whichMeaning: "מה הפירוש של המילה?", whichWord: "איזו מילה מתאימה לפירוש?", whichOdd: "איזו מילה יוצאת דופן?",
     freed: "המילה שוחררה", held: (name) => `${name} עוד מחזיקה את המילה. היא תחכה לכם מחר, ולא איבדתם כלום`,
     nextWord: "למילה הבאה", openGate: "פותחים את המבצר", opened: "המבצר נפתח", freedCount: (n, of) => `שחררתם ${n} מתוך ${of} מילים`,
     nextFort: "למבצר הבא", backIndex: "חזרה לאינדקס",
@@ -52,7 +52,7 @@ const COPY: Record<string, Copy> = {
     holds: (name, n) => (n === 1 ? `${name} keeps one word in the fortress` : `${name} keeps ${n} words in the fortress`), goFree: "Run to the fortress and set them free",
     how: "Move the runner left and right, jump over the blocks and collect sparks", go: "Run",
     sparks: "Sparks", place: (p, of) => `Place ${p} of ${of}`, left: "Left", right: "Right", jump: "Jump", exit: "Exit",
-    arrived: (name) => `You reached the fortress of ${name}`, whichMeaning: "What does the word mean?", whichWord: "Which word fits the meaning?",
+    arrived: (name) => `You reached the fortress of ${name}`, whichMeaning: "What does the word mean?", whichWord: "Which word fits the meaning?", whichOdd: "Which word does not belong?",
     freed: "The word is free", held: (name) => `${name} still keeps this word. It waits for you tomorrow, and nothing was lost`,
     nextWord: "Next word", openGate: "Open the fortress", opened: "The fortress is open", freedCount: (n, of) => `You freed ${n} of ${of} words`,
     nextFort: "To the next fortress", backIndex: "Back to the index",
@@ -131,10 +131,10 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     if (!data) return [];
     const byId = new Map(data.cards.map((x) => [x.id, x]));
     // The sample game: every fortress keeps other words.
-    const todays = demo
+    const todays: Data["todays"] = demo
       ? Array.from({ length: 6 }, (_, i) => ({ id: data.cards[(stage * 6 + i) % data.cards.length].id, format: i % 2 ? "word" : "meaning" }))
       : data.todays;
-    return todays.map((t) => { const card = byId.get(t.id); return card ? makeQuestion(card, t.format, data.cards, forChild) : null; }).filter((q): q is Question => !!q);
+    return todays.map((t) => { const card = byId.get(t.id); return card ? makeQuestion(card, t.format, data.cards, forChild, t.odd) : null; }).filter((q): q is Question => !!q);
   }, [data, forChild, demo, stage]);
 
   const monster = c.monsters[stage % c.monsters.length];
@@ -283,14 +283,14 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
             <div className="run-cages" aria-hidden="true">
               {queue.map((x, i) => <i key={x.card.id} className={i < marks.length ? (marks[i] ? "is-free" : "is-held") : i === at ? "is-now" : ""} />)}
             </div>
-            <div className="jrn-ask">{q.format === "meaning" ? c.whichMeaning : c.whichWord}</div>
-            <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "meaning" ? q.card.word : shortMeaning(q.card.meaning)}</div>
+            <div className="jrn-ask">{q.format === "odd" ? c.whichOdd : q.format === "meaning" ? c.whichMeaning : c.whichWord}</div>
+            {q.format !== "odd" && <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "meaning" ? q.card.word : shortMeaning(q.card.meaning)}</div>}
             <div className="jrn-options">
               {q.options.map((o) => {
                 const isRight = !!picked && o.id === q.card.id;
                 const isWrong = picked === o.id && o.id !== q.card.id;
                 return (
-                  <button key={o.id} type="button" className={`jrn-option${q.format === "word" ? " is-word" : ""}${isRight ? " is-right" : ""}${isWrong ? " is-other" : ""}`} onClick={() => void choose(o)} aria-disabled={!!picked || undefined} dir="auto">
+                  <button key={o.id} type="button" className={`jrn-option${q.format !== "meaning" ? " is-word" : ""}${isRight ? " is-right" : ""}${isWrong ? " is-other" : ""}`} onClick={() => void choose(o)} aria-disabled={!!picked || undefined} dir="auto">
                     {q.format === "meaning" ? shortMeaning(o.meaning) : o.word}
                   </button>
                 );

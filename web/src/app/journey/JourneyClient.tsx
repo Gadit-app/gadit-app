@@ -25,16 +25,18 @@ const FRAMES: Frame[] = ["plain", "silver", "gold", "rainbow", "diamond"];
 export type CardView = { id: string; word: string; language: string; meaning: string; foundDay: string; stars: number; known: boolean; frame: Frame; dueDay: string; due: boolean };
 export type Data = {
   today: string; dailyMax: number; usedToday: number; starsToKnow: number; cards: CardView[];
-  todays: Array<{ id: string; format: string | null }>; coins: number; frameCoins: Record<Frame, number>;
+  todays: Array<{ id: string; format: string | null; odd?: OddQuestion }>; coins: number; frameCoins: Record<Frame, number>;
   summary: { index: number; started: number; fresh: number };
 };
 export type Result = { correct: boolean; event: "practice" | "star" | "known" | "kept" | "again"; frameUp: Frame | null; card: CardView; coinsUp: number };
-export type Question = { card: CardView; format: "meaning" | "word"; options: CardView[] };
+/** "Odd one out": four words, three of one school unit (the card's word among them) and one that does not belong. */
+export type OddQuestion = { options: string[]; odd: string };
+export type Question = { card: CardView; format: "meaning" | "word" | "odd"; options: CardView[] };
 
 type Copy = {
   title: string; count: (n: number, of: number) => string; coins: string; signIn: string; loading: string; failed: string; retry: string;
   todayTitle: string; todayCount: (n: number) => string; start: string; doneToday: string; fewWords: string; noWords: string;
-  whichMeaning: string; whichWord: string; next: string; finish: string; of: (n: number, of: number) => string;
+  whichMeaning: string; whichWord: string; whichOdd: string; next: string; finish: string; of: (n: number, of: number) => string;
   star: (n: number, of: number) => string; known: string; kept: string; again: string; practice: string; frameUp: (f: string) => string; coinsUp: (n: number) => string;
   frames: Record<Frame, string>; sections: { index: string; started: string; fresh: string };
   opensTomorrow: string; ready: string; found: (d: string) => string; back: string; worth: (n: number) => string; top: string; demo: string;
@@ -45,7 +47,7 @@ const COPY: Record<string, Copy> = {
     loading: "פותחים את האינדקס", failed: "האינדקס לא נטען", retry: "לנסות שוב",
     todayTitle: "הקלפים של היום", todayCount: (n) => (n === 1 ? "קלף אחד מחכה" : `${n} קלפים מחכים`), start: "מתחילים",
     doneToday: "סיימתם להיום. הקלפים הבאים מחכים למחר", fewWords: "כשיהיו לכם שלוש מילים, הקלפים ייפתחו", noWords: "כל מילה שתחפשו ב-Gadit תהפוך כאן לקלף",
-    whichMeaning: "מה הפירוש של המילה?", whichWord: "איזו מילה מתאימה לפירוש?", next: "לקלף הבא", finish: "חזרה לאינדקס", of: (n, of) => `${n} מתוך ${of}`,
+    whichMeaning: "מה הפירוש של המילה?", whichWord: "איזו מילה מתאימה לפירוש?", whichOdd: "איזו מילה יוצאת דופן?", next: "לקלף הבא", finish: "חזרה לאינדקס", of: (n, of) => `${n} מתוך ${of}`,
     star: (n, of) => `כוכב ${n} מתוך ${of}`, known: "המילה נכנסה לאינדקס", kept: "זכרתם", again: "הקלף חוזר מחר. לא איבדתם כלום", practice: "תרגול",
     frameUp: (f) => `מסגרת חדשה: ${f}`, coinsUp: (n) => `+${n} מטבעות`,
     frames: { plain: "רגילה", silver: "כסף", gold: "זהב", rainbow: "קשת", diamond: "יהלום" },
@@ -57,7 +59,7 @@ const COPY: Record<string, Copy> = {
     loading: "Opening the index", failed: "The index did not load", retry: "Try again",
     todayTitle: "Today's cards", todayCount: (n) => (n === 1 ? "One card is waiting" : `${n} cards are waiting`), start: "Start",
     doneToday: "Done for today. The next cards wait for tomorrow", fewWords: "The cards open once you have three words", noWords: "Every word you look up in Gadit becomes a card here",
-    whichMeaning: "What does the word mean?", whichWord: "Which word fits the meaning?", next: "Next card", finish: "Back to the index", of: (n, of) => `${n} of ${of}`,
+    whichMeaning: "What does the word mean?", whichWord: "Which word fits the meaning?", whichOdd: "Which word does not belong?", next: "Next card", finish: "Back to the index", of: (n, of) => `${n} of ${of}`,
     star: (n, of) => `Star ${n} of ${of}`, known: "The word is in your index", kept: "You remembered", again: "The card comes back tomorrow. Nothing was lost", practice: "Practice",
     frameUp: (f) => `New frame: ${f}`, coinsUp: (n) => `+${n} coins`,
     frames: { plain: "Plain", silver: "Silver", gold: "Gold", rainbow: "Rainbow", diamond: "Diamond" },
@@ -92,7 +94,13 @@ const RUDE = /(?<!\p{L})(vulgar|obscene|profan\p{L}*|offensive|swear ?word|curse
 const isRude = (c: CardView) => RUDE.test(c.meaning);
 
 /** The question of one card: the card and two others that differ from it in both the word and the meaning. */
-export function makeQuestion(card: CardView, format: string | null, all: CardView[], forChild: boolean): Question | null {
+export function makeQuestion(card: CardView, format: string | null, all: CardView[], forChild: boolean, odd?: OddQuestion): Question | null {
+  // Odd one out: the word that does not belong carries the card's id, so
+  // "the right answer is the card" holds here as in the other formats.
+  if (format === "odd" && odd && odd.options.length === 4 && odd.options.includes(odd.odd)) {
+    return { card, format: "odd", options: shuffle(odd.options.map((w, i) => ({ ...card, id: w === odd.odd ? card.id : `${card.id}#${i}`, word: w, meaning: "" }))) };
+  }
+  if (format === "odd") format = "meaning";
   const others = shuffle(all.filter((c) => c.id !== card.id && c.word !== card.word && c.meaning !== card.meaning && !(forChild && isRude(c))));
   // The three answers are written in one script: a meaning in another
   // language gives the answer away (Gadi 2026-11-14). Among those, words of
@@ -183,7 +191,7 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
   const byId = useMemo(() => new Map((data?.cards ?? []).map((x) => [x.id, x])), [data]);
   const questions = useMemo(() => {
     if (!data) return [];
-    return data.todays.map((t) => { const card = byId.get(t.id); return card ? makeQuestion(card, t.format, data.cards, forChild) : null; }).filter((q): q is Question => !!q);
+    return data.todays.map((t) => { const card = byId.get(t.id); return card ? makeQuestion(card, t.format, data.cards, forChild, t.odd) : null; }).filter((q): q is Question => !!q);
   }, [data, byId, forChild]);
 
   const start = () => { sfx.tap(); setQueue(questions); setAt(0); setPicked(null); setResult(null); };
@@ -249,14 +257,14 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
         {(user || demo) && data && q && (
           <section className="jrn-play" aria-live="polite">
             <div className="jrn-step">{c.of(at + 1, queue!.length)}</div>
-            <div className="jrn-ask">{q.format === "meaning" ? c.whichMeaning : c.whichWord}</div>
-            <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "meaning" ? q.card.word : shortMeaning(q.card.meaning)}</div>
+            <div className="jrn-ask">{q.format === "odd" ? c.whichOdd : q.format === "meaning" ? c.whichMeaning : c.whichWord}</div>
+            {q.format !== "odd" && <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "meaning" ? q.card.word : shortMeaning(q.card.meaning)}</div>}
             <div className="jrn-options">
               {q.options.map((o) => {
                 const isRight = !!picked && o.id === q.card.id;
                 const isWrong = picked === o.id && o.id !== q.card.id;
                 return (
-                  <button key={o.id} type="button" className={`jrn-option${q.format === "word" ? " is-word" : ""}${isRight ? " is-right" : ""}${isWrong ? " is-other" : ""}`} onClick={() => void choose(o)} aria-disabled={!!picked || undefined} dir="auto">
+                  <button key={o.id} type="button" className={`jrn-option${q.format !== "meaning" ? " is-word" : ""}${isRight ? " is-right" : ""}${isWrong ? " is-other" : ""}`} onClick={() => void choose(o)} aria-disabled={!!picked || undefined} dir="auto">
                     {q.format === "meaning" ? shortMeaning(o.meaning) : o.word}
                   </button>
                 );

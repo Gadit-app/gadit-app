@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { gradeOfMember, nextLevelWords } from "@/lib/journey/level-words";
+import { oddQuestions } from "@/lib/journey/odd";
 import { isNotFoundMeaning } from "@/lib/not-a-word";
 import {
   addDays, answer, coinsOf, dayKeyOf, dueToday, frameOf, isDue, isKnown, newCard, pickFormat, summary, usedOn,
@@ -31,6 +32,8 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const FORMATS = ["meaning", "word"];
+/** "Odd one out" is asked only of a card that has a checked question (lib/journey/odd.ts). */
+const ODD = "odd";
 const MAX_CARDS = 500;
 /** The words a fortress keeps on a day with nothing else to ask. */
 const LEVEL_DAY = 6;
@@ -139,7 +142,13 @@ export async function GET(req: NextRequest) {
   // A day with little to review asks more unopened words than the usual three.
   const older = cards.filter((c) => isDue(c, today) && (isKnown(c) || c.stars > 0)).length;
   const newMax = Math.max(NEW_PER_DAY, LEVEL_DAY - older);
-  const todays = dueToday(cards, today, { usedToday: used, newMax }).map((c) => ({ id: c.id, format: pickFormat(c, FORMATS) }));
+  const due = dueToday(cards, today, { usedToday: used, newMax });
+  const odd = await oddQuestions(due as Stored[]);
+  const todays = due.map((c) => {
+    const o = odd.get(c.id);
+    const format = pickFormat(c, o ? [...FORMATS, ODD] : FORMATS);
+    return format === ODD && o ? { id: c.id, format, odd: o } : { id: c.id, format };
+  });
   return NextResponse.json({
     today, dailyMax: DAILY_MAX, usedToday: used, starsToKnow: STARS_TO_KNOW,
     cards: cards.map((c) => view(c, today)), todays,
@@ -153,7 +162,7 @@ export async function POST(req: NextRequest) {
   let body: { id?: unknown; choice?: unknown; format?: unknown; tz?: unknown };
   try { body = (await req.json()) as typeof body; } catch { return NextResponse.json({ error: "bad_body" }, { status: 400 }); }
   const id = str(body.id), choice = str(body.choice), format = str(body.format);
-  if (!id || id.length > 200 || id.includes("/") || !choice || !FORMATS.includes(format)) return NextResponse.json({ error: "bad_request" }, { status: 400 });
+  if (!id || id.length > 200 || id.includes("/") || !choice || !(FORMATS.includes(format) || format === ODD)) return NextResponse.json({ error: "bad_request" }, { status: 400 });
   const today = dayKeyOf(new Date(), zoneOf(body.tz));
   const ref = cardsOf(user.userId).doc(id);
   const db = getAdminDb();
