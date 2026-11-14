@@ -26,6 +26,7 @@ export type GameId =
   | "memory"
   | "anagram"
   | "speed"
+  | "letterpairs" // Letter memory: print and script letters, regular and final, each card says its name (no notebook)
   | "vowels"    // The sound of the vowel signs: one vowel at a time, by ear first (no notebook)
   | "wheel"     // The Letter Wheel: two wheels land on a letter and a vowel sign, said out loud (no notebook)
   | "syllables" // Reading in syllables: sound out a Hebrew bank word stone by stone (no notebook)
@@ -72,6 +73,7 @@ type NotebookItem = {
  *  Curated-content games (twin, time) use 0 — they ship with their own
  *  content and don't depend on the notebook. */
 export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
+  letterpairs: 0,
   vowels: 0,
   wheel: 0,
   syllables: 0,
@@ -102,6 +104,7 @@ export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
 /** How many rounds per session. Curated games pick from their content
  *  pool; notebook games scale down if the pool is smaller. */
 export const SESSION_SIZE: Record<GameId, number> = {
+  letterpairs: 3,
   vowels: 11,
   wheel: 10,
   syllables: 6,
