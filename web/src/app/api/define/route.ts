@@ -1128,7 +1128,31 @@ function isUncertainResult(r: unknown): boolean {
   return (o?.meanings?.length ?? 0) === 1 && /לא בטוחים במילה הזאת|not sure about this word/i.test(m);
 }
 
-async function escalateUncertain(systemPrompt: string, userContent: string, word: string, uiLangCode: string): Promise<object | null> {
+/** The "not found" and "did you mean" answers (rules 1b and 1c): one meaning
+ *  with no examples, and either a suggested word or an empty origin. */
+function isNotFoundResult(r: unknown): boolean {
+  const o = r as { suggestedWord?: string | null; meanings?: Array<{ examples?: unknown }>; etymology?: { originalWord?: string; sourceLanguage?: string } };
+  if (!Array.isArray(o?.meanings) || o.meanings.length !== 1) return false;
+  const ex = o.meanings[0]?.examples;
+  const noExamples = !Array.isArray(ex) || ex.every((e) => !String(e ?? "").trim());
+  if (!noExamples) return false;
+  return !!String(o.suggestedWord ?? "").trim() || (!String(o.etymology?.originalWord ?? "").trim() && !String(o.etymology?.sourceLanguage ?? "").trim());
+}
+
+const HEBREW_LETTER = /[א-ת]/;
+const sameWord = (a: string, b: string) => {
+  const cn = (s: string) => (s || "").normalize("NFD").replace(/\p{M}/gu, "").trim().toLowerCase();
+  return cn(a) === cn(b);
+};
+
+const SECOND_OPINION = {
+  uncertain: "A first pass was not sure about this word. You are the expert second opinion. If you KNOW it, including Mishnaic, Talmudic, Biblical and literary forms (e.g. 'כמדומים' = it seems, 'כמדומני' = I think), define it fully and set uncertain to false. Return uncertain only when you genuinely do not know the word.",
+  // Gat 2026-11-14: "ערגול" was answered "did you mean עיגול?" and nobody
+  // checked the first pass, because it was sure of itself.
+  notFound: "A first pass decided that the typed string is NOT a real word and answered 'not found' or 'did you mean'. You are the expert second opinion. If the typed string, exactly as typed, IS a real Hebrew word, define it fully under rule 1a and keep \"word\" exactly as typed. Rare, technical, professional, literary and crossword words are real words (e.g. 'ערגול' = rolling metal between heavy rollers, and shaping a piece of dough into a smooth ball). If it truly is not a word, answer with the same 1b or 1c shape. Never define a different, similar word in its place.",
+} as const;
+
+async function escalateUncertain(systemPrompt: string, userContent: string, word: string, uiLangCode: string, mode: keyof typeof SECOND_OPINION = "uncertain"): Promise<object | null> {
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -1140,7 +1164,7 @@ async function escalateUncertain(systemPrompt: string, userContent: string, word
         response_format: { type: "json_object" },
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "system", content: "A first pass was not sure about this word. You are the expert second opinion. If you KNOW it, including Mishnaic, Talmudic, Biblical and literary forms (e.g. 'כמדומים' = it seems, 'כמדומני' = I think), define it fully and set uncertain to false. Return uncertain only when you genuinely do not know the word." },
+          { role: "system", content: SECOND_OPINION[mode] },
           { role: "user", content: userContent },
         ],
       }),
@@ -1150,6 +1174,7 @@ async function escalateUncertain(systemPrompt: string, userContent: string, word
     const u = usageFrom(data);
     void logAiUsage({ feature: "define_escalate", model: SMART_MODEL, tokensIn: u.tokensIn, tokensOut: u.tokensOut });
     const parsed = JSON.parse(data.choices?.[0]?.message?.content ?? "{}") as Record<string, unknown>;
+    if (mode === "notFound" && (isNotFoundResult(parsed) || !sameWord(String(parsed.word ?? ""), word))) { console.info(`[define] second opinion: "${word}" is not a word for gpt-5.4 either`); return null; }
     if (isUncertainResult(parsed) || !Array.isArray(parsed.meanings) || !parsed.meanings.length) { console.info(`[define] escalate: gpt-5.4 not sure either for "${word}": ${JSON.stringify(parsed).slice(0, 300)}`); return null; }
     let out: Record<string, unknown> = parsed;
     let v = isDegenerate(out, word, uiLangCode);
@@ -1160,7 +1185,7 @@ async function escalateUncertain(systemPrompt: string, userContent: string, word
       v = isDegenerate(out, word, uiLangCode);
     }
     if (v.degenerate) { console.info(`[define] escalate: degenerate for "${word}": ${v.reason}`); return null; }
-    console.info(`[define] gpt-5.4 knew "${word}" (gpt-4o was not sure)`);
+    console.info(`[define] gpt-5.4 knew "${word}" (first pass: ${mode})`);
     return out;
   } catch {
     return null;
@@ -1780,6 +1805,10 @@ export async function POST(req: NextRequest) {
       if (cachedVerdict.degenerate) {
         console.warn(`Dropping corrupted cache entry [${hitKey}]: ${cachedVerdict.reason}`);
         await deleteCachedResult(hitKey);
+      } else if (HEBREW_LETTER.test(headWord) && isNotFoundResult(cached) && (cached as { nfChecked?: boolean }).nfChecked !== true) {
+        // A "not found" answer saved before the second opinion existed is
+        // asked again once (Gat 2026-11-14, "ערגול").
+        await deleteCachedResult(hitKey);
       } else {
         // Lazy backfill of the cross-language gloss for pre-existing cache
         // entries that predate the `translation` field. If the word is in a
@@ -2111,6 +2140,13 @@ export async function POST(req: NextRequest) {
               const better = await escalateUncertain(systemPrompt, userContent, word, uiLangCode);
               if (better) acceptedResult = better;
               else void noteUncertainWord(word, uiLangCode);
+            }
+            // A Hebrew word the first pass called "not a word" gets the same
+            // second opinion; the first answer stays when it agrees.
+            else if (HEBREW_LETTER.test(word) && isNotFoundResult(acceptedResult)) {
+              const better = await escalateUncertain(systemPrompt, userContent, word, uiLangCode, "notFound");
+              if (better) { (better as { correctedFrom?: string | null; suggestedWord?: string | null }).correctedFrom = null; (better as { suggestedWord?: string | null }).suggestedWord = null; acceptedResult = better; }
+              else (acceptedResult as { nfChecked?: boolean }).nfChecked = true;
             }
             // The etymology says where the word came from, never the definition
             // again. The repair is a second gpt-5.4 call of up to 20s, so the
