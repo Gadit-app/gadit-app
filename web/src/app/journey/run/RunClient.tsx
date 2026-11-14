@@ -27,7 +27,7 @@ import { startRun, THEMES, type RunHandle } from "./engine";
 
 type Copy = {
   title: string; demo: string; holds: (name: string, n: number) => string; goFree: string; how: string; go: string;
-  sparks: string; place: (p: number, of: number) => string; left: string; right: string; exit: string;
+  sparks: string; place: (p: number, of: number) => string; left: string; right: string; jump: string; exit: string;
   arrived: (name: string) => string; whichMeaning: string; whichWord: string; freed: string; held: (name: string) => string;
   nextWord: string; openGate: string; opened: string; freedCount: (n: number, of: number) => string; nextFort: string; backIndex: string;
   noneToday: string; fewWords: string; signIn: string; loading: string; failed: string; retry: string;
@@ -37,8 +37,8 @@ const COPY: Record<string, Copy> = {
   he: {
     title: "הדרך למבצר", demo: "משחק לדוגמה. הרצים האחרים הם דמויות לדוגמה, לא ילדים אמיתיים",
     holds: (name, n) => (n === 1 ? `${name} מחזיקה מילה אחת במבצר` : `${name} מחזיקה ${n} מילים במבצר`), goFree: "רוצו אל המבצר ושחררו אותן",
-    how: "מזיזים את הדמות ימינה ושמאלה, אוספים ניצוצות ועוקפים את המכשולים", go: "רצים",
-    sparks: "ניצוצות", place: (p, of) => `מקום ${p} מתוך ${of}`, left: "שמאלה", right: "ימינה", exit: "יציאה",
+    how: "מזיזים את הדמות ימינה ושמאלה, קופצים מעל המכשולים ואוספים ניצוצות", go: "רצים",
+    sparks: "ניצוצות", place: (p, of) => `מקום ${p} מתוך ${of}`, left: "שמאלה", right: "ימינה", jump: "קפיצה", exit: "יציאה",
     arrived: (name) => `הגעתם למבצר של ${name}`, whichMeaning: "מה הפירוש של המילה?", whichWord: "איזו מילה מתאימה לפירוש?",
     freed: "המילה שוחררה", held: (name) => `${name} עוד מחזיקה את המילה. היא תחכה לכם מחר, ולא איבדתם כלום`,
     nextWord: "למילה הבאה", openGate: "פותחים את המבצר", opened: "המבצר נפתח", freedCount: (n, of) => `שחררתם ${n} מתוך ${of} מילים`,
@@ -50,8 +50,8 @@ const COPY: Record<string, Copy> = {
   en: {
     title: "The road to the fortress", demo: "A sample game. The other runners are sample figures, not real children",
     holds: (name, n) => (n === 1 ? `${name} keeps one word in the fortress` : `${name} keeps ${n} words in the fortress`), goFree: "Run to the fortress and set them free",
-    how: "Move the runner left and right, collect sparks and go around the blocks", go: "Run",
-    sparks: "Sparks", place: (p, of) => `Place ${p} of ${of}`, left: "Left", right: "Right", exit: "Exit",
+    how: "Move the runner left and right, jump over the blocks and collect sparks", go: "Run",
+    sparks: "Sparks", place: (p, of) => `Place ${p} of ${of}`, left: "Left", right: "Right", jump: "Jump", exit: "Exit",
     arrived: (name) => `You reached the fortress of ${name}`, whichMeaning: "What does the word mean?", whichWord: "Which word fits the meaning?",
     freed: "The word is free", held: (name) => `${name} still keeps this word. It waits for you tomorrow, and nothing was lost`,
     nextWord: "Next word", openGate: "Open the fortress", opened: "The fortress is open", freedCount: (n, of) => `You freed ${n} of ${of} words`,
@@ -105,10 +105,12 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   const [picked, setPicked] = useState<string | null>(null);
   const [result, setResult] = useState<Result | null>(null);
   const [marks, setMarks] = useState<boolean[]>([]);
+  const [fading, setFading] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const runRef = useRef<RunHandle | null>(null);
   const shown = useRef({ part: -1, place: 0 });
+  const touch = useRef<{ x: number; y: number } | null>(null);
 
   const stageKey = user ? `gadit-journey-stage:${user.uid}` : "";
   const load = useCallback(async () => {
@@ -126,8 +128,12 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   const questions = useMemo(() => {
     if (!data) return [];
     const byId = new Map(data.cards.map((x) => [x.id, x]));
-    return data.todays.map((t) => { const card = byId.get(t.id); return card ? makeQuestion(card, t.format, data.cards, forChild) : null; }).filter((q): q is Question => !!q);
-  }, [data, forChild]);
+    // The sample game: every fortress keeps other words.
+    const todays = demo
+      ? Array.from({ length: 6 }, (_, i) => ({ id: data.cards[(stage * 6 + i) % data.cards.length].id, format: i % 2 ? "word" : "meaning" }))
+      : data.todays;
+    return todays.map((t) => { const card = byId.get(t.id); return card ? makeQuestion(card, t.format, data.cards, forChild) : null; }).filter((q): q is Question => !!q);
+  }, [data, forChild, demo, stage]);
 
   const monster = c.monsters[stage % c.monsters.length];
   const rivals = useMemo(() => (demo ? [{ name: `${c.sample} 1`, shirt: 0xe11d48 }, { name: `${c.sample} 2`, shirt: 0x7c3aed }] : []), [demo, c.sample]);
@@ -135,7 +141,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   const begin = () => {
     sfx.tap();
     setQueue(questions); setAt(0); setPicked(null); setResult(null); setMarks([]);
-    setSparks(0); setPlace(1); setPart(0); shown.current = { part: -1, place: 0 };
+    setSparks(0); setPlace(1); setPart(0); setFading(false); shown.current = { part: -1, place: 0 };
     setPhase("run");
   };
 
@@ -154,11 +160,13 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
         if (pct !== shown.current.part) { shown.current.part = pct; setPart(pct); }
         if (pl !== shown.current.place) { shown.current.place = pl; setPlace(pl); }
       },
-      onArrive: (r) => { setPlace(r.place); setSparks(r.sparks); sfx.unlock(); setPhase("fort"); },
+      onGate: () => { sfx.unlock(); setFading(true); },
+      onArrive: (r) => { setPlace(r.place); setSparks(r.sparks); setFading(false); setPhase("fort"); },
     }).then((h) => { if (gone) h.dispose(); else runRef.current = h; }).catch(() => { if (!gone) setPhase("fort"); });
     const key = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") { e.preventDefault(); runRef.current?.steer(-1); }
       if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") { e.preventDefault(); runRef.current?.steer(1); }
+      if (e.key === "ArrowUp" || e.key === " " || e.key === "w" || e.key === "W") { e.preventDefault(); runRef.current?.jump(); }
     };
     window.addEventListener("keydown", key);
     return () => { gone = true; window.removeEventListener("keydown", key); runRef.current?.dispose(); runRef.current = null; };
@@ -207,15 +215,26 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     return (
       <div className="run-stage" dir={dir}>
         <style>{RUN_CSS}</style>
-        <canvas ref={canvasRef} className="run-canvas" onPointerDown={(e) => runRef.current?.steer(e.clientX < window.innerWidth / 2 ? -1 : 1)} />
+        <canvas ref={canvasRef} className="run-canvas" onPointerDown={(e) => { touch.current = { x: e.clientX, y: e.clientY }; }}
+          onPointerUp={(e) => {
+            // A swipe up is a jump; a tap moves to the side that was tapped.
+            const t = touch.current; touch.current = null;
+            if (!t) return;
+            const dx = e.clientX - t.x, dy = e.clientY - t.y;
+            if (dy < -36 && Math.abs(dy) > Math.abs(dx)) runRef.current?.jump();
+            else if (Math.abs(dx) > 36) runRef.current?.steer(dx < 0 ? -1 : 1);
+            else runRef.current?.steer(e.clientX < window.innerWidth / 2 ? -1 : 1);
+          }} />
         <div className="run-hud">
           <span className="run-chip is-sparks"><b>✦</b> {sparks}</span>
           {rivals.length > 0 && <span className="run-chip">{c.place(place, rivals.length + 1)}</span>}
           <button type="button" className="run-chip is-exit" onClick={() => setPhase("intro")}>{c.exit}</button>
         </div>
         <div className="run-bar" aria-hidden="true"><i style={{ width: `${part}%` }} /></div>
+        <div className={`run-fade${fading ? " is-on" : ""}`} aria-hidden="true" />
         <div className="run-keys" dir="ltr">
           <button type="button" aria-label={c.left} onClick={() => runRef.current?.steer(-1)}>‹</button>
+          <button type="button" className="is-jump" aria-label={c.jump} onClick={() => runRef.current?.jump()}>{c.jump}</button>
           <button type="button" aria-label={c.right} onClick={() => runRef.current?.steer(1)}>›</button>
         </div>
       </div>
@@ -223,8 +242,9 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   }
 
   return (
-    <div className="wordbook jrn" dir={dir}>
+    <div className={`wordbook jrn run-room is-t${stage % THEMES.length}${phase === "intro" ? " is-out" : ""}`} dir={dir}>
       <style>{JRN_CSS + RUN_CSS}</style>
+      {phase !== "intro" && <><i className="run-torch is-a" aria-hidden="true" /><i className="run-torch is-b" aria-hidden="true" /></>}
       <div className="jrn-wrap">
         {!demo && !authLoading && !user && <p className="jrn-note">{c.signIn}</p>}
         {user && state === "loading" && !data && <p className="jrn-note">{c.loading}…</p>}
@@ -315,6 +335,27 @@ const RUN_CSS = `
 .run-keys { position: absolute; inset-inline: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); display: flex; justify-content: space-between; pointer-events: none; }
 .run-keys button { pointer-events: auto; width: 84px; height: 84px; border: 0; border-radius: 50%; background: rgba(255,255,255,.9); color: #0a7472; font-size: 56px; font-weight: 800; line-height: 1; cursor: pointer; box-shadow: 0 5px 0 rgba(10,116,114,.45); display: grid; place-items: center; padding: 0 0 8px; }
 .run-keys button:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(10,116,114,.45); }
+.run-keys button.is-jump { width: auto; min-width: 120px; padding: 0 26px; border-radius: 999px; font-size: 22px; align-self: end; height: 64px; }
+.run-room { min-height: 100dvh; --j-ink: #14202b; --j-soft: #47586a; --j-surface: #fffdf5; --j-line: #e2d6b8; --wall: #7d8a99; --trim: #d9534f; --sky: #bfe8ff; --land: #7cc46a;
+  background-color: var(--wall);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='64'%3E%3Cg fill='none' stroke='%23000' stroke-opacity='.2' stroke-width='3'%3E%3Cpath d='M0 1.5h96M0 33.5h96M24 0v32M72 0v32M0 32v32M48 32v32M96 32v32'/%3E%3C/g%3E%3C/svg%3E"); }
+.run-room.is-t1 { --wall: #c08a5c; --trim: #6b3fa0; --sky: #ffe2b0; --land: #e8c07a; }
+.run-room.is-t2 { --wall: #7fa9cc; --trim: #2f6fb0; --sky: #d8f1ff; --land: #f2fbff; }
+.run-room:not(.is-out) { background-image: radial-gradient(ellipse at 50% 28%, rgba(255,214,120,.28) 0, transparent 46%), radial-gradient(ellipse at 50% 40%, transparent 42%, rgba(0,0,0,.5) 100%), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='64'%3E%3Cg fill='none' stroke='%23000' stroke-opacity='.2' stroke-width='3'%3E%3Cpath d='M0 1.5h96M0 33.5h96M24 0v32M72 0v32M0 32v32M48 32v32M96 32v32'/%3E%3C/g%3E%3C/svg%3E"); animation: run-in .7s ease-out; }
+@keyframes run-in { from { filter: brightness(.25); } to { filter: none; } }
+.run-fade { position: absolute; inset: 0; background: #120d0a; opacity: 0; pointer-events: none; transition: opacity 1.3s ease-in .25s; }
+.run-fade.is-on { opacity: 1; }
+.run-torch { position: fixed; top: 20%; width: 16px; height: 86px; border-radius: 6px; background: linear-gradient(#3a2a1c 0 100%); display: none; }
+.run-torch.is-a { inset-inline-start: max(16px, calc(50% - 560px)); }
+.run-torch.is-b { inset-inline-end: max(16px, calc(50% - 560px)); }
+.run-torch::before { content: ""; position: absolute; left: 50%; bottom: 100%; width: 44px; height: 62px; margin-left: -22px; border-radius: 50% 50% 46% 46% / 64% 64% 36% 36%; background: radial-gradient(ellipse at 50% 78%, #fff3b0 0 22%, #ffb020 46%, #f0541a 74%, transparent 76%); transform-origin: 50% 100%; animation: run-flame .5s ease-in-out infinite alternate; }
+.run-torch::after { content: ""; position: absolute; left: 50%; bottom: 60%; width: 260px; height: 260px; margin: 0 0 0 -130px; border-radius: 50%; background: radial-gradient(circle, rgba(255,190,90,.35), transparent 68%); pointer-events: none; }
+@keyframes run-flame { from { transform: scale(1, 1) rotate(-3deg); } to { transform: scale(.9, 1.12) rotate(3deg); } }
+@media (min-width: 1040px) { .run-torch { display: block; } }
+@media (prefers-reduced-motion: reduce) { .run-torch::before, .run-room:not(.is-out) { animation: none; } }
+.run-room.is-out { background-image: linear-gradient(var(--sky) 0 58%, var(--land) 58% 100%); }
+.run-room .jrn-play { background: #fffdf5; border: 5px solid var(--trim); box-shadow: 0 10px 0 rgba(0,0,0,.22); }
+.run-room .jrn-option { background: #fff; }
 .run-monster { width: min(190px, 46vw); height: auto; }
 .run-cages { display: inline-flex; gap: 6px; flex-wrap: wrap; justify-content: center; direction: ltr; }
 .run-cages i { width: 22px; height: 28px; border-radius: 6px; background: #eef2f6; box-shadow: 0 0 0 2px #b8c4d0 inset; }

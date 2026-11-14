@@ -4671,7 +4671,13 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
               ))}
             </div>
           ) : null;
-          return <>{chooser}<div className="wb-play-sections">{sections.map((section) => {
+          // The new journey game is offered to the game testers first (Gadi 2026-11-14).
+          const testerNew = tester ? (
+            <a href="/journey/run" style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, margin: "0 auto 14px", maxWidth: 520, minHeight: 56, padding: "10px 20px", borderRadius: 18, background: "#0a7472", color: "#fff", fontWeight: 800, fontSize: 18, textDecoration: "none", textAlign: "center", boxShadow: "0 4px 0 #075452" }}>
+              {lang === "he" ? "🧪 חדש לבודקים: הדרך למבצר" : "🧪 New for testers: The road to the fortress"}
+            </a>
+          ) : null;
+          return <>{testerNew}{chooser}<div className="wb-play-sections">{sections.map((section) => {
             // When Kids Mode is on, filter to games we've curated for
             // younger players. The 5 notebook games always qualify
             // (auto-adapt from the child's own vocabulary); the 4
