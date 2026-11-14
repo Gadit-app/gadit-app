@@ -22,14 +22,14 @@ import { useKidsMode } from "@/lib/use-kids-mode";
 
 type Frame = "plain" | "silver" | "gold" | "rainbow" | "diamond";
 const FRAMES: Frame[] = ["plain", "silver", "gold", "rainbow", "diamond"];
-type CardView = { id: string; word: string; language: string; meaning: string; foundDay: string; stars: number; known: boolean; frame: Frame; dueDay: string; due: boolean };
-type Data = {
+export type CardView = { id: string; word: string; language: string; meaning: string; foundDay: string; stars: number; known: boolean; frame: Frame; dueDay: string; due: boolean };
+export type Data = {
   today: string; dailyMax: number; usedToday: number; starsToKnow: number; cards: CardView[];
   todays: Array<{ id: string; format: string | null }>; coins: number; frameCoins: Record<Frame, number>;
   summary: { index: number; started: number; fresh: number };
 };
-type Result = { correct: boolean; event: "practice" | "star" | "known" | "kept" | "again"; frameUp: Frame | null; card: CardView; coinsUp: number };
-type Question = { card: CardView; format: "meaning" | "word"; options: CardView[] };
+export type Result = { correct: boolean; event: "practice" | "star" | "known" | "kept" | "again"; frameUp: Frame | null; card: CardView; coinsUp: number };
+export type Question = { card: CardView; format: "meaning" | "word"; options: CardView[] };
 
 type Copy = {
   title: string; count: (n: number, of: number) => string; coins: string; signIn: string; loading: string; failed: string; retry: string;
@@ -67,7 +67,7 @@ const COPY: Record<string, Copy> = {
 };
 
 const shuffle = <T,>(a: T[]): T[] => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
-const zone = () => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"; } catch { return "UTC"; } };
+export const zone = () => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"; } catch { return "UTC"; } };
 const niceDay = (d: string, lang: string) => { try { return new Date(d + "T12:00:00Z").toLocaleDateString(lang, { day: "numeric", month: "long", year: "numeric" }); } catch { return d; } };
 
 /** The script a text is mostly written in (its first letter decides). */
@@ -92,7 +92,7 @@ const RUDE = /(?<!\p{L})(vulgar|obscene|profan\p{L}*|offensive|swear ?word|curse
 const isRude = (c: CardView) => RUDE.test(c.meaning);
 
 /** The question of one card: the card and two others that differ from it in both the word and the meaning. */
-function makeQuestion(card: CardView, format: string | null, all: CardView[], forChild: boolean): Question | null {
+export function makeQuestion(card: CardView, format: string | null, all: CardView[], forChild: boolean): Question | null {
   const others = shuffle(all.filter((c) => c.id !== card.id && c.word !== card.word && c.meaning !== card.meaning && !(forChild && isRude(c))));
   // The three answers are written in one script: a meaning in another
   // language gives the answer away (Gadi 2026-11-14). Among those, words of
@@ -110,7 +110,7 @@ function makeQuestion(card: CardView, format: string | null, all: CardView[], fo
 }
 
 /** A sample index for ?demo=1: what a child's collection looks like after a few months. Nothing is read or saved. */
-function demoData(): Data {
+export function demoData(): Data {
   const W: Array<[string, string, number, Frame | null]> = [
     ["שורש", "החלק של הצמח שנמצא באדמה ושותה ממנה מים", 3, "diamond"], ["מסע", "דרך ארוכה שעוברים ממקום למקום", 3, "rainbow"],
     ["אומץ", "הכוח לעשות דבר גם כשמפחדים", 3, "gold"], ["מפה", "ציור של מקום שמראה איפה כל דבר נמצא", 3, "gold"],
@@ -133,7 +133,7 @@ function demoData(): Data {
   };
 }
 /** What an answer would do, for the sample index only (the real rules are the scheduler's, on the server). */
-function demoResult(q: Question, right: boolean): Result {
+export function demoResult(q: Question, right: boolean): Result {
   const card = q.card;
   if (!right) return { correct: false, event: "again", frameUp: null, card, coinsUp: 0 };
   if (card.known) { const up = FRAMES[Math.min(FRAMES.length - 1, FRAMES.indexOf(card.frame) + 1)]; return { correct: true, event: "kept", frameUp: up !== card.frame ? up : null, card: { ...card, frame: up }, coinsUp: up !== card.frame ? 20 : 0 }; }
@@ -326,7 +326,7 @@ function Tiers({ frame, label }: { frame: Frame; label: string }) {
   );
 }
 
-const JRN_CSS = `
+export const JRN_CSS = `
 .jrn { --j-ink: var(--wb-ink, #14202b); --j-soft: var(--wb-ink-soft, #47586a); --j-surface: var(--surface, #fff); --j-line: var(--wb-border, #dfe5ea); --j-teal: #0a7472; }
 .jrn-wrap { max-width: 920px; margin-inline: auto; padding: 20px 16px 56px; display: grid; gap: 22px; color: var(--j-ink); }
 .jrn-head { display: grid; gap: 8px; justify-items: center; text-align: center; }
