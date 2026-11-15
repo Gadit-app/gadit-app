@@ -120,12 +120,15 @@ const getLangsWithDefinition = cache(async (word: string): Promise<string[]> => 
     const w = word.toLowerCase().trim();
     const refs = ALL_LANGS.map((l) => db.collection("cache").doc(`auto2_${l}_base_${w}`));
     const snaps = await db.getAll(...refs, { fieldMask: ["indexOk"] });
-    return ALL_LANGS.filter((_, i) => snaps[i]?.exists && snaps[i].get("indexOk") !== false);
+    return ALL_LANGS.filter((_, i) => snaps[i]?.exists && snaps[i].get("indexOk") === true);
   } catch (e) {
     console.error("word hreflang lookup failed:", e);
     return [];
   }
 });
+
+/** The engine's "no such word" answer, saved as a definition (Hebrew and English wording). */
+const NOT_FOUND_TEXT = /לא נמצא(ה|ו)? במילון|אינה מוכרת במילון|was not found in the dictionary|not appear to be a recognized/i;
 
 export async function generateMetadata(
   {
@@ -190,7 +193,11 @@ export async function generateMetadata(
     // is not generated for bots), so Google must not index an empty card.
     // A word vetted as gibberish or a private name (indexOk false) is
     // served but not indexed.
-    ...(preloaded && (preloaded as { indexOk?: unknown }).indexOk !== false ? {} : { robots: { index: false, follow: true } }),
+    // Indexed only once vetted (indexOk true, the weekly vet-words cron): a
+    // new definition waits up to a week, so a page that only says "the word
+    // was not found" is never open to Google in the meantime (Gadi
+    // 2026-11-15). Such a text is kept out even if it was vetted by mistake.
+    ...(preloaded && (preloaded as { indexOk?: unknown }).indexOk === true && !NOT_FOUND_TEXT.test(firstMeaning) ? {} : { robots: { index: false, follow: true } }),
     alternates: {
       canonical,
       ...(langs.length > 1
