@@ -52,6 +52,9 @@ export function guideListed(g: GuideDef, lang: string): boolean {
 }
 
 export const GUIDES: Record<string, GuideDef> = {
+  // "What is new" (Gadi 2026-11-15): a video alone, for a subscriber who has not been in for a while.
+  // It is listed once its video file is added here, e.g. video: { he: "/guide-video/whatsnew-he.mp4" }.
+  whatsnew: { id: "whatsnew", icon: "✨", color: "#D98324", titleKey: "whatsnew.title", descKey: "whatsnew.desc", steps: () => [], videoOnly: true },
   search: { id: "search", icon: "🔍", color: "#0EA5A5", titleKey: "search.title", descKey: "search.desc", steps: searchSteps, video: { he: "/guide-video/search-he.mp4" } },
   listen: { id: "listen", icon: "🔊", color: "#D98324", titleKey: "listen.title", descKey: "listen.desc", steps: listenSteps },
   niqqud: { id: "niqqud", icon: "🔡", color: "#0EA5A5", titleKey: "niqqud.title", descKey: "niqqud.desc", steps: niqqudSteps },
@@ -79,7 +82,7 @@ export const GUIDES: Record<string, GuideDef> = {
 export type GuideSection = { titleKey: string; guideIds: string[] };
 
 export const GUIDE_SECTIONS: GuideSection[] = [
-  { titleKey: "sec.start", guideIds: ["search", "listen", "niqqud", "save", "context", "wordpage", "extras", "kids"] },
+  { titleKey: "sec.start", guideIds: ["search", "whatsnew", "listen", "niqqud", "save", "context", "wordpage", "extras", "kids"] },
   { titleKey: "sec.family", guideIds: ["install", "addchild", "pair", "dashboard", "alerts", "homework", "ranks"] },
   { titleKey: "sec.learn", guideIds: ["reader", "say", "practice", "games", "duel"] },
   { titleKey: "sec.account", guideIds: ["account", "cancel"] },

@@ -89,7 +89,7 @@ type Dict = Record<string, Entry>;
 const G: Dict = {
   // ── page + chrome ──
   "help.title": { en: "Guides", he: "הדרכות" },
-  "help.sub": { en: "Every action in the app, in a short guide that shows exactly how. No narration, just the screens.", he: "כל פעולה באפליקציה, במדריך קצר שמראה בדיוק איך עושים אותה. בלי קריינות, רק המסכים." },
+  "help.sub": { en: "Every action in the app, in a short guide that shows exactly how.", he: "כל פעולה באפליקציה, במדריך קצר שמראה בדיוק איך עושים אותה." },
   "help.tourTitle": { en: "New here? Start with the basics", he: "חדשים כאן? מתחילים מהבסיס" },
   "help.tourSub": { en: "A quick guide to searching your first word.", he: "מדריך קצר לחיפוש המילה הראשונה שלכם." },
   "help.tourBtn": { en: "Start", he: "התחילו" },
@@ -419,6 +419,8 @@ const G: Dict = {
   "demo.dictWord": { en: "diligent", he: "diligent" },
 
   // ── guide: search ──
+  "whatsnew.title": { en: "What is new in Gadit", he: "מה חדש ב-Gadit" },
+  "whatsnew.desc": { en: "What was added in the last months, in under a minute.", he: "מה שנוסף בחודשים האחרונים, בפחות מדקה." },
   "search.title": { en: "Search a word", he: "איך מחפשים מילה" },
   "search.desc": { en: "Type or say a word and get all its meanings, examples, a picture and its origin.", he: "מקלידים או אומרים מילה ומקבלים את כל המשמעויות, דוגמאות, תמונה ומקור." },
   "search.s1": { en: "Type a word in the search box, or tap the mic and say it.", he: "מקלידים מילה בתיבת החיפוש, או לוחצים על המיקרופון ואומרים אותה." },
