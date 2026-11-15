@@ -90,6 +90,7 @@ import type { DuelQuestion } from "@/lib/duel";
 import { TF_COPY } from "@/components/play/GameTrueFalse";
 import { ensurePlayContent } from "@/lib/play-content/remote";
 import { LessonPath, type Lesson } from "@/components/play/learn/LessonPath";
+import { RightsLine } from "@/components/RightsLine";
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
 const LANGS = LANGUAGES;
@@ -4735,9 +4736,27 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
           // many children as possible see it and send notes (Gadi 2026-11-15). Its
           // texts exist in Hebrew and English only, so the other languages wait.
           const testerNew = lang === "he" || lang === "en" ? (
-            <a href="/journey/run" style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, margin: "0 auto 14px", maxWidth: 520, minHeight: 56, padding: "10px 20px", borderRadius: 18, background: "#0a7472", color: "#fff", fontWeight: 800, fontSize: 18, textDecoration: "none", textAlign: "center", boxShadow: "0 4px 0 #075452" }}>
-              {tester ? (lang === "he" ? "🧪 חדש לבודקים: הדרך למבצר" : "🧪 New for testers: The road to the fortress") : (lang === "he" ? "🏰 חדש: הדרך למבצר" : "🏰 New: The road to the fortress")}
-            </a>
+            // The fortress lives here, in Games, not in the top menu (Gadi and
+            // the council, 2026-11-15). The tile says what it is: a word game.
+            <div className="wb-fort-tile" dir={lang === "he" ? "rtl" : "ltr"}>
+              <style>{FORT_TILE_CSS}</style>
+              <a href="/journey/run" className="wb-fort-main">
+                <span className="wb-fort-art" aria-hidden="true">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- small local pictures */}
+                  <img src="/journey/thumbs/fortress1.webp" alt="" className="wb-fort-castle" />
+                  {/* eslint-disable-next-line @next/next/no-img-element -- small local pictures */}
+                  <img src="/journey/thumbs/monster1.webp" alt="" className="wb-fort-mon" />
+                </span>
+                <span className="wb-fort-text">
+                  {/* "New" comes down by itself after a month (the council, 2026-11-15). */}
+                  {(tester || FORT_IS_NEW) && <span className="wb-fort-new">{tester ? (lang === "he" ? "🧪 חדש לבודקים" : "🧪 New for testers") : (lang === "he" ? "חדש" : "New")}</span>}
+                  <b>{lang === "he" ? "הדרך למבצר" : "The road to the fortress"}</b>
+                  <small>{lang === "he" ? "משחק מילים: רצים אל המבצר ומשחררים את המילים שלכם" : "A word game: run to the fortress and set your words free"}</small>
+                </span>
+                <span className="wb-fort-go" aria-hidden="true">{lang === "he" ? "◀" : "▶"}</span>
+              </a>
+              <a href="/journey" className="wb-fort-cards">🃏 {lang === "he" ? "הקלפים שלי" : "My cards"}</a>
+            </div>
           ) : null;
           return <>{testerNew}{chooser}<div className="wb-play-sections">{sections.map((section) => {
             // When Kids Mode is on, filter to games we've curated for
@@ -4886,7 +4905,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
       </main>
 
       <footer className="wb-home-footer">
-        <span>© 2026 Gadit</span>
+        <RightsLine />
         <span className="gd-buy">·</span>
         <Link href={href("/pricing")} className="gd-buy">{v2(lang, "navPricing")}</Link>
         <span>·</span>
@@ -4898,3 +4917,25 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
     </div>
   );
 }
+
+/** "New" on the fortress tile until 2026-12-15 (checked once when the page loads). */
+const FORT_IS_NEW = typeof Date !== "undefined" && new Date().getTime() < Date.UTC(2026, 11, 15);
+
+/** The fortress tile at the top of Games (2026-11-15). */
+const FORT_TILE_CSS = `
+.wb-fort-tile { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; max-width: 620px; margin: 0 auto 16px; }
+.wb-fort-main { flex: 1 1 320px; display: flex; align-items: center; gap: 14px; min-height: 92px; padding: 10px 16px; border-radius: 20px; text-decoration: none; color: #fff;
+  background: radial-gradient(ellipse at 15% 120%, rgba(255,190,90,.45), transparent 60%), linear-gradient(105deg, #1f5a63 0%, #23525e 45%, #3a3f6e 100%);
+  box-shadow: 0 0 0 1px rgba(255,211,77,.4) inset, 0 8px 22px rgba(20,40,60,.25); }
+.wb-fort-main:hover { filter: brightness(1.06); }
+.wb-fort-art { position: relative; width: 96px; height: 72px; flex: none; }
+.wb-fort-castle { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 5px 6px rgba(0,0,0,.35)); }
+.wb-fort-mon { position: absolute; bottom: -4px; inset-inline-end: -6px; width: 38px; height: 38px; object-fit: contain; }
+.wb-fort-text { flex: 1; display: grid; gap: 2px; min-width: 0; text-align: start; }
+.wb-fort-text b { font-size: 19px; line-height: 1.25; }
+.wb-fort-text small { font-size: 13.5px; line-height: 1.4; color: #e3eef0; }
+.wb-fort-new { justify-self: start; padding: 1px 9px; border-radius: 999px; background: #ffd34d; color: #3b2a00; font-size: 11.5px; font-weight: 800; }
+.wb-fort-go { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(180deg, #ffe58a, #f5c542); color: #3b2a00; font-size: 15px; flex: none; box-shadow: 0 3px 0 #b88a00; }
+.wb-fort-cards { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; border-radius: 20px; background: #fff; color: #0a5c5a; font-weight: 700; text-decoration: none; box-shadow: 0 0 0 2px #bfe3e0 inset; }
+@media (max-width: 520px) { .wb-fort-cards { flex: 1 1 100%; } }
+`;

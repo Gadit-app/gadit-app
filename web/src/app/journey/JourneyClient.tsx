@@ -18,6 +18,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { buildable } from "@/lib/journey/build";
 import { BuildTiles, Lesson, Say, PARTS_CSS } from "./parts";
+import { GaditBrand } from "@/components/BrandMark";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { sfx } from "@/lib/game-sfx";
@@ -53,35 +54,35 @@ type Copy = {
   star: (n: number, of: number) => string; known: string; kept: string; again: string; practice: string; frameUp: (f: string) => string; coinsUp: (n: number) => string;
   frames: Record<Frame, string>; sections: { index: string; started: string; fresh: string };
   opensTomorrow: string; ready: string; found: (d: string) => string; back: string; worth: (n: number) => string; top: string; demo: string;
-  run: string; plain: string; waitIn: (n: number) => string; shop: string; map: string; fortN: (n: number) => string; close: string;
+  run: string; plain: string; plainMain: string; fortSmall: string; waitIn: (n: number) => string; shop: string; map: string; fortN: (n: number) => string; close: string; backGames: string;
 };
 const COPY: Record<string, Copy> = {
   he: {
-    title: "האינדקס שלי", count: (n, of) => `${n} מתוך ${of} מילים באינדקס`, coins: "מטבעות", signIn: "כדי לראות את האינדקס צריך להתחבר",
-    loading: "פותחים את האינדקס", failed: "האינדקס לא נטען", retry: "לנסות שוב",
+    title: "הקלפים שלי", count: (n, of) => `${n} מתוך ${of} מילים כבר באוסף`, coins: "מטבעות", signIn: "כדי לראות את הקלפים צריך להתחבר",
+    loading: "פותחים את הקלפים", failed: "הקלפים לא נטענו", retry: "לנסות שוב",
     todayTitle: "הקלפים של היום", todayCount: (n) => (n === 1 ? "קלף אחד מחכה" : `${n} קלפים מחכים`), start: "מתחילים",
     doneToday: "סיימתם להיום. הקלפים הבאים מחכים למחר", fewWords: "כשיהיו לכם שלוש מילים, הקלפים ייפתחו", noWords: "כל מילה שתחפשו ב-Gadit תהפוך כאן לקלף",
-    whichMeaning: "מה הפירוש של המילה?", whichWord: "איזו מילה מתאימה לפירוש?", whichOdd: "איזו מילה יוצאת דופן?", whichSense: "המשפט הזה הגיוני?", senseYes: "הגיוני", senseNo: "לא הגיוני", whichBuild: "הרכיבו את המילה שמתאימה לפירוש", hear: "להאזנה", lesson: "כך זה נכון", next: "לקלף הבא", finish: "חזרה לאינדקס", of: (n, of) => `${n} מתוך ${of}`,
-    star: (n, of) => `כוכב ${n} מתוך ${of}`, known: "המילה נכנסה לאינדקס", kept: "זכרתם", again: "הקלף חוזר מחר. לא איבדתם כלום", practice: "תרגול",
+    whichMeaning: "מה הפירוש של המילה?", whichWord: "איזו מילה מתאימה לפירוש?", whichOdd: "איזו מילה יוצאת דופן?", whichSense: "המשפט הזה הגיוני?", senseYes: "הגיוני", senseNo: "לא הגיוני", whichBuild: "הרכיבו את המילה שמתאימה לפירוש", hear: "להאזנה", lesson: "כך זה נכון", next: "לקלף הבא", finish: "חזרה לקלפים שלי", of: (n, of) => `${n} מתוך ${of}`,
+    star: (n, of) => `כוכב ${n} מתוך ${of}`, known: "המילה נכנסה לאוסף", kept: "זכרתם", again: "הקלף חוזר מחר. לא איבדתם כלום", practice: "תרגול",
     frameUp: (f) => `מסגרת חדשה: ${f}`, coinsUp: (n) => `+${n} מטבעות`,
     frames: { plain: "רגילה", silver: "כסף", gold: "זהב", rainbow: "קשת", diamond: "יהלום" },
-    sections: { index: "באינדקס", started: "בדרך לאינדקס", fresh: "קלפים סגורים" },
-    opensTomorrow: "נפתח מחר", ready: "מוכן לפתיחה", found: (d) => `נמצאה ב-${d}`, back: "חזרה", worth: (n) => `שווה ${n} מטבעות`, top: "המסגרת הכי גבוהה: יהלום", demo: "אינדקס לדוגמה, כך הוא נראה אחרי כמה חודשים",
-    run: "רצים אל המבצר", plain: "או תרגול רגיל, בלי המבצר", waitIn: (n) => (n === 1 ? "קלף אחד מחכה לכם במבצר" : `${n} קלפים מחכים לכם במבצר`),
+    sections: { index: "באוסף", started: "בדרך לאוסף", fresh: "קלפים סגורים" },
+    opensTomorrow: "נפתח מחר", ready: "מוכן לפתיחה", found: (d) => `נמצאה ב-${d}`, back: "חזרה", worth: (n) => `שווה ${n} מטבעות`, top: "המסגרת הכי גבוהה: יהלום", demo: "קלפים לדוגמה, כך הם נראים אחרי כמה חודשים",
+    run: "רצים אל המבצר", plain: "אותן שאלות, בלי תלת מימד (למכשיר איטי)", plainMain: "מתחילים את הקלפים", fortSmall: "או רצים אל המבצר בתלת מימד", backGames: "חזרה למשחקים", waitIn: (n) => (n === 1 ? "קלף אחד מחכה לכם במבצר" : `${n} קלפים מחכים לכם במבצר`),
     shop: "החנות", map: "המפה שלי", fortN: (n) => `מבצר ${n}`, close: "סגירה",
   },
   en: {
-    title: "My index", count: (n, of) => `${n} of ${of} words in the index`, coins: "coins", signIn: "Sign in to see your index",
-    loading: "Opening the index", failed: "The index did not load", retry: "Try again",
+    title: "My cards", count: (n, of) => `${n} of ${of} words in your collection`, coins: "coins", signIn: "Sign in to see your cards",
+    loading: "Opening your cards", failed: "Your cards did not load", retry: "Try again",
     todayTitle: "Today's cards", todayCount: (n) => (n === 1 ? "One card is waiting" : `${n} cards are waiting`), start: "Start",
     doneToday: "Done for today. The next cards wait for tomorrow", fewWords: "The cards open once you have three words", noWords: "Every word you look up in Gadit becomes a card here",
-    whichMeaning: "What does the word mean?", whichWord: "Which word fits the meaning?", whichOdd: "Which word does not belong?", whichSense: "Does this sentence make sense?", senseYes: "It makes sense", senseNo: "It does not", whichBuild: "Build the word that fits the meaning", hear: "Listen", lesson: "This is the right one", next: "Next card", finish: "Back to the index", of: (n, of) => `${n} of ${of}`,
-    star: (n, of) => `Star ${n} of ${of}`, known: "The word is in your index", kept: "You remembered", again: "The card comes back tomorrow. Nothing was lost", practice: "Practice",
+    whichMeaning: "What does the word mean?", whichWord: "Which word fits the meaning?", whichOdd: "Which word does not belong?", whichSense: "Does this sentence make sense?", senseYes: "It makes sense", senseNo: "It does not", whichBuild: "Build the word that fits the meaning", hear: "Listen", lesson: "This is the right one", next: "Next card", finish: "Back to my cards", of: (n, of) => `${n} of ${of}`,
+    star: (n, of) => `Star ${n} of ${of}`, known: "The word is in your collection", kept: "You remembered", again: "The card comes back tomorrow. Nothing was lost", practice: "Practice",
     frameUp: (f) => `New frame: ${f}`, coinsUp: (n) => `+${n} coins`,
     frames: { plain: "Plain", silver: "Silver", gold: "Gold", rainbow: "Rainbow", diamond: "Diamond" },
-    sections: { index: "In the index", started: "On the way to the index", fresh: "Closed cards" },
-    opensTomorrow: "Opens tomorrow", ready: "Ready to open", found: (d) => `Found on ${d}`, back: "Back", worth: (n) => `Worth ${n} coins`, top: "The highest frame: Diamond", demo: "A sample index, as it looks after a few months",
-    run: "Run to the fortress", plain: "Or plain practice, without the fortress", waitIn: (n) => (n === 1 ? "One card waits for you in the fortress" : `${n} cards wait for you in the fortress`),
+    sections: { index: "In the collection", started: "On the way to the collection", fresh: "Closed cards" },
+    opensTomorrow: "Opens tomorrow", ready: "Ready to open", found: (d) => `Found on ${d}`, back: "Back", worth: (n) => `Worth ${n} coins`, top: "The highest frame: Diamond", demo: "Sample cards, as they look after a few months",
+    run: "Run to the fortress", plain: "Same questions, without 3D (for a slow device)", plainMain: "Start the cards", fortSmall: "Or run to the fortress in 3D", backGames: "Back to games", waitIn: (n) => (n === 1 ? "One card waits for you in the fortress" : `${n} cards wait for you in the fortress`),
     shop: "The shop", map: "My map", fortN: (n) => `Fortress ${n}`, close: "Close",
   },
 };
@@ -303,6 +304,10 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
   }, [open]);
   const stage = data?.stage ?? 0;
   const road = data?.roads?.[String(stage)] ?? stage % 3;
+  // A device with no 3D (no WebGL) or very little memory gets the same
+  // questions without 3D as the main button (the council, 2026-11-15).
+  const [light, setLight] = useState(false);
+  useEffect(() => { const id = window.setTimeout(() => setLight(weakDevice()), 0); return () => window.clearTimeout(id); }, []);
 
   return (
     <div className={`wordbook jrn${q ? "" : " idx"}`} dir={dir}>
@@ -355,6 +360,10 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
                 today's cards, and the collection, which scrolls inside itself
                 only when it is larger than the screen. */}
             <header className="idx-top">
+              <div className="idx-backrow">
+                <Link className="jrn-back idx-back" href="/play"><span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span> {c.backGames}</Link>
+                <GaditBrand tone="dark" />
+              </div>
               <div className="idx-titles">
                 <h1 className="jrn-title">{c.title}</h1>
                 <div className="idx-count">{c.count(data.summary.index, total)}</div>
@@ -381,8 +390,17 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
               </div>
               {questions.length > 0 && (
                 <div className="idx-hero-go">
-                  <Link className="idx-run" href={demo ? "/journey/run?demo=1" : "/journey/run"}>{c.run} <span aria-hidden="true">{dir === "rtl" ? "◀" : "▶"}</span></Link>
-                  <button type="button" className="idx-plain" onClick={start}>{c.plain}</button>
+                  {light ? (
+                    <>
+                      <button type="button" className="idx-run" onClick={start}>{c.plainMain} <span aria-hidden="true">{dir === "rtl" ? "◀" : "▶"}</span></button>
+                      <Link className="idx-plain" href={demo ? "/journey/run?demo=1" : "/journey/run"}>{c.fortSmall}</Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link className="idx-run" href={demo ? "/journey/run?demo=1" : "/journey/run"}>{c.run} <span aria-hidden="true">{dir === "rtl" ? "◀" : "▶"}</span></Link>
+                      <button type="button" className="idx-plain" onClick={start}>{c.plain}</button>
+                    </>
+                  )}
                 </div>
               )}
             </section>
@@ -440,6 +458,16 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
   );
 }
 
+/** No WebGL, or a device that reports under 2 GB of memory: the 3D run would stutter or stay blank. */
+function weakDevice(): boolean {
+  try {
+    const cv = document.createElement("canvas");
+    if (!(cv.getContext("webgl2") || cv.getContext("webgl"))) return true;
+  } catch { return true; }
+  const mem = (navigator as Navigator & { deviceMemory?: number }).deviceMemory;
+  return typeof mem === "number" && mem < 2;
+}
+
 /** One card of the collection, as it lies on the shelf. */
 function CardFace({ card, c, of, onOpen }: { card: CardView; c: Copy; of: number; onOpen: () => void }) {
   return (
@@ -474,6 +502,9 @@ const IDX_CSS = `
 .idx .jrn-wrap { max-width: 1180px; height: 100dvh; padding-block: 12px; display: grid; grid-template-rows: auto auto minmax(0, auto); align-content: center; gap: 14px; overflow: hidden; color: inherit; }
 .idx .jrn-note { color: #d4e2e6; }
 .idx-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.idx-backrow { flex-basis: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.idx .idx-back { min-height: 34px; padding: 4px 12px; font-size: 14px; background: rgba(255,255,255,.12); color: #e3f4f2; box-shadow: 0 0 0 1px rgba(255,255,255,.2) inset; }
+.idx .idx-back:hover { background: rgba(255,255,255,.2); }
 .idx-titles { display: grid; gap: 3px; min-width: 0; }
 .idx .jrn-title { font-size: clamp(22px, 3.2vw, 30px); text-align: start; }
 .idx-count { font-size: 14.5px; font-weight: 700; color: #cfe0e3; }
@@ -500,6 +531,7 @@ const IDX_CSS = `
 .idx-run { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 50px; padding: 8px 26px; border-radius: 999px; background: linear-gradient(180deg, #ffe58a, #f5c542); color: #3b2a00; font-weight: 800; font-size: 18px; text-decoration: none; box-shadow: 0 4px 0 #b88a00, 0 0 24px rgba(255,211,77,.35); white-space: nowrap; }
 .idx-run:hover { filter: brightness(1.05); }
 .idx-plain { border: 0; background: none; padding: 2px 6px; color: #cfe0e3; font: inherit; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+button.idx-run { border: 0; font: inherit; font-weight: 800; font-size: 18px; cursor: pointer; }
 /* The collection: an album of cards. It scrolls inside itself only when larger than the screen. */
 .idx-shelf { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: rgba(255,255,255,.28) transparent; scrollbar-width: thin; display: grid; align-content: start; gap: 14px; padding: 4px 4px 8px; }
 .idx-group { display: grid; gap: 8px; min-width: 0; align-content: start; }

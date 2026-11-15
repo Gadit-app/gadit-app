@@ -1445,10 +1445,10 @@ function ProgressCard({ c, t, lang, onLearnSaved }: { c: ChildProgress; t: (type
             const he = lang === "he";
             return (
               <div className="fam-dash-recent">
-                <div className="fam-dash-recent-label">{he ? `הדרך למבצר: ${j.index} מילים באינדקס` : `The road to the fortress: ${j.index} words in the index`}</div>
+                <div className="fam-dash-recent-label">{he ? `הדרך למבצר: ${j.index} מילים באוסף` : `The road to the fortress: ${j.index} words in the collection`}</div>
                 {j.knownWeek.length > 0 && (
                   <>
-                    <div className="fam-dash-recent-label">{he ? "נכנסו לאינדקס השבוע" : "Entered the index this week"}</div>
+                    <div className="fam-dash-recent-label">{he ? "נכנסו לאוסף השבוע" : "Entered the collection this week"}</div>
                     <div className="fam-dash-chips">{j.knownWeek.map((w, i) => <span key={i} className="fam-dash-chip">{w}</span>)}</div>
                   </>
                 )}

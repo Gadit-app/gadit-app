@@ -172,6 +172,8 @@ export async function startHall(canvas: HTMLCanvasElement, o: HallOptions): Prom
   ro.observe(canvas);
   size();
 
+  // A device set to reduce motion: no flicker, no swinging, no breathing (the council, 2026-11-15).
+  const calm = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
   const frame2 = (now: number) => {
     if (stopped) return;
     raf = requestAnimationFrame(frame2);
@@ -179,24 +181,25 @@ export async function startHall(canvas: HTMLCanvasElement, o: HallOptions): Prom
     last = now; clock += dt;
 
     for (const t of torches) {
-      const f = 0.82 + Math.sin(clock * 9 + t.seed) * 0.1 + Math.sin(clock * 23 + t.seed * 2) * 0.08;
+      const f = calm ? 0.9 : 0.82 + Math.sin(clock * 9 + t.seed) * 0.1 + Math.sin(clock * 23 + t.seed * 2) * 0.08;
       t.light.intensity = 26 * f;
       t.flame.scale.set(1, 0.9 + f * 0.25, 1);
     }
     // The monster breathes; for a moment after a word goes free it looks sad.
     sad = Math.max(0, sad - dt);
     const down = opening >= 0 ? 1 : Math.min(1, sad * 1.6);
-    mon.scale.set(1 + Math.sin(clock * 2.2) * 0.02 - down * 0.06, 1 + Math.sin(clock * 2.2 + 1) * 0.03 - down * 0.12, 1);
+    const br = calm ? 0 : 1;
+    mon.scale.set(1 + Math.sin(clock * 2.2) * 0.02 * br - down * 0.06, 1 + Math.sin(clock * 2.2 + 1) * 0.03 * br - down * 0.12, 1);
     for (const p of pupils) p.position.y = 1.85 - down * 0.14;
     mouth.rotation.z = 0; mouth.scale.x = 1 - down * 0.35;
 
     for (let i = 0; i < cages.length; i++) {
       const c = cages[i];
-      c.orb.rotation.y = clock * 1.6;
+      c.orb.rotation.y = calm ? 0 : clock * 1.6;
       if (c.state === "shut") {
-        const swing = i === nowAt ? Math.sin(clock * 3) * 0.12 : Math.sin(clock * 1.1 + i) * 0.03;
+        const swing = calm ? 0 : i === nowAt ? Math.sin(clock * 3) * 0.12 : Math.sin(clock * 1.1 + i) * 0.03;
         c.group.rotation.z = swing;
-        const s = i === nowAt ? 1.12 + Math.sin(clock * 5) * 0.1 : 1;
+        const s = i === nowAt ? (calm ? 1.12 : 1.12 + Math.sin(clock * 5) * 0.1) : 1;
         c.orb.scale.setScalar(s);
       } else if (c.state === "held") {
         c.shake = Math.max(0, c.shake - dt);

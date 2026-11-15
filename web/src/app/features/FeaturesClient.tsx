@@ -26,6 +26,7 @@ import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { useAuth } from "@/lib/auth-context";
 import { useHref } from "@/lib/href";
 import { GaditDemoAnimation } from "@/components/design/GaditDemoAnimation";
+import { RightsLine } from "@/components/RightsLine";
 
 // Footer "Home" link label, every UI language.
 const FOOTER_HOME_COPY: Record<Lang, string> = {
@@ -2949,7 +2950,7 @@ export function FeaturesPage() {
       <GadVerbStamp />
 
       <footer className="wb-home-footer">
-        <span>© 2026 Gadit</span>
+        <RightsLine />
         <span>·</span>
         <Link href={href("/")}>{FOOTER_HOME_COPY[lang] ?? FOOTER_HOME_COPY.en}</Link>
         <span>·</span>

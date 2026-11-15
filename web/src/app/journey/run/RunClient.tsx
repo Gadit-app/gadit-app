@@ -18,6 +18,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { GaditBrand } from "@/components/BrandMark";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { sfx } from "@/lib/game-sfx";
@@ -49,7 +50,7 @@ const COPY: Record<string, Copy> = {
     arrived: (name) => `הגעתם למבצר של ${name}`, whichMeaning: "מה הפירוש של המילה?", whichWord: "איזו מילה מתאימה לפירוש?", whichOdd: "איזו מילה יוצאת דופן?", whichSense: "המשפט הזה הגיוני?", senseYes: "הגיוני", senseNo: "לא הגיוני", whichBuild: "הרכיבו את המילה שמתאימה לפירוש", hear: "להאזנה", lesson: "כך זה נכון", second: "עוד ניסיון אחד למילה שנשארה בכלוב", newToday: "המילים החדשות שמחכות במבצר היום",
     freed: "המילה שוחררה", held: (name) => `${name} עוד מחזיקה את המילה. היא תחכה לכם מחר, ולא איבדתם כלום`,
     nextWord: "למילה הבאה", openGate: "פותחים את המבצר", opened: "המבצר נפתח", freedCount: (n, of) => `שחררתם ${n} מתוך ${of} מילים`,
-    nextFort: "למבצר הבא", backIndex: "חזרה לאינדקס",
+    nextFort: "למבצר הבא", backIndex: "חזרה לקלפים שלי",
     stillHolds: (name, n) => (n === 1 ? `${name} עוד מחזיקה מילה אחת` : `${name} עוד מחזיקה ${n} מילים`), waitTomorrow: "הן יחכו לכם מחר במבצר הזה, ולא איבדתם כלום", alsoNow: (names) => `גם רצים עכשיו אל המבצר שלהם: ${names}`,
     earlierToday: (names) => `מוקדם יותר היום רצו כאן: ${names}`, worldToday: (n) => `היום ילדים שחררו יחד ${n.toLocaleString("he")} מילים`,
     tomorrow: "במבצר הבא מחכה מפלצת חדשה", pickRoad: "באיזו דרך רצים אליה?", picked: (name) => `בחרתם: ${name}`, roads: ["דרך היער", "דרך המדבר", "דרך הקרח"],
@@ -66,7 +67,7 @@ const COPY: Record<string, Copy> = {
     arrived: (name) => `You reached the fortress of ${name}`, whichMeaning: "What does the word mean?", whichWord: "Which word fits the meaning?", whichOdd: "Which word does not belong?", whichSense: "Does this sentence make sense?", senseYes: "It makes sense", senseNo: "It does not", whichBuild: "Build the word that fits the meaning", hear: "Listen", lesson: "This is the right one", second: "One more try for a word still in its cage", newToday: "The new words that wait in the fortress today",
     freed: "The word is free", held: (name) => `${name} still keeps this word. It waits for you tomorrow, and nothing was lost`,
     nextWord: "Next word", openGate: "Open the fortress", opened: "The fortress is open", freedCount: (n, of) => `You freed ${n} of ${of} words`,
-    nextFort: "To the next fortress", backIndex: "Back to the index",
+    nextFort: "To the next fortress", backIndex: "Back to my cards",
     stillHolds: (name, n) => (n === 1 ? `${name} still keeps one word` : `${name} still keeps ${n} words`), waitTomorrow: "They wait for you tomorrow in this fortress, and nothing was lost", alsoNow: (names) => `Also running to their own fortress now: ${names}`,
     earlierToday: (names) => `Earlier today these ran here: ${names}`, worldToday: (n) => `Today children freed ${n.toLocaleString("en")} words together`,
     tomorrow: "A new monster waits in the next fortress", pickRoad: "Which road will you take to it?", picked: (name) => `You chose: ${name}`, roads: ["The forest road", "The desert road", "The ice road"],
@@ -409,6 +410,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
             {/* The way back at the top (Gadi 2026-11-15). */}
             <div className="run-intro-top">
               <Link className="jrn-back" href={demo ? "/journey?demo=1" : "/journey"}><span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span> {c.backIndex}</Link>
+              <GaditBrand />
               {demo && <span className="jrn-demo">{c.demo}</span>}
             </div>
             <h1 className="jrn-title">{c.title}</h1>

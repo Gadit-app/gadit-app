@@ -32,6 +32,7 @@ import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { ShareButton, APP_SHARE_COPY } from "@/components/ShareButton";
 import { StartFreeCTA } from "@/components/StartFreeCTA";
 import { SCHOOLS_TIERS, SCHOOLS_TIER_LIST, studentsUpTo, type SchoolsTierKey } from "@/lib/schools-prices";
+import { RightsLine } from "@/components/RightsLine";
 
 // Same languages as HomeClient — duplicated rather than refactored so
 // the topbar on /schools mirrors the homepage exactly without coupling
@@ -1705,7 +1706,7 @@ function SchoolsLanding({ standalone = false }: { standalone?: boolean } = {}) {
       </section>
 
       <footer className="wb-home-footer">
-        <span>© 2026 Gadit</span>
+        <RightsLine />
         <span>·</span>
         <Link href={href("/pricing")}>{v2(lang, "footerPricing")}</Link>
         <span>·</span>

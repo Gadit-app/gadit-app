@@ -33,6 +33,7 @@ import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { LANGUAGES, langNameIn } from "@/lib/i18n";
 import { toggleLangGroup } from "@/lib/lang-groups";
 import { LangSearchList } from "@/components/LangSearch";
+import { RightsLine } from "@/components/RightsLine";
 
 // Code-split off the anonymous marketing homepage's critical bundle (Gadi
 // 2026-09-23 PageSpeed pass): AppearancePicker + KidsGameHeader render only
@@ -486,7 +487,7 @@ export function HomePage() {
       <GadVerbStamp />
 
       <footer className="wb-home-footer">
-        <span>© 2026 Gadit</span>
+        <RightsLine />
         <span className="gd-buy">·</span>
         <Link href={href("/pricing")} className="gd-buy">{c.pricing}</Link>
         <span>·</span>

@@ -22,6 +22,8 @@ import { InstallPwaPrompt } from "@/components/InstallPwaPrompt";
 import { RefCapture } from "@/components/RefCapture";
 import { VoiceAssistant } from "@/components/VoiceAssistant";
 import { GuideOverlay } from "@/components/GuideOverlay";
+import { HelpChat } from "@/components/HelpChat";
+import { BrandMark } from "@/components/BrandMark";
 import { KidRouteGuard } from "@/components/KidRouteGuard";
 import { TwaInit } from "@/components/TwaInit";
 import { NativeAppBridge } from "@/components/NativeAppBridge";
@@ -505,6 +507,10 @@ export default async function RootLayout({
               {/* Game testers' 🧪 note button (Gadi 2026-11-02), testers only. */}
               <TesterFab />
               <VoiceAssistant />
+              {/* The help assistant (2026-11-15): on only where config/helpChat says so. */}
+              <HelpChat />
+              {/* The Gadit logo and the rights line on every page without a header logo (2026-11-15). */}
+              <BrandMark />
               <GuideOverlay />
               {!iosApp && <InstallPwaPrompt />}
               {/* GA4 (G-28987K226D). Inside AuthProvider: it waits for the

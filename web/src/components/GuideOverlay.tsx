@@ -31,7 +31,10 @@ export function GuideOverlay() {
     // A same-tab in-app navigation that adds ?guide= (e.g. back/forward) should
     // also open it.
     window.addEventListener("popstate", readFromUrl);
-    return () => window.removeEventListener("popstate", readFromUrl);
+    // The help assistant opens a guide over the page it is on (2026-11-15).
+    const onOpen = (e: Event) => { const g = (e as CustomEvent<string>).detail; if (typeof g === "string" && getGuide(g)) setId(g); };
+    window.addEventListener("gadit:open-guide", onOpen);
+    return () => { window.removeEventListener("popstate", readFromUrl); window.removeEventListener("gadit:open-guide", onOpen); };
   }, []);
 
   const g = getGuide(id);

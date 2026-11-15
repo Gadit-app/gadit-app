@@ -23,6 +23,7 @@ import { useLang } from "@/lib/lang-context";
 import { JRN_CSS, demoData, zone, type Data } from "../JourneyClient";
 import { monsterNames, roadNames } from "../run/RunClient";
 import { THEMES } from "../run/engine";
+import { GaditBrand } from "@/components/BrandMark";
 
 const TREES_PER_ISLAND = 6;
 const AHEAD = 2;
@@ -30,18 +31,18 @@ const TREE = ["🌲", "🌵", "❄️"];
 
 const COPY = {
   he: {
-    title: "המפה שלי", trees: (n: number) => (n === 1 ? "מילה אחת באינדקס שתלה עץ אחד בעולם שלכם" : `${n} מילים באינדקס שתלו ${n} עצים בעולם שלכם`),
+    title: "המפה שלי", trees: (n: number) => (n === 1 ? "מילה אחת באוסף שתלה עץ אחד בעולם שלכם" : `${n} מילים באוסף שתלו ${n} עצים בעולם שלכם`),
     none: "כל מילה שתדעו תשתול עץ בעולם שלכם", fort: (n: number) => `מבצר ${n}`, here: "אתם כאן", opened: "נפתח", locked: "נעול",
     friend: (name: string) => `${name} כבר חברה שלכם`, waits: (name: string) => `${name} מחכה לכם`, later: "מחכה בהמשך הדרך",
     treesHere: (n: number) => (n === 1 ? "עץ אחד נשתל כאן" : `${n} עצים נשתלו כאן`),
-    run: "רצים אל המבצר", back: "חזרה לאינדקס", signIn: "כדי לראות את המפה צריך להתחבר", loading: "פורשים את המפה", failed: "המפה לא נטענה", retry: "לנסות שוב",
+    run: "רצים אל המבצר", back: "חזרה לקלפים שלי", signIn: "כדי לראות את המפה צריך להתחבר", loading: "פורשים את המפה", failed: "המפה לא נטענה", retry: "לנסות שוב",
   },
   en: {
-    title: "My map", trees: (n: number) => (n === 1 ? "One word in your index planted one tree in your world" : `${n} words in your index planted ${n} trees in your world`),
+    title: "My map", trees: (n: number) => (n === 1 ? "One word in your collection planted one tree in your world" : `${n} words in your collection planted ${n} trees in your world`),
     none: "Every word you know will plant a tree in your world", fort: (n: number) => `Fortress ${n}`, here: "You are here", opened: "Opened", locked: "Locked",
     friend: (name: string) => `${name} is your friend now`, waits: (name: string) => `${name} waits for you`, later: "Further along the road",
     treesHere: (n: number) => (n === 1 ? "One tree planted here" : `${n} trees planted here`),
-    run: "Run to the fortress", back: "Back to the index", signIn: "Sign in to see your map", loading: "Unrolling the map", failed: "The map did not load", retry: "Try again",
+    run: "Run to the fortress", back: "Back to my cards", signIn: "Sign in to see your map", loading: "Unrolling the map", failed: "The map did not load", retry: "Try again",
   },
 };
 
@@ -87,6 +88,7 @@ export function MapClient({ demo = false }: { demo?: boolean }) {
             <header className="jrn-head map-head">
               <div className="map-top">
                 <Link className="jrn-back" href={demo ? "/journey?demo=1" : "/journey"}><span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span> {c.back}</Link>
+                <GaditBrand tone="dark" />
                 <Link className="jrn-btn map-run" href={demo ? "/journey/run?demo=1" : "/journey/run"}>{c.run}</Link>
               </div>
               <h1 className="jrn-title">{c.title}</h1>

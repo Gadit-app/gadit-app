@@ -36,6 +36,7 @@ import {
 } from "./primitives";
 import { LangSwitcher } from "./LangSwitcher";
 import VoiceInput from "@/components/VoiceInput";
+import { RightsLine } from "@/components/RightsLine";
 
 type Script = "latin" | "he" | "ar";
 
@@ -729,7 +730,7 @@ export function HomeFooter() {
           borderTop: "1px solid oklch(1 0 0 / 0.04)",
         }}
       >
-        <span>© 2026 Gadit</span>
+        <RightsLine />
         {/* Language picker, duplicated from the header so the user
             who scrolls past the fold without noticing the header still
             has a way to switch, and so search engines see the locale

@@ -461,9 +461,14 @@ function vaCopy(lang: string): VaCopy {
 
 export function VoiceAssistant() {
   const { user, plan } = useAuth();
-  // Games have their own sound and word buttons; the mic stays out of them.
+  // The mic only where looking up a word is the thing to do (Gadi 2026-11-15:
+  // "check where it is relevant and remove it everywhere it is not"): home, a
+  // word page, the notebook, the reader and key words by subject. Not in games
+  // (they have their own sound and word buttons), the fortress, the say tool
+  // (it has its own mic), checkout, account, landing or legal pages.
   const pathname = usePathname() ?? "";
-  const inGame = /\/(world|play|duel|games|spell)(\/|$)/.test(pathname);
+  const bare = pathname.replace(/^\/[a-z]{2}(?:-[A-Za-z]{2,4})?(?=\/|$)/, "") || "/";
+  const inGame = !(bare === "/" || /^\/(word|words|notebook|read|subjects)(\/|$)/.test(bare));
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();

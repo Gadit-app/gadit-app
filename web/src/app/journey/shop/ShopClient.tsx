@@ -14,6 +14,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { GaditBrand } from "@/components/BrandMark";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { sfx } from "@/lib/game-sfx";
@@ -33,20 +34,20 @@ const COPY: Record<"he" | "en", Copy> = {
     free: "חינם", mine: "שלי", wearing: "עליי עכשיו",
     buy: (n) => `קונים ב-${n} מטבעות`, short: (n) => (n === 1 ? "חסר עוד מטבע אחד" : `חסרים עוד ${n} מטבעות`),
     how: "מטבעות מקבלים על כל מילה שיודעים. מה שקונים נשאר שלכם לתמיד",
-    back: "חזרה לאינדקס", run: "רצים אל המבצר",
+    back: "חזרה לקלפים שלי", run: "רצים אל המבצר",
     signIn: "כדי להיכנס לחנות צריך להתחבר", loading: "פותחים את החנות", failed: "החנות לא נטענה", retry: "לנסות שוב",
     bought: "קניתם! זה שלכם לתמיד", price: (n) => `${n} מטבעות`,
-    earn: (n) => `ב-${n} מילים`, earnMore: (n) => (n === 1 ? "עוד מילה אחת באינדקס, וזה שלכם. את זה לא קונים" : `עוד ${n} מילים באינדקס, וזה שלכם. את זה לא קונים`),
+    earn: (n) => `ב-${n} מילים`, earnMore: (n) => (n === 1 ? "עוד מילה אחת באוסף, וזה שלכם. את זה לא קונים" : `עוד ${n} מילים באוסף, וזה שלכם. את זה לא קונים`),
   },
   en: {
     title: "The shop", coins: "coins", slots: { shirt: "Shirt", hat: "Hat", back: "On the back", pet: "Companion" },
     free: "Free", mine: "Mine", wearing: "Wearing now",
     buy: (n) => `Buy for ${n} coins`, short: (n) => (n === 1 ? "One more coin needed" : `${n} more coins needed`),
     how: "You get coins for every word you know. What you buy is yours for good",
-    back: "Back to the index", run: "Run to the fortress",
+    back: "Back to my cards", run: "Run to the fortress",
     signIn: "Sign in to enter the shop", loading: "Opening the shop", failed: "The shop did not load", retry: "Try again",
     bought: "Bought! It is yours for good", price: (n) => `${n} coins`,
-    earn: (n) => `At ${n} words`, earnMore: (n) => (n === 1 ? "One more word in your index and it is yours. This one is not for sale" : `${n} more words in your index and it is yours. This one is not for sale`),
+    earn: (n) => `At ${n} words`, earnMore: (n) => (n === 1 ? "One more word in your collection and it is yours. This one is not for sale" : `${n} more words in your index and it is yours. This one is not for sale`),
   },
 };
 
@@ -152,9 +153,11 @@ export function ShopClient({ demo = false }: { demo?: boolean }) {
             <header className="jrn-head shop-head">
               <Link className="jrn-back" href={demo ? "/journey?demo=1" : "/journey"}><span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span> {c.back}</Link>
               <h1 className="jrn-title">{c.title}</h1>
+              <span className="shop-brand-narrow"><GaditBrand /></span>
               <div className="shop-head-end">
                 <div className="jrn-coins" title={c.coins}><span aria-hidden="true">●</span> {balance} {c.coins}</div>
                 <Link className="jrn-btn shop-run" href={demo ? "/journey/run?demo=1" : "/journey/run"}>{c.run}</Link>
+                <span className="shop-brand-wide"><GaditBrand /></span>
               </div>
             </header>
 
@@ -233,11 +236,17 @@ const SHOP_CSS = `
 .shop-head { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
 .shop-head .jrn-title { font-size: clamp(22px, 4vw, 30px); }
 .shop-head-end { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
+.shop-brand-narrow { display: none; }
 .shop-run { min-height: 40px; padding: 6px 18px; font-size: 15px; }
 /* A phone: the figure on top, the shelves under it, each in its own part of the screen. */
 @media (max-width: 760px) {
   .shop .jrn-wrap { padding-block: 8px; gap: 8px; }
-  .shop-head { grid-template-columns: auto 1fr; }
+  .shop-head { grid-template-columns: auto 1fr auto; }
+  .shop-brand-narrow { display: inline-flex; }
+  .shop .jrn-head { flex-wrap: wrap; }
+  .shop .jrn-head .jrn-back { padding-inline: 10px; font-size: 13.5px; }
+  .shop-head .jrn-title { font-size: 21px; }
+  .shop-brand-wide { display: none; }
   .shop-head .jrn-title { text-align: center; }
   .shop-head-end { grid-column: 1 / -1; justify-content: center; }
   .shop-layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(150px, 34dvh) minmax(0, 1fr); gap: 8px; }

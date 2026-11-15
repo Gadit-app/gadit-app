@@ -23,6 +23,7 @@ import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { LangSwitcher } from "@/components/design/LangSwitcher";
 import { PracticeV2 } from "@/components/design/PracticeV2";
 import { ReportQuestionButton } from "@/components/play/ReportQuestionButton";
+import { RightsLine } from "@/components/RightsLine";
 
 // Footer "Home" link label, every UI language.
 const FOOTER_HOME_COPY: Record<Lang, string> = {
@@ -130,7 +131,7 @@ export function PracticePage() {
       </main>
 
       <footer className="wb-home-footer">
-        <span>© 2026 Gadit</span>
+        <RightsLine />
         <span>·</span>
         <Link href={href("/")}>{FOOTER_HOME_COPY[lang] ?? FOOTER_HOME_COPY.en}</Link>
       </footer>
