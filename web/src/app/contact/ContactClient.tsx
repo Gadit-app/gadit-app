@@ -30,6 +30,7 @@ import { LangSearchList } from "@/components/LangSearch";
 import { HelpCenter } from "@/components/HelpCenter";
 import { LangSwitchMobile } from "@/components/LangSwitchMobile";
 import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
+import { openHelp, useHelpReady } from "@/lib/help-chat/ready";
 
 function LangSwitch() {
   const { lang, setLang } = useLang();
@@ -84,6 +85,7 @@ function LangSwitch() {
 }
 
 export function ContactClient() {
+  const helpUi = useHelpReady();
   const { lang, dir } = useLang();
   const { user, promptLogin } = useAuth();
   const href = useHref();
@@ -150,6 +152,13 @@ export function ContactClient() {
           padding: "clamp(40px, 6vw, 72px) clamp(20px, 3vw, 32px) clamp(56px, 8vw, 96px)",
         }}
       >
+        {/* The help assistant first, when it is on for this user (2026-11-16). */}
+        {helpUi && (
+          <button type="button" onClick={openHelp} style={{ display: "flex", alignItems: "center", gap: 12, width: "100%", marginBottom: 24, padding: "14px 18px", border: 0, borderRadius: 18, background: "#0a7472", color: "#fff", font: "inherit", textAlign: "start", cursor: "pointer", boxShadow: "0 6px 18px rgba(10,116,114,.25)" }}>
+            <span aria-hidden="true" style={{ fontSize: 26 }}>💬</span>
+            <span style={{ display: "grid", gap: 2 }}><b style={{ fontSize: 17 }}>{helpUi.title}</b><span style={{ fontSize: 14, opacity: 0.9 }}>{helpUi.sub}</span></span>
+          </button>
+        )}
         <HelpCenter />
       </main>
 

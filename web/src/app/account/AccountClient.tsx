@@ -44,6 +44,7 @@ import { isIosApp } from "@/lib/native-app";
 import { nativeManageSubscriptions } from "@/lib/native-iap";
 import { subscribeCopy } from "@/lib/subscribe-copy";
 import { countCached, setCachedWordsBulk } from "@/lib/offline-db";
+import { openHelp, useHelpReady } from "@/lib/help-chat/ready";
 
 // Upgrade button label template.
 const UPGRADE_TO_COPY: Record<Lang, string> = {
@@ -1503,6 +1504,7 @@ function RetentionModal({
     : step === "pause" ? c.pauseBody
     : (trialing ? c.trialConfirmBody : c.confirmBody);
 
+  const helpUi = useHelpReady();
   const primary: React.CSSProperties = {
     padding: "11px 18px", borderRadius: 12, border: "none", cursor: busy ? "default" : "pointer",
     background: "var(--teal, #0EA5A5)", color: "#fff", fontFamily: fontBody(lang), fontSize: 14,
@@ -1592,7 +1594,9 @@ function RetentionModal({
           ) : step === "support" ? (
             <>
               <button type="button" style={danger} disabled={busy} onClick={afterSupport}>{c.cancelAnywayBtn}</button>
-              <a style={primary} href="mailto:support@gadit.app?subject=Gadit%20technical%20problem">{c.supportBtn}</a>
+              {/* The help assistant first, when it is on for this user (2026-11-16). */}
+              {helpUi && <button type="button" style={primary} onClick={() => { onClose(); openHelp(); }}>💬 {helpUi.title}</button>}
+              <a style={helpUi ? ghost : primary} href="mailto:support@gadit.app?subject=Gadit%20technical%20problem">{c.supportBtn}</a>
             </>
           ) : step === "pause" ? (
             <>

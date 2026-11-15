@@ -8,6 +8,7 @@ import { LANGUAGES } from "@/lib/i18n";
 import { logAiUsage } from "@/lib/ai-cost";
 import { sendMail } from "@/lib/mail";
 import { helpUi } from "@/lib/help-chat/ui";
+import type { KbItem } from "@/lib/help-chat/kb";
 
 /**
  * The help assistant (Gadi 2026-11-15; the council's guardrails).
@@ -63,6 +64,24 @@ async function who(req: NextRequest) {
 }
 
 type Who = NonNullable<Awaited<ReturnType<typeof who>>>;
+
+// Items Gadi adds or fixes on /admin/help-chat (Firestore helpKb), on top of lib/help-chat/kb.ts.
+let added: { at: number; items: KbItem[] } | null = null;
+async function addedKb(): Promise<KbItem[]> {
+  if (added && Date.now() - added.at < 60_000) return added.items;
+  try {
+    const snap = await getAdminDb().collection("helpKb").get();
+    const items = snap.docs
+      .map((d) => ({ id: d.id, ...(d.data() as { q?: string; a?: string; money?: boolean; enabled?: boolean; order?: number }) }))
+      .filter((k) => k.enabled !== false && typeof k.q === "string" && typeof k.a === "string" && k.q.trim() !== "" && k.a.trim() !== "")
+      .sort((x, y) => (x.order ?? 0) - (y.order ?? 0))
+      .map((k): KbItem => ({ id: k.id, q: String(k.q), a: String(k.a), ...(k.money ? { money: true as const } : {}) }));
+    added = { at: Date.now(), items };
+    return items;
+  } catch {
+    return added?.items ?? [];
+  }
+}
 const allowed = (cfg: Cfg, w: Who) => cfg.enabled && !w.kid && (cfg.audience === "all" || w.tester || w.internal);
 
 export async function GET(req: NextRequest) {
@@ -145,7 +164,7 @@ export async function POST(req: NextRequest) {
 
   let a;
   try {
-    a = await answerHelp({ messages, lang, platform, plan: w.plan });
+    a = await answerHelp({ messages, lang, platform, plan: w.plan, extra: await addedKb() });
   } catch (e) {
     console.error("help-chat: model failed", e);
     return NextResponse.json({ failed: true, reply: "", escalate: false });

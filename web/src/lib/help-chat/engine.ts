@@ -12,7 +12,7 @@
  *   knowledge base, money links are not offered, and an answer that still
  *   shows a price or a currency is replaced by a hand-off.
  */
-import { HELP_KB } from "./kb";
+import { HELP_KB, type KbItem } from "./kb";
 import { linkIdsFor, type HelpLinkId } from "./links";
 import { costWithCache, TEXT_MODEL } from "@/lib/ai-cost";
 import { LANGUAGES } from "@/lib/i18n";
@@ -51,8 +51,11 @@ const RULES = `אתם "העוזר של Gadit". אתם עונים למשתמשי�
 
 מאגר הידע:`;
 
-function kbBlock(app: boolean): string {
-  return HELP_KB.filter((k) => !(app && k.money)).map((k, i) => `### ${i + 1}. ${k.q}\n${k.a}`).join("\n\n");
+/** The code's items, then the ones added from the admin page (Firestore helpKb), which win on the same id. */
+function kbBlock(app: boolean, extra: KbItem[]): string {
+  const added = new Map(extra.map((k) => [k.id, k]));
+  const all = [...HELP_KB.filter((k) => !added.has(k.id)), ...extra];
+  return all.filter((k) => !(app && k.money)).map((k, i) => `### ${i + 1}. ${k.q}\n${k.a}`).join("\n\n");
 }
 
 function langName(code: string): string {
@@ -71,7 +74,7 @@ function tail(platform: HelpPlatform, plan: string, lang: string, he: boolean): 
     "הקשר של השיחה הזו:",
     `- התוכנית של המשתמש: ${plan}.`,
     app
-      ? `- המשתמש בתוך האפליקציה של ${platform === "ios" ? "iOS" : "Google Play"}. אסור לגמרי להזכיר מחירים, מטבעות, תוכניות בתשלום, שדרוג, תקופת ניסיון, הנחות, קנייה, תשלום, או לרכוש באתר. כל שאלה על אלה: escalate=true, reason="money", ובתשובה רק שהעברתם לצוות.`
+      ? `- המשתמש בתוך האפליקציה של ${platform === "ios" ? "iOS" : "Google Play"}. אסור לגמרי להזכיר מחירים, מטבעות, תוכניות בתשלום, שדרוג, תקופת ניסיון, הנחות, קנייה, תשלום, או לרכוש באתר. כל שאלה על אלה: escalate=true, reason="money", ובתשובה רק שהעברתם לצוות. מטבעות המשחק (במבצר, בחנות של הדמות, בעולמות המילים) הם לא כסף: מותר להסביר איך מרוויחים אותם ומה קונים בהם.`
       : "- המשתמש באתר. מותר להסביר תוכניות ולהפנות לעמוד התוכניות (page:pricing), אבל לא כותבים מספרים של מחירים: הם משתנים לפי מדינה.",
     he
       ? "- עונים בעברית בלבד, בלשון רבים."
@@ -104,10 +107,10 @@ function schema(app: boolean) {
 // A price or a currency inside a store app: never shown (Play and Apple rules).
 const MONEY_RE = /[$€£₪¥₹]|\d+[.,]\d{2}\b|\b(USD|ILS|EUR|NIS)\b|ש"ח|שקל|דולר|מחיר|לשדרג|שדרוג|ניסיון חינם|trial|upgrade|price|pricing|subscribe/i;
 
-export async function answerHelp(o: { messages: HelpMsg[]; lang: string; platform: HelpPlatform; plan: string }): Promise<HelpAnswer> {
+export async function answerHelp(o: { messages: HelpMsg[]; lang: string; platform: HelpPlatform; plan: string; extra?: KbItem[] }): Promise<HelpAnswer> {
   const app = o.platform !== "web";
   const he = o.lang === "he";
-  const system = `${RULES}\n\n${kbBlock(app)}\n${tail(o.platform, o.plan, o.lang, he)}`;
+  const system = `${RULES}\n\n${kbBlock(app, o.extra ?? [])}\n${tail(o.platform, o.plan, o.lang, he)}`;
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
@@ -140,7 +143,9 @@ export async function answerHelp(o: { messages: HelpMsg[]; lang: string; platfor
   if (!answer) { escalate = true; reason = "unknown"; }
   // A long dash is never shown (Gadi's house rule), whatever the model wrote.
   answer = answer.replace(/\s*[—–]\s*/g, ", ");
-  if (app && MONEY_RE.test(answer) && reason !== "distress") {
+  // Sentences about game coins (the fortress shop) are not money.
+  const moneyText = answer.split(/(?<=[.!?\n])/).filter((x) => !/מטבעות|coins/i.test(x)).join(" ");
+  if (app && MONEY_RE.test(moneyText) && reason !== "distress") {
     escalate = true; reason = "money"; linkId = "none";
     answer = "";
   }

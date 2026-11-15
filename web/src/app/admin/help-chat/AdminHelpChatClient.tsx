@@ -10,8 +10,11 @@ import { useAdminContext } from "../admin-context";
 
 type Log = { id: string; ts: string | null; email: string; lang: string; platform: string; plan: string; convId: string; question: string; answer: string; escalate: boolean; reason: string; linkId: string; helped: boolean | null; cost: number; tester: boolean; internal: boolean };
 type Case = { id: string; lang: string; platform: string; q: string; answer: string; escalate: boolean; reason: string; linkId: string; ok: boolean; bad: string[]; cost: number };
+type Kb = { id: string; q: string; a: string; money: boolean; enabled?: boolean; updatedAt?: string | null };
 type Data = {
   config: { enabled?: boolean; audience?: string };
+  kbCode: Kb[];
+  kbAdded: Kb[];
   today: { count?: number; cost?: number; escalated?: number };
   logs: Log[];
   evalRun: { id: string; at: string | null; pass: number; total: number; cost: number; cases: Case[] } | null;
@@ -24,6 +27,10 @@ const S = {
     evalTitle: "בדיקה אחרונה", passed: "עברו", failed: "נכשלו", showAll: "להראות את כל המקרים", hideAll: "להסתיר",
     logTitle: "שיחות", onlyHanded: "רק מה שהועבר לאדם", onlyBad: "רק 'לא עזר'", search: "חיפוש", none: "אין עדיין שיחות", load: "טוען", err: "הטעינה נכשלה",
     q: "שאלה", a: "תשובה",
+    reasons: "למה הועבר לאדם", kbTitle: "מאגר הידע", kbAdded: "נוספו או תוקנו כאן", kbCode: "פריטים מהקוד", kbNone: "עוד לא נוסף כלום כאן",
+    kbHint: "פריט שנשמר כאן נכנס לעוזר תוך דקה, בלי עדכון לאתר. פריט עם אותו מזהה כמו פריט מהקוד מחליף אותו.",
+    kbQ: "השאלה (אפשר כמה ניסוחים, מופרדים ב- / )", kbA: "התשובה (בעברית, בלשון רבים)", kbMoney: "נושא של כסף (לא יוצג באפליקציות)", save: "שמירה", clear: "ניקוי",
+    edit: "עריכה", kbOff: "כיבוי", kbOn: "הפעלה", del: "מחיקה", addToKb: "הוספה למאגר", fixInKb: "תיקון בכאן", saved: "נשמר", showCode: "להראות את פריטי הקוד", hideCode: "להסתיר",
   },
   en: {
     title: "Gadit help assistant", on: "On", off: "Off", turnOn: "Turn on", turnOff: "Turn off", testers: "Testers and our accounts only", all: "Every signed-in adult",
@@ -31,6 +38,10 @@ const S = {
     evalTitle: "Last test run", passed: "passed", failed: "failed", showAll: "Show every case", hideAll: "Hide",
     logTitle: "Conversations", onlyHanded: "Handed to a person only", onlyBad: "'Not helpful' only", search: "Search", none: "No conversations yet", load: "Loading", err: "Loading failed",
     q: "Question", a: "Answer",
+    reasons: "Why it went to a person", kbTitle: "Knowledge base", kbAdded: "Added or fixed here", kbCode: "Items from the code", kbNone: "Nothing added here yet",
+    kbHint: "An item saved here reaches the assistant within a minute, no deploy. An item with the id of a code item replaces it.",
+    kbQ: "The question (several phrasings, separated by / )", kbA: "The answer (Hebrew, plural address)", kbMoney: "A money topic (hidden in the store apps)", save: "Save", clear: "Clear",
+    edit: "Edit", kbOff: "Turn off", kbOn: "Turn on", del: "Delete", addToKb: "Add to the knowledge base", fixInKb: "Fix here", saved: "Saved", showCode: "Show the code items", hideCode: "Hide",
   },
 };
 
@@ -43,6 +54,9 @@ export default function AdminHelpChatClient() {
   const [onlyBad, setOnlyBad] = useState(false);
   const [q, setQ] = useState("");
   const [allCases, setAllCases] = useState(false);
+  const [form, setForm] = useState<{ id: string; q: string; a: string; money: boolean }>({ id: "", q: "", a: "", money: false });
+  const [savedNote, setSavedNote] = useState(false);
+  const [showCode, setShowCode] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -59,6 +73,25 @@ export default function AdminHelpChatClient() {
     void load();
   };
 
+  const saveKb = async (k: { id?: string; q: string; a: string; money: boolean; enabled?: boolean }) => {
+    await fetch(`/api/admin/help-chat?secret=${encodeURIComponent(secret)}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kb: k }) });
+    setSavedNote(true);
+    window.setTimeout(() => setSavedNote(false), 2000);
+    void load();
+  };
+  const delKb = async (id: string) => {
+    await fetch(`/api/admin/help-chat?secret=${encodeURIComponent(secret)}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kbDelete: id }) });
+    void load();
+  };
+  const toForm = (k: { id?: string; q: string; a: string; money?: boolean }) => {
+    setForm({ id: k.id ?? "", q: k.q, a: k.a, money: !!k.money });
+    window.setTimeout(() => document.getElementById("hc-kb-form")?.scrollIntoView({ behavior: "smooth", block: "center" }), 0);
+  };
+  const reasons = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const l of data?.logs ?? []) if (l.escalate) m.set(l.reason, (m.get(l.reason) ?? 0) + 1);
+    return [...m.entries()].sort((a, b) => b[1] - a[1]);
+  }, [data]);
   const logs = useMemo(() => (data?.logs ?? []).filter((l) => (!onlyHanded || l.escalate) && (!onlyBad || l.helped === false) && (!q || `${l.question} ${l.answer} ${l.email}`.toLowerCase().includes(q.toLowerCase()))), [data, onlyHanded, onlyBad, q]);
   const rated = (data?.logs ?? []).filter((l) => l.helped !== null);
   const helpedN = rated.filter((l) => l.helped).length;
@@ -84,6 +117,13 @@ export default function AdminHelpChatClient() {
         </span>
       </section>
 
+      {reasons.length > 0 && (
+        <section style={{ ...card, display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
+          <b>{t.reasons}:</b>
+          {reasons.map(([r, n]) => <span key={r} style={{ padding: "2px 10px", borderRadius: 999, background: "#fff7ed", border: "1px solid #fed7aa" }}>{r} · {n}</span>)}
+        </section>
+      )}
+
       {ev && (
         <section style={card}>
           <h2 style={{ margin: "0 0 8px", fontSize: 17 }}>{t.evalTitle}: {ev.pass}/{ev.total} {t.passed} <span style={{ color: "#6B7280", fontWeight: 400, fontSize: 13 }}>({ev.at?.slice(0, 16).replace("T", " ")} UTC · ${Number(ev.cost).toFixed(3)})</span></h2>
@@ -100,6 +140,50 @@ export default function AdminHelpChatClient() {
         </section>
       )}
 
+      <section style={card} id="hc-kb-form">
+        <h2 style={{ margin: "0 0 4px", fontSize: 17 }}>{t.kbTitle}</h2>
+        <p style={{ margin: "0 0 10px", color: "#6B7280", fontSize: 13 }}>{t.kbHint}</p>
+        <div style={{ display: "grid", gap: 8 }}>
+          <input value={form.q} onChange={(e) => setForm({ ...form, q: e.target.value })} placeholder={t.kbQ} dir="rtl" style={{ padding: "8px 10px", border: "1px solid #E5E7EB", borderRadius: 8, font: "inherit" }} />
+          <textarea value={form.a} onChange={(e) => setForm({ ...form, a: e.target.value })} placeholder={t.kbA} dir="rtl" rows={4} style={{ padding: "8px 10px", border: "1px solid #E5E7EB", borderRadius: 8, font: "inherit", resize: "vertical" }} />
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center" }}>
+            <label><input type="checkbox" checked={form.money} onChange={(e) => setForm({ ...form, money: e.target.checked })} /> {t.kbMoney}</label>
+            {form.id && <span style={{ color: "#6B7280", fontSize: 12.5 }}>id: {form.id}</span>}
+            <button type="button" disabled={!form.q.trim() || !form.a.trim()} onClick={() => void saveKb({ id: form.id || undefined, q: form.q, a: form.a, money: form.money })} style={{ padding: "6px 16px", borderRadius: 8, border: 0, background: "#0EA5A5", color: "#fff", fontWeight: 700, cursor: "pointer" }}>{t.save}</button>
+            <button type="button" onClick={() => setForm({ id: "", q: "", a: "", money: false })} style={{ padding: "6px 12px", borderRadius: 8, border: "1px solid #E5E7EB", background: "#fff", cursor: "pointer" }}>{t.clear}</button>
+            {savedNote && <span style={{ color: "#166534", fontWeight: 700 }}>✓ {t.saved}</span>}
+          </div>
+        </div>
+        <h3 style={{ margin: "16px 0 6px", fontSize: 15 }}>{t.kbAdded} ({data.kbAdded.length})</h3>
+        {data.kbAdded.length === 0 ? <p style={{ color: "#6B7280", margin: 0 }}>{t.kbNone}</p> : (
+          <div style={{ display: "grid", gap: 6 }}>
+            {data.kbAdded.map((k) => (
+              <div key={k.id} style={{ border: "1px solid #E5E7EB", borderRadius: 8, padding: 8, opacity: k.enabled === false ? 0.5 : 1 }}>
+                <div dir="rtl"><b>{k.q}</b>{k.money ? " 💲" : ""}</div>
+                <div dir="rtl" style={{ whiteSpace: "pre-wrap", fontSize: 14 }}>{k.a}</div>
+                <div style={{ display: "flex", gap: 8, marginTop: 4, fontSize: 13 }}>
+                  <button type="button" onClick={() => toForm(k)} style={{ border: 0, background: "none", color: "#0EA5A5", cursor: "pointer", fontWeight: 700 }}>{t.edit}</button>
+                  <button type="button" onClick={() => void saveKb({ id: k.id, q: k.q, a: k.a, money: k.money, enabled: k.enabled === false })} style={{ border: 0, background: "none", color: "#6B7280", cursor: "pointer" }}>{k.enabled === false ? t.kbOn : t.kbOff}</button>
+                  <button type="button" onClick={() => void delKb(k.id)} style={{ border: 0, background: "none", color: "#b91c1c", cursor: "pointer" }}>{t.del}</button>
+                  <span style={{ color: "#9CA3AF" }}>{k.id}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        <button type="button" onClick={() => setShowCode((v) => !v)} style={{ marginTop: 10, border: 0, background: "none", color: "#0EA5A5", cursor: "pointer", fontWeight: 700 }}>{showCode ? t.hideCode : `${t.showCode} (${data.kbCode.length})`}</button>
+        {showCode && (
+          <div style={{ display: "grid", gap: 6, marginTop: 6 }}>
+            {data.kbCode.map((k) => (
+              <div key={k.id} style={{ borderInlineStart: "3px solid #E5E7EB", padding: "4px 8px" }}>
+                <div dir="rtl"><b>{k.q}</b>{k.money ? " 💲" : ""} <button type="button" onClick={() => toForm(k)} style={{ border: 0, background: "none", color: "#0EA5A5", cursor: "pointer", fontSize: 12.5 }}>{t.fixInKb}</button></div>
+                <div dir="rtl" style={{ fontSize: 13.5, color: "#374151" }}>{k.a}</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
       <section style={card}>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginBottom: 10 }}>
           <h2 style={{ margin: 0, fontSize: 17 }}>{t.logTitle} ({logs.length})</h2>
@@ -114,6 +198,7 @@ export default function AdminHelpChatClient() {
                 <div style={{ fontSize: 12.5, color: "#6B7280" }}>{l.ts?.slice(0, 16).replace("T", " ")} · {l.email}{l.internal ? " (ours)" : l.tester ? " (tester)" : ""} · {l.lang} · {l.platform} · {l.plan} · {l.escalate ? `→ ${l.reason}` : l.reason} · {l.linkId} · ${l.cost.toFixed(4)}{l.helped === true ? ` · 👍` : l.helped === false ? ` · 👎` : ""}</div>
                 <div dir="auto"><b>{t.q}:</b> {l.question}</div>
                 <div dir="auto" style={{ whiteSpace: "pre-wrap" }}><b>{t.a}:</b> {l.answer || "(handoff)"}</div>
+                <button type="button" onClick={() => toForm({ q: l.question, a: l.escalate ? "" : l.answer })} style={{ marginTop: 4, border: 0, background: "none", color: "#0EA5A5", cursor: "pointer", fontWeight: 700, fontSize: 13 }}>➕ {t.addToKb}</button>
               </div>
             ))}
           </div>

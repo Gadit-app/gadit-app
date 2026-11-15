@@ -11,6 +11,18 @@
  */
 import { answerHelp, type HelpPlatform } from "@/lib/help-chat/engine";
 import { getAdminDb } from "@/lib/firebase-admin";
+import type { KbItem } from "@/lib/help-chat/kb";
+
+/** The items added on /admin/help-chat, as the live chat sees them. */
+async function addedKb(): Promise<KbItem[]> {
+  try {
+    const snap = await getAdminDb().collection("helpKb").get();
+    return snap.docs
+      .map((d) => ({ id: d.id, q: String(d.get("q") ?? ""), a: String(d.get("a") ?? ""), money: d.get("money") === true, enabled: d.get("enabled") !== false }))
+      .filter((k) => k.enabled && k.q && k.a)
+      .map((k): KbItem => ({ id: k.id, q: k.q, a: k.a, ...(k.money ? { money: true as const } : {}) }));
+  } catch { return []; }
+}
 
 type Case = {
   id: string; lang: string; platform?: HelpPlatform; plan?: string; q: string | string[];
@@ -38,7 +50,7 @@ const CASES: Case[] = [
   { id: "he-vague", lang: "he", q: "זה לא עובד", escalate: false, must: /1|2/ },
   { id: "he-vague-2", lang: "he", q: ["לא מופיע לי", "2", "עדיין לא עובד, יש הודעת שגיאה אדומה"], escalate: true, reason: ["bug"] },
   { id: "he-castle", lang: "he", q: "המשחק של הטירה תקוע לבן שלי", escalate: false },
-  { id: "he-notebook-full", lang: "he", q: "למה הוא לא שומר לי מילים יותר", escalate: false, must: /30/ },
+  { id: "he-notebook-full", lang: "he", plan: "basic", q: "למה הוא לא שומר לי מילים יותר", escalate: false, must: /30/ },
   { id: "he-lost-words", lang: "he", q: ["כל המילים של הבת שלי נמחקו!!!", "היא מחוברת כרגיל, פשוט המחברת שלה ריקה פתאום"], escalate: true, reason: ["account", "bug"] },
   { id: "he-double", lang: "he", q: "חייבו אותי פעמיים החודש", escalate: true, reason: ["money"] },
   { id: "he-refund", lang: "he", q: "אני רוצה החזר כספי, ביטלתי ולא השתמשנו", escalate: true, reason: ["money"], never: /נחזיר|תקבלו החזר|יוחזר/ },
@@ -68,6 +80,23 @@ const CASES: Case[] = [
   { id: "ru-kidsmode", lang: "ru", q: "как включить детский режим?", escalate: false },
   { id: "ru-login", lang: "ru", q: "забыла пароль", escalate: false },
   { id: "es-offline", lang: "es", q: "¿funciona sin internet?", escalate: false },
+  // The wider knowledge base (2026-11-16)
+  { id: "g-first-reader", lang: "he", q: "יש משחק שעוזר לילד בכיתה א להתחיל לקרוא?", escalate: false, never: INTERNAL },
+  { id: "g-crossword", lang: "he", q: "איפה התשבץ?", escalate: false },
+  { id: "g-duel-online", lang: "he", q: "איך הבן שלי משחק נגד ילדים אחרים?", escalate: false },
+  { id: "g-grade-en", lang: "en", q: "my kid is in 2nd grade, which games fit him?", escalate: false },
+  { id: "g-shop-coins-app", lang: "he", platform: "play", q: "איך קונים כובע לדמות במבצר?", escalate: false, never: PRICE },
+  { id: "l-photo-page", lang: "he", q: "אפשר לצלם דף מהספר והוא יסביר את המילים?", escalate: false, link: ["guide:reader", "page:read"] },
+  { id: "l-say-spanish", lang: "he", q: "איך שומעים איך אומרים משפט בספרדית?", escalate: false, link: ["guide:say", "page:sayPage"] },
+  { id: "l-test-prep", lang: "he", q: "יש לבן שלי מבחן באנגלית ביום חמישי, איך מתכוננים עם Gadit?", escalate: false },
+  { id: "f-second-parent", lang: "he", q: "איך מוסיפים את אבא שלהם לחשבון?", escalate: false },
+  { id: "f-class-code", lang: "he", q: "המורה נתנה לבת שלי קוד כיתה, איפה מכניסים אותו?", escalate: false, never: INTERNAL },
+  { id: "f-receipt", lang: "he", q: "אני צריכה קבלה על התשלום של החודש", escalate: true, reason: ["money"] },
+  { id: "f-remove-child", lang: "he", q: "איך מוציאים ילד מהמשפחה?", never: INTERNAL },
+  { id: "ru-reader", lang: "ru", q: "можно сфотографировать страницу из книги?", escalate: false },
+  { id: "ar-pair", lang: "ar", q: "كيف أربط هاتف ابني؟", escalate: false, link: ["guide:pair"] },
+  // In a store app, what a plan includes may be said; a price, buying, upgrading or "on the website" never.
+  { id: "play-plans", lang: "he", platform: "play", q: "מה ההבדל בין Family ל-Individual?", never: /[$€£₪]|\d+[.,]\d{2}|ש"ח|שקל|דולר|מחיר|שדרוג|לשדרג|לקנות|לרכוש|באתר|gadit\.app/ },
 ];
 
 function check(c: Case, a: { answer: string; escalate: boolean; reason: string; linkId: string }): string[] {
@@ -84,16 +113,19 @@ function check(c: Case, a: { answer: string; escalate: boolean; reason: string; 
 async function main() {
   const firstArg = process.argv.indexOf("--first");
   const n = firstArg > 0 ? Number(process.argv[firstArg + 1]) : CASES.length;
+  const onlyArg = process.argv.indexOf("--only");
+  const only = onlyArg > 0 ? new Set(process.argv[onlyArg + 1].split(",")) : null;
   const save = process.argv.includes("--save");
   const out: Array<Record<string, unknown>> = [];
   let cost = 0, pass = 0;
-  for (const c of CASES.slice(0, n)) {
+  const extra = await addedKb();
+  for (const c of CASES.slice(0, n).filter((x) => !only || only.has(x.id))) {
     const turns = Array.isArray(c.q) ? c.q : [c.q];
     const messages: Array<{ role: "user" | "assistant"; content: string }> = [];
     let a = null as Awaited<ReturnType<typeof answerHelp>> | null;
     for (const t of turns) {
       messages.push({ role: "user", content: t });
-      a = await answerHelp({ messages, lang: c.lang, platform: c.platform ?? "web", plan: c.plan ?? "family" });
+      a = await answerHelp({ messages, lang: c.lang, platform: c.platform ?? "web", plan: c.plan ?? "family", extra });
       cost += a.costUsd;
       messages.push({ role: "assistant", content: a.answer || "(handed to the team)" });
     }

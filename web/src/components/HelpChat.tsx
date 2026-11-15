@@ -23,6 +23,7 @@ import { useHref } from "@/lib/href";
 import { useKidsMode } from "@/lib/use-kids-mode";
 import { isIosApp } from "@/lib/native-app";
 import { linkTarget } from "@/lib/help-chat/links";
+import { setHelpReady } from "@/lib/help-chat/ready";
 import { HELP_UI_EN, HELP_UI_HE, type HelpUi } from "@/lib/help-chat/ui-base";
 
 // A local build only (NEXT_PUBLIC_BUILD_ID "dev"), with ?helpdemo=1: the window
@@ -61,6 +62,8 @@ export function HelpChat() {
   const listRef = useRef<HTMLDivElement | null>(null);
 
   const kid = familyRole === "kid" || kidsMode;
+  // Tell the contact page and the cancel flow that the assistant can be offered.
+  useEffect(() => { setHelpReady(cfg && user && !kid ? cfg.ui : null); }, [cfg, user, kid]);
   const [demo, setDemo] = useState(false);
   useEffect(() => {
     if (!DEV) return;
