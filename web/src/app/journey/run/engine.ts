@@ -13,6 +13,7 @@
 import type * as THREE from "three";
 import { DEFAULT_LOOK, type Look } from "@/lib/journey/shop";
 import { buildFigure, hop } from "./figure";
+import { depthOf, loadModel, type ModelName } from "./models";
 
 export type Theme = {
   skyTop: string; sky: string; haze: number; ground: number; hill: number; path: number; curb: number; block: number;
@@ -194,6 +195,15 @@ export async function startRun(canvas: HTMLCanvasElement, o: RunOptions): Promis
   for (const x of [-5.5, 5.5]) { const banner = box(1.6, 3.4, 0.12, th.roof); banner.position.set(x, 4.6, -0.9); fort.add(banner); }
   fort.position.set(0, 0, -(LENGTH + 6));
   scene.add(fort);
+  // The real fortress of this landscape (run/models.ts). It loads while the
+  // child runs (it is far behind the fog at the start); the shapes above are
+  // hidden when it arrives, and stay when it cannot load.
+  void loadModel(T, `fortress${(o.theme % 3) + 1}` as ModelName, { width: 23 }).then((m) => {
+    if (stopped) return;
+    for (const ch of fort.children) ch.visible = false;
+    m.position.set(0, 0, -1 - depthOf(T, m) / 2);
+    fort.add(m);
+  }).catch(() => undefined);
 
   // A runner made of boxes: head, body, a pack, two arms and two legs that swing.
   const makeRunner = (shirt: number, pants: number, hat: number): Runner => {

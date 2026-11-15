@@ -18,6 +18,7 @@ import type * as THREE from "three";
 import { DEFAULT_LOOK, type Look } from "@/lib/journey/shop";
 import { buildFigure, hop } from "./figure";
 import { THEMES } from "./engine";
+import { loadModel, type ModelName } from "./models";
 
 export type HallOptions = { theme: number; look?: Look; total: number; monster: number; monsterColor: number; /** The first word hangs on the right (Hebrew). */ rtl?: boolean; /** Words the child looked up themselves: a marked cage. */ own?: boolean[] };
 export type HallHandle = { free: (i: number) => void; hold: (i: number) => void; now: (i: number) => void; open: () => void; dispose: () => void };
@@ -113,6 +114,15 @@ export async function startHall(canvas: HTMLCanvasElement, o: HallOptions): Prom
   for (const x of [-1.0, 1.0]) mon.add(at(box(0.5, 0.36, 0.7, shade(o.monsterColor, 0.82)), x, 0.18, 0.6));
   mon.position.set(0, 1.0, -3.7);
   scene.add(mon);
+  // The real monster (run/models.ts): when it arrives, the shapes above are
+  // hidden and the model takes their place; the breathing, the sad shrink and
+  // the step aside work on the group, so they move the model too.
+  void loadModel(T, `monster${(o.monster % 3) + 1}` as ModelName, { height: 3.3 }).then((m) => {
+    if (stopped) return;
+    for (const ch of mon.children) ch.visible = false;
+    m.position.set(0, 0, 0.2);
+    mon.add(m);
+  }).catch(() => undefined);
 
   // The cages: one for every word of the day, hanging in a row.
   const n = Math.max(1, Math.min(8, o.total));
