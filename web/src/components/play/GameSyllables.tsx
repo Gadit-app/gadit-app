@@ -21,6 +21,7 @@
  * free fallback.
  */
 
+import { forDeviceVoice } from "@/lib/hebrew-speech";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { sfx } from "@/lib/game-sfx";
@@ -232,7 +233,7 @@ export function useSpeech() {
         return;
       }
       try {
-        const u = new SpeechSynthesisUtterance(sayAs(text));
+        const u = new SpeechSynthesisUtterance(forDeviceVoice(sayAs(text)));
         u.lang = "he-IL"; u.rate = 0.8;
         u.onend = done; u.onerror = done;
         window.speechSynthesis.cancel();

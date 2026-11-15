@@ -15,6 +15,9 @@
  */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { buildable } from "@/lib/journey/build";
+import { BuildTiles, Lesson, Say, PARTS_CSS } from "./parts";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { sfx } from "@/lib/game-sfx";
@@ -25,18 +28,28 @@ const FRAMES: Frame[] = ["plain", "silver", "gold", "rainbow", "diamond"];
 export type CardView = { id: string; word: string; language: string; meaning: string; foundDay: string; stars: number; known: boolean; frame: Frame; dueDay: string; due: boolean };
 export type Data = {
   today: string; dailyMax: number; usedToday: number; starsToKnow: number; cards: CardView[];
-  todays: Array<{ id: string; format: string | null; odd?: OddQuestion }>; coins: number; frameCoins: Record<Frame, number>;
+  todays: Array<{ id: string; format: string | null; odd?: OddQuestion; sense?: SenseQuestion }>; coins: number; frameCoins: Record<Frame, number>;
   summary: { index: number; started: number; fresh: number };
+  /** The fortress the profile stands at, kept on the server. */
+  stage?: number;
+  /** Words freed today by all the children together. */
+  world?: { freedToday: number };
+  /** The landscape the child chose for a fortress, by fortress number. */
+  roads?: Record<string, number>;
+  /** The shop: what was bought, what the runner wears, what was spent (lib/journey/shop.ts). */
+  shop?: { owned: string[]; look: Record<"shirt" | "hat" | "back" | "pet", string>; spent: number };
 };
 export type Result = { correct: boolean; event: "practice" | "star" | "known" | "kept" | "again"; frameUp: Frame | null; card: CardView; coinsUp: number };
 /** "Odd one out": four words, three of one school unit (the card's word among them) and one that does not belong. */
 export type OddQuestion = { options: string[]; odd: string };
-export type Question = { card: CardView; format: "meaning" | "word" | "odd"; options: CardView[] };
+/** "Does this sentence make sense?": one checked sentence with the card's word, and whether it makes sense. */
+export type SenseQuestion = { text: string; sensible: boolean };
+export type Question = { card: CardView; format: "meaning" | "word" | "odd" | "sense" | "build"; options: CardView[]; sentence?: string };
 
 type Copy = {
   title: string; count: (n: number, of: number) => string; coins: string; signIn: string; loading: string; failed: string; retry: string;
   todayTitle: string; todayCount: (n: number) => string; start: string; doneToday: string; fewWords: string; noWords: string;
-  whichMeaning: string; whichWord: string; whichOdd: string; next: string; finish: string; of: (n: number, of: number) => string;
+  whichMeaning: string; whichWord: string; whichOdd: string; whichSense: string; senseYes: string; senseNo: string; whichBuild: string; hear: string; lesson: string; next: string; finish: string; of: (n: number, of: number) => string;
   star: (n: number, of: number) => string; known: string; kept: string; again: string; practice: string; frameUp: (f: string) => string; coinsUp: (n: number) => string;
   frames: Record<Frame, string>; sections: { index: string; started: string; fresh: string };
   opensTomorrow: string; ready: string; found: (d: string) => string; back: string; worth: (n: number) => string; top: string; demo: string;
@@ -47,7 +60,7 @@ const COPY: Record<string, Copy> = {
     loading: "פותחים את האינדקס", failed: "האינדקס לא נטען", retry: "לנסות שוב",
     todayTitle: "הקלפים של היום", todayCount: (n) => (n === 1 ? "קלף אחד מחכה" : `${n} קלפים מחכים`), start: "מתחילים",
     doneToday: "סיימתם להיום. הקלפים הבאים מחכים למחר", fewWords: "כשיהיו לכם שלוש מילים, הקלפים ייפתחו", noWords: "כל מילה שתחפשו ב-Gadit תהפוך כאן לקלף",
-    whichMeaning: "מה הפירוש של המילה?", whichWord: "איזו מילה מתאימה לפירוש?", whichOdd: "איזו מילה יוצאת דופן?", next: "לקלף הבא", finish: "חזרה לאינדקס", of: (n, of) => `${n} מתוך ${of}`,
+    whichMeaning: "מה הפירוש של המילה?", whichWord: "איזו מילה מתאימה לפירוש?", whichOdd: "איזו מילה יוצאת דופן?", whichSense: "המשפט הזה הגיוני?", senseYes: "הגיוני", senseNo: "לא הגיוני", whichBuild: "הרכיבו את המילה שמתאימה לפירוש", hear: "להאזנה", lesson: "כך זה נכון", next: "לקלף הבא", finish: "חזרה לאינדקס", of: (n, of) => `${n} מתוך ${of}`,
     star: (n, of) => `כוכב ${n} מתוך ${of}`, known: "המילה נכנסה לאינדקס", kept: "זכרתם", again: "הקלף חוזר מחר. לא איבדתם כלום", practice: "תרגול",
     frameUp: (f) => `מסגרת חדשה: ${f}`, coinsUp: (n) => `+${n} מטבעות`,
     frames: { plain: "רגילה", silver: "כסף", gold: "זהב", rainbow: "קשת", diamond: "יהלום" },
@@ -59,7 +72,7 @@ const COPY: Record<string, Copy> = {
     loading: "Opening the index", failed: "The index did not load", retry: "Try again",
     todayTitle: "Today's cards", todayCount: (n) => (n === 1 ? "One card is waiting" : `${n} cards are waiting`), start: "Start",
     doneToday: "Done for today. The next cards wait for tomorrow", fewWords: "The cards open once you have three words", noWords: "Every word you look up in Gadit becomes a card here",
-    whichMeaning: "What does the word mean?", whichWord: "Which word fits the meaning?", whichOdd: "Which word does not belong?", next: "Next card", finish: "Back to the index", of: (n, of) => `${n} of ${of}`,
+    whichMeaning: "What does the word mean?", whichWord: "Which word fits the meaning?", whichOdd: "Which word does not belong?", whichSense: "Does this sentence make sense?", senseYes: "It makes sense", senseNo: "It does not", whichBuild: "Build the word that fits the meaning", hear: "Listen", lesson: "This is the right one", next: "Next card", finish: "Back to the index", of: (n, of) => `${n} of ${of}`,
     star: (n, of) => `Star ${n} of ${of}`, known: "The word is in your index", kept: "You remembered", again: "The card comes back tomorrow. Nothing was lost", practice: "Practice",
     frameUp: (f) => `New frame: ${f}`, coinsUp: (n) => `+${n} coins`,
     frames: { plain: "Plain", silver: "Silver", gold: "Gold", rainbow: "Rainbow", diamond: "Diamond" },
@@ -82,6 +95,19 @@ function scriptOf(text: string): string {
 }
 
 /** A meaning as an answer: its first sentence only, so the three answers are of a like length (Gadi 2026-11-14). */
+/** The meaning as a question: the word itself is hidden wherever the meaning says it
+ *  ("courage is when you..."), with a Hebrew one-letter prefix kept, so the meaning
+ *  never hands over the answer of "which word fits" or "build the word". */
+export function maskedMeaning(card: { word: string; meaning: string }): string {
+  const w = card.word.trim();
+  const text = shortMeaning(card.meaning);
+  if (w.length < 2) return text;
+  const esc = w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const he = /[א-ת]/.test(w);
+  const re = he ? new RegExp(`(^|[^\\u05D0-\\u05EA])([הובלכמש]{0,2})${esc}(?![\\u05D0-\\u05EA])`, "g") : new RegExp(`\\b${esc}\\b`, "gi");
+  return he ? text.replace(re, "$1$2…") : text.replace(re, "…");
+}
+
 export function shortMeaning(meaning: string): string {
   const m = meaning.trim();
   const end = m.search(/[.!?。؟](\s|$)/u);
@@ -94,7 +120,22 @@ const RUDE = /(?<!\p{L})(vulgar|obscene|profan\p{L}*|offensive|swear ?word|curse
 const isRude = (c: CardView) => RUDE.test(c.meaning);
 
 /** The question of one card: the card and two others that differ from it in both the word and the meaning. */
-export function makeQuestion(card: CardView, format: string | null, all: CardView[], forChild: boolean, odd?: OddQuestion): Question | null {
+export function makeQuestion(card: CardView, format: string | null, all: CardView[], forChild: boolean, odd?: OddQuestion, sense?: SenseQuestion): Question | null {
+  // Does the sentence make sense: two fixed answers, "yes" then "no". The
+  // right one carries the card's id, as in every other format.
+  if (format === "sense" && sense && sense.text) {
+    return {
+      card, format: "sense", sentence: sense.text,
+      options: [
+        { ...card, id: sense.sensible ? card.id : `${card.id}#yes`, word: "yes", meaning: "" },
+        { ...card, id: sense.sensible ? `${card.id}#no` : card.id, word: "no", meaning: "" },
+      ],
+    };
+  }
+  if (format === "sense") format = "meaning";
+  // Build the word from letter tiles: no answers to choose from.
+  if (format === "build" && buildable(card.word)) return { card, format: "build", options: [] };
+  if (format === "build") format = "meaning";
   // Odd one out: the word that does not belong carries the card's id, so
   // "the right answer is the card" holds here as in the other formats.
   if (format === "odd" && odd && odd.options.length === 4 && odd.options.includes(odd.odd)) {
@@ -108,9 +149,14 @@ export function makeQuestion(card: CardView, format: string | null, all: CardVie
   const asked = format === "word" ? card.word : card.meaning;
   const alike = others.filter((c) => scriptOf(format === "word" ? c.word : c.meaning) === scriptOf(asked));
   const same = alike.filter((c) => c.language === card.language);
+  // Answers of about the same length come first: a one-word translation
+  // (a word from the child's school list) among long definitions gives itself away.
+  const shown = (c: CardView) => (format === "word" ? c.word : shortMeaning(c.meaning)).length;
+  const near = (c: CardView) => { const x = shown(c), y = shown(card); return x <= y * 2.2 + 4 && y <= x * 2.2 + 4; };
   const picks: CardView[] = [];
-  for (const c of [...same, ...alike, ...others]) {
-    if (picks.length === 2) break;
+  for (const c of [...same.filter(near), ...alike.filter(near), ...same, ...alike, ...others]) {
+    // Four answers, not three: a blind tap is right one time in four.
+    if (picks.length === 3) break;
     if (!picks.some((p) => p.id === c.id || p.word === c.word || p.meaning === c.meaning)) picks.push(c);
   }
   if (picks.length < 2) return null;
@@ -191,7 +237,7 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
   const byId = useMemo(() => new Map((data?.cards ?? []).map((x) => [x.id, x])), [data]);
   const questions = useMemo(() => {
     if (!data) return [];
-    return data.todays.map((t) => { const card = byId.get(t.id); return card ? makeQuestion(card, t.format, data.cards, forChild, t.odd) : null; }).filter((q): q is Question => !!q);
+    return data.todays.map((t) => { const card = byId.get(t.id); return card ? makeQuestion(card, t.format, data.cards, forChild, t.odd, t.sense) : null; }).filter((q): q is Question => !!q);
   }, [data, byId, forChild]);
 
   const start = () => { sfx.tap(); setQueue(questions); setAt(0); setPicked(null); setResult(null); };
@@ -246,7 +292,7 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
 
   return (
     <div className="wordbook jrn" dir={dir}>
-      <style>{JRN_CSS}</style>
+      <style>{JRN_CSS + PARTS_CSS}</style>
       <div className="jrn-wrap">
         {!demo && !authLoading && !user && <p className="jrn-note">{c.signIn}</p>}
         {user && state === "loading" && !data && <p className="jrn-note">{c.loading}…</p>}
@@ -257,15 +303,21 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
         {(user || demo) && data && q && (
           <section className="jrn-play" aria-live="polite">
             <div className="jrn-step">{c.of(at + 1, queue!.length)}</div>
-            <div className="jrn-ask">{q.format === "odd" ? c.whichOdd : q.format === "meaning" ? c.whichMeaning : c.whichWord}</div>
-            {q.format !== "odd" && <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "meaning" ? q.card.word : shortMeaning(q.card.meaning)}</div>}
+            <div className="jrn-ask">{q.format === "build" ? c.whichBuild : q.format === "sense" ? c.whichSense : q.format === "odd" ? c.whichOdd : q.format === "meaning" ? c.whichMeaning : c.whichWord}</div>
+            {q.format !== "odd" && (
+              <div className="jrn-prompt-row">
+                <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "sense" ? q.sentence : q.format === "meaning" ? q.card.word : maskedMeaning(q.card)}</div>
+                <Say text={q.format === "sense" ? q.sentence ?? "" : q.format === "meaning" ? q.card.word : maskedMeaning(q.card)} label={c.hear} />
+              </div>
+            )}
+            {q.format === "build" && <BuildTiles key={q.card.id} word={q.card.word} extra={forChild ? 0 : 2} disabled={!!picked} onDone={(right) => void choose({ ...q.card, id: right ? q.card.id : `${q.card.id}#x` })} />}
             <div className="jrn-options">
               {q.options.map((o) => {
                 const isRight = !!picked && o.id === q.card.id;
                 const isWrong = picked === o.id && o.id !== q.card.id;
                 return (
                   <button key={o.id} type="button" className={`jrn-option${q.format !== "meaning" ? " is-word" : ""}${isRight ? " is-right" : ""}${isWrong ? " is-other" : ""}`} onClick={() => void choose(o)} aria-disabled={!!picked || undefined} dir="auto">
-                    {q.format === "meaning" ? shortMeaning(o.meaning) : o.word}
+                    {q.format === "sense" ? (o.word === "yes" ? c.senseYes : c.senseNo) : q.format === "meaning" ? shortMeaning(o.meaning) : o.word}
                   </button>
                 );
               })}
@@ -273,6 +325,7 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
             {result && (
               <div className="jrn-result">
                 <div className={`jrn-result-line${result.correct ? " is-good" : ""}`}>{resultLine(result)}</div>
+                {!result.correct && <Lesson word={q.card.word} meaning={shortMeaning(q.card.meaning)} title={c.lesson} hear={c.hear} />}
                 {result.event === "star" || result.event === "known" ? <Stars n={result.card.stars} of={data.starsToKnow} /> : null}
                 {result.frameUp && <div className="jrn-result-line is-good">{c.frameUp(c.frames[result.frameUp])}</div>}
                 {result.coinsUp > 0 && <div className="jrn-coinup">{c.coinsUp(result.coinsUp)}</div>}
@@ -288,7 +341,9 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
               <h1 className="jrn-title">{c.title}</h1>
               {demo && <div className="jrn-demo">{c.demo}</div>}
               <div className="jrn-count">{c.count(data.summary.index, total)}</div>
-              <div className="jrn-coins" title={c.coins}><span aria-hidden="true">●</span> {data.coins} {c.coins}</div>
+              <div className="jrn-coins" title={c.coins}><span aria-hidden="true">●</span> {Math.max(0, data.coins - (data.shop?.spent ?? 0))} {c.coins}</div>
+              {!demo && <Link className="jrn-btn is-ghost" href="/journey/shop">{lang === "he" ? "🛍️ לחנות" : "🛍️ To the shop"}</Link>}
+              {!demo && <Link className="jrn-btn is-ghost" href="/journey/map">{lang === "he" ? "🗺️ המפה שלי" : "🗺️ My map"}</Link>}
             </header>
 
             <section className="jrn-today">

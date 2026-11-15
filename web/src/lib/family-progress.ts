@@ -37,7 +37,28 @@ export type ChildProgress = {
    *  change it: the language (null = off), "do they already read it?", and
    *  the child's app language when known (it decides which languages fit). */
   learnSetup?: { lang: "en" | "he" | null; reads: "no" | "little" | "yes" | null; ui: string | null };
+  /** The road to the fortress (Gadi 2026-11-15, the AI review): what the game
+   *  taught, in words a parent can use. `index` = words the child knows,
+   *  `knownWeek` = the ones that entered the index in the last 7 days, `hard`
+   *  = words missed more often than answered, `ask` = one word to ask about
+   *  at dinner. Null when the child never played. */
+  journey?: { index: number; knownWeek: string[]; hard: string[]; ask: string | null } | null;
 };
+
+/** What the journey game taught a profile, from its word cards (users/{uid}/journeyCards). */
+async function journeyOf(uid: string): Promise<ChildProgress["journey"]> {
+  const snap = await getAdminDb().collection("users").doc(uid).collection("journeyCards").limit(500).get();
+  if (snap.empty) return null;
+  const cutoff = new Date(Date.now() - WEEK_MS).toISOString().slice(0, 10);
+  const rows = snap.docs.map((d) => d.data() as { word?: string; knownDay?: string | null; right?: number; wrong?: number; stars?: number; lastDay?: string | null });
+  const word = (r: { word?: string }) => (typeof r.word === "string" ? r.word.trim() : "");
+  const known = rows.filter((r) => !!r.knownDay && word(r));
+  const knownWeek = known.filter((r) => (r.knownDay as string) >= cutoff).sort((a, b) => String(b.knownDay).localeCompare(String(a.knownDay))).map(word).slice(0, 8);
+  const hard = rows.filter((r) => !r.knownDay && word(r) && (r.wrong ?? 0) >= 2 && (r.wrong ?? 0) > (r.right ?? 0)).sort((a, b) => (b.wrong ?? 0) - (a.wrong ?? 0)).map(word).slice(0, 3);
+  // The word to ask about: the newest one in the index, else one the child has started.
+  const started = rows.filter((r) => !r.knownDay && (r.stars ?? 0) > 0 && word(r)).sort((a, b) => String(b.lastDay ?? "").localeCompare(String(a.lastDay ?? ""))).map(word);
+  return { index: known.length, knownWeek, hard, ask: knownWeek[0] ?? started[0] ?? null };
+}
 
 /** A child plus the words added in the last 7 days (newest first, distinct),
  *  used by the weekly email; the dashboard response leaves it out. */
@@ -139,6 +160,7 @@ export async function loadFamilyProgress(ownerUid: string): Promise<FamilyProgre
         const uid = ownMemberUid(ownerUid, m.userId);
         if (!uid) return base;
         const lr = await learningOf(uid).catch(() => null);
+        base.journey = await journeyOf(uid).catch(() => null);
         base.learning = lr?.learning ?? null;
         if (lr) base.learnSetup = lr.setup;
 

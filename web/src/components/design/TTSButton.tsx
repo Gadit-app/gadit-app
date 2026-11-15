@@ -27,6 +27,7 @@
  * from text or, last resort, "en-US".
  */
 
+import { forDeviceVoice } from "@/lib/hebrew-speech";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 
@@ -161,7 +162,9 @@ export function TTSButton({
     // page must not stack.
     window.speechSynthesis.cancel();
 
-    const u = new SpeechSynthesisUtterance(text);
+    // A device voice reads a furtive patah where it is written ("le-na-tse-cha"):
+    // for the voice only, the sign moves before its letter (lib/hebrew-speech.ts).
+    const u = new SpeechSynthesisUtterance(forDeviceVoice(text));
     u.lang = toBcp47(audioLang);
     // Pin the matching voice when we found one, so the engine doesn't
     // silently substitute the system default.

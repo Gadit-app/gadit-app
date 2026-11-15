@@ -440,6 +440,18 @@ async function applyPlanToUser(
   extra: Record<string, unknown>
 ) {
   const db = getAdminDb();
+  // A plan opened by hand (comp, e.g. a year paid by bank transfer, Gadi
+  // 2026-11-15) is not Stripe's to take away: while it runs, an old
+  // subscription that fails or ends must not downgrade the account or mark it
+  // past due. A new paid subscription (active or trialing) still applies.
+  const status = String(extra.subscriptionStatus ?? "");
+  if (plan === "basic" || status === "past_due" || status === "canceled" || status === "unpaid") {
+    const cur = (await db.collection("users").doc(userId).get()).data();
+    if (cur?.comp === true && typeof cur.compUntil === "number" && cur.compUntil > Date.now()) {
+      console.log(`[webhook] user ${userId} holds a comp until ${new Date(cur.compUntil).toISOString().slice(0, 10)}: ${plan}/${status} not applied`);
+      return;
+    }
+  }
   await db.collection("users").doc(userId).set(
     {
       plan,

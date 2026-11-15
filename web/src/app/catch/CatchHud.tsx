@@ -26,7 +26,7 @@ export function CatchHud({ word, letters, step, pic, c, game, onExit }: {
             // eslint-disable-next-line @next/next/no-img-element
             <img className="ct-slots-pic" src={pic} alt="" />
           ) : null}
-          <span className="ct-slots-say"><TTSButton text={word.nq || (word.native ? word.raw : word.w)} audioLang={audioLang} ariaLabel={c.hear} className="ct-tts-btn" rate={0.85} /></span>
+          <span className="ct-slots-say"><TTSButton text={word.nq || (word.native ? word.raw : word.w)} audioLang={audioLang} ariaLabel={c.hear} className="ct-tts-btn" rate={0.85} useOpenAI={word.lang === "he"} /></span>
           {/* plain text, not Glyph: a word's letters share one baseline (Osher 2026-11-10: in
               "above" the letters jumped up and down, because Glyph centres each letter's ink) */}
           {letters.map((l, i) => (

@@ -229,6 +229,14 @@ export const sfx = {
     noise(a, d, { t: t + 0.05, dur: 0.5, peak: 0.05, f0: 800, f1: 6000, q: 0.6, attack: 0.2 });
   },
 
+  /** A jump: a short springy "boing" that slides up, with a puff of air. */
+  jump() {
+    const a = audio(); if (!a) return; const t = now(a); const d = bus(a, { wet: 0.25 });
+    tone(a, d, { f: 300, to: 820, t, dur: 0.16, peak: 0.3, type: "triangle", lp: 2600, attack: 0.004 });
+    tone(a, d, { f: 600, to: 1240, t: t + 0.03, dur: 0.11, peak: 0.1, attack: 0.004 });
+    noise(a, d, { t, dur: 0.09, peak: 0.07, type: "highpass", f0: 2400 });
+  },
+
   /** A curtain or a scene opening: a soft airy whoosh. */
   whoosh() {
     const a = audio(); if (!a) return; const t = now(a); const d = bus(a, { wet: 0.4 });

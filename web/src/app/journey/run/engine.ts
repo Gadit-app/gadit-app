@@ -11,6 +11,8 @@
  */
 
 import type * as THREE from "three";
+import { DEFAULT_LOOK, type Look } from "@/lib/journey/shop";
+import { buildFigure, hop } from "./figure";
 
 export type Theme = {
   skyTop: string; sky: string; haze: number; ground: number; hill: number; path: number; curb: number; block: number;
@@ -22,14 +24,20 @@ export const THEMES: Theme[] = [
   { skyTop: "#5c9fe0", sky: "#e4f6ff", haze: 0xe4f6ff, ground: 0xf4fbff, hill: 0xcfe6f5, path: 0xbfe3f5, curb: 0x8fc3e0, block: 0x7fc4e8, fort: 0x8fb7d9, fortDark: 0x6f97bd, roof: 0x2f6fb0, flag: 0xff6b6b, dots: [0xffffff, 0xcfeeff, 0xa8d8f0], prop: "ice" },
 ];
 
-export type Rival = { name: string; shirt: number };
+export type Rival = { name: string; shirt: number; /** A real player's look (the shop). */ look?: Look };
 export type RunOptions = {
   theme: number;
+  /** What the child's runner wears (the shop). */
+  look?: Look;
+  /** Today's new words: each stands on a sign beside the road. */
+  signs?: string[];
   rivals: Rival[];
   onSparks: (n: number) => void;
   onProgress: (part: number, place: number) => void;
   onSpark: () => void;
   onStumble: () => void;
+  /** The child's runner left the ground. */
+  onJump?: () => void;
   /** The runner reached the gate and the gate starts to rise. */
   onGate: () => void;
   /** The runner is inside. `place` is 1 when nobody was ahead. */
@@ -41,7 +49,7 @@ const LANES = [-2.2, 0, 2.2];
 const LENGTH = 300;
 const ROW_GAP = 9;
 
-type Runner = { group: THREE.Group; arms: THREE.Group[]; legs: THREE.Group[]; lane: number; x: number; dist: number; pace: number; stumble: number; done: boolean; decided: number; up: number; vy: number };
+type Runner = { group: THREE.Group; arms: THREE.Group[]; legs: THREE.Group[]; pet: THREE.Group | null; lane: number; x: number; dist: number; pace: number; stumble: number; done: boolean; decided: number; up: number; vy: number };
 type Item = { mesh: THREE.Object3D; lane: number; dist: number; kind: "block" | "spark"; hit: boolean };
 
 export async function startRun(canvas: HTMLCanvasElement, o: RunOptions): Promise<RunHandle> {
@@ -210,11 +218,15 @@ export async function startRun(canvas: HTMLCanvasElement, o: RunOptions): Promis
     const arms = [limb(-0.64, 2.0, 0.95, shirt, 0xf2c79a), limb(0.64, 2.0, 0.95, shirt, 0xf2c79a)];
     const legs = [limb(-0.25, 0.98, 0.98, pants, 0xffffff), limb(0.25, 0.98, 0.98, pants, 0xffffff)];
     scene.add(g);
-    return { group: g, arms, legs, lane: 1, x: 0, dist: 0, pace: 1, stumble: 0, done: false, decided: -1, up: 0, vy: 0 };
+    return { group: g, arms, legs, pet: null, lane: 1, x: 0, dist: 0, pace: 1, stumble: 0, done: false, decided: -1, up: 0, vy: 0 };
   };
-  const me = makeRunner(0x0a7472, 0x24415c, 0xf5a400);
+  const mine = buildFigure(T, o.look ?? DEFAULT_LOOK);
+  scene.add(mine.group);
+  const me: Runner = { ...mine, lane: 1, x: 0, dist: 0, pace: 1, stumble: 0, done: false, decided: -1, up: 0, vy: 0 };
   const rivals: Runner[] = o.rivals.map((r, i) => {
-    const k = makeRunner(r.shirt, 0x3b3b4f, 0xffffff);
+    let k: Runner;
+    if (r.look) { const f = buildFigure(T, r.look, 0x3b3b4f); scene.add(f.group); k = { ...f, lane: 1, x: 0, dist: 0, pace: 1, stumble: 0, done: false, decided: -1, up: 0, vy: 0 }; }
+    else k = makeRunner(r.shirt, 0x3b3b4f, 0xffffff);
     k.lane = i % 2 === 0 ? 0 : 2;
     k.x = LANES[k.lane];
     k.pace = 0.93 + i * 0.05;
@@ -234,6 +246,36 @@ export async function startRun(canvas: HTMLCanvasElement, o: RunOptions): Promis
     k.group.add(tag);
     return k;
   });
+
+  // A sign for every new word of the day, on alternating sides of the road,
+  // each twice along the way: the child reads the word before meeting it inside.
+  {
+    const words = (o.signs ?? []).filter(Boolean).slice(0, 6);
+    const places = words.length ? Math.max(words.length, 6) : 0;
+    for (let k = 0; k < places; k++) {
+      const word = words[k % words.length];
+      const cv = document.createElement("canvas");
+      cv.width = 512; cv.height = 192;
+      const ctx = cv.getContext("2d");
+      if (ctx) {
+        ctx.fillStyle = "#fffdf5"; ctx.beginPath(); ctx.roundRect(6, 6, 500, 180, 28); ctx.fill();
+        ctx.lineWidth = 10; ctx.strokeStyle = "#0a7472"; ctx.stroke();
+        ctx.fillStyle = "#14202b"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        let px = 96; ctx.font = `800 ${px}px Rubik, system-ui, sans-serif`;
+        while (ctx.measureText(word).width > 450 && px > 34) { px -= 6; ctx.font = `800 ${px}px Rubik, system-ui, sans-serif`; }
+        ctx.fillText(word, 256, 100);
+      }
+      const side = k % 2 === 0 ? -1 : 1;
+      const sign = new T.Group();
+      const board = new T.Mesh(new T.PlaneGeometry(4.6, 1.72), new T.MeshBasicMaterial({ map: new T.CanvasTexture(cv), transparent: true }));
+      board.position.y = 3.3;
+      const post = box(0.22, 2.6, 0.22, 0x8a5a2b); post.position.y = 1.3;
+      sign.add(post, board);
+      sign.position.set(side * 5.6, 0, -(40 + k * ((LENGTH - 80) / Math.max(1, places - 1))));
+      sign.rotation.y = side * -0.42;
+      scene.add(sign);
+    }
+  }
 
   // The course: every few steps a row with blocks in some lanes and sparks in a free one.
   const items: Item[] = [];
@@ -293,6 +335,7 @@ export async function startRun(canvas: HTMLCanvasElement, o: RunOptions): Promis
     r.legs[0].rotation.x = -a; r.legs[1].rotation.x = a;
     r.group.position.set(r.x, still ? 0 : r.up + (r.up > 0 ? 0 : Math.abs(Math.sin(t * 11)) * 0.12), -r.dist);
     r.group.rotation.z = r.stumble > 0 ? Math.sin(t * 30) * 0.12 : (LANES[r.lane] - r.x) * -0.08;
+    hop(r, t, still);
   };
 
   const step = (r: Runner, dt: number, mine: boolean) => {
@@ -371,7 +414,7 @@ export async function startRun(canvas: HTMLCanvasElement, o: RunOptions): Promis
 
   return {
     steer: (dir) => { if (!me.done) me.lane = Math.max(0, Math.min(2, me.lane + dir)); },
-    jump: () => { if (!me.done && me.up === 0 && me.stumble <= 0) me.vy = 10.5; },
+    jump: () => { if (!me.done && me.up === 0 && me.stumble <= 0) { me.vy = 10.5; o.onJump?.(); } },
     dispose: () => {
       stopped = true;
       cancelAnimationFrame(raf);

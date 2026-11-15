@@ -836,6 +836,8 @@ type ChildProgress = {
   learning?: { lang: "en" | "he"; learnedWeek: number; learnedTotal: number; reinforce: number; list: { total: number; ready: number; testDate: string | null } | null } | null;
   /** The learning setting the parent can change (2026-10-22). */
   learnSetup?: LearnSetup;
+  /** What the journey game taught (lib/family-progress journeyOf). */
+  journey?: { index: number; knownWeek: string[]; hard: string[]; ask: string | null } | null;
 };
 
 const PROGRESS_COPY: Record<string, {
@@ -1435,6 +1437,31 @@ function ProgressCard({ c, t, lang, onLearnSaved }: { c: ChildProgress; t: (type
               </div>
             </div>
           )}
+          {/* The road to the fortress (Gadi 2026-11-15): what the game taught,
+              and one word to ask about at dinner. Hebrew and English only,
+              like the game itself. */}
+          {c.journey && (lang === "he" || lang === "en") && (() => {
+            const j = c.journey;
+            const he = lang === "he";
+            return (
+              <div className="fam-dash-recent">
+                <div className="fam-dash-recent-label">{he ? `הדרך למבצר: ${j.index} מילים באינדקס` : `The road to the fortress: ${j.index} words in the index`}</div>
+                {j.knownWeek.length > 0 && (
+                  <>
+                    <div className="fam-dash-recent-label">{he ? "נכנסו לאינדקס השבוע" : "Entered the index this week"}</div>
+                    <div className="fam-dash-chips">{j.knownWeek.map((w, i) => <span key={i} className="fam-dash-chip">{w}</span>)}</div>
+                  </>
+                )}
+                {j.hard.length > 0 && (
+                  <>
+                    <div className="fam-dash-recent-label">{he ? "מילים שעוד קשות" : "Words that are still hard"}</div>
+                    <div className="fam-dash-chips">{j.hard.map((w, i) => <span key={i} className="fam-dash-chip">{w}</span>)}</div>
+                  </>
+                )}
+                {j.ask && <div className="fam-dash-recent-label" dir="auto">{he ? `שאלה לארוחת ערב: מה פירוש המילה "${j.ask}"?` : `A question for dinner: what does "${j.ask}" mean?`}</div>}
+              </div>
+            );
+          })()}
         </>
       )}
       {/* Learning mode (Gadi 2026-10-11): real numbers, never a level. */}
