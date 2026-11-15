@@ -32,6 +32,8 @@ export type Data = {
   summary: { index: number; started: number; fresh: number };
   /** The fortress the profile stands at, kept on the server. */
   stage?: number;
+  /** Words freed today by all the children together. */
+  world?: { freedToday: number };
   /** The landscape the child chose for a fortress, by fortress number. */
   roads?: Record<string, number>;
   /** The shop: what was bought, what the runner wears, what was spent (lib/journey/shop.ts). */

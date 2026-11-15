@@ -25,6 +25,7 @@ type Copy = {
   title: string; coins: string; slots: Record<Slot, string>; free: string; mine: string; wearing: string;
   buy: (n: number) => string; short: (n: number) => string; how: string; back: string; run: string;
   signIn: string; loading: string; failed: string; retry: string; bought: string; price: (n: number) => string;
+  earn: (n: number) => string; earnMore: (n: number) => string;
 };
 const COPY: Record<"he" | "en", Copy> = {
   he: {
@@ -35,6 +36,7 @@ const COPY: Record<"he" | "en", Copy> = {
     back: "חזרה לאינדקס", run: "רצים אל המבצר",
     signIn: "כדי להיכנס לחנות צריך להתחבר", loading: "פותחים את החנות", failed: "החנות לא נטענה", retry: "לנסות שוב",
     bought: "קניתם! זה שלכם לתמיד", price: (n) => `${n} מטבעות`,
+    earn: (n) => `ב-${n} מילים`, earnMore: (n) => (n === 1 ? "עוד מילה אחת באינדקס, וזה שלכם. את זה לא קונים" : `עוד ${n} מילים באינדקס, וזה שלכם. את זה לא קונים`),
   },
   en: {
     title: "The shop", coins: "coins", slots: { shirt: "Shirt", hat: "Hat", back: "On the back", pet: "Companion" },
@@ -44,18 +46,23 @@ const COPY: Record<"he" | "en", Copy> = {
     back: "Back to the index", run: "Run to the fortress",
     signIn: "Sign in to enter the shop", loading: "Opening the shop", failed: "The shop did not load", retry: "Try again",
     bought: "Bought! It is yours for good", price: (n) => `${n} coins`,
+    earn: (n) => `At ${n} words`, earnMore: (n) => (n === 1 ? "One more word in your index and it is yours. This one is not for sale" : `${n} more words in your index and it is yours. This one is not for sale`),
   },
 };
 
-export function ShopClient() {
-  const { user, loading: authLoading } = useAuth();
+export function ShopClient({ demo = false }: { demo?: boolean }) {
+  const { user: realUser, loading: authLoading } = useAuth();
+  // The sample shop (?demo=1): 500 coins and 30 words to try things with. Nothing is read or saved.
+  const user = demo ? null : realUser;
   const { lang, dir } = useLang();
   const c = COPY[lang === "he" ? "he" : "en"];
-  const [state, setState] = useState<"loading" | "ready" | "failed">("loading");
-  const [earned, setEarned] = useState(0);
+  const [state, setState] = useState<"loading" | "ready" | "failed">(demo ? "ready" : "loading");
+  const [earned, setEarned] = useState(demo ? 500 : 0);
   const [owned, setOwned] = useState<string[]>([]);
   const [look, setLook] = useState<Look>(DEFAULT_LOOK);
   const [spent, setSpent] = useState(0);
+  // Words in the index: some things are earned by them, not bought.
+  const [known, setKnown] = useState(demo ? 30 : 0);
   const [slot, setSlot] = useState<Slot>("hat");
   // The thing being tried on in the window (not bought yet), if any.
   const [trying, setTrying] = useState<string | null>(null);
@@ -75,6 +82,7 @@ export function ShopClient() {
       setOwned(d.shop?.owned ?? []);
       setLook({ ...DEFAULT_LOOK, ...(d.shop?.look ?? {}) });
       setSpent(d.shop?.spent ?? 0);
+      setKnown(d.summary?.index ?? 0);
       setState("ready");
     } catch { setState("failed"); }
   }, [user, lang]);
@@ -82,7 +90,7 @@ export function ShopClient() {
 
   // What the window shows: the worn look, with the thing being tried on.
   const shown = useMemo((): Look => { const it = trying ? shopItem(trying) : undefined; return it ? { ...look, [it.slot]: it.id } : look; }, [look, trying]);
-  const ready = !!user && state === "ready";
+  const ready = (!!user || demo) && state === "ready";
   useEffect(() => {
     if (!ready || !canvasRef.current) return;
     let gone = false;
@@ -97,6 +105,13 @@ export function ShopClient() {
   const tried = trying ? shopItem(trying) : undefined;
 
   async function send(body: { buy?: string; wear?: string }): Promise<boolean> {
+    if (demo) {
+      const it = shopItem(body.buy ?? body.wear ?? "");
+      if (!it) return false;
+      if (body.buy) { setOwned((o) => [...o, it.id]); setSpent((x) => x + it.price); }
+      setLook((l) => ({ ...l, [it.slot]: it.id }));
+      return true;
+    }
     if (!user) return false;
     setBusy(true);
     try {
@@ -111,11 +126,11 @@ export function ShopClient() {
     if (busy) return;
     sfx.tap();
     setJustBought(false);
-    if (owns(owned, id)) { setTrying(null); const it = shopItem(id); if (it && look[it.slot] !== id) { setLook({ ...look, [it.slot]: id }); void send({ wear: id }); } return; }
+    if (owns(owned, id, known)) { setTrying(null); const it = shopItem(id); if (it && look[it.slot] !== id) { setLook({ ...look, [it.slot]: id }); void send({ wear: id }); } return; }
     setTrying(id);
   }
   async function buy() {
-    if (!tried || busy || balance < tried.price) return;
+    if (!tried || tried.need || busy || balance < tried.price) return;
     const ok = await send({ buy: tried.id });
     if (ok) { sfx.win(); setTrying(null); setJustBought(true); } else sfx.wrong();
   }
@@ -125,7 +140,7 @@ export function ShopClient() {
       <style>{JRN_CSS}</style>
       <style>{SHOP_CSS}</style>
       <div className="jrn-wrap">
-        {!authLoading && !user && <p className="jrn-note">{c.signIn}</p>}
+        {!demo && !authLoading && !user && <p className="jrn-note">{c.signIn}</p>}
         {user && state === "loading" && <p className="jrn-note">{c.loading}…</p>}
         {user && state === "failed" && (
           <p className="jrn-note">{c.failed} <button type="button" className="jrn-btn is-ghost" onClick={() => { setState("loading"); void load(); }}>{c.retry}</button></p>
@@ -142,7 +157,8 @@ export function ShopClient() {
 
             <div className="shop-act" aria-live="polite">
               {tried ? (
-                balance >= tried.price
+                tried.need ? <span className="shop-short">{c.earnMore(Math.max(1, tried.need - known))}</span>
+                : balance >= tried.price
                   ? <button type="button" className="jrn-btn" onClick={() => void buy()} disabled={busy}>{c.buy(tried.price)}</button>
                   : <span className="shop-short">{c.short(tried.price - balance)}</span>
               ) : justBought ? <span className="shop-ok">{c.bought}</span> : <span className="jrn-small">{c.how}</span>}
@@ -156,14 +172,14 @@ export function ShopClient() {
 
             <div className="shop-grid">
               {SHOP.filter((i) => i.slot === slot).map((i) => {
-                const mine = owns(owned, i.id);
+                const mine = owns(owned, i.id, known);
                 const on = look[i.slot] === i.id && !trying;
                 const sel = trying === i.id;
                 return (
                   <button key={i.id} type="button" className={`shop-item${on ? " is-on" : ""}${sel ? " is-try" : ""}`} onClick={() => tap(i.id)} aria-pressed={on || sel}>
                     <span className="shop-icon" aria-hidden="true" style={i.color !== undefined ? { color: `#${i.color.toString(16).padStart(6, "0")}` } : undefined}>{i.icon}</span>
                     <span className="shop-name">{lang === "he" ? i.he : i.en}</span>
-                    <span className={`shop-tag${mine ? " is-mine" : ""}`}>{on ? c.wearing : mine ? (i.price === 0 ? c.free : c.mine) : c.price(i.price)}</span>
+                    <span className={`shop-tag${mine ? " is-mine" : ""}`}>{on ? c.wearing : mine ? (i.price === 0 && !i.need ? c.free : c.mine) : i.need ? c.earn(i.need) : c.price(i.price)}</span>
                   </button>
                 );
               })}

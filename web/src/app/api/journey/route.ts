@@ -68,7 +68,13 @@ const MAX_STAGE = 100000;
 /** Coins for a word freed in the fortress (a real step of a card, not a practice round), so a
  *  new child can buy something small after the first game or two (Gadi 2026-11-15). Kept in
  *  the state doc as `bonus`; the coins of a profile are those of its known words plus these. */
-const FREED_COINS = 2;
+const FREED_COINS = 3;
+/** Coins for opening a whole fortress. */
+const FORT_COINS = 5;
+/** More coins for a word remembered after a long gap: by the gap that was waited (7, 30, 90, 365 days). */
+const GAP_COINS = [3, 6, 10, 15];
+/** The words freed by everyone on a day (UTC), one number with no names: journeyWorld/{day}. */
+const worldOf = (d = new Date()) => getAdminDb().collection("journeyWorld").doc(d.toISOString().slice(0, 10));
 const bonusOf = (v: unknown): number => (typeof v === "number" && v > 0 ? Math.floor(v) : 0);
 /** The landscape the child chose for a fortress, by fortress number (three landscapes). */
 const ROADS = 3;
@@ -182,11 +188,15 @@ export async function GET(req: NextRequest) {
     if (format === SENSE && s) return { id: c.id, format, sense: s };
     return { id: c.id, format: format === ODD || format === SENSE ? FORMATS[0] : format };
   });
-  const state = (await stateOf(user.userId).get()).data() ?? {};
+  const [stateSnap, worldSnap] = await Promise.all([stateOf(user.userId).get(), worldOf().get()]);
+  const state = stateSnap.data() ?? {};
+  const freedToday = worldSnap.get("freed");
   const st = state.stage;
   return NextResponse.json({
     stage: typeof st === "number" && st >= 0 ? Math.floor(st) : 0,
     roads: roadsOf(state.roads),
+    // Words freed today by all the children together: a number only.
+    world: { freedToday: typeof freedToday === "number" && freedToday > 0 ? Math.floor(freedToday) : 0 },
     // The shop: what was bought, what the runner wears and what was spent.
     shop: { owned: cleanOwned(state.owned), look: cleanLook(state.look), spent: typeof state.spent === "number" && state.spent > 0 ? Math.floor(state.spent) : 0 },
     today, dailyMax: DAILY_MAX, usedToday: used, starsToKnow: STARS_TO_KNOW,
@@ -219,19 +229,22 @@ export async function POST(req: NextRequest) {
     const item = shopItem(String(body.buy ?? body.wear));
     if (!item) return NextResponse.json({ error: "bad_request" }, { status: 400 });
     const ref = stateOf(user.userId);
-    const cardSnap = typeof body.buy === "string" ? await cardsOf(user.userId).limit(MAX_CARDS).get() : null;
-    const cardCoins = cardSnap ? coinsOf(cardSnap.docs.map((d) => readCard(d.id, d.data())).filter((c): c is Stored => !!c)) : 0;
+    const cardSnap = typeof body.buy === "string" || item.need ? await cardsOf(user.userId).limit(MAX_CARDS).get() : null;
+    const mine = cardSnap ? cardSnap.docs.map((d) => readCard(d.id, d.data())).filter((c): c is Stored => !!c) : [];
+    const cardCoins = coinsOf(mine);
+    // A thing that is earned, not sold: the child's once enough words are in the index.
+    const known = mine.filter(isKnown).length;
     const out = await getAdminDb().runTransaction(async (tx) => {
       const cur = (await tx.get(ref)).data() ?? {};
       let owned = cleanOwned(cur.owned);
       const look = cleanLook(cur.look);
       let spent = typeof cur.spent === "number" && cur.spent > 0 ? Math.floor(cur.spent) : 0;
       if (typeof body.buy === "string") {
-        if (owns(owned, item.id)) return { error: "owned" as const, owned, look, spent };
+        if (item.need || owns(owned, item.id)) return { error: "owned" as const, owned, look, spent };
         if (cardCoins + bonusOf(cur.bonus) - spent < item.price) return { error: "short" as const, owned, look, spent };
         owned = [...owned, item.id];
         spent += item.price;
-      } else if (!owns(owned, item.id)) return { error: "not_owned" as const, owned, look, spent };
+      } else if (!owns(owned, item.id, known)) return { error: "not_owned" as const, owned, look, spent };
       look[item.slot] = item.id;
       if (!user.impersonating) tx.set(ref, { owned, look, spent, at: new Date().toISOString() }, { merge: true });
       return { error: null, owned, look, spent };
@@ -246,7 +259,10 @@ export async function POST(req: NextRequest) {
     const cur = (await ref.get()).get("stage");
     const now = typeof cur === "number" && cur >= 0 ? Math.floor(cur) : 0;
     const next = want === now + 1 ? want : now;
-    if (next !== now && !user.impersonating) await ref.set({ stage: next, at: new Date().toISOString() }, { merge: true });
+    if (next !== now && !user.impersonating) {
+      const { FieldValue } = await import("firebase-admin/firestore");
+      await ref.set({ stage: next, at: new Date().toISOString(), bonus: FieldValue.increment(FORT_COINS) }, { merge: true });
+    }
     return NextResponse.json({ stage: next });
   }
   const id = str(body.id), choice = str(body.choice), format = str(body.format);
@@ -266,10 +282,17 @@ export async function POST(req: NextRequest) {
     return { before, after: { ...before, ...r.card } as Stored, event: r.event, frameUp: r.frameUp };
   });
   if (!out) return NextResponse.json({ error: "no_card" }, { status: 404 });
-  const freed = choice === id && (out.event === "star" || out.event === "known" || out.event === "kept") ? FREED_COINS : 0;
+  const real = choice === id && (out.event === "star" || out.event === "known" || out.event === "kept");
+  // A word of the index that was remembered after its gap pays more, the longer the gap.
+  const freed = real ? FREED_COINS + (out.event === "kept" && !out.before.relearn ? GAP_COINS[Math.min(GAP_COINS.length - 1, out.before.gapStep)] : 0) : 0;
   if (freed && !user.impersonating) {
     const { FieldValue } = await import("firebase-admin/firestore");
-    try { await stateOf(user.userId).set({ bonus: FieldValue.increment(freed) }, { merge: true }); } catch (e) { console.warn("journey: freed coins not saved", String(e)); }
+    try {
+      await Promise.all([
+        stateOf(user.userId).set({ bonus: FieldValue.increment(freed) }, { merge: true }),
+        worldOf().set({ freed: FieldValue.increment(1) }, { merge: true }),
+      ]);
+    } catch (e) { console.warn("journey: freed coins not saved", String(e)); }
   }
   return NextResponse.json({
     correct: choice === id, event: out.event, frameUp: out.frameUp, card: view(out.after, today),

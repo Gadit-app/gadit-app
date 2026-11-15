@@ -46,6 +46,30 @@ export function buildFigure(T: T3, look: Look = DEFAULT_LOOK, pants = 0x24415c):
       for (const [x, z] of [[-0.28, -0.28], [0.28, -0.28], [-0.28, 0.28], [0.28, 0.28], [0, -0.28], [0, 0.28]]) g.add(at(box(0.13, 0.24, 0.13, gold), x, 2.92, z));
       g.add(at(box(0.1, 0.1, 0.04, 0xdc2626), 0, 2.76, -0.36));
       break;
+    case "hat-flower":
+      for (let k = 0; k < 8; k++) { const a = (k / 8) * Math.PI * 2; g.add(at(box(0.2, 0.2, 0.2, [0xec4899, 0xfde047, 0xf97316, 0xa78bfa][k % 4]), Math.cos(a) * 0.36, 2.72, Math.sin(a) * 0.36)); }
+      break;
+    case "hat-chef":
+      g.add(at(box(0.66, 0.5, 0.66, 0xffffff), 0, 2.9, 0), at(box(0.86, 0.34, 0.86, 0xffffff), 0, 3.3, 0));
+      break;
+    case "hat-pirate":
+      g.add(at(box(1.1, 0.1, 0.9, 0x1f2937), 0, 2.72, 0), at(box(0.7, 0.42, 0.6, 0x1f2937), 0, 2.94, 0), at(box(0.2, 0.2, 0.02, 0xffffff), 0, 2.94, -0.31));
+      break;
+    case "hat-top":
+      g.add(at(box(1.0, 0.08, 1.0, 0x111827), 0, 2.7, 0), at(box(0.6, 0.7, 0.6, 0x111827), 0, 3.08, 0), at(box(0.62, 0.12, 0.62, 0xdc2626), 0, 2.82, 0));
+      break;
+    case "hat-astro":
+      g.add(at(box(0.86, 0.86, 0.86, 0xf1f5f9), 0, 2.4, 0.02), at(box(0.6, 0.44, 0.06, 0x1e3a8a), 0, 2.44, -0.43), at(box(0.1, 0.3, 0.1, 0x94a3b8), 0.3, 2.98, 0));
+      break;
+    case "hat-star":
+      g.add(at(box(0.68, 0.2, 0.68, 0x1e3a8a), 0, 2.76, 0), at(box(0.5, 0.08, 0.3, 0x1e3a8a), 0, 2.68, -0.46));
+      { const st = at(box(0.34, 0.34, 0.1, gold), 0, 3.1, 0); st.rotation.z = Math.PI / 4; g.add(st, at(box(0.34, 0.34, 0.1, gold), 0, 3.1, 0)); }
+      break;
+    case "hat-diamond":
+      g.add(at(box(0.7, 0.16, 0.7, 0xe2e8f0), 0, 2.75, 0));
+      for (const [x, z] of [[-0.28, -0.28], [0.28, -0.28], [-0.28, 0.28], [0.28, 0.28], [0, -0.28], [0, 0.28]]) g.add(at(cone(0.09, 0.34, 4, 0x7dd3fc), x, 3.0, z));
+      g.add(at(cone(0.16, 0.5, 4, 0x38bdf8), 0, 3.1, 0));
+      break;
     default:
       g.add(at(box(0.68, 0.2, 0.68, 0xf5a400), 0, 2.76, 0), at(box(0.5, 0.08, 0.3, 0xf5a400), 0, 2.68, -0.46));
   }
@@ -77,6 +101,42 @@ export function buildFigure(T: T3, look: Look = DEFAULT_LOOK, pants = 0x24415c):
         g.add(at(box(0.3, 0.8, 0.3, 0x9ca3af), x, 1.56, 0.42), at(box(0.32, 0.12, 0.32, 0x4b5563), x, 2.0, 0.42), flame);
       }
       break;
+    case "back-balloon":
+      g.add(at(box(0.03, 1.5, 0.03, 0x64748b), 0.5, 2.5, 0.3), at(box(0.62, 0.72, 0.62, 0xef4444), 0.5, 3.6, 0.3), at(box(0.62, 0.7, 0.26, 0xf5a400), 0, 1.56, 0.36));
+      break;
+    case "back-guitar": {
+      const gt = new T.Group();
+      gt.add(at(box(0.6, 0.7, 0.14, 0xb45309), 0, 0, 0), at(box(0.16, 0.9, 0.1, 0x78350f), 0, 0.75, 0), at(box(0.24, 0.24, 0.02, 0x1f2937), 0, 0.05, 0.08));
+      gt.position.set(0, 1.5, 0.36); gt.rotation.z = 0.5;
+      g.add(gt);
+      break;
+    }
+    case "back-sword": {
+      const sw = new T.Group();
+      sw.add(at(box(0.14, 1.3, 0.06, 0xd6b98c), 0, 0.3, 0), at(box(0.5, 0.1, 0.1, 0x92400e), 0, -0.36, 0), at(box(0.12, 0.3, 0.1, 0x92400e), 0, -0.54, 0));
+      sw.position.set(0, 1.6, 0.34); sw.rotation.z = -0.6;
+      g.add(sw);
+      break;
+    }
+    case "back-butterfly":
+    case "back-phoenix":
+      for (const side of [-1, 1]) {
+        const fire = look.back === "back-phoenix";
+        const w = new T.Group();
+        w.add(at(box(fire ? 1.1 : 0.8, 0.62, 0.06, fire ? 0xf97316 : 0xa855f7), side * (fire ? 0.6 : 0.44), 0.32, 0), at(box(fire ? 0.9 : 0.62, 0.5, 0.06, fire ? 0xef4444 : 0xec4899), side * (fire ? 0.5 : 0.36), -0.2, 0), at(box(0.2, 0.2, 0.08, fire ? 0xfde047 : 0xfde047), side * (fire ? 0.9 : 0.5), 0.36, 0.01));
+        if (fire) w.add(at(box(0.5, 0.36, 0.06, 0xfde047), side * 0.3, -0.6, 0));
+        w.position.set(side * 0.2, 1.7, 0.32);
+        w.rotation.y = side * -0.5;
+        g.add(w);
+      }
+      break;
+    case "back-starcape": {
+      const cape = at(box(0.98, 1.45, 0.06, 0x1e3a8a), 0, 1.28, 0.36);
+      cape.rotation.x = 0.16;
+      g.add(cape, at(box(1.0, 0.14, 0.2, 0x172554), 0, 2.0, 0.26));
+      for (const [x, y] of [[-0.25, 1.7], [0.2, 1.5], [-0.1, 1.15], [0.28, 0.95], [-0.3, 0.8]]) g.add(at(box(0.1, 0.1, 0.02, 0xfde047), x, y, 0.42 + (1.6 - y) * 0.16));
+      break;
+    }
     default:
       g.add(at(box(0.62, 0.7, 0.26, 0xf5a400), 0, 1.56, 0.36));
   }
@@ -116,12 +176,33 @@ export function buildFigure(T: T3, look: Look = DEFAULT_LOOK, pants = 0x24415c):
         p.add(at(box(0.44, 0.44, 0.4, 0xcbd5e1), 0, 0.4, 0), at(box(0.36, 0.3, 0.34, 0x94a3b8), 0, 0.8, 0), at(box(0.24, 0.08, 0.04, 0x38bdf8), 0, 0.82, -0.18), at(box(0.04, 0.2, 0.04, 0x475569), 0, 1.05, 0), at(box(0.1, 0.1, 0.1, 0xef4444), 0, 1.18, 0));
         for (const x of [-0.14, 0.14]) p.add(at(box(0.14, 0.16, 0.2, 0x475569), x, 0.08, 0));
         break;
+      case "pet-bunny":
+        creature(0xffffff, 0xe2e8f0);
+        for (const x of [-0.1, 0.1]) p.add(at(box(0.1, 0.44, 0.08, 0xffffff), x, 1.05, -0.34), at(box(0.05, 0.3, 0.02, 0xf9a8d4), x, 1.05, -0.39));
+        p.add(at(box(0.16, 0.16, 0.16, 0xffffff), 0, 0.42, 0.4));
+        break;
+      case "pet-fox":
+        creature(0xea580c, 0x7c2d12);
+        for (const x of [-0.13, 0.13]) p.add(at(cone(0.1, 0.24, 4, 0xea580c), x, 0.96, -0.34));
+        p.add(at(box(0.14, 0.14, 0.4, 0xea580c), 0, 0.46, 0.5), at(box(0.15, 0.15, 0.14, 0xffffff), 0, 0.46, 0.74), at(box(0.2, 0.14, 0.1, 0xffffff), 0, 0.58, -0.56));
+        break;
+      case "pet-owl":
+        p.add(at(box(0.46, 0.56, 0.4, 0x92400e), 0, 0.4, 0), at(box(0.5, 0.36, 0.42, 0xb45309), 0, 0.82, 0));
+        for (const x of [-0.12, 0.12]) p.add(at(box(0.16, 0.16, 0.04, 0xfde047), x, 0.84, -0.22), at(box(0.07, 0.07, 0.04, 0x111827), x, 0.84, -0.24), at(cone(0.07, 0.16, 4, 0x92400e), x * 1.6, 1.08, 0));
+        p.add(at(cone(0.05, 0.12, 4, 0xf97316), 0, 0.74, -0.26));
+        break;
+      case "pet-unicorn":
+        creature(0xffffff, 0xf5d0fe);
+        p.add(at(cone(0.06, 0.34, 6, 0xf5b301), 0, 1.02, -0.4));
+        for (const z of [-0.2, 0, 0.18]) p.add(at(box(0.1, 0.2, 0.14, [0xec4899, 0xa78bfa, 0x38bdf8][Math.round((z + 0.2) * 5) % 3]), 0, 0.72, z));
+        p.add(at(box(0.1, 0.34, 0.1, 0xec4899), 0, 0.42, 0.42));
+        break;
       default:
-        // The little dragon.
-        creature(0x22c55e, 0x15803d);
-        for (const z of [-0.1, 0.12, 0.3]) p.add(at(cone(0.07, 0.16, 4, 0xfde047), 0, 0.64, z));
-        for (const side of [-1, 1]) { const w = at(box(0.36, 0.26, 0.04, 0x86efac), side * 0.34, 0.6, 0.04); w.rotation.y = side * -0.5; p.add(w); }
-        p.add(at(box(0.1, 0.1, 0.34, 0x22c55e), 0, 0.34, 0.48));
+        // The little dragon (and the golden one).
+        creature(look.pet === "pet-golddragon" ? 0xf5b301 : 0x22c55e, look.pet === "pet-golddragon" ? 0xb45309 : 0x15803d);
+        for (const z of [-0.1, 0.12, 0.3]) p.add(at(cone(0.07, 0.16, 4, look.pet === "pet-golddragon" ? 0xef4444 : 0xfde047), 0, 0.64, z));
+        for (const side of [-1, 1]) { const w = at(box(0.36, 0.26, 0.04, look.pet === "pet-golddragon" ? 0xfde68a : 0x86efac), side * 0.34, 0.6, 0.04); w.rotation.y = side * -0.5; p.add(w); }
+        p.add(at(box(0.1, 0.1, 0.34, look.pet === "pet-golddragon" ? 0xf5b301 : 0x22c55e), 0, 0.34, 0.48));
     }
     pet.position.set(1.15, 0, 0.5);
     g.add(pet);

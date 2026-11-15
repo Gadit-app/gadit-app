@@ -34,6 +34,7 @@ type Copy = {
   arrived: (name: string) => string; whichMeaning: string; whichWord: string; whichOdd: string; whichSense: string; senseYes: string; senseNo: string; whichBuild: string; hear: string; lesson: string; second: string; newToday: string; freed: string; held: (name: string) => string;
   nextWord: string; openGate: string; opened: string; freedCount: (n: number, of: number) => string; nextFort: string; backIndex: string;
   stillHolds: (name: string, n: number) => string; waitTomorrow: string; alsoNow: (names: string) => string;
+  earlierToday: (names: string) => string; worldToday: (n: number) => string;
   tomorrow: string; pickRoad: string; picked: (name: string) => string; roads: string[]; ownWord: string; map: string;
   noneToday: string; fewWords: string; signIn: string; loading: string; failed: string; retry: string;
   monsters: string[]; sample: string;
@@ -49,6 +50,7 @@ const COPY: Record<string, Copy> = {
     nextWord: "למילה הבאה", openGate: "פותחים את המבצר", opened: "המבצר נפתח", freedCount: (n, of) => `שחררתם ${n} מתוך ${of} מילים`,
     nextFort: "למבצר הבא", backIndex: "חזרה לאינדקס",
     stillHolds: (name, n) => (n === 1 ? `${name} עוד מחזיקה מילה אחת` : `${name} עוד מחזיקה ${n} מילים`), waitTomorrow: "הן יחכו לכם מחר במבצר הזה, ולא איבדתם כלום", alsoNow: (names) => `גם רצים עכשיו אל המבצר שלהם: ${names}`,
+    earlierToday: (names) => `מוקדם יותר היום רצו כאן: ${names}`, worldToday: (n) => `היום ילדים שחררו יחד ${n.toLocaleString("he")} מילים`,
     tomorrow: "במבצר הבא מחכה מפלצת חדשה", pickRoad: "באיזו דרך רצים אליה?", picked: (name) => `בחרתם: ${name}`, roads: ["דרך היער", "דרך המדבר", "דרך הקרח"],
     ownWord: "את המילה הזאת חיפשתם בעצמכם", map: "🗺️ המפה שלי",
     noneToday: "המילים של היום כבר שוחררו. המבצר הבא ייפתח מחר", fewWords: "כשיהיו לכם שלוש מילים, המבצר הראשון ייפתח",
@@ -65,6 +67,7 @@ const COPY: Record<string, Copy> = {
     nextWord: "Next word", openGate: "Open the fortress", opened: "The fortress is open", freedCount: (n, of) => `You freed ${n} of ${of} words`,
     nextFort: "To the next fortress", backIndex: "Back to the index",
     stillHolds: (name, n) => (n === 1 ? `${name} still keeps one word` : `${name} still keeps ${n} words`), waitTomorrow: "They wait for you tomorrow in this fortress, and nothing was lost", alsoNow: (names) => `Also running to their own fortress now: ${names}`,
+    earlierToday: (names) => `Earlier today these ran here: ${names}`, worldToday: (n) => `Today children freed ${n.toLocaleString("en")} words together`,
     tomorrow: "A new monster waits in the next fortress", pickRoad: "Which road will you take to it?", picked: (name) => `You chose: ${name}`, roads: ["The forest road", "The desert road", "The ice road"],
     ownWord: "You looked this word up yourself", map: "🗺️ My map",
     noneToday: "Today's words are already free. The next fortress opens tomorrow", fewWords: "The first fortress opens once you have three words",
@@ -188,12 +191,14 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   // a first name and a look, nothing more. They run beside the child; there is
   // no place in a race against them, no helping and no way to reach them.
   const [others, setOthers] = useState<Array<{ name: string; look: Look }>>([]);
+  const [earlier, setEarlier] = useState<string[]>([]);
   const seeOthers = useCallback(async () => {
     if (!user || demo) return;
     try {
       const res = await fetch("/api/journey/now", { method: "POST", headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
-      const d = (await res.json()) as { others?: Array<{ name: string; look: Look }> };
+      const d = (await res.json()) as { others?: Array<{ name: string; look: Look }>; earlier?: string[] };
       if (Array.isArray(d.others)) setOthers(d.others);
+      if (Array.isArray(d.earlier)) setEarlier(d.earlier);
     } catch { /* the road is simply quiet */ }
   }, [user, demo]);
   useEffect(() => { const id = window.setTimeout(() => { void seeOthers(); }, 0); return () => window.clearTimeout(id); }, [seeOthers]);
@@ -385,6 +390,8 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
                 )}
                 <p className="jrn-small">{c.how}</p>
                 {!demo && others.length > 0 && <p className="jrn-small run-also">{c.alsoNow(others.map((o) => o.name).join(", "))}</p>}
+                {!demo && others.length === 0 && earlier.length > 0 && <p className="jrn-small run-also">{c.earlierToday(earlier.join(", "))}</p>}
+                {!demo && (data?.world?.freedToday ?? 0) >= 10 && <p className="jrn-small run-also">{c.worldToday(data!.world!.freedToday)}</p>}
                 <button type="button" className="jrn-btn" onClick={begin}>{c.go}</button>
                 {!demo && <Link className="jrn-btn is-ghost" href="/journey/shop">{lang === "he" ? "🛍️ לחנות" : "🛍️ To the shop"}</Link>}
                 {!demo && <Link className="jrn-btn is-ghost" href="/journey/map">{c.map}</Link>}
