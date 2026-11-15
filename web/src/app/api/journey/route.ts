@@ -62,6 +62,11 @@ const cardsOf = (uid: string) => getAdminDb().collection("users").doc(uid).colle
 /** The fortress the profile stands at (users/{uid}/journey/state), so a second device continues the same road. */
 const stateOf = (uid: string) => getAdminDb().collection("users").doc(uid).collection("journey").doc("state");
 const MAX_STAGE = 100000;
+/** Coins for a word freed in the fortress (a real step of a card, not a practice round), so a
+ *  new child can buy something small after the first game or two (Gadi 2026-11-15). Kept in
+ *  the state doc as `bonus`; the coins of a profile are those of its known words plus these. */
+const FREED_COINS = 2;
+const bonusOf = (v: unknown): number => (typeof v === "number" && v > 0 ? Math.floor(v) : 0);
 const zoneOf = (v: unknown) => (typeof v === "string" && v.length <= 64 ? v : "UTC");
 
 type Stored = Card & { word: string; language: string; meaning: string; foundDay: string };
@@ -171,7 +176,7 @@ export async function GET(req: NextRequest) {
     shop: { owned: cleanOwned(state.owned), look: cleanLook(state.look), spent: typeof state.spent === "number" && state.spent > 0 ? Math.floor(state.spent) : 0 },
     today, dailyMax: DAILY_MAX, usedToday: used, starsToKnow: STARS_TO_KNOW,
     cards: cards.map((c) => view(c, today)), todays,
-    summary: summary(cards, today), coins: coinsOf(cards), frameCoins: FRAME_COINS,
+    summary: summary(cards, today), coins: coinsOf(cards) + bonusOf(state.bonus), frameCoins: FRAME_COINS,
   });
 }
 
@@ -188,7 +193,7 @@ export async function POST(req: NextRequest) {
     if (!item) return NextResponse.json({ error: "bad_request" }, { status: 400 });
     const ref = stateOf(user.userId);
     const cardSnap = typeof body.buy === "string" ? await cardsOf(user.userId).limit(MAX_CARDS).get() : null;
-    const earned = cardSnap ? coinsOf(cardSnap.docs.map((d) => readCard(d.id, d.data())).filter((c): c is Stored => !!c)) : 0;
+    const cardCoins = cardSnap ? coinsOf(cardSnap.docs.map((d) => readCard(d.id, d.data())).filter((c): c is Stored => !!c)) : 0;
     const out = await getAdminDb().runTransaction(async (tx) => {
       const cur = (await tx.get(ref)).data() ?? {};
       let owned = cleanOwned(cur.owned);
@@ -196,7 +201,7 @@ export async function POST(req: NextRequest) {
       let spent = typeof cur.spent === "number" && cur.spent > 0 ? Math.floor(cur.spent) : 0;
       if (typeof body.buy === "string") {
         if (owns(owned, item.id)) return { error: "owned" as const, owned, look, spent };
-        if (earned - spent < item.price) return { error: "short" as const, owned, look, spent };
+        if (cardCoins + bonusOf(cur.bonus) - spent < item.price) return { error: "short" as const, owned, look, spent };
         owned = [...owned, item.id];
         spent += item.price;
       } else if (!owns(owned, item.id)) return { error: "not_owned" as const, owned, look, spent };
@@ -234,8 +239,13 @@ export async function POST(req: NextRequest) {
     return { before, after: { ...before, ...r.card } as Stored, event: r.event, frameUp: r.frameUp };
   });
   if (!out) return NextResponse.json({ error: "no_card" }, { status: 404 });
+  const freed = choice === id && (out.event === "star" || out.event === "known" || out.event === "kept") ? FREED_COINS : 0;
+  if (freed && !user.impersonating) {
+    const { FieldValue } = await import("firebase-admin/firestore");
+    try { await stateOf(user.userId).set({ bonus: FieldValue.increment(freed) }, { merge: true }); } catch (e) { console.warn("journey: freed coins not saved", String(e)); }
+  }
   return NextResponse.json({
     correct: choice === id, event: out.event, frameUp: out.frameUp, card: view(out.after, today),
-    coinsUp: coinsOf([out.after]) - coinsOf([out.before]),
+    coinsUp: coinsOf([out.after]) - coinsOf([out.before]) + freed,
   });
 }
