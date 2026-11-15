@@ -143,8 +143,8 @@ export async function startPreview(canvas: HTMLCanvasElement, first: Look): Prom
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   const scene = new T.Scene();
   const cam = new T.PerspectiveCamera(40, 1, 0.1, 50);
-  cam.position.set(0, 2.1, 8.2);
-  cam.lookAt(0, 1.6, 0);
+  cam.position.set(0, 2.2, 6.4);
+  cam.lookAt(0, 1.55, 0);
   scene.add(new T.HemisphereLight(0xffffff, 0xbfe3c8, 1.25));
   const sun = new T.DirectionalLight(0xfff4d6, 1.3);
   sun.position.set(4, 8, 6);
