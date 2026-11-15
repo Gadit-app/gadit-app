@@ -25,6 +25,7 @@ import { useKidsMode } from "@/lib/use-kids-mode";
 import { demoData, demoResult, makeQuestion, maskedMeaning, shortMeaning, zone, JRN_CSS, type CardView, type Data, type Question, type Result } from "../JourneyClient";
 import { startRun, THEMES, type RunHandle } from "./engine";
 import { startHall, type HallHandle } from "./hall";
+import { startIntro, type IntroHandle } from "./intro";
 import type { Look } from "@/lib/journey/shop";
 import { BuildTiles, Lesson, Say, PARTS_CSS } from "../parts";
 
@@ -35,7 +36,7 @@ type Copy = {
   nextWord: string; openGate: string; opened: string; freedCount: (n: number, of: number) => string; nextFort: string; backIndex: string;
   stillHolds: (name: string, n: number) => string; waitTomorrow: string; alsoNow: (names: string) => string;
   earlierToday: (names: string) => string; worldToday: (n: number) => string;
-  tomorrow: string; pickRoad: string; picked: (name: string) => string; roads: string[]; ownWord: string; listWord: string; map: string;
+  tomorrow: string; pickRoad: string; picked: (name: string) => string; roads: string[]; ownWord: string; listWord: string; map: string; shopTile: string; mapTile: string; coinsN: (n: number) => string; fortN: (n: number) => string;
   noneToday: string; fewWords: string; signIn: string; loading: string; failed: string; retry: string;
   monsters: string[]; sample: string;
 };
@@ -52,7 +53,7 @@ const COPY: Record<string, Copy> = {
     stillHolds: (name, n) => (n === 1 ? `${name} עוד מחזיקה מילה אחת` : `${name} עוד מחזיקה ${n} מילים`), waitTomorrow: "הן יחכו לכם מחר במבצר הזה, ולא איבדתם כלום", alsoNow: (names) => `גם רצים עכשיו אל המבצר שלהם: ${names}`,
     earlierToday: (names) => `מוקדם יותר היום רצו כאן: ${names}`, worldToday: (n) => `היום ילדים שחררו יחד ${n.toLocaleString("he")} מילים`,
     tomorrow: "במבצר הבא מחכה מפלצת חדשה", pickRoad: "באיזו דרך רצים אליה?", picked: (name) => `בחרתם: ${name}`, roads: ["דרך היער", "דרך המדבר", "דרך הקרח"],
-    ownWord: "את המילה הזאת חיפשתם בעצמכם", listWord: "מילה מהרשימה שלכם", map: "🗺️ המפה שלי",
+    ownWord: "את המילה הזאת חיפשתם בעצמכם", listWord: "מילה מהרשימה שלכם", shopTile: "החנות", mapTile: "המפה שלי", coinsN: (n) => `${n} מטבעות`, fortN: (n) => `מבצר ${n}`, map: "🗺️ המפה שלי",
     noneToday: "המילים של היום כבר שוחררו. המבצר הבא ייפתח מחר", fewWords: "כשיהיו לכם שלוש מילים, המבצר הראשון ייפתח",
     signIn: "כדי לרוץ אל המבצר צריך להתחבר", loading: "מכינים את הדרך", failed: "הדרך לא נטענה", retry: "לנסות שוב",
     monsters: ["גרגרנית", "נחרנית", "קפצוצית"], sample: "דמות לדוגמה",
@@ -69,7 +70,7 @@ const COPY: Record<string, Copy> = {
     stillHolds: (name, n) => (n === 1 ? `${name} still keeps one word` : `${name} still keeps ${n} words`), waitTomorrow: "They wait for you tomorrow in this fortress, and nothing was lost", alsoNow: (names) => `Also running to their own fortress now: ${names}`,
     earlierToday: (names) => `Earlier today these ran here: ${names}`, worldToday: (n) => `Today children freed ${n.toLocaleString("en")} words together`,
     tomorrow: "A new monster waits in the next fortress", pickRoad: "Which road will you take to it?", picked: (name) => `You chose: ${name}`, roads: ["The forest road", "The desert road", "The ice road"],
-    ownWord: "You looked this word up yourself", listWord: "A word from your list", map: "🗺️ My map",
+    ownWord: "You looked this word up yourself", listWord: "A word from your list", shopTile: "The shop", mapTile: "My map", coinsN: (n) => `${n} coins`, fortN: (n) => `Fortress ${n}`, map: "🗺️ My map",
     noneToday: "Today's words are already free. The next fortress opens tomorrow", fewWords: "The first fortress opens once you have three words",
     signIn: "Sign in to run to the fortress", loading: "Getting the road ready", failed: "The road did not load", retry: "Try again",
     monsters: ["Gobbler", "Snorer", "Hopper"], sample: "Sample runner",
@@ -149,6 +150,9 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   };
   const hallCanvas = useRef<HTMLCanvasElement | null>(null);
   const hallRef = useRef<HallHandle | null>(null);
+  // The opening screen: the fortress of today in 3D behind the card (run/intro.ts).
+  const introCanvas = useRef<HTMLCanvasElement | null>(null);
+  const [introOn, setIntroOn] = useState(false);
   // The question card must fit on the screen under the hall (Gadi 2026-11-15:
   // "the bottom of the frame goes down, raise it"). The card's height is kept
   // in --card-h on the room, and the hall takes only the height that is left.
@@ -267,10 +271,19 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     return () => { gone = true; hallRef.current?.dispose(); hallRef.current = null; setHallOn(false); };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- the hall is built once per fortress
   }, [inside, stage, themeIdx, look, cagesN, dir]);
+  const atIntro = phase === "intro" && !!data;
+  useEffect(() => {
+    if (!atIntro || !introCanvas.current) return;
+    let gone = false, h: IntroHandle | null = null;
+    void startIntro(introCanvas.current, { theme: themeIdx, monster: stage, rtl: dir === "rtl" })
+      .then((x) => { if (gone) { x.dispose(); return; } h = x; setIntroOn(true); })
+      .catch(() => undefined);
+    return () => { gone = true; h?.dispose(); setIntroOn(false); };
+  }, [atIntro, themeIdx, stage, dir]);
   // Keep the card's height on the room, so the hall shrinks to leave the card on screen.
   useEffect(() => {
     const card = cardRef.current, room = roomRef.current;
-    if (!inside || !card || !room) return;
+    if (!(inside || phase === "intro") || !card || !room) return;
     const set = () => room.style.setProperty("--card-h", `${Math.ceil(card.getBoundingClientRect().height)}px`);
     set();
     const ro = new ResizeObserver(set);
@@ -379,7 +392,8 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   }
 
   return (
-    <div ref={roomRef} className={`wordbook jrn run-room is-t${themeIdx}${phase === "intro" ? " is-out" : ""}${hallOn ? " has-hall" : ""}`} dir={dir}>
+    <div ref={roomRef} className={`wordbook jrn run-room is-t${themeIdx}${phase === "intro" ? " is-out" : ""}${hallOn ? " has-hall" : ""}${introOn && phase === "intro" ? " has-intro" : ""}`} dir={dir}>
+      {atIntro && <canvas ref={introCanvas} className={`run-intro${introOn ? " is-on" : ""}`} aria-hidden="true" />}
       <style>{JRN_CSS + PARTS_CSS + RUN_CSS}</style>
       {inside && <canvas ref={hallCanvas} className={`run-hall${hallOn ? " is-on" : ""}`} aria-hidden="true" />}
       {phase !== "intro" && <><i className="run-torch is-a" aria-hidden="true" /><i className="run-torch is-b" aria-hidden="true" /></>}
@@ -391,33 +405,53 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
         )}
 
         {ready && phase === "intro" && (
-          <section className="jrn-play">
+          <section ref={cardRef} className="jrn-play run-intro-card">
+            {/* The way back at the top (Gadi 2026-11-15). */}
+            <div className="run-intro-top">
+              <Link className="jrn-back" href={demo ? "/journey?demo=1" : "/journey"}><span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span> {c.backIndex}</Link>
+              {demo && <span className="jrn-demo">{c.demo}</span>}
+            </div>
             <h1 className="jrn-title">{c.title}</h1>
-            {demo && <span className="jrn-demo">{c.demo}</span>}
             {questions.length > 0 ? (
               <>
-                <Monster kind={stage} sad={false} />
-                <div className="jrn-ask">{c.holds(monster, questions.length)}</div>
-                <p className="jrn-note">{c.goFree}</p>
+                {!introOn && <Monster kind={stage} sad={false} />}
+                <div className="run-intro-lead"><b>{c.holds(monster, questions.length)}</b><span>{c.goFree}</span></div>
                 {fresh.length > 0 && (
+                  // The new words in a table: the word and its speaker in one column,
+                  // the meaning in the other, each on one line (Gadi 2026-11-15).
                   <div className="run-fresh">
-                    <div className="jrn-small">{c.newToday}</div>
-                    {fresh.map((x) => (
-                      <div key={x.id} className="run-fresh-row" dir="auto"><b>{x.word}</b> <Say text={x.word} label={c.hear} /> <span>{shortMeaning(x.meaning)}</span></div>
-                    ))}
+                    <div className="run-fresh-head">{c.newToday}</div>
+                    <table className="run-fresh-table">
+                      <tbody>
+                        {fresh.map((x) => (
+                          <tr key={x.id}>
+                            <th scope="row"><span className="run-fresh-word"><bdi>{x.word}</bdi><Say text={x.word} label={c.hear} /></span></th>
+                            <td title={shortMeaning(x.meaning)}><bdi>{shortMeaning(x.meaning)}</bdi></td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 )}
                 <p className="jrn-small">{c.how}</p>
                 {!demo && others.length > 0 && <p className="jrn-small run-also">{c.alsoNow(others.map((o) => o.name).join(", "))}</p>}
                 {!demo && others.length === 0 && earlier.length > 0 && <p className="jrn-small run-also">{c.earlierToday(earlier.join(", "))}</p>}
                 {!demo && (data?.world?.freedToday ?? 0) >= 10 && <p className="jrn-small run-also">{c.worldToday(data!.world!.freedToday)}</p>}
-                <button type="button" className="jrn-btn" onClick={begin}>{c.go}</button>
-                {!demo && <Link className="jrn-btn is-ghost" href="/journey/shop">{lang === "he" ? "🛍️ לחנות" : "🛍️ To the shop"}</Link>}
-                {!demo && <Link className="jrn-btn is-ghost" href="/journey/map">{c.map}</Link>}
+                <button type="button" className="jrn-btn run-go" onClick={begin}>{c.go} <span aria-hidden="true">{dir === "rtl" ? "◀" : "▶"}</span></button>
+                <div className="run-tiles">
+                  <Link className="run-tile" href={demo ? "/journey/shop?demo=1" : "/journey/shop"}>
+                    <span className="run-tile-icon" aria-hidden="true">🛍️</span>
+                    <span className="run-tile-text"><b>{c.shopTile}</b><small>{c.coinsN(Math.max(0, (data?.coins ?? 0) - (data?.shop?.spent ?? 0)))}</small></span>
+                  </Link>
+                  <Link className="run-tile" href={demo ? "/journey/map?demo=1" : "/journey/map"}>
+                    <span className="run-tile-icon" aria-hidden="true">🗺️</span>
+                    <span className="run-tile-text"><b>{c.mapTile}</b><small>{c.fortN(stage + 1)}</small></span>
+                  </Link>
+                </div>
               </>
             ) : (
               <>
-                <Monster kind={stage} sad />
+                {!introOn && <Monster kind={stage} sad />}
                 <p className="jrn-note">{data.cards.length < 3 ? c.fewWords : c.noneToday}</p>
                 <Link className="jrn-btn" href="/journey">{c.backIndex}</Link>
               </>
@@ -530,7 +564,40 @@ const RUN_CSS = `
 @media (min-width: 1040px) { .run-torch { display: block; } }
 @media (prefers-reduced-motion: reduce) { .run-torch::before, .run-room:not(.is-out) { animation: none; } }
 .run-room.is-out { background-image: linear-gradient(var(--sky) 0 58%, var(--land) 58% 100%); }
-.run-fresh { display: grid; gap: 8px; justify-items: center; width: 100%; max-width: 560px; padding: 12px 14px; border-radius: 16px; background: #f0faf9; box-shadow: 0 0 0 2px #bfe3e0 inset; }
+.run-fresh { display: grid; gap: 6px; width: 100%; max-width: 560px; padding: 10px 14px 8px; border-radius: 16px; background: #f0faf9; box-shadow: 0 0 0 2px #bfe3e0 inset; }
+.run-fresh-head { font-size: 13px; font-weight: 700; color: #47586a; text-align: center; }
+.run-fresh-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.run-fresh-table tr + tr { border-top: 1px solid #d6ecea; }
+.run-fresh-table th { width: 38%; padding: 4px 0; text-align: start; font-weight: 800; font-size: 17px; white-space: nowrap; overflow: hidden; }
+.run-fresh-word { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; }
+.run-fresh-word bdi { overflow: hidden; text-overflow: ellipsis; }
+.run-fresh-table td { padding: 4px 0; padding-inline-start: 10px; text-align: start; font-size: 15px; color: #33424f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.run-fresh-table .jrn-say { width: 30px; height: 30px; flex: none; }
+.run-fresh-table .jrn-say svg { width: 17px; height: 17px; }
+/* The opening screen: the 3D fortress behind, the card on the reading side. */
+.run-intro { position: fixed; inset: 0; width: 100%; height: 100dvh; display: block; opacity: 0; transition: opacity .6s ease; z-index: 0; pointer-events: none; }
+.run-intro.is-on { opacity: 1; }
+.run-room.has-intro .jrn-wrap { position: relative; z-index: 1; max-width: none; min-height: 100dvh; padding: 14px 4vw; display: flex; align-items: center; justify-content: flex-start; }
+.run-room.has-intro .run-intro-card { width: min(470px, 100%); background: rgba(255,253,245,.93); border: 1px solid rgba(255,255,255,.7); border-radius: 26px; box-shadow: 0 24px 60px rgba(20,24,40,.35); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.run-intro-card { gap: 10px; padding: 14px 18px 16px; }
+.run-intro-top { width: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.run-intro-card .jrn-title { font-size: clamp(24px, 4vw, 32px); }
+.run-intro-lead { display: grid; gap: 2px; font-size: 16px; line-height: 1.45; color: #33424f; }
+.run-intro-lead b { font-size: 17px; color: #14202b; }
+.run-go { width: 100%; max-width: 360px; min-height: 54px; font-size: 20px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
+.run-tiles { width: 100%; max-width: 360px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.run-tile { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 16px; background: #fff; color: #14202b; text-decoration: none; box-shadow: 0 0 0 2px #e2d6b8 inset; min-width: 0; }
+.run-tile:hover { box-shadow: 0 0 0 2px #0a7472 inset; }
+.run-tile-icon { font-size: 26px; line-height: 1; }
+.run-tile-text { display: grid; text-align: start; min-width: 0; }
+.run-tile-text b { font-size: 15px; }
+.run-tile-text small { font-size: 12.5px; color: #47586a; font-variant-numeric: tabular-nums; }
+@media (max-width: 759px) {
+  .run-room { --intro-h: clamp(130px, calc(100dvh - var(--card-h, 520px) - 12px), 40dvh); }
+  .run-room.has-intro .jrn-wrap { padding: calc(var(--intro-h) - 18px) 12px 10px; align-items: flex-start; justify-content: center; }
+  .run-room.has-intro .run-intro-card { width: 100%; }
+  .run-intro { height: var(--intro-h); }
+}
 .run-fresh-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; font-size: 16px; line-height: 1.5; }
 .run-fresh-row b { font-size: 20px; }
 .run-second { font-weight: 700; color: #7a5a00; background: #fff8e1; padding: 4px 14px; border-radius: 999px; }

@@ -148,11 +148,20 @@ export function ShopClient({ demo = false }: { demo?: boolean }) {
 
         {ready && (
           <>
-            <header className="jrn-head">
+            {/* The way back sits at the top (Gadi 2026-11-15: "I looked for the back button"). */}
+            <header className="jrn-head shop-head">
+              <Link className="jrn-back" href={demo ? "/journey?demo=1" : "/journey"}><span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span> {c.back}</Link>
               <h1 className="jrn-title">{c.title}</h1>
-              <div className="jrn-coins" title={c.coins}><span aria-hidden="true">●</span> {balance} {c.coins}</div>
+              <div className="shop-head-end">
+                <div className="jrn-coins" title={c.coins}><span aria-hidden="true">●</span> {balance} {c.coins}</div>
+                <Link className="jrn-btn shop-run" href={demo ? "/journey/run?demo=1" : "/journey/run"}>{c.run}</Link>
+              </div>
             </header>
 
+            {/* One screen (Gadi 2026-11-15): the figure stands beside the shelves, so a
+                thing tried on is seen while the shelves scroll in their own place. */}
+            <div className="shop-layout">
+            <div className="shop-stage">
             <div className="shop-window"><canvas ref={canvasRef} className="shop-canvas" /></div>
 
             <div className="shop-act" aria-live="polite">
@@ -163,13 +172,16 @@ export function ShopClient({ demo = false }: { demo?: boolean }) {
                   : <span className="shop-short">{c.short(tried.price - balance)}</span>
               ) : justBought ? <span className="shop-ok">{c.bought}</span> : <span className="jrn-small">{c.how}</span>}
             </div>
+            </div>
 
+            <div className="shop-side">
             <div className="shop-tabs" role="tablist">
               {SLOTS.map((s) => (
                 <button key={s} type="button" role="tab" aria-selected={slot === s} className={`shop-tab${slot === s ? " is-on" : ""}`} onClick={() => { sfx.tap(); setSlot(s); setTrying(null); setJustBought(false); }}>{c.slots[s]}</button>
               ))}
             </div>
 
+            <div className="shop-scroll">
             <div className="shop-grid">
               {SHOP.filter((i) => i.slot === slot).map((i) => {
                 const mine = owns(owned, i.id, known);
@@ -184,10 +196,9 @@ export function ShopClient({ demo = false }: { demo?: boolean }) {
                 );
               })}
             </div>
+            </div>
 
-            <div className="shop-foot">
-              <Link className="jrn-btn" href="/journey/run">{c.run}</Link>
-              <Link className="jrn-btn is-ghost" href="/journey">{c.back}</Link>
+            </div>
             </div>
           </>
         )}
@@ -197,21 +208,41 @@ export function ShopClient({ demo = false }: { demo?: boolean }) {
 }
 
 const SHOP_CSS = `
-.shop-window { width: 100%; max-width: 420px; height: clamp(220px, 38vh, 320px); margin: 0 auto; border-radius: 24px; background: linear-gradient(#cfefff, #eaf8ee); overflow: hidden; }
+.shop .jrn-wrap { max-width: 1120px; height: 100dvh; padding-block: 12px; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 12px; overflow: hidden; }
+.shop .jrn-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.shop-layout { display: grid; grid-template-columns: minmax(280px, 440px) minmax(0, 1fr); gap: 22px; min-height: 0; }
+.shop-stage { display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 10px; min-height: 0; }
+.shop-window { width: 100%; height: 100%; min-height: 0; border-radius: 24px; background: radial-gradient(ellipse at 50% 30%, #ffffff 0, #dff3ff 45%, #c7e7da 100%); box-shadow: 0 0 0 1px rgba(10,116,114,.12) inset, 0 12px 30px rgba(20,32,43,.12); overflow: hidden; }
 .shop-canvas { width: 100%; height: 100%; display: block; }
-.shop-act { min-height: 58px; display: flex; align-items: center; justify-content: center; text-align: center; }
+.shop-act { min-height: 52px; display: flex; align-items: center; justify-content: center; text-align: center; }
 .shop-short { font-weight: 700; color: #8a5a00; background: #fff3c4; padding: 8px 18px; border-radius: 999px; }
 .shop-ok { font-weight: 800; color: #0a6b3b; }
+.shop-side { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 12px; min-height: 0; }
 .shop-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 .shop-tab { min-height: 44px; padding: 8px 18px; border: 0; border-radius: 999px; background: var(--j-surface); color: var(--j-ink); font: inherit; font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: 0 0 0 2px var(--j-line) inset; }
 .shop-tab.is-on { background: var(--j-teal); color: #fff; box-shadow: none; }
-.shop-grid { width: 100%; max-width: 620px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 12px; }
-.shop-item { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 8px 12px; border: 0; border-radius: 18px; background: var(--j-surface); color: var(--j-ink); font: inherit; cursor: pointer; box-shadow: 0 0 0 2px var(--j-line) inset; min-width: 0; }
+.shop-scroll { min-height: 0; overflow-y: auto; padding: 4px; border-radius: 18px; overscroll-behavior: contain; }
+.shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; align-content: start; }
+.shop-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 6px; border: 0; border-radius: 16px; background: var(--j-surface); color: var(--j-ink); font: inherit; cursor: pointer; box-shadow: 0 0 0 2px var(--j-line) inset; min-width: 0; }
 .shop-item.is-try { box-shadow: 0 0 0 3px #e0a100 inset; }
 .shop-item.is-on { box-shadow: 0 0 0 3px var(--j-teal) inset; }
-.shop-icon { font-size: 40px; line-height: 1.1; }
-.shop-name { font-weight: 700; font-size: 15px; text-align: center; }
-.shop-tag { font-size: 13px; font-weight: 700; color: #8a5a00; background: #fff3c4; padding: 2px 10px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+.shop-icon { font-size: 32px; line-height: 1.1; }
+.shop-name { font-weight: 700; font-size: 14px; text-align: center; }
+.shop-tag { font-size: 12.5px; font-weight: 700; color: #8a5a00; background: #fff3c4; padding: 2px 10px; border-radius: 999px; font-variant-numeric: tabular-nums; }
 .shop-tag.is-mine { color: var(--j-teal); background: transparent; }
-.shop-foot { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; margin-top: 6px; }
+.shop-head { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+.shop-head .jrn-title { font-size: clamp(22px, 4vw, 30px); }
+.shop-head-end { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
+.shop-run { min-height: 40px; padding: 6px 18px; font-size: 15px; }
+/* A phone: the figure on top, the shelves under it, each in its own part of the screen. */
+@media (max-width: 760px) {
+  .shop .jrn-wrap { padding-block: 8px; gap: 8px; }
+  .shop-head { grid-template-columns: auto 1fr; }
+  .shop-head .jrn-title { text-align: center; }
+  .shop-head-end { grid-column: 1 / -1; justify-content: center; }
+  .shop-layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(150px, 34dvh) minmax(0, 1fr); gap: 8px; }
+  .shop-act { min-height: 44px; }
+  .shop-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
+  .shop-tab { min-height: 38px; padding: 6px 14px; font-size: 15px; }
+}
 `;

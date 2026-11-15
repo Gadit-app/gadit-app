@@ -406,6 +406,9 @@ export const JRN_CSS = `
 .jrn-wrap { max-width: 920px; margin-inline: auto; padding: 20px 16px 56px; display: grid; gap: 22px; color: var(--j-ink); }
 .jrn-head { display: grid; gap: 8px; justify-items: center; text-align: center; }
 .jrn-title { font-size: clamp(26px, 6vw, 36px); font-weight: 800; margin: 0; text-wrap: balance; }
+/* The way back, always at the top of a journey screen. */
+.jrn-back { justify-self: start; display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 6px 14px; border-radius: 999px; background: rgba(255,255,255,.85); color: var(--j-teal, #0a7472); font-weight: 700; font-size: 15px; text-decoration: none; box-shadow: 0 0 0 2px rgba(10,116,114,.35) inset; white-space: nowrap; }
+.jrn-back:hover { background: #fff; }
 .jrn-demo { padding: 4px 14px; border-radius: 999px; background: #e0f2fe; color: #075985; font-size: 14px; font-weight: 700; }
 .jrn-count { font-size: 18px; font-weight: 700; color: var(--j-soft); }
 .jrn-coins { display: inline-flex; gap: 6px; align-items: center; padding: 6px 16px; border-radius: 999px; background: #fff3c4; color: #6b4a00; font-weight: 800; font-size: 17px; font-variant-numeric: tabular-nums; }

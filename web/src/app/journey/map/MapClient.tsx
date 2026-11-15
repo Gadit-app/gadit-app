@@ -27,12 +27,12 @@ const COPY = {
   he: {
     title: "המפה שלי", trees: (n: number) => (n === 1 ? "מילה אחת באינדקס שתלה עץ אחד בעולם שלכם" : `${n} מילים באינדקס שתלו ${n} עצים בעולם שלכם`),
     none: "כל מילה שתדעו תשתול עץ בעולם שלכם", fort: (n: number) => `מבצר ${n}`, here: "אתם כאן", friend: (name: string) => `${name} כבר חברה שלכם`,
-    waits: "מחכה לכם", run: "רצים אל המבצר", back: "חזרה לאינדקס", signIn: "כדי לראות את המפה צריך להתחבר", loading: "פורשים את המפה", failed: "המפה לא נטענה", retry: "לנסות שוב",
+    waits: "מחכה לכם", later: "מחכה בהמשך הדרך", run: "רצים אל המבצר", back: "חזרה לאינדקס", signIn: "כדי לראות את המפה צריך להתחבר", loading: "פורשים את המפה", failed: "המפה לא נטענה", retry: "לנסות שוב",
   },
   en: {
     title: "My map", trees: (n: number) => (n === 1 ? "One word in your index planted one tree in your world" : `${n} words in your index planted ${n} trees in your world`),
     none: "Every word you know will plant a tree in your world", fort: (n: number) => `Fortress ${n}`, here: "You are here", friend: (name: string) => `${name} is your friend now`,
-    waits: "Waiting for you", run: "Run to the fortress", back: "Back to the index", signIn: "Sign in to see your map", loading: "Unrolling the map", failed: "The map did not load", retry: "Try again",
+    waits: "Waiting for you", later: "Further along the road", run: "Run to the fortress", back: "Back to the index", signIn: "Sign in to see your map", loading: "Unrolling the map", failed: "The map did not load", retry: "Try again",
   },
 };
 
@@ -105,7 +105,11 @@ export function MapClient({ demo = false }: { demo?: boolean }) {
         )}
         {(user || demo) && state === "ready" && data && (
           <>
-            <header className="jrn-head">
+            <header className="jrn-head map-head">
+              <div className="map-top">
+                <Link className="jrn-back" href={demo ? "/journey?demo=1" : "/journey"}><span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span> {c.back}</Link>
+                <Link className="jrn-btn map-run" href={demo ? "/journey/run?demo=1" : "/journey/run"}>{c.run}</Link>
+              </div>
               <h1 className="jrn-title">{c.title}</h1>
               <div className="jrn-note">{known > 0 ? c.trees(known) : c.none}</div>
             </header>
@@ -118,15 +122,11 @@ export function MapClient({ demo = false }: { demo?: boolean }) {
                     <Island theme={roadOf(s)} trees={trees} state={st} />
                     <div className="map-monster"><Monster kind={s} sad={false} shadow={st === "ahead"} /></div>
                     <div className="map-name">{c.fort(s + 1)} · {roads[roadOf(s)]}</div>
-                    <div className="jrn-small">{st === "open" ? c.friend(names[s % names.length]) : st === "here" ? `${c.here} · ${names[s % names.length]} ${c.waits}` : "?"}</div>
+                    <div className="jrn-small">{st === "open" ? c.friend(names[s % names.length]) : st === "here" ? `${c.here} · ${names[s % names.length]} ${c.waits}` : c.later}</div>
                   </li>
                 );
               })}
             </ol>
-            <div className="map-foot">
-              <Link className="jrn-btn" href="/journey/run">{c.run}</Link>
-              <Link className="jrn-btn is-ghost" href="/journey">{c.back}</Link>
-            </div>
           </>
         )}
       </div>
@@ -138,14 +138,34 @@ const MAP_CSS = `
 .map { min-height: 100dvh; background: linear-gradient(#1f2a44 0%, #2f4a6b 100%); }
 .map .jrn-wrap { color: #fff; }
 .map .jrn-note, .map .jrn-small { color: #d6e2f0; }
-.map-road { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 18px 14px; }
-.map-stop { position: relative; display: grid; gap: 4px; justify-items: center; text-align: center; padding: 10px 8px 12px; border-radius: 20px; min-width: 0; }
+/* The islands stand in a centred row (Gadi 2026-11-15: "why does it lean to the right?"),
+   joined by a dotted road, and wrap to more centred rows on a narrow screen. */
+.map-road { list-style: none; margin: 0 auto; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: 22px 34px; max-width: 980px; }
+.map-stop { position: relative; width: 210px; max-width: 100%; display: grid; grid-template-rows: auto auto auto 1fr; gap: 4px; justify-items: center; text-align: center; padding: 12px 10px 14px; border-radius: 20px; }
+.map-stop + .map-stop::before { content: ""; position: absolute; top: 78px; inset-inline-start: -32px; width: 30px; border-top: 4px dotted rgba(255,211,77,.6); }
+.map-stop.is-ahead::before { border-top-color: rgba(255,255,255,.25) !important; }
+.map-stop .jrn-small { font-size: 13.5px; line-height: 1.4; }
+/* A phone: two islands to a row, smaller, with no road between rows. */
+@media (max-width: 560px) {
+  .map-road { gap: 12px 10px; }
+  .map-stop { width: calc(50% - 6px); padding: 8px 4px 10px; }
+  .map-stop::before { display: none; }
+  .map-island { max-width: 150px; }
+  .map-monster { margin-top: -26px; }
+  .map-monster .run-monster { width: 48px; }
+  .map-monster .run-monster.is-shadow { width: 42px; }
+  .map-name { font-size: 14px; }
+  .map-stop .jrn-small { font-size: 12px; }
+}
 .map-stop.is-here { background: rgba(255,255,255,.1); box-shadow: 0 0 0 3px #ffd34d inset; }
 .map-island { width: 100%; max-width: 230px; height: auto; display: block; }
 .map-monster { margin-top: -34px; }
 .map-monster .run-monster { width: 64px; height: auto; display: block; }
 .map-monster .run-monster.is-shadow { width: 54px; filter: brightness(0); opacity: .45; }
-.map-name { font-weight: 800; font-size: 16px; }
+.map-name { font-weight: 800; font-size: 16px; line-height: 1.3; }
 .map .jrn-btn.is-ghost { color: #fff; box-shadow: 0 0 0 2px #fff inset; }
+.map-head { gap: 6px; }
+.map-top { width: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.map-run { min-height: 40px; padding: 6px 18px; font-size: 15px; }
 .map-foot { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
 `;

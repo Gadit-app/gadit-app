@@ -238,7 +238,16 @@ export async function startPreview(canvas: HTMLCanvasElement, first: Look): Prom
   scene.add(fig.group);
   const free = (o: THREE.Object3D) => o.traverse((x) => { const m = x as THREE.Mesh; m.geometry?.dispose?.(); const mat = m.material as THREE.Material | THREE.Material[] | undefined; if (Array.isArray(mat)) mat.forEach((y) => y.dispose()); else mat?.dispose?.(); });
 
-  const size = () => { const w = canvas.clientWidth || 1, h = canvas.clientHeight || 1; renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); };
+  // The whole figure, hat to shoes, whatever the shape of the window: a tall window stands further back.
+  const size = () => {
+    const w = canvas.clientWidth || 1, h = canvas.clientHeight || 1;
+    renderer.setSize(w, h, false);
+    cam.aspect = w / h;
+    const far = cam.aspect < 0.9 ? 9.2 : 7.6;
+    cam.position.set(0, 2.5, far);
+    cam.lookAt(0, 1.75, 0);
+    cam.updateProjectionMatrix();
+  };
   const ro = new ResizeObserver(size);
   ro.observe(canvas);
   size();
