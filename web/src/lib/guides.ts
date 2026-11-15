@@ -6,8 +6,14 @@
  * renders a guide (the /help index, the "?" GuideButton, the ?guide= overlay,
  * a /help#id deep link) reads from here, so adding a guide is one entry.
  *
- * Text lives in guide-i18n (titleKey/descKey resolve via gt()); an optional
- * `video` field can point at recorded footage where an animation isn't enough.
+ * Text lives in guide-i18n (titleKey/descKey resolve via gt()).
+ *
+ * A guide may also carry a recorded video per interface language (`video`,
+ * Gadi 2026-11-15, the same pattern as Yooniz). A viewer whose language has a
+ * video gets two tabs in the guide window, "Video" (opened first) and "Step by
+ * step" (the animated screens); every other language sees the screens only.
+ * Files live in public/guide-video/: <name>.mp4 (720p) and a poster of the
+ * same name, <name>.jpg. Direct links: /help#<id>, or ?guide=<id> on any page.
  */
 
 import type { Lang } from "@/lib/i18n";
@@ -28,9 +34,22 @@ export type GuideDef = {
   titleKey: string;
   descKey: string;
   steps: (lang: Lang) => WalkStep[];
-  /** Optional recorded video URL, for the rare case an animation can't show it. */
-  video?: string;
+  /** Recorded video by interface language, e.g. { he: "/guide-video/search-he.mp4" }. */
+  video?: Partial<Record<string, string>>;
+  /** A guide that is a video alone (no animated screens): listed only in a
+   *  language that has its video. */
+  videoOnly?: boolean;
 };
+
+/** The guide's video for this viewer's language, or null. */
+export function guideVideo(g: GuideDef, lang: string): string | null {
+  return g.video?.[lang] ?? null;
+}
+
+/** Whether the guide has something to show in this language. */
+export function guideListed(g: GuideDef, lang: string): boolean {
+  return !g.videoOnly || !!guideVideo(g, lang);
+}
 
 export const GUIDES: Record<string, GuideDef> = {
   search: { id: "search", icon: "🔍", color: "#0EA5A5", titleKey: "search.title", descKey: "search.desc", steps: searchSteps },

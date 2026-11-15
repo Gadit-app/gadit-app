@@ -12,7 +12,7 @@
 import { useEffect, useState } from "react";
 import { useLang } from "@/lib/lang-context";
 import { gt, useGuideLang } from "@/lib/guide-i18n";
-import { getGuide } from "@/lib/guides";
+import { getGuide, guideVideo } from "@/lib/guides";
 import { WalkthroughModal } from "@/components/Walkthrough";
 
 export function GuideOverlay() {
@@ -54,6 +54,7 @@ export function GuideOverlay() {
       guideId={g.id}
       title={gt(lang, g.titleKey)}
       steps={g.steps(lang)}
+      video={guideVideo(g, lang)}
       onClose={close}
     />
   );

@@ -13,7 +13,7 @@ import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
 import { gt, useGuideLangWait } from "@/lib/guide-i18n";
-import { GUIDES, GUIDE_SECTIONS, getGuide } from "@/lib/guides";
+import { GUIDES, GUIDE_SECTIONS, getGuide, guideVideo, guideListed } from "@/lib/guides";
 import { WalkthroughModal } from "@/components/Walkthrough";
 
 function PlayCircle({ color, flip }: { color: string; flip?: boolean }) {
@@ -27,6 +27,17 @@ function PlayCircle({ color, flip }: { color: string; flip?: boolean }) {
     >
       <svg width="15" height="15" viewBox="0 0 16 16" fill={color} aria-hidden="true" style={{ transform: flip ? "scaleX(-1)" : undefined }}>
         <path d="M4.5 3.2v9.6c0 .5.5.8 1 .55l7.3-4.8a.65.65 0 0 0 0-1.1L5.5 2.65a.65.65 0 0 0-1 .55Z" />
+      </svg>
+    </span>
+  );
+}
+
+/** On the card of a guide that has a video in the viewer's language. */
+function CameraCircle({ color }: { color: string }) {
+  return (
+    <span aria-hidden="true" style={{ width: 40, height: 40, flex: "none", borderRadius: "50%", background: color + "1A", display: "grid", placeItems: "center" }}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill={color} aria-hidden="true">
+        <path d="M4 6.5h9.5A2.5 2.5 0 0 1 16 9v6a2.5 2.5 0 0 1-2.5 2.5H4A2.5 2.5 0 0 1 1.5 15V9A2.5 2.5 0 0 1 4 6.5Zm13.5 3.6 3.6-2.3a.9.9 0 0 1 1.4.76v6.88a.9.9 0 0 1-1.4.76l-3.6-2.3Z" />
       </svg>
     </span>
   );
@@ -123,7 +134,7 @@ function HelpScreen() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 12 }}>
               {sec.guideIds.map((gid) => {
                 const g = GUIDES[gid];
-                if (!g) return null;
+                if (!g || !guideListed(g, lang)) return null;
                 return (
                   <button
                     key={gid}
@@ -141,7 +152,7 @@ function HelpScreen() {
                       <span style={{ display: "block", fontSize: 15.5, fontWeight: 700, color: "var(--ink,#0B1220)" }}>{gt(lang, g.titleKey)}</span>
                       <span style={{ display: "block", fontSize: 12.5, color: "var(--ink-muted,#6B7280)", marginTop: 2, lineHeight: 1.45 }}>{gt(lang, g.descKey)}</span>
                     </span>
-                    <PlayCircle color={g.color} flip={dir === "rtl"} />
+                    {guideVideo(g, lang) ? <CameraCircle color={g.color} /> : <PlayCircle color={g.color} flip={dir === "rtl"} />}
                   </button>
                 );
               })}
@@ -155,6 +166,7 @@ function HelpScreen() {
           guideId={open.id}
           title={gt(lang, open.titleKey)}
           steps={open.steps(lang)}
+          video={guideVideo(open, lang)}
           onClose={() => setOpenId(null)}
         />
       )}

@@ -73,6 +73,32 @@ const CHROME: Record<string, { close: string; replay: string; step: string; got:
   da: { close: "Luk", replay: "Afspil igen", step: "Trin", got: "Forstået", back: "Tilbage", next: "Næste" },
   hu: { close: "Bezárás", replay: "Újra", step: "Lépés", got: "Értem", back: "Vissza", next: "Tovább" },
 };
+// Tabs of a guide that has a recorded video. Wording approved by Gadi for
+// Hebrew (2026-11-15); a language gets its own wording when it gets a video.
+const TABS: Record<string, { video: string; steps: string }> = {
+  en: { video: "Video", steps: "Step by step" },
+  he: { video: "סרטון", steps: "שלב אחר שלב" },
+};
+
+function CameraIcon() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M4 6.5h9.5A2.5 2.5 0 0 1 16 9v6a2.5 2.5 0 0 1-2.5 2.5H4A2.5 2.5 0 0 1 1.5 15V9A2.5 2.5 0 0 1 4 6.5Zm13.5 3.6 3.6-2.3a.9.9 0 0 1 1.4.76v6.88a.9.9 0 0 1-1.4.76l-3.6-2.3Z" />
+    </svg>
+  );
+}
+
+function StepsIcon() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M10 6h11M10 12h11M10 18h11" />
+      <circle cx="4.5" cy="6" r="1.2" fill="currentColor" stroke="none" />
+      <circle cx="4.5" cy="12" r="1.2" fill="currentColor" stroke="none" />
+      <circle cx="4.5" cy="18" r="1.2" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
 function chrome(lang: string) {
   return CHROME[lang] ?? CHROME.en;
 }
@@ -194,6 +220,7 @@ export function WalkthroughModal({
   guideId,
   title,
   steps,
+  video,
   ctaLabel,
   onCta,
   onClose,
@@ -201,6 +228,8 @@ export function WalkthroughModal({
   guideId: string;
   title: string;
   steps: WalkStep[];
+  /** Recorded video in the viewer's language (lib/guides guideVideo), if any. */
+  video?: string | null;
   ctaLabel?: string;
   onCta?: () => void;
   onClose: () => void;
@@ -209,6 +238,12 @@ export function WalkthroughModal({
   const c = chrome(lang);
   const [atEnd, setAtEnd] = useState(false);
   const [playToken, setPlayToken] = useState(0);
+  // With a video the window opens on it; the animated screens are one tab away.
+  const hasSteps = steps.length > 0;
+  const [tab, setTab] = useState<"video" | "steps">(video ? "video" : "steps");
+  const showVideo = !!video && (tab === "video" || !hasSteps);
+  const tabs = TABS[lang] ?? TABS.en;
+  const played = useRef(false);
 
   // One guide open at a time + a measurement event, on open.
   useEffect(() => {
@@ -247,17 +282,49 @@ export function WalkthroughModal({
               background: "var(--paper,#F3F4F6)", color: "var(--ink-muted,#6B7280)", cursor: "pointer", fontSize: 16, lineHeight: 1 }}>✕</button>
         </div>
 
-        {/* Player fills the remaining height */}
-        <WalkthroughPlayer key={playToken} steps={steps} playing onReachEnd={() => setAtEnd(true)} />
+        {/* Two tabs when the guide has a video in this language */}
+        {video && hasSteps && (
+          <div role="tablist" style={{ display: "flex", gap: 4, padding: 4, marginBottom: 12, borderRadius: 14, background: "var(--paper,#F3F4F6)" }}>
+            {(["video", "steps"] as const).map((t) => (
+              <button key={t} type="button" role="tab" aria-selected={tab === t} onClick={() => setTab(t)}
+                style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "9px 10px",
+                  borderRadius: 11, border: "none", cursor: "pointer", fontFamily: "inherit", fontSize: 14.5, fontWeight: 700,
+                  background: tab === t ? "var(--surface,#fff)" : "transparent",
+                  color: tab === t ? "var(--teal-deep,#0A7472)" : "var(--ink-muted,#6B7280)",
+                  boxShadow: tab === t ? "0 1px 4px rgba(11,18,32,0.12)" : "none" }}>
+                {t === "video" ? <CameraIcon /> : <StepsIcon />}
+                <span>{t === "video" ? tabs.video : tabs.steps}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {showVideo ? (
+          // The video sits inside the remaining height, so the window stays one screen tall.
+          <div style={{ flex: 1, minHeight: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <video
+              src={video!}
+              poster={video!.replace(/[.]mp4$/, ".jpg")}
+              controls
+              playsInline
+              preload="metadata"
+              onPlay={() => { if (!played.current) { played.current = true; track("guide_video_play", { guide: guideId, lang }); } }}
+              style={{ width: "100%", maxHeight: "100%", borderRadius: 14, background: "#0B1220" }}
+            />
+          </div>
+        ) : (
+          // Player fills the remaining height
+          <WalkthroughPlayer key={playToken} steps={steps} playing onReachEnd={() => setAtEnd(true)} />
+        )}
 
         {/* Footer: CTA appears once the guide has played through */}
         <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 14 }}>
-          <button type="button" onClick={() => { setAtEnd(false); setPlayToken((t) => t + 1); }}
+          {!showVideo && <button type="button" onClick={() => { setAtEnd(false); setPlayToken((t) => t + 1); }}
             style={{ padding: "11px 18px", borderRadius: 12, border: "1px solid var(--hairline,#E5E7EB)",
               background: "transparent", color: "var(--ink,#0B1220)", fontSize: 14, fontWeight: 600, cursor: "pointer",
               opacity: atEnd ? 1 : 0.55 }}>
             {c.replay}
-          </button>
+          </button>}
           <button type="button" onClick={() => { (onCta ?? onClose)(); }}
             style={{ padding: "11px 22px", borderRadius: 12, border: "none",
               background: "#0EA5A5", color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
