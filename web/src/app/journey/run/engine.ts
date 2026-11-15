@@ -29,6 +29,8 @@ export type RunOptions = {
   theme: number;
   /** What the child's runner wears (the shop). */
   look?: Look;
+  /** Today's new words: each stands on a sign beside the road. */
+  signs?: string[];
   rivals: Rival[];
   onSparks: (n: number) => void;
   onProgress: (part: number, place: number) => void;
@@ -244,6 +246,36 @@ export async function startRun(canvas: HTMLCanvasElement, o: RunOptions): Promis
     k.group.add(tag);
     return k;
   });
+
+  // A sign for every new word of the day, on alternating sides of the road,
+  // each twice along the way: the child reads the word before meeting it inside.
+  {
+    const words = (o.signs ?? []).filter(Boolean).slice(0, 6);
+    const places = words.length ? Math.max(words.length, 6) : 0;
+    for (let k = 0; k < places; k++) {
+      const word = words[k % words.length];
+      const cv = document.createElement("canvas");
+      cv.width = 512; cv.height = 192;
+      const ctx = cv.getContext("2d");
+      if (ctx) {
+        ctx.fillStyle = "#fffdf5"; ctx.beginPath(); ctx.roundRect(6, 6, 500, 180, 28); ctx.fill();
+        ctx.lineWidth = 10; ctx.strokeStyle = "#0a7472"; ctx.stroke();
+        ctx.fillStyle = "#14202b"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        let px = 96; ctx.font = `800 ${px}px Rubik, system-ui, sans-serif`;
+        while (ctx.measureText(word).width > 450 && px > 34) { px -= 6; ctx.font = `800 ${px}px Rubik, system-ui, sans-serif`; }
+        ctx.fillText(word, 256, 100);
+      }
+      const side = k % 2 === 0 ? -1 : 1;
+      const sign = new T.Group();
+      const board = new T.Mesh(new T.PlaneGeometry(4.6, 1.72), new T.MeshBasicMaterial({ map: new T.CanvasTexture(cv), transparent: true }));
+      board.position.y = 3.3;
+      const post = box(0.22, 2.6, 0.22, 0x8a5a2b); post.position.y = 1.3;
+      sign.add(post, board);
+      sign.position.set(side * 5.6, 0, -(40 + k * ((LENGTH - 80) / Math.max(1, places - 1))));
+      sign.rotation.y = side * -0.42;
+      scene.add(sign);
+    }
+  }
 
   // The course: every few steps a row with blocks in some lanes and sparks in a free one.
   const items: Item[] = [];

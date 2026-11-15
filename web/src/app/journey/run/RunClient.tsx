@@ -26,11 +26,12 @@ import { demoData, demoResult, makeQuestion, shortMeaning, zone, JRN_CSS, type C
 import { startRun, THEMES, type RunHandle } from "./engine";
 import { startHall, type HallHandle } from "./hall";
 import type { Look } from "@/lib/journey/shop";
+import { BuildTiles, Lesson, Say, PARTS_CSS } from "../parts";
 
 type Copy = {
   title: string; demo: string; holds: (name: string, n: number) => string; goFree: string; how: string; go: string;
   sparks: string; place: (p: number, of: number) => string; left: string; right: string; jump: string; exit: string;
-  arrived: (name: string) => string; whichMeaning: string; whichWord: string; whichOdd: string; whichSense: string; senseYes: string; senseNo: string; freed: string; held: (name: string) => string;
+  arrived: (name: string) => string; whichMeaning: string; whichWord: string; whichOdd: string; whichSense: string; senseYes: string; senseNo: string; whichBuild: string; hear: string; lesson: string; second: string; newToday: string; freed: string; held: (name: string) => string;
   nextWord: string; openGate: string; opened: string; freedCount: (n: number, of: number) => string; nextFort: string; backIndex: string;
   stillHolds: (name: string, n: number) => string; waitTomorrow: string; alsoNow: (names: string) => string;
   noneToday: string; fewWords: string; signIn: string; loading: string; failed: string; retry: string;
@@ -42,7 +43,7 @@ const COPY: Record<string, Copy> = {
     holds: (name, n) => (n === 1 ? `${name} מחזיקה מילה אחת במבצר` : `${name} מחזיקה ${n} מילים במבצר`), goFree: "רוצו אל המבצר ושחררו אותן",
     how: "מזיזים את הדמות ימינה ושמאלה, קופצים מעל המכשולים ואוספים ניצוצות", go: "רצים",
     sparks: "ניצוצות", place: (p, of) => `מקום ${p} מתוך ${of}`, left: "שמאלה", right: "ימינה", jump: "קפיצה", exit: "יציאה",
-    arrived: (name) => `הגעתם למבצר של ${name}`, whichMeaning: "מה הפירוש של המילה?", whichWord: "איזו מילה מתאימה לפירוש?", whichOdd: "איזו מילה יוצאת דופן?", whichSense: "המשפט הזה הגיוני?", senseYes: "הגיוני", senseNo: "לא הגיוני",
+    arrived: (name) => `הגעתם למבצר של ${name}`, whichMeaning: "מה הפירוש של המילה?", whichWord: "איזו מילה מתאימה לפירוש?", whichOdd: "איזו מילה יוצאת דופן?", whichSense: "המשפט הזה הגיוני?", senseYes: "הגיוני", senseNo: "לא הגיוני", whichBuild: "הרכיבו את המילה שמתאימה לפירוש", hear: "להאזנה", lesson: "כך זה נכון", second: "עוד ניסיון אחד למילה שנשארה בכלוב", newToday: "המילים החדשות שמחכות במבצר היום",
     freed: "המילה שוחררה", held: (name) => `${name} עוד מחזיקה את המילה. היא תחכה לכם מחר, ולא איבדתם כלום`,
     nextWord: "למילה הבאה", openGate: "פותחים את המבצר", opened: "המבצר נפתח", freedCount: (n, of) => `שחררתם ${n} מתוך ${of} מילים`,
     nextFort: "למבצר הבא", backIndex: "חזרה לאינדקס",
@@ -56,7 +57,7 @@ const COPY: Record<string, Copy> = {
     holds: (name, n) => (n === 1 ? `${name} keeps one word in the fortress` : `${name} keeps ${n} words in the fortress`), goFree: "Run to the fortress and set them free",
     how: "Move the runner left and right, jump over the blocks and collect sparks", go: "Run",
     sparks: "Sparks", place: (p, of) => `Place ${p} of ${of}`, left: "Left", right: "Right", jump: "Jump", exit: "Exit",
-    arrived: (name) => `You reached the fortress of ${name}`, whichMeaning: "What does the word mean?", whichWord: "Which word fits the meaning?", whichOdd: "Which word does not belong?", whichSense: "Does this sentence make sense?", senseYes: "It makes sense", senseNo: "It does not",
+    arrived: (name) => `You reached the fortress of ${name}`, whichMeaning: "What does the word mean?", whichWord: "Which word fits the meaning?", whichOdd: "Which word does not belong?", whichSense: "Does this sentence make sense?", senseYes: "It makes sense", senseNo: "It does not", whichBuild: "Build the word that fits the meaning", hear: "Listen", lesson: "This is the right one", second: "One more try for a word still in its cage", newToday: "The new words that wait in the fortress today",
     freed: "The word is free", held: (name) => `${name} still keeps this word. It waits for you tomorrow, and nothing was lost`,
     nextWord: "Next word", openGate: "Open the fortress", opened: "The fortress is open", freedCount: (n, of) => `You freed ${n} of ${of} words`,
     nextFort: "To the next fortress", backIndex: "Back to the index",
@@ -113,6 +114,12 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   const [result, setResult] = useState<Result | null>(null);
   const [marks, setMarks] = useState<boolean[]>([]);
   const [fading, setFading] = useState(false);
+  // The second round (Gadi 2026-11-15): a word the child missed is explained
+  // and asked once more at the end, in another format. A right answer there
+  // opens its cage, so the fortress can open today; it gives no star and no
+  // coins, and the word still comes back tomorrow.
+  const [retry, setRetry] = useState<Array<{ q: Question; i: number }> | null>(null);
+  const [retryAt, setRetryAt] = useState(0);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const runRef = useRef<RunHandle | null>(null);
@@ -147,12 +154,17 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     const byId = new Map(data.cards.map((x) => [x.id, x]));
     // The sample game: every fortress keeps other words.
     const todays: Data["todays"] = demo
-      ? Array.from({ length: 6 }, (_, i) => ({ id: data.cards[(stage * 6 + i) % data.cards.length].id, format: i % 2 ? "word" : "meaning" }))
+      ? Array.from({ length: 6 }, (_, i) => ({ id: data.cards[(stage * 6 + i) % data.cards.length].id, format: i % 3 === 2 ? "build" : i % 2 ? "word" : "meaning" }))
       : data.todays;
     return todays.map((t) => { const card = byId.get(t.id); return card ? makeQuestion(card, t.format, data.cards, forChild, t.odd, t.sense) : null; }).filter((q): q is Question => !!q);
   }, [data, forChild, demo, stage]);
 
   const monster = c.monsters[stage % c.monsters.length];
+  // The words of today that the child never opened: they are shown with their
+  // meaning before the run and stand on signs along the road, so a word is
+  // met before it is asked (the AI review: "the game tests but never teaches").
+  // (The sample game shows its first three words this way, so the sample looks like the real thing.)
+  const fresh = useMemo(() => (demo ? questions.slice(0, 3).map((x) => x.card) : questions.map((x) => x.card).filter((x) => !x.known && x.stars === 0).slice(0, 6)), [questions, demo]);
   // Other players who are on the road right now, anywhere (/api/journey/now):
   // a first name and a look, nothing more. They run beside the child; there is
   // no place in a race against them, no helping and no way to reach them.
@@ -174,7 +186,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   const begin = () => {
     sfx.tap();
     void seeOthers();
-    setQueue(questions); setAt(0); setPicked(null); setResult(null); setMarks([]);
+    setQueue(questions); setAt(0); setPicked(null); setResult(null); setMarks([]); setRetry(null); setRetryAt(0);
     setSparks(0); setPlace(1); setPart(0); setFading(false); shown.current = { part: -1, place: 0 };
     setPhase("run");
   };
@@ -186,6 +198,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     void startRun(canvasRef.current, {
       theme: stage % THEMES.length,
       look: data?.shop?.look,
+      signs: fresh.map((x) => x.word),
       rivals,
       onSparks: setSparks,
       onSpark: () => sfx.tick(),
@@ -206,9 +219,11 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     };
     window.addEventListener("keydown", key);
     return () => { gone = true; window.removeEventListener("keydown", key); runRef.current?.dispose(); runRef.current = null; };
-  }, [phase, stage, rivals]);
+  }, [phase, stage, rivals, fresh]);
 
-  const q = queue[at] ?? null;
+  const q = retry ? retry[retryAt]?.q ?? null : queue[at] ?? null;
+  // The cage in the hall that the question on screen belongs to.
+  const nowIdx = retry ? retry[retryAt]?.i ?? 0 : at;
 
   // The hall lives from the moment the runner is inside until the child leaves the fortress.
   const inside = phase === "fort" || phase === "open";
@@ -223,7 +238,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     return () => { gone = true; hallRef.current?.dispose(); hallRef.current = null; setHallOn(false); };
   }, [inside, stage, look, cagesN, dir]);
   // What happens in the hall follows the answers.
-  useEffect(() => { if (hallOn) hallRef.current?.now(at); }, [hallOn, at]);
+  useEffect(() => { if (hallOn) hallRef.current?.now(nowIdx); }, [hallOn, nowIdx]);
   useEffect(() => {
     if (!hallOn || !hallRef.current) return;
     marks.forEach((ok, i) => { if (ok) hallRef.current?.free(i); else hallRef.current?.hold(i); });
@@ -236,6 +251,12 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     const right = opt.id === q.card.id;
     if (right) sfx.correct(); else sfx.wrong();
     let r: Result;
+    if (retry) {
+      // The second round is kept on this screen only: no star, no coins.
+      setResult({ correct: right, event: "practice", frameUp: null, card: q.card, coinsUp: 0 });
+      if (right) { const i = retry[retryAt].i; setMarks((m) => m.map((v, k) => (k === i ? true : v))); }
+      return;
+    }
     if (demo || !user) r = demoResult(q, right);
     else {
       try {
@@ -257,7 +278,16 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   const next = () => {
     sfx.tap();
     setPicked(null); setResult(null);
-    if (at + 1 < queue.length) { setAt(at + 1); return; }
+    if (retry) { if (retryAt + 1 < retry.length) { setRetryAt(retryAt + 1); return; } }
+    else {
+      if (at + 1 < queue.length) { setAt(at + 1); return; }
+      // One more try for every word that stayed in its cage, asked another way.
+      const missed = marks.map((ok, i) => (ok ? -1 : i)).filter((i) => i >= 0);
+      const again = missed
+        .map((i) => { const first = queue[i]; const other = makeQuestion(first.card, first.format === "meaning" ? "word" : "meaning", data?.cards ?? [], forChild); return other ? { q: other, i } : null; })
+        .filter((x): x is { q: Question; i: number } => !!x);
+      if (again.length) { setRetry(again); setRetryAt(0); return; }
+    }
     // The fortress opens only when every word of the day was freed; a word
     // the monster still keeps waits in the same fortress tomorrow.
     if (marks.every(Boolean)) {
@@ -306,7 +336,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
 
   return (
     <div className={`wordbook jrn run-room is-t${stage % THEMES.length}${phase === "intro" ? " is-out" : ""}${hallOn ? " has-hall" : ""}`} dir={dir}>
-      <style>{JRN_CSS + RUN_CSS}</style>
+      <style>{JRN_CSS + PARTS_CSS + RUN_CSS}</style>
       {inside && <canvas ref={hallCanvas} className={`run-hall${hallOn ? " is-on" : ""}`} aria-hidden="true" />}
       {phase !== "intro" && <><i className="run-torch is-a" aria-hidden="true" /><i className="run-torch is-b" aria-hidden="true" /></>}
       <div className="jrn-wrap">
@@ -325,6 +355,14 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
                 <Monster kind={stage} sad={false} />
                 <div className="jrn-ask">{c.holds(monster, questions.length)}</div>
                 <p className="jrn-note">{c.goFree}</p>
+                {fresh.length > 0 && (
+                  <div className="run-fresh">
+                    <div className="jrn-small">{c.newToday}</div>
+                    {fresh.map((x) => (
+                      <div key={x.id} className="run-fresh-row" dir="auto"><b>{x.word}</b> <Say text={x.word} label={c.hear} /> <span>{shortMeaning(x.meaning)}</span></div>
+                    ))}
+                  </div>
+                )}
                 <p className="jrn-small">{c.how}</p>
                 {!demo && others.length > 0 && <p className="jrn-small run-also">{c.alsoNow(others.map((o) => o.name).join(", "))}</p>}
                 <button type="button" className="jrn-btn" onClick={begin}>{c.go}</button>
@@ -345,10 +383,17 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
             {!hallOn && <Monster kind={stage} sad={!!result?.correct} />}
             <div className="jrn-step">{c.arrived(monster)}</div>
             <div className="run-cages" aria-hidden="true">
-              {queue.map((x, i) => <i key={x.card.id} className={i < marks.length ? (marks[i] ? "is-free" : "is-held") : i === at ? "is-now" : ""} />)}
+              {queue.map((x, i) => <i key={x.card.id} className={`${i < marks.length ? (marks[i] ? "is-free" : "is-held") : ""}${i === nowIdx ? " is-now" : ""}`} />)}
             </div>
-            <div className="jrn-ask">{q.format === "sense" ? c.whichSense : q.format === "odd" ? c.whichOdd : q.format === "meaning" ? c.whichMeaning : c.whichWord}</div>
-            {q.format !== "odd" && <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "sense" ? q.sentence : q.format === "meaning" ? q.card.word : shortMeaning(q.card.meaning)}</div>}
+            {retry && <div className="jrn-small run-second">{c.second}</div>}
+            <div className="jrn-ask">{q.format === "build" ? c.whichBuild : q.format === "sense" ? c.whichSense : q.format === "odd" ? c.whichOdd : q.format === "meaning" ? c.whichMeaning : c.whichWord}</div>
+            {q.format !== "odd" && (
+              <div className="jrn-prompt-row">
+                <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "sense" ? q.sentence : q.format === "meaning" ? q.card.word : shortMeaning(q.card.meaning)}</div>
+                <Say text={q.format === "sense" ? q.sentence ?? "" : q.format === "meaning" ? q.card.word : shortMeaning(q.card.meaning)} label={c.hear} />
+              </div>
+            )}
+            {q.format === "build" && <BuildTiles key={q.card.id} word={q.card.word} extra={forChild ? 0 : 2} disabled={!!picked} onDone={(right) => void choose({ ...q.card, id: right ? q.card.id : `${q.card.id}#x` })} />}
             <div className="jrn-options">
               {q.options.map((o) => {
                 const isRight = !!picked && o.id === q.card.id;
@@ -363,8 +408,9 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
             {result && (
               <div className="jrn-result">
                 <div className={`jrn-result-line${result.correct ? " is-good" : ""}`}>{result.correct ? c.freed : c.held(monster)}</div>
+                {!result.correct && <Lesson word={q.card.word} meaning={shortMeaning(q.card.meaning)} title={c.lesson} hear={c.hear} />}
                 {result.coinsUp > 0 && <div className="jrn-coinup">+{result.coinsUp}</div>}
-                <button type="button" className="jrn-btn" onClick={next}>{at + 1 < queue.length ? c.nextWord : c.openGate}</button>
+                <button type="button" className="jrn-btn" onClick={next}>{(retry ? retryAt + 1 < retry.length : at + 1 < queue.length || marks.some((ok) => !ok)) ? c.nextWord : c.openGate}</button>
               </div>
             )}
           </section>
@@ -420,6 +466,10 @@ const RUN_CSS = `
 @media (min-width: 1040px) { .run-torch { display: block; } }
 @media (prefers-reduced-motion: reduce) { .run-torch::before, .run-room:not(.is-out) { animation: none; } }
 .run-room.is-out { background-image: linear-gradient(var(--sky) 0 58%, var(--land) 58% 100%); }
+.run-fresh { display: grid; gap: 8px; justify-items: center; width: 100%; max-width: 560px; padding: 12px 14px; border-radius: 16px; background: #f0faf9; box-shadow: 0 0 0 2px #bfe3e0 inset; }
+.run-fresh-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; font-size: 16px; line-height: 1.5; }
+.run-fresh-row b { font-size: 20px; }
+.run-second { font-weight: 700; color: #7a5a00; background: #fff8e1; padding: 4px 14px; border-radius: 999px; }
 .run-hall { position: fixed; inset: 0 0 auto 0; width: 100%; height: 46dvh; display: block; opacity: 0; transition: opacity .5s ease; z-index: 0; pointer-events: none; }
 .run-hall.is-on { opacity: 1; }
 .run-room.has-hall .jrn-wrap { position: relative; z-index: 1; padding-top: calc(46dvh - 36px); }

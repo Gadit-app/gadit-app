@@ -3,6 +3,7 @@ import { getAdminAuth, getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-a
 import { gradeOfMember, nextLevelWords } from "@/lib/journey/level-words";
 import { oddQuestions } from "@/lib/journey/odd";
 import { senseQuestions } from "@/lib/journey/sense";
+import { buildable } from "@/lib/journey/build";
 import { cleanLook, cleanOwned, owns, shopItem } from "@/lib/journey/shop";
 import { isNotFoundMeaning } from "@/lib/not-a-word";
 import {
@@ -38,6 +39,8 @@ const FORMATS = ["meaning", "word"];
 const ODD = "odd";
 /** "Does this sentence make sense?", asked only of a level card that has a checked sentence. */
 const SENSE = "sense";
+/** "Build the word" from letter tiles: recall, it cannot be guessed (lib/journey/build.ts). */
+const BUILD = "build";
 const MAX_CARDS = 500;
 /** The words a fortress keeps on a day with nothing else to ask. */
 const LEVEL_DAY = 6;
@@ -161,8 +164,12 @@ export async function GET(req: NextRequest) {
     // A word is known after three stars, so it is asked in three formats: the
     // two plain ones and a third. A card that has both checked questions gets
     // one of them by its id, so half the words meet each kind.
+    // The third is "build the word" whenever the word is a single short one:
+    // every other format is a choice, and a child who taps at random gets one
+    // right in three, so three stars proved nothing (the AI review, 2026-11-15).
+    // A phrase or a long word keeps a checked question as its third.
     let h = 0; for (let i = 0; i < c.id.length; i++) h = (h * 31 + c.id.charCodeAt(i)) >>> 0;
-    const third = o && s ? (h % 2 ? ODD : SENSE) : o ? ODD : s ? SENSE : null;
+    const third = buildable((c as Stored).word) ? BUILD : o && s ? (h % 2 ? ODD : SENSE) : o ? ODD : s ? SENSE : null;
     const format = pickFormat(c, third ? [...FORMATS, third] : FORMATS);
     if (format === ODD && o) return { id: c.id, format, odd: o };
     if (format === SENSE && s) return { id: c.id, format, sense: s };
@@ -223,7 +230,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ stage: next });
   }
   const id = str(body.id), choice = str(body.choice), format = str(body.format);
-  if (!id || id.length > 200 || id.includes("/") || !choice || !(FORMATS.includes(format) || format === ODD || format === SENSE)) return NextResponse.json({ error: "bad_request" }, { status: 400 });
+  if (!id || id.length > 200 || id.includes("/") || !choice || !(FORMATS.includes(format) || format === ODD || format === SENSE || format === BUILD)) return NextResponse.json({ error: "bad_request" }, { status: 400 });
   const today = dayKeyOf(new Date(), zoneOf(body.tz));
   const ref = cardsOf(user.userId).doc(id);
   const db = getAdminDb();
