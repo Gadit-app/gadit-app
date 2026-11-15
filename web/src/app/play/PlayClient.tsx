@@ -3761,15 +3761,68 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
   //   all:             the whole notebook, as before;
   //   list:<id>:       one of the child's saved lists from Homework.
   // Remembered on this device.
+  //   level:           words of the child's school grade, with or without a
+  //                    notebook (Gadi 2026-11-15: "the games open for everyone").
+  // Remembered on this device. With nothing remembered, a notebook that can
+  // fill a game plays first; an empty one starts on the words of the grade.
   const [source, setSource] = useState("smart");
+  const [sourceChosen, setSourceChosen] = useState(false);
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from the device
-    try { const v = localStorage.getItem("gadit.play.source"); if (v) setSource(v); } catch { /* private mode */ }
+    try { const v = localStorage.getItem("gadit.play.source"); if (v) { setSource(v); setSourceChosen(true); } } catch { /* private mode */ }
   }, []);
   const chooseSource = (v: string) => {
     setSource(v);
+    setSourceChosen(true);
     try { localStorage.setItem("gadit.play.source", v); } catch { /* private mode */ }
   };
+  // Words of the grade (/api/play/level-words): Hebrew and English interfaces.
+  const [levelWords, setLevelWords] = useState<PlayWord[]>([]);
+  useEffect(() => {
+    if (loading || !user || (lang !== "he" && lang !== "en")) return;
+    let alive = true;
+    void (async () => {
+      try {
+        const r = await fetch(`/api/play/level-words?ui=${lang}`, { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+        const d = (await r.json()) as { words?: Array<{ word?: string; meaning?: string }> };
+        if (!alive || !Array.isArray(d.words)) return;
+        const all = d.words.filter((w) => w.word && w.meaning).map((w) => ({ word: w.word as string, language: lang, meaning: w.meaning as string, examples: [], uiLang: lang }) as PlayWord);
+        // The same forty all day, another forty tomorrow.
+        const day = new Date().toISOString().slice(0, 10);
+        const rank = (w: string) => { let h = 0; const k = day + "|" + w; for (let i = 0; i < k.length; i++) h = (h * 31 + k.charCodeAt(i)) >>> 0; return h; };
+        setLevelWords([...all].sort((a, b) => rank(a.word) - rank(b.word)).slice(0, 40));
+      } catch { /* the notebook and the starter words still play */ }
+    })();
+    return () => { alive = false; };
+  }, [loading, user, lang]);
+  const levelOk = levelWords.length >= MIN_WORDS_FOR_GAME.quiz;
+  const notebookOk = (pool?.length ?? 0) >= MIN_WORDS_FOR_GAME.quiz;
+  const src = !sourceChosen ? (notebookOk || !levelOk ? "smart" : "level") : source === "level" && !levelOk ? "smart" : source;
+  // English for a Hebrew-speaking child (Gadi 2026-11-15): the Ministry of
+  // Education Band I words, in topic sets, each with one checked Hebrew
+  // translation (scripts/play-en-he-build.cjs). Four sets a day, in order.
+  const [enSets, setEnSets] = useState<Array<{ topic: string; words: string[][] }>>([]);
+  useEffect(() => {
+    if (lang !== "he") return;
+    let alive = true;
+    void import("@/lib/play-content/en-he-band1.json").then((m) => { if (alive) setEnSets((m.default ?? m) as Array<{ topic: string; words: string[][] }>); }).catch(() => undefined);
+    return () => { alive = false; };
+  }, [lang]);
+  const [dayIndex] = useState(() => Math.floor(Date.now() / 86400000));
+  const builtinEn = useMemo((): PlayWord[] => {
+    if (enSets.length === 0) return [];
+    const start = (dayIndex * 4) % enSets.length;
+    const out: PlayWord[] = [];
+    // Two words with one translation (home, house) never share a day: a
+    // question must have a single right answer.
+    const used = new Set<string>();
+    for (let i = 0; i < 4; i++) for (const [en, he] of enSets[(start + i) % enSets.length].words) {
+      if (used.has(he)) continue;
+      used.add(he);
+      out.push({ word: en, language: "en", meaning: he, examples: [], uiLang: "he" });
+    }
+    return out;
+  }, [enSets, dayIndex]);
   const [lists, setLists] = useState<Array<{ setId: string; title: string; words: Array<{ en: string; he: string }> }>>([]);
   useEffect(() => {
     if (loading || !user || !isPaid) return;
@@ -3786,7 +3839,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
     })();
     return () => { alive = false; };
   }, [loading, user, isPaid]);
-  const activeList = source.startsWith("list:") ? lists.find((l) => l.setId === source.slice(5)) : undefined;
+  const activeList = src.startsWith("list:") ? lists.find((l) => l.setId === src.slice(5)) : undefined;
   const sourceNotebook = useMemo((): PlayWord[] => {
     const nb = pool ?? [];
     if (activeList) {
@@ -3803,14 +3856,15 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
       }
       return out;
     }
-    if (source === "all" || nb.length <= 40) return nb;
+    if (src === "level") return levelWords;
+    if (src === "all" || nb.length <= 40) return nb;
     // smart: the 25 newest (the notebook comes newest first) and 15 older
     // ones that rotate every day (the same mix all day, a new one tomorrow).
     const day = new Date().toISOString().slice(0, 10);
     const rank = (w: string) => { let h = 0; const k = day + "|" + w; for (let i = 0; i < k.length; i++) h = (h * 31 + k.charCodeAt(i)) >>> 0; return h; };
     const rest = [...nb.slice(25)].sort((a, b) => rank(a.word) - rank(b.word));
     return [...nb.slice(0, 25), ...rest.slice(0, 15)];
-  }, [pool, source, activeList, lang]);
+  }, [pool, src, activeList, lang, levelWords]);
   const listMode = !!activeList && sourceNotebook.length >= MIN_WORDS_FOR_GAME.quiz;
 
   const effectivePool = useMemo(() => {
@@ -3835,8 +3889,10 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
     for (const p of effectivePool) { const c = wordLangOf(p); m.set(c, (m.get(c) ?? 0) + 1); }
     // Only languages with enough words for a game get a chip; the rest
     // stay under "all languages".
-    return [...m.entries()].filter(([, n]) => n >= MIN_WORDS_FOR_GAME.quiz).sort((a, b) => b[1] - a[1]);
-  }, [effectivePool]);
+    const out = [...m.entries()].filter(([, n]) => n >= MIN_WORDS_FOR_GAME.quiz).sort((a, b) => b[1] - a[1]);
+    if (lang === "he" && builtinEn.length >= MIN_WORDS_FOR_GAME.quiz && !out.some(([c]) => c === "en")) out.push(["en", builtinEn.length]);
+    return out;
+  }, [effectivePool, lang, builtinEn]);
   const [wordLang, setWordLang] = useState<string | null>(null);
   useEffect(() => {
     try { const v = localStorage.getItem("gadit.play.wordLang"); if (v) setWordLang(v); } catch { /* private mode */ }
@@ -3862,9 +3918,13 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
     void ensurePlayContent(lang).then(() => { if (alive) setCuratedReady(true); });
     return () => { alive = false; };
   }, [lang]);
+  // English with no English words of the child's own (or on the words of the
+  // grade): the built-in topic sets, each word with its Hebrew translation.
+  const ownEnglish = useMemo(() => effectivePool.filter((p) => wordLangOf(p) === "en").length, [effectivePool]);
+  const useBuiltinEn = lang === "he" && !listMode && activeWordLang === "en" && builtinEn.length >= MIN_WORDS_FOR_GAME.quiz && (src === "level" || ownEnglish < MIN_WORDS_FOR_GAME.quiz);
   const gamePool = useMemo(
-    () => (listMode || activeWordLang === "all" ? effectivePool : effectivePool.filter((p) => wordLangOf(p) === activeWordLang)),
-    [effectivePool, activeWordLang, listMode],
+    () => (useBuiltinEn ? builtinEn : listMode || activeWordLang === "all" ? effectivePool : effectivePool.filter((p) => wordLangOf(p) === activeWordLang)),
+    [effectivePool, activeWordLang, listMode, useBuiltinEn, builtinEn],
   );
   const lessonLang = stage.kind === "lesson" ? stage.learnLang : null;
   // Every answer in learning mode goes to /api/learn, a few at a time.
@@ -4695,16 +4755,16 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
             // with an empty notebook.
             return (
               <section key={section.id} className={`wb-play-section wb-play-span-${Math.min(sectionGames.length, 4)}`}>
-                {section.id === homeId && ((pool?.length ?? 0) > 40 || lists.length > 0) && (
+                {section.id === homeId && (levelOk || (pool?.length ?? 0) > 40 || lists.length > 0) && (
                   <div className="wb-play-langs" role="radiogroup" aria-label={ml("playOn", lang)} style={{ gridColumn: "1 / -1", width: "100%", maxWidth: "none", display: "flex", flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "flex-start", gap: 8, marginBottom: 12 }}>
                     <span className="wb-play-langs-label">{ml("playOn", lang)}</span>
-                    {[["smart", ml("srcSmart", lang)], ["all", ml("srcAll", lang)], ...lists.map((l) => [`list:${l.setId}`, l.title] as [string, string])].map(([v, label]) => (
+                    {[...(levelOk ? [["level", lang === "he" ? "מילים לפי הכיתה" : "Words for my grade"]] : []), ["smart", ml("srcSmart", lang)], ...((pool?.length ?? 0) > 40 ? [["all", ml("srcAll", lang)]] : []), ...lists.map((l) => [`list:${l.setId}`, l.title] as [string, string])].map(([v, label]) => (
                       <button
                         key={v}
                         type="button"
                         role="radio"
-                        aria-checked={(source === v) || (v === "smart" && source.startsWith("list:") && !activeList)}
-                        className={`wb-play-lang${source === v || (v === "smart" && source.startsWith("list:") && !activeList) ? " is-on" : ""}`}
+                        aria-checked={(src === v) || (v === "smart" && src.startsWith("list:") && !activeList)}
+                        className={`wb-play-lang${src === v || (v === "smart" && src.startsWith("list:") && !activeList) ? " is-on" : ""}`}
                         onClick={() => chooseSource(v)}
                       >
                         {label}
