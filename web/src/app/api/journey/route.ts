@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { gradeOfMember, nextLevelWords } from "@/lib/journey/level-words";
 import { oddQuestions } from "@/lib/journey/odd";
+import { senseQuestions } from "@/lib/journey/sense";
 import { isNotFoundMeaning } from "@/lib/not-a-word";
 import {
   addDays, answer, coinsOf, dayKeyOf, dueToday, frameOf, isDue, isKnown, newCard, pickFormat, summary, usedOn,
@@ -34,6 +35,8 @@ export const dynamic = "force-dynamic";
 const FORMATS = ["meaning", "word"];
 /** "Odd one out" is asked only of a card that has a checked question (lib/journey/odd.ts). */
 const ODD = "odd";
+/** "Does this sentence make sense?", asked only of a level card that has a checked sentence. */
+const SENSE = "sense";
 const MAX_CARDS = 500;
 /** The words a fortress keeps on a day with nothing else to ask. */
 const LEVEL_DAY = 6;
@@ -146,11 +149,18 @@ export async function GET(req: NextRequest) {
   const older = cards.filter((c) => isDue(c, today) && (isKnown(c) || c.stars > 0)).length;
   const newMax = Math.max(NEW_PER_DAY, LEVEL_DAY - older);
   const due = dueToday(cards, today, { usedToday: used, newMax });
-  const odd = await oddQuestions(due as Stored[]);
+  const [odd, sense] = await Promise.all([oddQuestions(due as Stored[]), senseQuestions(due as Stored[], today)]);
   const todays = due.map((c) => {
-    const o = odd.get(c.id);
-    const format = pickFormat(c, o ? [...FORMATS, ODD] : FORMATS);
-    return format === ODD && o ? { id: c.id, format, odd: o } : { id: c.id, format };
+    const o = odd.get(c.id), s = sense.get(c.id);
+    // A word is known after three stars, so it is asked in three formats: the
+    // two plain ones and a third. A card that has both checked questions gets
+    // one of them by its id, so half the words meet each kind.
+    let h = 0; for (let i = 0; i < c.id.length; i++) h = (h * 31 + c.id.charCodeAt(i)) >>> 0;
+    const third = o && s ? (h % 2 ? ODD : SENSE) : o ? ODD : s ? SENSE : null;
+    const format = pickFormat(c, third ? [...FORMATS, third] : FORMATS);
+    if (format === ODD && o) return { id: c.id, format, odd: o };
+    if (format === SENSE && s) return { id: c.id, format, sense: s };
+    return { id: c.id, format: format === ODD || format === SENSE ? FORMATS[0] : format };
   });
   const st = (await stateOf(user.userId).get()).get("stage");
   return NextResponse.json({
@@ -178,7 +188,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ stage: next });
   }
   const id = str(body.id), choice = str(body.choice), format = str(body.format);
-  if (!id || id.length > 200 || id.includes("/") || !choice || !(FORMATS.includes(format) || format === ODD)) return NextResponse.json({ error: "bad_request" }, { status: 400 });
+  if (!id || id.length > 200 || id.includes("/") || !choice || !(FORMATS.includes(format) || format === ODD || format === SENSE)) return NextResponse.json({ error: "bad_request" }, { status: 400 });
   const today = dayKeyOf(new Date(), zoneOf(body.tz));
   const ref = cardsOf(user.userId).doc(id);
   const db = getAdminDb();
