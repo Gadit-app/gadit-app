@@ -53,6 +53,7 @@ type Copy = {
   star: (n: number, of: number) => string; known: string; kept: string; again: string; practice: string; frameUp: (f: string) => string; coinsUp: (n: number) => string;
   frames: Record<Frame, string>; sections: { index: string; started: string; fresh: string };
   opensTomorrow: string; ready: string; found: (d: string) => string; back: string; worth: (n: number) => string; top: string; demo: string;
+  run: string; plain: string; waitIn: (n: number) => string; shop: string; map: string; fortN: (n: number) => string; close: string;
 };
 const COPY: Record<string, Copy> = {
   he: {
@@ -66,6 +67,8 @@ const COPY: Record<string, Copy> = {
     frames: { plain: "רגילה", silver: "כסף", gold: "זהב", rainbow: "קשת", diamond: "יהלום" },
     sections: { index: "באינדקס", started: "בדרך לאינדקס", fresh: "קלפים סגורים" },
     opensTomorrow: "נפתח מחר", ready: "מוכן לפתיחה", found: (d) => `נמצאה ב-${d}`, back: "חזרה", worth: (n) => `שווה ${n} מטבעות`, top: "המסגרת הכי גבוהה: יהלום", demo: "אינדקס לדוגמה, כך הוא נראה אחרי כמה חודשים",
+    run: "רצים אל המבצר", plain: "או תרגול רגיל, בלי המבצר", waitIn: (n) => (n === 1 ? "קלף אחד מחכה לכם במבצר" : `${n} קלפים מחכים לכם במבצר`),
+    shop: "החנות", map: "המפה שלי", fortN: (n) => `מבצר ${n}`, close: "סגירה",
   },
   en: {
     title: "My index", count: (n, of) => `${n} of ${of} words in the index`, coins: "coins", signIn: "Sign in to see your index",
@@ -78,6 +81,8 @@ const COPY: Record<string, Copy> = {
     frames: { plain: "Plain", silver: "Silver", gold: "Gold", rainbow: "Rainbow", diamond: "Diamond" },
     sections: { index: "In the index", started: "On the way to the index", fresh: "Closed cards" },
     opensTomorrow: "Opens tomorrow", ready: "Ready to open", found: (d) => `Found on ${d}`, back: "Back", worth: (n) => `Worth ${n} coins`, top: "The highest frame: Diamond", demo: "A sample index, as it looks after a few months",
+    run: "Run to the fortress", plain: "Or plain practice, without the fortress", waitIn: (n) => (n === 1 ? "One card waits for you in the fortress" : `${n} cards wait for you in the fortress`),
+    shop: "The shop", map: "My map", fortN: (n) => `Fortress ${n}`, close: "Close",
   },
 };
 
@@ -191,7 +196,7 @@ export function demoData(lang = "he"): Data {
   const frameCoins: Record<Frame, number> = { plain: 10, silver: 30, gold: 70, rainbow: 150, diamond: 310 };
   const todays = [10, 11, 12, 3, 6, 14, 15, 16].map((i, n) => ({ id: "demo" + i, format: n % 2 ? "word" : "meaning" }));
   return {
-    today, dailyMax: 8, usedToday: 0, starsToKnow: 3, cards, todays, frameCoins,
+    today, dailyMax: 8, usedToday: 0, starsToKnow: 3, cards, todays, frameCoins, stage: 3, roads: { "1": 2, "2": 1 },
     coins: cards.reduce((n, x) => n + (x.known ? frameCoins[x.frame] : 0), 0),
     summary: { index: cards.filter((x) => x.known).length, started: cards.filter((x) => !x.known && x.stars > 0).length, fresh: cards.filter((x) => !x.known && x.stars === 0).length },
   };
@@ -289,10 +294,19 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
   }, [data]);
 
   const total = data?.cards.length ?? 0;
+  const openCard = open ? byId.get(open) ?? null : null;
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(null); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+  const stage = data?.stage ?? 0;
+  const road = data?.roads?.[String(stage)] ?? stage % 3;
 
   return (
-    <div className="wordbook jrn" dir={dir}>
-      <style>{JRN_CSS + PARTS_CSS}</style>
+    <div className={`wordbook jrn${q ? "" : " idx"}`} dir={dir}>
+      <style>{JRN_CSS + PARTS_CSS + IDX_CSS}</style>
       <div className="jrn-wrap">
         {!demo && !authLoading && !user && <p className="jrn-note">{c.signIn}</p>}
         {user && state === "loading" && !data && <p className="jrn-note">{c.loading}…</p>}
@@ -337,53 +351,102 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
 
         {(user || demo) && data && !q && (
           <>
-            <header className="jrn-head">
-              <h1 className="jrn-title">{c.title}</h1>
-              {demo && <div className="jrn-demo">{c.demo}</div>}
-              <div className="jrn-count">{c.count(data.summary.index, total)}</div>
-              <div className="jrn-coins" title={c.coins}><span aria-hidden="true">●</span> {Math.max(0, data.coins - (data.shop?.spent ?? 0))} {c.coins}</div>
-              {!demo && <Link className="jrn-btn is-ghost" href="/journey/shop">{lang === "he" ? "🛍️ לחנות" : "🛍️ To the shop"}</Link>}
-              {!demo && <Link className="jrn-btn is-ghost" href="/journey/map">{lang === "he" ? "🗺️ המפה שלי" : "🗺️ My map"}</Link>}
+            {/* The index fits one screen (Gadi 2026-11-15): a top bar, the band of
+                today's cards, and the collection, which scrolls inside itself
+                only when it is larger than the screen. */}
+            <header className="idx-top">
+              <div className="idx-titles">
+                <h1 className="jrn-title">{c.title}</h1>
+                <div className="idx-count">{c.count(data.summary.index, total)}</div>
+                <div className="idx-bar" aria-hidden="true"><i style={{ width: `${total ? Math.round((data.summary.index / total) * 100) : 0}%` }} /></div>
+                {demo && <div className="jrn-demo">{c.demo}</div>}
+              </div>
+              <div className="idx-actions">
+                <span className="idx-coins" title={c.coins}><span aria-hidden="true">●</span> {Math.max(0, data.coins - (data.shop?.spent ?? 0))} {c.coins}</span>
+                <Link className="idx-tile" href={demo ? "/journey/shop?demo=1" : "/journey/shop"}><span aria-hidden="true">🛍️</span> {c.shop}</Link>
+                <Link className="idx-tile" href={demo ? "/journey/map?demo=1" : "/journey/map"}><span aria-hidden="true">🗺️</span> {c.map}</Link>
+              </div>
             </header>
 
-            <section className="jrn-today">
-              <h2 className="jrn-h2">{c.todayTitle}</h2>
-              {total === 0 ? <p className="jrn-note">{c.noWords}</p>
-                : questions.length > 0 ? (<><p className="jrn-note">{c.todayCount(questions.length)}</p><button type="button" className="jrn-btn" onClick={start}>{c.start}</button></>)
-                : total < 3 ? <p className="jrn-note">{c.fewWords}</p>
-                : <p className="jrn-note">{c.doneToday}</p>}
+            <section className="idx-hero">
+              <div className="idx-hero-art" aria-hidden="true">
+                {/* eslint-disable-next-line @next/next/no-img-element -- small local pictures */}
+                <img className="idx-fort" src={`/journey/thumbs/fortress${(road % 3) + 1}.webp`} alt="" draggable={false} />
+                {/* eslint-disable-next-line @next/next/no-img-element -- small local pictures */}
+                <img className="idx-mon" src={`/journey/thumbs/monster${(stage % 3) + 1}.webp`} alt="" draggable={false} />
+              </div>
+              <div className="idx-hero-text">
+                <h2 className="idx-h2">{c.todayTitle} <span className="idx-fortn">{c.fortN(stage + 1)}</span></h2>
+                <p className="idx-hero-line">{total === 0 ? c.noWords : questions.length > 0 ? c.waitIn(questions.length) : total < 3 ? c.fewWords : c.doneToday}</p>
+              </div>
+              {questions.length > 0 && (
+                <div className="idx-hero-go">
+                  <Link className="idx-run" href={demo ? "/journey/run?demo=1" : "/journey/run"}>{c.run} <span aria-hidden="true">{dir === "rtl" ? "◀" : "▶"}</span></Link>
+                  <button type="button" className="idx-plain" onClick={start}>{c.plain}</button>
+                </div>
+              )}
             </section>
 
-            {(["index", "started", "fresh"] as const).map((g) => groups[g].length > 0 && (
-              <section key={g} className="jrn-group">
-                <h2 className="jrn-h2">{c.sections[g]} <span className="jrn-n">{groups[g].length}</span></h2>
-                <div className="jrn-grid">
-                  {groups[g].map((card) => g === "fresh" ? (
-                    <div key={card.id} className="jrn-card is-closed">
-                      <span className="jrn-q" aria-hidden="true">?</span>
-                      <span className="jrn-small">{card.due ? c.ready : c.opensTomorrow}</span>
-                    </div>
-                  ) : (
-                    <button key={card.id} type="button" className={`jrn-card is-${card.known ? card.frame : "started"}${open === card.id ? " is-open" : ""}`} onClick={() => setOpen(open === card.id ? null : card.id)} aria-expanded={open === card.id}>
-                      <span className="jrn-word" dir="auto">{card.word}</span>
-                      {card.known ? <Tiers frame={card.frame} label={c.frames[card.frame]} /> : <Stars n={card.stars} of={data.starsToKnow} />}
-                      {open === card.id && (
-                        <span className="jrn-more">
-                          <span className="jrn-meaning" dir="auto">{card.meaning}</span>
-                          <span className="jrn-small">{c.found(niceDay(card.foundDay, lang))}</span>
-                          {card.known && <span className="jrn-small">{c.worth(data.frameCoins[card.frame])}</span>}
-                          {card.known && card.frame !== "diamond" && <span className="jrn-small">{c.top}</span>}
-                        </span>
-                      )}
-                    </button>
-                  ))}
+            <div className="idx-shelf">
+              {groups.index.length > 0 && (
+                <section className="idx-group">
+                  <h2 className="idx-h2">{c.sections.index} <span className="idx-n">{groups.index.length}</span></h2>
+                  <div className="idx-grid">{groups.index.map((card) => <CardFace key={card.id} card={card} c={c} of={data.starsToKnow} onOpen={() => setOpen(card.id)} />)}</div>
+                </section>
+              )}
+              {(groups.started.length > 0 || groups.fresh.length > 0) && (
+                <div className={`idx-pair${groups.started.length > 0 && groups.fresh.length > 0 ? " is-two" : ""}`}>
+                  {groups.started.length > 0 && (
+                    <section className="idx-group">
+                      <h2 className="idx-h2">{c.sections.started} <span className="idx-n">{groups.started.length}</span></h2>
+                      <div className="idx-grid">{groups.started.map((card) => <CardFace key={card.id} card={card} c={c} of={data.starsToKnow} onOpen={() => setOpen(card.id)} />)}</div>
+                    </section>
+                  )}
+                  {groups.fresh.length > 0 && (
+                    <section className="idx-group">
+                      <h2 className="idx-h2">{c.sections.fresh} <span className="idx-n">{groups.fresh.length}</span></h2>
+                      <div className="idx-grid">
+                        {groups.fresh.map((card) => (
+                          <div key={card.id} className={`jrn-card is-closed${card.due ? " is-due" : ""}`}>
+                            <span className="jrn-q" aria-hidden="true">?</span>
+                            <span className="idx-label">{card.due ? c.ready : c.opensTomorrow}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
                 </div>
-              </section>
-            ))}
+              )}
+            </div>
+
+            {/* A card opened: the card itself, larger, above the page. */}
+            {openCard && (
+              <div className="idx-zoom" role="dialog" aria-modal="true" aria-label={openCard.word} onClick={() => setOpen(null)}>
+                <div className={`jrn-card idx-zoom-card is-${openCard.known ? openCard.frame : "started"}`} onClick={(e) => e.stopPropagation()}>
+                  <button type="button" className="idx-zoom-x" onClick={() => setOpen(null)} aria-label={c.close}>×</button>
+                  <div className="idx-zoom-word"><bdi>{openCard.word}</bdi><Say text={openCard.word} label={c.hear} /></div>
+                  {openCard.known ? <Tiers frame={openCard.frame} label={c.frames[openCard.frame]} /> : <Stars n={openCard.stars} of={data.starsToKnow} />}
+                  <p className="idx-zoom-meaning" dir="auto">{openCard.meaning}</p>
+                  <span className="jrn-small">{c.found(niceDay(openCard.foundDay, lang))}</span>
+                  {openCard.known && <span className="jrn-small">{c.worth(data.frameCoins[openCard.frame])}</span>}
+                  {openCard.known && openCard.frame !== "diamond" && <span className="jrn-small">{c.top}</span>}
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>
     </div>
+  );
+}
+
+/** One card of the collection, as it lies on the shelf. */
+function CardFace({ card, c, of, onOpen }: { card: CardView; c: Copy; of: number; onOpen: () => void }) {
+  return (
+    <button type="button" className={`jrn-card is-${card.known ? card.frame : "started"}`} onClick={onOpen}>
+      <span className={`jrn-word${card.word.length >= 12 ? " is-xlong" : card.word.length >= 8 ? " is-long" : ""}`} dir="auto">{card.word}</span>
+      {card.known ? <Tiers frame={card.frame} label={c.frames[card.frame]} /> : <Stars n={card.stars} of={of} />}
+    </button>
   );
 }
 
@@ -400,6 +463,107 @@ function Tiers({ frame, label }: { frame: Frame; label: string }) {
     </span>
   );
 }
+
+/** The index (Gadi 2026-11-15: "fit in one screen at 100%, smaller, more interesting"):
+ *  an album of cards on a deep shelf, the band of today's cards at the top. */
+const IDX_CSS = `
+.idx { min-height: 100dvh; color: #f4f1e6; background:
+  radial-gradient(ellipse at 12% -10%, rgba(255,211,77,.16), transparent 45%),
+  radial-gradient(ellipse at 95% 110%, rgba(56,189,248,.14), transparent 50%),
+  linear-gradient(165deg, #0e2f38 0%, #123f48 50%, #0d2531 100%); }
+.idx .jrn-wrap { max-width: 1180px; height: 100dvh; padding-block: 12px; display: grid; grid-template-rows: auto auto minmax(0, auto); align-content: center; gap: 14px; overflow: hidden; color: inherit; }
+.idx .jrn-note { color: #d4e2e6; }
+.idx-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.idx-titles { display: grid; gap: 3px; min-width: 0; }
+.idx .jrn-title { font-size: clamp(22px, 3.2vw, 30px); text-align: start; }
+.idx-count { font-size: 14.5px; font-weight: 700; color: #cfe0e3; }
+.idx-bar { width: min(260px, 60vw); height: 7px; border-radius: 999px; background: rgba(255,255,255,.14); overflow: hidden; }
+.idx-bar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #f5c542, #ffe08a); }
+.idx .jrn-demo { justify-self: start; margin-top: 3px; padding: 2px 10px; font-size: 12px; background: rgba(224,242,254,.16); color: #cdeeff; }
+.idx-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.idx-coins { display: inline-flex; gap: 6px; align-items: center; min-height: 40px; padding: 4px 14px; border-radius: 999px; background: linear-gradient(180deg, #ffe58a, #f5c542); color: #4a3300; font-weight: 800; font-size: 15px; font-variant-numeric: tabular-nums; box-shadow: 0 3px 0 #b88a00; }
+.idx-coins span { color: #b47d00; }
+.idx-tile { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 4px 14px; border-radius: 12px; background: rgba(255,255,255,.1); color: #fff; font-weight: 700; font-size: 15px; text-decoration: none; box-shadow: 0 0 0 1px rgba(255,255,255,.22) inset; }
+.idx-tile:hover { background: rgba(255,255,255,.18); }
+/* Today's cards: the fortress of the road the child is on, and the way in. */
+.idx-hero { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 6px 18px; padding: 10px 18px; border-radius: 20px; overflow: hidden;
+  background: radial-gradient(ellipse at 18% 120%, rgba(255,190,90,.45), transparent 60%), linear-gradient(105deg, #1f5a63 0%, #23525e 45%, #3a3f6e 100%);
+  box-shadow: 0 0 0 1px rgba(255,211,77,.35) inset, 0 12px 30px rgba(0,0,0,.3); }
+.idx-hero-art { position: relative; width: 132px; height: 92px; }
+.idx-fort { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 6px 8px rgba(0,0,0,.35)); }
+.idx-mon { position: absolute; bottom: -4px; inset-inline-end: -8px; width: 48px; height: 48px; object-fit: contain; filter: drop-shadow(0 3px 3px rgba(0,0,0,.4)); }
+.idx-hero-text { display: grid; gap: 2px; min-width: 0; }
+.idx-h2 { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; font-size: 18px; font-weight: 800; color: #fff; }
+.idx-fortn { padding: 1px 9px; border-radius: 999px; background: rgba(255,211,77,.2); color: #ffe08a; font-size: 12.5px; font-weight: 800; }
+.idx-hero-line { margin: 0; font-size: 15.5px; line-height: 1.45; color: #e3eef0; }
+.idx-hero-go { display: grid; gap: 4px; justify-items: center; }
+.idx-run { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 50px; padding: 8px 26px; border-radius: 999px; background: linear-gradient(180deg, #ffe58a, #f5c542); color: #3b2a00; font-weight: 800; font-size: 18px; text-decoration: none; box-shadow: 0 4px 0 #b88a00, 0 0 24px rgba(255,211,77,.35); white-space: nowrap; }
+.idx-run:hover { filter: brightness(1.05); }
+.idx-plain { border: 0; background: none; padding: 2px 6px; color: #cfe0e3; font: inherit; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+/* The collection: an album of cards. It scrolls inside itself only when larger than the screen. */
+.idx-shelf { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: rgba(255,255,255,.28) transparent; scrollbar-width: thin; display: grid; align-content: start; gap: 14px; padding: 4px 4px 8px; }
+.idx-group { display: grid; gap: 8px; min-width: 0; align-content: start; }
+.idx-n { padding: 0 8px; border-radius: 999px; background: rgba(255,255,255,.14); font-size: 13px; color: #e3eef0; }
+.idx-pair { display: grid; gap: 14px 22px; }
+.idx-pair.is-two { grid-template-columns: 1fr 1fr; }
+.idx-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); }
+.idx .jrn-card { position: relative; overflow: hidden; min-height: clamp(92px, 12dvh, 118px); gap: 6px; padding: 10px 6px; border-radius: 14px; background: #fffdf7; transition: transform .15s ease, box-shadow .15s ease; }
+.idx .jrn-card:is(button):hover { transform: translateY(-3px); }
+.idx .jrn-word { font-size: clamp(17px, 2.3dvh, 21px); line-height: 1.25; }
+.idx .jrn-word.is-long { font-size: clamp(15px, 2dvh, 18px); }
+.idx .jrn-word.is-xlong { font-size: 14px; }
+.idx .jrn-pips { gap: 3px; }
+.idx .jrn-pips i { width: 10px; height: 10px; }
+.idx .jrn-tiers .jrn-small { font-size: 11.5px; }
+.idx .jrn-stars i { font-size: 17px; }
+.idx .jrn-card.is-started { background: rgba(255,253,247,.94); box-shadow: none; border: 2px dashed #9fb3c2; }
+.idx .jrn-card.is-silver { background: linear-gradient(160deg, #ffffff, #e2e8ee); }
+.idx .jrn-card.is-gold { background: linear-gradient(160deg, #fffaea, #f7e09a); }
+.idx .jrn-card.is-rainbow { background: linear-gradient(160deg, #ffffff, #f2ebff) padding-box, linear-gradient(120deg, #ef4444, #f59e0b, #22c55e, #3b82f6, #a855f7) border-box; }
+.idx .jrn-card.is-diamond { background: linear-gradient(160deg, #f2fcff, #c6ecfb); box-shadow: 0 0 0 3px #38bdf8 inset, 0 0 0 6px #e0f7ff inset, 0 0 18px rgba(56,189,248,.55); }
+/* A light that passes over the high frames. */
+.idx .jrn-card:is(.is-gold, .is-rainbow, .is-diamond)::after { content: ""; position: absolute; inset: -40% -60%; background: linear-gradient(115deg, transparent 42%, rgba(255,255,255,.55) 50%, transparent 58%); transform: translateX(-60%); pointer-events: none; }
+.idx .jrn-card.is-diamond::after { animation: idx-shine 4.5s ease-in-out infinite; }
+@keyframes idx-shine { 0%, 55% { transform: translateX(-60%); } 100% { transform: translateX(60%); } }
+/* A closed card is the back of a card: the pattern of the album and a gold question mark. */
+.idx .jrn-card.is-closed { background: repeating-linear-gradient(45deg, rgba(255,255,255,.06) 0 7px, transparent 7px 14px), linear-gradient(160deg, #0b7a77, #07494a); box-shadow: 0 0 0 2px rgba(255,211,77,.55) inset; color: #fff; }
+.idx .jrn-q { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; font-size: 24px; color: #ffe08a; background: rgba(0,0,0,.2); box-shadow: 0 0 0 2px rgba(255,211,77,.6) inset; }
+.idx-label { font-size: 12px; line-height: 1.3; color: #e3f4f2; }
+.idx .jrn-card.is-closed.is-due { box-shadow: 0 0 0 2px #ffd34d inset, 0 0 16px rgba(255,211,77,.45); }
+/* The open card. */
+.idx-zoom { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 16px; background: rgba(6,18,24,.62); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+.idx .jrn-card.idx-zoom-card { width: min(360px, 100%); min-height: 0; gap: 10px; padding: 26px 22px 22px; border-radius: 22px; cursor: default; box-shadow: 0 24px 60px rgba(0,0,0,.45); }
+.idx .jrn-card.idx-zoom-card.is-silver { box-shadow: 0 0 0 4px #8fa0b0 inset, 0 0 0 6px #e6ebf0 inset, 0 24px 60px rgba(0,0,0,.45); }
+.idx .jrn-card.idx-zoom-card.is-gold { box-shadow: 0 0 0 4px #d4a017 inset, 0 0 0 6px #fbe9a6 inset, 0 24px 60px rgba(0,0,0,.45); }
+.idx .jrn-card.idx-zoom-card.is-plain { box-shadow: 0 0 0 3px #b8c4d0 inset, 0 24px 60px rgba(0,0,0,.45); }
+.idx-zoom-x { position: absolute; top: 8px; inset-inline-end: 10px; width: 36px; height: 36px; border: 0; border-radius: 50%; background: rgba(0,0,0,.07); color: #14202b; font-size: 22px; line-height: 1; cursor: pointer; z-index: 1; }
+.idx-zoom-word { display: inline-flex; align-items: center; gap: 10px; font-family: var(--wb-font-display, inherit); font-size: 30px; font-weight: 800; line-height: 1.3; overflow-wrap: anywhere; }
+.idx-zoom-meaning { margin: 0; font-size: 16.5px; line-height: 1.6; color: #22313d; }
+.idx .idx-zoom-card .jrn-pips i { width: 14px; height: 14px; }
+.idx .idx-zoom-card .jrn-tiers .jrn-small { font-size: 13px; }
+@media (prefers-reduced-motion: reduce) { .idx .jrn-card.is-diamond::after { animation: none; } .idx .jrn-card { transition: none; } }
+/* A phone: the bar and the band stack, the cards are smaller. */
+@media (max-width: 720px) {
+  .idx .jrn-wrap { padding: 10px 12px; gap: 10px; }
+  .idx-top { gap: 8px; }
+  .idx-actions { width: 100%; }
+  .idx-tile, .idx-coins { min-height: 36px; font-size: 14px; padding: 3px 11px; }
+  .idx-hero { grid-template-columns: auto minmax(0, 1fr); padding: 8px 12px 10px; gap: 4px 12px; }
+  .idx-hero-art { width: 92px; height: 64px; }
+  .idx-mon { width: 34px; height: 34px; }
+  .idx-hero-go { grid-column: 1 / -1; }
+  .idx-run { width: 100%; min-height: 46px; font-size: 17px; }
+  .idx-h2 { font-size: 16px; }
+  .idx-hero-line { font-size: 14px; }
+  .idx-pair.is-two { grid-template-columns: 1fr; }
+  .idx-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; }
+  .idx .jrn-card { min-height: 80px; padding: 8px 3px; gap: 5px; }
+  .idx .jrn-word { font-size: 15.5px; }
+  .idx .jrn-word.is-long { font-size: 13px; }
+  .idx .jrn-word.is-xlong { font-size: 11.5px; }
+  .idx .jrn-pips i { width: 8px; height: 8px; }
+}
+`;
 
 export const JRN_CSS = `
 .jrn { --j-ink: var(--wb-ink, #14202b); --j-soft: var(--wb-ink-soft, #47586a); --j-surface: var(--surface, #fff); --j-line: var(--wb-border, #dfe5ea); --j-teal: #0a7472; }
