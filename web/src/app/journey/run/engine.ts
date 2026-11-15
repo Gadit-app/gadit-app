@@ -24,7 +24,7 @@ export const THEMES: Theme[] = [
   { skyTop: "#5c9fe0", sky: "#e4f6ff", haze: 0xe4f6ff, ground: 0xf4fbff, hill: 0xcfe6f5, path: 0xbfe3f5, curb: 0x8fc3e0, block: 0x7fc4e8, fort: 0x8fb7d9, fortDark: 0x6f97bd, roof: 0x2f6fb0, flag: 0xff6b6b, dots: [0xffffff, 0xcfeeff, 0xa8d8f0], prop: "ice" },
 ];
 
-export type Rival = { name: string; shirt: number };
+export type Rival = { name: string; shirt: number; /** A real player's look (the shop). */ look?: Look };
 export type RunOptions = {
   theme: number;
   /** What the child's runner wears (the shop). */
@@ -220,7 +220,9 @@ export async function startRun(canvas: HTMLCanvasElement, o: RunOptions): Promis
   scene.add(mine.group);
   const me: Runner = { ...mine, lane: 1, x: 0, dist: 0, pace: 1, stumble: 0, done: false, decided: -1, up: 0, vy: 0 };
   const rivals: Runner[] = o.rivals.map((r, i) => {
-    const k = makeRunner(r.shirt, 0x3b3b4f, 0xffffff);
+    let k: Runner;
+    if (r.look) { const f = buildFigure(T, r.look, 0x3b3b4f); scene.add(f.group); k = { ...f, lane: 1, x: 0, dist: 0, pace: 1, stumble: 0, done: false, decided: -1, up: 0, vy: 0 }; }
+    else k = makeRunner(r.shirt, 0x3b3b4f, 0xffffff);
     k.lane = i % 2 === 0 ? 0 : 2;
     k.x = LANES[k.lane];
     k.pace = 0.93 + i * 0.05;

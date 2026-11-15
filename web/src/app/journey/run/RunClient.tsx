@@ -25,13 +25,14 @@ import { useKidsMode } from "@/lib/use-kids-mode";
 import { demoData, demoResult, makeQuestion, shortMeaning, zone, JRN_CSS, type CardView, type Data, type Question, type Result } from "../JourneyClient";
 import { startRun, THEMES, type RunHandle } from "./engine";
 import { startHall, type HallHandle } from "./hall";
+import type { Look } from "@/lib/journey/shop";
 
 type Copy = {
   title: string; demo: string; holds: (name: string, n: number) => string; goFree: string; how: string; go: string;
   sparks: string; place: (p: number, of: number) => string; left: string; right: string; jump: string; exit: string;
   arrived: (name: string) => string; whichMeaning: string; whichWord: string; whichOdd: string; whichSense: string; senseYes: string; senseNo: string; freed: string; held: (name: string) => string;
   nextWord: string; openGate: string; opened: string; freedCount: (n: number, of: number) => string; nextFort: string; backIndex: string;
-  stillHolds: (name: string, n: number) => string; waitTomorrow: string;
+  stillHolds: (name: string, n: number) => string; waitTomorrow: string; alsoNow: (names: string) => string;
   noneToday: string; fewWords: string; signIn: string; loading: string; failed: string; retry: string;
   monsters: string[]; sample: string;
 };
@@ -45,7 +46,7 @@ const COPY: Record<string, Copy> = {
     freed: "המילה שוחררה", held: (name) => `${name} עוד מחזיקה את המילה. היא תחכה לכם מחר, ולא איבדתם כלום`,
     nextWord: "למילה הבאה", openGate: "פותחים את המבצר", opened: "המבצר נפתח", freedCount: (n, of) => `שחררתם ${n} מתוך ${of} מילים`,
     nextFort: "למבצר הבא", backIndex: "חזרה לאינדקס",
-    stillHolds: (name, n) => (n === 1 ? `${name} עוד מחזיקה מילה אחת` : `${name} עוד מחזיקה ${n} מילים`), waitTomorrow: "הן יחכו לכם מחר במבצר הזה, ולא איבדתם כלום",
+    stillHolds: (name, n) => (n === 1 ? `${name} עוד מחזיקה מילה אחת` : `${name} עוד מחזיקה ${n} מילים`), waitTomorrow: "הן יחכו לכם מחר במבצר הזה, ולא איבדתם כלום", alsoNow: (names) => `גם רצים עכשיו אל המבצר שלהם: ${names}`,
     noneToday: "המילים של היום כבר שוחררו. המבצר הבא ייפתח מחר", fewWords: "כשיהיו לכם שלוש מילים, המבצר הראשון ייפתח",
     signIn: "כדי לרוץ אל המבצר צריך להתחבר", loading: "מכינים את הדרך", failed: "הדרך לא נטענה", retry: "לנסות שוב",
     monsters: ["גרגרנית", "נחרנית", "קפצוצית"], sample: "דמות לדוגמה",
@@ -59,7 +60,7 @@ const COPY: Record<string, Copy> = {
     freed: "The word is free", held: (name) => `${name} still keeps this word. It waits for you tomorrow, and nothing was lost`,
     nextWord: "Next word", openGate: "Open the fortress", opened: "The fortress is open", freedCount: (n, of) => `You freed ${n} of ${of} words`,
     nextFort: "To the next fortress", backIndex: "Back to the index",
-    stillHolds: (name, n) => (n === 1 ? `${name} still keeps one word` : `${name} still keeps ${n} words`), waitTomorrow: "They wait for you tomorrow in this fortress, and nothing was lost",
+    stillHolds: (name, n) => (n === 1 ? `${name} still keeps one word` : `${name} still keeps ${n} words`), waitTomorrow: "They wait for you tomorrow in this fortress, and nothing was lost", alsoNow: (names) => `Also running to their own fortress now: ${names}`,
     noneToday: "Today's words are already free. The next fortress opens tomorrow", fewWords: "The first fortress opens once you have three words",
     signIn: "Sign in to run to the fortress", loading: "Getting the road ready", failed: "The road did not load", retry: "Try again",
     monsters: ["Gobbler", "Snorer", "Hopper"], sample: "Sample runner",
@@ -152,10 +153,27 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   }, [data, forChild, demo, stage]);
 
   const monster = c.monsters[stage % c.monsters.length];
-  const rivals = useMemo(() => (demo ? [{ name: `${c.sample} 1`, shirt: 0xe11d48 }, { name: `${c.sample} 2`, shirt: 0x7c3aed }] : []), [demo, c.sample]);
+  // Other players who are on the road right now, anywhere (/api/journey/now):
+  // a first name and a look, nothing more. They run beside the child; there is
+  // no place in a race against them, no helping and no way to reach them.
+  const [others, setOthers] = useState<Array<{ name: string; look: Look }>>([]);
+  const seeOthers = useCallback(async () => {
+    if (!user || demo) return;
+    try {
+      const res = await fetch("/api/journey/now", { method: "POST", headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+      const d = (await res.json()) as { others?: Array<{ name: string; look: Look }> };
+      if (Array.isArray(d.others)) setOthers(d.others);
+    } catch { /* the road is simply quiet */ }
+  }, [user, demo]);
+  useEffect(() => { const id = window.setTimeout(() => { void seeOthers(); }, 0); return () => window.clearTimeout(id); }, [seeOthers]);
+  const rivals = useMemo(
+    () => (demo ? [{ name: `${c.sample} 1`, shirt: 0xe11d48 }, { name: `${c.sample} 2`, shirt: 0x7c3aed }] : others.map((o) => ({ name: o.name, shirt: 0x7c3aed, look: o.look }))),
+    [demo, c.sample, others],
+  );
 
   const begin = () => {
     sfx.tap();
+    void seeOthers();
     setQueue(questions); setAt(0); setPicked(null); setResult(null); setMarks([]);
     setSparks(0); setPlace(1); setPart(0); setFading(false); shown.current = { part: -1, place: 0 };
     setPhase("run");
@@ -271,7 +289,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
           }} />
         <div className="run-hud">
           <span className="run-chip is-sparks"><b>✦</b> {sparks}</span>
-          {rivals.length > 0 && <span className="run-chip">{c.place(place, rivals.length + 1)}</span>}
+          {demo && rivals.length > 0 && <span className="run-chip">{c.place(place, rivals.length + 1)}</span>}
           <button type="button" className="run-chip is-exit" onClick={() => setPhase("intro")}>{c.exit}</button>
         </div>
         <div className="run-bar" aria-hidden="true"><i style={{ width: `${part}%` }} /></div>
@@ -307,6 +325,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
                 <div className="jrn-ask">{c.holds(monster, questions.length)}</div>
                 <p className="jrn-note">{c.goFree}</p>
                 <p className="jrn-small">{c.how}</p>
+                {!demo && others.length > 0 && <p className="jrn-small run-also">{c.alsoNow(others.map((o) => o.name).join(", "))}</p>}
                 <button type="button" className="jrn-btn" onClick={begin}>{c.go}</button>
                 {!demo && <Link className="jrn-btn is-ghost" href="/journey/shop">{lang === "he" ? "🛍️ לחנות" : "🛍️ To the shop"}</Link>}
               </>
@@ -357,7 +376,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
             <div className="jrn-ask">{freedN === queue.length ? c.freedCount(freedN, queue.length) : `${c.freedCount(freedN, queue.length)}. ${c.waitTomorrow}`}</div>
             <div className="run-sum">
               <span className="run-chip is-sparks"><b>✦</b> {sparks} {c.sparks}</span>
-              {rivals.length > 0 && <span className="run-chip">{c.place(place, rivals.length + 1)}</span>}
+              {demo && rivals.length > 0 && <span className="run-chip">{c.place(place, rivals.length + 1)}</span>}
             </div>
             {demo
               ? <button type="button" className="jrn-btn" onClick={nextFort}>{c.nextFort}</button>
