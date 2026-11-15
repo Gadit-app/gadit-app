@@ -161,7 +161,9 @@ export async function startHall(canvas: HTMLCanvasElement, o: HallOptions): Prom
     cam.aspect = w / h;
     // A tall, narrow screen stands further back so the whole row of cages is seen.
     const narrow = w / h < 1.25;
-    cam.fov = narrow ? 62 : 46;
+    // A wide, low hall (the question card took most of the screen) zooms in, so
+    // the camera never looks past the end of the wall.
+    cam.fov = narrow ? 62 : Math.min(46, (2 * Math.atan(2.4 / (w / h)) * 180) / Math.PI);
     cam.position.set(0, narrow ? 5.2 : 4.8, narrow ? 17 : 12.5);
     cam.lookAt(0, narrow ? 4.4 : 4.0, -3);
     cam.updateProjectionMatrix();

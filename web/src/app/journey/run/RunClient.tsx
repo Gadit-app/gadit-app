@@ -149,6 +149,11 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   };
   const hallCanvas = useRef<HTMLCanvasElement | null>(null);
   const hallRef = useRef<HallHandle | null>(null);
+  // The question card must fit on the screen under the hall (Gadi 2026-11-15:
+  // "the bottom of the frame goes down, raise it"). The card's height is kept
+  // in --card-h on the room, and the hall takes only the height that is left.
+  const roomRef = useRef<HTMLDivElement | null>(null);
+  const cardRef = useRef<HTMLElement | null>(null);
   const [hallOn, setHallOn] = useState(false);
   const shown = useRef({ part: -1, place: 0 });
   const touch = useRef<{ x: number; y: number } | null>(null);
@@ -262,6 +267,20 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     return () => { gone = true; hallRef.current?.dispose(); hallRef.current = null; setHallOn(false); };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- the hall is built once per fortress
   }, [inside, stage, themeIdx, look, cagesN, dir]);
+  // Keep the card's height on the room, so the hall shrinks to leave the card on screen.
+  useEffect(() => {
+    const card = cardRef.current, room = roomRef.current;
+    if (!inside || !card || !room) return;
+    const set = () => room.style.setProperty("--card-h", `${Math.ceil(card.getBoundingClientRect().height)}px`);
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(card);
+    return () => ro.disconnect();
+  }, [inside, phase, at, retryAt, retry]);
+  // After an answer, the button to go on is brought into view.
+  useEffect(() => {
+    if (result) cardRef.current?.querySelector(".jrn-result .jrn-btn")?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }, [result]);
   // What happens in the hall follows the answers.
   useEffect(() => { if (hallOn) hallRef.current?.now(nowIdx); }, [hallOn, nowIdx]);
   useEffect(() => {
@@ -360,7 +379,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   }
 
   return (
-    <div className={`wordbook jrn run-room is-t${themeIdx}${phase === "intro" ? " is-out" : ""}${hallOn ? " has-hall" : ""}`} dir={dir}>
+    <div ref={roomRef} className={`wordbook jrn run-room is-t${themeIdx}${phase === "intro" ? " is-out" : ""}${hallOn ? " has-hall" : ""}`} dir={dir}>
       <style>{JRN_CSS + PARTS_CSS + RUN_CSS}</style>
       {inside && <canvas ref={hallCanvas} className={`run-hall${hallOn ? " is-on" : ""}`} aria-hidden="true" />}
       {phase !== "intro" && <><i className="run-torch is-a" aria-hidden="true" /><i className="run-torch is-b" aria-hidden="true" /></>}
@@ -407,7 +426,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
         )}
 
         {ready && phase === "fort" && q && (
-          <section className="jrn-play" aria-live="polite">
+          <section ref={cardRef} className="jrn-play" aria-live="polite">
             {!hallOn && <Monster kind={stage} sad={!!result?.correct} />}
             <div className="jrn-step">{c.arrived(monster)}</div>
             <div className="run-cages" aria-hidden="true">
@@ -447,7 +466,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
         )}
 
         {ready && phase === "open" && (
-          <section className="jrn-play">
+          <section ref={cardRef} className="jrn-play">
             {!hallOn && <Monster kind={stage} sad={freedN === queue.length} />}
             <h1 className="jrn-title">{freedN === queue.length ? c.opened : c.stillHolds(monster, queue.length - freedN)}</h1>
             <div className="jrn-ask">{freedN === queue.length ? c.freedCount(freedN, queue.length) : `${c.freedCount(freedN, queue.length)}. ${c.waitTomorrow}`}</div>
@@ -515,9 +534,15 @@ const RUN_CSS = `
 .run-fresh-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; font-size: 16px; line-height: 1.5; }
 .run-fresh-row b { font-size: 20px; }
 .run-second { font-weight: 700; color: #7a5a00; background: #fff8e1; padding: 4px 14px; border-radius: 999px; }
-.run-hall { position: fixed; inset: 0 0 auto 0; width: 100%; height: 46dvh; display: block; opacity: 0; transition: opacity .5s ease; z-index: 0; pointer-events: none; }
+/* The hall takes the height the question card leaves free, between 120px and 46% of the screen. */
+.run-room { --hall-h: clamp(120px, calc(100dvh - var(--card-h, 460px) - 18px), 46dvh); }
+.run-hall { position: fixed; inset: 0 0 auto 0; width: 100%; height: var(--hall-h); display: block; opacity: 0; transition: opacity .5s ease, height .25s ease; z-index: 0; pointer-events: none; }
 .run-hall.is-on { opacity: 1; }
-.run-room.has-hall .jrn-wrap { position: relative; z-index: 1; padding-top: calc(46dvh - 36px); }
+.run-room.has-hall .jrn-wrap { position: relative; z-index: 1; padding-top: calc(var(--hall-h) - 18px); padding-bottom: 10px; gap: 10px; }
+.run-room.has-hall .jrn-play { gap: 10px; padding: 14px 16px 16px; }
+.run-room.has-hall .jrn-prompt.is-word { font-size: clamp(30px, 7vw, 44px); line-height: 1.2; }
+.run-room.has-hall .jrn-option { min-height: 48px; padding: 9px 16px; }
+.run-room.has-hall .jrn-options { gap: 8px; }
 .run-room.has-hall .run-torch { display: none; }
 @media (prefers-reduced-motion: reduce) { .run-hall { transition: none; } }
 .run-room .jrn-play { background: #fffdf5; border: 5px solid var(--trim); box-shadow: 0 10px 0 rgba(0,0,0,.22); }
