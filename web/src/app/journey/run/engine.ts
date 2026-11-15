@@ -34,6 +34,8 @@ export type RunOptions = {
   onProgress: (part: number, place: number) => void;
   onSpark: () => void;
   onStumble: () => void;
+  /** The child's runner left the ground. */
+  onJump?: () => void;
   /** The runner reached the gate and the gate starts to rise. */
   onGate: () => void;
   /** The runner is inside. `place` is 1 when nobody was ahead. */
@@ -380,7 +382,7 @@ export async function startRun(canvas: HTMLCanvasElement, o: RunOptions): Promis
 
   return {
     steer: (dir) => { if (!me.done) me.lane = Math.max(0, Math.min(2, me.lane + dir)); },
-    jump: () => { if (!me.done && me.up === 0 && me.stumble <= 0) me.vy = 10.5; },
+    jump: () => { if (!me.done && me.up === 0 && me.stumble <= 0) { me.vy = 10.5; o.onJump?.(); } },
     dispose: () => {
       stopped = true;
       cancelAnimationFrame(raf);

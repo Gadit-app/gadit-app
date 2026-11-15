@@ -112,6 +112,7 @@ export type NavKey =
   | "features"
   | "notebook"
   | "play"
+  | "journey"
   | "say"
   | "read"
   | "spell"
@@ -307,6 +308,9 @@ function useNavLinks(): NavLink[] {
   // languages that have the catalog (he, en, and de once its data exists).
   const subjLang = subjectsLangFor(lang);
   const subjects: NavLink[] = subjLang ? [{ key: "subjects", href: href("/subjects"), label: SUBJECTS_NAV[subjLang] }] : [];
+  // The road to the fortress (the journey game, Gadi 2026-11-15). Its texts
+  // exist in Hebrew and English only, so the other languages do not get the link.
+  const journey: NavLink[] = lang === "he" || lang === "en" ? [{ key: "journey", href: href("/journey/run"), label: lang === "he" ? "המבצר" : "The fortress" }] : [];
 
   // A kid on a Family plan gets a stripped-down, commerce-free nav
   // (council 2026-08-04): only their own words + games. No Features,
@@ -328,6 +332,7 @@ function useNavLinks(): NavLink[] {
       { key: "read", href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en },
       { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
       { key: "play", href: href("/play"), label: v2(lang, "navPlay") },
+      ...journey,
     ];
   }
 
@@ -357,6 +362,7 @@ function useNavLinks(): NavLink[] {
         ...(deep ? [{ key: "read" as const, href: href("/read"), label: READ_NAV[lang] ?? READ_NAV.en }] : []),
         { key: "say", href: href("/say"), label: SAY_NAV[lang] ?? SAY_NAV.en },
         ...(deep ? [{ key: "play" as const, href: href("/play"), label: v2(lang, "navPlay") }] : []),
+        ...(deep ? journey : []),
       ];
       return links;
     }

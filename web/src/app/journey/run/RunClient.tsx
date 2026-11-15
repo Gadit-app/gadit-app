@@ -190,6 +190,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
       onSparks: setSparks,
       onSpark: () => sfx.tick(),
       onStumble: () => sfx.whoosh(),
+      onJump: () => sfx.jump(),
       onProgress: (p, pl) => {
         const pct = Math.round(p * 100);
         if (pct !== shown.current.part) { shown.current.part = pct; setPart(pct); }
