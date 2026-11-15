@@ -4,6 +4,7 @@ import { gradeOfMember, nextLevelWords } from "@/lib/journey/level-words";
 import { oddQuestions } from "@/lib/journey/odd";
 import { senseQuestions } from "@/lib/journey/sense";
 import { buildable } from "@/lib/journey/build";
+import { nextListWords } from "@/lib/journey/list-words";
 import { cleanLook, cleanOwned, owns, shopItem } from "@/lib/journey/shop";
 import { isNotFoundMeaning } from "@/lib/not-a-word";
 import {
@@ -44,6 +45,8 @@ const BUILD = "build";
 const MAX_CARDS = 500;
 /** The words a fortress keeps on a day with nothing else to ask. */
 const LEVEL_DAY = 6;
+/** Words of the child's own lists (the school's words of the week) that may wait unopened at once. */
+const LIST_WAITING = 12;
 const UI_LANG = /^[a-z]{2}(-[A-Z]{2})?$/;
 
 /** The school grade of the profile behind a token: its family member doc. */
@@ -147,6 +150,26 @@ export async function GET(req: NextRequest) {
     }
   }
   cards.push(...fresh);
+
+  // The school's words: the lists the child, a parent or a teacher typed in
+  // Homework wait in the fortress too (lib/journey/list-words.ts). They come
+  // before the words of the grade.
+  const ui0 = str(req.nextUrl.searchParams.get("ui"));
+  const waitingList = cards.filter((c) => c.id.startsWith("list-") && !isKnown(c) && c.stars === 0).length;
+  if (UI_LANG.test(ui0) && waitingList < LIST_WAITING && cards.length < MAX_CARDS) {
+    try {
+      const mine = await nextListWords(user.userId, ui0, have, cards.map((c) => c.word), Math.min(LIST_WAITING - waitingList, MAX_CARDS - cards.length));
+      const found = addDays(today, -1);
+      const add: Stored[] = mine.map((w) => ({ ...newCard(w.id, found), word: w.word, language: w.language, meaning: w.meaning, foundDay: found }));
+      if (add.length && !user.impersonating) {
+        const batch = db.batch();
+        for (const c of add) { const { id, ...rest } = c; batch.create(cardsOf(user.userId).doc(id), { ...rest, source: "list" }); }
+        try { await batch.commit(); } catch (e) { console.warn("journey: list cards not created", String(e)); }
+      }
+      for (const c of add) have.add(c.id);
+      cards.push(...add);
+    } catch (e) { console.warn("journey: list words not read", String(e)); }
+  }
 
   // Words of the school grade, when the day is short of words. They are
   // found "yesterday", so they can be opened today.

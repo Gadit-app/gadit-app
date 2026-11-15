@@ -136,8 +136,12 @@ export function makeQuestion(card: CardView, format: string | null, all: CardVie
   const asked = format === "word" ? card.word : card.meaning;
   const alike = others.filter((c) => scriptOf(format === "word" ? c.word : c.meaning) === scriptOf(asked));
   const same = alike.filter((c) => c.language === card.language);
+  // Answers of about the same length come first: a one-word translation
+  // (a word from the child's school list) among long definitions gives itself away.
+  const shown = (c: CardView) => (format === "word" ? c.word : shortMeaning(c.meaning)).length;
+  const near = (c: CardView) => { const x = shown(c), y = shown(card); return x <= y * 2.2 + 4 && y <= x * 2.2 + 4; };
   const picks: CardView[] = [];
-  for (const c of [...same, ...alike, ...others]) {
+  for (const c of [...same.filter(near), ...alike.filter(near), ...same, ...alike, ...others]) {
     // Four answers, not three: a blind tap is right one time in four.
     if (picks.length === 3) break;
     if (!picks.some((p) => p.id === c.id || p.word === c.word || p.meaning === c.meaning)) picks.push(c);

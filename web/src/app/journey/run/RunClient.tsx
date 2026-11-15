@@ -35,7 +35,7 @@ type Copy = {
   nextWord: string; openGate: string; opened: string; freedCount: (n: number, of: number) => string; nextFort: string; backIndex: string;
   stillHolds: (name: string, n: number) => string; waitTomorrow: string; alsoNow: (names: string) => string;
   earlierToday: (names: string) => string; worldToday: (n: number) => string;
-  tomorrow: string; pickRoad: string; picked: (name: string) => string; roads: string[]; ownWord: string; map: string;
+  tomorrow: string; pickRoad: string; picked: (name: string) => string; roads: string[]; ownWord: string; listWord: string; map: string;
   noneToday: string; fewWords: string; signIn: string; loading: string; failed: string; retry: string;
   monsters: string[]; sample: string;
 };
@@ -52,7 +52,7 @@ const COPY: Record<string, Copy> = {
     stillHolds: (name, n) => (n === 1 ? `${name} עוד מחזיקה מילה אחת` : `${name} עוד מחזיקה ${n} מילים`), waitTomorrow: "הן יחכו לכם מחר במבצר הזה, ולא איבדתם כלום", alsoNow: (names) => `גם רצים עכשיו אל המבצר שלהם: ${names}`,
     earlierToday: (names) => `מוקדם יותר היום רצו כאן: ${names}`, worldToday: (n) => `היום ילדים שחררו יחד ${n.toLocaleString("he")} מילים`,
     tomorrow: "במבצר הבא מחכה מפלצת חדשה", pickRoad: "באיזו דרך רצים אליה?", picked: (name) => `בחרתם: ${name}`, roads: ["דרך היער", "דרך המדבר", "דרך הקרח"],
-    ownWord: "את המילה הזאת חיפשתם בעצמכם", map: "🗺️ המפה שלי",
+    ownWord: "את המילה הזאת חיפשתם בעצמכם", listWord: "מילה מהרשימה שלכם", map: "🗺️ המפה שלי",
     noneToday: "המילים של היום כבר שוחררו. המבצר הבא ייפתח מחר", fewWords: "כשיהיו לכם שלוש מילים, המבצר הראשון ייפתח",
     signIn: "כדי לרוץ אל המבצר צריך להתחבר", loading: "מכינים את הדרך", failed: "הדרך לא נטענה", retry: "לנסות שוב",
     monsters: ["גרגרנית", "נחרנית", "קפצוצית"], sample: "דמות לדוגמה",
@@ -69,7 +69,7 @@ const COPY: Record<string, Copy> = {
     stillHolds: (name, n) => (n === 1 ? `${name} still keeps one word` : `${name} still keeps ${n} words`), waitTomorrow: "They wait for you tomorrow in this fortress, and nothing was lost", alsoNow: (names) => `Also running to their own fortress now: ${names}`,
     earlierToday: (names) => `Earlier today these ran here: ${names}`, worldToday: (n) => `Today children freed ${n.toLocaleString("en")} words together`,
     tomorrow: "A new monster waits in the next fortress", pickRoad: "Which road will you take to it?", picked: (name) => `You chose: ${name}`, roads: ["The forest road", "The desert road", "The ice road"],
-    ownWord: "You looked this word up yourself", map: "🗺️ My map",
+    ownWord: "You looked this word up yourself", listWord: "A word from your list", map: "🗺️ My map",
     noneToday: "Today's words are already free. The next fortress opens tomorrow", fewWords: "The first fortress opens once you have three words",
     signIn: "Sign in to run to the fortress", loading: "Getting the road ready", failed: "The road did not load", retry: "Try again",
     monsters: ["Gobbler", "Snorer", "Hopper"], sample: "Sample runner",
@@ -414,7 +414,8 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
               {queue.map((x, i) => <i key={x.card.id} className={`${i < marks.length ? (marks[i] ? "is-free" : "is-held") : ""}${i === nowIdx ? " is-now" : ""}`} />)}
             </div>
             {retry && <div className="jrn-small run-second">{c.second}</div>}
-            {!demo && !q.card.id.startsWith("lvl-") && <div className="jrn-small run-own">{c.ownWord}</div>}
+            {!demo && q.card.id.startsWith("list-") && <div className="jrn-small run-own">{c.listWord}</div>}
+            {!demo && !q.card.id.startsWith("lvl-") && !q.card.id.startsWith("list-") && <div className="jrn-small run-own">{c.ownWord}</div>}
             <div className="jrn-ask">{q.format === "build" ? c.whichBuild : q.format === "sense" ? c.whichSense : q.format === "odd" ? c.whichOdd : q.format === "meaning" ? c.whichMeaning : c.whichWord}</div>
             {q.format !== "odd" && (
               <div className="jrn-prompt-row">
