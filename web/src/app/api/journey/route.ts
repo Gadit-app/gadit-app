@@ -3,6 +3,7 @@ import { getAdminAuth, getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-a
 import { gradeOfMember, nextLevelWords } from "@/lib/journey/level-words";
 import { oddQuestions } from "@/lib/journey/odd";
 import { senseQuestions } from "@/lib/journey/sense";
+import { cleanLook, cleanOwned, owns, shopItem } from "@/lib/journey/shop";
 import { isNotFoundMeaning } from "@/lib/not-a-word";
 import {
   addDays, answer, coinsOf, dayKeyOf, dueToday, frameOf, isDue, isKnown, newCard, pickFormat, summary, usedOn,
@@ -162,9 +163,12 @@ export async function GET(req: NextRequest) {
     if (format === SENSE && s) return { id: c.id, format, sense: s };
     return { id: c.id, format: format === ODD || format === SENSE ? FORMATS[0] : format };
   });
-  const st = (await stateOf(user.userId).get()).get("stage");
+  const state = (await stateOf(user.userId).get()).data() ?? {};
+  const st = state.stage;
   return NextResponse.json({
     stage: typeof st === "number" && st >= 0 ? Math.floor(st) : 0,
+    // The shop: what was bought, what the runner wears and what was spent.
+    shop: { owned: cleanOwned(state.owned), look: cleanLook(state.look), spent: typeof state.spent === "number" && state.spent > 0 ? Math.floor(state.spent) : 0 },
     today, dailyMax: DAILY_MAX, usedToday: used, starsToKnow: STARS_TO_KNOW,
     cards: cards.map((c) => view(c, today)), todays,
     summary: summary(cards, today), coins: coinsOf(cards), frameCoins: FRAME_COINS,
@@ -174,8 +178,34 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const user = await verifyUserAndGetPlan(bearer(req));
   if (!user) return NextResponse.json({ error: "login_required" }, { status: 401 });
-  let body: { id?: unknown; choice?: unknown; format?: unknown; tz?: unknown; stage?: unknown };
+  let body: { id?: unknown; choice?: unknown; format?: unknown; tz?: unknown; stage?: unknown; buy?: unknown; wear?: unknown };
   try { body = (await req.json()) as typeof body; } catch { return NextResponse.json({ error: "bad_body" }, { status: 400 }); }
+  // { buy: itemId }: a look from the shop, paid with the coins of the known
+  // words. { wear: itemId }: put on a thing the child owns (a free one is
+  // everyone's). A bought thing is kept for good and nothing is ever taken back.
+  if (typeof body.buy === "string" || typeof body.wear === "string") {
+    const item = shopItem(String(body.buy ?? body.wear));
+    if (!item) return NextResponse.json({ error: "bad_request" }, { status: 400 });
+    const ref = stateOf(user.userId);
+    const cardSnap = typeof body.buy === "string" ? await cardsOf(user.userId).limit(MAX_CARDS).get() : null;
+    const earned = cardSnap ? coinsOf(cardSnap.docs.map((d) => readCard(d.id, d.data())).filter((c): c is Stored => !!c)) : 0;
+    const out = await getAdminDb().runTransaction(async (tx) => {
+      const cur = (await tx.get(ref)).data() ?? {};
+      let owned = cleanOwned(cur.owned);
+      const look = cleanLook(cur.look);
+      let spent = typeof cur.spent === "number" && cur.spent > 0 ? Math.floor(cur.spent) : 0;
+      if (typeof body.buy === "string") {
+        if (owns(owned, item.id)) return { error: "owned" as const, owned, look, spent };
+        if (earned - spent < item.price) return { error: "short" as const, owned, look, spent };
+        owned = [...owned, item.id];
+        spent += item.price;
+      } else if (!owns(owned, item.id)) return { error: "not_owned" as const, owned, look, spent };
+      look[item.slot] = item.id;
+      if (!user.impersonating) tx.set(ref, { owned, look, spent, at: new Date().toISOString() }, { merge: true });
+      return { error: null, owned, look, spent };
+    });
+    return NextResponse.json({ ok: !out.error, error: out.error, shop: { owned: out.owned, look: out.look, spent: out.spent } }, { status: out.error ? 409 : 200 });
+  }
   // { stage }: the child opened a fortress. The number only goes up, one fortress at a time.
   if (typeof body.stage === "number" && body.id === undefined) {
     const want = Math.floor(body.stage);

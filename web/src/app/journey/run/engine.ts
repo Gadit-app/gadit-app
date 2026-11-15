@@ -11,6 +11,8 @@
  */
 
 import type * as THREE from "three";
+import { DEFAULT_LOOK, type Look } from "@/lib/journey/shop";
+import { buildFigure, hop } from "./figure";
 
 export type Theme = {
   skyTop: string; sky: string; haze: number; ground: number; hill: number; path: number; curb: number; block: number;
@@ -25,6 +27,8 @@ export const THEMES: Theme[] = [
 export type Rival = { name: string; shirt: number };
 export type RunOptions = {
   theme: number;
+  /** What the child's runner wears (the shop). */
+  look?: Look;
   rivals: Rival[];
   onSparks: (n: number) => void;
   onProgress: (part: number, place: number) => void;
@@ -41,7 +45,7 @@ const LANES = [-2.2, 0, 2.2];
 const LENGTH = 300;
 const ROW_GAP = 9;
 
-type Runner = { group: THREE.Group; arms: THREE.Group[]; legs: THREE.Group[]; lane: number; x: number; dist: number; pace: number; stumble: number; done: boolean; decided: number; up: number; vy: number };
+type Runner = { group: THREE.Group; arms: THREE.Group[]; legs: THREE.Group[]; pet: THREE.Group | null; lane: number; x: number; dist: number; pace: number; stumble: number; done: boolean; decided: number; up: number; vy: number };
 type Item = { mesh: THREE.Object3D; lane: number; dist: number; kind: "block" | "spark"; hit: boolean };
 
 export async function startRun(canvas: HTMLCanvasElement, o: RunOptions): Promise<RunHandle> {
@@ -210,9 +214,11 @@ export async function startRun(canvas: HTMLCanvasElement, o: RunOptions): Promis
     const arms = [limb(-0.64, 2.0, 0.95, shirt, 0xf2c79a), limb(0.64, 2.0, 0.95, shirt, 0xf2c79a)];
     const legs = [limb(-0.25, 0.98, 0.98, pants, 0xffffff), limb(0.25, 0.98, 0.98, pants, 0xffffff)];
     scene.add(g);
-    return { group: g, arms, legs, lane: 1, x: 0, dist: 0, pace: 1, stumble: 0, done: false, decided: -1, up: 0, vy: 0 };
+    return { group: g, arms, legs, pet: null, lane: 1, x: 0, dist: 0, pace: 1, stumble: 0, done: false, decided: -1, up: 0, vy: 0 };
   };
-  const me = makeRunner(0x0a7472, 0x24415c, 0xf5a400);
+  const mine = buildFigure(T, o.look ?? DEFAULT_LOOK);
+  scene.add(mine.group);
+  const me: Runner = { ...mine, lane: 1, x: 0, dist: 0, pace: 1, stumble: 0, done: false, decided: -1, up: 0, vy: 0 };
   const rivals: Runner[] = o.rivals.map((r, i) => {
     const k = makeRunner(r.shirt, 0x3b3b4f, 0xffffff);
     k.lane = i % 2 === 0 ? 0 : 2;
@@ -293,6 +299,7 @@ export async function startRun(canvas: HTMLCanvasElement, o: RunOptions): Promis
     r.legs[0].rotation.x = -a; r.legs[1].rotation.x = a;
     r.group.position.set(r.x, still ? 0 : r.up + (r.up > 0 ? 0 : Math.abs(Math.sin(t * 11)) * 0.12), -r.dist);
     r.group.rotation.z = r.stumble > 0 ? Math.sin(t * 30) * 0.12 : (LANES[r.lane] - r.x) * -0.08;
+    hop(r, t, still);
   };
 
   const step = (r: Runner, dt: number, mine: boolean) => {

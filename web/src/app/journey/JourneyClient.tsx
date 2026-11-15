@@ -15,6 +15,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { sfx } from "@/lib/game-sfx";
@@ -29,6 +30,8 @@ export type Data = {
   summary: { index: number; started: number; fresh: number };
   /** The fortress the profile stands at, kept on the server. */
   stage?: number;
+  /** The shop: what was bought, what the runner wears, what was spent (lib/journey/shop.ts). */
+  shop?: { owned: string[]; look: Record<"shirt" | "hat" | "back" | "pet", string>; spent: number };
 };
 export type Result = { correct: boolean; event: "practice" | "star" | "known" | "kept" | "again"; frameUp: Frame | null; card: CardView; coinsUp: number };
 /** "Odd one out": four words, three of one school unit (the card's word among them) and one that does not belong. */
@@ -304,7 +307,8 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
               <h1 className="jrn-title">{c.title}</h1>
               {demo && <div className="jrn-demo">{c.demo}</div>}
               <div className="jrn-count">{c.count(data.summary.index, total)}</div>
-              <div className="jrn-coins" title={c.coins}><span aria-hidden="true">●</span> {data.coins} {c.coins}</div>
+              <div className="jrn-coins" title={c.coins}><span aria-hidden="true">●</span> {Math.max(0, data.coins - (data.shop?.spent ?? 0))} {c.coins}</div>
+              {!demo && <Link className="jrn-btn is-ghost" href="/journey/shop">{lang === "he" ? "🛍️ לחנות" : "🛍️ To the shop"}</Link>}
             </header>
 
             <section className="jrn-today">

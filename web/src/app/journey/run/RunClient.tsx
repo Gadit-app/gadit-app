@@ -161,6 +161,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     let gone = false;
     void startRun(canvasRef.current, {
       theme: stage % THEMES.length,
+      look: data?.shop?.look,
       rivals,
       onSparks: setSparks,
       onSpark: () => sfx.tick(),
@@ -280,6 +281,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
                 <p className="jrn-note">{c.goFree}</p>
                 <p className="jrn-small">{c.how}</p>
                 <button type="button" className="jrn-btn" onClick={begin}>{c.go}</button>
+                {!demo && <Link className="jrn-btn is-ghost" href="/journey/shop">{lang === "he" ? "🛍️ לחנות" : "🛍️ To the shop"}</Link>}
               </>
             ) : (
               <>
