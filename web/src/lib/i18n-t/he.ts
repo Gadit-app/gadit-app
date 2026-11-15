@@ -33,7 +33,7 @@ const t: TStrings = {
  "showAllMeanings": "הציגו את כל ההגדרות",
  "meaningLabel": "הגדרה",
  "contextNote": "איך ההגדרה הזאת מתאימה למשפט שלכם?",
- "definitionsLabel": "הגדרות",
+ "definitionsLabel": "משמעויות",
  "examplesLabel": "דוגמאות",
  "etymologyLabel": "מקור המילה",
  "idiomsLabel": "ניבים עם הגדרה זו",

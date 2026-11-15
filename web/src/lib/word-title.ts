@@ -63,6 +63,13 @@ function shortTranslation(t: unknown): string {
   return first.length > 0 && first.length <= 25 ? first : "";
 }
 
+/** True when the word is not in the page's own language (an English word on the Hebrew page). */
+export function isForeignWord(lang: string, result: { language?: unknown } | null): boolean {
+  const wordLang = result && typeof result.language === "string" ? result.language.trim().toLowerCase() : "";
+  const pageLang = (ENGLISH_NAME[lang] ?? "").toLowerCase();
+  return !!wordLang && wordLang !== "unknown" && !!pageLang && !wordLang.startsWith(pageLang);
+}
+
 export function wordTitle(
   lang: string,
   word: string,
@@ -70,9 +77,7 @@ export function wordTitle(
 ): string {
   const tpl = TITLES[lang];
   if (!tpl || !result) return `${word}, Gadit`;
-  const wordLang = typeof result.language === "string" ? result.language.trim().toLowerCase() : "";
-  const pageLang = (ENGLISH_NAME[lang] ?? "").toLowerCase();
-  const foreign = !!wordLang && wordLang !== "unknown" && !!pageLang && !wordLang.startsWith(pageLang);
+  const foreign = isForeignWord(lang, result);
   const trusted = !VERIFY_TRANSLATION.has(lang) || result.titleTranslationOk === true;
   const t = foreign && trusted ? shortTranslation(result.translation) : "";
   const variants = t ? tpl.foreign : tpl.same;

@@ -116,7 +116,7 @@ const G: Dict = {
   "ui.tagline": { en: "Understand words to the end", he: "להבין כל מילה עד הסוף" },
   "ui.searchPlaceholder": { en: "Type a word", he: "הקלידו מילה" },
   "ui.sentencePh": { en: "(Optional) Type the sentence where the word appears to get one precise definition", he: "(אופציונלי) הקלידו את המשפט שבו מופיעה המילה כדי לקבל הגדרה אחת מדויקת" },
-  "ui.definitions": { en: "Definitions", he: "הגדרות" },
+  "ui.definitions": { en: "Definitions", he: "משמעויות" },
   "ui.tabImage": { en: "Image", he: "תמונה" },
   "ui.tabKids": { en: "Kids' explanation", he: "הסבר לילדים" },
   "ui.tabQuiz": { en: "Quiz", he: "חידון" },

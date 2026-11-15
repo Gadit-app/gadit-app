@@ -2271,6 +2271,10 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
 .wordbook .wb-midiom + .wb-midiom {
   margin-top: 4px;
 }
+.wordbook .wb-midiom[hidden] { display: none; }
+/* Section labels are real headings (SEO step 2); they keep the label's look. */
+.wordbook .wb-eyebrow .wb-eyebrow-h { font: inherit; letter-spacing: inherit; color: inherit; margin: 0; }
+.wordbook h3.wb-mexamples-en-label { line-height: inherit; margin-top: 0; }
 .wordbook .wb-midiom-text { flex: 1; min-width: 0; }
 .wordbook .wb-midiom-phrase { font-weight: 700; color: var(--ink); }
 .wordbook .wb-midiom-sep    { color: var(--ink-muted); }

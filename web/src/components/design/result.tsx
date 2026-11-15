@@ -866,7 +866,7 @@ function MeaningEntry({
 
       {!awaitingKids && (meaning.examplesEn ?? []).length > 0 && lang !== "en" && (
         <div className="wb-mexamples wb-mexamples-en">
-          <div className="wb-mexamples-en-label">{EN_EXAMPLES_LABEL[lang] ?? "In English"}</div>
+          <h3 className="wb-mexamples-en-label">{EN_EXAMPLES_LABEL[lang] ?? "In English"}</h3>
           {(meaning.examplesEn ?? []).map((ex, j) => (
             <div className="wb-mexample" key={j} dir="ltr" lang="en">
               <span><TappableText text={ex} skipWord={word} /></span>
@@ -1043,12 +1043,12 @@ export function MeaningsBlock({
     <div className="wb-meanings">
       <div className="wb-eyebrow">
         <span className="wb-eyebrow-icon"><BookIcon /></span>
-        <span>
+        <h2 className="wb-eyebrow-h">
           {v2(lang, "meaningsEyebrow")}
           {meanings.length > 1 && (
             <span className="wb-eyebrow-count"> ({meanings.length})</span>
           )}
-        </span>
+        </h2>
         {canSimple && (
           <button type="button" role="switch" aria-checked={simpleOn} className={`wb-simple-chip${simpleOn ? " is-on" : ""}`} onClick={() => setSimpleOn(!simpleOn)}>
             <span>{simpleWordsLabel(lang)}</span>
@@ -1170,7 +1170,6 @@ export function IdiomsSection({
   // Prefer the dedicated set when it arrives non-empty; otherwise define's.
   const full = (fetched && fetched.length > 0 ? fetched : defineIdioms).slice(0, IDIOMS_MAX);
   if (full.length === 0) return null;
-  const all = full.slice(0, shown);
 
   // A speaker PER idiom (Gadi 2026-08-12: not one button that reads them
   // all). OpenAI voice for paying users handles the mixed phrase-language
@@ -1180,7 +1179,7 @@ export function IdiomsSection({
   return (
     <div className="wb-idioms-section">
       <div className="wb-eyebrow wb-eyebrow-with-flag">
-        <span>{v2(lang, "idiomsEyebrow")}</span>
+        <h2 className="wb-eyebrow-h">{v2(lang, "idiomsEyebrow")}</h2>
         {onReport && (
           <button
             type="button"
@@ -1197,7 +1196,9 @@ export function IdiomsSection({
         )}
       </div>
       <div className="wb-card wb-idioms-card">
-        {all.map((id, j) => {
+        {/* Every stored idiom is in the page; the ones past the shown count are
+            hidden until "+" is pressed (SEO step 2: a crawler reads them all). */}
+        {full.map((id, j) => {
           // Kids Mode: use the child-friendly meaning when we have one (Romi
           // 2026-09-18 hit hard words like "personification"/"illegible" inside
           // idiom explanations). Falls back to the adult meaning otherwise.
@@ -1205,7 +1206,7 @@ export function IdiomsSection({
             kidsOn && id.kidsMeaning?.trim() ? id.kidsMeaning.trim() : id.meaning;
           const rowTts = [id.phrase?.trim(), effMeaning?.trim()].filter(Boolean).join(", ");
           return (
-            <div className="wb-midiom" key={j}>
+            <div className="wb-midiom" key={j} hidden={j >= shown}>
               <div className="wb-midiom-text">
                 <span className="wb-midiom-phrase"><TappableText text={id.phrase} skipWord={word || undefined} /></span>
                 <span className="wb-midiom-sep">, </span>
@@ -1296,10 +1297,10 @@ export function OriginCard({ etymology, onReport, plan = "basic" }: { etymology:
   return (
     <div className="wb-origin-section">
       <div className="wb-eyebrow wb-eyebrow-with-flag">
-        <span>
+        <h2 className="wb-eyebrow-h">
           <span className="wb-eyebrow-icon"><ScrollIcon /></span>
           {v2(lang, "wordOriginEyebrow")}
-        </span>
+        </h2>
         <div className="wb-section-controls">
           {originTts && (
             <TTSButton

@@ -248,7 +248,7 @@ const t: Partial<V2Strings> = {
  "imageOpenFullAria": "פתחו את התמונה בגודל מלא",
  "kidsComingSoon": "הסבר לילדים יופיע כאן בקרוב.",
  "shareDefinitionAria": "שתפו הגדרה זו",
- "meaningsEyebrow": "הגדרות",
+ "meaningsEyebrow": "משמעויות",
  "wordOriginLanguage": "שפה",
  "wordOriginOriginallyMeant": "המקור",
  "actionCompose": "חברו משפט",

@@ -7,6 +7,7 @@ import { WordClient } from "./WordClient";
 import { LANGUAGES } from "@/lib/i18n";
 import { sanitizeDegenerateEtymology } from "@/lib/define-guard";
 import { wordTitle } from "@/lib/word-title";
+import { wordDescription } from "@/lib/word-description";
 import { WordLinks } from "./WordLinks";
 
 /**
@@ -145,9 +146,10 @@ export async function generateMetadata(
   // descriptions).
   const firstMeaning =
     (preloaded?.meanings?.[0] as { meaning?: string } | undefined)?.meaning?.trim() ?? "";
-  const description = firstMeaning
+  // Hebrew pages: the approved search-form wording (lib/word-description.ts).
+  const description = wordDescription(lang, decoded, preloaded as unknown as Parameters<typeof wordDescription>[2]) ?? (firstMeaning
     ? `${decoded}: ${firstMeaning.slice(0, 150)}${firstMeaning.length > 150 ? "…" : ""}`
-    : `Meanings, examples, etymology, and idioms for "${decoded}", in 30+ languages.`;
+    : `Meanings, examples, etymology, and idioms for "${decoded}", in 30+ languages.`);
 
   // Per-language self-canonical + hreflang (GSC fix, 2026-07-19).
   // Previously every language variant canonicalized to the English
@@ -227,12 +229,18 @@ export default async function WordRoute({
   // DefinedTerm in Gadit's term set (helps search and answer engines read it).
   const firstMeaning =
     (preloaded?.meanings?.[0] as { meaning?: string } | undefined)?.meaning?.trim() ?? "";
+  // Every meaning, numbered, so the term is described whole (first one alone
+  // when the word has a single meaning).
+  const allMeanings = ((preloaded?.meanings ?? []) as { meaning?: string }[])
+    .map((m) => (typeof m.meaning === "string" ? m.meaning.trim() : ""))
+    .filter(Boolean);
+  const ldDescription = allMeanings.length > 1 ? allMeanings.map((m, i) => `${i + 1}. ${m}`).join(" ") : firstMeaning;
   const ld = preloaded && firstMeaning
     ? {
         "@context": "https://schema.org",
         "@type": "DefinedTerm",
         name: decoded,
-        description: firstMeaning,
+        description: ldDescription,
         inLanguage: lang,
         url: `https://www.gadit.app${lang === "en" ? "" : `/${lang}`}/word/${encodeURIComponent(decoded.toLowerCase())}`,
         inDefinedTermSet: { "@type": "DefinedTermSet", name: "Gadit", url: "https://www.gadit.app" },
