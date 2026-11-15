@@ -95,6 +95,19 @@ function scriptOf(text: string): string {
 }
 
 /** A meaning as an answer: its first sentence only, so the three answers are of a like length (Gadi 2026-11-14). */
+/** The meaning as a question: the word itself is hidden wherever the meaning says it
+ *  ("courage is when you..."), with a Hebrew one-letter prefix kept, so the meaning
+ *  never hands over the answer of "which word fits" or "build the word". */
+export function maskedMeaning(card: { word: string; meaning: string }): string {
+  const w = card.word.trim();
+  const text = shortMeaning(card.meaning);
+  if (w.length < 2) return text;
+  const esc = w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const he = /[א-ת]/.test(w);
+  const re = he ? new RegExp(`(^|[^\\u05D0-\\u05EA])([הובלכמש]{0,2})${esc}(?![\\u05D0-\\u05EA])`, "g") : new RegExp(`\\b${esc}\\b`, "gi");
+  return he ? text.replace(re, "$1$2…") : text.replace(re, "…");
+}
+
 export function shortMeaning(meaning: string): string {
   const m = meaning.trim();
   const end = m.search(/[.!?。؟](\s|$)/u);
@@ -293,8 +306,8 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
             <div className="jrn-ask">{q.format === "build" ? c.whichBuild : q.format === "sense" ? c.whichSense : q.format === "odd" ? c.whichOdd : q.format === "meaning" ? c.whichMeaning : c.whichWord}</div>
             {q.format !== "odd" && (
               <div className="jrn-prompt-row">
-                <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "sense" ? q.sentence : q.format === "meaning" ? q.card.word : shortMeaning(q.card.meaning)}</div>
-                <Say text={q.format === "sense" ? q.sentence ?? "" : q.format === "meaning" ? q.card.word : shortMeaning(q.card.meaning)} label={c.hear} />
+                <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "sense" ? q.sentence : q.format === "meaning" ? q.card.word : maskedMeaning(q.card)}</div>
+                <Say text={q.format === "sense" ? q.sentence ?? "" : q.format === "meaning" ? q.card.word : maskedMeaning(q.card)} label={c.hear} />
               </div>
             )}
             {q.format === "build" && <BuildTiles key={q.card.id} word={q.card.word} extra={forChild ? 0 : 2} disabled={!!picked} onDone={(right) => void choose({ ...q.card, id: right ? q.card.id : `${q.card.id}#x` })} />}

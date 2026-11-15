@@ -22,7 +22,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { sfx } from "@/lib/game-sfx";
 import { useKidsMode } from "@/lib/use-kids-mode";
-import { demoData, demoResult, makeQuestion, shortMeaning, zone, JRN_CSS, type CardView, type Data, type Question, type Result } from "../JourneyClient";
+import { demoData, demoResult, makeQuestion, maskedMeaning, shortMeaning, zone, JRN_CSS, type CardView, type Data, type Question, type Result } from "../JourneyClient";
 import { startRun, THEMES, type RunHandle } from "./engine";
 import { startHall, type HallHandle } from "./hall";
 import type { Look } from "@/lib/journey/shop";
@@ -419,8 +419,8 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
             <div className="jrn-ask">{q.format === "build" ? c.whichBuild : q.format === "sense" ? c.whichSense : q.format === "odd" ? c.whichOdd : q.format === "meaning" ? c.whichMeaning : c.whichWord}</div>
             {q.format !== "odd" && (
               <div className="jrn-prompt-row">
-                <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "sense" ? q.sentence : q.format === "meaning" ? q.card.word : shortMeaning(q.card.meaning)}</div>
-                <Say text={q.format === "sense" ? q.sentence ?? "" : q.format === "meaning" ? q.card.word : shortMeaning(q.card.meaning)} label={c.hear} />
+                <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "sense" ? q.sentence : q.format === "meaning" ? q.card.word : maskedMeaning(q.card)}</div>
+                <Say text={q.format === "sense" ? q.sentence ?? "" : q.format === "meaning" ? q.card.word : maskedMeaning(q.card)} label={c.hear} />
               </div>
             )}
             {q.format === "build" && <BuildTiles key={q.card.id} word={q.card.word} extra={forChild ? 0 : 2} disabled={!!picked} onDone={(right) => void choose({ ...q.card, id: right ? q.card.id : `${q.card.id}#x` })} />}
