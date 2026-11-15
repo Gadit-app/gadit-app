@@ -24,6 +24,7 @@ import { sfx } from "@/lib/game-sfx";
 import { useKidsMode } from "@/lib/use-kids-mode";
 import { demoData, demoResult, makeQuestion, shortMeaning, zone, JRN_CSS, type CardView, type Data, type Question, type Result } from "../JourneyClient";
 import { startRun, THEMES, type RunHandle } from "./engine";
+import { startHall, type HallHandle } from "./hall";
 
 type Copy = {
   title: string; demo: string; holds: (name: string, n: number) => string; goFree: string; how: string; go: string;
@@ -114,6 +115,11 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const runRef = useRef<RunHandle | null>(null);
+  // Inside the fortress: the 3D hall behind the questions (run/hall.ts). When
+  // it cannot start (no WebGL), the flat room with the drawn monster stays.
+  const hallCanvas = useRef<HTMLCanvasElement | null>(null);
+  const hallRef = useRef<HallHandle | null>(null);
+  const [hallOn, setHallOn] = useState(false);
   const shown = useRef({ part: -1, place: 0 });
   const touch = useRef<{ x: number; y: number } | null>(null);
 
@@ -184,6 +190,26 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   }, [phase, stage, rivals]);
 
   const q = queue[at] ?? null;
+
+  // The hall lives from the moment the runner is inside until the child leaves the fortress.
+  const inside = phase === "fort" || phase === "open";
+  const look = data?.shop?.look;
+  const cagesN = queue.length;
+  useEffect(() => {
+    if (!inside || !hallCanvas.current || cagesN === 0) return;
+    let gone = false;
+    void startHall(hallCanvas.current, { theme: stage % THEMES.length, look, total: cagesN, monster: stage, monsterColor: parseInt(MONSTER_COLORS[stage % 3].slice(1), 16), rtl: dir === "rtl" })
+      .then((h) => { if (gone) { h.dispose(); return; } hallRef.current = h; setHallOn(true); })
+      .catch(() => undefined);
+    return () => { gone = true; hallRef.current?.dispose(); hallRef.current = null; setHallOn(false); };
+  }, [inside, stage, look, cagesN, dir]);
+  // What happens in the hall follows the answers.
+  useEffect(() => { if (hallOn) hallRef.current?.now(at); }, [hallOn, at]);
+  useEffect(() => {
+    if (!hallOn || !hallRef.current) return;
+    marks.forEach((ok, i) => { if (ok) hallRef.current?.free(i); else hallRef.current?.hold(i); });
+    if (phase === "open" && marks.length > 0 && marks.every(Boolean)) hallRef.current.open();
+  }, [hallOn, marks, phase]);
 
   async function choose(opt: CardView) {
     if (!q || picked) return;
@@ -260,8 +286,9 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   }
 
   return (
-    <div className={`wordbook jrn run-room is-t${stage % THEMES.length}${phase === "intro" ? " is-out" : ""}`} dir={dir}>
+    <div className={`wordbook jrn run-room is-t${stage % THEMES.length}${phase === "intro" ? " is-out" : ""}${hallOn ? " has-hall" : ""}`} dir={dir}>
       <style>{JRN_CSS + RUN_CSS}</style>
+      {inside && <canvas ref={hallCanvas} className={`run-hall${hallOn ? " is-on" : ""}`} aria-hidden="true" />}
       {phase !== "intro" && <><i className="run-torch is-a" aria-hidden="true" /><i className="run-torch is-b" aria-hidden="true" /></>}
       <div className="jrn-wrap">
         {!demo && !authLoading && !user && <p className="jrn-note">{c.signIn}</p>}
@@ -295,7 +322,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
 
         {ready && phase === "fort" && q && (
           <section className="jrn-play" aria-live="polite">
-            <Monster kind={stage} sad={!!result?.correct} />
+            {!hallOn && <Monster kind={stage} sad={!!result?.correct} />}
             <div className="jrn-step">{c.arrived(monster)}</div>
             <div className="run-cages" aria-hidden="true">
               {queue.map((x, i) => <i key={x.card.id} className={i < marks.length ? (marks[i] ? "is-free" : "is-held") : i === at ? "is-now" : ""} />)}
@@ -325,7 +352,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
 
         {ready && phase === "open" && (
           <section className="jrn-play">
-            <Monster kind={stage} sad={freedN === queue.length} />
+            {!hallOn && <Monster kind={stage} sad={freedN === queue.length} />}
             <h1 className="jrn-title">{freedN === queue.length ? c.opened : c.stillHolds(monster, queue.length - freedN)}</h1>
             <div className="jrn-ask">{freedN === queue.length ? c.freedCount(freedN, queue.length) : `${c.freedCount(freedN, queue.length)}. ${c.waitTomorrow}`}</div>
             <div className="run-sum">
@@ -373,6 +400,11 @@ const RUN_CSS = `
 @media (min-width: 1040px) { .run-torch { display: block; } }
 @media (prefers-reduced-motion: reduce) { .run-torch::before, .run-room:not(.is-out) { animation: none; } }
 .run-room.is-out { background-image: linear-gradient(var(--sky) 0 58%, var(--land) 58% 100%); }
+.run-hall { position: fixed; inset: 0 0 auto 0; width: 100%; height: 46dvh; display: block; opacity: 0; transition: opacity .5s ease; z-index: 0; pointer-events: none; }
+.run-hall.is-on { opacity: 1; }
+.run-room.has-hall .jrn-wrap { position: relative; z-index: 1; padding-top: calc(46dvh - 36px); }
+.run-room.has-hall .run-torch { display: none; }
+@media (prefers-reduced-motion: reduce) { .run-hall { transition: none; } }
 .run-room .jrn-play { background: #fffdf5; border: 5px solid var(--trim); box-shadow: 0 10px 0 rgba(0,0,0,.22); }
 .run-room .jrn-option { background: #fff; }
 .run-monster { width: min(190px, 46vw); height: auto; }
