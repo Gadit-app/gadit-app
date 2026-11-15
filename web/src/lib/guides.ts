@@ -52,7 +52,7 @@ export function guideListed(g: GuideDef, lang: string): boolean {
 }
 
 export const GUIDES: Record<string, GuideDef> = {
-  search: { id: "search", icon: "🔍", color: "#0EA5A5", titleKey: "search.title", descKey: "search.desc", steps: searchSteps },
+  search: { id: "search", icon: "🔍", color: "#0EA5A5", titleKey: "search.title", descKey: "search.desc", steps: searchSteps, video: { he: "/guide-video/search-he.mp4" } },
   listen: { id: "listen", icon: "🔊", color: "#D98324", titleKey: "listen.title", descKey: "listen.desc", steps: listenSteps },
   niqqud: { id: "niqqud", icon: "🔡", color: "#0EA5A5", titleKey: "niqqud.title", descKey: "niqqud.desc", steps: niqqudSteps },
   save: { id: "save", icon: "📓", color: "#0EA5A5", titleKey: "save.title", descKey: "save.desc", steps: saveSteps },
