@@ -4731,10 +4731,12 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
               ))}
             </div>
           ) : null;
-          // The new journey game is offered to the game testers first (Gadi 2026-11-14).
-          const testerNew = tester ? (
+          // The journey game: testers first (Gadi 2026-11-14), then everyone, so as
+          // many children as possible see it and send notes (Gadi 2026-11-15). Its
+          // texts exist in Hebrew and English only, so the other languages wait.
+          const testerNew = lang === "he" || lang === "en" ? (
             <a href="/journey/run" style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, margin: "0 auto 14px", maxWidth: 520, minHeight: 56, padding: "10px 20px", borderRadius: 18, background: "#0a7472", color: "#fff", fontWeight: 800, fontSize: 18, textDecoration: "none", textAlign: "center", boxShadow: "0 4px 0 #075452" }}>
-              {lang === "he" ? "🧪 חדש לבודקים: הדרך למבצר" : "🧪 New for testers: The road to the fortress"}
+              {tester ? (lang === "he" ? "🧪 חדש לבודקים: הדרך למבצר" : "🧪 New for testers: The road to the fortress") : (lang === "he" ? "🏰 חדש: הדרך למבצר" : "🏰 New: The road to the fortress")}
             </a>
           ) : null;
           return <>{testerNew}{chooser}<div className="wb-play-sections">{sections.map((section) => {

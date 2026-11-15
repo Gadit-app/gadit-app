@@ -30,6 +30,7 @@ type Copy = {
   sparks: string; place: (p: number, of: number) => string; left: string; right: string; jump: string; exit: string;
   arrived: (name: string) => string; whichMeaning: string; whichWord: string; whichOdd: string; freed: string; held: (name: string) => string;
   nextWord: string; openGate: string; opened: string; freedCount: (n: number, of: number) => string; nextFort: string; backIndex: string;
+  stillHolds: (name: string, n: number) => string; waitTomorrow: string;
   noneToday: string; fewWords: string; signIn: string; loading: string; failed: string; retry: string;
   monsters: string[]; sample: string;
 };
@@ -43,6 +44,7 @@ const COPY: Record<string, Copy> = {
     freed: "המילה שוחררה", held: (name) => `${name} עוד מחזיקה את המילה. היא תחכה לכם מחר, ולא איבדתם כלום`,
     nextWord: "למילה הבאה", openGate: "פותחים את המבצר", opened: "המבצר נפתח", freedCount: (n, of) => `שחררתם ${n} מתוך ${of} מילים`,
     nextFort: "למבצר הבא", backIndex: "חזרה לאינדקס",
+    stillHolds: (name, n) => (n === 1 ? `${name} עוד מחזיקה מילה אחת` : `${name} עוד מחזיקה ${n} מילים`), waitTomorrow: "הן יחכו לכם מחר במבצר הזה, ולא איבדתם כלום",
     noneToday: "המילים של היום כבר שוחררו. המבצר הבא ייפתח מחר", fewWords: "כשיהיו לכם שלוש מילים, המבצר הראשון ייפתח",
     signIn: "כדי לרוץ אל המבצר צריך להתחבר", loading: "מכינים את הדרך", failed: "הדרך לא נטענה", retry: "לנסות שוב",
     monsters: ["גרגרנית", "נחרנית", "קפצוצית"], sample: "דמות לדוגמה",
@@ -56,6 +58,7 @@ const COPY: Record<string, Copy> = {
     freed: "The word is free", held: (name) => `${name} still keeps this word. It waits for you tomorrow, and nothing was lost`,
     nextWord: "Next word", openGate: "Open the fortress", opened: "The fortress is open", freedCount: (n, of) => `You freed ${n} of ${of} words`,
     nextFort: "To the next fortress", backIndex: "Back to the index",
+    stillHolds: (name, n) => (n === 1 ? `${name} still keeps one word` : `${name} still keeps ${n} words`), waitTomorrow: "They wait for you tomorrow in this fortress, and nothing was lost",
     noneToday: "Today's words are already free. The next fortress opens tomorrow", fewWords: "The first fortress opens once you have three words",
     signIn: "Sign in to run to the fortress", loading: "Getting the road ready", failed: "The road did not load", retry: "Try again",
     monsters: ["Gobbler", "Snorer", "Hopper"], sample: "Sample runner",
@@ -120,8 +123,13 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     try {
       const res = await fetch(`/api/journey?tz=${encodeURIComponent(zone())}&ui=${encodeURIComponent(lang)}`, { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
       if (!res.ok) throw new Error(String(res.status));
-      setData((await res.json()) as Data);
-      try { setStage(Number(window.localStorage.getItem(`gadit-journey-stage:${user.uid}`)) || 0); } catch { /* the first fortress */ }
+      const got = (await res.json()) as Data;
+      setData(got);
+      // The fortress number is kept on the server; a number saved in this
+      // browser before 2026-11-15 is carried over once if it is further on.
+      let local = 0;
+      try { local = Number(window.localStorage.getItem(`gadit-journey-stage:${user.uid}`)) || 0; } catch { /* the first fortress */ }
+      setStage(Math.max(got.stage ?? 0, local));
       setState("ready");
     } catch { setState("failed"); }
   }, [user, lang]);
@@ -204,8 +212,15 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     sfx.tap();
     setPicked(null); setResult(null);
     if (at + 1 < queue.length) { setAt(at + 1); return; }
-    sfx.win();
-    if (stageKey) { try { window.localStorage.setItem(stageKey, String(stage + 1)); } catch { /* the stage is kept for this visit only */ } }
+    // The fortress opens only when every word of the day was freed; a word
+    // the monster still keeps waits in the same fortress tomorrow.
+    if (marks.every(Boolean)) {
+      sfx.win();
+      if (stageKey) { try { window.localStorage.setItem(stageKey, String(stage + 1)); } catch { /* the stage is kept for this visit only */ } }
+      if (user && !demo) {
+        void user.getIdToken().then((t) => fetch("/api/journey", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${t}` }, body: JSON.stringify({ stage: stage + 1 }) })).catch(() => undefined);
+      }
+    }
     setPhase("open");
   };
   const nextFort = () => { sfx.tap(); setStage(stage + 1); setPhase("intro"); };
@@ -308,9 +323,9 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
 
         {ready && phase === "open" && (
           <section className="jrn-play">
-            <Monster kind={stage} sad />
-            <h1 className="jrn-title">{c.opened}</h1>
-            <div className="jrn-ask">{c.freedCount(freedN, queue.length)}</div>
+            <Monster kind={stage} sad={freedN === queue.length} />
+            <h1 className="jrn-title">{freedN === queue.length ? c.opened : c.stillHolds(monster, queue.length - freedN)}</h1>
+            <div className="jrn-ask">{freedN === queue.length ? c.freedCount(freedN, queue.length) : `${c.freedCount(freedN, queue.length)}. ${c.waitTomorrow}`}</div>
             <div className="run-sum">
               <span className="run-chip is-sparks"><b>✦</b> {sparks} {c.sparks}</span>
               {rivals.length > 0 && <span className="run-chip">{c.place(place, rivals.length + 1)}</span>}

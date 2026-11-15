@@ -55,6 +55,9 @@ const bearer = (req: NextRequest) => {
   return h.toLowerCase().startsWith("bearer ") ? h.slice(7).trim() : null;
 };
 const cardsOf = (uid: string) => getAdminDb().collection("users").doc(uid).collection("journeyCards");
+/** The fortress the profile stands at (users/{uid}/journey/state), so a second device continues the same road. */
+const stateOf = (uid: string) => getAdminDb().collection("users").doc(uid).collection("journey").doc("state");
+const MAX_STAGE = 100000;
 const zoneOf = (v: unknown) => (typeof v === "string" && v.length <= 64 ? v : "UTC");
 
 type Stored = Card & { word: string; language: string; meaning: string; foundDay: string };
@@ -149,7 +152,9 @@ export async function GET(req: NextRequest) {
     const format = pickFormat(c, o ? [...FORMATS, ODD] : FORMATS);
     return format === ODD && o ? { id: c.id, format, odd: o } : { id: c.id, format };
   });
+  const st = (await stateOf(user.userId).get()).get("stage");
   return NextResponse.json({
+    stage: typeof st === "number" && st >= 0 ? Math.floor(st) : 0,
     today, dailyMax: DAILY_MAX, usedToday: used, starsToKnow: STARS_TO_KNOW,
     cards: cards.map((c) => view(c, today)), todays,
     summary: summary(cards, today), coins: coinsOf(cards), frameCoins: FRAME_COINS,
@@ -159,8 +164,19 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const user = await verifyUserAndGetPlan(bearer(req));
   if (!user) return NextResponse.json({ error: "login_required" }, { status: 401 });
-  let body: { id?: unknown; choice?: unknown; format?: unknown; tz?: unknown };
+  let body: { id?: unknown; choice?: unknown; format?: unknown; tz?: unknown; stage?: unknown };
   try { body = (await req.json()) as typeof body; } catch { return NextResponse.json({ error: "bad_body" }, { status: 400 }); }
+  // { stage }: the child opened a fortress. The number only goes up, one fortress at a time.
+  if (typeof body.stage === "number" && body.id === undefined) {
+    const want = Math.floor(body.stage);
+    if (!(want >= 0 && want <= MAX_STAGE)) return NextResponse.json({ error: "bad_request" }, { status: 400 });
+    const ref = stateOf(user.userId);
+    const cur = (await ref.get()).get("stage");
+    const now = typeof cur === "number" && cur >= 0 ? Math.floor(cur) : 0;
+    const next = want === now + 1 ? want : now;
+    if (next !== now && !user.impersonating) await ref.set({ stage: next, at: new Date().toISOString() }, { merge: true });
+    return NextResponse.json({ stage: next });
+  }
   const id = str(body.id), choice = str(body.choice), format = str(body.format);
   if (!id || id.length > 200 || id.includes("/") || !choice || !(FORMATS.includes(format) || format === ODD)) return NextResponse.json({ error: "bad_request" }, { status: 400 });
   const today = dayKeyOf(new Date(), zoneOf(body.tz));

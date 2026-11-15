@@ -27,6 +27,8 @@ export type Data = {
   today: string; dailyMax: number; usedToday: number; starsToKnow: number; cards: CardView[];
   todays: Array<{ id: string; format: string | null; odd?: OddQuestion }>; coins: number; frameCoins: Record<Frame, number>;
   summary: { index: number; started: number; fresh: number };
+  /** The fortress the profile stands at, kept on the server. */
+  stage?: number;
 };
 export type Result = { correct: boolean; event: "practice" | "star" | "known" | "kept" | "again"; frameUp: Frame | null; card: CardView; coinsUp: number };
 /** "Odd one out": four words, three of one school unit (the card's word among them) and one that does not belong. */
