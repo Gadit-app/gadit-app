@@ -34,6 +34,7 @@ type Copy = {
   arrived: (name: string) => string; whichMeaning: string; whichWord: string; whichOdd: string; whichSense: string; senseYes: string; senseNo: string; whichBuild: string; hear: string; lesson: string; second: string; newToday: string; freed: string; held: (name: string) => string;
   nextWord: string; openGate: string; opened: string; freedCount: (n: number, of: number) => string; nextFort: string; backIndex: string;
   stillHolds: (name: string, n: number) => string; waitTomorrow: string; alsoNow: (names: string) => string;
+  tomorrow: string; pickRoad: string; picked: (name: string) => string; roads: string[]; ownWord: string; map: string;
   noneToday: string; fewWords: string; signIn: string; loading: string; failed: string; retry: string;
   monsters: string[]; sample: string;
 };
@@ -48,6 +49,8 @@ const COPY: Record<string, Copy> = {
     nextWord: "למילה הבאה", openGate: "פותחים את המבצר", opened: "המבצר נפתח", freedCount: (n, of) => `שחררתם ${n} מתוך ${of} מילים`,
     nextFort: "למבצר הבא", backIndex: "חזרה לאינדקס",
     stillHolds: (name, n) => (n === 1 ? `${name} עוד מחזיקה מילה אחת` : `${name} עוד מחזיקה ${n} מילים`), waitTomorrow: "הן יחכו לכם מחר במבצר הזה, ולא איבדתם כלום", alsoNow: (names) => `גם רצים עכשיו אל המבצר שלהם: ${names}`,
+    tomorrow: "במבצר הבא מחכה מפלצת חדשה", pickRoad: "באיזו דרך רצים אליה?", picked: (name) => `בחרתם: ${name}`, roads: ["דרך היער", "דרך המדבר", "דרך הקרח"],
+    ownWord: "את המילה הזאת חיפשתם בעצמכם", map: "🗺️ המפה שלי",
     noneToday: "המילים של היום כבר שוחררו. המבצר הבא ייפתח מחר", fewWords: "כשיהיו לכם שלוש מילים, המבצר הראשון ייפתח",
     signIn: "כדי לרוץ אל המבצר צריך להתחבר", loading: "מכינים את הדרך", failed: "הדרך לא נטענה", retry: "לנסות שוב",
     monsters: ["גרגרנית", "נחרנית", "קפצוצית"], sample: "דמות לדוגמה",
@@ -62,20 +65,26 @@ const COPY: Record<string, Copy> = {
     nextWord: "Next word", openGate: "Open the fortress", opened: "The fortress is open", freedCount: (n, of) => `You freed ${n} of ${of} words`,
     nextFort: "To the next fortress", backIndex: "Back to the index",
     stillHolds: (name, n) => (n === 1 ? `${name} still keeps one word` : `${name} still keeps ${n} words`), waitTomorrow: "They wait for you tomorrow in this fortress, and nothing was lost", alsoNow: (names) => `Also running to their own fortress now: ${names}`,
+    tomorrow: "A new monster waits in the next fortress", pickRoad: "Which road will you take to it?", picked: (name) => `You chose: ${name}`, roads: ["The forest road", "The desert road", "The ice road"],
+    ownWord: "You looked this word up yourself", map: "🗺️ My map",
     noneToday: "Today's words are already free. The next fortress opens tomorrow", fewWords: "The first fortress opens once you have three words",
     signIn: "Sign in to run to the fortress", loading: "Getting the road ready", failed: "The road did not load", retry: "Try again",
     monsters: ["Gobbler", "Snorer", "Hopper"], sample: "Sample runner",
   },
 };
 
-const MONSTER_COLORS = ["#8b5cf6", "#f97316", "#14b8a6"];
+export const MONSTER_COLORS = ["#8b5cf6", "#f97316", "#14b8a6"];
+/** The names of the three monsters, in the language of the platform. */
+export const monsterNames = (lang: string): string[] => (COPY[lang] ?? COPY.en).monsters;
+/** The names of the three roads. */
+export const roadNames = (lang: string): string[] => (COPY[lang] ?? COPY.en).roads;
 
 /** A funny monster, never a scary one. Three shapes, one per fortress in turn. */
-function Monster({ kind, sad }: { kind: number; sad: boolean }) {
+export function Monster({ kind, sad, shadow }: { kind: number; sad: boolean; shadow?: boolean }) {
   const k = kind % 3;
   const fill = MONSTER_COLORS[k];
   return (
-    <svg className="run-monster" viewBox="0 0 200 190" role="img" aria-hidden="true">
+    <svg className={`run-monster${shadow ? " is-shadow" : ""}`} viewBox="0 0 200 190" role="img" aria-hidden="true">
       {k === 0 && <><path d="M62 44 L50 12 L80 34 Z" fill="#fde68a" /><path d="M138 44 L150 12 L120 34 Z" fill="#fde68a" /></>}
       {k === 2 && <><path d="M80 40 Q70 10 62 8" stroke={fill} strokeWidth="6" fill="none" strokeLinecap="round" /><circle cx="62" cy="8" r="8" fill="#fde68a" /><path d="M120 40 Q130 10 138 8" stroke={fill} strokeWidth="6" fill="none" strokeLinecap="round" /><circle cx="138" cy="8" r="8" fill="#fde68a" /></>}
       <path d={k === 2 ? "M60 180 Q40 100 62 52 Q100 14 138 52 Q160 100 140 180 Q120 168 100 180 Q80 168 60 180 Z" : "M30 176 Q10 96 48 52 Q100 6 152 52 Q190 96 170 176 Q146 160 124 176 Q100 160 76 176 Q54 160 30 176 Z"} fill={fill} />
@@ -125,6 +134,16 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   const runRef = useRef<RunHandle | null>(null);
   // Inside the fortress: the 3D hall behind the questions (run/hall.ts). When
   // it cannot start (no WebGL), the flat room with the drawn monster stays.
+  // The landscape of each fortress: the road the child chose for it (kept on
+  // the server), else the three landscapes in turn.
+  const [picks, setPicks] = useState<Record<string, number>>({});
+  const roadOf = (s: number): number => picks[String(s)] ?? data?.roads?.[String(s)] ?? s % THEMES.length;
+  const themeIdx = roadOf(stage);
+  const pickRoad = (t: number) => {
+    sfx.tap();
+    setPicks((p) => ({ ...p, [String(stage + 1)]: t }));
+    if (user && !demo) void user.getIdToken().then((tk) => fetch("/api/journey", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${tk}` }, body: JSON.stringify({ road: t, forStage: stage + 1 }) })).catch(() => undefined);
+  };
   const hallCanvas = useRef<HTMLCanvasElement | null>(null);
   const hallRef = useRef<HallHandle | null>(null);
   const [hallOn, setHallOn] = useState(false);
@@ -196,7 +215,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     if (phase !== "run" || !canvasRef.current) return;
     let gone = false;
     void startRun(canvasRef.current, {
-      theme: stage % THEMES.length,
+      theme: themeIdx,
       look: data?.shop?.look,
       signs: fresh.map((x) => x.word),
       rivals,
@@ -232,11 +251,12 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   useEffect(() => {
     if (!inside || !hallCanvas.current || cagesN === 0) return;
     let gone = false;
-    void startHall(hallCanvas.current, { theme: stage % THEMES.length, look, total: cagesN, monster: stage, monsterColor: parseInt(MONSTER_COLORS[stage % 3].slice(1), 16), rtl: dir === "rtl" })
+    void startHall(hallCanvas.current, { theme: themeIdx, look, own: queue.map((x) => !demo && !x.card.id.startsWith("lvl-")), total: cagesN, monster: stage, monsterColor: parseInt(MONSTER_COLORS[stage % 3].slice(1), 16), rtl: dir === "rtl" })
       .then((h) => { if (gone) { h.dispose(); return; } hallRef.current = h; setHallOn(true); })
       .catch(() => undefined);
     return () => { gone = true; hallRef.current?.dispose(); hallRef.current = null; setHallOn(false); };
-  }, [inside, stage, look, cagesN, dir]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- the hall is built once per fortress
+  }, [inside, stage, themeIdx, look, cagesN, dir]);
   // What happens in the hall follows the answers.
   useEffect(() => { if (hallOn) hallRef.current?.now(nowIdx); }, [hallOn, nowIdx]);
   useEffect(() => {
@@ -335,7 +355,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   }
 
   return (
-    <div className={`wordbook jrn run-room is-t${stage % THEMES.length}${phase === "intro" ? " is-out" : ""}${hallOn ? " has-hall" : ""}`} dir={dir}>
+    <div className={`wordbook jrn run-room is-t${themeIdx}${phase === "intro" ? " is-out" : ""}${hallOn ? " has-hall" : ""}`} dir={dir}>
       <style>{JRN_CSS + PARTS_CSS + RUN_CSS}</style>
       {inside && <canvas ref={hallCanvas} className={`run-hall${hallOn ? " is-on" : ""}`} aria-hidden="true" />}
       {phase !== "intro" && <><i className="run-torch is-a" aria-hidden="true" /><i className="run-torch is-b" aria-hidden="true" /></>}
@@ -367,6 +387,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
                 {!demo && others.length > 0 && <p className="jrn-small run-also">{c.alsoNow(others.map((o) => o.name).join(", "))}</p>}
                 <button type="button" className="jrn-btn" onClick={begin}>{c.go}</button>
                 {!demo && <Link className="jrn-btn is-ghost" href="/journey/shop">{lang === "he" ? "🛍️ לחנות" : "🛍️ To the shop"}</Link>}
+                {!demo && <Link className="jrn-btn is-ghost" href="/journey/map">{c.map}</Link>}
               </>
             ) : (
               <>
@@ -386,6 +407,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
               {queue.map((x, i) => <i key={x.card.id} className={`${i < marks.length ? (marks[i] ? "is-free" : "is-held") : ""}${i === nowIdx ? " is-now" : ""}`} />)}
             </div>
             {retry && <div className="jrn-small run-second">{c.second}</div>}
+            {!demo && !q.card.id.startsWith("lvl-") && <div className="jrn-small run-own">{c.ownWord}</div>}
             <div className="jrn-ask">{q.format === "build" ? c.whichBuild : q.format === "sense" ? c.whichSense : q.format === "odd" ? c.whichOdd : q.format === "meaning" ? c.whichMeaning : c.whichWord}</div>
             {q.format !== "odd" && (
               <div className="jrn-prompt-row">
@@ -425,9 +447,24 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
               <span className="run-chip is-sparks"><b>✦</b> {sparks} {c.sparks}</span>
               {demo && rivals.length > 0 && <span className="run-chip">{c.place(place, rivals.length + 1)}</span>}
             </div>
+            {freedN === queue.length && (
+              <div className="run-roads">
+                <Monster kind={stage + 1} sad={false} shadow />
+                <div className="jrn-note">{c.tomorrow}</div>
+                <div className="jrn-small">{picks[String(stage + 1)] !== undefined ? c.picked(c.roads[picks[String(stage + 1)]]) : c.pickRoad}</div>
+                <div className="run-road-row">
+                  {[0, 1, 2].filter((t) => t !== themeIdx).map((t) => (
+                    <button key={t} type="button" className={`run-road${picks[String(stage + 1)] === t ? " is-on" : ""}`} onClick={() => pickRoad(t)}>
+                      <i style={{ background: `linear-gradient(${THEMES[t].skyTop} 0%, ${THEMES[t].sky} 56%, #${THEMES[t].ground.toString(16).padStart(6, "0")} 56%)` }} />
+                      {c.roads[t]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             {demo
               ? <button type="button" className="jrn-btn" onClick={nextFort}>{c.nextFort}</button>
-              : <Link className="jrn-btn" href="/journey">{c.backIndex}</Link>}
+              : <><Link className="jrn-btn" href="/journey/map">{c.map}</Link><Link className="jrn-btn is-ghost" href="/journey">{c.backIndex}</Link></>}
           </section>
         )}
       </div>
@@ -478,6 +515,13 @@ const RUN_CSS = `
 .run-room .jrn-play { background: #fffdf5; border: 5px solid var(--trim); box-shadow: 0 10px 0 rgba(0,0,0,.22); }
 .run-room .jrn-option { background: #fff; }
 .run-monster { width: min(190px, 46vw); height: auto; }
+.run-monster.is-shadow { filter: brightness(0); opacity: .45; width: min(120px, 30vw); }
+.run-roads { display: grid; gap: 10px; justify-items: center; width: 100%; }
+.run-road-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.run-road { display: grid; gap: 6px; justify-items: center; padding: 8px 8px 10px; border: 0; border-radius: 16px; background: #fff; font: inherit; font-weight: 700; font-size: 15px; color: #14202b; cursor: pointer; box-shadow: 0 0 0 2px #e2d6b8 inset; }
+.run-road i { display: block; width: 132px; height: 74px; border-radius: 10px; }
+.run-road.is-on { box-shadow: 0 0 0 3px #0a7472 inset; }
+.run-own { font-weight: 700; color: #7a5a00; background: #fff3c4; padding: 3px 12px; border-radius: 999px; }
 .run-cages { display: inline-flex; gap: 6px; flex-wrap: wrap; justify-content: center; direction: ltr; }
 .run-cages i { width: 22px; height: 28px; border-radius: 6px; background: #eef2f6; box-shadow: 0 0 0 2px #b8c4d0 inset; }
 .run-cages i.is-now { box-shadow: 0 0 0 3px #0a7472 inset; }

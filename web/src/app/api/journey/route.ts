@@ -70,6 +70,13 @@ const MAX_STAGE = 100000;
  *  the state doc as `bonus`; the coins of a profile are those of its known words plus these. */
 const FREED_COINS = 2;
 const bonusOf = (v: unknown): number => (typeof v === "number" && v > 0 ? Math.floor(v) : 0);
+/** The landscape the child chose for a fortress, by fortress number (three landscapes). */
+const ROADS = 3;
+function roadsOf(v: unknown): Record<string, number> {
+  const out: Record<string, number> = {};
+  if (v && typeof v === "object") for (const [k, t] of Object.entries(v as Record<string, unknown>)) if (/^\d{1,6}$/.test(k) && typeof t === "number" && t >= 0 && t < ROADS) out[k] = Math.floor(t);
+  return out;
+}
 const zoneOf = (v: unknown) => (typeof v === "string" && v.length <= 64 ? v : "UTC");
 
 type Stored = Card & { word: string; language: string; meaning: string; foundDay: string };
@@ -179,6 +186,7 @@ export async function GET(req: NextRequest) {
   const st = state.stage;
   return NextResponse.json({
     stage: typeof st === "number" && st >= 0 ? Math.floor(st) : 0,
+    roads: roadsOf(state.roads),
     // The shop: what was bought, what the runner wears and what was spent.
     shop: { owned: cleanOwned(state.owned), look: cleanLook(state.look), spent: typeof state.spent === "number" && state.spent > 0 ? Math.floor(state.spent) : 0 },
     today, dailyMax: DAILY_MAX, usedToday: used, starsToKnow: STARS_TO_KNOW,
@@ -190,8 +198,20 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const user = await verifyUserAndGetPlan(bearer(req));
   if (!user) return NextResponse.json({ error: "login_required" }, { status: 401 });
-  let body: { id?: unknown; choice?: unknown; format?: unknown; tz?: unknown; stage?: unknown; buy?: unknown; wear?: unknown };
+  let body: { id?: unknown; choice?: unknown; format?: unknown; tz?: unknown; stage?: unknown; buy?: unknown; wear?: unknown; road?: unknown; forStage?: unknown };
   try { body = (await req.json()) as typeof body; } catch { return NextResponse.json({ error: "bad_body" }, { status: 400 }); }
+  // { road, forStage }: the landscape the child chose for the next fortress
+  // (only the fortress they stand at, or the one after it).
+  if (typeof body.road === "number" && typeof body.forStage === "number") {
+    const road = Math.floor(body.road), want = Math.floor(body.forStage);
+    const ref = stateOf(user.userId);
+    const cur = (await ref.get()).data() ?? {};
+    const now = typeof cur.stage === "number" && cur.stage >= 0 ? Math.floor(cur.stage) : 0;
+    if (!(road >= 0 && road < ROADS) || !(want === now || want === now + 1)) return NextResponse.json({ error: "bad_request" }, { status: 400 });
+    const roads = { ...roadsOf(cur.roads), [String(want)]: road };
+    if (!user.impersonating) await ref.set({ roads }, { merge: true });
+    return NextResponse.json({ roads });
+  }
   // { buy: itemId }: a look from the shop, paid with the coins of the known
   // words. { wear: itemId }: put on a thing the child owns (a free one is
   // everyone's). A bought thing is kept for good and nothing is ever taken back.

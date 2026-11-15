@@ -19,7 +19,7 @@ import { DEFAULT_LOOK, type Look } from "@/lib/journey/shop";
 import { buildFigure, hop } from "./figure";
 import { THEMES } from "./engine";
 
-export type HallOptions = { theme: number; look?: Look; total: number; monster: number; monsterColor: number; /** The first word hangs on the right (Hebrew). */ rtl?: boolean };
+export type HallOptions = { theme: number; look?: Look; total: number; monster: number; monsterColor: number; /** The first word hangs on the right (Hebrew). */ rtl?: boolean; /** Words the child looked up themselves: a marked cage. */ own?: boolean[] };
 export type HallHandle = { free: (i: number) => void; hold: (i: number) => void; now: (i: number) => void; open: () => void; dispose: () => void };
 
 type Cage = { group: THREE.Group; bars: THREE.Object3D[]; orb: THREE.Mesh; state: "shut" | "free" | "held"; t: number; shake: number; from: THREE.Vector3 | null };
@@ -125,6 +125,8 @@ export async function startHall(canvas: HTMLCanvasElement, o: HallOptions): Prom
     g.add(at(box(0.05, 2.4, 0.05, 0x4b5563), 0, 1.75, 0), at(box(1.0, 0.12, 1.0, 0x374151), 0, 0.56, 0), at(box(1.0, 0.12, 1.0, 0x374151), 0, -0.56, 0));
     const bars: THREE.Object3D[] = [];
     for (const [bx, bz] of [[-0.42, -0.42], [0.42, -0.42], [-0.42, 0.42], [0.42, 0.42], [0, 0.42], [0, -0.42], [-0.42, 0], [0.42, 0]]) { const b = at(box(0.07, 1.0, 0.07, 0x6b7280), bx, 0, bz); g.add(b); bars.push(b); }
+    // A word the child looked up: a golden cap on the cage and a small flag.
+    if (o.own?.[i]) g.add(at(box(1.08, 0.14, 1.08, 0xf5b301), 0, 0.66, 0), at(box(0.05, 0.6, 0.05, 0x4b5563), 0.4, 1.0, 0), at(box(0.42, 0.26, 0.04, 0xf5b301), 0.62, 1.16, 0));
     const orb = new T.Mesh(orbGeo, new T.MeshLambertMaterial({ color: 0xffd34d, emissive: 0xb37400 }));
     g.add(orb);
     // Lower in the middle, like a garland, and clear of the door's light.

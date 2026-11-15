@@ -32,6 +32,8 @@ export type Data = {
   summary: { index: number; started: number; fresh: number };
   /** The fortress the profile stands at, kept on the server. */
   stage?: number;
+  /** The landscape the child chose for a fortress, by fortress number. */
+  roads?: Record<string, number>;
   /** The shop: what was bought, what the runner wears, what was spent (lib/journey/shop.ts). */
   shop?: { owned: string[]; look: Record<"shirt" | "hat" | "back" | "pet", string>; spent: number };
 };
@@ -322,6 +324,7 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
               <div className="jrn-count">{c.count(data.summary.index, total)}</div>
               <div className="jrn-coins" title={c.coins}><span aria-hidden="true">●</span> {Math.max(0, data.coins - (data.shop?.spent ?? 0))} {c.coins}</div>
               {!demo && <Link className="jrn-btn is-ghost" href="/journey/shop">{lang === "he" ? "🛍️ לחנות" : "🛍️ To the shop"}</Link>}
+              {!demo && <Link className="jrn-btn is-ghost" href="/journey/map">{lang === "he" ? "🗺️ המפה שלי" : "🗺️ My map"}</Link>}
             </header>
 
             <section className="jrn-today">
