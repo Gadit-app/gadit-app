@@ -34,14 +34,14 @@ const COPY = {
     none: "כל מילה שתדעו תשתול עץ בעולם שלכם", fort: (n: number) => `מבצר ${n}`, here: "אתם כאן", opened: "נפתח", locked: "נעול",
     friend: (name: string) => `${name} כבר חברה שלכם`, waits: (name: string) => `${name} מחכה לכם`, later: "מחכה בהמשך הדרך",
     treesHere: (n: number) => (n === 1 ? "עץ אחד נשתל כאן" : `${n} עצים נשתלו כאן`),
-    run: "רצים אל המבצר", back: "חזרה לקלפים שלי", signIn: "כדי לראות את המפה צריך להתחבר", loading: "פורשים את המפה", failed: "המפה לא נטענה", retry: "לנסות שוב",
+    run: "רצים אל המבצר", back: "חזרה למשחקים", signIn: "כדי לראות את המפה צריך להתחבר", loading: "פורשים את המפה", failed: "המפה לא נטענה", retry: "לנסות שוב",
   },
   en: {
     title: "My map", trees: (n: number) => (n === 1 ? "One word in your collection planted one tree in your world" : `${n} words in your collection planted ${n} trees in your world`),
     none: "Every word you know will plant a tree in your world", fort: (n: number) => `Fortress ${n}`, here: "You are here", opened: "Opened", locked: "Locked",
     friend: (name: string) => `${name} is your friend now`, waits: (name: string) => `${name} waits for you`, later: "Further along the road",
     treesHere: (n: number) => (n === 1 ? "One tree planted here" : `${n} trees planted here`),
-    run: "Run to the fortress", back: "Back to my cards", signIn: "Sign in to see your map", loading: "Unrolling the map", failed: "The map did not load", retry: "Try again",
+    run: "Run to the fortress", back: "Back to games", signIn: "Sign in to see your map", loading: "Unrolling the map", failed: "The map did not load", retry: "Try again",
   },
 };
 
@@ -86,7 +86,7 @@ export function MapClient({ demo = false }: { demo?: boolean }) {
           <>
             <header className="jrn-head map-head">
               <div className="map-top">
-                <Link className="jrn-back" href={demo ? "/journey?demo=1" : "/journey"}><span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span> {c.back}</Link>
+                <Link className="jrn-back" href="/play"><span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span> {c.back}</Link>
                 <Link className="jrn-btn map-run" href={demo ? "/journey/run?demo=1" : "/journey/run"}>{c.run}</Link>
               </div>
               <h1 className="jrn-title">{c.title}</h1>

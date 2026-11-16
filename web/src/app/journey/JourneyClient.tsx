@@ -30,6 +30,10 @@ export type Data = {
   today: string; dailyMax: number; usedToday: number; starsToKnow: number; cards: CardView[];
   todays: Array<{ id: string; format: string | null; odd?: OddQuestion; sense?: SenseQuestion }>; coins: number; frameCoins: Record<Frame, number>;
   summary: { index: number; started: number; fresh: number };
+  /** Words in the index in every language (the cards above are only those of the screen language). */
+  knownAll?: number;
+  /** The grade of the words of the level the profile meets now (lib/journey/ladder.ts). */
+  level?: number | null;
   /** The fortress the profile stands at, kept on the server. */
   stage?: number;
   /** Words freed today by all the children together. */

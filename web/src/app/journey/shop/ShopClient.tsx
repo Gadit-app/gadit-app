@@ -33,7 +33,7 @@ const COPY: Record<"he" | "en", Copy> = {
     free: "חינם", mine: "שלי", wearing: "עליי עכשיו",
     buy: (n) => `קונים ב-${n} מטבעות`, short: (n) => (n === 1 ? "חסר עוד מטבע אחד" : `חסרים עוד ${n} מטבעות`),
     how: "מטבעות מקבלים על כל מילה שיודעים. מה שקונים נשאר שלכם לתמיד",
-    back: "חזרה לקלפים שלי", run: "רצים אל המבצר",
+    back: "חזרה למשחקים", run: "רצים אל המבצר",
     signIn: "כדי להיכנס לחנות צריך להתחבר", loading: "פותחים את החנות", failed: "החנות לא נטענה", retry: "לנסות שוב",
     bought: "קניתם! זה שלכם לתמיד", price: (n) => `${n} מטבעות`,
     earn: (n) => `ב-${n} מילים`, earnMore: (n) => (n === 1 ? "עוד מילה אחת באוסף, וזה שלכם. את זה לא קונים" : `עוד ${n} מילים באוסף, וזה שלכם. את זה לא קונים`),
@@ -43,7 +43,7 @@ const COPY: Record<"he" | "en", Copy> = {
     free: "Free", mine: "Mine", wearing: "Wearing now",
     buy: (n) => `Buy for ${n} coins`, short: (n) => (n === 1 ? "One more coin needed" : `${n} more coins needed`),
     how: "You get coins for every word you know. What you buy is yours for good",
-    back: "Back to my cards", run: "Run to the fortress",
+    back: "Back to games", run: "Run to the fortress",
     signIn: "Sign in to enter the shop", loading: "Opening the shop", failed: "The shop did not load", retry: "Try again",
     bought: "Bought! It is yours for good", price: (n) => `${n} coins`,
     earn: (n) => `At ${n} words`, earnMore: (n) => (n === 1 ? "One more word in your collection and it is yours. This one is not for sale" : `${n} more words in your index and it is yours. This one is not for sale`),
@@ -82,7 +82,7 @@ export function ShopClient({ demo = false }: { demo?: boolean }) {
       setOwned(d.shop?.owned ?? []);
       setLook({ ...DEFAULT_LOOK, ...(d.shop?.look ?? {}) });
       setSpent(d.shop?.spent ?? 0);
-      setKnown(d.summary?.index ?? 0);
+      setKnown(d.knownAll ?? d.summary?.index ?? 0);
       setState("ready");
     } catch { setState("failed"); }
   }, [user, lang]);
@@ -150,7 +150,7 @@ export function ShopClient({ demo = false }: { demo?: boolean }) {
           <>
             {/* The way back sits at the top (Gadi 2026-11-15: "I looked for the back button"). */}
             <header className="jrn-head shop-head">
-              <Link className="jrn-back" href={demo ? "/journey?demo=1" : "/journey"}><span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span> {c.back}</Link>
+              <Link className="jrn-back" href="/play"><span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span> {c.back}</Link>
               <h1 className="jrn-title">{c.title}</h1>
               <div className="shop-head-end">
                 <div className="jrn-coins" title={c.coins}><span aria-hidden="true">●</span> {balance} {c.coins}</div>

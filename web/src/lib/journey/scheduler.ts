@@ -153,8 +153,11 @@ export function answer(card: Card, a: { correct: boolean; format: string; day: s
  * reviews of index cards, then cards never opened (three a day at most).
  * A card never opened always gets one place when there is one, so a child
  * with a long tail of started cards still opens something new every day.
+ * `oneNew`: when no card of the day's new ones matches it, the last new place
+ * goes to a never-opened card that does (one word of the level a day, even
+ * when the notebook alone would fill every new place; Gadi 2026-11-16).
  */
-export function dueToday(cards: Card[], today: string, opts: { max?: number; newMax?: number; usedToday?: number } = {}): Card[] {
+export function dueToday(cards: Card[], today: string, opts: { max?: number; newMax?: number; usedToday?: number; oneNew?: (c: Card) => boolean } = {}): Card[] {
   const room = Math.max(0, (opts.max ?? DAILY_MAX) - (opts.usedToday ?? 0));
   if (!room) return [];
   const byDue = (a: Card, b: Card) => (a.dueDay < b.dueDay ? -1 : a.dueDay > b.dueDay ? 1 : a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
@@ -164,7 +167,12 @@ export function dueToday(cards: Card[], today: string, opts: { max?: number; new
   const fresh = due.filter((c) => !isKnown(c) && c.stars === 0).sort(byDue);
   const older = [...started, ...reviews];
   const firstOlder = older.slice(0, Math.max(0, room - (fresh.length ? 1 : 0)));
-  const newOnes = fresh.slice(0, Math.min(opts.newMax ?? NEW_PER_DAY, room - firstOlder.length));
+  let newOnes = fresh.slice(0, Math.min(opts.newMax ?? NEW_PER_DAY, room - firstOlder.length));
+  const must = opts.oneNew;
+  if (must && newOnes.length && !newOnes.some(must)) {
+    const pick = fresh.find(must);
+    if (pick) newOnes = [...newOnes.slice(0, -1), pick];
+  }
   const restOlder = older.slice(firstOlder.length, firstOlder.length + (room - firstOlder.length - newOnes.length));
   return [...firstOlder, ...restOlder, ...newOnes];
 }

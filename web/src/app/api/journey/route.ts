@@ -5,6 +5,8 @@ import { oddQuestions } from "@/lib/journey/odd";
 import { senseQuestions } from "@/lib/journey/sense";
 import { buildable } from "@/lib/journey/build";
 import { nextListWords } from "@/lib/journey/list-words";
+import { afterFirstAnswer, cleanLevel, currentLevel } from "@/lib/journey/ladder";
+import { readableIn } from "@/lib/journey/readable";
 import { cleanLook, cleanOwned, owns, shopItem } from "@/lib/journey/shop";
 import { isNotFoundMeaning } from "@/lib/not-a-word";
 import {
@@ -23,10 +25,14 @@ import {
  *   Makes a card for every notebook word that has none (face down, found on
  *   the day the word entered the notebook), and returns all the cards, the
  *   cards of today with the format to ask each in, the numbers and the coins.
- *   A child whose day is short of words also gets words of the school grade
- *   (lib/journey/level-words.ts), so a fortress never stands empty because
- *   the notebook is: enough unopened words to fill a day, and on a day with
- *   little else to do up to LEVEL_DAY of them are asked.
+ *   Only cards whose meaning is written in the screen's language are asked
+ *   and shown (lib/journey/readable.ts); the others wait, never deleted.
+ *   Every profile also gets words of its level (lib/journey/level-words.ts,
+ *   the level by lib/journey/ladder.ts: the grade, else grade 5, moved by the
+ *   first answers), so a fortress never stands empty because the notebook
+ *   is, and is never the notebook alone: enough unopened words to fill a
+ *   day, at least LEVEL_POOL waiting, one of the day's new words is one of
+ *   them, and on a day with little else to do up to LEVEL_DAY are asked.
  * POST /api/journey  { id, choice, format, tz }
  *   `choice` is the id of the card the child picked as the answer. The
  *   scheduler decides what the answer does; the card after it is returned.
@@ -48,6 +54,9 @@ const BUILD = "build";
 const MAX_CARDS = 500;
 /** The words a fortress keeps on a day with nothing else to ask. */
 const LEVEL_DAY = 6;
+/** Words of the level that wait unopened at all times, so one of them is among each day's new words. */
+const LEVEL_POOL = 2;
+const isLevel = (c: Card) => c.id.startsWith("lvl-");
 /** Words of the child's own lists (the school's words of the week) that may wait unopened at once. */
 const LIST_WAITING = 12;
 const UI_LANG = /^[a-z]{2}(-[A-Z]{2})?$/;
@@ -124,10 +133,17 @@ export async function GET(req: NextRequest) {
   const tz = zoneOf(req.nextUrl.searchParams.get("tz"));
   const today = dayKeyOf(new Date(), tz);
   const db = getAdminDb();
-  const [cardSnap, bookSnap] = await Promise.all([
+  const [cardSnap, bookSnap, stateSnap] = await Promise.all([
     cardsOf(user.userId).limit(MAX_CARDS).get(),
     db.collection("users").doc(user.userId).collection("notebook").orderBy("addedAt", "desc").limit(MAX_CARDS).get(),
+    stateOf(user.userId).get(),
   ]);
+  const state = stateSnap.data() ?? {};
+  // The screen's language: only the cards whose meaning it can read are asked and shown.
+  const ui = str(req.nextUrl.searchParams.get("ui"));
+  const uiOk = UI_LANG.test(ui);
+  const lang = ui.slice(0, 2);
+  const readable = (c: Stored) => !uiOk || readableIn(c.meaning, ui);
   const cards: Stored[] = [];
   const have = new Set<string>();
   for (const d of cardSnap.docs) { have.add(d.id); const c = readCard(d.id, d.data()); if (c) cards.push(c); }
@@ -157,11 +173,11 @@ export async function GET(req: NextRequest) {
   // The school's words: the lists the child, a parent or a teacher typed in
   // Homework wait in the fortress too (lib/journey/list-words.ts). They come
   // before the words of the grade.
-  const ui0 = str(req.nextUrl.searchParams.get("ui"));
-  const waitingList = cards.filter((c) => c.id.startsWith("list-") && !isKnown(c) && c.stars === 0).length;
-  if (UI_LANG.test(ui0) && waitingList < LIST_WAITING && cards.length < MAX_CARDS) {
+  const unopened = (pick: (c: Stored) => boolean) => cards.filter((c) => readable(c) && !isKnown(c) && c.stars === 0 && pick(c)).length;
+  const waitingList = unopened((c) => c.id.startsWith("list-"));
+  if (uiOk && waitingList < LIST_WAITING && cards.length < MAX_CARDS) {
     try {
-      const mine = await nextListWords(user.userId, ui0, have, cards.map((c) => c.word), Math.min(LIST_WAITING - waitingList, MAX_CARDS - cards.length));
+      const mine = await nextListWords(user.userId, ui, have, cards.map((c) => c.word), Math.min(LIST_WAITING - waitingList, MAX_CARDS - cards.length));
       const found = addDays(today, -1);
       const add: Stored[] = mine.map((w) => ({ ...newCard(w.id, found), word: w.word, language: w.language, meaning: w.meaning, foundDay: found }));
       if (add.length && !user.impersonating) {
@@ -174,29 +190,37 @@ export async function GET(req: NextRequest) {
     } catch (e) { console.warn("journey: list words not read", String(e)); }
   }
 
-  // Words of the school grade, when the day is short of words. They are
-  // found "yesterday", so they can be opened today.
+  // Words of the profile's level: always a few waiting, more when the day is
+  // short of words. They are found "yesterday", so they can be opened today.
   const used = usedOn(cards, today);
-  const ui = str(req.nextUrl.searchParams.get("ui"));
-  const unopened = cards.filter((c) => !isKnown(c) && c.stars === 0).length;
-  if (UI_LANG.test(ui) && unopened < DAILY_MAX && cards.length < MAX_CARDS) {
-    const grade = await gradeOf(bearer(req));
-    if (grade !== null) {
-      const level = await nextLevelWords(ui, grade, have, cards.map((c) => c.word), Math.min(DAILY_MAX - unopened, MAX_CARDS - cards.length));
-      const found = addDays(today, -1);
-      const add: Stored[] = level.map((w) => ({ ...newCard(w.id, found), word: w.word, language: w.language, meaning: w.meaning, foundDay: found }));
-      if (add.length && !user.impersonating) {
-        const batch = db.batch();
-        for (const c of add) { const { id, ...rest } = c; batch.create(cardsOf(user.userId).doc(id), { ...rest, source: "level" }); }
-        try { await batch.commit(); } catch (e) { console.warn("journey: level cards not created", String(e)); }
-      }
-      cards.push(...add);
+  const grade = uiOk ? await gradeOf(bearer(req)) : null;
+  const levels = (state.levels && typeof state.levels === "object" ? state.levels : {}) as Record<string, unknown>;
+  const lv = uiOk ? currentLevel(lang, levels[lang], grade) : null;
+  if (lv) {
+    if (JSON.stringify(cleanLevel(levels[lang])) !== JSON.stringify(lv) && !user.impersonating) {
+      try { await stateOf(user.userId).set({ levels: { [lang]: lv } }, { merge: true }); } catch (e) { console.warn("journey: level not saved", String(e)); }
+    }
+    const need = Math.min(Math.max(DAILY_MAX - unopened(() => true), LEVEL_POOL - unopened(isLevel)), MAX_CARDS - cards.length);
+    if (need > 0) {
+      try {
+        const level = await nextLevelWords(lang, lv.g, have, cards.map((c) => c.word), need);
+        const found = addDays(today, -1);
+        const add: Stored[] = level.map((w) => ({ ...newCard(w.id, found), word: w.word, language: w.language, meaning: w.meaning, foundDay: found }));
+        if (add.length && !user.impersonating) {
+          const batch = db.batch();
+          // lvlGrade: the level the word was given at, so its first answer moves the ladder of that level only.
+          for (const c of add) { const { id, ...rest } = c; batch.create(cardsOf(user.userId).doc(id), { ...rest, source: "level", lvlGrade: lv.g }); }
+          try { await batch.commit(); } catch (e) { console.warn("journey: level cards not created", String(e)); }
+        }
+        cards.push(...add);
+      } catch (e) { console.warn("journey: level words not read", String(e)); }
     }
   }
   // A day with little to review asks more unopened words than the usual three.
-  const older = cards.filter((c) => isDue(c, today) && (isKnown(c) || c.stars > 0)).length;
+  const shown = cards.filter(readable);
+  const older = shown.filter((c) => isDue(c, today) && (isKnown(c) || c.stars > 0)).length;
   const newMax = Math.max(NEW_PER_DAY, LEVEL_DAY - older);
-  const due = dueToday(cards, today, { usedToday: used, newMax });
+  const due = dueToday(shown, today, { usedToday: used, newMax, oneNew: lv ? isLevel : undefined });
   const [odd, sense] = await Promise.all([oddQuestions(due as Stored[]), senseQuestions(due as Stored[], today)]);
   const todays = due.map((c) => {
     const o = odd.get(c.id), s = sense.get(c.id);
@@ -214,8 +238,7 @@ export async function GET(req: NextRequest) {
     if (format === SENSE && s) return { id: c.id, format, sense: s };
     return { id: c.id, format: format === ODD || format === SENSE ? ASK[0] : format };
   });
-  const [stateSnap, worldSnap] = await Promise.all([stateOf(user.userId).get(), worldOf().get()]);
-  const state = stateSnap.data() ?? {};
+  const worldSnap = await worldOf().get();
   const freedToday = worldSnap.get("freed");
   const st = state.stage;
   return NextResponse.json({
@@ -226,8 +249,11 @@ export async function GET(req: NextRequest) {
     // The shop: what was bought, what the runner wears and what was spent.
     shop: { owned: cleanOwned(state.owned), look: cleanLook(state.look), spent: typeof state.spent === "number" && state.spent > 0 ? Math.floor(state.spent) : 0 },
     today, dailyMax: DAILY_MAX, usedToday: used, starsToKnow: STARS_TO_KNOW,
-    cards: cards.map((c) => view(c, today)), todays,
-    summary: summary(cards, today), coins: coinsOf(cards) + bonusOf(state.bonus), frameCoins: FRAME_COINS,
+    cards: shown.map((c) => view(c, today)), todays,
+    // The numbers of the cards on this screen. The coins and the words that earn
+    // shop items count every card, so a screen in another language takes nothing away.
+    summary: summary(shown, today), knownAll: cards.filter(isKnown).length, level: lv ? lv.g : null,
+    coins: coinsOf(cards) + bonusOf(state.bonus), frameCoins: FRAME_COINS,
   });
 }
 
@@ -297,7 +323,8 @@ export async function POST(req: NextRequest) {
   const ref = cardsOf(user.userId).doc(id);
   const db = getAdminDb();
   const out = await db.runTransaction(async (tx) => {
-    const before = readCard(id, (await tx.get(ref)).data());
+    const raw = (await tx.get(ref)).data();
+    const before = readCard(id, raw);
     if (!before) return null;
     const r = answer(before, { correct: choice === id, format, day: today });
     if (!user.impersonating) {
@@ -305,9 +332,22 @@ export async function POST(req: NextRequest) {
       void _id;
       tx.set(ref, rest);
     }
-    return { before, after: { ...before, ...r.card } as Stored, event: r.event, frameUp: r.frameUp };
+    return { before, after: { ...before, ...r.card } as Stored, event: r.event, frameUp: r.frameUp, lvlGrade: typeof raw?.lvlGrade === "number" ? raw.lvlGrade : null };
   });
   if (!out) return NextResponse.json({ error: "no_card" }, { status: 404 });
+  // The first time a word of the level is met moves the ladder (lib/journey/ladder.ts).
+  if (isLevel(out.before) && out.lvlGrade !== null && out.event !== "practice" && out.before.right + out.before.wrong === 0 && !user.impersonating) {
+    const lang = out.before.language;
+    try {
+      await db.runTransaction(async (tx) => {
+        const sref = stateOf(user.userId);
+        const all = (await tx.get(sref)).get("levels") as Record<string, unknown> | undefined;
+        const cur = cleanLevel(all?.[lang]);
+        if (!cur || cur.g !== out.lvlGrade) return;
+        tx.set(sref, { levels: { [lang]: afterFirstAnswer(lang, cur, choice === id) } }, { merge: true });
+      });
+    } catch (e) { console.warn("journey: level not moved", String(e)); }
+  }
   const real = choice === id && (out.event === "star" || out.event === "known" || out.event === "kept");
   // A word of the index that was remembered after its gap pays more, the longer the gap.
   const freed = real ? FREED_COINS + (out.event === "kept" && !out.before.relearn ? GAP_COINS[Math.min(GAP_COINS.length - 1, out.before.gapStep)] : 0) : 0;
