@@ -37,6 +37,8 @@ const CASES: Case[] = [
   // Plain how-to, Hebrew
   { id: "he-pair", lang: "he", q: "איך מחברים את הטאבלט של הבן שלי?", escalate: false, link: ["guide:pair"], never: INTERNAL },
   { id: "he-addchild", lang: "he", q: "איך מוסיפים ילד?", escalate: false, link: ["guide:addchild"] },
+  // The account page has had a "switch to Family" button since 2026-11-16: no hand-off needed.
+  { id: "he-ind-to-family", lang: "he", plan: "individual", q: "יש לי מנוי Individual, איך עוברים ל-Family?", escalate: false, must: /מעבר ל-Family/ },
   { id: "he-kidsmode", lang: "he", plan: "individual", q: "למה אין לי מצב ילדים?", escalate: false, must: /Family/ },
   { id: "he-context", lang: "he", q: "חיפשתי מילה וקיבלתי 5 פירושים, איך אני יודע מה נכון במשפט שלי", escalate: false, link: ["guide:context"] },
   { id: "he-cancel", lang: "he", q: "איך מבטלים את המנוי?", escalate: false, link: ["guide:cancel", "page:account"] },

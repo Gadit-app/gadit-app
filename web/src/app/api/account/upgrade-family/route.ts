@@ -22,9 +22,33 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
  *
  * No new subscription, no re-entering a card. GET first to preview
  * (interval + estimated Family price) so the button copy can be honest.
+ *
+ * 2026-11-16 (Gadi approved the button on the account page): the preview now
+ * carries the exact amount charged today (Stripe's own proration preview,
+ * pinned by proration_date so the charge matches it), and the switch happens
+ * only when that payment goes through (payment_behavior
+ * "pending_if_incomplete"): a declined card leaves the plan as it was instead
+ * of a Family plan with an unpaid invoice. Never inside the Play or iOS app.
  */
 
 export const maxDuration = 60;
+
+/** The Play app (TWA) and the iOS app never sell: the same rule as middleware.ts. */
+function inStoreApp(req: NextRequest): boolean {
+  if (isIosAppUA(req.headers.get("user-agent"))) return true;
+  const host = (req.headers.get("host") || "").split(":")[0];
+  return host !== "gadit.app" && req.cookies.get("gadit_play")?.value === "1";
+}
+
+/** The amount of a price in the subscription's currency (a multi-currency price keeps the others in currency_options). */
+async function priceIn(priceId: string, currency: string): Promise<number | null> {
+  try {
+    const p = await stripe.prices.retrieve(priceId, { expand: ["currency_options"] });
+    if (p.currency === currency) return p.unit_amount ?? null;
+    const opt = (p as unknown as { currency_options?: Record<string, { unit_amount?: number | null }> }).currency_options?.[currency];
+    return opt?.unit_amount ?? null;
+  } catch { return null; }
+}
 
 async function resolveCaller(req: NextRequest) {
   const authHeader = req.headers.get("Authorization") || "";
@@ -56,6 +80,7 @@ async function loadUpgradeContext(uid: string) {
 export async function GET(req: NextRequest) {
   const caller = await resolveCaller(req);
   if (!caller) return NextResponse.json({ error: "login_required" }, { status: 401 });
+  if (inStoreApp(req)) return NextResponse.json({ eligible: false, reason: "in_app" });
 
   const { email, alreadyFamily, isSchool, customerId } = await loadUpgradeContext(caller.userId);
 
@@ -71,6 +96,8 @@ export async function GET(req: NextRequest) {
   const live = subs.data.find((s) => s.status === "active")
     ?? subs.data.find((s) => s.status === "trialing" && !!s.default_payment_method);
   if (!live) return NextResponse.json({ eligible: false, reason: "no_live_sub" });
+  // Set to end: switching would only change the last weeks of a plan that is leaving.
+  if (live.cancel_at_period_end) return NextResponse.json({ eligible: false, reason: "canceling" });
 
   const currentPrice = live.items.data[0]?.price;
   const interval = currentPrice?.recurring?.interval; // "month" | "year"
@@ -82,27 +109,48 @@ export async function GET(req: NextRequest) {
   if (!familyPrice) return NextResponse.json({ eligible: false, reason: "no_family_price" });
   if (currentPrice?.id === familyPrice) return NextResponse.json({ eligible: false, reason: "already_family" });
 
-  // Best-effort Family price for the CTA copy (currency + amount).
-  let familyAmount: number | null = null;
-  let familyCurrency: string | null = null;
+  // What the switch costs: the Family price in the subscription's currency,
+  // and today's charge as Stripe would invoice it (the unused part of the
+  // current plan is credited). proration_date pins the preview; the POST
+  // sends it back so the charge equals what the user saw.
+  const currency = live.currency;
+  const familyAmount = await priceIn(familyPrice, currency);
+  const prorationDate = Math.floor(Date.now() / 1000);
+  let amountNow: number | null = null;
   try {
-    const fp = await stripe.prices.retrieve(familyPrice);
-    familyAmount = fp.unit_amount != null ? fp.unit_amount / 100 : null;
-    familyCurrency = fp.currency ?? null;
-  } catch { /* copy falls back to a generic label */ }
+    const preview = await stripe.invoices.createPreview({
+      customer: customerId,
+      subscription: live.id,
+      subscription_details: {
+        items: [{ id: live.items.data[0].id, price: familyPrice }],
+        proration_behavior: "always_invoice",
+        proration_date: prorationDate,
+      },
+    });
+    const isProration = (l: Stripe.InvoiceLineItem) =>
+      !!(l.parent?.subscription_item_details?.proration || l.parent?.invoice_item_details?.proration);
+    amountNow = Math.max(0, preview.lines.data.filter(isProration).reduce((n, l) => n + l.amount, 0));
+  } catch (err) {
+    console.warn("[upgrade-family] preview failed:", err);
+  }
+  // No honest number, no button: we never ask to approve an unknown charge.
+  if (familyAmount == null || amountNow == null) return NextResponse.json({ eligible: false, reason: "no_preview" });
 
   return NextResponse.json({
     eligible: true,
     interval, // "month" | "year"
     email: email || null,
-    familyAmount,
-    familyCurrency,
+    currency,
+    familyAmount: familyAmount / 100,
+    amountNow: amountNow / 100,
+    trialing: live.status === "trialing",
+    prorationDate,
   });
 }
 
 export async function POST(req: NextRequest) {
   // A plan change that charges now: never from inside the iOS app (App Review 3.1.1).
-  if (isIosAppUA(req.headers.get("user-agent"))) {
+  if (inStoreApp(req)) {
     return NextResponse.json({ error: "not_available_in_app" }, { status: 403 });
   }
   const caller = await resolveCaller(req);
@@ -121,6 +169,7 @@ export async function POST(req: NextRequest) {
   const live = subs.data.find((s) => s.status === "active")
     ?? subs.data.find((s) => s.status === "trialing" && !!s.default_payment_method);
   if (!live) return NextResponse.json({ error: "no_live_subscription" }, { status: 404 });
+  if (live.cancel_at_period_end) return NextResponse.json({ error: "subscription_canceling" }, { status: 409 });
 
   const item = live.items.data[0];
   const interval = item?.price?.recurring?.interval;
@@ -132,13 +181,42 @@ export async function POST(req: NextRequest) {
   if (!familyPrice) return NextResponse.json({ error: "family_price_not_set" }, { status: 503 });
   if (item.price?.id === familyPrice) return NextResponse.json({ ok: true, alreadyFamily: true });
 
-  // Swap the price, stamp uid/email so the webhook provisions Family, and
-  // invoice the proration now (charge the difference immediately).
+  // The proration time the user saw in the preview, so the charge matches it
+  // (only a recent one, inside the current period).
+  let body: { prorationDate?: unknown } = {};
+  try { body = await req.json(); } catch { /* no body: prorate as of now */ }
+  const now = Math.floor(Date.now() / 1000);
+  const pd = typeof body.prorationDate === "number" ? Math.floor(body.prorationDate) : null;
+  const periodStart = (item as unknown as { current_period_start?: number }).current_period_start ?? 0;
+  const prorationDate = pd && pd <= now && pd > now - 30 * 60 && pd >= periodStart ? pd : undefined;
+
+  // 1. Stamp uid/email so the webhook provisions the Family (family doc,
+  //    familyId) once the price changes. Harmless on its own.
   await stripe.subscriptions.update(live.id, {
-    items: [{ id: item.id, price: familyPrice }],
     metadata: { ...(live.metadata ?? {}), uid: caller.userId, ...(email ? { email } : {}) },
-    proration_behavior: "always_invoice",
   });
+  // 2. Swap the price and invoice the difference now. "pending_if_incomplete":
+  //    the new price applies only once that invoice is paid; a declined card
+  //    leaves the subscription exactly as it was.
+  const updated = await stripe.subscriptions.update(live.id, {
+    items: [{ id: item.id, price: familyPrice }],
+    proration_behavior: "always_invoice",
+    payment_behavior: "pending_if_incomplete",
+    ...(prorationDate ? { proration_date: prorationDate } : {}),
+  });
+  if (updated.pending_update) {
+    // Not paid: void the invoice so no retry charges for a switch that did not happen.
+    try {
+      const inv = typeof updated.latest_invoice === "string" ? updated.latest_invoice : updated.latest_invoice?.id;
+      if (inv) {
+        const got = await stripe.invoices.retrieve(inv);
+        if (got.status === "open" && got.id) await stripe.invoices.voidInvoice(got.id);
+      }
+    } catch (err) {
+      console.warn("[upgrade-family] void after a failed payment:", err);
+    }
+    return NextResponse.json({ error: "payment_failed" }, { status: 402 });
+  }
 
   return NextResponse.json({ ok: true, cycle: interval });
 }

@@ -453,7 +453,8 @@ export function GameVowelSteps({ onExit, lang, t }: { onExit: () => void; lang: 
   );
 }
 
-const VST_CSS = `
+/** Shared with "The letter and its sound" (GameLetterSounds), the step before this one. */
+export const VST_CSS = `
 .vst .vst-q { display: grid; gap: 14px; justify-items: center; text-align: center; }
 .vst-h { font-size: clamp(20px, 5vw, 26px); font-weight: 800; color: #14202b; line-height: 1.5; }
 .vst-sub { font-size: 16px; font-weight: 700; color: #47586a; }

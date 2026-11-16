@@ -78,6 +78,7 @@ const range = (from: Band, to: Band): Band[] => BANDS.slice(BANDS.indexOf(from),
 export const GAME_BANDS: Record<string, Band[]> = {
   // first readers (Hebrew letters and vowel signs)
   letterpairs: range("pre1", "g34"),
+  letters: range("pre1", "g12"),
   vowels: range("pre1", "g12"),
   wheel: range("pre1", "g12"),
   syllables: range("pre1", "g12"),

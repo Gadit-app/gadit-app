@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb, verifyUserAndGetPlan } from "@/lib/firebase-admin";
 import { loadFamilyProgress, publicFamilyProgress } from "@/lib/family-progress";
+import { isParentRole, type MemberRole } from "@/lib/family";
 
 /**
  * Family progress dashboard data.
@@ -15,8 +16,10 @@ import { loadFamilyProgress, publicFamilyProgress } from "@/lib/family-progress"
  * The numbers come from lib/family-progress (loadFamilyProgress), the same
  * function the weekly parent report email uses, so both always agree.
  *
- * Owner-only: the caller must be the family owner (families/{uid}
- * exists with their uid). A paired child cannot read siblings' data.
+ * The family owner (families/{uid} exists with their uid), and since
+ * 2026-11-16 the second parent too (Gadi: "both parents can see it"): a
+ * parent member of the family whose member doc is linked to this very
+ * account. A paired child cannot read siblings' data.
  */
 
 export async function GET(req: NextRequest) {
@@ -31,11 +34,22 @@ export async function GET(req: NextRequest) {
 
     // Owner check: the family doc id is the owner's uid.
     const famSnap = await db.collection("families").doc(ownerUid).get();
-    if (!famSnap.exists) {
-      return NextResponse.json({ error: "not_family_owner" }, { status: 403 });
+    if (famSnap.exists) {
+      return NextResponse.json(publicFamilyProgress(await loadFamilyProgress(ownerUid)));
     }
 
-    return NextResponse.json(publicFamilyProgress(await loadFamilyProgress(ownerUid)));
+    // The second parent: read on the server, never trusted from the client.
+    const me = (await db.collection("users").doc(ownerUid).get()).data() ?? {};
+    const familyId = typeof me.familyId === "string" ? me.familyId : "";
+    const memberId = typeof me.memberId === "string" ? me.memberId : "";
+    if (!familyId || !memberId || me.familyRole !== "parent" || familyId === ownerUid) {
+      return NextResponse.json({ error: "not_family_owner" }, { status: 403 });
+    }
+    const member = (await db.collection("families").doc(familyId).collection("members").doc(memberId).get()).data();
+    if (!member || member.userId !== ownerUid || !isParentRole(member.role as MemberRole)) {
+      return NextResponse.json({ error: "not_family_owner" }, { status: 403 });
+    }
+    return NextResponse.json({ ...publicFamilyProgress(await loadFamilyProgress(familyId)), readOnly: true });
   } catch (err) {
     console.error("[family/progress] error:", err);
     return NextResponse.json({ error: "internal_error" }, { status: 500 });

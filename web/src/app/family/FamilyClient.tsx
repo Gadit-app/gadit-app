@@ -25,6 +25,7 @@ import { familyUi } from "@/lib/family-ui-i18n";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { collection, doc, getDoc, onSnapshot, orderBy, query } from "firebase/firestore";
+import type { User } from "firebase/auth";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
@@ -1389,7 +1390,7 @@ const PROGRESS_COPY: Record<string, {
 };
 
 
-function ProgressCard({ c, t, lang, onLearnSaved }: { c: ChildProgress; t: (typeof PROGRESS_COPY)["en"]; lang: string; onLearnSaved?: () => void }) {
+function ProgressCard({ c, t, lang, onLearnSaved, readOnly }: { c: ChildProgress; t: (typeof PROGRESS_COPY)["en"]; lang: string; onLearnSaved?: () => void; readOnly?: boolean }) {
   const href = useHref();
   const color = memberColorFor({ colorIndex: c.colorIndex });
   const initial = (c.name || "?").trim().charAt(0).toUpperCase() || "?";
@@ -1407,7 +1408,7 @@ function ProgressCard({ c, t, lang, onLearnSaved }: { c: ChildProgress; t: (type
       {!c.linked ? (
         <>
           <div className="fam-dash-note">{t.notLinked}</div>
-          <Link href={href(`/family/${c.memberId}/pair`)} className="fam-dash-pair">{t.pairCta}</Link>
+          {!readOnly && <Link href={href(`/family/${c.memberId}/pair`)} className="fam-dash-pair">{t.pairCta}</Link>}
         </>
       ) : c.total === 0 ? (
         !c.learning && <div className="fam-dash-note">{t.noneYet}</div>
@@ -1477,7 +1478,7 @@ function ProgressCard({ c, t, lang, onLearnSaved }: { c: ChildProgress; t: (type
         );
       })()}
       {/* The parent sets learning mode for the child too (2026-10-22). */}
-      {c.linked && c.learnSetup && <ChildLearnSetting memberId={c.memberId} setup={c.learnSetup} lang={lang} onSaved={onLearnSaved} />}
+      {!readOnly && c.linked && c.learnSetup && <ChildLearnSetting memberId={c.memberId} setup={c.learnSetup} lang={lang} onSaved={onLearnSaved} />}
     </div>
   );
 }
@@ -2082,8 +2083,73 @@ const CONNECT_CARD: Record<string, [string, string, string]> = {
   hu: ["Még nem kapcsoltatok gyereket", "Egy perc az egész, utána itt láthatjátok minden szót, amit a gyerek tanul.", "Gyerek kapcsolása"],
 };
 
+/** The second parent's page: the children's progress, read only (Gadi 2026-11-16). */
+function SecondParentView({ user, lang, dir }: { user: User; lang: string; dir: string }) {
+  const href = useHref();
+  const pt = PROGRESS_COPY[lang] ?? PROGRESS_COPY.en;
+  const nav = NAV_COPY[lang] ?? NAV_COPY.en;
+  const [progress, setProgress] = useState<{ children: ChildProgress[]; totalWords: number; weekWords: number } | null>(null);
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/family/progress", { headers: { Authorization: `Bearer ${await user.getIdToken()}` } });
+        if (res.ok && !cancelled) setProgress(await res.json());
+      } catch {
+        /* the empty state below */
+      } finally {
+        if (!cancelled) setLoaded(true);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
+  return (
+    <div className="wordbook fam-shell-page" dir={dir}>
+      <style>{FAM_SHELL_CSS}</style>
+      <style>{FAM_DASH_CSS}</style>
+      <style>{SECOND_PARENT_CSS}</style>
+      <main className="fam-second">
+        <BackLink href={href("/")} className="fam-second-back">{nav.dictionary}</BackLink>
+        <h1 className="fam-second-title">{pt.title}</h1>
+        <p className="fam-second-sub">{pt.sub}</p>
+        {!loaded ? (
+          <div className="fam-dash-grid"><div className="fam-skel-card" /><div className="fam-skel-card" /></div>
+        ) : progress && progress.children.length > 0 ? (
+          <>
+            {progress.totalWords > 0 && (
+              <div className="fam-dash-summary">
+                <div className="fam-dash-sumcard">
+                  <span className="fam-dash-sumnum">{progress.totalWords}</span>
+                  <span className="fam-dash-sumlabel">{pt.familyTotal}</span>
+                </div>
+                <div className="fam-dash-sumcard fam-dash-sumcard-week">
+                  <span className="fam-dash-sumnum">+{progress.weekWords}</span>
+                  <span className="fam-dash-sumlabel">{pt.weekTotal}</span>
+                </div>
+              </div>
+            )}
+            <div className="fam-dash-grid">
+              {progress.children.map((cp) => <ProgressCard key={cp.memberId} c={cp} t={pt} lang={lang} readOnly />)}
+            </div>
+          </>
+        ) : (
+          <p className="fam-second-sub">{pt.noneYet}</p>
+        )}
+      </main>
+    </div>
+  );
+}
+
+const SECOND_PARENT_CSS = `
+.fam-second { max-width: 980px; margin-inline: auto; padding: 24px 16px 56px; display: grid; gap: 16px; }
+.fam-second-back { justify-self: start; font-weight: 600; color: var(--ink-soft, #47586a); text-decoration: none; }
+.fam-second-title { margin: 8px 0 0; font-size: clamp(24px, 4vw, 32px); font-weight: 800; color: var(--ink); text-wrap: balance; }
+.fam-second-sub { margin: 0; font-size: 15px; line-height: 1.6; color: var(--ink-soft, #47586a); max-width: 62ch; }
+`;
+
 export function FamilyClient() {
-  const { user, loading, setShowLoginModal } = useAuth();
+  const { user, loading, setShowLoginModal, familyId: myFamilyId, familyRole } = useAuth();
   const { lang, dir, setLang, t: ui } = useLang();
   const href = useHref();
   const router = useRouter();
@@ -2235,6 +2301,13 @@ export function FamilyClient() {
 
   if (!familyChecked) {
     return <div className="wordbook wb-family-page" dir={dir}><div className="gd-wait-page"><WaitDots className="gd-wait-big" /></div></div>;
+  }
+
+  // The second parent (Gadi 2026-11-16: "both parents can see it"): no
+  // family of their own, a parent in someone else's. They see the children's
+  // progress; members and settings stay with the parent who pays.
+  if (!family && familyRole === "parent" && myFamilyId && myFamilyId !== user.uid) {
+    return <SecondParentView user={user} lang={lang} dir={dir} />;
   }
 
   // No family doc = no Family subscription. Soft redirect with a message.

@@ -487,10 +487,10 @@ export function WbUserMenu() {
           >
             {gt(lang, "help.title")}
           </Link>
-          {/* Family menu item appears only for owners of a Family
-              subscription (familyId === own uid). Paired members (kids
-              + secondary parents) don't need to manage the family. */}
-          {familyId && user.uid === familyId && (
+          {/* Family menu item: the owner of a Family subscription
+              (familyId === own uid), and since 2026-11-16 the second parent
+              too, who sees the children's progress there (read only). */}
+          {familyId && (user.uid === familyId || familyRole === "parent") && (
             <Link
               role="menuitem"
               href={href("/family")}

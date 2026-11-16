@@ -26,6 +26,7 @@ export type GameId =
   | "memory"
   | "anagram"
   | "speed"
+  | "letters"   // The letter and its sound: what a letter, a sound and niqqud are; each letter with an anchor word (no notebook)
   | "letterpairs" // Letter memory: print and script letters, regular and final, each card says its name (no notebook)
   | "vowels"    // The sound of the vowel signs: one vowel at a time, by ear first (no notebook)
   | "wheel"     // The Letter Wheel: two wheels land on a letter and a vowel sign, said out loud (no notebook)
@@ -60,6 +61,10 @@ export type PlayWord = {
   picWord?: string;
   /** The stored "in simple words" explanation of the first meaning, when the offline cache has it. */
   simple?: string;
+  /** The word with prefix letters as its examples write it (Hebrew בבית for
+   *  בית), vetted by the caller. Fill-in blanks only the word and leaves the
+   *  prefix in the sentence ("ב____"), 2026-11-16. */
+  forms?: string[];
 };
 
 /** Notebook list shape returned by GET /api/notebook. */
@@ -74,6 +79,7 @@ type NotebookItem = {
  *  content and don't depend on the notebook. */
 export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
   letterpairs: 0,
+  letters: 0,
   vowels: 0,
   wheel: 0,
   syllables: 0,
@@ -105,6 +111,7 @@ export const MIN_WORDS_FOR_GAME: Record<GameId, number> = {
  *  pool; notebook games scale down if the pool is smaller. */
 export const SESSION_SIZE: Record<GameId, number> = {
   letterpairs: 3,
+  letters: 8,
   vowels: 11,
   wheel: 10,
   syllables: 6,
@@ -538,11 +545,15 @@ export type FillBlankQuestion = {
 
 const BLANK_TOKEN = "____";
 
-function wordRegex(word: string): RegExp {
-  const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+function wordRegex(word: string, forms?: string[]): RegExp {
+  const esc = (x: string) => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  // The prefixes of the vetted forms (בבית -> ב), in group 1, which stays
+  // outside the blank. An empty group when there are none, so $1 is always "".
+  const pre = [...new Set((forms ?? []).filter((f) => f.length > word.length && f.endsWith(word)).map((f) => f.slice(0, f.length - word.length)))];
+  const lead = pre.length ? `(${pre.map(esc).join("|")})?` : "()";
   // Unicode-aware word-boundaries don't exist universally; we wrap in
   // optional non-letter chars instead. \p{L} covers Hebrew, Arabic, Cyrillic.
-  return new RegExp(`(?<![\\p{L}\\p{N}])${escaped}(?![\\p{L}\\p{N}])`, "iu");
+  return new RegExp(`(?<![\\p{L}\\p{N}])${lead}${esc(word)}(?![\\p{L}\\p{N}])`, "iu");
 }
 
 /**
@@ -560,7 +571,7 @@ function wordRegex(word: string): RegExp {
 export function usableFillBlankExamples(p: PlayWord): string[] {
   const wordScript = scriptOf(p.word);
   if (wordScript === "unknown") return [];
-  const re = wordRegex(p.word);
+  const re = wordRegex(p.word, p.forms);
   return p.examples.filter((ex) => {
     if (!re.test(ex)) return false;
     const carrier = ex.replace(re, " ");
@@ -571,10 +582,10 @@ export function usableFillBlankExamples(p: PlayWord): string[] {
 /** Replace the word in a sentence with the blank token. Callers pass
  *  examples pre-vetted by usableFillBlankExamples, so the fallback
  *  append should never fire — kept as a belt-and-braces guard. */
-function blankOut(sentence: string, word: string): string {
-  if (!word) return sentence;
-  const re = wordRegex(word);
-  if (re.test(sentence)) return sentence.replace(re, BLANK_TOKEN);
+function blankOut(sentence: string, p: PlayWord): string {
+  if (!p.word) return sentence;
+  const re = wordRegex(p.word, p.forms);
+  if (re.test(sentence)) return sentence.replace(re, `$1${BLANK_TOKEN}`);
   return `${sentence} ${BLANK_TOKEN}`;
 }
 
@@ -621,7 +632,7 @@ export function buildFillBlankQuestions(
     const distractors = sample(uniqueSameScript, desiredDistractors);
     const options = shuffle([target.word, ...distractors]);
     questions.push({
-      sentence: blankOut(example, target.word),
+      sentence: blankOut(example, target),
       options,
       correctIdx: options.indexOf(target.word),
       word: target,

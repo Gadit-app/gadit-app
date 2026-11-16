@@ -73,6 +73,7 @@ import { DuelHub } from "@/components/play/duel/DuelHub";
 import { GameSyllables, syllablesCopy } from "@/components/play/GameSyllables";
 import { GameLetterWheel, letterWheelCopy } from "@/components/play/GameLetterWheel";
 import { GameVowelSteps, vowelStepsCopy } from "@/components/play/GameVowelSteps";
+import { GameLetterSounds, letterSoundsCopy } from "@/components/play/GameLetterSounds";
 import { GameLetterPairs, letterPairsCopy } from "@/components/play/GameLetterPairs";
 import { GameIdea } from "@/components/play/GameIdea";
 import { inventedBy, inventorName } from "@/lib/game-inventors";
@@ -3572,10 +3573,10 @@ function langNameIn(code: string, ui: string): string {
 /** Games that can open on one notebook word (/play?game=<id>&word=<w>). */
 const FOCUS_GAMES: GameId[] = ["flashcards", "flashdefs", "quiz", "memory", "anagram"];
 /** Every game has its own link, /play?game=<id> (Gadi 2026-11-02: to send one game to a parent). */
-const LINK_GAMES: string[] = ["quiz", "flashcards", "flashdefs", "truefalse", "fillblank", "context", "memory", "anagram", "speed", "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "letterpairs", "vowels", "syllables", "wheel", "wordsearch", "crossword", "arrowword", "duel"];
+const LINK_GAMES: string[] = ["quiz", "flashcards", "flashdefs", "truefalse", "fillblank", "context", "memory", "anagram", "speed", "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "letterpairs", "letters", "vowels", "syllables", "wheel", "wordsearch", "crossword", "arrowword", "duel"];
 
 /** The first-reader games, shown together as "Letters and vowel signs". */
-const LETTER_GAMES = new Set<string>(["letterpairs", "vowels", "syllables", "wheel"]);
+const LETTER_GAMES = new Set<string>(["letterpairs", "letters", "vowels", "syllables", "wheel"]);
 
 /** Games with a cover picture in public/play/<id>.webp (Gadi 2026-10-09).
  *  Add an id here once its picture is in place; others keep their icon. */
@@ -3585,7 +3586,7 @@ const COVER_V = 2;
 const GAME_COVERS = new Set<GameId>([
   "flashcards", "flashdefs", "quiz", "fillblank", "memory", "anagram", "speed",
   "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "truefalse", "context",
-  "syllables", "wheel", "wordsearch", "crossword", "arrowword", "letterpairs", "vowels",
+  "syllables", "wheel", "wordsearch", "crossword", "arrowword", "letterpairs", "vowels", "letters",
 ]);
 
 /** Games whose cover has a second drawing for children (Gadi 2026-11-12: the
@@ -4051,6 +4052,25 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
           <rect x="3" y="5" width="8" height="12" rx="2" />
           <rect x="13" y="7" width="8" height="12" rx="2" />
           <path d="M6 9h2M16 11h2" />
+        </svg>
+      ),
+    },
+    {
+      // The letter and its sound (Gadi approved 2026-11-16): the first two
+      // steps of first steps in reading, before the vowel signs. Hebrew
+      // letters, so shown to the Hebrew UI.
+      id: "letters",
+      title: letterSoundsCopy(lang).title,
+      desc: letterSoundsCopy(lang).desc,
+      enabled: lang === "he",
+      accent: "amber",
+      category: "notebook",
+      kidsFriendly: true,
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="4" width="11" height="14" rx="3" />
+          <path d="M17 9a3 3 0 0 1 0 6" />
+          <path d="M19.5 6.5a6.5 6.5 0 0 1 0 11" />
         </svg>
       ),
     },
@@ -4559,6 +4579,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
       syllables: <GameSyllables {...curatedProps} />,
       wheel: <GameLetterWheel {...curatedProps} />,
       vowels: <GameVowelSteps {...curatedProps} />,
+      letters: <GameLetterSounds {...curatedProps} />,
       letterpairs: <GameLetterPairs {...curatedProps} />,
     };
     if (stage.game in CURATED) {
@@ -4768,7 +4789,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
               (g) => secOf(g.id, g.category) === section.id && (!kidsMode || g.kidsFriendly || tester)
                 // The two Hebrew reading games are not offered in another
                 // language at all; they used to sit there as "Coming soon".
-                && !((g.id === "syllables" || g.id === "wheel" || g.id === "vowels" || g.id === "letterpairs") && lang !== "he"),
+                && !((g.id === "syllables" || g.id === "wheel" || g.id === "vowels" || g.id === "letters" || g.id === "letterpairs") && lang !== "he"),
             );
             if (sectionGames.length === 0 && !extraCards.some((id) => secOf(id, "notebook") === section.id)) return null;
             // Notebook section always shows now — the effectivePool

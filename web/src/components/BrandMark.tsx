@@ -102,7 +102,8 @@ export function BrandMark() {
 const GBM_CSS = `
 .gbm { position: fixed; z-index: 70; pointer-events: none; line-height: 1; opacity: .78; }
 .gbm.is-page { top: calc(env(safe-area-inset-top, 0px) + 10px); inset-inline-end: 12px; }
-.gbm.is-game { z-index: 61; bottom: calc(env(safe-area-inset-bottom, 0px) + 10px); inset-inline-end: 12px; opacity: .6; }
+/* Above the games' "found a mistake" button, which sits in the bottom left corner. */
+.gbm.is-game { z-index: 61; bottom: calc(env(safe-area-inset-bottom, 0px) + 46px); inset-inline-end: 14px; opacity: .6; }
 .gbm-link { pointer-events: auto; text-decoration: none; line-height: 1; }
 /* No box: a soft light halo keeps the word readable over any picture. */
 .gbm-word { font-family: var(--wb-serif, Georgia, "Times New Roman", serif); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; color: #14202b; line-height: 1; text-shadow: 0 0 4px rgba(255,255,255,.85), 0 0 10px rgba(255,255,255,.55); }

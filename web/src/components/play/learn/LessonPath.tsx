@@ -43,6 +43,8 @@ export type Lesson = {
 type StepId = "cards" | "pictures" | "match" | "fill" | "truefalse" | "reading" | "pronoun" | "build";
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+/** Every word of the Hebrew bank: a token that is one of them is not a prefixed form of another. */
+const HE_WORDS = new Set(HEBREW_BANK.map((b) => b.w));
 
 export function LessonPath({ lesson, learnLang, preReader, lang, t, onExit, onDone }: {
   lesson: Lesson;
@@ -64,10 +66,28 @@ export function LessonPath({ lesson, learnLang, preReader, lang, t, onExit, onDo
   // The lesson's words as game words, each with the workbook sentences that use it.
   const pool = useMemo<PlayWord[]>(() => lesson.items.map((x) => {
     const re = new RegExp(`(^|[^\\p{L}])${escapeRe(x.w)}($|[^\\p{L}])`, "iu");
+    const exact = lesson.sentences.filter((s) => re.test(s));
+    // Hebrew glues ו/ה/ב/ל/מ/ש/כ to the word (הראש, ביד): those sentences
+    // count too, so 122 of the 562 lesson words that never got a fill-in
+    // round now do (2026-11-12 QA). Not when the glued token is a word of its
+    // own (כלב is not כ + לב), nor a doubled vav (הווטרינר).
+    const forms: string[] = [];
+    const prefixed: string[] = [];
+    if (learnLang === "he") {
+      const pre = new RegExp(`(?<![\\p{L}\\p{N}])([ובלמשהכ]{1,3})${escapeRe(x.w)}(?![\\p{L}\\p{N}])`, "u");
+      for (const s of lesson.sentences) {
+        if (exact.includes(s)) continue;
+        const m = s.match(pre);
+        if (!m || HE_WORDS.has(m[0]) || lesson.items.some((y) => y.w === m[0]) || (m[1].endsWith("ו") && x.w.startsWith("ו"))) continue;
+        prefixed.push(s);
+        if (!forms.includes(m[0])) forms.push(m[0]);
+      }
+    }
     return {
       word: x.w,
       meaning: x.t,
-      examples: lesson.sentences.filter((s) => re.test(s)),
+      examples: [...exact, ...prefixed],
+      ...(forms.length ? { forms } : {}),
       language: learnLang === "he" ? "Hebrew" : "English",
       uiLang: lang,
       ...(x.en ? { picWord: x.en } : {}),

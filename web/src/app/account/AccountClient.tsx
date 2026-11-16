@@ -36,6 +36,7 @@ import { WbShellNav, WbShellBurger } from "@/components/design/WbShellChrome";
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { DeleteAccountModal, REASONS as EXIT_REASONS } from "@/components/design/DeleteAccountModal";
 import { isPlayModeClient } from "@/lib/play-copy";
+import { familySwitchUi } from "@/lib/family-switch/ui";
 import { LANGUAGES, langNameIn, type Lang } from "@/lib/i18n";
 import { toggleLangGroup } from "@/lib/lang-groups";
 import { LangSearchList } from "@/components/LangSearch";
@@ -371,6 +372,9 @@ export function AccountPage() {
 
   const [data, setData] = useState<AccountData | null>(null);
   const [loading, setLoading] = useState(true);
+  // A paying Individual subscriber can move to Family on the same subscription
+  // (Gadi approved 2026-11-16); the server says whether, and what it costs today.
+  const [famPreview, setFamPreview] = useState<FamPreview | null>(null);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   // Cancellation save-flow. `cancelFlow` null = closed; else it carries whether
@@ -465,6 +469,15 @@ export function AccountPage() {
         }
         const json = (await res.json()) as AccountData;
         if (!cancelled) setData(json);
+        // The Family switch: only on the website (never in the Play or iOS
+        // app), only for a card subscription; the server checks the rest.
+        if (!cancelled && (json.plan === "clear" || json.plan === "deep") && json.billingProvider !== "apple" && !isPlayModeClient()) {
+          try {
+            const r = await fetch("/api/account/upgrade-family", { headers: { Authorization: `Bearer ${idToken}` } });
+            const p = r.ok ? ((await r.json()) as FamPreview | { eligible: false }) : null;
+            if (!cancelled && p && p.eligible) setFamPreview(p);
+          } catch { /* no button */ }
+        }
       } catch {
         if (!cancelled) setErrorMsg(RETENTION_COPY(lang).loadErr);
       } finally {
@@ -734,6 +747,7 @@ export function AccountPage() {
                 onUpgradeTo={(priceId: string) =>
                   router.push(`${href("/checkout")}?price=${encodeURIComponent(priceId)}`)}
                 onChangePlan={() => router.push(href("/pricing"))}
+                famPreview={famPreview}
                 onCancel={handleStartCancel}
                 onResume={() => handleRetentionAction("resume")}
                 resumed={resumed}
@@ -833,8 +847,9 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 function PlanSection({
-  data, renewalDate, onManageBilling, onUpgradeTo, onChangePlan, onCancel, onResume, resumed, cancelBusy,
+  data, renewalDate, onManageBilling, onUpgradeTo, onChangePlan, onCancel, onResume, resumed, cancelBusy, famPreview,
 }: {
+  famPreview: FamPreview | null;
   data: AccountData;
   renewalDate: string | null;
   onManageBilling: () => void;
@@ -971,6 +986,7 @@ function PlanSection({
                 {/* .gd-buy: the Stripe portal and /pricing can start or change
                     a plan, so neither is offered inside the Play or iOS app
                     (App Review 3.1.1); billing is managed on the website. */}
+                {famPreview && !familyId && !schoolId && !data.cancelAtPeriodEnd && <FamilySwitch preview={famPreview} />}
                 <span className="gd-buy"><GhostBtn onClick={onManageBilling}>{v2(lang, "accountManageBilling")}</GhostBtn></span>
                 <span className="gd-buy"><GhostBtn onClick={onChangePlan}>{v2(lang, "accountChangePlan")}</GhostBtn></span>
               </>
@@ -1361,6 +1377,75 @@ function AccountSection({
 // at identical sizes — the same uniformity Gadi flagged when the two
 // buttons looked visually different even though they live in the same
 // primary tier.
+type FamPreview = { eligible: true; interval: "month" | "year"; currency: string; familyAmount: number; amountNow: number; trialing: boolean; prorationDate: number };
+
+/**
+ * "Switch to Family" (Gadi approved 2026-11-16). The box shows what changes
+ * and the exact amount charged today before anything happens; the server
+ * switches only when that payment goes through.
+ */
+function FamilySwitch({ preview }: { preview: FamPreview }) {
+  const { lang } = useLang();
+  const { user } = useAuth();
+  const href = useHref();
+  const t = familySwitchUi(lang);
+  const [step, setStep] = useState<"closed" | "open" | "busy" | "done" | "failPay" | "fail">("closed");
+  const money = (n: number) => {
+    try { return new Intl.NumberFormat(lang, { style: "currency", currency: preview.currency.toUpperCase() }).format(n); }
+    catch { return `${n} ${preview.currency.toUpperCase()}`; }
+  };
+  async function confirm() {
+    if (!user || step === "busy") return;
+    setStep("busy");
+    try {
+      const res = await fetch("/api/account/upgrade-family", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${await user.getIdToken()}` },
+        body: JSON.stringify({ prorationDate: preview.prorationDate }),
+      });
+      setStep(res.ok ? "done" : res.status === 402 ? "failPay" : "fail");
+    } catch {
+      setStep("fail");
+    }
+  }
+  if (step === "closed") {
+    return <span className="gd-buy"><PrimaryBtn onClick={() => setStep("open")}>{t.btn}</PrimaryBtn></span>;
+  }
+  const line = { margin: 0, fontFamily: fontBody(lang), fontSize: 14.5, lineHeight: 1.55, color: "var(--ink)" } as const;
+  return (
+    <div className="gd-buy" role="region" aria-label={t.btn} style={{
+      flexBasis: "100%", display: "grid", gap: 8, padding: "14px 16px", borderRadius: 14,
+      background: "color-mix(in srgb, #1D4ED8 9%, transparent)", border: "1px solid color-mix(in srgb, #1D4ED8 35%, transparent)",
+    }}>
+      {step === "done" ? (
+        <>
+          <p style={{ ...line, fontWeight: 600 }}>{t.done}</p>
+          <div><Link href={href("/family")} style={{ display: "inline-block", padding: "9px 18px", borderRadius: 10, background: "var(--teal, #0EA5A5)", color: "white", fontFamily: fontBody(lang), fontSize: 13, fontWeight: 600, textDecoration: "none" }}>{t.go}</Link></div>
+        </>
+      ) : (
+        <>
+          <p style={{ ...line, fontWeight: 700, fontSize: 16 }}>{t.btn}</p>
+          <p style={line}>{t.what}</p>
+          <p style={line}>{t.same}</p>
+          <p style={{ ...line, fontWeight: 600 }}>{preview.amountNow > 0 ? t.now.replace("{amount}", money(preview.amountNow)) : t.nowZero}</p>
+          <p style={line}>{(preview.interval === "year" ? t.nextYear : t.nextMonth).replace("{price}", money(preview.familyAmount))}</p>
+          {(step === "failPay" || step === "fail") && <p role="alert" style={{ ...line, color: "#B91C1C", fontWeight: 600 }}>{step === "failPay" ? t.failPay : t.fail}</p>}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center", marginTop: 4 }}>
+            {step === "busy" ? (
+              <span style={{ ...line, fontWeight: 600 }}><WaitText text={t.busy} live /></span>
+            ) : (
+              <>
+                <PrimaryBtn onClick={() => void confirm()}>{t.confirm}</PrimaryBtn>
+                <GhostBtn onClick={() => setStep("closed")}>{t.cancel}</GhostBtn>
+              </>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 function PrimaryBtn({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   const { lang } = useLang();
   return (
