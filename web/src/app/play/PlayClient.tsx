@@ -4703,8 +4703,6 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
             above its games. Notebook games hide entirely when the user
             doesn't have 4+ words; the other three categories are
             curated-content and always show. */}
-        {/* Invent your learning game (Gadi 2026-11-12): subscribers tell us a game idea. */}
-        {isPaid && planReady ? <GameIdea lang={lang} dir={dir} /> : null}
         {(() => {
           const notebookSection = { id: "notebook" as GameCategory, label: t.catNotebook };
           const wordSections: Array<{ id: GameCategory; label: string }> = [
@@ -4743,14 +4741,19 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
             return LETTER_GAMES.has(id) && (!band || shelf === "fit") ? "letters" : shelf;
           };
           const extraCards = ["catch", "catch-fair", ...(isPaid ? ["world", "duel"] : [])];
+          // The grades: a small heading like the sections below, and the chips
+          // in one row on a computer (Gadi 2026-11-16: "the grades drop to a
+          // second line").
           const chooser = !isKidPlayer && !kidsMode ? (
-            <div className="wb-play-langs" role="radiogroup" aria-label={bc.showFor} style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: 8, margin: "0 auto 14px" }}>
-              <span className="wb-play-langs-label">{bc.showFor}</span>
-              {([null, ...BANDS] as Array<Band | null>).map((b) => (
-                <button key={b ?? "all"} type="button" role="radio" aria-checked={pickedBand === b} className={`wb-play-lang${pickedBand === b ? " is-on" : ""}`} onClick={() => setPickedBand(b)}>
-                  {b ? bc.bands[b] : bc.all}
-                </button>
-              ))}
+            <div className="wb-play-grades">
+              <span className="wb-play-grades-label" id="wb-play-grades-label">{bc.showFor}</span>
+              <div className="wb-play-langs wb-play-grades-row" role="radiogroup" aria-labelledby="wb-play-grades-label">
+                {([null, ...BANDS] as Array<Band | null>).map((b) => (
+                  <button key={b ?? "all"} type="button" role="radio" aria-checked={pickedBand === b} className={`wb-play-lang${pickedBand === b ? " is-on" : ""}`} onClick={() => setPickedBand(b)}>
+                    {b ? bc.bands[b] : bc.all}
+                  </button>
+                ))}
+              </div>
             </div>
           ) : null;
           // The journey game: testers first (Gadi 2026-11-14), then everyone, so as
@@ -4776,10 +4779,13 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                 </span>
                 <span className="wb-fort-go" aria-hidden="true">{lang === "he" ? "◀" : "▶"}</span>
               </a>
-              <a href="/journey" className="wb-fort-cards">🃏 {lang === "he" ? "הקלפים שלי" : "My cards"}</a>
+              <a href="/journey" className="wb-fort-cards"><span className="wb-fort-cards-icon" aria-hidden="true">🃏</span>{lang === "he" ? "הקלפים שלי" : "My cards"}</a>
             </div>
           ) : null;
-          return <>{testerNew}{chooser}<div className="wb-play-sections">{sections.map((section) => {
+          // The top of the page lines up with the games grid below (Gadi
+          // 2026-11-16: "too busy, not aligned"): the fortress and "My cards"
+          // on the grid's columns, then the game-idea strip, then the grades.
+          return <><div className="wb-play-top"><style>{PLAY_TOP_CSS}</style>{testerNew}{/* Invent your learning game (Gadi 2026-11-12): subscribers tell us a game idea. */}{isPaid && planReady ? <GameIdea lang={lang} dir={dir} /> : null}{chooser}</div><div className="wb-play-sections">{sections.map((section) => {
             // When Kids Mode is on, filter to games we've curated for
             // younger players. The 5 notebook games always qualify
             // (auto-adapt from the child's own vocabulary); the 4
@@ -4943,9 +4949,26 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
 const FORT_IS_NEW = typeof Date !== "undefined" && new Date().getTime() < Date.UTC(2026, 11, 15);
 
 /** The fortress tile at the top of Games (2026-11-15). */
+/* The top of the games page sits on the same columns as the games below. */
+const PLAY_TOP_CSS = `
+.wb-play-top { display: grid; gap: 14px; margin: -12px 0 28px; }
+.wb-play-top .gi-banner { margin: 0; padding: 10px 16px; border-radius: 20px; gap: 12px; box-shadow: 0 3px 10px rgba(0,0,0,.08); }
+.wb-play-top .gi-bulb { width: 40px; height: 40px; font-size: 21px; }
+.wb-play-top .gi-banner-text strong { font-size: 16.5px; }
+.wb-play-top .gi-banner-text span { font-size: 13.5px; }
+.wb-play-grades { display: grid; gap: 10px; margin-top: 6px; }
+.wordbook .wb-play-grades-label { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--wb-ink-soft); padding-inline-start: 4px; }
+.wordbook .wb-play-grades-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.wordbook .wb-play-grades-row .wb-play-lang { white-space: nowrap; }
+@media (min-width: 900px) { .wordbook .wb-play-grades-row { flex-wrap: nowrap; } }
+`;
+
 const FORT_TILE_CSS = `
-.wb-fort-tile { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; max-width: 620px; margin: 0 auto 16px; }
-.wb-fort-main { flex: 1 1 320px; display: flex; align-items: center; gap: 14px; min-height: 92px; padding: 10px 16px; border-radius: 20px; text-decoration: none; color: #fff;
+/* Four columns like the games below: the fortress takes three, "My cards" one. */
+.wb-fort-tile { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+@media (min-width: 600px) { .wb-fort-tile { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 12px; } .wb-fort-main { grid-column: span 2; } }
+@media (min-width: 900px) { .wb-fort-tile { grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 14px; } .wb-fort-main { grid-column: span 3; } }
+.wb-fort-main { display: flex; align-items: center; gap: 14px; min-height: 92px; padding: 10px 16px; border-radius: 20px; text-decoration: none; color: #fff;
   background: radial-gradient(ellipse at 15% 120%, rgba(255,190,90,.45), transparent 60%), linear-gradient(105deg, #1f5a63 0%, #23525e 45%, #3a3f6e 100%);
   box-shadow: 0 0 0 1px rgba(255,211,77,.4) inset, 0 8px 22px rgba(20,40,60,.25); }
 .wb-fort-main:hover { filter: brightness(1.06); }
@@ -4957,6 +4980,8 @@ const FORT_TILE_CSS = `
 .wb-fort-text small { font-size: 13.5px; line-height: 1.4; color: #e3eef0; }
 .wb-fort-new { justify-self: start; padding: 1px 9px; border-radius: 999px; background: #ffd34d; color: #3b2a00; font-size: 11.5px; font-weight: 800; }
 .wb-fort-go { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(180deg, #ffe58a, #f5c542); color: #3b2a00; font-size: 15px; flex: none; box-shadow: 0 3px 0 #b88a00; }
-.wb-fort-cards { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; border-radius: 20px; background: #fff; color: #0a5c5a; font-weight: 700; text-decoration: none; box-shadow: 0 0 0 2px #bfe3e0 inset; }
-@media (max-width: 520px) { .wb-fort-cards { flex: 1 1 100%; } }
+.wb-fort-cards { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 10px 16px; border-radius: 20px; background: #fff; color: #0a5c5a; font-size: 16px; font-weight: 700; text-decoration: none; box-shadow: 0 0 0 2px #bfe3e0 inset; }
+.wb-fort-cards:hover { box-shadow: 0 0 0 2px #0a7472 inset; }
+.wb-fort-cards-icon { font-size: 28px; line-height: 1; }
+@media (max-width: 599px) { .wb-fort-cards { flex-direction: row; min-height: 52px; } .wb-fort-cards-icon { font-size: 22px; } }
 `;

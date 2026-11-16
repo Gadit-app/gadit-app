@@ -26,6 +26,16 @@ export function buildFigure(T: T3, look: Look = DEFAULT_LOOK, pants = 0x24415c):
   const g = new T.Group();
   g.add(at(box(0.95, 1.05, 0.5, shirt), 0, 1.5, 0), at(box(0.62, 0.62, 0.62, SKIN), 0, 2.36, 0));
 
+  // A face in front and hair behind, so it is clear which way the runner looks
+  // (Gadi's son, 2026-11-16: "you can't tell the front from the back"). The
+  // front is -z, where the cap's peak points; the back (+z) faces the camera.
+  for (const x of [-0.14, 0.14]) {
+    g.add(at(box(0.16, 0.17, 0.02, 0xffffff), x, 2.42, -0.316), at(box(0.09, 0.11, 0.02, 0x1f2937), x, 2.41, -0.328), at(box(0.035, 0.035, 0.01, 0xffffff), x + 0.025, 2.44, -0.336));
+    g.add(at(box(0.1, 0.06, 0.01, 0xf4a3a3), x * 1.45, 2.27, -0.316));
+  }
+  g.add(at(box(0.2, 0.05, 0.02, 0x9a3b2e), 0, 2.2, -0.316), at(box(0.05, 0.05, 0.02, 0x9a3b2e), -0.11, 2.23, -0.316), at(box(0.05, 0.05, 0.02, 0x9a3b2e), 0.11, 2.23, -0.316));
+  g.add(at(box(0.66, 0.42, 0.08, 0x6b3f1d), 0, 2.48, 0.33), at(box(0.08, 0.3, 0.5, 0x6b3f1d), -0.33, 2.52, 0.08), at(box(0.08, 0.3, 0.5, 0x6b3f1d), 0.33, 2.52, 0.08));
+
   // The hat.
   const gold = 0xf5b301;
   switch (look.hat) {

@@ -587,6 +587,10 @@ const RUN_CSS = `
 .run-hint { position: absolute; inset-inline: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 28px); width: fit-content; max-width: calc(100% - 32px); margin-inline: auto; padding: 10px 18px; border-radius: 999px; background: rgba(20,32,43,.62); color: #fff; font-weight: 700; font-size: 16px; line-height: 1.4; text-align: center; pointer-events: none; opacity: 0; animation: run-hint 5s ease .6s forwards; }
 @keyframes run-hint { 0% { opacity: 0; transform: translateY(8px); } 12%, 82% { opacity: 1; transform: none; } 100% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .run-hint { animation: none; opacity: 1; } }
+/* The whole game in Rubik, in every language, the question and the answers too
+   (Gadi 2026-11-16: in English the answer tiles were not in Rubik). Named on
+   every element, because the page's language rules set a font on each one. */
+.run-room, .run-room * { --wb-font-display: var(--font-rubik), "Rubik", system-ui, sans-serif; font-family: var(--font-rubik), "Rubik", system-ui, sans-serif; }
 .run-room { min-height: 100dvh; --j-ink: #14202b; --j-soft: #47586a; --j-surface: #fffdf5; --j-line: #e2d6b8; --wall: #7d8a99; --trim: #d9534f; --sky: #bfe8ff; --land: #7cc46a;
   background-color: var(--wall);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='64'%3E%3Cg fill='none' stroke='%23000' stroke-opacity='.2' stroke-width='3'%3E%3Cpath d='M0 1.5h96M0 33.5h96M24 0v32M72 0v32M0 32v32M48 32v32M96 32v32'/%3E%3C/g%3E%3C/svg%3E"); }
