@@ -14,7 +14,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { GaditBrand } from "@/components/BrandMark";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { sfx } from "@/lib/game-sfx";
@@ -153,11 +152,9 @@ export function ShopClient({ demo = false }: { demo?: boolean }) {
             <header className="jrn-head shop-head">
               <Link className="jrn-back" href={demo ? "/journey?demo=1" : "/journey"}><span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span> {c.back}</Link>
               <h1 className="jrn-title">{c.title}</h1>
-              <span className="shop-brand-narrow"><GaditBrand /></span>
               <div className="shop-head-end">
                 <div className="jrn-coins" title={c.coins}><span aria-hidden="true">●</span> {balance} {c.coins}</div>
                 <Link className="jrn-btn shop-run" href={demo ? "/journey/run?demo=1" : "/journey/run"}>{c.run}</Link>
-                <span className="shop-brand-wide"><GaditBrand /></span>
               </div>
             </header>
 
@@ -233,20 +230,21 @@ const SHOP_CSS = `
 .shop-name { font-weight: 700; font-size: 14px; text-align: center; }
 .shop-tag { font-size: 12.5px; font-weight: 700; color: #8a5a00; background: #fff3c4; padding: 2px 10px; border-radius: 999px; font-variant-numeric: tabular-nums; }
 .shop-tag.is-mine { color: var(--j-teal); background: transparent; }
-.shop-head { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+/* The fortress courtyard behind the shop (Gadi 2026-11-16: "a picture of the fortress or something more interesting"). */
+.jrn.shop { background: linear-gradient(rgba(248,250,252,.5), rgba(248,250,252,.72)), url("/journey/shop-bg.webp") center / cover no-repeat fixed, #eef4f7; }
+.jrn-head.shop-head { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; justify-items: stretch; }
+.shop-head .jrn-back { justify-self: start; }
+.shop-head .jrn-title { justify-self: center; text-shadow: 0 1px 0 rgba(255,255,255,.8); }
 .shop-head .jrn-title { font-size: clamp(22px, 4vw, 30px); }
 .shop-head-end { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
-.shop-brand-narrow { display: none; }
 .shop-run { min-height: 40px; padding: 6px 18px; font-size: 15px; }
 /* A phone: the figure on top, the shelves under it, each in its own part of the screen. */
 @media (max-width: 760px) {
   .shop .jrn-wrap { padding-block: 8px; gap: 8px; }
-  .shop-head { grid-template-columns: auto 1fr auto; }
-  .shop-brand-narrow { display: inline-flex; }
+  .jrn-head.shop-head { grid-template-columns: 1fr auto 1fr; }
   .shop .jrn-head { flex-wrap: wrap; }
   .shop .jrn-head .jrn-back { padding-inline: 10px; font-size: 13.5px; }
   .shop-head .jrn-title { font-size: 21px; }
-  .shop-brand-wide { display: none; }
   .shop-head .jrn-title { text-align: center; }
   .shop-head-end { grid-column: 1 / -1; justify-content: center; }
   .shop-layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(150px, 34dvh) minmax(0, 1fr); gap: 8px; }

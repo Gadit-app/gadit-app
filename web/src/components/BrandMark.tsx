@@ -13,8 +13,8 @@
  * Most pages carry the logo in their header. BrandMark appears only where no
  * logo is in sight: it looks for a header logo that is really visible (not
  * covered) after every navigation.
- *   - On a page without a header: a small "Gadit" in the top corner that
- *     leads home.
+ *   - On a page without a header: a small "Gadit" in the bottom left corner
+ *     that leads home (one fixed place, Gadi 2026-11-16).
  *   - Over a full-screen game (the word worlds, Context Detective): a quiet
  *     mark in the bottom corner opposite the child's avatar, which never
  *     takes a tap (the game's own exit button is the way back).
@@ -100,10 +100,13 @@ export function BrandMark() {
 }
 
 const GBM_CSS = `
-.gbm { position: fixed; z-index: 70; pointer-events: none; line-height: 1; opacity: .78; }
-.gbm.is-page { top: calc(env(safe-area-inset-top, 0px) + 10px); inset-inline-end: 12px; }
-/* Above the games' "found a mistake" button, which sits in the bottom left corner. */
-.gbm.is-game { z-index: 61; bottom: calc(env(safe-area-inset-bottom, 0px) + 46px); inset-inline-end: 14px; opacity: .6; }
+/* One fixed place in every language: the bottom left corner. */
+.gbm { position: fixed; z-index: 70; left: calc(env(safe-area-inset-left, 0px) + 14px); bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); pointer-events: none; line-height: 1; opacity: .78; }
+.gbm.is-game { z-index: 61; opacity: .6; }
+/* Above the games' "found a mistake" button, which sits in that corner too. */
+body:has(.wb-play-header-report) .gbm { bottom: calc(env(safe-area-inset-bottom, 0px) + 46px); }
+/* Left-to-right pages keep the help button in that corner: the word stands above it. */
+:root[dir="ltr"] body:has(.hc-fab) .gbm { bottom: calc(env(safe-area-inset-bottom, 0px) + 78px); }
 .gbm-link { pointer-events: auto; text-decoration: none; line-height: 1; }
 /* No box: a soft light halo keeps the word readable over any picture. */
 .gbm-word { font-family: var(--wb-serif, Georgia, "Times New Roman", serif); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; color: #14202b; line-height: 1; text-shadow: 0 0 4px rgba(255,255,255,.85), 0 0 10px rgba(255,255,255,.55); }

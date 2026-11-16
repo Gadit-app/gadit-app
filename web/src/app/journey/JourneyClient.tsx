@@ -18,7 +18,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { buildable } from "@/lib/journey/build";
 import { BuildTiles, Lesson, Say, PARTS_CSS } from "./parts";
-import { GaditBrand } from "@/components/BrandMark";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { sfx } from "@/lib/game-sfx";
@@ -388,7 +387,6 @@ export function JourneyClient({ demo = false }: { demo?: boolean }) {
             <header className="idx-top">
               <div className="idx-backrow">
                 <Link className="jrn-back idx-back" href="/play"><span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span> {c.backGames}</Link>
-                <GaditBrand tone="dark" />
               </div>
               <div className="idx-titles">
                 <h1 className="jrn-title">{c.title}</h1>
@@ -640,7 +638,7 @@ export const JRN_CSS = `
 .jrn-note { margin: 0; font-size: 17px; line-height: 1.6; color: var(--j-soft); }
 .jrn-small { font-size: 13px; line-height: 1.4; color: var(--j-soft); }
 .jrn-today { display: grid; gap: 10px; justify-items: start; padding: 18px; border-radius: 20px; background: var(--j-surface); border: 1px solid var(--j-line); }
-.jrn-btn { min-height: 50px; padding: 10px 28px; border: 0; border-radius: 999px; background: var(--j-teal); color: #fff; font: inherit; font-weight: 800; font-size: 18px; cursor: pointer; box-shadow: 0 4px 0 #075452; }
+.jrn-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; text-align: center; min-height: 50px; padding: 10px 28px; border: 0; border-radius: 999px; background: var(--j-teal); color: #fff; font: inherit; font-weight: 800; font-size: 18px; cursor: pointer; box-shadow: 0 4px 0 #075452; }
 .jrn-btn.is-ghost { min-height: 40px; padding: 6px 18px; font-size: 15px; background: transparent; color: var(--j-teal); box-shadow: 0 0 0 2px var(--j-teal) inset; }
 .jrn-group { display: grid; gap: 12px; }
 .jrn-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); align-items: start; }

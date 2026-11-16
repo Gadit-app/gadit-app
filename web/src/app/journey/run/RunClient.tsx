@@ -18,7 +18,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { GaditBrand } from "@/components/BrandMark";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { sfx } from "@/lib/game-sfx";
@@ -29,6 +28,7 @@ import { startHall, type HallHandle } from "./hall";
 import { startIntro, type IntroHandle } from "./intro";
 import type { Look } from "@/lib/journey/shop";
 import { BuildTiles, Lesson, Say, PARTS_CSS } from "../parts";
+import { WaitText } from "@/components/WaitText";
 
 type Copy = {
   title: string; demo: string; holds: (name: string, n: number) => string; goFree: string; how: string; go: string;
@@ -104,6 +104,29 @@ export function Monster({ kind, sad, shadow }: { kind: number; sad: boolean; sha
         ? <path d="M74 142 Q100 124 126 142" stroke="#14202b" strokeWidth="6" fill="none" strokeLinecap="round" />
         : <><path d="M66 128 Q100 160 134 128 Z" fill="#14202b" /><path d="M84 130 L90 141 L96 130 Z M104 130 L110 141 L116 130 Z" fill="#fff" /></>}
     </svg>
+  );
+}
+
+/**
+ * While the road is made ready (Gadi 2026-11-16: "not just two colours on the
+ * screen that have nothing to do with the game"): the fortress at the end of a
+ * winding path, a dotted line marching towards it and sparks along the way, in
+ * the colours of today's road.
+ */
+function RoadLoading({ text, kind }: { text: string; kind: number }) {
+  return (
+    <div className="run-loading" role="status">
+      <p className="run-loading-text"><WaitText text={text} live /></p>
+      <div className="run-loading-scene" aria-hidden="true">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="run-loading-fort" src={`/journey/thumbs/fortress${(kind % 3) + 1}.webp`} alt="" width={180} height={180} />
+        <svg className="run-loading-road" viewBox="0 0 400 300" preserveAspectRatio="none">
+          <path className="rl-road" d="M120 300 C 140 250, 240 236, 206 186 C 186 156, 194 132, 196 112 L 204 112 C 206 132, 214 156, 226 186 C 262 238, 282 262, 280 300 Z" />
+          <path className="rl-line" d="M200 300 C 204 256, 236 230, 216 186 C 202 156, 200 134, 200 116" />
+        </svg>
+        <i className="rl-spark is-1">✦</i><i className="rl-spark is-2">✦</i><i className="rl-spark is-3">✦</i><i className="rl-spark is-4">✦</i>
+      </div>
+    </div>
   );
 }
 
@@ -413,7 +436,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
       {phase !== "intro" && <><i className="run-torch is-a" aria-hidden="true" /><i className="run-torch is-b" aria-hidden="true" /></>}
       <div className="jrn-wrap">
         {!demo && !authLoading && !user && <p className="jrn-note">{c.signIn}</p>}
-        {user && state === "loading" && !data && <p className="jrn-note">{c.loading}…</p>}
+        {user && state === "loading" && !data && <RoadLoading text={c.loading} kind={stage} />}
         {user && state === "failed" && (
           <p className="jrn-note">{c.failed} <button type="button" className="jrn-btn is-ghost" onClick={() => { setState("loading"); void load(); }}>{c.retry}</button></p>
         )}
@@ -423,7 +446,6 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
             {/* The way back at the top (Gadi 2026-11-15). */}
             <div className="run-intro-top">
               <Link className="jrn-back" href={demo ? "/journey?demo=1" : "/journey"}><span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span> {c.backIndex}</Link>
-              <GaditBrand />
               {demo && <span className="jrn-demo">{c.demo}</span>}
             </div>
             <h1 className="jrn-title">{c.title}</h1>
@@ -582,7 +604,30 @@ const RUN_CSS = `
 @keyframes run-flame { from { transform: scale(1, 1) rotate(-3deg); } to { transform: scale(.9, 1.12) rotate(3deg); } }
 @media (min-width: 1040px) { .run-torch { display: block; } }
 @media (prefers-reduced-motion: reduce) { .run-torch::before, .run-room:not(.is-out) { animation: none; } }
-.run-room.is-out { background-image: linear-gradient(var(--sky) 0 58%, var(--land) 58% 100%); }
+/* The open air before the 3D scene: a sky that warms towards the horizon and soft
+   hills in the colours of today's road, never two flat halves (Gadi 2026-11-16). */
+.run-room.is-out { background-image:
+  radial-gradient(130% 55% at 50% 108%, color-mix(in srgb, var(--land) 88%, #000 10%) 0 60%, transparent 61%),
+  radial-gradient(75% 38% at 12% 74%, color-mix(in srgb, var(--land) 80%, #fff 20%) 0 58%, transparent 59%),
+  radial-gradient(80% 40% at 90% 76%, var(--land) 0 58%, transparent 59%),
+  linear-gradient(180deg, color-mix(in srgb, var(--sky) 70%, #5aa9ff 30%) 0%, var(--sky) 40%, #fff3d6 66%); }
+.run-loading { min-height: calc(100dvh - 40px); display: grid; grid-template-rows: auto minmax(0, 1fr); justify-items: center; align-content: stretch; gap: 8px; padding-top: 12vh; }
+.run-loading-text { margin: 0; font-size: clamp(20px, 3vw, 26px); font-weight: 800; color: #14404a; text-shadow: 0 1px 0 rgba(255,255,255,.7); }
+.run-loading-scene { position: relative; width: min(460px, 92vw); height: min(56dvh, 460px); align-self: end; }
+.run-loading-fort { position: absolute; z-index: 1; top: 0; left: 50%; height: 44%; width: auto; max-width: 70%; object-fit: contain; transform: translateX(-50%); filter: drop-shadow(0 10px 14px rgba(0,0,0,.18)); animation: rl-float 3.2s ease-in-out infinite; }
+/* The road fills the scene; its far end (y 112 of 300) tucks under the fortress gate. */
+.run-loading-road { position: absolute; inset: 0; width: 100%; height: 100%; }
+.rl-road { fill: #e2c48c; stroke: #c9a15a; stroke-width: 3; }
+.rl-line { fill: none; stroke: #fff; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 10 14; animation: rl-march 1s linear infinite; }
+.rl-spark { position: absolute; font-style: normal; color: #f5b400; font-size: 22px; text-shadow: 0 0 8px rgba(255,200,40,.8); animation: rl-twinkle 1.6s ease-in-out infinite; }
+.rl-spark.is-1 { left: 30%; bottom: 14%; }
+.rl-spark.is-2 { left: 64%; bottom: 26%; animation-delay: .4s; }
+.rl-spark.is-3 { left: 40%; bottom: 44%; animation-delay: .8s; font-size: 18px; }
+.rl-spark.is-4 { left: 57%; bottom: 55%; animation-delay: 1.2s; font-size: 15px; }
+@keyframes rl-march { to { stroke-dashoffset: 24; } }
+@keyframes rl-twinkle { 0%, 100% { opacity: .2; transform: scale(.7); } 50% { opacity: 1; transform: scale(1.15); } }
+@keyframes rl-float { 50% { transform: translateX(-50%) translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .rl-line, .rl-spark, .run-loading-fort { animation: none; } .rl-spark { opacity: .9; } }
 .run-fresh { display: grid; gap: 6px; width: 100%; max-width: 560px; padding: 10px 14px 8px; border-radius: 16px; background: #f0faf9; box-shadow: 0 0 0 2px #bfe3e0 inset; }
 .run-fresh-head { font-size: 13px; font-weight: 700; color: #47586a; text-align: center; }
 .run-fresh-table { width: 100%; border-collapse: collapse; table-layout: fixed; }

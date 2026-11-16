@@ -23,7 +23,6 @@ import { useLang } from "@/lib/lang-context";
 import { JRN_CSS, demoData, zone, type Data } from "../JourneyClient";
 import { monsterNames, roadNames } from "../run/RunClient";
 import { THEMES } from "../run/engine";
-import { GaditBrand } from "@/components/BrandMark";
 
 const TREES_PER_ISLAND = 6;
 const AHEAD = 2;
@@ -88,7 +87,6 @@ export function MapClient({ demo = false }: { demo?: boolean }) {
             <header className="jrn-head map-head">
               <div className="map-top">
                 <Link className="jrn-back" href={demo ? "/journey?demo=1" : "/journey"}><span aria-hidden="true">{dir === "rtl" ? "→" : "←"}</span> {c.back}</Link>
-                <GaditBrand tone="dark" />
                 <Link className="jrn-btn map-run" href={demo ? "/journey/run?demo=1" : "/journey/run"}>{c.run}</Link>
               </div>
               <h1 className="jrn-title">{c.title}</h1>
