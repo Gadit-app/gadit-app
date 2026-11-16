@@ -113,16 +113,18 @@ body:has(.wb-play-header-report) .gbm { bottom: calc(env(safe-area-inset-bottom,
    600, "it" teal italic 500. This mark lives outside .wordbook, so the font is
    named here and not taken from a .wordbook token (that fell back to Georgia,
    Gadi 2026-11-16: "the logo is in the wrong font"). */
-.gbm-word { font-family: var(--font-inter, "Inter"), "Inter", system-ui, sans-serif; font-size: 18px; font-weight: 600; letter-spacing: -0.015em; color: #0B1220; line-height: 1; text-shadow: 0 0 4px rgba(255,255,255,.85), 0 0 10px rgba(255,255,255,.55); }
+.gbm .gbm-word { font-family: var(--font-inter, "Inter"), "Inter", system-ui, sans-serif; font-size: 18px; font-weight: 600; letter-spacing: -0.015em; color: #0B1220; line-height: 1; text-shadow: 0 0 4px rgba(255,255,255,.85), 0 0 10px rgba(255,255,255,.55); }
 .gbm.is-game .gbm-word { font-size: 15px; }
-.gbm-it { color: #0E7490; font-style: italic; font-weight: 500; }
+/* Named on the span too: ":lang(he)" gives every element on a Hebrew page Rubik
+   directly, so the "it" would not inherit the word's font. */
+.gbm .gbm-it { font-family: var(--font-inter, "Inter"), "Inter", system-ui, sans-serif; color: #0E7490; font-style: italic; font-weight: 500; letter-spacing: inherit; line-height: 1; }
 @media print { .gbm { display: none; } }
 `;
 
 const GB_INLINE_CSS = `
 .gb-inline { display: inline-flex; line-height: 1; opacity: .85; }
-.gb-inline-word { font-family: var(--font-inter, "Inter"), "Inter", system-ui, sans-serif; font-size: 19px; font-weight: 600; letter-spacing: -0.015em; text-decoration: none; color: #0B1220; }
-.gb-inline-it { color: #0E7490; font-style: italic; font-weight: 500; }
+.gb-inline .gb-inline-word { font-family: var(--font-inter, "Inter"), "Inter", system-ui, sans-serif; font-size: 19px; font-weight: 600; letter-spacing: -0.015em; text-decoration: none; color: #0B1220; }
+.gb-inline .gb-inline-it { font-family: var(--font-inter, "Inter"), "Inter", system-ui, sans-serif; color: #0E7490; font-style: italic; font-weight: 500; letter-spacing: inherit; line-height: 1; }
 .gb-inline.is-dark .gb-inline-word { color: #fff; }
 .gb-inline.is-dark .gb-inline-it { color: #7fe0db; }
 `;
