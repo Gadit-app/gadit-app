@@ -408,6 +408,8 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
       {atIntro && <canvas ref={introCanvas} className={`run-intro${introOn ? " is-on" : ""}`} aria-hidden="true" />}
       <style>{JRN_CSS + PARTS_CSS + RUN_CSS}</style>
       {inside && <canvas ref={hallCanvas} className={`run-hall${hallOn ? " is-on" : ""}`} aria-hidden="true" />}
+      {/* The arrival line stands on the red carpet, a little above the card (Gadi 2026-11-16). */}
+      {hallOn && phase === "fort" && <div className="run-hall-title">{c.arrived(monster)}</div>}
       {phase !== "intro" && <><i className="run-torch is-a" aria-hidden="true" /><i className="run-torch is-b" aria-hidden="true" /></>}
       <div className="jrn-wrap">
         {!demo && !authLoading && !user && <p className="jrn-note">{c.signIn}</p>}
@@ -474,21 +476,26 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
 
         {ready && phase === "fort" && q && (
           <section ref={cardRef} className="jrn-play run-q" aria-live="polite">
+            {/* Gadi 2026-11-16 ("a bit too much for the eye"): no arrival line,
+                no "you looked this word up" chip, and the row of cages only when
+                the hall (which hangs its own cages) is not drawn. */}
             {!hallOn && <Monster kind={stage} sad={!!result?.correct} />}
-            <div className="jrn-step">{c.arrived(monster)}</div>
-            <div className="run-cages" aria-hidden="true">
-              {queue.map((x, i) => <i key={x.card.id} className={`${i < marks.length ? (marks[i] ? "is-free" : "is-held") : ""}${i === nowIdx ? " is-now" : ""}`} />)}
-            </div>
-            {retry && <div className="jrn-small run-second">{c.second}</div>}
-            {!demo && q.card.id.startsWith("list-") && <div className="jrn-small run-own">{c.listWord}</div>}
-            {!demo && !q.card.id.startsWith("lvl-") && !q.card.id.startsWith("list-") && <div className="jrn-small run-own">{c.ownWord}</div>}
-            <div className="jrn-ask">{q.format === "build" ? c.whichBuild : q.format === "sense" ? c.whichSense : q.format === "odd" ? c.whichOdd : q.format === "meaning" ? c.whichMeaning : c.whichWord}</div>
-            {q.format !== "odd" && (
-              <div className="jrn-prompt-row">
-                <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "sense" ? q.sentence : q.format === "meaning" ? q.card.word : maskedMeaning(q.card)}</div>
-                <Say text={q.format === "sense" ? q.sentence ?? "" : q.format === "meaning" ? q.card.word : maskedMeaning(q.card)} label={c.hear} />
+            {!hallOn && <div className="jrn-step">{c.arrived(monster)}</div>}
+            {!hallOn && (
+              <div className="run-cages" aria-hidden="true">
+                {queue.map((x, i) => <i key={x.card.id} className={`${i < marks.length ? (marks[i] ? "is-free" : "is-held") : ""}${i === nowIdx ? " is-now" : ""}`} />)}
               </div>
             )}
+            {retry && <div className="jrn-small run-second">{c.second}</div>}
+            <div className="run-askbox">
+              <div className="jrn-ask">{q.format === "build" ? c.whichBuild : q.format === "sense" ? c.whichSense : q.format === "odd" ? c.whichOdd : q.format === "meaning" ? c.whichMeaning : c.whichWord}</div>
+              {q.format !== "odd" && (
+                <div className="jrn-prompt-row">
+                  <div className={`jrn-prompt${q.format === "meaning" ? " is-word" : ""}`} dir="auto">{q.format === "sense" ? q.sentence : q.format === "meaning" ? q.card.word : maskedMeaning(q.card)}</div>
+                  <Say text={q.format === "sense" ? q.sentence ?? "" : q.format === "meaning" ? q.card.word : maskedMeaning(q.card)} label={c.hear} />
+                </div>
+              )}
+            </div>
             {q.format === "build" && <BuildTiles key={q.card.id} word={q.card.word} extra={forChild ? 0 : 2} disabled={!!picked} onDone={(right) => void choose({ ...q.card, id: right ? q.card.id : `${q.card.id}#x` })} />}
             <div className="jrn-options">
               {q.options.map((o) => {
@@ -638,9 +645,10 @@ const RUN_CSS = `
    hall, so its colours stay around the question; the definition sits in one
    bubble and the four words are coloured tiles, two by two. */
 .run-room .jrn-play.run-q { background: none; border: 0; box-shadow: none; padding: 4px 0 12px; gap: 10px; width: min(560px, 100%); margin-inline: auto; }
-.run-q .jrn-step { color: #fff; background: rgba(20,24,40,.55); padding: 4px 14px; border-radius: 999px; font-size: 14px; }
-.run-q .jrn-ask { color: #fff; font-size: 17px; text-shadow: 0 2px 6px rgba(0,0,0,.6); }
-.run-q .jrn-prompt-row { width: 100%; flex-wrap: nowrap; background: #fffdf5; border: 4px solid var(--trim); border-radius: 20px; padding: 10px 14px; box-shadow: 0 6px 0 rgba(0,0,0,.22); }
+.run-q .run-askbox { width: 100%; display: grid; gap: 4px; justify-items: center; background: #fffdf5; border: 0; border-radius: 20px; padding: 10px 16px 12px; box-shadow: 0 10px 28px rgba(0,0,0,.28); }
+.run-q .jrn-ask { color: #6b5a3a; font-size: 15px; font-weight: 700; }
+.run-hall-title { position: fixed; z-index: 1; top: calc(var(--hall-h) - 66px); inset-inline: 16px; text-align: center; pointer-events: none; color: #fff; font-weight: 800; font-size: clamp(16px, 2.2vw, 20px); text-shadow: 0 2px 8px rgba(0,0,0,.65), 0 0 2px rgba(0,0,0,.5); }
+.run-q .jrn-prompt-row { width: 100%; flex-wrap: nowrap; }
 .run-q .jrn-prompt { font-size: 18px; line-height: 1.5; color: #14202b; min-width: 0; }
 .run-q .jrn-prompt.is-word { font-size: clamp(28px, 7vw, 40px); }
 .run-room .run-q .jrn-options { grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }

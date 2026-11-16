@@ -106,12 +106,35 @@ function scriptOf(text: string): string {
  *  never hands over the answer of "which word fits" or "build the word". */
 export function maskedMeaning(card: { word: string; meaning: string }): string {
   const w = card.word.trim();
-  const text = shortMeaning(card.meaning);
+  const text = promptMeaning(card.meaning);
   if (w.length < 2) return text;
   const esc = w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const he = /[א-ת]/.test(w);
-  const re = he ? new RegExp(`(^|[^\\u05D0-\\u05EA])([הובלכמש]{0,2})${esc}(?![\\u05D0-\\u05EA])`, "g") : new RegExp(`\\b${esc}\\b`, "gi");
-  return he ? text.replace(re, "$1$2…") : text.replace(re, "…");
+  // A letter of the word's own script, for the edges of the word.
+  const L = he ? "\\u05D0-\\u05EA" : "\\p{L}";
+  const word = `${he ? "[הובלכמש]{0,2}" : ""}${esc}`;
+  const or = he ? "או" : "or";
+  // The meaning names the word in a list of like words ("חיפוש או בדיקה",
+  // "checking or testing"): that part goes and the sentence still reads whole
+  // (Gadi 2026-11-16: "…" in the middle looked like a cut definition).
+  const out = text
+    .replace(new RegExp(`\\s*,?\\s+${or}\\s+${word}(?![${L}])`, "giu"), "")
+    .replace(new RegExp(`(^|[^${L}])${word}\\s+${or}\\s+`, "giu"), "$1")
+    .replace(new RegExp(`,\\s*${word}(?=\\s*,)`, "giu"), "");
+  // Anywhere else the word would give the answer away: a blank, seen as one.
+  const re = new RegExp(`(^|[^${L}])(${he ? "[הובלכמש]{0,2}" : ""})${esc}(?![${L}])`, "giu");
+  return out.replace(re, "$1$2____");
+}
+
+/** A meaning as a question: its first sentence, whole when it can be; a very
+ *  long one stops at a comma rather than in the middle of a phrase. */
+function promptMeaning(meaning: string): string {
+  const m = meaning.trim();
+  const end = m.search(/[.!?。؟](\s|$)/u);
+  const first = end > 20 ? m.slice(0, end + 1) : m;
+  if (first.length <= 220) return first;
+  const cut = first.lastIndexOf(",", 210);
+  return cut > 80 ? first.slice(0, cut) + "." : first.slice(0, 207).trimEnd() + "…";
 }
 
 export function shortMeaning(meaning: string): string {
