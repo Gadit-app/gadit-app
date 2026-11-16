@@ -44,7 +44,7 @@ export type RunOptions = {
   /** The runner is inside. `place` is 1 when nobody was ahead. */
   onArrive: (r: { place: number; sparks: number }) => void;
 };
-export type RunHandle = { steer: (dir: -1 | 1) => void; jump: () => void; dispose: () => void };
+export type RunHandle = { steer: (dir: -1 | 1) => void; lane: (lane: 0 | 1 | 2) => void; jump: () => void; dispose: () => void };
 
 const LANES = [-2.2, 0, 2.2];
 const LENGTH = 300;
@@ -424,6 +424,8 @@ export async function startRun(canvas: HTMLCanvasElement, o: RunOptions): Promis
 
   return {
     steer: (dir) => { if (!me.done) me.lane = Math.max(0, Math.min(2, me.lane + dir)); },
+    // The computer: the runner follows the mouse to the lane under it.
+    lane: (l) => { if (!me.done) me.lane = l; },
     jump: () => { if (!me.done && me.up === 0 && me.stumble <= 0) { me.vy = 10.5; o.onJump?.(); } },
     dispose: () => {
       stopped = true;

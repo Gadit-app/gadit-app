@@ -32,7 +32,7 @@ import { BuildTiles, Lesson, Say, PARTS_CSS } from "../parts";
 
 type Copy = {
   title: string; demo: string; holds: (name: string, n: number) => string; goFree: string; how: string; go: string;
-  sparks: string; place: (p: number, of: number) => string; left: string; right: string; jump: string; exit: string;
+  sparks: string; place: (p: number, of: number) => string; left: string; right: string; jump: string; exit: string; hintTouch: string; hintMouse: string;
   arrived: (name: string) => string; whichMeaning: string; whichWord: string; whichOdd: string; whichSense: string; senseYes: string; senseNo: string; whichBuild: string; hear: string; lesson: string; second: string; newToday: string; freed: string; held: (name: string) => string;
   nextWord: string; openGate: string; opened: string; freedCount: (n: number, of: number) => string; nextFort: string; backIndex: string;
   stillHolds: (name: string, n: number) => string; waitTomorrow: string; alsoNow: (names: string) => string;
@@ -47,6 +47,7 @@ const COPY: Record<string, Copy> = {
     holds: (name, n) => (n === 1 ? `${name} מחזיקה מילה אחת במבצר` : `${name} מחזיקה ${n} מילים במבצר`), goFree: "רוצו אל המבצר ושחררו אותן",
     how: "מזיזים את הדמות ימינה ושמאלה, קופצים מעל המכשולים ואוספים ניצוצות", go: "רצים",
     sparks: "ניצוצות", place: (p, of) => `מקום ${p} מתוך ${of}`, left: "שמאלה", right: "ימינה", jump: "קפיצה", exit: "יציאה",
+    hintTouch: "מחליקים ימינה ושמאלה כדי לזוז, ולמעלה כדי לקפוץ", hintMouse: "מזיזים את העכבר ימינה ושמאלה, ולוחצים כדי לקפוץ",
     arrived: (name) => `הגעתם למבצר של ${name}`, whichMeaning: "מה הפירוש של המילה?", whichWord: "איזו מילה מתאימה לפירוש?", whichOdd: "איזו מילה יוצאת דופן?", whichSense: "המשפט הזה הגיוני?", senseYes: "הגיוני", senseNo: "לא הגיוני", whichBuild: "הרכיבו את המילה שמתאימה לפירוש", hear: "להאזנה", lesson: "כך זה נכון", second: "עוד ניסיון אחד למילה שנשארה בכלוב", newToday: "המילים החדשות שמחכות במבצר היום",
     freed: "המילה שוחררה", held: (name) => `${name} עוד מחזיקה את המילה. היא תחכה לכם מחר, ולא איבדתם כלום`,
     nextWord: "למילה הבאה", openGate: "פותחים את המבצר", opened: "המבצר נפתח", freedCount: (n, of) => `שחררתם ${n} מתוך ${of} מילים`,
@@ -64,6 +65,7 @@ const COPY: Record<string, Copy> = {
     holds: (name, n) => (n === 1 ? `${name} keeps one word in the fortress` : `${name} keeps ${n} words in the fortress`), goFree: "Run to the fortress and set them free",
     how: "Move the runner left and right, jump over the blocks and collect sparks", go: "Run",
     sparks: "Sparks", place: (p, of) => `Place ${p} of ${of}`, left: "Left", right: "Right", jump: "Jump", exit: "Exit",
+    hintTouch: "Swipe left and right to move, and up to jump", hintMouse: "Move the mouse left and right, and click to jump",
     arrived: (name) => `You reached the fortress of ${name}`, whichMeaning: "What does the word mean?", whichWord: "Which word fits the meaning?", whichOdd: "Which word does not belong?", whichSense: "Does this sentence make sense?", senseYes: "It makes sense", senseNo: "It does not", whichBuild: "Build the word that fits the meaning", hear: "Listen", lesson: "This is the right one", second: "One more try for a word still in its cage", newToday: "The new words that wait in the fortress today",
     freed: "The word is free", held: (name) => `${name} still keeps this word. It waits for you tomorrow, and nothing was lost`,
     nextWord: "Next word", openGate: "Open the fortress", opened: "The fortress is open", freedCount: (n, of) => `You freed ${n} of ${of} words`,
@@ -162,6 +164,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
   const [hallOn, setHallOn] = useState(false);
   const shown = useRef({ part: -1, place: 0 });
   const touch = useRef<{ x: number; y: number } | null>(null);
+  const [mouse, setMouse] = useState(false);
 
   const stageKey = user ? `gadit-journey-stage:${user.uid}` : "";
   const load = useCallback(async () => {
@@ -186,7 +189,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     const byId = new Map(data.cards.map((x) => [x.id, x]));
     // The sample game: every fortress keeps other words.
     const todays: Data["todays"] = demo
-      ? Array.from({ length: 6 }, (_, i) => ({ id: data.cards[(stage * 6 + i) % data.cards.length].id, format: i % 3 === 2 ? "build" : i % 2 ? "word" : "meaning" }))
+      ? Array.from({ length: 6 }, (_, i) => ({ id: data.cards[(stage * 6 + i) % data.cards.length].id, format: i % 3 === 2 ? "build" : "word" }))
       : data.todays;
     return todays.map((t) => { const card = byId.get(t.id); return card ? makeQuestion(card, t.format, data.cards, forChild, t.odd, t.sense) : null; }).filter((q): q is Question => !!q);
   }, [data, forChild, demo, stage]);
@@ -222,6 +225,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     void seeOthers();
     setQueue(questions); setAt(0); setPicked(null); setResult(null); setMarks([]); setRetry(null); setRetryAt(0);
     setSparks(0); setPlace(1); setPart(0); setFading(false); shown.current = { part: -1, place: 0 };
+    setMouse(typeof window !== "undefined" && window.matchMedia("(hover: hover) and (pointer: fine)").matches);
     setPhase("run");
   };
 
@@ -342,7 +346,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
       // One more try for every word that stayed in its cage, asked another way.
       const missed = marks.map((ok, i) => (ok ? -1 : i)).filter((i) => i >= 0);
       const again = missed
-        .map((i) => { const first = queue[i]; const other = makeQuestion(first.card, first.format === "meaning" ? "word" : "meaning", data?.cards ?? [], forChild); return other ? { q: other, i } : null; })
+        .map((i) => { const first = queue[i]; const other = makeQuestion(first.card, first.format === "build" ? "word" : "build", data?.cards ?? [], forChild); return other ? { q: other, i } : null; })
         .filter((x): x is { q: Question; i: number } => !!x);
       if (again.length) { setRetry(again); setRetryAt(0); return; }
     }
@@ -366,13 +370,24 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
     return (
       <div className="run-stage" dir={dir}>
         <style>{RUN_CSS}</style>
-        <canvas ref={canvasRef} className="run-canvas" onPointerDown={(e) => { touch.current = { x: e.clientX, y: e.clientY }; }}
+        {/* No buttons on the screen (Gadi's son, 2026-11-16: "the arrows and the
+            jump are not needed, no game works like that today"). A phone: swipe
+            to the side to move, swipe up to jump, a tap moves to the side that
+            was tapped. A computer: the runner follows the mouse, a click jumps.
+            The arrow keys and the space bar still work. */}
+        <canvas ref={canvasRef} className="run-canvas"
+          onPointerDown={(e) => { touch.current = { x: e.clientX, y: e.clientY }; }}
+          onPointerMove={(e) => {
+            if (e.pointerType !== "mouse") return;
+            const w = window.innerWidth;
+            runRef.current?.lane(e.clientX < w / 3 ? 0 : e.clientX > (w * 2) / 3 ? 2 : 1);
+          }}
           onPointerUp={(e) => {
-            // A swipe up is a jump; a tap moves to the side that was tapped.
             const t = touch.current; touch.current = null;
             if (!t) return;
             const dx = e.clientX - t.x, dy = e.clientY - t.y;
             if (dy < -36 && Math.abs(dy) > Math.abs(dx)) runRef.current?.jump();
+            else if (e.pointerType === "mouse") runRef.current?.jump();
             else if (Math.abs(dx) > 36) runRef.current?.steer(dx < 0 ? -1 : 1);
             else runRef.current?.steer(e.clientX < window.innerWidth / 2 ? -1 : 1);
           }} />
@@ -383,11 +398,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
         </div>
         <div className="run-bar" aria-hidden="true"><i style={{ width: `${part}%` }} /></div>
         <div className={`run-fade${fading ? " is-on" : ""}`} aria-hidden="true" />
-        <div className="run-keys" dir="ltr">
-          <button type="button" aria-label={c.left} onClick={() => runRef.current?.steer(-1)}>‹</button>
-          <button type="button" className="is-jump" aria-label={c.jump} onClick={() => runRef.current?.jump()}>{c.jump}</button>
-          <button type="button" aria-label={c.right} onClick={() => runRef.current?.steer(1)}>›</button>
-        </div>
+        <div className="run-hint" aria-live="polite">{mouse ? c.hintMouse : c.hintTouch}</div>
       </div>
     );
   }
@@ -462,7 +473,7 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
         )}
 
         {ready && phase === "fort" && q && (
-          <section ref={cardRef} className="jrn-play" aria-live="polite">
+          <section ref={cardRef} className="jrn-play run-q" aria-live="polite">
             {!hallOn && <Monster kind={stage} sad={!!result?.correct} />}
             <div className="jrn-step">{c.arrived(monster)}</div>
             <div className="run-cages" aria-hidden="true">
@@ -544,10 +555,9 @@ const RUN_CSS = `
 .run-chip.is-exit { pointer-events: auto; cursor: pointer; background: rgba(20,32,43,.72); color: #fff; }
 .run-bar { position: absolute; inset-inline: 16px; top: calc(env(safe-area-inset-top, 0px) + 62px); height: 8px; border-radius: 999px; background: rgba(255,255,255,.55); overflow: hidden; direction: ltr; }
 .run-bar i { display: block; height: 100%; background: #0a7472; border-radius: 999px; }
-.run-keys { position: absolute; inset-inline: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); display: flex; justify-content: space-between; pointer-events: none; }
-.run-keys button { pointer-events: auto; width: 84px; height: 84px; border: 0; border-radius: 50%; background: rgba(255,255,255,.9); color: #0a7472; font-size: 56px; font-weight: 800; line-height: 1; cursor: pointer; box-shadow: 0 5px 0 rgba(10,116,114,.45); display: grid; place-items: center; padding: 0 0 8px; }
-.run-keys button:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(10,116,114,.45); }
-.run-keys button.is-jump { width: auto; min-width: 120px; padding: 0 26px; border-radius: 999px; font-size: 22px; align-self: end; height: 64px; }
+.run-hint { position: absolute; inset-inline: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 28px); width: fit-content; max-width: calc(100% - 32px); margin-inline: auto; padding: 10px 18px; border-radius: 999px; background: rgba(20,32,43,.62); color: #fff; font-weight: 700; font-size: 16px; line-height: 1.4; text-align: center; pointer-events: none; opacity: 0; animation: run-hint 5s ease .6s forwards; }
+@keyframes run-hint { 0% { opacity: 0; transform: translateY(8px); } 12%, 82% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .run-hint { animation: none; opacity: 1; } }
 .run-room { min-height: 100dvh; --j-ink: #14202b; --j-soft: #47586a; --j-surface: #fffdf5; --j-line: #e2d6b8; --wall: #7d8a99; --trim: #d9534f; --sky: #bfe8ff; --land: #7cc46a;
   background-color: var(--wall);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='64'%3E%3Cg fill='none' stroke='%23000' stroke-opacity='.2' stroke-width='3'%3E%3Cpath d='M0 1.5h96M0 33.5h96M24 0v32M72 0v32M0 32v32M48 32v32M96 32v32'/%3E%3C/g%3E%3C/svg%3E"); }
@@ -624,6 +634,25 @@ const RUN_CSS = `
 .run-road i { display: block; width: 132px; height: 74px; border-radius: 10px; }
 .run-road.is-on { box-shadow: 0 0 0 3px #0a7472 inset; }
 .run-own { font-weight: 700; color: #7a5a00; background: #fff3c4; padding: 3px 12px; border-radius: 999px; }
+/* The question in the fortress (Gadi 2026-11-16): no white sheet over the
+   hall, so its colours stay around the question; the definition sits in one
+   bubble and the four words are coloured tiles, two by two. */
+.run-room .jrn-play.run-q { background: none; border: 0; box-shadow: none; padding: 4px 0 12px; gap: 10px; width: min(560px, 100%); margin-inline: auto; }
+.run-q .jrn-step { color: #fff; background: rgba(20,24,40,.55); padding: 4px 14px; border-radius: 999px; font-size: 14px; }
+.run-q .jrn-ask { color: #fff; font-size: 17px; text-shadow: 0 2px 6px rgba(0,0,0,.6); }
+.run-q .jrn-prompt-row { width: 100%; flex-wrap: nowrap; background: #fffdf5; border: 4px solid var(--trim); border-radius: 20px; padding: 10px 14px; box-shadow: 0 6px 0 rgba(0,0,0,.22); }
+.run-q .jrn-prompt { font-size: 18px; line-height: 1.5; color: #14202b; min-width: 0; }
+.run-q .jrn-prompt.is-word { font-size: clamp(28px, 7vw, 40px); }
+.run-room .run-q .jrn-options { grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+.run-room .run-q .jrn-option { --tile: #f97316; --tile-d: #c2410c; min-height: 64px; padding: 8px 10px; border-radius: 18px; background: var(--tile); color: #fff; font-size: clamp(19px, 5.4vw, 26px); font-weight: 800; line-height: 1.25; text-shadow: 0 1px 2px rgba(0,0,0,.25); box-shadow: 0 5px 0 var(--tile-d); overflow-wrap: anywhere; }
+.run-room .run-q .jrn-option:nth-child(2) { --tile: #8b5cf6; --tile-d: #6d28d9; }
+.run-room .run-q .jrn-option:nth-child(3) { --tile: #0ea5a5; --tile-d: #0b7a7a; }
+.run-room .run-q .jrn-option:nth-child(4) { --tile: #ec4899; --tile-d: #be185d; }
+.run-room .run-q .jrn-option:not([aria-disabled]):active { transform: translateY(3px); box-shadow: 0 2px 0 var(--tile-d); }
+.run-room .run-q .jrn-option[aria-disabled="true"] { opacity: .5; }
+.run-room .run-q .jrn-option.is-right { --tile: #22c55e; --tile-d: #15803d; opacity: 1; box-shadow: 0 5px 0 var(--tile-d), 0 0 0 4px #fff inset; }
+.run-room .run-q .jrn-option.is-other { --tile: #94a3b8; --tile-d: #64748b; opacity: 1; }
+.run-q .jrn-result { width: 100%; background: #fffdf5; border-radius: 20px; padding: 12px 14px; box-shadow: 0 6px 0 rgba(0,0,0,.22); }
 .run-cages { display: inline-flex; gap: 6px; flex-wrap: wrap; justify-content: center; direction: ltr; }
 .run-cages i { width: 22px; height: 28px; border-radius: 6px; background: #eef2f6; box-shadow: 0 0 0 2px #b8c4d0 inset; }
 .run-cages i.is-now { box-shadow: 0 0 0 3px #0a7472 inset; }

@@ -138,16 +138,19 @@ export function makeQuestion(card: CardView, format: string | null, all: CardVie
       ],
     };
   }
-  if (format === "sense") format = "meaning";
+  if (format === "sense") format = "word";
   // Build the word from letter tiles: no answers to choose from.
   if (format === "build" && buildable(card.word)) return { card, format: "build", options: [] };
-  if (format === "build") format = "meaning";
+  if (format === "build") format = "word";
   // Odd one out: the word that does not belong carries the card's id, so
   // "the right answer is the card" holds here as in the other formats.
   if (format === "odd" && odd && odd.options.length === 4 && odd.options.includes(odd.odd)) {
     return { card, format: "odd", options: shuffle(odd.options.map((w, i) => ({ ...card, id: w === odd.odd ? card.id : `${card.id}#${i}`, word: w, meaning: "" }))) };
   }
-  if (format === "odd") format = "meaning";
+  if (format === "odd") format = "word";
+  // The definition is shown and the child picks the word among four tiles:
+  // four long definitions to read took the whole screen (Gadi 2026-11-16).
+  if (format !== "word") format = "word";
   const others = shuffle(all.filter((c) => c.id !== card.id && c.word !== card.word && c.meaning !== card.meaning && !(forChild && isRude(c))));
   // The three answers are written in one script: a meaning in another
   // language gives the answer away (Gadi 2026-11-14). Among those, words of
@@ -195,7 +198,7 @@ export function demoData(lang = "he"): Data {
     stars, known: !!frame, frame: frame ?? "plain", dueDay: i % 3 === 0 || !frame ? today : "2027-01-01", due: (i % 3 === 0 || !frame) && i !== 17,
   }));
   const frameCoins: Record<Frame, number> = { plain: 10, silver: 30, gold: 70, rainbow: 150, diamond: 310 };
-  const todays = [10, 11, 12, 3, 6, 14, 15, 16].map((i, n) => ({ id: "demo" + i, format: n % 2 ? "word" : "meaning" }));
+  const todays = [10, 11, 12, 3, 6, 14, 15, 16].map((i, n) => ({ id: "demo" + i, format: n % 2 ? "word" : "build" }));
   return {
     today, dailyMax: 8, usedToday: 0, starsToKnow: 3, cards, todays, frameCoins, stage: 3, roads: { "1": 2, "2": 1 },
     coins: cards.reduce((n, x) => n + (x.known ? frameCoins[x.frame] : 0), 0),

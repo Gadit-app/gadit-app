@@ -35,7 +35,10 @@ import {
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+/** Formats an answer may carry ("meaning" from an older page is still read). */
 const FORMATS = ["meaning", "word"];
+/** What a card is asked in: the definition, and the child picks the word (Gadi 2026-11-16). */
+const ASK = ["word"];
 /** "Odd one out" is asked only of a card that has a checked question (lib/journey/odd.ts). */
 const ODD = "odd";
 /** "Does this sentence make sense?", asked only of a level card that has a checked sentence. */
@@ -206,10 +209,10 @@ export async function GET(req: NextRequest) {
     // A phrase or a long word keeps a checked question as its third.
     let h = 0; for (let i = 0; i < c.id.length; i++) h = (h * 31 + c.id.charCodeAt(i)) >>> 0;
     const third = buildable((c as Stored).word) ? BUILD : o && s ? (h % 2 ? ODD : SENSE) : o ? ODD : s ? SENSE : null;
-    const format = pickFormat(c, third ? [...FORMATS, third] : FORMATS);
+    const format = pickFormat(c, third ? [...ASK, third] : ASK);
     if (format === ODD && o) return { id: c.id, format, odd: o };
     if (format === SENSE && s) return { id: c.id, format, sense: s };
-    return { id: c.id, format: format === ODD || format === SENSE ? FORMATS[0] : format };
+    return { id: c.id, format: format === ODD || format === SENSE ? ASK[0] : format };
   });
   const [stateSnap, worldSnap] = await Promise.all([stateOf(user.userId).get(), worldOf().get()]);
   const state = stateSnap.data() ?? {};
