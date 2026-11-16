@@ -116,7 +116,7 @@ function fold(s: string): string {
  *  "serve", "בהתמדה" of "התמדה", "مكتوب" of "كتب"): the base's letters show
  *  in order inside the answer, one may be missing on longer words. Stops the
  *  writer from swapping in a word of its own ("נזהרו" claimed as "ירא"). */
-function isFormOf(answer: string, base: string, lang: string): boolean {
+export function isFormOf(answer: string, base: string, lang: string): boolean {
   const a = fold(answer);
   const b = fold(base);
   if (!a || !b) return false;
@@ -128,7 +128,45 @@ function isFormOf(answer: string, base: string, lang: string): boolean {
     if (k < 0) { missing++; continue; }
     at = k + 1;
   }
-  return missing <= (b.length >= 4 || NO_SPACES.has(lang) ? 1 : 0);
+  if (missing <= (b.length >= 4 || NO_SPACES.has(lang) ? 1 : 0)) return true;
+  return lang === "he" && isHebrewFormOf(a, b);
+}
+
+/** The letters of a Hebrew word that stay in all its forms: the ל of an
+ *  infinitive and its ות ending go (לגלות → גל), and so do the vowel letters
+ *  ו and י after the first letter, which come and go between forms. */
+function heStem(folded: string, isBase: boolean): string {
+  let s = folded;
+  if (isBase && s.length >= 4 && s[0] === "ל") {
+    s = s.slice(1);
+    if (s.length >= 4 && s.endsWith("ות")) s = s.slice(0, -2);
+  }
+  return s.slice(0, 1) + s.slice(1).replace(/[וי]/g, "");
+}
+
+/**
+ * A Hebrew practice word is often a verb in its infinitive, and a story says
+ * it in another tense or person: "גילה" of "לגלות", "חילקה" of "לחלוק",
+ * "מקשיבים" of "להקשיב" (Gadi 2026-11-16: good Hebrew stories were thrown away
+ * for this). The stem's letters must show in order, starting within the
+ * first three letters (a prefix such as ו, ה, ש, מ, נ, ת) and leaving at most
+ * three after it (an ending such as ה, נו, תי, ים, ות); a longer stem may miss
+ * one letter (the ה of "לגלות" in "גילינו"). Letters only, already folded.
+ */
+function isHebrewFormOf(a: string, b: string): boolean {
+  const stem = heStem(b, true);
+  const ans = heStem(a, false);
+  if (stem.length < 2 || !ans) return false;
+  let at = 0, first = -1, last = -1, missing = 0;
+  for (const ch of stem) {
+    const k = ans.indexOf(ch, at);
+    if (k < 0) { missing++; continue; }
+    if (first < 0) first = k;
+    last = k;
+    at = k + 1;
+  }
+  if (first < 0 || first > 2 || ans.length - 1 - last > 3) return false;
+  return missing <= (stem.length >= 3 ? 1 : 0) && missing < stem.length - 1;
 }
 
 /** Checks one story from the model; null when it is broken. */

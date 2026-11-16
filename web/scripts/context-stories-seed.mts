@@ -35,7 +35,8 @@
  * --budget=D   hard stop once this run has spent D dollars (default 1)
  * --spent=D    dollars spent in earlier runs, added to the printed total only
  * --combos     lang:ui+ui:kids, comma separated (default: the 4 curated pools)
- * --source     curated (default) | bank
+ * --source     curated (default) | bank | kids60 (the 60 built-in Kids Mode words
+ *              of src/lib/play-content/context-kids-words.ts, kids combinations only)
  * --dry        call the model, save and delete nothing
  *
  * Needs the Firebase service account at C:\Users\gadib\.secrets\gadit-firebase-sa.json
@@ -47,6 +48,7 @@ import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { applyContextCheck, contextCheckMessages, contextMessages, langName, parseContextRounds, storyDoc, CONTEXT_STORE } from "../src/lib/context-game.ts";
 import { getCuratedPlayPool } from "../src/lib/play-content/curated-play-words.ts";
+import { CONTEXT_KIDS_WORDS } from "../src/lib/play-content/context-kids-words.ts";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -80,6 +82,7 @@ const groups: Group[] = (arg("combos") ?? DEFAULT).split(",").map((c) => {
 });
 
 async function poolOf(g: Group): Promise<string[]> {
+  if (SOURCE === "kids60") return g.kids ? CONTEXT_KIDS_WORDS[g.lang] ?? [] : [];
   if (SOURCE === "bank") {
     // Kids Mode takes the first levels, the older reader the upper ones.
     const fits = (d: number) => (g.kids ? d <= 3 : d >= 3);

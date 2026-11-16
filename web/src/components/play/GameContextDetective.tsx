@@ -31,6 +31,8 @@ import { useAuth } from "@/lib/auth-context";
 import type { PlayWord } from "@/lib/play-engine";
 import { dirForLang, sample, shuffle, wordLangOf } from "@/lib/play-engine";
 import { CONTEXT_POOL_MAX, CONTEXT_ROUNDS, type ContextRound } from "@/lib/context-game";
+import { CONTEXT_KIDS_WORDS } from "@/lib/play-content/context-kids-words";
+import { getCuratedPlayPool } from "@/lib/play-content/curated-play-words";
 import { GameResult } from "./GameResult";
 import { reportAnswer } from "@/lib/learn/report";
 import type { PlayT } from "./GameQuiz";
@@ -65,9 +67,18 @@ function pickWords(pool: PlayWord[], ui: string, kids: boolean): { words: string
     if (g.length > bestN || (g.length === bestN && l === ui)) { best = l; bestN = g.length; }
   }
   // Newest words come first in the pool: lean on them, mixed with a few others.
-  const g = groups.get(best) ?? [];
+  const g = [...(groups.get(best) ?? [])];
   const n = kids ? 6 : 9;
-  const fresh = g.slice(0, Math.min(g.length, n * 2));
+  // Kids Mode: the 60 built-in words of the story language come after the
+  // child's own, and a child with few words of their own draws from all of
+  // them, so the stories written ahead for them rotate instead of the same
+  // dozen coming back (Gadi 2026-11-16).
+  const builtin = kids ? CONTEXT_KIDS_WORDS[best] ?? [] : [];
+  const key = (w: string) => w.normalize("NFC").toLowerCase();
+  const notOwn = new Set([...builtin, ...getCuratedPlayPool("he", true).map((p) => p.word), ...getCuratedPlayPool("en", true).map((p) => p.word)].map(key));
+  const own = g.filter((w) => !notOwn.has(key(w))).length;
+  for (const w of builtin) if (!g.some((x) => same(x, w))) g.push(w);
+  const fresh = !kids || own >= n ? g.slice(0, Math.min(g.length, n * 2)) : g;
   // `all`: every word of that language, for the ready stories (2026-11-12).
   return { words: sample(fresh, n), all: g.slice(0, CONTEXT_POOL_MAX), wordLang: best || ui };
 }
