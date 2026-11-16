@@ -436,7 +436,8 @@ export function RunClient({ demo = false }: { demo?: boolean }) {
       {phase !== "intro" && <><i className="run-torch is-a" aria-hidden="true" /><i className="run-torch is-b" aria-hidden="true" /></>}
       <div className="jrn-wrap">
         {!demo && !authLoading && !user && <p className="jrn-note">{c.signIn}</p>}
-        {user && state === "loading" && !data && <RoadLoading text={c.loading} kind={stage} />}
+        {/* The road scene from the very first moment, also while we still learn who is signed in, so the first screen is never empty. */}
+        {((authLoading && !ready) || (user && state === "loading" && !data)) && <RoadLoading text={c.loading} kind={stage} />}
         {user && state === "failed" && (
           <p className="jrn-note">{c.failed} <button type="button" className="jrn-btn is-ghost" onClick={() => { setState("loading"); void load(); }}>{c.retry}</button></p>
         )}
@@ -609,11 +610,13 @@ const RUN_CSS = `
 @media (min-width: 1040px) { .run-torch { display: block; } }
 @media (prefers-reduced-motion: reduce) { .run-torch::before, .run-room:not(.is-out) { animation: none; } }
 /* The open air before the 3D scene: a sky that warms towards the horizon and soft
-   hills in the colours of today's road, never two flat halves (Gadi 2026-11-16). */
+   hills in the colours of today's road, never two flat halves (Gadi 2026-11-16).
+   The hills end in a sharp edge: a 1% fade on a screen-wide ellipse smeared
+   over tens of pixels and looked out of focus (Gadi 2026-11-16). */
 .run-room.is-out { background-image:
-  radial-gradient(130% 55% at 50% 108%, color-mix(in srgb, var(--land) 88%, #000 10%) 0 60%, transparent 61%),
-  radial-gradient(75% 38% at 12% 74%, color-mix(in srgb, var(--land) 80%, #fff 20%) 0 58%, transparent 59%),
-  radial-gradient(80% 40% at 90% 76%, var(--land) 0 58%, transparent 59%),
+  radial-gradient(130% 55% at 50% 108%, color-mix(in srgb, var(--land) 88%, #000 10%) 0 60%, transparent calc(60% + 1.5px)),
+  radial-gradient(75% 38% at 12% 74%, color-mix(in srgb, var(--land) 80%, #fff 20%) 0 58%, transparent calc(58% + 1.5px)),
+  radial-gradient(80% 40% at 90% 76%, var(--land) 0 58%, transparent calc(58% + 1.5px)),
   linear-gradient(180deg, color-mix(in srgb, var(--sky) 70%, #5aa9ff 30%) 0%, var(--sky) 40%, #fff3d6 66%); }
 .run-loading { min-height: calc(100dvh - 40px); display: grid; grid-template-rows: auto minmax(0, 1fr); justify-items: center; align-content: stretch; gap: 8px; padding-top: 12vh; }
 .run-loading-text { margin: 0; font-size: clamp(20px, 3vw, 26px); font-weight: 800; color: #14404a; text-shadow: 0 1px 0 rgba(255,255,255,.7); }
