@@ -23,6 +23,7 @@ type Data = {
 const S = {
   he: {
     title: "העוזר של Gadit", on: "פועל", off: "כבוי", turnOn: "להפעיל", turnOff: "לכבות", testers: "רק בודקים וחשבונות שלנו", all: "כל המשתמשים המחוברים (מבוגרים)",
+    live: "מתעדכן לבד כל 20 שניות",
     today: "היום", questions: "שאלות", cost: "עלות", handed: "הועברו לאדם", helped: "עזר", notHelped: "לא עזר",
     evalTitle: "בדיקה אחרונה", passed: "עברו", failed: "נכשלו", showAll: "להראות את כל המקרים", hideAll: "להסתיר",
     logTitle: "שיחות", onlyHanded: "רק מה שהועבר לאדם", onlyBad: "רק 'לא עזר'", search: "חיפוש", none: "אין עדיין שיחות", load: "טוען", err: "הטעינה נכשלה",
@@ -34,6 +35,7 @@ const S = {
   },
   en: {
     title: "Gadit help assistant", on: "On", off: "Off", turnOn: "Turn on", turnOff: "Turn off", testers: "Testers and our accounts only", all: "Every signed-in adult",
+    live: "Updates by itself every 20 seconds",
     today: "Today", questions: "questions", cost: "cost", handed: "handed to a person", helped: "helpful", notHelped: "not helpful",
     evalTitle: "Last test run", passed: "passed", failed: "failed", showAll: "Show every case", hideAll: "Hide",
     logTitle: "Conversations", onlyHanded: "Handed to a person only", onlyBad: "'Not helpful' only", search: "Search", none: "No conversations yet", load: "Loading", err: "Loading failed",
@@ -67,6 +69,13 @@ export default function AdminHelpChatClient() {
     } catch { setState("failed"); }
   }, [secret]);
   useEffect(() => { const id = window.setTimeout(() => { void load(); }, 0); return () => window.clearTimeout(id); }, [load]);
+  // Live (Gadi 2026-11-16: "I want to see it work live" while subscribers try
+  // it): the log and today's numbers reload every 20 seconds while the tab is
+  // seen. The knowledge-base form keeps its own state, so nothing typed is lost.
+  useEffect(() => {
+    const id = window.setInterval(() => { if (document.visibilityState === "visible") void load(); }, 20000);
+    return () => window.clearInterval(id);
+  }, [load]);
 
   const save = async (patch: { enabled?: boolean; audience?: string }) => {
     await fetch(`/api/admin/help-chat?secret=${encodeURIComponent(secret)}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patch) });
@@ -187,6 +196,7 @@ export default function AdminHelpChatClient() {
       <section style={card}>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginBottom: 10 }}>
           <h2 style={{ margin: 0, fontSize: 17 }}>{t.logTitle} ({logs.length})</h2>
+          <span style={{ fontSize: 12, color: "#6B7280" }}>● {t.live}</span>
           <label><input type="checkbox" checked={onlyHanded} onChange={(e) => setOnlyHanded(e.target.checked)} /> {t.onlyHanded}</label>
           <label><input type="checkbox" checked={onlyBad} onChange={(e) => setOnlyBad(e.target.checked)} /> {t.onlyBad}</label>
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t.search} style={{ padding: "4px 10px", border: "1px solid #E5E7EB", borderRadius: 8 }} />
