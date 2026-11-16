@@ -109,16 +109,20 @@ body:has(.wb-play-header-report) .gbm { bottom: calc(env(safe-area-inset-bottom,
 :root[dir="ltr"] body:has(.hc-fab) .gbm { bottom: calc(env(safe-area-inset-bottom, 0px) + 78px); }
 .gbm-link { pointer-events: auto; text-decoration: none; line-height: 1; }
 /* No box: a soft light halo keeps the word readable over any picture. */
-.gbm-word { font-family: var(--wb-serif, Georgia, "Times New Roman", serif); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; color: #14202b; line-height: 1; text-shadow: 0 0 4px rgba(255,255,255,.85), 0 0 10px rgba(255,255,255,.55); }
+/* The official wordmark, exactly as in the site header (.wb-wordmark): Inter
+   600, "it" teal italic 500. This mark lives outside .wordbook, so the font is
+   named here and not taken from a .wordbook token (that fell back to Georgia,
+   Gadi 2026-11-16: "the logo is in the wrong font"). */
+.gbm-word { font-family: var(--font-inter, "Inter"), "Inter", system-ui, sans-serif; font-size: 18px; font-weight: 600; letter-spacing: -0.015em; color: #0B1220; line-height: 1; text-shadow: 0 0 4px rgba(255,255,255,.85), 0 0 10px rgba(255,255,255,.55); }
 .gbm.is-game .gbm-word { font-size: 15px; }
-.gbm-it { color: #0a7472; font-style: italic; font-weight: 400; }
+.gbm-it { color: #0E7490; font-style: italic; font-weight: 500; }
 @media print { .gbm { display: none; } }
 `;
 
 const GB_INLINE_CSS = `
 .gb-inline { display: inline-flex; line-height: 1; opacity: .85; }
-.gb-inline-word { font-family: var(--wb-serif, Georgia, "Times New Roman", serif); font-size: 19px; font-weight: 500; letter-spacing: -0.02em; text-decoration: none; color: #14202b; }
-.gb-inline-it { color: #0a7472; font-style: italic; font-weight: 400; }
+.gb-inline-word { font-family: var(--font-inter, "Inter"), "Inter", system-ui, sans-serif; font-size: 19px; font-weight: 600; letter-spacing: -0.015em; text-decoration: none; color: #0B1220; }
+.gb-inline-it { color: #0E7490; font-style: italic; font-weight: 500; }
 .gb-inline.is-dark .gb-inline-word { color: #fff; }
 .gb-inline.is-dark .gb-inline-it { color: #7fe0db; }
 `;
