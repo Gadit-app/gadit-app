@@ -7,7 +7,7 @@
  * returns to /coach. Mounted globally in layout; renders nothing for ordinary
  * sessions. Gadi 2026-08-22.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
@@ -57,43 +57,59 @@ const LABEL: Record<string, { coaching: (name: string) => string; exit: string }
 };
 function lbl(lang: string) { return LABEL[lang] ?? LABEL.en; }
 
+// The coach session flag, kept for the browser session so the bar is there on
+// the first paint of every navigation inside a coach session (Gadi 2026-08-27).
+// Read through useSyncExternalStore: the server (and the hydrating client)
+// sees "no bar", then the client shows it at once. Reading sessionStorage in
+// a useState initializer made a full refresh during coaching render a bar the
+// server never sent, a hydration error (React #418, 2026-11-17).
+const COACH_KEY = "gadit-coach-active";
+const flagListeners = new Set<() => void>();
+function readCoachFlag(): boolean {
+  try { return sessionStorage.getItem(COACH_KEY) === "1"; } catch { return false; }
+}
+function writeCoachFlag(on: boolean) {
+  try {
+    if (on) sessionStorage.setItem(COACH_KEY, "1");
+    else sessionStorage.removeItem(COACH_KEY);
+  } catch { /* ignore */ }
+  flagListeners.forEach((l) => l());
+}
+function subscribeCoachFlag(l: () => void) {
+  flagListeners.add(l);
+  return () => { flagListeners.delete(l); };
+}
+
 export function CoachSessionBanner() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const { lang, dir } = useLang();
   const router = useRouter();
-  // Seed from a session flag so the banner is present on the first paint of
-  // every navigation WITHIN a coach session, instead of resolving the token
-  // claim async each time and shoving the page down (Gadi 2026-08-27). The flag
-  // lives only for the browser session and is reconciled below.
-  const [isCoach, setIsCoach] = useState<boolean>(() => {
-    try { return typeof window !== "undefined" && sessionStorage.getItem("gadit-coach-active") === "1"; } catch { return false; }
-  });
+  // The session flag (see writeCoachFlag), reconciled with the token below.
+  const isCoach = useSyncExternalStore(subscribeCoachFlag, readCoachFlag, () => false);
   const [name, setName] = useState("");
 
   useEffect(() => {
+    // While sign-in is still resolving, keep the flag: dropping it here made
+    // the bar vanish and come back on every refresh during coaching.
+    if (loading) return;
     let cancelled = false;
     (async () => {
       if (!user) {
-        setIsCoach(false);
-        try { sessionStorage.removeItem("gadit-coach-active"); } catch { /* ignore */ }
+        writeCoachFlag(false);
         return;
       }
       try {
         const res = await user.getIdTokenResult();
         if (cancelled) return;
         const coach = res.claims?.coach === true;
-        setIsCoach(coach);
         setName(user.displayName || "");
-        try {
-          if (coach) sessionStorage.setItem("gadit-coach-active", "1");
-          else sessionStorage.removeItem("gadit-coach-active");
-        } catch { /* ignore */ }
+        writeCoachFlag(coach);
       } catch {
-        if (!cancelled) setIsCoach(false);
+        if (!cancelled) writeCoachFlag(false);
       }
     })();
     return () => { cancelled = true; };
-  }, [user]);
+  }, [user, loading]);
 
   if (!isCoach) return null;
   const c = lbl(lang);
