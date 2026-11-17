@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   description: "Gadit 特定商取引法に基づく表記 (Legal notice under the Act on Specified Commercial Transactions).",
 };
 
-const LAST_UPDATED = "November 2, 2026";
+const LAST_UPDATED = "2026-11-02"; // ISO day; LegalPage writes it in the document's language
 
 const Mail = () => <a href={`mailto:${SELLER.email}`}>{SELLER.email}</a>;
 

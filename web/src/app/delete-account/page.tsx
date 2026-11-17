@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "How to delete your Gadit account and what data is removed.",
 };
 
-const LAST_UPDATED = "August 19, 2026";
+const LAST_UPDATED = "2026-08-19"; // ISO day; LegalPage writes it in the document's language
 
 const EnglishBody = () => (
   <>

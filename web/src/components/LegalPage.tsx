@@ -139,12 +139,31 @@ const BACK_LABEL: Record<string, string> = {
   hu: "Vissza a Gadithoz",
 };
 
+/** "2026-10-25" in the document's language ("25 באוקטובר 2026", "October 25,
+ *  2026"); the Hebrew page showed the English date (Gadi 2026-11-17). Any
+ *  other string is shown as given. */
+function formatUpdated(day: string, lang: string): string {
+  const m = day.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return day;
+  const date = new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
+  // Gregorian everywhere (Persian and Thai would switch calendar); a language
+  // the runtime has no data for falls back to English, not to the device's.
+  const opts: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric", timeZone: "UTC", calendar: "gregory" };
+  try {
+    const known = Intl.DateTimeFormat.supportedLocalesOf([lang]).length > 0;
+    return new Intl.DateTimeFormat(known ? lang : "en", opts).format(date);
+  } catch {
+    return new Intl.DateTimeFormat("en", opts).format(date);
+  }
+}
+
 export default function LegalPage({
   locales,
   lastUpdated,
   bindingNotice = true,
 }: {
   locales: Partial<Record<Lang, LocaleContent>>;
+  /** ISO day ("2026-10-25"), written in the document's language. */
   lastUpdated: string;
   /** false for a document whose binding text is not English (the Japanese
    *  特定商取引法 disclosure), so the "English version governs" line is hidden. */
@@ -237,7 +256,7 @@ export default function LegalPage({
           </h1>
           <p className="text-xs text-slate-400 mb-8">
             {LAST_UPDATED_LABEL[locale] ?? LAST_UPDATED_LABEL.en}
-            {lastUpdated}
+            <span suppressHydrationWarning>{formatUpdated(lastUpdated, locale)}</span>
           </p>
 
           <div className="legal-body">{active.body}</div>

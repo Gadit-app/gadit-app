@@ -1,13 +1,20 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
 import { translatedLegalLocales } from "@/components/legal/registry";
+import { legalMetadata } from "@/lib/page-titles";
 
-export const metadata: Metadata = {
+const BASE_METADATA: Metadata = {
   title: "Privacy Policy, Gadit",
   description: "How Gadit collects, uses, and protects your information.",
 };
 
-const LAST_UPDATED = "October 25, 2026";
+/** Title and description in the visitor's UI language (Gadi 2026-11-17). */
+export function generateMetadata(): Promise<Metadata> {
+  return legalMetadata("privacy", BASE_METADATA);
+}
+
+/** ISO day; LegalPage writes it in the document's language. */
+const LAST_UPDATED = "2026-10-25";
 
 const EnglishBody = () => (
   <>

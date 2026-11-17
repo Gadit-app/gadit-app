@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { resolveShareLang } from "./landing-metadata";
+import DESCRIPTIONS from "./page-descriptions-i18n.json";
 
 /**
  * Browser-tab titles for the app pages in all 33 UI languages (2026-10-10
@@ -66,7 +67,25 @@ export async function pageTitle(key: PageKey): Promise<string> {
   return (T[lang] ?? T.en)[key];
 }
 
-/** `metadata` for a page: its existing static fields plus a localized title. */
+/** The Google description (and the legal pages' titles) in every UI language
+ *  (Gadi 2026-11-17, SEO audit: these pages showed one English description in
+ *  all languages; the Hebrew text was approved by the council and translated
+ *  by scripts/page-descriptions-i18n.mjs). */
+const D = DESCRIPTIONS as Record<string, Record<string, string>>;
+const describe = (lang: string, key: string): string | undefined => D[lang]?.[key] ?? D.en?.[key];
+
+/** `metadata` for a page: its existing static fields plus a localized title
+ *  and, where one exists, a localized description. */
 export async function pageMetadata(key: PageKey, base: Metadata = {}): Promise<Metadata> {
-  return { ...base, title: await pageTitle(key) };
+  const lang = await resolveShareLang();
+  const description = describe(lang, key);
+  return { ...base, title: (T[lang] ?? T.en)[key], ...(description ? { description } : {}) };
+}
+
+/** Title and description of /privacy and /terms in the UI language. */
+export async function legalMetadata(key: "privacy" | "terms", base: Metadata): Promise<Metadata> {
+  const lang = await resolveShareLang();
+  const title = describe(lang, `${key}Title`);
+  const description = describe(lang, key);
+  return { ...base, ...(title ? { title } : {}), ...(description ? { description } : {}) };
 }
