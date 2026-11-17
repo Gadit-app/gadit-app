@@ -9,9 +9,12 @@ export const revalidate = 86400;
 const ALL_LANGS: string[] = LANGUAGES.map((l) => l.code);
 
 /** URL for a path in a given UI language. English is the unprefixed canonical
- *  surface (mirrors buildHref); every other language gets a /<lang> prefix. */
+ *  surface (mirrors buildHref); every other language gets a /<lang> prefix.
+ *  The homepage is the bare prefix with no trailing slash, the same URL as the
+ *  page's own canonical ("/he/" redirects to "/he"). */
 function langUrl(path: string, l: string): string {
-  return l === "en" ? `${BASE}${path}` : `${BASE}/${l}${path}`;
+  const rest = path === "/" ? "" : path;
+  return l === "en" ? `${BASE}${rest || "/"}` : `${BASE}/${l}${rest}`;
 }
 
 /** hreflang alternates for a multilingual path — declares every language
@@ -30,23 +33,42 @@ function alternatesFor(path: string): { languages: Record<string, string> } {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Static pages. The consumer-facing ones are localized into all 33 languages,
-  // so they carry hreflang alternates; the legal pages stay English-only.
+  // Static pages. The consumer-facing ones are localized into every UI
+  // language, so they carry hreflang alternates; the legal pages stay
+  // English-only. Each language version is its own entry (Gadi 2026-11-17,
+  // SEO audit): with only the English URL listed, Google had never heard of
+  // /he/families or /he/individuals ("URL is unknown to Google").
   const localizedStatic: Array<{ path: string; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"]; priority: number }> = [
     { path: "/", changeFrequency: "weekly", priority: 1 },
+    { path: "/families", changeFrequency: "monthly", priority: 0.9 },
+    { path: "/individuals", changeFrequency: "monthly", priority: 0.8 },
     { path: "/features", changeFrequency: "monthly", priority: 0.8 },
     { path: "/pricing", changeFrequency: "monthly", priority: 0.8 },
     { path: "/schools", changeFrequency: "monthly", priority: 0.7 },
     { path: "/partners", changeFrequency: "monthly", priority: 0.5 },
     { path: "/words", changeFrequency: "weekly", priority: 0.6 },
+    { path: "/help", changeFrequency: "monthly", priority: 0.5 },
+    { path: "/contact", changeFrequency: "monthly", priority: 0.4 },
   ];
-  const staticEntries: MetadataRoute.Sitemap = [
-    ...localizedStatic.map((s) => ({
-      url: langUrl(s.path, "en"),
-      changeFrequency: s.changeFrequency,
-      priority: s.priority,
-      alternates: alternatesFor(s.path),
-    })),
+  // The /words hub lists a language's own words: in a language with only a
+  // handful of them it is a near-empty page, so it is listed only from
+  // WORDS_HUB_MIN words up (every language if the word list failed).
+  const WORDS_HUB_MIN = 30;
+  const wordsPerLang = new Map<string, number>();
+  const staticEntries = (): MetadataRoute.Sitemap => [
+    ...localizedStatic.flatMap((s) => {
+      const alternates = alternatesFor(s.path);
+      const langs =
+        s.path === "/words" && wordsPerLang.size > 0
+          ? ALL_LANGS.filter((l) => (wordsPerLang.get(l) ?? 0) >= WORDS_HUB_MIN)
+          : ALL_LANGS;
+      return langs.map((l) => ({
+        url: langUrl(s.path, l),
+        changeFrequency: s.changeFrequency,
+        priority: s.priority,
+        alternates,
+      }));
+    }),
     { url: `${BASE}/privacy`, changeFrequency: "yearly" as const, priority: 0.3 },
     { url: `${BASE}/terms`, changeFrequency: "yearly" as const, priority: 0.3 },
   ];
@@ -111,6 +133,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             }
           : undefined;
       for (const l of langs) {
+        wordsPerLang.set(l, (wordsPerLang.get(l) ?? 0) + 1);
         wordEntries.push({
           url: langUrl(path, l),
           changeFrequency: "monthly",
@@ -122,7 +145,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   } catch (e) {
     console.error("sitemap word enumeration failed:", e);
     wordEntries = [];
+    wordsPerLang.clear();
   }
 
-  return [...staticEntries, ...wordEntries];
+  return [...staticEntries(), ...wordEntries];
 }

@@ -20,6 +20,37 @@ export async function generateMetadata(): Promise<Metadata> {
   return (await resolveShareLang()) === "en" ? EN_METADATA : {};
 }
 
+/** Who Gadit is, for search engines (Gadi 2026-11-17, SEO audit): the
+ *  site's name and logo. Same in every language. */
+const SITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.gadit.app/#organization",
+      name: "Gadit",
+      url: "https://www.gadit.app/",
+      logo: { "@type": "ImageObject", url: "https://www.gadit.app/icon-512.png", width: 512, height: 512 },
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.gadit.app/#website",
+      name: "Gadit",
+      alternateName: "gadit.app",
+      url: "https://www.gadit.app/",
+      publisher: { "@id": "https://www.gadit.app/#organization" },
+    },
+  ],
+};
+
 export default function Home() {
-  return <HomePage />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(SITE_JSON_LD).replace(/</g, "\\u003c") }}
+      />
+      <HomePage />
+    </>
+  );
 }

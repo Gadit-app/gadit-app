@@ -361,7 +361,10 @@ export function HomePage() {
           <div className="wb-home-logo" translate="no">
             Gad<span className="wb-home-logo-it">it</span>
           </div>
-          <p className="wb-home-tagline">{c.tagline}</p>
+          {/* The page's main heading for search engines (Gadi 2026-11-17, SEO
+              audit: the homepage had no h1). Same look: .wb-home-tagline sets
+              every size, weight and margin. */}
+          <h1 className="wb-home-tagline">{c.tagline}</h1>
 
           <form className="wb-home-search" onSubmit={onSubmit}>
             <div className="wb-home-search-box">

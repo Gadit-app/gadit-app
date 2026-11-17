@@ -104,6 +104,13 @@ const nextConfig: NextConfig = {
           { key: "X-Robots-Tag", value: "noindex, nofollow" },
         ],
       },
+      // The product decks are shared by hand, not search pages: in Google
+      // they competed with the landing pages they describe (Gadi 2026-11-17,
+      // SEO audit). Links in them are still followed.
+      {
+        source: "/decks/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex" }],
+      },
     ];
   },
   async rewrites() {
