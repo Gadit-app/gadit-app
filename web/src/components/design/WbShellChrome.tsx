@@ -292,7 +292,23 @@ const TREASURE_NAV: Record<string, string> = {
   hu: "Szavaim",
 };
 
-function useNavLinks(): NavLink[] {
+/** The anonymous (marketing) nav. */
+function anonymousLinks(lang: Lang, href: (p: string) => string): NavLink[] {
+  return [
+    { key: "features", href: href("/features"), label: v2(lang, "navFeatures") },
+    { key: "individuals", href: href("/individuals"), label: INDIVIDUALS_LABEL[lang] ?? INDIVIDUALS_LABEL.en },
+    { key: "families", href: href("/families"), label: FAMILIES_LABEL[lang] ?? FAMILIES_LABEL.en },
+    { key: "schools", href: href("/schools"), label: v2(lang, "navSchools") },
+    { key: "pricing", href: href("/pricing"), label: v2(lang, "navPricing") },
+  ];
+}
+
+/** `placeholder`: while sign-in resolves, return the anonymous links instead
+ *  of none, for the caller to render invisibly (Gadi 2026-11-18, SEO: the
+ *  server HTML then holds the links to the landing pages, which search
+ *  engines read before any script runs; nothing shows until it is known
+ *  who is signed in, so no one sees the wrong nav). */
+function useNavLinks(placeholder = false): NavLink[] {
   const { user, plan, planReady, loading, familyRole, kidsAccess } = useAuth();
   const [kidsMode] = useKidsMode();
   const { lang } = useLang();
@@ -302,7 +318,7 @@ function useNavLinks(): NavLink[] {
   // nav: otherwise a logged-in user briefly sees the anonymous marketing links
   // (or a paid user sees the basic upsell) before it flips to their tools.
   // (Gadi 2026-08-27: kill the topbar flashes.)
-  if (loading || (user && !planReady)) return [];
+  if (loading || (user && !planReady)) return placeholder ? anonymousLinks(lang, href) : [];
 
   // Key words by subject (Gadi 2026-10-26): its own tab, only in the UI
   // languages that have the catalog (he, en, and de once its data exists).
@@ -372,13 +388,7 @@ function useNavLinks(): NavLink[] {
   }
 
   // Anonymous — the marketing nav.
-  return [
-    { key: "features", href: href("/features"), label: v2(lang, "navFeatures") },
-    { key: "individuals", href: href("/individuals"), label: INDIVIDUALS_LABEL[lang] ?? INDIVIDUALS_LABEL.en },
-    { key: "families", href: href("/families"), label: FAMILIES_LABEL[lang] ?? FAMILIES_LABEL.en },
-    { key: "schools", href: href("/schools"), label: v2(lang, "navSchools") },
-    { key: "pricing", href: href("/pricing"), label: v2(lang, "navPricing") },
-  ];
+  return anonymousLinks(lang, href);
 }
 
 /** Desktop centre nav. Drop-in replacement for the old inline
@@ -399,10 +409,14 @@ function backToStart(e: ReactMouseEvent<HTMLAnchorElement>, url: string) {
 }
 
 export function WbShellNav({ active }: { active?: NavKey }) {
-  const links = useNavLinks();
+  const links = useNavLinks(true);
   const { lang } = useLang();
   const href = useHref();
-  const { user } = useAuth();
+  const { user, loading, planReady } = useAuth();
+  // Not yet known who is signed in: the anonymous links are in the page but
+  // invisible and out of the tab order (see useNavLinks).
+  const pending = loading || (!!user && !planReady);
+  const hide = pending ? ({ "aria-hidden": true, tabIndex: -1, style: { visibility: "hidden" } } as const) : {};
   const router = useRouter();
   return (
     <nav className="wb-shell-nav">
@@ -437,6 +451,7 @@ export function WbShellNav({ active }: { active?: NavKey }) {
             href={l.href}
             onClick={(e) => backToStart(e, l.href)}
             className={`wb-shell-navlink${active === l.key ? " is-active" : ""}${BUY_NAV_KEYS.has(l.key) ? " gd-buy" : ""}`}
+            {...hide}
           >
             {l.label}
           </Link>

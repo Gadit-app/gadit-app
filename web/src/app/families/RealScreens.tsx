@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Real app screens for the Families landing page (Gadi 2026-09-28, after the
@@ -299,7 +299,7 @@ export function PhoneNotes({ notes }: { notes: NonNullable<RealCopy["dashNotes"]
             {notes.items.map((n, i) => (
               <li key={i} className="fam-note">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/icon-192.png" alt="" width={40} height={40} className="fam-note-icon" />
+                <img src="/icon-192.png" alt="" width={40} height={40} className="fam-note-icon" loading="lazy" decoding="async" />
                 <div className="fam-note-text">
                   <div className="fam-note-head"><b>Gadit</b><span>{n.when}</span></div>
                   <div className="fam-note-t">{n.t}</div>
@@ -317,20 +317,27 @@ export function PhoneNotes({ notes }: { notes: NonNullable<RealCopy["dashNotes"]
 /** A laptop playing a short silent clip of a real game; it plays only while on screen. */
 export function LaptopVideo({ src, poster, label }: { src: string; poster: string; label: string }) {
   const ref = useRef<HTMLVideoElement>(null);
+  // The poster (81KB) loads only when the clip gets near the screen: it used
+  // to compete with the hero images on a phone (Gadi 2026-11-18, speed).
+  const [near, setNear] = useState(false);
   useEffect(() => {
     const v = ref.current;
     if (!v || typeof IntersectionObserver === "undefined") return;
+    const soon = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setNear(true); soon.disconnect(); }
+    }, { rootMargin: "800px 0px" });
+    soon.observe(v);
     const io = new IntersectionObserver(([e]) => {
       if (e.isIntersecting) { v.preload = "auto"; void v.play().catch(() => undefined); } else v.pause();
     }, { threshold: 0.35 });
     io.observe(v);
-    return () => io.disconnect();
+    return () => { io.disconnect(); soon.disconnect(); };
   }, []);
   return (
     <div className="fam-laptop">
       <div className="fam-laptop-lid">
         <div className="fam-laptop-screen">
-          <video ref={ref} src={src} poster={poster} muted loop playsInline preload="none" aria-label={label} />
+          <video ref={ref} src={src} poster={near ? poster : undefined} muted loop playsInline preload="none" aria-label={label} />
         </div>
       </div>
       <div className="fam-laptop-base" aria-hidden />

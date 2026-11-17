@@ -446,11 +446,12 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* First-paint fonts (Hebrew + Latin UI) preloaded, like the old
-            next/font preload set (Geist / Rubik / Inter / Heebo). */}
-        <link rel="preload" href="/fonts/rubik-hebrew-366f4809.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        {/* First-paint fonts preloaded (Rubik + Inter). Gadi 2026-11-18, speed:
+            Heebo is no longer preloaded (no page renders with it; it still
+            loads on demand), and Rubik's Hebrew file only on right-to-left
+            pages, so a phone spends that bandwidth on the page's own CSS. */}
+        {initialDir === "rtl" && <link rel="preload" href="/fonts/rubik-hebrew-366f4809.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />}
         <link rel="preload" href="/fonts/rubik-latin-0ae40db1.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/heebo-hebrew-255b36d2.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/inter-latin-6ab57b19.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         {cjkHref(initialLang) && <link rel="stylesheet" href={cjkHref(initialLang)!} />}
       </head>
