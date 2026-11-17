@@ -10134,6 +10134,19 @@ html[data-theme="dark"] .wordbook .wb-dym-chip {
 /* Off-hours hint: a real bottom footer. margin-top:auto pins it to the viewport
    bottom (it is a direct flex child of the flex-column page), so it never rides
    up with the hero + names. Low-key: small font, muted colour. (Gadi 2026-08-25.) */
+/* The class counter's strip (Gadi 2026-11-17): it takes the free height
+   between the search form and the footer (the page is a flex column) and
+   centres the counter in it. At least 28px above and below. */
+/* The search area gives up its bottom padding to the strip, so the counter sits
+   exactly halfway between the sentence box and the footer. */
+.wordbook.wb-shell-page > .wb-home-main:has(+ .wb-class-stats-slot) { padding-bottom: 0; flex: 0 0 auto; }
+.wordbook .wb-class-stats-slot {
+  flex: 1 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 22px;
+}
 .wordbook .wb-classroom-offhours {
   max-width: 620px;
   width: calc(100% - 44px);

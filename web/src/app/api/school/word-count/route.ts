@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
-import { FieldValue, type DocumentReference } from "firebase-admin/firestore";
+import { AggregateField, FieldValue, type DocumentReference } from "firebase-admin/firestore";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { verifiedSchoolId } from "@/lib/school-identity";
 import { normalizeClassCode } from "@/lib/school";
@@ -23,7 +23,10 @@ import { CLASS_THRESHOLDS, nextThreshold, normalizeClassWord, rankIndexFor, type
  * data: just the word.
  *
  * POST { word, cls? }  → { count, next, scope, milestone? }
- * GET  ?cls=CODE (or Bearer) → { count, next, scope }
+ * GET  ?cls=CODE (or Bearer) → { count, next, scope, searches }
+ *   `searches`: every look-up, not only the different words (Gadi
+ *   2026-11-16): the classroom's searchCount, which both the class link and
+ *   the school account add to; a school of several classes sums them.
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -117,10 +120,21 @@ export async function POST(req: NextRequest) {
   });
 }
 
+/** Every look-up of the screen's class, or of the whole school. */
+async function searchesOf(targets: { display: Target; logTo?: DocumentReference }, snap: FirebaseFirestore.DocumentSnapshot): Promise<number | null> {
+  try {
+    if (targets.logTo) return Number((await targets.logTo.get()).get("searchCount") ?? 0);
+    if (targets.display.ref.parent.id === "classrooms") return Number(snap.get("searchCount") ?? 0);
+    const agg = await targets.display.ref.collection("classrooms").aggregate({ n: AggregateField.sum("searchCount") }).get();
+    return Number(agg.data().n ?? 0);
+  } catch { return null; }
+}
+
 export async function GET(req: NextRequest) {
   const targets = await resolveTargets(req, req.nextUrl.searchParams.get("cls") ?? "");
   if (!targets) return NextResponse.json({ error: "not_school" }, { status: 404 });
   const snap = await targets.display.ref.get();
   const count = Number(snap.get("uniqueWordCount") ?? 0);
-  return NextResponse.json({ count, next: nextThreshold(count), scope: targets.display.scope });
+  const searches = await searchesOf(targets, snap);
+  return NextResponse.json({ count, next: nextThreshold(count), scope: targets.display.scope, ...(searches !== null ? { searches } : {}) });
 }

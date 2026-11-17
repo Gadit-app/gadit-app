@@ -18,7 +18,7 @@
 
 import { WaitDots } from "@/components/WaitText";
 import { useEffect, useRef, useState } from "react";
-import { ClassProgressChip, type ClassProgress } from "@/components/design/ClassMilestone";
+import { ClassProgressLine, type ClassProgress } from "@/components/design/ClassMilestone";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/lang-context";
@@ -717,14 +717,14 @@ export function ClassroomKidClient({ code }: { code: string }) {
   // independent identities. Anonymous kids leave this empty and the
   // search log gets stored without a studentName.
   const [studentName, setStudentName] = useState<string>("");
-  // Class dictionary total (different words), shown above the search box
-  // so the class sees the next milestone coming (Gadi 2026-10-03).
+  // Class dictionary total (different words and all searches), shown under
+  // the search (Gadi 2026-10-03; moved below it 2026-11-16).
   const [classProgress, setClassProgress] = useState<ClassProgress | null>(null);
   useEffect(() => {
     let cancelled = false;
     fetch(`/api/school/word-count?cls=${encodeURIComponent(code)}`)
       .then((r) => (r.ok ? r.json() : null))
-      .then((d) => { if (!cancelled && d && typeof d.count === "number") setClassProgress({ count: d.count, next: d.next, scope: d.scope }); })
+      .then((d) => { if (!cancelled && d && typeof d.count === "number") setClassProgress({ count: d.count, next: d.next, scope: d.scope, ...(typeof d.searches === "number" ? { searches: d.searches } : {}) }); })
       .catch(() => {});
     return () => { cancelled = true; };
   }, [code]);
@@ -947,11 +947,6 @@ export function ClassroomKidClient({ code }: { code: string }) {
               so a kid can flip it. plan="deep" passed to bypass the
               tier gate — classroom users get paid-tier features via
               the school subscription. */}
-          {classProgress && (data.students.length === 0 || studentName) && (
-            <div style={{ display: "flex", justifyContent: "center", margin: "0 0 12px" }}>
-              <ClassProgressChip progress={classProgress} lang={lang} />
-            </div>
-          )}
           {(data.students.length === 0 || studentName) && (
             <form className="wb-home-search" onSubmit={onSubmit}>
               <div className="wb-home-search-box">
@@ -1002,6 +997,15 @@ export function ClassroomKidClient({ code }: { code: string }) {
           )}
         </div>
       </main>
+
+      {/* The class counter, halfway between the search and the footer
+          (Gadi 2026-11-17): a strip that takes the free height of the
+          page and centres the line in it, away from the search box. */}
+      {classProgress && (data.students.length === 0 || studentName) && (
+        <div className="wb-class-stats-slot">
+          <ClassProgressLine progress={classProgress} lang={lang} />
+        </div>
+      )}
 
       {/* Off-hours soft hint — a real bottom footer (margin-top:auto pins it to
           the viewport bottom) so it never floats up with the hero + names. */}

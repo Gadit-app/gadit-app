@@ -29,7 +29,8 @@
    "Великаны слов",
    "Звёзды языка",
    "Легенды слов"
-  ]
+  ],
+  "searches": "{n} поисков"
  },
  "es": {
   "labelClass": "Su clase",
@@ -61,7 +62,8 @@
    "Gigantes de las palabras",
    "Estrellas del lenguaje",
    "Leyendas de las palabras"
-  ]
+  ],
+  "searches": "{n} búsquedas"
  },
  "pt": {
   "labelClass": "A vossa turma",
@@ -93,7 +95,8 @@
    "Gigantes das Palavras",
    "Estrelas da Linguagem",
    "Lendas das Palavras"
-  ]
+  ],
+  "searches": "{n} buscas"
  },
  "fr": {
   "labelClass": "Votre classe",
@@ -125,7 +128,8 @@
    "Géants des mots",
    "Étoiles du langage",
    "Légendes des mots"
-  ]
+  ],
+  "searches": "{n} recherches"
  },
  "de": {
   "labelClass": "Eure Klasse",
@@ -157,7 +161,8 @@
    "Wortgiganten",
    "Sprachstars",
    "Wortlegenden"
-  ]
+  ],
+  "searches": "{n} Suchanfragen"
  },
  "cs": {
   "labelClass": "Vaše třída",
@@ -189,7 +194,8 @@
    "Slovní obři",
    "Jazykové hvězdy",
    "Legendy slov"
-  ]
+  ],
+  "searches": "{n} hledání"
  },
  "sk": {
   "labelClass": "Vaša trieda",
@@ -221,7 +227,8 @@
    "Obri slov",
    "Jazykové hviezdy",
    "Legendy slov"
-  ]
+  ],
+  "searches": "{n} vyhľadaní"
  },
  "it": {
   "labelClass": "La vostra classe",
@@ -253,7 +260,8 @@
    "Giganti delle parole",
    "Stelle del linguaggio",
    "Leggende delle parole"
-  ]
+  ],
+  "searches": "{n} ricerche"
  },
  "ja": {
   "labelClass": "みんなのクラス",
@@ -285,7 +293,8 @@
    "ことばのきょじん",
    "ことばスター",
    "ことばでんせつ"
-  ]
+  ],
+  "searches": "{n}回の検索"
  },
  "hi": {
   "labelClass": "आपकी कक्षा",
@@ -317,7 +326,8 @@
    "शब्द दिग्गज",
    "भाषा सितारे",
    "शब्द दिग्गज"
-  ]
+  ],
+  "searches": "{n} खोजें"
  },
  "am": {
   "labelClass": "የእናንተ ክፍል",
@@ -349,7 +359,8 @@
    "የቃል ግዙፎች",
    "የቋንቋ ኮከቦች",
    "የቃል ጀግኖች"
-  ]
+  ],
+  "searches": "{n} ፍለጋዎች"
  },
  "uk": {
   "labelClass": "Ваш клас",
@@ -381,7 +392,8 @@
    "Гіганти слів",
    "Зірки мови",
    "Легенди слів"
-  ]
+  ],
+  "searches": "{n} пошуків"
  },
  "tr": {
   "labelClass": "Sınıfınız",
@@ -413,7 +425,8 @@
    "Kelime Devleri",
    "Dil Yıldızları",
    "Kelime Efsaneleri"
-  ]
+  ],
+  "searches": "{n} arama"
  },
  "pl": {
   "labelClass": "Wasza klasa",
@@ -445,7 +458,8 @@
    "Giganci słów",
    "Gwiazdy języka",
    "Legendy słów"
-  ]
+  ],
+  "searches": "{n} wyszukiwań"
  },
  "fa": {
   "labelClass": "کلاس شما",
@@ -477,7 +491,8 @@
    "غول‌های واژه",
    "ستاره‌های زبان",
    "افسانه‌های واژه"
-  ]
+  ],
+  "searches": "{n} جستجو"
  },
  "id": {
   "labelClass": "Kelas kalian",
@@ -509,7 +524,8 @@
    "Raksasa Kata",
    "Bintang Bahasa",
    "Legenda Kata"
-  ]
+  ],
+  "searches": "{n} penelusuran"
  },
  "nl": {
   "labelClass": "Jullie klas",
@@ -541,7 +557,8 @@
    "Woordreuzen",
    "Taalsterren",
    "Woordlegendes"
-  ]
+  ],
+  "searches": "{n} zoekopdrachten"
  },
  "el": {
   "labelClass": "Η τάξη σας",
@@ -573,7 +590,8 @@
    "Γίγαντες των Λέξεων",
    "Αστέρια της Γλώσσας",
    "Θρύλοι των Λέξεων"
-  ]
+  ],
+  "searches": "{n} αναζητήσεις"
  },
  "zu": {
   "labelClass": "Ikilasi lenu",
@@ -605,7 +623,8 @@
    "Iziqhwaga Zamagama",
    "Izinkanyezi Zolimi",
    "Izingqalabutho Zamagama"
-  ]
+  ],
+  "searches": "ukusesha okungu-{n}"
  },
  "xh": {
   "labelClass": "Iklasi yenu",
@@ -637,7 +656,8 @@
    "Iingxilimbela Zamagama",
    "Iinkwenkwezi Zolwimi",
    "Amaqhawe Amagama"
-  ]
+  ],
+  "searches": "uphendlo olungama-{n}"
  },
  "nso": {
   "labelClass": "Phapoši ya lena",
@@ -669,7 +689,8 @@
    "Dikgagara tša Mantšu",
    "Dinaledi tša Polelo",
    "Bagale ba Mantšu"
-  ]
+  ],
+  "searches": "dinyako tša {n}"
  },
  "tn": {
   "labelClass": "Phaposi ya lona",
@@ -701,7 +722,8 @@
    "Bagolo ba Mafoko",
    "Dinaledi tsa Puo",
    "Bagaka ba Mafoko"
-  ]
+  ],
+  "searches": "dipatlisiso di le {n}"
  },
  "st": {
   "labelClass": "Tlelase ya lona",
@@ -733,7 +755,8 @@
    "Dinatla tsa Mantswe",
    "Dinaledi tsa Puo",
    "Ditumi tsa Mantswe"
-  ]
+  ],
+  "searches": "dipatlisiso tse {n}"
  },
  "ts": {
   "labelClass": "Tlilasi ya n'wina",
@@ -765,7 +788,8 @@
    "Tinghala ta Marito",
    "Tinyeleti ta Ririmi",
    "Tinhenha ta Marito"
-  ]
+  ],
+  "searches": "ku lavisisa ka {n}"
  },
  "ss": {
   "labelClass": "Likilasi lenu",
@@ -797,7 +821,8 @@
    "Emachawe Emagama",
    "Tinkhanyeti Telulwimi",
    "Tinganekwane Temagama"
-  ]
+  ],
+  "searches": "kusesha loku-{n}"
  },
  "ve": {
   "labelClass": "Kilasi yaṋu",
@@ -829,7 +854,8 @@
    "Vhahulwane vha maipfi",
    "Naledzi dza luambo",
    "Vhaḓivhalea vha maipfi"
-  ]
+  ],
+  "searches": "u ṱoḓa ha {n}"
  },
  "nr": {
   "labelClass": "Ikilasi lenu",
@@ -861,7 +887,8 @@
    "Abakhulu Bamezwi",
    "Iinkwekwezi Zelimi",
    "Amaqhawe Wamezwi"
-  ]
+  ],
+  "searches": "ukufuna oku-{n}"
  },
  "vi": {
   "labelClass": "Lớp của các em",
@@ -893,7 +920,8 @@
    "Người khổng lồ từ ngữ",
    "Ngôi sao ngôn ngữ",
    "Huyền thoại từ ngữ"
-  ]
+  ],
+  "searches": "{n} lượt tìm kiếm"
  },
  "fil": {
   "labelClass": "Ang inyong klase",
@@ -925,7 +953,8 @@
    "Mga Higante ng Salita",
    "Mga Bituin sa Wika",
    "Mga Alamat ng Salita"
-  ]
+  ],
+  "searches": "{n} paghahanap"
  },
  "af": {
   "labelClass": "Julle klas",
@@ -957,7 +986,8 @@
    "Woordreuse",
    "Taalsterre",
    "Woordlegendes"
-  ]
+  ],
+  "searches": "{n} soektogte"
  },
  "sw": {
   "labelClass": "Darasa lenu",
@@ -989,7 +1019,8 @@
    "Majitu ya Maneno",
    "Nyota za Lugha",
    "Hadithi za Maneno"
-  ]
+  ],
+  "searches": "utafutaji {n}"
  },
  "zh-CN": {
   "labelClass": "你们班",
@@ -1021,7 +1052,8 @@
    "单词巨人",
    "语言之星",
    "单词传奇"
-  ]
+  ],
+  "searches": "{n} 次搜索"
  },
  "zh-TW": {
   "labelClass": "你們班",
@@ -1053,7 +1085,8 @@
    "單字巨人",
    "語言之星",
    "單字傳奇"
-  ]
+  ],
+  "searches": "{n} 次搜尋"
  },
  "ko": {
   "labelClass": "우리 반",
@@ -1085,7 +1118,8 @@
    "단어 거인",
    "언어 스타",
    "단어 전설"
-  ]
+  ],
+  "searches": "{n}회 검색"
  },
  "th": {
   "labelClass": "ห้องเรียนของคุณ",
@@ -1117,7 +1151,8 @@
    "ยักษ์ใหญ่คำศัพท์",
    "ดาวภาษา",
    "ตำนานคำศัพท์"
-  ]
+  ],
+  "searches": "ค้นหา {n} ครั้ง"
  },
  "bn": {
   "labelClass": "তোমাদের ক্লাস",
@@ -1149,7 +1184,8 @@
    "শব্দ দানব",
    "ভাষা তারকারা",
    "শব্দ কিংবদন্তি"
-  ]
+  ],
+  "searches": "{n}টি অনুসন্ধান"
  },
  "da": {
   "labelClass": "Jeres klasse",
@@ -1181,7 +1217,8 @@
    "Ordgiganter",
    "Sprogstjerner",
    "Ordlegender"
-  ]
+  ],
+  "searches": "{n} søgninger"
  },
  "hu": {
   "labelClass": "Osztályotok",
@@ -1213,6 +1250,7 @@
    "Szóóriások",
    "Nyelvi csillagok",
    "Szólegendák"
-  ]
+  ],
+  "searches": "{n} keresés"
  }
 }

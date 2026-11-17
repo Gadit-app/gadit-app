@@ -11,7 +11,8 @@ import { classCopy, rankNameAt, type ClassScope } from "@/lib/class-milestones";
  * so the kid at the class computer can turn around and tell everyone.
  */
 
-export type ClassProgress = { count: number; next: number | null; scope: ClassScope };
+/** `searches`: every look-up of the class (or school), not only the different words. */
+export type ClassProgress = { count: number; next: number | null; scope: ClassScope; searches?: number };
 export type ClassMilestoneHit = { count: number; rankIndex: number };
 
 export function ClassProgressChip({ progress, lang }: { progress: ClassProgress; lang: string }) {
@@ -34,6 +35,38 @@ export function ClassProgressChip({ progress, lang }: { progress: ClassProgress;
           </span>
           <span>{c.toNext(progress.next - progress.count)}</span>
         </>
+      )}
+    </div>
+  );
+}
+
+/**
+ * The class page's counter (Gadi 2026-11-16: the white chip sat right on top
+ * of the search box and confused; the class also wants to see all its
+ * searches, not only the different words). Plain text under the search, no
+ * box: "Your class: 757 searches · 434 different words", and a thin bar to
+ * the next rank. The page places it (.wb-class-stats-slot on the class page).
+ */
+export function ClassProgressLine({ progress, lang }: { progress: ClassProgress; lang: string }) {
+  const c = classCopy(lang);
+  const pct = progress.next ? Math.min(100, Math.round((progress.count / progress.next) * 100)) : 100;
+  const parts = [typeof progress.searches === "number" ? c.searches(progress.searches) : null, c.reached(progress.count)].filter(Boolean);
+  return (
+    <div
+      className="wb-class-stats"
+      dir={lang === "he" || lang === "ar" || lang === "fa" ? "rtl" : "ltr"}
+      style={{ display: "grid", justifyItems: "center", gap: 8, fontSize: 14.5, lineHeight: 1.5, color: "var(--ink-soft, #3F4856)", textAlign: "center" }}
+    >
+      <div>
+        <span style={{ fontWeight: 700, color: "var(--ink, #0B1220)" }}>{c.label[progress.scope]}:</span> {parts.join(" · ")}
+      </div>
+      {progress.next && (
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 10, fontSize: 13.5 }}>
+          <span aria-hidden="true" style={{ width: 80, height: 5, borderRadius: 99, background: "color-mix(in srgb, #0EA5A5 18%, transparent)", overflow: "hidden" }}>
+            <span style={{ display: "block", width: `${pct}%`, height: "100%", background: "#0EA5A5", borderRadius: 99 }} />
+          </span>
+          <span>{c.toNext(progress.next - progress.count)}</span>
+        </div>
       )}
     </div>
   );

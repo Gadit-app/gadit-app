@@ -11,7 +11,7 @@
 import I18N from "./class-milestones-i18n.json";
 
 /** The other UI languages (Gadi 2026-10-06), from scripts/class-milestones-i18n.mjs. */
-type I18nCopy = { labelClass: string; labelSchool: string; words: string; toNext: string; wowClass: string; wowSchool: string; reached: string; rank: string; tell: string; close: string; ranks: string[] };
+type I18nCopy = { labelClass: string; labelSchool: string; words: string; searches?: string; toNext: string; wowClass: string; wowSchool: string; reached: string; rank: string; tell: string; close: string; ranks: string[] };
 const MORE = I18N as Record<string, I18nCopy>;
 
 export const CLASS_THRESHOLDS = [50, 100, 200, 300, 400, 500, 750, 1000, 1250, 1500, 1750, 2000, 2500, 3000, 3500, 4000, 4500, 5000];
@@ -73,6 +73,7 @@ const COPY = {
   he: {
     label: { class: "הכיתה שלכם", school: "בית הספר שלכם" },
     words: (n: number) => `${n.toLocaleString("he-IL")} מילים`,
+    searches: (n: number) => `${n.toLocaleString("he-IL")} חיפושים`,
     toNext: (n: number) => `עוד ${n.toLocaleString("he-IL")} לדרגה הבאה`,
     wow: (scope: ClassScope) => `וואו! ${scope === "class" ? "הכיתה שלכם הגיעה" : "בית הספר שלכם הגיע"} לדרגה חדשה!`,
     reached: (n: number) => `${n.toLocaleString("he-IL")} מילים שונות`,
@@ -83,6 +84,7 @@ const COPY = {
   en: {
     label: { class: "Your class", school: "Your school" },
     words: (n: number) => `${n.toLocaleString("en-US")} words`,
+    searches: (n: number) => `${n.toLocaleString("en-US")} searches`,
     toNext: (n: number) => `${n.toLocaleString("en-US")} more to the next rank`,
     wow: (scope: ClassScope) => `Wow! ${scope === "class" ? "Your class" : "Your school"} reached a new rank!`,
     reached: (n: number) => `${n.toLocaleString("en-US")} different words`,
@@ -93,6 +95,7 @@ const COPY = {
   ar: {
     label: { class: "صفّكم", school: "مدرستكم" },
     words: (n: number) => `${n.toLocaleString("en-US")} كلمة`,
+    searches: (n: number) => `${n.toLocaleString("en-US")} عملية بحث`,
     toNext: (n: number) => `بقي ${n.toLocaleString("en-US")} للدرجة التالية`,
     wow: (scope: ClassScope) => `رائع! ${scope === "class" ? "وصل صفّكم" : "وصلت مدرستكم"} إلى درجة جديدة!`,
     reached: (n: number) => `${n.toLocaleString("en-US")} كلمة مختلفة`,
@@ -107,6 +110,7 @@ function fromI18n(lang: string, c: I18nCopy): typeof COPY.en {
   return {
     label: { class: c.labelClass, school: c.labelSchool },
     words: (n: number) => c.words.replace("{n}", num(n)),
+    searches: (n: number) => (c.searches ?? "{n} searches").replace("{n}", num(n)),
     toNext: (n: number) => c.toNext.replace("{n}", num(n)),
     wow: (scope: ClassScope) => (scope === "class" ? c.wowClass : c.wowSchool),
     reached: (n: number) => c.reached.replace("{n}", num(n)),
