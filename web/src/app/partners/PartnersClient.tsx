@@ -2472,7 +2472,8 @@ export function PartnersClient() {
                   the page language; the partner can change it. */}
               <label style={{ display: "block", fontSize: 12.5, color: "var(--ink-muted)", margin: "2px 0 5px" }}>{LANG_Q[lang] ?? LANG_Q.en}</label>
               <select style={{ ...S.input, cursor: "pointer" }} value={signupLang} onChange={(e) => setSignupLang(e.target.value)}>
-                {LANGUAGES.map((l) => (<option key={l.code} value={l.code}>{langNameIn(l.code, lang)}</option>))}
+                {/* suppressHydrationWarning: Node and Chrome name siSwati, Tshivenda and isiNdebele differently (React #418, night QA 2026-11-18). */}
+                {LANGUAGES.map((l) => (<option key={l.code} value={l.code} suppressHydrationWarning>{langNameIn(l.code, lang)}</option>))}
               </select>
               {state === "error" && <div style={S.formErr}>{errMsg}</div>}
               <button type="submit" style={S.formCta} disabled={state === "sending"}>

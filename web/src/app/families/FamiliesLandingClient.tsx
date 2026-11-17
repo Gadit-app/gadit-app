@@ -1,5 +1,6 @@
 "use client";
 
+import { keepBrand } from "@/lib/keep-brand";
 import { usePricing } from "@/lib/use-pricing";
 import { Testimonials, InlineTestimonial, FAMILY_TESTIMONIALS_HE, KIDS_TESTIMONIALS_HE, PARENTS_TESTIMONIALS_HE } from "@/components/design/Testimonials";
 import type { FamI18n } from "./i18n/types";
@@ -1425,7 +1426,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
       <section key={`real-${i}`} className={`fam-band ${i % 2 === 0 ? "fam-band-cream" : "fam-band-white"}`}>
         <div className={`fam-feature ${i % 2 === 1 ? "is-flipped" : ""}`}>
           <div className="fam-feature-text">
-            <div className="fam-kicker">{f.kicker}</div>
+            <div className="fam-kicker">{keepBrand(f.kicker)}</div>
             <h2 className="fam-h2 fam-h2-start">{f.title}</h2>
             <p className="fam-body"><Lines text={f.body} /></p>
             <ul className="fam-real-points">
@@ -1453,7 +1454,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
   const painSection = (band: "white" | "cream") => (
     <section className={`fam-band fam-band-${band}`}>
       <div className="fam-section fam-center">
-        <div className="fam-kicker fam-kicker-light">{c.painKicker}</div>
+        <div className="fam-kicker fam-kicker-light">{keepBrand(c.painKicker)}</div>
         {real ? (
           <>
             <h2 className="fam-h2">{real.pain.title}</h2>
@@ -1485,7 +1486,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
   const puzzleSection = (band: "white" | "cream" | "teal") => (
     <section className={`fam-band fam-band-${band}${band === "teal" ? " fam-puzzle-band" : ""}`}>
       <div className="fam-section fam-center">
-        <div className="fam-kicker fam-kicker-light">{c.puzzleKicker}</div>
+        <div className="fam-kicker fam-kicker-light">{keepBrand(c.puzzleKicker)}</div>
         <h2 className="fam-h2">{c.puzzleTitle.split("\n").map((t, i) => <span key={i} style={{ display: "block" }}>{t}</span>)}</h2>
         <p className="fam-body fam-body-center">{real ? <Lines text={c.puzzleBody} /> : c.puzzleBody}</p>
         <PuzzleMock lang={lang} beforeLabel={c.puzzleBefore} afterLabel={c.puzzleAfter} />
@@ -1724,7 +1725,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
           <>
             <section className="fam-band fam-band-white fam-cards-band" id="fam-cards">
               <div className="fam-section fam-center fam-section-wide">
-                {real.cardsKicker && <div className="fam-kicker">{real.cardsKicker}</div>}
+                {real.cardsKicker && <div className="fam-kicker">{keepBrand(real.cardsKicker)}</div>}
                 <h2 className="fam-h2">{real.cardsTitle ?? c.chainTitle}</h2>
                 <div className="fam-mock-toggle fam-cards-kids" aria-hidden>
                   <span className="fam-mock-toggle-pill">{famMock(lang).kidsLabel}</span>
@@ -1767,7 +1768,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
             <section className="fam-band fam-band-cream">
               <div className="fam-feature">
                 <div className="fam-feature-text">
-                  <div className="fam-kicker">{real.dash.kicker}</div>
+                  <div className="fam-kicker">{keepBrand(real.dash.kicker)}</div>
                   <h2 className="fam-h2 fam-h2-start">{real.dash.title}</h2>
                   <p className="fam-body"><Lines text={real.dash.body} /></p>
                   <ul className="fam-real-points">
@@ -1808,7 +1809,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
           <section className="fam-band fam-band-hw">
             <div className="fam-hw">
               <div className="fam-hw-head">
-                <div className="fam-kicker">{real.homework.kicker}</div>
+                <div className="fam-kicker">{keepBrand(real.homework.kicker)}</div>
                 <h2 className="fam-h2">{real.homework.title.split("\n").map((t, i) => <span key={i} style={{ display: "block" }}>{t}</span>)}</h2>
                 <p className="fam-body"><Lines text={real.homework.body} /></p>
               </div>
@@ -1972,7 +1973,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
             <section key={i} className={`fam-band ${i % 2 === 0 ? "fam-band-white" : "fam-band-cream"}`}>
               <div className={`fam-feature ${flip ? "is-flipped" : ""}`}>
                 <div className="fam-feature-text">
-                  <div className="fam-kicker">{f.kicker}</div>
+                  <div className="fam-kicker">{keepBrand(f.kicker)}</div>
                   <h2 className="fam-h2 fam-h2-start">{f.title}</h2>
                   <p className="fam-body">{f.body}</p>
                 </div>

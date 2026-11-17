@@ -636,6 +636,20 @@ function readAnonCounter(): number {
   }
 }
 
+/** True when the browser first loaded this very page (a landing from Google or
+ *  a link): such a view is free. A word page reached by searching inside the
+ *  site is a client-side navigation, so its path differs from the document's. */
+function isLandingView(): boolean {
+  if (typeof window === "undefined") return true;
+  try {
+    const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    if (!nav) return true;
+    return new URL(nav.name).pathname === window.location.pathname;
+  } catch {
+    return true;
+  }
+}
+
 function bumpAnonCounter(): number {
   if (typeof window === "undefined") return 0;
   const next = readAnonCounter() + 1;
@@ -1372,6 +1386,25 @@ export function WordClient({
     // what turns the GSC Soft 404s into indexable pages.
     if (initialResult && !user && !contextSentence && lang === preloadLang) {
       fetchedFor.current = key;
+      // The anonymous wall (Gadi 2026-09-06: 3 searches per device, cache
+      // hits included) used to skip this branch entirely, so a search for any
+      // stored word inside the site was never counted and the wall never came
+      // (night QA 2026-11-18). A landing from Google (the page the browser
+      // first loaded) stays free and uncounted, as decided; a word page
+      // reached inside the site counts.
+      if (!isLandingView()) {
+        if (readAnonCounter() >= ANON_LIFETIME_LIMIT) {
+          setResult(null);
+          setQuotaState({ reached: true, nextStep: "signup" });
+          setLoading(false);
+          return () => {
+            fetchedFor.current = null;
+          };
+        }
+        const used = bumpAnonCounter();
+        const left = Math.max(0, ANON_LIFETIME_LIMIT - used);
+        if (left > 0 && left <= 2) setAnonSearchesLeft(left);
+      }
       setResult(initialResult);
       setLoading(false);
       setErrorMsg("");

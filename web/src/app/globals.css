@@ -2747,18 +2747,21 @@ html:not([lang="he"]):not([lang="ar"]):not([lang="fa"]):not([lang="ja"]):not([la
      2-4px across these — visible as the search bar bouncing up/down.
      Forcing 24px (mobile) / 28px (desktop) freezes the slot. */
   margin: 0 0 36px;
-  height: 24px;
+  /* min-height, not height (night QA 2026-11-18): the slot stays 24px for the
+     37 languages whose tagline fits one line, and a longer tagline (zu, fil,
+     tn, ss on a phone) takes a second line instead of being cut. */
+  min-height: 24px;
+  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
 }
 @media (min-width: 768px) {
   .wordbook .wb-home-tagline {
     font-size: 18px;
     margin: 0 0 44px;
     letter-spacing: 0.10em;
-    height: 28px;
+    min-height: 28px;
   }
 }
 

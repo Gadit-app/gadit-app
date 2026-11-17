@@ -34,6 +34,7 @@
  * Hover pauses. Click a dot to jump.
  */
 
+import { keepBrand } from "@/lib/keep-brand";
 import { planCopy } from "@/lib/plan-copy";
 import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/lib/lang-context";
@@ -3347,7 +3348,7 @@ export function GaditDemoAnimation() {
           theme (page tokens, readable on dark). Only the mockup FRAME
           below is force-light — it's a "screenshot" of the light app. */}
       <div className="wb-demo-anim-headstrip">
-        <div className="wb-demo-anim-eyebrow">{c.watchEyebrow}</div>
+        <div className="wb-demo-anim-eyebrow">{keepBrand(c.watchEyebrow)}</div>
         <h2 className="wb-demo-anim-title">{c.watchTitle}</h2>
         <p className="wb-demo-anim-lede">{c.watchLede}</p>
       </div>

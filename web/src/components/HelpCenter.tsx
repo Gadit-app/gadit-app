@@ -125,7 +125,8 @@ export function HelpCenter() {
         >
           {c.emailCta}
         </a>
-        <p className="wb-help-response-time">{c.responseTime}</p>
+        {/* The typical-reply line is gone (council round 2, 2026-11-17): it
+            repeated the reply time as a firmer promise than "usually". */}
         <p className="wb-help-email-line" dir="ltr">
           <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
         </p>

@@ -1200,7 +1200,7 @@ function Gate({ title, appTitle, btn, onClick, href, buy, lang, second }: { titl
       {buy && <p className="gd-play-only" style={{ margin: 0, fontSize: 16, color: "var(--ink,#20272E)" }}>{playNotActive(lang ?? "en")}</p>}
       {buy && <AppIntentPing feature="reader" />}
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
-        {href ? <Link href={href} className={buy ? "gd-buy" : undefined}>{inner}</Link> : <span onClick={onClick}>{inner}</span>}
+        {href ? <Link href={href} className={buy ? "gd-buy" : undefined}>{inner}</Link> : <button type="button" onClick={onClick} style={{ background: "none", border: 0, padding: 0, font: "inherit" }}>{inner}</button>}
         {second && (
           <Link href={second.href} className="gd-buy">
             <span style={{ ...look, background: "transparent", color: "var(--teal,#0EA5A5)", border: "1.5px solid var(--teal,#0EA5A5)" }}>{second.btn}</span>
