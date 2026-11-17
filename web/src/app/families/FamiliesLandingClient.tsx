@@ -1851,7 +1851,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
             <section className="fam-band fam-band-white fam-subj-band">
               <div className="fam-feature">
                 <div className="fam-feature-text">
-                  <div className="fam-kicker">{sc.kicker}</div>
+                  <div className="fam-kicker">{keepBrand(sc.kicker)}</div>
                   <h2 className="fam-h2 fam-h2-start">{sc.title}</h2>
                   <SubjectsLines copy={sc} pClass="fam-body" noteClass="fam-subj-note" />
                 </div>
@@ -1870,7 +1870,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
           <section className="fam-band fam-band-sun">
             <div className="fam-games-show">
               <Image src="/play/duel-mascot.webp" alt="" width={240} height={240} className="fam-games-mascot" />
-              <div className="fam-kicker">{real.games.kicker}</div>
+              <div className="fam-kicker">{keepBrand(real.games.kicker)}</div>
               <h2 className="fam-h2">{real.games.title}</h2>
               <p className="fam-body"><Lines text={real.games.body} /></p>
               <div className="fam-games-stage fam-devices">
@@ -1898,7 +1898,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
             <div className="fam-feature">
               <div className="fam-feature-text">
                 <Image src="/play/duel-mascot.webp" alt="" width={240} height={240} className="fam-games-mascot" />
-                <div className="fam-kicker">{real.games.kicker}</div>
+                <div className="fam-kicker">{keepBrand(real.games.kicker)}</div>
                 <h2 className="fam-h2 fam-h2-start">{real.games.title}</h2>
                 <p className="fam-body"><Lines text={real.games.body} /></p>
                 <ul className="fam-real-points">
@@ -1927,7 +1927,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
         <section className="fam-band fam-band-cream">
           <div className="fam-feature">
             <div className="fam-feature-text">
-              <div className="fam-kicker">{c.dashKicker}</div>
+              <div className="fam-kicker">{keepBrand(c.dashKicker)}</div>
               <h2 className="fam-h2 fam-h2-start">{c.dashTitle}</h2>
               <p className="fam-body">{c.dashBody}</p>
             </div>
@@ -2009,7 +2009,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
         {/* 6 · Comparison */}
         <section className="fam-band fam-band-white">
           <div className="fam-section">
-            <div className="fam-kicker">{c.compareKicker}</div>
+            <div className="fam-kicker">{keepBrand(c.compareKicker)}</div>
             <h2 className="fam-h2">{c.compareTitle}</h2>
             <div className="fam-compare">
               <div className="fam-compare-head">
@@ -2032,7 +2032,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
         <section className="fam-band fam-band-purple">
           <div className="fam-section fam-center">
             <ShieldBigIcon />
-            {real?.safeKicker && <div className="fam-kicker fam-kicker-light">{real.safeKicker}</div>}
+            {real?.safeKicker && <div className="fam-kicker fam-kicker-light">{keepBrand(real.safeKicker)}</div>}
             <h2 className="fam-h2">{real?.safeTitle ?? c.safeTitle}</h2>
             <div className="fam-inline-img">
               <Image src={desk ? "/fam/safe-tablet.webp" : "/fam/safe.webp"} alt="" width={1200} height={800} sizes="(max-width: 760px) 92vw, 560px" />
@@ -2053,7 +2053,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
         {!real && (
         <section className="fam-band fam-band-purple">
           <div className="fam-section fam-center">
-            <div className="fam-kicker">{c.credKicker}</div>
+            <div className="fam-kicker">{keepBrand(c.credKicker)}</div>
             <h2 className="fam-h2">{c.credTitle}</h2>
             <p className="fam-body fam-body-center">{c.credBody}</p>
           </div>
@@ -2080,7 +2080,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
              ending in the visible-progress payoff + CTA. */}
         <section className="fam-band fam-band-white">
           <div className="fam-section fam-center fam-section-wide">
-            <div className="fam-kicker" id="fam-how">{real ? real.howKicker : c.chainKicker}</div>
+            <div className="fam-kicker" id="fam-how">{keepBrand(real ? real.howKicker : c.chainKicker)}</div>
             <h2 className="fam-h2">{real ? real.howTitle : c.chainTitle}</h2>
             {real ? (
               <>
@@ -2153,7 +2153,7 @@ function FamiliesLanding({ withNav = false, classic = false, i18n }: { withNav?:
         {/* 9 · Pricing */}
         <section className={`fam-band fam-band-cream${real ? " fam-price-band" : ""}`} id="fam-pricing">
           <div className="fam-section">
-            {!real && <div className="fam-kicker">{c.priceKicker}</div>}
+            {!real && <div className="fam-kicker">{keepBrand(c.priceKicker)}</div>}
             <div className="fam-price-card">
               <div className="fam-price-badge">{c.trialBadge}</div>
               <h2 className="fam-price-title">{c.priceTitle}</h2>
