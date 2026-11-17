@@ -5,10 +5,10 @@ import type { Lang } from "./i18n";
 export const HELP_MORE_1: Partial<Record<Lang, HelpContent>> = {
   ar: {
     eyebrow: "مركز المساعدة",
-    heading: "اعثر على إجابتك بسرعة.",
+    heading: "اعثر على إجابتك بسرعة",
     lede: "أسئلة شائعة وحلول خطوة بخطوة، مرتبة حسب الموضوع. إذا لم تجد مشكلتك، تواصل مع الفريق من أسفل الصفحة.",
     stillNeedHelpHeading: "ما زلت بحاجة إلى مساعدة؟",
-    stillNeedHelpBody: "راسلنا مباشرة. يقرأ الفريق كل رسالة ويرد خلال يوم أو يومين.",
+    stillNeedHelpBody: "راسلنا مباشرة. يقرأ الفريق كل رسالة ويرد عادة خلال يوم أو يومين.",
     emailCta: "راسلنا عبر البريد",
     responseTime: "الرد المعتاد: خلال 24 إلى 48 ساعة.",
     categories: [
@@ -360,10 +360,10 @@ export const HELP_MORE_1: Partial<Record<Lang, HelpContent>> = {
   },
   ru: {
     eyebrow: "Центр помощи",
-    heading: "Быстро найдите ответ.",
+    heading: "Быстро найдите ответ",
     lede: "Частые вопросы и пошаговые решения, сгруппированные по темам. Если вы не нашли свой вопрос, свяжитесь с командой внизу страницы.",
     stillNeedHelpHeading: "Всё ещё нужна помощь?",
-    stillNeedHelpBody: "Напишите нам напрямую. Команда читает каждое сообщение и отвечает в течение одного-двух дней.",
+    stillNeedHelpBody: "Напишите нам напрямую. Команда читает каждое сообщение и обычно отвечает в течение одного-двух дней.",
     emailCta: "Написать нам",
     responseTime: "Обычное время ответа: от 24 до 48 часов.",
     categories: [
@@ -715,10 +715,10 @@ export const HELP_MORE_1: Partial<Record<Lang, HelpContent>> = {
   },
   es: {
     eyebrow: "Centro de ayuda",
-    heading: "Encuentra una respuesta, rápido.",
+    heading: "Encuentra una respuesta, rápido",
     lede: "Preguntas frecuentes y soluciones paso a paso, organizadas por tema. Si no ves tu problema, ponte en contacto con el equipo al final de la página.",
     stillNeedHelpHeading: "¿Sigues sin solución?",
-    stillNeedHelpBody: "Escríbenos directamente. El equipo lee cada mensaje y responde en uno o dos días.",
+    stillNeedHelpBody: "Escríbenos directamente. El equipo lee cada mensaje y suele responder en uno o dos días.",
     emailCta: "Escríbenos",
     responseTime: "Respuesta habitual: entre 24 y 48 horas.",
     categories: [
@@ -1070,10 +1070,10 @@ export const HELP_MORE_1: Partial<Record<Lang, HelpContent>> = {
   },
   pt: {
     eyebrow: "Central de Ajuda",
-    heading: "Encontre uma resposta, rápido.",
+    heading: "Encontre uma resposta, rápido",
     lede: "Perguntas frequentes e soluções passo a passo, organizadas por tema. Se você não encontrar o seu problema, fale com a equipe no fim da página.",
     stillNeedHelpHeading: "Ainda precisa de ajuda?",
-    stillNeedHelpBody: "Escreva para nós diretamente. A equipe lê todas as mensagens e responde em um ou dois dias.",
+    stillNeedHelpBody: "Escreva para nós diretamente. A equipe lê todas as mensagens e geralmente responde em um ou dois dias.",
     emailCta: "Enviar e-mail",
     responseTime: "Resposta típica: em 24 a 48 horas.",
     categories: [
@@ -1425,10 +1425,10 @@ export const HELP_MORE_1: Partial<Record<Lang, HelpContent>> = {
   },
   fr: {
     eyebrow: "Centre d'aide",
-    heading: "Trouvez une réponse, vite.",
+    heading: "Trouvez une réponse, vite",
     lede: "Questions fréquentes et solutions pas à pas, classées par thème. Si vous ne trouvez pas votre problème, contactez l'équipe en bas de la page.",
     stillNeedHelpHeading: "Toujours bloqué ?",
-    stillNeedHelpBody: "Écrivez-nous directement. L'équipe lit chaque message et répond sous un ou deux jours.",
+    stillNeedHelpBody: "Écrivez-nous directement. L'équipe lit chaque message et répond généralement sous un ou deux jours.",
     emailCta: "Nous écrire",
     responseTime: "Délai de réponse habituel : 24 à 48 heures.",
     categories: [
@@ -1780,10 +1780,10 @@ export const HELP_MORE_1: Partial<Record<Lang, HelpContent>> = {
   },
   de: {
     eyebrow: "Hilfe-Center",
-    heading: "Schnell eine Antwort finden.",
+    heading: "Schnell eine Antwort finden",
     lede: "Häufige Fragen und Schritt-für-Schritt-Lösungen, nach Themen sortiert. Wenn Ihr Anliegen nicht dabei ist, kontaktieren Sie das Team unten auf der Seite.",
     stillNeedHelpHeading: "Immer noch nicht weiter?",
-    stillNeedHelpBody: "Schreiben Sie uns direkt. Das Team liest jede Nachricht und antwortet innerhalb von ein bis zwei Tagen.",
+    stillNeedHelpBody: "Schreiben Sie uns direkt. Das Team liest jede Nachricht und antwortet normalerweise innerhalb von ein bis zwei Tagen.",
     emailCta: "E-Mail an uns",
     responseTime: "Übliche Antwortzeit: innerhalb von 24 bis 48 Stunden.",
     categories: [

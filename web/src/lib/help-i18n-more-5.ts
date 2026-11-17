@@ -5,10 +5,10 @@ import type { Lang } from "./i18n";
 export const HELP_MORE_5: Partial<Record<Lang, HelpContent>> = {
   "zh-CN": {
     eyebrow: "帮助中心",
-    heading: "快速找到答案。",
+    heading: "快速找到答案",
     lede: "常见问题和分步解决方法，按类别整理。如果没有找到你的问题，请通过页面底部联系我们的团队。",
     stillNeedHelpHeading: "还是没解决？",
-    stillNeedHelpBody: "直接给我们写信。每条消息都会由团队阅读，并在一两天内回复。",
+    stillNeedHelpBody: "直接给我们写信。每条消息都会由团队阅读，并通常会在一两天内回复。",
     emailCta: "给我们发邮件",
     responseTime: "通常回复时间：24 到 48 小时内。",
     categories: [
@@ -360,10 +360,10 @@ export const HELP_MORE_5: Partial<Record<Lang, HelpContent>> = {
   },
   "zh-TW": {
     eyebrow: "說明中心",
-    heading: "快速找到答案。",
+    heading: "快速找到答案",
     lede: "常見問題與逐步解決方法，依類別整理。如果沒有看到你的問題，請透過頁面底部聯絡我們的團隊。",
     stillNeedHelpHeading: "還是沒有解決？",
-    stillNeedHelpBody: "直接寫信給我們。每則訊息都會由團隊閱讀，並在一兩天內回覆。",
+    stillNeedHelpBody: "直接寫信給我們。每則訊息都會由團隊閱讀，並通常在一兩天內回覆。",
     emailCta: "寄信給我們",
     responseTime: "一般回覆時間：24 到 48 小時內。",
     categories: [
@@ -715,10 +715,10 @@ export const HELP_MORE_5: Partial<Record<Lang, HelpContent>> = {
   },
   ko: {
     eyebrow: "고객센터",
-    heading: "답을 빠르게 찾아보세요.",
+    heading: "답을 빠르게 찾아보세요",
     lede: "자주 묻는 질문과 단계별 해결 방법을 분야별로 정리했어요. 원하는 내용이 없다면 페이지 하단에서 팀에 문의해 주세요.",
     stillNeedHelpHeading: "아직 해결되지 않았나요?",
-    stillNeedHelpBody: "저희에게 직접 메일을 보내 주세요. 모든 메시지는 팀이 직접 읽고 하루이틀 안에 답장해요.",
+    stillNeedHelpBody: "저희에게 직접 메일을 보내 주세요. 모든 메시지는 팀이 직접 읽고 보통 하루이틀 안에 답장해요.",
     emailCta: "이메일 보내기",
     responseTime: "평균 답변 시간: 24~48시간 이내",
     categories: [
@@ -1073,7 +1073,7 @@ export const HELP_MORE_5: Partial<Record<Lang, HelpContent>> = {
     heading: "ค้นหาคำตอบได้อย่างรวดเร็ว",
     lede: "คำถามที่พบบ่อยและวิธีแก้ไขทีละขั้นตอน จัดหมวดหมู่ตามหัวข้อ หากไม่พบปัญหาของคุณ ติดต่อทีมงานได้ที่ด้านล่างของหน้า",
     stillNeedHelpHeading: "ยังแก้ปัญหาไม่ได้ใช่ไหม",
-    stillNeedHelpBody: "เขียนถึงเราได้โดยตรง ทีมงานอ่านทุกข้อความและตอบกลับภายในหนึ่งถึงสองวัน",
+    stillNeedHelpBody: "เขียนถึงเราได้โดยตรง ทีมงานอ่านทุกข้อความและมักจะตอบกลับภายในหนึ่งถึงสองวัน",
     emailCta: "ส่งอีเมลถึงเรา",
     responseTime: "ตอบกลับโดยทั่วไปภายใน 24 ถึง 48 ชั่วโมง",
     categories: [
@@ -1425,10 +1425,10 @@ export const HELP_MORE_5: Partial<Record<Lang, HelpContent>> = {
   },
   bn: {
     eyebrow: "সহায়তা কেন্দ্র",
-    heading: "দ্রুত উত্তর খুঁজে নিন।",
+    heading: "দ্রুত উত্তর খুঁজে নিন",
     lede: "বিষয় অনুযায়ী সাজানো সাধারণ প্রশ্ন ও ধাপে ধাপে সমাধান। আপনার সমস্যাটি খুঁজে না পেলে পাতার নিচ থেকে আমাদের টিমের সাথে যোগাযোগ করুন।",
     stillNeedHelpHeading: "এখনও সমাধান হয়নি?",
-    stillNeedHelpBody: "সরাসরি আমাদের লিখুন। প্রতিটি বার্তা টিম পড়ে এবং এক বা দুই দিনের মধ্যে উত্তর দেয়।",
+    stillNeedHelpBody: "সরাসরি আমাদের লিখুন। প্রতিটি বার্তা টিম পড়ে এবং সাধারণত এক বা দুই দিনের মধ্যে উত্তর দেয়।",
     emailCta: "আমাদের ইমেইল করুন",
     responseTime: "সাধারণত উত্তর আসে ২৪ থেকে ৪৮ ঘণ্টার মধ্যে।",
     categories: [

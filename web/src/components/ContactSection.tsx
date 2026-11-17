@@ -41,8 +41,9 @@ export default function ContactSection() {
           <span>{c.emailButton}</span>
         </a>
 
-        <p className="text-xs text-slate-400 mt-5">{c.responseTime}</p>
-        <p className="text-xs text-slate-400 mt-1" dir="ltr">
+        {/* The typical-reply line is gone (council round 2, 2026-11-17): it
+            repeated the reply time as a firmer promise than "usually". */}
+        <p className="text-xs text-slate-400 mt-5" dir="ltr">
           <a
             href={`mailto:${SUPPORT_EMAIL}`}
             className="hover:text-blue-600 transition-colors"

@@ -5,10 +5,10 @@ import type { Lang } from "./i18n";
 export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
   cs: {
     eyebrow: "Centrum nápovědy",
-    heading: "Najděte odpověď, rychle.",
+    heading: "Najděte odpověď, rychle",
     lede: "Časté otázky a postupy krok za krokem, seřazené podle oblastí. Pokud tu svůj problém nenajdete, ozvěte se našemu týmu, kontakt najdete dole na stránce.",
     stillNeedHelpHeading: "Stále si nevíte rady?",
-    stillNeedHelpBody: "Napište nám přímo. Každou zprávu si tým přečte a odpověď dostanete do jednoho až dvou dnů.",
+    stillNeedHelpBody: "Napište nám přímo. Každou zprávu si tým přečte a odpověď obvykle dostanete do jednoho až dvou dnů.",
     emailCta: "Napište nám e-mail",
     responseTime: "Obvyklá doba odpovědi: do 24 až 48 hodin.",
     categories: [
@@ -360,10 +360,10 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
   },
   sk: {
     eyebrow: "Centrum pomoci",
-    heading: "Nájdite odpoveď, rýchlo.",
+    heading: "Nájdite odpoveď, rýchlo",
     lede: "Časté otázky a postupy krok za krokom, zoradené podľa oblastí. Ak tu svoj problém nenájdete, ozvite sa nášmu tímu, kontakt nájdete dole na stránke.",
     stillNeedHelpHeading: "Stále si neviete rady?",
-    stillNeedHelpBody: "Napíšte nám priamo. Každú správu si tím prečíta a odpoveď dostanete do jedného až dvoch dní.",
+    stillNeedHelpBody: "Napíšte nám priamo. Každú správu si tím prečíta a odpoveď zvyčajne dostanete do jedného až dvoch dní.",
     emailCta: "Napíšte nám e-mail",
     responseTime: "Zvyčajná doba odpovede: do 24 až 48 hodín.",
     categories: [
@@ -715,10 +715,10 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
   },
   it: {
     eyebrow: "Centro assistenza",
-    heading: "Trova subito una risposta.",
+    heading: "Trova subito una risposta",
     lede: "Domande frequenti e soluzioni passo passo, organizzate per area. Se non trovi il tuo problema, contatta il team in fondo alla pagina.",
     stillNeedHelpHeading: "Ti serve ancora aiuto?",
-    stillNeedHelpBody: "Scrivici direttamente. Il team legge ogni messaggio e risponde entro un giorno o due.",
+    stillNeedHelpBody: "Scrivici direttamente. Il team legge ogni messaggio e di solito risponde entro un giorno o due.",
     emailCta: "Scrivici un'email",
     responseTime: "Risposta tipica: entro 24-48 ore.",
     categories: [
@@ -1070,10 +1070,10 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
   },
   ja: {
     eyebrow: "ヘルプセンター",
-    heading: "答えをすばやく見つけましょう。",
+    heading: "答えをすばやく見つけましょう",
     lede: "よくある質問と手順ごとの解決方法を、分野別にまとめています。お困りの内容が見つからない場合は、ページ下部からチームにご連絡ください。",
     stillNeedHelpHeading: "まだ解決しませんか？",
-    stillNeedHelpBody: "直接ご連絡ください。すべてのメッセージにチームが目を通し、1、2日以内に返信します。",
+    stillNeedHelpBody: "直接ご連絡ください。すべてのメッセージにチームが目を通し、通常1、2日以内に返信します。",
     emailCta: "メールで問い合わせる",
     responseTime: "通常の返信: 24時間から48時間以内。",
     categories: [
@@ -1425,10 +1425,10 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
   },
   hi: {
     eyebrow: "सहायता केंद्र",
-    heading: "जवाब पाएँ, जल्दी।",
+    heading: "जवाब पाएँ, जल्दी",
     lede: "आम सवाल और चरण-दर-चरण समाधान, विषय के अनुसार व्यवस्थित। अगर आपकी समस्या यहाँ नहीं दिखती, तो पेज के नीचे से हमारी टीम से संपर्क करें।",
     stillNeedHelpHeading: "अब भी अटके हुए हैं?",
-    stillNeedHelpBody: "हमें सीधे लिखें। हर संदेश टीम पढ़ती है और एक या दो दिन में जवाब देती है।",
+    stillNeedHelpBody: "हमें सीधे लिखें। हर संदेश टीम पढ़ती है और आमतौर पर एक या दो दिन में जवाब देती है।",
     emailCta: "हमें ईमेल करें",
     responseTime: "आम तौर पर जवाब: 24 से 48 घंटे के भीतर।",
     categories: [
@@ -1780,10 +1780,10 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
   },
   am: {
     eyebrow: "የእገዛ ማዕከል",
-    heading: "መልስ በፍጥነት ያግኙ።",
+    heading: "መልስ በፍጥነት ያግኙ",
     lede: "የተለመዱ ጥያቄዎችና ደረጃ በደረጃ መፍትሄዎች፣ በዘርፍ ተደራጅተው። ችግርዎን እዚህ ካላገኙት፣ ከገጹ ግርጌ ቡድናችንን ያግኙ።",
     stillNeedHelpHeading: "አሁንም አልተፈታም?",
-    stillNeedHelpBody: "በቀጥታ ይጻፉልን። እያንዳንዱን መልእክት ቡድኑ ያነባል፣ በአንድ ወይም በሁለት ቀን ውስጥም መልስ ይሰጣል።",
+    stillNeedHelpBody: "በቀጥታ ይጻፉልን። እያንዳንዱን መልእክት ቡድኑ ያነባል፣ በአብዛኛው በአንድ ወይም በሁለት ቀን ውስጥም መልስ ይሰጣል።",
     emailCta: "ኢሜይል ይላኩልን",
     responseTime: "የተለመደው የመልስ ጊዜ: ከ24 እስከ 48 ሰዓት ውስጥ።",
     categories: [

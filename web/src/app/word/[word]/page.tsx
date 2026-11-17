@@ -7,7 +7,7 @@ import { WordClient } from "./WordClient";
 import { LANGUAGES } from "@/lib/i18n";
 import { sanitizeDegenerateEtymology } from "@/lib/define-guard";
 import { wordTitle } from "@/lib/word-title";
-import { wordDescription } from "@/lib/word-description";
+import { wordDescription, wordDescriptionIntl } from "@/lib/word-description";
 import { WordLinks } from "./WordLinks";
 
 /**
@@ -149,8 +149,10 @@ export async function generateMetadata(
   // descriptions).
   const firstMeaning =
     (preloaded?.meanings?.[0] as { meaning?: string } | undefined)?.meaning?.trim() ?? "";
-  // Hebrew pages: the approved search-form wording (lib/word-description.ts).
-  const description = wordDescription(lang, decoded, preloaded as unknown as Parameters<typeof wordDescription>[2]) ?? (firstMeaning
+  // Hebrew pages: the approved search-form wording; English, Spanish and
+  // Arabic: the council's round-2 templates (lib/word-description.ts).
+  const descInput = preloaded as unknown as Parameters<typeof wordDescription>[2];
+  const description = wordDescription(lang, decoded, descInput) ?? wordDescriptionIntl(lang, decoded, descInput) ?? (firstMeaning
     ? `${decoded}: ${firstMeaning.slice(0, 150)}${firstMeaning.length > 150 ? "…" : ""}`
     : `Meanings, examples, etymology, and idioms for "${decoded}", in 30+ languages.`);
 

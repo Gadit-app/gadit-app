@@ -5,10 +5,10 @@ import type { Lang } from "./i18n";
 export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
   vi: {
     eyebrow: "Trung tâm trợ giúp",
-    heading: "Tìm câu trả lời thật nhanh.",
+    heading: "Tìm câu trả lời thật nhanh",
     lede: "Các câu hỏi thường gặp và cách khắc phục từng bước, sắp xếp theo chủ đề. Nếu bạn không thấy vấn đề của mình, hãy liên hệ với đội ngũ ở cuối trang.",
     stillNeedHelpHeading: "Vẫn chưa giải quyết được?",
-    stillNeedHelpBody: "Hãy viết trực tiếp cho chúng tôi. Mọi tin nhắn đều được đội ngũ đọc và trả lời trong vòng một hoặc hai ngày.",
+    stillNeedHelpBody: "Hãy viết trực tiếp cho chúng tôi. Mọi tin nhắn đều được đội ngũ đọc và thường được trả lời trong vòng một hoặc hai ngày.",
     emailCta: "Gửi email cho chúng tôi",
     responseTime: "Thời gian trả lời thông thường: trong vòng 24 đến 48 giờ.",
     categories: [
@@ -360,10 +360,10 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
   },
   fil: {
     eyebrow: "Sentro ng Tulong",
-    heading: "Hanapin ang sagot, nang mabilis.",
+    heading: "Hanapin ang sagot, nang mabilis",
     lede: "Mga karaniwang tanong at sunud-sunod na solusyon, nakaayos ayon sa paksa. Kung hindi mo makita ang problema mo, makipag-ugnayan sa team sa ibaba.",
     stillNeedHelpHeading: "May problema pa rin?",
-    stillNeedHelpBody: "Sumulat ka sa amin nang direkta. Binabasa ng team ang bawat mensahe at sinasagot ito sa loob ng isa o dalawang araw.",
+    stillNeedHelpBody: "Sumulat ka sa amin nang direkta. Binabasa ng team ang bawat mensahe at karaniwang sinasagot ito sa loob ng isa o dalawang araw.",
     emailCta: "Mag-email sa amin",
     responseTime: "Karaniwang sagot: sa loob ng 24 hanggang 48 oras.",
     categories: [
@@ -715,10 +715,10 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
   },
   af: {
     eyebrow: "Hulpsentrum",
-    heading: "Kry vinnig 'n antwoord.",
+    heading: "Kry vinnig 'n antwoord",
     lede: "Algemene vrae en stap-vir-stap oplossings, volgens onderwerp georden. As jy nie jou probleem sien nie, kontak die span onderaan.",
     stillNeedHelpHeading: "Steeds vas?",
-    stillNeedHelpBody: "Skryf direk aan ons. Die span lees elke boodskap en antwoord binne 'n dag of twee.",
+    stillNeedHelpBody: "Skryf direk aan ons. Die span lees elke boodskap en antwoord gewoonlik binne 'n dag of twee.",
     emailCta: "E-pos ons",
     responseTime: "Gewone antwoordtyd: binne 24 tot 48 uur.",
     categories: [
@@ -1070,10 +1070,10 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
   },
   sw: {
     eyebrow: "Kituo cha Msaada",
-    heading: "Pata jibu, haraka.",
+    heading: "Pata jibu, haraka",
     lede: "Maswali ya kawaida na suluhisho hatua kwa hatua, yamepangwa kwa maeneo. Ikiwa huoni tatizo lako, wasiliana na timu chini ya ukurasa.",
     stillNeedHelpHeading: "Bado umekwama?",
-    stillNeedHelpBody: "Tuandikie moja kwa moja. Kila ujumbe husomwa na timu na hujibiwa ndani ya siku moja au mbili.",
+    stillNeedHelpBody: "Tuandikie moja kwa moja. Kila ujumbe husomwa na timu na kwa kawaida hujibiwa ndani ya siku moja au mbili.",
     emailCta: "Tutumie barua pepe",
     responseTime: "Muda wa kawaida wa kujibu: ndani ya saa 24 hadi 48.",
     categories: [
@@ -1425,10 +1425,10 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
   },
   da: {
     eyebrow: "Hjælpecenter",
-    heading: "Find et svar, hurtigt.",
+    heading: "Find et svar, hurtigt",
     lede: "Almindelige spørgsmål og løsninger trin for trin, ordnet efter emne. Hvis du ikke kan se dit problem, så kontakt teamet nederst på siden.",
     stillNeedHelpHeading: "Sidder du stadig fast?",
-    stillNeedHelpBody: "Skriv direkte til os. Teamet læser hver eneste besked og svarer inden for en dag eller to.",
+    stillNeedHelpBody: "Skriv direkte til os. Teamet læser hver eneste besked og svarer som regel inden for en dag eller to.",
     emailCta: "Send os en e-mail",
     responseTime: "Typisk svartid: inden for 24 til 48 timer.",
     categories: [
@@ -1780,10 +1780,10 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
   },
   hu: {
     eyebrow: "Súgóközpont",
-    heading: "Találd meg gyorsan a választ.",
+    heading: "Találd meg gyorsan a választ",
     lede: "Gyakori kérdések és lépésről lépésre megoldások, témák szerint rendezve. Ha nem látod a problémádat, lent felveheted a kapcsolatot a csapattal.",
     stillNeedHelpHeading: "Még mindig elakadtál?",
-    stillNeedHelpBody: "Írj nekünk közvetlenül. A csapat minden üzenetet elolvas, és egy-két napon belül válaszol.",
+    stillNeedHelpBody: "Írj nekünk közvetlenül. A csapat minden üzenetet elolvas, és általában egy-két napon belül válaszol.",
     emailCta: "Írj nekünk e-mailt",
     responseTime: "Szokásos válaszidő: 24-48 órán belül.",
     categories: [

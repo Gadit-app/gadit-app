@@ -80,3 +80,128 @@ export function wordDescription(lang: string, word: string, result: Result | nul
 
   return prefix + fit(first, MAX - prefix.length - tail.length) + tail;
 }
+
+/* ------------------------------------------------------------------------
+ * English, Spanish and Arabic word pages (council round 2, 2026-11-17,
+ * Gadi delegated the approval). The Hebrew function above is untouched and
+ * must stay byte-identical (its December measurement).
+ *
+ *   {prefix}{meaning}{separator}{ending}
+ *   "Meaning of clay: A natural earthy material that is plastic when wet,
+ *    consisting essentially of hydrated silicates of aluminum. With examples
+ *    and word origin."
+ *   "Significado de easy: algo que no requiere mucho esfuerzo o dificultad
+ *    para hacer o entender. Con ejemplos en inglés y en español."
+ *
+ * Rules: a count only for a word in the page's language and only from 2
+ * meanings; the ending names only what the page holds and is never cut;
+ * at most 160 characters; the meaning is whole, else whole sentences, else
+ * cut at a comma, else at a word with "…".
+ * ---------------------------------------------------------------------- */
+type IntlCopy = {
+  prefix: (w: string, count: string) => string;
+  count: (n: number) => string;
+  items: { examples: string; idioms: string; origin: string };
+  list: (items: string[]) => string;
+  bothLanguages?: string;
+};
+const INTL: Record<string, IntlCopy> = {
+  en: {
+    prefix: (w, c) => `Meaning of ${w}${c}: `,
+    count: (n) => (n === 2 ? " (two meanings)" : ` (${n} meanings)`),
+    items: { examples: "examples", idioms: "idioms", origin: "word origin" },
+    list: (it) => `With ${it.length === 1 ? it[0] : `${it.slice(0, -1).join(", ")} and ${it[it.length - 1]}`}.`,
+  },
+  es: {
+    prefix: (w, c) => `Significado de ${w}${c}: `,
+    count: (n) => (n === 2 ? " (dos significados)" : ` (${n} significados)`),
+    items: { examples: "ejemplos", idioms: "modismos", origin: "el origen de la palabra" },
+    list: (it) => `Con ${it.length === 1 ? it[0] : `${it.slice(0, -1).join(", ")} y ${it[it.length - 1]}`}.`,
+    bothLanguages: "Con ejemplos en inglés y en español.",
+  },
+  ar: {
+    prefix: (w, c) => `معنى كلمة ${w}${c}: `,
+    count: (n) => (n === 2 ? " (معنيان)" : n <= 10 ? ` (${n} معانٍ)` : ` (${n} معنى)`),
+    items: { examples: "أمثلة", idioms: "تعابير اصطلاحية", origin: "أصل الكلمة" },
+    list: (it) => `مع ${it.join(" و")}.`,
+    bothLanguages: "مع أمثلة بالإنجليزية والعربية.",
+  },
+};
+
+const TRAILING = /[\s.,;:…،؛]+$/;
+
+/** Spanish: lower-case the first letter unless the first word has another capital ("ONU"). */
+function lowerFirst(s: string): string {
+  const first = s.split(/\s/)[0] ?? "";
+  if (/\p{Lu}/u.test(first.slice(1))) return s;
+  return s.charAt(0).toLocaleLowerCase("es") + s.slice(1);
+}
+
+/** The meaning fitted into `room`: [text, separator]. Separator ". ", " " (after ?!؟) or "… ". */
+function fitIntl(m: string, room: number): [string, string] | null {
+  const sepFor = (t: string) => (/[?!؟]$/.test(t) ? " " : ". ");
+  if (m.length <= room) return [m, sepFor(m)];
+  // Whole leading sentences.
+  let best = "";
+  for (let i = 0; i < m.length - 1; i++) {
+    if (/[.?!؟]/.test(m[i]) && m[i + 1] === " " && i + 1 <= room) best = m.slice(0, i + 1);
+  }
+  if (best) {
+    const t = best.replace(/\.$/, "");
+    return [t, sepFor(t)];
+  }
+  // A comma (or semicolon) that falls in the second half of the room.
+  let cut = -1;
+  for (const mark of [", ", "; ", "، ", "؛ "]) {
+    let i = m.indexOf(mark);
+    while (i !== -1) {
+      if (i >= room / 2 && i <= room) cut = Math.max(cut, i);
+      i = m.indexOf(mark, i + 1);
+    }
+  }
+  if (cut > 0) return [m.slice(0, cut).replace(TRAILING, ""), ". "];
+  // A word.
+  const sp = m.lastIndexOf(" ", room - 1);
+  if (sp <= 0) return null;
+  return [m.slice(0, sp).replace(TRAILING, ""), "… "];
+}
+
+export function wordDescriptionIntl(lang: string, word: string, result: Result | null): string | null {
+  const c = INTL[lang];
+  if (!c || !result) return null;
+  const meanings = (Array.isArray(result.meanings) ? result.meanings : []) as Meaning[];
+  let m = typeof meanings[0]?.meaning === "string" ? meanings[0].meaning.trim().replace(TRAILING, "") : "";
+  if (!m) return null;
+  if (lang === "es") m = lowerFirst(m);
+
+  const foreign = isForeignWord(lang, result);
+  const n = meanings.length;
+  const hasExamples = meanings.some((x) => len(x.examples) > 0);
+  const hasIdioms = len(result.generalIdioms) > 0 || meanings.some((x) => len(x.idioms) > 0);
+  const ety = result.etymology as { historyNote?: unknown; sourceLanguage?: unknown } | null | undefined;
+  const hasOrigin = !!ety && [ety.historyNote, ety.sourceLanguage].some((v) => typeof v === "string" && v.trim().length > 0);
+  const both =
+    foreign &&
+    !!c.bothLanguages &&
+    typeof result.language === "string" &&
+    result.language.trim().toLowerCase().startsWith("english") &&
+    meanings.some((x) => len(x.examplesEn) > 0) &&
+    hasExamples;
+  const items = [hasExamples && c.items.examples, hasIdioms && c.items.idioms, hasOrigin && c.items.origin].filter(Boolean) as string[];
+  const ending = both ? c.bothLanguages! : items.length ? c.list(items) : "";
+
+  let count = !foreign && n >= 2 ? c.count(n) : "";
+  let prefix = c.prefix(word, count);
+  let room = MAX - prefix.length - 2 - ending.length;
+  if (room < 40 && count) {
+    count = "";
+    prefix = c.prefix(word, count);
+    room = MAX - prefix.length - 2 - ending.length;
+  }
+  if (room < 20) return null;
+  const fitted = fitIntl(m, room);
+  if (!fitted) return null;
+  const [text, sep] = fitted;
+  if (!ending) return prefix + text + (sep === "… " ? "…" : sep === " " ? "" : ".");
+  return prefix + text + sep + ending;
+}

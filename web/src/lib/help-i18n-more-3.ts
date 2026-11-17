@@ -5,10 +5,10 @@ import type { Lang } from "./i18n";
 export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
   uk: {
     eyebrow: "Центр допомоги",
-    heading: "Знайдіть відповідь швидко.",
+    heading: "Знайдіть відповідь швидко",
     lede: "Поширені запитання та покрокові рішення, згруповані за темами. Якщо не бачите свого питання, зв'яжіться з командою внизу сторінки.",
     stillNeedHelpHeading: "Досі не вийшло?",
-    stillNeedHelpBody: "Напишіть нам напряму. Команда читає кожне повідомлення і відповідає протягом одного або двох днів.",
+    stillNeedHelpBody: "Напишіть нам напряму. Команда читає кожне повідомлення і зазвичай відповідає протягом одного або двох днів.",
     emailCta: "Написати нам",
     responseTime: "Зазвичай відповідаємо протягом 24 до 48 годин.",
     categories: [
@@ -360,10 +360,10 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
   },
   tr: {
     eyebrow: "Yardım Merkezi",
-    heading: "Cevabı hızla bulun.",
+    heading: "Cevabı hızla bulun",
     lede: "Sık sorulan sorular ve adım adım çözümler, konulara göre düzenlendi. Sorununuzu burada göremiyorsanız sayfanın altından ekiple iletişime geçin.",
     stillNeedHelpHeading: "Hâlâ çözemediniz mi?",
-    stillNeedHelpBody: "Bize doğrudan yazın. Her mesaj ekip tarafından okunur ve bir iki gün içinde yanıtlanır.",
+    stillNeedHelpBody: "Bize doğrudan yazın. Her mesaj ekip tarafından okunur ve genellikle bir iki gün içinde yanıtlanır.",
     emailCta: "Bize e-posta gönderin",
     responseTime: "Genellikle 24 ila 48 saat içinde yanıt veriyoruz.",
     categories: [
@@ -715,10 +715,10 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
   },
   pl: {
     eyebrow: "Centrum pomocy",
-    heading: "Szybko znajdź odpowiedź.",
+    heading: "Szybko znajdź odpowiedź",
     lede: "Najczęstsze pytania i rozwiązania krok po kroku, pogrupowane według tematów. Jeśli nie widzisz swojego problemu, skontaktuj się z zespołem na dole strony.",
     stillNeedHelpHeading: "Nadal potrzebujesz pomocy?",
-    stillNeedHelpBody: "Napisz do nas bezpośrednio. Zespół czyta każdą wiadomość i odpowiada w ciągu dnia lub dwóch.",
+    stillNeedHelpBody: "Napisz do nas bezpośrednio. Zespół czyta każdą wiadomość i zwykle odpowiada w ciągu dnia lub dwóch.",
     emailCta: "Napisz do nas",
     responseTime: "Zwykle odpowiadamy w ciągu 24 do 48 godzin.",
     categories: [
@@ -1070,10 +1070,10 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
   },
   fa: {
     eyebrow: "مرکز راهنما",
-    heading: "پاسخ را سریع پیدا کنید.",
+    heading: "پاسخ را سریع پیدا کنید",
     lede: "پرسش‌های رایج و راه‌حل‌های گام‌به‌گام، دسته‌بندی‌شده بر اساس موضوع. اگر مشکل‌تان را اینجا نمی‌بینید، از پایین صفحه با تیم در تماس باشید.",
     stillNeedHelpHeading: "هنوز مشکل حل نشده؟",
-    stillNeedHelpBody: "مستقیم برای ما بنویسید. تیم همه پیام‌ها را می‌خواند و ظرف یکی دو روز پاسخ می‌دهد.",
+    stillNeedHelpBody: "مستقیم برای ما بنویسید. تیم همه پیام‌ها را می‌خواند و معمولاً ظرف یکی دو روز پاسخ می‌دهد.",
     emailCta: "ایمیل به ما",
     responseTime: "پاسخ معمول: ظرف 24 تا 48 ساعت.",
     categories: [
@@ -1425,10 +1425,10 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
   },
   id: {
     eyebrow: "Pusat Bantuan",
-    heading: "Temukan jawaban dengan cepat.",
+    heading: "Temukan jawaban dengan cepat",
     lede: "Pertanyaan umum dan solusi langkah demi langkah, dikelompokkan per topik. Jika masalah Anda tidak ada di sini, hubungi tim di bagian bawah halaman.",
     stillNeedHelpHeading: "Masih buntu?",
-    stillNeedHelpBody: "Tulis langsung kepada kami. Setiap pesan dibaca oleh tim dan dibalas dalam satu atau dua hari.",
+    stillNeedHelpBody: "Tulis langsung kepada kami. Setiap pesan dibaca oleh tim dan biasanya dibalas dalam satu atau dua hari.",
     emailCta: "Kirim email ke kami",
     responseTime: "Biasanya kami membalas dalam 24 hingga 48 jam.",
     categories: [
@@ -1780,10 +1780,10 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
   },
   nl: {
     eyebrow: "Helpcentrum",
-    heading: "Vind snel een antwoord.",
+    heading: "Vind snel een antwoord",
     lede: "Veelgestelde vragen en stapsgewijze oplossingen, geordend per onderwerp. Staat je probleem er niet bij? Neem dan onderaan contact op met het team.",
     stillNeedHelpHeading: "Kom je er nog niet uit?",
-    stillNeedHelpBody: "Schrijf ons direct. Het team leest elk bericht en reageert binnen een dag of twee.",
+    stillNeedHelpBody: "Schrijf ons direct. Het team leest elk bericht en reageert meestal binnen een dag of twee.",
     emailCta: "Mail ons",
     responseTime: "Gebruikelijke reactietijd: binnen 24 tot 48 uur.",
     categories: [

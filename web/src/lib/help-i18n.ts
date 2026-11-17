@@ -73,10 +73,10 @@ export const HELP = {} as Record<Lang, HelpContent>;
 Object.assign(HELP, {
   en: {
     eyebrow: "Help Center",
-    heading: "Find an answer, fast.",
+    heading: "Find an answer, fast",
     lede: "Common questions and step by step fixes, organised by area. If you don't see your issue, get in touch with the team at the bottom.",
     stillNeedHelpHeading: "Still stuck?",
-    stillNeedHelpBody: "Write to us directly. Every message gets read by the team and a reply within a day or two.",
+    stillNeedHelpBody: "Write to us directly. Every message gets read by the team, and a reply usually comes within a day or two.",
     emailCta: "Email us",
     responseTime: "Typical reply: within 24 to 48 hours.",
     categories: [
@@ -428,10 +428,10 @@ Object.assign(HELP, {
   },
   zu: {
     eyebrow: "Isikhungo Sosizo",
-    heading: "Thola impendulo, ngokushesha.",
+    heading: "Thola impendulo, ngokushesha",
     lede: "Imibuzo evamile nezixazululo isinyathelo nesinyathelo, zihlelwe ngezindawo. Uma ungayiboni inkinga yakho, xhumana neqembu ngezansi.",
     stillNeedHelpHeading: "Usabambekile?",
-    stillNeedHelpBody: "Sibhalele ngqo. Wonke umyalezo ufundwa iqembu futhi uthola impendulo phakathi kosuku noma ezimbili.",
+    stillNeedHelpBody: "Sibhalele ngqo. Wonke umyalezo ufundwa iqembu futhi ngokuvamile uthola impendulo phakathi kosuku noma ezimbili.",
     emailCta: "Sithumelele i-imeyili",
     responseTime: "Impendulo evamile: phakathi kwamahora angu-24 kuya kwangu-48.",
     categories: [
@@ -783,10 +783,10 @@ Object.assign(HELP, {
   },
   xh: {
     eyebrow: "Iziko loncedo",
-    heading: "Fumana impendulo, ngokukhawuleza.",
+    heading: "Fumana impendulo, ngokukhawuleza",
     lede: "Imibuzo eqhelekileyo nezisombululo inyathelo ngenyathelo, zicwangciswe ngamacandelo. Ukuba awuyiboni ingxaki yakho, qhagamshelana neqela ezantsi.",
     stillNeedHelpHeading: "Usabambekile?",
-    stillNeedHelpBody: "Sibhalele ngqo. Wonke umyalezo ufundwa liqela kwaye uphendulwa kwisithuba sosuku okanye ezimbini.",
+    stillNeedHelpBody: "Sibhalele ngqo. Wonke umyalezo ufundwa liqela kwaye ngokuqhelekileyo uphendulwa kwisithuba sosuku okanye ezimbini.",
     emailCta: "Sithumelele i-imeyile",
     responseTime: "Impendulo eqhelekileyo: kwiiyure ezingama-24 ukuya kwezingama-48.",
     categories: [
@@ -1138,10 +1138,10 @@ Object.assign(HELP, {
   },
   nso: {
     eyebrow: "Senthara ya Thušo",
-    heading: "Hwetša karabo, ka pela.",
+    heading: "Hwetša karabo, ka pela",
     lede: "Dipotšišo tše di tlwaelegilego le ditharollo tša kgato ka kgato, di rulagantšwe go ya ka dihlogo. Ge o sa bone bothata bja gago, ikgokaganye le sehlopha ka fase.",
     stillNeedHelpHeading: "O sa kgomaretšwe?",
-    stillNeedHelpBody: "Re ngwalele thwii. Molaetša o mongwe le o mongwe o balwa ke sehlopha gomme o hwetša karabo ka gare ga letšatši goba a mabedi.",
+    stillNeedHelpBody: "Re ngwalele thwii. Molaetša o mongwe le o mongwe o balwa ke sehlopha gomme gantši o hwetša karabo ka gare ga letšatši goba a mabedi.",
     emailCta: "Re romele imeile",
     responseTime: "Gantši re araba: ka gare ga diiri tše 24 go ya go tše 48.",
     categories: [
@@ -1493,10 +1493,10 @@ Object.assign(HELP, {
   },
   tn: {
     eyebrow: "Lefelo la Thuso",
-    heading: "Bona karabo, ka bonako.",
+    heading: "Bona karabo, ka bonako",
     lede: "Dipotso tse di tlwaelegileng le ditharabololo kgato ka kgato, di rulagantswe ka dikarolo. Fa o sa bone bothata jwa gago, ikgolaganye le setlhopha kwa tlase.",
     stillNeedHelpHeading: "A o sa ntse o kgoreletsegile?",
-    stillNeedHelpBody: "Re kwalele ka tlhamalalo. Molaetsa mongwe le mongwe o balwa ke setlhopha mme o bona karabo mo letsatsing kgotsa a mabedi.",
+    stillNeedHelpBody: "Re kwalele ka tlhamalalo. Molaetsa mongwe le mongwe o balwa ke setlhopha mme gantsi o bona karabo mo letsatsing kgotsa a mabedi.",
     emailCta: "Re romelele imeile",
     responseTime: "Gantsi re araba mo diureng di le 24 go ya go 48.",
     categories: [
@@ -1848,10 +1848,10 @@ Object.assign(HELP, {
   },
   st: {
     eyebrow: "Setsi sa Thuso",
-    heading: "Fumana karabo, kapele.",
+    heading: "Fumana karabo, kapele",
     lede: "Dipotso tse tlwaelehileng le ditharollo mohato ka mohato, di hlophisitswe ka dikarolo. Haeba o sa bone bothata ba hao, ikopanye le sehlopha ka tlase.",
     stillNeedHelpHeading: "O ntse o thatafallwa?",
-    stillNeedHelpBody: "Re ngolle ka kotloloho. Molaetsa o mong le o mong o balwa ke sehlopha mme o fumana karabo nakong ya letsatsi kapa a mabedi.",
+    stillNeedHelpBody: "Re ngolle ka kotloloho. Molaetsa o mong le o mong o balwa ke sehlopha mme hangata o fumana karabo nakong ya letsatsi kapa a mabedi.",
     emailCta: "Re romele imeile",
     responseTime: "Karabo e tlwaelehileng: nakong ya dihora tse 24 ho isa ho tse 48.",
     categories: [
@@ -2203,10 +2203,10 @@ Object.assign(HELP, {
   },
   ts: {
     eyebrow: "Ndhawu ya Mpfuno",
-    heading: "Kumani nhlamulo, hi ku hatlisa.",
+    heading: "Kumani nhlamulo, hi ku hatlisa",
     lede: "Swivutiso leswi tolovelekeke na ndlela yo lulamisa swiphiqo goza hi goza, swi hleriwile hi swiphemu. Loko mi nga voni xiphiqo xa n'wina, vulavulani na ntlawa laha hansi.",
     stillNeedHelpHeading: "Xana ma ha khomekile?",
-    stillNeedHelpBody: "Hi tsaleleni hi ku kongoma. Rungula rin'wana na rin'wana ri hlayiwa hi ntlawa naswona ri hlamuriwa endzhaku ka siku rin'we kumbe mambirhi.",
+    stillNeedHelpBody: "Hi tsaleleni hi ku kongoma. Rungula rin'wana na rin'wana ri hlayiwa hi ntlawa naswona ri hlamuriwa hakanyingi endzhaku ka siku rin'we kumbe mambirhi.",
     emailCta: "Hi rhumeleni imeyili",
     responseTime: "Nhlamulo ya ntolovelo: endzhaku ka tiawara ta 24 ku ya eka 48.",
     categories: [
@@ -2558,10 +2558,10 @@ Object.assign(HELP, {
   },
   ss: {
     eyebrow: "Sikhungo Selusito",
-    heading: "Tfola imphendvulo, masinyane.",
+    heading: "Tfola imphendvulo, masinyane",
     lede: "Imibuto levamile netisombululo tesinyatselo ngesinyatselo, letihlelwe ngetindzawo. Uma ungayiboni inkinga yakho, xhumana nelicembu ngentasi.",
     stillNeedHelpHeading: "Usabambekile?",
-    stillNeedHelpBody: "Sibhalele ngco. Wonkhe umlayeto ufundvwa licembu futsi uphendvulwa ngekhatsi kwelilanga linye nobe lamabili.",
+    stillNeedHelpBody: "Sibhalele ngco. Wonkhe umlayeto ufundvwa licembu futsi ngokuvamile uphendvulwa ngekhatsi kwelilanga linye nobe lamabili.",
     emailCta: "Sitfumelele i-imeyili",
     responseTime: "Imphendvulo levamile: ngekhatsi kwemahora langu-24 kuya ku-48.",
     categories: [
@@ -2913,10 +2913,10 @@ Object.assign(HELP, {
   },
   ve: {
     eyebrow: "Fhethu ha Thuso",
-    heading: "Wanani phindulo, nga u ṱavhanya.",
+    heading: "Wanani phindulo, nga u ṱavhanya",
     lede: "Mbudziso dzi ḓivheaho na nḓila dza u lugisa tshiṱepe nga tshiṱepe, dzo dzudzanywa nga masia. Arali ni sa vhoni thaidzo yaṋu, kwamani tshigwada afho fhasi.",
     stillNeedHelpHeading: "Ni kha ḓi kundwa?",
-    stillNeedHelpBody: "Ri ṅwaleleni. Mulaedza muṅwe na muṅwe u vhalwa nga tshigwada nahone u fhindulwa nga ḓuvha ḽithihi kana mavhili.",
+    stillNeedHelpBody: "Ri ṅwaleleni. Mulaedza muṅwe na muṅwe u vhalwa nga tshigwada nahone nga tlwaelo u fhindulwa nga ḓuvha ḽithihi kana mavhili.",
     emailCta: "Ri rumeleni imeiḽi",
     responseTime: "Kanzhi ri fhindula nga awara dza 24 u swika 48.",
     categories: [
@@ -3268,10 +3268,10 @@ Object.assign(HELP, {
   },
   nr: {
     eyebrow: "Isikhungo Sesizo",
-    heading: "Thola ipendulo, msinyana.",
+    heading: "Thola ipendulo, msinyana",
     lede: "Imibuzo evamileko nezilungiso zegadango ngegadango, zihlelwe ngeendawo. Nange ungaboni umraro wakho, thintana nethimba ngezansi.",
     stillNeedHelpHeading: "Usabambekile?",
-    stillNeedHelpBody: "Sitlolele ngokuqondileko. Umlayezo ngamunye ufundwa lithimba begodu uthola ipendulo phakathi kwelanga linye namkha amabili.",
+    stillNeedHelpBody: "Sitlolele ngokuqondileko. Umlayezo ngamunye ufundwa lithimba begodu ngokuvamileko uthola ipendulo phakathi kwelanga linye namkha amabili.",
     emailCta: "Sithumelele i-imeyili",
     responseTime: "Ipendulo ejayelekileko: phakathi kwamahora ama-24 ukuya kwama-48.",
     categories: [
@@ -3623,10 +3623,10 @@ Object.assign(HELP, {
   },
   el: {
     eyebrow: "Κέντρο βοήθειας",
-    heading: "Βρες μια απάντηση, γρήγορα.",
+    heading: "Βρες μια απάντηση, γρήγορα",
     lede: "Συχνές ερωτήσεις και λύσεις βήμα προς βήμα, οργανωμένες ανά περιοχή. Αν δεν βλέπεις το ζήτημά σου, επικοινώνησε με την ομάδα στο κάτω μέρος.",
     stillNeedHelpHeading: "Ακόμα κολλημένος;",
-    stillNeedHelpBody: "Γράψε μας απευθείας. Κάθε μήνυμα διαβάζεται από την ομάδα και παίρνει απάντηση μέσα σε μία ή δύο ημέρες.",
+    stillNeedHelpBody: "Γράψε μας απευθείας. Κάθε μήνυμα διαβάζεται από την ομάδα και παίρνει συνήθως απάντηση μέσα σε μία ή δύο ημέρες.",
     emailCta: "Στείλε μας email",
     responseTime: "Τυπική απάντηση: μέσα σε 24 με 48 ώρες.",
     categories: [
@@ -3978,10 +3978,10 @@ Object.assign(HELP, {
   },
   he: {
     eyebrow: "מרכז עזרה",
-    heading: "מצאו תשובה. מהר.",
+    heading: "מצאו תשובה מהר",
     lede: "שאלות נפוצות ופתרונות שלב שלב, מסודרים לפי תחום. לא רואים את הבעיה שלכם? אפשר לפנות אלינו ישירות למטה.",
     stillNeedHelpHeading: "עדיין תקועים?",
-    stillNeedHelpBody: "כתבו לנו ישירות. כל הודעה נקראת על ידי הצוות, ותגובה תגיע תוך יום או יומיים.",
+    stillNeedHelpBody: "כתבו לנו ישירות. כל הודעה נקראת על ידי הצוות, ותגובה תגיע בדרך כלל תוך יום או יומיים.",
     emailCta: "שלחו לנו מייל",
     responseTime: "זמן תגובה אופייני: עד 48 שעות.",
     categories: [
