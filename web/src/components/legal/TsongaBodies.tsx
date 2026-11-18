@@ -23,6 +23,9 @@ export function PrivacyBodyTs(): ReactElement {
         vuxokoxoko bya xisekelo bya phurofayili lebyi Google yi byi nyikaka (vito leri kombisiwaka, xifaniso xa
         phurofayili). A hi amukeli phasiwedi ya n’wina ya Google.
       </p>
+      <p>
+        {"Eka app ya iOS mi nga tlhela mi nghena hi Apple. Kutani Apple yi hi nyika vito ni adirese ya imeyili leyi mi hlawulaka ku yi avelana, leyi nga vaka adirese ya xihundla yo hundzisela leyi hundziselaka ti-imeyili ta hina eka n’wina. A hi amukeli phasiwedi ya n’wina ya Apple."}
+      </p>
       <h3>Vuxokoxoko bya matirhiselo</h3>
       <p>Loko mi tirhisa Gadit, hi lulamisa:</p>
       <ul>
@@ -77,30 +80,45 @@ export function PrivacyBodyTs(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{", yi lulamisa marito ni swivulwa leswi mi swi rhumelaka ku endla tinhlamuselo, mavonelo hi swivulwa, tikhwizi, ni ku tsala leswi vuriweke hi rito (Whisper), naswona yi endla swifaniso (DALL·E 3). Yi tlhela yi tsala tinhlamulo ta mupfuni wa Gadit: hi yi rhumela xivutiso xa n’wina, marungula ya le mahlweni ya mbulavurisano wolowo, ririmi ra xitirhisiwa xa n’wina, pulani ya n’wina, ni loko mi ri eka webusayiti kumbe app, naswona a hi engeteli vito ra n’wina kumbe adirese ya imeyili. Vuxokoxoko lebyi rhumeriwaka eka OpenAI byi lawuriwa hi pholisi ya OpenAI ya matirhiselo ya vuxokoxoko ya API."}
+          <strong>OpenAI</strong>{", yi lulamisa marito ni swivulwa leswi mi swi rhumelaka ku endla tinhlamuselo, mavonelo hi swivulwa ni tikhwizi, yi hundzula matsalwa ma va rito, yi tsala leswi vuriweke hi rito, yi hlaya matsalwa eka swifaniso ni tifayela ta PDF leswi mi swi layishaka ehenhla ka yona, xikombiso mapheji ya ntirho wa le kaya, naswona yi endla swifaniso. Yi tlhela yi tsala tinhlamulo ta mupfuni wa Gadit: hi yi rhumela xivutiso xa n’wina, marungula ya le mahlweni ya mbulavurisano wolowo, ririmi ra xitirhisiwa xa n’wina, pulani ya n’wina, ni loko mi ri eka webusayiti kumbe app, naswona a hi engeteli vito ra n’wina kumbe adirese ya imeyili. Vuxokoxoko lebyi rhumeriwaka eka OpenAI byi lawuriwa hi pholisi ya OpenAI ya matirhiselo ya vuxokoxoko ya API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), yi hlayisa akhawunti ya n’wina,
           phurofayili, xiyimo xa ku tsarisa, matimu ya ku lavisisa, ni swifaniso leswi endliweke.
         </li>
         <li>
+          <strong>Google</strong>{"(Gemini, hi ku tirhisa Google Cloud), yi hundzula matsalwa ma va rito. Hi yi rhumela ntsena matsalwa lama faneleke ku hlayiwa hi rito, ku fana na marito, swivulwa ni switori, naswona mpfumawulo wu hlayisiwa eka vuhlayiselo bya hina bya Firebase leswaku wu tlhela wu chayiwa. Eka ntlangu wun’we wa ku hlaya yi tlhela yi yingisela mpfumawulo lowu n’wana a wu vulaka hi rito, ku wu kambela, naswona ku rhekhodiwa koloko a ku hlayisiwi. Google Fonts yi humesa tifonte ta xitirhisiwa xa Xichayina, Xijapani ni Xikoriya, naswona yi vona adirese ya n’wina ya IP."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{", nhlangano lowu nga riki wa vuyelo eIsrael, wu engetela swikombiso swa swivulwa swa Hebheru swa niqqud eka matsalwa ya Xiheberu ya vahlayi lavatsongo. Hi wu rhumela ntsena matsalwa ya Xiheberu."}
+        </li>
+        <li>
           <strong>Stripe</strong>, yi khoma ku hakela, ku tsarisa, ni photali ya ku hakela.
         </li>
         <li>
+          <strong>Apple</strong>{", yi nyika Sign in with Apple eka app ya iOS, vona xiyenge xa 1, naswona yi xavisa ni ku hakerisa swikhokhelo leswi xaviwaka eka app ya iOS. Eka swona, Apple yi khoma ku hakela, naswona hina hi amukela ntsena xitiyisekiso xa ku xava ni xiyimo xa kona, ku fana na ku pfuxeta kumbe ku tlhela ku tlheriseriwa mali."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{", yi hakela vatirhisani va hina. Hi yi nyika adirese ya imeyili ya PayPal ya mutirhisani ni ntsengo."}
+        </li>
+        <li>
           <strong>Resend</strong>{", yi rhumela ti-imeyili ta hina (to tanihi swihlanganisi swo nghena ni switiviso), naswona yi yisa eka xipano xa hina swivutiso leswi mupfuni wa Gadit a swi hundziselaka, yi tirhisa adirese ya imeyili ya n’wina tanihi adirese yo hlamula."}
+        </li>
+        <li>
+          <strong>Expo</strong>{", yi rhumela switiviso swa app ya iOS, ku fana ni switsundzuxo leswi mutswari a nga swi pfurhaka, leswi katsaka vito ra n’wana ni rito leri n’wana a ri laviseke."}
         </li>
         <li>
           <strong>Vercel</strong>, yi hlayisa ni ku phakela websayiti, naswona yi nyika tinhlayo leti nga kombiki
           munhu ni ku pima matirhelo.
         </li>
         <li>
-          <strong>Ku navetisa ni tinhlayo</strong>, Meta (Meta Pixel), Google Analytics na TikTok (TikTok Pixel na
-          Events API) swi pima ku endzela ni mbuyelo wa swinavetiso swa hina. Swi tirhisa tikhukhi (cookies) ni
-          thekinoloji leyi fanaka eka matluka ya hina ya vuxavisi, ya ku tsarisa ni ya ku hakela. Loko mi tsarisa
-          kumbe mi hakela, hi nga rhumela eka vukorhokeri lebyi adirese ya imeyili ni ID ya akhawunti leswi khodiweke
-          hi ndlela ya tlhelo rin’we (hash), swin’we ni adirese ya n’wina ya IP ni vuxokoxoko bya burawuza ya n’wina,
-          ntsena ku pima swinavetiso swa hina. A hi rhumeli nikatsongo vuxokoxoko byihi na byihi hi vana, naswona
-          switirhisiwa leswi a swi tirhi eka tikirini leti vana va ti tirhisaka.
+          <strong>Yooniz</strong>{", i vukorhokeri byo hambana bya ku dyondza bya ndyangu lebyi humaka eka musunguri un’we. Yooniz yi nga hi vutisa loko adirese ya imeyili ya mutswari yi ri ni pulani ya Gadit Family leyi tirhaka, naswona hi hlamula ntsena hi ina kumbe e-e. Loko yi ri kona, ndyangu wu nga pfula Gadit ku suka eka Yooniz handle ka phasiwedi: Yooniz yi hi rhumela adirese ya imeyili ya mutswari, mavito yo kombisa ya swirho swa ndyangu, ni leswaku un’wana ni un’wana i mutswari, mufana kumbe nhwanyana. Loko n’wana loyi a pfulaka Gadit ku suka eka Yooniz a twisisa rito, hi rhumela Yooniz adirese ya imeyili ya mutswari, ID ya n’wana ya Yooniz ni nhlayo ya tinhla to dyondza leti a ti kumeke, kambe a hi rhumeli rito hi rona."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{", yi humesa swifaniso leswitsongo swa tifulegi leswi kombisiwaka eka matluka ya hina, kutani yi vona adirese ya n’wina ya IP ni vuxokoxoko bya burawuza ya n’wina."}
+        </li>
+        <li>
+          <strong>Ku navetisa ni tinhlayo</strong>{", Meta (Meta Pixel), Google Analytics na TikTok (TikTok Pixel na Events API) swi pima ku endzela ni mbuyelo wa swinavetiso swa hina. Swi tirhisa tikhukhi (cookies) ni thekinoloji leyi fanaka eka matluka ya hina ya vuxavisi, ya ku tsarisa ni ya ku hakela. Loko mi tsarisa kumbe mi hakela, hi nga rhumela eka vukorhokeri lebyi adirese ya imeyili ni ID ya akhawunti leswi khodiweke hi ndlela ya tlhelo rin’we (hash), swin’we ni adirese ya n’wina ya IP ni vuxokoxoko bya burawuza ya n’wina, ntsena ku pima swinavetiso swa hina. Affonso, vukorhokeri bya swilo leswi hlanganisaka swihlanganisi swa vatirhisani, byi layicha eka matluka wolawo wolawo ni le ka tluka rin’wana ni rin’wana leri muyendzi a fikaka eka rona hi xihlanganisi xa mutirhisani, naswona byi hlayisa khukhi ku fikela eka masiku ya 60. Loko mi tsarisa endzhaku ko fika hi xihlanganisi xa mutirhisani xa Affonso, hi rhumela Affonso adirese ya n’wina ya imeyili, vito ni ID ya akhawunti, leswaku mutirhisani loyi a mi kongomiseke a kuma xidemokiriti. A hi rhumeli nikatsongo vukorhokeri byihi na byihi lebyi vuxokoxoko hi vana, naswona switirhisiwa leswi a swi tirhi eka phurofayili ya n’wana, eka Kids Mode kumbe eka matluka ya swihlanganisi swa tlilasi."}
         </li>
       </ul>
 
@@ -148,9 +166,16 @@ export function PrivacyBodyTs(): ReactElement {
 
       <h2>7. Vana</h2>
       <p>
-        Gadit a yi kongomisiwanga eka vana lava nga ehansi ka malembe ya 13. Loko mi tshemba leswaku n’wana la nga
-        ehansi ka malembe ya 13 u endlile akhawunti, hi rhumeleni imeyili kutani hi ta susa akhawunti ni vuxokoxoko
-        lebyi fambelanaka na yona.
+        {"Akhawunti ya Gadit i ya vanhu lavakulu, lava nga ni malembe ya 18 kumbe ku tlula. Vana ni vantshwa va tirhisa Gadit ntsena hi ku tirhisa munhu lonkulu, hi yin’wana ya tindlela timbirhi."}
+      </p>
+      <p>
+        {"Tiphurofayili ta Family: mutswari u engetela n’wana un’wana na un’wana tanihi phurofayili endzeni ka akhawunti ya mutswari ya Family, hi vito ni leswaku n’wana i jaha kumbe nhwanyana, naswona, loko mutswari a swi engetela, ni malembe, giredi ya xikolo ni xifaniso. Vana a va na adirese ya imeyili kumbe phasiwedi na hina. Marito lawa n’wana a ma lavaka, ni buku ya yena, mintlangu ni nhluvuko wa yena, swi hlayisiwa eka akhawunti ya ndyangu. Vatswari va ndyangu, ni mani na mani loyi va n’wi nyikaka mfikelelo eka swona (hi xikombiso mudyondzisi wa le kaya), va nga swi vona, naswona mutswari a nga hlawula ku kuma switiviso, hi xitiviso kumbe hi imeyili, leswi nga ni marito lawa n’wana a ma lavaka. Mutswari a nga susa phurofayili ya n’wana eka app nkarhi wun’wana ni wun’wana."}
+      </p>
+      <p>
+        {"Swihlanganisi swa tlilasi: mudyondzi u pfula xihlanganisi kumbe khodi leyi mudyondzisi a yi nyikaka, handle ka akhawunti naswona handle ka adirese ya imeyili. Loko mudyondzisi a nghenisile nxaxamelo wa mavito, mudyondzi u hlawula vito ra yena eka wona, naswona marito lawa mudyondzi a ma lavaka ma hlayisiwa eka tlilasi ehansi ka vito rero, leswaku mudyondzisi a kota ku ma vona. Xikolo xi teka xiboho xo tirhisa Gadit naswona xi na vutihlamuleri byo tivisa vatswari laha nawu wu swi lavaka."}
+      </p>
+      <p>
+        {"A hi tshuki hi tirhisa vuxokoxoko bya vana eka ku navetisa, naswona switirhisiwa leswi longoloxiweke ehansi ka Ku navetisa ni tinhlayo eka xiyenge xa 3 a swi tshuki swi layicha eka phurofayili ya n’wana, eka Kids Mode kumbe eka matluka ya swihlanganisi swa tlilasi. Ku endla leswaku phurofayili ya n’wana ni vuxokoxoko bya yona swi suriwa, mutswari a nga tsalela "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" naswona hi ta swi sula. Loko mi tshemba leswaku n’wana u pfurile akhawunti ya yena hi yexe, hi tsaleleni naswona hi ta sula akhawunti ni vuxokoxoko bya yona."}
       </p>
 
       <h2>8. Vatirhisi va matiko man’wana</h2>
@@ -191,9 +216,7 @@ export function TermsBodyTs(): ReactElement {
 
       <h2>1. Loyi a pfumeleriwaka ku tirhisa Gadit</h2>
       <p>
-        Mi fanele ku va ni malembe ya 13 hi vuntsongo leswaku mi endla akhawunti. Loko mi ri exikarhi ka malembe ya 13
-        na 18, mi fanele ku va ni mpfumelelo wa mutswari kumbe muhlayisi wa nawu. Hi ku tirhisa Gadit mi tiyisisa
-        leswaku mi fikelela swilaveko leswi.
+        {"Mi fanele ku va ni malembe ya 18 kumbe ku tlula leswaku mi pfula akhawunti ya Gadit. Vana ni vantshwa lava nga ehansi ka malembe ya 18 va tirhisa Gadit ntsena hi ku tirhisa munhu lonkulu: mutswari kumbe muhlayisi wa nawu a nga va engetela tanihi tiphurofayili eka pulani ya Family, naswona xikolo xi nga nyika vadyondzi va xona nchumu wa ku nghena wa tlilasi. Mutswari, muhlayisi wa nawu kumbe xikolo lexi nyikaka mfikelelo lowu xi na vutihlamuleri bya wona. Hi ku pfula akhawunti, mi tiyisisa leswaku mi ni malembe ya 18 kumbe ku tlula."}
       </p>
 
       <h2>2. Akhawunti ya n’wina</h2>
@@ -217,16 +240,11 @@ export function TermsBodyTs(): ReactElement {
       </p>
       <h3>Ku herisa</h3>
       <p>
-        Mi nga herisa nkarhi wun’wana ni wun’wana eka tluka ra akhawunti ya n’wina. Ku herisa ku yimisa ku pfuxeta
-        loku taka. Mi ta ya emahlweni mi kota ku tirhisa swihlawulekisi leswi hakeriwaka ku fikela emakumu ka nkarhi
-        wa sweswi wa ku hakela. A hi tlheriseli xiphemu xa mali ya nkarhi lowu nga tirhisiwangiki.
+        {"Mi nga herisa nkarhi wun’wana ni wun’wana eka tluka ra akhawunti ya n’wina. Ku herisa ku yimisa ku pfuxeta loku taka. Mi ta ya emahlweni mi kota ku tirhisa swihlawulekisi leswi hakeriwaka ku fikela emakumu ka nkarhi wa sweswi wa ku hakela. Handle ka ku tlheriseriwa ka mali loku hlamuseriwaka laha hansi, a hi tlheriseli mali ya nkarhi lowu nga tirhisiwangiki, handle ka loko nawu wu lava swin’wana."}
       </p>
       <h3>Ku tlheriseriwa mali</h3>
       <p>
-        Handle ka laha nawu wu swi lavaka, ku hakela a ku tlheriseriwi. Loko mi tshemba leswaku mi hakerisiwile hi
-        xihoxo, tihlanganiseni na hina eka{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a> endzeni ka masiku ya 30
-        endzhaku ka ku hakerisiwa koloko.
+        {"Loko mi kombela endzeni ka masiku ya 14 ku sukela eka ku hakela ko sungula eka akhawunti ya n’wina, kumbe endzeni ka masiku ya 14 ku sukela eka ku pfuxetiwa ka lembe, hi ta tlherisa ku hakela koloko hi ku helela. A swi bohi leswaku mi nyika xivangelo. Tsalelani "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" mi tirhisa adirese ya imeyili ya akhawunti ya n’wina. Ku tlheriseriwa ka mali ku tlhela ku herisa ni ku tsarisa. Ku hakela kun’wana a ku tlheriseriwi, handle ka laha nawu wu lavaka ku tlheriseriwa ka mali. Loko mi tshemba leswaku mi hakerisiwile hi xihoxo, hi tsaleleni endzeni ka masiku ya 30 ku sukela eka ku hakerisiwa koloko. Swixavi leswi endliweke eka app ya iOS swi hakerisiwa hi Apple, naswona i Apple ntsena leyi nga swi tlherisaka, eka reportaproblem.apple.com."}
       </p>
 
       <h2>4. Matirhiselo lama amukelekaka</h2>
@@ -246,9 +264,7 @@ export function TermsBodyTs(): ReactElement {
 
       <h2>5. Swilo leswi endliweke hi AI</h2>
       <p>
-        Gadit yi tirhisa timodeli ta vutlhari byo endliwa (artificial intelligence) (ku katsa na GPT, Whisper, na
-        DALL·E swa OpenAI) ku endla tinhlamuselo, swikombiso, masungulo ya marito (etymology), mavonelo, tikhwizi,
-        swifaniso, ni ku tsala leswi vuriweke hi rito. Mi twisisa naswona mi pfumela leswaku:
+        {"Gadit yi tirhisa timodeli ta vutlhari byo endliwa (ku katsa na timodeli ta OpenAI na Google) ku endla tinhlamuselo, swikombiso, masungulo ya marito, mavonelo, tikhwizi, swifaniso, rito, ni ku tsala leswi vuriweke. Mi twisisa naswona mi pfumela leswaku:"}
       </p>
       <ul>
         <li>

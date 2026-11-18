@@ -510,7 +510,7 @@ export default async function RootLayout({
               <VoiceAssistant />
               {/* The help assistant (2026-11-15): on only where config/helpChat says so. */}
               <HelpChat />
-              {/* The Gadit logo and the rights line on every page without a header logo (2026-11-15). */}
+              {/* The Gadit logo on every page without a header logo (2026-11-15; the rights line was dropped 2026-11-18). */}
               <BrandMark />
               <GuideOverlay />
               {!iosApp && <InstallPwaPrompt />}

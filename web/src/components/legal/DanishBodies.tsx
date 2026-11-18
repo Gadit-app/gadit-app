@@ -23,6 +23,9 @@ export function PrivacyBodyDa(): ReactElement {
         profiloplysninger, som Google stiller til rådighed (visningsnavn, profilbillede). Vi modtager ikke din
         Google-adgangskode.
       </p>
+      <p>
+        {"I iOS-appen kan du også logge ind med Apple. Apple giver os derefter det navn og den e-mailadresse, du vælger at dele, og det kan være en privat relayadresse, som videresender vores e-mails til dig. Vi modtager ikke din Apple-adgangskode."}
+      </p>
       <h3>Brugsoplysninger</h3>
       <p>Når du bruger Gadit, behandler vi:</p>
       <ul>
@@ -75,29 +78,45 @@ export function PrivacyBodyDa(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{": behandler de ord og sætninger, du indsender, for at generere definitioner, feedback på sætninger, quizzer og taletransskription (Whisper), og genererer billeder (DALL·E 3). Den skriver også Gadit-assistentens svar: Vi sender dit spørgsmål, de tidligere beskeder i den samme samtale, dit grænsefladesprog, dit abonnement og om du er på webstedet eller i appen, og vi vedhæfter ikke dit navn eller din e-mailadresse. Data, der sendes til OpenAI, er underlagt OpenAIs politik for brug af API-data."}
+          <strong>OpenAI</strong>{": behandler de ord og sætninger, du indsender, for at generere definitioner, feedback på sætninger og quizzer, omdanner tekst til tale, transskriberer stemmeinput, læser teksten i fotos og PDF-filer, som du uploader, f.eks. lektiesider, og genererer billeder. Den skriver også Gadit-assistentens svar: Vi sender dit spørgsmål, de tidligere beskeder i den samme samtale, dit grænsefladesprog, dit abonnement og om du er på webstedet eller i appen, og vi vedhæfter ikke dit navn eller din e-mailadresse. Data, der sendes til OpenAI, er underlagt OpenAIs politik for brug af API-data."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): gemmer din konto, din profil, din
           abonnementsstatus, din søgehistorik og genererede billeder.
         </li>
         <li>
+          <strong>Google</strong>{": (Gemini, via Google Cloud) omdanner tekst til tale. Vi sender den kun den tekst, der skal læses højt, såsom ord, sætninger og historier, og lyden gemmes i vores Firebase-lager, så den kan afspilles igen. I ét læsespil hører den også den lyd, et barn siger højt, for at kontrollere den, og den optagelse gemmes ikke. Google Fonts leverer skrifttyperne til grænsefladen på kinesisk, japansk og koreansk og ser din IP-adresse."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{": en israelsk nonprofitorganisation, tilføjer vokaltegn (niqqud) til hebraisk tekst for unge læsere. Vi sender den kun den hebraiske tekst."}
+        </li>
+        <li>
           <strong>Stripe</strong>: håndterer betalinger, abonnementer og faktureringsportalen.
         </li>
         <li>
+          <strong>Apple</strong>{": leverer Log ind med Apple i iOS-appen, se afsnit 1, og sælger og opkræver de abonnementer, der købes i iOS-appen. For disse køb håndterer Apple betalingen, og vi modtager kun en bekræftelse på købet og dets status, f.eks. en fornyelse eller en tilbagebetaling."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{": betaler vores partnere. Vi giver den partnerens PayPal-e-mailadresse og beløbet."}
+        </li>
+        <li>
           <strong>Resend</strong>{": sender vores e-mails (såsom log ind-links og notifikationer) og leverer til vores team de spørgsmål, som Gadit-assistenten sender videre, med din e-mailadresse som svaradresse."}
+        </li>
+        <li>
+          <strong>Expo</strong>{": leverer notifikationerne i iOS-appen, f.eks. de påmindelser, som en forælder kan slå til, og som indeholder et barns navn og det ord, barnet slog op."}
         </li>
         <li>
           <strong>Vercel</strong>: hoster og leverer webstedet og stiller anonymiserede analyser og målinger af
           ydeevne til rådighed.
         </li>
         <li>
-          <strong>Annoncering og analyse</strong>: Meta (Meta Pixel), Google Analytics og TikTok (TikTok Pixel og
-          Events API) måler besøg og resultaterne af vores annoncer. De bruger cookies og lignende teknologier på
-          vores marketing-, tilmeldings- og betalingssider. Når du tilmelder dig eller betaler, kan vi sende disse
-          tjenester en hashet (envejskrypteret) e-mailadresse og konto-ID sammen med din IP-adresse og oplysninger om
-          din browser, udelukkende for at måle vores annoncer. Vi sender dem aldrig oplysninger om børn, og disse
-          værktøjer kører ikke på de skærme, som børn bruger.
+          <strong>Yooniz</strong>{": en separat familielæringstjeneste fra den samme stifter. Yooniz kan spørge os, om en forælders e-mailadresse har et aktivt Gadit Family-abonnement, og vi svarer kun ja eller nej. Hvis den har det, kan familien åbne Gadit fra Yooniz uden adgangskode: Yooniz sender os forælderens e-mailadresse, familiemedlemmernes visningsnavne og om hver af dem er en forælder, en dreng eller en pige. Når et barn, der har åbnet Gadit fra Yooniz, forstår et ord, sender vi Yooniz forælderens e-mailadresse, barnets Yooniz-ID og antallet af optjente læringspoint, aldrig selve ordet."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{": leverer de små flagbilleder, der vises på vores sider, og ser derfor din IP-adresse og oplysninger om din browser."}
+        </li>
+        <li>
+          <strong>Annoncering og analyse</strong>{": Meta (Meta Pixel), Google Analytics og TikTok (TikTok Pixel og Events API) måler besøg og resultaterne af vores annoncer. De bruger cookies og lignende teknologier på vores marketing-, tilmeldings- og betalingssider. Når du tilmelder dig eller betaler, kan vi sende disse tjenester en hashet (envejskrypteret) e-mailadresse og konto-ID sammen med din IP-adresse og oplysninger om din browser, udelukkende for at måle vores annoncer. Affonso, en tjeneste til partnerlinks, indlæses på de samme sider og på enhver side, en besøgende når frem til via et partnerlink, og gemmer en cookie i op til 60 dage. Hvis du tilmelder dig, efter at du er kommet via et partnerlink fra Affonso, sender vi Affonso din e-mailadresse, dit navn og dit konto-ID, så den partner, der henviste dig, får kredit. Vi sender dem aldrig oplysninger om børn, og disse værktøjer kører ikke på et barns profil, i Kids Mode eller på sider med klasselinks."}
         </li>
       </ul>
 
@@ -144,8 +163,16 @@ export function PrivacyBodyDa(): ReactElement {
 
       <h2>7. Børn</h2>
       <p>
-        Gadit er ikke rettet mod børn under 13 år. Hvis du mener, at et barn under 13 år har oprettet en konto, så send
-        os en e-mail, og vi sletter kontoen og de tilknyttede data.
+        {"En Gadit-konto er til voksne på 18 år og derover. Børn og unge bruger kun Gadit gennem en voksen på en af to måder."}
+      </p>
+      <p>
+        {"Family-profiler: En forælder tilføjer hvert barn som en profil i forælderens Family-konto med et navn og oplysning om, hvorvidt barnet er en dreng eller en pige, og, hvis forælderen tilføjer det, også alder, klassetrin og et foto. Børn har ikke nogen e-mailadresse eller adgangskode hos os. De ord, et barn slår op, og barnets notesbog, spil og fremskridt gemmes i familiens konto. Forældrene i familien og enhver, som de giver adgang til, f.eks. en privatlærer, kan se dem, og en forælder kan vælge at modtage meddelelser, som notifikation eller e-mail, med de ord, et barn slår op. En forælder kan til enhver tid fjerne et barns profil i appen."}
+      </p>
+      <p>
+        {"Klasselink: En elev åbner det link eller den kode, som en lærer giver, uden en konto og uden en e-mailadresse. Hvis læreren har indtastet en navneliste, vælger eleven sit navn fra den, og de ord, eleven slår op, gemmes for klassen under dette navn, så læreren kan se dem. Skolen beslutter at bruge Gadit og er ansvarlig for at informere forældrene, hvor loven kræver det."}
+      </p>
+      <p>
+        {"Vi bruger aldrig børns oplysninger til annoncering, og de værktøjer, der er anført under Annoncering og analyse i afsnit 3, indlæses aldrig på et barns profil, i Kids Mode eller på sider med klasselink. For at få slettet et barns profil og dets data kan en forælder skrive til "}<a href="mailto:support@gadit.app">support@gadit.app</a>{", og vi vil slette dem. Hvis du mener, at et barn har oprettet en konto selv, så skriv til os, og vi vil slette kontoen og dens data."}
       </p>
 
       <h2>8. Internationale brugere</h2>
@@ -183,8 +210,7 @@ export function TermsBodyDa(): ReactElement {
 
       <h2>1. Hvem må bruge Gadit</h2>
       <p>
-        Du skal være mindst 13 år gammel for at oprette en konto. Hvis du er mellem 13 og 18 år, skal du have
-        tilladelse fra en forælder eller værge. Ved at bruge Gadit erklærer du, at du opfylder disse krav.
+        {"Du skal være 18 år eller ældre for at oprette en Gadit-konto. Børn og unge under 18 bruger kun Gadit gennem en voksen: En forælder eller værge kan tilføje dem som profiler på Family-abonnementet, og en skole kan give sine elever et klasselink. Den forælder, værge eller skole, der giver denne adgang, er ansvarlig for den. Ved at oprette en konto bekræfter du, at du er 18 år eller ældre."}
       </p>
 
       <h2>2. Din konto</h2>
@@ -207,16 +233,11 @@ export function TermsBodyDa(): ReactElement {
       </p>
       <h3>Opsigelse</h3>
       <p>
-        Du kan til enhver tid opsige fra din kontoside. Opsigelse stopper fremtidige fornyelser. Du bevarer adgangen til
-        de betalte funktioner indtil udgangen af den igangværende faktureringsperiode. Vi giver ikke delvis
-        tilbagebetaling for ubrugt tid.
+        {"Du kan til enhver tid opsige fra din kontoside. Opsigelse stopper fremtidige fornyelser. Du bevarer adgangen til de betalte funktioner indtil udgangen af den igangværende faktureringsperiode. Bortset fra de refunderinger, der er beskrevet nedenfor, refunderer vi ikke ubrugt tid, medmindre loven kræver andet."}
       </p>
       <h3>Tilbagebetaling</h3>
       <p>
-        Medmindre loven kræver andet, refunderes betalinger ikke. Hvis du mener, at du er blevet opkrævet ved en fejl,
-        så kontakt{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a> inden for 30 dage efter
-        opkrævningen.
+        {"Hvis du beder om det inden for 14 dage efter den første betaling på din konto, eller inden for 14 dage efter en årlig fornyelse, refunderer vi den pågældende betaling fuldt ud. Du behøver ikke at angive nogen grund. Skriv til "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" fra den e-mailadresse, der er knyttet til din konto. En refundering afslutter også abonnementet. Andre betalinger refunderes ikke, medmindre loven kræver en refundering. Hvis du mener, at du er blevet opkrævet ved en fejl, så skriv til os inden for 30 dage efter opkrævningen. Køb foretaget i iOS-appen faktureres af Apple, og kun Apple kan refundere dem, på reportaproblem.apple.com."}
       </p>
 
       <h2>4. Acceptabel brug</h2>
@@ -236,9 +257,7 @@ export function TermsBodyDa(): ReactElement {
 
       <h2>5. AI-genereret indhold</h2>
       <p>
-        Gadit bruger modeller for kunstig intelligens (herunder OpenAIs GPT, Whisper og DALL·E) til at generere
-        definitioner, eksempler, etymologier, feedback, quizzer, billeder og transskriptioner. Du forstår og
-        accepterer, at:
+        {"Gadit bruger modeller for kunstig intelligens, herunder modeller fra OpenAI og Google, til at generere definitioner, eksempler, etymologier, feedback, quizzer, billeder, tale og transskriptioner. Du forstår og accepterer, at:"}
       </p>
       <ul>
         <li>

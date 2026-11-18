@@ -23,6 +23,9 @@ export function PrivacyBodyNl(): ReactElement {
         basisprofielinformatie die Google verstrekt (weergavenaam, profielfoto). Wij ontvangen uw Google-wachtwoord
         niet.
       </p>
+      <p>
+        {"In de iOS-app kunt u zich ook aanmelden met Apple. Apple geeft ons dan de naam en het e-mailadres dat u kiest te delen, wat een privérelay-adres kan zijn dat onze e-mails naar u doorstuurt. Wij ontvangen uw Apple-wachtwoord niet."}
+      </p>
       <h3>Gebruiksinformatie</h3>
       <p>Wanneer u Gadit gebruikt, verwerken wij:</p>
       <ul>
@@ -76,29 +79,45 @@ export function PrivacyBodyNl(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{": verwerkt de woorden en zinnen die u indient om definities, feedback op zinnen, quizzen en spraaktranscriptie (Whisper) te genereren, en genereert afbeeldingen (DALL·E 3). OpenAI schrijft ook de antwoorden van de Gadit-assistent: wij sturen uw vraag, de eerdere berichten in hetzelfde gesprek, uw interface-taal, uw abonnement en of u de website of de app gebruikt, en wij voegen uw naam of e-mailadres niet toe. Gegevens die naar OpenAI worden verzonden, vallen onder het API-beleid voor gegevensgebruik van OpenAI."}
+          <strong>OpenAI</strong>{": verwerkt de woorden en zinnen die u indient om definities, feedback op zinnen en quizzen te genereren, zet tekst om in spraak, transcribeert spraakinvoer, leest de tekst in foto’s en PDF-bestanden die u uploadt (bijvoorbeeld huiswerkbladen) en genereert afbeeldingen. OpenAI schrijft ook de antwoorden van de Gadit-assistent: wij sturen uw vraag, de eerdere berichten in hetzelfde gesprek, uw interface-taal, uw abonnement en of u de website of de app gebruikt, en wij voegen uw naam of e-mailadres niet toe. Gegevens die naar OpenAI worden verzonden, vallen onder het API-beleid voor gegevensgebruik van OpenAI."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): slaat uw account, profiel,
           abonnementsstatus, zoekgeschiedenis en gegenereerde afbeeldingen op.
         </li>
         <li>
+          <strong>Google</strong>{"(Gemini, via Google Cloud): zet tekst om in spraak. Wij sturen alleen de tekst die moet worden voorgelezen, zoals woorden, zinnen en verhalen, en de audio wordt in onze Firebase-opslag bewaard zodat deze opnieuw kan worden afgespeeld. In één leesspel hoort het ook het geluid dat een kind hardop maakt, om dit te controleren, en die opname wordt niet opgeslagen. Google Fonts levert de lettertypen van de Chinese, Japanse en Koreaanse interface en ziet uw IP-adres."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{", een Israëlische non-profitorganisatie, voegt klinkertekens (niqqud) toe aan Hebreeuwse tekst voor jonge lezers. Wij sturen alleen de Hebreeuwse tekst."}
+        </li>
+        <li>
           <strong>Stripe</strong>: verzorgt betalingen, abonnementen en het factureringsportaal.
         </li>
         <li>
+          <strong>Apple</strong>{": biedt Sign in with Apple aan in de iOS-app (zie paragraaf 1) en verkoopt en factureert de abonnementen die in de iOS-app worden gekocht. Voor die aankopen verwerkt Apple de betaling, en wij ontvangen alleen een bevestiging van de aankoop en de status daarvan (zoals een verlenging of een terugbetaling)."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{": betaalt onze partners (affiliates). Wij geven het PayPal-e-mailadres van de partner en het bedrag door."}
+        </li>
+        <li>
           <strong>Resend</strong>{": verzendt onze e-mails (zoals aanmeldlinks en meldingen), en bezorgt aan ons team de vragen die de Gadit-assistent doorstuurt, met uw e-mailadres als antwoordadres."}
+        </li>
+        <li>
+          <strong>Expo</strong>{": bezorgt de meldingen van de iOS-app, zoals de waarschuwingen die een ouder kan inschakelen en die de naam van een kind en het woord dat het kind heeft opgezocht bevatten."}
         </li>
         <li>
           <strong>Vercel</strong>: host en levert de website, en verzorgt geanonimiseerde analyses en
           prestatiemetingen.
         </li>
         <li>
-          <strong>Advertenties en analyse</strong>: Meta (Meta Pixel), Google Analytics en TikTok (TikTok Pixel en
-          Events API) meten bezoeken en de resultaten van onze advertenties. Zij gebruiken cookies en vergelijkbare
-          technologieën op onze marketing-, aanmeld- en betaalpagina&rsquo;s. Wanneer u zich aanmeldt of betaalt,
-          kunnen wij deze diensten een gehasht (eenrichtingsversleuteld) e-mailadres en account-ID sturen, samen met
-          uw IP-adres en browsergegevens, uitsluitend om onze advertenties te meten. Wij sturen hun nooit informatie
-          over kinderen, en deze tools draaien niet op de schermen die kinderen gebruiken.
+          <strong>Yooniz</strong>{", een afzonderlijke leerservice voor gezinnen van dezelfde oprichter. Yooniz kan ons vragen of het e-mailadres van een ouder een actief Gadit Family-abonnement heeft, en wij antwoorden alleen ja of nee. Als dat zo is, kan het gezin Gadit vanuit Yooniz openen zonder wachtwoord: Yooniz stuurt ons het e-mailadres van de ouder, de weergavenamen van de gezinsleden en of ieder van hen een ouder, een jongen of een meisje is. Wanneer een kind dat Gadit vanuit Yooniz heeft geopend een woord begrijpt, sturen wij Yooniz het e-mailadres van de ouder, de Yooniz-ID van het kind en het aantal verdiende leerpunten, nooit het woord zelf."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{", levert de kleine vlagafbeeldingen die op onze pagina’s worden getoond, en ziet daardoor uw IP-adres en browsergegevens."}
+        </li>
+        <li>
+          <strong>Advertenties en analyse</strong>{": Meta (Meta Pixel), Google Analytics en TikTok (TikTok Pixel en Events API) meten bezoeken en de resultaten van onze advertenties. Zij gebruiken cookies en vergelijkbare technologieën op onze marketing-, aanmeld- en betaalpagina’s. Wanneer u zich aanmeldt of betaalt, kunnen wij deze diensten een gehasht (eenrichtingsversleuteld) e-mailadres en account-ID sturen, samen met uw IP-adres en browsergegevens, uitsluitend om onze advertenties te meten. Affonso, een dienst voor affiliatelinks, wordt geladen op dezelfde pagina’s en op elke pagina die een bezoeker via een partnerlink bereikt, en bewaart maximaal 60 dagen een cookie. Als u zich aanmeldt nadat u via een affiliatelink van Affonso bent binnengekomen, sturen wij Affonso uw e-mailadres, naam en account-ID, zodat de affiliate die u heeft doorverwezen daarvoor de krediet krijgt. Wij sturen nooit informatie over kinderen naar een van deze diensten, en deze tools draaien niet op het profiel van een kind, in de kindermodus of op pagina’s met een klaslink."}
         </li>
       </ul>
 
@@ -146,8 +165,16 @@ export function PrivacyBodyNl(): ReactElement {
 
       <h2>7. Kinderen</h2>
       <p>
-        Gadit is niet gericht op kinderen jonger dan 13 jaar. Als u denkt dat een kind jonger dan 13 jaar een account
-        heeft aangemaakt, stuur ons dan een e-mail en wij verwijderen het account en de bijbehorende gegevens.
+        {"Een Gadit-account is bedoeld voor volwassenen van 18 jaar en ouder. Kinderen en tieners gebruiken Gadit alleen via een volwassene, op een van twee manieren."}
+      </p>
+      <p>
+        {"Family-profielen: een ouder voegt elk kind toe als profiel binnen het Family-account van de ouder, met een naam en of het kind een jongen of een meisje is, en, als de ouder die toevoegt, ook een leeftijd, een schooljaar en een foto. Kinderen hebben bij ons geen e-mailadres of wachtwoord. De woorden die een kind opzoekt, en de woordenschrift, spellen en voortgang van het kind, worden opgeslagen in het account van de familie. De ouders in de familie, en iedereen aan wie zij toegang geven, bijvoorbeeld een privéleraar, kunnen deze zien, en een ouder kan ervoor kiezen meldingen te ontvangen, via een notificatie of e-mail, met de woorden die een kind opzoekt. Een ouder kan het profiel van een kind op elk moment in de app verwijderen."}
+      </p>
+      <p>
+        {"Klaslinks: een leerling opent de link of code die een leraar geeft, zonder account en zonder e-mailadres. Als de leraar een namenlijst heeft ingevoerd, kiest de leerling daar zijn of haar naam uit, en de woorden die de leerling opzoekt, worden voor de klas onder die naam opgeslagen, zodat de leraar deze kan zien. De school besluit Gadit te gebruiken en is verantwoordelijk voor het informeren van ouders waar de wet dit vereist."}
+      </p>
+      <p>
+        {"Wij gebruiken informatie van kinderen nooit voor advertenties, en de tools die onder Advertenties en analyse in sectie 3 worden genoemd, laden nooit op een kinderprofiel, in Kids Mode of op pagina's met klaslinks. Om het profiel van een kind en de bijbehorende gegevens te laten verwijderen, kan een ouder schrijven naar "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" en zullen wij deze verwijderen. Als u denkt dat een kind zelf een account heeft geopend, schrijf ons dan en wij zullen het account en de bijbehorende gegevens verwijderen."}
       </p>
 
       <h2>8. Internationale gebruikers</h2>
@@ -187,9 +214,7 @@ export function TermsBodyNl(): ReactElement {
 
       <h2>1. Wie Gadit mag gebruiken</h2>
       <p>
-        U moet ten minste 13 jaar oud zijn om een account aan te maken. Als u tussen 13 en 18 jaar oud bent, heeft u
-        toestemming nodig van een ouder of wettelijke voogd. Door Gadit te gebruiken, verklaart u dat u aan deze
-        vereisten voldoet.
+        {"U moet 18 jaar of ouder zijn om een Gadit-account te openen. Kinderen en tieners jonger dan 18 jaar gebruiken Gadit alleen via een volwassene: een ouder of voogd kan hen als profielen toevoegen aan het Family-abonnement, en een school kan haar leerlingen een klaslink geven. De ouder, voogd of school die deze toegang geeft, is daarvoor verantwoordelijk. Door een account te openen, bevestigt u dat u 18 jaar of ouder bent."}
       </p>
 
       <h2>2. Uw account</h2>
@@ -213,15 +238,11 @@ export function TermsBodyNl(): ReactElement {
       </p>
       <h3>Opzegging</h3>
       <p>
-        U kunt op elk moment opzeggen via uw accountpagina. Opzegging stopt toekomstige verlengingen. U behoudt toegang
-        tot de betaalde functies tot het einde van de lopende factureringsperiode. Wij verstrekken geen gedeeltelijke
-        terugbetalingen voor ongebruikte tijd.
+        {"U kunt op elk moment opzeggen via uw accountpagina. Opzegging stopt toekomstige verlengingen. U behoudt toegang tot de betaalde functies tot het einde van de lopende factureringsperiode. Behalve voor de hieronder beschreven terugbetalingen, betalen wij geen geld terug voor ongebruikte tijd, tenzij de wet anders vereist."}
       </p>
       <h3>Terugbetalingen</h3>
       <p>
-        Behalve waar de wet dit vereist, worden betalingen niet terugbetaald. Als u denkt dat er bij u ten onrechte een
-        bedrag in rekening is gebracht, neem dan binnen 30 dagen na de afschrijving contact op met{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a>.
+        {"Als u hierom verzoekt binnen 14 dagen na de eerste betaling op uw account, of binnen 14 dagen na een jaarlijkse verlenging, betalen wij die betaling volledig terug. U hoeft daarvoor geen reden op te geven. Schrijf naar "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" vanaf het e-mailadres van uw account. Een terugbetaling beëindigt ook het abonnement. Andere betalingen worden niet terugbetaald, behalve waar de wet een terugbetaling vereist. Als u denkt dat er bij u ten onrechte een bedrag in rekening is gebracht, schrijf ons dan binnen 30 dagen na de afschrijving. Aankopen die in de iOS-app zijn gedaan, worden door Apple gefactureerd, en alleen Apple kan deze terugbetalen, via reportaproblem.apple.com."}
       </p>
 
       <h2>4. Aanvaardbaar gebruik</h2>
@@ -241,9 +262,7 @@ export function TermsBodyNl(): ReactElement {
 
       <h2>5. Door AI gegenereerde inhoud</h2>
       <p>
-        Gadit gebruikt modellen voor kunstmatige intelligentie (waaronder GPT, Whisper en DALL·E van OpenAI) om
-        definities, voorbeelden, etymologieën, feedback, quizzen, afbeeldingen en transcripties te genereren. U begrijpt
-        en gaat ermee akkoord dat:
+        {"Gadit gebruikt modellen voor kunstmatige intelligentie, waaronder modellen van OpenAI en Google, om definities, voorbeelden, etymologieën, feedback, quizzen, afbeeldingen, spraak en transcripties te genereren. U begrijpt en gaat ermee akkoord dat:"}
       </p>
       <ul>
         <li>

@@ -23,7 +23,7 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             a: [
               "Перейти на нову картку можна менш ніж за хвилину і без скасування. Ваша поточна підписка продовжує діяти, просто з новою карткою.",
               "1. Увійдіть на gadit.app і відкрийте \"Акаунт\" у меню акаунта. 2. Натисніть \"Керувати оплатою\". 3. Відкриється захищена сторінка Stripe. Додайте нову картку як спосіб оплати і позначте її як основну. 4. За бажанням видаліть стару картку.",
-              "Починаючи з наступного платіжного циклу, усі списання підуть з нової картки. Попереднє списання, яке вже пройшло, залишиться на старій картці. Повернення коштів не потрібне, хіба що ви окремо його захочете.",
+              "Починаючи з наступного платіжного циклу, усі списання підуть з нової картки. Попереднє списання, яке вже пройшло, залишиться на старій картці. Зміна картки не переносить це списання і не змінює дату наступного списання.",
             ],
           },
           {
@@ -73,8 +73,9 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "refund",
             q: "Чи можна повернути гроші?",
             a: [
-              "Так. Якщо покупка була менш ніж 14 днів тому і сервісом майже не користувалися, напишіть нам з поштою акаунта і коротко поясніть причину. Такі повернення схвалюються без суперечок.",
-              "Якщо минуло понад 14 днів, команда розглядає кожен випадок окремо. Скасуйте підписку, щоб вона не поновлювалася далі, і напишіть нам.",
+              "Так, протягом 14 днів після першого платежу у вашому акаунті або після річного поновлення. Напишіть на support@gadit.app з адреси електронної пошти вашого акаунта, і ми повністю повернемо цей платіж. Причину вказувати не потрібно. Повернення також припиняє підписку, а гроші повертаються на картку, якою ви платили, зазвичай протягом 5 до 10 робочих днів.",
+              "Після 14 днів платежі не повертаються, якщо тільки вас не списали помилково або закон у вашій країні не вимагає повернення. Ви можете будь-коли скасувати підписку, щоб вона не поновилася, і вона залишиться активною до кінця вже оплаченого періоду.",
+              "Купили в застосунку на iPhone або iPad? Такі повернення оформлює Apple на reportaproblem.apple.com.",
             ],
           },
           {
@@ -280,8 +281,9 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "payout",
             q: "Коли я отримаю виплату?",
             a: [
-              "Раз на місяць, коли ваш баланс досягає мінімуму, який показано у вашій партнерській панелі. Ми надсилаємо виплату на акаунт PayPal, який ви там вказали. Мінімум, це поріг, а не стеля: ви можете заробити значно більше, а виплату отримаєте, щойно його перетнете.",
-              "Комісії стають доступними через 30 днів після оплати підписки, щоб врахувати вікно для повернення коштів. Тож комісія за підписку в січні стає доступною на початку лютого і потрапляє у вашу наступну виплату, щойно баланс досягне мінімуму.",
+              "Раз на місяць, без мінімальної суми. Кожна комісія стає доступною до виплати через 30 днів після платежу клієнта, і все, що вже доступне, ми надсилаємо в наступній щомісячній виплаті на акаунт PayPal, який ви вказали у своїй партнерській панелі.",
+              "Ми виплачуємо у валюті, якою заплатив клієнт, якщо PayPal може її надіслати. Якщо ні, то в доларах США, за курсом на день виплати.",
+              "Комісії очікують 30 днів через повернення коштів: якщо платіж клієнта повертається, комісія за нього скасовується. Тому комісія за платіж у січні стає доступною до виплати в лютому і потрапляє в наступну щомісячну виплату.",
             ],
           },
           {
@@ -335,8 +337,8 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "kid-safety",
             q: "Чи безпечний Gadit для дітей?",
             a: [
-              "Gadit створено для того, щоб батьки могли безпечно користуватися ним разом із дитиною. Дитячий режим дає прості, конкретні пояснення, що відповідають віку (приблизно для віку від 5 до 10 років), за допомогою того самого рушія, що створює контент для дорослих, з чіткими інструкціями спрощувати. Контент, створений користувачами, ніколи не показується дітям.",
-              "Відповідно до наших правил і норм захисту приватності дітей у всьому світі, власний акаунт можна мати з 13 років. Діти користуються Gadit через батьків: у плані Family батьки додають кожну дитину на сторінці «Сім'я», кожна дитина отримує власний простір із дитячим режимом, а батьківська панель показує слова, які шукає кожна дитина. Щоб усе налаштувати, почніть з Family на сторінці «Ціни».",
+              "Gadit створено так, щоб батьки могли безпечно користуватися ним разом із дитиною. Дитячий режим дає прості, конкретні пояснення, що відповідають віку, приблизно для дітей 5 до 10 років, за допомогою того самого рушія, що створює контент для дорослих, але з чіткими інструкціями спрощувати. Контент, створений користувачами, ніколи не показується дітям.",
+              "Власний акаунт призначений для дорослих, від 18 років. Діти й підлітки користуються Gadit через дорослого. Вдома батьки додають кожну дитину на сторінці Family, кожна дитина отримує власний простір із дитячим режимом, а батьківська панель показує слова, які шукає кожна дитина. У школі клас отримує посилання від учителя, і учні приєднуються без акаунта і без електронної пошти.",
             ],
           },
           {
@@ -379,7 +381,7 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             a: [
               "İptal etmeden, bir dakikadan kısa sürede yeni karta geçebilirsiniz. Mevcut aboneliğiniz devam eder, sadece yeni kartla.",
               "1. gadit.app adresinde oturum açın ve hesap menüsünden \"Hesap\" bölümünü açın. 2. \"Faturalandırmayı yönet\" seçeneğine tıklayın. 3. Güvenli bir Stripe sayfası açılır. Yeni kartı bir ödeme yöntemi olarak ekleyin ve varsayılan olarak işaretleyin. 4. İsterseniz eski kartı kaldırın.",
-              "Bir sonraki fatura döneminden itibaren her şey yeni karta gider. Önceki ücretlendirme, zaten tahsil edildiği için, eski kartta kalır. Özellikle istemiyorsanız iade gerekmez.",
+              "Bir sonraki faturalandırma döneminden itibaren her şey yeni karta gider. Önceki ücret, zaten tahsil edildiği için, eski kartta kalır. Kartı değiştirmek o ücreti taşımaz ve bir sonraki faturalandırma tarihinizi değiştirmez.",
             ],
           },
           {
@@ -429,8 +431,9 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "refund",
             q: "İade alabilir miyim?",
             a: [
-              "Evet. Satın alma 14 günden kısa süre önce yapıldıysa ve hizmet pek kullanılmadıysa, hesap e-postanızla ve nedenini kısaca açıklayan bir notla bize yazın. Bu iadeler sorunsuz onaylanır.",
-              "14 günden fazla geçtiyse ekip her durumu ayrı değerlendirir. Yenilenmeye devam etmemesi için aboneliği iptal edin ve bize e-posta gönderin.",
+              "Evet, hesabınızdaki ilk ödemeden veya yıllık yenilemeden itibaren 14 gün içinde. Hesabınızın e-posta adresinden support@gadit.app adresine yazın, o ödemeyi size tam olarak iade edelim. Bir neden belirtmeniz gerekmez. İade aynı zamanda aboneliği de sonlandırır ve para, ödeme yaptığınız karta genelde 5 ila 10 iş günü içinde döner.",
+              "14 günden sonra, yanlışlıkla ücret alınmadıysa veya yaşadığınız yerdeki yasa bunu gerektirmiyorsa ödemeler iade edilmez. Aboneliğin yenilenmemesi için istediğiniz zaman iptal edebilirsiniz ve ödediğiniz dönemin sonuna kadar kullanmaya devam edersiniz.",
+              "iPhone veya iPad uygulamasında mı satın aldınız? Bu iadeleri Apple, reportaproblem.apple.com üzerinden yapar.",
             ],
           },
           {
@@ -636,8 +639,9 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "payout",
             q: "Ödememi ne zaman alırım?",
             a: [
-              "Ayda bir, bakiyeniz partner panelinizde gösterilen minimum tutara ulaştığında. Ödemeyi orada belirttiğiniz PayPal hesabına göndeririz. Bu minimum tutar bir üst sınır değil, eşiktir. Çok daha fazlasını kazanabilirsiniz ve ödemeyi bu eşiği geçtiğinizde alırsınız.",
-              "Komisyonlar, iade süresine zaman tanımak için abonelik ödemesinden 30 gün sonra serbest bırakılır. Yani Ocak ayındaki bir abonelik Şubat başında serbest kalır ve bakiyeniz minimum tutara ulaştığında bir sonraki ödemenize eklenir.",
+              "Ayda bir, minimum tutar olmadan. Her komisyon, müşterinin ödemesinden 30 gün sonra ödenebilir hale gelir ve ödenebilir olan her şey, partner panelinizde belirttiğiniz PayPal hesabına bir sonraki aylık ödemede gönderilir.",
+              "PayPal gönderebiliyorsa ödemeyi müşterinin ödediği para biriminde yaparız. Aksi halde, ödeme yaptığımız gündeki kur üzerinden US dollars olarak göndeririz.",
+              "Komisyonlar iadeler nedeniyle 30 gün bekler. Bir müşterinin ödemesi iade edilirse, o ödeme için komisyon da iptal edilir. Yani Ocak ayındaki bir ödeme için komisyon Şubat ayında ödenebilir hale gelir ve bir sonraki aylık ödemede gönderilir.",
             ],
           },
           {
@@ -691,8 +695,8 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "kid-safety",
             q: "Gadit çocuklar için güvenli mi?",
             a: [
-              "Gadit, bir ebeveynin çocuğuyla birlikte güvenle kullanması için tasarlandı. Çocuk modu, yetişkin içeriğini üreten aynı motoru basitleştirme yönünde açık talimatlarla kullanarak basit, somut ve yaşa uygun (yaklaşık 5 ila 10 yaş düzeyinde) açıklamalar üretir. Kullanıcıların oluşturduğu içerik çocuklara asla gösterilmez.",
-              "Politikalarımız ve dünya genelindeki çocuk gizliliği kurallarıyla uyumlu olarak kendi hesabına sahip olmak 13 yaş ve üzeri içindir. Çocuklar Gadit'i bir ebeveyn aracılığıyla kullanır: Family planında ebeveyn her çocuğu Aile sayfasından ekler, her çocuk Çocuk moduyla kendine ait bir alan alır ve ebeveyn paneli her çocuğun aradığı kelimeleri gösterir. Kurmak için Fiyatlar sayfasındaki Family planıyla başlayın.",
+              "Gadit, bir ebeveynin çocukla birlikte güvenle kullanması için tasarlandı. Çocuk modu, basitleştirme yönünde açık talimatlarla yetişkin içeriğini üreten aynı motoru kullanarak basit, somut ve yaşa uygun, yaklaşık 5 ila 10 yaş düzeyinde, açıklamalar üretir. Kullanıcıların oluşturduğu hiçbir içerik çocuklara asla gösterilmez.",
+              "Kendi hesabınız yalnızca 18 yaş ve üzeri yetişkinler içindir. Çocuklar ve gençler Gadit'i bir yetişkin üzerinden kullanır. Evde ebeveyn her çocuğu Family sayfasından ekler, her çocuk Çocuk moduyla kendine ait bir alan alır ve ebeveyn paneli her çocuğun aradığı kelimeleri gösterir. Okulda ise sınıf öğretmenden bir bağlantı alır ve öğrenciler hesap veya e-posta adresi olmadan katılır.",
             ],
           },
           {
@@ -735,7 +739,7 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             a: [
               "Możesz przejść na nową kartę w niecałą minutę, bez anulowania. Twoja obecna subskrypcja działa dalej, tylko na nowej karcie.",
               "1. Zaloguj się na gadit.app i otwórz \"Konto\" z menu konta. 2. Kliknij \"Zarządzaj płatnościami\". 3. Otworzy się bezpieczna strona Stripe. Dodaj nową kartę jako metodę płatności i ustaw ją jako domyślną. 4. Opcjonalnie usuń starą kartę.",
-              "Od następnego okresu rozliczeniowego wszystko będzie pobierane z nowej karty. Poprzednia płatność, już pobrana, pozostaje na starej karcie. Zwrot nie jest potrzebny, chyba że wyraźnie go chcesz.",
+              "Od następnego okresu rozliczeniowego wszystko będzie pobierane z nowej karty. Poprzednia płatność, już pobrana, pozostaje na starej karcie. Zmiana karty nie przenosi tej płatności i nie zmienia daty następnego rozliczenia.",
             ],
           },
           {
@@ -785,8 +789,9 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "refund",
             q: "Czy mogę otrzymać zwrot pieniędzy?",
             a: [
-              "Tak. Jeśli zakup był mniej niż 14 dni temu, a usługa nie była intensywnie używana, napisz do nas z adresem e-mail konta i krótką informacją o powodzie. Takie zwroty zatwierdzamy bez problemów.",
-              "Jeśli minęło więcej niż 14 dni, zespół rozpatruje każdy przypadek indywidualnie. Anuluj subskrypcję, żeby się dalej nie odnawiała, i napisz do nas.",
+              "Tak, w ciągu 14 dni od pierwszej płatności na koncie albo od rocznego odnowienia. Napisz do support@gadit.app z adresu e-mail przypisanego do konta, a zwrócimy tę płatność w całości. Nie musisz podawać powodu. Zwrot kończy też subskrypcję, a pieniądze wracają na kartę, którą była opłacona, zwykle w ciągu 5 do 10 dni roboczych.",
+              "Po 14 dniach płatności nie podlegają zwrotowi, chyba że opłata została pobrana przez pomyłkę albo prawo w kraju, w którym mieszkasz, tego wymaga. Możesz anulować w każdej chwili, żeby subskrypcja się nie odnowiła, i zachowasz dostęp do końca opłaconego okresu.",
+              "Kupiono w aplikacji na iPhone lub iPadzie? Zwroty obsługuje Apple na stronie reportaproblem.apple.com.",
             ],
           },
           {
@@ -992,8 +997,9 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "payout",
             q: "Kiedy dostanę wypłatę?",
             a: [
-              "Raz w miesiącu, gdy Twoje saldo osiągnie minimum pokazane w panelu partnera. Wysyłamy je na konto PayPal ustawione właśnie tam. Minimum to próg, a nie limit, możesz zarobić znacznie więcej, a wypłatę dostajesz po jego przekroczeniu.",
-              "Prowizje są zwalniane 30 dni po płatności za subskrypcję, ze względu na okres zwrotów. Prowizja za subskrypcję ze stycznia zostaje więc zwolniona na początku lutego i trafia do najbliższej wypłaty, gdy Twoje saldo osiągnie minimum.",
+              "Raz w miesiącu, bez minimum. Każda prowizja staje się należna 30 dni po płatności klienta, a wszystko, co jest już należne, wysyłamy w najbliższej miesięcznej wypłacie na konto PayPal ustawione w panelu partnera.",
+              "Płacimy w walucie, w której zapłacił klient, jeśli PayPal może ją wysłać, a w innym przypadku w dolarach amerykańskich, według kursu z dnia wypłaty.",
+              "Prowizje czekają 30 dni ze względu na zwroty. Jeśli płatność klienta zostanie zwrócona, prowizja od niej jest anulowana. Dlatego prowizja od płatności ze stycznia staje się należna w lutym i trafia do najbliższej miesięcznej wypłaty.",
             ],
           },
           {
@@ -1047,8 +1053,8 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "kid-safety",
             q: "Czy Gadit jest bezpieczny dla dzieci?",
             a: [
-              "Gadit powstał z myślą o tym, by rodzic mógł bezpiecznie korzystać z niego razem z dzieckiem. Tryb dla dzieci tworzy wyjaśnienia proste, konkretne i dostosowane do wieku (mniej więcej na poziomie 5 do 10 lat), korzystając z tego samego silnika co treści dla dorosłych, z wyraźnymi instrukcjami upraszczania. Dzieciom nigdy nie są pokazywane treści tworzone przez użytkowników.",
-              "Zgodnie z naszymi zasadami i przepisami o ochronie prywatności dzieci na całym świecie własne konto może mieć osoba od 13. roku życia. Dzieci korzystają z Gadit przez rodzica: w planie Family rodzic dodaje każde dziecko na stronie Rodzina, każde dziecko dostaje własną przestrzeń z trybem dla dzieci, a panel rodzica pokazuje słowa, które wyszukuje każde dziecko. Aby to skonfigurować, zacznij od Family na stronie Cennik.",
+              "Gadit powstał z myślą o tym, by rodzic mógł bezpiecznie korzystać z niego razem z dzieckiem. Tryb dla dzieci tworzy wyjaśnienia proste, konkretne i dostosowane do wieku, mniej więcej na poziomie 5 do 10 lat, korzystając z tego samego silnika co treści dla dorosłych, z wyraźnymi instrukcjami upraszczania. Dzieciom nigdy nie są pokazywane treści tworzone przez użytkowników.",
+              "Własne konto jest dla dorosłych, od 18. roku życia. Dzieci i nastolatki korzystają z Gadit przez dorosłego. W domu rodzic dodaje każde dziecko na stronie Family, każde dziecko dostaje własną przestrzeń z trybem dla dzieci, a panel rodzica pokazuje słowa, które wyszukuje każde dziecko. W szkole klasa dostaje link od nauczyciela, a uczniowie dołączają bez konta i bez adresu e-mail.",
             ],
           },
           {
@@ -1091,7 +1097,7 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             a: [
               "می‌توانید در کمتر از یک دقیقه و بدون لغو اشتراک به کارت جدید بروید. اشتراک فعلی‌تان ادامه پیدا می‌کند، فقط با کارت جدید.",
               "1. در gadit.app وارد شوید و از منوی حساب، «حساب» را باز کنید. 2. روی «مدیریت صورت‌حساب» بزنید. 3. یک صفحه امن Stripe باز می‌شود. کارت جدید را به‌عنوان روش پرداخت اضافه کنید و آن را پیش‌فرض بگذارید. 4. اگر خواستید، کارت قبلی را حذف کنید.",
-              "از دوره صورتحساب بعدی به بعد، همه چیز روی کارت جدید می‌رود. پرداخت قبلی، که از قبل دریافت شده، روی کارت قبلی می‌ماند. نیازی به بازپرداخت نیست، مگر این‌که مشخصاً خودتان بخواهید.",
+              "از چرخه صورتحساب بعدی به بعد، همه چیز روی کارت جدید می‌رود. مبلغ قبلی، که از قبل دریافت شده، روی کارت قبلی می‌ماند. عوض کردن کارت آن مبلغ را جابه‌جا نمی‌کند و تاریخ صورتحساب بعدی را هم تغییر نمی‌دهد.",
             ],
           },
           {
@@ -1141,8 +1147,9 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "refund",
             q: "آیا می‌توانم پولم را پس بگیرم؟",
             a: [
-              "بله. اگر خرید کمتر از 14 روز پیش بوده و از سرویس زیاد استفاده نشده، با ایمیل حساب‌تان و توضیح کوتاهی درباره دلیلش برای ما بنویسید. این بازپرداخت‌ها بی‌دردسر تأیید می‌شوند.",
-              "اگر بیش از 14 روز گذشته، تیم هر مورد را جداگانه بررسی می‌کند. اشتراک را لغو کنید تا دیگر تمدید نشود و به ما ایمیل بزنید.",
+              "بله، تا 14 روز بعد از اولین پرداخت حساب‌تان، یا بعد از تمدید سالانه. از ایمیل حساب‌تان به support@gadit.app پیام بدهید و ما همان پرداخت را کامل پس می‌دهیم. لازم نیست دلیلی بدهید. با بازپرداخت، اشتراک هم پایان می‌یابد و پول به همان کارتی برمی‌گردد که با آن پرداخت کرده‌اید، معمولاً ظرف 5 تا 10 روز کاری.",
+              "بعد از 14 روز، پرداخت‌ها بازپرداخت نمی‌شوند، مگر این‌که اشتباهی از شما مبلغ گرفته شده باشد یا قانون محل زندگی‌تان این را لازم بداند. هر وقت بخواهید می‌توانید لغو کنید تا اشتراک تمدید نشود، و تا پایان دوره‌ای که برایش پرداخت کرده‌اید فعال می‌ماند.",
+              "خرید را در برنامه iPhone یا iPad انجام داده‌اید؟ بازپرداخت‌های آن را Apple در reportaproblem.apple.com انجام می‌دهد.",
             ],
           },
           {
@@ -1348,8 +1355,9 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "payout",
             q: "کی پول دریافت می‌کنم؟",
             a: [
-              "ماهانه، وقتی موجودی‌تان به حداقل مبلغی برسد که در داشبورد همکاری‌تان نشان داده می‌شود. پرداخت را به حساب PayPal که آنجا تنظیم کرده‌اید می‌فرستیم. این حداقل مبلغ یک آستانه است، نه سقف. می‌توانید خیلی بیشتر درآمد داشته باشید، و وقتی از این آستانه بگذرید پرداخت را دریافت می‌کنید.",
-              "پورسانت‌ها 30 روز پس از پرداخت اشتراک آزاد می‌شوند تا مهلت بازپرداخت در نظر گرفته شود. بنابراین پورسانت اشتراک ژانویه اوایل فوریه آزاد می‌شود و وقتی موجودی‌تان به حداقل برسد، در پرداخت بعدی‌تان قرار می‌گیرد.",
+              "ماهانه، بدون حداقل مبلغ. هر پورسانت 30 روز بعد از پرداخت مشتری قابل پرداخت می‌شود و هر چه قابل پرداخت باشد در پرداخت ماهانه بعدی به حساب PayPal که در داشبورد شریک‌تان تنظیم کرده‌اید فرستاده می‌شود.",
+              "اگر PayPal بتواند با همان ارزی که مشتری پرداخت کرده پول را بفرستد، ما هم با همان ارز پرداخت می‌کنیم. در غیر این صورت، پرداخت به دلار آمریکا انجام می‌شود، با نرخ تبدیل روز پرداخت.",
+              "پورسانت‌ها به خاطر بازپرداخت‌ها 30 روز منتظر می‌مانند. اگر پرداخت یک مشتری بازپرداخت شود، پورسانت مربوط به آن لغو می‌شود. پس پورسانت یک پرداخت ژانویه در فوریه قابل پرداخت می‌شود و در پرداخت ماهانه بعدی فرستاده می‌شود.",
             ],
           },
           {
@@ -1403,8 +1411,8 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "kid-safety",
             q: "آیا Gadit برای کودکان امن است؟",
             a: [
-              "Gadit طوری طراحی شده که والدین بتوانند با خیال راحت همراه کودک از آن استفاده کنند. حالت کودک توضیح‌هایی ساده، ملموس و مناسب سن (حدود سطح 5 تا 10 سالگی) تولید می‌کند و از همان موتوری استفاده می‌کند که محتوای بزرگسالان را می‌سازد، با دستورالعمل‌های صریح برای ساده‌سازی. محتوای تولیدشده توسط کاربران هرگز به کودکان نشان داده نمی‌شود.",
-              "مطابق با سیاست‌های ما و قوانین حریم خصوصی کودکان در سراسر جهان، داشتن حساب مستقل از 13 سالگی به بالا ممکن است. کودکان از طریق والدین از Gadit استفاده می‌کنند: در طرح Family والد هر کودک را از صفحه «خانواده» اضافه می‌کند، هر کودک فضای خودش را با حالت کودک می‌گیرد و پنل والدین واژه‌هایی را که هر کودک جستجو می‌کند نشان می‌دهد. برای راه‌اندازی، با Family در صفحه «قیمت‌ها» شروع کنید.",
+              "Gadit طوری طراحی شده که والدین بتوانند با خیال راحت همراه کودک از آن استفاده کنند. حالت کودک توضیح‌هایی ساده، ملموس و مناسب سن، حدود سطح 5 تا 10 سالگی، تولید می‌کند و از همان موتوری استفاده می‌کند که محتوای بزرگسالان را می‌سازد، با دستورالعمل‌های صریح برای ساده‌سازی. محتوای تولیدشده توسط کاربران هرگز به کودکان نشان داده نمی‌شود.",
+              "داشتن حساب شخصی فقط برای بزرگسالان 18 سال به بالا است. کودکان و نوجوانان از طریق یک بزرگسال از Gadit استفاده می‌کنند. در خانه، والد هر کودک را در صفحه Family اضافه می‌کند، هر کودک فضای خودش را با Kids Mode می‌گیرد و پنل والدین واژه‌هایی را که هر کودک جستجو می‌کند نشان می‌دهد. در مدرسه، کلاس یک لینک از معلم می‌گیرد و دانش‌آموزها بدون حساب و بدون آدرس ایمیل وارد می‌شوند.",
             ],
           },
           {
@@ -1447,7 +1455,7 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             a: [
               "Anda bisa beralih ke kartu baru dalam waktu kurang dari satu menit tanpa membatalkan. Langganan Anda saat ini tetap berjalan, hanya dengan kartu baru.",
               "1. Masuk ke gadit.app dan buka \"Akun\" dari menu akun. 2. Klik \"Kelola tagihan\". 3. Halaman Stripe yang aman akan terbuka. Tambahkan kartu baru sebagai metode pembayaran dan jadikan sebagai default. 4. Jika mau, hapus kartu lama.",
-              "Mulai siklus tagihan berikutnya, semua tagihan akan masuk ke kartu baru. Tagihan sebelumnya, yang sudah ditarik, tetap ada di kartu lama. Tidak perlu pengembalian dana kecuali Anda memang menginginkannya.",
+              "Mulai siklus tagihan berikutnya, semua tagihan akan masuk ke kartu baru. Tagihan sebelumnya, yang sudah ditarik, tetap ada di kartu lama. Mengganti kartu tidak memindahkan tagihan itu dan tidak mengubah tanggal tagihan berikutnya.",
             ],
           },
           {
@@ -1497,8 +1505,9 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "refund",
             q: "Bisakah saya mendapatkan pengembalian dana?",
             a: [
-              "Bisa. Jika pembelian dilakukan kurang dari 14 hari yang lalu dan layanan belum banyak digunakan, tulis kepada kami dengan email akun Anda dan catatan singkat tentang alasannya. Pengembalian dana seperti ini disetujui tanpa dipersulit.",
-              "Jika sudah lebih dari 14 hari, tim menanganinya kasus per kasus. Batalkan langganan agar tidak terus diperpanjang, lalu kirim email kepada kami.",
+              "Bisa, dalam 14 hari sejak pembayaran pertama di akun Anda, atau sejak perpanjangan tahunan. Tulis ke support@gadit.app dari alamat email akun Anda dan kami akan mengembalikan pembayaran itu sepenuhnya. Anda tidak perlu memberikan alasan. Pengembalian dana ini juga mengakhiri langganan, dan uang akan kembali ke kartu yang Anda pakai untuk membayar, biasanya dalam 5 sampai 10 hari kerja.",
+              "Setelah 14 hari, pembayaran tidak dapat dikembalikan, kecuali Anda ditagih karena kesalahan atau hukum di tempat Anda tinggal mewajibkannya. Anda bisa membatalkan kapan saja agar langganan tidak diperpanjang, dan tetap menggunakannya sampai akhir periode yang sudah Anda bayar.",
+              "Membeli di aplikasi iPhone atau iPad? Apple menangani pengembalian dana tersebut di reportaproblem.apple.com.",
             ],
           },
           {
@@ -1704,8 +1713,9 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "payout",
             q: "Kapan saya dibayar?",
             a: [
-              "Sekali sebulan, saat saldo Anda mencapai minimum yang ditampilkan di dasbor partner Anda. Kami mengirimkannya ke akun PayPal yang Anda atur di sana. Minimum itu adalah ambang, bukan batas atas: Anda bisa menghasilkan jauh lebih banyak, dan Anda menerima pembayaran begitu melewatinya.",
-              "Komisi dicairkan 30 hari setelah pembayaran langganan, untuk memberi ruang bagi masa pengembalian dana. Jadi langganan Januari dicairkan di awal Februari dan masuk ke pembayaran Anda berikutnya setelah saldo Anda mencapai minimum.",
+              "Sekali sebulan, tanpa minimum. Setiap komisi bisa dibayarkan 30 hari setelah pembayaran pelanggan, dan semua yang sudah bisa dibayarkan akan dikirim pada pembayaran bulanan berikutnya ke akun PayPal yang Anda atur di dasbor partner Anda.",
+              "Kami membayar dalam mata uang yang dipakai pelanggan saat membayar jika PayPal bisa mengirimkannya, dan jika tidak, dalam dolar AS, dengan kurs pada hari kami membayar.",
+              "Komisi menunggu 30 hari karena pengembalian dana: jika pembayaran pelanggan dikembalikan, komisi untuk pembayaran itu dibatalkan. Jadi komisi dari pembayaran bulan Januari bisa dibayarkan pada bulan Februari, dan dikirim pada pembayaran bulanan berikutnya.",
             ],
           },
           {
@@ -1759,8 +1769,8 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "kid-safety",
             q: "Apakah Gadit aman untuk anak-anak?",
             a: [
-              "Gadit dirancang agar orang tua dapat menggunakannya dengan aman bersama anak. Mode anak menghasilkan penjelasan yang sederhana, konkret, dan sesuai usia (kira-kira tingkat usia 5 hingga 10 tahun), menggunakan mesin yang sama dengan konten dewasa, dengan instruksi tegas untuk menyederhanakan. Konten buatan pengguna tidak pernah ditampilkan kepada anak-anak.",
-              "Sesuai kebijakan kami dan aturan privasi anak di seluruh dunia, akun sendiri hanya untuk usia 13 tahun ke atas. Anak-anak menggunakan Gadit melalui orang tua: di paket Family, orang tua menambahkan setiap anak dari halaman Keluarga, setiap anak mendapat ruang sendiri dengan Mode anak, dan panel orang tua menampilkan kata-kata yang dicari setiap anak. Untuk mengaturnya, mulailah dengan Family di halaman Harga.",
+              "Gadit dirancang agar orang tua dapat menggunakannya dengan aman bersama anak. Mode anak menghasilkan penjelasan yang sederhana, konkret, dan sesuai usia, kira-kira tingkat usia 5 hingga 10 tahun, menggunakan mesin yang sama dengan konten dewasa, dengan instruksi tegas untuk menyederhanakan. Konten buatan pengguna tidak pernah ditampilkan kepada anak-anak.",
+              "Akun pribadi hanya untuk orang dewasa, usia 18 tahun ke atas. Anak-anak dan remaja menggunakan Gadit melalui orang dewasa. Di rumah, orang tua menambahkan setiap anak di halaman Family, setiap anak mendapat ruang sendiri dengan Mode anak, dan panel orang tua menampilkan kata-kata yang dicari setiap anak. Di sekolah, kelas mendapat tautan dari guru, dan siswa bergabung tanpa akun atau alamat email.",
             ],
           },
           {
@@ -1803,7 +1813,7 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             a: [
               "Je kunt in minder dan een minuut overstappen op een nieuwe kaart, zonder op te zeggen. Je huidige abonnement loopt gewoon door, alleen op de nieuwe kaart.",
               "1. Log in op gadit.app en open \"Account\" in het accountmenu. 2. Klik op \"Facturering beheren\". 3. Er opent een beveiligde Stripe-pagina. Voeg de nieuwe kaart toe als betaalmethode en stel die in als standaard. 4. Verwijder eventueel de oude kaart.",
-              "Vanaf de volgende factuurperiode gaat alles naar de nieuwe kaart. De vorige betaling, die al is afgeschreven, blijft op de oude kaart. Een terugbetaling is niet nodig, tenzij je die specifiek wilt.",
+              "Vanaf de volgende factuurperiode gaat alles naar de nieuwe kaart. De vorige betaling, die al is afgeschreven, blijft op de oude kaart. Het wijzigen van de kaart verplaatst die betaling niet en verandert je volgende factuurdatum niet.",
             ],
           },
           {
@@ -1853,8 +1863,9 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "refund",
             q: "Kan ik mijn geld terugkrijgen?",
             a: [
-              "Ja. Als de aankoop minder dan 14 dagen geleden was en de dienst nauwelijks is gebruikt, schrijf ons dan met het e-mailadres van je account en een korte toelichting waarom. Zulke terugbetalingen worden zonder gedoe goedgekeurd.",
-              "Is het langer dan 14 dagen geleden, dan bekijkt het team het per geval. Zeg het abonnement op zodat het niet blijft verlengen, en mail ons.",
+              "Ja, binnen 14 dagen na de eerste betaling op je account, of na een jaarlijkse verlenging. Mail naar support@gadit.app vanaf het e-mailadres van je account, dan betalen we die betaling volledig terug. Je hoeft geen reden op te geven. De terugbetaling stopt ook het abonnement, en het geld gaat terug naar de kaart waarmee je hebt betaald, meestal binnen 5 tot 10 werkdagen.",
+              "Na 14 dagen worden betalingen niet terugbetaald, behalve als je per ongeluk bent belast of als de wet in het land waar je woont dat verplicht. Je kunt altijd opzeggen zodat het abonnement niet wordt verlengd, en je houdt het tot het einde van de periode waarvoor je hebt betaald.",
+              "Gekocht in de app op iPhone of iPad? Apple regelt die terugbetalingen via reportaproblem.apple.com.",
             ],
           },
           {
@@ -2060,8 +2071,9 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "payout",
             q: "Wanneer word ik uitbetaald?",
             a: [
-              "Eén keer per maand, zodra je saldo de minimumdrempel bereikt die in je partnerdashboard staat. We sturen het naar het PayPal-account dat je daar hebt ingesteld. Die minimumdrempel is een ondergrens, geen plafond. Je kunt veel meer verdienen, en je krijgt de uitbetaling zodra je eroverheen gaat.",
-              "Commissies worden 30 dagen na de abonnementsbetaling vrijgegeven, vanwege de terugbetalingstermijn. Een abonnement uit januari wordt dus begin februari vrijgegeven en komt in je volgende uitbetaling zodra je saldo de minimumdrempel bereikt.",
+              "Eén keer per maand, zonder minimumbedrag. Elke commissie wordt 30 dagen na de betaling van de klant uitbetaalbaar, en alles wat uitbetaalbaar is wordt in de volgende maandelijkse uitbetaling gestuurd naar het PayPal-account dat je in je partnerdashboard hebt ingesteld.",
+              "We betalen in de valuta waarin de klant heeft betaald als PayPal die kan versturen, en anders in Amerikaanse dollars, tegen de wisselkoers op de dag van uitbetaling.",
+              "Commissies wachten 30 dagen vanwege terugbetalingen. Als de betaling van een klant wordt terugbetaald, vervalt de commissie daarop. Een commissie op een betaling in januari wordt dus in februari uitbetaalbaar en gaat mee in de volgende maandelijkse uitbetaling.",
             ],
           },
           {
@@ -2115,8 +2127,8 @@ export const HELP_MORE_3: Partial<Record<Lang, HelpContent>> = {
             id: "kid-safety",
             q: "Is Gadit veilig voor kinderen?",
             a: [
-              "Gadit is ontworpen zodat een ouder het veilig samen met een kind kan gebruiken. De kindermodus geeft uitleg die eenvoudig, concreet en passend bij de leeftijd is (ongeveer op het niveau van 5 tot 10 jaar), met dezelfde engine die de inhoud voor volwassenen maakt, met expliciete instructies om te vereenvoudigen. Door gebruikers gemaakte inhoud wordt nooit aan kinderen getoond.",
-              "In lijn met ons beleid en de regels voor de privacy van kinderen wereldwijd is een eigen account mogelijk vanaf 13 jaar. Kinderen gebruiken Gadit via een ouder: bij het Family-abonnement voegt de ouder elk kind toe via de Gezin-pagina, elk kind krijgt een eigen plek met de kindermodus, en het ouderoverzicht laat de woorden zien die elk kind opzoekt. Begin met Family op de prijzenpagina om het in te stellen.",
+              "Gadit is ontworpen zodat een ouder het veilig samen met een kind kan gebruiken. De kindermodus geeft uitleg die eenvoudig, concreet en passend bij de leeftijd is, ongeveer op het niveau van 5 tot 10 jaar, met dezelfde engine die de inhoud voor volwassenen maakt, met expliciete instructies om te vereenvoudigen. Door gebruikers gemaakte inhoud wordt nooit aan kinderen getoond.",
+              "Een eigen account is voor volwassenen van 18 jaar en ouder. Kinderen en tieners gebruiken Gadit via een volwassene. Thuis voegt een ouder elk kind toe op de Family-pagina, elk kind krijgt een eigen plek met Kids Mode, en het ouderoverzicht laat de woorden zien die elk kind opzoekt. Op school krijgt de klas een link van de docent, en leerlingen doen mee zonder account of e-mailadres.",
             ],
           },
           {

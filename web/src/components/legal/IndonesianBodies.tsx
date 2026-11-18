@@ -22,6 +22,9 @@ export function PrivacyBodyId(): ReactElement {
         Saat Anda membuat akun, kami mengumpulkan alamat email Anda dan, jika Anda masuk dengan Google, informasi profil
         dasar yang diberikan oleh Google (nama tampilan, foto profil). Kami tidak menerima kata sandi Google Anda.
       </p>
+      <p>
+        {"Di aplikasi iOS Anda juga dapat masuk dengan Apple. Dalam hal ini Apple memberikan kepada kami nama dan alamat email yang Anda pilih untuk dibagikan, yang dapat berupa alamat relay privat yang meneruskan email kami kepada Anda. Kami tidak menerima kata sandi Apple Anda."}
+      </p>
       <h3>Informasi penggunaan</h3>
       <p>Saat Anda menggunakan Gadit, kami memproses:</p>
       <ul>
@@ -75,30 +78,45 @@ export function PrivacyBodyId(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{": memproses kata dan kalimat yang Anda kirimkan untuk membuat definisi, umpan balik kalimat, kuis, dan transkripsi suara (Whisper), serta membuat gambar (DALL·E 3). OpenAI juga menulis jawaban asisten Gadit: kami mengirimkan pertanyaan Anda, pesan-pesan sebelumnya dalam percakapan yang sama, bahasa antarmuka Anda, paket langganan Anda, dan apakah Anda menggunakan situs web atau aplikasi, dan kami tidak menyertakan nama atau alamat email Anda. Data yang dikirim ke OpenAI tunduk pada kebijakan penggunaan data API OpenAI."}
+          <strong>OpenAI</strong>{": memproses kata dan kalimat yang Anda kirimkan untuk membuat definisi, umpan balik kalimat, dan kuis, mengubah teks menjadi suara, mentranskripsikan masukan suara, membaca teks dalam foto dan file PDF yang Anda unggah, misalnya halaman pekerjaan rumah, dan membuat gambar. OpenAI juga menulis jawaban asisten Gadit: kami mengirimkan pertanyaan Anda, pesan-pesan sebelumnya dalam percakapan yang sama, bahasa antarmuka Anda, paket Anda, dan apakah Anda menggunakan situs web atau aplikasi, dan kami tidak menyertakan nama atau alamat email Anda. Data yang dikirim ke OpenAI tunduk pada kebijakan penggunaan data API OpenAI."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): menyimpan akun, profil, status
           langganan, riwayat pencarian, dan gambar yang dibuat milik Anda.
         </li>
         <li>
+          <strong>Google</strong>{": (Gemini, melalui Google Cloud), mengubah teks menjadi suara. Kami hanya mengirimkan teks yang akan dibacakan, seperti kata, kalimat, dan cerita, dan audio tersebut disimpan di penyimpanan Firebase kami agar dapat diputar kembali. Dalam satu permainan membaca, Google juga mendengar bunyi yang diucapkan seorang anak dengan suara keras, untuk memeriksanya, dan rekaman tersebut tidak disimpan. Google Fonts menyajikan font untuk antarmuka dalam bahasa Tionghoa, Jepang, dan Korea, dan melihat alamat IP Anda."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{": organisasi nirlaba Israel, menambahkan tanda vokal pada teks bahasa Ibrani untuk pembaca muda. Kami hanya mengirimkan teks bahasa Ibrani kepadanya."}
+        </li>
+        <li>
           <strong>Stripe</strong>: menangani pembayaran, langganan, dan portal penagihan.
         </li>
         <li>
+          <strong>Apple</strong>{": menyediakan Sign in with Apple di aplikasi iOS, lihat bagian 1, dan menjual serta menagih langganan yang dibeli di aplikasi iOS. Untuk pembelian tersebut, Apple menangani pembayaran, dan kami hanya menerima konfirmasi atas pembelian itu dan statusnya, seperti perpanjangan atau pengembalian dana."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{": membayar mitra kami. Kami memberikan alamat email PayPal mitra tersebut dan jumlahnya."}
+        </li>
+        <li>
           <strong>Resend</strong>{": mengirim email kami (seperti tautan masuk dan notifikasi), dan meneruskan kepada tim kami pertanyaan yang diteruskan oleh asisten Gadit, dengan alamat email Anda sebagai alamat balasan."}
+        </li>
+        <li>
+          <strong>Expo</strong>{": mengirimkan notifikasi aplikasi iOS, seperti peringatan yang dapat diaktifkan oleh orang tua, yang mencakup nama anak dan kata yang dicari oleh anak tersebut."}
         </li>
         <li>
           <strong>Vercel</strong>: menghosting dan menyajikan situs web, serta menyediakan analitik anonim dan
           pengukuran kinerja.
         </li>
         <li>
-          <strong>Iklan dan analitik</strong>: Meta (Meta Pixel), Google Analytics, dan TikTok (TikTok Pixel dan
-          Events API) mengukur kunjungan dan hasil iklan kami. Layanan ini menggunakan cookie dan teknologi serupa di
-          halaman pemasaran, pendaftaran, dan pembayaran kami. Saat Anda mendaftar atau membayar, kami dapat
-          mengirimkan kepada layanan ini alamat email dan ID akun yang telah di-hash (dienkripsi satu arah), bersama
-          dengan alamat IP dan detail browser Anda, semata-mata untuk mengukur iklan kami. Kami tidak pernah
-          mengirimkan informasi apa pun tentang anak-anak kepada mereka, dan alat-alat ini tidak berjalan di layar
-          yang digunakan anak-anak.
+          <strong>Yooniz</strong>{": layanan pembelajaran keluarga terpisah dari pendiri yang sama. Yooniz dapat menanyakan kepada kami apakah alamat email orang tua memiliki paket Gadit Family yang aktif, dan kami hanya menjawab ya atau tidak. Jika ada, keluarga dapat membuka Gadit dari Yooniz tanpa kata sandi: Yooniz mengirimkan kepada kami alamat email orang tua, nama tampilan anggota keluarga, dan apakah masing-masing adalah orang tua, anak laki-laki, atau anak perempuan. Ketika seorang anak yang membuka Gadit dari Yooniz memahami sebuah kata, kami mengirimkan kepada Yooniz alamat email orang tua, ID Yooniz anak tersebut, dan jumlah poin pembelajaran yang diperoleh, tidak pernah kata itu sendiri."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{": menyajikan gambar bendera kecil yang ditampilkan di halaman kami, sehingga melihat alamat IP dan detail browser Anda."}
+        </li>
+        <li>
+          <strong>Iklan dan analitik</strong>{": Meta (Meta Pixel), Google Analytics, dan TikTok (TikTok Pixel dan Events API) mengukur kunjungan dan hasil iklan kami. Layanan ini menggunakan cookie dan teknologi serupa di halaman pemasaran, pendaftaran, dan pembayaran kami. Saat Anda mendaftar atau membayar, kami dapat mengirimkan kepada layanan ini alamat email dan ID akun yang telah di-hash (dienkripsi satu arah), bersama dengan alamat IP dan detail browser Anda, semata-mata untuk mengukur iklan kami. Affonso, layanan untuk tautan afiliasi, dimuat di halaman-halaman yang sama dan di setiap halaman yang dikunjungi pengunjung melalui tautan mitra, dan menyimpan cookie hingga 60 hari. Jika Anda mendaftar setelah datang melalui tautan afiliasi Affonso, kami mengirimkan kepada Affonso alamat email, nama, dan ID akun Anda, agar afiliasi yang merujuk Anda mendapatkan kredit. Kami tidak pernah mengirimkan informasi tentang anak-anak kepada layanan mana pun ini, dan alat-alat ini tidak berjalan pada profil anak, dalam Kids Mode, atau di halaman tautan kelas."}
         </li>
       </ul>
 
@@ -145,8 +163,16 @@ export function PrivacyBodyId(): ReactElement {
 
       <h2>7. Anak-anak</h2>
       <p>
-        Gadit tidak ditujukan untuk anak-anak di bawah usia 13 tahun. Jika Anda yakin bahwa seorang anak di bawah usia 13
-        tahun telah membuat akun, kirimkan email kepada kami dan kami akan menghapus akun tersebut beserta data terkait.
+        {"Akun Gadit ditujukan untuk orang dewasa, yaitu yang berusia 18 tahun atau lebih. Anak-anak dan remaja menggunakan Gadit hanya melalui orang dewasa, dengan salah satu dari dua cara berikut."}
+      </p>
+      <p>
+        {"Profil Family: orang tua menambahkan setiap anak sebagai profil di dalam akun Family milik orang tua, dengan nama dan apakah anak tersebut laki-laki atau perempuan, dan, jika ditambahkan oleh orang tua, juga usia, tingkat kelas, dan foto. Anak-anak tidak memiliki alamat email atau kata sandi pada kami. Kata-kata yang dicari seorang anak, serta buku catatan, permainan, dan kemajuannya, disimpan di akun keluarga. Orang tua dalam keluarga, dan siapa pun yang mereka beri akses kepadanya, dapat melihatnya, dan orang tua dapat memilih untuk menerima pemberitahuan, melalui notifikasi atau email, berisi kata-kata yang dicari seorang anak. Orang tua dapat menghapus profil anak di aplikasi kapan saja."}
+      </p>
+      <p>
+        {"Tautan kelas: seorang siswa membuka tautan atau kode yang diberikan guru, tanpa akun dan tanpa alamat email. Jika guru memasukkan daftar nama, siswa memilih namanya dari daftar tersebut, dan kata-kata yang dicari siswa disimpan untuk kelas di bawah nama tersebut, sehingga guru dapat melihatnya. Sekolah memutuskan untuk menggunakan Gadit dan bertanggung jawab untuk memberi tahu orang tua apabila diwajibkan oleh hukum."}
+      </p>
+      <p>
+        {"Kami tidak pernah menggunakan informasi anak untuk iklan, dan alat-alat yang tercantum di bawah Iklan dan analitik pada bagian 3 tidak pernah dimuat pada profil anak, dalam Kids Mode, atau pada halaman tautan kelas. Untuk menghapus profil anak dan datanya, orang tua dapat menulis ke "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" dan kami akan menghapusnya. Jika Anda yakin seorang anak telah membuka akun sendiri, hubungi kami dan kami akan menghapus akun tersebut beserta datanya."}
       </p>
 
       <h2>8. Pengguna internasional</h2>
@@ -187,9 +213,7 @@ export function TermsBodyId(): ReactElement {
 
       <h2>1. Siapa yang boleh menggunakan Gadit</h2>
       <p>
-        Anda harus berusia minimal 13 tahun untuk membuat akun. Jika Anda berusia antara 13 dan 18 tahun, Anda harus
-        memiliki izin dari orang tua atau wali yang sah. Dengan menggunakan Gadit, Anda menyatakan bahwa Anda memenuhi
-        persyaratan ini.
+        {"Anda harus berusia 18 tahun atau lebih untuk membuka akun Gadit. Anak-anak dan remaja di bawah usia 18 tahun menggunakan Gadit hanya melalui orang dewasa: orang tua atau wali dapat menambahkan mereka sebagai profil pada paket Family, dan sekolah dapat memberikan tautan kelas kepada para siswanya. Orang tua, wali, atau sekolah yang memberikan akses tersebut bertanggung jawab atasnya. Dengan membuka akun, Anda mengonfirmasi bahwa Anda berusia 18 tahun atau lebih."}
       </p>
 
       <h2>2. Akun Anda</h2>
@@ -212,16 +236,11 @@ export function TermsBodyId(): ReactElement {
       </p>
       <h3>Pembatalan</h3>
       <p>
-        Anda dapat membatalkan kapan saja dari halaman akun Anda. Pembatalan menghentikan perpanjangan berikutnya. Anda
-        tetap memiliki akses ke fitur berbayar hingga akhir periode penagihan saat ini. Kami tidak memberikan
-        pengembalian dana sebagian untuk waktu yang tidak digunakan.
+        {"Anda dapat membatalkan kapan saja dari halaman akun Anda. Pembatalan menghentikan perpanjangan berikutnya. Anda tetap memiliki akses ke fitur berbayar hingga akhir periode penagihan saat ini. Selain pengembalian dana yang dijelaskan di bawah ini, kami tidak mengembalikan dana untuk waktu yang tidak digunakan, kecuali jika hukum mengharuskan sebaliknya."}
       </p>
       <h3>Pengembalian dana</h3>
       <p>
-        Kecuali jika diwajibkan oleh hukum, pembayaran tidak dapat dikembalikan. Jika Anda yakin telah dikenai biaya
-        secara keliru, hubungi{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a> dalam waktu 30 hari sejak
-        tanggal penagihan.
+        {"Jika Anda memintanya dalam waktu 14 hari sejak pembayaran pertama pada akun Anda, atau dalam waktu 14 hari sejak perpanjangan tahunan, kami akan mengembalikan pembayaran tersebut secara penuh. Anda tidak perlu memberikan alasan. Kirim email ke "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" dari alamat email akun Anda. Pengembalian dana juga mengakhiri langganan. Pembayaran lainnya tidak dapat dikembalikan, kecuali jika hukum mengharuskan pengembalian dana. Jika Anda yakin telah dikenai biaya secara keliru, hubungi kami dalam waktu 30 hari sejak tanggal penagihan. Pembelian yang dilakukan di aplikasi iOS ditagihkan oleh Apple, dan hanya Apple yang dapat mengembalikan dananya, di reportaproblem.apple.com."}
       </p>
 
       <h2>4. Penggunaan yang dapat diterima</h2>
@@ -241,8 +260,7 @@ export function TermsBodyId(): ReactElement {
 
       <h2>5. Konten yang dihasilkan AI</h2>
       <p>
-        Gadit menggunakan model kecerdasan buatan (termasuk GPT, Whisper, dan DALL·E dari OpenAI) untuk menghasilkan
-        definisi, contoh, etimologi, umpan balik, kuis, gambar, dan transkripsi. Anda memahami dan menyetujui bahwa:
+        {"Gadit menggunakan model kecerdasan buatan (termasuk model dari OpenAI dan Google) untuk menghasilkan definisi, contoh, etimologi, umpan balik, kuis, gambar, suara, dan transkripsi. Anda memahami dan menyetujui bahwa:"}
       </p>
       <ul>
         <li>

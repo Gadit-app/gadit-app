@@ -34,6 +34,9 @@ const EnglishBody = () => (
       When you create an account, we collect your email address and, if you sign in with Google, the basic profile
       information Google provides (display name, profile picture). We do not receive your Google password.
     </p>
+    <p>
+      {"In the iOS app you can also sign in with Apple. Apple then gives us the name and the email address you choose to share, which can be a private relay address that forwards our emails to you. We do not receive your Apple password."}
+    </p>
     <h3>Usage information</h3>
     <p>
       When you use Gadit, we process:
@@ -91,34 +94,46 @@ const EnglishBody = () => (
     </p>
     <ul>
       <li>
-        <strong>OpenAI</strong>, processes the words and sentences you submit to generate definitions, sentence
-        feedback, quizzes, and voice transcription (Whisper), and generates images (DALL·E 3). It also writes the
-        Gadit assistant&rsquo;s answers: we send it your question, the earlier messages of the same conversation, your
-        interface language, your plan, and whether you are on the website or the app, and we do not attach your name or
-        email address. Data sent to OpenAI is governed by OpenAI&rsquo;s API data usage policy.
+        <strong>OpenAI</strong>{", processes the words and sentences you submit to generate definitions, sentence feedback and quizzes, turns text into speech, transcribes voice input, reads the text in photos and PDF files you upload (for example homework pages), and generates images. It also writes the Gadit assistant’s answers: we send it your question, the earlier messages of the same conversation, your interface language, your plan, and whether you are on the website or the app, and we do not attach your name or email address. Data sent to OpenAI is governed by OpenAI’s API data usage policy."}
       </li>
       <li>
         <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), stores your account, profile,
         subscription status, search history, and generated images.
       </li>
       <li>
+        <strong>Google</strong>{" (Gemini, through Google Cloud), turns text into speech. We send it only the text to be read aloud, such as words, sentences and stories, and the audio is kept in our Firebase storage so it can be played again. In one reading game it also hears the sound a child says aloud, to check it, and that recording is not stored. Google Fonts serves the fonts of the Chinese, Japanese and Korean interface and sees your IP address."}
+      </li>
+      <li>
+        <strong>Dicta</strong>{", an Israeli non-profit, adds vowel marks (niqqud) to Hebrew text for young readers. We send it only the Hebrew text."}
+      </li>
+      <li>
         <strong>Stripe</strong>, handles payments, subscriptions, and billing portal.
+      </li>
+      <li>
+        <strong>Apple</strong>{", provides Sign in with Apple in the iOS app (see section 1), and sells and bills the subscriptions bought in the iOS app. For those, Apple handles the payment, and we receive only a confirmation of the purchase and its status (such as a renewal or a refund)."}
+      </li>
+      <li>
+        <strong>PayPal</strong>{", pays our partners (affiliates). We give it the partner’s PayPal email address and the amount."}
       </li>
       <li>
         <strong>Resend</strong>, sends our emails (such as sign-in links and notifications), and delivers to our team the
         questions the Gadit assistant passes on, with your email address as the reply address.
       </li>
       <li>
+        <strong>Expo</strong>{", delivers the notifications of the iOS app, such as the alerts a parent can turn on, which include a child’s name and the word the child looked up."}
+      </li>
+      <li>
         <strong>Vercel</strong>, hosts and serves the website, and provides anonymized analytics and performance
         measurement.
       </li>
       <li>
-        <strong>Advertising and analytics</strong>: Meta (Meta Pixel), Google Analytics and TikTok (TikTok Pixel and
-        Events API) measure visits and the results of our ads. They use cookies and similar technologies on our
-        marketing, sign-up and payment pages. When you sign up or pay, we may send these services a hashed (one-way
-        encrypted) email address and account ID, together with your IP address and browser details, only to measure
-        our ads. We never send them any information about children, and these tools do not run on the screens children
-        use.
+        <strong>Yooniz</strong>{", a separate family learning service from the same founder. Yooniz can ask us whether a parent’s email address has an active Gadit Family plan, and we answer only yes or no. If it does, the family can open Gadit from Yooniz without a password: Yooniz sends us the parent’s email address, the family members’ display names, and whether each one is a parent, a boy or a girl. When a child who opened Gadit from Yooniz understands a word, we send Yooniz the parent’s email address, the child’s Yooniz ID and the number of learning points earned, never the word itself."}
+      </li>
+      <li>
+        <strong>flagcdn.com</strong>{", serves the small flag images shown on our pages, and so sees your IP address and browser details."}
+      </li>
+      <li>
+        <strong>Advertising and analytics</strong>{": Meta (Meta Pixel), Google Analytics and TikTok (TikTok Pixel and Events API) measure visits and the results of our ads. They use cookies and similar technologies on our marketing, sign-up and payment pages. When you sign up or pay, we may send these services a hashed (one-way encrypted) email address and account ID, together with your IP address and browser details, only to measure our ads. Affonso, a service for affiliate links, loads on the same pages and on any page a visitor reaches through a partner link, and keeps a cookie for up to 60 days. If you sign up after arriving through an Affonso affiliate link, we send Affonso your email address, name and account ID, so the affiliate who referred you is credited. We never send any of these services information about children, and these tools do not run on a child’s profile, in Kids Mode or on class link pages."}
       </li>
     </ul>
 
@@ -165,8 +180,16 @@ const EnglishBody = () => (
 
     <h2>7. Children</h2>
     <p>
-      Gadit is not directed to children under 13. If you believe a child under 13 has created an account, email us
-      and we will delete the account and associated data.
+      {"A Gadit account is for adults, 18 and older. Children and teenagers use Gadit only through an adult, in one of two ways."}
+    </p>
+    <p>
+      {"Family profiles: a parent adds each child as a profile inside the parent's Family account, with a name and whether the child is a boy or a girl, and, if the parent adds them, an age, a school grade and a photo. Children have no email address or password with us. The words a child looks up, and the child's notebook, games and progress, are saved in the family's account. The parents in the family, and anyone they give access to (for example a tutor), can see them, and a parent can choose to get alerts, by notification or email, with the words a child looks up. A parent can remove a child's profile in the app at any time."}
+    </p>
+    <p>
+      {"Class links: a student opens the link or code a teacher gives, without an account and without an email address. If the teacher entered a list of names, the student picks their name from it, and the words the student looks up are saved for the class under that name, so the teacher can see them. The school decides to use Gadit and is responsible for informing parents where the law requires it."}
+    </p>
+    <p>
+      {"We never use children's information for advertising, and the tools listed under Advertising and analytics in section 3 never load on a child's profile, in Kids Mode or on class link pages. To have a child's profile and its data deleted, a parent can write to "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" and we will delete it. If you believe a child opened an account of their own, write to us and we will delete the account and its data."}
     </p>
 
     <h2>8. International users</h2>
@@ -208,6 +231,9 @@ const HebrewBody = () => (
     <p>
       כשאתם יוצרים חשבון, אנחנו אוספים את כתובת הדוא&rdquo;ל שלכם, ואם אתם מתחברים דרך Google, את פרטי הפרופיל
       הבסיסיים ש-Google מספקת (שם תצוגה, תמונת פרופיל). אנחנו <strong>לא</strong> מקבלים את סיסמת ה-Google שלכם.
+    </p>
+    <p>
+      {"באפליקציה ל-iOS אפשר להתחבר גם עם Apple. במקרה כזה Apple מעבירה לנו את השם ואת כתובת הדוא״ל שבחרתם לשתף, שיכולה להיות כתובת ממסר פרטית שמעבירה אליכם את המיילים שלנו. אנחנו לא מקבלים את סיסמת ה-Apple שלכם."}
     </p>
     <h3>מידע על השימוש</h3>
     <p>כשאתם משתמשים ב-Gadit, אנחנו מעבדים:</p>
@@ -262,31 +288,45 @@ const HebrewBody = () => (
     </p>
     <ul>
       <li>
-        <strong>OpenAI</strong>, מעבד את המילים והמשפטים שאתם שולחים, כדי ליצור הגדרות, פידבק על משפטים, חידונים,
-        ותמלול קולי (Whisper), וכן יוצר תמונות (DALL·E 3). הוא גם מנסח את התשובות של העוזר של Gadit: אנחנו שולחים אליו
-        את השאלה, את ההודעות הקודמות באותה שיחה, את שפת הממשק, את המסלול, והאם אתם באתר או באפליקציה, ולא מצרפים את
-        השם או את כתובת הדוא״ל שלכם. המידע שנשלח ל-OpenAI כפוף למדיניות השימוש של OpenAI ב-API.
+        <strong>OpenAI</strong>{", מעבד את המילים והמשפטים שאתם שולחים כדי ליצור הגדרות, פידבק על משפטים וחידונים, הופך טקסט לדיבור, מתמלל קלט קולי, קורא את הטקסט בתמונות ובקובצי PDF שאתם מעלים (למשל דפי שיעורי בית), ויוצר תמונות. הוא גם מנסח את התשובות של העוזר של Gadit: אנחנו שולחים אליו את השאלה, את ההודעות הקודמות באותה שיחה, את שפת הממשק, את המסלול, והאם אתם באתר או באפליקציה, ולא מצרפים את השם או את כתובת הדוא״ל שלכם. המידע שנשלח ל-OpenAI כפוף למדיניות השימוש של OpenAI ב-API."}
       </li>
       <li>
         <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), שומר את החשבון, הפרופיל,
         סטטוס המנוי, היסטוריית החיפוש, והתמונות שנוצרו.
       </li>
       <li>
+        <strong>Google</strong>{" (Gemini, דרך Google Cloud), הופך טקסט לדיבור. אנחנו שולחים אליו רק את הטקסט שיש להקריא, כמו מילים, משפטים וסיפורים, והשמע נשמר באחסון ה-Firebase שלנו כדי שאפשר יהיה להשמיע אותו שוב. במשחק קריאה אחד הוא גם שומע את הצליל שילד אומר בקול, כדי לבדוק אותו, וההקלטה הזאת לא נשמרת. Google Fonts מגיש את הגופנים של הממשק בסינית, ביפנית ובקוריאנית, ורואה את כתובת ה-IP שלכם."}
+      </li>
+      <li>
+        <strong>Dicta</strong>{", עמותה ישראלית, מוסיפה ניקוד לטקסט בעברית עבור קוראים צעירים. אנחנו שולחים אליה רק את הטקסט בעברית."}
+      </li>
+      <li>
         <strong>Stripe</strong>, מטפל בתשלומים, מנויים, ופורטל החיוב.
+      </li>
+      <li>
+        <strong>Apple</strong>{", מספקת את ההתחברות עם Apple באפליקציה ל-iOS (ראו סעיף 1), ומוכרת ומחייבת את המנויים שנקנים באפליקציה ל-iOS. ברכישות האלה Apple מטפלת בתשלום, ואנחנו מקבלים רק אישור על הרכישה ועל מצבה (למשל חידוש או החזר)."}
+      </li>
+      <li>
+        <strong>PayPal</strong>{", משלם לשותפים שלנו. אנחנו מעבירים אליו את כתובת ה-PayPal של השותף ואת הסכום."}
       </li>
       <li>
         <strong>Resend</strong>, שולח את המיילים שלנו (למשל קישורי כניסה והתראות), ומעביר לצוות שלנו את השאלות שהעוזר של
         Gadit מעביר הלאה, עם כתובת הדוא״ל שלכם ככתובת לתשובה.
       </li>
       <li>
+        <strong>Expo</strong>{", מעביר את ההתראות של האפליקציה ל-iOS, למשל התראות שהורה יכול להפעיל, שכוללות את שם הילד ואת המילה שהילד חיפש."}
+      </li>
+      <li>
         <strong>Vercel</strong>, מארח את האתר ומספק אנליטיקה ומדידת ביצועים אנונימית.
       </li>
       <li>
-        <strong>פרסום ומדידה</strong>: Meta (Meta Pixel), Google Analytics ו-TikTok (TikTok Pixel ו-Events API) מודדים
-        ביקורים ואת התוצאות של הפרסומות שלנו. הם משתמשים בעוגיות (cookies) ובטכנולוגיות דומות בדפי השיווק, ההרשמה
-        והתשלום שלנו. כשאתם נרשמים או משלמים, ייתכן שנשלח לשירותים האלה כתובת דוא״ל ומזהה חשבון מוצפנים בהצפנה
-        חד-כיוונית (hash), יחד עם כתובת ה-IP ופרטי הדפדפן, רק כדי למדוד את הפרסומות שלנו. אנחנו אף פעם לא שולחים להם
-        מידע על ילדים, והכלים האלה לא פועלים במסכים שילדים משתמשים בהם.
+        <strong>Yooniz</strong>{", שירות למידה משפחתי נפרד של אותו מייסד. Yooniz יכול לשאול אותנו אם לכתובת דוא״ל של הורה יש מסלול Family פעיל ב-Gadit, ואנחנו עונים רק כן או לא. אם יש, המשפחה יכולה להיכנס ל-Gadit מתוך Yooniz בלי סיסמה: Yooniz שולח אלינו את כתובת הדוא״ל של ההורה, את שמות התצוגה של בני המשפחה, והאם כל אחד מהם הוא הורה, בן או בת. כשילד שנכנס ל-Gadit מתוך Yooniz מבין מילה, אנחנו שולחים ל-Yooniz את כתובת הדוא״ל של ההורה, את המזהה של הילד ב-Yooniz ואת מספר נקודות הלמידה שנצברו, אף פעם לא את המילה עצמה."}
+      </li>
+      <li>
+        <strong>flagcdn.com</strong>{", מגיש את תמונות הדגלים הקטנות שמוצגות בדפים שלנו, ולכן רואה את כתובת ה-IP ואת פרטי הדפדפן שלכם."}
+      </li>
+      <li>
+        <strong>פרסום ומדידה</strong>{": Meta (Meta Pixel), Google Analytics ו-TikTok (TikTok Pixel ו-Events API) מודדים ביקורים ואת התוצאות של הפרסומות שלנו. הם משתמשים בעוגיות (cookies) ובטכנולוגיות דומות בדפי השיווק, ההרשמה והתשלום שלנו. כשאתם נרשמים או משלמים, ייתכן שנשלח לשירותים האלה כתובת דוא״ל ומזהה חשבון מוצפנים בהצפנה חד-כיוונית (hash), יחד עם כתובת ה-IP ופרטי הדפדפן, רק כדי למדוד את הפרסומות שלנו. Affonso, שירות לקישורי שותפים, נטען באותם דפים ובכל דף שמגיעים אליו דרך קישור של שותף, ושומר עוגייה עד 60 יום. אם נרשמתם אחרי שהגעתם דרך קישור שותף של Affonso, אנחנו שולחים ל-Affonso את כתובת הדוא״ל, השם ומזהה החשבון שלכם, כדי שהשותף שהפנה אתכם יקבל את הקרדיט. אנחנו אף פעם לא שולחים לאף אחד מהשירותים האלה מידע על ילדים, והכלים האלה לא פועלים בפרופיל של ילד, במצב ילדים או בדפים של קישור כיתה."}
       </li>
     </ul>
 
@@ -332,8 +372,16 @@ const HebrewBody = () => (
 
     <h2>7. ילדים</h2>
     <p>
-      Gadit אינו מיועד לילדים מתחת לגיל 13. אם אתם סבורים שילד מתחת לגיל 13 פתח חשבון, כתבו לנו ואנחנו נמחק את
-      החשבון ואת המידע הנלווה.
+      {"חשבון ב-Gadit מיועד למבוגרים, מגיל 18 ומעלה. ילדים ובני נוער משתמשים ב-Gadit רק דרך מבוגר, באחת משתי דרכים."}
+    </p>
+    <p>
+      {"פרופילים במשפחה: הורה מוסיף כל ילד כפרופיל בתוך חשבון ה-Family שלו, עם שם והאם זה בן או בת, ואם ההורה מוסיף אותם, גם גיל, כיתה ותמונה. לילדים אין אצלנו כתובת דוא״ל או סיסמה. המילים שילד מחפש, והמחברת, המשחקים וההתקדמות שלו, נשמרים בחשבון המשפחה. ההורים במשפחה, וכל מי שהם נותנים לו גישה (למשל מורה פרטי), יכולים לראות אותם, והורה יכול לבחור לקבל התראות, בהודעה או במייל, עם המילים שילד מחפש. הורה יכול להסיר את הפרופיל של ילד באפליקציה בכל עת."}
+    </p>
+    <p>
+      {"קישורי כיתה: תלמיד פותח את הקישור או הקוד שהמורה נותן, בלי חשבון ובלי כתובת דוא״ל. אם המורה הזין רשימת שמות, התלמיד בוחר בה את השם שלו, והמילים שהוא מחפש נשמרות בכיתה תחת השם הזה, כדי שהמורה יוכל לראות אותן. בית הספר מחליט להשתמש ב-Gadit, והוא אחראי ליידע את ההורים כשהחוק מחייב זאת."}
+    </p>
+    <p>
+      {"אנחנו אף פעם לא משתמשים במידע על ילדים לפרסום, והכלים שמפורטים תחת 'פרסום ומדידה' בסעיף 3 לא נטענים אף פעם בפרופיל של ילד, במצב ילדים או בדפים של קישור כיתה. כדי למחוק את הפרופיל של ילד ואת המידע שלו, הורה יכול לכתוב ל-"}<a href="mailto:support@gadit.app">support@gadit.app</a>{" ואנחנו נמחק אותו. אם אתם סבורים שילד פתח חשבון משלו, כתבו לנו ואנחנו נמחק את החשבון ואת המידע שלו."}
     </p>
 
     <h2>8. משתמשים בינלאומיים</h2>

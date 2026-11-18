@@ -45,10 +45,27 @@ export function setAdsRoleIsKid(kid: boolean) {
   roleIsKid = kid;
 }
 
+/** Inside the Play or iOS app (html[data-play="1"]): no ad tools at all, since
+ *  children use the apps on their own devices (council round 5, 2026-11-18). */
+export function inStoreApp(): boolean {
+  try {
+    return document.documentElement.dataset.play === "1";
+  } catch {
+    return false;
+  }
+}
+
+/** A school class-link page (/c/<code>, with or without a language prefix):
+ *  students use it without an account, so no ad tool ever loads there. */
+export function isClassLinkPath(path: string): boolean {
+  return new RegExp("^\/" + LANG + "c\/").test(path);
+}
+
 /** True when a pixel or analytics hit may be sent right now. */
 export function adsAllowed(path?: string): boolean {
   if (typeof window === "undefined") return false;
   try {
+    if (inStoreApp()) return false;
     return !roleIsKid && !readKidsMode() && isAcquisitionPath(path ?? window.location.pathname);
   } catch {
     return false;

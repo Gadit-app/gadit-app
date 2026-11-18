@@ -23,6 +23,9 @@ export function PrivacyBodySs(): ReactElement {
         lowisisekelo we-phrofayili lonikwa ngu-Google (libito lelibonakalako, sitfombe se-phrofayili). Asilitfoli
         liphasiwedi lakho le-Google.
       </p>
+      <p>
+        {"Ku-app ye-iOS ungaphindze ungene nge-Apple. Apple bese isinika libito nelikheli le-imeyili lokhetsa ukwabelana ngalo, lokungaba likheli leliyimfihlo lekudlulisa ema-imeyili etfu kuwe. Asilitfoli liphasiwedi lakho le-Apple."}
+      </p>
       <h3>Umniningwane wekusebentisa</h3>
       <p>Nawusebentisa i-Gadit, sicubungula:</p>
       <ul>
@@ -76,31 +79,46 @@ export function PrivacyBodySs(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{", icubungula emagama nemisho loyitfumelako kute yakhe tincazelo, imibono ngemisho, imibuto yekuhlola, nekubhala phansi inkhulumo (Whisper), futsi yakha titfombe (DALL·E 3). Iphindze ibhale timphendvulo temsiti wa-Gadit: siyitfumela umbuto wakho, imilayeto yangaphambilini yaleyo ngxoxo lefanako, lulwimi lwe-interface yakho, luhlelo lwakho, nekutsi ukuwebhusayithi noma ku-app, futsi asinamatsi ligama lakho noma likheli lakho le-imeyili. Umniningwane lotfunyelwa ku-OpenAI ulawulwa yinchubomgomo ye-OpenAI yekusetjentiswa kwemniningwane ye-API."}
+          <strong>OpenAI</strong>{", icubungula emagama nemisho loyitfumelako kute yakhe tincazelo, imibono ngemisho kanye nemibuto yekuhlola, igucule umbhalo ube yinkhulumo, ibhale phansi lokufakwa ngelivi, ifundze umbhalo losetitfombeni nakumafayela e-PDF leniwalayishako (sibonelo, emakhasi emsebenti wasekhaya), futsi yakhe titfombe. Iphindze ibhale timphendvulo temsiti wa-Gadit: siyitfumela umbuto wakho, imilayeto yangaphambilini yaleyo ngxoxo lefanako, lulwimi lwe-interface yakho, luhlelo lwakho, nekutsi ukuwebhusayithi noma ku-app, futsi asinamatsi ligama lakho noma likheli lakho le-imeyili. Umniningwane lotfunyelwa ku-OpenAI ulawulwa yinchubomgomo ye-OpenAI yekusetjentiswa kwemniningwane ye-API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), igcina i-akhawunti yakho,
           iphrofayili, simo sekubhalisa, umlandvo wekusesha, kanye netitfombe letentiwe.
         </li>
         <li>
+          <strong>Google</strong>{"(Gemini, nge-Google Cloud), igucula umbhalo ube yinkhulumo. Siyitfumela kuphela umbhalo lofanele ufundvwe ngekuvakala, njengemagama, imisho netindzaba, futsi umsindvo ugcinwa ku-Firebase storage yetfu kute ukhone kuphindze udlalwe. Emdlalweni munye wekufundza iphindze ive umsindvo umntfwana lawusho ngekuvakala, kute iwuhlole, futsi loko lokurekhodiwe akugcinwa. Google Fonts iniketa emafonti e-interface yesiShayina, yesiJapan neyesiKorea, futsi ibona likheli lakho le-IP."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{", inhlangano yase-Israel lengenzi nzuzo, ifaka bonkhamisa embhalweni wesiHebheru kute ufundzeke bantfwana. Siyitfumela kuphela umbhalo wesiHebheru."}
+        </li>
+        <li>
           <strong>Stripe</strong>, iphatsa tinkhokhelo, kubhalisa, kanye nelikhasi lekuphatsa tinkhokhelo (billing
           portal).
         </li>
         <li>
+          <strong>Apple</strong>{", iniketa Sign in with Apple ku-app ye-iOS (buka sigaba 1), futsi itsengisa iphindze ikhokhise timphahla tekubhalisela letitsengwa ku-app ye-iOS. Kuleto, Apple iphatse inkhokhelo, futsi tsine semukela kuphela sicinisekiso sekutsenga nesimo sako (njengekuvuselelwa noma kubuyiselwa imali)."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{", ikhokhela bashiyalane betfu. Siyinika likheli le-imeyili ye-PayPal lebashiyalane kanye nenani."}
+        </li>
+        <li>
           <strong>Resend</strong>{", itfumela ema-imeyili etfu (njengemachumanisi ekungena netatiso), futsi yendlulisela ethimbeni letfu imibuto ledluliselwa phambili ngumsiti wa-Gadit, nelikheli lakho le-imeyili njengelikheli lekuphendvula."}
+        </li>
+        <li>
+          <strong>Expo</strong>{", iletsa tatiso te-app ye-iOS, njengezexwayiso umtali langativula, letifaka ligama lemntfwana kanye neligama umntfwana lalibukile."}
         </li>
         <li>
           <strong>Vercel</strong>, ibamba futsi ihambise iwebhusayithi, futsi iniketa tibalo letingavezi muntfu
           nekukalwa kwekusebenta.
         </li>
         <li>
-          <strong>Kukhangisa netibalo</strong>, i-Meta (Meta Pixel), i-Google Analytics ne-TikTok (TikTok Pixel
-          ne-Events API) kukala kuvakasha kanye nemiphumela yetikhangiso tetfu. Kusebentisa ema-cookie kanye
-          netheknoloji lefanako emakhasini etfu ekukhangisa, ekubhalisa nekukhokha. Nawubhalisa nome nawukhokha,
-          singatfumela kulamasevisi likheli le-imeyili kanye ne-ID ye-akhawunti letifihlwe ngendlela yinye (hash),
-          kanye nelikheli lakho le-IP nemniningwane yesiphequluli sakho, kuphela kute sikale tikhangiso tetfu. Asikaze
-          sitfumele kuwo umniningwane nome ngumuphi ngebantfwana, futsi lamathuluzi akasebenti etikrinini
-          letisetjentiswa bantfwana.
+          <strong>Yooniz</strong>{", yinsita lehlukene yekufundza kwemindeni levela kumusunguli lofanako. Yooniz ingasibuza kutsi likheli le-imeyili lemtali line-Gadit Family plan lesebentako yini, futsi siphendvula kuphela ngekutsi yebo noma cha. Nangabe ikhona, umndeni ungavula i-Gadit usuka ku-Yooniz ngaphandle kweliphasiwedi: Yooniz isitfumelela likheli le-imeyili lemtali, emabito ekubonisa emalunga emndeni, nekutsi ngamunye wabo ungutali, ngumfana noma yintfombatana. Uma umntfwana lovule i-Gadit asuka ku-Yooniz acondza ligama, sitfumela ku-Yooniz likheli le-imeyili lemtali, i-ID yemntfwana ku-Yooniz kanye nenombolo yemaphuzu ekufundza lawatfolile, hhayi ligama lona ngekwalo."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{", iniketa titfombe letincane temafulegi letikhonjiswa emakhasini etfu, ngako ibona likheli lakho le-IP nemniningwane yesiphequluli sakho."}
+        </li>
+        <li>
+          <strong>Kukhangisa netibalo</strong>{", i-Meta (Meta Pixel), Google Analytics ne-TikTok (TikTok Pixel ne-Events API) kukala kuvakasha kanye nemiphumela yetikhangiso tetfu. Kusebentisa ema-cookie kanye netheknoloji lefanako emakhasini etfu ekukhangisa, ekubhalisa nekukhokha. Nawubhalisa noma nawukhokha, singatfumela kulamasevisi likheli le-imeyili kanye ne-ID ye-akhawunti letifihlwe ngendlela yinye (hash), kanye nelikheli lakho le-IP nemniningwane yesiphequluli sakho, kuphela kute sikale tikhangiso tetfu. Affonso, insita yetichumanisi tebashiyalane, ilayisha kulamakhasi lafanako nakunoma nguliphi likhasi sivakashi lesifinyelela kulo ngesichumanisi sebashiyalane, futsi igcina i-cookie sikhatsi lesingafika emalanga langu-60. Nangabe nibhalisa ngemva kwekufika ngesichumanisi sebashiyalane se-Affonso, sitfumela ku-Affonso likheli lenu le-imeyili, ligama kanye ne-ID ye-akhawunti, kute umshiyalane lonibhekise atfole sikweleti. Asikaze sitfumele kulamasevisi nome nguyiphi imininingwane ngebantfwana, futsi lamathuluzi akasebenti ku-phrofayili yemntfwana, ku-Kids Mode noma emakhasini etichumanisi teliklasi."}
         </li>
       </ul>
 
@@ -148,9 +166,16 @@ export function PrivacyBodySs(): ReactElement {
 
       <h2>7. Bantfwana</h2>
       <p>
-        I-Gadit ayentelwanga bantfwana labangaphansi kweminyaka lengu-13. Nangabe ukholwa kutsi umntfwana longaphansi
-        kweminyaka lengu-13 uvule i-akhawunti, sitfumelele i-imeyili futsi sitawucisha i-akhawunti nemniningwane
-        lohlobene nayo.
+        {"I-akhawunti ye-Gadit yebantfu labadzala, labaneminyaka lengu-18 nobe ngetulu. Bantfwana nebasha basebentisa i-Gadit kuphela ngekudzabula kumuntfu lomdzala, ngalenye yetindlela letimbili."}
+      </p>
+      <p>
+        {"Ema-phrofayili e-Family: umtali ufaka umntfwana ngamunye njenge-phrofayili ngekhatsi kwe-akhawunti ye-Family yemtali, anelibito nekutsi umntfwana ungumfana nobe yintfombatana, futsi, nangabe umtali akufaka, neminyaka, libanga lesikolwa nesitfombe. Bantfwana abanalo likheli le-imeyili nobe liphasiwedi natsi. Emagama umntfwana lawafunako, kanye nebhuku lakhe, imidlalo nentfutfuko yakhe, kugcinwa ku-akhawunti yemndeni. Batali emndenini, nabo bonkhe lababanika kufinyelela kubo, sibonelo thishela wangasese, bangakubona loko, futsi umtali angakhetsa kutfola taziso, ngesaziso nobe nge-imeyili, letinemagama umntfwana lawafunako. Umtali angasusa i-phrofayili yemntfwana ku-app nanoma nini."}
+      </p>
+      <p>
+        {"Tixhumanisi teliklasi: umfundzi uvula lesixhumanisi nobe lekhodi layinikwa thishela, ngaphandle kwe-akhawunti nangaphandle kwelikheli le-imeyili. Nangabe thishela afake luhla lwemabito, umfundzi ukhetsa libito lakhe kulo, futsi emagama umfundzi lawafunako agcinelwa liklasi ngaphansi kwalelo libito, kute thishela akhone kuwabona. Sikolwa sitsatsa sincumo sekusebentisa i-Gadit futsi siphetse umtfwalo wekutiniketa batali lwati lapho umtsetfo ukudzingako."}
+      </p>
+      <p>
+        {"Asikaze sisebentise umniningwane webantfwana ekukhangiseni, futsi emathuluzi labalwe ngaphansi kwe-Kukhangisa netibalo esigabeni 3 awakaze alayishe ku-phrofayili yemntfwana, ku-Kids Mode nobe emakhasini etixhumanisi teliklasi. Kute kususwe i-phrofayili yemntfwana nemniningwane wayo, umtali angabhalela ku-"}<a href="mailto:support@gadit.app">support@gadit.app</a>{" futsi sitawuyisusa. Nangabe ukholwa kutsi umntfwana uvule i-akhawunti yakhe, sibhalele futsi sitawususa leyo akhawunti nemniningwane yayo."}
       </p>
 
       <h2>8. Basebentisi labasemaveni langaphandle</h2>
@@ -191,9 +216,7 @@ export function TermsBodySs(): ReactElement {
 
       <h2>1. Ngubani longasebentisa i-Gadit</h2>
       <p>
-        Kufanele okungenani ube neminyaka lengu-13 kute uvule i-akhawunti. Nangabe uneminyaka lephakatsi kwalengu-13
-        nalengu-18, kufanele ube nemvume yemtali nobe yemgcini wakho ngekwemtsetfo. Ngekusebentisa i-Gadit uyaveta
-        kutsi uyahlangabetana nalezidzingo.
+        {"Kufanele ube neminyaka lengu-18 nobe ngetulu kute uvule i-akhawunti ye-Gadit. Bantfwana nebasha labangaphansi kweminyaka lengu-18 basebentisa i-Gadit kuphela ngekudzabula kumuntfu lomdzala: umtali nobe umgcini ngekwemtsetfo bangabafaka njengema-phrofayili kuhlelo lwe-Family, futsi sikolwa singanika bafundzi baso isixhumanisi seliklasi. Umtali, umgcini ngekwemtsetfo nobe sikolwa lesinika lokufinyelela nguyena lophetse umtfwalo wako. Ngekuvula i-akhawunti, uyacinisekisa kutsi uneminyaka lengu-18 nobe ngetulu."}
       </p>
 
       <h2>2. I-akhawunti yakho</h2>
@@ -217,16 +240,11 @@ export function TermsBodySs(): ReactElement {
       </p>
       <h3>Kukhansela</h3>
       <p>
-        Ungakhansela nanoma nini elikhasini le-akhawunti yakho. Kukhansela kumisa kuvuselela kwesikhatsi lesitako.
-        Utawuchubeka ufinyelela tinsita letikhokhelwako kuze kube sekupheleni kwesikhatsi sekukhokha lesikhona.
-        Asibuyiseli ingcenye yemali yesikhatsi lesingakasetjentiswa.
+        {"Ungakhansela nanoma nini elikhasini le-akhawunti yakho. Kukhansela kumisa kuvuselela kwesikhatsi lesitako. Utawuchubeka ufinyelela etintfweni letikhokhelwako kuze kube sekupheleni kwesikhatsi sekukhokha lesikhona. Ngaphandle kwekubuyiselwa kwemali lokuchazwe ngentasi, asibuyiseli imali yesikhatsi lesingakasetjentiswa, ngaphandle kwalapho umtsetfo udzinga lokunye."}
       </p>
       <h3>Kubuyiselwa imali</h3>
       <p>
-        Ngaphandle kwalapho kudzingwa ngumtsetfo, tinkhokhelo atibuyiselwa. Nangabe ukholwa kutsi ukhokhiswe ngephutsa,
-        sitsintse ekhelini{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a> ngekhatsi kwemalanga
-        langu-30 ekhokhisweni loko.
+        {"Nangabe ucela ngekhatsi kwemalanga langu-14 kusukela ekukhokheni kwekucala ku-akhawunti yakho, nobe ngekhatsi kwemalanga langu-14 kusukela ekuvuseleleni kwemnyaka, sitakubuyisela leyo nkhokhelo iphelele. Akudzingeki unike sizatfu. Bhalela ku-"}<a href="mailto:support@gadit.app">support@gadit.app</a>{" usebentisa likheli le-imeyili le-akhawunti yakho. Kubuyiselwa kwemali kuphindze kuphelise kubhalisa. Letinye tinkhokhelo atibuyiselwa, ngaphandle kwalapho umtsetfo udzinga kubuyiselwa kwemali. Nangabe ukholwa kutsi ukhokhiswe ngephutsa, bhalela kitsi ngekhatsi kwemalanga langu-30 kusukela ekukhokhisweni. Lokutsengiwe ku-app ye-iOS kukhokhiswa ngu-Apple, futsi ngu-Apple kuphela longakubuyisela imali yako, ku-reportaproblem.apple.com."}
       </p>
 
       <h2>4. Kusebentisa lokwemukelekako</h2>
@@ -246,9 +264,7 @@ export function TermsBodySs(): ReactElement {
 
       <h2>5. Lokucuketfwe lokwentiwe yi-AI</h2>
       <p>
-        I-Gadit isebentisa ema-modeli ebuhlakani lobentiwe (artificial intelligence) (lokufaka ekhatsi i-GPT,
-        i-Whisper, ne-DALL·E te-OpenAI) kute yakhe tincazelo, tibonelo, imvelaphi yemagama (etymology), imibono,
-        imibuto yekuhlola, titfombe, nekubhalwa phansi kwenkhulumo. Uyacondza futsi uyavuma kutsi:
+        {"I-Gadit isebentisa ema-modeli ebuhlakani lobentiwe (artificial intelligence) (lokufaka ekhatsi ema-modeli e-OpenAI nawe-Google) kute yakhe tincazelo, tibonelo, imvelaphi yemagama, imibono, imibuto yekuhlola, titfombe, inkhulumo, nekubhalwa phansi kwenkhulumo. Uyacondza futsi uyavuma kutsi:"}
       </p>
       <ul>
         <li>

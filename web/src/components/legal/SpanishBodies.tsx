@@ -21,6 +21,9 @@ export function PrivacyBodyEs(): ReactElement {
         información básica de perfil que Google proporciona (nombre de visualización, foto de perfil). No recibimos su
         contraseña de Google.
       </p>
+      <p>
+        {"En la aplicación de iOS también puede iniciar sesión con Apple. En ese caso, Apple nos proporciona el nombre y la dirección de correo electrónico que usted elija compartir, que puede ser una dirección privada de retransmisión que reenvía nuestros correos electrónicos a usted. No recibimos su contraseña de Apple."}
+      </p>
       <h3>Información de uso</h3>
       <p>Cuando usted utiliza Gadit, procesamos:</p>
       <ul>
@@ -73,30 +76,45 @@ export function PrivacyBodyEs(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{": procesa las palabras y oraciones que usted envía para generar definiciones, comentarios sobre oraciones, cuestionarios y transcripción de voz (Whisper), y genera imágenes (DALL·E 3). También redacta las respuestas del asistente de Gadit: le enviamos su pregunta, los mensajes anteriores de la misma conversación, su idioma de la interfaz, su plan y si está en el sitio web o en la aplicación, y no adjuntamos su nombre ni su dirección de correo electrónico. Los datos enviados a OpenAI se rigen por la política de uso de datos de la API de OpenAI."}
+          <strong>OpenAI</strong>{": procesa las palabras y oraciones que usted envía para generar definiciones, comentarios sobre oraciones y cuestionarios, convierte texto en voz, transcribe la entrada de voz, lee el texto de las fotos y los archivos PDF que usted carga (por ejemplo, páginas de tareas) y genera imágenes. También redacta las respuestas del asistente de Gadit: le enviamos su pregunta, los mensajes anteriores de la misma conversación, su idioma de la interfaz, su plan y si está en el sitio web o en la aplicación, y no adjuntamos su nombre ni su dirección de correo electrónico. Los datos enviados a OpenAI se rigen por la política de uso de datos de la API de OpenAI."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): almacena su cuenta, perfil,
           estado de suscripción, historial de búsqueda e imágenes generadas.
         </li>
         <li>
+          <strong>Google</strong>{": (Gemini, a través de Google Cloud) convierte texto en voz. Le enviamos únicamente el texto que debe leerse en voz alta, como palabras, oraciones e historias, y el audio se conserva en nuestro almacenamiento de Firebase para que pueda reproducirse de nuevo. En un juego de lectura también oye el sonido que un niño dice en voz alta, para comprobarlo, y esa grabación no se almacena. Google Fonts sirve las fuentes de la interfaz en chino, japonés y coreano, y ve su dirección IP."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{": una organización sin fines de lucro israelí, añade vocalización (niqqud) al texto en hebreo para lectores jóvenes. Le enviamos únicamente el texto en hebreo."}
+        </li>
+        <li>
           <strong>Stripe</strong>: gestiona los pagos, las suscripciones y el portal de facturación.
         </li>
         <li>
+          <strong>Apple</strong>{": proporciona Iniciar sesión con Apple en la aplicación de iOS (véase la sección 1), y vende y factura las suscripciones compradas en la aplicación de iOS. En esas compras, Apple gestiona el pago y nosotros recibimos únicamente una confirmación de la compra y de su estado (como una renovación o un reembolso)."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{": paga a nuestros socios afiliados. Le proporcionamos la dirección de correo electrónico de PayPal del socio y el importe."}
+        </li>
+        <li>
           <strong>Resend</strong>{": envía nuestros correos electrónicos (como enlaces de inicio de sesión y notificaciones), y entrega a nuestro equipo las preguntas que el asistente de Gadit remite, con su dirección de correo electrónico como dirección de respuesta."}
+        </li>
+        <li>
+          <strong>Expo</strong>{": entrega las notificaciones de la aplicación de iOS, como las alertas que un padre o una madre puede activar, que incluyen el nombre de un niño y la palabra que el niño buscó."}
         </li>
         <li>
           <strong>Vercel</strong>: aloja y sirve el sitio web, y proporciona analítica anónima y medición del
           rendimiento.
         </li>
         <li>
-          <strong>Publicidad y analítica</strong>: Meta (Meta Pixel), Google Analytics y TikTok (TikTok Pixel y Events
-          API) miden las visitas y los resultados de nuestros anuncios. Utilizan cookies y tecnologías similares en
-          nuestras páginas de marketing, registro y pago. Cuando usted se registra o paga, podemos enviar a estos
-          servicios una dirección de correo electrónico y un ID de cuenta cifrados mediante hash (cifrado
-          unidireccional), junto con su dirección IP y los datos de su navegador, únicamente para medir nuestros
-          anuncios. Nunca les enviamos ninguna información sobre niños, y estas herramientas no funcionan en las
-          pantallas que usan los niños.
+          <strong>Yooniz</strong>{": un servicio independiente de aprendizaje familiar del mismo fundador. Yooniz puede preguntarnos si la dirección de correo electrónico de un padre o una madre tiene un plan Family activo en Gadit, y nosotros respondemos únicamente sí o no. Si lo tiene, la familia puede abrir Gadit desde Yooniz sin contraseña: Yooniz nos envía la dirección de correo electrónico del padre o de la madre, los nombres para mostrar de los miembros de la familia y si cada uno es un padre, un niño o una niña. Cuando un niño que abrió Gadit desde Yooniz entiende una palabra, enviamos a Yooniz la dirección de correo electrónico del padre o de la madre, el ID de Yooniz del niño y el número de puntos de aprendizaje obtenidos, nunca la palabra en sí."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{": sirve las pequeñas imágenes de banderas que se muestran en nuestras páginas y, por lo tanto, ve su dirección IP y los datos de su navegador."}
+        </li>
+        <li>
+          <strong>Publicidad y analítica</strong>{": Meta (Meta Pixel), Google Analytics y TikTok (TikTok Pixel y Events API) miden las visitas y los resultados de nuestros anuncios. Utilizan cookies y tecnologías similares en nuestras páginas de marketing, registro y pago. Cuando usted se registra o paga, podemos enviar a estos servicios una dirección de correo electrónico y un ID de cuenta cifrados mediante hash (cifrado unidireccional), junto con su dirección IP y los datos de su navegador, únicamente para medir nuestros anuncios. Affonso, un servicio de enlaces de afiliados, se carga en esas mismas páginas y en cualquier página a la que un visitante llegue a través de un enlace de afiliado, y conserva una cookie durante un máximo de 60 días. Si usted se registra después de llegar a través de un enlace de afiliado de Affonso, enviamos a Affonso su dirección de correo electrónico, su nombre y su ID de cuenta, para que se atribuya el mérito al afiliado que le refirió. Nunca enviamos a ninguno de estos servicios información sobre niños, y estas herramientas no funcionan en el perfil de un niño, en Kids Mode ni en las páginas de enlaces de clase."}
         </li>
       </ul>
 
@@ -144,8 +162,16 @@ export function PrivacyBodyEs(): ReactElement {
 
       <h2>7. Menores</h2>
       <p>
-        Gadit no está dirigido a menores de 13 años. Si usted cree que un menor de 13 años ha creado una cuenta,
-        escríbanos y eliminaremos la cuenta y los datos asociados.
+        {"Una cuenta de Gadit es para adultos, de 18 años o más. Los niños y adolescentes usan Gadit únicamente a través de un adulto, de una de estas dos formas."}
+      </p>
+      <p>
+        {"Perfiles de Family: un padre o una madre añade a cada niño como perfil dentro de la cuenta Family del progenitor, con un nombre y si es niño o niña, y, si el progenitor los añade, también una edad, un curso escolar y una foto. Los niños no tienen con nosotros dirección de correo electrónico ni contraseña. Las palabras que busca un niño, y su cuaderno, juegos y progreso, se guardan en la cuenta de la familia. Los padres de la familia, y cualquier persona a la que den acceso, por ejemplo un tutor particular, pueden verlos, y uno de los padres puede elegir recibir alertas, por notificación o por correo electrónico, con las palabras que busca un niño. Un padre o una madre puede eliminar el perfil de un niño en la aplicación en cualquier momento."}
+      </p>
+      <p>
+        {"Enlaces de clase: un estudiante abre el enlace o el código que le da un profesor, sin cuenta y sin dirección de correo electrónico. Si el profesor introdujo una lista de nombres, el estudiante elige su nombre de esa lista, y las palabras que busca el estudiante se guardan para la clase con ese nombre, para que el profesor pueda verlas. La escuela decide usar Gadit y es responsable de informar a los padres cuando la ley lo exija."}
+      </p>
+      <p>
+        {"Nunca utilizamos la información de los niños para publicidad, y las herramientas enumeradas bajo Publicidad y analítica en la sección 3 nunca se cargan en el perfil de un niño, en el modo infantil ni en las páginas de enlaces de clase. Para eliminar el perfil de un niño y sus datos, un padre o una madre puede escribir a "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" y lo eliminaremos. Si usted cree que un niño abrió una cuenta por su cuenta, escríbanos y eliminaremos la cuenta y sus datos."}
       </p>
 
       <h2>8. Usuarios internacionales</h2>
@@ -185,8 +211,7 @@ export function TermsBodyEs(): ReactElement {
 
       <h2>1. Quién puede utilizar Gadit</h2>
       <p>
-        Usted debe tener al menos 13 años para crear una cuenta. Si tiene entre 13 y 18 años, debe contar con el permiso
-        de un padre, madre o tutor legal. Al utilizar Gadit, usted declara que cumple con estos requisitos.
+        {"Usted debe tener 18 años o más para abrir una cuenta de Gadit. Los niños y adolescentes menores de 18 años usan Gadit únicamente a través de un adulto: un padre, madre o tutor puede añadirlos como perfiles en el plan Family, y una escuela puede dar a sus estudiantes un enlace de clase. El padre, madre, tutor o centro educativo que proporciona ese acceso es responsable de ello. Al abrir una cuenta, usted confirma que tiene 18 años o más."}
       </p>
 
       <h2>2. Su cuenta</h2>
@@ -210,16 +235,11 @@ export function TermsBodyEs(): ReactElement {
       </p>
       <h3>Cancelación</h3>
       <p>
-        Usted puede cancelar en cualquier momento desde la página de su cuenta. La cancelación detiene las renovaciones
-        futuras. Mantendrá el acceso a las funciones de pago hasta el final del período de facturación en curso. No
-        ofrecemos reembolsos parciales por el tiempo no utilizado.
+        {"Usted puede cancelar en cualquier momento desde la página de su cuenta. La cancelación detiene las renovaciones futuras. Mantendrá el acceso a las funciones de pago hasta el final del período de facturación en curso. Salvo por los reembolsos que se describen a continuación, no reembolsamos el tiempo no utilizado, excepto cuando la ley exija lo contrario."}
       </p>
       <h3>Reembolsos</h3>
       <p>
-        Salvo cuando la ley lo exija, los pagos no son reembolsables. Si considera que se le cobró por error,
-        contáctenos en{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a> dentro de los 30 días
-        siguientes al cargo.
+        {"Si lo solicita dentro de los 14 días siguientes al primer pago realizado en su cuenta, o dentro de los 14 días siguientes a una renovación anual, le reembolsaremos íntegramente ese pago. No necesita indicar el motivo. Escríbanos a "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" desde la dirección de correo electrónico de su cuenta. El reembolso también pone fin a la suscripción. Los demás pagos no son reembolsables, salvo cuando la ley exija un reembolso. Si considera que se le cobró por error, escríbanos dentro de los 30 días siguientes al cargo. Las compras realizadas en la aplicación de iOS son facturadas por Apple, y solo Apple puede reembolsarlas, en reportaproblem.apple.com."}
       </p>
 
       <h2>4. Uso aceptable</h2>
@@ -239,9 +259,7 @@ export function TermsBodyEs(): ReactElement {
 
       <h2>5. Contenido generado por IA</h2>
       <p>
-        Gadit utiliza modelos de inteligencia artificial (incluidos GPT, Whisper y DALL·E de OpenAI) para generar
-        definiciones, ejemplos, etimologías, comentarios, cuestionarios, imágenes y transcripciones. Usted entiende y
-        acepta que:
+        {"Gadit utiliza modelos de inteligencia artificial, incluidos modelos de OpenAI y Google, para generar definiciones, ejemplos, etimologías, comentarios, cuestionarios, imágenes, voz y transcripciones. Usted entiende y acepta que:"}
       </p>
       <ul>
         <li>

@@ -23,6 +23,9 @@ export function PrivacyBodyVe(): ReactElement {
         mafhungo a mutheo a phurofaiḽi ane Google a a ṋetshedza (dzina ḽine ḽa sumbedzwa, tshifanyiso tsha
         phurofaiḽi). A ri ṱanganedzi phasiwede yaṋu ya Google.
       </p>
+      <p>
+        {"Kha app ya iOS ni nga dovha na dzhena nga Apple. Nga murahu Apple i ri ṋea dzina na aḓirese ya imeiḽi ye na nanga u i kovhekana, ine ya nga vha aḓirese ya phuraivethe ya u fhirisela imeiḽi dzashu kha inwi. A ri ṱanganedzi phasiwede yaṋu ya Apple."}
+      </p>
       <h3>Mafhungo a u shumisa</h3>
       <p>Musi ni tshi shumisa Gadit, ri shuma nga:</p>
       <ul>
@@ -76,30 +79,45 @@ export function PrivacyBodyVe(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{", i shuma nga maipfi na mitaladzo ine na i rumela u ita ṱhalutshedzo, nyeletshedzo nga ha mitaladzo, mbudziso dza ndingo, na u ṅwala zwo ambiwaho (Whisper), nahone i ita zwifanyiso (DALL·E 3). I dovha ya ṅwala phindulo dza muthusi wa Gadit: ri i rumela mbudziso yaṋu, milaedza yo fhiraho ya nyambedzano yeneyo, luambo lwa interface yaṋu, pulane yaṋu, na uri ni kha webusaithi kana app, nahone a ri nambatedzi dzina ḽaṋu kana ḓiresi yaṋu ya imeiḽi. Data i rumelwaho kha OpenAI i langwa nga mbekanyamaitele ya OpenAI ya u shumiswa ha data ya API."}
+          <strong>OpenAI</strong>{", i shuma nga maipfi na mitaladzo ine na i rumela u itela u ita ṱhalutshedzo, phindulo nga ha mitaladzo na mbudziso dza ndingo, i shandukisa ḽiṅwalwa ḽa vha mubvumo, i ṅwala nga maṅwalo zwe zwa ambiwa kha khanḓiso ya ipfi, i vhala ḽiṅwalwa kha zwifanyiso na faela dza PDF dzine na dzi rumela nṱha (sa tsumbo masiaṱari a mushumo wa hayani), nahone i ita zwifanyiso. I dovha ya ṅwala phindulo dza muthusi wa Gadit: ri i rumela mbudziso yaṋu, milaedza yo fhiraho ya nyambedzano yeneyo, luambo lwa interface yaṋu, pulane yaṋu, na uri ni kha webusaithi kana app, nahone a ri nambatedzi dzina ḽaṋu kana ḓiresi yaṋu ya imeiḽi. Data i rumelwaho kha OpenAI i langwa nga mbekanyamaitele ya OpenAI ya u shumiswa ha data ya API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), i vhulunga akhaunthu yaṋu,
           phurofaiḽi, tshiimo tsha u ṅwalisa, ḓivhazwakale ya u ṱoḓa, na zwifanyiso zwo itwaho.
         </li>
         <li>
+          <strong>Google</strong>{"(Gemini, nga Google Cloud), i shandukisa ḽiṅwalwa ḽa vha mubvumo. Ri i rumela fhedzi ḽiṅwalwa ḽine ḽa fanela u vhalelwa nṱha, sa maipfi, mitaladzo na mafhungo, nahone mubvumo u vhulungwa kha vhupo hashu ha u vhulunga ha Firebase u itela uri u kone u tambiwa hafhu. Kha muṅwe mutambo wa u vhala i dovha ya pfa mubvumo une ṅwana a u amba nṱha, u itela u u ṱola, nahone yeneyo rekhodo a i vhulungwi. Google Fonts i tshimbidza font dza interface ya Tshichaina, Tshijapane na Tshikorea, nahone i vhona aḓirese yaṋu ya IP."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{", tshiimiswa tsha Israele tshi si tsha u ita bindu, tshi engedza zwiga zwa maipfi (niqqud) kha ḽiṅwalwa ḽa Tshihevheru u itela vhavhali vhaṱuku. Ri tshi rumela fhedzi ḽiṅwalwa ḽa Tshihevheru."}
+        </li>
+        <li>
           <strong>Stripe</strong>, i lavhelesa mbadelo, u ṅwalisa, na siaṱari ḽa u langa mbadelo (billing portal).
         </li>
         <li>
+          <strong>Apple</strong>{", iṋetshedza Sign in with Apple kha app ya iOS (sedzani khethekanyo ya 1), nahone i rengisa na u badelisa dzingwaliso dzine dza rengiwa kha app ya iOS. Kha idzo khumbelo, Apple i lavhelesa mbadelo, nahone ri ṱanganedza fhedzi khwaṱhisedzo ya u renga na tshiimo tshayo (sa tsumbo u vusulusa kana mbuedzedzo)."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{", i badela vhashumisani vhashu. Ri i ṋea ḓiresi ya imeiḽi ya PayPal ya mushumisani na tshelede ine ya fanela u badelwa."}
+        </li>
+        <li>
           <strong>Resend</strong>{", i rumela dziimeiḽi dzashu (sa tsumbo, dzilinki dza u dzhena na nḓivhadzo), nahone i isa kha tshigwada tshashu mbudziso dzine muthusi wa Gadit a dzi fhirisela phanḓa, i na ḓiresi yaṋu ya imeiḽi sa ḓiresi ya u fhindula."}
+        </li>
+        <li>
+          <strong>Expo</strong>{", i rumela nḓivhadzo dza app ya iOS, sa tsumbo tsivhudzo dzine mubebi a nga dzi shumisa, dzine dza katela dzina ḽa ṅwana na ipfi ḽe ṅwana a ḽi sedza."}
         </li>
         <li>
           <strong>Vercel</strong>, i fara na u ṋetshedza webusaithi, nahone i ṋetshedza mbalo dzi sa sumbedzi muthu na
           u kala kushumele.
         </li>
         <li>
-          <strong>U ḓivhadza na mbalo</strong>, Meta (Meta Pixel), Google Analytics na TikTok (TikTok Pixel na Events
-          API) zwi kala madalo na mvelelo dza nḓivhadzo dzashu. Zwi shumisa dzikhukhi (cookies) na thekhinolodzhi dzi
-          fanaho kha masiaṱari ashu a u rengisa, a u ṅwalisa na a mbadelo. Musi ni tshi ṅwalisa kana ni tshi badela,
-          ri nga rumela kha tshumelo idzi aḓirese ya imeiḽi na ID ya akhaunthu zwo khouḓiwaho nga nḓila ya thungo
-          nthihi (hash), khathihi na aḓirese yaṋu ya IP na zwidodombedzwa zwa buraweza yaṋu, fhedzi u kala nḓivhadzo
-          dzashu. A ri vhuyi ra dzi rumela mafhungo naa ḽithihi nga ha vhana, nahone zwishumiswa izwi a zwi shumi kha
-          zwikirini zwine vhana vha zwi shumisa.
+          <strong>Yooniz</strong>{", tshumelo yo fhambanaho ya u guda ya muṱa i bvaho kha musiki muthihi. Yooniz i nga ri vhudzisa arali ḓiresi ya imeiḽi ya mubebi i na pulane ya Gadit Family ine ya khou shuma, nahone ri fhindula fhedzi ee kana hai. Arali i hone, muṱa u nga vula Gadit u bva kha Yooniz hu si na phasiwede: Yooniz i ri rumela ḓiresi ya imeiḽi ya mubebi, madzina a u sumbedzwa a miraḓo ya muṱa, na uri muṅwe na muṅwe ndi mubebi, mutukana kana musidzana. Musi ṅwana we a vula Gadit a tshi bva kha Yooniz a tshi pfesesa ipfi, ri rumela Yooniz ḓiresi ya imeiḽi ya mubebi, ID ya ṅwana kha Yooniz na tshivhalo tsha dziphoyinti dza u guda dzo wanalaho, hu si vhuya ha vha ipfi ḽoneḽo."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{", i shumela zwifanyiso zwiṱuku zwa mifuḽaga zwine zwa sumbedzwa kha masiaṱari ashu, ngauralo i vhona aḓirese yaṋu ya IP na zwidodombedzwa zwa buraweza yaṋu."}
+        </li>
+        <li>
+          <strong>U ḓivhadza na mbalo</strong>{": Meta (Meta Pixel), Google Analytics na TikTok (TikTok Pixel na Events API) zwi kala madalo na mvelelo dza nḓivhadzo dzashu. Zwi shumisa dzikhukhi (cookies) na thekhinolodzhi dzi fanaho kha masiaṱari ashu a u rengisa, a u ṅwalisa na a mbadelo. Musi ni tshi ṅwalisa kana ni tshi badela, ri nga rumela kha tshumelo idzi aḓirese ya imeiḽi na ID ya akhaunthu zwo khouḓiwaho nga nḓila ya thungo nthihi (hash), khathihi na aḓirese yaṋu ya IP na zwidodombedzwa zwa buraweza yaṋu, fhedzi u kala nḓivhadzo dzashu. Affonso, tshumelo ya dzilinki dza vhashumisani, i laidzwa kha eneo masiaṱari fanaho na kha siaṱari ḽiṅwe na ḽiṅwe ḽine mueni a swika khaḽo nga linki ya mushumisani, nahone i vhulunga cookie lwa maḓuvha a swikaho kha 60. Arali no ṅwalisa nga murahu ha u swika nga linki ya mushumisani ya Affonso, ri rumela Affonso ḓiresi yaṋu ya imeiḽi, dzina na ID ya akhaunthu, u itela uri mushumisani o ni ḓisaho a kone u wana khirediti. A ri vhuyi ra rumela kha nthihi ya tshumelo idzi mafhungo nga ha vhana, nahone zwishumiswa izwi a zwi shumi kha phurofaiḽi ya ṅwana, kha Kids Mode kana kha masiaṱari a dzilinki dza kilasi."}
         </li>
       </ul>
 
@@ -147,8 +165,16 @@ export function PrivacyBodyVe(): ReactElement {
 
       <h2>7. Vhana</h2>
       <p>
-        Gadit a yo livhiswa kha vhana vha re fhasi ha miṅwaha ya 13. Arali ni tshi tenda uri ṅwana a re fhasi ha
-        miṅwaha ya 13 o sika akhaunthu, ri rumeleni imeiḽi nahone ri ḓo phumula akhaunthu na data i elanaho nayo.
+        {"Akhaunthu ya Gadit ndi ya vhathu vhahulwane, vha miṅwaha ya 18 na u fhira. Vhana na vhaswa vha shumisa Gadit fhedzi nga kha muthu muhulwane, nga iṅwe ya nḓila mbili."}
+      </p>
+      <p>
+        {"Dziphurofaiḽi dza Family: mubebi u engedza ṅwana muṅwe na muṅwe sa phurofaiḽi ngomu kha akhaunthu ya Family ya mubebi, hu na dzina na uri ndi mutukana kana musidzana, nahone, arali mubebi a zwi engedza, miṅwaha, gireidi ya tshikolo na tshifanyiso. Vhana a vha na aḓirese ya imeiḽi kana phasiwede na riṋe. Maipfi ane ṅwana a a ṱola, na bugu yawe ya notsi, mitambo na mvelaphanḓa yawe, zwi vhulungwa kha akhaunthu ya muṱa. Vhabebi vha re kha muṱa, na muṅwe na muṅwe we vha mu ṋea u swikelela kha zwenezwo, sa tsumbo mudededzi wa u thusa nga eṱhe, vha nga zwi vhona, nahone mubebi a nga nanga u wana nḓivhadzo, nga nḓivhadzo kana nga imeiḽi, dzi re na maipfi ane ṅwana a a ṱola. Mubebi a nga bvisa phurofaiḽi ya ṅwana kha app tshifhinga tshiṅwe na tshiṅwe."}
+      </p>
+      <p>
+        {"Dziḽinki dza kilasi: mugudiswa u vula ḽinki kana khoudu ine mudededzi a i ṋea, hu si na akhaunthu nahone hu si na aḓirese ya imeiḽi. Arali mudededzi o dzhenisa mutevhe wa madzina, mugudiswa u nanga dzina ḽawe kha wonoyo mutevhe, nahone maipfi ane mugudiswa a a ṱola a vhulungwa kha kilasi nga fhasi ha iḽo dzina, uri mudededzi a kone u a vhona. Tshikolo ndi tshone tshine tsha dzhia tsheo ya u shumisa Gadit nahone tshi na vhudifhinduleli ha u ḓivhadza vhabebi hune mulayo wa zwi ṱoḓa."}
+      </p>
+      <p>
+        {"A ri vhuya ra shumisa mafhungo a vhana kha u ḓivhadza, nahone zwishumiswa zwo bulwaho fhasi ha U ḓivhadza na mbalo kha khethekanyo ya 3 a zwi shumi na khathihi kha phurofaiḽi ya ṅwana, kha Kids Mode kana kha masiaṱari a ḽinki ya kilasi. U itela uri phurofaiḽi ya ṅwana na data yayo zwi phumulwe, mubebi a nga ṅwala kha "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" nahone ri ḓo zwi phumula. Arali ni tshi tenda uri ṅwana o vula akhaunthu yawe ene muṋe, ri ṅwaleleni nahone ri ḓo phumula akhaunthu na data yayo."}
       </p>
 
       <h2>8. Vhashumisi vha mashango a nnḓa</h2>
@@ -190,9 +216,7 @@ export function TermsBodyVe(): ReactElement {
 
       <h2>1. Ndi nnyi ane a nga shumisa Gadit</h2>
       <p>
-        Ni fanela u vha ni na miṅwaha ya 13 kana u fhira u itela u sika akhaunthu. Arali ni na miṅwaha i re vhukati ha
-        13 na 18, ni fanela u vha na thendelo ya mubebi kana muṱhogomeli o tendelwaho nga mulayo. Nga u shumisa Gadit
-        ni khou sumbedza uri ni swikelela zwiṱoḓwa zwenezwi.
+        {"Ni fanela u vha ni na miṅwaha ya 18 kana u fhira u itela u vula akhaunthu ya Gadit. Vhana na vhaswa vha re fhasi ha miṅwaha ya 18 vha shumisa Gadit fhedzi nga kha muthu muhulwane: mubebi kana muṱhogomeli a nga vha engedza sa dziphurofaiḽi kha pulane ya Family, nahone tshikolo tshi nga ṋea vhagudiswa vha tshone ḽinki ya kilasi. Mubebi, muṱhogomeli kana tshikolo tshine tsha ṋea uhu u swikelela ndi tshone tshine tsha vha na vhudifhinduleli hao. Nga u vula akhaunthu, ni khou khwaṱhisedza uri ni na miṅwaha ya 18 kana u fhira."}
       </p>
 
       <h2>2. Akhaunthu yaṋu</h2>
@@ -216,17 +240,11 @@ export function TermsBodyVe(): ReactElement {
       </p>
       <h3>U khansela</h3>
       <p>
-        Ni nga khansela tshifhinga tshiṅwe na tshiṅwe kha siaṱari ḽa akhaunthu yaṋu. U khansela hu imisa u vusuluswa
-        ha tshifhinga tshi ḓaho. Ni ḓo bvela phanḓa ni tshi swikelela zwiteṅwa zwine zwa badelwa u swika magumoni a
-        tshifhinga tsha zwino tsha mbadelo. A ri vhuedzedzi tshipiḓa tsha tshelede tsha tshifhinga tshi songo
-        shumiswaho.
+        {"Ni nga khansela tshifhinga tshiṅwe na tshiṅwe kha siaṱari ḽa akhaunthu yaṋu. U khansela hu imisa u vusuluswa ha tshifhinga tshi ḓaho. Ni ḓo bvela phanḓa ni tshi swikelela zwiteṅwa zwine zwa badelwa u swika magumoni a tshifhinga tsha zwino tsha mbadelo. Nga nnḓa ha mbuedzedzo dzo ṱalutshedzwaho afho fhasi, a ri vhuedzedzi tshelede ya tshifhinga tshi songo shumiswaho, nga nnḓa ha hune mulayo wa zwi ṱoḓa."}
       </p>
       <h3>U vhuedzedzwa ha tshelede</h3>
       <p>
-        Nga nnḓa ha hune mulayo wa zwi ṱoḓa, mbadelo a dzi vhuedzedzwi. Arali ni tshi tenda uri no badeliswa nga
-        vhukhakhi, ri kwameni kha{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a> hu saathu u fhela maḓuvha a
-        30 u bva musi no badeliswa.
+        {"Arali na humbela hu saathu u fhela maḓuvha a 14 u bva kha mbadelo ya u thoma kha akhaunthu yaṋu, kana hu saathu u fhela maḓuvha a 14 u bva kha u vusuluswa ha ṅwaha, ri ḓo ni vhuedzedza yeneyo mbadelo yo fhelelaho. A ni ṱoḓi u ṋea tshiitisi. Ṅwalelani kha "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" ni tshi shumisa aḓirese ya imeiḽi ya akhaunthu yaṋu. Mbuedzedzo i dovha ya fhelisa na vhurengiseli. Dziṅwe mbadelo a dzi vhuedzedzwi, nga nnḓa ha hune mulayo wa ṱoḓa mbuedzedzo. Arali ni tshi tenda uri no badeliswa nga vhukhakhi, ri ṅwaleleni hu saathu u fhela maḓuvha a 30 u bva nga ḽa mbadelo yeneyo. Zwo rengiwa kha app ya iOS zwi badeliswa nga Apple, nahone ndi Apple fhedzi ine ya nga zwi vhuedzedza, kha reportaproblem.apple.com."}
       </p>
 
       <h2>4. U shumisa ho teaho</h2>
@@ -246,9 +264,7 @@ export function TermsBodyVe(): ReactElement {
 
       <h2>5. Zwiteṅwa zwo itwaho nga AI</h2>
       <p>
-        Gadit i shumisa modeḽe dza vhuṱali ho itwaho (artificial intelligence) (hu tshi katelwa GPT, Whisper, na DALL·E
-        zwa OpenAI) u ita ṱhalutshedzo, tsumbo, mathomo a maipfi (etymology), nyeletshedzo, mbudziso dza ndingo,
-        zwifanyiso, na u ṅwala zwo ambiwaho. Ni a pfesesa nahone ni a tenda uri:
+        {"Gadit i shumisa modeḽe dza vhuṱali ho itwaho (hu tshi katelwa modeḽe dza OpenAI na Google) u ita ṱhalutshedzo, tsumbo, mathomo a maipfi (etymology), nyeletshedzo, mbudziso dza ndingo, zwifanyiso, mubvumo, na u ṅwala zwo ambiwaho. Ni a pfesesa nahone ni a tenda uri:"}
       </p>
       <ul>
         <li>

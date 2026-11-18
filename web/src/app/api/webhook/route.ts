@@ -10,6 +10,7 @@ import { getAdminDb } from "@/lib/firebase-admin";
 import { bootstrapFamily, stampFamilyActivated, sendFamilyWelcome } from "@/lib/family-bootstrap";
 import { YEAR_ONE_MS } from "@/lib/partners";
 import { bookPartnerCommission } from "@/lib/partner-commission";
+import { voidEarningsForRefund } from "@/lib/refund-void";
 import { autoEnrollPartner } from "@/lib/partner-auto";
 import { isNewSchoolsPrice, NEW_SCHOOLS_YEARLY_IDS } from "@/lib/schools-prices";
 import { dunningLang, buildDunningEmail } from "@/lib/dunning-email";
@@ -1083,6 +1084,18 @@ export async function POST(req: NextRequest) {
       const invoice = event.data.object as Stripe.Invoice;
       await applyGraceFromFailedInvoice(invoice);
       await notifyPaymentFailed(invoice);
+    }
+
+    // A refund or a dispute takes back the partner commission, the first-sale
+    // bonus and the member-gets-member reward it earned (council round 5).
+    // Needs these two events enabled on the Stripe webhook endpoint.
+    if (event.type === "charge.refunded") {
+      await voidEarningsForRefund(stripe, event.data.object as Stripe.Charge, "refund");
+    }
+    if (event.type === "charge.dispute.created") {
+      const dispute = event.data.object as Stripe.Dispute;
+      const chargeId = typeof dispute.charge === "string" ? dispute.charge : dispute.charge?.id;
+      if (chargeId) await voidEarningsForRefund(stripe, await stripe.charges.retrieve(chargeId), "dispute");
     }
 
     return NextResponse.json({ received: true });

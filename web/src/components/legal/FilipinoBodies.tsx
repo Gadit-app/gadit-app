@@ -23,6 +23,9 @@ export function PrivacyBodyFil(): ReactElement {
         Google, ang pangunahing impormasyon ng profile na ibinibigay ng Google (display name, larawan sa profile). Hindi
         namin natatanggap ang inyong password sa Google.
       </p>
+      <p>
+        {"Sa iOS app, maaari rin kayong mag-sign in gamit ang Apple. Pagkatapos, ibinibigay sa amin ng Apple ang pangalan at ang email address na pinili ninyong ibahagi, na maaaring isang private relay address na nagpapasa sa inyo ng aming mga email. Hindi namin natatanggap ang inyong password sa Apple."}
+      </p>
       <h3>Impormasyon sa paggamit</h3>
       <p>Kapag ginagamit ninyo ang Gadit, pinoproseso namin ang:</p>
       <ul>
@@ -76,30 +79,45 @@ export function PrivacyBodyFil(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{": pinoproseso ang mga salita at pangungusap na inyong isinusumite upang bumuo ng mga kahulugan, feedback sa pangungusap, quiz, at voice transcription (Whisper), at bumubuo ng mga larawan (DALL·E 3). Isinusulat din nito ang mga sagot ng assistant ng Gadit: ipinapadala namin rito ang inyong tanong, ang mga naunang mensahe sa parehong pag-uusap, ang wika ng inyong interface, ang inyong plan, at kung kayo ay nasa website o app, at hindi namin isinasama ang inyong pangalan o email address. Ang datos na ipinapadala sa OpenAI ay sakop ng patakaran ng OpenAI sa paggamit ng datos ng API."}
+          <strong>OpenAI</strong>{": pinoproseso ang mga salita at pangungusap na inyong isinusumite upang bumuo ng mga kahulugan, feedback sa pangungusap at mga quiz, ginagawang speech ang teksto, tine-transcribe ang voice input, binabasa ang teksto sa mga larawang at PDF file na inyong ina-upload, halimbawa mga pahina ng takdang-aralin, at bumubuo ng mga larawan. Isinusulat din nito ang mga sagot ng assistant ng Gadit: ipinapadala namin rito ang inyong tanong, ang mga naunang mensahe sa parehong pag-uusap, ang wika ng inyong interface, ang inyong plan, at kung kayo ay nasa website o app, at hindi namin isinasama ang inyong pangalan o email address. Ang datos na ipinapadala sa OpenAI ay sakop ng patakaran ng OpenAI sa paggamit ng datos ng API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): iniimbak ang inyong account,
           profile, status ng subscription, kasaysayan ng paghahanap, at mga nabuong larawan.
         </li>
         <li>
+          <strong>Google</strong>{":  (Gemini, sa pamamagitan ng Google Cloud), ginagawang speech ang teksto. Ang ipinapadala lamang namin dito ay ang tekstong babasahin nang malakas, gaya ng mga salita, pangungusap at kuwento, at ang audio ay itinatago sa aming Firebase storage upang maaari itong patugtugin muli. Sa isang reading game, naririnig din nito ang tunog na binibigkas nang malakas ng isang bata upang masuri ito, at ang recording na iyon ay hindi itinatago. Inihahatid ng Google Fonts ang mga font ng interface sa Chinese, Japanese at Korean, at nakikita nito ang inyong IP address."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{": isang Israeli non-profit, naglalagay ng mga vowel mark, niqqud, sa tekstong Hebrew para sa mga batang mambabasa. Ang ipinapadala lamang namin dito ay ang tekstong Hebrew."}
+        </li>
+        <li>
           <strong>Stripe</strong>: humahawak sa mga pagbabayad, subscription, at billing portal.
         </li>
         <li>
+          <strong>Apple</strong>{": nagbibigay ng Sign in with Apple sa iOS app, tingnan ang seksyon 1, at nagbebenta at naniningil para sa mga subscription na binibili sa iOS app. Para sa mga iyon, Apple ang humahawak sa bayad, at pagtitibay lamang ng pagbili at ng katayuan nito, tulad ng renewal o refund, ang natatanggap namin."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{": nagbabayad sa aming mga partner, affiliates. Ibinibigay namin dito ang PayPal email address ng partner at ang halaga."}
+        </li>
+        <li>
           <strong>Resend</strong>{": nagpapadala ng aming mga email (tulad ng mga sign-in link at notification), at ipinadadala sa aming team ang mga tanong na ipinapasa ng assistant ng Gadit, na ang inyong email address ang gagamiting reply address."}
+        </li>
+        <li>
+          <strong>Expo</strong>{": naghahatid ng mga notification ng iOS app, tulad ng mga alert na maaaring i-on ng isang magulang, na kinabibilangan ng pangalan ng bata at ng salitang hinanap ng bata."}
         </li>
         <li>
           <strong>Vercel</strong>: nagho-host at naghahatid ng website, at nagbibigay ng anonymous na analytics at
           pagsukat ng performance.
         </li>
         <li>
-          <strong>Pag-aanunsyo at analytics</strong>: Sinusukat ng Meta (Meta Pixel), Google Analytics, at TikTok
-          (TikTok Pixel at Events API) ang mga pagbisita at ang mga resulta ng aming mga ad. Gumagamit sila ng cookies
-          at mga katulad na teknolohiya sa aming mga pahina ng marketing, pag-sign up, at pagbabayad. Kapag kayo ay
-          nag-sign up o nagbayad, maaari naming ipadala sa mga serbisyong ito ang isang hashed (one-way na
-          naka-encrypt) na email address at account ID, kasama ang inyong IP address at mga detalye ng browser, para
-          lamang sukatin ang aming mga ad. Hindi kailanman kami nagpapadala sa kanila ng anumang impormasyon tungkol
-          sa mga bata, at hindi tumatakbo ang mga tool na ito sa mga screen na ginagamit ng mga bata.
+          <strong>Yooniz</strong>{": isang hiwalay na serbisyong pampagkatuto para sa pamilya mula sa parehong founder. Maaaring tanungin kami ng Yooniz kung ang email address ng isang magulang ay may aktibong Gadit Family plan, at oo o hindi lamang ang aming isinasagot. Kung mayroon, maaaring buksan ng pamilya ang Gadit mula sa Yooniz nang walang password: ipinapadala sa amin ng Yooniz ang email address ng magulang, ang mga display name ng mga miyembro ng pamilya, at kung ang bawat isa ay magulang, lalaki o babae. Kapag may batang nagbukas ng Gadit mula sa Yooniz at nakaunawa ng isang salita, ipinapadala namin sa Yooniz ang email address ng magulang, ang Yooniz ID ng bata at ang bilang ng mga learning point na nakuha, ngunit hindi kailanman ang mismong salita."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{": inihahatid ang maliliit na larawan ng mga bandila na ipinapakita sa aming mga pahina, at dahil dito ay nakikita nito ang inyong IP address at mga detalye ng browser."}
+        </li>
+        <li>
+          <strong>Pag-aanunsyo at analytics</strong>{": Sinusukat ng Meta, Meta Pixel, Google Analytics at TikTok, TikTok Pixel at Events API, ang mga pagbisita at ang mga resulta ng aming mga ad. Gumagamit sila ng cookies at mga katulad na teknolohiya sa aming mga pahina ng marketing, pag-sign up, at pagbabayad. Kapag kayo ay nag-sign up o nagbayad, maaari naming ipadala sa mga serbisyong ito ang isang hashed, one-way na naka-encrypt, na email address at account ID, kasama ang inyong IP address at mga detalye ng browser, para lamang sukatin ang aming mga ad. Ang Affonso, isang serbisyo para sa mga affiliate link, ay naglo-load sa mga kaparehong pahina at sa anumang pahinang mararating ng bisita sa pamamagitan ng link ng partner, at nagpapanatili ng cookie nang hanggang 60 araw. Kung nag-sign up kayo matapos dumating sa pamamagitan ng affiliate link ng Affonso, ipinapadala namin sa Affonso ang inyong email address, pangalan at account ID, upang makredito ang affiliate na nag-refer sa inyo. Hindi kailanman kami nagpapadala sa alinman sa mga serbisyong ito ng impormasyon tungkol sa mga bata, at hindi tumatakbo ang mga tool na ito sa profile ng bata, sa Kids Mode o sa mga pahina ng class link."}
         </li>
       </ul>
 
@@ -147,9 +165,16 @@ export function PrivacyBodyFil(): ReactElement {
 
       <h2>7. Mga bata</h2>
       <p>
-        Ang Gadit ay hindi nakadirekta sa mga batang wala pang 13 taong gulang. Kung naniniwala kayong may batang wala
-        pang 13 taong gulang na gumawa ng account, mag-email sa amin at buburahin namin ang account at ang kaugnay na
-        datos.
+        {"Ang account sa Gadit ay para sa mga nasa hustong gulang, 18 taong gulang pataas. Ang mga bata at tinedyer ay gumagamit ng Gadit sa pamamagitan lamang ng isang nasa hustong gulang, sa isa sa dalawang paraan."}
+      </p>
+      <p>
+        {"Mga profile sa Family: idinadagdag ng magulang ang bawat bata bilang profile sa loob ng Family account ng magulang, na may pangalan at kung ang bata ay lalaki o babae, at, kung idaragdag ng magulang ang mga ito, edad, baitang sa paaralan, at larawan. Walang email address o password sa amin ang mga bata. Ang mga salitang hinahanap ng bata, at ang notebook, mga laro, at progreso ng bata, ay sine-save sa account ng pamilya. Makikita ang mga ito ng mga magulang sa pamilya, at ng sinumang binibigyan nila ng access, gaya ng tutor, at maaaring piliin ng magulang na makatanggap ng mga alert, sa notification o email, kasama ang mga salitang hinahanap ng bata. Maaaring alisin ng magulang ang profile ng bata sa app anumang oras."}
+      </p>
+      <p>
+        {"Mga class link: binubuksan ng estudyante ang link o code na ibinibigay ng guro, nang walang account at walang email address. Kung naglagay ang guro ng listahan ng mga pangalan, pipiliin ng estudyante ang kaniyang pangalan mula rito, at ang mga salitang hinahanap ng estudyante ay sine-save para sa klase sa ilalim ng pangalang iyon, upang makita ng guro ang mga ito. Ang paaralan ang nagpapasyang gumamit ng Gadit at ito ang may pananagutan sa pagpapaalam sa mga magulang kung hinihingi ito ng batas."}
+      </p>
+      <p>
+        {"Hindi namin kailanman ginagamit ang impormasyon ng mga bata para sa pag-aanunsyo, at ang mga tool na nakalista sa ilalim ng Pag-aanunsyo at analytics sa seksyon 3 ay hindi kailanman naglo-load sa profile ng bata, sa Kids Mode, o sa mga pahina ng class link. Upang ma-delete ang profile ng bata at ang datos nito, maaaring sumulat ang magulang sa "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" at ide-delete namin ito. Kung naniniwala kayong may batang nagbukas ng sarili niyang account, sumulat sa amin at ide-delete namin ang account at ang datos nito."}
       </p>
 
       <h2>8. Mga internasyonal na user</h2>
@@ -190,9 +215,7 @@ export function TermsBodyFil(): ReactElement {
 
       <h2>1. Sino ang maaaring gumamit ng Gadit</h2>
       <p>
-        Kailangang kayo ay hindi bababa sa 13 taong gulang upang makagawa ng account. Kung kayo ay nasa pagitan ng 13 at
-        18 taong gulang, kailangan ninyo ang pahintulot ng magulang o legal na tagapag-alaga. Sa paggamit ng Gadit,
-        ipinapahayag ninyo na natutugunan ninyo ang mga kinakailangang ito.
+        {"Kailangan kayong 18 taong gulang o mas matanda upang makapagbukas ng account sa Gadit. Ang mga bata at tinedyer na wala pang 18 taong gulang ay gumagamit ng Gadit sa pamamagitan lamang ng isang nasa hustong gulang: maaaring idagdag sila ng magulang o tagapag-alaga bilang mga profile sa planong Family, at maaaring bigyan ng isang paaralan ang mga estudyante nito ng class link. Ang magulang, tagapag-alaga, o paaralang nagbibigay ng access na ito ang may pananagutan dito. Sa pagbubukas ng account, kinukumpirma ninyo na kayo ay 18 taong gulang o mas matanda."}
       </p>
 
       <h2>2. Ang inyong account</h2>
@@ -215,16 +238,11 @@ export function TermsBodyFil(): ReactElement {
       </p>
       <h3>Pagkansela</h3>
       <p>
-        Maaari kayong magkansela anumang oras mula sa pahina ng inyong account. Ang pagkansela ay humihinto sa mga susunod
-        na pag-renew. Mananatili ang inyong access sa mga bayad na feature hanggang sa katapusan ng kasalukuyang billing
-        period. Hindi kami nagbibigay ng bahagyang refund para sa hindi nagamit na panahon.
+        {"Maaari kayong magkansela anumang oras mula sa pahina ng inyong account. Ang pagkansela ay humihinto sa mga susunod na pag-renew. Mananatili ang inyong access sa mga bayad na feature hanggang sa katapusan ng kasalukuyang billing period. Maliban sa mga refund na inilalarawan sa ibaba, hindi kami nagbabalik ng bayad para sa hindi nagamit na panahon, maliban kung hinihingi ng batas ang iba."}
       </p>
       <h3>Mga refund</h3>
       <p>
-        Maliban kung hinihingi ng batas, ang mga bayad ay hindi refundable. Kung naniniwala kayong kayo ay nasingil nang
-        mali, makipag-ugnayan sa{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a> sa loob ng 30 araw mula sa
-        pagsingil.
+        {"Kung hihiling kayo sa loob ng 14 na araw mula sa unang bayad sa inyong account, o sa loob ng 14 na araw mula sa taunang pag-renew, ibabalik namin nang buo ang bayad na iyon. Hindi ninyo kailangang magbigay ng dahilan. Sumulat sa "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" mula sa email address ng inyong account. Tinatapos din ng refund ang subscription. Ang ibang mga bayad ay hindi refundable, maliban kung hinihingi ng batas ang refund. Kung naniniwala kayong kayo ay nasingil nang mali, sumulat sa amin sa loob ng 30 araw mula sa pagsingil. Ang mga pagbiling ginawa sa iOS app ay sinisingil ng Apple, at Apple lamang ang maaaring mag-refund ng mga iyon, sa reportaproblem.apple.com."}
       </p>
 
       <h2>4. Katanggap-tanggap na paggamit</h2>
@@ -244,9 +262,7 @@ export function TermsBodyFil(): ReactElement {
 
       <h2>5. Nilalamang binuo ng AI</h2>
       <p>
-        Gumagamit ang Gadit ng mga artificial intelligence model (kabilang ang GPT, Whisper, at DALL·E ng OpenAI) upang
-        bumuo ng mga kahulugan, halimbawa, etimolohiya, feedback, quiz, larawan, at transcription. Nauunawaan at
-        sinasang-ayunan ninyo na:
+        {"Gumagamit ang Gadit ng mga artificial-intelligence model (kabilang ang mga model mula sa OpenAI at Google) upang bumuo ng mga kahulugan, halimbawa, etimolohiya, feedback, quiz, larawan, speech, at transcription. Nauunawaan at sinasang-ayunan ninyo na:"}
       </p>
       <ul>
         <li>

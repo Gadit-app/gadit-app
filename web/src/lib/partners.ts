@@ -113,9 +113,10 @@ export const COMMISSION_HOLD_MS = 30 * 24 * 60 * 60 * 1000;
 /** "Year one" window from the moment a customer was referred. */
 export const YEAR_ONE_MS = 365 * 24 * 60 * 60 * 1000;
 
-/** Minimum accrued (payable) balance before a payout is due, in the
- *  partner's main currency's minor units. Mirrors Yooniz's $50 floor. */
-export const PAYOUT_MINIMUM_MINOR = 5000;
+/** No payout minimum (council round 5, 2026-11-18): every released commission
+ *  goes out in the monthly PayPal run. PayPal cannot send these currencies, so
+ *  their balances are paid in USD at the day's rate. */
+export const PAYPAL_NO_PAYOUT: readonly string[] = ["zar", "try", "ron", "uah", "aed", "sar"];
 
 /** Cookie that carries the referring partner's id from the /p/<code>
  *  landing until the visitor creates an account. 60-day attribution

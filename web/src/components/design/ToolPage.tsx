@@ -24,7 +24,6 @@ import { WbShellNav, WbShellBurger, type NavKey } from "@/components/design/WbSh
 import { WbUserMenu } from "@/components/design/WbUserMenu";
 import { AppearancePicker } from "@/components/AppearancePicker";
 import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
-import { RightsLine } from "@/components/RightsLine";
 
 export function ToolPage({ active, title, titleExtra, sub, width = 880, children }: {
   active: NavKey;
@@ -85,10 +84,8 @@ export function ToolPage({ active, title, titleExtra, sub, width = 880, children
       </main>
 
       <footer className="wb-home-footer">
-        <RightsLine />
-        <span className="gd-buy">·</span>
         <Link href={href("/pricing")} className="gd-buy">{v2(lang, "navPricing")}</Link>
-        <span>·</span>
+        <span className="gd-buy">·</span>
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>
         <Link href={href("/terms")}>{v2(lang, "footerTerms")}</Link>

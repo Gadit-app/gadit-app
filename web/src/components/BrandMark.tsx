@@ -32,7 +32,7 @@ import BRAND from "@/lib/brand-i18n.json";
 const LOGOS = ".wb-wordmark, .wb-shell-wordmark, .wb-classroom-wordmark, .fam-wordmark, .cb-wordmark, img[alt='Gadit'], [data-gadit-brand]";
 const GAME_STAGES = ".wst, .ctx-world";
 
-const rightsOf = (lang: string) => ((BRAND as Record<string, { rights: string; home: string }>)[lang] ?? BRAND.en);
+const homeOf = (lang: string) => ((BRAND as Record<string, { home: string }>)[lang] ?? BRAND.en);
 
 /** A logo near the top of the page that can really be seen (not this mark, not covered). */
 function visibleLogo(): boolean {
@@ -57,7 +57,7 @@ function visibleLogo(): boolean {
 export function GaditBrand({ tone = "light" }: { tone?: "light" | "dark" }) {
   const { lang } = useLang();
   const href = useHref();
-  const t = rightsOf(lang);
+  const t = homeOf(lang);
   return (
     <span className={`gb-inline is-${tone}`} data-gadit-brand="">
       <style>{GB_INLINE_CSS}</style>
@@ -84,7 +84,7 @@ export function BrandMark() {
   }, [pathname, admin]);
 
   if (admin || mode === "none") return null;
-  const t = rightsOf(lang);
+  const t = homeOf(lang);
   return (
     <div data-brandmark="" className={`gbm is-${mode}`} dir={dir}>
       <style>{GBM_CSS}</style>

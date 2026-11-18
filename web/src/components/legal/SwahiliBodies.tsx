@@ -21,6 +21,9 @@ export function PrivacyBodySw(): ReactElement {
         Unapofungua akaunti, tunakusanya anwani yako ya barua pepe na, ikiwa utaingia kwa kutumia Google, taarifa za
         msingi za wasifu ambazo Google hutoa (jina la kuonyesha, picha ya wasifu). Hatupokei nenosiri lako la Google.
       </p>
+      <p>
+        {"Katika programu ya iOS unaweza pia kuingia kwa kutumia Apple. Kisha Apple hutupatia jina na anwani ya barua pepe unayochagua kushiriki, ambayo inaweza kuwa anwani ya faragha ya relay inayokutumia barua pepe zetu. Hatupokei nenosiri lako la Apple."}
+      </p>
       <h3>Taarifa za matumizi</h3>
       <p>Unapotumia Gadit, tunachakata:</p>
       <ul>
@@ -72,29 +75,45 @@ export function PrivacyBodySw(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{": huchakata maneno na sentensi unazowasilisha ili kutengeneza fasili, maoni kuhusu sentensi, majaribio mafupi, na unukuzi wa sauti (Whisper), na hutengeneza picha (DALL·E 3). Pia huandika majibu ya msaidizi wa Gadit: tunaitumia swali lako, ujumbe wa awali wa mazungumzo hayo hayo, lugha ya kiolesura chako, mpango wako, na iwapo uko kwenye tovuti au programu, na hatuambatishi jina lako wala anwani yako ya barua pepe. Data zinazotumwa kwa OpenAI zinasimamiwa na sera ya OpenAI ya matumizi ya data za API."}
+          <strong>OpenAI</strong>{": huchakata maneno na sentensi unazowasilisha ili kutengeneza fasili, maoni kuhusu sentensi na majaribio mafupi, hubadilisha maandishi kuwa sauti, hunukuu sauti unayoingiza, husoma maandishi kwenye picha na faili za PDF unazopakia, kwa mfano kurasa za kazi za nyumbani, na hutengeneza picha. Pia huandika majibu ya msaidizi wa Gadit: tunaitumia swali lako, ujumbe wa awali wa mazungumzo hayo hayo, lugha ya kiolesura chako, mpango wako, na iwapo uko kwenye tovuti au programu, na hatuambatishi jina lako wala anwani yako ya barua pepe. Data zinazotumwa kwa OpenAI zinasimamiwa na sera ya OpenAI ya matumizi ya data za API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): huhifadhi akaunti yako, wasifu,
           hali ya usajili, historia ya utafutaji, na picha zilizotengenezwa.
         </li>
         <li>
+          <strong>Google</strong>{": (Gemini, kupitia Google Cloud) hubadilisha maandishi kuwa sauti. Tunaitumia maandishi pekee yanayopaswa kusomwa kwa sauti, kama vile maneno, sentensi na hadithi, na sauti hiyo huhifadhiwa katika hifadhi yetu ya Firebase ili iweze kuchezwa tena. Katika mchezo mmoja wa kusoma, pia husikia sauti ambayo mtoto hutamka kwa sauti ili kuikagua, na rekodi hiyo haihifadhiwi. Google Fonts hutoa fonti za kiolesura cha Kichina, Kijapani na Kikorea, na huona anwani yako ya IP."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{": shirika lisilo la faida la Israeli, huongeza alama za vokali (niqqud) kwenye maandishi ya Kiebrania kwa ajili ya wasomaji wachanga. Tunalitumia maandishi ya Kiebrania pekee."}
+        </li>
+        <li>
           <strong>Stripe</strong>: hushughulikia malipo, usajili, na lango la usimamizi wa malipo.
         </li>
         <li>
+          <strong>Apple</strong>{": hutoa Sign in with Apple katika programu ya iOS (tazama sehemu ya 1), na huuza na kutoza usajili unaonunuliwa katika programu ya iOS. Kwa ununuzi huo, Apple hushughulikia malipo, na sisi hupokea tu uthibitisho wa ununuzi na hali yake, kama vile usasishaji au marejesho."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{": hulipa washirika wetu. Tunaitumia anwani ya barua pepe ya PayPal ya mshirika na kiasi husika."}
+        </li>
+        <li>
           <strong>Resend</strong>{": hutuma barua pepe zetu (kama vile viungo vya kuingia na arifa), na huiwasilishia timu yetu maswali ambayo msaidizi wa Gadit hupeleka mbele, huku anwani yako ya barua pepe ikitumika kama anwani ya kujibu."}
+        </li>
+        <li>
+          <strong>Expo</strong>{": huwasilisha arifa za programu ya iOS, kama vile arifa ambazo mzazi anaweza kuwasha, zinazojumuisha jina la mtoto na neno ambalo mtoto alitafuta."}
         </li>
         <li>
           <strong>Vercel</strong>: hupangisha na kuhudumia tovuti, na hutoa uchanganuzi usio na utambulisho na upimaji wa
           utendaji.
         </li>
         <li>
-          <strong>Matangazo na uchanganuzi</strong>: Meta (Meta Pixel), Google Analytics na TikTok (TikTok Pixel na
-          Events API) hupima ziara na matokeo ya matangazo yetu. Hutumia vidakuzi (cookies) na teknolojia zinazofanana
-          kwenye kurasa zetu za masoko, usajili na malipo. Unapojisajili au kulipa, tunaweza kutuma kwa huduma hizi
-          anwani ya barua pepe na kitambulisho cha akaunti vilivyosimbwa kwa njia moja (hash), pamoja na anwani yako
-          ya IP na maelezo ya kivinjari chako, kwa ajili ya kupima matangazo yetu tu. Hatuzitumii kamwe taarifa yoyote
-          kuhusu watoto, na zana hizi haziendeshwi kwenye skrini zinazotumiwa na watoto.
+          <strong>Yooniz</strong>{": huduma tofauti ya kujifunza kwa familia kutoka kwa mwanzilishi huyo huyo. Yooniz inaweza kutuuliza ikiwa anwani ya barua pepe ya mzazi ina mpango wa Gadit Family unaotumika, na sisi hujibu ndiyo au hapana tu. Ikiwa upo, familia inaweza kufungua Gadit kutoka Yooniz bila nenosiri: Yooniz hututumia anwani ya barua pepe ya mzazi, majina ya kuonyesha ya wanafamilia, na iwapo kila mmoja ni mzazi, mvulana au msichana. Mtoto aliyefungua Gadit kutoka Yooniz anapoelewa neno, tunatuma kwa Yooniz anwani ya barua pepe ya mzazi, kitambulisho cha mtoto cha Yooniz na idadi ya pointi za kujifunza alizopata, kamwe si neno lenyewe."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{": hutoa picha ndogo za bendera zinazoonyeshwa kwenye kurasa zetu, na kwa hivyo huona anwani yako ya IP na maelezo ya kivinjari chako."}
+        </li>
+        <li>
+          <strong>Matangazo na uchanganuzi</strong>{": Meta (Meta Pixel), Google Analytics na TikTok (TikTok Pixel na Events API) hupima ziara na matokeo ya matangazo yetu. Hutumia vidakuzi (cookies) na teknolojia zinazofanana kwenye kurasa zetu za masoko, usajili na malipo. Unapojisajili au kulipa, tunaweza kutuma kwa huduma hizi anwani ya barua pepe na kitambulisho cha akaunti vilivyosimbwa kwa njia moja (hash), pamoja na anwani yako ya IP na maelezo ya kivinjari chako, kwa ajili ya kupima matangazo yetu tu. Affonso, huduma ya viungo vya washirika, hupakiwa kwenye kurasa hizo hizo na kwenye ukurasa wowote ambao mgeni anaufikia kupitia kiungo cha mshirika, na huweka kidakuzi kwa hadi siku 60. Ikiwa utajisajili baada ya kufika kupitia kiungo cha mshirika cha Affonso, tunatuma kwa Affonso anwani yako ya barua pepe, jina na kitambulisho cha akaunti, ili mshirika aliyekuletea apewe sifa. Hatuwatumii kamwe huduma hizi zozote taarifa kuhusu watoto, na zana hizi haziendeshwi kwenye wasifu wa mtoto, katika Kids Mode au kwenye kurasa za viungo vya darasa."}
         </li>
       </ul>
 
@@ -141,8 +160,16 @@ export function PrivacyBodySw(): ReactElement {
 
       <h2>7. Watoto</h2>
       <p>
-        Gadit haikulengwa kwa watoto walio chini ya umri wa miaka 13. Ikiwa unaamini kwamba mtoto aliye chini ya miaka 13
-        amefungua akaunti, tutumie barua pepe na tutaifuta akaunti hiyo pamoja na data zinazohusiana nayo.
+        {"Akaunti ya Gadit ni ya watu wazima, wenye umri wa miaka 18 na zaidi. Watoto na vijana hutumia Gadit kupitia mtu mzima pekee, kwa mojawapo ya njia mbili."}
+      </p>
+      <p>
+        {"Wasifu wa Family: mzazi humwongeza kila mtoto kama wasifu ndani ya akaunti ya Family ya mzazi, akiwa na jina na iwapo mtoto ni mvulana au msichana, na, ikiwa mzazi ataongeza taarifa hizo, pia umri, darasa na picha. Watoto hawana anwani ya barua pepe wala nenosiri kwetu. Maneno anayoyatafuta mtoto, pamoja na daftari lake, michezo na maendeleo yake, huhifadhiwa katika akaunti ya family. Wazazi katika family, na yeyote wanayempa ufikiaji huo, kwa mfano mwalimu wa ziada, wanaweza kuviona, na mzazi anaweza kuchagua kupokea arifa, kwa notisi au kwa barua pepe, zenye maneno anayoyatafuta mtoto. Mzazi anaweza kuondoa wasifu wa mtoto katika programu wakati wowote."}
+      </p>
+      <p>
+        {"Viungo vya darasa: mwanafunzi hufungua kiungo au msimbo anaopokea kutoka kwa mwalimu, bila akaunti na bila anwani ya barua pepe. Ikiwa mwalimu aliingiza orodha ya majina, mwanafunzi huchagua jina lake kutoka humo, na maneno anayoyatafuta mwanafunzi huhifadhiwa kwa ajili ya darasa chini ya jina hilo, ili mwalimu aweze kuyaona. Shule huamua kutumia Gadit na inawajibika kuwafahamisha wazazi pale sheria inapohitaji hivyo."}
+      </p>
+      <p>
+        {"Hatutumii kamwe taarifa za watoto kwa matangazo, na zana zilizoorodheshwa chini ya Matangazo na uchanganuzi katika sehemu ya 3 hazipakiiwi kamwe kwenye wasifu wa mtoto, katika Hali ya Watoto au kwenye kurasa za viungo vya darasa. Ili wasifu wa mtoto na data zake zifutwe, mzazi anaweza kuandika kwa "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" na tutaufuta. Ikiwa unaamini kwamba mtoto alifungua akaunti yake mwenyewe, tuandikie na tutaifuta akaunti hiyo pamoja na data zake."}
       </p>
 
       <h2>8. Watumiaji wa kimataifa</h2>
@@ -180,8 +207,7 @@ export function TermsBodySw(): ReactElement {
 
       <h2>1. Nani anaweza kutumia Gadit</h2>
       <p>
-        Ni lazima uwe na umri wa angalau miaka 13 ili kufungua akaunti. Ikiwa una umri kati ya miaka 13 na 18, ni lazima
-        uwe na ruhusa ya mzazi au mlezi halali. Kwa kutumia Gadit, unathibitisha kwamba unatimiza masharti haya.
+        {"Ni lazima uwe na umri wa miaka 18 au zaidi ili kufungua akaunti ya Gadit. Watoto na vijana walio chini ya miaka 18 hutumia Gadit kupitia mtu mzima pekee: mzazi au mlezi anaweza kuwaongeza kama wasifu katika mpango wa Family, na shule inaweza kuwapa wanafunzi wake kiungo cha darasa. Mzazi, mlezi au shule inayotoa ufikiaji huo inawajibika kwa ufikiaji huo. Kwa kufungua akaunti, unathibitisha kwamba una umri wa miaka 18 au zaidi."}
       </p>
 
       <h2>2. Akaunti yako</h2>
@@ -204,16 +230,11 @@ export function TermsBodySw(): ReactElement {
       </p>
       <h3>Kughairi</h3>
       <p>
-        Unaweza kughairi wakati wowote kupitia ukurasa wa akaunti yako. Kughairi kunasimamisha usasishaji wa baadaye.
-        Utaendelea kupata vipengele vya kulipia hadi mwisho wa kipindi cha sasa cha malipo. Hatutoi marejesho ya sehemu ya
-        pesa kwa muda ambao haujatumika.
+        {"Unaweza kughairi wakati wowote kupitia ukurasa wa akaunti yako. Kughairi kunasimamisha usasishaji wa baadaye. Utaendelea kupata vipengele vya kulipia hadi mwisho wa kipindi cha sasa cha malipo. Isipokuwa kwa marejesho yaliyoelezwa hapa chini, hatutoi marejesho ya pesa kwa muda ambao haujatumika, isipokuwa pale sheria inapotaka vinginevyo."}
       </p>
       <h3>Marejesho ya pesa</h3>
       <p>
-        Isipokuwa pale sheria inapotaka hivyo, malipo hayarejeshwi. Ikiwa unaamini kwamba ulitozwa kimakosa, wasiliana
-        na{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a> ndani ya siku 30 baada ya
-        kutozwa.
+        {"Ukiomba ndani ya siku 14 tangu malipo ya kwanza kwenye akaunti yako, au ndani ya siku 14 tangu usasishaji wa kila mwaka, tutarejesha malipo hayo kwa ukamilifu. Huhitaji kutoa sababu. Andika kwa "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" ukitumia anwani ya barua pepe ya akaunti yako. Marejesho pia yanasitisha usajili. Malipo mengine hayarejeshwi, isipokuwa pale sheria inapotaka marejesho. Ikiwa unaamini kwamba ulitozwa kimakosa, tuandikie ndani ya siku 30 tangu ulipozwa. Ununuzi unaofanywa katika programu ya iOS hutozwa na Apple, na ni Apple pekee inayoweza kurejesha pesa hizo, kupitia reportaproblem.apple.com."}
       </p>
 
       <h2>4. Matumizi yanayokubalika</h2>
@@ -233,8 +254,7 @@ export function TermsBodySw(): ReactElement {
 
       <h2>5. Maudhui yanayotengenezwa na AI</h2>
       <p>
-        Gadit hutumia modeli za akili bandia (ikiwa ni pamoja na GPT, Whisper, na DALL·E za OpenAI) kutengeneza fasili,
-        mifano, etimolojia, maoni, majaribio mafupi, picha, na manukuu ya sauti. Unaelewa na kukubali kwamba:
+        {"Gadit hutumia modeli za akili bandia (ikiwa ni pamoja na modeli kutoka OpenAI na Google) kutengeneza fasili, mifano, etimolojia, maoni, majaribio mafupi, picha, sauti, na manukuu. Unaelewa na kukubali kwamba:"}
       </p>
       <ul>
         <li>

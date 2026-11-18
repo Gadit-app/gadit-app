@@ -22,6 +22,9 @@ export function PrivacyBodyHu(): ReactElement {
         Amikor Ön fiókot hoz létre, összegyűjtjük az e-mail-címét, és ha Google-fiókkal jelentkezik be, a Google által
         megadott alapvető profiladatokat (megjelenített név, profilkép). A Google-jelszavát nem kapjuk meg.
       </p>
+      <p>
+        {"Az iOS alkalmazásban Apple-lel is bejelentkezhet. Ilyenkor az Apple átadja nekünk az Ön által megosztani választott nevet és e-mail-címet, amely lehet egy privát relay-cím is, amely továbbítja Önnek az e-mailjeinket. Az Apple-jelszavát nem kapjuk meg."}
+      </p>
       <h3>Használati adatok</h3>
       <p>Amikor Ön a Gadit szolgáltatást használja, a következőket kezeljük:</p>
       <ul>
@@ -74,30 +77,45 @@ export function PrivacyBodyHu(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{": feldolgozza az Ön által beküldött szavakat és mondatokat definíciók, mondatokra adott visszajelzések, kvízek és hangátírás (Whisper) generálása céljából, valamint képeket generál (DALL·E 3). A Gadit asszisztens válaszait is megírja: elküldjük neki az Ön kérdését, ugyanazon beszélgetés korábbi üzeneteit, a felület nyelvét, az előfizetési csomagját, valamint azt, hogy a webhelyet vagy az alkalmazást használja-e, és nem csatoljuk az Ön nevét vagy e-mail-címét. Az OpenAI részére küldött adatokra az OpenAI API-adathasználati szabályzata vonatkozik."}
+          <strong>OpenAI</strong>{": feldolgozza az Ön által beküldött szavakat és mondatokat definíciók, mondatokra adott visszajelzések és kvízek generálása céljából, a szöveget beszéddé alakítja, átírja a hangbemenetet, kiolvassa az Ön által feltöltött fényképeken és PDF-fájlokban szereplő szöveget (például házi feladatok lapjain), és képeket generál. A Gadit asszisztens válaszait is megírja: elküldjük neki az Ön kérdését, ugyanazon beszélgetés korábbi üzeneteit, a felület nyelvét, az előfizetési csomagját, valamint azt, hogy a webhelyet vagy az alkalmazást használja-e, és nem csatoljuk az Ön nevét vagy e-mail-címét. Az OpenAI részére küldött adatokra az OpenAI API-adathasználati szabályzata vonatkozik."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): tárolja az Ön fiókját, profilját,
           előfizetési állapotát, keresési előzményeit és a generált képeket.
         </li>
         <li>
+          <strong>Google</strong>{": (Gemini, Google Cloudon keresztül) a szöveget beszéddé alakítja. Csak a felolvasandó szöveget küldjük el neki, például szavakat, mondatokat és történeteket, és a hanganyagot a Firebase-tárhelyünkön őrizzük meg, hogy újra lejátszható legyen. Egyik olvasójátékunkban hallja azt a hangot is, amelyet a gyermek hangosan kimond, hogy ellenőrizze, és ezt a felvételt nem tároljuk. A Google Fonts szolgálja ki a kínai, japán és koreai felület betűtípusait, és látja az Ön IP-címét."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{": izraeli nonprofit szervezet, magánhangzójelekkel látja el a héber szöveget a fiatal olvasók számára. Csak a héber szöveget küldjük el neki."}
+        </li>
+        <li>
           <strong>Stripe</strong>: kezeli a fizetéseket, az előfizetéseket és a számlázási portált.
         </li>
         <li>
+          <strong>Apple</strong>{": biztosítja a Sign in with Apple funkciót az iOS alkalmazásban (lásd az 1. szakaszt), valamint értékesíti és kiszámlázza az iOS alkalmazásban megvásárolt előfizetéseket. Ezeknél a vásárlásoknál a fizetést az Apple kezeli, mi pedig csak a vásárlásról és annak állapotáról kapunk visszaigazolást, például megújításról vagy visszatérítésről."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{": kifizeti partnereinket. Elküldjük neki a partner PayPal e-mail-címét és az összeget."}
+        </li>
+        <li>
           <strong>Resend</strong>{": küldi az e-mailjeinket (például a bejelentkezési linkeket és értesítéseket), és továbbítja a csapatunknak a Gadit asszisztens által továbbított kérdéseket, az Ön e-mail-címével válaszcímként."}
+        </li>
+        <li>
+          <strong>Expo</strong>{": kézbesíti az iOS alkalmazás értesítéseit, például azokat a figyelmeztetéseket, amelyeket egy szülő bekapcsolhat, és amelyek tartalmazzák a gyermek nevét és a gyermek által kikeresett szót."}
         </li>
         <li>
           <strong>Vercel</strong>: tárhelyet biztosít a weboldalnak és kiszolgálja azt, valamint anonimizált analitikát
           és teljesítménymérést nyújt.
         </li>
         <li>
-          <strong>Hirdetések és analitika</strong>: A Meta (Meta Pixel), a Google Analytics és a TikTok (TikTok Pixel
-          és Events API) a látogatásokat és hirdetéseink eredményeit méri. Marketing-, regisztrációs és fizetési
-          oldalainkon sütiket (cookie-kat) és hasonló technológiákat használnak. Amikor Ön regisztrál vagy fizet,
-          ezeknek a szolgáltatásoknak elküldhetünk egy hash-elt (egyirányú titkosítással kódolt) e-mail-címet és
-          fiókazonosítót, az Ön IP-címével és böngészőjének adataival együtt, kizárólag hirdetéseink mérése céljából.
-          Soha nem küldünk nekik semmilyen információt gyermekekről, és ezek az eszközök nem futnak azokon a
-          képernyőkön, amelyeket gyermekek használnak.
+          <strong>Yooniz</strong>{": ugyanazon alapító különálló családi tanulási szolgáltatása. A Yooniz megkérdezheti tőlünk, hogy egy szülő e-mail-címéhez tartozik-e aktív Gadit Family csomag, és mi csak igennel vagy nemmel válaszolunk. Ha igen, a család jelszó nélkül nyithatja meg a Gaditot a Yoonizból: a Yooniz elküldi nekünk a szülő e-mail-címét, a családtagok megjelenített neveit, valamint azt, hogy mindegyikük szülő, fiú vagy lány-e. Amikor egy olyan gyermek, aki a Yoonizból nyitotta meg a Gaditot, megért egy szót, elküldjük a Yooniznak a szülő e-mail-címét, a gyermek Yooniz-azonosítóját és a megszerzett tanulási pontok számát, magát a szót azonban soha."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{": kiszolgálja az oldalainkon megjelenő kis zászlóképeket, ezért látja az Ön IP-címét és böngészőjének adatait."}
+        </li>
+        <li>
+          <strong>Hirdetések és analitika</strong>{": A Meta (Meta Pixel), a Google Analytics és a TikTok (TikTok Pixel és Events API) a látogatásokat és hirdetéseink eredményeit méri. Marketing-, regisztrációs és fizetési oldalainkon sütiket (cookie-kat) és hasonló technológiákat használnak. Amikor Ön regisztrál vagy fizet, ezeknek a szolgáltatásoknak elküldhetünk egy hash-elt (egyirányú titkosítással kódolt) e-mail-címet és fiókazonosítót, az Ön IP-címével és böngészőjének adataival együtt, kizárólag hirdetéseink mérése céljából. Az Affonso, egy partnerhivatkozásokat kezelő szolgáltatás, ugyanezeken az oldalakon, valamint minden olyan oldalon betöltődik, amelyet a látogató partnerhivatkozáson keresztül ér el, és legfeljebb 60 napig sütit tárol. Ha Ön úgy regisztrál, hogy előtte egy Affonso partnerhivatkozáson keresztül érkezett, elküldjük az Affonso részére az Ön e-mail-címét, nevét és fiókazonosítóját, hogy a hivatkozó partner jóváírást kapjon. Soha nem küldünk e szolgáltatások egyikének sem gyermekekre vonatkozó információt, és ezek az eszközök nem futnak gyermekprofilban, Gyerek módban vagy az osztályhivatkozásos oldalakon."}
         </li>
       </ul>
 
@@ -145,8 +163,16 @@ export function PrivacyBodyHu(): ReactElement {
 
       <h2>7. Gyermekek</h2>
       <p>
-        A Gadit nem 13 év alatti gyermekeknek szól. Ha úgy gondolja, hogy egy 13 év alatti gyermek fiókot hozott létre,
-        írjon nekünk e-mailt, és töröljük a fiókot és a kapcsolódó adatokat.
+        {"A Gadit-fiók felnőtteknek, 18 éves vagy annál idősebb személyeknek szól. A gyermekek és tizenévesek a Gaditot csak egy felnőtten keresztül használhatják, kétféle mód egyikén."}
+      </p>
+      <p>
+        {"Family profilok: a szülő minden gyermeket profilként ad hozzá a saját Family fiókján belül, névvel és annak megjelölésével, hogy a gyermek fiú vagy lány, valamint, ha a szülő megadja ezeket, életkorral, iskolai évfolyammal és fényképpel. A gyermekeknek nálunk nincs e-mail-címük vagy jelszavuk. A családi fiókban kerülnek mentésre azok a szavak, amelyeket a gyermek kikeres, valamint a gyermek jegyzetfüzete, játékai és előrehaladása. Ezeket a család szülei, valamint bárki, akinek hozzáférést adnak, például korrepetitor, láthatják, és a szülő dönthet úgy is, hogy értesítést kap, push értesítésben vagy e-mailben, azokról a szavakról, amelyeket a gyermek kikeres. A szülő a gyermek profilját bármikor eltávolíthatja az alkalmazásban."}
+      </p>
+      <p>
+        {"Osztályhivatkozások: a tanuló a tanár által adott hivatkozást vagy kódot fiók és e-mail-cím nélkül nyitja meg. Ha a tanár megadott egy névsort, a tanuló kiválasztja belőle a saját nevét, és az általa kikeresett szavak ezen a néven az osztály számára mentésre kerülnek, hogy a tanár láthassa őket. Az iskola dönt a Gadit használatáról, és ahol ezt jogszabály előírja, az iskola felelős a szülők tájékoztatásáért."}
+      </p>
+      <p>
+        {"Gyermekekre vonatkozó információkat soha nem használunk fel hirdetési célokra, és a 3. szakaszban, a Hirdetések és analitika pont alatt felsorolt eszközök soha nem töltődnek be gyermekprofilban, Gyerek módban vagy osztályhivatkozási oldalakon. A gyermek profiljának és adatainak törléséhez a szülő írhat a "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" címre, és mi töröljük azokat. Ha úgy gondolja, hogy egy gyermek saját maga nyitott fiókot, írjon nekünk, és mi töröljük a fiókot és az ahhoz tartozó adatokat."}
       </p>
 
       <h2>8. Nemzetközi felhasználók</h2>
@@ -187,8 +213,7 @@ export function TermsBodyHu(): ReactElement {
 
       <h2>1. Ki használhatja a Gadit szolgáltatást</h2>
       <p>
-        Fiók létrehozásához legalább 13 évesnek kell lennie. Ha Ön 13 és 18 év közötti, szülője vagy törvényes gyámja
-        engedélyével kell rendelkeznie. A Gadit használatával Ön kijelenti, hogy megfelel ezeknek a követelményeknek.
+        {"Gadit-fiókot csak 18 éves vagy annál idősebb személy nyithat. A 18 év alatti gyermekek és tizenévesek a Gaditot csak egy felnőtten keresztül használhatják: a szülő vagy törvényes gyám profilként hozzáadhatja őket a Family csomagban, az iskola pedig osztályhivatkozást adhat a tanulóinak. Az a szülő, törvényes gyám vagy iskola, amely ezt a hozzáférést biztosítja, felelős érte. A fiók megnyitásával Ön megerősíti, hogy elmúlt 18 éves."}
       </p>
 
       <h2>2. Az Ön fiókja</h2>
@@ -210,15 +235,11 @@ export function TermsBodyHu(): ReactElement {
       </p>
       <h3>Lemondás</h3>
       <p>
-        Előfizetését bármikor lemondhatja a fiókja oldalán. A lemondás leállítja a jövőbeli megújításokat. A fizetős
-        funkciókhoz az aktuális számlázási időszak végéig továbbra is hozzáfér. A fel nem használt időre részleges
-        visszatérítést nem nyújtunk.
+        {"Előfizetését bármikor lemondhatja a fiókja oldalán. A lemondás leállítja a jövőbeli megújításokat. A fizetős funkciókhoz az aktuális számlázási időszak végéig továbbra is hozzáfér. Az alább ismertetett visszatérítések kivételével a fel nem használt időre nem térítünk vissza összeget, kivéve, ha a jogszabály ettől eltérően rendelkezik."}
       </p>
       <h3>Visszatérítések</h3>
       <p>
-        A jogszabály által előírt esetek kivételével a befizetések nem téríthetők vissza. Ha úgy gondolja, hogy tévesen
-        terheltük meg, a terheléstől számított 30 napon belül forduljon hozzánk a következő címen:{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a>.
+        {"Ha a fiókján teljesített első fizetéstől számított 14 napon belül, vagy éves megújítás esetén a megújítástól számított 14 napon belül kéri, az adott fizetést teljes egészében visszatérítjük. Nem kell indokolást adnia. Írjon a "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" címre a fiókjához tartozó e-mail-címről. A visszatérítés az előfizetést is megszünteti. A többi fizetés nem visszatéríthető, kivéve, ha a jogszabály visszatérítést ír elő. Ha úgy gondolja, hogy tévedésből terheltük meg, a terheléstől számított 30 napon belül írjon nekünk. Az iOS alkalmazásban végzett vásárlásokat az Apple számlázza ki, és azokat csak az Apple térítheti vissza a reportaproblem.apple.com oldalon."}
       </p>
 
       <h2>4. Elfogadható használat</h2>
@@ -239,9 +260,7 @@ export function TermsBodyHu(): ReactElement {
 
       <h2>5. Mesterséges intelligencia által generált tartalom</h2>
       <p>
-        A Gadit mesterségesintelligencia-modelleket használ (köztük az OpenAI GPT, Whisper és DALL·E modelljeit)
-        definíciók, példák, etimológiák, visszajelzések, kvízek, képek és átiratok generálására. Ön tudomásul veszi és
-        elfogadja, hogy:
+        {"A Gadit mesterségesintelligencia-modelleket használ, köztük az OpenAI és a Google modelljeit, definíciók, példák, etimológiák, visszajelzések, kvízek, képek, beszéd és átiratok generálására. Ön tudomásul veszi és elfogadja, hogy:"}
       </p>
       <ul>
         <li>

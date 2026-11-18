@@ -91,7 +91,7 @@ Object.assign(HELP, {
             a: [
               "You can switch to a new card in under a minute without cancelling. Your current subscription keeps running, just on the new card.",
               "1. Sign in at gadit.app and open \"Account\" from the account menu. 2. Click \"Manage billing\". 3. A secure Stripe page opens. Add the new card as a payment method and mark it as the default. 4. Optionally remove the old card.",
-              "From the next billing cycle on, everything goes to the new card. The previous charge (already collected) stays on the old card. No refund needed unless you want one specifically.",
+              "From the next billing cycle on, everything goes to the new card. The previous charge (already collected) stays on the old card. Changing the card does not move that charge or change your next billing date.",
             ],
           },
           {
@@ -141,8 +141,9 @@ Object.assign(HELP, {
             id: "refund",
             q: "Can I get a refund?",
             a: [
-              "Yes. If the purchase was less than 14 days ago and the service hasn't been used much, write to us with your account email and a short note about why. Those refunds get approved without a fight.",
-              "If it's been more than 14 days, the team handles it case by case. Cancel the subscription so it doesn't keep renewing, and email us.",
+              "Yes, within 14 days of the first payment on your account, or of a yearly renewal. Write to support@gadit.app from your account's email address and we refund that payment in full. You do not need to give a reason. The refund also ends the subscription, and the money returns to the card you paid with, usually within 5 to 10 business days.",
+              "After 14 days, payments are not refunded, unless you were charged in error or the law where you live requires it. You can cancel anytime so the subscription does not renew, and you keep it until the end of the period you paid for.",
+              "Bought in the iPhone or iPad app? Apple handles those refunds at reportaproblem.apple.com.",
             ],
           },
           {
@@ -348,8 +349,9 @@ Object.assign(HELP, {
             id: "payout",
             q: "When do I get paid?",
             a: [
-              "Once a month, when your balance reaches the minimum shown in your partner dashboard. We send it to the PayPal account you set there. The minimum is a threshold, not a cap: you can earn far more, and you receive the payout once you cross it.",
-              "Commissions release 30 days after the subscription payment, to allow for the refund window. So a January subscription releases in early February and lands in your next payout once your balance reaches the minimum.",
+              "Once a month, with no minimum. Each commission becomes payable 30 days after the customer's payment, and everything payable is sent in the next monthly payout to the PayPal account you set in your partner dashboard.",
+              "We pay in the currency the customer paid in when PayPal can send it, and otherwise in US dollars, at the exchange rate on the day we pay.",
+              "Commissions wait 30 days because of refunds: if a customer's payment is refunded, the commission on it is cancelled. So a commission on a January payment becomes payable in February and goes out in the next monthly payout.",
             ],
           },
           {
@@ -404,7 +406,7 @@ Object.assign(HELP, {
             q: "Is Gadit safe for kids?",
             a: [
               "Gadit is designed for a parent to use safely alongside a child. Kids mode produces explanations that are simple, concrete, and age-appropriate (around the 5 to 10 year old level), using the same engine that powers adult content with explicit instructions to simplify. No user-generated content is ever shown to kids.",
-              "In line with our policies and child-privacy rules around the world, an account of your own is for ages 13 and up. Children use Gadit through a parent: on the Family plan the parent adds each child from the Family page, every child gets a space of their own with Kids Mode, and the parent board shows the words each child looks up. To set it up, start with Family on the pricing page.",
+              "An account of your own is for adults, 18 and up. Children and teenagers use Gadit through an adult. At home, a parent adds each child on the Family page, every child gets a space of their own with Kids Mode, and the parent board shows the words each child looks up. At school, the class gets a link from the teacher, and students join without an account or an email address.",
             ],
           },
           {
@@ -445,9 +447,9 @@ Object.assign(HELP, {
             id: "change-card",
             q: "Ngiyishintsha kanjani ikhadi lesikweletu ekubhaliseni kwami?",
             a: [
-              "Ungashintshela ekhadini elisha ngaphansi komzuzu, ngaphandle kokukhansela. Ukubhalisa kwakho kwamanje kuqhubeka kusebenza, kodwa manje sekusebenzisa ikhadi elisha.",
+              "Ungashintshela ekhadini elisha ngaphansi komzuzu, ngaphandle kokukhansela. Ukubhalisa kwakho kwamanje kuyaqhubeka, kumane kusebenzise ikhadi elisha.",
               "1. Ngena ku-gadit.app bese uvula okuthi \"I-akhawunti\" kumenyu ye-akhawunti. 2. Chofoza \"Phatha ukukhokha\". 3. Kuvuleka ikhasi elivikelekile le-Stripe. Engeza ikhadi elisha njengendlela yokukhokha bese ulimaka njengeliyinhloko. 4. Uma uthanda, susa ikhadi elidala.",
-              "Kusukela emjikelezweni olandelayo wokukhokha, konke kuzoya ekhadini elisha. Inkokhelo yangaphambilini, esivele iqoqiwe, ihlala ekhadini elidala. Akudingeki ukubuyiselwa imali ngaphandle uma uyifuna ngokuqondile.",
+              "Kusukela emjikelezweni olandelayo wokukhokha, konke kuzoya ekhadini elisha. Inkokhelo yangaphambilini, esivele iqoqiwe, ihlala ekhadini elidala. Ukushintsha ikhadi akuyidluliseli leyo nkokhelo futhi akulushintshi usuku lwakho olulandelayo lokukhokha.",
             ],
           },
           {
@@ -497,8 +499,9 @@ Object.assign(HELP, {
             id: "refund",
             q: "Ngingawuthola umbuyiselo?",
             a: [
-              "Yebo. Uma ukuthenga kwenzeke ngaphansi kwezinsuku ezingu-14 ezedlule futhi insizakalo ingasetshenzisiwe kakhulu, sibhalele nge-imeyili ye-akhawunti yakho nenothi elifushane ngesizathu. Leyo mibuyiselo iyagunyazwa ngaphandle kwempikiswano.",
-              "Uma sekwedlule izinsuku ezingaphezu kuka-14, iqembu likuphatha icala ngecala. Khansela ukubhalisa ukuze kungaqhubeki kuvuselela, bese usithumelela i-imeyili.",
+              "Yebo, zingakapheli izinsuku ezingu-14 kusukela ekukhokheni kokuqala ku-akhawunti yakho, noma ekuvuseleleni konyaka. Sibhalele ku-support@gadit.app usebenzisa ikheli le-imeyili le-akhawunti yakho, bese sibuyisa leyo nkokhelo ngokugcwele. Awudingi ukunikeza isizathu. Umbuyiselo uphinde uqede ukubhalisa, futhi imali ibuyela ekhadini okhokhe ngalo, ngokuvamile zingakapheli izinsuku zebhizinisi ezingu-5 kuya kwezingu-10.",
+              "Ngemva kwezinsuku ezingu-14, izinkokhelo azibuyiswa, ngaphandle uma ukhokhiswe ngephutha noma umthetho walapho ohlala khona ukufuna lokho. Ungakhansela noma nini ukuze ukubhalisa kungavuseleleki, futhi kuhlala kusebenza kuze kube sekupheleni kwesikhathi osikhokhele.",
+              "Uthenge kuhlelo lokusebenza lwe-iPhone noma lwe-iPad? Apple yiyo ephatha leyo mibuyiselo ku-reportaproblem.apple.com.",
             ],
           },
           {
@@ -704,8 +707,9 @@ Object.assign(HELP, {
             id: "payout",
             q: "Ngikhokhelwa nini?",
             a: [
-              "Kanye ngenyanga, uma ibhalansi yakho isifinyelele ubuncane obukhonjiswe kudeshibhodi yakho yabalingani. Siyithumela ku-akhawunti ye-PayPal oyisethe lapho. Ubuncane buyisilinganiso sokuqala, akuwona umkhawulo ophezulu. Ungahola kakhulu ngaphezu kwalokho, futhi uthola inkokhelo uma usuweqile lowo mkhawulo.",
-              "Amakhomishini akhululwa ezinsukwini ezingu-30 ngemva kwenkokhelo yokubhalisa, ukuze kuvumeleke isikhathi sembuyiselo. Ngakho ukubhalisa kukaJanuwari kukhululwa ekuqaleni kukaFebhuwari, bese kufika enkokhelweni yakho elandelayo uma ibhalansi yakho isifinyelele ubuncane.",
+              "Kanye ngenyanga, ngaphandle kobuncane. Ikhomishini ngayinye iba ilungele ukukhokhwa ezinsukwini ezingu-30 ngemva kwenkokhelo yekhasimende, futhi konke osekulungele kuthunyelwa enkokhelweni yenyanga elandelayo ku-akhawunti ye-PayPal oyisethe kudeshibhodi yakho yabalingani.",
+              "Sikhokha ngemali ikhasimende elikhokhe ngayo uma i-PayPal ikwazi ukuyithumela, kungenjalo sikhokha ngama-US dollar, ngesilinganiso sokushintsha imali sosuku esikhokha ngalo.",
+              "Amakhomishini alinda izinsuku ezingu-30 ngenxa yemibuyiselo. Uma inkokhelo yekhasimende ibuyiselwa, ikhomishini yayo iyakhanselwa. Ngakho ikhomishini yenkokhelo kaJanuwari iba ilungele ukukhokhwa ngoFebhuwari, bese iphunyelwa enkokhelweni yenyanga elandelayo.",
             ],
           },
           {
@@ -759,8 +763,8 @@ Object.assign(HELP, {
             id: "kid-safety",
             q: "Ingabe i-Gadit iphephile ezinganeni?",
             a: [
-              "I-Gadit yakhelwe ukuthi umzali ayisebenzise ngokuphepha eceleni kwengane. Imodi yezingane ikhiqiza izincazelo ezilula, ezibonakalayo, nezifanele ubudala (cishe izinga leminyaka engu-5 kuya kwengu-10), isebenzisa injini efanayo enika amandla okuqukethwe kwabadala nemiyalo ecacile yokwenza kube lula. Akukho okuqukethwe okwenziwe umsebenzisi okuke kuboniswe ezinganeni.",
-              "Ngokuhambisana nezinqubomgomo zethu nemithetho yobumfihlo bezingane emhlabeni wonke, i-akhawunti yakho siqu ingeyabaneminyaka engu-13 nangaphezulu. Izingane zisebenzisa i-Gadit ngomzali: kuhlelo lwe-Family umzali wengeza ingane ngayinye ekhasini le-Family, ingane ngayinye ithola indawo yayo enemodi yezingane, futhi ibhodi lomzali likhombisa amagama ingane ngayinye ewabhekayo. Ukuze ukusethe, qala nge-Family ekhasini lamanani.",
+              "I-Gadit yakhelwe ukuthi umzali ayisebenzise ngokuphepha eceleni kwengane. Imodi yezingane ikhiqiza izincazelo ezilula, ezicacile, nezifanele ubudala, cishe ezingeni leminyaka engu-5 kuya kwengu-10, isebenzisa injini efanayo enika amandla okuqukethwe kwabadala, kodwa inemiyalo ecacile yokwenza kube lula. Akukho okuqukethwe okwenziwe umsebenzisi okuke kuboniswe ezinganeni.",
+              "I-akhawunti yakho siqu eyabantu abadala, abaneminyaka engu-18 nangaphezulu. Izingane nentsha basebenzisa i-Gadit ngomuntu omdala. Ekhaya, umzali wengeza ingane ngayinye ekhasini le-Family, ingane ngayinye ithola indawo yayo ene-Kids Mode, futhi ibhodi lomzali likhombisa amagama ingane ngayinye ewabhekayo. Esikoleni, ikilasi lithola isixhumanisi kuthisha, futhi abafundi bajoyina ngaphandle kwe-akhawunti noma ikheli le-imeyili.",
             ],
           },
           {
@@ -803,7 +807,7 @@ Object.assign(HELP, {
             a: [
               "Ungatshintshela kwikhadi elitsha ngaphantsi komzuzu ngaphandle kokurhoxisa. Umrhumo wakho wangoku uyaqhubeka, kodwa usebenzisa ikhadi elitsha.",
               "1. Ngena kwi-gadit.app uze uvule \"Iakhawunti\" kwimenyu yeakhawunti. 2. Cofa \"Lawula iintlawulo\". 3. Kuvuleka iphepha le-Stripe elikhuselekileyo. Yongeza ikhadi elitsha njengendlela yokuhlawula uze ulibeke njengolungagqibekanga. 4. Ukuba uyafuna, susa ikhadi elidala.",
-              "Ukususela kumjikelo olandelayo wokuhlawula, yonke into iya kwikhadi elitsha. Intlawulo yangaphambili, esele iqokelelwe, ihlala kwikhadi elidala. Akufuneki mbuyekezo ngaphandle kokuba uyifuna ngokuthe ngqo.",
+              "Ukusukela kumjikelo olandelayo wokuhlawula, yonke into iya kwikhadi elitsha. Intlawulo yangaphambili, esele iqokelelwe, ihlala kwikhadi elidala. Ukutshintsha ikhadi akuyisusi loo ntlawulo apho, kwaye akutshintshi umhla wakho olandelayo wokuhlawula.",
             ],
           },
           {
@@ -853,8 +857,9 @@ Object.assign(HELP, {
             id: "refund",
             q: "Ndingayifumana imali yam ibuyiswe?",
             a: [
-              "Ewe. Ukuba uthenge kwiintsuku ezingaphantsi kwe-14 ezidlulileyo kwaye inkonzo ayikasetyenziswa kakhulu, sibhalele nge-imeyile yeakhawunti yakho kunye nenqaku elifutshane elichaza isizathu. Ezo mbuyekezo zivunywa ngaphandle kwengxabano.",
-              "Ukuba sele kudlule iintsuku ezingaphezu kwe-14, iqela liyiphatha ngokwemeko nganye. Rhoxisa umrhumo ukuze ungaqhubeki uzihlaziya, uze usithumelele i-imeyile.",
+              "Ewe, kwiintsuku ezili-14 zentlawulo yokuqala kwiakhawunti yakho, okanye yohlaziyo lonyaka. Sibhalele ku-support@gadit.app usebenzisa idilesi ye-imeyile yeakhawunti yakho size siyibuyise ngokupheleleyo loo ntlawulo. Akuyomfuneko ukunika isizathu. Imbuyekezo ikwaphelisa nomrhumo, kwaye imali ibuyela kwikhadi obuhlawule ngalo, ngokuqhelekileyo kwiintsuku zokusebenza ezi-5 ukuya kwezi-10.",
+              "Emva kweentsuku ezili-14, iintlawulo azibuyiswa, ngaphandle kokuba uhlawuliswe ngempazamo okanye umthetho walapho uhlala khona ukufuna oko. Ungarhoxisa nanini na ukuze umrhumo ungahlaziyeki, kwaye uya kuhlala usebenza de kuphele ixesha olibhateleleyo.",
+              "Uthenge kwi-app ye-iPhone okanye ye-iPad? Apple ilawula ezo mbuyekezo ku-reportaproblem.apple.com.",
             ],
           },
           {
@@ -1060,8 +1065,9 @@ Object.assign(HELP, {
             id: "payout",
             q: "Ndihlawulwa nini?",
             a: [
-              "Kanye ngenyanga, xa ibhalansi yakho ifikelela kweyona mali incinci iboniswe kwibhodi yakho yeqabane. Siyithumela kwiakhawunti ye-PayPal oyimisele apho. Le mali incinci ngumda osezantsi, ayingomda ophezulu. Ungafumana ngaphezulu kakhulu, kwaye ufumana intlawulo xa sele uwugqithile loo mda.",
-              "Iikhomishini zikhutshwa kwiintsuku ezingama-30 emva kwentlawulo yomrhumo, ukuze kubekho ixesha lembuyekezo. Ngoko umrhumo kaJanuwari ukhutshwa ekuqaleni kukaFebruwari, uze ungene kwintlawulo yakho elandelayo xa ibhalansi yakho ifikelela kweyona mali incinci.",
+              "Kanye ngenyanga, ngaphandle kweyona mali incinci. Ikhomishini nganye iba ilungele ukuhlawulwa emva kweentsuku ezingama-30 emva kwentlawulo yomthengi, kwaye yonke into esele ilungele ukuhlawulwa ithunyelwa kwintlawulo yenyanga elandelayo kwiakhawunti ye-PayPal oyimiseleyo kwibhodi yakho yeqabane.",
+              "Sihlawula ngemali umthengi ahlawule ngayo xa i-PayPal inokuyithumela, kungenjalo sihlawula ngeedola zase-US, ngokomlinganiselo wotshintshiselwano wosuku esihlawula ngalo.",
+              "Iikhomishini zilinda iintsuku ezingama-30 ngenxa yembuyekezo. Ukuba intlawulo yomthengi ibuyisiwe, ikhomishini yayo iyarhoxiswa. Ngoko ikhomishini yentlawulo kaJanuwari iba ilungele ukuhlawulwa ngoFebruwari, ize iphume kwintlawulo yenyanga elandelayo.",
             ],
           },
           {
@@ -1115,8 +1121,8 @@ Object.assign(HELP, {
             id: "kid-safety",
             q: "Ingaba i-Gadit ikhuselekile kubantwana?",
             a: [
-              "Gadit yenzelwe ukuba umzali ayisebenzise ngokukhuselekileyo ecaleni komntwana. Imo yabantwana ivelisa iinkcazelo ezilula, ezicacileyo nezifanele ubudala (malunga nenqanaba leminyaka emi-5 ukuya kweli-10), isebenzisa injini efanayo eqhuba umxholo wabantu abadala enemiyalelo ecacileyo yokwenza lula. Akukho mxholo wenziwe ngabasebenzisi ukhe uboniswe abantwana.",
-              "Ngokuhambelana nemigaqo-nkqubo yethu nemithetho yobucala babantwana kwihlabathi liphela, iakhawunti yakho ngokwakho ingeyabaneminyaka eli-13 nangaphezulu. Abantwana basebenzisa i-Gadit ngomzali: kwisicwangciso se-Family umzali wongeza umntwana ngamnye kwiphepha le-Family, umntwana ngamnye ufumana indawo yakhe eneMo yabantwana, kwaye ibhodi yomzali ibonisa amagama akhangelwa ngumntwana ngamnye. Ukuze uqalise, qala nge-Family kwiphepha lamaxabiso.",
+              "Gadit yenzelwe ukuba umzali ayisebenzise ngokukhuselekileyo ecaleni komntwana. Imo yabantwana ivelisa iinkcazelo ezilula, ezicacileyo nezifanele ubudala, malunga nenqanaba leminyaka emi-5 ukuya kweli-10, isebenzisa injini efanayo eqhuba umxholo wabantu abadala enemiyalelo ecacileyo yokwenza lula. Akukho mxholo wenziwe ngabasebenzisi ukhe uboniswe abantwana.",
+              "Iakhawunti yakho ngokwakho yeyabantu abadala, abaneminyaka eli-18 nangaphezulu. Abantwana nabafikisayo basebenzisa Gadit ngomntu omdala. Ekhaya, umzali wongeza umntwana ngamnye kwiphepha le-Family, umntwana ngamnye ufumana indawo yakhe ene-Kids Mode, kwaye ibhodi yomzali ibonisa amagama akhangelwa ngumntwana ngamnye. Esikolweni, iklasi ifumana ilinki kutitshala, kwaye abafundi bajoyina ngaphandle kweakhawunti okanye idilesi ye-imeyile.",
             ],
           },
           {
@@ -1157,9 +1163,9 @@ Object.assign(HELP, {
             id: "change-card",
             q: "Nka fetoša bjang karata ya sekoloto ya peeletšo ya ka?",
             a: [
-              "O ka fetogela go karata ye mpsha ka nako ye nnyane go feta motsotso ntle le go khansela. Peeletšo ya gago ya bjale e tšwela pele, feela e šomiša karata ye mpsha.",
+              "O ka fetogela go karata ye mpsha ka nako ye nnyane go feta motsotso ntle le go khansela. Peeletšo ya gago ya bjale e tšwela pele, feela ka karata ye mpsha.",
               "1. Tsena go gadit.app gomme o bule \"Akhaonto\" go tšwa go menu ya akhaonto. 2. Kgotla \"Laola ditefo\". 3. Letlakala le le šireletšegilego la Stripe le a bulega. Tsenya karata ye mpsha bjalo ka mokgwa wa tefo gomme o e swaye bjalo ka ya motheo. 4. Ge o rata, tloša karata ya kgale.",
-              "Go tloga potologong ye e latelago ya tefo, tšohle di ya go karata ye mpsha. Tefo ya pele, ye e šetšego e kgobokeditšwe, e dula go karata ya kgale. Ga go nyakege pusetšo ya tšhelete ntle le ge o e nyaka ka go lebanya.",
+              "Go tloga potologong ye e latelago ya tefo, tšohle di ya go karata ye mpsha. Tefo ya pele, ye e šetšego e kgobokeditšwe, e dula go karata ya kgale. Go fetola karata ga go šiše tefo yeo goba go fetola letšatši la gago la tefo le le latelago.",
             ],
           },
           {
@@ -1209,8 +1215,9 @@ Object.assign(HELP, {
             id: "refund",
             q: "Na nka bušetšwa tšhelete?",
             a: [
-              "Ee. Ge theko e dirilwe ka gare ga matšatši a 14 gomme tirelo e sa šomišwa kudu, re ngwalele ka imeile ya akhaonto ya gago le lengwalwana le lekopana la gore ke ka lebaka la eng. Dipušetšo tšeo di dumelelwa ntle le kgang.",
-              "Ge e le go feta matšatši a 14, sehlopha se e lekola ka nngwe ka nngwe. Khansela peeletšo gore e se tšwele pele e mpshafala, gomme o re romele imeile.",
+              "Ee, ka gare ga matšatši a 14 go tloga tefong ya mathomo akhaontong ya gago, goba go mpshafatšwa ga ngwaga. Re ngwalele go support@gadit.app ka aterese ya imeile ya akhaonto ya gago gomme re bušetša tefo yeo ka botlalo. Ga go nyakege gore o fe lebaka. Pusetšo gape e feleletša peeletšo, gomme tšhelete e boela karateng yeo o lefilego ka yona, gantši ka gare ga matšatši a mošomo a 5 go ya go a 10.",
+              "Ka morago ga matšatši a 14, ditefo ga di bušetšwe, ntle le ge o lefeditšwe ka phošo goba molao moo o dulago o nyaka seo. O ka khansela neng kapa neng gore peeletšo e se sa mpshafala, gomme e dula e šoma go fihla mafelelong a nako yeo o e lefelletšego.",
+              "Na o rekile ka app ya iPhone goba iPad? Apple e laola dipusetšo tšeo go reportaproblem.apple.com.",
             ],
           },
           {
@@ -1416,8 +1423,9 @@ Object.assign(HELP, {
             id: "payout",
             q: "Ke lefelwa neng?",
             a: [
-              "Gape ka kgwedi, ge tšhelete ya gago e fihla go bonyenyane bjo bo bontšhitšwego letlakaleng la gago la taolo la molekane. Re e romela akhaontong ya PayPal ye o e beakantšego moo. Bonyenyane bjoo ke moedi wa go lokolla tefo, ga se mollwane. O ka hwetša go feta kudu, gomme o amogela tefo ge o šetše o bo fetile.",
-              "Dikhomišene di lokollwa matšatši a 30 ka morago ga tefo ya peeletšo, go dumelela sebaka sa go bušetša tšhelete. Ka fao peeletšo ya Janaware e lokollwa mathomong a Feberware gomme e tsena tefong ya gago ye e latelago ge tšhelete ya gago e fihla go bonyenyane.",
+              "Gange ka kgwedi, ntle le bonyenyane. Khomišene ye nngwe le ye nngwe e ba ye e swanetšego go lefelwa matšatši a 30 ka morago ga tefo ya moreki, gomme tšohle tše di swanetšego go lefelwa di romelwa tefong ye e latelago ya kgwedi le kgwedi go akhaonto ya PayPal yeo o e beakantšego ka go dashboard ya gago ya molekane.",
+              "Re lefa ka tšhelete yeo moreki a lefilego ka yona ge PayPal e kgona go e romela, gomme ge go se bjalo re lefa ka US dollars, ka seelo sa phapantšho sa letšatši leo re lefacago ka lona.",
+              "Dikhomišene di leta matšatši a 30 ka baka la dipusetšo. Ge tefo ya moreki e bušeditšwe, khomišene ya yona e a khanselwa. Ka fao khomišene ya tefo ya Janaware e ba ye e swanetšego go lefelwa ka Feberware, gomme e romelwa tefong ye e latelago ya kgwedi le kgwedi.",
             ],
           },
           {
@@ -1471,8 +1479,8 @@ Object.assign(HELP, {
             id: "kid-safety",
             q: "Na Gadit e bolokegile bakeng sa bana?",
             a: [
-              "Gadit e diretšwe gore motswadi a e šomiše ka polokego gotee le ngwana. Mokgwa wa bana o tšweletša ditlhalošo tše bonolo, tše di kwagalago le tše di loketšego mengwaga (maemong a mengwaga ye 5 go ya go ye 10), o šomiša enjene ye e swanago le ye e dirago diteng tša batho ba bagolo, ka ditaelo tše di kwagalago tša go nolofatša. Ga go diteng tše di dirilwego ke badiriši tšeo di kilego tša bontšhwa bana.",
-              "Go ya ka dipholisi tša rena le melao ya sephiri sa bana lefaseng ka bophara, akhaonto ya gago ka noši ke ya mengwaga ye 13 go ya godimo. Bana ba šomiša Gadit ka motswadi: go leano la Family motswadi o oketša ngwana yo mongwe le yo mongwe go tšwa letlakaleng la Family, ngwana yo mongwe le yo mongwe o hwetša sebaka sa gagwe le Mokgwa wa bana, gomme letlakala la taolo la motswadi le bontšha mantšu ao ngwana yo mongwe le yo mongwe a a nyakago. Go thoma, thoma ka Family letlakaleng la ditheko.",
+              "Gadit e diretšwe gore motswadi a e šomiše ka polokego gotee le ngwana. Mokgwa wa bana o tšweletša ditlhalošo tše bonolo, tše di bonagalago gabotse, le tše di swanetšego mengwaga, mo e ka bago maemo a bana ba mengwaga ya 5 go ya go 10, o šomiša enjene ye e swanago le ye e hlohleletšago diteng tša batho ba bagolo, ka ditaelo tše di lebanyago tša go nolofatša. Ga go diteng tše di dirilwego ke badiriši tšeo di kilego tša bontšhwa bana.",
+              "Akhaonto ya gago ka noši ke ya batho ba bagolo, ba mengwaga ya 18 go ya godimo. Bana le bafsa ba šomiša Gadit ka motho yo mogolo. Ka gae, motswadi o oketša ngwana yo mongwe le yo mongwe letlakaleng la Family, ngwana yo mongwe le yo mongwe o hwetša sebaka sa gagwe ka noši ka Mokgwa wa bana, gomme boto ya motswadi e bontšha mantšu ao ngwana yo mongwe le yo mongwe a a nyakago. Sekolong, phapoši e hwetša linki go tšwa go morutiši, gomme baithuti ba tsena ntle le akhaonto goba aterese ya imeile.",
             ],
           },
           {
@@ -1513,9 +1521,9 @@ Object.assign(HELP, {
             id: "change-card",
             q: "Ke fetola jang karata ya sekoloto mo ikwadisong ya me?",
             a: [
-              "O ka fetolela go karata e ntšha mo nakong e e kwa tlase ga motsotso kwa ntle ga go khansela. Ikwadiso ya gago ya jaanong e tswelela, fela ka karata e ntšha.",
+              "O ka fetolela go karata e ntšha mo nakong e e kwa tlase ga motsotso kwa ntle ga go khansela. Ikwadiso ya gago ya jaanong e tswelela, fela jaanong ka karata e ntšha.",
               "1. Tsena mo gadit.app mme o bule \"Akhaonto\" go tswa mo menung ya akhaonto. 2. Tobetsa \"Laola dituelo\". 3. Tsebe e e sireletsegileng ya Stripe e a bulega. Tsenya karata e ntšha e le mokgwa wa tefo mme o e tshwaye e le ya ka metlha. 4. Fa o batla, tlosa karata ya kgale.",
-              "Go tloga mo nakong e e latelang ya tefo, tsotlhe di ya mo karateng e ntšha. Tefo e e fetileng, e e setseng e duetswe, e nna mo karateng ya kgale. Ga go tlhokege pusetso ya madi ntle le fa o e batla ka tlhamalalo.",
+              "Go tloga mo nakong e e latelang ya tefo, tsotlhe di tla ya mo karateng e ntšha. Tefo e e fetileng, e e setseng e duetswe, e nna mo karateng ya kgale. Go fetola karata ga go fuduse tefo eo e bile ga go fetole letlha la gago le le latelang la tefo.",
             ],
           },
           {
@@ -1565,8 +1573,9 @@ Object.assign(HELP, {
             id: "refund",
             q: "A nka busediwa madi?",
             a: [
-              "Ee. Fa theko e dirilwe mo malatsing a a kwa tlase ga 14 a a fetileng mme tirelo e sa dirisiwa thata, re kwalele ka imeile ya akhaonto ya gago le molaetsa o mokhutshwane wa gore goreng. Dituelo tseo di dumelelwa kwa ntle ga kgang.",
-              "Fa go fetile malatsi a a fetang 14, setlhopha se tsamaisa kgang nngwe le nngwe ka bo yone. Khansela ikwadiso gore e se ka ya tswelela go ntšhafala, mme o re romelele imeile.",
+              "Ee, mo malatsing a le 14 go tswa mo tefong ya ntlha mo akhaontong ya gago, kgotsa mo ntšhafatsong ya ngwaga. Re kwalele kwa support@gadit.app ka imeile ya akhaonto ya gago mme re tla busetsa tefo eo yotlhe. Ga o tlhoke go naya lebaka. Pusetso gape e fedisa ikwadiso, mme madi a boela mo karateng e o duetseng ka yone, gantsi mo malatsing a kgwebo a le 5 go ya go 10.",
+              "Morago ga malatsi a le 14, dituelo ga di busediwe, ntle le fa o ne wa duedisiwa ka phoso kgotsa molao wa kwa o nnang teng o batla jalo. O ka khansela nako nngwe le nngwe gore ikwadiso e se ka ya ntšhafadiwa, mme e tla nna e dira go fitlha bokhutlong jwa paka e o e duetseng.",
+              "A o rekile mo app ya iPhone kgotsa iPad? Apple ke yone e tsamaisang dipusetso tseo kwa reportaproblem.apple.com.",
             ],
           },
           {
@@ -1772,8 +1781,9 @@ Object.assign(HELP, {
             id: "payout",
             q: "Ke duelwa leng?",
             a: [
-              "Gangwe ka kgwedi, fa madi a gago a fitlha mo bonnyeng jo bo bontshitsweng mo lebotong la gago la molekane. Re a romela kwa akhaontong ya PayPal e o e beileng koo. Bonnye joo ke selekanyo sa go simolola, e seng bokhutlo, o ka bona go feta moo thata, mme o amogela tefo fa o sena go bo feta.",
-              "Dikomishene di lokollwa malatsi a le 30 morago ga tefo ya ikwadiso, go letla nako ya go busetsa madi. Ka jalo ikwadiso ya Ferikgong e lokollwa kwa tshimologong ya Tlhakole, mme e tsena mo tefong ya gago e e latelang fa madi a gago a fitlha mo bonnyeng jo bo tlhokegang.",
+              "Gangwe ka kgwedi, go se na bonnye. Komishene nngwe le nngwe e tshwanela go duelwa malatsi a le 30 morago ga tefo ya moreki, mme tsotlhe tse di siametseng go duelwa di romelwa mo tefong e e latelang ya kgwedi le kgwedi kwa akhaontong ya PayPal e o e beileng mo dashboard ya gago ya molekane.",
+              "Re duela ka madi a moreki a duetseng ka one fa PayPal e kgona go a romela, mme fa go sa kgonege, re duela ka didolara tsa US, ka seelo sa phetogo ya madi sa letsatsi le re duelang ka lone.",
+              "Dikomishene di leta malatsi a le 30 ka ntlha ya dipusetso, fa tefo ya moreki e busediwa, komishene ya yone e a phimolwa. Ka jalo komishene ya tefo ya Ferikgong e tshwanela go duelwa ka Tlhakole, mme e romelwa mo tefong e e latelang ya kgwedi le kgwedi.",
             ],
           },
           {
@@ -1827,8 +1837,8 @@ Object.assign(HELP, {
             id: "kid-safety",
             q: "A Gadit e babalesegile mo baneng?",
             a: [
-              "Gadit e diretswe gore motsadi a e dirise ka polokesego mmogo le ngwana. Mokgwa wa bana o dira ditlhaloso tse di bonolo, tse di tlhamaletseng, tse di tshwanetseng dingwaga (ka nna maemo a dingwaga di le 5 go ya go 10), o dirisa enjene e e tshwanang e e dirang dikagare tsa bagolo ka ditaelo tse di tlhamaletseng tsa go nolofatsa. Ga go na dikagare tse di kwadilweng ke badirisi tse di bontshiwang bana.",
-              "Go ya ka dipholisi tsa rona le melao ya sephiri sa bana mo lefatsheng lotlhe, akhaonto ya gago a le esi ke ya dingwaga di le 13 le go feta. Bana ba dirisa Gadit ka motsadi: mo leanong la Family motsadi o oketsa ngwana mongwe le mongwe go tswa mo tsebeng ya Family, ngwana mongwe le mongwe o bona lefelo la gagwe le Mokgwa wa bana, mme lebota la batsadi le bontsha mafoko a ngwana mongwe le mongwe a a batlang. Go simolola, simolola ka Family mo tsebeng ya ditlhwatlhwa.",
+              "Gadit e diretswe gore motsadi a e dirise ka polokesego mmogo le ngwana. Mokgwa wa bana o dira ditlhaloso tse di bonolo, tse di tlhamaletseng, tse di tshwanetseng dingwaga, mo maemong a a ka nnang dingwaga di le 5 go ya go 10, o dirisa enjene e e tshwanang e e dirang dikagare tsa bagolo ka ditaelo tse di tlhamaletseng tsa go nolofatsa. Ga go na dikagare tse di dirilweng ke badirisi tse di bontshiwang bana.",
+              "Akhaonto ya gago ka bowena ke ya bagolo, ba dingwaga di le 18 go ya godimo. Bana le basha ba dirisa Gadit ka mogolo. Mo gae, motsadi o oketsa ngwana mongwe le mongwe mo tsebeng ya Family, ngwana mongwe le mongwe o bona lefelo la gagwe ka Mokgwa wa bana, mme boto ya motsadi e bontsha mafoko a ngwana mongwe le mongwe a a batlang. Kwa sekolong, phaposi e bona kgolagano go tswa kwa moruting, mme baithuti ba tsena ba sena akhaonto kgotsa aterese ya imeile.",
             ],
           },
           {
@@ -1869,9 +1879,9 @@ Object.assign(HELP, {
             id: "change-card",
             q: "Nka fetola karete ya mokitlane ngodisong ya ka jwang?",
             a: [
-              "O ka fetohela karete e ntjha ka nako e ka tlase ho motsotso ntle le ho emisa. Ngodiso ya hao ya hajwale e tswela pele, empa ka karete e ntjha.",
+              "O ka fetohela kareteng e ntjha ka nako e ka tlase ho motsotso ntle le ho hlakola. Ngodiso ya hao ya hajwale e tswela pele, feela e sebedisa karete e ntjha.",
               "1. Kena ho gadit.app mme o bule \"Akhaonte\" ho menu ya akhaonte. 2. Tobetsa \"Laola ditefo\". 3. Leqephe le sireletsehileng la Stripe le a buleha. Kenya karete e ntjha e le mokgwa wa tefo mme o e tshwaye e le ya kamehla. 4. Ha o rata, tlosa karete ya kgale.",
-              "Ho tloha nakong e latelang ya tefo, tsohle di ya kareteng e ntjha. Tefo e fetileng, e seng e nkuwe, e dula kareteng ya kgale. Ha ho hlokahale ho kgutliswa tjhelete ntle le haeba o e batla ka ho kgetheha.",
+              "Ho tloha nakong e latelang ya tefo, tsohle di tla ya kareteng e ntjha. Tefo e fetileng, e seng e nkilwe, e sala kareteng ya kgale. Ho fetola karete ha ho ise tefo eo kareteng e ntjha, hape ha ho fetole letsatsi la hao le latelang la tefo.",
             ],
           },
           {
@@ -1921,8 +1931,9 @@ Object.assign(HELP, {
             id: "refund",
             q: "Na nka kgutlisetswa tjhelete?",
             a: [
-              "E. Haeba theko e entswe nakong e ka tlase ho matsatsi a 14 mme tshebeletso e sa sebediswa haholo, re ngolle ka imeile ya akhaonte ya hao le molaetsa o mokgutshwane wa hore hobaneng. Ho kgutlisa tjhelete hoo ho dumellwa ntle le ngangisano.",
-              "Haeba ho fetile matsatsi a 14, sehlopha se sheba taba ka nngwe ka nngwe. Emisa ngodiso hore e se ke ya tswela pele ho ntjhafala, mme o re romele imeile.",
+              "E, nakong ya matsatsi a 14 ho tloha tefong ya pele akhaonteng ya hao, kapa ntjhafatsong ya selemo. Re ngolle ho support@gadit.app ka imeile ya akhaonte ya hao mme re tla kgutlisa tefo eo ka botlalo. Ha ho hlokahale hore o fane ka lebaka. Ho kgutlisa tjhelete hona ho fedisa le ngodiso, mme tjhelete e kgutlela kareteng eo o lefileng ka yona, hangata nakong ya matsatsi a 5 ho isa ho a 10 a mosebetsi.",
+              "Ka mora matsatsi a 14, ditefo ha di kgutlisetswe, ntle le haeba o lefisitswe ka phoso kapa molao wa moo o dulang o batla jwalo. O ka hlakola neng kapa neng hore ngodiso e se ke ya ntjhafala, mme e tla dula e sebetsa ho fihlela qetellong ya nako eo o e lefileng.",
+              "Na o rekile ka app ya iPhone kapa iPad? Apple e laola ho kgutlisa tjhelete hoo ho reportaproblem.apple.com.",
             ],
           },
           {
@@ -2128,8 +2139,9 @@ Object.assign(HELP, {
             id: "payout",
             q: "Ke lefuwa neng?",
             a: [
-              "Hang ka kgwedi, ha tjhelete ya hao e fihla bonyaneng bo bontshitsweng leqepheng la hao la taolo la molekane. Re e romela akhaonteng ya PayPal eo o e behileng moo. Bonyane boo ke moedi wa ho qala, eseng moedi wa ho qetela. O ka fumana ho feta haholo, mme o fumana tefo hang ha o bo feta.",
-              "Dikhomishene di lokollwa matsatsi a 30 ka mora tefo ya ngodiso, ho dumella nako ya ho kgutlisa tjhelete. Kahoo ngodiso ya Pherekgong e lokollwa qalong ya Hlakola mme e kena tefong ya hao e latelang hang ha tjhelete ya hao e fihla bonyaneng.",
+              "Hang ka kgwedi, ntle le bonyane ba tjhelete. Khomishene e nngwe le e nngwe e lokela ho lefuwa matsatsi a 30 ka mora tefo ya moreki, mme tsohle tse loketseng tefo di romelwa tefong e latelang ya kgwedi le kgwedi akhaonteng ya PayPal eo o e behileng ho dashboard ya hao ya molekane.",
+              "Re lefa ka tjhelete eo moreki a lefileng ka yona ha PayPal e ka e romela, mme ha ho sa kgonehe re lefa ka didolara tsa US, ho ya ka sekgahla sa phapanyetsano ka letsatsi leo re lefang ka lona.",
+              "Dikhomishene di ema matsatsi a 30 ka baka la ho kgutlisa tjhelete. Haeba tefo ya moreki e kgutlisetswa, khomishene ya yona e a hlakolwa. Kahoo khomishene ya tefo ya Pherekgong e lokela ho lefuwa ka Hlakola, mme e romelwa tefong e latelang ya kgwedi le kgwedi.",
             ],
           },
           {
@@ -2183,8 +2195,8 @@ Object.assign(HELP, {
             id: "kid-safety",
             q: "Na Gadit e bolokehile bakeng sa bana?",
             a: [
-              "Gadit e etseditswe hore motswadi a e sebedise ka polokeho hammoho le ngwana. Mokgwa wa bana o etsa ditlhaloso tse bonolo, tse hlakileng, le tse loketseng dilemo (hoo e ka bang boemong ba dilemo tse 5 ho isa ho tse 10), o sebedisa enjene e tshwanang e etsang dikahare tsa batho ba baholo ka ditaelo tse hlakileng tsa ho nolofatsa. Ha ho dikahare tse etswang ke basebedisi tse kileng tsa bontshwa bana.",
-              "Ho ya ka maano a rona le melao ya lekunutu la bana lefatsheng ka bophara, akhaonte ya hao o le mong ke ya dilemo tse 13 le ho feta. Bana ba sebedisa Gadit ka motswadi: leanong la Family motswadi o eketsa ngwana e mong le e mong ho tswa leqepheng la Family, ngwana e mong le e mong o fumana sebaka sa hae le Mokgwa wa bana, mme leqephe la taolo la motswadi le bontsha mantswe ao ngwana e mong le e mong a a batlang. Ho qala, qala ka Family leqepheng la ditheko.",
+              "Gadit e etseditswe hore motswadi a e sebedise ka polokeho hammoho le ngwana. Mokgwa wa bana o etsa ditlhaloso tse bonolo, tse tobileng, le tse loketseng dilemo, hoo e ka bang boemong ba dilemo tse 5 ho isa ho tse 10, o sebedisa enjene e tshwanang e etsang dikahare tsa batho ba baholo ka ditaelo tse hlakileng tsa ho nolofatsa. Ha ho dikahare tse etswang ke basebedisi tse bontshwang bana.",
+              "Akhaonte ya hao ke ya batho ba baholo, ba dilemo tse 18 ho ya hodimo. Bana le batjha ba sebedisa Gadit ka motho e moholo. Lapeng, motswadi o eketsa ngwana e mong le e mong leqepheng la Family, ngwana e mong le e mong o fumana sebaka sa hae ka Mokgwa wa bana, mme boto ya motswadi e bontsha mantswe ao ngwana e mong le e mong a a batlang. Sekolong, tlelase e fumana lehokela ho tswa ho titjhere, mme baithuti ba kena ntle le akhaonte kapa aterese ya imeile.",
             ],
           },
           {
@@ -2227,7 +2239,7 @@ Object.assign(HELP, {
             a: [
               "Mi nga cincela eka khadi lerintshwa hi nkarhi wa le hansi ka minete handle ka ku khansela. Mbhaliso wa n'wina wa sweswi wu tshama wu ri karhi wu tirha, ntsena hi khadi lerintshwa.",
               "1. Nghenani eka gadit.app kutani mi pfula \"Akhawunti\" eka menyu ya akhawunti. 2. Thintani \"Lawula ku hakela\". 3. Tluka leri sirhelelekeke ra Stripe ri ta pfuleka. Engetelani khadi lerintshwa tanihi ndlela yo hakela kutani mi ri veka tanihi ra ntolovelo. 4. Loko mi lava, susani khadi ra khale.",
-              "Ku sukela eka nkarhi lowu landzelaka wa ku hakela, hinkwaswo swi ta ya eka khadi lerintshwa. Ku hakerisiwa ka khale, loku se ku hakeriweke, ku tshama eka khadi ra khale. A ku laveki ku vuyiseriwa mali handle ka loko mi swi lava hi ku kongoma.",
+              "Ku sukela eka nkarhi lowu landzelaka wa ku hakela, hinkwaswo swi ta ya eka khadi lerintshwa. Ku hakerisiwa ka khale, loku se ku hakeriweke, ku tshama eka khadi ra khale. Ku cinca khadi a swi hundziseli ku hakerisiwa koloko naswona a swi cinci siku ra n'wina leri landzelaka ra ku hakela.",
             ],
           },
           {
@@ -2277,8 +2289,9 @@ Object.assign(HELP, {
             id: "refund",
             q: "Xana ndzi nga vuyiseriwa mali?",
             a: [
-              "Ina. Loko ku xava ku endliwe emahlweni ka masiku ya 14 naswona vukorhokeri byi nga tirhisiwanga ngopfu, hi tsaleleni hi imeyili ya akhawunti ya n'wina na rungula ro koma leri hlamuselaka xivangelo. Ku vuyiseriwa mali koloko ku pfumeleriwa handle ka ku lwisana.",
-              "Loko ku hundze masiku yo tlula 14, ntlawa wu languta xiyimo xin'wana na xin'wana hi xoxe. Khanselani mbhaliso leswaku wu nga yi emahlweni wu pfuxetiwa, kutani mi hi rhumela imeyili.",
+              "Ina, endzeni ka masiku ya 14 ku sukela eka ku hakela ko sungula eka akhawunti ya wena, kumbe eka ku pfuxetiwa ka lembe. Hi tsaleleni eka support@gadit.app hi imeyili ya akhawunti ya wena, kutani hi ta vuyisa hakelo rero hinkwaro. A swi lavi leswaku u nyika xivangelo. Ku vuyiseriwa mali ku tlhela ku herisa mbhaliso, naswona mali yi tlhelela eka khadi leri u hakeriseke ha rona, hi ntolovelo endzeni ka 5 ku fika eka 10 wa masiku ya bindzu.",
+              "Endzhaku ka masiku ya 14, ku hakela a ku vuyiseriwi, handle ka loko u hakerisiwile hi xihoxo kumbe nawu wa laha u tshamaka kona wu swi lava. U nga khansela nkarhi wun'wana na wun'wana leswaku mbhaliso wu nga pfuxetiwi, naswona wu tshama wu tirha ku fika emakumu ka nkarhi lowu u wu hakeriseke.",
+              "U xave eka app ya iPhone kumbe iPad? Apple hi yona yi endlaka ku vuyiseriwa koloko eka reportaproblem.apple.com.",
             ],
           },
           {
@@ -2484,8 +2497,9 @@ Object.assign(HELP, {
             id: "payout",
             q: "Ndzi hakeriwa rini?",
             a: [
-              "Kan'we hi n'hweti, loko mali ya n'wina yi fika eka ntsengo wa le hansi lowu kombisiweke eka dashibodo ya n'wina ya mutirhisani. Hi yi rhumela eka akhawunti ya PayPal leyi mi yi vekeke kwalaho. Ntsengo wa le hansi i ndzilakano wa ku sungula, a hi wa le henhla. Mi nga kuma swo tala swinene, naswona mi amukela ku hakeriwa loko mi wu tlula.",
-              "Tikhomixini ti humesiwa endzhaku ka masiku ya 30 ku sukela eka ku hakela ka mbhaliso, leswaku ku va na nkarhi wa ku vuyiseriwa mali. Hikwalaho khomixini ya mbhaliso wa Sunguti yi humesiwa eku sunguleni ka Nyenyanyana, kutani yi nghena eka ku hakeriwa ka n'wina loku landzelaka loko mali ya n'wina yi fika eka ntsengo wa le hansi.",
+              "Kan'we hi n'hweti, handle ka ntsengo wa le hansi. Khomixini yin'wana na yin'wana yi lunghekela ku hakeriwa masiku ya 30 endzhaku ka ku hakela ka muxavi, naswona hinkwaswo leswi lunghekeleke swi rhumeriwa eka ku hakeriwa ka n'hweti loku landzelaka eka akhawunti ya PayPal leyi mi yi vekeke eka dashibodo ya n'wina ya mutirhisani.",
+              "Hi hakela hi mali leyi muxavi a hakeriseke ha yona loko PayPal yi kota ku yi rhumela, naswona loko swi nga koteki, hi hakela hi tidolara ta US, hi mpimo wa ku cincana ka mali wa siku leri hi hakeraka ha rona.",
+              "Tikhomixini ti tshama masiku ya 30 hikwalaho ka ku vuyiseriwa mali, loko ku hakela ka muxavi ku vuyiseriwa, khomixini ya kona ya khanseleriwa. Hikwalaho khomixini ya ku hakela ka Sunguti yi lunghekela ku hakeriwa hi Nyenyanyana, kutani yi huma eka ku hakeriwa ka n'hweti loku landzelaka.",
             ],
           },
           {
@@ -2539,8 +2553,8 @@ Object.assign(HELP, {
             id: "kid-safety",
             q: "Xana Gadit yi hlayisekile eka vana?",
             a: [
-              "Gadit yi endleriwe leswaku mutswari a yi tirhisa hi ndlela leyi hlayisekeke a ri na n'wana. Xiyimo xa vana xi endla tinhlamuselo to olova, leti kongomeke, leti fambelanaka na malembe (kwalomu ka xiyimo xa malembe ya 5 ku ya eka 10), hi ku tirhisa njini leyi fanaka na leyi endlaka vuxokoxoko bya vanhu lavakulu yi ri na swiletelo swo kongoma swo olovisa. A ku na vuxokoxoko lebyi tsariweke hi vatirhisi lebyi kombisiwaka vana nikatsongo.",
-              "Hi ku landza tipholisi ta hina na milawu ya xihundla xa vana emisaveni hinkwayo, akhawunti ya wena hi wexe i ya malembe ya 13 ku ya ehenhla. Vana va tirhisa Gadit hi ku tirhisa mutswari: eka pulani ya Family mutswari u engetela n'wana un'wana na un'wana eka tluka ra Family, n'wana un'wana na un'wana u kuma ndhawu ya yena na Xiyimo xa vana, naswona dashibodo ya vatswari yi kombisa marito lawa n'wana un'wana na un'wana a ma lavaka. Ku swi lulamisa, sungulani hi Family eka tluka ra minxavo.",
+              "Gadit yi endleriwe leswaku mutswari a yi tirhisa hi ndlela leyi hlayisekeke a ri na n'wana. Xiyimo xa vana xi endla tinhlamuselo to olova, leti kongomeke, leti fambelanaka na malembe, kwalomu ka xiyimo xa malembe ya 5 ku ya eka 10, hi ku tirhisa njini leyi fanaka na leyi endlaka vuxokoxoko bya vanhu lavakulu yi ri na swiletelo swo kongoma swo olovisa. A ku na vuxokoxoko lebyi tsariweke hi vatirhisi lebyi kombisiwaka vana nikatsongo.",
+              "Akhawunti ya wena hi wexe i ya vanhu lavakulu, va 18 ku ya ehenhla. Vana na vantshwa va tirhisa Gadit hi ku tirhisa munhu lonkulu. Ekaya, mutswari u engetela n'wana un'wana na un'wana eka tluka ra Family, n'wana un'wana na un'wana u kuma ndhawu ya yena na Xiyimo xa vana, naswona dashibodo ya vatswari yi kombisa marito lawa n'wana un'wana na un'wana a ma lavaka. Exikolweni, tlilasi yi kuma linki ku suka eka mudyondzisi, kutani vadyondzi va nghena handle ka akhawunti kumbe adirese ya imeyili.",
             ],
           },
           {
@@ -2583,7 +2597,7 @@ Object.assign(HELP, {
             a: [
               "Ungashintjela kulikhadi lelisha ngaphansi kwemzuzu ngaphandle kwekukhansela. Kubhalisa kwakho kwanyalo kuchubeka, kodvwa ngelikhadi lelisha.",
               "1. Ngena ku-gadit.app bese uvula \"I-akhawunti\" kumenyu ye-akhawunti. 2. Cindzetela \"Phatsa tinkhokhelo\". 3. Kuvuleka likhasi le-Stripe lelivikelekile. Faka likhadi lelisha njengendlela yekukhokha bese ulibeka njengaleliyinhloko. 4. Uma utsandza, susa likhadi lelidzala.",
-              "Kusukela emjikelezweni lolandzelako wekukhokha, konkhe kuya kulikhadi lelisha. Inkhokhelo yangaphambilini, lese ivele yakhokhwa, ihlala kulikhadi lelidzala. Akudzingeki kubuyiselwa imali ngaphandle uma uyifuna ngco.",
+              "Kusukela emjikelezweni lolandzelako wekukhokha, konkhe kuya kulikhadi lelisha. Inkhokhelo yangaphambilini, lese ivele yakhokhwa, ihlala kulikhadi lelidzala. Kushintja likhadi akuyisusi leyonkhokhelo futsi akuguquli lusuku lwakho lolulandzelako lwekukhokha.",
             ],
           },
           {
@@ -2633,8 +2647,9 @@ Object.assign(HELP, {
             id: "refund",
             q: "Ngingabuyiselwa imali yini?",
             a: [
-              "Yebo. Uma kutsenga kwenteke emalanga langaphansi kwa-14 lendlulile futsi lusito lungakasetjentiswa kakhulu, sibhalele une-imeyili ye-akhawunti yakho kanye nenchazelo lefishane yekutsi kungani. Leto timali letibuyiselwako tiyavunywa ngaphandle kwenkinga.",
-              "Uma sekudlule emalanga langetulu kwa-14, licembu likubuka ngalinye ngalinye. Khansela kubhalisa kute kungachubeki nekuvuseleleka, bese usitfumelela i-imeyili.",
+              "Yebo, kungakapheli emalanga la-14 kusukela ekukhokheni kwekucala ku-akhawunti yakho, nobe ekuvuseleleni kwemnyaka. Sibhalele ku-support@gadit.app usebentisa likheli le-imeyili lelihlobene ne-akhawunti yakho, bese siyibuyisela yonkhe leyonkhokhelo. Akudzingeki unike sizatfu. Kubuyiselwa kwemali kuphetsa nekubhalisa, futsi imali ibuyela kulelikhadi lokhokhe ngalo, imvamisa emalangeni ebhizinisi la-5 kuya kula-10.",
+              "Ngemuva kwemalanga la-14, tinkhokhelo atibuyiselwa, ngaphandle kwekutsi ukhokhiswe ngeliphutsa nobe umtsetfo walapho uhlala khona ukufuna njalo. Ungakhansela noma kunini kute kubhalisa kungaphindzi kuvuseleleke, futsi kuhlala kusebenta kuze kube sekupheleni kwesikhatsi losikhokhele.",
+              "Uthenge kuhlelo lwe-iPhone nobe iPad? Apple nguyena losingatsa loko kubuyiselwa kwemali ku-reportaproblem.apple.com.",
             ],
           },
           {
@@ -2840,8 +2855,9 @@ Object.assign(HELP, {
             id: "payout",
             q: "Ngikhokhelwa nini?",
             a: [
-              "Kanye ngenyanga, uma ibhalansi yakho ifinyelela kusayizi lomncane lokhonjisiwe elibhodini lakho lemlingani. Siyitfumela ku-akhawunti ye-PayPal loyibeke khona. Lowomncane usilinganiselo, hhayi siphetfo. Ungahola lokunyenti kakhulu, futsi utfola inkhokhelo uma sewuwedlulile.",
-              "Tikhomishini tikhululwa emalanga langu-30 ngemuva kwenkhokhelo yekubhalisa, kute kube nesikhatsi sekubuyiselwa kwemali. Ngako kubhalisa kwaJanuwari kukhululwa ekucaleni kwaFebruwari futsi kungena enkhokhelweni yakho lelandzelako uma ibhalansi yakho ifinyelela kulowo mncane.",
+              "Kanye ngenyanga, ngaphandle kwemali lencane leyimfanelo. Ikhomishini ngayinye ifanele kukhokhwa emalanga la-30 ngemuva kwekukhokha kwemtsengi, futsi konkhe lokufanele kukhokhwe kutfunyelwa enkhokhelweni yenyanga lelandzelako ku-akhawunti ye-PayPal loyibeke ebhodini lakho lemlingani.",
+              "Sikhokha ngemali lefanako naleyo letsengi ayikhokhe ngayo uma PayPal ingayitfumela, kantsi uma kungenjalo sikhokha ngemadola aseMelika, ngekushintjiswa kwemali ngalelo langa lesikhokha ngalo.",
+              "Tikhomishini tilindza emalanga la-30 ngenca yekubuyiselwa kwemali, nangabe inkhokhelo yemtsengi ibuyiselwa, ikhomishini yayo iyacishwa. Ngako ikhomishini yenkhokhelo yaJanuwari iba ngulefanele kukhokhwa ngaFebhuwari, bese iphuma enkhokhelweni yenyanga lelandzelako.",
             ],
           },
           {
@@ -2895,8 +2911,8 @@ Object.assign(HELP, {
             id: "kid-safety",
             q: "Gadit iphephile yini kubantfwana?",
             a: [
-              "Gadit yakhelwe kutsi umtali ayisebentise ngekuphepha ahlanganyela nemntfwana. Simo sebantfwana sikhicita tinchazelo letilula, leticacile, letifanele iminyaka (cishe lizinga leminyaka lesuka ku-5 kuya ku-10), sisebentisa injini lefanako lesebentela lokucuketfwe kwebantfu labadzala kanye netinkhombandlela letibonakalako tekwenta kube lula. Kute lokucuketfwe lokubhalwe ngubasebentisi lokukhonjiswa bantfwana.",
-              "Ngekuvumelana netinchubomgomo tetfu nemitsetfo yemfihlo yebantfwana emhlabeni wonkhe, i-akhawunti yakho uwedvwa ingeyalabaneminyaka leli-13 kuya etulu. Bantfwana basebentisa Gadit ngemtali: kulihlelo le-Family umtali wengeta umntfwana ngamunye ekhasini le-Family, umntfwana ngamunye utfola indzawo yakhe lenaSimo sebantfwana, futsi libhodi lemtali likhombisa emagama umntfwana ngamunye lawaseshako. Kute ucale, cala nge-Family ekhasini lematengo.",
+              "Gadit yakhelwe kutsi umtali ayisebentise ngekuphepha ahlanganyela nemntfwana. Simo sebantfwana sikhicita tinchazelo letilula, leticacile, letifanele iminyaka, cishe lizinga leminyaka lesuka ku-5 kuya ku-10, sisebentisa injini lefanako lesebentela lokucuketfwe kwebantfu labadzala kanye netinkhombandlela letibonakalako tekwenta kube lula. Kute lokucuketfwe lokubhalwe ngubasebentisi lokukhonjiswa bantfwana.",
+              "I-akhawunti yakho uwedvwa yebantfu labadzala, labaneminyaka leli-18 kuya etulu. Bantfwana nebasha basebentisa Gadit ngemuntfu lomdzala. Ekhaya, umtali wengeta umntfwana ngamunye ekhasini le-Family, umntfwana ngamunye utfola indzawo yakhe lenaSimo sebantfwana, futsi libhodi lemtali likhombisa emagama umntfwana ngamunye lawaseshako. Esikolweni, liklasi litfola lilinki ku-thishela, futsi bafundzi bajoyina ngaphandle kwe-akhawunti nobe likheli le-imeyili.",
             ],
           },
           {
@@ -2939,7 +2955,7 @@ Object.assign(HELP, {
             a: [
               "Ni nga shandukela kha garaṱa ntswa nga fhasi ha minithi, ni sa khansele. Ṅwaliso waṋu wa zwino u bvela phanḓa u tshi shuma, fhedzi nga garaṱa ntswa.",
               "1. Dzhenani kha gadit.app ni vule \"Akhaunthu\" kha menu ya akhaunthu. 2. Kiḽikani \"Langani mbadelo\". 3. Siaṱari ḽo tsireledzeaho ḽa Stripe ḽi ḓo vulea. Engedzani garaṱa ntswa sa ndila ya mbadelo nahone ni i swaye sa ya default. 4. Arali ni tshi ṱoḓa, bvisani garaṱa ya kale.",
-              "U bva kha murendelo wa mbadelo u tevhelaho, zwoṱhe zwi ḓo ya kha garaṱa ntswa. Mbadelo yo fhiraho, ye ya no kuvhanganywa kale, i dzula kha garaṱa ya kale. A hu ṱoḓei u humiselwa tshelede nga nnḓa ha musi ni tshi i ṱoḓa nga ho khetheaho.",
+              "U bva kha murendelo wa mbadelo u tevhelaho, zwoṱhe zwi ḓo ya kha garaṱa ntswa. Mbadelo yo fhiraho, ye ya no kuvhanganywa kale, i dzula kha garaṱa ya kale. U shandukisa garaṱa a zwi sudzulusi yeneyo mbadelo nahone a zwi shanduli datumu yaṋu ya mbadelo i tevhelaho.",
             ],
           },
           {
@@ -2989,8 +3005,9 @@ Object.assign(HELP, {
             id: "refund",
             q: "Naa ndi nga humiselwa tshelede?",
             a: [
-              "Ee. Arali na renga hu sa athu u fhela maḓuvha a 14 nahone tshumelo i songo shumiswa nga maanḓa, ri ṅwaleleni nga imeiḽi ya akhaunthu yaṋu na mulaedza mupfufhi wa uri ndi ngani. U humiselwa honoho hu tendelwa hu si na nndwa.",
-              "Arali ho fhira maḓuvha a 14, tshigwada tshi sedza nga nḓila ya mulandu muṅwe na muṅwe. Khanselani ṅwaliso uri u si bvele phanḓa u tshi vusuluswa, ni ri rumele imeiḽi.",
+              "Ee, nga ngomu ha maḓuvha a 14 u bva kha mbadelo ya u thoma kha akhaunthu yaṋu, kana u bva kha u vusuluswa ha ṅwaha. Ṅwalelani support@gadit.app nga ḓiresi ya imeiḽi ya akhaunthu yaṋu, ri kone u humisela yeneyo mbadelo yoṱhe. A ni tei u ṋea tshiitisi. U humiselwa honohu hu dovha ha fhelisa ṅwaliso, nahone tshelede i humela kha garaṱa ye na badela ngayo, kanzhi nga ngomu ha maḓuvha a 5 u swika 10 a mushumo.",
+              "Nga murahu ha maḓuvha a 14, mbadelo a dzi humiswi, nnḓani ha musi no badeliswa nga vhukhakhi kana mulayo wa fhethu hune na dzula hone wa zwi ṱoḓa. Ni nga khansela tshifhinga tshiṅwe na tshiṅwe uri ṅwaliso i si vusuluswe, nahone i dzula i hone u swika mafheloni a tshifhinga tshe na tshi badela.",
+              "No renga kha app ya iPhone kana iPad? Apple ndi yone i langaho u humiselwa uho kha reportaproblem.apple.com.",
             ],
           },
           {
@@ -3196,8 +3213,9 @@ Object.assign(HELP, {
             id: "payout",
             q: "Ndi ḓo badelwa lini?",
             a: [
-              "Luthihi nga ṅwedzi, musi tshelede yaṋu i tshi swika kha minimamu i sumbedzwaho kha tshikirini tshaṋu tsha mushumisani. Ri i rumela kha akhaunthu ya PayPal ye na i vhea henefho. Minimamu ndi mukano, a si mupimo wa nṱha, ni nga wana zwinzhi u fhira zwenezwo, nahone ni ṱanganedza mbadelo musi ni tshi i fhira.",
-              "Khomishini dzi bviswa nga murahu ha maḓuvha a 30 a mbadelo ya ṅwaliso, u itela fasiṱere ya u humiselwa tshelede. Ngauralo, khomishini ya ṅwaliso wa January i bviswa mathomoni a February nahone i dzhena kha mbadelo yaṋu i tevhelaho musi tshelede yaṋu i tshi swika kha minimamu.",
+              "Luthihi nga ṅwedzi, hu si na minimamu. Khomishini iṅwe na iṅwe i no tea u badelwa i swika nga murahu ha maḓuvha a 30 u bva kha mbadelo ya mukhasitama, nahone zwoṱhe zwine zwa tea u badelwa zwi rumelwa kha mbadelo ya ṅwedzi i tevhelaho kha akhaunthu ya PayPal ye na i vhea kha dashboard yaṋu ya mushumisani.",
+              "Ri badela nga tshelede ye mukhasitama a badela ngayo musi PayPal i tshi kona u i rumela, arali zwi sa konadzei, ri badela nga dzi dollar dza Amerika, nga tshikalo tsha u shandukisa tshelede tsha ḓuvha ḽine ra badela ngalo.",
+              "Khomishini dzi lindela maḓuvha a 30 nga mulandu wa u humiselwa tshelede. Arali mbadelo ya mukhasitama ya humiselwa, khomishini yayo i a fheliswa. Ngauralo khomishini ya mbadelo ya January i swika u tea u badelwa nga February, nahone i bva kha mbadelo ya ṅwedzi i tevhelaho.",
             ],
           },
           {
@@ -3251,8 +3269,8 @@ Object.assign(HELP, {
             id: "kid-safety",
             q: "Naa Gadit yo tsireledzea kha vhana?",
             a: [
-              "Gadit yo itelwa uri mubebi a i shumise nga nḓila yo tsireledzeaho e na ṅwana. Tshiimo tsha vhana tshi ita ṱhalutshedzo dzo leluwaho, dzi pfeseseaho, nahone dzi tshimbilelanaho na miṅwaha (tsini na vhuimo ha miṅwaha ya 5 u swika 10), hu tshi shumiswa tshishumiswa tshine tsha ita zwithu zwa vhahulwane hu na ndaela dzo khetheaho dza u leludza. A hu na zwithu zwo ṅwalwaho nga vhashumisi zwine zwa sumbedzwa vhana.",
-              "U ya nga mbekanyamaitele dzashu na milayo ya tshiphiri tsha vhana shangoni ḽoṱhe, akhaunthu ya muthu e eṱhe ndi ya miṅwaha ya 13 u ya nṱha. Vhana vha shumisa Gadit nga kha mubebi: kha pulane ya Family mubebi u engedza ṅwana muṅwe na muṅwe u bva kha siaṱari ḽa Family, ṅwana muṅwe na muṅwe u wana fhethu hawe na Tshiimo tsha vhana, nahone tshikirini tsha vhabebi tshi sumbedza maipfi ane ṅwana muṅwe na muṅwe a a ṱoḓa. U zwi thoma, thomani nga Family kha siaṱari ḽa mitengo.",
+              "Gadit yo itelwa uri mubebi a i shumise nga nḓila yo tsireledzeaho e na ṅwana. Tshiimo tsha vhana tshi ita ṱhalutshedzo dzo leluwaho, dza vhukuma, nahone dzi tshimbilelanaho na miṅwaha, tsini na vhuimo ha miṅwaha ya 5 u swika 10, hu tshi shumiswa tshishumiswa tshenetsho tshithihi tshi shumaho kha zwithu zwa vhahulwane, fhedzi hu na ndaela dzo livhaho dza u leludza. A hu na zwo itwaho nga vhashumisi zwine zwa sumbedzwa vhana.",
+              "Akhaunthu yaṋu ndi ya vhahulwane, vha miṅwaha ya 18 u ya nṱha. Vhana na vhaswa vha shumisa Gadit nga kha muhulwane. Hayani, mubebi u engedza ṅwana muṅwe na muṅwe kha siaṱari ḽa Family, ṅwana muṅwe na muṅwe a wana fhethu hawe ho khetheaho hu re na Tshiimo tsha vhana, nahone bodo ya mubebi i sumbedza maipfi ane ṅwana muṅwe na muṅwe a a ṱoḓa. Tshikoloni, kilasi i wana vhukwamani u bva kha mudededzi, nahone vhagudiswa vha dzhena hu si na akhaunthu kana ḓiresi ya imeiḽi.",
             ],
           },
           {
@@ -3295,7 +3313,7 @@ Object.assign(HELP, {
             a: [
               "Ungatjhentjhela kukarada etjha ngaphasi komzuzu ngaphandle kokukhansela. Ukubhalisela kwakho kwanje kuragela phambili, kwaphela ngekarada etjha.",
               "1. Ngena ku-gadit.app bese uvula \"I-akhawunti\" kusuka kumenyu ye-akhawunti. 2. Qhwarhaza \"Lawula ukubhadela\". 3. Kuzokuvuleka ikhasi le-Stripe eliphephileko. Faka ikarada etjha njengendlela yokubhadela bese uyibeka njengejayelekileko. 4. Nawufuna, susa ikarada endala.",
-              "Kusukela esikhathini sokubhadela esilandelako, koke kuya kukarada etjha. Ukubhadeliswa kwangaphambili, osekuqoqiwe, kuhlala kukarada endala. Akutlhogeki ukubuyiselwa imali ngaphandle kobana uyifuna ngokuqondileko.",
+              "Kusukela esikhathini sokubhadela esilandelako, koke kuya kukarada etjha. Ukubhadeliswa kwangaphambili, osekuqoqiwe, kuhlala kukarada endala. Ukutjhentjha ikarada akususi lokho kubhadeliswa begodu akutjhentjhi ilanga lakho elilandelako lokubhadela.",
             ],
           },
           {
@@ -3345,8 +3363,9 @@ Object.assign(HELP, {
             id: "refund",
             q: "Ngingabuyiselwa imali?",
             a: [
-              "Iye. Nange ukuthenga kwenzeke ngaphasi kwamalanga ali-14 adlulileko begodu umsebenzi ungakasetjenziswa khulu, sitlolele nge-imeyili ye-akhawunti yakho nombhalo omfitjhani wesizathu. Ukubuyiselwa imali okunjalo kuvunyelwa ngaphandle kobudisi.",
-              "Nange sekudlule amalanga ali-14, ithimba likuphatha ngokwesimo ngasinye. Khansela ukubhalisela bona kungaragi kuzivuselela, bese usithumelela i-imeyili.",
+              "Iye, kungakapheli amalanga ali-14 kusukela ekubhadeleni kokuthoma ku-akhawunti yakho, namkha ekuvuseleleni komnyaka. Sitlolele ku-support@gadit.app usebenzisa i-imeyili ye-akhawunti yakho, bese sikubuyisele leyo mbhadelo ngokuzeleko. Akutlhogeki ukunikeza isizathu. Ukubuyiselwa imali kuqeda nokubhalisela, begodu imali ibuyela ekaradeni obhadele ngayo, ngokujayelekileko kungakapheli amalanga womsebenzi ama-5 ukuya kali-10.",
+              "Ngemva kwamalanga ali-14, iimbhadelo azibuyiselwa, ngaphandle kobana ubhadeliswe ngephoso namkha umthetho walapho uhlala khona ukufuna njalo. Ungakhansela nanyana kunini bona ukubhalisela kungavuseleleki, begodu kuhlala kusebenza bekube sekupheleni kwesikhathi osibhadeleleko.",
+              "Uthenge kuhlelo lwe-iPhone namkha lwe-iPad? Apple ilawula lokho kubuyiselwa imali ku-reportaproblem.apple.com.",
             ],
           },
           {
@@ -3552,8 +3571,9 @@ Object.assign(HELP, {
             id: "payout",
             q: "Ngibhadelwa nini?",
             a: [
-              "Kanye ngenyanga, lokha ibhalansi yakho nayifika enanini elincani elitjengiswe edeshibhodini yakho yomlingani. Siyithumela ku-akhawunti ye-PayPal oyibeke khona. Lelo nani elincani lisilinganiso sokuthoma, akusimkhawulo ophezulu. Ungazuza okunengi khulu, begodu uthola umbhadelo nawudlula khona.",
-              "Iinkhomitjhini zikhululwa ngemva kwamalanga ama-30 ngemva kokubhadelela ukubhalisela, bona kube nesikhathi sokubuyiselwa imali. Ngalokho ikhomitjhini yokubhalisela kwakaJanabari ikhululwa ekuthomeni kwakaFebherbari, bese ingena embhadelweni wakho olandelako lokha ibhalansi yakho nayifika enanini elincani.",
+              "Kanye ngenyanga, ngaphandle kwenani elincani. Ikhomitjhini ngayinye iyabhadeka ngemva kwamalanga ama-30 ngemva kombhadelo wekhasimende, begodu koke okubhadelekako kuthunyelwa embhadelweni wenyanga olandelako ku-akhawunti ye-PayPal oyibeke edeshibhodini yomlingani wakho.",
+              "Sibhadala ngemali ikhasimende elibhadele ngayo lokha i-PayPal nakwaziko ukuyithumela, kungenjalo sibhadala ngama-US dollars, ngesilinganiso sokutjhentjha imali selanga esibhadala ngalo.",
+              "Iinkhomitjhini zilinda amalanga ama-30 ngebanga lokubuyiselwa imali, nangabe umbhadelo wekhasimende ubuyiselwa, ikhomitjhini yawo iyakhanselwa. Ngalokho ikhomitjhini yombhadelo wangoJanabari iba ngebhadelekako ngoFebherbari, bese ithunyelwa embhadelweni wenyanga olandelako.",
             ],
           },
           {
@@ -3607,8 +3627,8 @@ Object.assign(HELP, {
             id: "kid-safety",
             q: "I-Gadit iphephile kubantwana?",
             a: [
-              "I-Gadit yakhelwe bona umbelethi ayisebenzise ngokuphephileko kunye nomntwana. Imodi yabantwana yenza iinhlathululo ezilula, eziqondileko nezifanele ubudala (ezingeni leminyaka ema-5 ukuya kweli-10 ngokuseduze), isebenzisa injini efanako esebenzisela okuqukethwe kwabadala kunye neenyeleliso eziqondileko zokwenza kube lula. Okuqukethwe okwenziwe ngabasebenzisi akukhe kwatjengiswa abantwana.",
-              "Ngokuvumelana nemithetho yethu nemithetho yefihlo yabantwana ephasini loke, i-akhawunti yakho ngokwakho ngeyeminyaka eli-13 nangaphezulu. Abantwana basebenzisa i-Gadit ngombelethi: ehlelweni le-Family umbelethi ufaka umntwana ngamunye ekhasini lomndeni, umntwana ngamunye uthola indawo yakhe eneModi yabantwana, begodu ibhodi yababelethi itjengisa amezwi umntwana ngamunye awafunako. Bona ukulungiselele, thoma nge-Family ekhasini lamanani.",
+              "I-Gadit yakhelwe bona umbelethi ayisebenzise ngokuphephileko kunye nomntwana. Imodi yabantwana yenza iinhlathululo ezilula, eziqondileko nezifanele ubudala, ezisezingeni leminyaka ema-5 ukuya kweli-10, isebenzisa injini efanako esebenzisela okuqukethwe kwabadala kunye neenyeleliso eziqondileko zokwenza kube lula. Okuqukethwe okwenziwe ngabasebenzisi akukhe kwatjengiswa abantwana.",
+              "I-akhawunti yakho ngokwakho ngeyabadala, abaneminyaka eli-18 ukuya phezulu. Abantwana nabatjha basebenzisa i-Gadit ngomuntu omdala. Ekhaya, umbelethi ufaka umntwana ngamunye ekhasini le-Family, umntwana ngamunye uthola indawo yakhe ene-Kids Mode, begodu ibhodi yababelethi itjengisa amezwi umntwana ngamunye awafunako. Esikolweni, iklasi ithola ilinki ethiwe ngutitjhere, begodu abafundi bajoyina ngaphandle kwe-akhawunti namkha ikheli le-imeyili.",
             ],
           },
           {
@@ -3649,9 +3669,9 @@ Object.assign(HELP, {
             id: "change-card",
             q: "Πώς αλλάζω την πιστωτική κάρτα στη συνδρομή μου;",
             a: [
-              "Μπορείς να περάσεις σε νέα κάρτα σε λιγότερο από ένα λεπτό, χωρίς να ακυρώσεις τίποτα. Η τρέχουσα συνδρομή σου συνεχίζει κανονικά, απλώς με τη νέα κάρτα.",
+              "Μπορείς να περάσεις σε νέα κάρτα σε λιγότερο από ένα λεπτό, χωρίς να ακυρώσεις. Η τρέχουσα συνδρομή σου συνεχίζει κανονικά, απλώς με τη νέα κάρτα.",
               "1. Συνδέσου στο gadit.app και άνοιξε το \"Λογαριασμός\" από το μενού λογαριασμού. 2. Πάτησε \"Διαχείριση χρέωσης\". 3. Ανοίγει μια ασφαλής σελίδα του Stripe. Πρόσθεσε τη νέα κάρτα ως τρόπο πληρωμής και όρισέ την ως προεπιλογή. 4. Προαιρετικά, αφαίρεσε την παλιά κάρτα.",
-              "Από τον επόμενο κύκλο χρέωσης και μετά, όλα πηγαίνουν στη νέα κάρτα. Η προηγούμενη χρέωση, που έχει ήδη εισπραχθεί, παραμένει στην παλιά κάρτα. Δεν χρειάζεται επιστροφή χρημάτων, εκτός αν τη θέλεις ειδικά.",
+              "Από τον επόμενο κύκλο χρέωσης και μετά, όλα περνούν στη νέα κάρτα. Η προηγούμενη χρέωση, που έχει ήδη εισπραχθεί, μένει στην παλιά κάρτα. Η αλλαγή κάρτας δεν μεταφέρει αυτή τη χρέωση και δεν αλλάζει την ημερομηνία της επόμενης χρέωσης.",
             ],
           },
           {
@@ -3701,8 +3721,9 @@ Object.assign(HELP, {
             id: "refund",
             q: "Μπορώ να πάρω επιστροφή χρημάτων;",
             a: [
-              "Ναι. Αν η αγορά έγινε πριν από λιγότερο από 14 ημέρες και η υπηρεσία δεν έχει χρησιμοποιηθεί πολύ, γράψε μας με το email του λογαριασμού σου και μια σύντομη σημείωση για τον λόγο. Αυτές οι επιστροφές εγκρίνονται χωρίς τριβές.",
-              "Αν έχουν περάσει πάνω από 14 ημέρες, η ομάδα το εξετάζει κατά περίπτωση. Ακύρωσε τη συνδρομή για να μην ανανεώνεται και στείλε μας email.",
+              "Ναι, μέσα σε 14 ημέρες από την πρώτη πληρωμή στον λογαριασμό σου ή από μια ετήσια ανανέωση. Γράψε στο support@gadit.app από τη διεύθυνση email του λογαριασμού σου και επιστρέφουμε ολόκληρο αυτό το ποσό. Δεν χρειάζεται να δώσεις λόγο. Η επιστροφή σταματά και τη συνδρομή, και τα χρήματα επιστρέφουν στην κάρτα με την οποία πλήρωσες, συνήθως μέσα σε 5 έως 10 εργάσιμες ημέρες.",
+              "Μετά τις 14 ημέρες, οι πληρωμές δεν επιστρέφονται, εκτός αν χρεώθηκες κατά λάθος ή αν το απαιτεί η νομοθεσία εκεί όπου ζεις. Μπορείς να ακυρώσεις οποιαδήποτε στιγμή ώστε να μην ανανεωθεί η συνδρομή, και την κρατάς μέχρι το τέλος της περιόδου που έχεις πληρώσει.",
+              "Έκανες αγορά στην εφαρμογή για iPhone ή iPad; Τις επιστροφές εκεί τις διαχειρίζεται η Apple, στο reportaproblem.apple.com.",
             ],
           },
           {
@@ -3908,8 +3929,9 @@ Object.assign(HELP, {
             id: "payout",
             q: "Πότε πληρώνομαι;",
             a: [
-              "Μία φορά τον μήνα, όταν το υπόλοιπό σου φτάσει το ελάχιστο ποσό που φαίνεται στον πίνακα συνεργατών σου. Το στέλνουμε στον λογαριασμό PayPal που ορίζεις εκεί. Το ελάχιστο είναι όριο, όχι ταβάνι. Μπορείς να κερδίσεις πολύ περισσότερα και λαμβάνεις την πληρωμή μόλις το ξεπεράσεις.",
-              "Οι προμήθειες αποδεσμεύονται 30 ημέρες μετά την πληρωμή της συνδρομής, ώστε να υπάρχει το παράθυρο επιστροφών. Έτσι, μια συνδρομή του Ιανουαρίου αποδεσμεύεται στις αρχές Φεβρουαρίου και μπαίνει στην επόμενη πληρωμή σου μόλις το υπόλοιπό σου φτάσει το ελάχιστο.",
+              "Μία φορά τον μήνα, χωρίς ελάχιστο ποσό. Κάθε προμήθεια γίνεται πληρωτέα 30 ημέρες μετά την πληρωμή του πελάτη και ό,τι είναι πληρωτέο στέλνεται στην επόμενη μηνιαία πληρωμή στον λογαριασμό PayPal που έχεις ορίσει στον πίνακα συνεργατών σου.",
+              "Πληρώνουμε στο νόμισμα με το οποίο πλήρωσε ο πελάτης όταν το PayPal μπορεί να το στείλει, και διαφορετικά σε δολάρια ΗΠΑ, με την ισοτιμία της ημέρας που πληρώνουμε.",
+              "Οι προμήθειες περιμένουν 30 ημέρες λόγω επιστροφών χρημάτων: αν η πληρωμή ενός πελάτη επιστραφεί, η προμήθεια γι' αυτήν ακυρώνεται. Έτσι, μια προμήθεια για πληρωμή του Ιανουαρίου γίνεται πληρωτέα τον Φεβρουάριο και στέλνεται στην επόμενη μηνιαία πληρωμή.",
             ],
           },
           {
@@ -3963,8 +3985,8 @@ Object.assign(HELP, {
             id: "kid-safety",
             q: "Είναι το Gadit ασφαλές για παιδιά;",
             a: [
-              "Το Gadit σχεδιάστηκε για να το χρησιμοποιεί ένας γονέας με ασφάλεια δίπλα σε ένα παιδί. Η λειτουργία για παιδιά παράγει επεξηγήσεις που είναι απλές, συγκεκριμένες και κατάλληλες για την ηλικία (γύρω στο επίπεδο 5 με 10 ετών), χρησιμοποιώντας τον ίδιο μηχανισμό που τροφοδοτεί το περιεχόμενο για ενήλικες, με ρητές οδηγίες για απλοποίηση. Κανένα περιεχόμενο που δημιουργείται από χρήστες δεν εμφανίζεται ποτέ σε παιδιά.",
-              "Σύμφωνα με τις πολιτικές μας και τους κανόνες για την ιδιωτικότητα των παιδιών σε όλο τον κόσμο, ένας δικός σου λογαριασμός είναι για ηλικίες 13 και άνω. Τα παιδιά χρησιμοποιούν το Gadit μέσω ενός γονέα: στο πλάνο Family ο γονέας προσθέτει κάθε παιδί από τη σελίδα Οικογένεια, κάθε παιδί παίρνει τον δικό του χώρο με τη λειτουργία για παιδιά, και ο πίνακας γονέα δείχνει τις λέξεις που αναζητά κάθε παιδί. Για να το ρυθμίσεις, ξεκίνα με το Family στη σελίδα τιμών.",
+              "Το Gadit σχεδιάστηκε για να το χρησιμοποιεί ένας γονέας με ασφάλεια μαζί με ένα παιδί. Η λειτουργία για παιδιά παράγει επεξηγήσεις που είναι απλές, συγκεκριμένες και κατάλληλες για την ηλικία, περίπου για παιδιά 5 έως 10 ετών, χρησιμοποιώντας τον ίδιο μηχανισμό που τροφοδοτεί το περιεχόμενο για ενήλικες, με ρητές οδηγίες για απλοποίηση. Κανένα περιεχόμενο που δημιουργείται από χρήστες δεν εμφανίζεται ποτέ σε παιδιά.",
+              "Ένας προσωπικός λογαριασμός προορίζεται για ενήλικες, 18 ετών και άνω. Τα παιδιά και οι έφηβοι χρησιμοποιούν το Gadit μέσω ενός ενήλικα. Στο σπίτι, ο γονέας προσθέτει κάθε παιδί στη σελίδα Family, κάθε παιδί αποκτά τον δικό του χώρο με τη λειτουργία για παιδιά, και ο πίνακας γονέα δείχνει τις λέξεις που αναζητά κάθε παιδί. Στο σχολείο, η τάξη παίρνει έναν σύνδεσμο από τον δάσκαλο και οι μαθητές μπαίνουν χωρίς λογαριασμό και χωρίς διεύθυνση email.",
             ],
           },
           {
@@ -4007,7 +4029,7 @@ Object.assign(HELP, {
             a: [
               "אפשר להחליף לכרטיס חדש בפחות מדקה, בלי לבטל. המנוי הנוכחי שלכם ממשיך, פשוט עם הכרטיס החדש.",
               "1. היכנסו ל-gadit.app ופתחו את \"החשבון שלי\" מתפריט החשבון. 2. לחצו על \"ניהול חיוב\". 3. ייפתח מסך מאובטח של Stripe. הוסיפו בו את הכרטיס החדש כאמצעי תשלום וסמנו אותו כברירת מחדל. 4. אם תרצו, מחקו את הכרטיס הישן.",
-              "מהחיוב הבא והלאה הכל ילך לכרטיס החדש. החיוב הקודם (שכבר נגבה) נשאר על הכרטיס הישן. אין צורך בהחזר אלא אם תרצו אחד באופן ספציפי.",
+              "מהחיוב הבא והלאה הכל ילך לכרטיס החדש. החיוב הקודם (שכבר נגבה) נשאר על הכרטיס הישן. החלפת הכרטיס לא מעבירה את החיוב הזה ולא משנה את תאריך החיוב הבא.",
             ],
           },
           {
@@ -4057,8 +4079,9 @@ Object.assign(HELP, {
             id: "refund",
             q: "אפשר לקבל החזר כספי?",
             a: [
-              "כן. אם רכשתם לפני פחות מ-14 ימים ולא השתמשתם בשירות הרבה, כתבו לנו עם האימייל של החשבון והסבר קצר. החזרים כאלה מאושרים בלי להתעקש.",
-              "אם עבר יותר מ-14 ימים, הצוות יטפל מקרה מקרה. בטלו את המנוי כדי שלא יתחדש, ושלחו לנו מייל.",
+              "כן, תוך 14 יום מהתשלום הראשון בחשבון או מחידוש שנתי. כתבו ל-support@gadit.app מכתובת המייל של החשבון, ונחזיר את התשלום הזה במלואו. אין צורך לנמק. ההחזר מסיים גם את המנוי, והכסף חוזר לכרטיס שבו שילמתם, בדרך כלל תוך 5 עד 10 ימי עסקים.",
+              "אחרי 14 יום התשלומים לא מוחזרים, אלא אם חויבתם בטעות או שהחוק במקום מגוריכם מחייב החזר. אפשר לבטל בכל רגע כדי שהמנוי לא יתחדש, והוא נשאר פעיל עד סוף התקופה ששילמתם עליה.",
+              "קניתם באפליקציה לאייפון או לאייפד? את ההחזר נותנת Apple, בכתובת reportaproblem.apple.com.",
             ],
           },
           {
@@ -4264,8 +4287,9 @@ Object.assign(HELP, {
             id: "payout",
             q: "מתי מקבלים את הכסף?",
             a: [
-              "פעם בחודש, כשהיתרה לתשלום מגיעה לסכום המינימום שמופיע באזור השותפים. התשלום נשלח לחשבון ה-PayPal שהגדרתם שם. המינימום הוא סף, לא תקרה: אפשר להרוויח הרבה יותר, והתשלום מגיע כשעוברים אותו.",
-              "העמלות משתחררות 30 יום אחרי תשלום המנוי, כדי לאפשר חלון להחזרים. כך עמלה על מנוי מינואר משתחררת בתחילת פברואר, ונכנסת לתשלום הבא כשהיתרה שלכם מגיעה למינימום.",
+              "פעם בחודש, בלי סכום מינימום. כל עמלה זמינה לתשלום 30 יום אחרי התשלום של הלקוח, וכל מה שזמין נשלח בתשלום החודשי הבא לחשבון ה-PayPal שהגדרתם באזור השותפים.",
+              "אנחנו משלמים במטבע שבו הלקוח שילם כש-PayPal יכול לשלוח אותו, ואחרת בדולר אמריקאי, לפי שער החליפין ביום התשלום.",
+              "העמלות ממתינות 30 יום בגלל ההחזרים: אם התשלום של לקוח מוחזר, העמלה עליו מתבטלת. כך עמלה על תשלום מינואר זמינה לתשלום בפברואר, ונשלחת בתשלום החודשי הבא.",
             ],
           },
           {
@@ -4320,7 +4344,7 @@ Object.assign(HELP, {
             q: "Gadit בטוח לילדים?",
             a: [
               "Gadit נבנה כך שהורה יוכל להשתמש בו עם הילד בצורה בטוחה ומבוקרת. מצב ילדים מייצר הסברים פשוטים, קונקרטיים ומתאימים לגיל (רמת 5 עד 10 שנים), עם אותו מנוע שמייצר את התוכן למבוגרים, רק עם הוראות מפורשות לפישוט. אף תוכן שמשתמשים יוצרים לא מוצג לילדים.",
-              "בהתאם למדיניות שלנו ולכללי פרטיות ילדים בעולם, חשבון עצמאי מיועד לגיל 13 ומעלה. ילדים משתמשים ב-Gadit דרך ההורה: במסלול Family ההורה מוסיף כל ילד מעמוד המשפחה, כל ילד מקבל אזור משלו עם מצב ילדים, ולוח ההורה מראה את המילים שכל ילד מחפש. כדי להתחיל, היכנסו ל-Family בעמוד המחירים.",
+              "חשבון עצמאי מיועד למבוגרים, מגיל 18 ומעלה. ילדים ובני נוער משתמשים ב-Gadit דרך מבוגר. בבית, ההורה מוסיף כל ילד בעמוד המשפחה, כל ילד מקבל אזור משלו עם מצב ילדים, ולוח ההורה מראה את המילים שכל ילד מחפש. בבית הספר, הכיתה מקבלת קישור מהמורה, והתלמידים נכנסים בלי חשבון ובלי כתובת מייל.",
             ],
           },
           {

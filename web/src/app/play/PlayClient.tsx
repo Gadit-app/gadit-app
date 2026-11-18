@@ -91,7 +91,6 @@ import type { DuelQuestion } from "@/lib/duel";
 import { TF_COPY } from "@/components/play/GameTrueFalse";
 import { ensurePlayContent } from "@/lib/play-content/remote";
 import { LessonPath, type Lesson } from "@/components/play/learn/LessonPath";
-import { RightsLine } from "@/components/RightsLine";
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
 const LANGS = LANGUAGES;
@@ -4932,10 +4931,8 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
       </main>
 
       <footer className="wb-home-footer">
-        <RightsLine />
-        <span className="gd-buy">·</span>
         <Link href={href("/pricing")} className="gd-buy">{v2(lang, "navPricing")}</Link>
-        <span>·</span>
+        <span className="gd-buy">·</span>
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>
         <Link href={href("/terms")}>{v2(lang, "footerTerms")}</Link>

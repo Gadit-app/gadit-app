@@ -36,7 +36,6 @@ import { useAuth } from "@/lib/auth-context";
 import CheckoutResumeBanner from "@/components/CheckoutResumeBanner";
 import { useHref } from "@/lib/href";
 import { SCHOOLS_TIERS, SCHOOLS_TIER_LIST, IL_SCHOOL_PRICES, studentsUpTo, type SchoolsTierKey } from "@/lib/schools-prices";
-import { RightsLine } from "@/components/RightsLine";
 
 // Footer "Home" link label, every UI language.
 const FOOTER_HOME_COPY: Record<Lang, string> = {
@@ -5018,8 +5017,6 @@ export function PricingPageRoute() {
       <GadVerbStamp />
 
       <footer className="wb-home-footer">
-        <RightsLine />
-        <span>·</span>
         <Link href={href("/")}>{FOOTER_HOME_COPY[lang] ?? FOOTER_HOME_COPY.en}</Link>
         <span>·</span>
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>

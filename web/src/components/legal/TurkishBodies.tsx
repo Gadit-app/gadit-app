@@ -22,6 +22,9 @@ export function PrivacyBodyTr(): ReactElement {
         Bir hesap oluşturduğunuzda e-posta adresinizi ve Google ile oturum açarsanız Google’ın sağladığı temel profil
         bilgilerini (görünen ad, profil fotoğrafı) toplarız. Google şifrenizi almayız.
       </p>
+      <p>
+        {"iOS uygulamasında Apple ile de oturum açabilirsiniz. Bu durumda Apple, bizimle paylaşmayı seçtiğiniz adı ve e-posta adresini bize iletir; bu adres, e-postalarımızı size yönlendiren özel bir relay adresi olabilir. Apple şifrenizi almayız."}
+      </p>
       <h3>Kullanım bilgileri</h3>
       <p>Gadit’i kullandığınızda şunları işleriz:</p>
       <ul>
@@ -73,30 +76,45 @@ export function PrivacyBodyTr(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{": tanımlar, cümle geri bildirimleri, testler ve sesli transkripsiyon (Whisper) oluşturmak için gönderdiğiniz kelimeleri ve cümleleri işler ve görseller (DALL·E 3) oluşturur. Ayrıca Gadit asistanının yanıtlarını da yazar: sorunuzu, aynı konuşmadaki önceki mesajları, arayüz dilinizi, planınızı ve web sitesinde mi yoksa uygulamada mı olduğunuzu göndeririz; adınızı veya e-posta adresinizi eklemeyiz. OpenAI’a gönderilen veriler, OpenAI’ın API veri kullanım politikasına tabidir."}
+          <strong>OpenAI</strong>{": gönderdiğiniz kelimeleri ve cümleleri işleyerek tanımlar, cümle geri bildirimleri ve testler oluşturur, metni sese dönüştürür, ses girişini yazıya döker, yüklediğiniz fotoğraf ve PDF dosyalarındaki metni okur (örneğin ödev sayfaları) ve görseller oluşturur. Ayrıca Gadit asistanının yanıtlarını da yazar: sorunuzu, aynı konuşmadaki önceki mesajları, arayüz dilinizi, planınızı ve web sitesinde mi yoksa uygulamada mı olduğunuzu göndeririz; adınızı veya e-posta adresinizi eklemeyiz. OpenAI’a gönderilen veriler, OpenAI’ın API veri kullanım politikasına tabidir."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): hesabınızı, profilinizi, abonelik
           durumunuzu, arama geçmişinizi ve oluşturulan görselleri saklar.
         </li>
         <li>
+          <strong>Google</strong>{": (Gemini, Google Cloud aracılığıyla) metni sese dönüştürür. Ona yalnızca yüksek sesle okunacak metni, örneğin kelimeleri, cümleleri ve hikâyeleri göndeririz ve ses, tekrar çalınabilmesi için Firebase depolamamızda saklanır. Bir okuma oyununda ayrıca bir çocuğun yüksek sesle söylediği sesi de kontrol etmek için duyar ve bu kayıt saklanmaz. Google Fonts, Çince, Japonca ve Korece arayüzün yazı tiplerini sunar ve IP adresinizi görür."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{": İsrailli bir kâr amacı gütmeyen kuruluştur ve küçük yaştaki okuyucular için İbranice metne sesli harf işaretleri ekler. Ona yalnızca İbranice metni göndeririz."}
+        </li>
+        <li>
           <strong>Stripe</strong>: ödemeleri, abonelikleri ve faturalandırma portalını yönetir.
         </li>
         <li>
+          <strong>Apple</strong>{": iOS uygulamasında Apple ile Giriş özelliğini sağlar (bkz. bölüm 1) ve iOS uygulamasında satın alınan abonelikleri satar ve ücretlendirir. Bu işlemlerde ödemeyi Apple yönetir ve biz yalnızca satın alma işleminin ve durumunun onayını alırız (örneğin yenileme veya iade)."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{": iş ortaklarımıza ödeme yapar. İş ortağının PayPal e-posta adresini ve tutarı ona veririz."}
+        </li>
+        <li>
           <strong>Resend</strong>{": e-postalarımızı (örneğin giriş bağlantıları ve bildirimler) gönderir ve Gadit asistanının ilettiği soruları, e-posta adresinizi yanıt adresi olarak ekleyerek ekibimize ulaştırır."}
+        </li>
+        <li>
+          <strong>Expo</strong>{": iOS uygulamasının bildirimlerini iletir; buna, bir ebeveynin açabileceği ve çocuğun adını ve çocuğun aradığı kelimeyi içeren uyarılar da dahildir."}
         </li>
         <li>
           <strong>Vercel</strong>: web sitesini barındırır ve sunar; anonimleştirilmiş analiz ve performans ölçümü
           sağlar.
         </li>
         <li>
-          <strong>Reklam ve analiz</strong>: Meta (Meta Pixel), Google Analytics ve TikTok (TikTok Pixel ve Events
-          API), ziyaretleri ve reklamlarımızın sonuçlarını ölçer. Bu hizmetler, pazarlama, kayıt ve ödeme
-          sayfalarımızda çerezler (cookies) ve benzer teknolojiler kullanır. Kaydolduğunuzda veya ödeme yaptığınızda,
-          yalnızca reklamlarımızı ölçmek amacıyla bu hizmetlere karma (hash) uygulanmış (tek yönlü şifrelenmiş) bir
-          e-posta adresi ve hesap kimliğini, IP adresiniz ve tarayıcı bilgilerinizle birlikte gönderebiliriz. Bu
-          hizmetlere çocuklarla ilgili hiçbir bilgiyi asla göndermeyiz ve bu araçlar çocukların kullandığı ekranlarda
-          çalışmaz.
+          <strong>Yooniz</strong>{": aynı kurucunun ayrı bir aile öğrenme hizmetidir. Yooniz, bir ebeveynin e-posta adresinde etkin bir Gadit Family planı olup olmadığını bize sorabilir ve biz yalnızca evet veya hayır yanıtı veririz. Varsa aile, Yooniz içinden Gadit’i parola olmadan açabilir: Yooniz bize ebeveynin e-posta adresini, aile üyelerinin görünen adlarını ve her birinin ebeveyn, erkek çocuk veya kız çocuk olup olmadığını gönderir. Yooniz içinden Gadit’i açan bir çocuk bir kelimeyi anladığında, Yooniz’e ebeveynin e-posta adresini, çocuğun Yooniz kimliğini ve kazanılan öğrenme puanı sayısını göndeririz; kelimenin kendisini asla göndermeyiz."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{": sayfalarımızda gösterilen küçük bayrak görsellerini sunar ve bu nedenle IP adresinizi ve tarayıcı bilgilerinizi görür."}
+        </li>
+        <li>
+          <strong>Reklam ve analiz</strong>{": Meta (Meta Pixel), Google Analytics ve TikTok (TikTok Pixel ve Events API), ziyaretleri ve reklamlarımızın sonuçlarını ölçer. Bu hizmetler, pazarlama, kayıt ve ödeme sayfalarımızda çerezler (cookies) ve benzer teknolojiler kullanır. Kaydolduğunuzda veya ödeme yaptığınızda, yalnızca reklamlarımızı ölçmek amacıyla bu hizmetlere karma (hash) uygulanmış (tek yönlü şifrelenmiş) bir e-posta adresi ve hesap kimliğini, IP adresiniz ve tarayıcı bilgilerinizle birlikte gönderebiliriz. İş ortaklığı bağlantıları için bir hizmet olan Affonso, aynı sayfalarda ve bir ziyaretçinin iş ortağı bağlantısı üzerinden ulaştığı her sayfada yüklenir ve 60 güne kadar bir çerez tutar. Bir Affonso iş ortaklığı bağlantısı üzerinden geldikten sonra kaydolursanız, sizi yönlendiren iş ortağına kredi verilebilmesi için Affonso’ya e-posta adresinizi, adınızı ve hesap kimliğinizi göndeririz. Bu hizmetlere çocuklarla ilgili hiçbir bilgiyi asla göndermeyiz ve bu araçlar bir çocuğun profilinde, Çocuk Modunda veya sınıf bağlantısı sayfalarında çalışmaz."}
         </li>
       </ul>
 
@@ -143,8 +161,16 @@ export function PrivacyBodyTr(): ReactElement {
 
       <h2>7. Çocuklar</h2>
       <p>
-        Gadit, 13 yaşın altındaki çocuklara yönelik değildir. 13 yaşın altındaki bir çocuğun hesap oluşturduğunu
-        düşünüyorsanız bize e-posta gönderin; hesabı ve ilişkili verileri sileriz.
+        {"Gadit hesabı, 18 yaş ve üzerindeki yetişkinler içindir. Çocuklar ve gençler Gadit’i yalnızca bir yetişkin aracılığıyla, iki yoldan biriyle kullanır."}
+      </p>
+      <p>
+        {"Family profilleri: ebeveyn, her çocuğu kendi Family hesabı içinde bir profil olarak ekler; adını ve erkek mi kız mı olduğunu, ayrıca ebeveyn eklerse yaşını, okul sınıfını ve fotoğrafını girer. Çocukların bizde bir e-posta adresi veya şifresi yoktur. Bir çocuğun aradığı kelimeler ile defteri, oyunları ve ilerlemesi ailenin hesabında saklanır. Ailedeki ebeveynler ve erişim verdikleri kişiler (örneğin özel ders öğretmeni) bunları görebilir; ayrıca bir ebeveyn, bir çocuğun aradığı kelimelerle ilgili bildirim veya e-posta yoluyla uyarı almayı seçebilir. Ebeveyn, bir çocuğun profilini uygulamada istediği zaman kaldırabilir."}
+      </p>
+      <p>
+        {"Sınıf bağlantıları: öğrenci, öğretmenin verdiği bağlantıyı veya kodu hesap olmadan ve e-posta adresi olmadan açar. Öğretmen bir isim listesi girdiyse öğrenci bu listeden kendi adını seçer ve öğrencinin aradığı kelimeler, öğretmenin görebilmesi için sınıf için bu ad altında kaydedilir. Gadit’i kullanmaya okul karar verir ve yasanın gerektirdiği durumlarda ebeveynleri bilgilendirmekten okul sorumludur."}
+      </p>
+      <p>
+        {"Çocuklara ait bilgileri hiçbir zaman reklam amacıyla kullanmayız ve 3. bölümde Reklam ve analiz başlığı altında listelenen araçlar, bir çocuğun profilinde, Çocuk Modunda veya sınıf bağlantısı sayfalarında hiçbir zaman yüklenmez. Bir çocuğun profilinin ve verilerinin silinmesini sağlamak için bir ebeveyn "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" adresine yazabilir; biz de bunları sileriz. Bir çocuğun kendi başına hesap açtığını düşünüyorsanız bize yazın; hesabı ve verilerini silelim."}
       </p>
 
       <h2>8. Uluslararası kullanıcılar</h2>
@@ -184,8 +210,7 @@ export function TermsBodyTr(): ReactElement {
 
       <h2>1. Gadit’i kimler kullanabilir</h2>
       <p>
-        Hesap oluşturmak için en az 13 yaşında olmanız gerekir. 13 ile 18 yaş arasındaysanız bir ebeveynin veya yasal
-        vasinin iznine sahip olmanız gerekir. Gadit’i kullanarak bu şartları karşıladığınızı beyan etmiş olursunuz.
+        {"Gadit hesabı açmak için 18 yaşında veya daha büyük olmanız gerekir. 18 yaşın altındaki çocuklar ve gençler Gadit’i yalnızca bir yetişkin aracılığıyla kullanabilir: bir ebeveyn veya vasi onları Family planına profil olarak ekleyebilir ve bir okul öğrencilerine bir sınıf bağlantısı verebilir. Bu erişimi sağlayan ebeveyn, vasi veya okul bundan sorumludur. Hesap açarak 18 yaşında veya daha büyük olduğunuzu onaylarsınız."}
       </p>
 
       <h2>2. Hesabınız</h2>
@@ -208,16 +233,11 @@ export function TermsBodyTr(): ReactElement {
       </p>
       <h3>İptal</h3>
       <p>
-        Hesap sayfanızdan istediğiniz zaman iptal edebilirsiniz. İptal, gelecekteki yenilemeleri durdurur. Ücretli
-        özelliklere erişiminiz mevcut faturalandırma döneminin sonuna kadar devam eder. Kullanılmayan süre için kısmi
-        iade yapmayız.
+        {"Hesap sayfanızdan istediğiniz zaman iptal edebilirsiniz. İptal, gelecekteki yenilemeleri durdurur. Ücretli özelliklere erişiminiz mevcut faturalandırma döneminin sonuna kadar devam eder. Aşağıda açıklanan iadeler dışında, yasa aksini gerektirmedikçe kullanılmayan süre için iade yapmayız."}
       </p>
       <h3>İadeler</h3>
       <p>
-        Yasanın gerektirdiği durumlar dışında ödemeler iade edilmez. Yanlışlıkla ücretlendirildiğinizi düşünüyorsanız,
-        ücretlendirmeden itibaren 30 gün içinde{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a> adresiyle iletişime
-        geçin.
+        {"Hesabınızdaki ilk ödemeden itibaren 14 gün içinde veya yıllık bir yenilemeden itibaren 14 gün içinde talepte bulunursanız, bu ödemenin tamamını iade ederiz. Gerekçe göstermeniz gerekmez. Hesabınıza bağlı e-posta adresinden "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" adresine yazın. İade yapılması aboneliği de sona erdirir. Yasanın iade zorunluluğu getirdiği durumlar dışında diğer ödemeler iade edilmez. Yanlışlıkla ücretlendirildiğinizi düşünüyorsanız, ücretlendirmeden itibaren 30 gün içinde bize yazın. iOS uygulamasında yapılan satın alımlar Apple tarafından ücretlendirilir ve bunları yalnızca Apple reportaproblem.apple.com adresi üzerinden iade edebilir."}
       </p>
 
       <h2>4. Kabul edilebilir kullanım</h2>
@@ -237,9 +257,7 @@ export function TermsBodyTr(): ReactElement {
 
       <h2>5. Yapay zekâ tarafından oluşturulan içerik</h2>
       <p>
-        Gadit; tanımlar, örnekler, etimolojiler, geri bildirimler, testler, görseller ve transkripsiyonlar oluşturmak
-        için yapay zekâ modelleri (OpenAI’ın GPT, Whisper ve DALL·E modelleri dahil) kullanır. Şunları anlar ve kabul
-        edersiniz:
+        {"Gadit; tanımlar, örnekler, etimolojiler, geri bildirimler, testler, görseller, seslendirme ve transkripsiyonlar oluşturmak için yapay zekâ modelleri (OpenAI ve Google modelleri dahil) kullanır. Şunları anlar ve kabul edersiniz:"}
       </p>
       <ul>
         <li>

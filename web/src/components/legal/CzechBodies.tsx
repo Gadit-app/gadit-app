@@ -23,6 +23,9 @@ export function PrivacyBodyCs(): ReactElement {
         základní profilové informace, které Google poskytuje (zobrazované jméno, profilový obrázek). Vaše heslo k účtu
         Google nedostáváme.
       </p>
+      <p>
+        {"V aplikaci pro iOS se můžete přihlásit také přes Apple. Apple nám pak poskytne jméno a e-mailovou adresu, které se rozhodnete sdílet, a tou může být i soukromá přeposílací adresa, která vám přeposílá naše e-maily. Vaše heslo k Apple nedostáváme."}
+      </p>
       <h3>Informace o používání</h3>
       <p>Když používáte Gadit, zpracováváme:</p>
       <ul>
@@ -74,29 +77,45 @@ export function PrivacyBodyCs(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{": zpracovává slova a věty, které odešlete, za účelem generování definic, zpětné vazby k větám, kvízů a přepisu hlasu (Whisper) a generuje obrázky (DALL·E 3). Vytváří také odpovědi asistenta Gadit: odesíláme mu vaši otázku, předchozí zprávy ze stejné konverzace, jazyk vašeho rozhraní, váš tarif a informaci o tom, zda používáte webové stránky nebo aplikaci, a nepřipojujeme vaše jméno ani e-mailovou adresu. Na údaje odesílané společnosti OpenAI se vztahují zásady OpenAI pro používání dat v rámci API."}
+          <strong>OpenAI</strong>{": zpracovává slova a věty, které odešlete, za účelem generování definic, zpětné vazby k větám a kvízů, převádí text na řeč, přepisuje hlasový vstup, čte text na fotografiích a v PDF souborech, které nahrajete (například stránky domácích úkolů), a generuje obrázky. Vytváří také odpovědi asistenta Gadit: odesíláme mu vaši otázku, předchozí zprávy ze stejné konverzace, jazyk vašeho rozhraní, váš tarif a informaci o tom, zda používáte webové stránky nebo aplikaci, a nepřipojujeme vaše jméno ani e-mailovou adresu. Na údaje odesílané společnosti OpenAI se vztahují zásady OpenAI pro používání dat v rámci API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): ukládá váš účet, profil, stav
           předplatného, historii vyhledávání a vygenerované obrázky.
         </li>
         <li>
+          <strong>Google</strong>{"(Gemini, prostřednictvím Google Cloud): převádí text na řeč. Odesíláme mu pouze text, který má být přečten nahlas, například slova, věty a příběhy, a zvuk se ukládá do našeho úložiště Firebase, aby jej bylo možné znovu přehrát. V jedné čtenářské hře také slyší zvuk, který dítě vysloví nahlas, aby jej zkontroloval, a tento záznam se neukládá. Google Fonts poskytuje písma pro rozhraní v čínštině, japonštině a korejštině a vidí vaši IP adresu."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{": izraelská nezisková organizace, doplňuje do hebrejského textu samohlásková znaménka (niqqud) pro mladé čtenáře. Odesíláme jí pouze hebrejský text."}
+        </li>
+        <li>
           <strong>Stripe</strong>: zajišťuje platby, předplatné a fakturační portál.
         </li>
         <li>
+          <strong>Apple</strong>{": poskytuje Přihlášení přes Apple v aplikaci pro iOS (viz oddíl 1) a prodává a účtuje předplatná zakoupená v aplikaci pro iOS. U těchto nákupů zpracovává platbu Apple a my dostáváme pouze potvrzení o nákupu a jeho stavu (například obnovení nebo vrácení peněz)."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{": vyplácí naše partnery. Předáváme mu partnerovu e-mailovou adresu pro PayPal a částku."}
+        </li>
+        <li>
           <strong>Resend</strong>{": odesílá naše e-maily (například přihlašovací odkazy a oznámení) a doručuje našemu týmu otázky, které asistent Gadit předá dál, přičemž vaše e-mailová adresa slouží jako adresa pro odpověď."}
+        </li>
+        <li>
+          <strong>Expo</strong>{": doručuje oznámení aplikace pro iOS, například upozornění, která může rodič zapnout a která zahrnují jméno dítěte a slovo, které dítě vyhledalo."}
         </li>
         <li>
           <strong>Vercel</strong>: hostuje a provozuje webové stránky a poskytuje anonymizovanou analytiku a měření
           výkonu.
         </li>
         <li>
-          <strong>Reklama a analytika</strong>: Meta (Meta Pixel), Google Analytics a TikTok (TikTok Pixel a Events
-          API) měří návštěvy a výsledky našich reklam. Na našich marketingových, registračních a platebních stránkách
-          používají soubory cookie a podobné technologie. Když se zaregistrujete nebo zaplatíte, můžeme těmto službám
-          odeslat hashovanou (jednosměrně zašifrovanou) e-mailovou adresu a ID účtu spolu s vaší IP adresou a údaji o
-          prohlížeči, a to pouze za účelem měření našich reklam. Nikdy jim neposíláme žádné informace o dětech a tyto
-          nástroje neběží na obrazovkách, které používají děti.
+          <strong>Yooniz</strong>{": samostatná služba pro rodinné vzdělávání od stejného zakladatele. Yooniz se nás může zeptat, zda má e-mailová adresa rodiče aktivní tarif Gadit Family, a my odpovíme pouze ano nebo ne. Pokud ano, může rodina otevřít Gadit z Yooniz bez hesla: Yooniz nám pošle e-mailovou adresu rodiče, zobrazovaná jména členů rodiny a informaci o tom, zda je každý z nich rodič, chlapec nebo dívka. Když dítě, které otevřelo Gadit z Yooniz, porozumí slovu, pošleme Yooniz e-mailovou adresu rodiče, Yooniz ID dítěte a počet získaných studijních bodů, nikdy však ne samotné slovo."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{": poskytuje malé obrázky vlajek zobrazované na našich stránkách, a vidí tak vaši IP adresu a údaje o prohlížeči."}
+        </li>
+        <li>
+          <strong>Reklama a analytika</strong>{": Meta (Meta Pixel), Google Analytics a TikTok (TikTok Pixel a Events API) měří návštěvy a výsledky našich reklam. Na našich marketingových, registračních a platebních stránkách používají soubory cookie a podobné technologie. Když se zaregistrujete nebo zaplatíte, můžeme těmto službám odeslat hashovanou (jednosměrně zašifrovanou) e-mailovou adresu a ID účtu spolu s vaší IP adresou a údaji o prohlížeči, a to pouze za účelem měření našich reklam. Affonso, služba pro partnerské odkazy, se načítá na stejných stránkách a na každé stránce, na kterou návštěvník přijde přes partnerský odkaz, a ukládá soubor cookie až na 60 dnů. Pokud se zaregistrujete poté, co přijdete přes partnerský odkaz Affonso, pošleme Affonso vaši e-mailovou adresu, jméno a ID účtu, aby partner, který vás doporučil, získal zásluhu. Nikdy žádné z těchto služeb neposíláme informace o dětech a tyto nástroje neběží na dětském profilu, v Dětském režimu ani na stránkách s odkazem do třídy."}
         </li>
       </ul>
 
@@ -143,8 +162,16 @@ export function PrivacyBodyCs(): ReactElement {
 
       <h2>7. Děti</h2>
       <p>
-        Gadit není určen dětem mladším 13 let. Pokud se domníváte, že účet vytvořilo dítě mladší 13 let, napište nám
-        e-mail a my účet i související údaje smažeme.
+        {"Účet Gadit je určen pro dospělé ve věku 18 let a starší. Děti a dospívající používají Gadit pouze prostřednictvím dospělé osoby, a to jedním ze dvou způsobů."}
+      </p>
+      <p>
+        {"Profily Family: rodič přidá každé dítě jako profil v rámci svého účtu Family, a to se jménem a údajem, zda jde o chlapce nebo dívku, a pokud je rodič doplní, také s věkem, školním ročníkem a fotografií. Děti u nás nemají e-mailovou adresu ani heslo. Slova, která dítě vyhledává, a také jeho zápisník, hry a pokrok se ukládají do rodinného účtu. Vidět je mohou rodiče v rodině i kdokoli, komu udělí přístup, například doučovatel, a rodič si může zvolit, že bude dostávat upozornění, prostřednictvím oznámení nebo e-mailu, se slovy, která dítě vyhledává. Rodič může profil dítěte v aplikaci kdykoli odstranit."}
+      </p>
+      <p>
+        {"Odkazy do třídy: student otevře odkaz nebo kód, který mu poskytne učitel, bez účtu a bez e-mailové adresy. Pokud učitel zadal seznam jmen, student si z něj vybere své jméno a slova, která vyhledává, se pro danou třídu ukládají pod tímto jménem, aby je učitel mohl vidět. O použití Gadit rozhoduje škola a je odpovědná za informování rodičů tam, kde to vyžaduje zákon."}
+      </p>
+      <p>
+        {"Informace o dětech nikdy nepoužíváme k reklamním účelům a nástroje uvedené pod položkou Reklama a analytika v oddílu 3 se nikdy nenačítají na profilu dítěte, v dětském režimu ani na stránkách odkazů do třídy. Pokud chcete odstranit profil dítěte a jeho údaje, může rodič napsat na "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" a my je smažeme. Pokud se domníváte, že si dítě vytvořilo vlastní účet, napište nám a my účet i jeho údaje smažeme."}
       </p>
 
       <h2>8. Mezinárodní uživatelé</h2>
@@ -183,8 +210,7 @@ export function TermsBodyCs(): ReactElement {
 
       <h2>1. Kdo smí Gadit používat</h2>
       <p>
-        K vytvoření účtu vám musí být alespoň 13 let. Pokud je vám mezi 13 a 18 lety, musíte mít souhlas rodiče nebo
-        zákonného zástupce. Používáním služby Gadit prohlašujete, že tyto požadavky splňujete.
+        {"K vytvoření účtu Gadit vám musí být alespoň 18 let. Děti a dospívající mladší 18 let používají Gadit pouze prostřednictvím dospělé osoby: rodič nebo zákonný zástupce je může přidat jako profily do tarifu Family a škola může svým studentům poskytnout odkaz do třídy. Rodič, zákonný zástupce nebo škola, kteří tento přístup poskytují, za něj nesou odpovědnost. Vytvořením účtu potvrzujete, že je vám alespoň 18 let."}
       </p>
 
       <h2>2. Váš účet</h2>
@@ -206,16 +232,11 @@ export function TermsBodyCs(): ReactElement {
       </p>
       <h3>Zrušení</h3>
       <p>
-        Předplatné můžete kdykoli zrušit na stránce svého účtu. Zrušením se zastaví budoucí obnovení. Přístup k placeným
-        funkcím si ponecháte do konce aktuálního fakturačního období. Za nevyužitou dobu neposkytujeme částečné
-        refundace.
+        {"Předplatné můžete kdykoli zrušit na stránce svého účtu. Zrušením se zastaví budoucí obnovení. Přístup k placeným funkcím si ponecháte do konce aktuálního fakturačního období. S výjimkou refundací popsaných níže peníze za nevyužitou dobu nevracíme, ledaže zákon vyžaduje jinak."}
       </p>
       <h3>Vrácení peněz</h3>
       <p>
-        S výjimkou případů, kdy to vyžaduje zákon, jsou platby nevratné. Pokud se domníváte, že vám byla částka
-        naúčtována omylem, kontaktujte{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a> do 30 dnů od
-        naúčtování platby.
+        {"Pokud o to požádáte do 14 dnů od první platby na vašem účtu nebo do 14 dnů od ročního obnovení, vrátíme vám tuto platbu v plné výši. Nemusíte uvádět důvod. Napište na "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" z e-mailové adresy vašeho účtu. Refundací se zároveň ukončuje i předplatné. Ostatní platby jsou nevratné, s výjimkou případů, kdy zákon vrácení peněz vyžaduje. Pokud se domníváte, že vám byla částka naúčtována omylem, napište nám do 30 dnů od naúčtování platby. Nákupy provedené v aplikaci pro iOS účtuje Apple a refundaci za ně může poskytnout pouze Apple na adrese reportaproblem.apple.com."}
       </p>
 
       <h2>4. Přijatelné používání</h2>
@@ -235,9 +256,7 @@ export function TermsBodyCs(): ReactElement {
 
       <h2>5. Obsah generovaný umělou inteligencí</h2>
       <p>
-        Gadit využívá modely umělé inteligence (včetně modelů GPT, Whisper a DALL·E od společnosti OpenAI) ke
-        generování definic, příkladů, etymologií, zpětné vazby, kvízů, obrázků a přepisů. Berete na vědomí a souhlasíte
-        s tím, že:
+        {"Gadit využívá modely umělé inteligence, včetně modelů od OpenAI a Google, ke generování definic, příkladů, etymologií, zpětné vazby, kvízů, obrázků, řeči a přepisů. Berete na vědomí a souhlasíte s tím, že:"}
       </p>
       <ul>
         <li>

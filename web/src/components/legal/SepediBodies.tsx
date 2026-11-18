@@ -23,6 +23,9 @@ export function PrivacyBodyNso(): ReactElement {
         tshedimošo ya motheo ya profaele yeo Google e e abago (leina leo le bontšhwago, seswantšho sa profaele). Ga re
         amogele phasewete ya gago ya Google.
       </p>
+      <p>
+        {"Ka app ya iOS o ka tsena gape ka Apple. Ka gona Apple e re nea leina le aterese ya imeile tšeo o kgethago go di abelana, tšeo di ka bago aterese ya sephiri ya relay yeo e fetišetšago diimeile tša rena go wena. Ga re amogele phasewete ya gago ya Apple."}
+      </p>
       <h3>Tshedimošo ya tšhomišo</h3>
       <p>Ge o šomiša Gadit, re šomana le:</p>
       <ul>
@@ -77,30 +80,45 @@ export function PrivacyBodyNso(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{", e šoma ka mantšu le mafoko ao o a romelago go dira ditlhalošo, ditshwayo mabapi le mafoko, diteko, le go ngwalolla seo se bolelwago (Whisper), gomme e dira diswantšho (DALL·E 3). E bile e ngwala dikarabo tša mothuši wa Gadit: re e romela potšišo ya gago, melaetša ya pejana ya poledišano yeo e swanago, polelo ya segokaganyi sa gago, leano la gago, le gore a o le wepsaeteng goba ka app, gomme ga re akaretše leina la gago goba aterese ya gago ya imeile. Datha yeo e romelwago go OpenAI e laolwa ke pholisi ya OpenAI ya tšhomišo ya datha ya API."}
+          <strong>OpenAI</strong>{", e šoma ka mantšu le mafoko ao o a romelago go tšweletša ditlhalošo, ditshwayo mabapi le mafoko le diteko, e fetola sengwalwa go ba polelo, e ngwalolla tseno ya lentšu, e bala sengwalwa diswantšhong le difaeleng tša PDF tšeo o di tsenyago godimo ga seva (ka mohlala, matlakala a mošomo wa gae), gomme e tšweletša diswantšho. E bile e ngwala dikarabo tša mothuši wa Gadit: re e romela potšišo ya gago, melaetša ya pejana ya poledišano yeo e swanago, polelo ya segokaganyi sa gago, leano la gago, le gore a o le wepsaeteng goba ka app, gomme ga re akaretše leina la gago goba aterese ya gago ya imeile. Datha yeo e romelwago go OpenAI e laolwa ke pholisi ya OpenAI ya tšhomišo ya datha ya API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), e boloka akhaonto ya gago,
           profaele, maemo a ngwadišo, histori ya dinyakišišo, le diswantšho tšeo di dirilwego.
         </li>
         <li>
+          <strong>Google</strong>{"(Gemini, ka Google Cloud), e fetola sengwalwa go ba polelo. Re e romela feela sengwalwa seo se swanetšego go balelwa godimo, bjalo ka mantšu, mafoko le dikanegelo, gomme modumo o bolokwa polokelong ya rena ya Firebase gore o kgone go bapalwa gape. Papading e tee ya go bala e bile e kwa modumo wo ngwana a o bolelago godimo, gore o hlahlobje, gomme rekoto yeo ga e bolokwe. Google Fonts e aba difonte tša segokaganyi sa Se-China, Se-Japan le Se-Korea, gomme e bona aterese ya gago ya IP."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{", mokgatlo wa Israel wo o sa dirego poelo, o tsenya maswao a ditumammogo mantšung a Seheberu bakeng sa babadi ba banyenyane. Re e romela feela sengwalwa sa Seheberu."}
+        </li>
+        <li>
           <strong>Stripe</strong>, e šoma ka ditefo, dingwadišo, le potale ya ditefo.
         </li>
         <li>
+          <strong>Apple</strong>{", e fana ka Sign in with Apple ka app ya iOS (bona karolo ya 1), gomme e rekiša le go lefediša ditshebeletšo tša boingwadišo tšeo di rekilwego ka app ya iOS. Mabapi le tšeo, Apple e šoma ka tefo, gomme rena re amogela feela netefatšo ya theko le maemo a yona (bjalo ka mpshafatšo goba pušetšo ya tšhelete)."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{", e lefa balekane ba rena. Re e fa aterese ya imeile ya PayPal ya molekane le tšhelete."}
+        </li>
+        <li>
           <strong>Resend</strong>{", e romela diimeile tša rena (go fa mohlala, dikgokaganyo tša go tsena le ditsebišo), gomme e fetišetša go sehlopha sa rena dipotšišo tšeo mothuši wa Gadit a di fetišetšago, ka aterese ya gago ya imeile bjalo ka aterese ya go araba."}
+        </li>
+        <li>
+          <strong>Expo</strong>{", e romela ditsebišo tša app ya iOS, bjalo ka ditemošo tšeo motswadi a ka di kgontšhago, tšeo di akaretšago leina la ngwana le lentšu leo ngwana a le nyakilego."}
         </li>
         <li>
           <strong>Vercel</strong>, e swara le go abela weposaete, gomme e aba tshekatsheko ye e sa tsebišego motho le
           go lekanya tshepedišo.
         </li>
         <li>
-          <strong>Papatšo le tshekatsheko</strong>, Meta (Meta Pixel), Google Analytics le TikTok (TikTok Pixel le
-          Events API) di lekanya diketelo le dipoelo tša dipapatšo tša rena. Di šomiša dikhuki (cookies) le
-          theknolotši ye e swanago matlakaleng a rena a papatšo, a ngwadišo le a tefo. Ge o ngwadiša goba o lefa, re
-          ka romela ditirelo tše aterese ya imeile le ID ya akhaonto tšeo di khoutilwego ka tsela ya lehlakore le tee
-          (hash), gotee le aterese ya gago ya IP le dintlha tša sefetleki sa gago, fela go lekanya dipapatšo tša rena.
-          Ga re ke re di romele tshedimošo efe goba efe ka ga bana, gomme didirišwa tše ga di šome dikrineng tšeo bana
-          ba di šomišago.
+          <strong>Yooniz</strong>{", tirelo e aroganego ya go ithuta ya lapa go tšwa go mothei yo a swanago. Yooniz e ka re botšiša gore a aterese ya imeile ya motswadi e na le leano la Gadit Family leo le šomago, gomme re araba feela ee goba aowa. Ge go le bjalo, lapa le ka bula Gadit go tšwa go Yooniz ntle le phasewete: Yooniz e re romela aterese ya imeile ya motswadi, maina a pontšho a maloko a lapa, le gore yo mongwe le yo mongwe ke motswadi, mošemane goba ngwanenyana. Ge ngwana yo a butšego Gadit go tšwa go Yooniz a kwešiša lentšu, re romela Yooniz aterese ya imeile ya motswadi, ID ya ngwana ya Yooniz le palo ya dintlha tša go ithuta tšeo di hweditšwego, eupša le ka mohla ga re romele lentšu ka bolona."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{", e aba diswantšho tše nnyane tša difolaga tšeo di bontšhwago matlakaleng a rena, ka gona e bona aterese ya gago ya IP le dintlha tša sefetleki sa gago."}
+        </li>
+        <li>
+          <strong>Papatšo le tshekatsheko</strong>{", Meta (Meta Pixel), Google Analytics le TikTok (TikTok Pixel le Events API) di lekanya diketelo le dipoelo tša dipapatšo tša rena. Di šomiša dikhuki (cookies) le ditheknolotši tše di swanago matlakaleng a rena a papatšo, a ngwadišo le a tefo. Ge o ngwadiša goba o lefa, re ka romela ditirelo tše aterese ya imeile le ID ya akhaonto tšeo di khoutilwego ka tsela ya lehlakore le tee (hash), gotee le aterese ya gago ya IP le dintlha tša sefetleki sa gago, fela go lekanya dipapatšo tša rena. Affonso, tirelo ya dilinki tša balekane, e laetšwa matlakaleng ao a swanago le letlakaleng le ge e le lefe leo moeti a fihlelago go lona ka kgokaganyo ya molekane, gomme e boloka khuki go fihla matšatši a 60. Ge o ngwadiša ka morago ga go fihla ka kgokaganyo ya molekane ya Affonso, re romela Affonso aterese ya gago ya imeile, leina le ID ya akhaonto, gore molekane yo a go rometšego a hwetše mokitlana. Ga re ke re romele le ge e le efe ya ditirelo tše tshedimošo ka ga bana, gomme didirišwa tše ga di šome profaeleng ya ngwana, ka Kids Mode goba matlakaleng a dilinki tša klase."}
         </li>
       </ul>
 
@@ -148,8 +166,16 @@ export function PrivacyBodyNso(): ReactElement {
 
       <h2>7. Bana</h2>
       <p>
-        Gadit ga e lebišwe go bana ba ka fase ga mengwaga ye 13. Ge o dumela gore ngwana wa ka fase ga mengwaga ye 13
-        o hlamile akhaonto, re romele imeile gomme re tla phumola akhaonto le datha ye e amanago le yona.
+        {"Akhaonto ya Gadit ke ya batho ba bagolo, ba mengwaga ye 18 le go feta. Bana le bafsa ba šomiša Gadit feela ka motho yo mogolo, ka e nngwe ya ditsela tše pedi."}
+      </p>
+      <p>
+        {"Diprofaele tša Family: motswadi o oketša ngwana yo mongwe le yo mongwe bjalo ka profaele ka gare ga akhaonto ya motswadi ya Family, ka leina le gore ngwana ke mošemane goba ngwanenyana, gomme, ge motswadi a di oketša, le mengwaga, mphato wa sekolo le seswantšho. Bana ga ba na aterese ya imeile goba phasewete le rena. Mantšu ao ngwana a a nyakago, le puku ya gagwe ya dintlha, dipapadi le tšwelopele ya gagwe, di bolokwa akhaontong ya lapa. Batswadi ba ka lapeng, le mang le mang yo ba mo neago phihlelelo go yona, ka mohlala morutiši wa sephiring, ba ka di bona, gomme motswadi a ka kgetha go amogela ditemošo, ka tsebišo goba ka imeile, tša mantšu ao ngwana a a nyakago. Motswadi a ka tloša profaele ya ngwana ka app nako efe goba efe."}
+      </p>
+      <p>
+        {"Dikgokaganyi tša sehlopha: morutwana o bula sekgokaganyi goba khoutu yeo morutiši a mo neago yona, ntle le akhaonto le ntle le aterese ya imeile. Ge morutiši a tsentšhitše lelokelelo la maina, morutwana o kgetha leina la gagwe go lona, gomme mantšu ao morutwana a a nyakago a bolokwa bakeng sa sehlopha ka fase ga leina leo, gore morutiši a kgone go a bona. Sekolo se tšea sephetho sa go šomiša Gadit gomme se ikarabela go tsebiša batswadi moo molao o nyakago seo."}
+      </p>
+      <p>
+        {"Le ka mohla ga re šomiše tshedimošo ya bana bakeng sa papatšo, gomme didirišwa tšeo di lokeleditšwego ka fase ga Papatšo le tshekatsheko karolong ya 3 ga di tsenywe le ka mohla profaeleng ya ngwana, ka Kids Mode goba matlakaleng a dikgokaganyi tša sehlopha. Go phumola profaele ya ngwana le datha ya yona, motswadi a ka ngwalela "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" gomme re tla e phumola. Ge o dumela gore ngwana o butše akhaonto ya gagwe ka noši, re ngwalele gomme re tla phumola akhaonto le datha ya yona."}
       </p>
 
       <h2>8. Bašomiši ba ditšhabatšhaba</h2>
@@ -189,9 +215,7 @@ export function TermsBodyNso(): ReactElement {
 
       <h2>1. Ke mang yo a ka šomišago Gadit</h2>
       <p>
-        O swanetše go ba le bonyane mengwaga ye 13 go hlama akhaonto. Ge o le magareng ga mengwaga ye 13 le ye 18, o
-        swanetše go ba le tumelelo ya motswadi goba mohlokomedi wa semolao. Ka go šomiša Gadit, o tiišetša gore o
-        fihlelela dinyakwa tše.
+        {"O swanetše go ba le mengwaga ye 18 goba go feta go bula akhaonto ya Gadit. Bana le bafsa ba ka fase ga mengwaga ye 18 ba šomiša Gadit feela ka motho yo mogolo: motswadi goba mohlokomedi a ka ba oketša bjalo ka diprofaele leanong la Family, gomme sekolo se ka nea baithuti ba sona sekgokaganyi sa sehlopha. Motswadi, mohlokomedi goba sekolo seo se fanago ka phihlelelo yeo ke sona se ikarabelago ka yona. Ka go bula akhaonto, o tiišetša gore o na le mengwaga ye 18 goba go feta."}
       </p>
 
       <h2>2. Akhaonto ya gago</h2>
@@ -215,16 +239,11 @@ export function TermsBodyNso(): ReactElement {
       </p>
       <h3>Go khansela</h3>
       <p>
-        O ka khansela nako efe goba efe go tšwa letlakaleng la akhaonto ya gago. Go khansela go emiša dimpshafatšo tša
-        ka moso. O tla tšwela pele o na le phihlelelo ya dikarolo tšeo di lefelwago go fihla mafelelong a nako ya bjale
-        ya tefo. Ga re bušetše tšhelete ya karolo ya nako yeo e sa šomišwago.
+        {"O ka khansela nako efe goba efe go tšwa letlakaleng la akhaonto ya gago. Go khansela go emiša dimpshafatšo tša ka moso. O tla tšwela pele o na le phihlelelo ya dikarolo tšeo di lefelwago go fihla mafelelong a nako ya bjale ya tefo. Ka ntle ga dipušetšo tšeo di hlalošitšwego ka mo tlase, ga re bušetše tšhelete ya nako yeo e sa šomišwago, ntle le ge molao o nyaka ka tsela e nngwe."}
       </p>
       <h3>Dipušetšo tša tšhelete</h3>
       <p>
-        Ntle le moo molao o go nyakago, ditefo ga di bušetšwe. Ge o dumela gore o lefišitšwe ka phošo, ikgokaganye
-        le{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a> mo matšatšing a 30 go tloga
-        ge o lefišitšwe.
+        {"Ge o kgopela mo matšatšing a 14 go tloga tefong ya pele akhaontong ya gago, goba mo matšatšing a 14 go tloga mpshafatšong ya ngwaga le ngwaga, re tla bušetša tefo yeo ka botlalo. Ga go nyakege gore o fe lebaka. Ngwalela "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" o diriša aterese ya imeile ya akhaonto ya gago. Pušetšo ya tšhelete e fediša le peeletšo. Ditefo tše dingwe ga di bušetšwe, ntle le moo molao o nyakago pušetšo. Ge o dumela gore o lefišitšwe ka phošo, re ngwalele mo matšatšing a 30 go tloga ge o lefišitšwe. Ditheko tšeo di dirilwego ka app ya iOS di lefedišwa ke Apple, gomme ke Apple feela yeo e ka di bušetšago, go reportaproblem.apple.com."}
       </p>
 
       <h2>4. Tšhomišo ye e amogelegago</h2>
@@ -244,9 +263,7 @@ export function TermsBodyNso(): ReactElement {
 
       <h2>5. Diteng tšeo di tšweleditšwego ke AI</h2>
       <p>
-        Gadit e šomiša dimmotlolo tša bohlale bja maitirelo (go akaretša GPT, Whisper, le DALL·E tša OpenAI) go
-        tšweletša ditlhalošo, mehlala, ditšo tša mantšu, ditshwayo, diteko, diswantšho, le dingwalollo. O a kwešiša
-        gomme o dumela gore:
+        {"Gadit e šomiša dimmotlolo tša bohlale bja maitirelo (go akaretša dimmotlolo tša OpenAI le Google) go tšweletša ditlhalošo, mehlala, ditšo tša mantšu, ditshwayo, diteko, diswantšho, polelo ya lentšu le dingwalollo. O a kwešiša gomme o dumela gore:"}
       </p>
       <ul>
         <li>

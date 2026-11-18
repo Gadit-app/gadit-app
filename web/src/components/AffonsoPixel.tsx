@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useKidsMode } from "@/lib/use-kids-mode";
-import { adsAllowed } from "@/lib/ad-scope";
+import { adsAllowed, inStoreApp, isClassLinkPath } from "@/lib/ad-scope";
 import { arrivedWithAffiliateParam, ensureAffonsoPixel } from "@/lib/affonso";
 
 /**
@@ -21,6 +21,9 @@ export default function AffonsoPixel() {
   useEffect(() => {
     if (!decided || loaded) return;
     if (familyRole === "kid" || kidsOn) return;
+    // Never inside the store apps or on a class-link page, even with ?ref=
+    // (council round 5, 2026-11-18: Privacy §3 and §7 promise it).
+    if (inStoreApp() || isClassLinkPath(pathname)) return;
     if (adsAllowed(pathname) || arrivedWithAffiliateParam()) {
       ensureAffonsoPixel();
       // eslint-disable-next-line react-hooks/set-state-in-effect -- a one-way latch (the pixel, once loaded, stays loaded)

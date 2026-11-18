@@ -23,6 +23,9 @@ export function PrivacyBodyNr(): ReactElement {
         lephrofayili elinikelwa yi-Google (ibizo elibonakalako, isithombe sephrofayili). Asiyamukeli iphasiwedi yakho
         ye-Google.
       </p>
+      <p>
+        {"Ku-app ye-iOS ungaphinda ungene nge-Apple. Ngalokho i-Apple isinika ibizo nekheli le-imeyili okhetha ukulabelana ngalo, okungaba likheli eliyimfihlo lokudlulisa elithumela ama-imeyili wethu kuwe. Asiyamukeli iphasiwedi yakho ye-Apple."}
+      </p>
       <h3>Ilwazi lokusebenzisa</h3>
       <p>Nawusebenzisa i-Gadit, sisebenza ngalokhu:</p>
       <ul>
@@ -75,30 +78,45 @@ export function PrivacyBodyNr(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{", isebenza ngamezwi nemitjho oyithumelako ukwenza iinhlathululo, imibono ngemitjho, imibuzo yokuhlola, nokutlola phasi ikulumo (Whisper), begodu yenza iinthombe (DALL·E 3). Begodu itlola iimpendulo zomsizi we-Gadit: siyithumela umbuzo wakho, imilayezo yangaphambilini yengcoco efanako, ilimi lesikhombimsebenzisi, uhlelo lwakho, nokuthi ukuwebhusayithi namkha ku-app, begodu asinamathiseli ibizo lakho namkha ikheli lakho le-imeyili. Idatha ethunyelwa ku-OpenAI ilawulwa mthethomgomo we-OpenAI wokusetjenziswa kwedatha ye-API."}
+          <strong>OpenAI</strong>{", isebenza ngamezwi nemitjho oyithumelako ukwenza iinhlathululo, imibono ngemitjho nemibuzo yokuhlola, iguqula umtlolo ube yikulumo, itlole phasi okufakwe ngezwi, ifunde umtlolo oseenthombeni nakumafayela we-PDF owulayishako, ngokwesibonelo amakhasi womsebenzi wekhaya, begodu yenza iinthombe. Begodu itlola iimpendulo zomsizi we-Gadit: siyithumela umbuzo wakho, imilayezo yangaphambilini yengcoco efanako, ilimi lesikhombimsebenzisi, uhlelo lwakho, nokuthi ukuwebhusayithi namkha ku-app, begodu asinamathiseli ibizo lakho namkha ikheli lakho le-imeyili. Idatha ethunyelwa ku-OpenAI ilawulwa mthethomgomo we-OpenAI wokusetjenziswa kwedatha ye-API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), igcina i-akhawunti yakho,
           iphrofayili, isimo sokubhalisa, umlando wokufuna, neenthombe ezenziweko.
         </li>
         <li>
+          <strong>Google</strong>{", i-Gemini, nge-Google Cloud, iguqula umtlolo ube yikulumo. Siyithumela kwaphela umtlolo okufuze ufundwe ngokuzwakalako, njengamezwi, imitjho neendatjana, begodu umsindo ugcinwa ekugcinweni kwethu kwe-Firebase ukuze ukghone ukudlalwa godu. Emdlalweni munye wokufunda ibuye ilalele umsindo umntwana awukhulumako ngokuzwakalako, ukuze iwuhlolisise, begodu lokho okuqotjiweko akugcinwa. Google Fonts iletha amafonti wesikhombimsebenzisi sesi-China, sesi-Japan nesi-Korea, begodu ibona ikheli lakho le-IP."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{", iyinhlangano engasenzeli nzuzo yakwa-Israel, efaka amatshwayo wonkamisa emtlolweni wesiHebheru wabatloli abancani. Siyithumela kwaphela umtlolo wesiHebheru."}
+        </li>
+        <li>
           <strong>Stripe</strong>, iphatha iimbhadelo, ukubhalisa, nekhasi lokuphatha iimbhadelo (billing portal).
         </li>
         <li>
+          <strong>Apple</strong>{", inikela ngokungena nge-Apple ku-app ye-iOS, bona isigaba 1, begodu ithengisa begodu ikhokhise ngokubhalisa okuthengwa ku-app ye-iOS. Kilezo zinto ezithengwako, Apple iphatha ukubhadela, begodu thina samukela kwaphela isiqinisekiso sokuthenga nesimo sakho, njengokuvuselelwa namkha ukubuyiselwa imali."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{", ibhadela abalingani bethu. Siyinika ikheli le-imeyili le-PayPal lomlingani kanye nesamba."}
+        </li>
+        <li>
           <strong>Resend</strong>{", ithumela ama-imeyili wethu (njengamalinki wokungena nezaziso), begodu idlulisela eqenjini lethu imibuzo umsizi we-Gadit ayidlulisako, linekheli lakho le-imeyili njengekheli lokuphendula."}
+        </li>
+        <li>
+          <strong>Expo</strong>{", iletha izaziso ze-app ye-iOS, njengokutjwayeliswa umzali angakuvulako, okufaka hlangana ibizo lomntwana nelizwi umntwana alijameleko."}
         </li>
         <li>
           <strong>Vercel</strong>, ibamba begodu ihambisa iwebhusayidi, begodu inikela iimbalo ezingatjengisi umuntu
           nokulinganiswa kokusebenza.
         </li>
         <li>
-          <strong>Ukukhangisa neembalo</strong>, i-Meta (Meta Pixel), i-Google Analytics ne-TikTok (TikTok Pixel
-          ne-Events API) zilinganisa ukuvakatjhela kanye nemiphumela yeenkhangiso zethu. Zisebenzisa ama-cookie kanye
-          namathekinoloji afanako emakhasini wethu wokuthengisa, wokubhalisa nawokubhadela. Nawubhalisa namkha
-          nawubhadela, singathumela kilezi zinsiza ikheli le-imeyili kanye ne-ID ye-akhawunti kufihlwe ngekhowudi
-          yendlela yinye (hash), kanye nekheli lakho le-IP nemininingwana yebhrawuza yakho, kwaphela ukulinganisa
-          iinkhangiso zethu. Asizithumeleli nanini ilwazi nalinye ngabantwana, begodu amathulusi la awasebenzi
-          eenkrinini abantwana abazisebenzisako.
+          <strong>Yooniz</strong>{", yinsiza ehlukileko yokufunda komndeni yomseki ofanako. Yooniz ingasibuza bona ikheli le-imeyili lomzali linehlelo le-Gadit Family elisebenzako yini, begodu siphendula ngo-yebo namkha ngo-cha kwaphela. Nawukhona, umndeni ungavula i-Gadit usuka ku-Yooniz ngaphandle kwephasiwedi: Yooniz isithumela ikheli le-imeyili lomzali, amabizo wokubonakala kwamalunga womndeni, nokuthi ngiloyo naloyo ungumzali, mumfana namkha yintombazana. Umntwana ovule i-Gadit esuka ku-Yooniz nakenzwisisa ilizwi, sithumela ku-Yooniz ikheli le-imeyili lomzali, i-ID yomntwana ye-Yooniz kanye nenani lamaphuzu wokufunda awafumeneko, kodwana asithumeli nanini ilizwi ngokwalo."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{", iletha iinthombe ezincani zamafulego ezitjengiswa emakhasini wethu, begodu ngalokho ibona ikheli lakho le-IP nemininingwana yebhrawuza yakho."}
+        </li>
+        <li>
+          <strong>Ukukhangisa neembalo</strong>{", i-Meta, Meta Pixel, i-Google Analytics ne-TikTok, TikTok Pixel ne-Events API, zilinganisa ukuvakatjhela kanye nemiphumela yeenkhangiso zethu. Zisebenzisa ama-cookie kanye namathekinoloji afanako emakhasini wethu wokuthengisa, wokubhalisa nawokubhadela. Nawubhalisa namkha nawubhadela, singathumela kilezi zinsiza ikheli le-imeyili kanye ne-ID ye-akhawunti kufihlwe ngekhowudi yendlela yinye, hash, kanye nekheli lakho le-IP nemininingwana yebhrawuza yakho, kwaphela ukulinganisa iinkhangiso zethu. Affonso, insiza yamalinki wabalingani, ilayitjheka emakhasini afanako nakunanyana ngiliphi ikhasi isivakatjhi esifikelela kilo ngelinki lomlingani, begodu igcina i-cookie isikhathi esingafika emalangeni ama-60. Nawubhalisa ngemva kokufika ngelinki lomlingani le-Affonso, sithumela ku-Affonso ikheli lakho le-imeyili, ibizo lakho ne-ID ye-akhawunti yakho, ukuze umlingani okunqophise kithi athole ikhredithi. Asizithumeleli nanini nanyana ngiyiphi yalezi zinsiza ilwazi ngabantwana, begodu amathulusi la awasebenzi ephrofayilini yomntwana, ku-Kids Mode namkha emakhasini welinki yekilasi."}
         </li>
       </ul>
 
@@ -146,8 +164,16 @@ export function PrivacyBodyNr(): ReactElement {
 
       <h2>7. Abantwana</h2>
       <p>
-        I-Gadit ayenzelwanga abantwana abangaphasi kweminyaka eli-13. Nawukholwa bona umntwana ongaphasi kweminyaka
-        eli-13 uvule i-akhawunti, sithumele i-imeyili begodu sizokusula i-akhawunti nedatha ehlobene nayo.
+        {"I-akhawunti ye-Gadit ngeyabantu abadala abaneminyaka eli-18 namkha ngaphezulu. Abantwana nabatjha basebenzisa i-Gadit kwaphela ngokudlula kumuntu omdala, ngenye yeendlela ezimbili."}
+      </p>
+      <p>
+        {"Amaphrofayili we-Family: umzali ungeza umntwana ngamunye njengephrofayili ngaphakathi kwe-akhawunti yomzali ye-Family, nebizo nokuthi umntwana mfana namkha ntombazana, begodu, nangabe umzali uyakwengeza, neminyaka, ibanga lesikolo nesithombe. Abantwana abanalo ikheli le-imeyili namkha iphasiwedi kithi. Amagama umntwana awafunako, nencwadi yakhe, imidlalo nokuragela phambili kwakhe, kugcinwa ku-akhawunti yomndeni. Ababelethi emndenini, nabo boke abanika ukufinyelela khona, isibonelo umfundisi wangasese, bangakubona, begodu umzali angakhetha ukuthola izaziso, ngesaziso namkha nge-imeyili, ezinamagama umntwana awafunako. Umzali angasusa iphrofayili yomntwana ku-app nanyana kunini."}
+      </p>
+      <p>
+        {"Iixhumanisi zekilasi: umfundi uvula isixhumanisi namkha ikhodi ayinikelwa mfundisi, ngaphandle kwe-akhawunti begodu ngaphandle kwekheli le-imeyili. Nangabe umfundisi ufake irhelo lamabizo, umfundi ukhetha ibizo lakhe kilo, begodu amagama umfundi awafunako agcinelwa ikilasi ngaphasi kwalelo bizo, bona umfundisi awabone. Isikolo sithatha isiqunto sokusebenzisa i-Gadit begodu sinesibopho sokwazisa ababelethi lapho umthetho ukufuna khona."}
+      </p>
+      <p>
+        {"Asikaze sisebenzise ilwazi labantwana ekukhangiseni, begodu amathulusi adweliswe ngaphasi kwe-Ukukhangisa neembalo esigabeni 3 awalayitjhwa ephrofayilini yomntwana, ku-Kids Mode namkha emakhasini weixhumanisi zekilasi. Bona kusulwe iphrofayili yomntwana nedatha yayo, umzali angatlolela ku-"}<a href="mailto:support@gadit.app">support@gadit.app</a>{" begodu sizoyisula. Nawukholwa bona umntwana uvule i-akhawunti yakhe, sitlolele begodu sizokusula i-akhawunti nedatha yayo."}
       </p>
 
       <h2>8. Abasebenzisi bamanye amazwe</h2>
@@ -188,9 +214,7 @@ export function TermsBodyNr(): ReactElement {
 
       <h2>1. Ngubani ongasebenzisa i-Gadit</h2>
       <p>
-        Kufuze ube neminyaka eli-13 okungenani bona uvule i-akhawunti. Nawuneminyaka ephakathi kwe-13 ne-18, kufuze
-        ube nemvumo yomzali namkha yomtlhogomeli osemthethweni. Ngokusebenzisa i-Gadit utjengisa bona uyahlangabezana
-        neemfuneko lezi.
+        {"Kufuze ube neminyaka eli-18 namkha ngaphezulu bona uvule i-akhawunti ye-Gadit. Abantwana nabatjha abangaphasi kweminyaka eli-18 basebenzisa i-Gadit kwaphela ngokudlula kumuntu omdala: umzali namkha umtlhogomeli bangabangeza njengamaphrofayili kuhlelo lwe-Family, begodu isikolo singanika abafundi baso isixhumanisi sekilasi. Umzali, umtlhogomeli namkha isikolo esinika ukufinyelela lokho sinesibopho ngakho. Ngokuvula i-akhawunti, uyaqinisekisa bona uneminyaka eli-18 namkha ngaphezulu."}
       </p>
 
       <h2>2. I-akhawunti yakho</h2>
@@ -214,16 +238,11 @@ export function TermsBodyNr(): ReactElement {
       </p>
       <h3>Ukukhansela</h3>
       <p>
-        Ungakhansela nanyana kunini ekhasini le-akhawunti yakho. Ukukhansela kumisa ukuvuselelwa kwesikhathi esizako.
-        Uzokuragela phambili ufikelela izinto ezibhadelwako bekube sekupheleni kwesikhathi sokubhadela esikhona.
-        Asibuyiseli ingcenye yemali yesikhathi esingakasetjenziswa.
+        {"Ungakhansela nanyana kunini ekhasini le-akhawunti yakho. Ukukhansela kumisa ukuvuselelwa kwesikhathi esizako. Uzokuragela phambili ufikelela izinto ezibhadelwako bekube sekupheleni kwesikhathi sokubhadela esikhona. Ngaphandle kweembuyiselo ezihlathululwe ngaphasi, asibuyiseli imali yesikhathi esingakasetjenziswa, ngaphandle kwalapho umthetho ufuna okuhlukileko."}
       </p>
       <h3>Ukubuyiselwa kwemali</h3>
       <p>
-        Ngaphandle lapho kutlhogwa mthetho, iimbhadelo azibuyiselwa. Nawukholwa bona ubhadeliswe ngephoso, thintana
-        nathi ekhelini{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a> ngaphakathi kwamalanga
-        ama-30 wokubhadeliswa loko.
+        {"Nawucela ngaphakathi kwamalanga ali-14 wokubhadela kokuthoma ku-akhawunti yakho, namkha ngaphakathi kwamalanga ali-14 wokuvuselelwa komnyaka, sizokubuyisela yoke leyombhadelo. Akutlhogeki unikele isizathu. Sitlolele ku-"}<a href="mailto:support@gadit.app">support@gadit.app</a>{" usuka ekhelini le-imeyili le-akhawunti yakho. Imbuyiselo iqeda nokuzibhalisa. Ezinye iimbhadelo azibuyiselwa, ngaphandle kwalapho umthetho ufuna imbuyiselo. Nawukholwa bona ubhadeliswe ngephoso, sitlolele ngaphakathi kwamalanga ama-30 wokubhadeliswa. Okuthengwe ku-app ye-iOS kubhadeliswa yi-Apple, begodu yi-Apple kwaphela engakubuyisela khona, ku-reportaproblem.apple.com."}
       </p>
 
       <h2>4. Ukusebenzisa okwamukelekako</h2>
@@ -243,9 +262,7 @@ export function TermsBodyNr(): ReactElement {
 
       <h2>5. Okuqukethwe okwenziwe yi-AI</h2>
       <p>
-        I-Gadit isebenzisa amamodeli wobuhlakani bokwenziwa (artificial intelligence) (kufakwa hlangana ne-GPT,
-        i-Whisper, ne-DALL·E ze-OpenAI) ukwenza iinhlathululo, iimbonelo, umsuka wamezwi (etymology), imibono, imibuzo
-        yokuhlola, iinthombe, nokutlolwa phasi kwekulumo. Uyazwisisa begodu uyavuma bona:
+        {"I-Gadit isebenzisa amamodeli wobuhlakani bokwenziwa (kufakwa hlangana namamodeli avela ku-OpenAI ne-Google) ukwenza iinhlathululo, iimbonelo, umsuka wamezwi, imibono, imibuzo yokuhlola, iinthombe, ikulumo, nokutlolwa phasi kwekulumo. Uyazwisisa begodu uyavuma bona:"}
       </p>
       <ul>
         <li>

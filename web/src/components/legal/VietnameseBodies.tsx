@@ -22,6 +22,9 @@ export function PrivacyBodyVi(): ReactElement {
         Khi bạn tạo tài khoản, chúng tôi thu thập địa chỉ email của bạn và, nếu bạn đăng nhập bằng Google, thông tin hồ
         sơ cơ bản do Google cung cấp (tên hiển thị, ảnh hồ sơ). Chúng tôi không nhận mật khẩu Google của bạn.
       </p>
+      <p>
+        {"Trong ứng dụng iOS, bạn cũng có thể đăng nhập bằng Apple. Khi đó, Apple cung cấp cho chúng tôi tên và địa chỉ email mà bạn chọn chia sẻ, có thể là một địa chỉ chuyển tiếp riêng tư dùng để chuyển email của chúng tôi đến bạn. Chúng tôi không nhận mật khẩu Apple của bạn."}
+      </p>
       <h3>Thông tin sử dụng</h3>
       <p>Khi bạn sử dụng Gadit, chúng tôi xử lý:</p>
       <ul>
@@ -75,30 +78,45 @@ export function PrivacyBodyVi(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{": xử lý các từ và câu bạn gửi để tạo định nghĩa, nhận xét về câu, bài kiểm tra nhanh và chuyển giọng nói thành văn bản (Whisper), đồng thời tạo hình ảnh (DALL·E 3). OpenAI cũng soạn câu trả lời của trợ lý Gadit: chúng tôi gửi cho OpenAI câu hỏi của bạn, các tin nhắn trước đó trong cùng cuộc trò chuyện, ngôn ngữ giao diện của bạn, gói đăng ký của bạn và việc bạn đang dùng trang web hay ứng dụng, và chúng tôi không đính kèm tên hoặc địa chỉ email của bạn. Dữ liệu gửi đến OpenAI chịu sự điều chỉnh của chính sách sử dụng dữ liệu API của OpenAI."}
+          <strong>OpenAI</strong>{": xử lý các từ và câu bạn gửi để tạo định nghĩa, nhận xét về câu và bài kiểm tra nhanh, chuyển văn bản thành giọng nói, chép lời đầu vào bằng giọng nói, đọc văn bản trong ảnh và tệp PDF mà bạn tải lên, ví dụ như trang bài tập về nhà, và tạo hình ảnh. OpenAI cũng soạn câu trả lời của trợ lý Gadit: chúng tôi gửi cho OpenAI câu hỏi của bạn, các tin nhắn trước đó trong cùng cuộc trò chuyện, ngôn ngữ giao diện của bạn, gói đăng ký của bạn và việc bạn đang dùng trang web hay ứng dụng, và chúng tôi không đính kèm tên hoặc địa chỉ email của bạn. Dữ liệu gửi đến OpenAI chịu sự điều chỉnh của chính sách sử dụng dữ liệu API của OpenAI."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): lưu trữ tài khoản, hồ sơ, trạng
           thái gói đăng ký, lịch sử tìm kiếm và hình ảnh được tạo của bạn.
         </li>
         <li>
+          <strong>Google</strong>{": (Gemini, thông qua Google Cloud) chuyển văn bản thành giọng nói. Chúng tôi chỉ gửi cho Google văn bản cần được đọc to, như từ, câu và truyện, và âm thanh được lưu trong bộ nhớ Firebase của chúng tôi để có thể phát lại. Trong một trò chơi đọc, Google cũng nghe âm thanh mà trẻ phát âm to để kiểm tra, và bản ghi âm đó không được lưu trữ. Google Fonts cung cấp phông chữ cho giao diện tiếng Trung, tiếng Nhật và tiếng Hàn, và nhìn thấy địa chỉ IP của bạn."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{": một tổ chức phi lợi nhuận của Israel, thêm dấu nguyên âm vào văn bản tiếng Hebrew cho độc giả nhỏ tuổi. Chúng tôi chỉ gửi cho Dicta văn bản tiếng Hebrew."}
+        </li>
+        <li>
           <strong>Stripe</strong>: xử lý thanh toán, gói đăng ký và cổng quản lý thanh toán.
         </li>
         <li>
+          <strong>Apple</strong>{": cung cấp tính năng Sign in with Apple trong ứng dụng iOS (xem mục 1), đồng thời bán và thu tiền các gói đăng ký được mua trong ứng dụng iOS. Đối với các giao dịch đó, Apple xử lý việc thanh toán, và chúng tôi chỉ nhận được xác nhận về giao dịch mua và trạng thái của giao dịch đó, chẳng hạn như gia hạn hoặc hoàn tiền."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{": thanh toán cho các đối tác liên kết của chúng tôi. Chúng tôi cung cấp cho PayPal địa chỉ email PayPal của đối tác và số tiền."}
+        </li>
+        <li>
           <strong>Resend</strong>{": gửi email của chúng tôi (chẳng hạn như liên kết đăng nhập và thông báo), đồng thời chuyển đến đội ngũ của chúng tôi các câu hỏi mà trợ lý Gadit chuyển tiếp, với địa chỉ email của bạn là địa chỉ để trả lời."}
+        </li>
+        <li>
+          <strong>Expo</strong>{": gửi các thông báo của ứng dụng iOS, chẳng hạn như các cảnh báo mà cha mẹ có thể bật, bao gồm tên của trẻ và từ mà trẻ đã tra cứu."}
         </li>
         <li>
           <strong>Vercel</strong>: lưu trữ và phân phối trang web, đồng thời cung cấp phân tích ẩn danh và đo lường
           hiệu suất.
         </li>
         <li>
-          <strong>Quảng cáo và phân tích</strong>: Meta (Meta Pixel), Google Analytics và TikTok (TikTok Pixel và
-          Events API) đo lường lượt truy cập và kết quả quảng cáo của chúng tôi. Các dịch vụ này sử dụng cookie và các
-          công nghệ tương tự trên các trang tiếp thị, đăng ký và thanh toán của chúng tôi. Khi bạn đăng ký hoặc thanh
-          toán, chúng tôi có thể gửi cho các dịch vụ này địa chỉ email và ID tài khoản đã được băm (mã hóa một chiều),
-          cùng với địa chỉ IP và thông tin trình duyệt của bạn, chỉ để đo lường quảng cáo của chúng tôi. Chúng tôi
-          không bao giờ gửi cho họ bất kỳ thông tin nào về trẻ em, và các công cụ này không chạy trên những màn hình
-          mà trẻ em sử dụng.
+          <strong>Yooniz</strong>{": một dịch vụ học tập gia đình riêng biệt do cùng một nhà sáng lập tạo ra. Yooniz có thể hỏi chúng tôi liệu địa chỉ email của cha mẹ có gói Family đang hoạt động trên Gadit hay không, và chúng tôi chỉ trả lời có hoặc không. Nếu có, gia đình có thể mở Gadit từ Yooniz mà không cần mật khẩu: Yooniz gửi cho chúng tôi địa chỉ email của cha mẹ, tên hiển thị của các thành viên trong gia đình, và liệu mỗi người là cha mẹ, bé trai hay bé gái. Khi một trẻ mở Gadit từ Yooniz hiểu được một từ, chúng tôi gửi cho Yooniz địa chỉ email của cha mẹ, ID Yooniz của trẻ và số điểm học tập đã kiếm được, tuyệt đối không gửi chính từ đó."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{": cung cấp các hình ảnh lá cờ nhỏ hiển thị trên các trang của chúng tôi, và vì vậy nhìn thấy địa chỉ IP và thông tin trình duyệt của bạn."}
+        </li>
+        <li>
+          <strong>Quảng cáo và phân tích</strong>{": Meta (Meta Pixel), Google Analytics và TikTok (TikTok Pixel và Events API) đo lường lượt truy cập và kết quả quảng cáo của chúng tôi. Các dịch vụ này sử dụng cookie và các công nghệ tương tự trên các trang tiếp thị, đăng ký và thanh toán của chúng tôi. Khi bạn đăng ký hoặc thanh toán, chúng tôi có thể gửi cho các dịch vụ này địa chỉ email và ID tài khoản đã được băm (mã hóa một chiều), cùng với địa chỉ IP và thông tin trình duyệt của bạn, chỉ để đo lường quảng cáo của chúng tôi. Affonso, một dịch vụ cho liên kết đối tác liên kết, tải trên cùng các trang đó và trên mọi trang mà khách truy cập đến thông qua liên kết của đối tác, và lưu cookie trong tối đa 60 ngày. Nếu bạn đăng ký sau khi truy cập qua một liên kết đối tác liên kết của Affonso, chúng tôi gửi cho Affonso địa chỉ email, tên và ID tài khoản của bạn, để đối tác đã giới thiệu bạn được ghi nhận công lao. Chúng tôi không bao giờ gửi cho bất kỳ dịch vụ nào trong số này thông tin về trẻ em, và các công cụ này không chạy trên hồ sơ của trẻ, trong Kids Mode hoặc trên các trang liên kết lớp học."}
         </li>
       </ul>
 
@@ -146,8 +164,16 @@ export function PrivacyBodyVi(): ReactElement {
 
       <h2>7. Trẻ em</h2>
       <p>
-        Gadit không hướng đến trẻ em dưới 13 tuổi. Nếu bạn cho rằng một trẻ em dưới 13 tuổi đã tạo tài khoản, hãy gửi
-        email cho chúng tôi và chúng tôi sẽ xóa tài khoản đó cùng dữ liệu liên quan.
+        {"Tài khoản Gadit dành cho người lớn từ đủ 18 tuổi trở lên. Trẻ em và thanh thiếu niên chỉ sử dụng Gadit thông qua một người lớn, theo một trong hai cách sau."}
+      </p>
+      <p>
+        {"Hồ sơ Family: cha hoặc mẹ thêm từng trẻ dưới dạng một hồ sơ trong tài khoản Family của cha mẹ, với tên và thông tin là bé trai hay bé gái, và nếu cha mẹ thêm thì có thể bao gồm cả độ tuổi, lớp học và ảnh. Trẻ em không có địa chỉ email hoặc mật khẩu với chúng tôi. Các từ mà trẻ tra cứu, cùng với sổ tay, trò chơi và tiến độ của trẻ, được lưu trong tài khoản của gia đình. Cha mẹ trong gia đình, và bất kỳ ai mà họ cấp quyền truy cập cho, chẳng hạn như gia sư, đều có thể xem các thông tin này, và cha hoặc mẹ có thể chọn nhận thông báo, qua thông báo trên thiết bị hoặc qua email, về các từ mà trẻ tra cứu. Cha hoặc mẹ có thể xóa hồ sơ của trẻ trong ứng dụng bất kỳ lúc nào."}
+      </p>
+      <p>
+        {"Liên kết lớp học: học sinh mở liên kết hoặc mã do giáo viên cung cấp, không cần tài khoản và không cần địa chỉ email. Nếu giáo viên đã nhập một danh sách tên, học sinh sẽ chọn tên của mình từ danh sách đó, và các từ mà học sinh tra cứu sẽ được lưu cho lớp dưới tên đó để giáo viên có thể xem. Nhà trường quyết định sử dụng Gadit và chịu trách nhiệm thông báo cho cha mẹ trong trường hợp pháp luật yêu cầu."}
+      </p>
+      <p>
+        {"Chúng tôi tuyệt đối không sử dụng thông tin của trẻ em cho mục đích quảng cáo, và các công cụ được liệt kê dưới mục Quảng cáo và phân tích ở phần 3 sẽ không bao giờ tải trên hồ sơ của trẻ, trong Chế độ Trẻ em hoặc trên các trang liên kết lớp học. Để xóa hồ sơ của trẻ và dữ liệu của hồ sơ đó, cha hoặc mẹ có thể viết đến "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" và chúng tôi sẽ xóa. Nếu bạn cho rằng một trẻ em đã tự mở tài khoản, hãy viết cho chúng tôi và chúng tôi sẽ xóa tài khoản đó cùng dữ liệu của tài khoản."}
       </p>
 
       <h2>8. Người dùng quốc tế</h2>
@@ -187,8 +213,7 @@ export function TermsBodyVi(): ReactElement {
 
       <h2>1. Ai có thể sử dụng Gadit</h2>
       <p>
-        Bạn phải từ đủ 13 tuổi trở lên để tạo tài khoản. Nếu bạn từ 13 đến 18 tuổi, bạn phải được cha mẹ hoặc người giám
-        hộ hợp pháp cho phép. Bằng việc sử dụng Gadit, bạn cam đoan rằng bạn đáp ứng các yêu cầu này.
+        {"Bạn phải từ đủ 18 tuổi trở lên để mở tài khoản Gadit. Trẻ em và thanh thiếu niên dưới 18 tuổi chỉ sử dụng Gadit thông qua một người lớn: cha mẹ hoặc người giám hộ có thể thêm các em dưới dạng hồ sơ trong gói Family, và nhà trường có thể cung cấp cho học sinh của mình một liên kết lớp học. Cha mẹ, người giám hộ hoặc nhà trường cấp quyền truy cập đó chịu trách nhiệm về việc này. Bằng việc mở tài khoản, bạn xác nhận rằng mình từ đủ 18 tuổi trở lên."}
       </p>
 
       <h2>2. Tài khoản của bạn</h2>
@@ -211,16 +236,11 @@ export function TermsBodyVi(): ReactElement {
       </p>
       <h3>Hủy</h3>
       <p>
-        Bạn có thể hủy bất kỳ lúc nào từ trang tài khoản của mình. Việc hủy sẽ dừng các lần gia hạn trong tương lai. Bạn
-        vẫn giữ quyền truy cập vào các tính năng trả phí cho đến hết kỳ thanh toán hiện tại. Chúng tôi không hoàn tiền
-        một phần cho thời gian chưa sử dụng.
+        {"Bạn có thể hủy bất kỳ lúc nào từ trang tài khoản của mình. Việc hủy sẽ dừng các lần gia hạn trong tương lai. Bạn vẫn giữ quyền truy cập vào các tính năng trả phí cho đến hết kỳ thanh toán hiện tại. Ngoại trừ các khoản hoàn tiền được mô tả dưới đây, chúng tôi không hoàn tiền cho thời gian chưa sử dụng, trừ khi pháp luật yêu cầu khác."}
       </p>
       <h3>Hoàn tiền</h3>
       <p>
-        Trừ trường hợp pháp luật có yêu cầu, các khoản thanh toán không được hoàn lại. Nếu bạn cho rằng mình bị tính phí
-        nhầm, hãy liên hệ{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a> trong vòng 30 ngày kể từ
-        ngày bị tính phí.
+        {"Nếu bạn yêu cầu trong vòng 14 ngày kể từ khoản thanh toán đầu tiên trên tài khoản của mình, hoặc trong vòng 14 ngày kể từ một lần gia hạn hằng năm, chúng tôi sẽ hoàn lại toàn bộ khoản thanh toán đó. Bạn không cần nêu lý do. Hãy viết đến "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" từ địa chỉ email của tài khoản. Việc hoàn tiền cũng đồng thời chấm dứt gói đăng ký. Các khoản thanh toán khác không được hoàn lại, trừ khi pháp luật yêu cầu phải hoàn tiền. Nếu bạn cho rằng mình bị tính phí nhầm, hãy viết cho chúng tôi trong vòng 30 ngày kể từ ngày bị tính phí. Các giao dịch mua trong ứng dụng iOS được Apple lập hóa đơn, và chỉ Apple mới có thể hoàn tiền cho các giao dịch đó tại reportaproblem.apple.com."}
       </p>
 
       <h2>4. Sử dụng được chấp nhận</h2>
@@ -240,8 +260,7 @@ export function TermsBodyVi(): ReactElement {
 
       <h2>5. Nội dung do AI tạo ra</h2>
       <p>
-        Gadit sử dụng các mô hình trí tuệ nhân tạo (bao gồm GPT, Whisper và DALL·E của OpenAI) để tạo định nghĩa, ví
-        dụ, từ nguyên, nhận xét, bài kiểm tra nhanh, hình ảnh và bản chép lời. Bạn hiểu và đồng ý rằng:
+        {"Gadit sử dụng các mô hình trí tuệ nhân tạo, bao gồm các mô hình của OpenAI và Google, để tạo định nghĩa, ví dụ, từ nguyên, nhận xét, bài kiểm tra nhanh, hình ảnh, giọng nói và bản chép lời. Bạn hiểu và đồng ý rằng:"}
       </p>
       <ul>
         <li>

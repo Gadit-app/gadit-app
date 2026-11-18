@@ -14,7 +14,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { limitBump } from "@/lib/rate-limit";
 import { sendPartnerWelcome } from "@/lib/partner-email";
-import { Partner, Commission, commissionState, PAYOUT_MINIMUM_MINOR, EARNED_TIER_PAYING, EARNED_LIFETIME_RATE, FIRST_SALE_BONUS_MINOR, FIRST_SALE_BONUS_UNTIL, firstSaleBonusActive } from "@/lib/partners";
+import { Partner, Commission, commissionState, EARNED_TIER_PAYING, EARNED_LIFETIME_RATE, FIRST_SALE_BONUS_MINOR, FIRST_SALE_BONUS_UNTIL, firstSaleBonusActive } from "@/lib/partners";
 
 export const maxDuration = 30;
 
@@ -98,11 +98,6 @@ export async function GET(req: NextRequest) {
         availableAt: Number.isFinite(r.nextRelease) ? new Date(r.nextRelease).toISOString() : null,
       }));
 
-    // Payout: the primary currency = the one holding the most released $.
-    const primaryCur = Object.entries(byCurrency)
-      .sort((a, b) => b[1].released - a[1].released)[0]?.[0] ?? "usd";
-    const availableMinor = byCurrency[primaryCur]?.released ?? 0;
-
     return NextResponse.json({
       name: partner.name,
       code: partner.code,
@@ -121,10 +116,9 @@ export async function GET(req: NextRequest) {
       firstSaleBonus: { active: firstSaleBonusActive(now), until: new Date(FIRST_SALE_BONUS_UNTIL).toISOString(), minor: FIRST_SALE_BONUS_MINOR, earned: bonusEarned },
       earnings: byCurrency, // { ils: {pending,released,paid}, usd: {...} }
       referrals,
+      // No minimum (council round 5): everything released goes out in the
+      // next monthly payout, in every currency.
       payout: {
-        minimumMinor: PAYOUT_MINIMUM_MINOR,
-        currency: primaryCur,
-        availableMinor,
         nextPayoutDate: nextPayoutDate(now),
       },
     });

@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   description: "Gadit 特定商取引法に基づく表記 (Legal notice under the Act on Specified Commercial Transactions).",
 };
 
-const LAST_UPDATED = "2026-11-02"; // ISO day; LegalPage writes it in the document's language
+const LAST_UPDATED = "2026-11-18"; // ISO day; LegalPage writes it in the document's language
 
 const Mail = () => <a href={`mailto:${SELLER.email}`}>{SELLER.email}</a>;
 
@@ -98,11 +98,11 @@ const JapaneseBody = () => (
 
     <h2>返品・キャンセル</h2>
     <ul>
-      <li>デジタルサービスの性質上、お申し込み後の返品はお受けしておりません。</li>
+      <li>{"アカウントで最初のお支払い、または年額プランの更新料金については、請求日から14日以内にアカウントのメールアドレスから "}<Mail />{" までご連絡いただければ、全額を返金いたします。理由をお伝えいただく必要はありません。返金をもって、その有料プランは終了します。"}</li>
       <li>
         解約はアカウントページからいつでも行えます。解約すると以後の自動更新は停止され、現在の請求期間の終了まで有料機能をご利用いただけます。
       </li>
-      <li>未使用期間に対する日割り返金および一部返金は行いません。法令で義務付けられている場合を除き、お支払いいただいた料金は返金できません。</li>
+      <li>{"上記の場合を除き、未使用期間に対する日割り返金および一部返金は行わず、お支払いいただいた料金は返金できません。ただし、法令で義務付けられている場合はこの限りではありません。"}</li>
       <li>無料体験期間中に解約した場合、無料体験はその時点で終了し、料金は発生しません。</li>
       <li>
         誤って請求されたと思われる場合は、請求日から30日以内に <Mail /> までご連絡ください。
@@ -179,15 +179,12 @@ const EnglishBody = () => (
 
     <h2>Returns and cancellation (返品・キャンセル)</h2>
     <ul>
-      <li>Because this is a digital service, there are no returns after purchase.</li>
+      <li>{"Within 14 days of the first payment on your account, or of a yearly renewal, we refund that payment in full if you write to "}<Mail />{" from your account's email address. You do not need to give a reason. A refund also ends the subscription."}</li>
       <li>
         You can cancel at any time from your account page. Cancellation stops future renewals, and you keep the paid
         features until the end of the current billing period.
       </li>
-      <li>
-        We do not give prorated or partial refunds for unused time. Except where required by law, payments are
-        non-refundable.
-      </li>
+      <li>{"Apart from that, we do not give prorated or partial refunds for unused time, and other payments are non-refundable, except where the law requires otherwise."}</li>
       <li>If you cancel during the free trial, the trial ends at that moment and you are not charged.</li>
       <li>
         If you believe you were charged in error, contact <Mail /> within 30 days of the charge.

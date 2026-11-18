@@ -10,7 +10,7 @@
  */
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
-import { syntheticUidFor } from "@/lib/family";
+import { deleteFamilyMember } from "@/lib/family-delete";
 
 export async function POST(req: NextRequest) {
   try {
@@ -42,21 +42,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "cannot_delete_owner" }, { status: 400 });
     }
 
-    // Clean up the synthetic member account (best effort — it may never
-    // have been paired, in which case there's nothing to delete).
-    const syntheticUid = syntheticUidFor(ownerUid, memberId);
-    try {
-      await getAdminAuth().deleteUser(syntheticUid);
-    } catch {
-      /* no synthetic auth user — fine */
-    }
-    try {
-      await db.collection("users").doc(syntheticUid).delete();
-    } catch {
-      /* no user doc — fine */
-    }
-
-    await memberRef.delete();
+    // Everything that belongs to the member: the synthetic account and all
+    // its data, the parent's log of their searches, tutor access, the member
+    // doc (council round 5: removal used to leave the notebook behind).
+    await deleteFamilyMember(db, ownerUid, memberId);
 
     return NextResponse.json({ ok: true });
   } catch (err) {

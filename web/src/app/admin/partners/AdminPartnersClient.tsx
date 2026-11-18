@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAdminContext } from "../admin-context";
 import { LANGUAGES } from "@/lib/i18n";
-import { DEFAULT_RATE_YEAR_ONE, DEFAULT_RATE_LIFETIME } from "@/lib/partners";
+import { DEFAULT_RATE_YEAR_ONE, DEFAULT_RATE_LIFETIME, PAYPAL_NO_PAYOUT } from "@/lib/partners";
 
 /** Program defaults as whole percentages, for the add form. */
 const DEFAULT_Y1_PCT = String(Math.round(DEFAULT_RATE_YEAR_ONE * 100));
@@ -620,7 +620,7 @@ export default function AdminPartnersClient() {
                   <div style={statLabel}>{t.paidTotal}</div>
                   <div style={statValue}><span dir="ltr">{r.clicks} / {r.signups} / {r.payingCustomers}</span></div>
                   <div style={statValue}><span dir="ltr">{fmtMoney(accrued)}</span></div>
-                  <div style={{ ...statValue, color: "#0EA5A5", fontWeight: 800 }}><span dir="ltr">{fmtMoney(payable)}</span></div>
+                  <div style={{ ...statValue, color: "#0EA5A5", fontWeight: 800 }}><span dir="ltr">{fmtMoney(payable)}</span>{payable.some((x) => PAYPAL_NO_PAYOUT.includes(x.cur)) && <span style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#B45309" }}>pay in USD</span>}</div>
                   <div style={statValue}><span dir="ltr">{fmtMoney(paid)}</span></div>
                 </div>
 

@@ -37,7 +37,6 @@ import { SPELL_T_EXTRA } from "@/lib/spell-i18n";
 import { misc } from "@/lib/misc-i18n";
 import { ml } from "@/lib/my-lists-i18n";
 import { QText } from "@/components/play/QText";
-import { RightsLine } from "@/components/RightsLine";
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
 const LANGS = LANGUAGES;
@@ -917,10 +916,8 @@ export function NotebookPage() {
       </main>
 
       <footer className="wb-home-footer">
-        <RightsLine />
-        <span className="gd-buy">·</span>
         <Link href={href("/pricing")} className="gd-buy">{v2(lang, "navPricing")}</Link>
-        <span>·</span>
+        <span className="gd-buy">·</span>
         <Link href={href("/privacy")}>{v2(lang, "footerPrivacy")}</Link>
         <span>·</span>
         <Link href={href("/terms")}>{v2(lang, "footerTerms")}</Link>

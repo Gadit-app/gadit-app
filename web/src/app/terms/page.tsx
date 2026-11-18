@@ -27,8 +27,7 @@ const EnglishBody = () => (
 
     <h2>1. Who may use Gadit</h2>
     <p>
-      You must be at least 13 years old to create an account. If you are between 13 and 18, you must have the
-      permission of a parent or legal guardian. By using Gadit you represent that you meet these requirements.
+      {"You must be 18 or older to open a Gadit account. Children and teenagers under 18 use Gadit only through an adult: a parent or guardian can add them as profiles on the Family plan, and a school can give its students a class link. The parent, guardian or school that gives this access is responsible for it. By opening an account, you confirm that you are 18 or older."}
     </p>
 
     <h2>2. Your account</h2>
@@ -51,15 +50,11 @@ const EnglishBody = () => (
     </p>
     <h3>Cancellation</h3>
     <p>
-      You may cancel at any time from your account page. Cancellation stops future renewals. You retain access to
-      the paid features until the end of the current billing period. We do not provide partial refunds for unused
-      time.
+      {"You may cancel at any time from your account page. Cancellation stops future renewals. You retain access to the paid features until the end of the current billing period. Apart from the refunds described below, we do not refund unused time, except where the law requires otherwise."}
     </p>
     <h3>Refunds</h3>
     <p>
-      Except where required by law, payments are non-refundable. If you believe you were charged in error, contact{" "}
-      <a href="mailto:support@gadit.app">support@gadit.app</a> within 30 days of the
-      charge.
+      {"If you ask within 14 days of the first payment on your account, or within 14 days of a yearly renewal, we refund that payment in full. You do not need to give a reason. Write to "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" from your account's email address. A refund also ends the subscription. Other payments are non-refundable, except where the law requires a refund. If you believe you were charged in error, write to us within 30 days of the charge. Purchases made in the iOS app are billed by Apple, and only Apple can refund them, at reportaproblem.apple.com."}
     </p>
 
     <h2>4. Acceptable use</h2>
@@ -79,9 +74,7 @@ const EnglishBody = () => (
 
     <h2>5. AI-generated content</h2>
     <p>
-      Gadit uses artificial-intelligence models (including OpenAI&rsquo;s GPT, Whisper, and DALL·E) to generate
-      definitions, examples, etymologies, feedback, quizzes, images, and transcriptions. You understand and agree
-      that:
+      {"Gadit uses artificial-intelligence models (including models from OpenAI and Google) to generate definitions, examples, etymologies, feedback, quizzes, images, speech, and transcriptions. You understand and agree that:"}
     </p>
     <ul>
       <li>
@@ -193,8 +186,7 @@ const HebrewBody = () => (
 
     <h2>1. מי רשאי להשתמש ב-Gadit</h2>
     <p>
-      עליכם להיות לפחות בני 13 כדי לפתוח חשבון. אם אתם בני 13 עד 18, נדרש אישור הורה או אפוטרופוס חוקי. בשימוש
-      ב-Gadit אתם מצהירים שאתם עומדים בדרישות אלה.
+      {"כדי לפתוח חשבון ב-Gadit, גילכם צריך להיות 18 ומעלה. ילדים ובני נוער מתחת לגיל 18 משתמשים ב-Gadit רק דרך מבוגר: הורה או אפוטרופוס יכולים להוסיף אותם כפרופילים בתוכנית Family, ובית ספר יכול לתת לתלמידים שלו קישור כיתה. ההורה, האפוטרופוס או בית הספר שנותנים את הגישה הזאת אחראים לה. בפתיחת חשבון אתם מאשרים שגילכם 18 ומעלה."}
     </p>
 
     <h2>2. החשבון שלכם</h2>
@@ -216,14 +208,11 @@ const HebrewBody = () => (
     </p>
     <h3>ביטול</h3>
     <p>
-      אתם יכולים לבטל בכל עת מדף החשבון. הביטול עוצר חידושים עתידיים. הגישה לפיצ&rsquo;רים בתשלום נשמרת עד סוף
-      תקופת החיוב הנוכחית. איננו מספקים החזרים חלקיים עבור זמן שלא נוצל.
+      {"אתם יכולים לבטל בכל עת מדף החשבון. הביטול עוצר חידושים עתידיים. הגישה לפיצ'רים בתשלום נשמרת עד סוף תקופת החיוב הנוכחית. מלבד ההחזרים המתוארים בהמשך, איננו מחזירים כסף על זמן שלא נוצל, אלא אם החוק מחייב אחרת."}
     </p>
     <h3>החזרים</h3>
     <p>
-      למעט במקרים שבהם החוק מחייב אחרת, התשלומים אינם ניתנים להחזרה. אם אתם סבורים שחויבתם בטעות, פנו אלינו
-      לכתובת <a href="mailto:support@gadit.app">support@gadit.app</a> תוך 30 יום
-      מהחיוב.
+      {"אם תבקשו תוך 14 יום מהתשלום הראשון בחשבון, או תוך 14 יום מחידוש שנתי, נחזיר לכם את התשלום הזה במלואו. אין צורך לנמק. כתבו ל-"}<a href="mailto:support@gadit.app">support@gadit.app</a>{" מכתובת הדוא״ל של החשבון. ההחזר מסיים גם את המנוי. שאר התשלומים אינם ניתנים להחזרה, למעט במקרים שבהם החוק מחייב החזר. אם אתם סבורים שחויבתם בטעות, כתבו לנו תוך 30 יום מהחיוב. רכישות באפליקציה ל-iOS מחויבות על ידי Apple, ורק Apple יכולה להחזיר אותן, בכתובת reportaproblem.apple.com."}
     </p>
 
     <h2>4. שימוש מותר</h2>
@@ -243,8 +232,7 @@ const HebrewBody = () => (
 
     <h2>5. תוכן שנוצר על ידי AI</h2>
     <p>
-      Gadit משתמש במודלים של בינה מלאכותית (כולל GPT, Whisper ו-DALL·E של OpenAI) כדי ליצור הגדרות, דוגמאות,
-      אטימולוגיות, פידבק, חידונים, תמונות ותמלולים. אתם מבינים ומסכימים כי:
+      {"Gadit משתמש במודלים של בינה מלאכותית (כולל מודלים של OpenAI ושל Google) כדי ליצור הגדרות, דוגמאות, אטימולוגיות, פידבק, חידונים, תמונות, הקראה קולית ותמלולים. אתם מבינים ומסכימים כי:"}
     </p>
     <ul>
       <li>

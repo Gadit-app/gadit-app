@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { deleteOwnedFamily } from "@/lib/family-delete";
 import { sendMail } from "@/lib/mail";
 import Stripe from "stripe";
 import {
@@ -205,6 +206,10 @@ export async function POST(req: NextRequest) {
         logs.forEach((d) => logBatch.delete(d.ref));
         await logBatch.commit();
       }
+
+      // A family owner takes the family with them: every child's profile and
+      // data, the family record and the Yooniz link (council round 5).
+      await deleteOwnedFamily(db, userId);
 
       // The user doc AND everything under it: notebook, journey,
       // journeyCards, learnWords, dictationSets, gifts, ledger, stats, meta,

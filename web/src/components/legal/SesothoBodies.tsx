@@ -23,6 +23,9 @@ export function PrivacyBodySt(): ReactElement {
         tlhahisoleseding ya motheo ya profaele eo Google e e fanang (lebitso le bonahalang, setshwantsho sa profaele).
         Ha re fumane phasewete ya hao ya Google.
       </p>
+      <p>
+        {"Ka app ya iOS o ka kena hape ka Apple. Ha ho le jwalo, Apple e re fa lebitso le aterese ya imeile eo o kgethang ho e arolelana, e ka bang aterese ya poraefete ya relay e fetisetsang diimeile tsa rona ho wena. Ha re fumane phasewete ya hao ya Apple."}
+      </p>
       <h3>Tlhahisoleseding ya tshebediso</h3>
       <p>Ha o sebedisa Gadit, re sebetsana le:</p>
       <ul>
@@ -77,30 +80,45 @@ export function PrivacyBodySt(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>{", e sebetsana le mantswe le dipolelo tseo o di romelang ho hlahisa ditlhaloso, maikutlo ka dipolelo, diteko, le ho ngola seo ho buuwang (Whisper), mme e hlahisa ditshwantsho (DALL·E 3). E boetse e ngola dikarabo tsa mothusi wa Gadit: re e romella potso ya hao, melaetsa e fetileng ya puisano eo e le nngwe, puo ya sehokelo ya hao, leano la hao, le hore na o websaeteng kapa ho app, mme ha re kenyeletse lebitso la hao kapa aterese ya imeile. Dintlha tse romelwang ho OpenAI di laolwa ke leano la OpenAI la tshebediso ya dintlha tsa API."}
+          <strong>OpenAI</strong>{", e sebetsana le mantswe le dipolelo tseo o di romelang ho hlahisa ditlhaloso, maikutlo ka dipolelo le diteko, e fetola mongolo hore e be puo, e ngola seo ho buuwang ka lentswe, e bala mongolo o ditshwantshong le difaeleng tsa PDF tseo o di kenyang (mohlala maqephe a mosebetsi wa sekolo o etsetswang hae), mme e hlahisa ditshwantsho. E boetse e ngola dikarabo tsa mothusi wa Gadit: re e romella potso ya hao, melaetsa e fetileng ya puisano eo e le nngwe, puo ya sehokelo ya hao, leano la hao, le hore na o websaeteng kapa ho app, mme ha re kenyeletse lebitso la hao kapa aterese ya imeile. Dintlha tse romelwang ho OpenAI di laolwa ke leano la OpenAI la tshebediso ya dintlha tsa API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), e boloka akhaonto ya hao,
           profaele, boemo ba ngodiso, nalane ya dipatlo, le ditshwantsho tse hlahisitsweng.
         </li>
         <li>
+          <strong>Google</strong>{"(Gemini, ka Google Cloud), e fetola mongolo hore e be puo. Re e romella feela mongolo o lokelang ho ballwa hodimo, jwalo ka mantswe, dipolelo le dipale, mme modumo o bolokwa polokelong ya rona ya Firebase hore o tle o ka letswa hape. Papading e le nngwe ya ho bala e boetse e utlwa modumo oo ngwana a o buang ka lentswe le phahameng, hore e o hlahlobe, mme rekoto eo ha e bolokwe. Google Fonts e fana ka difonte tsa sehokelo sa Sechaena, Sejapane le Sekorea, mme e bona aterese ya hao ya IP."}
+        </li>
+        <li>
+          <strong>Dicta</strong>{", mokgatlo o sa etseng phaello wa Iseraele, o kenya matshwao a liluma-nosi mongolong wa Seheberu bakeng sa babadi ba banyenyane. Re e romella feela mongolo wa Seheberu."}
+        </li>
+        <li>
           <strong>Stripe</strong>, e sebetsana le ditefo, dingodiso, le potale ya ditefo.
         </li>
         <li>
+          <strong>Apple</strong>{", e fana ka Sign in with Apple ho app ya iOS (sheba karolo ya 1), mme e rekisa le ho lefisa dingodiso tse rekilweng ho app ya iOS. Bakeng sa tsona, Apple e sebetsana le tefo, mme rona re amohela feela netefatso ya theko le boemo ba yona (jwalo ka ntjhafatso kapa puseletso ya tjhelete)."}
+        </li>
+        <li>
+          <strong>PayPal</strong>{", e lefa balekane ba rona. Re e fa aterese ya imeile ya PayPal ya molekane le tjhelete."}
+        </li>
+        <li>
           <strong>Resend</strong>{", e romela diimeile tsa rona (jwalo ka dikhokahanyo tsa ho kena le ditsebiso), mme e isa sehlopheng sa rona dipotso tseo mothusi wa Gadit a di fetisetsang, ka aterese ya hao ya imeile e le aterese ya karabo."}
+        </li>
+        <li>
+          <strong>Expo</strong>{", e romela ditsebiso tsa app ya iOS, jwalo ka ditemoso tseo motswadi a ka di bulelang, tse kenyeletsang lebitso la ngwana le lentswe leo ngwana a le batlileng."}
         </li>
         <li>
           <strong>Vercel</strong>, e bolokela le ho fana ka websaete, mme e fana ka tlhahlobo e sa tsebahatseng motho
           le tekanyo ya tshebetso.
         </li>
         <li>
-          <strong>Papatso le tlhahlobo</strong>, Meta (Meta Pixel), Google Analytics le TikTok (TikTok Pixel le Events
-          API) di lekanya diketelo le diphetho tsa dipapatso tsa rona. Di sebedisa dikhuki (cookies) le theknoloji e
-          tshwanang maqepheng a rona a papatso, a ngodiso le a tefo. Ha o ngodisa kapa o lefa, re ka romela
-          ditshebeletso tsena aterese ya imeile le ID ya akhaonto tse kgoutilweng ka tsela ya lehlakore le le leng
-          (hash), hammoho le aterese ya hao ya IP le dintlha tsa sebadi sa hao, feela ho lekanya dipapatso tsa rona.
-          Ha ho mohla re di romellang tlhahisoleseding efe kapa efe ka bana, mme disebediswa tsena ha di sebetse
-          diskrineng tseo bana ba di sebedisang.
+          <strong>Yooniz</strong>{", tshebeletso e arohaneng ya ho ithuta ya lelapa e tswang ho mothehi a le mong. Yooniz e ka re botsa hore na aterese ya imeile ya motswadi e na le leano la Gadit Family le sebetsang, mme re araba feela ka ee kapa tjhe. Haeba le le teng, lelapa le ka bula Gadit ho tswa ho Yooniz ntle le phasewete: Yooniz e re romella aterese ya imeile ya motswadi, mabitso a pontsho a ditho tsa lelapa, le hore na e mong le e mong ke motswadi, moshanyana kapa ngwanana. Ha ngwana ya butseng Gadit ho tswa ho Yooniz a utlwisisa lentswe, re romella Yooniz aterese ya imeile ya motswadi, ID ya Yooniz ya ngwana le palo ya dintlha tsa ho ithuta tse fumanweng, mme ha ho mohla re romelang lentswe ka bolona."}
+        </li>
+        <li>
+          <strong>flagcdn.com</strong>{", e fana ka ditshwantsho tse nyenyane tsa difolakha tse bontshwang maqepheng a rona, mme ka hoo e bona aterese ya hao ya IP le dintlha tsa sebadi sa hao."}
+        </li>
+        <li>
+          <strong>Papatso le tlhahlobo</strong>{": Meta (Meta Pixel), Google Analytics le TikTok (TikTok Pixel le Events API) di lekanya diketelo le diphetho tsa dipapatso tsa rona. Di sebedisa dikhuki (cookies) le theknoloji e tshwanang maqepheng a rona a papatso, a ngodiso le a tefo. Ha o ngodisa kapa o lefa, re ka romela ditshebeletso tsena aterese ya imeile le ID ya akhaonto tse kgoutilweng ka tsela ya lehlakore le le leng (hash), hammoho le aterese ya hao ya IP le dintlha tsa sebadi sa hao, feela ho lekanya dipapatso tsa rona. Affonso, tshebeletso ya dihokelo tsa balekane, e kenya maqepheng ao ao le leqepheng lefe kapa lefe leo moeti a le fihlelang ka sehokelo sa molekane, mme e boloka khuki ho fihlela matsatsi a 60. Haeba o ngodisa ka mora ho fihla ka sehokelo sa molekane sa Affonso, re romella Affonso aterese ya hao ya imeile, lebitso le ID ya akhaonto, hore molekane ya o rometseng a fuwe mokitlane. Ha ho mohla re romellang leha e le efe ya ditshebeletso tsena tlhahisoleseding ka bana, mme disebediswa tsena ha di sebetse profaeleng ya ngwana, ho Kids Mode kapa maqepheng a sehokelo sa tlelase."}
         </li>
       </ul>
 
@@ -148,8 +166,16 @@ export function PrivacyBodySt(): ReactElement {
 
       <h2>7. Bana</h2>
       <p>
-        Gadit ha e a lebiswa baneng ba ka tlase ho dilemo tse 13. Haeba o dumela hore ngwana ya ka tlase ho dilemo tse
-        13 o thehile akhaonto, re romelle imeile mme re tla hlakola akhaonto le dintlha tse amanang le yona.
+        {"Akhaonto ya Gadit e etseditswe batho ba baholo, ba dilemo tse 18 ho ya hodimo. Bana le batjha ba sebedisa Gadit feela ka motho e moholo, ka e nngwe ya ditsela tse pedi."}
+      </p>
+      <p>
+        {"Diprofaele tsa Family: motswadi o kenya ngwana e mong le e mong e le profaele kahare ho akhaonto ya motswadi ya Family, ka lebitso le hore na ngwana ke moshemane kapa ngwanana, mme, haeba motswadi a di kenya, le dilemo, kereiti ya sekolo le setshwantsho. Bana ha ba na aterese ya imeile kapa phasewete ho rona. Mantswe ao ngwana a a batlang, le bukana ya ngwana, dipapadi le tswelopele ya hae, di bolokwa akhaontong ya lelapa. Batswadi ba lelapa, le mang kapa mang eo ba mo fang phihlello ho yona (mohlala morupedi wa poraefete), ba ka di bona, mme motswadi a ka kgetha ho fumana ditemoso, ka tsebiso kapa ka imeile, tse nang le mantswe ao ngwana a a batlang. Motswadi a ka tlosa profaele ya ngwana ka app nako efe kapa efe."}
+      </p>
+      <p>
+        {"Dihokelo tsa tlelase: moithuti o bula sehokelo kapa khoutu eo mosuwe a fanang ka yona, ntle le akhaonto le ntle le aterese ya imeile. Haeba mosuwe a kentse lenane la mabitso, moithuti o kgetha lebitso la hae ho lona, mme mantswe ao moithuti a a batlang a bolokwa bakeng sa tlelase tlasa lebitso leo, hore mosuwe a tle a a bone. Sekolo se etsa qeto ya ho sebedisa Gadit mme se ikarabella bakeng sa ho tsebisa batswadi moo molao o e hlokang."}
+      </p>
+      <p>
+        {"Ha ho mohla re sebedisang tlhahisoleseding ya bana bakeng sa papatso, mme disebediswa tse thathamisitsweng tlasa Papatso le tlhahlobo karolong ya 3 ha di bulehe profaeleng ya ngwana, ho Kids Mode kapa maqepheng a sehokelo sa tlelase. Ho etsa hore profaele ya ngwana le dintlha tsa yona di hlakolwe, motswadi a ka ngolla "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" mme re tla e hlakola. Haeba o dumela hore ngwana o butse akhaonto ya hae ka boeena, re ngolle mme re tla hlakola akhaonto le dintlha tsa yona."}
       </p>
 
       <h2>8. Basebedisi ba matjhaba</h2>
@@ -190,9 +216,7 @@ export function TermsBodySt(): ReactElement {
 
       <h2>1. Ke mang ya ka sebedisang Gadit</h2>
       <p>
-        O tlameha ho ba bonyane dilemo tse 13 ho theha akhaonto. Haeba o le pakeng tsa dilemo tse 13 le 18, o tlameha
-        ho ba le tumello ya motswadi kapa mohlokomedi wa molao. Ka ho sebedisa Gadit, o tiisa hore o fihlella ditlhoko
-        tsena.
+        {"O tlameha ho ba le dilemo tse 18 kapa ho feta ho bula akhaonto ya Gadit. Bana le batjha ba ka tlase ho dilemo tse 18 ba sebedisa Gadit feela ka motho e moholo: motswadi kapa mohlokomedi a ka ba kenya e le diprofaele morerong wa Family, mme sekolo se ka fa baithuti ba sona sehokelo sa tlelase. Motswadi, mohlokomedi kapa sekolo se fanang ka phihlello ena se ikarabella bakeng sa yona. Ka ho bula akhaonto, o tiisa hore o na le dilemo tse 18 kapa ho feta."}
       </p>
 
       <h2>2. Akhaonto ya hao</h2>
@@ -216,16 +240,11 @@ export function TermsBodySt(): ReactElement {
       </p>
       <h3>Ho hlakola ngodiso</h3>
       <p>
-        O ka hlakola ngodiso nako efe kapa efe ho tswa leqepheng la akhaonto ya hao. Ho hlakola ho emisa dintjhafatso
-        tsa nakong e tlang. O tla tswela pele o fihlella dikarolo tse lefellwang ho fihlela qetellong ya nako ya tefo
-        ya jwale. Ha re kgutlise tjhelete ya karolo ya nako e sa sebediswang.
+        {"O ka hlakola nako efe kapa efe ho tswa leqepheng la akhaonto ya hao. Ho hlakola ho emisa dintjhafatso tsa nakong e tlang. O tla tswela pele o fihlella dikarolo tse lefellwang ho fihlela qetellong ya nako ya tefo ya jwale. Ntle le dikgutsufatso tsa tjhelete tse hlalositsweng ka tlase, ha re kgutlise tjhelete bakeng sa nako e sa sebediswang, ntle le moo molao o hlokang ka teng."}
       </p>
       <h3>Dikgutliso tsa tjhelete</h3>
       <p>
-        Ntle le moo molao o hlokang, ditefo ha di kgutliswe. Haeba o dumela hore o lefisitswe ka phoso, ikopanye
-        le{" "}
-        <a href="mailto:support@gadit.app">support@gadit.app</a> nakong ya matsatsi a 30 ho
-        tloha ha o lefisitswe.
+        {"Haeba o kopa nakong ya matsatsi a 14 ho tloha tefong ya pele akhaontong ya hao, kapa nakong ya matsatsi a 14 ho tloha ntjhafatsong ya selemo, re tla kgutlisa tefo eo ka botlalo. Ha ho hlokahale hore o fane ka lebaka. Ngola ho "}<a href="mailto:support@gadit.app">support@gadit.app</a>{" o sebedisa aterese ya imeile ya akhaonto ya hao. Ho kgutlisa tjhelete ho boetse ho fedisa ngodiso. Ditefo tse ding ha di kgutliswe, ntle le moo molao o hlokang ho kgutliswa ha tjhelete. Haeba o dumela hore o lefisitswe ka phoso, re ngolle nakong ya matsatsi a 30 ho tloha ha o lefisitswe. Ditheko tse entsweng ka app ya iOS di lefiswa ke Apple, mme ke Apple feela e ka di kgutlisang, ho reportaproblem.apple.com."}
       </p>
 
       <h2>4. Tshebediso e amohelehang</h2>
@@ -245,9 +264,7 @@ export function TermsBodySt(): ReactElement {
 
       <h2>5. Dikahare tse hlahisitsweng ke AI</h2>
       <p>
-        Gadit e sebedisa dimodele tsa bohlale ba maiketsetso (ho kenyeletswa GPT, Whisper, le DALL·E tsa OpenAI) ho
-        hlahisa ditlhaloso, mehlala, ditso tsa mantswe, maikutlo, diteko, ditshwantsho, le dingolwa tsa seo ho
-        buuwang. O a utlwisisa mme o dumela hore:
+        {"Gadit e sebedisa dimodele tsa bohlale ba maiketsetso (ho kenyeletswa dimodele tsa OpenAI le Google) ho hlahisa ditlhaloso, mehlala, ditso tsa mantswe, maikutlo, diteko, ditshwantsho, puo e balwang, le dingolwa tsa seo ho buuwang. O a utlwisisa mme o dumela hore:"}
       </p>
       <ul>
         <li>
