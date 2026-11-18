@@ -9,7 +9,7 @@ import { HomePage } from "./HomeClient";
  * teaser, footer. Anonymous and signed-in users both land here.
  */
 const EN_METADATA: Metadata = {
-  title: "Gadit, Every word, understood.",
+  title: "Gadit, Every word, understood",
   description:
     "A dictionary that meets you in context, meanings, origins, idioms, and a vivid image, in 30+ languages.",
 };
