@@ -29,8 +29,14 @@ export function PrivacyBodyId(): ReactElement {
         <li>gambar yang dibuat atas permintaan Anda;</li>
         <li>paket langganan dan status penagihan Anda;</li>
         <li>riwayat pencarian terbaru (untuk pengguna berbayar, hingga 10 kata terakhir), yang disimpan agar Anda dapat mengaksesnya kembali nanti;</li>
+        <li>
+          {"jika Anda menggunakan asisten Gadit di pusat bantuan: pertanyaan yang Anda ajukan, jawabannya, dan apakah Anda menandai suatu jawaban sebagai membantu, bersama dengan ID akun Anda (dan ID keluarga, jika ada), alamat email, paket langganan, bahasa antarmuka, dan apakah Anda menggunakan situs web atau aplikasi;"}
+        </li>
         <li>kuota bulanan (misalnya, jumlah gambar yang telah Anda buat dalam siklus penagihan ini).</li>
       </ul>
+      <p>
+        {"Asisten Gadit tidak ditawarkan pada profil anak, dalam Mode Anak, atau kepada pengunjung yang tidak masuk ke akun. Mohon jangan mengetikkan kata sandi atau nomor kartu ke dalamnya."}
+      </p>
       <h3>Data teknis dan analitik</h3>
       <p>
         Kami secara otomatis mengumpulkan informasi teknis dasar seperti alamat IP, jenis browser, jenis perangkat, URL
@@ -51,6 +57,9 @@ export function PrivacyBodyId(): ReactElement {
         <li>untuk menyediakan dan meningkatkan layanan Gadit (membuat definisi, gambar, umpan balik kalimat, kuis);</li>
         <li>untuk mengelola akun Anda dan mempersonalisasi pengalaman Anda (riwayat pencarian, bahasa pilihan, sakelar &ldquo;Mode Anak&rdquo;);</li>
         <li>untuk memproses langganan dan mengirim email transaksional (tanda terima, perubahan langganan);</li>
+        <li>
+          {"untuk menjawab pertanyaan Anda di asisten Gadit dan meningkatkan jawaban bantuan kami, dan, ketika asisten meneruskan pertanyaan kepada tim kami, untuk mengirimkan melalui email kepada tim percakapan terbaru beserta nama, alamat email, paket langganan, bahasa antarmuka, dan apakah Anda menggunakan situs web atau aplikasi, agar tim dapat membalas Anda melalui email;"}
+        </li>
         <li>untuk mengukur dan meningkatkan kinerja produk serta mencegah penyalahgunaan;</li>
         <li>untuk mematuhi kewajiban hukum.</li>
       </ul>
@@ -66,9 +75,7 @@ export function PrivacyBodyId(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>: memproses kata dan kalimat yang Anda kirimkan untuk membuat definisi, umpan balik
-          kalimat, kuis, dan transkripsi suara (Whisper), serta membuat gambar (DALL·E 3). Data yang dikirim ke OpenAI
-          tunduk pada kebijakan penggunaan data API OpenAI.
+          <strong>OpenAI</strong>{": memproses kata dan kalimat yang Anda kirimkan untuk membuat definisi, umpan balik kalimat, kuis, dan transkripsi suara (Whisper), serta membuat gambar (DALL·E 3). OpenAI juga menulis jawaban asisten Gadit: kami mengirimkan pertanyaan Anda, pesan-pesan sebelumnya dalam percakapan yang sama, bahasa antarmuka Anda, paket langganan Anda, dan apakah Anda menggunakan situs web atau aplikasi, dan kami tidak menyertakan nama atau alamat email Anda. Data yang dikirim ke OpenAI tunduk pada kebijakan penggunaan data API OpenAI."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): menyimpan akun, profil, status
@@ -76,6 +83,9 @@ export function PrivacyBodyId(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>: menangani pembayaran, langganan, dan portal penagihan.
+        </li>
+        <li>
+          <strong>Resend</strong>{": mengirim email kami (seperti tautan masuk dan notifikasi), dan meneruskan kepada tim kami pertanyaan yang diteruskan oleh asisten Gadit, dengan alamat email Anda sebagai alamat balasan."}
         </li>
         <li>
           <strong>Vercel</strong>: menghosting dan menyajikan situs web, serta menyediakan analitik anonim dan
@@ -96,8 +106,17 @@ export function PrivacyBodyId(): ReactElement {
       <ul>
         <li>Informasi akun: selama akun Anda masih ada.</li>
         <li>Riwayat pencarian: 10 pencarian terakhir per pengguna, diperbarui pada setiap pencarian baru.</li>
+        <li>
+          {"Percakapan dengan asisten Gadit: 180 hari, lalu dihapus secara otomatis, atau lebih cepat jika Anda menghapus akun. Jumlah harian pertanyaan Anda, yang digunakan untuk batas harian, dihapus setelah 3 hari."}
+        </li>
+        <li>
+          {"Pertanyaan yang diteruskan oleh asisten Gadit kepada tim kami: disimpan di kotak masuk tim kami, seperti email apa pun yang Anda kirim kepada kami."}
+        </li>
         <li>Gambar yang dibuat: disimpan agar kombinasi kata+makna yang sama dapat menggunakan kembali gambar yang tersimpan dalam cache. Dapat disimpan tanpa batas waktu selama akun Anda aktif.</li>
         <li>Catatan penagihan dan pajak: sebagaimana diwajibkan oleh hukum yang berlaku (biasanya 7 tahun).</li>
+        <li>
+          {"Akun yang dihapus: catatan singkat bahwa akun telah dihapus (alamat email, paket langganan, serta alasan dan catatan yang Anda berikan, jika ada), yang disimpan agar kami dapat menjawab pertanyaan tentang penghapusan tersebut."}
+        </li>
         <li>Data analitik: diagregasi, biasanya disimpan oleh penyedia analitik selama 13 bulan.</li>
       </ul>
 

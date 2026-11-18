@@ -181,14 +181,9 @@ export async function POST(req: NextRequest) {
     // Sub-collections are not deleted automatically by deleting the
     // parent doc, so we walk them explicitly.
     try {
-      const notebookRef = db
-        .collection("notebook")
-        .doc(userId)
-        .collection("entries");
-      const entries = await notebookRef.get();
-      const batch = db.batch();
-      entries.forEach((d) => batch.delete(d.ref));
-      await batch.commit();
+      // The old notebook path (notebook/{uid}/entries), from before the
+      // notebook moved under users/{uid}; recursive, so nothing is left.
+      await db.recursiveDelete(db.collection("notebook").doc(userId));
 
       // Daily usage docs use composite IDs (userId_YYYY-MM-DD); we
       // query by userId field so the future-dated ones are caught too.
@@ -200,8 +195,23 @@ export async function POST(req: NextRequest) {
       usage.forEach((d) => usageBatch.delete(d.ref));
       await usageBatch.commit();
 
-      // Top-level user doc.
-      await db.collection("users").doc(userId).delete();
+      // Help assistant conversations (otherwise kept 180 days) go with the
+      // account, as the privacy policy says (council round 4, 2026-11-18).
+      // Batches of 400 stay under Firestore's 500-writes-per-batch limit.
+      for (let round = 0; round < 50; round++) {
+        const logs = await db.collection("helpLogs").where("uid", "==", userId).limit(400).get();
+        if (logs.empty) break;
+        const logBatch = db.batch();
+        logs.forEach((d) => logBatch.delete(d.ref));
+        await logBatch.commit();
+      }
+
+      // The user doc AND everything under it: notebook, journey,
+      // journeyCards, learnWords, dictationSets, gifts, ledger, stats, meta,
+      // imageUsage. A plain .delete() left all of these behind (council
+      // round 4 found it, 2026-11-18), so "your notebook and history are
+      // erased" was not true.
+      await db.recursiveDelete(db.collection("users").doc(userId));
     } catch (err) {
       console.error("Firestore cleanup failed:", err);
       return NextResponse.json(

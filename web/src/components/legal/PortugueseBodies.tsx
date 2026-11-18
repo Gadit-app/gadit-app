@@ -27,8 +27,14 @@ export function PrivacyBodyPt() {
         <li>imagens geradas a seu pedido;</li>
         <li>seu plano de assinatura e situação de pagamento;</li>
         <li>um histórico recente de pesquisas (para usuários pagos, até as 10 últimas palavras), armazenado para que você possa acessá-lo novamente depois;</li>
+        <li>
+          {"se você usar o assistente do Gadit na central de ajuda: as perguntas que você faz, as respostas dele e se você marcou uma resposta como útil, juntamente com o ID da sua conta (e o ID da família, se houver), endereço de e-mail, plano, idioma da interface e se você usou o site ou o aplicativo;"}
+        </li>
         <li>cotas mensais (por exemplo, o número de imagens que você gerou neste ciclo de cobrança).</li>
       </ul>
+      <p>
+        {"O assistente do Gadit não é oferecido em perfis infantis, no Modo Infantil nem a visitantes que não tenham iniciado sessão. Por favor, não digite senhas nem números de cartão nele."}
+      </p>
       <h3>Dados técnicos e de análise</h3>
       <p>
         Coletamos automaticamente informações técnicas básicas, como endereço IP, tipo de navegador, tipo de
@@ -49,6 +55,9 @@ export function PrivacyBodyPt() {
         <li>para fornecer e melhorar o serviço Gadit (gerando definições, imagens, feedback de frases, quizzes);</li>
         <li>para manter sua conta e personalizar sua experiência (histórico de pesquisa, idioma preferido, Modo Infantil);</li>
         <li>para processar assinaturas e enviar e-mails transacionais (recibos, alterações de assinatura);</li>
+        <li>
+          {"para responder às suas perguntas no assistente do Gadit e melhorar nossas respostas de ajuda e, quando o assistente encaminhar uma pergunta à nossa equipe, para enviar por e-mail à equipe a conversa recente com seu nome, endereço de e-mail, plano, idioma da interface e se você usou o site ou o aplicativo, para que a equipe possa responder a você por e-mail;"}
+        </li>
         <li>para medir e melhorar o desempenho do produto e prevenir abusos;</li>
         <li>para cumprir obrigações legais.</li>
       </ul>
@@ -63,9 +72,7 @@ export function PrivacyBodyPt() {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>: processa as palavras e frases que você envia para gerar definições,
-          feedback de frases, quizzes e transcrição de voz (Whisper), e gera imagens (DALL·E 3). Os dados enviados
-          à OpenAI são regidos pela política de uso de dados da API da OpenAI.
+          <strong>OpenAI</strong>{": processa as palavras e frases que você envia para gerar definições, feedback de frases, quizzes e transcrição de voz (Whisper), e gera imagens (DALL·E 3). Também redige as respostas do assistente do Gadit: enviamos à OpenAI sua pergunta, as mensagens anteriores da mesma conversa, o idioma da sua interface, seu plano e se você está no site ou no aplicativo, e não anexamos seu nome nem seu endereço de e-mail. Os dados enviados à OpenAI são regidos pela política de uso de dados da API da OpenAI."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): armazena sua conta,
@@ -73,6 +80,9 @@ export function PrivacyBodyPt() {
         </li>
         <li>
           <strong>Stripe</strong>: processa pagamentos, assinaturas e portal de cobrança.
+        </li>
+        <li>
+          <strong>Resend</strong>{": envia nossos e-mails (como links de entrada e notificações) e entrega à nossa equipe as perguntas que o assistente do Gadit encaminha, com seu endereço de e-mail como endereço de resposta."}
         </li>
         <li>
           <strong>Vercel</strong>: hospeda e entrega o site, e fornece análises anonimizadas e medição de desempenho.
@@ -91,8 +101,17 @@ export function PrivacyBodyPt() {
       <ul>
         <li>Informações da conta: enquanto sua conta existir.</li>
         <li>Histórico de pesquisa: as últimas 10 pesquisas por usuário, atualizadas a cada nova pesquisa.</li>
+        <li>
+          {"Conversas com o assistente do Gadit: 180 dias e, em seguida, excluídas automaticamente, ou antes disso se você excluir sua conta. Uma contagem diária das suas perguntas, usada para o limite diário, é excluída após 3 dias."}
+        </li>
+        <li>
+          {"Perguntas que o assistente do Gadit encaminha à nossa equipe: mantidas na caixa de e-mail da nossa equipe, como qualquer e-mail que você nos envie."}
+        </li>
         <li>Imagens geradas: mantidas para que a mesma palavra+significado possa reutilizar a imagem em cache. Podem ser retidas por tempo indeterminado enquanto sua conta estiver ativa.</li>
         <li>Registros de cobrança e fiscais: conforme exigido pela legislação aplicável (tipicamente 7 anos).</li>
+        <li>
+          {"Contas excluídas: um breve registro de que a conta foi excluída (seu endereço de e-mail, plano e o motivo e a observação que você forneceu, se houver), mantido para que possamos responder a perguntas sobre a exclusão."}
+        </li>
         <li>Dados de análise: agregados, normalmente retidos pelo provedor de análise por 13 meses.</li>
       </ul>
 

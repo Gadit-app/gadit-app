@@ -30,8 +30,14 @@ export function PrivacyBodySs(): ReactElement {
         <li>titfombe letentiwe ngesicelo sakho;</li>
         <li>luhlelo lwakho lwekubhalisa kanye nesimo sekukhokha;</li>
         <li>umlandvo wakamuva wekusesha (kubasebentisi labakhokhako, kufika emagameni langu-10 ekugcina), logcinwako kute ukhone kuwubuka futsi ngemuva;</li>
+        <li>
+          {"nangabe usebentisa umsiti wa-Gadit esikhungweni selusito: imibuto loyibutako, timphendvulo tawo, nekutsi uyiphawule yini imphendvulo njengeyewusita, kanye nesihlonzi se-akhawunti yakho (nesihlonzi semndeni, nangabe unaso), likheli lakho le-imeyili, luhlelo lwakho, lulwimi lwe-interface, nekutsi usebentise iwebhusayithi noma i-app;"}
+        </li>
         <li>tilinganiso tanyanga nanyanga (sibonelo, linani letitfombe lotentile kulesikhatsi sekukhokha lesikhona).</li>
       </ul>
+      <p>
+        {"Umsiti wa-Gadit awuniketwa kumaphrofayili ebantfwana, ku-Simo sebantfwana, noma kubavakashi labangakangeni ku-akhawunti. Sicela ungafaki emaphasiwedi noma tinombolo temakhadi kuwo."}
+      </p>
       <h3>Umniningwane wetheknoloji newetibalo</h3>
       <p>
         Sicoca ngalokutentekela umniningwane wetheknoloji lowisisekelo lonjenge likheli le-IP, luhlobo lwesiphequluli
@@ -52,6 +58,9 @@ export function PrivacyBodySs(): ReactElement {
         <li>kuniketa nekwenta ncono lusito lwe-Gadit (kwakha tincazelo, titfombe, imibono ngemisho, imibuto yekuhlola);</li>
         <li>kugcina i-akhawunti yakho nekwenta kutsi lokubonako kuhambisane nawe (umlandvo wekusesha, lulwimi loluncamako, sikhetso se-&ldquo;Simo sebantfwana&rdquo;);</li>
         <li>kucubungula kubhalisa nekutfumela ema-imeyili ekuhwebelana (emarisidi, tingucuko tekubhalisa);</li>
+        <li>
+          {"kuphendvula imibuto yakho kumsiti wa-Gadit nekutfutfukisa timphendvulo tetfu telusito, futsi, nangabe umsiti adlulisela umbuto ethimbeni letfu, kutfumela ithimba nge-imeyili ingcoco yakamuva kanye neligama lakho, likheli lakho le-imeyili, luhlelo lwakho, lulwimi lwe-interface, nekutsi usebentise iwebhusayithi noma i-app, kuze ithimba likhone kukuphendvula nge-imeyili;"}
+        </li>
         <li>kukala nekwenta ncono kusebenta kwemkhicito nekuvimba kusetjentiswa kabi;</li>
         <li>kulandzela tibopho temtsetfo.</li>
       </ul>
@@ -67,9 +76,7 @@ export function PrivacyBodySs(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>, icubungula emagama nemisho loyitfumelako kute yakhe tincazelo, imibono ngemisho,
-          imibuto yekuhlola, nekubhala phansi inkhulumo (Whisper), futsi yakha titfombe (DALL·E 3). Umniningwane
-          lotfunyelwa ku-OpenAI ulawulwa yinchubomgomo ye-OpenAI yekusetjentiswa kwemniningwane ye-API.
+          <strong>OpenAI</strong>{", icubungula emagama nemisho loyitfumelako kute yakhe tincazelo, imibono ngemisho, imibuto yekuhlola, nekubhala phansi inkhulumo (Whisper), futsi yakha titfombe (DALL·E 3). Iphindze ibhale timphendvulo temsiti wa-Gadit: siyitfumela umbuto wakho, imilayeto yangaphambilini yaleyo ngxoxo lefanako, lulwimi lwe-interface yakho, luhlelo lwakho, nekutsi ukuwebhusayithi noma ku-app, futsi asinamatsi ligama lakho noma likheli lakho le-imeyili. Umniningwane lotfunyelwa ku-OpenAI ulawulwa yinchubomgomo ye-OpenAI yekusetjentiswa kwemniningwane ye-API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), igcina i-akhawunti yakho,
@@ -78,6 +85,9 @@ export function PrivacyBodySs(): ReactElement {
         <li>
           <strong>Stripe</strong>, iphatsa tinkhokhelo, kubhalisa, kanye nelikhasi lekuphatsa tinkhokhelo (billing
           portal).
+        </li>
+        <li>
+          <strong>Resend</strong>{", itfumela ema-imeyili etfu (njengemachumanisi ekungena netatiso), futsi yendlulisela ethimbeni letfu imibuto ledluliselwa phambili ngumsiti wa-Gadit, nelikheli lakho le-imeyili njengelikheli lekuphendvula."}
         </li>
         <li>
           <strong>Vercel</strong>, ibamba futsi ihambise iwebhusayithi, futsi iniketa tibalo letingavezi muntfu
@@ -98,8 +108,17 @@ export function PrivacyBodySs(): ReactElement {
       <ul>
         <li>Umniningwane we-akhawunti: nangabe i-akhawunti yakho isekhona.</li>
         <li>Umlandvo wekusesha: kusesha kwekugcina lokungu-10 kumsebentisi ngamunye, lokuvuselelwa ngako konkhe kusesha lokusha.</li>
+        <li>
+          {"Tingxoxo nemsiti wa-Gadit: emalanga langu-180, bese tiyacinywa ngekutentjekela, noma masinyane nangabe ucisha i-akhawunti yakho. Kubalwa kwansuku tonkhe kwemibuto yakho, lokusetjentiselwa umkhawulo wansuku tonkhe, kuyacinywa ngemuva kwemalanga la-3."}
+        </li>
+        <li>
+          {"Imibuto lomsiti wa-Gadit layidlulisela ethimbeni letfu: igcinwa ebhokisini le-imeyili lethimba letfu, njengawo onkhe ema-imeyili lositfumelela wona."}
+        </li>
         <li>Titfombe letentiwe: tiyagcinwa kute ligama lelifanako nencazelo lefanako kusetjentiswe kabusha sitfombe lesigciniwe. Tingagcinwa sikhatsi lesingapheli nangabe i-akhawunti yakho isasebenta.</li>
         <li>Emarekhodi ekukhokha nentsela: njengobe kudzingwa ngumtsetfo losebentako (kavamise kuba yiminyaka lesi-7).</li>
+        <li>
+          {"Ema-akhawunti lacishiwe: lirekhodi lelifushane lekutsi i-akhawunti icishiwe (likheli layo le-imeyili, luhlelo, kanye nesizatfu nelinotsi loluniketile, nangabe kukhona), leligcinelwa kutsi sikhone kuphendvula imibuto mayelana nekucishwa."}
+        </li>
         <li>Umniningwane wetibalo: lohlanganisiwe, kavamise kugcinwa ngumhlinzeki wetibalo tinyanga leti-13.</li>
       </ul>
 

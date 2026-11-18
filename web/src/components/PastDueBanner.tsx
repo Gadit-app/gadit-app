@@ -15,7 +15,7 @@ import { useLang } from "@/lib/lang-context";
 type Copy = { msg: (days: number) => string; cta: string; busy: string };
 
 const COPY: Record<string, Copy> = {
-  he: { msg: (d) => `החיוב על המנוי לא עבר. הגישה נשמרת לך עוד ${d} ימים, עדכנו כרטיס כדי לא לאבד אותה.`, cta: "עדכון כרטיס", busy: "רגע…" },
+  he: { msg: (d) => `החיוב על המנוי לא עבר. הגישה נשמרת לכם עוד ${d} ימים, עדכנו כרטיס כדי לא לאבד אותה.`, cta: "עדכון כרטיס", busy: "רגע…" },
   en: { msg: (d) => `Your subscription payment failed. Your access stays for ${d} more days, update your card to keep it.`, cta: "Update card", busy: "One moment…" },
   ar: { msg: (d) => `لم تُقبل عملية دفع الاشتراك. يبقى وصولك ${d} أيام أخرى، حدّث البطاقة كي لا تفقده.`, cta: "تحديث البطاقة", busy: "لحظة…" },
   ru: { msg: (d) => `Оплата подписки не прошла. Доступ сохраняется ещё ${d} дн., обновите карту, чтобы не потерять его.`, cta: "Обновить карту", busy: "Секунду…" },

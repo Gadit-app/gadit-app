@@ -30,8 +30,14 @@ export function PrivacyBodyVe(): ReactElement {
         <li>zwifanyiso zwo itwaho nga u ya nga khumbelo yaṋu;</li>
         <li>pulane yaṋu ya u ṅwalisa na tshiimo tsha mbadelo;</li>
         <li>ḓivhazwakale ya zwenezwino ya u ṱoḓa (kha vhashumisi vhane vha badela, u swika kha maipfi a 10 a u fhedza), i vhulungwaho uri ni kone u i wana hafhu nga murahu;</li>
+        <li>
+          {"arali na shumisa muthusi wa Gadit kha senthara ya thuso: mbudziso dzine na dzi vhudzisa, phindulo dzawo, na uri no sumbedza naa uri phindulo yo thusa, zwoṱhe na ID ya akhaunthu yaṋu (na ID ya muṱa, arali i hone), ḓiresi ya imeiḽi, pulane yaṋu, luambo lwa interface, na uri no shumisa webusaithi kana app;"}
+        </li>
         <li>mikano ya ṅwedzi (sa tsumbo, tshivhalo tsha zwifanyiso zwe na zwi ita kha tshifhinga tshino tsha mbadelo).</li>
       </ul>
+      <p>
+        {"Muthusi wa Gadit a u wanali kha diphurofaili dza vhana, kha Tshiimo tsha vhana, kana kha vhasheni vha songo dzhena kha akhaunthu. Ri humbela uri ni songo ṅwala phasiwede kana nomboro dza garaṱa khayo."}
+      </p>
       <h3>Data ya thekhinikhala na ya mbalo</h3>
       <p>
         Ri kuvhanganya nga u ḓiitela mafhungo a mutheo a thekhinikhala a ngaho aḓirese ya IP, lushaka lwa buraweza,
@@ -52,6 +58,9 @@ export function PrivacyBodyVe(): ReactElement {
         <li>u ṋetshedza na u khwinifhadza tshumelo ya Gadit (u ita ṱhalutshedzo, zwifanyiso, nyeletshedzo nga ha mitaladzo, mbudziso dza ndingo);</li>
         <li>u londota akhaunthu yaṋu na u ita uri tshenzhemo yaṋu i ni fanele (ḓivhazwakale ya u ṱoḓa, luambo lune na lu funesa, tshikhethi tsha &ldquo;Tshiimo tsha vhana&rdquo;);</li>
         <li>u shuma nga u ṅwalisa na u rumela dziimeiḽi dza thengiselano (rasiti, tshanduko dza u ṅwalisa);</li>
+        <li>
+          {"u fhindula mbudziso dzaṋu kha muthusi wa Gadit na u khwinifhadza phindulo dzashu dza thuso, nahone, musi muthusi a tshi fhirisela mbudziso kha tshigwada tshashu, u rumela nga imeiḽi kha tshigwada nyambedzano ya zwenezwino yo fhiraho na dzina ḽaṋu, ḓiresi ya imeiḽi, pulane yaṋu, luambo lwa interface, na uri no shumisa webusaithi kana app, uri tshigwada tshi kone u ni fhindula nga imeiḽi;"}
+        </li>
         <li>u kala na u khwinifhadza kushumele kwa tshibveledzwa na u thivhela u shumiswa nga nḓila i si yone;</li>
         <li>u tevhedza mbofho dza mulayo.</li>
       </ul>
@@ -67,9 +76,7 @@ export function PrivacyBodyVe(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>, i shuma nga maipfi na mitaladzo ine na i rumela u ita ṱhalutshedzo, nyeletshedzo nga
-          ha mitaladzo, mbudziso dza ndingo, na u ṅwala zwo ambiwaho (Whisper), nahone i ita zwifanyiso (DALL·E 3).
-          Data i rumelwaho kha OpenAI i langwa nga mbekanyamaitele ya OpenAI ya u shumiswa ha data ya API.
+          <strong>OpenAI</strong>{", i shuma nga maipfi na mitaladzo ine na i rumela u ita ṱhalutshedzo, nyeletshedzo nga ha mitaladzo, mbudziso dza ndingo, na u ṅwala zwo ambiwaho (Whisper), nahone i ita zwifanyiso (DALL·E 3). I dovha ya ṅwala phindulo dza muthusi wa Gadit: ri i rumela mbudziso yaṋu, milaedza yo fhiraho ya nyambedzano yeneyo, luambo lwa interface yaṋu, pulane yaṋu, na uri ni kha webusaithi kana app, nahone a ri nambatedzi dzina ḽaṋu kana ḓiresi yaṋu ya imeiḽi. Data i rumelwaho kha OpenAI i langwa nga mbekanyamaitele ya OpenAI ya u shumiswa ha data ya API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), i vhulunga akhaunthu yaṋu,
@@ -77,6 +84,9 @@ export function PrivacyBodyVe(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>, i lavhelesa mbadelo, u ṅwalisa, na siaṱari ḽa u langa mbadelo (billing portal).
+        </li>
+        <li>
+          <strong>Resend</strong>{", i rumela dziimeiḽi dzashu (sa tsumbo, dzilinki dza u dzhena na nḓivhadzo), nahone i isa kha tshigwada tshashu mbudziso dzine muthusi wa Gadit a dzi fhirisela phanḓa, i na ḓiresi yaṋu ya imeiḽi sa ḓiresi ya u fhindula."}
         </li>
         <li>
           <strong>Vercel</strong>, i fara na u ṋetshedza webusaithi, nahone i ṋetshedza mbalo dzi sa sumbedzi muthu na
@@ -97,8 +107,17 @@ export function PrivacyBodyVe(): ReactElement {
       <ul>
         <li>Mafhungo a akhaunthu: musi akhaunthu yaṋu i tshi kha ḓi vha hone.</li>
         <li>Ḓivhazwakale ya u ṱoḓa: u ṱoḓa hu 10 ha u fhedza kha mushumisi muṅwe na muṅwe, hu tshi vusuluswa nga u ṱoḓa huswa huṅwe na huṅwe.</li>
+        <li>
+          {"Nyambedzano dza muthusi wa Gadit: maḓuvha a 180, nga murahu dza tshinyadzwa nga othomethiki, kana nga u ṱavhanya arali na thutha akhaunthu yaṋu. Tshivhalo tsha ḓuvha na ḓuvha tsha mbudziso dzaṋu, tshi shumiswaho kha mukano wa ḓuvha na ḓuvha, tshi a thuthiwa nga murahu ha maḓuvha a 3."}
+        </li>
+        <li>
+          {"Mbudziso dzine muthusi wa Gadit a dzi fhirisela kha tshigwada tshashu: dzi vhulungwa kha bogisi ḽa imeiḽi ḽa tshigwada tshashu, u fana na imeiḽi iṅwe na iṅwe ine na ri rumela yone."}
+        </li>
         <li>Zwifanyiso zwo itwaho: zwi a vhulungwa uri ipfi na ṱhalutshedzo zwi fanaho zwi kone u shumisa hafhu tshifanyiso tsho vhulungwaho. Zwi nga vhulungwa lwa tshifhinga tshi sa fheli arali akhaunthu yaṋu i tshi kha ḓi shuma.</li>
         <li>Rekhodo dza mbadelo na dza muthelo: u ya nga zwine mulayo u shumaho wa zwi ṱoḓa (kanzhi miṅwaha ya 7).</li>
+        <li>
+          {"Dziakhaunthu dzo thuthiwaho: rekhodo pfufhi ya uri akhaunthu yo thuthiwa (ḓiresi yayo ya imeiḽi, pulane, na tshiitisi na notsi ye na iṋea, arali zwi hone), i vhulungwaho uri ri kone u fhindula mbudziso nga ha u thuthiwa hayo."}
+        </li>
         <li>Data ya mbalo: yo ṱanganyiswaho, kanzhi i vhulungwa nga muṋetshedzi wa mbalo lwa miṅwedzi ya 13.</li>
       </ul>
 

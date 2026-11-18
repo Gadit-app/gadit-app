@@ -29,8 +29,14 @@ export function PrivacyBodyAf(): ReactElement {
         <li>beelde wat op u versoek gegenereer word;</li>
         <li>u intekeningplan en faktureringstatus;</li>
         <li>’n onlangse soekgeskiedenis (vir betalende gebruikers, tot die laaste 10 woorde), wat gestoor word sodat u later weer toegang daartoe kan verkry;</li>
+        <li>
+          {"indien u die Gadit-assistent in die hulpsentrum gebruik: die vrae wat u vra, sy antwoorde en of u aangedui het dat ’n antwoord nuttig was, saam met u rekening-ID (en familie-ID, indien u een het), e-posadres, plan, koppelvlaktaal, en of u die webwerf of die toepassing gebruik het;"}
+        </li>
         <li>maandelikse kwotas (byvoorbeeld die aantal beelde wat u in hierdie faktureringsiklus gegenereer het).</li>
       </ul>
+      <p>
+        {"Die Gadit-assistent word nie op kinderprofiele, in Kindermodus of aan besoekers wat nie aangemeld is nie, aangebied nie. Moet asseblief nie wagwoorde of kaartnommers daarin tik nie."}
+      </p>
       <h3>Tegniese en analitiese data</h3>
       <p>
         Ons samel outomaties basiese tegniese inligting in, soos IP-adres, blaaiertipe, toesteltipe, verwysende URL
@@ -51,6 +57,9 @@ export function PrivacyBodyAf(): ReactElement {
         <li>om die Gadit-diens te verskaf en te verbeter (die generering van definisies, beelde, terugvoer op sinne, vasvrae);</li>
         <li>om u rekening in stand te hou en u ervaring te verpersoonlik (soekgeskiedenis, voorkeurtaal, Kindermodus-skakelaar);</li>
         <li>om intekeninge te verwerk en transaksionele e-posse te stuur (kwitansies, intekeningveranderinge);</li>
+        <li>
+          {"om u vrae in die Gadit-assistent te beantwoord en ons hulpantwoorde te verbeter, en, wanneer die assistent ’n vraag na ons span aanstuur, om die onlangse gesprek per e-pos aan die span te stuur saam met u naam, e-posadres, plan, koppelvlaktaal, en of u die webwerf of die toepassing gebruik het, sodat die span u per e-pos kan antwoord;"}
+        </li>
         <li>om produkprestasie te meet en te verbeter en misbruik te voorkom;</li>
         <li>om aan wetlike verpligtinge te voldoen.</li>
       </ul>
@@ -66,9 +75,7 @@ export function PrivacyBodyAf(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>: verwerk die woorde en sinne wat u indien om definisies, terugvoer op sinne, vasvrae
-          en stemtranskripsie (Whisper) te genereer, en genereer beelde (DALL·E 3). Data wat na OpenAI gestuur word,
-          word deur OpenAI se API-beleid oor datagebruik beheer.
+          <strong>OpenAI</strong>{": verwerk die woorde en sinne wat u indien om definisies, terugvoer op sinne, vasvrae en stemtranskripsie (Whisper) te genereer, en genereer beelde (DALL·E 3). Dit skryf ook die Gadit-assistent se antwoorde: ons stuur u vraag, die vroeëre boodskappe in dieselfde gesprek, u koppelvlaktaal, u plan, en of u op die webwerf of in die toepassing is, en ons heg nie u naam of e-posadres aan nie. Data wat na OpenAI gestuur word, word deur OpenAI se API-beleid oor datagebruik beheer."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): stoor u rekening, profiel,
@@ -76,6 +83,9 @@ export function PrivacyBodyAf(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>: hanteer betalings, intekeninge en die faktureringsportaal.
+        </li>
+        <li>
+          <strong>Resend</strong>{": stuur ons e-posse (soos aanmeldskakels en kennisgewings), en lewer die vrae wat die Gadit-assistent aanstuur aan ons span af, met u e-posadres as die antwoordadres."}
         </li>
         <li>
           <strong>Vercel</strong>: huisves en bedien die webwerf, en verskaf geanonimiseerde analise en
@@ -95,8 +105,17 @@ export function PrivacyBodyAf(): ReactElement {
       <ul>
         <li>Rekeninginligting: solank u rekening bestaan.</li>
         <li>Soekgeskiedenis: die laaste 10 soektogte per gebruiker, bygewerk met elke nuwe soektog.</li>
+        <li>
+          {"Gesprekke met die Gadit-assistent: 180 dae, dan word dit outomaties uitgevee, of vroeër indien u u rekening uitvee. ’n Daaglikse telling van u vrae, wat vir die daaglikse limiet gebruik word, word ná 3 dae uitgevee."}
+        </li>
+        <li>
+          {"Vrae wat die Gadit-assistent na ons span aanstuur: word in ons span se posbus gehou, soos enige e-pos wat u aan ons stuur."}
+        </li>
         <li>Gegenereerde beelde: bewaar sodat dieselfde woord+betekenis die gekasde beeld kan hergebruik. Dit kan onbepaald bewaar word solank u rekening aktief is.</li>
         <li>Fakturerings- en belastingrekords: soos deur toepaslike wetgewing vereis (gewoonlik 7 jaar).</li>
+        <li>
+          {"Geskrapte rekeninge: ’n kort rekord dat die rekening geskrap is (die e-posadres, plan, en die rede en nota wat u gegee het, indien enige), wat gehou word sodat ons vrae oor die skrapping kan beantwoord."}
+        </li>
         <li>Analitiese data: saamgevoeg, gewoonlik deur die analiseverskaffer vir 13 maande bewaar.</li>
       </ul>
 

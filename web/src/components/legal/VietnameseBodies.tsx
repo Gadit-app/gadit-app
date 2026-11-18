@@ -29,8 +29,14 @@ export function PrivacyBodyVi(): ReactElement {
         <li>hình ảnh được tạo theo yêu cầu của bạn;</li>
         <li>gói đăng ký và trạng thái thanh toán của bạn;</li>
         <li>lịch sử tìm kiếm gần đây (đối với người dùng trả phí, tối đa 10 từ gần nhất), được lưu trữ để bạn có thể truy cập lại sau;</li>
+        <li>
+          {"nếu bạn sử dụng trợ lý Gadit trong trung tâm trợ giúp: các câu hỏi bạn đặt, các câu trả lời của trợ lý và việc bạn có đánh dấu một câu trả lời là hữu ích hay không, cùng với ID tài khoản của bạn (và ID gia đình, nếu có), địa chỉ email, gói đăng ký, ngôn ngữ giao diện và việc bạn đã sử dụng trang web hay ứng dụng;"}
+        </li>
         <li>hạn mức hằng tháng (ví dụ: số lượng hình ảnh bạn đã tạo trong chu kỳ thanh toán này).</li>
       </ul>
+      <p>
+        {"Trợ lý Gadit không được cung cấp trên hồ sơ trẻ em, trong Chế độ trẻ em hoặc cho khách truy cập chưa đăng nhập. Vui lòng không nhập mật khẩu hoặc số thẻ vào đó."}
+      </p>
       <h3>Dữ liệu kỹ thuật và phân tích</h3>
       <p>
         Chúng tôi tự động thu thập thông tin kỹ thuật cơ bản như địa chỉ IP, loại trình duyệt, loại thiết bị, URL giới
@@ -51,6 +57,9 @@ export function PrivacyBodyVi(): ReactElement {
         <li>để cung cấp và cải thiện dịch vụ Gadit (tạo định nghĩa, hình ảnh, nhận xét về câu, bài kiểm tra nhanh);</li>
         <li>để duy trì tài khoản của bạn và cá nhân hóa trải nghiệm của bạn (lịch sử tìm kiếm, ngôn ngữ ưa thích, công tắc &ldquo;Chế độ trẻ em&rdquo;);</li>
         <li>để xử lý gói đăng ký và gửi email giao dịch (biên lai, thay đổi gói đăng ký);</li>
+        <li>
+          {"để trả lời các câu hỏi của bạn trong trợ lý Gadit và cải thiện các câu trả lời trợ giúp của chúng tôi, và khi trợ lý chuyển một câu hỏi cho đội ngũ của chúng tôi, để gửi email cho đội ngũ cuộc trò chuyện gần đây cùng với tên, địa chỉ email, gói đăng ký, ngôn ngữ giao diện và việc bạn đã sử dụng trang web hay ứng dụng, ताकि đội ngũ có thể trả lời bạn qua email;"}
+        </li>
         <li>để đo lường và cải thiện hiệu suất sản phẩm và ngăn chặn hành vi lạm dụng;</li>
         <li>để tuân thủ các nghĩa vụ pháp lý.</li>
       </ul>
@@ -66,9 +75,7 @@ export function PrivacyBodyVi(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>: xử lý các từ và câu bạn gửi để tạo định nghĩa, nhận xét về câu, bài kiểm tra nhanh và
-          chuyển giọng nói thành văn bản (Whisper), đồng thời tạo hình ảnh (DALL·E 3). Dữ liệu gửi đến OpenAI chịu sự
-          điều chỉnh của chính sách sử dụng dữ liệu API của OpenAI.
+          <strong>OpenAI</strong>{": xử lý các từ và câu bạn gửi để tạo định nghĩa, nhận xét về câu, bài kiểm tra nhanh và chuyển giọng nói thành văn bản (Whisper), đồng thời tạo hình ảnh (DALL·E 3). OpenAI cũng soạn câu trả lời của trợ lý Gadit: chúng tôi gửi cho OpenAI câu hỏi của bạn, các tin nhắn trước đó trong cùng cuộc trò chuyện, ngôn ngữ giao diện của bạn, gói đăng ký của bạn và việc bạn đang dùng trang web hay ứng dụng, và chúng tôi không đính kèm tên hoặc địa chỉ email của bạn. Dữ liệu gửi đến OpenAI chịu sự điều chỉnh của chính sách sử dụng dữ liệu API của OpenAI."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): lưu trữ tài khoản, hồ sơ, trạng
@@ -76,6 +83,9 @@ export function PrivacyBodyVi(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>: xử lý thanh toán, gói đăng ký và cổng quản lý thanh toán.
+        </li>
+        <li>
+          <strong>Resend</strong>{": gửi email của chúng tôi (chẳng hạn như liên kết đăng nhập và thông báo), đồng thời chuyển đến đội ngũ của chúng tôi các câu hỏi mà trợ lý Gadit chuyển tiếp, với địa chỉ email của bạn là địa chỉ để trả lời."}
         </li>
         <li>
           <strong>Vercel</strong>: lưu trữ và phân phối trang web, đồng thời cung cấp phân tích ẩn danh và đo lường
@@ -96,8 +106,17 @@ export function PrivacyBodyVi(): ReactElement {
       <ul>
         <li>Thông tin tài khoản: trong thời gian tài khoản của bạn còn tồn tại.</li>
         <li>Lịch sử tìm kiếm: 10 lượt tìm kiếm gần nhất của mỗi người dùng, được cập nhật sau mỗi lượt tìm kiếm mới.</li>
+        <li>
+          {"Các cuộc trò chuyện với trợ lý Gadit: 180 ngày, sau đó được xóa tự động, hoặc sớm hơn nếu bạn xóa tài khoản của mình. Số lượng câu hỏi hằng ngày của bạn, được dùng cho giới hạn hằng ngày, sẽ bị xóa sau 3 ngày."}
+        </li>
+        <li>
+          {"Các câu hỏi mà trợ lý Gadit chuyển cho đội ngũ của chúng tôi: được lưu trong hộp thư của đội ngũ, như mọi email khác mà bạn gửi cho chúng tôi."}
+        </li>
         <li>Hình ảnh được tạo: được lưu giữ để cùng một tổ hợp từ+nghĩa có thể dùng lại hình ảnh đã lưu trong bộ nhớ đệm. Có thể được lưu giữ vô thời hạn chừng nào tài khoản của bạn còn hoạt động.</li>
         <li>Hồ sơ thanh toán và thuế: theo yêu cầu của pháp luật hiện hành (thường là 7 năm).</li>
+        <li>
+          {"Tài khoản đã xóa: một bản ghi ngắn cho biết tài khoản đã bị xóa (địa chỉ email, gói đăng ký và lý do cùng ghi chú bạn đã cung cấp, nếu có), được lưu giữ để chúng tôi có thể trả lời các câu hỏi về việc xóa."}
+        </li>
         <li>Dữ liệu phân tích: ở dạng tổng hợp, thường được nhà cung cấp dịch vụ phân tích lưu giữ trong 13 tháng.</li>
       </ul>
 

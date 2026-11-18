@@ -30,8 +30,14 @@ export function PrivacyBodyNl(): ReactElement {
         <li>afbeeldingen die op uw verzoek worden gegenereerd;</li>
         <li>uw abonnement en uw factureringsstatus;</li>
         <li>een recente zoekgeschiedenis (voor betalende gebruikers tot de laatste 10 woorden), opgeslagen zodat u deze later opnieuw kunt raadplegen;</li>
+        <li>
+          {"als u de Gadit-assistent in het helpcentrum gebruikt: de vragen die u stelt, de antwoorden die de assistent geeft en of u een antwoord als nuttig hebt gemarkeerd, samen met uw account-ID (en familie-ID, indien van toepassing), e-mailadres, abonnement, interface-taal en of u de website of de app hebt gebruikt;"}
+        </li>
         <li>maandelijkse quota (bijvoorbeeld het aantal afbeeldingen dat u in de huidige factureringsperiode heeft gegenereerd).</li>
       </ul>
+      <p>
+        {"De Gadit-assistent wordt niet aangeboden op kinderprofielen, in de Kindermodus of aan bezoekers die niet zijn aangemeld. Typ er geen wachtwoorden of kaartnummers in."}
+      </p>
       <h3>Technische en analytische gegevens</h3>
       <p>
         Wij verzamelen automatisch technische basisinformatie zoals IP-adres, browsertype, apparaattype, verwijzende
@@ -52,6 +58,9 @@ export function PrivacyBodyNl(): ReactElement {
         <li>om de dienst Gadit te leveren en te verbeteren (het genereren van definities, afbeeldingen, feedback op zinnen, quizzen);</li>
         <li>om uw account te onderhouden en uw ervaring te personaliseren (zoekgeschiedenis, voorkeurstaal, schakelaar voor de Kindermodus);</li>
         <li>om abonnementen te verwerken en transactionele e-mails te verzenden (ontvangstbewijzen, wijzigingen in het abonnement);</li>
+        <li>
+          {"om uw vragen in de Gadit-assistent te beantwoorden en onze hulpantwoorden te verbeteren, en, wanneer de assistent een vraag doorstuurt naar ons team, om het team per e-mail het recente gesprek te sturen samen met uw naam, e-mailadres, abonnement, interface-taal en of u de website of de app hebt gebruikt, zodat het team u per e-mail kan antwoorden;"}
+        </li>
         <li>om de prestaties van het product te meten en te verbeteren en misbruik te voorkomen;</li>
         <li>om te voldoen aan wettelijke verplichtingen.</li>
       </ul>
@@ -67,9 +76,7 @@ export function PrivacyBodyNl(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>: verwerkt de woorden en zinnen die u indient om definities, feedback op zinnen,
-          quizzen en spraaktranscriptie (Whisper) te genereren, en genereert afbeeldingen (DALL·E 3). Gegevens die naar
-          OpenAI worden verzonden, vallen onder het API-beleid voor gegevensgebruik van OpenAI.
+          <strong>OpenAI</strong>{": verwerkt de woorden en zinnen die u indient om definities, feedback op zinnen, quizzen en spraaktranscriptie (Whisper) te genereren, en genereert afbeeldingen (DALL·E 3). OpenAI schrijft ook de antwoorden van de Gadit-assistent: wij sturen uw vraag, de eerdere berichten in hetzelfde gesprek, uw interface-taal, uw abonnement en of u de website of de app gebruikt, en wij voegen uw naam of e-mailadres niet toe. Gegevens die naar OpenAI worden verzonden, vallen onder het API-beleid voor gegevensgebruik van OpenAI."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): slaat uw account, profiel,
@@ -77,6 +84,9 @@ export function PrivacyBodyNl(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>: verzorgt betalingen, abonnementen en het factureringsportaal.
+        </li>
+        <li>
+          <strong>Resend</strong>{": verzendt onze e-mails (zoals aanmeldlinks en meldingen), en bezorgt aan ons team de vragen die de Gadit-assistent doorstuurt, met uw e-mailadres als antwoordadres."}
         </li>
         <li>
           <strong>Vercel</strong>: host en levert de website, en verzorgt geanonimiseerde analyses en
@@ -96,8 +106,17 @@ export function PrivacyBodyNl(): ReactElement {
       <ul>
         <li>Accountinformatie: zolang uw account bestaat.</li>
         <li>Zoekgeschiedenis: de laatste 10 zoekopdrachten per gebruiker, bijgewerkt bij elke nieuwe zoekopdracht.</li>
+        <li>
+          {"Gesprekken met de Gadit-assistent: 180 dagen, daarna automatisch verwijderd, of eerder als u uw account verwijdert. Een dagelijkse telling van uw vragen, gebruikt voor de dagelijkse limiet, wordt na 3 dagen verwijderd."}
+        </li>
+        <li>
+          {"Vragen die de Gadit-assistent doorstuurt naar ons team: bewaard in de mailbox van ons team, net als elke e-mail die u ons stuurt."}
+        </li>
         <li>Gegenereerde afbeeldingen: bewaard zodat dezelfde combinatie van woord en betekenis de in de cache opgeslagen afbeelding opnieuw kan gebruiken. Deze kunnen voor onbepaalde tijd worden bewaard zolang uw account actief is.</li>
         <li>Facturerings- en belastinggegevens: zoals vereist door de toepasselijke wetgeving (doorgaans 7 jaar).</li>
+        <li>
+          {"Verwijderde accounts: een korte registratie dat het account is verwijderd (het e-mailadres, het abonnement en de reden en opmerking die u hebt opgegeven, indien van toepassing), bewaard zodat wij vragen over de verwijdering kunnen beantwoorden."}
+        </li>
         <li>Analytische gegevens: geaggregeerd, doorgaans door de analyseprovider 13 maanden bewaard.</li>
       </ul>
 

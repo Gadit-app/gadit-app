@@ -29,8 +29,14 @@ export function PrivacyBodyFr() {
         <li>les images générées à votre demande&nbsp;;</li>
         <li>votre formule d&rsquo;abonnement et l&rsquo;état de votre facturation&nbsp;;</li>
         <li>un historique de recherche récent (pour les utilisateurs payants, jusqu&rsquo;aux 10 derniers mots), conservé afin que vous puissiez y accéder ultérieurement&nbsp;;</li>
+        <li>
+          {"si vous utilisez l&rsquo;assistant Gadit dans le centre d&rsquo;aide&nbsp;: les questions que vous posez, ses réponses et le fait que vous ayez indiqué qu&rsquo;une réponse vous a été utile, ainsi que l&rsquo;identifiant de votre compte (et l&rsquo;identifiant de votre famille, le cas échéant), votre adresse e-mail, votre formule, la langue de l&rsquo;interface, et si vous avez utilisé le site web ou l&rsquo;application&nbsp;;"}
+        </li>
         <li>des quotas mensuels (par exemple, le nombre d&rsquo;images que vous avez générées au cours du cycle de facturation en cours).</li>
       </ul>
+      <p>
+        {"L&rsquo;assistant Gadit n&rsquo;est pas proposé sur les profils d&rsquo;enfants, en Mode Enfants ni aux visiteurs qui ne sont pas connectés. Veuillez ne pas y saisir de mots de passe ni de numéros de carte bancaire."}
+      </p>
       <h3>Données techniques et analytiques</h3>
       <p>
         Nous collectons automatiquement des informations techniques de base telles que l&rsquo;adresse IP, le type
@@ -52,6 +58,9 @@ export function PrivacyBodyFr() {
         <li>pour fournir et améliorer le service Gadit (génération de définitions, d&rsquo;images, retours sur phrases, quiz)&nbsp;;</li>
         <li>pour gérer votre compte et personnaliser votre expérience (historique de recherche, langue préférée, activation du Mode Enfants)&nbsp;;</li>
         <li>pour traiter les abonnements et envoyer des e-mails transactionnels (reçus, modifications d&rsquo;abonnement)&nbsp;;</li>
+        <li>
+          {"pour répondre à vos questions dans l&rsquo;assistant Gadit et améliorer nos réponses d&rsquo;aide, et, lorsque l&rsquo;assistant transmet une question à notre équipe, pour envoyer par e-mail à l&rsquo;équipe la conversation récente avec votre nom, votre adresse e-mail, votre formule, la langue de l&rsquo;interface, et si vous avez utilisé le site web ou l&rsquo;application, afin que l&rsquo;équipe puisse vous répondre par e-mail&nbsp;;"}
+        </li>
         <li>pour mesurer et améliorer les performances du produit et prévenir les abus&nbsp;;</li>
         <li>pour respecter nos obligations légales.</li>
       </ul>
@@ -67,10 +76,7 @@ export function PrivacyBodyFr() {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>, traite les mots et les phrases que vous soumettez afin de générer des
-          définitions, des retours sur phrases, des quiz et la transcription vocale (Whisper), et génère des
-          images (DALL·E 3). Les données envoyées à OpenAI sont régies par la politique d&rsquo;utilisation des
-          données de l&rsquo;API d&rsquo;OpenAI.
+          <strong>OpenAI</strong>{", traite les mots et les phrases que vous soumettez afin de générer des définitions, des retours sur phrases, des quiz et la transcription vocale (Whisper), et génère des images (DALL·E 3). Il rédige aussi les réponses de l&rsquo;assistant Gadit&nbsp;: nous lui envoyons votre question, les messages antérieurs de la même conversation, la langue de votre interface, votre formule, et si vous utilisez le site web ou l&rsquo;application, sans y joindre votre nom ni votre adresse e-mail. Les données envoyées à OpenAI sont régies par la politique d&rsquo;utilisation des données de l&rsquo;API d&rsquo;OpenAI."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), stocke votre compte, votre
@@ -78,6 +84,9 @@ export function PrivacyBodyFr() {
         </li>
         <li>
           <strong>Stripe</strong>, gère les paiements, les abonnements et le portail de facturation.
+        </li>
+        <li>
+          <strong>Resend</strong>{", envoie nos e-mails (comme les liens de connexion et les notifications), et transmet à notre équipe les questions que l&rsquo;assistant Gadit lui transmet, avec votre adresse e-mail comme adresse de réponse."}
         </li>
         <li>
           <strong>Vercel</strong>, héberge et sert le site web et fournit des analyses anonymisées et la mesure
@@ -98,8 +107,17 @@ export function PrivacyBodyFr() {
       <ul>
         <li>Informations de compte&nbsp;: tant que votre compte existe.</li>
         <li>Historique de recherche&nbsp;: les 10 dernières recherches par utilisateur, mises à jour à chaque nouvelle recherche.</li>
+        <li>
+          {"Conversations avec l&rsquo;assistant Gadit&nbsp;: 180 jours, puis suppression automatique, ou plus tôt si vous supprimez votre compte. Un décompte quotidien de vos questions, utilisé pour la limite quotidienne, est supprimé après 3 jours."}
+        </li>
+        <li>
+          {"Questions que l&rsquo;assistant Gadit transmet à notre équipe&nbsp;: conservées dans la boîte mail de notre équipe, comme tout autre e-mail que vous nous envoyez."}
+        </li>
         <li>Images générées&nbsp;: conservées afin qu&rsquo;un même couple mot+sens puisse réutiliser l&rsquo;image mise en cache. Peuvent être conservées indéfiniment tant que votre compte est actif.</li>
         <li>Registres de facturation et registres fiscaux&nbsp;: selon les exigences de la loi applicable (généralement 7 ans).</li>
+        <li>
+          {"Comptes supprimés&nbsp;: une brève trace de la suppression du compte (son adresse e-mail, sa formule, ainsi que le motif et la note que vous avez fournis, le cas échéant), conservée afin que nous puissions répondre aux questions relatives à la suppression."}
+        </li>
         <li>Données analytiques&nbsp;: agrégées, généralement conservées par le fournisseur d&rsquo;analyses pendant 13 mois.</li>
       </ul>
 

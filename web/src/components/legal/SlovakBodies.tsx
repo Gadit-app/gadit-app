@@ -30,8 +30,14 @@ export function PrivacyBodySk(): ReactElement {
         <li>obrázky vygenerované na vašu žiadosť;</li>
         <li>váš plán predplatného a stav fakturácie;</li>
         <li>nedávnu históriu vyhľadávania (pri platiacich používateľoch až posledných 10 slov), uloženú, aby ste sa k nej mohli neskôr vrátiť;</li>
+        <li>
+          {"ak používate asistenta Gadit v centre pomoci: otázky, ktoré kladiete, jeho odpovede a to, či ste označili odpoveď ako užitočnú, spolu s identifikátorom vášho účtu (a identifikátorom rodiny, ak ho máte), e-mailovou adresou, plánom, jazykom rozhrania a tým, či ste použili web alebo aplikáciu;"}
+        </li>
         <li>mesačné kvóty (napríklad počet obrázkov, ktoré ste vygenerovali v aktuálnom fakturačnom období).</li>
       </ul>
+      <p>
+        {"Asistent Gadit sa neponúka na detských profiloch, v Detskom režime ani návštevníkom, ktorí nie sú prihlásení. Nezadávajte doň heslá ani čísla platobných kariet."}
+      </p>
       <h3>Technické a analytické údaje</h3>
       <p>
         Automaticky zhromažďujeme základné technické informácie, ako je IP adresa, typ prehliadača, typ zariadenia,
@@ -51,6 +57,9 @@ export function PrivacyBodySk(): ReactElement {
         <li>na poskytovanie a zlepšovanie služby Gadit (generovanie definícií, obrázkov, spätnej väzby k vetám, kvízov);</li>
         <li>na správu vášho účtu a prispôsobenie vášho prostredia (história vyhľadávania, preferovaný jazyk, prepínač „Detský režim“);</li>
         <li>na spracovanie predplatného a odosielanie transakčných e-mailov (potvrdenia o platbe, zmeny predplatného);</li>
+        <li>
+          {"na odpovedanie na vaše otázky v asistentovi Gadit a zlepšovanie našich odpovedí v centre pomoci, a keď asistent odovzdá otázku nášmu tímu, na odoslanie nedávnej konverzácie tímu e-mailom spolu s vaším menom, e-mailovou adresou, plánom, jazykom rozhrania a tým, či ste použili web alebo aplikáciu, aby vám tím mohol odpovedať e-mailom;"}
+        </li>
         <li>na meranie a zlepšovanie výkonu produktu a na predchádzanie zneužitiu;</li>
         <li>na plnenie zákonných povinností.</li>
       </ul>
@@ -65,9 +74,7 @@ export function PrivacyBodySk(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>: spracúva slová a vety, ktoré odošlete, s cieľom generovať definície, spätnú väzbu k
-          vetám, kvízy a prepis hlasu (Whisper), a generuje obrázky (DALL·E 3). Na údaje odosielané spoločnosti OpenAI
-          sa vzťahujú zásady OpenAI pre používanie údajov v rámci API.
+          <strong>OpenAI</strong>{": spracúva slová a vety, ktoré odošlete, s cieľom generovať definície, spätnú väzbu k vetám, kvízy a prepis hlasu (Whisper), a generuje obrázky (DALL·E 3). Píše aj odpovede asistenta Gadit: odosielame mu vašu otázku, predchádzajúce správy z tej istej konverzácie, jazyk vášho rozhrania, váš plán a informáciu o tom, či používate web alebo aplikáciu, a nepripájame vaše meno ani e-mailovú adresu. Na údaje odosielané spoločnosti OpenAI sa vzťahujú zásady OpenAI pre používanie údajov v rámci API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): ukladá váš účet, profil, stav
@@ -75,6 +82,9 @@ export function PrivacyBodySk(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>: zabezpečuje platby, predplatné a fakturačný portál.
+        </li>
+        <li>
+          <strong>Resend</strong>{": odosiela naše e-maily (napríklad prihlasovacie odkazy a oznámenia) a doručuje nášmu tímu otázky, ktoré asistent Gadit odovzdá ďalej, s vašou e-mailovou adresou ako adresou na odpoveď."}
         </li>
         <li>
           <strong>Vercel</strong>: hosťuje a prevádzkuje webovú stránku a poskytuje anonymizovanú analytiku a meranie
@@ -94,8 +104,17 @@ export function PrivacyBodySk(): ReactElement {
       <ul>
         <li>Informácie o účte: počas existencie vášho účtu.</li>
         <li>História vyhľadávania: posledných 10 vyhľadávaní na používateľa, aktualizovaná pri každom novom vyhľadávaní.</li>
+        <li>
+          {"Konverzácie s asistentom Gadit: 180 dní, potom sa automaticky vymažú, alebo skôr, ak svoj účet vymažete. Denný počet vašich otázok, používaný na denný limit, sa vymaže po 3 dňoch."}
+        </li>
+        <li>
+          {"Otázky, ktoré asistent Gadit odovzdá nášmu tímu: uchovávajú sa v schránke nášho tímu, rovnako ako akýkoľvek e-mail, ktorý nám pošlete."}
+        </li>
         <li>Vygenerované obrázky: uchovávajú sa, aby rovnaká kombinácia slovo+význam mohla znova použiť obrázok uložený vo vyrovnávacej pamäti. Môžu sa uchovávať neobmedzene, kým je váš účet aktívny.</li>
         <li>Fakturačné a daňové záznamy: v rozsahu vyžadovanom platnými právnymi predpismi (zvyčajne 7 rokov).</li>
+        <li>
+          {"Vymazané účty: krátky záznam o tom, že účet bol vymazaný (jeho e-mailová adresa, plán a dôvod a poznámka, ktoré ste uviedli, ak nejaké boli), uchovávaný, aby sme mohli odpovedať na otázky o vymazaní."}
+        </li>
         <li>Analytické údaje: v súhrnnej podobe, poskytovateľ analytiky ich zvyčajne uchováva 13 mesiacov.</li>
       </ul>
 

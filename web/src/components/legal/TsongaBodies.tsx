@@ -30,8 +30,14 @@ export function PrivacyBodyTs(): ReactElement {
         <li>swifaniso leswi endliwaka hi xikombelo xa n’wina;</li>
         <li>pulani ya n’wina ya ku tsarisa ni xiyimo xa ku hakela;</li>
         <li>matimu ya ku lavisisa ya sweswinyana (eka vatirhisi lava hakelaka, ku fika eka marito ya 10 ya hetelelo), lama hlayisiwaka leswaku mi ta kota ku ma kuma nakambe endzhaku;</li>
+        <li>
+          {"loko mi tirhisa mupfuni wa Gadit eka senthara ya mpfuno: swivutiso leswi mi swi vutisaka, tinhlamulo ta wona, ni loko mi funghile leswaku nhlamulo yi pfunile, swin’we ni xihlawulekisi xa akhawunti ya n’wina (ni xihlawulekisi xa ndyangu, loko mi ri na xona), adirese ya imeyili, pulani, ririmi ra xitirhisiwa, ni loko mi tirhisile webusayiti kumbe app;"}
+        </li>
         <li>mimpimo ya n’hweti (xikombiso, nhlayo ya swifaniso leswi mi swi endleke eka nkarhi lowu wa ku hakela).</li>
       </ul>
+      <p>
+        {"Mupfuni wa Gadit a nga nyikeriwi eka tiphurofayili ta vana, eka Xiyimo xa vana kumbe eka vayeni lava nga nghenangiki eka akhawunti. Hi kombela mi nga tsali tiphasiwedi kumbe tinomboro ta khadi eka wona."}
+      </p>
       <h3>Vuxokoxoko bya xithekiniki ni bya tinhlayo</h3>
       <p>
         Hi hlengeleta hi ku tiendlekela vuxokoxoko bya xisekelo bya xithekiniki, ku fana na adirese ya IP, muxaka wa
@@ -53,6 +59,9 @@ export function PrivacyBodyTs(): ReactElement {
         <li>ku nyika ni ku antswisa vukorhokeri bya Gadit (ku endla tinhlamuselo, swifaniso, mavonelo hi swivulwa, tikhwizi);</li>
         <li>ku hlayisa akhawunti ya n’wina ni ku endla leswaku ntokoto wa n’wina wu mi fanela (matimu ya ku lavisisa, ririmi leri mi ri tsakelaka, xihlawuri xa &ldquo;Xiyimo xa vana&rdquo;);</li>
         <li>ku lulamisa ku tsarisa ni ku rhumela timeyili ta mintirho ya ku hakela (tirisiti, ku cinca ka ku tsarisa);</li>
+        <li>
+          {"ku hlamula swivutiso swa n’wina eka mupfuni wa Gadit ni ku antswisa tinhlamulo ta hina ta mpfuno, naswona, loko mupfuni a hundzisela xivutiso eka xipano xa hina, ku rhumela xipano hi imeyili mbulavurisano wa sweswinyana swin’we ni vito ra n’wina, adirese ya imeyili, pulani, ririmi ra xitirhisiwa, ni loko mi tirhisile webusayiti kumbe app, leswaku xipano xi ta kota ku mi hlamula hi imeyili;"}
+        </li>
         <li>ku pima ni ku antswisa matirhelo ya xiendliwa ni ku sivela ku tirhisiwa hi ndlela yo biha;</li>
         <li>ku landzelela swiboho swa nawu.</li>
       </ul>
@@ -68,10 +77,7 @@ export function PrivacyBodyTs(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>, yi lulamisa marito ni swivulwa leswi mi swi rhumelaka ku endla tinhlamuselo,
-          mavonelo hi swivulwa, tikhwizi, ni ku tsala leswi vuriweke hi rito (Whisper), naswona yi endla swifaniso
-          (DALL·E 3). Vuxokoxoko lebyi rhumeriwaka eka OpenAI byi lawuriwa hi pholisi ya OpenAI ya matirhiselo ya
-          vuxokoxoko ya API.
+          <strong>OpenAI</strong>{", yi lulamisa marito ni swivulwa leswi mi swi rhumelaka ku endla tinhlamuselo, mavonelo hi swivulwa, tikhwizi, ni ku tsala leswi vuriweke hi rito (Whisper), naswona yi endla swifaniso (DALL·E 3). Yi tlhela yi tsala tinhlamulo ta mupfuni wa Gadit: hi yi rhumela xivutiso xa n’wina, marungula ya le mahlweni ya mbulavurisano wolowo, ririmi ra xitirhisiwa xa n’wina, pulani ya n’wina, ni loko mi ri eka webusayiti kumbe app, naswona a hi engeteli vito ra n’wina kumbe adirese ya imeyili. Vuxokoxoko lebyi rhumeriwaka eka OpenAI byi lawuriwa hi pholisi ya OpenAI ya matirhiselo ya vuxokoxoko ya API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), yi hlayisa akhawunti ya n’wina,
@@ -79,6 +85,9 @@ export function PrivacyBodyTs(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>, yi khoma ku hakela, ku tsarisa, ni photali ya ku hakela.
+        </li>
+        <li>
+          <strong>Resend</strong>{", yi rhumela ti-imeyili ta hina (to tanihi swihlanganisi swo nghena ni switiviso), naswona yi yisa eka xipano xa hina swivutiso leswi mupfuni wa Gadit a swi hundziselaka, yi tirhisa adirese ya imeyili ya n’wina tanihi adirese yo hlamula."}
         </li>
         <li>
           <strong>Vercel</strong>, yi hlayisa ni ku phakela websayiti, naswona yi nyika tinhlayo leti nga kombiki
@@ -99,8 +108,17 @@ export function PrivacyBodyTs(): ReactElement {
       <ul>
         <li>Vuxokoxoko bya akhawunti: loko akhawunti ya n’wina ya ha ri kona.</li>
         <li>Matimu ya ku lavisisa: ku lavisisa ka 10 ka hetelelo eka mutirhisi un’wana ni un’wana, loku pfuxetiwaka nkarhi wun’wana ni wun’wana loko ku lavisisiwa nakambe.</li>
+        <li>
+          {"Mimbulavurisano na mupfuni wa Gadit: masiku ya 180, kutani yi susiwa hi ku tisungulela, kumbe hi ku hatlisa loko mi sula akhawunti ya n’wina. Nhlayo ya siku ni siku ya swivutiso swa n’wina, leyi tirhisiwaka eka mpimo wa siku ni siku, yi susiwa endzhaku ka masiku ya 3."}
+        </li>
+        <li>
+          {"Swivutiso leswi mupfuni wa Gadit a swi hundziselaka eka xipano xa hina: swi hlayisiwa eka bokisi ra poso ra xipano xa hina, ku fana ni imeyili yin’wana ni yin’wana leyi mi hi rhumelaka yona."}
+        </li>
         <li>Swifaniso leswi endliweke: swa hlayisiwa leswaku rito ni nhlamuselo leswi fanaka swi ta tirhisa nakambe xifaniso lexi hlayisiweke. Swi nga hlayisiwa nkarhi lowu nga pimiwangiki loko akhawunti ya n’wina ya ha tirha.</li>
         <li>Tirhekhodo ta ku hakela ni ta xibalo: hi ku ya hi leswi nawu lowu tirhaka wu swi lavaka (hi ntolovelo malembe ya 7).</li>
+        <li>
+          {"Akhawunti leti susiweke: rhekhodo yo koma ya leswaku akhawunti yi susiwile (adirese ya yona ya imeyili, pulani, ni xivangelo ni nhlamuselo leyi mi yi tsaleke, loko yi ri kona), leyi hlayisiwaka leswaku hi ta kota ku hlamula swivutiso malunghana ni ku susiwa ka yona."}
+        </li>
         <li>Vuxokoxoko bya tinhlayo: lebyi hlanganisiweke, hi ntolovelo byi hlayisiwa hi muphakeri wa tinhlayo ku ringana tin’hweti ta 13.</li>
       </ul>
 

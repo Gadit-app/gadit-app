@@ -30,8 +30,14 @@ export function PrivacyBodyPl(): ReactElement {
         <li>obrazy wygenerowane na Państwa żądanie;</li>
         <li>Państwa plan subskrypcji i status rozliczeń;</li>
         <li>niedawną historię wyszukiwania (w przypadku płatnych użytkowników do 10 ostatnich słów), przechowywaną, aby mogli Państwo później do niej wrócić;</li>
+        <li>
+          {"jeśli korzystają Państwo z asystenta Gadit w centrum pomocy: zadawane przez Państwa pytania, jego odpowiedzi oraz informacja o tym, czy oznaczyli Państwo odpowiedź jako pomocną, wraz z identyfikatorem konta (oraz identyfikatorem rodziny, jeśli go Państwo mają), adresem e-mail, planem, językiem interfejsu oraz informacją o tym, czy korzystali Państwo ze strony internetowej czy z aplikacji;"}
+        </li>
         <li>miesięczne limity (na przykład liczbę obrazów wygenerowanych przez Państwa w bieżącym okresie rozliczeniowym).</li>
       </ul>
+      <p>
+        {"Asystent Gadit nie jest oferowany na profilach dziecięcych, w Trybie dziecięcym ani osobom, które nie są zalogowane. Prosimy nie wpisywać do niego haseł ani numerów kart płatniczych."}
+      </p>
       <h3>Dane techniczne i analityczne</h3>
       <p>
         Automatycznie zbieramy podstawowe informacje techniczne, takie jak adres IP, typ przeglądarki, typ urządzenia,
@@ -52,6 +58,9 @@ export function PrivacyBodyPl(): ReactElement {
         <li>w celu świadczenia i ulepszania usługi Gadit (generowanie definicji, obrazów, informacji zwrotnych dotyczących zdań, quizów);</li>
         <li>w celu prowadzenia Państwa konta i personalizacji korzystania z usługi (historia wyszukiwania, preferowany język, przełącznik „Tryb dziecięcy”);</li>
         <li>w celu obsługi subskrypcji i wysyłania wiadomości e-mail dotyczących transakcji (potwierdzenia płatności, zmiany subskrypcji);</li>
+        <li>
+          {"w celu odpowiadania na Państwa pytania w asystencie Gadit i ulepszania naszych odpowiedzi pomocy, a także, gdy asystent przekazuje pytanie do naszego zespołu, w celu przesłania zespołowi pocztą e-mail ostatniej rozmowy wraz z Państwa imieniem, adresem e-mail, planem, językiem interfejsu oraz informacją o tym, czy korzystali Państwo ze strony internetowej czy z aplikacji, aby zespół mógł odpowiedzieć Państwu e-mailem;"}
+        </li>
         <li>w celu pomiaru i poprawy wydajności produktu oraz zapobiegania nadużyciom;</li>
         <li>w celu wypełniania obowiązków prawnych.</li>
       </ul>
@@ -67,9 +76,7 @@ export function PrivacyBodyPl(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>: przetwarza przesyłane przez Państwa słowa i zdania w celu generowania definicji,
-          informacji zwrotnych dotyczących zdań, quizów i transkrypcji mowy (Whisper) oraz generuje obrazy (DALL·E 3).
-          Dane przesyłane do OpenAI podlegają zasadom OpenAI dotyczącym wykorzystywania danych w API.
+          <strong>OpenAI</strong>{": przetwarza przesyłane przez Państwa słowa i zdania w celu generowania definicji, informacji zwrotnych dotyczących zdań, quizów i transkrypcji mowy (Whisper) oraz generuje obrazy (DALL·E 3). Pisze również odpowiedzi asystenta Gadit: wysyłamy do niego Państwa pytanie, wcześniejsze wiadomości z tej samej rozmowy, język interfejsu, plan oraz informację o tym, czy korzystają Państwo ze strony internetowej czy z aplikacji, i nie dołączamy Państwa imienia ani adresu e-mail. Dane przesyłane do OpenAI podlegają zasadom OpenAI dotyczącym wykorzystywania danych w API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): przechowuje Państwa konto,
@@ -77,6 +84,9 @@ export function PrivacyBodyPl(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>: obsługuje płatności, subskrypcje i portal rozliczeniowy.
+        </li>
+        <li>
+          <strong>Resend</strong>{": wysyła nasze wiadomości e-mail (takie jak linki do logowania i powiadomienia) oraz dostarcza naszemu zespołowi pytania przekazane przez asystenta Gadit, z Państwa adresem e-mail jako adresem do odpowiedzi."}
         </li>
         <li>
           <strong>Vercel</strong>: hostuje i udostępnia stronę internetową oraz zapewnia zanonimizowaną analitykę i
@@ -97,8 +107,17 @@ export function PrivacyBodyPl(): ReactElement {
       <ul>
         <li>Informacje o koncie: przez cały okres istnienia Państwa konta.</li>
         <li>Historia wyszukiwania: 10 ostatnich wyszukiwań na użytkownika, aktualizowana przy każdym nowym wyszukiwaniu.</li>
+        <li>
+          {"Rozmowy z asystentem Gadit: 180 dni, a następnie usuwane automatycznie, lub wcześniej, jeśli usuną Państwo konto. Dzienna liczba Państwa pytań, wykorzystywana do dziennego limitu, jest usuwana po 3 dniach."}
+        </li>
+        <li>
+          {"Pytania przekazane przez asystenta Gadit do naszego zespołu: przechowywane w skrzynce pocztowej naszego zespołu, jak każda wiadomość e-mail wysłana do nas przez Państwa."}
+        </li>
         <li>Wygenerowane obrazy: przechowywane, aby ta sama kombinacja słowo+znaczenie mogła ponownie wykorzystać obraz zapisany w pamięci podręcznej. Mogą być przechowywane bezterminowo, dopóki Państwa konto jest aktywne.</li>
         <li>Dokumentacja rozliczeniowa i podatkowa: zgodnie z wymogami obowiązującego prawa (zazwyczaj 7 lat).</li>
+        <li>
+          {"Usunięte konta: krótki zapis usunięcia konta (jego adres e-mail, plan oraz podany przez Państwa powód i uwaga, jeśli zostały podane), przechowywany, abyśmy mogli odpowiadać na pytania dotyczące usunięcia."}
+        </li>
         <li>Dane analityczne: w formie zbiorczej, zazwyczaj przechowywane przez dostawcę analityki przez 13 miesięcy.</li>
       </ul>
 

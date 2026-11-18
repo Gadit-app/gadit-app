@@ -30,8 +30,14 @@ export function PrivacyBodySt(): ReactElement {
         <li>ditshwantsho tse entsweng ka kopo ya hao;</li>
         <li>leano la hao la ngodiso (subscription) le boemo ba hao ba tefo;</li>
         <li>nalane ya morao tjena ya dipatlo (bakeng sa basebedisi ba lefang, ho fihla mantsweng a 10 a ho qetela), e bolokwang hore o tle o e fumane hape hamorao;</li>
+        <li>
+          {"haeba o sebedisa mothusi wa Gadit setsing sa thuso: dipotso tseo o di botsang, dikarabo tsa wona, le hore na o tshwailwe hore karabo e bile thuso, hammoho le ID ya akhaonto ya hao (le ID ya lelapa, haeba o e na le yona), aterese ya hao ya imeile, leano la hao, puo ya sehokelo, le hore na o sebedisitse websaete kapa app;"}
+        </li>
         <li>dikabelo tsa kgwedi (mohlala, palo ya ditshwantsho tseo o di entseng nakong ena ya jwale ya tefo).</li>
       </ul>
+      <p>
+        {"Mothusi wa Gadit ha o fumanehe diprofaeleng tsa bana, ho Mokgwa wa bana, kapa ho baeti ba sa kang ba kena akhaontong. Ka kopo o se ke wa ngola diphasewete kapa dinomoro tsa karete ho wona."}
+      </p>
       <h3>Dintlha tsa theknoloji le tsa tlhahlobo</h3>
       <p>
         Re bokella ka boiketsetso tlhahisoleseding ya motheo ya theknoloji jwalo ka aterese ya IP, mofuta wa sebadi
@@ -53,6 +59,9 @@ export function PrivacyBodySt(): ReactElement {
         <li>ho fana ka le ho ntlafatsa tshebeletso ya Gadit (ho hlahisa ditlhaloso, ditshwantsho, maikutlo ka dipolelo, le diteko);</li>
         <li>ho hlokomela akhaonto ya hao le ho etsa hore boiphihlelo ba hao bo o tshwanele (nalane ya dipatlo, puo eo o e ratang, sekonopo sa &ldquo;Mokgwa wa bana&rdquo;);</li>
         <li>ho sebetsana le dingodiso le ho romela diimeile tsa ditransekshene (diresiti, diphetoho tsa ngodiso);</li>
+        <li>
+          {"ho araba dipotso tsa hao mothusing wa Gadit le ho ntlafatsa dikarabo tsa rona tsa thuso, mme, ha mothusi a fetisetsa potso sehlopheng sa rona, ho romela sehlopha ka imeile puisano ya morao tjena hammoho le lebitso la hao, aterese ya imeile, leano la hao, puo ya sehokelo, le hore na o sebedisitse websaete kapa app, e le hore sehlopha se kgone ho o araba ka imeile;"}
+        </li>
         <li>ho lekanya le ho ntlafatsa tshebetso ya sehlahiswa le ho thibela tshebediso e mpe;</li>
         <li>ho latela ditlamo tsa molao.</li>
       </ul>
@@ -68,9 +77,7 @@ export function PrivacyBodySt(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>, e sebetsana le mantswe le dipolelo tseo o di romelang ho hlahisa ditlhaloso,
-          maikutlo ka dipolelo, diteko, le ho ngola seo ho buuwang (Whisper), mme e hlahisa ditshwantsho (DALL·E 3).
-          Dintlha tse romelwang ho OpenAI di laolwa ke leano la OpenAI la tshebediso ya dintlha tsa API.
+          <strong>OpenAI</strong>{", e sebetsana le mantswe le dipolelo tseo o di romelang ho hlahisa ditlhaloso, maikutlo ka dipolelo, diteko, le ho ngola seo ho buuwang (Whisper), mme e hlahisa ditshwantsho (DALL·E 3). E boetse e ngola dikarabo tsa mothusi wa Gadit: re e romella potso ya hao, melaetsa e fetileng ya puisano eo e le nngwe, puo ya sehokelo ya hao, leano la hao, le hore na o websaeteng kapa ho app, mme ha re kenyeletse lebitso la hao kapa aterese ya imeile. Dintlha tse romelwang ho OpenAI di laolwa ke leano la OpenAI la tshebediso ya dintlha tsa API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), e boloka akhaonto ya hao,
@@ -78,6 +85,9 @@ export function PrivacyBodySt(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>, e sebetsana le ditefo, dingodiso, le potale ya ditefo.
+        </li>
+        <li>
+          <strong>Resend</strong>{", e romela diimeile tsa rona (jwalo ka dikhokahanyo tsa ho kena le ditsebiso), mme e isa sehlopheng sa rona dipotso tseo mothusi wa Gadit a di fetisetsang, ka aterese ya hao ya imeile e le aterese ya karabo."}
         </li>
         <li>
           <strong>Vercel</strong>, e bolokela le ho fana ka websaete, mme e fana ka tlhahlobo e sa tsebahatseng motho
@@ -98,8 +108,17 @@ export function PrivacyBodySt(): ReactElement {
       <ul>
         <li>Tlhahisoleseding ya akhaonto: ha feela akhaonto ya hao e ntse e le teng.</li>
         <li>Nalane ya dipatlo: dipatlo tse 10 tsa ho qetela ho mosebedisi e mong le e mong, e ntjhafatswa ka patlo e nngwe le e nngwe e ntjha.</li>
+        <li>
+          {"Dipuisano le mothusi wa Gadit: matsatsi a 180, ebe di hlakolwa ka bohona, kapa pejana haeba o hlakola akhaonto ya hao. Palo ya letsatsi le letsatsi ya dipotso tsa hao, e sebedisetswang moedi wa letsatsi le letsatsi, e hlakolwa kamora matsatsi a 3."}
+        </li>
+        <li>
+          {"Dipotso tseo mothusi wa Gadit a di fetisetsang sehlopheng sa rona: di bolokwa lebokoseng la imeile la sehlopha sa rona, jwalo ka imeile efe kapa efe eo o re romellang yona."}
+        </li>
         <li>Ditshwantsho tse hlahisitsweng: di a bolokwa e le hore lentswe le moelelo tse tshwanang (lentswe+moelelo) di kgone ho sebedisa hape setshwantsho se bolokilweng. Di ka bolokwa ka ho sa feleng ha feela akhaonto ya hao e ntse e sebetsa.</li>
         <li>Direkoto tsa ditefo le tsa lekgetho: jwalo ka ha molao o sebetsang o hloka (hangata dilemo tse 7).</li>
+        <li>
+          {"Akhaonto tse hlakotsweng: rekoto e kgutshwane ya hore akhaonto e hlakotswe (aterese ya yona ya imeile, leano, le lebaka le tlhaloso eo o faneng ka yona, haeba di le teng), e bolokwang e le hore re kgone ho araba dipotso mabapi le ho hlakolwa."}
+        </li>
         <li>Dintlha tsa tlhahlobo: di kopantswe, hangata di bolokwa ke mofani wa tlhahlobo dikgwedi tse 13.</li>
       </ul>
 

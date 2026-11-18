@@ -22,8 +22,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "Jak změním platební kartu u svého předplatného?",
             a: [
               "Na novou kartu přejdete za méně než minutu a nemusíte nic rušit. Vaše současné předplatné běží dál, jen na novou kartu.",
-              "1. Přihlaste se na gadit.app a otevřete stránku Účet (vpravo nahoře). 2. Klikněte na \"Spravovat platby\". 3. Otevře se zabezpečená stránka Stripe. Klikněte na \"Přidat platební metodu\", zadejte novou kartu a nastavte ji jako výchozí. 4. Pokud chcete, starou kartu odeberte.",
-              "Od dalšího zúčtovacího období se vše strhává z nové karty. Předchozí platba (už stržená) zůstává na staré kartě. Vracet peníze není potřeba, pokud si to výslovně nepřejete.",
+              "1. Přihlaste se na gadit.app a v nabídce účtu otevřete „Účet“. 2. Klikněte na „Spravovat fakturaci“. 3. Otevře se zabezpečená stránka Stripe. Přidejte novou kartu jako platební metodu a nastavte ji jako výchozí. 4. Volitelně odeberte starou kartu.",
+              "Od dalšího zúčtovacího období půjde vše na novou kartu. Předchozí platba, která už proběhla, zůstává na staré kartě. Vrácení peněz není potřeba, ledaže ho chcete konkrétně vy.",
             ],
           },
           {
@@ -31,7 +31,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "Jak zruším předplatné?",
             a: [
               "Sami, kdykoli. Přihlaste se, otevřete Účet a pod svým tarifem klepněte na Zrušit předplatné.",
-              "U placeného předplatného vám přístup zůstane do konce období, které už máte zaplacené. Poté se účet převede na Basic (zdarma). Vaše uložená slova i historie zůstanou v bezpečí.",
+              "Koupili jste předplatné v aplikaci na iPhonu nebo iPadu? Zrušte ho v nastavení předplatného Apple. Odkaz „Spravovat předplatné“ na stránce Účet vás tam vezme.",
+              "U placeného předplatného vám přístup zůstane do konce období, které už máte zaplacené. Poté se účet převede na Basic, zdarma. Vaše uložená slova i historie zůstanou v bezpečí.",
               "Během 14denní zkušební verze zrušení ukončí zkušební období okamžitě a nic se neúčtuje. Pokud vám jde jen o automatickou platbu, vyberte v okně zrušení tento důvod a místo zrušení můžete vypnout obnovení, takže zkušební období vám zůstane až do posledního dne.",
               "Pokud placené předplatné zrušíte omylem nebo si to rozmyslíte, můžete ho na stejné stránce obnovit, dokud období neskončí.",
             ],
@@ -89,7 +90,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "Platba se nezdařila. Co mám dělat?",
             a: [
               "Stripe neúspěšné platby v následujících dnech automaticky několikrát zopakuje. Většina problémů se vyřeší sama, jakmile banka uvolní blokaci nebo je na kartě dost prostředků.",
-              "Pokud to chcete vyřešit hned, přejděte do Účet → Spravovat platby → Přidat platební metodu, zadejte funkční kartu a nastavte ji jako výchozí. Stripe neúspěšnou platbu na nové kartě okamžitě zopakuje. Pokud vaše předplatné už spadlo na Basic, můžete si ho znovu objednat na stránce Ceník a váš sešit zůstane nedotčený.",
+              "Nahoře na stránce se objeví pruh s informací, že platba neprošla, a přístup vám ještě pár dní zůstane. Klepněte tam na „Aktualizovat kartu“, zadejte funkční kartu a platbu na ní hned zkusíme znovu. Pokud vaše předplatné už spadlo na Basic, můžete se znovu přihlásit k odběru na stránce s cenami a váš sešit zůstane nedotčený.",
             ],
           },
           {
@@ -118,42 +119,42 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "forgot-password",
-            q: "Zapomenuté heslo",
+            q: "Zapomněl jsem heslo",
             a: [
-              "Otevřete přihlašovací okno a klikněte na \"Zapomněli jste heslo?\". Zadejte e-mail, který pro Gadit používáte, a do minuty či dvou vám přijde odkaz pro obnovení.",
-              "Pokud e-mail nepřijde, zkontrolujte spam. Pokud nepřijde ani tak, možná jste se registrovali přes Google, a ne e-mailem a heslem. Zkuste tlačítko \"Pokračovat přes Google\".",
+              "V přihlašovacím okně napište svůj e-mail a pak klepněte na „Zapomněl jsi heslo?“. Odkaz pro reset obvykle dorazí do schránky během minuty nebo dvou. Můžete také klepnout na „Poslat přihlašovací odkaz e-mailem“ a přihlásit se bez hesla.",
+              "Pokud e-mail nepřijde, zkontrolujte spam. Jestli pořád nic, možná jste se registrovali přes Google místo e-mailu a hesla. Zkuste tlačítko „Pokračovat přes Google“.",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "Heslo mám určitě správně, ale zobrazuje se \"Nesprávný e-mail nebo heslo\"",
+            q: "Heslo mám určitě správně, ale zobrazuje se „Nesprávný e-mail nebo heslo“",
             a: [
-              "Zkontrolujte tři věci. Zaprvé Caps Lock. Zadruhé mezeru na konci při kopírování a vkládání. Zatřetí, jestli jste se nezaregistrovali přes Google místo hesla (pak použijte \"Pokračovat přes Google\").",
-              "Pořád nic? Obnovte heslo ve stejném okně. Začnete načisto.",
+              "Zkontrolujte tři věci. Zaprvé Caps Lock. Zadruhé mezeru navíc na konci po kopírování a vložení. Zatřetí, jestli jste se neregistrovali přes Google místo hesla, v tom případě použijte „Pokračovat přes Google“.",
+              "Pořád nic? V té samé hlášce klepněte na „Poslat přihlašovací odkaz e-mailem“ a přihlaste se bez hesla, nebo na „Zvolit nové heslo“.",
             ],
           },
           {
             id: "google-fails",
             q: "Přihlášení přes Google nefunguje",
             a: [
-              "Nejčastější příčina: váš prohlížeč pro gadit.app blokuje cookies třetích stran nebo vyskakovací okna. Povolte je v oprávněních v adresním řádku a zkuste to znovu.",
-              "V anonymním režimu je přihlášení přes Google záměrně omezené. Přepněte do běžného okna prohlížeče.",
+              "Uvnitř aplikací jako Instagram, Facebook nebo TikTok je tlačítko Google skryté. Otevřete odkaz ve svém běžném prohlížeči, nebo se přihlaste e-mailem. Pokud jste se registrovali přes Google, napište ten e-mail a klepněte na „Poslat přihlašovací odkaz e-mailem“.",
+              "V anonymním okně mohou zablokované cookies zastavit přihlášení přes Google, tak zkuste běžné okno.",
             ],
           },
           {
             id: "change-email",
             q: "Jak změním e-mail u svého účtu?",
             a: [
-              "Účet, klikněte na svůj e-mail, Změnit e-mail. Novou adresu je potřeba potvrdit, než se změna uloží. Předplatné, historie i sešit se přenesou.",
-              "Pokud je e-mail propojený se zákazníkem ve Stripe, změňte ho i na fakturačním portálu Stripe, aby budoucí účtenky chodily na novou adresu.",
+              "Změnu e-mailu u účtu dělá tým. Napište nám z vaší současné adresy a do zprávy uveďte novou adresu. Tým ji změní a vaše předplatné, historie i sešit zůstanou beze změny.",
             ],
           },
           {
             id: "delete-account",
             q: "Jak smažu svůj účet?",
             a: [
-              "Účet, dole na stránce, Smazat účet. Je to nevratné. Předplatné se zruší, sešit a historie se vymažou a e-mail se uvolní pro novou registraci.",
-              "Záznamy Stripe o minulých platbách zůstávají (ze zákona je musíme uchovávat pro účetnictví). Nic jiného nezůstane.",
+              "Dole na stránce „Účet“ klepněte na „Smazat účet“ a pro potvrzení napište e-mail svého účtu. Je to trvalé, předplatné se zruší, sešit i historie se smažou a e-mail se uvolní pro novou registraci.",
+              "Jediná výjimka je předplatné koupené v App Store. Smazání účtu ho nezruší, takže ho nejdřív zrušte v nastavení předplatného Apple.",
+              "Záznamy o minulých platbách zůstávají, protože je ze zákona musíme uchovávat pro účetnictví.",
             ],
           },
           {
@@ -168,8 +169,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "multiple-accounts",
             q: "Myslím, že mám omylem dva účty. Co teď?",
             a: [
-              "Obvykle se to stane, když se někdo se stejnou adresou jednou zaregistruje přes Google a jednou e-mailem a heslem, nebo když se zaregistrujete dvakrát s různými e-mailovými adresami. Každá registrace vytvoří samostatný účet Gadit s vlastním sešitem, historií a stavem předplatného.",
-              "Napište nám obě e-mailové adresy (nebo UID ze stránky Účet) a který účet si chcete ponechat. Tým sloučí sešity a historii do vybraného účtu a ten druhý čistě uzavře. O žádná data nepřijdete.",
+              "Obvykle se to stane, když se někdo jednou zaregistruje přes Google a podruhé e-mailem a heslem se stejnou adresou, nebo když se zaregistrujete dvakrát s různými e-mailovými adresami. Každá registrace vytvoří samostatný účet Gadit s vlastním sešitem, historií a stavem předplatného.",
+              "Napište nám z jedné z těch dvou adres a uveďte druhou adresu i to, který účet si chcete nechat. Tým sloučí sešity a historii do účtu, který si vyberete, a pak ten druhý čistě uzavře. O žádná data nepřijdete.",
             ],
           },
         ],
@@ -183,7 +184,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "wrong-definition",
             q: "Myslím, že definice je špatně. Co mám dělat?",
             a: [
-              "Na každé stránce s výsledkem je dole malé tlačítko \"Nahlásit\". Klepněte na něj, vyberte kategorii (definice, etymologie, příklad, idiom, vysvětlení pro děti a tak dále) a napište krátkou poznámku. Přijde přímo týmu a každé hlášení projdeme.",
+              "Vedle každého významu a také na kartách s idiomy a původem slova je malá ikona vlajky. Klepněte na ni, vyberte, co je špatně, a případně přidejte krátkou poznámku. Přijde to přímo týmu a každé hlášení projdeme.",
               "Nebojte se, že jste moc puntičkářští. Slovník se díky takové zpětné vazbě zlepšuje rychleji než díky čemukoli jinému.",
             ],
           },
@@ -192,15 +193,15 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "Dětský režim nemění vysvětlení",
             a: [
               "Dětský režim změní text jen tam, kde už pro slovo existuje vysvětlení pro děti. U slova, které jste právě vyhledali poprvé, počkejte 10 až 15 sekund, než se dětská verze připraví.",
-              "Dětský režim je součástí tarifu Family. Na Basic, na Individual nebo bez účtu vám přepínač místo zapnutí ukáže tarif Family. Předplatitelé, kteří si Clear nebo Deep objednali před říjnem 2026, si dětský režim ponechávají. Pokud ho chcete získat, podívejte se na Family na stránce s cenami.",
+              "Dětský režim je součástí tarifu Family. Na Individual místo něj uvidíte přepínač „Jednoduše“, který ukáže jednodušší vysvětlení každého významu. Na Basic nebo bez účtu žádný přepínač není. Předplatitelé, kteří si Clear nebo Deep objednali před říjnem 2026, si dětský režim ponechávají. Pokud ho chcete získat, podívejte se na Family na stránce s cenami.",
             ],
           },
           {
             id: "voice-fails",
             q: "Hlasové vyhledávání nefunguje",
             a: [
-              "Hlasové vyhledávání potřebuje oprávnění k mikrofonu. Většina prohlížečů se ptá jednou pro každý web. Pokud jste omylem klikli na Blokovat, musíte to změnit ručně: klikněte na ikonu zámku nebo informací vedle gadit.app v adresním řádku, pak Nastavení webu, pak Mikrofon, pak Povolit.",
-              "V Safari na iPhonu a iPadu vyžaduje přístup k mikrofonu také povolení v Nastavení → Safari → Mikrofon. Hlasové vyhledávání je součástí tarifů Individual a Family: na Basic místo něj uvidíte nabídku tarifů a nepřihlášení návštěvníci budou požádáni o přihlášení. Pro přechod na vyšší tarif otevřete stránku s cenami.",
+              "Hlasové vyhledávání potřebuje oprávnění k mikrofonu. Většina prohlížečů se ptá jednou pro každý web. Pokud jste ho omylem zablokovali, klepněte na ikonu vedle gadit.app v adresním řádku a v oprávněních webu povolte mikrofon.",
+              "Na iPhonu a iPadu také povolte mikrofon pro Safari v aplikaci Nastavení v zařízení. Hlasové vyhledávání je součástí tarifů Individual a Family, takže na Basic a bez účtu se tlačítko mikrofonu nezobrazuje. Pokud chcete přejít na vyšší tarif, otevřete stránku s cenami.",
             ],
           },
           {
@@ -221,10 +222,10 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "offline",
-            q: "Jak funguje offline režim?",
+            q: "Jak používat Gadit offline?",
             a: [
-              "Používání offline je součástí tarifů Individual a Family. Každé slovo, které vyhledáte, se uloží ve vašem zařízení, takže se znovu otevře okamžitě i bez internetu. Na stránce Účet si také můžete stáhnout balíček nejoblíbenějších slov ve vašem jazyce.",
-              "Vyhledání úplně nového slova stále vyžaduje připojení, protože Gadit pro něj musí připravit celý výsledek. Offline kopie zahrnuje slova, která už ve svém zařízení máte. Pokud máte Basic, podívejte se na tarify na stránce s cenami.",
+              "Používání offline je součástí tarifů Individual a Family. Každé slovo, které vyhledáte, se uloží ve vašem zařízení, takže se znovu otevře okamžitě i bez internetu. Na stránce Účet můžete také klepnout na „Stáhnout offline balíček“ a uložit si do tohoto zařízení slova z našeho slovníku ve vašem jazyce.",
+              "Vyhledání úplně nového slova stále vyžaduje připojení, protože Gadit pro něj musí připravit celý výsledek. Offline kopie pokrývá slova, která už ve svém zařízení máte. Pokud máte Basic, podívejte se na tarify na stránce s cenami.",
             ],
           },
           {
@@ -239,16 +240,16 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "word-not-found",
             q: "Po vyhledání slova se nezobrazil žádný výsledek. Co se děje?",
             a: [
-              "Nejdřív zkontrolujte pravopis. Gadit si s drobnými překlepy většinou poradí, ale špatná samohláska nebo chybějící písmeno ho může zmást. Pokud se objeví navržená oprava, zkuste ji.",
-              "Kromě toho: u velmi vzácných nebo slangových slov nemusí být výsledek dost jistý. Pokud víte, že slovo existuje, klikněte na tlačítko Nahlásit na stránce výsledku (nebo na chybové obrazovce) a dejte nám vědět. Každé hlášení projdeme a skutečná chybějící slova doplníme do systému.",
+              "Nejdřív zkontrolujte pravopis. Pokud tam byl překlep, Gadit obvykle ukáže opravené slovo a přidá odkaz, přes který můžete vyhledat i to, co jste napsali původně.",
+              "Velmi vzácná slova nebo slang nemusí mít výsledek vždycky. Pokud jste si jistí, že slovo existuje, napište nám z této stránky a tým to prověří.",
             ],
           },
           {
             id: "change-language",
             q: "Jak změním jazyk rozhraní?",
             a: [
-              "Vpravo nahoře na každé stránce uvidíte malou ikonu vlajky (nebo název aktuálního jazyka). Klepněte na ni a vyberte ze 41 jazyků.",
-              "Vaše volba se uloží v tomto zařízení. Vše se znovu načte v novém jazyce: rozhraní, nabídky, budoucí definice slov, příklady, vysvětlení pro děti, dokonce i etymologie. Výsledky uložené v mezipaměti ve starém jazyce zůstanou, dokud tato slova znovu nevyhledáte.",
+              "Nahoře na stránce je ikona zeměkoule s vaším aktuálním jazykem. Klepněte na ni a vyberte jazyk.",
+              "Vaše volba se uloží v tomto zařízení. Vše se znovu načte v novém jazyce, rozhraní, nabídky, budoucí definice slov, příklady, vysvětlení pro děti, dokonce i původ slova. Slova, která jste už vyhledali ve starém jazyce, v něm zůstanou, dokud je nevyhledáte znovu.",
             ],
           },
         ],
@@ -262,33 +263,33 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "join-partner",
             q: "Jak se stanu partnerem Gadit?",
             a: [
-              "Otevřete /partners z libovolné stránky a klikněte na \"Stát se partnerem\". Zaregistrujte se jménem a e-mailem a váš jedinečný doporučující odkaz i přehled pro sledování kliknutí a provizí jsou hned připravené. Na schválení se nečeká.",
-              "Připojení je zdarma a otevřené komukoli. Abyste se stali partnerem, nepotřebujete předplatné Gadit.",
+              "Přejděte na gadit.app/partners a klepněte na „Připojit se zdarma“. Zadejte své jméno a e-mail a pak klepněte na „Získat můj partnerský kód“. Váš osobní odkaz a partnerský přehled s kliknutími a provizemi jsou připravené hned, bez čekání na schválení. Kód i odkaz vám také přijdou e-mailem.",
+              "Zapojení je zdarma a je otevřené každému. K tomu, abyste se stali partnerem, nepotřebujete předplatné Gadit.",
             ],
           },
           {
             id: "commission-model",
             q: "Jak se počítají provize?",
             a: [
-              "Standardní podmínky jsou 25 % z každé platby, kterou zákazník provede během prvního roku. Po prvním roce získáváte 10 % z každé platby, dokud zákazník platí.",
+              "Standardní podmínky jsou 25 % z každé platby, kterou zákazník provede během prvního roku. Po prvním roce získáváte 10 % z každé platby, dokud zákazník platí. Když přivedete 5 platících zákazníků, vaše provize po prvním roce se natrvalo zvýší na 15 %.",
               "Funguje to stejně pro měsíční i roční plány, protože provize se počítá z každé skutečné platby. Pokud zákazník předplatné zruší, vaše provize končí jeho poslední platbou.",
-              "Tým může pro konkrétní partnery nastavit jiné sazby. Vaše vlastní sazby vždy uvidíte v partnerském přehledu, kam se dostanete přes /partners.",
+              "Tým může pro konkrétní partnery nastavit jiné sazby. Vaše vlastní sazby vždy uvidíte v partnerském přehledu.",
             ],
           },
           {
             id: "payout",
             q: "Kdy dostanu výplatu?",
             a: [
-              "Měsíčně, jakmile váš zůstatek přesáhne $50. Použijeme způsob výplaty, který jste nastavili v partnerském přehledu (bankovní převod, PayPal a podobně). $50 je minimální hranice, ne strop. Vydělat můžete mnohem víc, výplatu jen dostanete, až hranici překročíte.",
-              "Provize se uvolňují 30 dní po platbě předplatného, kvůli lhůtě pro vrácení peněz. Předplatné z ledna se tedy uvolní na začátku února a dostanete ho v nejbližší výplatě, jakmile zůstatek přesáhne $50.",
+              "Jednou měsíčně, jakmile váš zůstatek dosáhne minima uvedeného ve vašem partnerském přehledu. Pošleme ho na účet PayPal, který jste tam nastavili. Minimum je hranice, ne strop. Můžete vydělat mnohem víc a výplatu dostanete, jakmile ji překročíte.",
+              "Provize se uvolňují 30 dní po platbě předplatného, kvůli lhůtě pro vrácení peněz. Předplatné z ledna se tedy uvolní na začátku února a dostanete ho v nejbližší výplatě, jakmile váš zůstatek dosáhne minima.",
             ],
           },
           {
             id: "empty-dashboard",
             q: "Jsem v programu, ale můj přehled je prázdný",
             a: [
-              "Statistiky se zobrazí po prvním kliknutí na váš odkaz. Prázdný přehled jen znamená, že zatím nikdo neklikl. Sdílejte odkaz. Jakmile začne aktivita, přehled se aktualizuje téměř v reálném čase.",
-              "Pokud jste odkaz sdíleli a někdo se zaregistroval, ale přehled to neukazuje, napište nám přibližný čas registrace a tým přiřazení zkontroluje.",
+              "Statistiky se zobrazí po prvním kliknutí na váš odkaz. Prázdný přehled jen znamená, že zatím nikdo neklikl. Sdílejte odkaz. Jakmile začne aktivita, přehled se aktualizuje skoro v reálném čase.",
+              "Pokud jste odkaz sdíleli a někdo se zaregistroval, ale přehled to neukazuje, napište nám přibližný čas registrace a tým zkontroluje, odkud registrace přišla.",
             ],
           },
           {
@@ -303,8 +304,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "missing-commission",
             q: "Někdo se zaregistroval přes můj odkaz, ale provizi nevidím",
             a: [
-              "Nejčastěji jde o načasování: registrace se v přehledu objeví během pár minut, ale provize se zaúčtuje až po skutečném zaplacení předplatného (což může být o několik dní později, pokud má zákazník zkušební období zdarma). Podívejte se znovu po skončení zkušebního období.",
-              "Pokud bylo předplatné zaplacené a provizi ani po 48 hodinách nevidíte, napište nám přibližný čas registrace a e-mail nebo přibližné jméno předplatitele, pokud je znáte. Tým projde celý řetězec přiřazení a případnou chybu ručně opraví.",
+              "Nejčastěji jde o načasování. Registrace se v přehledu objeví během pár minut, ale provize se zaúčtuje až po skutečném zaplacení předplatného, což může být o několik dní později, pokud má zákazník zkušební období zdarma. Podívejte se znovu po skončení zkušebního období.",
+              "Pokud bylo předplatné zaplacené a provizi ani po 48 hodinách nevidíte, napište nám přibližný čas registrace a e-mail nebo přibližné jméno předplatitele, pokud ho znáte. Tým zkontroluje, odkud registrace přišla, a případné přehlédnutí ručně opraví.",
             ],
           },
         ],
@@ -376,18 +377,19 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "change-card",
             q: "Ako zmením platobnú kartu pri svojom predplatnom?",
             a: [
-              "Na novú kartu prejdete za menej ako minútu a nemusíte nič rušiť. Vaše súčasné predplatné beží ďalej, len na novú kartu.",
-              "1. Prihláste sa na gadit.app a otvorte stránku Účet (vpravo hore). 2. Kliknite na \"Spravovať platby\". 3. Otvorí sa zabezpečená stránka Stripe. Kliknite na \"Pridať platobnú metódu\", zadajte novú kartu a nastavte ju ako predvolenú. 4. Ak chcete, starú kartu odstráňte.",
-              "Od ďalšieho zúčtovacieho obdobia sa všetko strháva z novej karty. Predchádzajúca platba (už stiahnutá) zostáva na starej karte. Vracať peniaze netreba, ak si to výslovne neželáte.",
+              "Na novú kartu môžete prejsť za menej ako minútu a nemusíte nič rušiť. Vaše súčasné predplatné beží ďalej, len na novej karte.",
+              "1. Prihláste sa na gadit.app a v menu účtu otvorte „Účet“. 2. Kliknite na „Spravovať fakturáciu“. 3. Otvorí sa zabezpečená stránka Stripe. Pridajte novú kartu ako platobnú metódu a nastavte ju ako predvolenú. 4. Voliteľne odstráňte starú kartu.",
+              "Od ďalšieho zúčtovacieho obdobia pôjde všetko na novú kartu. Predchádzajúca platba, ktorá už bola stiahnutá, zostáva na starej karte. Vrátenie peňazí netreba, iba ak ho chcete vyslovene.",
             ],
           },
           {
             id: "cancel",
             q: "Ako zruším predplatné?",
             a: [
-              "Sami, kedykoľvek. Prihláste sa, otvorte Účet a pod svojím plánom ťuknite na Zrušiť predplatné.",
-              "Pri platenom predplatnom vám prístup zostane do konca obdobia, ktoré už máte zaplatené. Potom sa účet prepne na Basic (zadarmo). Vaše uložené slová aj história zostanú v bezpečí.",
-              "Počas 14-dňovej skúšobnej verzie zrušenie ukončí skúšobné obdobie hneď a nič sa nestrhne. Ak vám ide len o automatickú platbu, vyberte v okne zrušenia tento dôvod a namiesto zrušenia môžete vypnúť obnovenie, takže skúšobné obdobie vám zostane až do posledného dňa.",
+              "Sami, kedykoľvek. Prihláste sa, otvorte Účet a pod svojím plánom ťuknite na zrušenie predplatného.",
+              "Kúpili ste si predplatné v aplikácii na iPhone alebo iPad? Zrušte ho v nastaveniach predplatného Apple. Odkaz „Spravovať predplatné“ na stránke Účet vás tam zavedie.",
+              "Pri platenom predplatnom vám prístup zostane do konca obdobia, ktoré už máte zaplatené. Potom sa účet prepne na Basic, zadarmo. Vaše uložené slová aj história zostanú v bezpečí.",
+              "Počas 14-dňovej skúšobnej verzie zrušenie ukončí skúšobné obdobie hneď a nič sa nestrhne. Ak vás trápi len automatická platba, vyberte v okne zrušenia tento dôvod a namiesto zrušenia môžete vypnúť obnovenie, takže skúšobné obdobie vám zostane až do posledného dňa.",
               "Ak platené predplatné zrušíte omylom alebo si to rozmyslíte, môžete ho na tej istej stránke obnoviť, kým obdobie neskončí.",
             ],
           },
@@ -443,8 +445,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "failed-payment",
             q: "Platba zlyhala. Čo mám robiť?",
             a: [
-              "Stripe neúspešné platby v nasledujúcich dňoch automaticky niekoľkokrát zopakuje. Väčšina problémov sa vyrieši sama, keď banka uvoľní blokáciu alebo je na karte dosť prostriedkov.",
-              "Ak to chcete vyriešiť hneď, prejdite do Účet → Spravovať platby → Pridať platobnú metódu, zadajte funkčnú kartu a nastavte ju ako predvolenú. Stripe neúspešnú platbu na novej karte okamžite zopakuje. Ak vaše predplatné už kleslo na Basic, môžete si ho znova objednať na stránke Cenník a váš zošit zostane nedotknutý.",
+              "Stripe v nasledujúcich dňoch automaticky ešte niekoľkokrát skúsi neúspešnú platbu znova. Väčšina problémov sa vyrieši sama, keď banka uvoľní blokáciu alebo je na karte dosť prostriedkov.",
+              "V hornej časti stránky sa zobrazí lišta, že platba neprešla, a prístup vám zostane ešte pár dní. Tam ťuknite na „Aktualizovať kartu“, zadajte funkčnú kartu a hneď na nej skúsime platbu znova. Ak vaše predplatné už kleslo na Basic, môžete sa znova prihlásiť na odber na stránke s cenami a váš zošit zostane nedotknutý.",
             ],
           },
           {
@@ -473,42 +475,42 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "forgot-password",
-            q: "Zabudnuté heslo",
+            q: "Zabudol som heslo",
             a: [
-              "Otvorte prihlasovacie okno a kliknite na \"Zabudli ste heslo?\". Zadajte e-mail, ktorý pre Gadit používate, a do minúty či dvoch vám príde odkaz na obnovenie.",
-              "Ak e-mail nepríde, skontrolujte spam. Ak nepríde ani potom, možno ste sa registrovali cez Google, a nie e-mailom a heslom. Skúste tlačidlo \"Pokračovať cez Google\".",
+              "V prihlasovacom okne zadajte svoj e-mail a potom ťuknite na „Zabudol si heslo?“. Odkaz na obnovenie zvyčajne príde do schránky do minúty či dvoch. Môžete tiež ťuknúť na „Poslať prihlasovací odkaz e-mailom“ a prihlásiť sa bez hesla.",
+              "Ak e-mail nepríde, skontrolujte spam. Ak nepríde ani potom, možno ste sa zaregistrovali cez Google namiesto e-mailu a hesla. Skúste tlačidlo „Pokračovať cez Google“.",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "Heslo mám určite správne, ale zobrazuje sa \"Nesprávny e-mail alebo heslo\"",
+            q: "Moje heslo je správne, ale píše to, že e-mail a heslo sa nezhodujú",
             a: [
-              "Skontrolujte tri veci. Po prvé Caps Lock. Po druhé medzeru na konci pri kopírovaní a vkladaní. Po tretie, či ste sa nezaregistrovali cez Google namiesto hesla (vtedy použite \"Pokračovať cez Google\").",
-              "Stále nič? Obnovte heslo v tom istom okne. Začnete načisto.",
+              "Skontrolujte tri veci. Po prvé, Caps Lock. Po druhé, či na konci po skopírovaní nezostala medzera. Po tretie, možno ste sa zaregistrovali cez Google a nie cez heslo, vtedy použite „Pokračovať cez Google“.",
+              "Stále nič? V tej istej správe ťuknite na „Poslať prihlasovací odkaz e-mailom“ a prihláste sa bez hesla, alebo na „Zvoliť nové heslo“.",
             ],
           },
           {
             id: "google-fails",
             q: "Prihlásenie cez Google nefunguje",
             a: [
-              "Najčastejšia príčina: váš prehliadač pre gadit.app blokuje cookies tretích strán alebo vyskakovacie okná. Povoľte ich v povoleniach v paneli s adresou a skúste to znova.",
-              "V režime inkognito je prihlásenie cez Google zámerne obmedzené. Prepnite do bežného okna prehliadača.",
+              "V aplikáciách ako Instagram, Facebook alebo TikTok je tlačidlo Google skryté. Otvorte odkaz v bežnom prehliadači alebo sa prihláste e-mailom. Ak ste sa pridali cez Google, zadajte ten e-mail a ťuknite na „Poslať prihlasovací odkaz e-mailom“.",
+              "V súkromnom okne, inkognito, môžu zablokované cookies zastaviť prihlásenie cez Google, tak skúste bežné okno.",
             ],
           },
           {
             id: "change-email",
             q: "Ako zmením e-mail pri svojom účte?",
             a: [
-              "Účet, kliknite na svoj e-mail, Zmeniť e-mail. Novú adresu treba potvrdiť, kým sa zmena uloží. Predplatné, história aj zošit sa prenesú.",
-              "Ak je e-mail prepojený so zákazníkom v Stripe, zmeňte ho aj na fakturačnom portáli Stripe, aby budúce potvrdenia chodili na novú adresu.",
+              "Zmenu e-mailu pri účte robí tím. Napíšte nám z vašej aktuálnej adresy a do správy uveďte novú adresu. Tím ju aktualizuje a vaše predplatné, história aj zošit zostanú tak, ako sú.",
             ],
           },
           {
             id: "delete-account",
             q: "Ako zmažem svoj účet?",
             a: [
-              "Účet, dole na stránke, Zmazať účet. Je to nevratné. Predplatné sa zruší, zošit a história sa vymažú a e-mail sa uvoľní na novú registráciu.",
-              "Záznamy Stripe o minulých platbách zostávajú (zo zákona ich musíme uchovávať na účtovné účely). Nič iné nezostane.",
+              "Dole na stránke „Účet“ ťuknite na „Zmazať účet“ a na potvrdenie zadajte e-mail svojho účtu. Je to natrvalo, vaše predplatné sa zruší, zošit a história sa vymažú a e-mail sa uvoľní na novú registráciu.",
+              "Jedinou výnimkou je predplatné kúpené v App Store, zmazanie účtu ho nezruší, takže ho najprv zrušte v nastaveniach predplatného Apple.",
+              "Záznamy o minulých platbách zostanú, pretože zákon nám káže uchovávať ich na účtovné účely.",
             ],
           },
           {
@@ -523,8 +525,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "multiple-accounts",
             q: "Myslím, že mám omylom dva účty. Čo teraz?",
             a: [
-              "Zvyčajne sa to stane, keď sa niekto s tou istou adresou raz zaregistruje cez Google a raz e-mailom a heslom, alebo keď sa zaregistrujete dvakrát s rôznymi e-mailovými adresami. Každá registrácia vytvorí samostatný účet Gadit s vlastným zošitom, históriou a stavom predplatného.",
-              "Napíšte nám obe e-mailové adresy (alebo UID zo stránky Účet) a ktorý účet si chcete ponechať. Tím zlúči zošity a históriu do vybraného účtu a ten druhý čisto uzavrie. O žiadne údaje neprídete.",
+              "Zvyčajne sa to stane, keď sa niekto raz zaregistruje cez Google a raz e-mailom a heslom s tou istou adresou, alebo keď sa zaregistrujete dvakrát s rôznymi e-mailovými adresami. Každá registrácia vytvorí samostatný účet Gadit s vlastným zošitom, históriou a stavom predplatného.",
+              "Napíšte nám z jednej z tých dvoch adries a uveďte tú druhú adresu aj to, ktorý účet si chcete nechať. Tím zlúči zošity a históriu do účtu, ktorý si vyberiete, a potom ten druhý čisto uzavrie. O žiadne údaje neprídete.",
             ],
           },
         ],
@@ -538,8 +540,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "wrong-definition",
             q: "Myslím, že definícia je nesprávna. Čo mám robiť?",
             a: [
-              "Na každej stránke s výsledkom je dole malé tlačidlo \"Nahlásiť\". Ťuknite naň, vyberte kategóriu (definícia, etymológia, príklad, idióm, vysvetlenie pre deti a podobne) a napíšte krátku poznámku. Príde priamo tímu a každé hlásenie prejdeme.",
-              "Nebojte sa, že ste príliš puntičkárski. Slovník sa vďaka takejto spätnej väzbe zlepšuje rýchlejšie ako vďaka čomukoľvek inému.",
+              "Vedľa každého významu a aj na kartách s idiómami a pôvodom slova je malá ikona vlajky. Ťuknite na ňu, vyberte, čo je zle, a ak chcete, pridajte krátku poznámku. Ide to priamo tímu a každé hlásenie skontrolujeme.",
+              "Nebojte sa, že ste príliš puntičkárski. Slovník sa vďaka tejto spätnej väzbe zlepšuje rýchlejšie než vďaka čomukoľvek inému.",
             ],
           },
           {
@@ -547,15 +549,15 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "Detský režim nemení vysvetlenie",
             a: [
               "Detský režim zmení text len tam, kde už pre slovo existuje vysvetlenie pre deti. Pri slove, ktoré ste práve vyhľadali prvýkrát, počkajte 10 až 15 sekúnd, kým sa detská verzia pripraví.",
-              "Detský režim je súčasťou plánu Family. Na Basic, na Individual alebo bez účtu vám prepínač namiesto zapnutia ukáže plán Family. Predplatitelia, ktorí si Clear alebo Deep objednali pred októbrom 2026, si detský režim ponechávajú. Ak ho chcete získať, pozrite si Family na stránke s cenami.",
+              "Detský režim je súčasťou plánu Family. Na Individual namiesto neho uvidíte prepínač „Jednoducho“, ktorý dáva jednoduchšie vysvetlenie každého významu. Na Basic alebo bez účtu tu nie je žiadny prepínač. Predplatitelia, ktorí sa pridali na Clear alebo Deep pred októbrom 2026, si Detský režim ponechávajú. Ak ho chcete získať, pozrite si Family na stránke s cenami.",
             ],
           },
           {
             id: "voice-fails",
             q: "Hlasové vyhľadávanie nefunguje",
             a: [
-              "Hlasové vyhľadávanie potrebuje povolenie pre mikrofón. Väčšina prehliadačov sa pýta raz pre každú stránku. Ak ste omylom klikli na Blokovať, musíte to zmeniť ručne: kliknite na ikonu zámky alebo informácií vedľa gadit.app v paneli s adresou, potom Nastavenia stránky, potom Mikrofón, potom Povoliť.",
-              "V Safari na iPhone a iPade vyžaduje prístup k mikrofónu aj povolenie v Nastavenia → Safari → Mikrofón. Hlasové vyhľadávanie je súčasťou plánov Individual a Family: na Basic namiesto neho uvidíte ponuku plánov a neprihlásení návštevníci budú vyzvaní na prihlásenie. Ak chcete prejsť na vyšší plán, otvorte stránku s cenami.",
+              "Hlasové vyhľadávanie potrebuje povolenie pre mikrofón. Väčšina prehliadačov sa pýta raz pre každú stránku. Ak ste ho omylom zablokovali, ťuknite na ikonu vedľa gadit.app v paneli s adresou a v povoleniach stránky povoľte mikrofón.",
+              "Na iPhone a iPad tiež povoľte mikrofón pre Safari v aplikácii Nastavenia. Hlasové vyhľadávanie je súčasťou plánov Individual a Family, takže na Basic a bez účtu sa tlačidlo mikrofónu nezobrazuje. Ak chcete prejsť na vyšší plán, otvorte stránku s cenami.",
             ],
           },
           {
@@ -576,10 +578,10 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "offline",
-            q: "Ako funguje offline režim?",
+            q: "Ako používam Gadit offline?",
             a: [
-              "Používanie offline je súčasťou plánov Individual a Family. Každé slovo, ktoré vyhľadáte, sa uloží vo vašom zariadení, takže sa znova otvorí okamžite aj bez internetu. Na stránke Účet si tiež môžete stiahnuť balík najobľúbenejších slov vo vašom jazyku.",
-              "Vyhľadanie úplne nového slova stále vyžaduje pripojenie, pretože Gadit preň musí pripraviť celý výsledok. Offline kópia zahŕňa slová, ktoré už vo svojom zariadení máte. Ak máte Basic, pozrite si plány na stránke s cenami.",
+              "Používanie offline je súčasťou plánov Individual a Family. Každé slovo, ktoré vyhľadáte, sa uloží vo vašom zariadení, takže sa znova otvorí okamžite aj bez internetu. Na stránke Účet môžete tiež ťuknúť na „Stiahnuť offline balík“ a uložiť si do tohto zariadenia slová z nášho slovníka vo vašom jazyku.",
+              "Vyhľadanie úplne nového slova stále vyžaduje pripojenie, pretože Gadit preň musí pripraviť celý výsledok. Offline kópia pokrýva slová, ktoré už vo svojom zariadení máte. Ak máte Basic, pozrite si plány na stránke s cenami.",
             ],
           },
           {
@@ -592,18 +594,18 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "word-not-found",
-            q: "Po vyhľadaní slova sa nezobrazil žiadny výsledok. Čo sa deje?",
+            q: "Vyhľadal som slovo a nedostal som výsledok. Čo sa deje?",
             a: [
-              "Najprv skontrolujte pravopis. Gadit si s drobnými preklepmi väčšinou poradí, ale nesprávna samohláska alebo chýbajúce písmeno ho môže zmiasť. Ak sa objaví navrhovaná oprava, skúste ju.",
-              "Okrem toho: pri veľmi zriedkavých alebo slangových slovách nemusí byť výsledok dosť istý. Ak viete, že slovo existuje, kliknite na tlačidlo Nahlásiť na stránke výsledku (alebo na chybovej obrazovke) a dajte nám vedieť. Každé hlásenie prejdeme a skutočne chýbajúce slová doplníme do systému.",
+              "Najprv skontrolujte pravopis. Ak tam bol preklep, Gadit zvyčajne ukáže opravené slovo aj s odkazom na vyhľadanie toho, čo ste napísali pôvodne.",
+              "Veľmi zriedkavé slová alebo slang nemusia vždy vrátiť výsledok. Ak ste si istí, že slovo existuje, napíšte nám z tejto stránky a tím to skontroluje.",
             ],
           },
           {
             id: "change-language",
             q: "Ako zmením jazyk rozhrania?",
             a: [
-              "Vpravo hore na každej stránke uvidíte malú ikonu vlajky (alebo názov aktuálneho jazyka). Ťuknite na ňu a vyberte zo 41 jazykov.",
-              "Vaša voľba sa uloží v tomto zariadení. Všetko sa znova načíta v novom jazyku: rozhranie, ponuky, budúce definície slov, príklady, vysvetlenia pre deti, dokonca aj etymológia. Výsledky uložené vo vyrovnávacej pamäti v starom jazyku zostanú, kým tieto slová znova nevyhľadáte.",
+              "Navrchu stránky je ikona glóbusu s vaším aktuálnym jazykom. Ťuknite na ňu a vyberte jazyk.",
+              "Vaša voľba sa uloží v tomto zariadení. Všetko sa znova načíta v novom jazyku, rozhranie, ponuky, budúce definície slov, príklady, vysvetlenia pre deti, dokonca aj pôvod slova. Slová, ktoré ste už vyhľadali v starom jazyku, sa v ňom budú zobrazovať, kým ich nevyhľadáte znova.",
             ],
           },
         ],
@@ -617,25 +619,25 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "join-partner",
             q: "Ako sa stanem partnerom Gadit?",
             a: [
-              "Otvorte /partners z ľubovoľnej stránky a kliknite na \"Stať sa partnerom\". Zaregistrujte sa menom a e-mailom a váš jedinečný odporúčací odkaz aj prehľad na sledovanie kliknutí a provízií sú hneď pripravené. Na schválenie sa nečaká.",
-              "Pripojenie je zadarmo a otvorené pre každého. Aby ste sa stali partnerom, nepotrebujete predplatné Gadit.",
+              "Prejdite na gadit.app/partners a ťuknite na „Pridaj sa zadarmo“. Zadajte svoje meno a e-mail, potom ťuknite na „Získať môj partnerský kód“. Váš osobný odkaz a partnerský prehľad s kliknutiami a províziami budú pripravené hneď, bez čakania na schválenie. Kód a odkaz vám prídu aj e-mailom.",
+              "Pridanie je zadarmo a otvorené pre každého. Na to, aby ste sa stali partnerom, nepotrebujete predplatné Gadit.",
             ],
           },
           {
             id: "commission-model",
             q: "Ako sa počítajú provízie?",
             a: [
-              "Štandardné podmienky sú 25 % z každej platby, ktorú zákazník uskutoční počas prvého roka. Po prvom roku získavate 10 % z každej platby, kým zákazník platí.",
+              "Štandardné podmienky sú 25 % z každej platby, ktorú zákazník uskutoční počas prvého roka. Po prvom roku získavate 10 % z každej platby, kým zákazník platí. Ak privediete 5 platiacich zákazníkov, váš podiel po prvom roku stúpne na 15 % navždy.",
               "Funguje to rovnako pre mesačné aj ročné plány, pretože provízia sa počíta z každej skutočnej platby. Ak zákazník predplatné zruší, vaša provízia končí jeho poslednou platbou.",
-              "Tím môže pre konkrétnych partnerov nastaviť iné sadzby. Vaše vlastné sadzby vždy uvidíte v partnerskom prehľade, kam sa dostanete cez /partners.",
+              "Tím môže pre konkrétnych partnerov nastaviť iné sadzby. Vaše vlastné sadzby vždy uvidíte v partnerskom prehľade.",
             ],
           },
           {
             id: "payout",
             q: "Kedy dostanem výplatu?",
             a: [
-              "Mesačne, keď váš zostatok prekročí $50. Použijeme spôsob výplaty, ktorý ste nastavili v partnerskom prehľade (bankový prevod, PayPal a podobne). $50 je minimálna hranica, nie strop. Zarobiť môžete oveľa viac, výplatu len dostanete, keď hranicu prekročíte.",
-              "Provízie sa uvoľňujú 30 dní po platbe predplatného, kvôli lehote na vrátenie peňazí. Predplatné z januára sa teda uvoľní začiatkom februára a dostanete ho v najbližšej výplate, keď zostatok prekročí $50.",
+              "Raz mesačne, keď váš zostatok dosiahne minimum zobrazené vo vašom partnerskom prehľade. Pošleme ho na účet PayPal, ktorý ste tam nastavili. Minimum je hranica, nie strop. Môžete zarobiť oveľa viac a výplatu dostanete, keď ju prekročíte.",
+              "Provízie sa uvoľňujú 30 dní po platbe predplatného, aby ostal priestor na vrátenie peňazí. Takže provízia z januárového predplatného sa uvoľní začiatkom februára a príde vo vašej najbližšej výplate, keď zostatok dosiahne minimum.",
             ],
           },
           {
@@ -643,7 +645,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "Som v programe, ale môj prehľad je prázdny",
             a: [
               "Štatistiky sa zobrazia po prvom kliknutí na váš odkaz. Prázdny prehľad len znamená, že zatiaľ nikto neklikol. Zdieľajte odkaz. Keď sa začne aktivita, prehľad sa aktualizuje takmer v reálnom čase.",
-              "Ak ste odkaz zdieľali a niekto sa zaregistroval, ale prehľad to neukazuje, napíšte nám približný čas registrácie a tím priradenie skontroluje.",
+              "Ak ste odkaz zdieľali a niekto sa zaregistroval, ale prehľad to neukazuje, napíšte nám približný čas registrácie a tím skontroluje, odkiaľ registrácia prišla.",
             ],
           },
           {
@@ -658,8 +660,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "missing-commission",
             q: "Niekto sa zaregistroval cez môj odkaz, ale províziu nevidím",
             a: [
-              "Najčastejšie ide o načasovanie: registrácia sa v prehľade objaví do pár minút, ale provízia sa zaúčtuje až po skutočnom zaplatení predplatného (čo môže byť o niekoľko dní neskôr, ak má zákazník skúšobné obdobie zadarmo). Pozrite sa znova po skončení skúšobného obdobia.",
-              "Ak bolo predplatné zaplatené a províziu ani po 48 hodinách nevidíte, napíšte nám približný čas registrácie a e-mail alebo približné meno predplatiteľa, ak ich poznáte. Tím prejde celý reťazec priradenia a prípadnú chybu ručne opraví.",
+              "Najčastejšie ide o načasovanie. Registrácia sa v prehľade objaví do pár minút, ale provízia sa zaúčtuje až po skutočnom zaplatení predplatného, čo môže byť o niekoľko dní neskôr, ak má zákazník skúšobné obdobie zadarmo. Pozrite sa znova po skončení skúšobného obdobia.",
+              "Ak bolo predplatné zaplatené a províziu ani po 48 hodinách nevidíte, napíšte nám približný čas registrácie a e-mail alebo približné meno predplatiteľa, ak ich poznáte. Tím skontroluje, odkiaľ registrácia prišla, a prípadné opomenutie ručne opraví.",
             ],
           },
         ],
@@ -732,17 +734,18 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "Come cambio la carta di credito del mio abbonamento?",
             a: [
               "Puoi passare a una nuova carta in meno di un minuto, senza annullare nulla. Il tuo abbonamento attuale continua, semplicemente sulla nuova carta.",
-              "1. Accedi su gadit.app e apri la pagina Account (in alto a destra). 2. Clicca su \"Gestisci pagamenti\". 3. Si apre una pagina sicura di Stripe. Clicca su \"Aggiungi metodo di pagamento\", inserisci la nuova carta e impostala come predefinita. 4. Se vuoi, rimuovi la vecchia carta.",
-              "Dal ciclo di fatturazione successivo, tutto viene addebitato sulla nuova carta. L'addebito precedente (già incassato) resta sulla vecchia carta. Non serve alcun rimborso, a meno che tu non lo voglia espressamente.",
+              "1. Accedi su gadit.app e apri \"Account\" dal menu account. 2. Clicca su \"Gestisci fatturazione\". 3. Si apre una pagina sicura di Stripe. Aggiungi la nuova carta come metodo di pagamento e impostala come predefinita. 4. Se vuoi, rimuovi la vecchia carta.",
+              "Dal ciclo di fatturazione successivo, tutto passerà sulla nuova carta. L'addebito precedente, già incassato, resta sulla vecchia carta. Non serve alcun rimborso, a meno che tu non ne voglia uno nello specifico.",
             ],
           },
           {
             id: "cancel",
             q: "Come annullo il mio abbonamento?",
             a: [
-              "In autonomia, in qualsiasi momento. Accedi, apri Account e tocca Annulla abbonamento sotto il tuo piano.",
-              "Con un abbonamento a pagamento, l'accesso resta attivo fino alla fine del periodo che hai già pagato. Dopo, l'account passa a Basic (gratuito). Le parole salvate e la cronologia restano al sicuro.",
-              "Durante la prova gratuita di 14 giorni, annullare chiude subito la prova e non ti viene addebitato nulla. Se ti preoccupa solo l'addebito automatico, scegli questo motivo nella finestra di annullamento: potrai invece disattivare il rinnovo e tenere la prova fino all'ultimo giorno.",
+              "In autonomia, in qualsiasi momento. Accedi, apri \"Account\" e tocca Annulla abbonamento sotto il tuo piano.",
+              "Hai acquistato l'abbonamento nell'app per iPhone o iPad? Annullalo nelle impostazioni abbonamenti di Apple. Il link \"Gestisci abbonamento\" nella tua pagina \"Account\" ti porta lì.",
+              "Con un abbonamento a pagamento, l'accesso resta attivo fino alla fine del periodo che hai già pagato. Dopo, l'account passa a Basic, gratuito. Le parole salvate e la cronologia restano al sicuro.",
+              "Durante la prova gratuita di 14 giorni, annullare chiude subito la prova e non ti viene addebitato nulla. Se ti preoccupa solo l'addebito automatico, scegli questo motivo nella finestra di annullamento e potrai invece disattivare il rinnovo, mantenendo la prova fino all'ultimo giorno.",
               "Se annulli un abbonamento a pagamento per sbaglio o cambi idea, puoi riattivarlo dalla stessa pagina prima che il periodo finisca.",
             ],
           },
@@ -798,8 +801,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "failed-payment",
             q: "Il mio pagamento non è andato a buon fine. Cosa devo fare?",
             a: [
-              "Stripe riprova automaticamente i pagamenti non riusciti alcune volte nei giorni successivi. La maggior parte dei problemi si risolve da sola quando la banca sblocca la transazione o la carta ha fondi sufficienti.",
-              "Se vuoi risolvere subito, vai su Account → Gestisci pagamenti → Aggiungi metodo di pagamento, inserisci una carta funzionante e impostala come predefinita. Stripe riproverà subito l'addebito non riuscito sulla nuova carta. Se l'abbonamento è già tornato a Basic, puoi riabbonarti dalla pagina Prezzi e il tuo quaderno resta intatto.",
+              "Stripe riprova automaticamente i pagamenti non riusciti alcune volte nei giorni successivi. La maggior parte dei problemi si risolve da sola quando la banca sblocca l'autorizzazione o la carta torna ad avere saldo sufficiente.",
+              "In alto nella pagina comparirà una barra che dice che l'addebito non è andato a buon fine, e il tuo accesso viene mantenuto ancora per qualche giorno. Tocca lì \"Aggiorna carta\", inserisci una carta funzionante e proveremo subito ad addebitarla. Se il tuo abbonamento è già passato a Basic, puoi abbonarti di nuovo dalla pagina Prezzi e il tuo quaderno resterà intatto.",
             ],
           },
           {
@@ -830,40 +833,40 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "forgot-password",
             q: "Ho dimenticato la password",
             a: [
-              "Apri la finestra di accesso e clicca su \"Password dimenticata?\". Inserisci l'email che usi per Gadit e riceverai un link di reimpostazione entro un paio di minuti.",
-              "Se l'email non arriva, controlla lo spam. Se continua a non arrivare, forse ti sei registrato con Google invece che con email e password. Prova il pulsante \"Continua con Google\".",
+              "Nella finestra di accesso, inserisci la tua email e poi tocca \"Password dimenticata?\". Il link per reimpostarla di solito arriva nella posta in arrivo entro uno o due minuti. Puoi anche toccare \"Inviami un link di accesso\" ed entrare senza password.",
+              "Se l'email non arriva, controlla lo spam. Se ancora non arriva, potresti esserti registrato con Google invece che con email e password. Prova il pulsante \"Continua con Google\".",
             ],
           },
           {
             id: "wrong-credentials",
             q: "Sono sicuro che la password è giusta, ma compare \"Email o password errate\"",
             a: [
-              "Tre cose da controllare. Primo, il blocco maiuscole. Secondo, uno spazio finale quando copi e incolli. Terzo, ti sei registrato con Google invece che con una password (in quel caso usa \"Continua con Google\").",
-              "Ancora niente? Reimposta la password dalla stessa finestra. Così riparti da zero.",
+              "Tre cose da controllare. Primo, il blocco maiuscole. Secondo, uno spazio in più alla fine dopo un copia e incolla. Terzo, potresti esserti registrato con Google invece che con una password, in quel caso usa \"Continua con Google\".",
+              "Se ancora non va, nello stesso messaggio tocca \"Inviami un link di accesso\" per entrare senza password, oppure \"Scegli una nuova password\".",
             ],
           },
           {
             id: "google-fails",
             q: "L'accesso con Google non funziona",
             a: [
-              "Causa più comune: il browser blocca i cookie di terze parti o i pop-up per gadit.app. Consentili dalle autorizzazioni nella barra degli indirizzi e riprova.",
-              "In modalità in incognito l'accesso con Google è limitato di proposito. Passa a una normale finestra del browser.",
+              "Dentro app come Instagram, Facebook o TikTok, il pulsante Google è nascosto. Apri il link nel tuo browser normale, oppure accedi con la tua email. Se ti sei registrato con Google, inserisci quell'email e tocca \"Inviami un link di accesso\".",
+              "In una finestra privata o in incognito, i cookie bloccati possono impedire l'accesso con Google, quindi prova una finestra normale.",
             ],
           },
           {
             id: "change-email",
             q: "Come cambio l'email del mio account?",
             a: [
-              "Account, clicca sulla tua email, Cambia email. Dovrai confermare il nuovo indirizzo prima che la modifica sia effettiva. Abbonamento, cronologia e quaderno vengono tutti trasferiti.",
-              "Se l'email è collegata a un cliente Stripe, aggiornala anche nel portale di fatturazione di Stripe, così le ricevute future arriveranno al nuovo indirizzo.",
+              "Il cambio dell'email dell'account viene fatto dal team. Scrivici dalla tua email attuale e indica nel messaggio il nuovo indirizzo. Il team lo aggiornerà e il tuo abbonamento, la cronologia e il quaderno resteranno come sono.",
             ],
           },
           {
             id: "delete-account",
             q: "Come elimino il mio account?",
             a: [
-              "Account, in fondo alla pagina, Elimina account. L'operazione è definitiva. L'abbonamento viene annullato, quaderno e cronologia vengono cancellati e l'email torna libera per una nuova registrazione.",
-              "Restano i registri Stripe degli addebiti passati (per legge dobbiamo conservarli a fini contabili). Nient'altro.",
+              "In fondo alla pagina \"Account\", tocca \"Elimina account\" e digita l'email del tuo account per confermare. L'operazione è definitiva: il tuo abbonamento viene annullato, il tuo quaderno e la tua cronologia vengono cancellati, e l'email torna libera per una nuova registrazione.",
+              "L'unica eccezione è un abbonamento acquistato nell'App Store: eliminare l'account non lo annulla, quindi annullalo prima nelle impostazioni abbonamenti di Apple.",
+              "I dati degli addebiti passati restano, perché per legge dobbiamo conservarli per la contabilità.",
             ],
           },
           {
@@ -879,7 +882,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "Credo di avere due account per errore. E ora?",
             a: [
               "Di solito succede quando qualcuno si registra una volta con Google e una volta con email e password usando lo stesso indirizzo, oppure quando ti registri due volte con indirizzi email diversi. Ogni registrazione crea un account Gadit separato, con il proprio quaderno, la propria cronologia e il proprio stato di abbonamento.",
-              "Scrivici entrambi gli indirizzi email (o gli UID dalla pagina Account) e indica quale vuoi tenere. Il team unirà quaderni e cronologia sull'account che scegli e chiuderà l'altro in modo pulito. Nessun dato perso.",
+              "Scrivici da uno dei due indirizzi e indica l'altro indirizzo e quale account vuoi tenere. Il team unirà quaderno e cronologia nell'account che scegli, poi chiuderà l'altro in modo pulito. Nessun dato andrà perso.",
             ],
           },
         ],
@@ -893,7 +896,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "wrong-definition",
             q: "Penso che la definizione sia sbagliata. Cosa faccio?",
             a: [
-              "Ogni pagina dei risultati ha in fondo un piccolo pulsante \"Segnala\". Toccalo, scegli una categoria (definizione, etimologia, esempio, modo di dire, spiegazione per bambini e così via) e scrivi una breve nota. Arriva direttamente al team e ogni segnalazione viene esaminata.",
+              "Accanto a ogni significato, e nelle schede dei modi di dire e dell'origine della parola, c'è una piccola icona a bandierina. Toccala, scegli cosa non va e, se vuoi, aggiungi una breve nota. Arriva direttamente al team e ogni segnalazione viene esaminata.",
               "Non preoccuparti di essere troppo pignolo. Il dizionario migliora grazie a questo riscontro più velocemente che con qualsiasi altra cosa.",
             ],
           },
@@ -902,15 +905,15 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "La modalità bambini non cambia la spiegazione",
             a: [
               "La modalità bambini cambia il testo solo quando la parola ha già una spiegazione adatta ai bambini. Per una parola che hai appena cercato per la prima volta, aspetta da 10 a 15 secondi mentre viene preparata la versione per bambini.",
-              "La modalità bambini fa parte del piano Family. Con Basic, con Individual o senza account, l'interruttore mostra il piano Family invece di attivarsi. Chi si è abbonato a Clear o Deep prima di ottobre 2026 mantiene la modalità bambini. Per averla, guarda Family nella pagina dei prezzi.",
+              "La modalità bambini fa parte del piano Family. Con Individual vedrai invece l'interruttore \"In parole semplici\", che dà una spiegazione più semplice di ogni significato. Con Basic o senza account non c'è nessun interruttore. Chi si è abbonato a Clear o Deep prima di ottobre 2026 mantiene la modalità bambini. Per averla, guarda Family nella pagina dei prezzi.",
             ],
           },
           {
             id: "voice-fails",
             q: "La ricerca vocale non funziona",
             a: [
-              "La ricerca vocale richiede l'autorizzazione al microfono. La maggior parte dei browser la chiede una volta per sito. Se hai cliccato per sbaglio su Blocca, dovrai riattivarla a mano: clicca sull'icona del lucchetto o delle informazioni accanto a gadit.app nella barra degli indirizzi, poi Impostazioni sito, poi Microfono, poi Consenti.",
-              "Su Safari per iPhone e iPad, l'accesso al microfono richiede anche Impostazioni → Safari → Microfono. La ricerca vocale fa parte dei piani Individual e Family: con Basic vedrai invece i piani, e ai visitatori non collegati viene chiesto di accedere. Per passare a un piano superiore, apri la pagina dei prezzi.",
+              "La ricerca vocale richiede l'autorizzazione al microfono. La maggior parte dei browser la chiede una volta per sito. Se l'hai bloccato per sbaglio, tocca l'icona accanto a gadit.app nella barra degli indirizzi e consenti il microfono nelle autorizzazioni del sito.",
+              "Su iPhone e iPad, consenti il microfono anche per Safari nell'app Impostazioni del dispositivo. La ricerca vocale fa parte dei piani Individual e Family, quindi con Basic e senza account il pulsante del microfono non compare. Per passare a un piano superiore, apri la pagina dei prezzi.",
             ],
           },
           {
@@ -933,8 +936,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "offline",
             q: "Come funziona la modalità offline?",
             a: [
-              "L'uso offline fa parte dei piani Individual e Family. Ogni parola che cerchi viene conservata sul tuo dispositivo, così si riapre all'istante anche senza internet. Dalla pagina Account puoi anche scaricare un pacchetto con le parole più popolari nella tua lingua.",
-              "Per cercare una parola del tutto nuova serve comunque la connessione, perché Gadit deve preparare il risultato completo. La copia offline comprende le parole già presenti sul tuo dispositivo. Se hai Basic, guarda i piani nella pagina dei prezzi.",
+              "L'uso offline fa parte dei piani Individual e Family. Ogni parola che cerchi viene conservata sul tuo dispositivo, così si riapre all'istante anche senza internet. Puoi anche toccare \"Scarica pacchetto offline\" nella tua pagina \"Account\" per salvare su questo dispositivo le parole del nostro dizionario nella tua lingua.",
+              "Per cercare una parola del tutto nuova serve comunque la connessione, perché Gadit deve preparare il risultato completo. La copia offline copre le parole già presenti sul tuo dispositivo. Se hai Basic, guarda i piani nella pagina dei prezzi.",
             ],
           },
           {
@@ -949,16 +952,16 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "word-not-found",
             q: "Ho cercato una parola e non ho ottenuto risultati. Cosa succede?",
             a: [
-              "Per prima cosa controlla l'ortografia. Gadit gestisce quasi sempre i piccoli errori di battitura, ma una vocale sbagliata o una lettera mancante possono confonderlo. Se compare una correzione suggerita, provala.",
-              "Oltre a questo: parole molto rare o gergali potrebbero non dare un risultato affidabile. Se sei sicuro che la parola esista, clicca sul pulsante Segnala nella pagina dei risultati (o nella schermata di errore) e faccelo sapere. Ogni segnalazione viene esaminata e le parole davvero mancanti vengono inserite nel sistema.",
+              "Per prima cosa controlla l'ortografia. Se c'è stato un errore di battitura, Gadit di solito mostra la parola corretta, con un link per cercare comunque quello che hai scritto.",
+              "Le parole molto rare o gergali non sempre danno un risultato. Se sei sicuro che la parola esista, scrivici da questa pagina e il team controllerà.",
             ],
           },
           {
             id: "change-language",
             q: "Come cambio la lingua dell'interfaccia?",
             a: [
-              "In alto a destra di ogni pagina vedrai una piccola icona con una bandiera (o il nome della lingua attuale). Toccala e scegli tra 41 lingue.",
-              "La tua scelta viene salvata su questo dispositivo. Tutto si ricarica nella nuova lingua: l'interfaccia, i menu, le future definizioni, gli esempi, le spiegazioni per bambini, perfino l'etimologia. I risultati già salvati in cache nella vecchia lingua restano finché non cerchi di nuovo quelle parole.",
+              "In alto nella pagina c'è un'icona del globo con la tua lingua attuale. Toccala e scegli una lingua.",
+              "La tua scelta viene salvata su questo dispositivo. Tutto si ricarica nella nuova lingua: l'interfaccia, i menu, le definizioni future, gli esempi, le spiegazioni per bambini, perfino l'origine della parola. Le parole che hai già cercato nella lingua precedente restano in quella finché non le cerchi di nuovo.",
             ],
           },
         ],
@@ -972,25 +975,25 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "join-partner",
             q: "Come divento partner di Gadit?",
             a: [
-              "Apri /partners da qualsiasi pagina e clicca su \"Diventa partner\". Registrati con nome ed email e avrai subito il tuo link di referral personale e una dashboard per seguire clic e commissioni. Nessuna attesa di approvazione.",
-              "Partecipare è gratuito e aperto a tutti. Non serve un abbonamento Gadit per diventare partner.",
+              "Vai su gadit.app/partners e tocca \"Iscriviti gratis\". Inserisci il tuo nome e la tua email, poi tocca \"Ottieni il mio codice partner\". Il tuo link personale e la dashboard partner, con clic e commissioni, sono pronti subito, senza attesa di approvazione. Il codice e il link arrivano anche via email.",
+              "Iscriversi è gratuito ed è aperto a tutti. Non serve un abbonamento Gadit per diventare partner.",
             ],
           },
           {
             id: "commission-model",
             q: "Come vengono calcolate le commissioni?",
             a: [
-              "Le condizioni standard sono il 25% di ogni pagamento che un cliente effettua nel suo primo anno. Dopo il primo anno, guadagni il 10% di ogni pagamento finché il cliente continua a pagare.",
+              "Le condizioni standard sono il 25% di ogni pagamento che un cliente effettua nel suo primo anno. Dopo il primo anno, guadagni il 10% di ogni pagamento finché il cliente continua a pagare. Se porti 5 clienti paganti, la tua quota dopo il primo anno sale al 15% a vita.",
               "Funziona allo stesso modo per i piani mensili e annuali, perché la commissione si calcola su ogni pagamento effettivo. Se un cliente annulla, la tua commissione si ferma con il suo ultimo pagamento.",
-              "Il team può fissare tariffe diverse per partner specifici. Le tue tariffe sono sempre visibili nella tua dashboard partner, che raggiungi da /partners.",
+              "Il team può fissare tariffe diverse per partner specifici. Le tue tariffe sono sempre visibili nella tua dashboard partner.",
             ],
           },
           {
             id: "payout",
             q: "Quando vengo pagato?",
             a: [
-              "Ogni mese, quando il tuo saldo supera $50. Usiamo il metodo di pagamento che hai impostato nella dashboard partner (bonifico bancario, PayPal e così via). $50 è la soglia minima, non un tetto. Puoi guadagnare molto di più, ricevi semplicemente il pagamento quando superi la soglia.",
-              "Le commissioni vengono sbloccate 30 giorni dopo il pagamento dell'abbonamento, per coprire il periodo di rimborso. Quindi un abbonamento di gennaio si sblocca a inizio febbraio e arriva nel tuo pagamento successivo, quando il saldo supera $50.",
+              "Una volta al mese, quando il tuo saldo raggiunge il minimo mostrato nella tua dashboard partner. Lo inviamo all'account PayPal che imposti lì. Il minimo è una soglia, non un tetto: puoi guadagnare molto di più, e ricevi il pagamento una volta superata.",
+              "Le commissioni vengono sbloccate 30 giorni dopo il pagamento dell'abbonamento, per coprire il periodo di rimborso. Quindi un abbonamento di gennaio si sblocca a inizio febbraio e arriva nel tuo pagamento successivo, una volta che il tuo saldo raggiunge il minimo.",
             ],
           },
           {
@@ -998,7 +1001,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "Mi sono iscritto ma la mia dashboard è vuota",
             a: [
               "Le statistiche compaiono dopo il primo clic sul tuo link. Vuota significa solo che nessuno ha ancora cliccato. Condividi il link. Quando inizia l'attività, la dashboard si aggiorna quasi in tempo reale.",
-              "Se hai condiviso il link e qualcuno si è registrato ma la dashboard non lo mostra, scrivici l'orario approssimativo della registrazione e il team controllerà l'attribuzione.",
+              "Se hai condiviso e qualcuno si è registrato ma la dashboard non lo mostra, scrivici con l'orario approssimativo della registrazione e il team controllerà da dove è arrivata.",
             ],
           },
           {
@@ -1013,8 +1016,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "missing-commission",
             q: "Qualcuno si è registrato tramite il mio link ma non vedo la commissione",
             a: [
-              "Il più delle volte è una questione di tempi: la registrazione compare nella dashboard in pochi minuti, ma la commissione viene registrata solo quando l'abbonamento viene effettivamente pagato (il che può avvenire giorni dopo, se il cliente è in prova gratuita). Ricontrolla dopo la fine della prova.",
-              "Se l'abbonamento è stato pagato ma dopo 48 ore non vedi ancora la commissione, scrivici l'orario approssimativo della registrazione e l'email o il nome approssimativo dell'abbonato, se li conosci. Il team ricostruirà la catena di attribuzione e correggerà a mano eventuali errori.",
+              "Il più delle volte è una questione di tempi: la registrazione compare nella dashboard in pochi minuti, ma la commissione viene registrata solo quando l'abbonamento viene effettivamente pagato, il che può avvenire giorni dopo se la persona è in prova gratuita. Ricontrolla dopo la fine della prova.",
+              "Se l'abbonamento è stato pagato ma dopo 48 ore non vedi ancora la commissione, scrivici l'orario approssimativo della registrazione e l'email o il nome approssimativo dell'abbonato, se lo conosci. Il team controllerà da dove è arrivata la registrazione e correggerà a mano eventuali mancanze.",
             ],
           },
         ],
@@ -1087,17 +1090,18 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "サブスクリプションのクレジットカードを変更するには？",
             a: [
               "解約せずに、1分もかからずに新しいカードへ切り替えられます。現在のサブスクリプションはそのまま続き、新しいカードで支払われます。",
-              "1. gadit.app にログインし、アカウントページ（右上）を開きます。2. 「お支払いの管理」をクリックします。3. Stripe の安全なページが開きます。「お支払い方法を追加」をクリックし、新しいカードを入力して、デフォルトに設定します。4. 必要に応じて古いカードを削除します。",
-              "次の請求サイクルから、すべて新しいカードに請求されます。前回の請求（すでに支払い済み）は古いカードのままです。特にご希望がない限り、返金の必要はありません。",
+              "1. gadit.app にログインして、アカウントメニューから「アカウント」を開きます。2. 「お支払いを管理」をクリックします。3. Stripe の安全なページが開きます。新しいカードを支払い方法として追加し、デフォルトに設定してください。4. 必要なら古いカードを削除します。",
+              "次の請求サイクルから、すべて新しいカードに請求されます。前回の請求はすでに回収済みなので、古いカードのままです。特にご希望でなければ、返金の必要はありません。",
             ],
           },
           {
             id: "cancel",
             q: "サブスクリプションを解約するには？",
             a: [
-              "いつでもご自身で解約できます。ログインして「アカウント」を開き、ご利用中のプランの下にある「サブスクリプションを解約」をタップしてください。",
-              "有料のサブスクリプションの場合は、すでにお支払い済みの期間が終わるまで引き続きご利用いただけます。その後、アカウントは Basic（無料）に切り替わります。保存した単語や履歴はそのまま安全に保たれます。",
-              "14日間の無料トライアル中に解約すると、トライアルはその時点で終了し、料金は一切かかりません。自動での請求だけが心配な場合は、解約画面でその理由を選ぶと、代わりに自動更新をオフにして、トライアルを最終日まで続けられます。",
+              "いつでもご自身で解約できます。ログインして「アカウント」を開き、ご利用中のプランの下にある解約をタップしてください。",
+              "iPhone や iPad のアプリでサブスクリプションを購入した場合は、Apple のサブスクリプション設定で解約してください。アカウントページの「サブスクリプションを管理」リンクからそこへ移動できます。",
+              "有料のサブスクリプションの場合は、すでにお支払い済みの期間が終わるまで引き続きご利用いただけます。その後、アカウントは Basic に切り替わります。保存した単語や履歴はそのまま安全に保たれます。",
+              "14日間の無料トライアル中に解約すると、トライアルはその時点で終了し、料金は一切かかりません。自動請求だけが心配な場合は、解約画面でその理由を選ぶと、代わりに更新をオフにして、トライアルを最終日まで続けられます。",
               "有料のサブスクリプションを誤って解約した場合や気が変わった場合は、期間が終わる前に同じページから再開できます。",
             ],
           },
@@ -1154,7 +1158,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "支払いが失敗しました。どうすればいいですか？",
             a: [
               "Stripe は、失敗した支払いをその後の数日間に何度か自動で再試行します。銀行の保留が解除されたり、カードの残高が足りるようになったりすると、ほとんどの場合は自然に解決します。",
-              "すぐに解決したい場合は、アカウント → 「お支払いの管理」 → 「お支払い方法を追加」に進み、使えるカードを入力してデフォルトに設定してください。Stripe が新しいカードで、失敗した請求をすぐに再試行します。サブスクリプションがすでに Basic に戻っている場合は、料金ページから再登録できます。ノートはそのまま残ります。",
+              "ページ上部に請求が通らなかったことを知らせるバーが表示され、アクセスはあと数日そのまま保たれます。そこで「カードを更新」をタップし、使えるカードを入力してください。すぐにそのカードで請求を試します。サブスクリプションがすでに Basic に戻っている場合は、料金ページから再登録できます。ノートはそのまま残ります。",
             ],
           },
           {
@@ -1185,40 +1189,40 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "forgot-password",
             q: "パスワードを忘れました",
             a: [
-              "ログイン画面を開き、「パスワードをお忘れですか？」をクリックします。Gadit で使っているメールアドレスを入力すると、1、2分以内に再設定用のリンクが届きます。",
-              "メールが届かない場合は、迷惑メールフォルダをご確認ください。それでも届かない場合は、メールアドレスとパスワードではなく Google で登録したのかもしれません。「Google で続ける」ボタンをお試しください。",
+              "ログイン画面でメールアドレスを入力し、「パスワードをお忘れですか？」をタップしてください。通常は1、2分で再設定用のリンクが受信箱に届きます。「ログイン用リンクをメールで送る」をタップして、パスワードなしでログインすることもできます。",
+              "メールが届かない場合は、迷惑メールをご確認ください。それでも届かない場合は、メールアドレスとパスワードではなく Google で登録したのかもしれません。「Google で続行」ボタンをお試しください。",
             ],
           },
           {
             id: "wrong-credentials",
             q: "パスワードは正しいはずなのに「メールアドレスまたはパスワードが違います」と表示されます",
             a: [
-              "確認していただきたい点が3つあります。1つ目は Caps Lock。2つ目は、コピーして貼り付けたときの末尾の空白。3つ目は、パスワードではなく Google で登録していないか（その場合は「Google で続ける」をお使いください）。",
-              "それでも解決しない場合は、同じ画面からパスワードを再設定してください。まっさらな状態でやり直せます。",
+              "確認していただきたい点が3つあります。1つ目は Caps Lock。2つ目は、コピーして貼り付けたあとに末尾に余分な空白が入っていないか。3つ目は、パスワードではなく Google で登録していないかです。その場合は「Google で続行」を使ってください。",
+              "それでも入れない場合は、同じメッセージ内の「ログイン用リンクをメールで送る」でパスワードなしでログインするか、「新しいパスワードを設定」をタップしてください。",
             ],
           },
           {
             id: "google-fails",
             q: "Google でログインできません",
             a: [
-              "よくある原因は、ブラウザが gadit.app のサードパーティ Cookie やポップアップをブロックしていることです。アドレスバーの権限設定で許可してから、もう一度お試しください。",
-              "シークレットモードでは、Google ログインは意図的に制限されています。通常のブラウザウィンドウに切り替えてください。",
+              "Instagram、Facebook、TikTok などのアプリ内では、Google のボタンが表示されないことがあります。通常のブラウザでリンクを開くか、メールアドレスでログインしてください。Google で登録した場合は、そのメールアドレスを入力して「ログイン用リンクをメールで送る」をタップしてください。",
+              "シークレットウィンドウでは、Cookie のブロックが Google ログインを止めることがあります。通常のウィンドウでお試しください。",
             ],
           },
           {
             id: "change-email",
             q: "アカウントのメールアドレスを変更するには？",
             a: [
-              "アカウントでご自身のメールアドレスをクリックし、「メールアドレスを変更」を選びます。変更を確定するには、新しいアドレスの確認が必要です。サブスクリプション、履歴、ノートはすべて引き継がれます。",
-              "メールアドレスが Stripe の顧客情報に紐づいている場合は、今後の領収書が新しいアドレスに届くよう、Stripe の請求ポータルでも更新してください。",
+              "アカウントのメールアドレスの変更はチームで行います。現在のメールアドレスからご連絡いただき、本文に新しいメールアドレスを書いてください。チームで更新します。サブスクリプション、履歴、ノートはそのまま残ります。",
             ],
           },
           {
             id: "delete-account",
             q: "アカウントを削除するには？",
             a: [
-              "アカウントページの一番下にある「アカウントを削除」から行えます。削除は元に戻せません。サブスクリプションは解約され、ノートと履歴は消去され、メールアドレスは新しい登録に使えるようになります。",
-              "過去の請求に関する Stripe の記録は残ります（会計上、法律で保管が義務づけられています）。それ以外は何も残りません。",
+              "アカウントページの一番下で「アカウントを削除」をタップし、確認のためにアカウントのメールアドレスを入力してください。これは元に戻せません。サブスクリプションは解約され、ノートと履歴は削除され、メールアドレスは新しく登録できるようになります。",
+              "ただし、App Store で購入したサブスクリプションだけは例外です。アカウントを削除しても解約されないため、先に Apple のサブスクリプション設定で解約してください。",
+              "過去の請求記録は残ります。会計のために法律で保管が義務づけられているからです。",
             ],
           },
           {
@@ -1233,8 +1237,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "multiple-accounts",
             q: "誤ってアカウントを2つ作ってしまったようです。どうすればいいですか？",
             a: [
-              "これはたいてい、同じアドレスで一度は Google、一度はメールアドレスとパスワードで登録した場合や、別々のメールアドレスで2回登録した場合に起こります。登録のたびに、ノート、履歴、サブスクリプション状況をそれぞれ持つ別の Gadit アカウントが作られます。",
-              "両方のメールアドレス（またはアカウントページの UID）と、残したいほうのアカウントをお知らせください。チームが選んだアカウントにノートと履歴をまとめ、もう一方をきれいに閉じます。データは失われません。",
+              "これはたいてい、同じメールアドレスで一度は Google、一度はメールアドレスとパスワードで登録した場合や、別々のメールアドレスで2回登録した場合に起こります。登録のたびに、ノート、履歴、サブスクリプション状態をそれぞれ持つ別の Gadit アカウントが作られます。",
+              "2つのうちどちらかのメールアドレスからご連絡いただき、もう一方のメールアドレスと、残したいアカウントを書いてください。チームが選んだアカウントにノートと履歴をまとめ、もう一方をきれいに閉じます。データは失われません。",
             ],
           },
         ],
@@ -1248,7 +1252,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "wrong-definition",
             q: "定義が間違っていると思います。どうすればいいですか？",
             a: [
-              "結果ページの下部には、小さな「報告」ボタンがあります。タップしてカテゴリ（定義、語源、例文、慣用句、子ども向けの説明など）を選び、短いメモを書いてください。報告はチームに直接届き、すべて確認しています。",
+              "各意味の横と、慣用句カードや語源カードに小さな旗のアイコンがあります。タップして何が違うかを選び、必要なら短いメモも添えてください。報告はそのままチームに届き、すべて確認しています。",
               "細かすぎるかも、と遠慮する必要はありません。こうしたフィードバックこそが、辞書を何よりも早く良くしてくれます。",
             ],
           },
@@ -1256,16 +1260,16 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "kids-not-working",
             q: "キッズモードにしても説明が変わりません",
             a: [
-              "キッズモードで表示が切り替わるのは、その単語の子ども向けの説明がすでにある場合だけです。初めて調べた単語の場合は、子ども向けの説明が準備されるまで10秒から15秒ほどお待ちください。",
-              "キッズモードは Family プランに含まれています。Basic や Individual をご利用の場合、またはアカウントがない場合は、スイッチを押してもオンにならず、Family プランのご案内が表示されます。2026年10月より前に Clear または Deep に登録された方は、引き続きキッズモードをご利用いただけます。ご利用になるには、料金ページで Family をご覧ください。",
+              "キッズモードで表示が変わるのは、その単語に子ども向けの説明がすでにある場合だけです。初めて調べた単語の場合は、子ども向けの説明が準備されるまで10秒から15秒ほどお待ちください。",
+              "キッズモードは Family プランに含まれています。Individual では代わりに「かんたんに」スイッチが表示され、各意味をよりやさしく説明します。Basic またはアカウントなしではスイッチは表示されません。2026年10月より前に Clear または Deep に登録された方は、引き続きキッズモードをご利用いただけます。ご利用になるには、料金ページで Family をご覧ください。",
             ],
           },
           {
             id: "voice-fails",
             q: "音声検索が使えません",
             a: [
-              "音声検索にはマイクの許可が必要です。ほとんどのブラウザはサイトごとに一度だけ確認します。誤って「ブロック」をクリックした場合は、手動で戻す必要があります。アドレスバーで gadit.app の横にある鍵または情報アイコンをクリックし、「サイトの設定」、「マイク」、「許可」の順に進んでください。",
-              "iPhone や iPad の Safari では、設定 → Safari → マイク でマイクへのアクセスも許可する必要があります。音声検索は Individual と Family プランに含まれています。Basic ではプランのご案内が表示され、ログインしていない方にはログインのご案内が表示されます。アップグレードするには、料金ページを開いてください。",
+              "音声検索にはマイクの許可が必要です。ほとんどのブラウザはサイトごとに一度だけ確認します。誤ってブロックした場合は、アドレスバーで gadit.app の横にあるアイコンをタップして、サイトの権限でマイクを許可してください。",
+              "iPhone や iPad では、端末の設定アプリでも Safari にマイクを許可する必要があります。音声検索は Individual と Family プランに含まれているため、Basic とアカウントなしではマイクボタンは表示されません。アップグレードするには、料金ページを開いてください。",
             ],
           },
           {
@@ -1288,8 +1292,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "offline",
             q: "オフラインモードはどのように動きますか？",
             a: [
-              "オフライン利用は Individual と Family プランに含まれています。調べた単語はすべてお使いの端末に保存されるので、インターネットがなくてもすぐにもう一度開けます。また、アカウントページから、お使いの言語でよく調べられる単語のパックをダウンロードすることもできます。",
-              "まったく新しい単語を調べるには、引き続きインターネット接続が必要です。Gadit がその単語の結果をすべて準備する必要があるためです。オフラインで使えるのは、すでに端末にある単語です。Basic をご利用の場合は、料金ページでプランをご覧ください。",
+              "オフライン利用は Individual と Family プランに含まれています。調べた単語はすべてお使いの端末に保存されるので、インターネットがなくてもすぐにもう一度開けます。また、アカウントページで「オフラインパックをダウンロード」をタップすると、この端末にお使いの言語の辞書の単語を保存できます。",
+              "まったく新しい単語を調べるには、引き続き接続が必要です。Gadit がその単語の完全な結果を準備する必要があるためです。オフライン版で使えるのは、すでに端末にある単語です。Basic をご利用の場合は、料金ページでプランをご覧ください。",
             ],
           },
           {
@@ -1304,16 +1308,16 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "word-not-found",
             q: "単語を検索しても結果が出ません。どうなっていますか？",
             a: [
-              "まずはつづりをご確認ください。Gadit はちょっとした打ち間違いならたいてい対応できますが、母音の間違いや文字の抜けがあると正しく判断できないことがあります。修正候補が表示されたら、それをお試しください。",
-              "それ以外では、ごくまれな単語やスラングは、確かな結果が出ないことがあります。実在する単語だと確信がある場合は、結果ページ（またはエラー画面）の「報告」ボタンをクリックしてお知らせください。報告はすべて確認し、本当に抜けていた単語はシステムに反映します。",
+              "まずはつづりをご確認ください。入力ミスがある場合、Gadit はたいてい修正後の単語を表示し、入力したままでも検索できるリンクも出します。",
+              "ごくまれな単語やスラングは、結果が出ないことがあります。その単語があるはずだと思う場合は、このページからご連絡ください。チームで確認します。",
             ],
           },
           {
             id: "change-language",
             q: "表示言語を変更するには？",
             a: [
-              "どのページでも右上に、小さな国旗アイコン（または現在の言語名）があります。タップすると、41の言語から選べます。",
-              "選んだ言語はこの端末に保存されます。インターフェース、メニュー、これから調べる単語の定義、例文、子ども向けの説明、語源まで、すべてが新しい言語で読み込まれます。以前の言語でキャッシュ済みの結果は、その単語をもう一度検索するまでそのまま残ります。",
+              "ページ上部に、現在の言語が表示された地球アイコンがあります。タップして言語を選んでください。",
+              "選んだ言語はこの端末に保存されます。インターフェース、メニュー、これから調べる単語の定義、例文、子ども向けの説明、語源まで、すべてが新しい言語で読み込まれます。以前の言語ですでに調べた単語は、もう一度検索するまでその言語のまま表示されます。",
             ],
           },
         ],
@@ -1327,7 +1331,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "join-partner",
             q: "Gadit のパートナーになるには？",
             a: [
-              "どのページからでも /partners を開き、「パートナーになる」をクリックします。お名前とメールアドレスで登録すると、専用の紹介リンクと、クリック数や報酬を確認できるダッシュボードがすぐに使えるようになります。承認を待つ必要はありません。",
+              "gadit.app/partners を開いて「無料で参加」をタップしてください。名前とメールアドレスを入力してから「パートナーコードを取得」をタップすると、個人リンクと、クリック数や報酬を確認できるパートナーダッシュボードがすぐに使えるようになります。承認待ちはありません。コードとリンクはメールでも届きます。",
               "参加は無料で、どなたでも参加できます。パートナーになるのに Gadit のサブスクリプションは必要ありません。",
             ],
           },
@@ -1335,25 +1339,25 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "commission-model",
             q: "報酬はどのように計算されますか？",
             a: [
-              "標準の条件では、お客様が最初の1年間に支払う毎回の支払額の25%です。最初の1年が過ぎたあとは、お客様が支払いを続ける限り、毎回の支払額の10%を受け取れます。",
-              "報酬は実際の支払いごとに計算されるため、月額プランでも年額プランでも同じ仕組みです。お客様が解約した場合、報酬は最後の支払いで終了します。",
-              "チームが特定のパートナーに別の料率を設定することもあります。ご自身の料率は、/partners から開けるパートナーダッシュボードでいつでも確認できます。",
+              "標準の条件では、お客様が最初の1年間に支払うすべての支払いの25%です。最初の1年が過ぎたあとは、お客様が支払いを続ける限り、すべての支払いの10%を受け取れます。有料のお客様を5人紹介すると、最初の1年後の取り分はずっと15%に上がります。",
+              "報酬は実際の支払いごとに計算されるため、月額プランでも年額プランでも同じ仕組みです。お客様が解約した場合、報酬は最後の支払いで止まります。",
+              "チームが特定のパートナーに別の料率を設定することもあります。ご自身の料率は、パートナーダッシュボードにいつでも表示されます。",
             ],
           },
           {
             id: "payout",
             q: "報酬はいつ支払われますか？",
             a: [
-              "残高が $50 を超えると、毎月お支払いします。パートナーダッシュボードで設定した受け取り方法（銀行振込、PayPal など）を使います。$50 は最低基準額であり、上限ではありません。もっと多く稼ぐこともでき、基準額を超えた時点で支払いを受け取れるという意味です。",
-              "返金期間を考慮し、報酬はサブスクリプションの支払いから30日後に確定します。たとえば1月のサブスクリプションは2月上旬に確定し、残高が $50 を超えた時点で次回のお支払いに含まれます。",
+              "毎月1回、残高がパートナーダッシュボードに表示されている最低支払額に達するとお支払いします。支払いは、そこで設定した PayPal アカウントに送られます。最低額は上限ではなく基準です。もっと多く稼ぐこともでき、その額を超えた時点で支払いを受け取れます。",
+              "返金期間を考慮するため、報酬はサブスクリプションの支払いから30日後に確定します。たとえば1月のサブスクリプションなら2月上旬に確定し、残高が最低支払額に達すると次回の支払いに含まれます。",
             ],
           },
           {
             id: "empty-dashboard",
             q: "参加したのにダッシュボードが空のままです",
             a: [
-              "統計はリンクが初めてクリックされたあとに表示されます。空なのは、まだ誰もクリックしていないというだけです。リンクをシェアしてみましょう。アクティビティが始まれば、ダッシュボードはほぼリアルタイムで更新されます。",
-              "リンクをシェアして誰かが登録したのに、ダッシュボードに反映されない場合は、おおよその登録時刻を添えてご連絡ください。チームが紹介の記録を確認します。",
+              "統計は、あなたのリンクが最初にクリックされたあとに表示されます。空なのは、まだ誰もクリックしていないというだけです。リンクをシェアしてみてください。アクティビティが始まれば、ダッシュボードはほぼリアルタイムで更新されます。",
+              "リンクをシェアして誰かが登録したのに、ダッシュボードに反映されない場合は、おおよその登録時刻を添えてご連絡ください。チームがその登録元を確認します。",
             ],
           },
           {
@@ -1368,8 +1372,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "missing-commission",
             q: "リンクから登録した人がいるのに、報酬が表示されません",
             a: [
-              "多くの場合はタイミングの問題です。登録は数分以内にダッシュボードに表示されますが、報酬が計上されるのはサブスクリプションの支払いが実際に行われてからです（無料トライアル中なら数日後になることもあります）。トライアル終了後にもう一度ご確認ください。",
-              "サブスクリプションの支払いが済んでいるのに48時間たっても報酬が表示されない場合は、おおよその登録時刻と、わかれば登録者のメールアドレスかおおよその名前を添えてご連絡ください。チームが紹介の記録をたどり、漏れがあれば手動で修正します。",
+              "多くの場合はタイミングの問題です。登録は数分以内にダッシュボードに表示されますが、報酬が計上されるのはサブスクリプションの支払いが実際に行われてからです。無料トライアル中なら数日後になることもあります。トライアル終了後にもう一度ご確認ください。",
+              "サブスクリプションの支払いが済んでいるのに48時間たっても報酬が表示されない場合は、おおよその登録時刻と、わかれば登録者のメールアドレスかおおよその名前を添えてご連絡ください。チームが登録元を確認し、漏れがあれば手動で修正します。",
             ],
           },
         ],
@@ -1442,16 +1446,17 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "मैं अपनी सदस्यता का क्रेडिट कार्ड कैसे बदलूँ?",
             a: [
               "आप बिना रद्द किए एक मिनट से भी कम समय में नए कार्ड पर स्विच कर सकते हैं। आपकी मौजूदा सदस्यता चलती रहती है, बस नए कार्ड पर।",
-              "1. gadit.app पर साइन इन करें और अपना अकाउंट पेज खोलें (ऊपर दाईं ओर)। 2. \"बिलिंग प्रबंधित करें\" पर क्लिक करें। 3. Stripe का एक सुरक्षित पेज खुलेगा। \"भुगतान विधि जोड़ें\" पर क्लिक करें, नया कार्ड दर्ज करें और उसे डिफ़ॉल्ट के रूप में चुनें। 4. चाहें तो पुराना कार्ड हटा दें।",
-              "अगले बिलिंग चक्र से सारे भुगतान नए कार्ड से होंगे। पिछला शुल्क (जो पहले ही लिया जा चुका है) पुराने कार्ड पर ही रहेगा। रिफ़ंड की ज़रूरत नहीं है, जब तक कि आप खास तौर पर न चाहें।",
+              "1. gadit.app पर साइन इन करें और अकाउंट मेनू से \"खाता\" खोलें। 2. \"बिलिंग प्रबंधित करें\" पर क्लिक करें। 3. Stripe का एक सुरक्षित पेज खुलेगा। वहाँ नए कार्ड को भुगतान विधि के रूप में जोड़ें और उसे डिफ़ॉल्ट के रूप में चुनें। 4. चाहें तो पुराना कार्ड हटा दें।",
+              "अगले बिलिंग चक्र से सारे भुगतान नए कार्ड से होंगे। पिछला शुल्क, जो पहले ही लिया जा चुका है, पुराने कार्ड पर ही रहेगा। रिफ़ंड की ज़रूरत नहीं है, जब तक कि आप खास तौर पर न चाहें।",
             ],
           },
           {
             id: "cancel",
             q: "मैं अपनी सदस्यता कैसे रद्द करूँ?",
             a: [
-              "आप खुद, कभी भी कर सकते हैं। साइन इन करें, खाता खोलें, और अपने प्लान के नीचे \"सदस्यता रद्द करें\" पर टैप करें।",
-              "पेड सदस्यता में आपकी पहुँच उस अवधि के अंत तक बनी रहती है जिसका आप भुगतान कर चुके हैं। उसके बाद अकाउंट Basic (मुफ़्त) पर आ जाता है। आपके सहेजे हुए शब्द और इतिहास सुरक्षित रहते हैं।",
+              "आप खुद, कभी भी कर सकते हैं। साइन इन करें, \"खाता\" खोलें, और अपने प्लान के नीचे सदस्यता रद्द करें पर टैप करें।",
+              "क्या आपने अपनी सदस्यता iPhone या iPad ऐप में खरीदी थी? उसे अपनी Apple सदस्यता सेटिंग्स में रद्द करें। आपके खाता पेज पर \"सदस्यता प्रबंधित करें\" लिंक आपको वहीं ले जाता है।",
+              "पेड सदस्यता में आपकी पहुँच उस अवधि के अंत तक बनी रहती है जिसका आप भुगतान कर चुके हैं। उसके बाद अकाउंट Basic, मुफ़्त, पर आ जाता है। आपके सहेजे हुए शब्द और इतिहास सुरक्षित रहते हैं।",
               "14 दिन के मुफ़्त ट्रायल के दौरान रद्द करने पर ट्रायल तुरंत खत्म हो जाता है और कोई शुल्क नहीं लगता। अगर आपकी चिंता सिर्फ़ अपने आप होने वाला शुल्क है, तो रद्द करने वाली विंडो में वही कारण चुनें, फिर आप इसके बजाय रिन्यूअल बंद कर सकते हैं और ट्रायल आखिरी दिन तक चलता रहेगा।",
               "अगर आपने पेड सदस्यता गलती से रद्द कर दी या आपका इरादा बदल गया, तो अवधि खत्म होने से पहले आप उसी पेज से उसे फिर से शुरू कर सकते हैं।",
             ],
@@ -1509,7 +1514,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "मेरा भुगतान विफल हो गया। मुझे क्या करना चाहिए?",
             a: [
               "Stripe अगले कुछ दिनों में विफल भुगतानों को अपने आप कुछ बार फिर से आज़माता है। ज़्यादातर मामले अपने आप सुलझ जाते हैं, जब बैंक रोक हटा देता है या कार्ड में पर्याप्त बैलेंस आ जाता है।",
-              "अगर आप इसे अभी ठीक करना चाहते हैं, तो अकाउंट → बिलिंग प्रबंधित करें → भुगतान विधि जोड़ें पर जाएँ, एक चालू कार्ड दर्ज करें और उसे डिफ़ॉल्ट बनाएँ। Stripe नए कार्ड पर विफल शुल्क को तुरंत फिर से आज़माएगा। अगर आपकी सदस्यता पहले ही Basic पर आ चुकी है, तो आप कीमतें पेज से फिर से सदस्यता ले सकते हैं और आपकी नोटबुक वैसी ही बनी रहेगी।",
+              "पेज के ऊपर एक बार दिखेगा कि भुगतान पूरा नहीं हुआ, और आपकी पहुँच कुछ और दिनों तक बनी रहेगी। वहाँ \"कार्ड अपडेट करें\" पर टैप करें, एक चालू कार्ड दर्ज करें, और हम उस पर तुरंत शुल्क फिर से आज़माएँगे। अगर आपकी सदस्यता पहले ही Basic पर आ चुकी है, तो आप Pricing पेज से फिर से सदस्यता ले सकते हैं और आपकी नोटबुक वैसी ही बनी रहेगी।",
             ],
           },
           {
@@ -1538,42 +1543,42 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "forgot-password",
-            q: "पासवर्ड याद नहीं आ रहा",
+            q: "मैं पासवर्ड भूल गया/गई",
             a: [
-              "साइन इन विंडो खोलें और \"पासवर्ड भूल गए?\" पर क्लिक करें। Gadit के लिए इस्तेमाल होने वाला ईमेल दर्ज करें और एक या दो मिनट में आपको रीसेट लिंक मिल जाएगा।",
+              "साइन इन विंडो में अपना ईमेल टाइप करें, फिर \"पासवर्ड भूल गए?\" पर टैप करें। रीसेट लिंक आमतौर पर एक या दो मिनट में आपके इनबॉक्स में आ जाता है। आप \"मुझे ईमेल पर लॉगिन लिंक भेजें\" पर भी टैप कर सकते हैं और बिना पासवर्ड के साइन इन कर सकते हैं।",
               "अगर ईमेल नहीं आता, तो स्पैम देखें। अगर फिर भी नहीं आता, तो हो सकता है आपने ईमेल और पासवर्ड के बजाय Google से साइन अप किया हो। \"Google के साथ जारी रखें\" बटन आज़माएँ।",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "मुझे यकीन है कि पासवर्ड सही है, फिर भी \"गलत ईमेल या पासवर्ड\" दिखता है",
+            q: "मेरा पासवर्ड सही है, फिर भी लिखा आता है कि ईमेल और पासवर्ड मेल नहीं खाते",
             a: [
-              "तीन चीज़ें जाँचें। पहला, Caps Lock। दूसरा, कॉपी-पेस्ट करते समय आखिर में छूटी खाली जगह। तीसरा, कहीं आपने पासवर्ड के बजाय Google से साइन अप तो नहीं किया (तब \"Google के साथ जारी रखें\" इस्तेमाल करें)।",
-              "अब भी नहीं हुआ? उसी विंडो से पासवर्ड रीसेट करें। इससे सब कुछ नए सिरे से सेट हो जाता है।",
+              "तीन चीज़ें जाँचें। पहला, Caps Lock। दूसरा, कॉपी-पेस्ट करते समय आखिर में छूटी खाली जगह। तीसरा, हो सकता है आपने पासवर्ड के बजाय Google से साइन अप किया हो, तब \"Google के साथ जारी रखें\" इस्तेमाल करें।",
+              "अब भी अटके हैं? उसी संदेश में \"मुझे ईमेल पर लॉगिन लिंक भेजें\" पर टैप करें और बिना पासवर्ड के अंदर जाएँ, या \"नया पासवर्ड चुनें\" पर टैप करें।",
             ],
           },
           {
             id: "google-fails",
             q: "Google से साइन इन काम नहीं कर रहा",
             a: [
-              "सबसे आम कारण: आपका ब्राउज़र gadit.app के लिए थर्ड-पार्टी कुकीज़ या पॉप-अप ब्लॉक कर रहा है। एड्रेस बार की अनुमतियों में उन्हें अनुमति दें और फिर से कोशिश करें।",
-              "अगर आप इनकॉग्निटो मोड में हैं, तो Google साइन इन जान-बूझकर सीमित होता है। सामान्य ब्राउज़र विंडो पर जाएँ।",
+              "Instagram, Facebook या TikTok जैसी ऐप्स के अंदर Google बटन छिपा होता है। लिंक को अपने सामान्य ब्राउज़र में खोलें, या अपने ईमेल से साइन इन करें। अगर आपने Google से जॉइन किया था, तो वही ईमेल टाइप करें और \"मुझे ईमेल पर लॉगिन लिंक भेजें\" पर टैप करें।",
+              "प्राइवेट, incognito विंडो में blocked cookies की वजह से Google साइन इन रुक सकता है, इसलिए सामान्य विंडो आज़माएँ।",
             ],
           },
           {
             id: "change-email",
             q: "मैं अपने अकाउंट का ईमेल कैसे बदलूँ?",
             a: [
-              "अकाउंट, अपने ईमेल पर क्लिक करें, ईमेल बदलें। बदलाव लागू होने से पहले आपको नए पते की पुष्टि करनी होगी। आपकी सदस्यता, इतिहास और नोटबुक सब साथ आ जाते हैं।",
-              "अगर ईमेल किसी Stripe ग्राहक से जुड़ा है, तो उसे Stripe बिलिंग पोर्टल पर भी अपडेट करें ताकि आगे की रसीदें नए पते पर आएँ।",
+              "आपके अकाउंट का ईमेल टीम बदलती है। हमें अपने मौजूदा पते से ईमेल भेजें और संदेश में नया पता लिखें। टीम उसे अपडेट कर देगी, और आपकी सदस्यता, इतिहास और नोटबुक जैसे हैं वैसे ही रहेंगे।",
             ],
           },
           {
             id: "delete-account",
             q: "मैं अपना अकाउंट कैसे डिलीट करूँ?",
             a: [
-              "अकाउंट, पेज के सबसे नीचे, अकाउंट डिलीट करें। यह स्थायी है। आपकी सदस्यता रद्द हो जाती है, आपकी नोटबुक और इतिहास मिट जाते हैं, और ईमेल नए साइन अप के लिए खाली हो जाता है।",
-              "पिछले शुल्कों के Stripe रिकॉर्ड बने रहते हैं (हिसाब-किताब के लिए कानूनन हमें उन्हें रखना होता है)। इसके अलावा कुछ नहीं रहता।",
+              "खाता पेज के सबसे नीचे \"खाता हटाएँ\" पर टैप करें और पुष्टि के लिए अपने अकाउंट का ईमेल टाइप करें। यह स्थायी है। आपकी सदस्यता रद्द हो जाती है, आपकी नोटबुक और इतिहास मिट जाते हैं, और ईमेल नए साइन अप के लिए खाली हो जाता है।",
+              "एक अपवाद है, App Store में खरीदी गई सदस्यता। अकाउंट डिलीट करने से वह रद्द नहीं होती, इसलिए पहले उसे अपनी Apple सदस्यता सेटिंग्स में रद्द करें।",
+              "पिछले शुल्कों के रिकॉर्ड बने रहते हैं, क्योंकि कानून के अनुसार हमें उन्हें हिसाब-किताब के लिए रखना होता है।",
             ],
           },
           {
@@ -1589,7 +1594,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "मुझे लगता है कि गलती से मेरे दो अकाउंट बन गए हैं। अब क्या करूँ?",
             a: [
               "आम तौर पर ऐसा तब होता है जब कोई एक ही पते से एक बार Google से और एक बार ईमेल और पासवर्ड से साइन अप करता है, या जब आप दो अलग ईमेल पतों से दो बार साइन अप करते हैं। हर साइन अप एक अलग Gadit अकाउंट बनाता है, जिसकी अपनी नोटबुक, इतिहास और सदस्यता स्थिति होती है।",
-              "दोनों ईमेल पते (या अकाउंट पेज से UID) और आप कौन-सा अकाउंट रखना चाहते हैं, यह लिखकर हमें भेजें। टीम नोटबुक और इतिहास को आपके चुने हुए अकाउंट में मिला देगी, फिर दूसरे को साफ़-सुथरे तरीके से बंद कर देगी। कोई डेटा नहीं खोएगा।",
+              "हमें दो पतों में से किसी एक से ईमेल भेजें, और उसमें दूसरा पता और यह लिखें कि आप कौन-सा अकाउंट रखना चाहते हैं। टीम नोटबुक और इतिहास को आपके चुने हुए अकाउंट में मिला देगी, फिर दूसरे को साफ़-सुथरे तरीके से बंद कर देगी। कोई डेटा नहीं खोएगा।",
             ],
           },
         ],
@@ -1603,7 +1608,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "wrong-definition",
             q: "मुझे लगता है कि परिभाषा गलत है। मैं क्या करूँ?",
             a: [
-              "हर नतीजे वाले पेज के नीचे एक छोटा \"रिपोर्ट करें\" बटन है। उस पर टैप करें, एक श्रेणी चुनें (परिभाषा, व्युत्पत्ति, उदाहरण, मुहावरा, बच्चों की व्याख्या वगैरह) और एक छोटा नोट लिखें। यह सीधे टीम तक पहुँचता है और हर रिपोर्ट की समीक्षा होती है।",
+              "हर अर्थ के पास, और मुहावरों और शब्द की उत्पत्ति वाले कार्ड पर, एक छोटा झंडे का आइकन होता है। उस पर टैप करें, बताएं क्या गलत है, और चाहें तो एक छोटा नोट जोड़ दें। यह सीधे टीम तक पहुँचता है, और हर रिपोर्ट की समीक्षा होती है।",
               "बहुत ज़्यादा बारीकी की चिंता न करें। इस फ़ीडबैक से डिक्शनरी किसी भी और चीज़ से ज़्यादा तेज़ी से बेहतर होती है।",
             ],
           },
@@ -1611,16 +1616,16 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "kids-not-working",
             q: "किड्स मोड व्याख्या नहीं बदल रहा",
             a: [
-              "किड्स मोड सिर्फ़ तभी टेक्स्ट बदलता है जब शब्द की बच्चों के अनुकूल व्याख्या पहले से मौजूद हो। जो शब्द आपने अभी पहली बार खोजा है, उसके लिए 10 से 15 सेकंड रुकें, जब तक बच्चों वाला संस्करण तैयार होता है।",
-              "किड्स मोड Family प्लान का हिस्सा है। Basic पर, Individual पर या बिना अकाउंट के, टॉगल चालू होने के बजाय Family प्लान दिखाता है। जिन सब्सक्राइबर्स ने अक्टूबर 2026 से पहले Clear या Deep लिया था, उनके पास किड्स मोड बना रहता है। इसे पाने के लिए प्राइसिंग पेज पर Family देखें।",
+              "किड्स मोड सिर्फ़ वहीं टेक्स्ट बदलता है जहाँ उस शब्द के लिए बच्चों के अनुकूल व्याख्या पहले से मौजूद हो। जो शब्द आपने अभी पहली बार खोजा है, उसके लिए 10 से 15 सेकंड रुकें, जब तक बच्चों वाला संस्करण तैयार होता है।",
+              "किड्स मोड Family प्लान का हिस्सा है। Individual पर इसकी जगह \"आसान शब्दों में\" स्विच दिखता है, जो हर अर्थ की आसान व्याख्या देता है। Basic पर या बिना अकाउंट के कोई स्विच नहीं होता। जिन सब्सक्राइबर्स ने अक्टूबर 2026 से पहले Clear या Deep लिया था, उनके पास किड्स मोड बना रहता है। इसे पाने के लिए प्राइसिंग पेज पर Family देखें।",
             ],
           },
           {
             id: "voice-fails",
             q: "वॉइस सर्च काम नहीं कर रहा",
             a: [
-              "वॉइस सर्च के लिए माइक्रोफ़ोन की अनुमति चाहिए। ज़्यादातर ब्राउज़र हर साइट के लिए एक बार पूछते हैं। अगर आपने गलती से ब्लॉक पर क्लिक कर दिया, तो आपको इसे हाथ से वापस बदलना होगा: एड्रेस बार में gadit.app के पास ताले या जानकारी वाले आइकन पर क्लिक करें, फिर साइट सेटिंग्स, फिर माइक्रोफ़ोन, फिर अनुमति दें।",
-              "iPhone और iPad के Safari पर माइक्रोफ़ोन के लिए सेटिंग्स → Safari → माइक्रोफ़ोन में भी अनुमति देनी होती है। वॉइस सर्च Individual और Family प्लान का हिस्सा है: Basic पर आपको इसकी जगह प्लान दिखेंगे, और जो विज़िटर साइन इन नहीं हैं उनसे साइन इन करने को कहा जाता है। अपग्रेड करने के लिए प्राइसिंग पेज खोलें।",
+              "वॉइस सर्च के लिए माइक्रोफ़ोन की अनुमति चाहिए। ज़्यादातर ब्राउज़र हर साइट के लिए एक बार पूछते हैं। अगर आपने इसे गलती से ब्लॉक कर दिया, तो एड्रेस बार में gadit.app के पास वाले आइकन पर टैप करें और साइट परमिशन में माइक्रोफ़ोन की अनुमति दें।",
+              "iPhone और iPad पर डिवाइस की Settings app में Safari के लिए भी माइक्रोफ़ोन की अनुमति दें। वॉइस सर्च Individual और Family प्लान का हिस्सा है, इसलिए Basic पर और बिना अकाउंट के माइक्रोफ़ोन बटन दिखता नहीं है। अपग्रेड करने के लिए प्राइसिंग पेज खोलें।",
             ],
           },
           {
@@ -1641,10 +1646,10 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "offline",
-            q: "ऑफ़लाइन मोड कैसे काम करता है?",
+            q: "मैं Gadit को ऑफ़लाइन कैसे इस्तेमाल करूँ?",
             a: [
-              "ऑफ़लाइन इस्तेमाल Individual और Family प्लान का हिस्सा है। आपका खोजा हर शब्द आपके डिवाइस पर रखा जाता है, इसलिए वह बिना इंटरनेट के भी तुरंत फिर से खुल जाता है। आप अपने अकाउंट पेज से अपनी भाषा के सबसे लोकप्रिय शब्दों का पैक भी डाउनलोड कर सकते हैं।",
-              "बिल्कुल नया शब्द खोजने के लिए अब भी इंटरनेट चाहिए, क्योंकि Gadit को उसके लिए पूरा नतीजा तैयार करना होता है। ऑफ़लाइन कॉपी में वे शब्द आते हैं जो पहले से आपके डिवाइस पर हैं। अगर आप Basic पर हैं, तो प्राइसिंग पेज पर प्लान देखें।",
+              "ऑफ़लाइन इस्तेमाल Individual और Family प्लान का हिस्सा है। आपका खोजा हर शब्द आपके डिवाइस पर रखा जाता है, इसलिए वह बिना इंटरनेट के भी तुरंत फिर से खुल जाता है। आप अपने \"खाता\" पेज पर \"ऑफ़लाइन पैक डाउनलोड करें\" पर टैप करके अपनी भाषा में हमारे शब्दकोश के शब्द इस डिवाइस पर सेव भी कर सकते हैं।",
+              "बिल्कुल नया शब्द खोजने के लिए अब भी इंटरनेट चाहिए, क्योंकि Gadit को उसके लिए पूरा नतीजा तैयार करना होता है। ऑफ़लाइन कॉपी में वे शब्द शामिल होते हैं जो पहले से आपके डिवाइस पर हैं। अगर आप Basic पर हैं, तो प्राइसिंग पेज पर प्लान देखें।",
             ],
           },
           {
@@ -1659,16 +1664,16 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "word-not-found",
             q: "मैंने एक शब्द खोजा और कोई नतीजा नहीं मिला। क्या हो रहा है?",
             a: [
-              "सबसे पहले वर्तनी जाँचें। Gadit ज़्यादातर छोटी टाइपिंग गलतियाँ संभाल लेता है, लेकिन गलत स्वर या छूटा हुआ अक्षर उसे भटका सकता है। अगर कोई सुझाया गया सुधार दिखे, तो उसे आज़माएँ।",
-              "इसके अलावा: बहुत दुर्लभ या बोलचाल (स्लैंग) के शब्दों का नतीजा भरोसेमंद न भी हो। अगर आपको यकीन है कि शब्द असली है, तो नतीजे वाले पेज (या त्रुटि स्क्रीन) पर रिपोर्ट करें बटन पर क्लिक करें और हमें बताएँ। हर रिपोर्ट की समीक्षा होती है और सचमुच छूटे शब्द सिस्टम में वापस जोड़े जाते हैं।",
+              "सबसे पहले वर्तनी जाँचें। अगर टाइपिंग में गलती हुई थी, तो Gadit आमतौर पर सही किया हुआ शब्द दिखाता है, साथ में आपने जो टाइप किया था उसे फिर भी खोजने का लिंक भी देता है।",
+              "बहुत दुर्लभ शब्द या स्लैंग को हमेशा नतीजा नहीं मिलता। अगर आपको यकीन है कि शब्द मौजूद है, तो इसी पेज से हमें लिखें, टीम जाँच करेगी।",
             ],
           },
           {
             id: "change-language",
             q: "मैं इंटरफ़ेस की भाषा कैसे बदलूँ?",
             a: [
-              "हर पेज के ऊपर दाईं ओर आपको एक छोटा झंडे वाला आइकन (या आपकी मौजूदा भाषा का नाम) दिखेगा। उस पर टैप करें और 41 भाषाओं में से चुनें।",
-              "आपकी पसंद इस डिवाइस पर सहेजी जाती है। सब कुछ नई भाषा में फिर से लोड होता है: इंटरफ़ेस, मेन्यू, आगे की शब्द परिभाषाएँ, उदाहरण, बच्चों की व्याख्याएँ, यहाँ तक कि व्युत्पत्ति भी। पुरानी भाषा में पहले से कैश हुए नतीजे तब तक रहते हैं जब तक आप उन शब्दों को फिर से नहीं खोजते।",
+              "पेज के ऊपर आपकी मौजूदा भाषा के साथ एक ग्लोब आइकन होता है। उस पर टैप करें और भाषा चुनें।",
+              "आपकी पसंद इस डिवाइस पर सहेजी जाती है। सब कुछ नई भाषा में फिर से लोड होता है: इंटरफ़ेस, मेन्यू, आगे की शब्द परिभाषाएँ, उदाहरण, बच्चों की व्याख्याएँ, यहाँ तक कि शब्द की उत्पत्ति भी। जिन शब्दों को आप पुरानी भाषा में पहले ही खोज चुके हैं, वे उसी में दिखेंगे, जब तक आप उन्हें फिर से नहीं खोजते।",
             ],
           },
         ],
@@ -1682,7 +1687,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "join-partner",
             q: "मैं Gadit पार्टनर कैसे बनूँ?",
             a: [
-              "किसी भी पेज से /partners खोलें और \"पार्टनर बनें\" पर क्लिक करें। अपने नाम और ईमेल से साइन अप करें, और आपका खास रेफ़रल लिंक और क्लिक व कमीशन देखने के लिए एक डैशबोर्ड तुरंत तैयार हो जाता है। मंज़ूरी का इंतज़ार नहीं।",
+              "gadit.app/partners पर जाएँ और \"मुफ्त में जुड़ें\" पर टैप करें। अपना नाम और ईमेल भरें, फिर \"मेरा पार्टनर कोड पाएं\" पर टैप करें। आपका निजी लिंक और पार्टनर डैशबोर्ड, जहाँ क्लिक और कमीशन दिखते हैं, तुरंत तैयार हो जाते हैं। मंजूरी का इंतजार नहीं करना पड़ता। कोड और लिंक ईमेल से भी मिल जाते हैं।",
               "जुड़ना मुफ़्त है और सबके लिए खुला है। पार्टनर बनने के लिए आपको Gadit सदस्यता की ज़रूरत नहीं है।",
             ],
           },
@@ -1690,17 +1695,17 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "commission-model",
             q: "कमीशन कैसे तय होता है?",
             a: [
-              "मानक शर्तें हैं: ग्राहक अपने पहले साल में जो भी भुगतान करता है, हर भुगतान का 25%। पहले साल के बाद, जब तक ग्राहक भुगतान करता रहता है, आपको हर भुगतान का 10% मिलता है।",
+              "मानक शर्तें हैं, ग्राहक अपने पहले साल में जो भी भुगतान करता है, हर भुगतान का 25%। पहले साल के बाद, जब तक ग्राहक भुगतान करता रहता है, आपको हर भुगतान का 10% मिलता है। अगर आप 5 भुगतान करने वाले ग्राहक लाते हैं, तो पहले साल के बाद आपका हिस्सा हमेशा के लिए 15% हो जाता है।",
               "यह मासिक और सालाना दोनों प्लान के लिए एक जैसा काम करता है, क्योंकि कमीशन हर वास्तविक भुगतान पर गिना जाता है। अगर ग्राहक रद्द करता है, तो आपका कमीशन उसके आखिरी भुगतान के साथ रुक जाता है।",
-              "टीम कुछ खास पार्टनर्स के लिए अलग दरें तय कर सकती है। आपकी अपनी दरें हमेशा आपके पार्टनर डैशबोर्ड में दिखती हैं, जहाँ आप /partners से पहुँच सकते हैं।",
+              "टीम कुछ खास पार्टनर्स के लिए अलग दरें तय कर सकती है। आपकी अपनी दरें हमेशा आपके पार्टनर डैशबोर्ड में दिखती हैं।",
             ],
           },
           {
             id: "payout",
             q: "मुझे भुगतान कब मिलता है?",
             a: [
-              "हर महीने, जब आपका बैलेंस $50 से ऊपर चला जाए। हम वही भुगतान तरीका इस्तेमाल करते हैं जो आपने पार्टनर डैशबोर्ड में चुना है (बैंक ट्रांसफ़र, PayPal वगैरह)। $50 न्यूनतम सीमा है, कोई ऊपरी सीमा नहीं। आप इससे कहीं ज़्यादा कमा सकते हैं, बस भुगतान तब मिलता है जब आप यह सीमा पार करते हैं।",
-              "रिफ़ंड की अवधि को ध्यान में रखते हुए, कमीशन सदस्यता भुगतान के 30 दिन बाद जारी होता है। यानी जनवरी की सदस्यता फ़रवरी की शुरुआत में जारी होती है और बैलेंस $50 से ऊपर जाने पर आपके अगले भुगतान में आ जाती है।",
+              "हर महीने, जब आपका बैलेंस आपके पार्टनर डैशबोर्ड में दिखाए गए न्यूनतम स्तर तक पहुँच जाता है। हम इसे उसी PayPal खाते में भेजते हैं जो आपने वहाँ सेट किया है। यह न्यूनतम राशि सिर्फ एक सीमा है, कोई ऊपरी सीमा नहीं। आप इससे कहीं ज़्यादा कमा सकते हैं, और भुगतान आपको तब मिलता है जब आप यह सीमा पार कर लेते हैं।",
+              "रिफ़ंड की अवधि के लिए, कमीशन सदस्यता भुगतान के 30 दिन बाद जारी होता है। यानी जनवरी की सदस्यता का कमीशन फ़रवरी की शुरुआत में जारी होता है, और आपका बैलेंस न्यूनतम स्तर तक पहुँचने पर आपके अगले भुगतान में आ जाता है।",
             ],
           },
           {
@@ -1708,7 +1713,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "जुड़ने के बाद भी मेरा डैशबोर्ड खाली है",
             a: [
               "आँकड़े आपके लिंक पर पहले क्लिक के बाद दिखते हैं। खाली होने का मतलब बस इतना है कि अभी तक किसी ने क्लिक नहीं किया। जाइए, लिंक शेयर कीजिए। गतिविधि शुरू होते ही डैशबोर्ड लगभग रियल टाइम में अपडेट होता है।",
-              "अगर आपने लिंक शेयर किया है और किसी ने साइन अप किया है, लेकिन डैशबोर्ड में नहीं दिख रहा, तो साइन अप के अंदाज़न समय के साथ हमें लिखें और टीम एट्रिब्यूशन की जाँच करेगी।",
+              "अगर आपने शेयर किया है और किसी ने साइन अप किया है, लेकिन डैशबोर्ड में वह नहीं दिख रहा, तो साइन अप का अंदाज़न समय लिखकर हमें भेजें। टीम जाँच करेगी कि साइन अप कहाँ से आया था।",
             ],
           },
           {
@@ -1723,8 +1728,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "missing-commission",
             q: "किसी ने मेरे लिंक से साइन अप किया, लेकिन मुझे कमीशन नहीं दिख रहा",
             a: [
-              "ज़्यादातर यह समय की बात होती है: साइन अप कुछ ही मिनटों में डैशबोर्ड में दिख जाता है, लेकिन कमीशन तभी दर्ज होता है जब सदस्यता का वास्तव में भुगतान हो जाए (अगर वे फ़्री ट्रायल पर हैं तो इसमें कुछ दिन लग सकते हैं)। ट्रायल खत्म होने के बाद फिर देखें।",
-              "अगर सदस्यता का भुगतान हो गया है, लेकिन 48 घंटे बाद भी कमीशन नहीं दिख रहा, तो साइन अप का अंदाज़न समय और अगर पता हो तो सदस्य का ईमेल या अंदाज़न नाम लिखकर हमें भेजें। टीम एट्रिब्यूशन की पूरी कड़ी जाँचेगी और कोई चूक हो तो उसे हाथ से ठीक करेगी।",
+              "ज़्यादातर यह समय की बात होती है। साइन अप कुछ ही मिनटों में डैशबोर्ड में दिख जाता है, लेकिन कमीशन तभी दर्ज होता है जब सदस्यता का वास्तव में भुगतान हो जाए, अगर वे फ़्री ट्रायल पर हैं तो इसमें कुछ दिन लग सकते हैं। ट्रायल खत्म होने के बाद फिर देखें।",
+              "अगर सदस्यता का भुगतान हो गया है, लेकिन 48 घंटे बाद भी कमीशन नहीं दिख रहा, तो साइन अप का अंदाज़न समय और अगर पता हो तो सदस्य का ईमेल या अंदाज़न नाम लिखकर हमें भेजें। टीम जाँच करेगी कि साइन अप कहाँ से आया था और कोई चूक हुई होगी तो उसे हाथ से ठीक करेगी।",
             ],
           },
         ],
@@ -1797,17 +1802,18 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "የምዝገባዬን ክሬዲት ካርድ እንዴት መቀየር እችላለሁ?",
             a: [
               "ምዝገባዎን ሳይሰርዙ ከአንድ ደቂቃ ባነሰ ጊዜ ወደ አዲስ ካርድ መቀየር ይችላሉ። አሁን ያለዎት ምዝገባ እንደቀጠለ ይቆያል፣ በአዲሱ ካርድ ብቻ።",
-              "1. በ gadit.app ይግቡና የመለያዎን ገጽ ይክፈቱ (ከላይ በቀኝ)። 2. \"ክፍያን ያስተዳድሩ\" የሚለውን ይጫኑ። 3. ደህንነቱ የተጠበቀ የ Stripe ገጽ ይከፈታል። \"የክፍያ ዘዴ ያክሉ\" የሚለውን ይጫኑ፣ አዲሱን ካርድ ያስገቡ፣ እንደ ዋና (Default) ምልክት ያድርጉበት። 4. ከፈለጉ የድሮውን ካርድ ያስወግዱ።",
-              "ከቀጣዩ የክፍያ ዙር ጀምሮ ሁሉም ክፍያ በአዲሱ ካርድ ይፈጸማል። ቀደም ሲል የተከፈለው ክፍያ (አስቀድሞ የተሰበሰበው) በድሮው ካርድ ላይ ይቆያል። በተለይ ካልፈለጉ በስተቀር ገንዘብ መመለስ አያስፈልግም።",
+              "1. በgadit.app ይግቡና ከመለያ ምናሌው \"መለያ\" ይክፈቱ። 2. \"ክፍያን ያስተዳድሩ\" የሚለውን ይጫኑ። 3. ደህንነቱ የተጠበቀ የStripe ገጽ ይከፈታል። አዲሱን ካርድ እንደ የክፍያ ዘዴ ያክሉት እና እንደ ዋና ያድርጉት። 4. ከፈለጉ የድሮውን ካርድ ያስወግዱ።",
+              "ከቀጣዩ የክፍያ ዙር ጀምሮ ሁሉም ክፍያ በአዲሱ ካርድ ይሄዳል። ቀደም ሲል የተከፈለው ክፍያ በድሮው ካርድ ላይ ይቆያል። በተለይ ካልፈለጉ በስተቀር ተመላሽ ገንዘብ አያስፈልግም።",
             ],
           },
           {
             id: "cancel",
             q: "ምዝገባዬን እንዴት መሰረዝ እችላለሁ?",
             a: [
-              "በራስዎ፣ በማንኛውም ጊዜ። ይግቡ፣ መለያን ይክፈቱ፣ እና በእቅድዎ ስር \"ምዝገባውን ይሰርዙ\" የሚለውን ይንኩ።",
-              "በክፍያ ምዝገባ ላይ፣ አስቀድመው የከፈሉበት ጊዜ እስኪያልቅ ድረስ መጠቀምዎን ይቀጥላሉ። ከዚያ በኋላ መለያው ወደ Basic (ነጻ) ይዛወራል። ያስቀመጧቸው ቃላትና ታሪክዎ ደህንነታቸው ተጠብቆ ይቆያሉ።",
-              "በ14 ቀኑ የነጻ ሙከራ ጊዜ ውስጥ ከሰረዙ፣ ሙከራው ወዲያውኑ ያበቃል፣ ምንም ክፍያም አይጠየቅም። የሚያሳስብዎት አውቶማቲክ ክፍያው ብቻ ከሆነ፣ በመሰረዣ መስኮቱ ውስጥ ያንን ምክንያት ይምረጡ፣ ከዚያም በምትኩ ራስ ሰር እድሳቱን አጥፍተው ሙከራውን እስከ መጨረሻው ቀን መቀጠል ይችላሉ።",
+              "በራስዎ፣ በማንኛውም ጊዜ። ይግቡ፣ \"መለያ\" ይክፈቱ፣ እና በእቅድዎ ስር ምዝገባን መሰረዝ የሚለውን ይንኩ።",
+              "ምዝገባዎን በiPhone ወይም በiPad app ውስጥ ገዝተውታል? በApple የምዝገባ ቅንብሮች ውስጥ ይሰርዙት። በእርስዎ የመለያ ገጽ ላይ ያለው \"ምዝገባዎን ያስተዳድሩ\" ሊንክ ወደዚያ ይወስዳል።",
+              "በክፍያ ምዝገባ ላይ፣ አስቀድመው የከፈሉበት ጊዜ እስኪያልቅ ድረስ መጠቀምዎን ይቀጥላሉ። ከዚያ በኋላ መለያው ወደ Basic ይዛወራል። ያስቀመጧቸው ቃላትና ታሪክዎ ደህንነታቸው ተጠብቆ ይቆያሉ።",
+              "በ14 ቀኑ የነጻ ሙከራ ጊዜ ውስጥ ከሰረዙ፣ ሙከራው ወዲያውኑ ያበቃል፣ ምንም ክፍያም አይጠየቅም። የሚያሳስብዎት አውቶማቲክ ክፍያው ብቻ ከሆነ፣ በመሰረዣ መስኮቱ ውስጥ ያንን ምክንያት ይምረጡ፣ ከዚያም በምትኩ እድሳቱን ማጥፋት ይችላሉ፣ ሙከራውንም እስከ መጨረሻው ቀን ድረስ ያቆያሉ።",
               "የክፍያ ምዝገባን በስህተት ከሰረዙ ወይም ሐሳብዎን ከቀየሩ፣ ጊዜው ከማለቁ በፊት ከዚያው ገጽ መልሰው መቀጠል ይችላሉ።",
             ],
           },
@@ -1864,7 +1870,7 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             q: "ክፍያዬ አልተሳካም። ምን ማድረግ አለብኝ?",
             a: [
               "Stripe ያልተሳኩ ክፍያዎችን በሚቀጥሉት ቀናት ውስጥ በራሱ ጥቂት ጊዜ እንደገና ይሞክራል። ባንኩ እገዳውን ሲያነሳ ወይም ካርዱ በቂ ቀሪ ሂሳብ ሲኖረው አብዛኞቹ ችግሮች በራሳቸው ይፈታሉ።",
-              "ወዲያውኑ ማስተካከል ከፈለጉ፣ ወደ መለያ → ክፍያን ያስተዳድሩ → የክፍያ ዘዴ ያክሉ ይሂዱ፣ የሚሰራ ካርድ ያስገቡና እንደ ዋና ያድርጉት። Stripe ያልተሳካውን ክፍያ በአዲሱ ካርድ ወዲያውኑ እንደገና ይሞክራል። ምዝገባዎ አስቀድሞ ወደ Basic ተመልሶ ከሆነ፣ ከዋጋዎች ገጽ እንደገና መመዝገብ ይችላሉ፣ ማስታወሻ ደብተርዎም እንዳለ ይቆያል።",
+              "ከላይ በገጹ ላይ ክፍያው እንዳልተሳካ የሚነግር ማስታወቂያ ይታያል፣ እና መጠቀምዎ ለጥቂት ተጨማሪ ቀናት ይቀጥላል። እዚያ \"ካርድ ያዘምኑ\" የሚለውን ይንኩ፣ የሚሰራ ካርድ ያስገቡ፣ እኛም ክፍያውን በእሱ ላይ ወዲያውኑ እንሞክራለን። ምዝገባዎ አስቀድሞ ወደ Basic ተመልሶ ከሆነ፣ ከዋጋዎች ገጽ እንደገና መመዝገብ ይችላሉ፣ ማስታወሻ ደብተርዎም እንዳለ ይቆያል።",
             ],
           },
           {
@@ -1895,40 +1901,40 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "forgot-password",
             q: "የይለፍ ቃሌን ረሳሁት",
             a: [
-              "የመግቢያ መስኮቱን ይክፈቱና \"የይለፍ ቃል ረሱ?\" የሚለውን ይጫኑ። ለ Gadit የሚጠቀሙበትን ኢሜይል ያስገቡ፣ በአንድ ወይም በሁለት ደቂቃ ውስጥም የዳግም ማስጀመሪያ አገናኝ ይደርስዎታል።",
-              "ኢሜይሉ ካልደረሰ፣ የአይፈለጌ መልእክት አቃፊውን ይመልከቱ። አሁንም ካልደረሰ፣ በኢሜይልና በይለፍ ቃል ሳይሆን በ Google ተመዝግበው ሊሆን ይችላል። \"በ Google ይቀጥሉ\" የሚለውን አዝራር ይሞክሩ።",
+              "በመግቢያ መስኮቱ ውስጥ ኢሜይልዎን ያስገቡ፣ ከዚያ \"የይለፍ ቃልዎን ረሱ?\" የሚለውን ይጫኑ። የዳግም ማስጀመሪያ ሊንክ ብዙውን ጊዜ በአንድ ወይም በሁለት ደቂቃ ውስጥ ወደ የገቢ መልእክት ሳጥንዎ ይደርሳል። እንዲሁም \"የመግቢያ ሊንክ በኢሜይል ላኩልኝ\" የሚለውን በመጫን ያለ የይለፍ ቃል መግባት ይችላሉ።",
+              "ኢሜይሉ ካልደረሰ፣ spam ይመልከቱ። አሁንም ካልደረሰ፣ በኢሜይልና በይለፍ ቃል ሳይሆን በ Google ተመዝግበው ሊሆን ይችላል። \"በGoogle ይቀጥሉ\" የሚለውን አዝራር ይሞክሩ።",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "የይለፍ ቃሌ ትክክል እንደሆነ እርግጠኛ ነኝ፣ ግን \"የተሳሳተ ኢሜይል ወይም የይለፍ ቃል\" ይላል",
+            q: "የይለፍ ቃሌ ትክክል ነው፣ ግን ኢሜይሉና የይለፍ ቃሉ አይዛመዱም ይላል",
             a: [
-              "ሦስት ነገሮችን ያረጋግጡ። አንደኛ፣ Caps Lock። ሁለተኛ፣ ሲቀዱና ሲለጥፉ መጨረሻ ላይ የቀረ ባዶ ቦታ። ሦስተኛ፣ በይለፍ ቃል ፈንታ በ Google ተመዝግበው እንደሆነ (ያን ጊዜ \"በ Google ይቀጥሉ\" የሚለውን ይጠቀሙ)።",
-              "አሁንም አልሆነም? ከዚያው መስኮት የይለፍ ቃሉን ዳግም ያስጀምሩ። ሁሉንም ነገር ከአዲስ ያስተካክልልዎታል።",
+              "ሦስት ነገሮችን ያረጋግጡ። አንደኛ፣ Caps Lock። ሁለተኛ፣ ኮፒ አድርገው ከለጠፉ በኋላ መጨረሻ ላይ የተረፈ ባዶ ቦታ። ሦስተኛ፣ ምናልባት በይለፍ ቃል ሳይሆን በ Google ተመዝግበው ይሆናል፣ በዚያ ጊዜ \"በGoogle ይቀጥሉ\" የሚለውን ይጠቀሙ።",
+              "አሁንም ተቸግረዋል? በዚያው መልእክት ውስጥ \"የመግቢያ ሊንክ በኢሜይል ላኩልኝ\" የሚለውን ይጫኑና ያለ የይለፍ ቃል ይግቡ፣ ወይም \"አዲስ የይለፍ ቃል ይምረጡ\" የሚለውን ይጫኑ።",
             ],
           },
           {
             id: "google-fails",
             q: "በ Google መግባት አይሰራም",
             a: [
-              "በጣም የተለመደው ምክንያት: አሳሽዎ ለ gadit.app የሶስተኛ ወገን ኩኪዎችን ወይም ብቅ ባይ መስኮቶችን እየከለከለ ነው። በአድራሻ አሞሌው ፈቃዶች ውስጥ ይፍቀዷቸውና እንደገና ይሞክሩ።",
-              "በማንነት የማያሳውቅ (incognito) ሁነታ ላይ ከሆኑ፣ በ Google መግባት ሆን ተብሎ የተገደበ ነው። ወደ መደበኛ የአሳሽ መስኮት ይቀይሩ።",
+              "እንደ Instagram፣ Facebook ወይም TikTok ባሉ መተግበሪያዎች ውስጥ የ Google አዝራሩ ይደበቃል። ሊንኩን በመደበኛ አሳሽዎ ውስጥ ይክፈቱ፣ ወይም በኢሜይልዎ ይግቡ። በ Google ከተቀላቀሉ፣ ያንን ኢሜይል ያስገቡና \"የመግቢያ ሊንክ በኢሜይል ላኩልኝ\" የሚለውን ይጫኑ።",
+              "በ private, incognito መስኮት ውስጥ የታገዱ cookies በ Google መግባትን ሊያቆሙ ይችላሉ፣ ስለዚህ በመደበኛ መስኮት ይሞክሩ።",
             ],
           },
           {
             id: "change-email",
             q: "በመለያዬ ላይ ያለውን ኢሜይል እንዴት መቀየር እችላለሁ?",
             a: [
-              "መለያ፣ ኢሜይልዎን ይጫኑ፣ ኢሜይል ቀይር። ለውጡ ከመጽናቱ በፊት አዲሱን አድራሻ ማረጋገጥ ያስፈልግዎታል። ምዝገባዎ፣ ታሪክዎና ማስታወሻ ደብተርዎ ሁሉም ወደ አዲሱ ይዛወራሉ።",
-              "ኢሜይሉ ከ Stripe ደንበኛ ጋር የተያያዘ ከሆነ፣ ወደፊት ደረሰኞች ወደ አዲሱ አድራሻ እንዲመጡ በ Stripe የክፍያ መግቢያ ገጽ ላይም ያዘምኑት።",
+              "የመለያዎን ኢሜይል መቀየር በቡድኑ ይደረጋል። አሁን ከሚጠቀሙበት አድራሻ ኢሜይል ይላኩልንና አዲሱን አድራሻ በመልእክቱ ውስጥ ይጻፉ። ቡድኑ ያዘምነዋል፣ ምዝገባዎ፣ ታሪክዎና ማስታወሻ ደብተርዎም እንዳሉ ይቀጥላሉ።",
             ],
           },
           {
             id: "delete-account",
             q: "መለያዬን እንዴት መሰረዝ እችላለሁ?",
             a: [
-              "መለያ፣ በገጹ ግርጌ፣ መለያ ሰርዝ። ይህ ቋሚ ነው። ምዝገባዎ ይሰረዛል፣ ማስታወሻ ደብተርዎና ታሪክዎ ይጠፋሉ፣ ኢሜይሉም ለአዲስ ምዝገባ ነጻ ይሆናል።",
-              "ያለፉ ክፍያዎች የ Stripe መዛግብት ይቆያሉ (ለሂሳብ አያያዝ እንድንይዛቸው በሕግ ይጠበቅብናል)። ከዚህ ውጪ ምንም አይቀርም።",
+              "በ\"መለያ\" ገጽ ግርጌ ላይ \"መለያ ይሰርዙ\" የሚለውን ይጫኑና ለማረጋገጥ የመለያዎን ኢሜይል ያስገቡ። ይህ ቋሚ ነው፣ ምዝገባዎ ይሰረዛል፣ ማስታወሻ ደብተርዎና ታሪክዎ ይጠፋሉ፣ ኢሜይሉም ለአዲስ ምዝገባ ነጻ ይሆናል።",
+              "አንድ ልዩ ሁኔታ አለ፣ በ App Store የተገዛ ምዝገባ። መለያውን መሰረዝ ያንን አይሰርዘውም፣ ስለዚህ መጀመሪያ በ Apple የምዝገባ ቅንብሮችዎ ውስጥ ይሰርዙት።",
+              "ያለፉ ክፍያዎች መዝገቦች ግን ይቆያሉ፣ ምክንያቱም ለሂሳብ አያያዝ በሕግ እንድናቆያቸው ይጠየቅብናል።",
             ],
           },
           {
@@ -1943,8 +1949,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "multiple-accounts",
             q: "በስህተት ሁለት መለያዎች ያሉኝ ይመስለኛል። አሁን ምን ላድርግ?",
             a: [
-              "ይህ ብዙውን ጊዜ የሚሆነው አንድ ሰው በአንድ አድራሻ አንድ ጊዜ በ Google፣ አንድ ጊዜ ደግሞ በኢሜይልና በይለፍ ቃል ሲመዘገብ፣ ወይም በተለያዩ የኢሜይል አድራሻዎች ሁለት ጊዜ ሲመዘገቡ ነው። እያንዳንዱ ምዝገባ የራሱ ማስታወሻ ደብተር፣ ታሪክና የምዝገባ ሁኔታ ያለው የተለየ የ Gadit መለያ ይፈጥራል።",
-              "ሁለቱንም የኢሜይል አድራሻዎች (ወይም ከመለያ ገጹ የሚገኙትን UID) እና የትኛውን ማቆየት እንደሚፈልጉ ይጻፉልን። ቡድኑ ማስታወሻ ደብተሮቹንና ታሪኩን እርስዎ በመረጡት መለያ ላይ ያዋህዳል፣ ከዚያም ሌላውን በንጽሕና ይዘጋዋል። ምንም መረጃ አይጠፋም።",
+              "ይህ ብዙውን ጊዜ የሚሆነው አንድ ሰው በአንድ አድራሻ አንድ ጊዜ በGoogle፣ አንድ ጊዜ ደግሞ በኢሜይልና በይለፍ ቃል ሲመዘገብ፣ ወይም በተለያዩ የኢሜይል አድራሻዎች ሁለት ጊዜ ሲመዘገቡ ነው። እያንዳንዱ ምዝገባ የራሱ ማስታወሻ ደብተር፣ ታሪክና የምዝገባ ሁኔታ ያለው የተለየ የGadit መለያ ይፈጥራል።",
+              "ከሁለቱ አድራሻዎች አንዱን ተጠቅመው ኢሜይል ይላኩልን፣ እና ሌላውን አድራሻ ከእርሱ ጋር የትኛውን መለያ ማቆየት እንደሚፈልጉ ይጻፉ። ቡድኑ ማስታወሻ ደብተሩንና ታሪኩን ወደ እርስዎ በመረጡት መለያ ያዋህዳል፣ ከዚያም ሌላውን በንጽሕና ይዘጋዋል። ምንም መረጃ አይጠፋም።",
             ],
           },
         ],
@@ -1958,24 +1964,24 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "wrong-definition",
             q: "ትርጉሙ የተሳሳተ ይመስለኛል። ምን ላድርግ?",
             a: [
-              "እያንዳንዱ የውጤት ገጽ ግርጌ ላይ ትንሽ \"ሪፖርት አድርግ\" አዝራር አለ። ይጫኑት፣ ምድብ ይምረጡ (ትርጉም፣ የቃል መነሻ፣ ምሳሌ፣ ፈሊጥ፣ የልጆች ማብራሪያ፣ ወዘተ) እና አጭር ማስታወሻ ይጻፉ። በቀጥታ ቡድኑ ዘንድ ይደርሳል፣ እያንዳንዱ ሪፖርትም ይገመገማል።",
-              "ከልክ በላይ ጥቃቅን ነገር እንደሚያነሱ አይጨነቁ። መዝገበ ቃላቱ ከምንም ነገር በላይ በፍጥነት የሚሻሻለው በዚህ ዓይነቱ ግብረ መልስ ነው።",
+              "ከእያንዳንዱ ትርጉም አጠገብ፣ እንዲሁም በፈሊጦች እና በቃል መነሻ ካርዶች ላይ፣ ትንሽ የሰንደቅ ምልክት አለ። ይንኩት፣ ምን እንደተሳሳተ ይምረጡ፣ ከፈለጉም አጭር ማስታወሻ ያክሉ። ሪፖርቱ በቀጥታ ወደ ቡድኑ ይደርሳል፣ እያንዳንዱ ሪፖርትም ይገመገማል።",
+              "ከልክ በላይ ጥቃቅን ነገር እንደሚያነሱ አይጨነቁ። መዝገበ ቃላቱ ከምንም ነገር በላይ በፍጥነት የሚሻሻለው በዚህ ግብረ መልስ ነው።",
             ],
           },
           {
             id: "kids-not-working",
-            q: "የልጆች ሁነታ ማብራሪያውን እየቀየረ አይደለም",
+            q: "የልጆች ሁነታ ማብራሪያውን አይቀይርም",
             a: [
-              "የልጆች ሁነታ ጽሑፉን የሚቀይረው ለቃሉ ለልጆች የሚመች ማብራሪያ አስቀድሞ ካለ ብቻ ነው። ለመጀመሪያ ጊዜ አሁን ለፈለጉት ቃል፣ የልጆቹ ስሪት እስኪዘጋጅ ድረስ ከ10 እስከ 15 ሰከንድ ይጠብቁ።",
-              "የልጆች ሁነታ የ Family ዕቅድ አካል ነው። Basic ላይ፣ Individual ላይ ወይም ያለ መለያ፣ ማብሪያ ማጥፊያው ከመብራት ይልቅ የ Family ዕቅድን ያሳያል። ከኦክቶበር 2026 በፊት ለ Clear ወይም ለ Deep የተመዘገቡ ደንበኞች የልጆች ሁነታን ይዘው ይቀጥላሉ። ለማግኘት፣ በዋጋ ገጹ ላይ Family ን ይመልከቱ።",
+              "የልጆች ሁነታ ጽሑፉን የሚቀይረው ቃሉ አስቀድሞ ለልጆች የሚመች ማብራሪያ ሲኖረው ብቻ ነው። አንድን ቃል ለመጀመሪያ ጊዜ ከፈለጉት፣ ለልጆች የሚመች ስሪቱ እስኪዘጋጅ ድረስ ከ10 እስከ 15 ሰከንድ ይጠብቁ።",
+              "የልጆች ሁነታ የ Family ዕቅድ አካል ነው። በ Individual ላይ በምትኩ \"በቀላል ቃላት\" የሚል ማብሪያ ማጥፊያ ያያሉ፣ እሱም ለእያንዳንዱ ትርጉም ቀለል ያለ ማብራሪያ ይሰጣል። በ Basic ወይም ያለ መለያ ማብሪያ ማጥፊያ የለም። ከኦክቶበር 2026 በፊት ወደ Clear ወይም Deep የተቀላቀሉ ተመዝጋቢዎች የልጆች ሁነታን ይቀጥላሉ። ለማግኘት፣ በዋጋ ገጹ ላይ Family ን ይመልከቱ።",
             ],
           },
           {
             id: "voice-fails",
             q: "የድምፅ ፍለጋ አይሰራም",
             a: [
-              "የድምፅ ፍለጋ የማይክሮፎን ፈቃድ ያስፈልገዋል። አብዛኞቹ አሳሾች ለእያንዳንዱ ድረ ገጽ አንድ ጊዜ ይጠይቃሉ። በስህተት አግድ የሚለውን ከተጫኑ፣ በእጅ መመለስ ያስፈልግዎታል: በአድራሻ አሞሌው ውስጥ ከ gadit.app አጠገብ ያለውን የቁልፍ ወይም የመረጃ አዶ ይጫኑ፣ ከዚያ የድረ ገጽ ቅንብሮች፣ ከዚያ ማይክሮፎን፣ ከዚያ ፍቀድ።",
-              "በ iPhone እና iPad Safari ላይ የማይክሮፎን መዳረሻ በቅንብሮች → Safari → ማይክሮፎን ውስጥም መፍቀድ ይፈልጋል። የድምፅ ፍለጋ የ Individual እና Family ዕቅዶች አካል ነው: Basic ላይ በምትኩ ዕቅዶቹን ያያሉ፣ ያልገቡ ጎብኚዎች ደግሞ እንዲገቡ ይጠየቃሉ። ለማሳደግ፣ የዋጋ ገጹን ይክፈቱ።",
+              "የድምፅ ፍለጋ የማይክሮፎን ፈቃድ ያስፈልገዋል። አብዛኞቹ አሳሾች ለእያንዳንዱ ድረ ገጽ አንድ ጊዜ ይጠይቃሉ። በስህተት ካገዱት፣ በአድራሻ አሞሌው ውስጥ ከ gadit.app አጠገብ ያለውን አዶ ይጫኑ እና በድረ ገጹ ፈቃዶች ውስጥ ማይክሮፎኑን ይፍቀዱ።",
+              "በ iPhone እና iPad ላይ ማይክሮፎኑን ለ Safari በመሣሪያው Settings መተግበሪያ ውስጥም መፍቀድ ያስፈልጋል። የድምፅ ፍለጋ የ Individual እና Family ዕቅዶች አካል ነው፣ ስለዚህ በ Basic እና ያለ መለያ የማይክሮፎን አዝራር አይታይም። ለማሻሻል፣ የዋጋ ገጹን ይክፈቱ።",
             ],
           },
           {
@@ -1996,10 +2002,10 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "offline",
-            q: "ከመስመር ውጭ ሁነታ እንዴት ይሰራል?",
+            q: "Gadit ን ከመስመር ውጭ እንዴት ልጠቀም?",
             a: [
-              "ከመስመር ውጭ መጠቀም የ Individual እና Family ዕቅዶች አካል ነው። የሚፈልጉት እያንዳንዱ ቃል በመሣሪያዎ ላይ ስለሚቀመጥ፣ ያለ ኢንተርኔት ወዲያውኑ እንደገና ይከፈታል። በቋንቋዎ በጣም ተወዳጅ የሆኑ ቃላትን የያዘ ጥቅል ከመለያ ገጽዎም ማውረድ ይችላሉ።",
-              "ፍጹም አዲስ ቃል መፈለግ አሁንም ግንኙነት ይፈልጋል፣ ምክንያቱም Gadit ለቃሉ ሙሉውን ውጤት ማዘጋጀት አለበት። ከመስመር ውጭ ያለው ቅጂ አስቀድመው በመሣሪያዎ ላይ ያሉትን ቃላት ይሸፍናል። Basic ላይ ከሆኑ፣ በዋጋ ገጹ ላይ ዕቅዶቹን ይመልከቱ።",
+              "ከመስመር ውጭ መጠቀም የ Individual እና Family ዕቅዶች አካል ነው። የሚፈልጉት እያንዳንዱ ቃል በመሣሪያዎ ላይ ይቀመጣል፣ ስለዚህ ያለ ኢንተርኔት እንኳን ወዲያውኑ እንደገና ይከፈታል። በተጨማሪም በ\"መለያ\" ገጽዎ ላይ \"የመስመር ውጭ ጥቅል ያውርዱ\" የሚለውን መጫን ይችላሉ፣ እና የመዝገበ ቃላታችን ቃላት በቋንቋዎ በዚህ መሣሪያ ላይ ይቀመጣሉ።",
+              "ፍጹም አዲስ ቃል መፈለግ አሁንም ግንኙነት ይፈልጋል፣ ምክንያቱም Gadit ለቃሉ ሙሉውን ውጤት ማዘጋጀት አለበት። ከመስመር ውጭ ያለው ቅጂ አስቀድሞ በመሣሪያዎ ላይ ያሉትን ቃላት ይሸፍናል። Basic ላይ ከሆኑ፣ በዋጋ ገጹ ላይ ዕቅዶቹን ይመልከቱ።",
             ],
           },
           {
@@ -2012,18 +2018,18 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "word-not-found",
-            q: "ቃል ፈልጌ ምንም ውጤት አላገኘሁም። ምን እየሆነ ነው?",
+            q: "ቃል ፈልጌ ውጤት አላገኘሁም። ምን እየሆነ ነው?",
             a: [
-              "መጀመሪያ ፊደሉን ያረጋግጡ። Gadit ትናንሽ የትየባ ስህተቶችን ብዙውን ጊዜ ይረዳል፣ ነገር ግን የተሳሳተ አናባቢ ወይም የጎደለ ፊደል ሊያሳስተው ይችላል። የእርማት ጥቆማ ከታየ ይሞክሩት።",
-              "ከዚህ ባሻገር: በጣም ብርቅ የሆኑ ወይም የጎዳና ቋንቋ ቃላት አስተማማኝ ውጤት ላያመጡ ይችላሉ። ቃሉ እውነተኛ እንደሆነ እርግጠኛ ከሆኑ፣ በውጤት ገጹ (ወይም በስህተት ማያው) ላይ ያለውን ሪፖርት አድርግ የሚለውን አዝራር ይጫኑና ያሳውቁን። እያንዳንዱ ሪፖርት ይገመገማል፣ በእርግጥ የጎደሉ ቃላትም ወደ ሥርዓቱ ይጨመራሉ።",
+              "መጀመሪያ ፊደሉን ያረጋግጡ። የትየባ ስህተት ካለ፣ Gadit ብዙውን ጊዜ የተስተካከለውን ቃል ያሳያል፣ ከዚያም የተየቡትን ቃል እንደዚያው ለመፈለግ ሊንክ ይሰጣል።",
+              "በጣም ብርቅ የሆኑ ቃላት ወይም የጎዳና ቋንቋ ሁልጊዜ ውጤት አያመጡም። ቃሉ እንዳለ እርግጠኛ ከሆኑ፣ ከዚህ ገጽ ይጻፉልን እና ቡድኑ ያረጋግጣል።",
             ],
           },
           {
             id: "change-language",
-            q: "የመተግበሪያውን ቋንቋ እንዴት መቀየር እችላለሁ?",
+            q: "የመተግበሪያውን ቋንቋ እንዴት እቀይራለሁ?",
             a: [
-              "በማንኛውም ገጽ ከላይ በቀኝ ትንሽ የሰንደቅ ዓላማ አዶ (ወይም የአሁኑ ቋንቋዎ ስም) ያያሉ። ይጫኑትና ከ41 ቋንቋዎች ይምረጡ።",
-              "ምርጫዎ በዚህ መሣሪያ ላይ ይቀመጣል። ሁሉም ነገር በአዲሱ ቋንቋ እንደገና ይጫናል: መተግበሪያው፣ ምናሌዎቹ፣ ወደፊት የሚፈልጓቸው የቃላት ትርጉሞች፣ ምሳሌዎች፣ የልጆች ማብራሪያዎች፣ የቃሉ መነሻ ጭምር። በድሮው ቋንቋ አስቀድመው የተቀመጡ ውጤቶች እነዚያን ቃላት እንደገና እስኪፈልጉ ድረስ እንዳሉ ይቆያሉ።",
+              "በገጹ ከላይ የአሁኑን ቋንቋዎን የሚያሳይ የግሎብ አዶ አለ። ይጫኑት እና ቋንቋ ይምረጡ።",
+              "ምርጫዎ በዚህ መሣሪያ ላይ ይቀመጣል። ሁሉም ነገር በአዲሱ ቋንቋ እንደገና ይጫናል፣ መተግበሪያው፣ ምናሌዎቹ፣ ወደፊት የሚመጡ የቃላት ትርጓሜዎች፣ ምሳሌዎች፣ የልጆች ማብራሪያዎች፣ የቃሉ መነሻ ጭምር። አስቀድመው በድሮው ቋንቋ የፈለጓቸው ቃላት እንደዚያው ይታያሉ፣ እንደገና እስኪፈልጓቸው ድረስ።",
             ],
           },
         ],
@@ -2035,35 +2041,35 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
         items: [
           {
             id: "join-partner",
-            q: "የ Gadit አጋር እንዴት መሆን እችላለሁ?",
+            q: "የ Gadit አጋር እንዴት እሆናለሁ?",
             a: [
-              "ከማንኛውም ገጽ /partners ይክፈቱና \"አጋር ይሁኑ\" የሚለውን ይጫኑ። በስምዎና በኢሜይልዎ ይመዝገቡ፣ የራስዎ የሆነ የማጣቀሻ አገናኝና ጠቅታዎችንና ኮሚሽኖችን የሚከታተሉበት ዳሽቦርድ ወዲያውኑ ይዘጋጃሉ። ማጽደቅን መጠበቅ የለም።",
-              "መቀላቀል ነጻ ነው፣ ለማንኛውም ሰውም ክፍት ነው። አጋር ለመሆን የ Gadit ምዝገባ አያስፈልግዎትም።",
+              "ወደ gadit.app/partners ይሂዱ እና \"በነጻ ይቀላቀሉ\" የሚለውን ይጫኑ። ስምዎን እና ኢሜይልዎን ያስገቡ፣ ከዚያም \"የአጋር ኮዴን ያግኙ\" የሚለውን ይጫኑ። የእርስዎ የግል ሊንክ እና ጠቅታዎችንና ኮሚሽኖችን የሚያሳየው የአጋር ዳሽቦርድ ወዲያውኑ ዝግጁ ይሆናሉ፣ ማጽደቅ ለመጠበቅ አያስፈልግም። ኮዱ እና ሊንኩ በኢሜይልም ይደርስዎታል።",
+              "መቀላቀል ነጻ ነው እና ለሁሉም ክፍት ነው። አጋር ለመሆን የ Gadit ምዝገባ አያስፈልግዎትም።",
             ],
           },
           {
             id: "commission-model",
             q: "ኮሚሽኖች እንዴት ይሰላሉ?",
             a: [
-              "መደበኛው ውል አንድ ደንበኛ በመጀመሪያው ዓመቱ ከሚፈጽመው እያንዳንዱ ክፍያ 25% ነው። ከመጀመሪያው ዓመት በኋላ፣ ደንበኛው መክፈሉን እስከቀጠለ ድረስ ከእያንዳንዱ ክፍያ 10% ያገኛሉ።",
-              "ኮሚሽኑ በእያንዳንዱ ትክክለኛ ክፍያ ላይ ስለሚቆጠር፣ ለወርሃዊም ለዓመታዊም ዕቅዶች በተመሳሳይ መንገድ ይሰራል። ደንበኛው ከሰረዘ፣ ኮሚሽንዎ በመጨረሻው ክፍያው ይቆማል።",
-              "ቡድኑ ለተወሰኑ አጋሮች የተለየ መጠን ሊወስን ይችላል። የራስዎ መጠኖች ሁልጊዜ ከ /partners በሚደርሱበት የአጋር ዳሽቦርድዎ ላይ ይታያሉ።",
+              "መደበኛው ውል አንድ ደንበኛ በመጀመሪያው ዓመቱ ከሚፈጽመው እያንዳንዱ ክፍያ 25% ነው። ከዚያ የመጀመሪያ ዓመት በኋላ፣ ደንበኛው መክፈሉን እስከቀጠለ ድረስ ከእያንዳንዱ ክፍያ 10% ያገኛሉ። 5 የሚከፍሉ ደንበኞችን ካመጡ፣ ከመጀመሪያው ዓመት በኋላ የሚያገኙት ድርሻ ለዘላለም ወደ 15% ይጨምራል።",
+              "ኮሚሽኑ በእያንዳንዱ ትክክለኛ ክፍያ ላይ ስለሚቆጠር፣ ይህ ለወርሃዊም ለዓመታዊም ዕቅዶች በተመሳሳይ መንገድ ይሰራል። ደንበኛው ካቋረጠ፣ ኮሚሽንዎ በመጨረሻው ክፍያው ይቆማል።",
+              "ቡድኑ ለተወሰኑ አጋሮች የተለየ መጠን ሊወስን ይችላል። የራስዎ መጠኖች ሁልጊዜ በአጋር ዳሽቦርድዎ ላይ ይታያሉ።",
             ],
           },
           {
             id: "payout",
             q: "ክፍያዬን መቼ አገኛለሁ?",
             a: [
-              "በየወሩ፣ ቀሪ ሂሳብዎ ከ $50 ሲያልፍ። በአጋር ዳሽቦርዱ ያዘጋጁትን የክፍያ መቀበያ ዘዴ (የባንክ ዝውውር፣ PayPal፣ ወዘተ) እንጠቀማለን። $50 ዝቅተኛው ገደብ እንጂ ጣሪያ አይደለም። ከዚያ እጅግ የበለጠ ማግኘት ይችላሉ፣ ክፍያውን የሚቀበሉት ገደቡን ሲያልፉ ብቻ ነው።",
-              "ለገንዘብ መመለሻ ጊዜው ሲባል፣ ኮሚሽኖች ከምዝገባ ክፍያው 30 ቀናት በኋላ ይለቀቃሉ። ስለዚህ የጥር ወር ምዝገባ በየካቲት መጀመሪያ ይለቀቃል፣ ቀሪ ሂሳብዎ ከ $50 ሲያልፍም በቀጣዩ ክፍያዎ ውስጥ ይገባል።",
+              "በወር አንድ ጊዜ፣ ቀሪ ሂሳብዎ በአጋር ዳሽቦርድዎ ላይ ወደሚታየው ዝቅተኛ መጠን ሲደርስ። ክፍያውን እዚያ ወደሚያዘጋጁት የ PayPal መለያ እንልካለን። ዝቅተኛው መጠን ገደብ ነው እንጂ ጣሪያ አይደለም። ከዚያ እጅግ የበለጠ ማግኘት ይችላሉ፣ ክፍያውንም የሚቀበሉት ያንን ገደብ ሲያልፉ ነው።",
+              "ለገንዘብ መመለሻ ጊዜ ለመስጠት፣ ኮሚሽኖች ከምዝገባ ክፍያው 30 ቀናት በኋላ ይለቀቃሉ። ስለዚህ የጥር ወር ምዝገባ በየካቲት መጀመሪያ ይለቀቃል፣ ቀሪ ሂሳብዎም ዝቅተኛው መጠን ሲደርስ በቀጣዩ ክፍያዎ ውስጥ ይገባል።",
             ],
           },
           {
             id: "empty-dashboard",
             q: "ተቀላቅያለሁ ግን ዳሽቦርዴ ባዶ ነው",
             a: [
-              "ስታቲስቲክሱ የሚታየው አገናኝዎ ለመጀመሪያ ጊዜ ከተጫነ በኋላ ነው። ባዶ መሆኑ ገና ማንም አልጫነውም ማለት ብቻ ነው። አገናኙን ያጋሩ። እንቅስቃሴ ሲጀመር ዳሽቦርዱ በቅጽበት ማለት በሚቻል ፍጥነት ይዘምናል።",
-              "አገናኙን አጋርተው አንድ ሰው ቢመዘገብም ዳሽቦርዱ ካላሳየ፣ የምዝገባውን ግምታዊ ሰዓት ይዘው ይጻፉልን፣ ቡድኑም የማጣቀሻ ምዝገባውን ይፈትሻል።",
+              "ስታቲስቲክሱ የሚታየው በሊንክዎ ላይ የመጀመሪያው ጠቅታ ከተደረገ በኋላ ነው። ባዶ ማለት እስካሁን ማንም አልጫነውም ማለት ብቻ ነው። ሊንኩን ያጋሩ። እንቅስቃሴ ሲጀምር ዳሽቦርዱ ወዲያውኑ በሚባል ፍጥነት ይዘምናል።",
+              "አጋርተው አንድ ሰው ከተመዘገበ በኋላም ዳሽቦርዱ ይህን ካላሳየ፣ የምዝገባውን ግምታዊ ሰዓት ጨምረው ይጻፉልን፣ ቡድኑም ምዝገባው ከየት እንደመጣ ይፈትሻል።",
             ],
           },
           {
@@ -2078,8 +2084,8 @@ export const HELP_MORE_2: Partial<Record<Lang, HelpContent>> = {
             id: "missing-commission",
             q: "አንድ ሰው በአገናኜ ተመዝግቧል ግን ኮሚሽኑን አላየሁም",
             a: [
-              "ብዙውን ጊዜ ይህ የጊዜ ጉዳይ ነው: ምዝገባው በደቂቃዎች ውስጥ በዳሽቦርዱ ላይ ይታያል፣ ኮሚሽኑ ግን የሚመዘገበው ምዝገባው በትክክል ከተከፈለ በኋላ ብቻ ነው (በነጻ ሙከራ ላይ ከሆኑ ይህ ከቀናት በኋላ ሊሆን ይችላል)። የሙከራ ጊዜው ካበቃ በኋላ እንደገና ይመልከቱ።",
-              "ምዝገባው ተከፍሎ ከ48 ሰዓት በኋላም ኮሚሽኑን ካላዩ፣ የምዝገባውን ግምታዊ ሰዓትና የሚያውቁት ከሆነ የደንበኛውን ኢሜይል ወይም ግምታዊ ስም ይዘው ይጻፉልን። ቡድኑ የማጣቀሻውን ሰንሰለት መርምሮ የጎደለ ነገር ካለ በእጅ ያስተካክላል።",
+              "ብዙውን ጊዜ ይህ የጊዜ ጉዳይ ነው። ምዝገባው በደቂቃዎች ውስጥ በዳሽቦርዱ ላይ ይታያል፣ ኮሚሽኑ ግን ምዝገባው በትክክል ከተከፈለ በኋላ ብቻ ይመዘገባል። እነሱ በነጻ ሙከራ ላይ ከሆኑ ይህ ከቀናት በኋላ ሊሆን ይችላል። የሙከራ ጊዜው ካበቃ በኋላ እንደገና ይመልከቱ።",
+              "ምዝገባው ተከፍሎ ከ48 ሰዓት በኋላም ኮሚሽኑን ካላዩ፣ የምዝገባውን ግምታዊ ሰዓት እና የሚያውቁት ከሆነ የተመዝጋቢውን ኢሜይል ወይም ግምታዊ ስም ይዘው ይጻፉልን። ቡድኑ ምዝገባው ከየት እንደመጣ ይፈትሻል እና ያመለጠ ነገር ካለ በእጅ ያስተካክላል።",
             ],
           },
         ],

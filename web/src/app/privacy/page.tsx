@@ -14,7 +14,7 @@ export function generateMetadata(): Promise<Metadata> {
 }
 
 /** ISO day; LegalPage writes it in the document's language. */
-const LAST_UPDATED = "2026-10-25";
+const LAST_UPDATED = "2026-11-18";
 
 const EnglishBody = () => (
   <>
@@ -43,8 +43,17 @@ const EnglishBody = () => (
       <li>images generated at your request;</li>
       <li>your subscription plan and billing status;</li>
       <li>a recent search history (for paid users, up to the last 10 words), stored so you can access it again later;</li>
+      <li>
+        if you use the Gadit assistant in the help center: the questions you ask, its answers and whether you marked an
+        answer as helpful, together with your account ID (and family ID, if you have one), email address, plan,
+        interface language, and whether you used the website or the app;
+      </li>
       <li>monthly quotas (for example, the number of images you have generated this billing cycle).</li>
     </ul>
+    <p>
+      The Gadit assistant is not offered on children&rsquo;s profiles, in Kids Mode or to visitors who are not signed in.
+      Please do not type passwords or card numbers into it.
+    </p>
     <h3>Technical and analytics data</h3>
     <p>
       We automatically collect basic technical information such as IP address, browser type, device type, referring
@@ -63,6 +72,11 @@ const EnglishBody = () => (
       <li>to provide and improve the Gadit service (generating definitions, images, sentence feedback, quizzes);</li>
       <li>to maintain your account and personalize your experience (search history, preferred language, Kids Mode toggle);</li>
       <li>to process subscriptions and send transactional emails (receipts, subscription changes);</li>
+      <li>
+        to answer your questions in the Gadit assistant and improve our help answers, and, when the assistant passes a
+        question to our team, to email the team the recent conversation with your name, email address, plan, interface
+        language, and whether you used the website or the app, so the team can reply to you by email;
+      </li>
       <li>to measure and improve product performance and prevent abuse;</li>
       <li>to comply with legal obligations.</li>
     </ul>
@@ -78,8 +92,10 @@ const EnglishBody = () => (
     <ul>
       <li>
         <strong>OpenAI</strong>, processes the words and sentences you submit to generate definitions, sentence
-        feedback, quizzes, and voice transcription (Whisper), and generates images (DALL·E 3). Data sent to OpenAI
-        is governed by OpenAI&rsquo;s API data usage policy.
+        feedback, quizzes, and voice transcription (Whisper), and generates images (DALL·E 3). It also writes the
+        Gadit assistant&rsquo;s answers: we send it your question, the earlier messages of the same conversation, your
+        interface language, your plan, and whether you are on the website or the app, and we do not attach your name or
+        email address. Data sent to OpenAI is governed by OpenAI&rsquo;s API data usage policy.
       </li>
       <li>
         <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), stores your account, profile,
@@ -87,6 +103,10 @@ const EnglishBody = () => (
       </li>
       <li>
         <strong>Stripe</strong>, handles payments, subscriptions, and billing portal.
+      </li>
+      <li>
+        <strong>Resend</strong>, sends our emails (such as sign-in links and notifications), and delivers to our team the
+        questions the Gadit assistant passes on, with your email address as the reply address.
       </li>
       <li>
         <strong>Vercel</strong>, hosts and serves the website, and provides anonymized analytics and performance
@@ -106,8 +126,17 @@ const EnglishBody = () => (
     <ul>
       <li>Account information: while your account exists.</li>
       <li>Search history: the last 10 searches per user, updated on each new search.</li>
+      <li>
+        Gadit assistant conversations: 180 days, then deleted automatically, or sooner if you delete your account. A daily
+        count of your questions, used for the daily limit, is deleted after 3 days.
+      </li>
+      <li>Questions the Gadit assistant passes to our team: kept in our team&rsquo;s mailbox, like any email you send us.</li>
       <li>Generated images: kept so the same word+meaning can reuse the cached image. May be retained indefinitely as long as your account is active.</li>
       <li>Billing and tax records: as required by applicable law (typically 7 years).</li>
+      <li>
+        Deleted accounts: a short record that the account was deleted (its email address, plan, and the reason and note
+        you gave, if any), kept so we can answer questions about the deletion.
+      </li>
       <li>Analytics data: aggregated, typically retained by the analytics provider for 13 months.</li>
     </ul>
 
@@ -167,7 +196,7 @@ const HebrewBody = () => (
     <p>
       Gadit (להלן &ldquo;Gadit&rdquo;, &ldquo;אנחנו&rdquo;, &ldquo;שלנו&rdquo;) הוא שירות המופעל על ידי{" "}
       <strong>Lavi Learning and Training Technologies LLC</strong>, חברה הרשומה בארצות הברית. מדיניות פרטיות זו
-      מסבירה איזה מידע אנחנו אוספים, איך אנחנו משתמשים בו, ואילו אפשרויות יש לך.
+      מסבירה איזה מידע אנחנו אוספים, איך אנחנו משתמשים בו, ואילו אפשרויות יש לכם.
     </p>
     <p>
       לכל שאלה, אפשר לכתוב אלינו ב-{" "}
@@ -187,8 +216,16 @@ const HebrewBody = () => (
       <li>תמונות שנוצרו לבקשתכם;</li>
       <li>מצב המנוי שלכם וסטטוס התשלום;</li>
       <li>היסטוריית חיפושים אחרונה (למשתמשים בתשלום, עד 10 מילים אחרונות), נשמרת כדי שתוכלו לחזור אליה;</li>
+      <li>
+        אם אתם משתמשים בעוזר של Gadit במרכז העזרה: השאלות שאתם שואלים, התשובות שלו, והאם סימנתם שתשובה עזרה, יחד עם
+        מזהה החשבון (ומזהה המשפחה, אם יש), כתובת הדוא״ל, המסלול, שפת הממשק, והאם השתמשתם באתר או באפליקציה;
+      </li>
       <li>מכסות חודשיות (למשל, כמה תמונות יצרתם בתקופת החיוב הנוכחית).</li>
     </ul>
+    <p>
+      העוזר של Gadit לא מוצע בפרופילים של ילדים, במצב ילדים ולמי שלא מחוברים לחשבון. אנא אל תכתבו בו סיסמאות או מספרי
+      כרטיס אשראי.
+    </p>
     <h3>מידע טכני ואנליטי</h3>
     <p>
       אנחנו אוספים אוטומטית מידע טכני בסיסי כמו כתובת IP, סוג דפדפן, סוג מכשיר, כתובת מפנה, ודפים שנצפו. המידע
@@ -207,6 +244,11 @@ const HebrewBody = () => (
       <li>כדי לספק ולשפר את שירות Gadit (יצירת הגדרות, תמונות, פידבק על משפטים, חידונים);</li>
       <li>כדי לתחזק את החשבון שלכם ולהתאים לכם את החוויה (היסטוריית חיפוש, שפה מועדפת, מצב ילדים);</li>
       <li>כדי לעבד מנויים ולשלוח מיילים עסקיים (קבלות, שינויים במנוי);</li>
+      <li>
+        כדי לענות על השאלות שלכם בעוזר של Gadit ולשפר את תשובות העזרה שלנו, וכשהעוזר מעביר שאלה לצוות, כדי לשלוח לצוות
+        במייל את השיחה האחרונה יחד עם השם, כתובת הדוא״ל, המסלול, שפת הממשק, והאם השתמשתם באתר או באפליקציה, כדי שהצוות
+        יוכל לענות לכם במייל;
+      </li>
       <li>כדי למדוד ולשפר את ביצועי המוצר ולמנוע שימוש לרעה;</li>
       <li>כדי לעמוד בחובות משפטיות.</li>
     </ul>
@@ -221,7 +263,9 @@ const HebrewBody = () => (
     <ul>
       <li>
         <strong>OpenAI</strong>, מעבד את המילים והמשפטים שאתם שולחים, כדי ליצור הגדרות, פידבק על משפטים, חידונים,
-        ותמלול קולי (Whisper), וכן יוצר תמונות (DALL·E 3). המידע שנשלח ל-OpenAI כפוף למדיניות השימוש של OpenAI ב-API.
+        ותמלול קולי (Whisper), וכן יוצר תמונות (DALL·E 3). הוא גם מנסח את התשובות של העוזר של Gadit: אנחנו שולחים אליו
+        את השאלה, את ההודעות הקודמות באותה שיחה, את שפת הממשק, את המסלול, והאם אתם באתר או באפליקציה, ולא מצרפים את
+        השם או את כתובת הדוא״ל שלכם. המידע שנשלח ל-OpenAI כפוף למדיניות השימוש של OpenAI ב-API.
       </li>
       <li>
         <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), שומר את החשבון, הפרופיל,
@@ -229,6 +273,10 @@ const HebrewBody = () => (
       </li>
       <li>
         <strong>Stripe</strong>, מטפל בתשלומים, מנויים, ופורטל החיוב.
+      </li>
+      <li>
+        <strong>Resend</strong>, שולח את המיילים שלנו (למשל קישורי כניסה והתראות), ומעביר לצוות שלנו את השאלות שהעוזר של
+        Gadit מעביר הלאה, עם כתובת הדוא״ל שלכם ככתובת לתשובה.
       </li>
       <li>
         <strong>Vercel</strong>, מארח את האתר ומספק אנליטיקה ומדידת ביצועים אנונימית.
@@ -246,8 +294,17 @@ const HebrewBody = () => (
     <ul>
       <li>מידע על החשבון: כל עוד החשבון שלכם קיים.</li>
       <li>היסטוריית חיפוש: 10 החיפושים האחרונים למשתמש, מתעדכן עם כל חיפוש חדש.</li>
+      <li>
+        שיחות עם העוזר של Gadit: 180 יום, ואז הן נמחקות אוטומטית, או מוקדם יותר אם תמחקו את החשבון. ספירה יומית של
+        השאלות שלכם, שמשמשת למגבלה היומית, נמחקת אחרי 3 ימים.
+      </li>
+      <li>שאלות שהעוזר של Gadit מעביר לצוות: נשמרות בתיבת הדואר של הצוות, כמו כל מייל אחר שאתם שולחים לנו.</li>
       <li>תמונות שנוצרו: נשמרות כך שלאותה מילה+משמעות אפשר להשתמש בתמונה מהמטמון. עשויות להישמר ללא הגבלה כל עוד החשבון פעיל.</li>
       <li>רשומות חיוב ומיסים: כפי שנדרש בחוק (בדרך כלל 7 שנים).</li>
+      <li>
+        חשבונות שנמחקו: רשומה קצרה על המחיקה (כתובת הדוא״ל, המסלול, והסיבה וההערה שכתבתם, אם כתבתם), שנשמרת כדי שנוכל
+        לענות על שאלות לגבי המחיקה.
+      </li>
       <li>נתוני אנליטיקה: מצטברים, נשמרים בדרך כלל 13 חודשים על ידי ספק האנליטיקה.</li>
     </ul>
 

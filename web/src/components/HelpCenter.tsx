@@ -36,12 +36,12 @@ const SUPPORT_EMAIL = "support@gadit.app";
 const PLAY_HIDDEN_CATEGORIES = new Set(["billing", "partner"]);
 const PLAY_HIDDEN_ITEMS = new Set([
   "share-account", // plan names + a price
-  "change-email", // Stripe billing portal
   "kids-not-working", // "requires Clear or Deep... prompt you to upgrade"
   "voice-fails", // plan names + upgrade prompt
   "no-image", // plan quotas
   "save-word", // plan names
   "what-is-gadit", // plan names
+  "offline", // plan names + the pricing page (council round 4, 2026-11-18)
 ]);
 
 export function HelpCenter() {

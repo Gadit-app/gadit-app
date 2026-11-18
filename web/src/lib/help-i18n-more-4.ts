@@ -21,19 +21,20 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "change-card",
             q: "Làm sao để thay đổi thẻ tín dụng cho gói đăng ký của tôi?",
             a: [
-              "Bạn có thể chuyển sang thẻ mới trong chưa đầy một phút mà không cần hủy. Gói đăng ký hiện tại vẫn tiếp tục chạy, chỉ là trên thẻ mới.",
-              "1. Đăng nhập tại gadit.app và mở trang Tài khoản (góc trên bên phải). 2. Nhấn \"Quản lý thanh toán\". 3. Một trang Stripe bảo mật sẽ mở ra. Nhấn \"Thêm phương thức thanh toán\", nhập thẻ mới và đặt làm Mặc định. 4. Nếu muốn, hãy xóa thẻ cũ.",
-              "Từ chu kỳ thanh toán tiếp theo, mọi khoản phí sẽ được tính vào thẻ mới. Khoản phí trước đó (đã thu) vẫn nằm trên thẻ cũ. Không cần hoàn tiền, trừ khi bạn thực sự muốn.",
+              "Bạn có thể chuyển sang thẻ mới trong chưa đầy một phút mà không cần hủy. Gói đăng ký hiện tại vẫn tiếp tục, chỉ chuyển sang thẻ mới.",
+              "1. Đăng nhập tại gadit.app và mở \"Tài khoản\" từ menu tài khoản. 2. Nhấn \"Quản lý thanh toán\". 3. Một trang Stripe bảo mật sẽ mở ra. Thêm thẻ mới làm phương thức thanh toán và đặt làm mặc định. 4. Nếu muốn, hãy xóa thẻ cũ.",
+              "Từ kỳ thanh toán tiếp theo trở đi, mọi khoản phí sẽ được tính vào thẻ mới. Khoản thanh toán trước đó, đã thu rồi, vẫn nằm trên thẻ cũ. Không cần hoàn tiền, trừ khi bạn muốn hoàn tiền cụ thể.",
             ],
           },
           {
             id: "cancel",
             q: "Làm sao để hủy gói đăng ký?",
             a: [
-              "Bạn tự làm được, bất cứ lúc nào. Đăng nhập, mở Tài khoản và chạm vào Hủy gói đăng ký bên dưới gói của bạn.",
-              "Với gói trả phí, bạn vẫn được sử dụng đến hết kỳ đã thanh toán. Sau đó tài khoản chuyển về Basic (miễn phí). Các từ đã lưu và lịch sử của bạn vẫn được giữ an toàn.",
-              "Trong 14 ngày dùng thử miễn phí, việc hủy sẽ kết thúc bản dùng thử ngay lập tức và bạn không bị tính phí gì. Nếu điều bạn lo chỉ là khoản phí tự động, hãy chọn lý do đó trong cửa sổ hủy, khi đó bạn có thể tắt gia hạn thay vì hủy và vẫn giữ bản dùng thử đến ngày cuối cùng.",
-              "Nếu bạn lỡ hủy gói trả phí hoặc đổi ý, bạn có thể tiếp tục gói ngay trên cùng trang đó trước khi kỳ hiện tại kết thúc.",
+              "Bạn tự làm được, bất cứ lúc nào. Đăng nhập, mở Tài khoản và nhấn Hủy gói đăng ký dưới gói của bạn.",
+              "Nếu bạn mua gói đăng ký trong ứng dụng trên iPhone hoặc iPad, hãy hủy trong phần cài đặt gói đăng ký của Apple. Liên kết \"Quản lý gói đăng ký\" trên trang Tài khoản sẽ đưa bạn tới đó.",
+              "Với gói trả phí, bạn vẫn được sử dụng đến hết kỳ đã thanh toán. Sau đó tài khoản chuyển về Basic, miễn phí. Các từ đã lưu và lịch sử của bạn vẫn được giữ an toàn.",
+              "Trong 14 ngày dùng thử miễn phí, việc hủy sẽ kết thúc bản dùng thử ngay lập tức và bạn sẽ không bị tính phí gì. Nếu điều bạn lo chỉ là khoản phí tự động, hãy chọn lý do đó trong cửa sổ hủy, khi đó bạn có thể tắt gia hạn thay vì hủy, và vẫn giữ bản dùng thử đến ngày cuối cùng.",
+              "Nếu bạn lỡ hủy gói trả phí hoặc đổi ý, bạn có thể tiếp tục lại từ chính trang đó trước khi kỳ hiện tại kết thúc.",
             ],
           },
           {
@@ -88,8 +89,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "failed-payment",
             q: "Thanh toán của tôi bị thất bại. Tôi nên làm gì?",
             a: [
-              "Stripe tự động thử lại các khoản thanh toán thất bại vài lần trong những ngày sau đó. Phần lớn trường hợp tự được giải quyết khi ngân hàng gỡ lệnh giữ tiền hoặc thẻ có đủ số dư.",
-              "Nếu muốn khắc phục ngay, hãy vào Tài khoản → Quản lý thanh toán → Thêm phương thức thanh toán, nhập một thẻ dùng được và đặt làm Mặc định. Stripe sẽ thử lại khoản phí thất bại ngay lập tức trên thẻ mới. Nếu gói đăng ký của bạn đã bị chuyển về Basic, bạn có thể đăng ký lại từ trang Bảng giá và sổ tay của bạn vẫn còn nguyên.",
+              "Stripe sẽ tự động thử lại các khoản thanh toán thất bại vài lần trong những ngày tiếp theo. Phần lớn trường hợp sẽ tự được giải quyết khi ngân hàng gỡ giữ tiền hoặc thẻ có đủ số dư.",
+              "Một thanh thông báo ở đầu trang sẽ cho biết khoản thanh toán chưa thành công, và quyền truy cập của bạn vẫn được giữ thêm vài ngày. Hãy nhấn \"Cập nhật thẻ\" ở đó, nhập một thẻ dùng được, và chúng tôi sẽ thử thanh toán ngay trên thẻ đó. Nếu gói đăng ký của bạn đã chuyển về Basic, bạn có thể đăng ký lại từ trang Bảng giá và sổ tay của bạn vẫn còn nguyên.",
             ],
           },
           {
@@ -120,7 +121,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "forgot-password",
             q: "Tôi quên mật khẩu",
             a: [
-              "Mở hộp thoại đăng nhập và nhấn \"Quên mật khẩu?\". Nhập email bạn dùng cho Gadit và bạn sẽ nhận được liên kết đặt lại trong vòng một hai phút.",
+              "Trong cửa sổ đăng nhập, nhập email của bạn rồi nhấn \"Quên mật khẩu?\". Liên kết đặt lại thường sẽ đến hộp thư của bạn trong vòng một hoặc hai phút. Bạn cũng có thể nhấn \"Gửi cho tôi liên kết đăng nhập qua email\" để đăng nhập mà không cần mật khẩu.",
               "Nếu email không đến, hãy kiểm tra thư mục spam. Nếu vẫn không thấy, có thể bạn đã đăng ký bằng Google thay vì email và mật khẩu. Hãy thử nút \"Tiếp tục với Google\".",
             ],
           },
@@ -128,32 +129,32 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "wrong-credentials",
             q: "Tôi chắc chắn mật khẩu đúng nhưng hệ thống báo \"Sai email hoặc mật khẩu\"",
             a: [
-              "Có ba điều cần kiểm tra. Thứ nhất, phím Caps Lock. Thứ hai, khoảng trắng thừa ở cuối khi sao chép và dán. Thứ ba, bạn đã đăng ký bằng Google chứ không phải bằng mật khẩu (hãy dùng \"Tiếp tục với Google\").",
-              "Vẫn chưa được? Hãy đặt lại mật khẩu ngay trong hộp thoại đó. Mọi thứ sẽ được thiết lập lại sạch sẽ.",
+              "Có ba điều cần kiểm tra. Thứ nhất, phím Caps Lock. Thứ hai, khoảng trắng thừa ở cuối sau khi sao chép và dán. Thứ ba, có thể bạn đã đăng ký bằng Google chứ không phải bằng mật khẩu, lúc đó hãy dùng \"Tiếp tục với Google\".",
+              "Vẫn chưa được? Trong chính thông báo đó, hãy nhấn \"Gửi cho tôi liên kết đăng nhập qua email\" để vào mà không cần mật khẩu, hoặc \"Chọn mật khẩu mới\".",
             ],
           },
           {
             id: "google-fails",
             q: "Đăng nhập bằng Google không hoạt động",
             a: [
-              "Nguyên nhân thường gặp nhất: trình duyệt của bạn đang chặn cookie của bên thứ ba hoặc cửa sổ bật lên cho gadit.app. Hãy cho phép chúng trong phần quyền trên thanh địa chỉ rồi thử lại.",
-              "Nếu bạn đang ở chế độ ẩn danh, đăng nhập bằng Google bị hạn chế có chủ đích. Hãy chuyển sang cửa sổ trình duyệt thông thường.",
+              "Bên trong các ứng dụng như Instagram, Facebook hoặc TikTok, nút Google sẽ bị ẩn. Hãy mở liên kết trong trình duyệt thông thường của bạn, hoặc đăng nhập bằng email. Nếu bạn đã đăng ký bằng Google, hãy nhập đúng email đó và nhấn \"Gửi cho tôi liên kết đăng nhập qua email\".",
+              "Trong cửa sổ riêng tư, chặn cookie có thể khiến đăng nhập bằng Google không hoạt động, nên hãy thử bằng cửa sổ bình thường.",
             ],
           },
           {
             id: "change-email",
             q: "Làm sao để thay đổi email của tài khoản?",
             a: [
-              "Vào Tài khoản, nhấn vào email của bạn, chọn Thay đổi email. Bạn cần xác nhận địa chỉ mới thì thay đổi mới có hiệu lực. Gói đăng ký, lịch sử và sổ tay của bạn đều được giữ nguyên.",
-              "Nếu email gắn với một khách hàng Stripe, hãy cập nhật cả trên cổng thanh toán Stripe để các biên lai sau này được gửi đến địa chỉ mới.",
+              "Việc đổi email tài khoản sẽ do đội ngũ thực hiện. Hãy gửi email cho chúng tôi từ địa chỉ hiện tại của bạn và ghi địa chỉ mới trong thư. Đội ngũ sẽ cập nhật giúp bạn, còn gói đăng ký, lịch sử và sổ tay vẫn giữ nguyên.",
             ],
           },
           {
             id: "delete-account",
             q: "Làm sao để xóa tài khoản?",
             a: [
-              "Vào Tài khoản, cuối trang, chọn Xóa tài khoản. Thao tác này là vĩnh viễn. Gói đăng ký của bạn bị hủy, sổ tay và lịch sử bị xóa, và email được giải phóng để đăng ký mới.",
-              "Hồ sơ các khoản phí trước đây trên Stripe vẫn được giữ lại (theo luật chúng tôi phải lưu chúng cho mục đích kế toán). Không có gì khác được giữ lại.",
+              "Ở cuối trang \"Tài khoản\", nhấn \"Xóa tài khoản\" và nhập email của tài khoản để xác nhận. Thao tác này là vĩnh viễn, gói đăng ký của bạn sẽ bị hủy, sổ tay và lịch sử sẽ bị xóa, và email đó sẽ được giải phóng để đăng ký mới.",
+              "Ngoại lệ duy nhất là gói đăng ký mua trong App Store, xóa tài khoản sẽ không hủy gói đó, nên hãy hủy trước trong phần cài đặt gói đăng ký của Apple.",
+              "Thông tin về các khoản thanh toán trước đây vẫn được giữ lại, vì pháp luật yêu cầu chúng tôi lưu lại cho mục đích kế toán.",
             ],
           },
           {
@@ -169,7 +170,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Hình như tôi lỡ tạo hai tài khoản. Giờ phải làm sao?",
             a: [
               "Điều này thường xảy ra khi ai đó đăng ký một lần bằng Google và một lần bằng email và mật khẩu với cùng một địa chỉ, hoặc khi bạn đăng ký hai lần bằng hai địa chỉ email khác nhau. Mỗi lần đăng ký tạo ra một tài khoản Gadit riêng, với sổ tay, lịch sử và trạng thái gói đăng ký riêng.",
-              "Hãy viết cho chúng tôi kèm cả hai địa chỉ email (hoặc UID từ trang Tài khoản) và cho biết bạn muốn giữ tài khoản nào. Đội ngũ sẽ gộp sổ tay và lịch sử vào tài khoản bạn chọn, sau đó đóng tài khoản kia một cách gọn gàng. Không mất dữ liệu nào.",
+              "Hãy gửi email cho chúng tôi từ một trong hai địa chỉ đó, và ghi địa chỉ còn lại cùng với tài khoản bạn muốn giữ. Đội ngũ sẽ gộp sổ tay và lịch sử vào tài khoản bạn chọn, rồi đóng tài khoản kia gọn gàng. Không mất dữ liệu nào.",
             ],
           },
         ],
@@ -183,24 +184,24 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "wrong-definition",
             q: "Tôi nghĩ định nghĩa bị sai. Tôi nên làm gì?",
             a: [
-              "Mỗi trang kết quả đều có một nút \"Báo cáo\" nhỏ ở cuối trang. Nhấn vào đó, chọn một danh mục (định nghĩa, từ nguyên, ví dụ, thành ngữ, giải thích cho trẻ em, v.v.) và viết một ghi chú ngắn. Báo cáo được gửi thẳng đến đội ngũ và mọi báo cáo đều được xem xét.",
-              "Đừng ngại nếu bạn thấy mình quá khắt khe. Từ điển được cải thiện nhờ những phản hồi này nhanh hơn bất cứ điều gì khác.",
+              "Bên cạnh mỗi nghĩa, và trên các thẻ thành ngữ và nguồn gốc từ, đều có một biểu tượng lá cờ nhỏ. Hãy nhấn vào đó, chọn chỗ có vấn đề, và nếu muốn thì thêm một ghi chú ngắn. Báo cáo sẽ được gửi thẳng đến đội ngũ, và mọi báo cáo đều được xem xét.",
+              "Đừng ngại nếu bạn thấy mình quá khắt khe. Từ điển được cải thiện nhờ kiểu phản hồi này nhanh hơn bất cứ điều gì khác.",
             ],
           },
           {
             id: "kids-not-working",
             q: "Chế độ trẻ em không thay đổi phần giải thích",
             a: [
-              "Chế độ trẻ em chỉ đổi văn bản khi từ đó đã có phần giải thích thân thiện với trẻ em. Với một từ bạn vừa tra lần đầu, hãy đợi 10 đến 15 giây trong lúc phiên bản cho trẻ em được chuẩn bị.",
-              "Chế độ trẻ em là một phần của gói Family. Ở Basic, ở Individual hoặc khi chưa có tài khoản, nút gạt sẽ hiển thị gói Family thay vì bật lên. Những người đăng ký Clear hoặc Deep trước tháng 10 năm 2026 vẫn giữ chế độ trẻ em. Để có tính năng này, hãy xem gói Family trên trang bảng giá.",
+              "Chế độ trẻ em chỉ đổi phần văn bản khi từ đó đã có sẵn lời giải thích phù hợp cho trẻ em. Với một từ bạn vừa tra lần đầu, hãy đợi 10 đến 15 giây trong lúc phiên bản cho trẻ em được chuẩn bị.",
+              "Chế độ trẻ em là một phần của gói Family. Ở Individual, bạn sẽ thấy nút gạt \"Bằng lời đơn giản\" thay vào đó, để hiện lời giải thích đơn giản hơn cho từng nghĩa. Ở Basic hoặc khi chưa có tài khoản thì sẽ không có nút gạt. Những người đã đăng ký Clear hoặc Deep trước tháng 10 năm 2026 vẫn giữ Chế độ trẻ em. Để có tính năng này, hãy xem gói Family trên trang bảng giá.",
             ],
           },
           {
             id: "voice-fails",
             q: "Tìm kiếm bằng giọng nói không hoạt động",
             a: [
-              "Tìm kiếm bằng giọng nói cần quyền truy cập micrô. Hầu hết trình duyệt hỏi một lần cho mỗi trang web. Nếu bạn lỡ nhấn Chặn, bạn cần bật lại thủ công: nhấn vào biểu tượng ổ khóa hoặc thông tin bên cạnh gadit.app trên thanh địa chỉ, rồi Cài đặt trang web, rồi Micrô, rồi Cho phép.",
-              "Trên Safari cho iPhone và iPad, quyền truy cập micrô còn cần bật trong Cài đặt → Safari → Micrô. Tìm kiếm bằng giọng nói là một phần của gói Individual và Family: ở Basic bạn sẽ thấy các gói thay vào đó, còn khách chưa đăng nhập sẽ được mời đăng nhập. Để nâng cấp, hãy mở trang bảng giá.",
+              "Tìm kiếm bằng giọng nói cần quyền truy cập micrô. Hầu hết trình duyệt sẽ hỏi một lần cho mỗi trang web. Nếu bạn lỡ chặn, hãy nhấn vào biểu tượng bên cạnh gadit.app trên thanh địa chỉ rồi cho phép micrô trong phần quyền của trang web.",
+              "Trên iPhone và iPad, bạn cũng cần cho phép micrô cho Safari trong ứng dụng Cài đặt của thiết bị. Tìm kiếm bằng giọng nói là một phần của gói Individual và Family, nên ở Basic và khi chưa có tài khoản thì nút micrô sẽ không xuất hiện. Để nâng cấp, hãy mở trang bảng giá.",
             ],
           },
           {
@@ -223,8 +224,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "offline",
             q: "Chế độ ngoại tuyến hoạt động thế nào?",
             a: [
-              "Dùng ngoại tuyến là một phần của gói Individual và Family. Mọi từ bạn tra đều được giữ trên thiết bị, nên lần sau chúng mở lại ngay lập tức mà không cần internet. Bạn cũng có thể tải một gói gồm những từ phổ biến nhất trong ngôn ngữ của bạn từ trang Tài khoản.",
-              "Tra một từ hoàn toàn mới vẫn cần kết nối mạng, vì Gadit phải chuẩn bị đầy đủ kết quả cho từ đó. Bản ngoại tuyến bao gồm những từ đã có trên thiết bị của bạn. Nếu bạn đang dùng Basic, hãy xem các gói trên trang bảng giá.",
+              "Dùng ngoại tuyến là một phần của gói Individual và Family. Mọi từ bạn tra đều được giữ trên thiết bị, nên lần sau chúng mở lại ngay lập tức mà không cần internet. Bạn cũng có thể nhấn \"Tải gói ngoại tuyến\" trên trang Tài khoản để lưu các từ trong từ điển của chúng tôi bằng ngôn ngữ của bạn trên thiết bị này.",
+              "Tra một từ hoàn toàn mới vẫn cần kết nối mạng, vì Gadit phải chuẩn bị đầy đủ kết quả cho từ đó. Bản ngoại tuyến chỉ bao gồm những từ đã có trên thiết bị của bạn. Nếu bạn đang dùng Basic, hãy xem các gói trên trang bảng giá.",
             ],
           },
           {
@@ -239,16 +240,16 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "word-not-found",
             q: "Tôi tìm một từ nhưng không có kết quả. Chuyện gì vậy?",
             a: [
-              "Trước tiên, hãy kiểm tra chính tả. Gadit xử lý được phần lớn lỗi gõ nhỏ, nhưng một nguyên âm sai hoặc thiếu một chữ cái có thể khiến kết quả bị lệch. Hãy thử từ được gợi ý sửa nếu có.",
-              "Ngoài ra: những từ rất hiếm hoặc tiếng lóng có thể không cho ra kết quả đủ chắc chắn. Nếu bạn chắc chắn từ đó có thật, hãy nhấn nút Báo cáo trên trang kết quả (hoặc trên màn hình lỗi) và cho chúng tôi biết. Mọi báo cáo đều được xem xét và những từ thật sự bị bỏ sót sẽ được đưa trở lại vào hệ thống.",
+              "Trước tiên, hãy kiểm tra chính tả. Nếu có lỗi gõ, Gadit thường sẽ hiện từ đã được sửa, kèm một liên kết để vẫn tìm đúng thứ bạn đã gõ.",
+              "Những từ rất hiếm hoặc tiếng lóng không phải lúc nào cũng có kết quả. Nếu bạn chắc chắn từ đó có thật, hãy viết cho chúng tôi từ chính trang này và đội ngũ sẽ kiểm tra.",
             ],
           },
           {
             id: "change-language",
             q: "Làm sao để thay đổi ngôn ngữ giao diện?",
             a: [
-              "Ở góc trên bên phải của mọi trang, bạn sẽ thấy một biểu tượng lá cờ nhỏ (hoặc tên ngôn ngữ hiện tại). Nhấn vào đó và chọn trong 41 ngôn ngữ.",
-              "Lựa chọn của bạn được lưu trên thiết bị này. Mọi thứ sẽ tải lại bằng ngôn ngữ mới: giao diện, các menu, định nghĩa từ sau này, ví dụ, phần giải thích cho trẻ em, thậm chí cả từ nguyên. Những kết quả đã lưu trong bộ nhớ đệm bằng ngôn ngữ cũ vẫn giữ nguyên cho đến khi bạn tìm lại những từ đó.",
+              "Ở đầu trang có một biểu tượng hình địa cầu kèm ngôn ngữ hiện tại. Hãy nhấn vào đó và chọn ngôn ngữ.",
+              "Lựa chọn của bạn được lưu trên thiết bị này. Mọi thứ sẽ tải lại bằng ngôn ngữ mới, giao diện, các menu, các định nghĩa từ bạn tra sau này, ví dụ, phần giải thích cho trẻ em, thậm chí cả nguồn gốc của từ. Những từ bạn đã tra trước đó bằng ngôn ngữ cũ vẫn sẽ hiển thị như vậy cho đến khi bạn tra lại.",
             ],
           },
         ],
@@ -262,25 +263,25 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "join-partner",
             q: "Làm sao để trở thành đối tác của Gadit?",
             a: [
-              "Mở /partners từ bất kỳ trang nào và nhấn \"Trở thành đối tác\". Đăng ký bằng tên và email, và liên kết giới thiệu riêng của bạn cùng một bảng điều khiển để theo dõi lượt nhấp và hoa hồng sẽ sẵn sàng ngay. Không phải chờ duyệt.",
-              "Tham gia miễn phí và mở cho tất cả mọi người. Bạn không cần gói đăng ký Gadit để trở thành đối tác.",
+              "Hãy vào gadit.app/partners và nhấn \"Tham gia miễn phí\". Nhập tên và email của bạn, rồi nhấn \"Nhận mã đối tác của tôi\". Liên kết cá nhân và bảng điều khiển đối tác của bạn, với lượt nhấp và hoa hồng, sẽ có ngay lập tức, không cần chờ duyệt. Mã và liên kết cũng sẽ được gửi qua email cho bạn.",
+              "Việc tham gia là miễn phí và mở cho tất cả mọi người. Bạn không cần gói đăng ký Gadit để trở thành đối tác.",
             ],
           },
           {
             id: "commission-model",
             q: "Hoa hồng được tính như thế nào?",
             a: [
-              "Điều khoản tiêu chuẩn là 25% mỗi khoản thanh toán mà khách hàng thực hiện trong năm đầu tiên. Sau năm đầu tiên đó, bạn nhận 10% mỗi khoản thanh toán chừng nào khách hàng còn tiếp tục trả tiền.",
-              "Cách tính này giống nhau cho gói tháng và gói năm, vì hoa hồng được tính trên từng khoản thanh toán thực tế. Nếu khách hàng hủy, hoa hồng của bạn dừng lại ở khoản thanh toán cuối cùng của họ.",
-              "Đội ngũ có thể đặt mức khác cho một số đối tác cụ thể. Mức hoa hồng của riêng bạn luôn hiển thị trong bảng điều khiển đối tác, bạn có thể vào đó từ /partners.",
+              "Điều khoản tiêu chuẩn là 25% của mỗi khoản thanh toán mà khách hàng thực hiện trong năm đầu tiên. Sau năm đầu tiên đó, bạn nhận 10% của mỗi khoản thanh toán miễn là khách hàng còn tiếp tục trả tiền. Nếu bạn mang về 5 khách hàng trả phí, phần của bạn sau năm đầu tiên sẽ tăng lên 15% trọn đời.",
+              "Cách tính này giống nhau cho gói tháng và gói năm, vì hoa hồng được tính trên từng khoản thanh toán thực tế. Nếu khách hàng hủy, hoa hồng của bạn sẽ dừng ở khoản thanh toán cuối cùng của họ.",
+              "Đội ngũ có thể đặt mức khác cho một số đối tác cụ thể. Mức hoa hồng của riêng bạn luôn hiển thị trong bảng điều khiển đối tác.",
             ],
           },
           {
             id: "payout",
             q: "Khi nào tôi được thanh toán?",
             a: [
-              "Hằng tháng, khi số dư của bạn vượt quá $50. Chúng tôi dùng phương thức nhận tiền bạn đã cài đặt trong bảng điều khiển đối tác (chuyển khoản ngân hàng, PayPal, v.v.). $50 là ngưỡng tối thiểu, không phải mức trần. Bạn có thể kiếm nhiều hơn rất nhiều, chỉ là bạn nhận tiền khi vượt qua ngưỡng.",
-              "Hoa hồng được giải ngân 30 ngày sau khoản thanh toán gói đăng ký, để chừa thời gian cho khoảng hoàn tiền. Vì vậy một gói đăng ký tháng Một sẽ được giải ngân vào đầu tháng Hai và vào lần thanh toán tiếp theo của bạn khi số dư vượt quá $50.",
+              "Mỗi tháng một lần, khi số dư của bạn đạt mức tối thiểu hiển thị trong bảng điều khiển đối tác. Chúng tôi gửi tiền tới tài khoản PayPal mà bạn đã cài đặt ở đó. Mức tối thiểu là một ngưỡng, không phải mức trần, bạn có thể kiếm nhiều hơn rất nhiều, và bạn sẽ nhận thanh toán khi vượt qua ngưỡng đó.",
+              "Hoa hồng được mở sau 30 ngày kể từ khoản thanh toán gói đăng ký, để chừa thời gian cho khoảng hoàn tiền. Vì vậy một gói đăng ký trong tháng Một sẽ được mở vào đầu tháng Hai, và sẽ vào đợt thanh toán tiếp theo của bạn khi số dư đạt mức tối thiểu.",
             ],
           },
           {
@@ -288,7 +289,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Tôi đã tham gia nhưng bảng điều khiển trống trơn",
             a: [
               "Số liệu sẽ hiển thị sau lượt nhấp đầu tiên vào liên kết của bạn. Trống chỉ có nghĩa là chưa có ai nhấp. Hãy chia sẻ liên kết. Bảng điều khiển cập nhật gần như theo thời gian thực khi có hoạt động.",
-              "Nếu bạn đã chia sẻ và có người đăng ký nhưng bảng điều khiển không phản ánh điều đó, hãy viết cho chúng tôi kèm thời gian đăng ký ước chừng, đội ngũ sẽ kiểm tra việc ghi nhận.",
+              "Nếu bạn đã chia sẻ và có người đăng ký nhưng bảng điều khiển không phản ánh điều đó, hãy viết cho chúng tôi kèm thời gian đăng ký ước chừng, đội ngũ sẽ kiểm tra xem lượt đăng ký đó đến từ đâu.",
             ],
           },
           {
@@ -303,8 +304,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "missing-commission",
             q: "Có người đăng ký qua liên kết của tôi nhưng tôi không thấy hoa hồng",
             a: [
-              "Thường đây là vấn đề thời gian: lượt đăng ký hiện trong bảng điều khiển trong vòng vài phút, nhưng hoa hồng chỉ được ghi nhận khi gói đăng ký thực sự được thanh toán (có thể vài ngày sau nếu họ đang dùng thử miễn phí). Hãy kiểm tra lại sau khi thời gian dùng thử kết thúc.",
-              "Nếu gói đăng ký đã được thanh toán mà sau 48 giờ bạn vẫn không thấy hoa hồng, hãy viết cho chúng tôi kèm thời gian đăng ký ước chừng và email hoặc tên gần đúng của người đăng ký nếu bạn biết. Đội ngũ sẽ kiểm tra chuỗi ghi nhận và khắc phục thủ công mọi thiếu sót.",
+              "Thường đây là vấn đề thời gian, lượt đăng ký hiện trong bảng điều khiển trong vòng vài phút, nhưng hoa hồng chỉ được ghi nhận khi gói đăng ký thực sự được thanh toán, việc này có thể muộn hơn vài ngày nếu họ đang dùng thử miễn phí. Hãy kiểm tra lại sau khi thời gian dùng thử kết thúc.",
+              "Nếu gói đăng ký đã được thanh toán mà sau 48 giờ bạn vẫn không thấy hoa hồng, hãy viết cho chúng tôi kèm thời gian đăng ký ước chừng và email hoặc tên gần đúng của người đăng ký nếu bạn biết. Đội ngũ sẽ kiểm tra lượt đăng ký đó đến từ đâu và sửa thủ công nếu có ghi nhận bị sót.",
             ],
           },
         ],
@@ -377,16 +378,17 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Paano ko papalitan ang credit card sa subscription ko?",
             a: [
               "Puwede kang lumipat sa bagong card sa loob ng wala pang isang minuto nang hindi nagka-cancel. Tuloy-tuloy pa rin ang kasalukuyang subscription mo, sa bagong card na lang.",
-              "1. Mag-sign in sa gadit.app at buksan ang Account page mo (kanang itaas). 2. I-click ang \"Manage billing\". 3. Magbubukas ang isang secure na page ng Stripe. I-click ang \"Add payment method\", ilagay ang bagong card, at i-set ito bilang Default. 4. Kung gusto mo, tanggalin ang lumang card.",
-              "Simula sa susunod na billing cycle, sa bagong card na mapupunta ang lahat. Mananatili sa lumang card ang naunang singil (na nakolekta na). Hindi kailangan ng refund maliban kung talagang gusto mo.",
+              "1. Mag-sign in sa gadit.app at buksan ang \"Account\" mula sa account menu. 2. I-click ang \"Pamahalaan ang pagsingil\". 3. Magbubukas ang isang secure na page ng Stripe. Idagdag ang bagong card bilang payment method at gawin itong default. 4. Kung gusto mo, alisin ang lumang card.",
+              "Simula sa susunod na billing cycle, sa bagong card na mapupunta ang lahat. Mananatili sa lumang card ang naunang singil, na nakolekta na. Hindi kailangan ng refund maliban kung gusto mo talaga.",
             ],
           },
           {
             id: "cancel",
             q: "Paano ko ika-cancel ang subscription ko?",
             a: [
-              "Kaya mo itong gawin mismo, anumang oras. Mag-sign in, buksan ang Account, at i-tap ang Kanselahin ang subscription sa ilalim ng iyong plan.",
-              "Sa bayad na subscription, tuloy ang access mo hanggang matapos ang period na nabayaran mo na. Pagkatapos noon, lilipat ang account sa Basic (libre). Ligtas pa rin ang mga na-save mong salita at history.",
+              "Kaya mo itong gawin mismo, anumang oras. Mag-sign in, buksan ang Account, at i-tap ang Cancel subscription sa ilalim ng plan mo.",
+              "Binili mo ba ang subscription mo sa iPhone o iPad app? Kanselahin ito sa Apple subscription settings mo. Dadalhin ka roon ng link na \"Pamahalaan ang subscription\" sa page na Account mo.",
+              "Sa bayad na subscription, tuloy ang access mo hanggang matapos ang period na nabayaran mo na. Pagkatapos noon, lilipat ang account sa Basic, na libre. Ligtas pa rin ang mga na-save mong salita at history.",
               "Sa loob ng 14 na araw na libreng trial, kapag nag-cancel ka, matatapos agad ang trial at walang sisingilin. Kung ang awtomatikong singil lang ang inaalala mo, piliin ang dahilang iyon sa cancel window at puwede mong i-off na lang ang renewal, para tuloy ang trial hanggang sa huling araw nito.",
               "Kung na-cancel mo ang bayad na subscription nang hindi sinasadya o nagbago ang isip mo, puwede mo itong ituloy ulit mula sa parehong page bago matapos ang period.",
             ],
@@ -444,7 +446,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Nag-fail ang bayad ko. Ano ang dapat kong gawin?",
             a: [
               "Awtomatikong sinusubukan ulit ng Stripe ang mga nag-fail na bayad nang ilang beses sa mga susunod na araw. Karamihan ng failure ay kusang naaayos kapag inalis na ng bangko ang hold o may sapat nang balanse ang card.",
-              "Kung gusto mo itong ayusin agad, pumunta sa Account → Manage billing → Add payment method, maglagay ng gumaganang card, at i-set ito bilang Default. Agad na susubukan ulit ng Stripe ang nag-fail na singil sa bagong card. Kung bumalik na sa Basic ang subscription mo, puwede kang mag-subscribe ulit mula sa Pricing at buo pa rin ang notebook mo.",
+              "May bar sa itaas ng page na magsasabing hindi natuloy ang singil, at mananatili ang access mo nang ilang araw pa. I-tap ang \"I-update ang card\" doon, maglagay ng gumaganang card, at susubukan namin agad ang singil sa card na iyon. Kung bumalik na sa Basic ang subscription mo, puwede kang mag-subscribe ulit mula sa Pricing page at buo pa rin ang notebook mo.",
             ],
           },
           {
@@ -475,40 +477,40 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "forgot-password",
             q: "Nakalimutan ko ang password ko",
             a: [
-              "Buksan ang sign-in dialog at i-click ang \"Forgot password?\". Ilagay ang email na ginagamit mo sa Gadit at makakatanggap ka ng reset link sa loob ng isa o dalawang minuto.",
-              "Kung hindi dumating ang email, tingnan ang spam. Kung wala pa rin, baka sa Google ka nag-sign up sa halip na email at password. Subukan ang button na \"Continue with Google\".",
+              "Sa sign-in window, i-type ang email mo, tapos i-tap ang \"Nakalimutan ang password?\". Karaniwan, dumarating ang reset link sa inbox mo sa loob ng isa o dalawang minuto. Puwede mo ring i-tap ang \"Padalhan ako ng link para mag-sign in\" at mag-sign in nang walang password.",
+              "Kung hindi dumating ang email, tingnan ang spam. Kung wala pa rin, baka sa Google ka nag-sign up sa halip na email at password. Subukan ang button na \"Magpatuloy gamit ang Google\".",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "Sigurado akong tama ang password ko pero sinasabing \"Wrong email or password\"",
+            q: "Sigurado akong tama ang password ko pero sinasabing hindi tugma ang email at password",
             a: [
-              "Tatlong bagay ang dapat i-check. Una, ang Caps Lock. Pangalawa, may sobrang space sa dulo kapag nag-copy-paste. Pangatlo, sa Google ka nag-sign up at hindi gamit ang password (gamitin na lang ang \"Continue with Google\").",
-              "May problema pa rin? I-reset ang password mula sa parehong dialog. Malinis na magsisimula ulit ang lahat.",
+              "Tatlong bagay ang dapat i-check. Una, ang Caps Lock. Pangalawa, may sobrang space sa dulo pagkatapos mag-copy-paste. Pangatlo, baka sa Google ka nag-sign up at hindi gamit ang password, kaya \"Magpatuloy gamit ang Google\" ang gamitin mo.",
+              "May problema pa rin? Sa parehong mensahe, i-tap ang \"Padalhan ako ng link para mag-sign in\" para makapasok nang walang password, o ang \"Pumili ng bagong password\".",
             ],
           },
           {
             id: "google-fails",
             q: "Hindi gumagana ang Google sign-in",
             a: [
-              "Pinakakaraniwang dahilan: bina-block ng browser mo ang third-party cookies o mga pop-up para sa gadit.app. Payagan ang mga ito sa permissions sa address bar at subukan ulit.",
-              "Kung naka-incognito mode ka, sadyang limitado ang Google sign-in. Lumipat sa normal na browser window.",
+              "Sa loob ng mga app tulad ng Instagram, Facebook, o TikTok, nakatago ang Google button. Buksan ang link sa regular mong browser, o mag-sign in gamit ang email mo. Kung sumali ka gamit ang Google, i-type ang email na iyon at i-tap ang \"Padalhan ako ng link para mag-sign in\".",
+              "Sa private o incognito window, puwedeng pigilan ng blocked cookies ang Google sign-in, kaya subukan ang normal na window.",
             ],
           },
           {
             id: "change-email",
             q: "Paano ko papalitan ang email sa account ko?",
             a: [
-              "Account, i-click ang email mo, Change email. Kailangan mong kumpirmahin ang bagong address bago ito tumalab. Madadala lahat ang subscription, history, at notebook mo.",
-              "Kung naka-link ang email sa isang Stripe customer, i-update din ito sa Stripe billing portal para mapunta sa bagong address ang mga susunod na resibo.",
+              "Ang team ang nagpapalit ng email ng account. Mag-email sa amin mula sa kasalukuyan mong address at isulat ang bagong address sa mensahe. Ia-update ito ng team, at mananatili ang subscription, history, at notebook mo gaya ng dati.",
             ],
           },
           {
             id: "delete-account",
             q: "Paano ko buburahin ang account ko?",
             a: [
-              "Account, sa ibaba ng page, Delete account. Permanente ito. Makakansela ang subscription mo, mabubura ang notebook at history mo, at magagamit na ulit ang email para sa bagong sign-up.",
-              "Mananatili ang mga record ng mga nakaraang singil sa Stripe (obligado kami ayon sa batas na itago ang mga ito para sa accounting). Wala nang iba pang matitira.",
+              "Sa ibaba ng page na Account, i-tap ang \"Burahin ang account\" at i-type ang email ng account mo para makumpirma. Permanente ito, makakansela ang subscription mo, mabubura ang notebook at history mo, at magiging puwede ulit ang email para sa bagong sign-up.",
+              "Ang isang exception ay subscription na binili sa App Store. Hindi ito nakokansela kapag binura ang account, kaya kanselahin mo muna ito sa Apple subscription settings mo.",
+              "Mananatili ang mga record ng mga nakaraang singil, dahil kailangan naming itago ang mga ito ayon sa batas para sa accounting.",
             ],
           },
           {
@@ -524,7 +526,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Sa tingin ko may dalawa akong account nang hindi sinasadya. Ano ngayon?",
             a: [
               "Karaniwang nangyayari ito kapag may nag-sign up nang isang beses gamit ang Google at isang beses gamit ang email at password sa parehong address, o kapag nag-sign up ka nang dalawang beses gamit ang magkaibang email address. Bawat sign-up ay gumagawa ng hiwalay na Gadit account na may sariling notebook, history, at estado ng subscription.",
-              "Sumulat sa amin kasama ang dalawang email address (o mga UID mula sa Account page) at kung alin ang gusto mong panatilihin. Pagsasamahin ng team ang mga notebook at history sa account na pipiliin mo, tapos maayos na isasara ang isa. Walang mawawalang data.",
+              "Mag-email sa amin mula sa isa sa dalawang address, at isulat ang isa pang address at kung aling account ang gusto mong panatilihin. Pagsasamahin ng team ang notebook at history sa account na pipiliin mo, tapos maayos na isasara ang isa. Walang mawawalang data.",
             ],
           },
         ],
@@ -538,7 +540,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "wrong-definition",
             q: "Sa tingin ko mali ang depinisyon. Ano ang gagawin ko?",
             a: [
-              "May maliit na button na \"Report\" sa ibaba ng bawat result page. I-tap ito, pumili ng kategorya (depinisyon, etimolohiya, halimbawa, idyoma, paliwanag na pambata, at iba pa) at magsulat ng maikling tala. Diretso itong napupunta sa team at nirerepaso ang bawat report.",
+              "Sa tabi ng bawat kahulugan, at sa mga card ng idyoma at pinagmulan ng salita, may maliit na icon ng bandila. I-tap ito, piliin kung ano ang mali, at magdagdag ng maikling tala kung gusto mo. Diretso itong napupunta sa team, at nirerepaso ang bawat report.",
               "Huwag mag-alala kung pakiramdam mo ay masyado kang mapili. Mas mabilis gumaganda ang diksyunaryo dahil sa ganitong feedback kaysa sa kahit ano pa.",
             ],
           },
@@ -546,16 +548,16 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "kids-not-working",
             q: "Hindi binabago ng Kids mode ang paliwanag",
             a: [
-              "Binabago lang ng Kids mode ang teksto kapag may pambatang paliwanag na ang salita. Para sa salitang kaka-lookup mo lang sa unang pagkakataon, maghintay ng 10 hanggang 15 segundo habang inihahanda ang pambatang bersyon.",
-              "Bahagi ng Family plan ang Kids mode. Sa Basic, sa Individual, o kapag walang account, ipinapakita ng toggle ang Family plan sa halip na mag-on. Nananatili ang Kids mode sa mga subscriber na sumali sa Clear o Deep bago ang Oktubre 2026. Para makuha ito, tingnan ang Family sa page ng pricing.",
+              "Binabago lang ng Kids Mode ang teksto kapag may pambatang paliwanag na ang salita. Para sa salitang kaka-lookup mo lang sa unang pagkakataon, maghintay ng 10 hanggang 15 segundo habang inihahanda ang pambatang bersyon.",
+              "Bahagi ng Family plan ang Kids Mode. Sa Individual, makikita mo sa halip ang switch na \"Sa simpleng salita\", na nagbibigay ng mas simpleng paliwanag sa bawat kahulugan. Sa Basic o kapag walang account, walang switch. Ang mga subscriber na sumali sa Clear o Deep bago ang October 2026 ay mananatiling may Kids Mode. Para makuha ito, tingnan ang Family sa pricing page.",
             ],
           },
           {
             id: "voice-fails",
             q: "Hindi gumagana ang voice search",
             a: [
-              "Kailangan ng voice search ng pahintulot sa mikropono. Karamihan ng browser ay nagtatanong nang isang beses bawat site. Kung na-click mo ang Block nang hindi sinasadya, kailangan mo itong ibalik nang mano-mano: i-click ang lock o info icon sa tabi ng gadit.app sa address bar, tapos Site settings, tapos Microphone, tapos Allow.",
-              "Sa Safari sa iPhone at iPad, kailangan ding payagan ang mikropono sa Settings → Safari → Microphone. Bahagi ng Individual at Family plan ang voice search: sa Basic, ang mga plan ang makikita mo sa halip, at hihilingang mag-sign in ang mga bisitang hindi naka-sign in. Para mag-upgrade, buksan ang page ng pricing.",
+              "Kailangan ng voice search ng pahintulot sa mikropono. Karamihan ng browser ay nagtatanong nang isang beses bawat site. Kung na-block mo ito nang hindi sinasadya, i-tap ang icon sa tabi ng gadit.app sa address bar at payagan ang mikropono sa site permissions.",
+              "Sa iPhone at iPad, kailangan ding payagan ang mikropono para sa Safari sa Settings app ng device. Bahagi ng Individual at Family plan ang voice search, kaya sa Basic at kapag walang account, hindi lumalabas ang microphone button. Para mag-upgrade, buksan ang pricing page.",
             ],
           },
           {
@@ -578,8 +580,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "offline",
             q: "Paano gumagana ang offline mode?",
             a: [
-              "Bahagi ng Individual at Family plan ang offline na gamit. Nakatago sa device mo ang bawat salitang hinahanap mo, kaya bumubukas ulit ito agad kahit walang internet. Puwede mo ring i-download mula sa page ng Account mo ang isang pack ng mga pinakasikat na salita sa wika mo.",
-              "Kailangan pa rin ng koneksyon para mag-lookup ng bagong-bagong salita, dahil kailangang ihanda ng Gadit ang buong resulta para dito. Sakop ng offline na kopya ang mga salitang nasa device mo na. Kung Basic ka, tingnan ang mga plan sa page ng pricing.",
+              "Bahagi ng Individual at Family plan ang offline na gamit. Nakatago sa device mo ang bawat salitang hinahanap mo, kaya bumubukas ulit ito agad kahit walang internet. Puwede mo ring i-tap ang \"I-download ang offline pack\" sa page ng Account mo para i-save sa device na ito ang mga salita ng aming diksyunaryo sa wika mo.",
+              "Kailangan pa rin ng koneksyon para mag-lookup ng ganap na bagong salita, dahil kailangang ihanda ng Gadit ang buong resulta para dito. Sakop ng offline na kopya ang mga salitang nasa device mo na. Kung Basic ka, tingnan ang mga plan sa pricing page.",
             ],
           },
           {
@@ -594,16 +596,16 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "word-not-found",
             q: "Nag-search ako ng salita at walang lumabas na resulta. Ano'ng nangyayari?",
             a: [
-              "Una, i-check ang spelling. Kadalasan ay kaya ng Gadit ang maliliit na typo, pero puwede itong malito sa maling patinig o kulang na letra. Subukan ang iminumungkahing pagwawasto kung may lumabas.",
-              "Bukod doon: maaaring hindi makapagbigay ng tiyak na resulta ang mga napakabihirang salita o slang. Kung sigurado kang totoo ang salita, i-click ang Report button sa result page (o sa error screen) at ipaalam sa amin. Nirerepaso ang bawat report at ibinabalik sa system ang mga totoong nakaligtaan.",
+              "Una, i-check ang spelling. Kung may typo, karaniwang ipinapakita ng Gadit ang itinamang salita, kasama ang link para hanapin pa rin ang tinype mo.",
+              "Hindi palaging may resulta ang napakabihirang mga salita o slang. Kung sigurado kang totoong salita ito, sumulat sa amin mula sa page na ito at susuriin ito ng team.",
             ],
           },
           {
             id: "change-language",
             q: "Paano palitan ang wika ng interface?",
             a: [
-              "Sa kanang itaas ng kahit anong page, makikita mo ang maliit na icon ng bandila (o ang pangalan ng kasalukuyang wika mo). I-tap ito at pumili mula sa 41 na wika.",
-              "Naka-save ang pinili mo sa device na ito. Magre-reload ang lahat sa bagong wika: ang interface, ang mga menu, ang mga susunod na depinisyon ng salita, mga halimbawa, mga pambatang paliwanag, pati ang etimolohiya. Mananatili ang mga resultang naka-cache na sa lumang wika hanggang i-search mo ulit ang mga salitang iyon.",
+              "Sa itaas ng page, may globe icon kasama ang kasalukuyan mong wika. I-tap ito at pumili ng wika.",
+              "Naka-save ang pinili mo sa device na ito. Magre-reload ang lahat sa bagong wika, ang interface, mga menu, mga susunod na depinisyon ng salita, mga halimbawa, mga pambatang paliwanag, pati ang pinagmulan ng salita. Ang mga salitang na-search mo na sa lumang wika ay mananatiling ganoon hanggang hanapin mo ulit ang mga iyon.",
             ],
           },
         ],
@@ -617,7 +619,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "join-partner",
             q: "Paano maging partner ng Gadit?",
             a: [
-              "Buksan ang /partners mula sa kahit anong page at i-click ang \"Maging partner\". Mag-sign up gamit ang pangalan at email mo, at handa agad ang sarili mong referral link pati ang dashboard para i-track ang mga click at komisyon. Walang hihintaying approval.",
+              "Pumunta sa gadit.app/partners at i-tap ang \"Sumali nang libre\". Ilagay ang pangalan at email mo, tapos i-tap ang \"Kunin ang partner code ko\". Handa agad ang personal mong link at partner dashboard, kasama ang clicks at commissions, at walang hihintaying approval. Darating din ang code at link sa email mo.",
               "Libre ang pagsali at bukas sa lahat. Hindi mo kailangan ng Gadit subscription para maging partner.",
             ],
           },
@@ -625,17 +627,17 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "commission-model",
             q: "Paano kinukuwenta ang mga komisyon?",
             a: [
-              "Ang standard na terms ay 25% ng bawat bayad na ginagawa ng customer sa unang taon niya. Pagkatapos ng unang taon na iyon, kikita ka ng 10% ng bawat bayad hangga't patuloy na nagbabayad ang customer.",
-              "Pareho ito para sa mga monthly at annual plan, dahil binibilang ang komisyon sa bawat aktwal na bayad. Kung mag-cancel ang customer, titigil ang komisyon mo sa huli niyang bayad.",
-              "Puwedeng magtakda ang team ng ibang rate para sa mga partikular na partner. Laging makikita ang sarili mong mga rate sa partner dashboard mo, na mapupuntahan mo mula sa /partners.",
+              "Ang standard na terms ay 25% ng bawat bayad na ginagawa ng customer sa unang taon niya. Pagkatapos ng unang taon na iyon, kikita ka ng 10% ng bawat bayad hangga't patuloy na nagbabayad ang customer. Kapag nakapagdala ka ng 5 nagbabayad na customer, tataas sa 15% habambuhay ang bahagi mo pagkatapos ng unang taon.",
+              "Pareho ito para sa monthly at annual plan, dahil binibilang ang komisyon sa bawat aktwal na bayad. Kung mag-cancel ang customer, titigil ang komisyon mo sa huli niyang bayad.",
+              "Puwedeng magtakda ang team ng ibang rate para sa ilang partner. Laging makikita ang sarili mong mga rate sa partner dashboard mo.",
             ],
           },
           {
             id: "payout",
             q: "Kailan ako mababayaran?",
             a: [
-              "Buwan-buwan, kapag lumampas na sa $50 ang balanse mo. Ginagamit namin ang payout method na itinakda mo sa partner dashboard (bank transfer, PayPal, at iba pa). Ang $50 ay minimum na threshold, hindi limitasyon. Puwede kang kumita nang mas malaki, matatanggap mo lang ang payout kapag nalampasan mo ang threshold.",
-              "Inilalabas ang mga komisyon 30 araw pagkatapos ng bayad sa subscription, para bigyang-daan ang refund window. Kaya ang subscription noong Enero ay inilalabas sa unang bahagi ng Pebrero at napupunta sa susunod mong payout kapag lumampas na sa $50 ang balanse mo.",
+              "Minsan bawat buwan, kapag naabot ng balanse mo ang minimum na nakalagay sa partner dashboard mo. Ipinapadala namin ito sa PayPal account na itinakda mo roon. Threshold ang minimum, hindi cap. Puwede kang kumita nang mas malaki, at matatanggap mo ang payout kapag nalampasan mo ito.",
+              "Inilalabas ang mga komisyon 30 araw pagkatapos ng bayad sa subscription, para bigyang-daan ang refund window. Kaya ang subscription noong Enero ay inilalabas sa unang bahagi ng Pebrero at mapupunta sa susunod mong payout kapag naabot ng balanse mo ang minimum.",
             ],
           },
           {
@@ -643,7 +645,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Sumali ako pero walang laman ang dashboard ko",
             a: [
               "Lalabas ang stats pagkatapos ng unang click sa link mo. Kapag walang laman, ibig sabihin lang ay wala pang nagki-click. I-share mo na ang link. Halos real time ang update ng dashboard kapag nagsimula na ang aktibidad.",
-              "Kung na-share mo na at may nag-sign up pero hindi ito makikita sa dashboard, sumulat sa amin kasama ang tantiyang oras ng sign-up at iche-check ng team ang attribution.",
+              "Kung na-share mo na at may nag-sign up pero hindi ito makikita sa dashboard, sumulat sa amin kasama ang tantiyang oras ng sign-up at susuriin ng team kung saan nanggaling ang sign-up.",
             ],
           },
           {
@@ -658,8 +660,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "missing-commission",
             q: "May nag-sign up gamit ang link ko pero hindi ko makita ang komisyon",
             a: [
-              "Kadalasan, usapin ito ng timing: lumalabas ang sign-up sa dashboard sa loob ng ilang minuto, pero naitatala lang ang komisyon kapag talagang nabayaran na ang subscription (na puwedeng ilang araw pa kung naka-free trial sila). Balikan ito pagkatapos ng trial.",
-              "Kung nabayaran na ang subscription pero wala ka pa ring nakikitang komisyon pagkalipas ng 48 oras, sumulat sa amin kasama ang tantiyang oras ng sign-up at ang email o tantiyang pangalan ng subscriber kung alam mo. Susuriin ng team ang attribution chain at mano-manong aayusin ang anumang nakaligtaan.",
+              "Kadalasan, usapin ito ng timing. Lumalabas ang sign-up sa dashboard sa loob ng ilang minuto, pero naitatala lang ang komisyon kapag talagang nabayaran na ang subscription, na puwedeng ilang araw pa kung naka-free trial sila. Balikan ito pagkatapos ng trial.",
+              "Kung nabayaran na ang subscription pero wala ka pa ring nakikitang komisyon pagkalipas ng 48 oras, sumulat sa amin kasama ang tantiyang oras ng sign-up at ang email o tantiyang pangalan ng subscriber kung alam mo. Susuriin ng team kung saan nanggaling ang sign-up at mano-manong aayusin ang anumang nakaligtaan.",
             ],
           },
         ],
@@ -732,16 +734,17 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Hoe verander ek die kredietkaart vir my intekening?",
             a: [
               "Jy kan in minder as 'n minuut na 'n nuwe kaart oorskakel sonder om te kanselleer. Jou huidige intekening loop gewoon voort, net op die nuwe kaart.",
-              "1. Teken in by gadit.app en maak jou Rekening-bladsy oop (regs bo). 2. Klik op \"Bestuur betaling\". 3. 'n Veilige Stripe-bladsy maak oop. Klik op \"Voeg betaalmetode by\", voer die nuwe kaart in en merk dit as Verstek. 4. Verwyder opsioneel die ou kaart.",
-              "Vanaf die volgende faktuursiklus gaan alles na die nuwe kaart. Die vorige heffing (reeds ingevorder) bly op die ou kaart. Geen terugbetaling is nodig nie, tensy jy spesifiek een wil hê.",
+              "1. Meld aan by gadit.app en maak \"Rekening\" oop vanaf die rekeningkieslys. 2. Klik op \"Bestuur fakturering\". 3. 'n Veilige Stripe-bladsy maak oop. Voeg die nuwe kaart as 'n betaalmetode by en merk dit as die verstek. 4. Verwyder opsioneel die ou kaart.",
+              "Vanaf die volgende faktuursiklus gaan alles na die nuwe kaart. Die vorige heffing, wat reeds ingevorder is, bly op die ou kaart. Geen terugbetaling is nodig nie, tensy jy spesifiek een wil hê.",
             ],
           },
           {
             id: "cancel",
             q: "Hoe kanselleer ek my intekening?",
             a: [
-              "Jy doen dit self, enige tyd. Meld aan, maak Rekening oop en tik op Kanselleer intekening onder jou plan.",
-              "Op 'n betaalde intekening duur jou toegang voort tot aan die einde van die tydperk waarvoor jy reeds betaal het. Daarna skuif die rekening na Basic (gratis). Jou gestoorde woorde en geskiedenis bly veilig.",
+              "Jy doen dit self, enige tyd. Meld aan, maak Rekening oop, en tik op Kanselleer intekening onder jou plan.",
+              "Het jy jou intekening in die iPhone- of iPad-app gekoop? Kanselleer dit in jou Apple-intekeninginstellings. Die \"Bestuur intekening\"-skakel op jou Rekening-bladsy neem jou soontoe.",
+              "Op 'n betaalde intekening duur jou toegang voort tot aan die einde van die tydperk waarvoor jy reeds betaal het. Daarna skuif die rekening na Basic, gratis. Jou gestoorde woorde en geskiedenis bly veilig.",
               "Tydens die gratis proeftydperk van 14 dae beëindig kansellering die proeftydperk dadelik, en niks word gehef nie. As die outomatiese heffing jou enigste bekommernis is, kies daardie rede in die kansellasievenster, dan kan jy eerder die hernuwing afskakel en die proeftydperk tot die laaste dag hou.",
               "As jy 'n betaalde intekening per ongeluk kanselleer of van plan verander, kan jy dit op dieselfde bladsy hervat voordat die tydperk eindig.",
             ],
@@ -799,7 +802,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "My betaling het misluk. Wat moet ek doen?",
             a: [
               "Stripe probeer mislukte betalings outomaties 'n paar keer oor die volgende dae weer. Die meeste mislukkings los vanself op sodra die bank die blokkering ophef of die kaart genoeg saldo het.",
-              "As jy dit dadelik wil regmaak, gaan na Rekening → Bestuur betaling → Voeg betaalmetode by, voer 'n kaart in wat werk en stel dit as Verstek. Stripe sal die mislukte heffing dadelik op die nuwe kaart herprobeer. As jou intekening reeds na Basic teruggeval het, kan jy weer inteken vanaf Pryse en jou notaboek bly ongeskonde.",
+              "Boaan die bladsy sal daar 'n balk wees wat sê die heffing het nie deurgegaan nie, en jou toegang bly nog 'n paar dae behoue. Tik daar op \"Werk kaart by\", voer 'n werkende kaart in, en ons sal die heffing dadelik daarop probeer. As jou intekening reeds na Basic teruggeskuif het, kan jy weer vanaf die Pryse-bladsy inteken en jou notaboek bly ongeskonde.",
             ],
           },
           {
@@ -830,40 +833,40 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "forgot-password",
             q: "Ek het my wagwoord vergeet",
             a: [
-              "Maak die aanmeldvenster oop en klik op \"Wagwoord vergeet?\". Voer die e-posadres in wat jy vir Gadit gebruik en jy kry binne 'n minuut of twee 'n herstelskakel.",
-              "As die e-pos nie aankom nie, kyk in strooipos. As dit steeds nie aankom nie, het jy dalk met Google geregistreer in plaas van e-pos en wagwoord. Probeer die \"Gaan voort met Google\"-knoppie.",
+              "Tik jou e-posadres in die aanmeldvenster in, en tik dan op \"Wagwoord vergeet?\". 'n Herstelskakel kom gewoonlik binne 'n minuut of twee in jou inkassie aan. Jy kan ook op \"Stuur vir my 'n aanmeldskakel per e-pos\" tik en sonder 'n wagwoord aanmeld.",
+              "As die e-pos nie aankom nie, kyk in strooipos. As dit steeds nie aankom nie, het jy dalk met Google geregistreer in plaas van met e-pos en wagwoord. Probeer die \"Gaan voort met Google\"-knoppie.",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "Ek is seker my wagwoord is reg, maar dit sê \"Verkeerde e-pos of wagwoord\"",
+            q: "Ek is seker my wagwoord is reg, maar dit sê die e-posadres en wagwoord pas nie",
             a: [
-              "Drie dinge om na te gaan. Eerstens, Caps Lock. Tweedens, 'n spasie aan die einde wanneer jy kopieer en plak. Derdens, jy het met Google geregistreer eerder as met 'n wagwoord (gebruik eerder \"Gaan voort met Google\").",
-              "Steeds vas? Stel die wagwoord in dieselfde venster terug. Dan begin alles skoon van voor af.",
+              "Drie dinge om na te gaan. Eerstens, Caps Lock. Tweedens, 'n ekstra spasie aan die einde nadat jy gekopieer en geplak het. Derdens, jy het dalk met Google geregistreer eerder as met 'n wagwoord, gebruik dan eerder \"Gaan voort met Google\".",
+              "Steeds vas? Tik in dieselfde boodskap op \"Stuur vir my 'n aanmeldskakel per e-pos\" om sonder 'n wagwoord in te kom, of op \"Kies 'n nuwe wagwoord\".",
             ],
           },
           {
             id: "google-fails",
             q: "Aanmelding met Google werk nie",
             a: [
-              "Mees algemene oorsaak: jou blaaier blokkeer derdeparty-koekies of opspringvensters vir gadit.app. Laat dit toe in die toestemmings by die adresbalk en probeer weer.",
-              "As jy in incognito-modus is, word aanmelding met Google doelbewus beperk. Skakel oor na 'n gewone blaaiervenster.",
+              "Binne apps soos Instagram, Facebook of TikTok is die Google-knoppie versteek. Maak die skakel in jou gewone blaaier oop, of meld met jou e-posadres aan. As jy met Google aangesluit het, tik daardie e-posadres in en tik op \"Stuur vir my 'n aanmeldskakel per e-pos\".",
+              "In 'n private venster kan geblokkeerde cookies Google-aanmelding keer, so probeer 'n gewone venster.",
             ],
           },
           {
             id: "change-email",
             q: "Hoe verander ek die e-posadres op my rekening?",
             a: [
-              "Rekening, klik op jou e-posadres, Verander e-pos. Jy moet die nuwe adres bevestig voordat die verandering geld. Jou intekening, geskiedenis en notaboek word almal oorgedra.",
-              "As die e-posadres aan 'n Stripe-kliënt gekoppel is, werk dit ook op die Stripe-betaalportaal by sodat toekomstige kwitansies na die nuwe adres gaan.",
+              "Die span verander jou rekening se e-posadres. Stuur vir ons 'n e-pos vanaf jou huidige adres en skryf die nuwe adres in die boodskap. Die span sal dit opdateer, en jou intekening, geskiedenis en notaboek bly soos dit is.",
             ],
           },
           {
             id: "delete-account",
             q: "Hoe skrap ek my rekening?",
             a: [
-              "Rekening, onderaan die bladsy, Skrap rekening. Dit is permanent. Jou intekening word gekanselleer, jou notaboek en geskiedenis word uitgevee en die e-posadres word vrygestel vir 'n nuwe registrasie.",
-              "Stripe se rekords van vorige heffings bly bestaan (ons is wetlik verplig om dit vir rekeningkundige doeleindes te hou). Niks anders bly oor nie.",
+              "Onderaan die Rekening-bladsy, tik op \"Skrap rekening\" en tik jou rekening se e-posadres in om te bevestig. Dit is permanent. Jou intekening word gekanselleer, jou notaboek en geskiedenis word uitgevee, en die e-posadres word vrygestel vir 'n nuwe registrasie.",
+              "Die een uitsondering is 'n intekening wat in die App Store gekoop is. Om die rekening te skrap kanselleer dit nie, so kanselleer dit eers in jou Apple-intekeninginstellings.",
+              "Rekords van vorige heffings bly, want die wet vereis dat ons dit vir rekeningkunde hou.",
             ],
           },
           {
@@ -879,7 +882,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Ek dink ek het per ongeluk twee rekeninge. Wat nou?",
             a: [
               "Dit gebeur gewoonlik wanneer iemand een keer met Google en een keer met e-pos en wagwoord registreer met dieselfde adres, of wanneer jy twee keer met verskillende e-posadresse registreer. Elke registrasie skep 'n aparte Gadit-rekening met sy eie notaboek, geskiedenis en intekeningstatus.",
-              "Skryf aan ons met albei e-posadresse (of UID's van die Rekening-bladsy) en watter een jy wil hou. Die span sal die notaboeke en geskiedenis saamvoeg op die rekening wat jy kies, en dan die ander een netjies sluit. Geen data gaan verlore nie.",
+              "Stuur vir ons 'n e-pos vanaf een van die twee adresse, en skryf die ander adres en watter rekening jy wil hou. Die span sal die notaboeke en geskiedenis saamvoeg op die rekening wat jy kies, en dan die ander een netjies sluit. Geen data gaan verlore nie.",
             ],
           },
         ],
@@ -893,7 +896,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "wrong-definition",
             q: "Ek dink die definisie is verkeerd. Wat doen ek?",
             a: [
-              "Elke resultaatbladsy het 'n klein \"Rapporteer\"-knoppie onderaan. Tik daarop, kies 'n kategorie (definisie, etimologie, voorbeeld, idioom, kinderverduideliking, ensovoorts) en skryf 'n kort nota. Dit gaan direk na die span en elke verslag word nagegaan.",
+              "Langs elke betekenis, en op die idiome- en woordoorsprong-kaarte, is daar 'n klein vlagikoon. Tik daarop, kies wat verkeerd is, en voeg 'n kort nota by as jy wil. Dit gaan reguit na die span, en elke verslag word nagegaan.",
               "Moenie bekommerd wees dat jy te puntenerig is nie. Die woordeboek verbeter vinniger deur hierdie terugvoer as deur enigiets anders.",
             ],
           },
@@ -902,15 +905,15 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Kindermodus verander nie die verduideliking nie",
             a: [
               "Kindermodus verander net die teks waar die woord reeds 'n kindervriendelike verduideliking het. Vir 'n woord wat jy pas vir die eerste keer opgesoek het, gee dit 10 tot 15 sekondes terwyl die kindervriendelike weergawe voorberei word.",
-              "Kindermodus is deel van die Family-plan. Op Basic, op Individual of sonder 'n rekening wys die skakelaar die Family-plan in plaas daarvan om aan te skakel. Intekenaars wat voor Oktober 2026 by Clear of Deep aangesluit het, behou Kindermodus. Om dit te kry, kyk na Family op die prysblad.",
+              "Kindermodus is deel van die Family-plan. Op Individual sal jy eerder 'n \"In eenvoudige woorde\"-skakelaar sien, wat 'n eenvoudiger verduideliking van elke betekenis gee. Op Basic of sonder 'n rekening is daar geen skakelaar nie. Intekenaars wat voor Oktober 2026 by Clear of Deep aangesluit het, behou Kindermodus. Om dit te kry, kyk na Family op die prysblad.",
             ],
           },
           {
             id: "voice-fails",
             q: "Stemsoektog werk nie",
             a: [
-              "Stemsoektog het mikrofoontoestemming nodig. Die meeste blaaiers vra een keer per webwerf. As jy per ongeluk op Blokkeer geklik het, moet jy dit self terugstel: klik op die slot- of inligtingsikoon langs gadit.app in die adresbalk, dan Werfinstellings, dan Mikrofoon, dan Laat toe.",
-              "Op Safari vir iPhone en iPad het mikrofoontoegang ook Instellings → Safari → Mikrofoon nodig. Stemsoektog is deel van die Individual- en Family-planne: op Basic sien jy eerder die planne, en besoekers wat nie aangemeld is nie, word gevra om aan te meld. Om op te gradeer, maak die prysblad oop.",
+              "Stemsoektog het mikrofoontoestemming nodig. Die meeste blaaiers vra een keer per webwerf. As jy dit per ongeluk geblokkeer het, tik op die ikoon langs gadit.app in die adresbalk en laat die mikrofoon in die werftoestemmings toe.",
+              "Op iPhone en iPad moet jy ook die mikrofoon vir Safari in die toestel se Instellings-app toelaat. Stemsoektog is deel van die Individual- en Family-planne, so op Basic en sonder 'n rekening verskyn die mikrofoonknoppie nie. Om op te gradeer, maak die prysblad oop.",
             ],
           },
           {
@@ -931,9 +934,9 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "offline",
-            q: "Hoe werk vanlyn modus?",
+            q: "Hoe gebruik ek Gadit vanlyn?",
             a: [
-              "Vanlyn gebruik is deel van die Individual- en Family-planne. Elke woord wat jy opsoek, word op jou toestel gehou, so dit maak weer onmiddellik sonder internet oop. Jy kan ook 'n pakket van die gewildste woorde in jou taal vanaf jou Rekening-bladsy aflaai.",
+              "Vanlyn gebruik is deel van die Individual- en Family-planne. Elke woord wat jy opsoek, word op jou toestel gehou, so dit maak weer onmiddellik sonder internet oop. Jy kan ook op \"Laai vanlyn-pak af\" op jou Rekening-bladsy tik om ons woordeboek se woorde in jou taal op hierdie toestel te stoor.",
               "Om 'n splinternuwe woord op te soek, vereis steeds 'n verbinding, want Gadit moet die volledige resultaat daarvoor voorberei. Die vanlyn kopie dek die woorde wat reeds op jou toestel is. As jy op Basic is, kyk na die planne op die prysblad.",
             ],
           },
@@ -949,16 +952,16 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "word-not-found",
             q: "Ek het 'n woord gesoek en geen resultaat gekry nie. Wat gaan aan?",
             a: [
-              "Kontroleer eers die spelling. Gadit hanteer meestal klein tikfoute, maar 'n verkeerde klinker of ontbrekende letter kan dit van stryk bring. Probeer die voorgestelde regstelling as een verskyn.",
-              "Verder: baie skaars woorde of slengwoorde gee dalk nie 'n betroubare resultaat nie. As jy seker is die woord bestaan, klik op die Rapporteer-knoppie op die resultaatbladsy (of op die foutskerm) en laat weet ons. Elke verslag word nagegaan en woorde wat werklik gemis is, word terug in die stelsel gevoer.",
+              "Kontroleer eers die spelling. As daar 'n tikfout was, wys Gadit gewoonlik die reggestelde woord, met 'n skakel om tog te soek vir wat jy getik het.",
+              "Baie skaars woorde of slengwoorde kry nie altyd 'n resultaat nie. As jy seker is die woord bestaan, skryf vir ons vanaf hierdie bladsy en die span sal dit nagaan.",
             ],
           },
           {
             id: "change-language",
             q: "Hoe verander ek die koppelvlaktaal?",
             a: [
-              "Regs bo op enige bladsy sien jy 'n klein vlagikoon (of die naam van jou huidige taal). Tik daarop en kies uit 41 tale.",
-              "Jou keuse word op hierdie toestel gestoor. Alles herlaai in die nuwe taal: die koppelvlak, die kieslyste, toekomstige woorddefinisies, voorbeelde, kinderverduidelikings, selfs die etimologie. Resultate wat reeds in die ou taal in die kas is, bly totdat jy daardie woorde weer soek.",
+              "Boaan die bladsy is daar 'n aardbol-ikoon met jou huidige taal. Tik daarop en kies 'n taal.",
+              "Jou keuse word op hierdie toestel gestoor. Alles herlaai in die nuwe taal: die koppelvlak, die kieslyste, toekomstige woorddefinisies, voorbeelde, kinderverduidelikings, selfs die woord se oorsprong. Woorde wat jy reeds in die ou taal opgesoek het, wys daarin totdat jy weer daarvoor soek.",
             ],
           },
         ],
@@ -972,7 +975,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "join-partner",
             q: "Hoe word ek 'n Gadit-vennoot?",
             a: [
-              "Maak /partners vanaf enige bladsy oop en klik op \"Word 'n vennoot\". Registreer met jou naam en e-posadres, en jou unieke verwysingskakel plus 'n paneelbord om klieke en kommissies te volg, is dadelik gereed. Geen wag vir goedkeuring nie.",
+              "Gaan na gadit.app/partners en tik op \"Sluit gratis aan\". Vul jou naam en e-posadres in, en tik dan op \"Kry my vennootkode\". Jou persoonlike skakel en vennootpaneelbord, met klikke en kommissies, is dadelik gereed, sonder wagtyd vir goedkeuring. Die kode en skakel kom ook per e-pos aan.",
               "Aansluiting is gratis en oop vir enigiemand. Jy het nie 'n Gadit-intekening nodig om 'n vennoot te word nie.",
             ],
           },
@@ -980,17 +983,17 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "commission-model",
             q: "Hoe word kommissies bereken?",
             a: [
-              "Die standaardvoorwaardes is 25% van elke betaling wat 'n kliënt in hul eerste jaar maak. Na daardie eerste jaar verdien jy 10% van elke betaling solank die kliënt aanhou betaal.",
+              "Die standaardvoorwaardes is 25% van elke betaling wat 'n kliënt in hul eerste jaar maak. Na daardie eerste jaar verdien jy 10% van elke betaling solank die kliënt aanhou betaal. Bring 5 betalende kliënte in en jou aandeel na die eerste jaar styg lewenslank na 15%.",
               "Dit werk dieselfde vir maandelikse en jaarlikse planne, want kommissie word op elke werklike betaling bereken. As 'n kliënt kanselleer, stop jou kommissie met hul laaste betaling.",
-              "Die span kan ander tariewe vir spesifieke vennote stel. Jou eie tariewe verskyn altyd op jou vennootpaneelbord, wat jy vanaf /partners kan bereik.",
+              "Die span kan ander tariewe vir spesifieke vennote stel. Jou eie tariewe verskyn altyd op jou vennootpaneelbord.",
             ],
           },
           {
             id: "payout",
             q: "Wanneer word ek betaal?",
             a: [
-              "Maandeliks, sodra jou saldo $50 oorskry. Ons gebruik die uitbetalingsmetode wat jy op die vennootpaneelbord gestel het (bankoorplasing, PayPal, ensovoorts). $50 is die minimum drempel, nie 'n plafon nie. Jy kan baie meer verdien, jy ontvang net die uitbetaling wanneer jy die drempel oorskry.",
-              "Kommissies word 30 dae na die intekeningbetaling vrygestel, om voorsiening te maak vir die terugbetalingstydperk. 'n Januarie-intekening word dus vroeg in Februarie vrygestel en beland in jou volgende uitbetaling sodra jou saldo $50 oorskry.",
+              "Een keer per maand, wanneer jou saldo die minimum bereik wat op jou vennootpaneelbord gewys word. Ons stuur dit na die PayPal-rekening wat jy daar ingestel het. Die minimum is 'n drempel, nie 'n plafon nie. Jy kan baie meer verdien, en jy ontvang die uitbetaling sodra jy daaroor gaan.",
+              "Kommissies word 30 dae na die intekeningbetaling vrygestel, om voorsiening te maak vir die terugbetalingstydperk. 'n Januarie-intekening word dus vroeg in Februarie vrygestel en beland in jou volgende uitbetaling sodra jou saldo die minimum bereik.",
             ],
           },
           {
@@ -998,7 +1001,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Ek het aangesluit, maar my paneelbord is leeg",
             a: [
               "Statistieke verskyn na die eerste klik op jou skakel. Leeg beteken net dat nog niemand geklik het nie. Gaan deel die skakel. Die paneelbord werk byna intyds by sodra daar aktiwiteit is.",
-              "As jy gedeel het en iemand geregistreer het, maar die paneelbord wys dit nie, skryf aan ons met die benaderde tyd van registrasie en die span sal die toeskrywing nagaan.",
+              "As jy gedeel het en iemand geregistreer het, maar die paneelbord wys dit nie, skryf aan ons met die benaderde tyd van registrasie en die span sal nagaan waar die registrasie vandaan gekom het.",
             ],
           },
           {
@@ -1013,8 +1016,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "missing-commission",
             q: "Iemand het deur my skakel geregistreer, maar ek sien nie die kommissie nie",
             a: [
-              "Meestal gaan dit oor tydsberekening: die registrasie verskyn binne minute op die paneelbord, maar die kommissie word eers geboek wanneer die intekening werklik betaal is (wat dae later kan wees as hulle op 'n gratis proeftydperk is). Kyk weer nadat die proeftydperk verby is.",
-              "As die intekening betaal is, maar jy sien ná 48 uur steeds nie die kommissie nie, skryf aan ons met die benaderde registrasietyd en die e-posadres of benaderde naam van die intekenaar as jy dit weet. Die span sal die toeskrywingsketting ondersoek en enige gemis self regstel.",
+              "Meestal gaan dit oor tydsberekening. Die registrasie verskyn binne minute op die paneelbord, maar die kommissie word eers geboek wanneer die intekening werklik betaal is, wat dae later kan wees as hulle op 'n gratis proeftydperk is. Kyk weer nadat die proeftydperk verby is.",
+              "As die intekening betaal is, maar jy sien ná 48 uur steeds nie die kommissie nie, skryf aan ons met die benaderde registrasietyd en die e-posadres of benaderde naam van die intekenaar as jy dit weet. Die span sal nagaan waar die registrasie vandaan gekom het en enige gemis handmatig regstel.",
             ],
           },
         ],
@@ -1087,8 +1090,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Ninabadilishaje kadi ya mkopo kwenye usajili wangu?",
             a: [
               "Unaweza kuhamia kadi mpya kwa chini ya dakika moja bila kughairi. Usajili wako wa sasa unaendelea kama kawaida, ila kwa kadi mpya.",
-              "1. Ingia kwenye gadit.app na ufungue ukurasa wako wa Akaunti (juu kulia). 2. Bofya \"Dhibiti malipo\". 3. Ukurasa salama wa Stripe utafunguka. Bofya \"Ongeza njia ya malipo\", weka kadi mpya, na uiweke kama Chaguo-msingi. 4. Ukipenda, ondoa kadi ya zamani.",
-              "Kuanzia mzunguko ujao wa malipo, kila kitu kitatozwa kwenye kadi mpya. Malipo ya awali (yaliyokwisha kukusanywa) yanabaki kwenye kadi ya zamani. Hakuna haja ya kurejeshewa pesa isipokuwa ukitaka hasa.",
+              "1. Ingia kwenye gadit.app na ufungue \"Akaunti\" kutoka kwenye menyu ya akaunti. 2. Bofya \"Dhibiti malipo\". 3. Ukurasa salama wa Stripe utafunguka. Ongeza kadi mpya kama njia ya malipo na uiweke kama chaguo-msingi. 4. Ukipenda, ondoa kadi ya zamani.",
+              "Kuanzia mzunguko ujao wa malipo, kila kitu kitatozwa kwenye kadi mpya. Malipo ya awali, ambayo tayari yamekusanywa, yanabaki kwenye kadi ya zamani. Hakuna haja ya kurejeshewa pesa isipokuwa ukitaka hasa.",
             ],
           },
           {
@@ -1096,7 +1099,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Ninaghairi vipi usajili wangu?",
             a: [
               "Unaweza kufanya mwenyewe, wakati wowote. Ingia, fungua Akaunti, kisha gusa Ghairi usajili chini ya mpango wako.",
-              "Kwenye usajili unaolipiwa, ufikiaji wako unaendelea hadi mwisho wa kipindi ulicholipia tayari. Baada ya hapo akaunti inahamia Basic (bila malipo). Maneno uliyohifadhi na historia yako yanabaki salama.",
+              "Ulinunua usajili wako katika programu ya iPhone au iPad? Ughairi kwenye mipangilio yako ya usajili ya Apple. Kiungo cha \"Dhibiti usajili\" kwenye ukurasa wako wa Akaunti kinakupeleka huko.",
+              "Kwenye usajili unaolipiwa, ufikiaji wako unaendelea hadi mwisho wa kipindi ulicholipia tayari. Baada ya hapo akaunti inahamia Basic, bila malipo. Maneno uliyohifadhi na historia yako vinabaki salama.",
               "Wakati wa jaribio la bure la siku 14, kughairi kunamaliza jaribio papo hapo na hakuna malipo yoyote. Kama wasiwasi wako pekee ni malipo ya kiotomatiki, chagua sababu hiyo kwenye dirisha la kughairi na badala yake unaweza kuzima usasishaji, ukiendelea na jaribio hadi siku yake ya mwisho.",
               "Ukighairi usajili unaolipiwa kwa makosa au ukibadilisha nia, unaweza kuuendeleza kutoka ukurasa huo huo kabla kipindi hakijaisha.",
             ],
@@ -1154,7 +1158,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Malipo yangu yameshindikana. Nifanye nini?",
             a: [
               "Stripe hujaribu tena malipo yaliyoshindikana kiotomatiki mara kadhaa katika siku zinazofuata. Mara nyingi tatizo hujitatua lenyewe benki inapoondoa kizuizi au kadi inapokuwa na salio la kutosha.",
-              "Ukitaka kulirekebisha mara moja, nenda Akaunti → Dhibiti malipo → Ongeza njia ya malipo, weka kadi inayofanya kazi, na uiweke kama Chaguo-msingi. Stripe itajaribu tena malipo yaliyoshindikana papo hapo kwenye kadi mpya. Ikiwa usajili wako tayari umerudi kwenye Basic, unaweza kujisajili upya kutoka ukurasa wa Bei na daftari lako litabaki salama.",
+              "Utaona ujumbe juu ya ukurasa ukisema malipo hayakupita, na ufikiaji wako utaendelea kwa siku chache zaidi. Gusa \"Sasisha kadi\" hapo, weka kadi inayofanya kazi, na tutajaribu malipo hapo hapo. Ikiwa usajili wako tayari umerudi kwenye Basic, unaweza kujisajili tena kutoka ukurasa wa Bei na daftari lako litabaki salama.",
             ],
           },
           {
@@ -1185,40 +1189,40 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "forgot-password",
             q: "Nimesahau nenosiri langu",
             a: [
-              "Fungua dirisha la kuingia na ubofye \"Umesahau nenosiri?\". Weka barua pepe unayotumia kwa Gadit na utapata kiungo cha kuweka upya ndani ya dakika moja au mbili.",
+              "Kwenye dirisha la kuingia, andika barua pepe yako, kisha gusa \"Umesahau nywila?\". Kiungo cha kuweka upya kwa kawaida hufika kwenye kikasha chako ndani ya dakika moja au mbili. Unaweza pia kugusa \"Nitumie kiungo cha kuingia kwa barua pepe\" na kuingia bila nenosiri.",
               "Ikiwa barua pepe haifiki, angalia barua taka. Ikiwa bado haifiki, huenda ulijisajili kwa Google badala ya barua pepe na nenosiri. Jaribu kitufe cha \"Endelea na Google\".",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "Nina uhakika nenosiri langu ni sahihi lakini inasema \"Barua pepe au nenosiri si sahihi\"",
+            q: "Nina uhakika nenosiri langu ni sahihi, lakini inasema barua pepe na nenosiri havilingani",
             a: [
-              "Mambo matatu ya kukagua. Kwanza, Caps Lock. Pili, nafasi ya ziada mwishoni unaponakili na kubandika. Tatu, ulijisajili kwa Google badala ya nenosiri (tumia \"Endelea na Google\" badala yake).",
-              "Bado umekwama? Weka upya nenosiri kutoka dirisha hilo hilo. Inakuanzisha upya kikamilifu.",
+              "Mambo matatu ya kukagua. Kwanza, Caps Lock. Pili, nafasi ya ziada mwishoni baada ya kunakili na kubandika. Tatu, huenda ulijisajili kwa Google badala ya nenosiri, tumia \"Endelea na Google\" badala yake.",
+              "Bado umekwama? Kwenye ujumbe huo huo gusa \"Nitumie kiungo cha kuingia kwa barua pepe\" ili kuingia bila nenosiri, au \"Chagua nenosiri jipya\".",
             ],
           },
           {
             id: "google-fails",
             q: "Kuingia kwa Google hakufanyi kazi",
             a: [
-              "Sababu ya kawaida zaidi: kivinjari chako kinazuia vidakuzi vya wahusika wengine au madirisha ibukizi kwa gadit.app. Viruhusu kwenye ruhusa za upau wa anwani kisha jaribu tena.",
-              "Ikiwa uko kwenye hali fiche (incognito), kuingia kwa Google kumezuiwa kwa makusudi. Hamia kwenye dirisha la kawaida la kivinjari.",
+              "Ndani ya programu kama Instagram, Facebook au TikTok, kitufe cha Google hufichwa. Fungua kiungo kwenye kivinjari chako cha kawaida, au ingia kwa barua pepe yako. Ikiwa ulijiunga kwa Google, andika barua pepe hiyo na uguse \"Nitumie kiungo cha kuingia kwa barua pepe\".",
+              "Kwenye dirisha la faragha, incognito, cookies zilizozuiwa zinaweza kuzuia kuingia kwa Google, kwa hiyo jaribu dirisha la kawaida.",
             ],
           },
           {
             id: "change-email",
             q: "Ninabadilishaje barua pepe kwenye akaunti yangu?",
             a: [
-              "Akaunti, bofya barua pepe yako, Badilisha barua pepe. Utahitaji kuthibitisha anwani mpya kabla mabadiliko hayajaanza kufanya kazi. Usajili wako, historia, na daftari vyote vinahamia nawe.",
-              "Ikiwa barua pepe imeunganishwa na mteja wa Stripe, isasishe pia kwenye tovuti ya malipo ya Stripe ili risiti za baadaye ziende kwenye anwani mpya.",
+              "Kubadilisha barua pepe ya akaunti yako hufanywa na timu. Tutumie barua pepe kutoka kwenye anwani yako ya sasa na uandike anwani mpya kwenye ujumbe. Timu itaisasisha, na usajili wako, historia na daftari vitabaki kama vilivyo.",
             ],
           },
           {
             id: "delete-account",
             q: "Ninafutaje akaunti yangu?",
             a: [
-              "Akaunti, chini ya ukurasa, Futa akaunti. Hatua hii ni ya kudumu. Usajili wako unaghairiwa, daftari na historia yako vinafutwa, na barua pepe inaachiliwa kwa ajili ya usajili mpya.",
-              "Kumbukumbu za Stripe za malipo ya awali zinabaki (tunatakiwa kisheria kuzihifadhi kwa ajili ya uhasibu). Hakuna kingine kinachobaki.",
+              "Chini ya ukurasa wa \"Akaunti\", gusa \"Futa akaunti\" na uandike barua pepe ya akaunti yako ili kuthibitisha. Hii ni ya kudumu, usajili wako unaghairiwa, daftari na historia yako vinafutwa, na barua pepe inaachiliwa kwa ajili ya usajili mpya.",
+              "Isipokuwa moja ni usajili ulionunuliwa katika App Store, kufuta akaunti hakughairi usajili huo, kwa hiyo ughairi kwanza kwenye mipangilio yako ya usajili ya Apple.",
+              "Kumbukumbu za malipo ya zamani zinabaki, kwa sababu sheria inatutaka tuzihifadhi kwa ajili ya uhasibu.",
             ],
           },
           {
@@ -1233,8 +1237,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "multiple-accounts",
             q: "Nadhani nina akaunti mbili kwa makosa. Sasa nifanye nini?",
             a: [
-              "Hii kwa kawaida hutokea mtu anapojisajili mara moja kwa Google na mara moja kwa barua pepe na nenosiri akitumia anwani ile ile, au unapojisajili mara mbili kwa anwani tofauti za barua pepe. Kila usajili huunda akaunti tofauti ya Gadit yenye daftari, historia, na hali ya usajili yake.",
-              "Tuandikie ukitaja anwani zote mbili za barua pepe (au UID kutoka ukurasa wa Akaunti) na ipi ungependa kubaki nayo. Timu itaunganisha madaftari na historia kwenye akaunti utakayochagua, kisha itafunga nyingine kwa utaratibu. Hakuna data itakayopotea.",
+              "Hii kwa kawaida hutokea mtu anapojisajili mara moja kwa Google na mara moja kwa barua pepe na nenosiri akitumia anwani ile ile, au unapojisajili mara mbili kwa anwani tofauti za barua pepe. Kila usajili huunda akaunti tofauti ya Gadit yenye daftari, historia na hali ya usajili yake.",
+              "Tutumie barua pepe kutoka kwenye mojawapo ya anwani hizo mbili, na uandike anwani nyingine pamoja na akaunti ungependa kubaki nayo. Timu itaunganisha madaftari na historia kwenye akaunti utakayochagua, kisha itafunga nyingine vizuri. Hakuna data itakayopotea.",
             ],
           },
         ],
@@ -1248,8 +1252,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "wrong-definition",
             q: "Nadhani maana si sahihi. Nifanye nini?",
             a: [
-              "Kila ukurasa wa matokeo una kitufe kidogo cha \"Ripoti\" chini. Kiguse, chagua aina (maana, etimolojia, mfano, nahau, maelezo ya watoto, na kadhalika) na uandike ujumbe mfupi. Unafika moja kwa moja kwa timu na kila ripoti hupitiwa.",
-              "Usijali kuwa mchambuzi kupita kiasi. Kamusi huboreka kutokana na maoni haya haraka kuliko kitu kingine chochote.",
+              "Kando ya kila maana, na pia kwenye kadi za nahau na chimbuko la neno, kuna aikoni ndogo ya bendera. Iguse, chagua kisicho sahihi, na ukitaka ongeza maelezo mafupi. Inafika moja kwa moja kwa timu, na kila ripoti hupitiwa.",
+              "Usijali kuwa makini kupita kiasi. Kamusi huboreka kutokana na maoni haya haraka kuliko kitu kingine chochote.",
             ],
           },
           {
@@ -1257,15 +1261,15 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Hali ya Watoto haibadilishi maelezo",
             a: [
               "Hali ya Watoto hubadilisha maandishi tu pale ambapo neno tayari lina maelezo yanayofaa watoto. Kwa neno ambalo umelitafuta sasa hivi kwa mara ya kwanza, subiri sekunde 10 hadi 15 wakati toleo linalofaa watoto linaandaliwa.",
-              "Hali ya Watoto ni sehemu ya mpango wa Family. Kwenye Basic, kwenye Individual, au bila akaunti, kitufe kinaonyesha mpango wa Family badala ya kuwaka. Waliojisajili kwenye Clear au Deep kabla ya Oktoba 2026 wanaendelea kuwa na Hali ya Watoto. Ili kuipata, angalia Family kwenye ukurasa wa bei.",
+              "Hali ya Watoto ni sehemu ya mpango wa Family. Kwenye Individual utaona swichi ya \"Kwa maneno rahisi\" badala yake, ambayo huonyesha maelezo rahisi zaidi ya kila maana. Kwenye Basic au bila akaunti hakuna swichi. Waliojisajili kwenye Clear au Deep kabla ya Oktoba 2026 wanaendelea kuwa na Hali ya Watoto. Ili kuipata, angalia Family kwenye ukurasa wa bei.",
             ],
           },
           {
             id: "voice-fails",
             q: "Utafutaji kwa sauti haufanyi kazi",
             a: [
-              "Utafutaji kwa sauti unahitaji ruhusa ya kipaza sauti. Vivinjari vingi huuliza mara moja kwa kila tovuti. Ikiwa ulibofya Zuia kwa bahati mbaya, utahitaji kuirudisha mwenyewe: bofya aikoni ya kufuli au taarifa kando ya gadit.app kwenye upau wa anwani, kisha Mipangilio ya tovuti, kisha Kipaza sauti, kisha Ruhusu.",
-              "Kwenye Safari ya iPhone na iPad, ufikiaji wa kipaza sauti pia unahitaji Mipangilio → Safari → Kipaza sauti. Utafutaji kwa sauti ni sehemu ya mipango ya Individual na Family: kwenye Basic utaona mipango badala yake, na wageni ambao hawajaingia wanaombwa kuingia. Ili kupandisha daraja, fungua ukurasa wa bei.",
+              "Utafutaji kwa sauti unahitaji ruhusa ya kipaza sauti. Vivinjari vingi huuliza mara moja kwa kila tovuti. Ikiwa uliizuia kwa bahati mbaya, gusa aikoni iliyo kando ya gadit.app kwenye upau wa anwani na uruhusu kipaza sauti kwenye ruhusa za tovuti.",
+              "Kwenye iPhone na iPad, pia ruhusu kipaza sauti kwa Safari kwenye programu ya Mipangilio ya kifaa. Utafutaji kwa sauti ni sehemu ya mipango ya Individual na Family, kwa hiyo kwenye Basic na bila akaunti kitufe cha kipaza sauti hakionekani. Ili kuboresha, fungua ukurasa wa bei.",
             ],
           },
           {
@@ -1288,7 +1292,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "offline",
             q: "Hali ya nje ya mtandao inafanyaje kazi?",
             a: [
-              "Matumizi bila intaneti ni sehemu ya mipango ya Individual na Family. Kila neno unalotafuta huwekwa kwenye kifaa chako, kwa hivyo hufunguka tena papo hapo bila intaneti. Unaweza pia kupakua kifurushi cha maneno maarufu zaidi katika lugha yako kutoka ukurasa wako wa Akaunti.",
+              "Matumizi bila intaneti ni sehemu ya mipango ya Individual na Family. Kila neno unalotafuta huwekwa kwenye kifaa chako, kwa hivyo hufunguka tena papo hapo bila intaneti. Unaweza pia kugusa \"Pakua kifurushi cha nje ya mtandao\" kwenye ukurasa wako wa Akaunti ili kuhifadhi maneno ya kamusi yetu katika lugha yako kwenye kifaa hiki.",
               "Kutafuta neno jipya kabisa bado kunahitaji muunganisho, kwa sababu Gadit lazima iandae matokeo kamili ya neno hilo. Nakala ya nje ya mtandao inajumuisha maneno ambayo tayari yako kwenye kifaa chako. Kama uko kwenye Basic, angalia mipango kwenye ukurasa wa bei.",
             ],
           },
@@ -1304,16 +1308,16 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "word-not-found",
             q: "Nilitafuta neno na sikupata matokeo. Kuna nini?",
             a: [
-              "Kwanza, kagua tahajia. Mara nyingi Gadit hushughulikia makosa madogo ya uchapaji, lakini irabu isiyo sahihi au herufi iliyokosekana inaweza kuichanganya. Jaribu marekebisho yanayopendekezwa ikiwa yanaonekana.",
-              "Zaidi ya hayo: maneno adimu sana au ya misimu huenda yasilete matokeo ya uhakika. Ikiwa una uhakika neno lipo kweli, bofya kitufe cha Ripoti kwenye ukurasa wa matokeo (au kwenye skrini ya hitilafu) na utujulishe. Kila ripoti hupitiwa na maneno yaliyokosekana kweli huingizwa tena kwenye mfumo.",
+              "Kwanza, kagua tahajia. Ikiwa kulikuwa na kosa la kuandika, Gadit kwa kawaida huonyesha neno lililosahihishwa, pamoja na kiungo cha kutafuta tena ulichoandika.",
+              "Maneno adimu sana au ya misimu hayapati matokeo kila wakati. Ikiwa una uhakika neno lipo, tuandikie kutoka kwenye ukurasa huu na timu itakagua.",
             ],
           },
           {
             id: "change-language",
             q: "Ninabadilishaje lugha ya kiolesura?",
             a: [
-              "Juu kulia mwa ukurasa wowote, utaona aikoni ndogo ya bendera (au jina la lugha yako ya sasa). Iguse na uchague kati ya lugha 41.",
-              "Chaguo lako huhifadhiwa kwenye kifaa hiki. Kila kitu hupakia upya kwa lugha mpya: kiolesura, menyu, maana za maneno za baadaye, mifano, maelezo ya watoto, hata etimolojia. Matokeo yaliyokwisha kuhifadhiwa kwenye akiba kwa lugha ya zamani yanabaki hadi utakapotafuta maneno hayo tena.",
+              "Juu ya ukurasa kuna aikoni ya duara la dunia yenye lugha yako ya sasa. Iguse na uchague lugha.",
+              "Chaguo lako huhifadhiwa kwenye kifaa hiki. Kila kitu hupakia upya kwa lugha mpya, kiolesura, menyu, maana za maneno za baadaye, mifano, maelezo ya watoto, hata chimbuko la neno. Maneno ambayo tayari ulitafuta kwa lugha ya zamani yataendelea kuonekana hivyo mpaka uyatafute tena.",
             ],
           },
         ],
@@ -1327,7 +1331,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "join-partner",
             q: "Ninakuwaje mshirika wa Gadit?",
             a: [
-              "Fungua /partners kutoka ukurasa wowote na ubofye \"Kuwa mshirika\". Jisajili kwa jina lako na barua pepe, na kiungo chako cha kipekee cha rufaa pamoja na dashibodi ya kufuatilia mibofyo na kamisheni vitakuwa tayari papo hapo. Hakuna kusubiri idhini.",
+              "Nenda kwenye gadit.app/partners na ubofye \"Jiunge bure\". Weka jina lako na barua pepe, kisha ubofye \"Pata msimbo wangu wa mshirika\". Kiungo chako binafsi na dashibodi ya mshirika, yenye mibofyo na kamisheni, vitakuwa tayari papo hapo, bila kusubiri idhini. Msimbo na kiungo pia vitatumwa kwa barua pepe.",
               "Kujiunga ni bure na kuko wazi kwa yeyote. Huhitaji usajili wa Gadit ili kuwa mshirika.",
             ],
           },
@@ -1335,17 +1339,17 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "commission-model",
             q: "Kamisheni hukokotolewa vipi?",
             a: [
-              "Masharti ya kawaida ni 25% ya kila malipo ambayo mteja hufanya katika mwaka wake wa kwanza. Baada ya mwaka huo wa kwanza, unapata 10% ya kila malipo kwa muda wote ambao mteja anaendelea kulipa.",
+              "Masharti ya kawaida ni 25% ya kila malipo ambayo mteja hufanya katika mwaka wake wa kwanza. Baada ya mwaka huo wa kwanza, unapata 10% ya kila malipo kwa muda wote ambao mteja anaendelea kulipa. Ukileta wateja 5 wanaolipa, sehemu yako baada ya mwaka wa kwanza inapanda hadi 15% maisha yote.",
               "Hii inafanya kazi vivyo hivyo kwa mipango ya kila mwezi na ya kila mwaka, kwa sababu kamisheni huhesabiwa kwa kila malipo halisi. Mteja akighairi, kamisheni yako inakoma na malipo yake ya mwisho.",
-              "Timu inaweza kuweka viwango tofauti kwa washirika fulani. Viwango vyako mwenyewe huonekana kila wakati kwenye dashibodi yako ya mshirika, ambayo unaweza kuifikia kutoka /partners.",
+              "Timu inaweza kuweka viwango tofauti kwa washirika fulani. Viwango vyako mwenyewe huonekana kila wakati kwenye dashibodi yako ya mshirika.",
             ],
           },
           {
             id: "payout",
             q: "Ninalipwa lini?",
             a: [
-              "Kila mwezi, salio lako likishavuka $50. Tunatumia njia ya malipo uliyoweka kwenye dashibodi ya mshirika (uhamisho wa benki, PayPal, na kadhalika). $50 ni kiwango cha chini, si kikomo. Unaweza kupata zaidi sana, ila unapokea malipo unapovuka kiwango hicho.",
-              "Kamisheni hutolewa siku 30 baada ya malipo ya usajili, ili kutoa nafasi kwa kipindi cha kurejesha pesa. Kwa hiyo usajili wa Januari hutolewa mwanzoni mwa Februari na kuingia kwenye malipo yako yanayofuata salio lako likishavuka $50.",
+              "Mara moja kwa mwezi, salio lako linapofikia kiwango cha chini kinachoonyeshwa kwenye dashibodi yako ya mshirika. Tunaituma kwenye akaunti ya PayPal uliyoweka huko. Kiwango cha chini ni kizingiti, si kikomo. Unaweza kupata zaidi sana, na utapokea malipo ukishakivuka.",
+              "Kamisheni hutolewa siku 30 baada ya malipo ya usajili, ili kutoa nafasi kwa kipindi cha kurejesha pesa. Kwa hiyo usajili wa Januari hutolewa mwanzoni mwa Februari na kuingia kwenye malipo yako yanayofuata salio lako likishafikia kiwango cha chini.",
             ],
           },
           {
@@ -1353,7 +1357,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Nimejiunga lakini dashibodi yangu haina kitu",
             a: [
               "Takwimu huonekana baada ya mbofyo wa kwanza kwenye kiungo chako. Kuwa tupu kunamaanisha tu kwamba bado hakuna aliyebofya. Nenda ukashiriki kiungo. Dashibodi husasishwa karibu papo hapo shughuli zikianza.",
-              "Ikiwa umeshiriki na mtu amejisajili lakini dashibodi haionyeshi hivyo, tuandikie ukitaja muda wa takriban wa kujisajili na timu itakagua uhusishaji.",
+              "Ikiwa umeshiriki na mtu amejisajili lakini dashibodi haionyeshi hivyo, tuandikie ukitaja muda wa takriban wa kujisajili na timu itakagua kilikotoka kujisajili.",
             ],
           },
           {
@@ -1368,8 +1372,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "missing-commission",
             q: "Mtu amejisajili kupitia kiungo changu lakini sioni kamisheni",
             a: [
-              "Mara nyingi ni suala la muda: usajili huonekana kwenye dashibodi ndani ya dakika chache, lakini kamisheni hurekodiwa tu usajili unapolipiwa kweli (jambo ambalo linaweza kuwa siku kadhaa baadaye ikiwa wako kwenye kipindi cha majaribio bila malipo). Angalia tena baada ya kipindi cha majaribio kuisha.",
-              "Ikiwa usajili umelipiwa lakini bado huoni kamisheni baada ya saa 48, tuandikie ukitaja muda wa takriban wa kujisajili na barua pepe au jina la takriban la mteja ikiwa unalijua. Timu itachunguza mnyororo wa uhusishaji na kurekebisha kosa lolote yenyewe.",
+              "Mara nyingi ni suala la muda. Usajili huonekana kwenye dashibodi ndani ya dakika chache, lakini kamisheni hurekodiwa tu usajili unapolipiwa kweli, jambo ambalo linaweza kuwa siku kadhaa baadaye ikiwa wako kwenye kipindi cha majaribio bila malipo. Angalia tena baada ya kipindi cha majaribio kuisha.",
+              "Ikiwa usajili umelipiwa lakini bado huoni kamisheni baada ya saa 48, tuandikie ukitaja muda wa takriban wa kujisajili na barua pepe au jina la takriban la mteja ikiwa unalijua. Timu itakagua usajili ulitoka wapi na kurekebisha kosa lolote kwa mikono.",
             ],
           },
         ],
@@ -1442,8 +1446,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Hvordan skifter jeg betalingskortet på mit abonnement?",
             a: [
               "Du kan skifte til et nyt kort på under et minut uden at opsige noget. Dit nuværende abonnement fortsætter som normalt, bare på det nye kort.",
-              "1. Log ind på gadit.app, og åbn din Konto-side (øverst til højre). 2. Klik på \"Administrer betaling\". 3. En sikker Stripe-side åbnes. Klik på \"Tilføj betalingsmetode\", indtast det nye kort, og markér det som Standard. 4. Fjern eventuelt det gamle kort.",
-              "Fra næste betalingsperiode går alt til det nye kort. Den tidligere opkrævning (som allerede er trukket) bliver på det gamle kort. Der er ikke brug for en refusion, medmindre du specifikt ønsker en.",
+              "1. Log ind på gadit.app, og åbn \"Konto\" fra kontomenuen. 2. Klik på \"Administrer betaling\". 3. En sikker Stripe-side åbnes. Tilføj det nye kort som betalingsmetode, og markér det som standard. 4. Fjern eventuelt det gamle kort.",
+              "Fra næste betalingsperiode går alt til det nye kort. Den tidligere opkrævning, som allerede er trukket, bliver på det gamle kort. Der er ikke brug for en refusion, medmindre du specifikt ønsker en.",
             ],
           },
           {
@@ -1451,7 +1455,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Hvordan opsiger jeg mit abonnement?",
             a: [
               "Du gør det selv, når som helst. Log ind, åbn Konto, og tryk på Opsig abonnement under din plan.",
-              "På et betalt abonnement fortsætter din adgang til udgangen af den periode, du allerede har betalt for. Derefter går kontoen over til Basic (gratis). Dine gemte ord og din historik forbliver sikre.",
+              "Købte du dit abonnement i iPhone eller iPad appen? Opsig det i dine Apple abonnementsindstillinger. Linket \"Administrer abonnement\" på din Konto-side fører dig derhen.",
+              "På et betalt abonnement fortsætter din adgang til udgangen af den periode, du allerede har betalt for. Derefter går kontoen over til Basic, gratis. Dine gemte ord og din historik forbliver sikre.",
               "I den gratis prøveperiode på 14 dage afslutter en opsigelse prøveperioden med det samme, og du bliver ikke opkrævet noget. Hvis det kun er den automatiske opkrævning, du er bekymret for, så vælg den grund i opsigelsesvinduet, så kan du i stedet slå fornyelsen fra og beholde prøveperioden til sidste dag.",
               "Hvis du opsiger et betalt abonnement ved en fejl eller fortryder, kan du genoptage det fra samme side, før perioden slutter.",
             ],
@@ -1509,7 +1514,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Min betaling mislykkedes. Hvad skal jeg gøre?",
             a: [
               "Stripe prøver automatisk mislykkede betalinger igen et par gange i løbet af de følgende dage. De fleste fejl løser sig selv, når banken frigiver reservationen, eller kortet har nok dækning.",
-              "Hvis du vil løse det med det samme, så gå til Konto → Administrer betaling → Tilføj betalingsmetode, indtast et kort, der virker, og sæt det som Standard. Stripe prøver straks den mislykkede opkrævning igen på det nye kort. Hvis dit abonnement allerede er faldet tilbage til Basic, kan du tegne abonnement igen fra Priser, og din notesbog er intakt.",
+              "En bjælke øverst på siden fortæller, at opkrævningen ikke gik igennem, og din adgang bliver bevaret nogle dage endnu. Tryk dér på \"Opdater kort\", indtast et kort, der virker, så prøver vi opkrævningen på det med det samme. Hvis dit abonnement allerede er faldet tilbage til Basic, kan du tegne abonnement igen fra prissiden, og din notesbog er intakt.",
             ],
           },
           {
@@ -1540,40 +1545,40 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "forgot-password",
             q: "Jeg har glemt min adgangskode",
             a: [
-              "Åbn login-vinduet, og klik på \"Glemt adgangskode?\". Indtast den e-mail, du bruger til Gadit, så får du et nulstillingslink inden for et minut eller to.",
+              "I login-vinduet skal du skrive din e-mail og derefter trykke på \"Glemt adgangskode?\". Et nulstillingslink kommer som regel i din indbakke inden for et minut eller to. Du kan også trykke på \"Send mig et login-link på mail\" og logge ind uden adgangskode.",
               "Hvis mailen ikke kommer, så tjek spam. Hvis den stadig ikke kommer, har du måske tilmeldt dig med Google i stedet for e-mail og adgangskode. Prøv knappen \"Fortsæt med Google\".",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "Jeg er sikker på, at min adgangskode er rigtig, men der står \"Forkert e-mail eller adgangskode\"",
+            q: "Min adgangskode er rigtig, men der står, at e-mail og adgangskode ikke passer sammen",
             a: [
-              "Tre ting at tjekke. For det første Caps Lock. For det andet et mellemrum til sidst, når du kopierer og indsætter. For det tredje om du tilmeldte dig med Google i stedet for en adgangskode (brug i så fald \"Fortsæt med Google\").",
-              "Sidder du stadig fast? Nulstil adgangskoden fra samme vindue. Så starter du helt forfra.",
+              "Tre ting at tjekke. For det første Caps Lock. For det andet et ekstra mellemrum til sidst efter kopiering og indsætning. For det tredje har du måske tilmeldt dig med Google i stedet for en adgangskode, så brug \"Fortsæt med Google\" i stedet.",
+              "Sidder du stadig fast? I samme besked kan du trykke på \"Send mig et login-link på mail\" for at komme ind uden adgangskode, eller \"Vælg ny adgangskode\".",
             ],
           },
           {
             id: "google-fails",
             q: "Login med Google virker ikke",
             a: [
-              "Den mest almindelige årsag: din browser blokerer tredjepartscookies eller pop op-vinduer for gadit.app. Tillad dem under tilladelserne i adresselinjen, og prøv igen.",
-              "Hvis du bruger inkognitotilstand, er login med Google bevidst begrænset. Skift til et almindeligt browservindue.",
+              "Inde i apps som Instagram, Facebook eller TikTok er Google-knappen skjult. Åbn linket i din almindelige browser, eller log ind med din e-mail. Hvis du tilmeldte dig med Google, så skriv den e-mail og tryk på \"Send mig et login-link på mail\".",
+              "I et privat vindue kan blokerede cookies stoppe login med Google, så prøv et almindeligt vindue.",
             ],
           },
           {
             id: "change-email",
             q: "Hvordan ændrer jeg e-mailen på min konto?",
             a: [
-              "Konto, klik på din e-mail, Skift e-mail. Du skal bekræfte den nye adresse, før ændringen træder i kraft. Dit abonnement, din historik og din notesbog følger alle med.",
-              "Hvis e-mailen er knyttet til en Stripe-kunde, så opdater den også i Stripes betalingsportal, så fremtidige kvitteringer går til den nye adresse.",
+              "Ændring af kontoens e-mail håndteres af teamet. Skriv til os fra din nuværende adresse, og skriv den nye adresse i beskeden. Teamet opdaterer den, og dit abonnement, din historik og din notesbog forbliver, som de er.",
             ],
           },
           {
             id: "delete-account",
             q: "Hvordan sletter jeg min konto?",
             a: [
-              "Konto, nederst på siden, Slet konto. Det er permanent. Dit abonnement bliver opsagt, din notesbog og historik bliver slettet, og e-mailen bliver frigivet til en ny tilmelding.",
-              "Stripes registreringer af tidligere opkrævninger bliver bevaret (vi er lovmæssigt forpligtet til at gemme dem til regnskabet). Intet andet bliver gemt.",
+              "Nederst på siden \"Konto\" skal du trykke på \"Slet konto\" og skrive kontoens e-mail for at bekræfte. Det er permanent. Dit abonnement bliver opsagt, din notesbog og historik bliver slettet, og e-mailen bliver frigivet til en ny tilmelding.",
+              "Den eneste undtagelse er et abonnement købt i App Store. Sletning af kontoen opsiger det ikke, så opsig det først i dine Apple abonnementsindstillinger.",
+              "Registreringer af tidligere opkrævninger bliver bevaret, fordi loven kræver, at vi gemmer dem til regnskab.",
             ],
           },
           {
@@ -1589,7 +1594,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Jeg tror, jeg har to konti ved en fejl. Hvad nu?",
             a: [
               "Det sker typisk, når nogen tilmelder sig én gang med Google og én gang med e-mail og adgangskode med samme adresse, eller når du tilmelder dig to gange med forskellige e-mailadresser. Hver tilmelding opretter en separat Gadit-konto med sin egen notesbog, historik og abonnementsstatus.",
-              "Skriv til os med begge e-mailadresser (eller UID'er fra Konto-siden), og hvilken du gerne vil beholde. Teamet samler notesbøgerne og historikken på den konto, du vælger, og lukker derefter den anden pænt. Ingen data går tabt.",
+              "Skriv til os fra en af de to adresser, og skriv den anden adresse og hvilken konto du gerne vil beholde. Teamet samler notesbogen og historikken på den konto, du vælger, og lukker derefter den anden pænt. Ingen data går tabt.",
             ],
           },
         ],
@@ -1603,24 +1608,24 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "wrong-definition",
             q: "Jeg tror, definitionen er forkert. Hvad gør jeg?",
             a: [
-              "Hver resultatside har en lille \"Rapportér\"-knap nederst. Tryk på den, vælg en kategori (definition, etymologi, eksempel, idiom, børneforklaring og så videre), og skriv en kort note. Den går direkte til teamet, og hver rapport bliver gennemgået.",
-              "Du skal ikke være bange for at være for kritisk. Ordbogen bliver hurtigere bedre af denne feedback end af noget andet.",
+              "Ved siden af hver betydning, og på kortene for idiomer og ordets oprindelse, er der et lille flagikon. Tryk på det, vælg hvad der er galt, og tilføj en kort note, hvis du vil. Det går direkte til teamet, og hver rapport bliver gennemgået.",
+              "Vær ikke bange for at være for kritisk. Ordbogen bliver hurtigere bedre af den feedback end af noget andet.",
             ],
           },
           {
             id: "kids-not-working",
             q: "Børnetilstand ændrer ikke forklaringen",
             a: [
-              "Børnetilstand skifter kun teksten, hvor ordet allerede har en børnevenlig forklaring. For et ord, du lige har slået op for første gang, så giv det 10 til 15 sekunder, mens den børnevenlige version bliver gjort klar.",
-              "Børnetilstand er en del af Family-abonnementet. På Basic, på Individual eller uden konto viser kontakten Family-abonnementet i stedet for at slå til. Abonnenter, der tilmeldte sig Clear eller Deep før oktober 2026, beholder børnetilstand. Du får den ved at se Family på prissiden.",
+              "Børnetilstand skifter kun teksten, når ordet allerede har en børnevenlig forklaring. For et ord, du lige har slået op for første gang, så giv det 10 til 15 sekunder, mens den børnevenlige version bliver gjort klar.",
+              "Børnetilstand er en del af Family-abonnementet. På Individual ser du i stedet kontakten \"Med enkle ord\", som giver en enklere forklaring af hver betydning. På Basic eller uden konto er der ingen kontakt. Abonnenter, der tilmeldte sig Clear eller Deep før oktober 2026, beholder børnetilstand. For at få den skal du se Family på prissiden.",
             ],
           },
           {
             id: "voice-fails",
             q: "Stemmesøgning virker ikke",
             a: [
-              "Stemmesøgning kræver adgang til mikrofonen. De fleste browsere spørger én gang pr. websted. Hvis du ved et uheld klikkede på Bloker, skal du slå det til igen manuelt: klik på lås- eller info-ikonet ved siden af gadit.app i adresselinjen, derefter Webstedsindstillinger, derefter Mikrofon, derefter Tillad.",
-              "I Safari på iPhone og iPad kræver mikrofonadgang også Indstillinger → Safari → Mikrofon. Stemmesøgning er en del af Individual- og Family-abonnementerne: på Basic ser du abonnementerne i stedet, og besøgende, der ikke er logget ind, bliver bedt om at logge ind. Åbn prissiden for at opgradere.",
+              "Stemmesøgning kræver adgang til mikrofonen. De fleste browsere spørger én gang pr. websted. Hvis du ved en fejl blokerede den, skal du trykke på ikonet ved siden af gadit.app i adresselinjen og tillade mikrofonen i webstedets tilladelser.",
+              "På iPhone og iPad skal du også tillade mikrofonen for Safari i enhedens app Indstillinger. Stemmesøgning er en del af Individual- og Family-abonnementerne, så på Basic og uden konto vises mikrofonknappen ikke. For at opgradere skal du åbne prissiden.",
             ],
           },
           {
@@ -1641,10 +1646,10 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "offline",
-            q: "Hvordan virker offlinetilstand?",
+            q: "Hvordan bruger jeg Gadit offline?",
             a: [
-              "Offline brug er en del af Individual- og Family-abonnementerne. Hvert ord, du slår op, bliver gemt på din enhed, så det åbner igen med det samme uden internet. Du kan også downloade en pakke med de mest populære ord på dit sprog fra Konto-siden.",
-              "Et helt nyt ord kræver stadig forbindelse, fordi Gadit skal gøre hele resultatet klar til det. Offlinekopien dækker de ord, der allerede er på din enhed. Hvis du er på Basic, kan du se abonnementerne på prissiden.",
+              "Offline brug er en del af Individual- og Family-abonnementerne. Hvert ord, du slår op, bliver gemt på din enhed, så det åbner igen med det samme uden internet. Du kan også trykke på \"Hent offline-pakke\" på din Konto-side for at gemme ordene fra vores ordbog på dit sprog på denne enhed.",
+              "Et helt nyt ord kræver stadig forbindelse, fordi Gadit skal gøre hele resultatet klar til det. Offlinekopien dækker de ord, der allerede er på din enhed. Hvis du er på Basic, kan du se planerne på prissiden.",
             ],
           },
           {
@@ -1659,16 +1664,16 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "word-not-found",
             q: "Jeg søgte efter et ord og fik intet resultat. Hvad sker der?",
             a: [
-              "Tjek først stavningen. Gadit klarer som regel mindre tastefejl, men en forkert vokal eller et manglende bogstav kan bringe den ud af kurs. Prøv den foreslåede rettelse, hvis der dukker en op.",
-              "Derudover: meget sjældne ord eller slangord giver måske ikke et sikkert resultat. Hvis du er sikker på, at ordet findes, så klik på Rapportér-knappen på resultatsiden (eller på fejlskærmen), og giv os besked. Hver rapport bliver gennemgået, og ord, der reelt mangler, bliver ført tilbage i systemet.",
+              "Tjek først stavningen. Hvis der var en tastefejl, viser Gadit som regel det rettede ord, med et link til alligevel at søge efter det, du skrev.",
+              "Meget sjældne ord eller slangord giver ikke altid et resultat. Hvis du er sikker på, at ordet findes, så skriv til os fra denne side, så tjekker teamet det.",
             ],
           },
           {
             id: "change-language",
             q: "Hvordan skifter jeg sprog i brugerfladen?",
             a: [
-              "Øverst til højre på alle sider ser du et lille flagikon (eller navnet på dit nuværende sprog). Tryk på det, og vælg mellem 41 sprog.",
-              "Dit valg bliver gemt på denne enhed. Alt indlæses igen på det nye sprog: brugerfladen, menuerne, fremtidige orddefinitioner, eksempler, børneforklaringer og endda etymologien. Resultater, der allerede ligger i cachen på det gamle sprog, bliver liggende, indtil du søger efter de ord igen.",
+              "Øverst på siden er der et globusikon med dit nuværende sprog. Tryk på det, og vælg et sprog.",
+              "Dit valg bliver gemt på denne enhed. Alt indlæses igen på det nye sprog, brugerfladen, menuerne, fremtidige orddefinitioner, eksempler, børneforklaringer og endda ordets oprindelse. Ord, du allerede har slået op på det gamle sprog, vises i det, indtil du søger efter dem igen.",
             ],
           },
         ],
@@ -1682,7 +1687,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "join-partner",
             q: "Hvordan bliver jeg Gadit-partner?",
             a: [
-              "Åbn /partners fra en hvilken som helst side, og klik på \"Bliv partner\". Tilmeld dig med dit navn og din e-mail, så er dit unikke henvisningslink og et dashboard til at følge klik og provision klar med det samme. Ingen ventetid på godkendelse.",
+              "Gå til gadit.app/partners og tryk på \"Deltag gratis\". Indtast dit navn og din e-mail, og tryk derefter på \"Få min partnerkode\". Dit personlige link og partnerdashboard, med klik og provision, er klar med det samme, uden ventetid på godkendelse. Koden og linket kommer også på mail.",
               "Det er gratis at være med og åbent for alle. Du behøver ikke et Gadit-abonnement for at blive partner.",
             ],
           },
@@ -1690,17 +1695,17 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "commission-model",
             q: "Hvordan beregnes provisionen?",
             a: [
-              "Standardvilkårene er 25% af hver betaling, en kunde foretager i sit første år. Efter det første år tjener du 10% af hver betaling, så længe kunden bliver ved med at betale.",
+              "Standardvilkårene er 25% af hver betaling, en kunde foretager i sit første år. Efter det første år tjener du 10% af hver betaling, så længe kunden bliver ved med at betale. Får du 5 betalende kunder, stiger din andel efter det første år til 15% for livet.",
               "Det fungerer på samme måde for månedlige og årlige planer, fordi provisionen beregnes af hver faktisk betaling. Hvis en kunde opsiger, stopper din provision med kundens sidste betaling.",
-              "Teamet kan fastsætte andre satser for bestemte partnere. Dine egne satser vises altid på dit partnerdashboard, som du kan nå fra /partners.",
+              "Teamet kan fastsætte andre satser for bestemte partnere. Dine egne satser vises altid på dit partnerdashboard.",
             ],
           },
           {
             id: "payout",
             q: "Hvornår får jeg udbetaling?",
             a: [
-              "Månedligt, når din saldo overstiger $50. Vi bruger den udbetalingsmetode, du har valgt på partnerdashboardet (bankoverførsel, PayPal og så videre). $50 er minimumsgrænsen, ikke et loft. Du kan tjene langt mere, du modtager bare udbetalingen, når du passerer grænsen.",
-              "Provisionen frigives 30 dage efter abonnementsbetalingen for at give plads til refusionsperioden. Så et abonnement i januar frigives i starten af februar og lander i din næste udbetaling, når din saldo overstiger $50.",
+              "Én gang om måneden, når din saldo når minimumsbeløbet, som vises på dit partnerdashboard. Vi sender den til den PayPal-konto, du angiver der. Minimumsbeløbet er en grænse, ikke et loft. Du kan tjene langt mere, og du får udbetalingen, når du passerer grænsen.",
+              "Provisionen frigives 30 dage efter abonnementsbetalingen for at give plads til refusionsperioden. Så et abonnement i januar frigives i starten af februar og lander i din næste udbetaling, når din saldo når minimumsbeløbet.",
             ],
           },
           {
@@ -1708,7 +1713,7 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             q: "Jeg er tilmeldt, men mit dashboard er tomt",
             a: [
               "Statistik vises efter det første klik på dit link. Tomt betyder bare, at ingen har klikket endnu. Gå ud og del linket. Dashboardet opdateres næsten i realtid, så snart der er aktivitet.",
-              "Hvis du har delt linket, og nogen har tilmeldt sig, men dashboardet ikke viser det, så skriv til os med det omtrentlige tidspunkt for tilmeldingen, så tjekker teamet tilskrivningen.",
+              "Hvis du har delt linket, og nogen har tilmeldt sig, men dashboardet ikke viser det, så skriv til os med det omtrentlige tidspunkt for tilmeldingen, så tjekker teamet, hvor tilmeldingen kom fra.",
             ],
           },
           {
@@ -1723,8 +1728,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "missing-commission",
             q: "Nogen har tilmeldt sig via mit link, men jeg kan ikke se provisionen",
             a: [
-              "Oftest handler det om timing: tilmeldingen vises på dashboardet inden for få minutter, men provisionen bliver først bogført, når abonnementet faktisk er betalt (hvilket kan være dage senere, hvis de er på en gratis prøveperiode). Kig igen, når prøveperioden er slut.",
-              "Hvis abonnementet er betalt, og du stadig ikke kan se provisionen efter 48 timer, så skriv til os med det omtrentlige tidspunkt for tilmeldingen og abonnentens e-mail eller omtrentlige navn, hvis du kender det. Teamet graver i tilskrivningskæden og retter manuelt eventuelle fejl.",
+              "Oftest handler det om timing. Tilmeldingen vises på dashboardet inden for få minutter, men provisionen bliver først bogført, når abonnementet faktisk er betalt, og det kan være dage senere, hvis de er på en gratis prøveperiode. Kig igen, når prøveperioden er slut.",
+              "Hvis abonnementet er betalt, og du stadig ikke kan se provisionen efter 48 timer, så skriv til os med det omtrentlige tidspunkt for tilmeldingen og abonnentens e-mail eller omtrentlige navn, hvis du kender det. Teamet tjekker, hvor tilmeldingen kom fra, og retter manuelt eventuelle fejl.",
             ],
           },
         ],
@@ -1796,19 +1801,20 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "change-card",
             q: "Hogyan cserélhetem le a bankkártyát az előfizetésemen?",
             a: [
-              "Kevesebb mint egy perc alatt átválthatsz egy új kártyára, lemondás nélkül. A jelenlegi előfizetésed tovább fut, csak az új kártyáról.",
-              "1. Jelentkezz be a gadit.app oldalon, és nyisd meg a Fiók oldalt (jobb felső sarok). 2. Kattints a \"Számlázás kezelése\" gombra. 3. Megnyílik egy biztonságos Stripe-oldal. Kattints a \"Fizetési mód hozzáadása\" gombra, add meg az új kártyát, és jelöld meg alapértelmezettként. 4. Ha szeretnéd, töröld a régi kártyát.",
-              "A következő számlázási ciklustól minden az új kártyára megy. Az előző terhelés (amelyet már levontunk) a régi kártyán marad. Visszatérítésre nincs szükség, hacsak kifejezetten nem kérsz egyet.",
+              "Kevesebb mint egy perc alatt átválthatsz új kártyára lemondás nélkül. A jelenlegi előfizetésed tovább fut, csak az új kártyával.",
+              "1. Jelentkezz be a gadit.app oldalon, és nyisd meg a fiók menüben a \"Fiók\" oldalt. 2. Kattints a \"Számlázás kezelése\" gombra. 3. Megnyílik egy biztonságos Stripe-oldal. Add hozzá az új kártyát fizetési módként, és állítsd be alapértelmezettnek. 4. Ha szeretnéd, töröld a régi kártyát.",
+              "A következő számlázási ciklustól minden az új kártyára megy. Az előző terhelés, amit már beszedtünk, a régi kártyán marad. Visszatérítésre nincs szükség, hacsak kifejezetten nem szeretnél.",
             ],
           },
           {
             id: "cancel",
             q: "Hogyan mondhatom le az előfizetésemet?",
             a: [
-              "Saját magad, bármikor. Jelentkezz be, nyisd meg a Fiók oldalt, és koppints a csomagod alatti Előfizetés lemondása gombra.",
-              "Fizetős előfizetésnél a hozzáférésed a már kifizetett időszak végéig megmarad. Ezután a fiók Basic (ingyenes) csomagra vált. A mentett szavaid és az előzményeid biztonságban maradnak.",
-              "A 14 napos ingyenes próbaidőszak alatt a lemondás azonnal lezárja a próbaidőszakot, és semmit nem terhelünk. Ha csak az automatikus terhelés miatt aggódsz, válaszd ezt az okot a lemondási ablakban, és helyette kikapcsolhatod a megújítást, így a próbaidőszak az utolsó napjáig megmarad.",
-              "Ha tévedésből mondtad le a fizetős előfizetést, vagy meggondoltad magad, ugyanazon az oldalon újraindíthatod, mielőtt az időszak véget ér.",
+              "Saját magad, bármikor. Jelentkezz be, nyisd meg a Fiók oldalt, és koppints a csomagod alatt az előfizetés lemondására.",
+              "Az előfizetésedet iPhone vagy iPad appban vetted? Az Apple előfizetési beállításaiban mondd le. A Fiók oldalon az \"Előfizetés kezelése\" link oda visz.",
+              "Fizetős előfizetésnél a hozzáférésed a már kifizetett időszak végéig megmarad. Utána a fiók Basic, ingyenes csomagra vált. A mentett szavaid és az előzményeid biztonságban maradnak.",
+              "A 14 napos ingyenes próbaidőszak alatt a lemondás azonnal véget vet a próbaidőszaknak, és semmit sem terhelünk. Ha csak az automatikus terhelés miatt aggódsz, válaszd ezt az okot a lemondási ablakban, és inkább kikapcsolhatod a megújítást, így a próbaidőszak az utolsó napjáig megmarad.",
+              "Ha véletlenül mondtad le a fizetős előfizetést, vagy meggondoltad magad, ugyanerről az oldalról újraindíthatod, mielőtt az időszak véget ér.",
             ],
           },
           {
@@ -1863,8 +1869,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "failed-payment",
             q: "Sikertelen volt a fizetésem. Mit tegyek?",
             a: [
-              "A Stripe a következő napokban automatikusan többször újrapróbálja a sikertelen fizetéseket. A legtöbb hiba magától megoldódik, amint a bank feloldja a zárolást, vagy elegendő egyenleg lesz a kártyán.",
-              "Ha azonnal rendezni szeretnéd, menj a Fiók → Számlázás kezelése → Fizetési mód hozzáadása menüpontra, adj meg egy működő kártyát, és állítsd be alapértelmezettként. A Stripe azonnal újrapróbálja a sikertelen terhelést az új kártyán. Ha az előfizetésed már visszaesett Basic csomagra, az Árak oldalon újra előfizethetsz, és a füzeted érintetlen marad.",
+              "A Stripe a következő napokban automatikusan többször újrapróbálja a sikertelen fizetéseket. A legtöbb hiba magától megoldódik, amikor a bank feloldja a zárolást, vagy lesz elég egyenleg a kártyán.",
+              "Az oldal tetején egy sáv jelzi majd, hogy a terhelés nem ment át, és a hozzáférésed még néhány napig megmarad. Koppints ott a \"Kártya frissítése\" gombra, adj meg egy működő kártyát, és rögtön megpróbáljuk azon a terhelést. Ha az előfizetésed már Basic csomagra váltott, az árak oldalon újra előfizethetsz, és a füzeted érintetlen marad.",
             ],
           },
           {
@@ -1895,40 +1901,40 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "forgot-password",
             q: "Elfelejtettem a jelszavamat",
             a: [
-              "Nyisd meg a bejelentkezési ablakot, és kattints az \"Elfelejtetted a jelszavad?\" lehetőségre. Add meg a Gadithoz használt e-mail-címedet, és egy-két percen belül megkapod a visszaállító linket.",
-              "Ha az e-mail nem érkezik meg, nézd meg a spam mappát. Ha még mindig nem jön, lehet, hogy Google-lel regisztráltál, nem e-maillel és jelszóval. Próbáld a \"Folytatás Google-lel\" gombot.",
+              "A bejelentkezési ablakban írd be az e-mail-címedet, majd koppints az \"Elfelejtetted a jelszavad?\" lehetőségre. A visszaállító link általában egy-két percen belül megérkezik. Rákoppinthatsz a \"Küldjenek belépési linket e-mailben\" lehetőségre is, és jelszó nélkül beléphetsz.",
+              "Ha az e-mail nem érkezik meg, nézd meg a spam mappát. Ha ott sincs, lehet, hogy Google-lel regisztráltál, nem e-maillel és jelszóval. Próbáld a \"Folytatás Google-fiókkal\" gombot.",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "Biztos vagyok benne, hogy jó a jelszavam, mégis azt írja: \"Hibás e-mail-cím vagy jelszó\"",
+            q: "Biztos vagyok benne, hogy jó a jelszavam, mégis azt írja, hogy az e-mail és a jelszó nem egyezik",
             a: [
-              "Három dolgot érdemes ellenőrizni. Először a Caps Lockot. Másodszor a végén maradt szóközt másolás és beillesztés után. Harmadszor azt, hogy nem jelszóval, hanem Google-lel regisztráltál-e (ilyenkor használd a \"Folytatás Google-lel\" gombot).",
-              "Még mindig nem megy? Állítsd vissza a jelszót ugyanabban az ablakban. Így tisztán indulhatsz újra.",
+              "Három dolgot érdemes ellenőrizni. Először a Caps Lockot. Másodszor a végén maradt plusz szóközt másolás és beillesztés után. Harmadszor azt, hogy nem Google-lel regisztráltál-e jelszó helyett, ilyenkor a \"Folytatás Google-fiókkal\" gombot használd.",
+              "Még mindig nem megy? Ugyanebben az üzenetben koppints a \"Küldjenek belépési linket e-mailben\" lehetőségre, hogy jelszó nélkül belépj, vagy az \"Új jelszó választása\" lehetőségre.",
             ],
           },
           {
             id: "google-fails",
             q: "Nem működik a Google-bejelentkezés",
             a: [
-              "A leggyakoribb ok: a böngésződ letiltja a harmadik féltől származó sütiket vagy a felugró ablakokat a gadit.app számára. Engedélyezd őket a címsor engedélyeinél, és próbáld újra.",
-              "Inkognitó módban a Google-bejelentkezés szándékosan korlátozott. Válts normál böngészőablakra.",
+              "Olyan appokon belül, mint az Instagram, Facebook vagy TikTok, a Google gomb rejtve van. Nyisd meg a linket a szokásos böngésződben, vagy lépj be az e-mail-címeddel. Ha Google-lel regisztráltál, írd be azt az e-mail-címet, és koppints a \"Küldjenek belépési linket e-mailben\" lehetőségre.",
+              "Privát, inkognitó ablakban a letiltott cookie-k megakadályozhatják a Google-bejelentkezést, ezért próbáld normál ablakban.",
             ],
           },
           {
             id: "change-email",
             q: "Hogyan változtathatom meg a fiókom e-mail-címét?",
             a: [
-              "Fiók, kattints az e-mail-címedre, majd E-mail-cím módosítása. Az új címet meg kell erősítened, mielőtt életbe lép. Az előfizetésed, az előzményeid és a füzeted mind átkerülnek.",
-              "Ha az e-mail-cím egy Stripe-ügyfélhez tartozik, a Stripe számlázási portálján is frissítsd, hogy a jövőbeli nyugták az új címre érkezzenek.",
+              "A fiókod e-mail-címét a csapat módosítja. Írj nekünk a jelenlegi címedről, és az üzenetben add meg az új címet. A csapat frissíti, az előfizetésed, az előzményeid és a füzeted pedig változatlan marad.",
             ],
           },
           {
             id: "delete-account",
             q: "Hogyan törölhetem a fiókomat?",
             a: [
-              "Fiók, az oldal alján Fiók törlése. Ez végleges. Az előfizetésedet lemondjuk, a füzetedet és az előzményeidet töröljük, az e-mail-cím pedig felszabadul egy új regisztrációhoz.",
-              "A korábbi terhelések Stripe-nyilvántartása megmarad (a törvény előírja, hogy könyvelési célból megőrizzük). Semmi más nem marad meg.",
+              "A Fiók oldal alján koppints a \"Fiók törlése\" gombra, majd az megerősítéshez írd be a fiókod e-mail-címét. Ez végleges. Az előfizetésed megszűnik, a füzeted és az előzményeid törlődnek, az e-mail-cím pedig felszabadul egy új regisztrációhoz.",
+              "Egy kivétel van, a App Store-ban vásárolt előfizetés. A fiók törlése ezt nem mondja le, ezért előbb az Apple előfizetési beállításaiban mondd le.",
+              "A korábbi terhelések adatai megmaradnak, mert a törvény kötelez minket, hogy könyvelési célból megőrizzük őket.",
             ],
           },
           {
@@ -1943,8 +1949,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "multiple-accounts",
             q: "Azt hiszem, véletlenül két fiókom van. Most mi legyen?",
             a: [
-              "Ez általában akkor fordul elő, ha valaki ugyanazzal a címmel egyszer Google-lel, egyszer pedig e-maillel és jelszóval regisztrál, vagy ha kétszer regisztrálsz két különböző e-mail-címmel. Minden regisztráció külön Gadit-fiókot hoz létre saját füzettel, előzményekkel és előfizetési állapottal.",
-              "Írj nekünk mindkét e-mail-címmel (vagy a Fiók oldalon látható UID-kkal), és azzal, hogy melyiket szeretnéd megtartani. A csapat összevonja a füzeteket és az előzményeket a választott fiókba, majd rendben lezárja a másikat. Semmilyen adat nem vész el.",
+              "Ez általában akkor történik, amikor valaki egyszer Google-lel, egyszer pedig e-maillel és jelszóval regisztrál ugyanazzal a címmel, vagy amikor két különböző e-mail-címmel kétszer regisztrálsz. Minden regisztráció külön Gadit-fiókot hoz létre saját füzettel, előzményekkel és előfizetési állapottal.",
+              "Írj nekünk az egyik címről, és írd meg a másik címet is, valamint azt, melyik fiókot szeretnéd megtartani. A csapat a füzeteket és az előzményeket az általad választott fiókba vonja össze, majd rendben lezárja a másikat. Nem vész el adat.",
             ],
           },
         ],
@@ -1958,24 +1964,24 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "wrong-definition",
             q: "Szerintem hibás a definíció. Mit tegyek?",
             a: [
-              "Minden találati oldal alján van egy kis \"Hibajelentés\" gomb. Koppints rá, válassz kategóriát (definíció, etimológia, példa, szólás, gyerekmagyarázat és így tovább), és írj egy rövid megjegyzést. Egyenesen a csapathoz kerül, és minden jelentést átnézünk.",
-              "Ne aggódj, hogy túl szőrszálhasogató vagy. A szótár ebből a visszajelzésből gyorsabban fejlődik, mint bármi másból.",
+              "Minden jelentés mellett, valamint a szólások és a szóeredet kártyáin is van egy kis zászló ikon. Koppints rá, válaszd ki, mi a gond, és ha szeretnéd, írj rövid megjegyzést is. A jelentés egyenesen a csapathoz kerül, és mindegyiket átnézzük.",
+              "Ne aggódj amiatt, hogy túl szigorú vagy. A szótár ebből a visszajelzésből gyorsabban fejlődik, mint bármi másból.",
             ],
           },
           {
             id: "kids-not-working",
             q: "A Gyerek mód nem változtatja meg a magyarázatot",
             a: [
-              "A Gyerek mód csak akkor cseréli a szöveget, ha a szóhoz már van gyerekbarát magyarázat. Ha egy szót most kerestél ki először, adj neki 10-15 másodpercet, amíg elkészül a gyerekbarát változat.",
-              "A Gyerek mód a Family csomag része. Basic vagy Individual csomaggal, illetve fiók nélkül a kapcsoló bekapcsolás helyett a Family csomagot mutatja. Akik 2026 októbere előtt fizettek elő Clear vagy Deep csomagra, megtartják a Gyerek módot. Ha szeretnéd, nézd meg a Family csomagot az árak oldalon.",
+              "A Gyerek mód csak ott változtatja meg a szöveget, ahol a szóhoz már van gyerekbarát magyarázat. Ha most kerestél rá először egy szóra, adj neki 10-15 másodpercet, amíg elkészül a gyerekbarát változat.",
+              "A Gyerek mód a Family csomag része. Individual csomagban helyette az \"Egyszerűen\" kapcsolót látod, ami minden jelentéshez egyszerűbb magyarázatot ad. Basic csomagban vagy fiók nélkül nincs kapcsoló. Akik 2026 októbere előtt Clear vagy Deep csomagra fizettek elő, megtartják a Gyerek módot. Ha szeretnéd, nézd meg a Family csomagot az árak oldalon.",
             ],
           },
           {
             id: "voice-fails",
             q: "Nem működik a hangalapú keresés",
             a: [
-              "A hangalapú kereséshez mikrofonengedély kell. A legtöbb böngésző oldalanként egyszer kérdez rá. Ha véletlenül a Letiltás gombra kattintottál, kézzel kell visszakapcsolnod: kattints a lakat vagy az információ ikonra a címsorban a gadit.app mellett, majd Webhelybeállítások, majd Mikrofon, majd Engedélyezés.",
-              "iPhone-on és iPaden a Safariban a mikrofonhozzáféréshez a Beállítások → Safari → Mikrofon beállítás is kell. A hangalapú keresés az Individual és a Family csomag része: Basic csomaggal helyette a csomagokat látod, a be nem jelentkezett látogatókat pedig bejelentkezésre kérjük. A váltáshoz nyisd meg az árak oldalt.",
+              "A hangalapú kereséshez mikrofonengedély kell. A legtöbb böngésző webhelyenként egyszer kérdez rá. Ha véletlenül letiltottad, koppints a gadit.app melletti ikonra a címsorban, és engedélyezd a mikrofont a webhely jogosultságainál.",
+              "iPhone-on és iPaden a Safari számára a készülék Beállítások appjában is engedélyezni kell a mikrofont. A hangalapú keresés az Individual és a Family csomag része, ezért Basic csomagban és fiók nélkül a mikrofon gomb nem jelenik meg. A váltáshoz nyisd meg az árak oldalt.",
             ],
           },
           {
@@ -1996,10 +2002,10 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
           },
           {
             id: "offline",
-            q: "Hogyan működik az offline mód?",
+            q: "Hogyan használhatom a Gaditot offline?",
             a: [
-              "Az offline használat az Individual és a Family csomag része. Minden kikeresett szó megmarad az eszközödön, így internet nélkül is azonnal újra megnyílik. A Fiók oldalról letöltheted a nyelved legnépszerűbb szavainak csomagját is.",
-              "Egy vadonatúj szó kereséséhez továbbra is kapcsolat kell, mert a Gaditnak el kell készítenie hozzá a teljes találatot. Az offline másolat az eszközödön már meglévő szavakat tartalmazza. Ha Basic csomagod van, nézd meg a csomagokat az árak oldalon.",
+              "Az offline használat az Individual és a Family csomag része. Minden szó, amit kikeresel, megmarad az eszközödön, így internet nélkül is azonnal újra megnyílik. A Fiók oldalon az \"Offline csomag letöltése\" lehetőségre is koppinthatsz, hogy a szótárad nyelvének szavai erre az eszközre lementődjenek.",
+              "Egy teljesen új szó kikereséséhez továbbra is kapcsolat kell, mert a Gaditnak el kell készítenie hozzá a teljes találatot. Az offline másolat azokat a szavakat fedi le, amelyek már ott vannak az eszközödön. Ha Basic csomagban vagy, nézd meg a csomagokat az árak oldalon.",
             ],
           },
           {
@@ -2014,16 +2020,16 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "word-not-found",
             q: "Rákerestem egy szóra, de nem kaptam találatot. Mi történik?",
             a: [
-              "Először ellenőrizd a helyesírást. A Gadit a kisebb elírásokat többnyire kezeli, de egy rossz magánhangzó vagy egy hiányzó betű megzavarhatja. Ha megjelenik javasolt javítás, próbáld ki.",
-              "Ezen túl: a nagyon ritka vagy szleng szavakra nem mindig születik megbízható találat. Ha biztos vagy benne, hogy a szó létezik, kattints a Hibajelentés gombra a találati oldalon (vagy a hibaképernyőn), és szólj nekünk. Minden jelentést átnézünk, és a valóban hiányzó szavakat visszavezetjük a rendszerbe.",
+              "Először ellenőrizd a helyesírást. Ha elírás volt benne, a Gadit általában megmutatja a javított szót, és ad egy linket ahhoz is, hogy mégis arra keress rá, amit beírtál.",
+              "A nagyon ritka vagy szleng szavakra nem mindig van találat. Ha biztos vagy benne, hogy a szó létezik, írj nekünk erről az oldalról, és a csapat megnézi.",
             ],
           },
           {
             id: "change-language",
             q: "Hogyan változtathatom meg a felület nyelvét?",
             a: [
-              "Bármelyik oldal jobb felső sarkában látsz egy kis zászló ikont (vagy a jelenlegi nyelved nevét). Koppints rá, és válassz 41 nyelv közül.",
-              "A választásod ezen az eszközön mentődik el. Minden újratöltődik az új nyelven: a felület, a menük, a jövőbeli szódefiníciók, a példák, a gyerekmagyarázatok, sőt az etimológia is. A régi nyelven már gyorsítótárazott találatok megmaradnak, amíg újra rá nem keresel azokra a szavakra.",
+              "Az oldal tetején van egy földgömb ikon az aktuális nyelveddel. Koppints rá, és válassz nyelvet.",
+              "A választásod ezen az eszközön mentődik el. Minden újratöltődik az új nyelven, a felület, a menük, a jövőbeli szódefiníciók, a példák, a gyerekmagyarázatok, sőt még a szó eredete is. Azok a szavak, amelyekre már rákerestél a régi nyelven, addig azon maradnak, amíg újra rájuk nem keresel.",
             ],
           },
         ],
@@ -2037,33 +2043,33 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "join-partner",
             q: "Hogyan lehetek Gadit-partner?",
             a: [
-              "Bármelyik oldalról nyisd meg a /partners oldalt, és kattints a \"Legyél partner\" gombra. Regisztrálj a neveddel és az e-mail-címeddel, és az egyedi ajánlói linked, valamint egy irányítópult a kattintások és jutalékok követésére azonnal elkészül. Nincs várakozás jóváhagyásra.",
-              "A csatlakozás ingyenes, és bárki számára nyitott. Nem kell Gadit-előfizetés ahhoz, hogy partner legyél.",
+              "Nyisd meg a gadit.app/partners oldalt, és koppints a \"Csatlakozz ingyen\" gombra. Add meg a nevedet és az e-mail-címedet, majd koppints a \"Kérem a partnerkódomat\" gombra. A személyes linked és a partner-irányítópultod, a kattintásokkal és a jutalékokkal, azonnal elkészül, nincs várakozás jóváhagyásra. A kódot és a linket e-mailben is megkapod.",
+              "A csatlakozás ingyenes, és mindenki előtt nyitott. Nem kell Gadit-előfizetés ahhoz, hogy partner legyél.",
             ],
           },
           {
             id: "commission-model",
             q: "Hogyan számítjuk a jutalékot?",
             a: [
-              "A szokásos feltétel az, hogy az ügyfél első évében tett minden fizetésének 25%-át kapod. Az első év után minden fizetés 10%-át kapod, amíg az ügyfél fizet.",
-              "Ez a havi és az éves csomagoknál is ugyanígy működik, mert a jutalékot minden tényleges fizetés után számoljuk. Ha az ügyfél lemondja az előfizetést, a jutalékod az utolsó fizetésével megszűnik.",
-              "A csapat egyes partnereknek eltérő mértéket is megállapíthat. A saját mértékeid mindig megjelennek a partner-irányítópultodon, amelyet a /partners oldalról érhetsz el.",
+              "A szokásos feltételek szerint az ügyfél első évében minden fizetésének 25%-át kapod. Az első év után minden fizetés 10%-át kapod addig, amíg az ügyfél tovább fizet. Ha 5 fizető ügyfelet hozol, az első év utáni részesedésed életre szólóan 15%-ra nő.",
+              "Ez ugyanígy működik havi és éves csomagoknál is, mert a jutalékot minden tényleges fizetés után számoljuk. Ha az ügyfél lemondja az előfizetést, a jutalékod az utolsó fizetésével megáll.",
+              "A csapat bizonyos partnereknek eltérő arányokat is beállíthat. A saját arányaid mindig látszanak a partner-irányítópultodon.",
             ],
           },
           {
             id: "payout",
             q: "Mikor kapok kifizetést?",
             a: [
-              "Havonta, amint az egyenleged meghaladja az $50-t. A partner-irányítópulton beállított kifizetési módot használjuk (banki átutalás, PayPal és így tovább). Az $50 a minimális küszöb, nem felső határ. Sokkal többet is kereshetsz, csak a kifizetést akkor kapod meg, amikor átléped a küszöböt.",
-              "A jutalékok 30 nappal az előfizetési fizetés után szabadulnak fel, hogy legyen idő a visszatérítési időszakra. Így egy januári előfizetés jutaléka február elején szabadul fel, és a következő kifizetésedbe kerül, amint az egyenleged meghaladja az $50-t.",
+              "Havonta, amikor az egyenleged eléri a partner-irányítópultodon látható minimumot. Az ott megadott PayPal-fiókba küldjük. A minimum egy küszöb, nem felső határ. Sokkal többet is kereshetsz, és a kifizetést akkor kapod meg, amikor átléped ezt a küszöböt.",
+              "A jutalékok az előfizetési fizetés után 30 nappal szabadulnak fel, hogy legyen idő a visszatérítési időszakra. Ezért egy januári előfizetés jutaléka február elején szabadul fel, és a következő kifizetésedbe kerül, amikor az egyenleged eléri a minimumot.",
             ],
           },
           {
             id: "empty-dashboard",
             q: "Csatlakoztam, de üres az irányítópultom",
             a: [
-              "A statisztikák a linkedre érkező első kattintás után jelennek meg. Az üres irányítópult csak annyit jelent, hogy még senki nem kattintott. Oszd meg a linket. Amint elindul az aktivitás, az irányítópult szinte valós időben frissül.",
-              "Ha már megosztottad, és valaki regisztrált, de az irányítópult nem mutatja, írj nekünk a regisztráció hozzávetőleges időpontjával, és a csapat ellenőrzi a hozzárendelést.",
+              "A statisztikák az első kattintás után jelennek meg a linkeden. Az üres csak annyit jelent, hogy még senki sem kattintott rá. Oszd meg a linket. Az irányítópult szinte valós időben frissül, amint elindul az aktivitás.",
+              "Ha már megosztottad, és valaki regisztrált, de ez nem látszik az irányítópulton, írj nekünk a regisztráció hozzávetőleges időpontjával, és a csapat megnézi, honnan jött a regisztráció.",
             ],
           },
           {
@@ -2078,8 +2084,8 @@ export const HELP_MORE_4: Partial<Record<Lang, HelpContent>> = {
             id: "missing-commission",
             q: "Valaki a linkemen keresztül regisztrált, de nem látom a jutalékot",
             a: [
-              "Legtöbbször időzítésről van szó: a regisztráció perceken belül megjelenik az irányítópulton, de a jutalék csak akkor kerül könyvelésre, amikor az előfizetést ténylegesen kifizetik (ami napokkal később is lehet, ha ingyenes próbaidőszakot használnak). Nézz vissza a próbaidőszak vége után.",
-              "Ha az előfizetést kifizették, de 48 óra után sem látod a jutalékot, írj nekünk a regisztráció hozzávetőleges időpontjával, valamint az előfizető e-mail-címével vagy hozzávetőleges nevével, ha tudod. A csapat utánajár a hozzárendelési láncnak, és kézzel pótol minden kimaradást.",
+              "Legtöbbször ez időzítés kérdése. A regisztráció perceken belül megjelenik az irányítópulton, de a jutalék csak akkor könyvelődik, amikor az előfizetést ténylegesen kifizetik, ami napokkal később is lehet, ha ingyenes próbaidőszakon vannak. Nézz vissza a próbaidőszak vége után.",
+              "Ha az előfizetést már kifizették, de 48 óra után sem látod a jutalékot, írj nekünk a regisztráció hozzávetőleges időpontjával, valamint az előfizető e-mail-címével vagy hozzávetőleges nevével, ha tudod. A csapat megnézi, honnan jött a regisztráció, és kézzel javít minden kimaradást.",
             ],
           },
         ],

@@ -91,6 +91,17 @@ export function middleware(req: NextRequest) {
     const segs = req.nextUrl.pathname.split("/").filter(Boolean);
     const routeFirst = segs[0] && SUPPORTED_LANGS.has(segs[0]) ? segs[1] : segs[0];
     if (!routeFirst || !PAY_ROUTES.has(routeFirst)) {
+      // A client-side navigation or prefetch (an RSC request) from a purchase
+      // page to a page that lives on www: the cross-origin redirect below was
+      // blocked (CORS) and a click on "Terms" hung about 5 s (night QA
+      // 2026-11-18). Plain HTML makes the router do a normal full-page load,
+      // which the redirect then sends to www.
+      if (req.headers.get("rsc") === "1") {
+        return new NextResponse("<!doctype html><title>Gadit</title>", {
+          status: 200,
+          headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" },
+        });
+      }
       const www = req.nextUrl.clone();
       www.host = "www.gadit.app";
       www.port = "";

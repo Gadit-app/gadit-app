@@ -29,8 +29,14 @@ export function PrivacyBodyTr(): ReactElement {
         <li>talebiniz üzerine oluşturulan görseller;</li>
         <li>abonelik planınız ve faturalandırma durumunuz;</li>
         <li>daha sonra yeniden erişebilmeniz için saklanan yakın tarihli arama geçmişi (ücretli kullanıcılar için son 10 kelimeye kadar);</li>
+        <li>
+          {"yardım merkezinde Gadit asistanını kullanmanız hâlinde: sorduğunuz sorular, verdiği yanıtlar ve bir yanıtı yararlı olarak işaretleyip işaretlemediğiniz; ayrıca hesap kimliğiniz (ve varsa aile kimliğiniz), e-posta adresiniz, planınız, arayüz diliniz ve web sitesini mi yoksa uygulamayı mı kullandığınız;"}
+        </li>
         <li>aylık kotalar (örneğin, mevcut faturalandırma döneminde oluşturduğunuz görsel sayısı).</li>
       </ul>
+      <p>
+        {"Gadit asistanı, çocuk profillerinde, Çocuk Modu'nda veya hesabına giriş yapmamış ziyaretçilere sunulmaz. Lütfen buna parola veya kart numarası yazmayın."}
+      </p>
       <h3>Teknik ve analitik veriler</h3>
       <p>
         IP adresi, tarayıcı türü, cihaz türü, yönlendiren URL ve görüntülenen sayfalar gibi temel teknik bilgileri
@@ -50,6 +56,9 @@ export function PrivacyBodyTr(): ReactElement {
         <li>Gadit hizmetini sunmak ve geliştirmek (tanımlar, görseller, cümle geri bildirimleri ve testler oluşturmak);</li>
         <li>hesabınızı sürdürmek ve deneyiminizi kişiselleştirmek (arama geçmişi, tercih edilen dil, &ldquo;Çocuk modu&rdquo; anahtarı);</li>
         <li>abonelikleri işleme almak ve işlemsel e-postalar (makbuzlar, abonelik değişiklikleri) göndermek;</li>
+        <li>
+          {"Gadit asistanında sorularınızı yanıtlamak ve yardım yanıtlarımızı iyileştirmek; ayrıca asistan bir soruyu ekibimize ilettiğinde, ekibin size e-posta ile yanıt verebilmesi için son konuşmayı adınız, e-posta adresiniz, planınız, arayüz diliniz ve web sitesini mi yoksa uygulamayı mı kullandığınız bilgileriyle birlikte ekibimize e-posta ile göndermek;"}
+        </li>
         <li>ürün performansını ölçmek ve iyileştirmek ve kötüye kullanımı önlemek;</li>
         <li>yasal yükümlülüklere uymak.</li>
       </ul>
@@ -64,9 +73,7 @@ export function PrivacyBodyTr(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>: tanımlar, cümle geri bildirimleri, testler ve sesli transkripsiyon (Whisper)
-          oluşturmak için gönderdiğiniz kelimeleri ve cümleleri işler ve görseller (DALL·E 3) oluşturur. OpenAI’a
-          gönderilen veriler, OpenAI’ın API veri kullanım politikasına tabidir.
+          <strong>OpenAI</strong>{": tanımlar, cümle geri bildirimleri, testler ve sesli transkripsiyon (Whisper) oluşturmak için gönderdiğiniz kelimeleri ve cümleleri işler ve görseller (DALL·E 3) oluşturur. Ayrıca Gadit asistanının yanıtlarını da yazar: sorunuzu, aynı konuşmadaki önceki mesajları, arayüz dilinizi, planınızı ve web sitesinde mi yoksa uygulamada mı olduğunuzu göndeririz; adınızı veya e-posta adresinizi eklemeyiz. OpenAI’a gönderilen veriler, OpenAI’ın API veri kullanım politikasına tabidir."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): hesabınızı, profilinizi, abonelik
@@ -74,6 +81,9 @@ export function PrivacyBodyTr(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>: ödemeleri, abonelikleri ve faturalandırma portalını yönetir.
+        </li>
+        <li>
+          <strong>Resend</strong>{": e-postalarımızı (örneğin giriş bağlantıları ve bildirimler) gönderir ve Gadit asistanının ilettiği soruları, e-posta adresinizi yanıt adresi olarak ekleyerek ekibimize ulaştırır."}
         </li>
         <li>
           <strong>Vercel</strong>: web sitesini barındırır ve sunar; anonimleştirilmiş analiz ve performans ölçümü
@@ -94,8 +104,17 @@ export function PrivacyBodyTr(): ReactElement {
       <ul>
         <li>Hesap bilgileri: hesabınız var olduğu sürece.</li>
         <li>Arama geçmişi: kullanıcı başına son 10 arama; her yeni aramada güncellenir.</li>
+        <li>
+          {"Gadit asistanı konuşmaları: 180 gün; ardından otomatik olarak silinir veya hesabınızı silmeniz hâlinde daha önce silinir. Günlük sınır için kullanılan günlük soru sayınız 3 gün sonra silinir."}
+        </li>
+        <li>
+          {"Gadit asistanının ekibimize ilettiği sorular: bize gönderdiğiniz diğer tüm e-postalar gibi, ekibimizin posta kutusunda saklanır."}
+        </li>
         <li>Oluşturulan görseller: aynı kelime+anlam çiftinin önbelleğe alınmış görseli yeniden kullanabilmesi için saklanır. Hesabınız aktif olduğu sürece süresiz olarak saklanabilir.</li>
         <li>Faturalandırma ve vergi kayıtları: yürürlükteki mevzuatın gerektirdiği süre boyunca (genellikle 7 yıl).</li>
+        <li>
+          {"Silinmiş hesaplar: silme işlemine ilişkin kısa bir kayıt (e-posta adresi, plan ve varsa belirttiğiniz neden ile not); silme işlemine ilişkin soruları yanıtlayabilmemiz için saklanır."}
+        </li>
         <li>Analiz verileri: toplu hâlde; genellikle analiz sağlayıcısı tarafından 13 ay süreyle saklanır.</li>
       </ul>
 

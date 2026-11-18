@@ -28,8 +28,14 @@ export function PrivacyBodySw(): ReactElement {
         <li>picha zinazotengenezwa kwa ombi lako;</li>
         <li>mpango wako wa usajili na hali ya malipo;</li>
         <li>historia ya hivi karibuni ya utafutaji (kwa watumiaji wanaolipia, hadi maneno 10 ya mwisho), inayohifadhiwa ili uweze kuifikia tena baadaye;</li>
+        <li>
+          {"ikiwa unatumia msaidizi wa Gadit katika kituo cha usaidizi: maswali unayouliza, majibu yake, na iwapo uliashiria kwamba jibu lilikuwa la msaada, pamoja na kitambulisho cha akaunti yako (na kitambulisho cha familia, ikiwa unacho), anwani ya barua pepe, mpango wako, lugha ya kiolesura, na iwapo ulitumia tovuti au programu;"}
+        </li>
         <li>mipaka ya matumizi ya kila mwezi (kwa mfano, idadi ya picha ulizotengeneza katika kipindi hiki cha malipo).</li>
       </ul>
+      <p>
+        {"Msaidizi wa Gadit hatolewi kwenye profaili za watoto, katika Hali ya Watoto, au kwa wageni ambao hawajaingia kwenye akaunti. Tafadhali usiandike nywila au nambari za kadi ndani yake."}
+      </p>
       <h3>Data za kiufundi na za uchanganuzi</h3>
       <p>
         Tunakusanya kiotomatiki taarifa za msingi za kiufundi kama vile anwani ya IP, aina ya kivinjari, aina ya kifaa,
@@ -49,6 +55,9 @@ export function PrivacyBodySw(): ReactElement {
         <li>kutoa na kuboresha huduma ya Gadit (kutengeneza fasili, picha, maoni kuhusu sentensi, majaribio mafupi);</li>
         <li>kudumisha akaunti yako na kubinafsisha matumizi yako (historia ya utafutaji, lugha unayopendelea, kitufe cha &ldquo;Hali ya Watoto&rdquo;);</li>
         <li>kuchakata usajili na kutuma barua pepe za miamala (risiti, mabadiliko ya usajili);</li>
+        <li>
+          {"kujibu maswali yako katika msaidizi wa Gadit na kuboresha majibu yetu ya usaidizi, na, msaidizi anapopeleka swali kwa timu yetu, kuitumia timu hiyo barua pepe yenye mazungumzo ya hivi karibuni pamoja na jina lako, anwani ya barua pepe, mpango wako, lugha ya kiolesura, na iwapo ulitumia tovuti au programu, ili timu iweze kukujibu kwa barua pepe;"}
+        </li>
         <li>kupima na kuboresha utendaji wa bidhaa na kuzuia matumizi mabaya;</li>
         <li>kutimiza wajibu wa kisheria.</li>
       </ul>
@@ -63,9 +72,7 @@ export function PrivacyBodySw(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>: huchakata maneno na sentensi unazowasilisha ili kutengeneza fasili, maoni kuhusu
-          sentensi, majaribio mafupi, na unukuzi wa sauti (Whisper), na hutengeneza picha (DALL·E 3). Data zinazotumwa kwa
-          OpenAI zinasimamiwa na sera ya OpenAI ya matumizi ya data za API.
+          <strong>OpenAI</strong>{": huchakata maneno na sentensi unazowasilisha ili kutengeneza fasili, maoni kuhusu sentensi, majaribio mafupi, na unukuzi wa sauti (Whisper), na hutengeneza picha (DALL·E 3). Pia huandika majibu ya msaidizi wa Gadit: tunaitumia swali lako, ujumbe wa awali wa mazungumzo hayo hayo, lugha ya kiolesura chako, mpango wako, na iwapo uko kwenye tovuti au programu, na hatuambatishi jina lako wala anwani yako ya barua pepe. Data zinazotumwa kwa OpenAI zinasimamiwa na sera ya OpenAI ya matumizi ya data za API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): huhifadhi akaunti yako, wasifu,
@@ -73,6 +80,9 @@ export function PrivacyBodySw(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>: hushughulikia malipo, usajili, na lango la usimamizi wa malipo.
+        </li>
+        <li>
+          <strong>Resend</strong>{": hutuma barua pepe zetu (kama vile viungo vya kuingia na arifa), na huiwasilishia timu yetu maswali ambayo msaidizi wa Gadit hupeleka mbele, huku anwani yako ya barua pepe ikitumika kama anwani ya kujibu."}
         </li>
         <li>
           <strong>Vercel</strong>: hupangisha na kuhudumia tovuti, na hutoa uchanganuzi usio na utambulisho na upimaji wa
@@ -92,8 +102,17 @@ export function PrivacyBodySw(): ReactElement {
       <ul>
         <li>Taarifa za akaunti: wakati wote akaunti yako ipo.</li>
         <li>Historia ya utafutaji: utafutaji 10 wa mwisho kwa kila mtumiaji, husasishwa kwa kila utafutaji mpya.</li>
+        <li>
+          {"Mazungumzo na msaidizi wa Gadit: siku 180, kisha hufutwa kiotomatiki, au mapema zaidi ukifuta akaunti yako. Hesabu ya kila siku ya maswali yako, inayotumika kwa kikomo cha kila siku, hufutwa baada ya siku 3."}
+        </li>
+        <li>
+          {"Maswali ambayo msaidizi wa Gadit hupeleka kwa timu yetu: huhifadhiwa katika kisanduku cha barua cha timu yetu, kama barua pepe nyingine yoyote unayotutumia."}
+        </li>
         <li>Picha zilizotengenezwa: huhifadhiwa ili neno+maana ileile iweze kutumia tena picha iliyohifadhiwa kwenye akiba (cache). Zinaweza kuhifadhiwa kwa muda usio na kikomo maadamu akaunti yako iko hai.</li>
         <li>Rekodi za malipo na kodi: kama inavyotakiwa na sheria inayotumika (kwa kawaida miaka 7).</li>
+        <li>
+          {"Akaunti zilizofutwa: rekodi fupi kwamba akaunti ilifutwa (anwani yake ya barua pepe, mpango, na sababu na dokezo ulilotoa, ikiwa lipo), inayohifadhiwa ili tuweze kujibu maswali kuhusu ufutaji huo."}
+        </li>
         <li>Data za uchanganuzi: za jumla, kwa kawaida huhifadhiwa na mtoa huduma wa uchanganuzi kwa miezi 13.</li>
       </ul>
 

@@ -30,8 +30,14 @@ export function PrivacyBodyFil(): ReactElement {
         <li>mga larawang binubuo ayon sa inyong kahilingan;</li>
         <li>inyong subscription plan at billing status;</li>
         <li>kamakailang kasaysayan ng paghahanap (para sa mga bayad na user, hanggang sa huling 10 salita), na iniimbak upang ma-access ninyo itong muli sa ibang pagkakataon;</li>
+        <li>
+          {"kung ginagamit ninyo ang assistant ng Gadit sa help center: ang mga tanong na itinatanong ninyo, ang mga sagot nito, at kung minarkahan ninyo ang isang sagot bilang nakatulong, kasama ang inyong account ID (at family ID, kung mayroon), email address, plan, wika ng interface, at kung ginamit ninyo ang website o ang app;"}
+        </li>
         <li>buwanang quota (halimbawa, ang bilang ng mga larawang nabuo ninyo sa billing cycle na ito).</li>
       </ul>
+      <p>
+        {"Ang assistant ng Gadit ay hindi inaalok sa mga profile ng mga bata, sa Mode para sa mga Bata, o sa mga bisitang hindi naka-sign in. Mangyaring huwag mag-type rito ng mga password o numero ng card."}
+      </p>
       <h3>Teknikal at analytics na datos</h3>
       <p>
         Awtomatiko naming kinokolekta ang pangunahing teknikal na impormasyon gaya ng IP address, uri ng browser, uri ng
@@ -52,6 +58,9 @@ export function PrivacyBodyFil(): ReactElement {
         <li>upang ibigay at pagbutihin ang serbisyo ng Gadit (pagbuo ng mga kahulugan, larawan, feedback sa pangungusap, quiz);</li>
         <li>upang mapanatili ang inyong account at i-personalize ang inyong karanasan (kasaysayan ng paghahanap, gustong wika, toggle ng &ldquo;Mode para sa mga Bata&rdquo;);</li>
         <li>upang iproseso ang mga subscription at magpadala ng mga transactional email (mga resibo, mga pagbabago sa subscription);</li>
+        <li>
+          {"upang sagutin ang inyong mga tanong sa assistant ng Gadit at pagbutihin ang aming mga sagot sa help, at, kapag ipinapasa ng assistant ang isang tanong sa aming team, upang i-email sa team ang kamakailang pag-uusap kasama ang inyong pangalan, email address, plan, wika ng interface, at kung ginamit ninyo ang website o ang app, upang makasagot sa inyo ang team sa pamamagitan ng email;"}
+        </li>
         <li>upang sukatin at pagbutihin ang performance ng produkto at pigilan ang pang-aabuso;</li>
         <li>upang sumunod sa mga legal na obligasyon.</li>
       </ul>
@@ -67,9 +76,7 @@ export function PrivacyBodyFil(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>: pinoproseso ang mga salita at pangungusap na inyong isinusumite upang bumuo ng mga
-          kahulugan, feedback sa pangungusap, quiz, at voice transcription (Whisper), at bumubuo ng mga larawan (DALL·E 3).
-          Ang datos na ipinapadala sa OpenAI ay sakop ng patakaran ng OpenAI sa paggamit ng datos ng API.
+          <strong>OpenAI</strong>{": pinoproseso ang mga salita at pangungusap na inyong isinusumite upang bumuo ng mga kahulugan, feedback sa pangungusap, quiz, at voice transcription (Whisper), at bumubuo ng mga larawan (DALL·E 3). Isinusulat din nito ang mga sagot ng assistant ng Gadit: ipinapadala namin rito ang inyong tanong, ang mga naunang mensahe sa parehong pag-uusap, ang wika ng inyong interface, ang inyong plan, at kung kayo ay nasa website o app, at hindi namin isinasama ang inyong pangalan o email address. Ang datos na ipinapadala sa OpenAI ay sakop ng patakaran ng OpenAI sa paggamit ng datos ng API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): iniimbak ang inyong account,
@@ -77,6 +84,9 @@ export function PrivacyBodyFil(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>: humahawak sa mga pagbabayad, subscription, at billing portal.
+        </li>
+        <li>
+          <strong>Resend</strong>{": nagpapadala ng aming mga email (tulad ng mga sign-in link at notification), at ipinadadala sa aming team ang mga tanong na ipinapasa ng assistant ng Gadit, na ang inyong email address ang gagamiting reply address."}
         </li>
         <li>
           <strong>Vercel</strong>: nagho-host at naghahatid ng website, at nagbibigay ng anonymous na analytics at
@@ -97,8 +107,17 @@ export function PrivacyBodyFil(): ReactElement {
       <ul>
         <li>Impormasyon ng account: habang umiiral ang inyong account.</li>
         <li>Kasaysayan ng paghahanap: ang huling 10 paghahanap bawat user, ina-update sa bawat bagong paghahanap.</li>
+        <li>
+          {"Mga pag-uusap sa assistant ng Gadit: 180 araw, pagkatapos ay awtomatikong binubura, o mas maaga kung buburahin ninyo ang inyong account. Ang pang-araw-araw na bilang ng inyong mga tanong, na ginagamit para sa pang-araw-araw na limitasyon, ay binubura pagkalipas ng 3 araw."}
+        </li>
+        <li>
+          {"Mga tanong na ipinapasa ng assistant ng Gadit sa aming team: iniingatan sa mailbox ng aming team, tulad ng anumang email na ipinapadala ninyo sa amin."}
+        </li>
         <li>Mga nabuong larawan: iniingatan upang muling magamit ng parehong salita+kahulugan ang naka-cache na larawan. Maaaring panatilihin nang walang takdang panahon habang aktibo ang inyong account.</li>
         <li>Mga rekord ng billing at buwis: ayon sa hinihingi ng naaangkop na batas (karaniwang 7 taon).</li>
+        <li>
+          {"Mga binurang account: isang maikling tala na binura ang account (ang email address nito, plan, at ang dahilan at tala na ibinigay ninyo, kung mayroon), na iniingatan upang makasagot kami sa mga tanong tungkol sa pagbura."}
+        </li>
         <li>Analytics na datos: pinagsama-sama, karaniwang iniingatan ng analytics provider sa loob ng 13 buwan.</li>
       </ul>
 

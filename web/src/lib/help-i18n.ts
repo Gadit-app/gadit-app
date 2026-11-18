@@ -90,7 +90,7 @@ Object.assign(HELP, {
             q: "How do I change the credit card on my subscription?",
             a: [
               "You can switch to a new card in under a minute without cancelling. Your current subscription keeps running, just on the new card.",
-              "1. Sign in at gadit.app and open your Account page (top right). 2. Click \"Manage billing\". 3. A secure Stripe page opens. Click \"Add payment method\", enter the new card, and mark it as Default. 4. Optionally remove the old card.",
+              "1. Sign in at gadit.app and open \"Account\" from the account menu. 2. Click \"Manage billing\". 3. A secure Stripe page opens. Add the new card as a payment method and mark it as the default. 4. Optionally remove the old card.",
               "From the next billing cycle on, everything goes to the new card. The previous charge (already collected) stays on the old card. No refund needed unless you want one specifically.",
             ],
           },
@@ -99,6 +99,7 @@ Object.assign(HELP, {
             q: "How do I cancel my subscription?",
             a: [
               "Self-serve, any time. Sign in, open Account, and tap Cancel subscription under your plan.",
+              "Bought your subscription in the iPhone or iPad app? Cancel it in your Apple subscription settings. The \"Manage subscription\" link on your Account page takes you there.",
               "On a paid subscription, your access continues until the end of the period you already paid for. After that the account moves to Basic (free). Your saved words and history stay safe.",
               "During the 14-day free trial, cancelling ends the trial right away and nothing is charged. If the automatic charge is your only worry, pick that reason in the cancel window and you can turn off the renewal instead, keeping the trial until its last day.",
               "If you cancel a paid subscription by mistake or change your mind, you can resume it from the same page before the period ends.",
@@ -157,7 +158,7 @@ Object.assign(HELP, {
             q: "My payment failed. What should I do?",
             a: [
               "Stripe automatically retries failed payments a few times over the following days. Most failures resolve on their own once the bank releases the hold or the card has enough balance.",
-              "If you want to fix it right away, go to Account → Manage billing → Add payment method, enter a working card, and set it as Default. Stripe will retry the failed charge immediately on the new card. If your subscription has already lapsed to Basic, you can resubscribe from Pricing and your notebook stays intact.",
+              "A bar at the top of the page will say the charge didn't go through, and your access is kept for a few more days. Tap \"Update card\" there, enter a working card, and we'll try the charge on it right away. If your subscription has already moved to Basic, you can subscribe again from the Pricing page and your notebook stays intact.",
             ],
           },
           {
@@ -188,40 +189,40 @@ Object.assign(HELP, {
             id: "forgot-password",
             q: "I forgot my password",
             a: [
-              "Open the sign-in dialog and click \"Forgot password?\". Enter the email you use for Gadit and you'll get a reset link within a minute or two.",
+              "In the sign-in window, type your email, then tap \"Forgot password?\". A reset link usually arrives in your inbox within a minute or two. You can also tap \"Email me a sign-in link\" and sign in with no password.",
               "If the email doesn't arrive, check spam. If it still doesn't arrive, you might have signed up with Google instead of email and password. Try the \"Continue with Google\" button.",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "I'm sure my password is right but it says \"Wrong email or password\"",
+            q: "My password is right, but it says the email and password don't match",
             a: [
-              "Three things to check. First, capslock. Second, trailing space when copy-pasting. Third, you signed up with Google rather than a password (use \"Continue with Google\" instead).",
-              "Still stuck? Reset the password from the same dialog. It sets you up clean.",
+              "Three things to check. First, Caps Lock. Second, an extra space at the end after copy-pasting. Third, maybe you signed up with Google rather than a password (use \"Continue with Google\" instead).",
+              "Still stuck? In the same message tap \"Email me a sign-in link\" to get in without a password, or \"Choose a new password\".",
             ],
           },
           {
             id: "google-fails",
             q: "Google sign-in doesn't work",
             a: [
-              "Most common cause: your browser is blocking third-party cookies or pop-ups for gadit.app. Allow them in the address-bar permissions and try again.",
-              "If you're in incognito mode, Google sign-in is restricted on purpose. Switch to a normal browser window.",
+              "Inside apps such as Instagram, Facebook or TikTok, the Google button is hidden. Open the link in your regular browser, or sign in with your email. If you joined with Google, type that email and tap \"Email me a sign-in link\".",
+              "In a private (incognito) window, blocked cookies can stop Google sign-in, so try a normal window.",
             ],
           },
           {
             id: "change-email",
             q: "How do I change the email on my account?",
             a: [
-              "Account, click your email, Change email. You'll need to confirm the new address before it sticks. Your subscription, history, and notebook all carry over.",
-              "If the email is tied to a Stripe customer, update it on the Stripe billing portal too so future receipts go to the new address.",
+              "Changing your account email is done by the team. Email us from your current address and write the new address in the message. The team will update it, and your subscription, history and notebook stay as they are.",
             ],
           },
           {
             id: "delete-account",
             q: "How do I delete my account?",
             a: [
-              "Account, bottom of the page, Delete account. This is permanent. Your subscription is cancelled, your notebook and history are erased, and the email is freed up for a fresh signup.",
-              "Stripe records of past charges remain (we're legally required to keep them for accounting). Nothing else stays.",
+              "At the bottom of the Account page, tap \"Delete account\" and type your account email to confirm. This is permanent: your subscription is cancelled, your notebook and history are erased, and the email is freed up for a fresh signup.",
+              "The one exception is a subscription bought in the App Store: deleting the account doesn't cancel it, so cancel it first in your Apple subscription settings.",
+              "Records of past charges stay, because the law requires us to keep them for accounting.",
             ],
           },
           {
@@ -237,7 +238,7 @@ Object.assign(HELP, {
             q: "I think I have two accounts by mistake. What now?",
             a: [
               "This usually happens when someone signs up once with Google and once with email and password using the same address, or when you sign up twice with different email addresses. Each signup creates a separate Gadit account with its own notebook, history, and subscription state.",
-              "Write to us with both email addresses (or UIDs from the Account page) and which one you'd like to keep. The team will merge the notebooks and history onto the account you choose, then close the other one cleanly. No data lost.",
+              "Email us from one of the two addresses, and write the other address and which account you'd like to keep. The team will merge the notebooks and history onto the account you choose, then close the other one cleanly. No data lost.",
             ],
           },
         ],
@@ -251,7 +252,7 @@ Object.assign(HELP, {
             id: "wrong-definition",
             q: "I think the definition is wrong. What do I do?",
             a: [
-              "Every result page has a small \"Report\" button at the bottom. Tap it, pick a category (definition, etymology, example, idiom, kids explanation, and so on) and write a short note. It comes straight to the team and every report gets reviewed.",
+              "Next to every meaning, and on the idioms and word origin cards, there's a small flag icon. Tap it, choose what's wrong, and add a short note if you like. It comes straight to the team, and every report gets reviewed.",
               "Don't worry about being too picky. The dictionary improves from this feedback faster than from anything else.",
             ],
           },
@@ -260,15 +261,15 @@ Object.assign(HELP, {
             q: "Kids Mode isn't changing the explanation",
             a: [
               "Kids Mode only changes the text where the word already has a kid-friendly explanation. For a word you've just looked up for the first time, give it 10 to 15 seconds while the kid-friendly version is prepared.",
-              "Kids Mode is part of the Family plan. On Basic, on Individual, or without an account, the switch shows the Family plan instead of turning on. Subscribers who joined Clear or Deep before October 2026 keep Kids Mode. To get it, see Family on the pricing page.",
+              "Kids Mode is part of the Family plan. On Individual you'll see an \"In simple words\" switch instead, which gives a simpler explanation of each meaning. On Basic or without an account there is no switch. Subscribers who joined Clear or Deep before October 2026 keep Kids Mode. To get it, see Family on the pricing page.",
             ],
           },
           {
             id: "voice-fails",
             q: "Voice search doesn't work",
             a: [
-              "Voice search needs microphone permission. Most browsers ask once per site. If you accidentally clicked Block, you'll need to flip it back manually: click the lock or info icon next to gadit.app in the address bar, then Site settings, then Microphone, then Allow.",
-              "On Safari for iPhone and iPad, microphone access also needs Settings → Safari → Microphone. Voice search is part of the Individual and Family plans: on Basic you'll see the plans instead, and visitors who aren't signed in are asked to sign in. To upgrade, open the pricing page.",
+              "Voice search needs microphone permission. Most browsers ask once per site. If you blocked it by mistake, tap the icon next to gadit.app in the address bar and allow the microphone in the site permissions.",
+              "On iPhone and iPad, also allow the microphone for Safari in the device's Settings app. Voice search is part of the Individual and Family plans, so on Basic and without an account the microphone button doesn't appear. To upgrade, open the pricing page.",
             ],
           },
           {
@@ -289,9 +290,9 @@ Object.assign(HELP, {
           },
           {
             id: "offline",
-            q: "How does offline mode work?",
+            q: "How do I use Gadit offline?",
             a: [
-              "Offline use is part of the Individual and Family plans. Every word you look up is kept on your device, so it opens again instantly without internet. You can also download a pack of the most popular words in your language from your Account page.",
+              "Offline use is part of the Individual and Family plans. Every word you look up is kept on your device, so it opens again instantly without internet. You can also tap \"Download offline pack\" on your Account page to save our dictionary's words in your language on this device.",
               "Looking up a brand-new word still needs a connection, because Gadit has to prepare the full result for it. The offline copy covers the words already on your device. If you're on Basic, see the plans on the pricing page.",
             ],
           },
@@ -307,16 +308,16 @@ Object.assign(HELP, {
             id: "word-not-found",
             q: "I searched a word and didn't get a result. What's going on?",
             a: [
-              "First, check the spelling. Gadit handles minor typos most of the time, but a wrong vowel or missing letter can throw it off. Try the suggested correction if one appears.",
-              "Beyond that: very rare or slang words might not return a confident result. If you're sure the word is real, click the Report button on the result page (or on the error screen) and let us know. Every report gets reviewed and real misses get fed back into the system.",
+              "First, check the spelling. If there was a typo, Gadit usually shows the corrected word, with a link to search for what you typed anyway.",
+              "Very rare words or slang don't always get a result. If you're sure the word exists, write to us from this page and the team will check.",
             ],
           },
           {
             id: "change-language",
             q: "How do I change the UI language?",
             a: [
-              "Top right of any page, you'll see a small flag icon (or your current language name). Tap it and pick from 41 languages.",
-              "Your choice is saved on this device. Everything reloads in the new language: the interface, the menus, future word definitions, examples, kid explanations, even the etymology. Already-cached results in the old language stay until you search those words again.",
+              "At the top of the page there's a globe icon with your current language. Tap it and choose a language.",
+              "Your choice is saved on this device. Everything reloads in the new language: the interface, the menus, future word definitions, examples, kid explanations, even the word's origin. Words you already looked up in the old language show in it until you search them again.",
             ],
           },
         ],
@@ -330,7 +331,7 @@ Object.assign(HELP, {
             id: "join-partner",
             q: "How do I become a Gadit partner?",
             a: [
-              "Open /partners from any page and click \"Become a partner\". Sign up with your name and email, and your unique referral link plus a dashboard to track clicks and commissions are ready right away. No waiting for approval.",
+              "Go to gadit.app/partners and tap \"Join free\". Enter your name and email, then tap \"Get my partner code\". Your personal link and partner dashboard, with clicks and commissions, are ready right away, with no wait for approval. The code and link also arrive by email.",
               "Joining is free and open to anyone. You don't need a Gadit subscription to become a partner.",
             ],
           },
@@ -338,17 +339,17 @@ Object.assign(HELP, {
             id: "commission-model",
             q: "How are commissions calculated?",
             a: [
-              "The standard terms are 25% of every payment a customer makes in their first year. After that first year, you earn 10% of every payment for as long as the customer keeps paying.",
+              "The standard terms are 25% of every payment a customer makes in their first year. After that first year, you earn 10% of every payment for as long as the customer keeps paying. Bring 5 paying customers and your share after the first year rises to 15% for life.",
               "This works the same for monthly and annual plans, because commission is counted on each actual payment. If a customer cancels, your commission stops with their last payment.",
-              "The team can set different rates for specific partners. Your own rates always show in your partner dashboard, which you can reach from /partners.",
+              "The team can set different rates for specific partners. Your own rates always show in your partner dashboard.",
             ],
           },
           {
             id: "payout",
             q: "When do I get paid?",
             a: [
-              "Monthly, once your balance crosses $50. We use the payout method you set in the partner dashboard (bank transfer, PayPal, and so on). $50 is the minimum threshold, not a cap. You can earn far more, you just receive the payout when you cross the threshold.",
-              "Commissions release 30 days after the subscription payment, to allow for the refund window. So a January subscription releases in early February and lands in your next payout once your balance crosses $50.",
+              "Once a month, when your balance reaches the minimum shown in your partner dashboard. We send it to the PayPal account you set there. The minimum is a threshold, not a cap: you can earn far more, and you receive the payout once you cross it.",
+              "Commissions release 30 days after the subscription payment, to allow for the refund window. So a January subscription releases in early February and lands in your next payout once your balance reaches the minimum.",
             ],
           },
           {
@@ -356,7 +357,7 @@ Object.assign(HELP, {
             q: "I joined but my dashboard is empty",
             a: [
               "Stats show after the first click on your link. Empty just means nobody's clicked yet. Go share the link. The dashboard updates in near real time once activity starts.",
-              "If you've shared and someone's signed up but the dashboard isn't reflecting it, write to us with the rough time of signup and the team will check the attribution.",
+              "If you've shared and someone's signed up but the dashboard isn't reflecting it, write to us with the rough time of signup and the team will check where the signup came from.",
             ],
           },
           {
@@ -372,7 +373,7 @@ Object.assign(HELP, {
             q: "Someone signed up through my link but I don't see the commission",
             a: [
               "Most often this is timing: the signup shows up in the dashboard within minutes, but the commission only books once the subscription is actually paid (which can be days later if they're on a free trial). Check back after the trial ends.",
-              "If the subscription paid but you still don't see the commission after 48 hours, write to us with the rough signup time and the email or rough name of the subscriber if you know it. The team will dig into the attribution chain and fix any miss manually.",
+              "If the subscription paid but you still don't see the commission after 48 hours, write to us with the rough signup time and the email or rough name of the subscriber if you know it. The team will check where the signup came from and fix any miss manually.",
             ],
           },
         ],
@@ -444,19 +445,20 @@ Object.assign(HELP, {
             id: "change-card",
             q: "Ngiyishintsha kanjani ikhadi lesikweletu ekubhaliseni kwami?",
             a: [
-              "Ungashintshela ekhadini elisha ngaphansi komzuzu ngaphandle kokukhansela. Ukubhalisa kwakho kwamanje kuqhubeka kusebenza, kodwa manje ekhadini elisha.",
-              "1. Ngena ku-gadit.app bese uvula ikhasi lakho le-Account (phezulu ngakwesokudla). 2. Chofoza \"Manage billing\". 3. Kuvuleka ikhasi le-Stripe elivikelekile. Chofoza \"Add payment method\", faka ikhadi elisha, bese ulimaka njenge-Default. 4. Ngokuzikhethela, susa ikhadi elidala.",
-              "Kusukela emjikelezweni olandelayo wokukhokha, konke kuya ekhadini elisha. Inkokhelo yangaphambilini (esivele iqoqiwe) ihlala ekhadini elidala. Akudingeki umbuyiselo ngaphandle uma uwufuna ngokuqondile.",
+              "Ungashintshela ekhadini elisha ngaphansi komzuzu, ngaphandle kokukhansela. Ukubhalisa kwakho kwamanje kuqhubeka kusebenza, kodwa manje sekusebenzisa ikhadi elisha.",
+              "1. Ngena ku-gadit.app bese uvula okuthi \"I-akhawunti\" kumenyu ye-akhawunti. 2. Chofoza \"Phatha ukukhokha\". 3. Kuvuleka ikhasi elivikelekile le-Stripe. Engeza ikhadi elisha njengendlela yokukhokha bese ulimaka njengeliyinhloko. 4. Uma uthanda, susa ikhadi elidala.",
+              "Kusukela emjikelezweni olandelayo wokukhokha, konke kuzoya ekhadini elisha. Inkokhelo yangaphambilini, esivele iqoqiwe, ihlala ekhadini elidala. Akudingeki ukubuyiselwa imali ngaphandle uma uyifuna ngokuqondile.",
             ],
           },
           {
             id: "cancel",
             q: "Ngikukhansela kanjani ukubhalisa kwami?",
             a: [
-              "Ungakwenza wena, noma nini. Ngena ngemvume, vula i-Akhawunti, bese uthepha okuthi Khansela ukubhalisa ngaphansi kohlelo lwakho.",
-              "Uma unokubhalisa okukhokhelwayo, ukufinyelela kwakho kuqhubeka kuze kube sekupheleni kwesikhathi osuvele usikhokhele. Ngemva kwalokho i-akhawunti ibuyela ku-Basic (yamahhala). Amagama akho awagcinile nomlando kuhlala kuphephile.",
-              "Phakathi nesikhathi sokuzama samahhala sezinsuku ezingu-14, ukukhansela kuqeda isikhathi sokuzama ngokushesha futhi akukho okukhokhiswayo. Uma ukhathazeke ngenkokhelo ezenzakalelayo kuphela, khetha leso sizathu efasiteleni lokukhansela, bese ungavala ukuvuselela esikhundleni salokho, ugcine isikhathi sokuzama kuze kube usuku lwaso lokugcina.",
-              "Uma ukhansela ukubhalisa okukhokhelwayo ngephutha noma ushintsha umqondo, ungakuqhubeka kusuka kuleli khasi elifanayo ngaphambi kokuphela kwesikhathi.",
+              "Ungakwenza wena, noma nini. Ngena, uvule i-akhawunti, bese uthepha okuthi Khansela ukubhalisa ngaphansi kohlelo lwakho.",
+              "Uthenge ukubhalisa kwakho kuhlelo lokusebenza lwe-iPhone noma lwe-iPad? Kukhansela kuzilungiselelo zakho zokubhalisa ze-Apple. Isixhumanisi esithi \"Phatha ukubhalisa\" ekhasini lakho le-akhawunti sikuyisa khona.",
+              "Uma unokubhalisa okukhokhelwayo, ukufinyelela kwakho kuqhubeka kuze kube sekupheleni kwesikhathi osuvele usikhokhele. Ngemva kwalokho i-akhawunti iya ku-Basic, yamahhala. Amagama akho alondoloziwe nomlando kuhlala kuphephile.",
+              "Phakathi nesikhathi sokuzama samahhala sezinsuku ezingu-14, ukukhansela kuqeda leso sikhathi sokuzama ngokushesha futhi akukho okukhokhiswayo. Uma okukukhathazayo kuphela kuyinkokhelo ezenzakalelayo, khetha leso sizathu efasiteleni lokukhansela, bese ungacisha ukuvuselela esikhundleni salokho, ugcine isikhathi sokuzama kuze kube usuku lwaso lokugcina.",
+              "Uma ukhansela ukubhalisa okukhokhelwayo ngephutha noma ushintsha umqondo, ungakuqalisa futhi kusuka kulelo khasi elifanayo ngaphambi kokuphela kwesikhathi.",
             ],
           },
           {
@@ -511,8 +513,8 @@ Object.assign(HELP, {
             id: "failed-payment",
             q: "Inkokhelo yami yehlulekile. Kufanele ngenzeni?",
             a: [
-              "I-Stripe izama kabusha ngokuzenzakalelayo izinkokhelo ezihlulekile izikhathi ezimbalwa ezinsukwini ezilandelayo. Iningi lokwehluleka lizixazulula lona uma ibhange likhulula ukubamba noma ikhadi linebhalansi eyanele.",
-              "Uma ufuna ukuyilungisa ngokushesha, iya ku-Account, Manage billing, Add payment method, faka ikhadi elisebenzayo, bese ulisetha njenge-Default. I-Stripe izozama kabusha inkokhelo ehlulekile ngokushesha ekhadini elisha. Uma ukubhalisa kwakho sekuphelelwe yisikhathi kwabuyela ku-Basic, ungabhalisa kabusha kusuka ku-Pricing futhi incwadi yakho yamanothi ihlala iphelele.",
+              "I-Stripe izama kabusha ngokuzenzakalelayo izinkokhelo ezihlulekile izikhathi ezimbalwa ezinsukwini ezilandelayo. Iningi lokwehluleka liyazilungisa lona uma ibhange selikhulule ukubamba, noma ikhadi selinebhalansi eyanele.",
+              "Ibha phezulu ekhasini izosho ukuthi inkokhelo ayiphumelelanga, futhi ukufinyelela kwakho kugcinwa izinsuku ezimbalwa ezengeziwe. Thepha okuthi \"Buyekeza ikhadi\" lapho, ufake ikhadi elisebenzayo, bese sizama inkokhelo kulona ngokushesha. Uma ukubhalisa kwakho sekubuyisele ku-Basic, ungabhalisa futhi ekhasini le-Pricing futhi incwadi yakho yamanothi ihlala injalo.",
             ],
           },
           {
@@ -543,40 +545,40 @@ Object.assign(HELP, {
             id: "forgot-password",
             q: "Ngiyikhohliwe iphasiwedi yami",
             a: [
-              "Vula ibhokisi lokungena bese uchofoza \"Forgot password?\". Faka i-imeyili oyisebenzisela i-Gadit bese uthola isixhumanisi sokusetha kabusha phakathi komzuzu noma emibili.",
-              "Uma i-imeyili ingafiki, hlola i-spam. Uma isengafiki, kungenzeka wabhalisa nge-Google esikhundleni se-imeyili nephasiwedi. Zama inkinobho ethi \"Continue with Google\".",
+              "Ewindini lokungena, thayipha i-imeyili yakho, bese uthepha \"Ukhohlwe iphasiwedi?\". Isixhumanisi sokusetha kabusha sivame ukufika ebhokisini lakho lokungenayo kungakapheli umzuzu noma emibili. Ungaphinda uthephe \"Ngithumelele isixhumanisi sokungena nge-imeyili\" ungene ngaphandle kwephasiwedi.",
+              "Uma i-imeyili ingafiki, hlola i-spam. Uma isengafiki, kungenzeka wabhalisa nge-Google esikhundleni se-imeyili nephasiwedi. Zama inkinobho ethi \"Qhubeka nge-Google\".",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "Ngiqinisekile ukuthi iphasiwedi yami ilungile kodwa ithi \"Wrong email or password\"",
+            q: "Iphasiwedi yami ilungile, kodwa ithi i-imeyili nephasiwedi akuhambisani",
             a: [
-              "Izinto ezintathu okufanele uzihlole. Okokuqala, i-capslock. Okwesibili, isikhala esisemuva uma ukopisha unamathisela. Okwesithathu, wabhalisa nge-Google kunephasiwedi (sebenzisa \"Continue with Google\" esikhundleni salokho).",
-              "Usabambekile? Setha kabusha iphasiwedi kusuka kubhokisi elifanayo. Kukubeka endaweni ecacile.",
+              "Izinto ezintathu okufanele uzihlole. Okokuqala, i-Caps Lock. Okwesibili, isikhala esengeziwe ekugcineni ngemva kokukopisha nokunamathisela. Okwesithathu, kungenzeka wabhalisa nge-Google kunokuba usebenzise iphasiwedi, sebenzisa \"Qhubeka nge-Google\" esikhundleni salokho.",
+              "Usabambekile? Kulo mlayezo ofanayo thepha \"Ngithumelele isixhumanisi sokungena nge-imeyili\" ukuze ungene ngaphandle kwephasiwedi, noma \"Khetha iphasiwedi entsha\".",
             ],
           },
           {
             id: "google-fails",
             q: "Ukungena nge-Google akusebenzi",
             a: [
-              "Imbangela evame kakhulu: isiphequluli sakho sivimbela amakhukhi enkampani yesithathu noma ama-pop-up e-gadit.app. Wavumele ezimvumeni ezisebharini yekheli bese uzama futhi.",
-              "Uma usemodini ye-incognito, ukungena nge-Google kuvinjelwe ngamabomu. Shintshela kuwindi elijwayelekile lesiphequluli.",
+              "Ngaphakathi kwezinhlelo zokusebenza ezifana ne-Instagram, Facebook noma TikTok, inkinobho ye-Google iyafihlwa. Vula isixhumanisi kusiphequluli sakho esijwayelekile, noma ungene nge-imeyili yakho. Uma wajoyina nge-Google, thayipha leyo imeyili bese uthepha \"Ngithumelele isixhumanisi sokungena nge-imeyili\".",
+              "Ewindini eliyimfihlo, ama-cookie avinjiwe angamisa ukungena nge-Google, ngakho zama iwindi elijwayelekile.",
             ],
           },
           {
             id: "change-email",
             q: "Ngiyishintsha kanjani i-imeyili ku-akhawunti yami?",
             a: [
-              "I-Account, chofoza i-imeyili yakho, Change email. Uzodinga ukuqinisekisa ikheli elisha ngaphambi kokuthi lisebenze. Ukubhalisa kwakho, umlando, nencwadi yamanothi konke kudlulela.",
-              "Uma i-imeyili iboshelwe kukhasimende le-Stripe, yibuyekeze nasephothalini yokukhokha ye-Stripe ukuze amarisidi esikhathi esizayo aye ekhelini elisha.",
+              "Ukushintsha i-imeyili ye-akhawunti yakho kwenziwa yithimba. Sithumelele i-imeyili usuka ekhelini lakho lamanje bese ubhala ikheli elisha emlayezweni. Ithimba lizolibuyekeza, futhi ukubhalisa kwakho, umlando nencwadi yamanothi kuhlala kunje.",
             ],
           },
           {
             id: "delete-account",
             q: "Ngiyisusa kanjani i-akhawunti yami?",
             a: [
-              "I-Account, ngezansi kwekhasi, Delete account. Lokhu kuhlala unomphela. Ukubhalisa kwakho kuyakhanselwa, incwadi yakho yamanothi nomlando kuyasuswa, futhi i-imeyili iyakhululwa ukuze ubhalise kabusha.",
-              "Amarekhodi e-Stripe ezinkokhelo ezedlule ahlala (ngokomthetho sidinga ukuwagcina ngezobalomali). Akukho okunye okusalayo.",
+              "Ezansi kwekhasi le-\"I-akhawunti\", thepha \"Susa i-akhawunti\" bese uthayipha i-imeyili ye-akhawunti yakho ukuze uqinisekise. Lokhu kuhlala unomphela: ukubhalisa kwakho kuyakhanselwa, incwadi yakho yamanothi nomlando kuyasuswa, futhi i-imeyili iyakhululwa ukuze ubhalise kabusha.",
+              "Okuhlukile kuphela ukubhalisa okuthengwe ku-App Store, ukususa i-akhawunti akukukhanseli, ngakho kukhansele kuqala kuzilungiselelo zakho zokubhalisa ze-Apple.",
+              "Amarekhodi ezinkokhelo ezedlule ayahlala, ngoba umthetho usiphoqa ukuthi siwagcine ngezokubalwa kwezimali.",
             ],
           },
           {
@@ -591,8 +593,8 @@ Object.assign(HELP, {
             id: "multiple-accounts",
             q: "Ngicabanga ukuthi nginama-akhawunti amabili ngephutha. Manje kwenziwani?",
             a: [
-              "Lokhu kuvame ukwenzeka lapho umuntu ebhalisa kanye nge-Google bese ebhalisa kanye nge-imeyili nephasiwedi esebenzisa ikheli elifanayo, noma lapho ubhalisa kabili ngamakheli e-imeyili ahlukene. Ukubhalisa ngakunye kudala i-akhawunti ye-Gadit ehlukene enencwadi yamanothi yayo, umlando, nesimo sokubhalisa.",
-              "Sibhalele ngamakheli e-imeyili womabili (noma ama-UID asuka ekhasini le-Account) nokuthi yiliphi ofuna ukuligcina. Iqembu lizohlanganisa izincwadi zamanothi nomlando ku-akhawunti oyikhethayo, bese livala enye ngokuhlanzekile. Ayikho idatha elahlekayo.",
+              "Lokhu kuvame ukwenzeka lapho umuntu ebhalisa kanye nge-Google bese ebhalisa futhi nge-imeyili nephasiwedi esebenzisa ikheli elifanayo, noma lapho ubhalisa kabili ngamakheli e-imeyili ahlukene. Ukubhalisa ngakunye kwakha i-akhawunti ye-Gadit ehlukile enencwadi yamanothi yayo, umlando wayo, nesimo sayo sokubhalisa.",
+              "Sithumele i-imeyili usuka kwelinye lalawo makheli amabili, bese ubhala elinye ikheli nokuthi iyiphi i-akhawunti ofuna ukuyigcina. Iqembu lizohlanganisa incwadi yamanothi nomlando ku-akhawunti oyikhethayo, bese livala enye kahle. Ayikho idatha elahlekayo.",
             ],
           },
         ],
@@ -606,7 +608,7 @@ Object.assign(HELP, {
             id: "wrong-definition",
             q: "Ngicabanga ukuthi incazelo ayilungile. Ngenzani?",
             a: [
-              "Wonke amakhasi omphumela anenkinobho encane ethi \"Report\" ngezansi. Yicindezele, khetha isigaba (incazelo, umsuka wegama, isibonelo, isisho, incazelo yezingane, njalonjalo) bese ubhala inothi elifushane. Kufika ngqo eqenjini futhi wonke umbiko uyabuyekezwa.",
+              "Eceleni kwencazelo ngayinye, futhi nasemakhadini ezisho nawomsuka wegama, kunophawu oluncane lwefulegi. Luthephe, ukhethe okungalungile, bese ungeza inothi elifushane uma uthanda. Kufika ngqo eqenjini, futhi wonke umbiko uyabuyekezwa.",
               "Ungakhathazeki ngokuba nokukhetha okweqile. Isichazamazwi sithuthuka kule mpendulo ngokushesha kunanoma yini enye.",
             ],
           },
@@ -614,16 +616,16 @@ Object.assign(HELP, {
             id: "kids-not-working",
             q: "Imodi yezingane ayiyishintshi incazelo",
             a: [
-              "Imodi yezingane ishintsha umbhalo kuphela lapho igama selivele linencazelo elungele izingane. Egameni osanda kulibheka okokuqala, linika imizuzwana engu-10 kuya kwengu-15 ngenkathi kulungiswa inguqulo yezingane.",
-              "Imodi yezingane iyingxenye yohlelo lwe-Family. Ku-Basic, ku-Individual, noma ngaphandle kwe-akhawunti, i-toggle ikhombisa uhlelo lwe-Family esikhundleni sokuvula. Ababhalisile ku-Clear noma ku-Deep ngaphambi kuka-Okthoba 2026 bagcina imodi yezingane. Ukuze uyithole, bheka i-Family ekhasini lamanani.",
+              "Imodi yezingane ishintsha umbhalo kuphela lapho igama selivele linencazelo elungele izingane. Egameni osanda kulibheka okokuqala, linike imizuzwana engu-10 kuya kwengu-15 ngenkathi kulungiswa inguqulo yezingane.",
+              "Imodi yezingane iyingxenye yohlelo lwe-Family. Ku-Individual uzobona iswishi ethi \"Ngamagama alula\" esikhundleni sayo, enikeza incazelo elula kakhudlwana yencazelo ngayinye. Ku-Basic noma ngaphandle kwe-akhawunti akukho swishi. Ababhalisile abajoyine i-Clear noma i-Deep ngaphambi kuka-Okthoba 2026 bagcina Imodi yezingane. Ukuze uyithole, bheka i-Family ekhasini lamanani.",
             ],
           },
           {
             id: "voice-fails",
             q: "Usesho ngezwi alusebenzi",
             a: [
-              "Usesho ngezwi ludinga imvume yemakrofoni. Iziphequluli eziningi zibuza kanye ngesayithi ngalinye. Uma ngengozi uchofoze u-Block, uzodinga ukukuguqula kabusha ngesandla: chofoza isikhiye noma isithonjana solwazi eduze kwe-gadit.app ebharini yekheli, bese Site settings, bese Microphone, bese Allow.",
-              "Ku-Safari ku-iPhone naku-iPad, ukufinyelela imakrofoni kudinga futhi i-Settings → Safari → Microphone. Usesho ngezwi luyingxenye yamahlelo e-Individual ne-Family: ku-Basic uzobona amahlelo esikhundleni salokho, futhi izivakashi ezingangenanga ngemvume zicelwa ukuthi zingene. Ukuze uthuthukise, vula ikhasi lamanani.",
+              "Usesho ngezwi ludinga imvume yemakrofoni. Iziphequluli eziningi zibuza kanye ngesayithi ngalinye. Uma uyivimbe ngephutha, thepha isithonjana esiseduze kwe-gadit.app ebharini yekheli bese uvumela imakrofoni kuzimvume zesayithi.",
+              "Ku-iPhone naku-iPad, vumela futhi imakrofoni ye-Safari kuhlelo lokusebenza lwe-Settings lwedivayisi. Usesho ngezwi luyingxenye yamahlelo e-Individual ne-Family, ngakho ku-Basic nangaphandle kwe-akhawunti inkinobho yemakrofoni ayiveli. Ukuze uthuthukise, vula ikhasi lamanani.",
             ],
           },
           {
@@ -644,9 +646,9 @@ Object.assign(HELP, {
           },
           {
             id: "offline",
-            q: "Isebenza kanjani imodi yokungaxhunyiwe ku-inthanethi?",
+            q: "Ngiyisebenzisa kanjani i-Gadit ngaphandle kwe-inthanethi?",
             a: [
-              "Ukusebenzisa ungaxhunyiwe ku-inthanethi kuyingxenye yamahlelo e-Individual ne-Family. Wonke amagama owabhekayo agcinwa kudivayisi yakho, ngakho avuleka futhi ngokushesha ngaphandle kwe-inthanethi. Ungalanda nephakethe lamagama adume kakhulu ngolimi lwakho ekhasini lakho le-Akhawunti.",
+              "Ukusebenzisa ngaphandle kwe-inthanethi kuyingxenye yamahlelo e-Individual ne-Family. Wonke amagama owabhekayo agcinwa kudivayisi yakho, ngakho avuleka futhi ngokushesha ngaphandle kwe-inthanethi. Ungathepha futhi okuthi \"Landa iphakethe lokungaxhumeki\" ekhasini lakho le-\"I-akhawunti\" ukuze ulondoloze amagama esichazamazwi sethu ngolimi lwakho kule divayisi.",
               "Ukubheka igama elisha ngokuphelele kusadinga uxhumano, ngoba i-Gadit kufanele ilungiselele umphumela ogcwele walo. Ikhophi yokungaxhunyiwe imboza amagama asevele ekudivayisi yakho. Uma uku-Basic, bheka amahlelo ekhasini lamanani.",
             ],
           },
@@ -662,16 +664,16 @@ Object.assign(HELP, {
             id: "word-not-found",
             q: "Ngiseshe igama kodwa angitholanga mphumela. Kwenzekani?",
             a: [
-              "Okokuqala, hlola upelo. I-Gadit iphatha amaphutha amancane wokuthayipha isikhathi esiningi, kodwa unkamisa ongalungile noma uhlamvu olungekho kungayidukisa. Zama ukulungiswa okuphakanyisiwe uma kuvela.",
-              "Ngaphandle kwalokho: amagama angavamile kakhulu noma esilingi angahle angabuyisi umphumela oqinisekile. Uma uqinisekile ukuthi igama likhona ngempela, chofoza inkinobho ethi Report ekhasini lomphumela (noma esikrinini sephutha) bese usazisa. Wonke umbiko uyabuyekezwa futhi ukungatholakali kwangempela kubuyiselwa ohlelweni.",
+              "Okokuqala, hlola upelo. Uma kube nephutha lokuthayipha, i-Gadit ivamise ukukhombisa igama elilungisiwe, kanye nesixhumanisi sokusesha lokho okubhale noma kunjalo.",
+              "Amagama angavamile kakhulu noma esilingi awahlali enomphumela. Uma uqinisekile ukuthi igama likhona, sibhalele usuka kuleli khasi bese ithimba lizokuhlola.",
             ],
           },
           {
             id: "change-language",
             q: "Ngilushintsha kanjani ulimi lwesixhumi (UI)?",
             a: [
-              "Phezulu ngakwesokudla kwanoma yiliphi ikhasi, uzobona isithonjana esincane sefulege (noma igama lolimi lwakho lwamanje). Sithephe bese ukhetha phakathi kwezilimi ezingu-41.",
-              "Ukukhetha kwakho kugcinwa kule divayisi. Konke kulayisha kabusha ngolimi olusha: isixhumi, amamenyu, izincazelo zamagama zesikhathi esizayo, izibonelo, izincazelo zezingane, ngisho nomsuka wegama. Imiphumela esivele igciniwe ngolimi oludala ihlala kuze kube yilapho usesha lawo magama futhi.",
+              "Phezulu ekhasini kunesithonjana sembulunga esinolimi lwakho lwamanje. Sithephe bese ukhetha ulimi.",
+              "Ukukhetha kwakho kugcinwa kule divayisi. Konke kulayisha kabusha ngolimi olusha, isixhumi, amamenyu, izincazelo zamagama zesikhathi esizayo, izibonelo, izincazelo zezingane, ngisho nomsuka wegama. Amagama osuvele wawabheka ngolimi oludala azohlala ekulo kuze kube yilapho uwasesha futhi.",
             ],
           },
         ],
@@ -685,33 +687,33 @@ Object.assign(HELP, {
             id: "join-partner",
             q: "Ngiba kanjani umlingani we-Gadit?",
             a: [
-              "Vula i-/partners kusuka kunoma yiliphi ikhasi bese uchofoza \"Become a partner\". Bhalisa ngegama nge-imeyili yakho, futhi isixhumanisi sakho esiyingqayizivele sokudlulisela kanye nedeshibhodi yokulandelela ukuchofoza namakhomishini kulungile ngokushesha. Akukho ukulinda ukugunyazwa.",
-              "Ukujoyina kumahhala futhi kuvulekele wonke umuntu. Awudingi ukubhalisela i-Gadit ukuze ube umlingani.",
+              "Iya ku-gadit.app/partners bese uthepha \"Joyina mahhala\". Faka igama lakho ne-imeyili, bese uthepha \"Thola ikhodi yami yomlingani\". Isixhumanisi sakho siqu nedeshibhodi yabalingani, enokuchofozwa namakhomishini, kuba sekulungile ngokushesha, ngaphandle kokulinda ukugunyazwa. Ikhodi nesixhumanisi nakho kufika nge-imeyili.",
+              "Ukujoyina kumahhala futhi kuvulekele wonke umuntu. Awudingi ukubhalisa ku-Gadit ukuze ube umlingani.",
             ],
           },
           {
             id: "commission-model",
             q: "Amakhomishini abalwa kanjani?",
             a: [
-              "Imigomo ejwayelekile ingu-25% wayo yonke inkokhelo eyenziwa yikhasimende onyakeni walo wokuqala. Ngemva kwalowo nyaka wokuqala, uhola u-10% wayo yonke inkokhelo inqobo nje uma ikhasimende liqhubeka likhokha.",
+              "Imigomo ejwayelekile ingu-25% wayo yonke inkokhelo eyenziwa ikhasimende onyakeni walo wokuqala. Ngemva kwalowo nyaka wokuqala, uhola u-10% wayo yonke inkokhelo inqobo nje uma ikhasimende liqhubeka likhokha. Uma uletha amakhasimende akhokhayo angu-5, isabelo sakho ngemva konyaka wokuqala sikhuphukela ku-15% impilo yonke.",
               "Lokhu kusebenza ngendlela efanayo ezinhlelweni zenyanga nezonyaka, ngoba ikhomishini ibalwa enkokhelweni ngayinye eyenziwe ngempela. Uma ikhasimende likhansela, ikhomishini yakho iyama ngenkokhelo yalo yokugcina.",
-              "Iqembu lingasetha amazinga ahlukile kwabalingani abathile. Amazinga akho ahlala ebonakala kudeshibhodi yakho yabalingani, ongayifinyelela kusuka ku-/partners.",
+              "Iqembu lingasetha amazinga ahlukile kwabanye abalingani. Amazinga akho ahlala ebonakala kudeshibhodi yakho yabalingani.",
             ],
           },
           {
             id: "payout",
             q: "Ngikhokhelwa nini?",
             a: [
-              "Ngenyanga, uma ibhalansi yakho iwela ngaphezu kuka-$50. Sisebenzisa indlela yokukhokha oyisethe kudeshibhodi yabalingani (ukudlulisa ngebhange, i-PayPal, njalonjalo). U-$50 uwumkhawulo ophansi, hhayi umkhawulo ophezulu. Ungahola okuningi kakhulu, uthola nje inkokhelo lapho wedlula umkhawulo.",
-              "Amakhomishini akhululwa ngemva kwezinsuku ezingu-30 kwenkokhelo yokubhalisa, ukuze kuvumeleke iwindi lombuyiselo. Ngakho ukubhalisa kukaJanuwari kukhululwa ekuqaleni kukaFebhuwari futhi kufika enkokhelweni yakho elandelayo uma ibhalansi yakho iwela ngaphezu kuka-$50.",
+              "Kanye ngenyanga, uma ibhalansi yakho isifinyelele ubuncane obukhonjiswe kudeshibhodi yakho yabalingani. Siyithumela ku-akhawunti ye-PayPal oyisethe lapho. Ubuncane buyisilinganiso sokuqala, akuwona umkhawulo ophezulu. Ungahola kakhulu ngaphezu kwalokho, futhi uthola inkokhelo uma usuweqile lowo mkhawulo.",
+              "Amakhomishini akhululwa ezinsukwini ezingu-30 ngemva kwenkokhelo yokubhalisa, ukuze kuvumeleke isikhathi sembuyiselo. Ngakho ukubhalisa kukaJanuwari kukhululwa ekuqaleni kukaFebhuwari, bese kufika enkokhelweni yakho elandelayo uma ibhalansi yakho isifinyelele ubuncane.",
             ],
           },
           {
             id: "empty-dashboard",
             q: "Ngijoyinile kodwa ideshibhodi yami ayinalutho",
             a: [
-              "Izibalo zivela ngemva kokuchofoza kokuqala esixhumanisini sakho. Okungenalutho kusho nje ukuthi akekho osechofozile okwamanje. Hamba wabelane ngesixhumanisi. Ideshibhodi ibuyekeza cishe ngesikhathi sangempela uma umsebenzi uqala.",
-              "Uma wabelane futhi othile ebhalisile kodwa ideshibhodi ingakubonisi, sibhalele ngesikhathi esilinganiselwe sokubhalisa futhi iqembu lizohlola ukwabelwa.",
+              "Izibalo ziyavela ngemva kokuchofoza kokuqala esixhumanisini sakho. Okungenalutho kusho nje ukuthi akekho osechofozile okwamanje. Hamba wabelane ngesixhumanisi. Ideshibhodi ibuyekeza cishe ngesikhathi sangempela uma umsebenzi usuqalile.",
+              "Uma wabelane futhi othile ebhalisile kodwa ideshibhodi ingakubonisi lokho, sibhalele ngesikhathi esilinganiselwe sokubhalisa, iqembu lizohlola ukuthi ukubhalisa kuvelaphi.",
             ],
           },
           {
@@ -726,8 +728,8 @@ Object.assign(HELP, {
             id: "missing-commission",
             q: "Umuntu othile ubhalise ngesixhumanisi sami kodwa angiyiboni ikhomishini",
             a: [
-              "Ngokuvamile lokhu kungenxa yesikhathi: ukubhalisa kuvela kudeshibhodi phakathi kwemizuzu, kodwa ikhomishini ibhukwa kuphela uma ukubhalisa sekukhokhelwe ngempela (okungaba izinsuku kamuva uma besesikhathini sokulinga samahhala). Buyela emuva ngemva kokuphela kwesikhathi sokulinga.",
-              "Uma ukubhalisa kukhokhelwe kodwa usangayiboni ikhomishini ngemva kwamahora angu-48, sibhalele ngesikhathi esilinganiselwe sokubhalisa kanye ne-imeyili noma igama elilinganiselwe lombhalisi uma ulazi. Iqembu lizophenya iketango lokwabelwa futhi lilungise noma yikuphi ukungatholakali ngesandla.",
+              "Ngokuvamile lokhu kuba yindaba yesikhathi. Ukubhalisa kuvela kudeshibhodi phakathi kwemizuzu, kodwa ikhomishini ibhalwa kuphela uma ukubhalisa sekukhokhelwe ngempela, okungaba izinsuku kamuva uma besesikhathini sokulinga samahhala. Bheka futhi ngemva kokuphela kwesikhathi sokulinga.",
+              "Uma ukubhalisa kukhokhelwe kodwa usangayiboni ikhomishini ngemva kwamahora angu-48, sibhalele ngesikhathi esilinganiselwe sokubhalisa kanye ne-imeyili noma igama elilinganiselwe lombhalisi uma ukwazi. Iqembu lizohlola ukuthi ukubhalisa kuvelaphi futhi lilungise noma yini ephuthelwe ngesandla.",
             ],
           },
         ],
@@ -799,19 +801,20 @@ Object.assign(HELP, {
             id: "change-card",
             q: "Ndilitshintsha njani ikhadi letyala kumrhumo wam?",
             a: [
-              "Ungatshintshela kwikhadi elitsha ngaphantsi komzuzu ngaphandle kokurhoxisa. Umrhumo wakho wangoku uyaqhubeka, kodwa ngekhadi elitsha.",
-              "1. Ngena kwi-gadit.app uze uvule iphepha leAkhawunti yakho (phezulu ekunene). 2. Cofa \"Lawula iintlawulo\". 3. Kuvuleka iphepha le-Stripe elikhuselekileyo. Cofa \"Add payment method\", faka ikhadi elitsha, uze ulibeke njengeDefault. 4. Ukuba uyafuna, susa ikhadi elidala.",
-              "Ukususela kumjikelo olandelayo wokuhlawula, yonke into iya kwikhadi elitsha. Intlawulo yangaphambili (esele iqokelelwe) ihlala kwikhadi elidala. Akufuneki mbuyekezo ngaphandle kokuba uyifuna ngokuthe ngqo.",
+              "Ungatshintshela kwikhadi elitsha ngaphantsi komzuzu ngaphandle kokurhoxisa. Umrhumo wakho wangoku uyaqhubeka, kodwa usebenzisa ikhadi elitsha.",
+              "1. Ngena kwi-gadit.app uze uvule \"Iakhawunti\" kwimenyu yeakhawunti. 2. Cofa \"Lawula iintlawulo\". 3. Kuvuleka iphepha le-Stripe elikhuselekileyo. Yongeza ikhadi elitsha njengendlela yokuhlawula uze ulibeke njengolungagqibekanga. 4. Ukuba uyafuna, susa ikhadi elidala.",
+              "Ukususela kumjikelo olandelayo wokuhlawula, yonke into iya kwikhadi elitsha. Intlawulo yangaphambili, esele iqokelelwe, ihlala kwikhadi elidala. Akufuneki mbuyekezo ngaphandle kokuba uyifuna ngokuthe ngqo.",
             ],
           },
           {
             id: "cancel",
             q: "Ndiwurhoxisa njani umrhumo wam?",
             a: [
-              "Uzenzela ngokwakho, nanini na. Ngena, vula iAkhawunti, uze ucofe Rhoxisa umrhumo phantsi kwesicwangciso sakho.",
-              "Kumrhumo ohlawulelwayo, ukufikelela kwakho kuyaqhubeka de kuphele ixesha osele ulihlawulele. Emva koko iakhawunti ibuyela kwi-Basic (simahla). Amagama akho agciniweyo nembali yakho zihlala zikhuselekile.",
+              "Uzenzela ngokwakho, nanini na. Ngena, uvule iAkhawunti, uze ucofe ukurhoxisa umrhumo phantsi kwesicwangciso sakho.",
+              "Uthenge umrhumo wakho kwi-app ye-iPhone okanye ye-iPad? Wurhoxise kwiisetingi zomrhumo ze-Apple. Ilinki ethi \"Lawula umrhumo\" kwiphepha lakho leAkhawunti ikusa apho.",
+              "Kumrhumo ohlawulelwayo, ukufikelela kwakho kuyaqhubeka de kuphele ixesha osele ulihlawulele. Emva koko iakhawunti iya kwi-Basic, simahla. Amagama akho agciniweyo nembali yakho zihlala zikhuselekile.",
               "Ngexesha lovavanyo lwasimahla lweentsuku ezili-14, ukurhoxisa kuphelisa uvavanyo ngoko nangoko kwaye akukho nto ihlawuliswayo. Ukuba ukhathazwa kuphela yintlawulo ezenzekelayo, khetha eso sizathu kwifestile yokurhoxisa, uze ucime ukuhlaziywa endaweni yoko, ugcine uvavanyo de kube lusuku lwalo lokugqibela.",
-              "Ukuba urhoxisa umrhumo ohlawulelwayo ngempazamo okanye utshintsha ingqondo, ungawuqhubela phambili kwakwiphepha elo ngaphambi kokuba ixesha liphele.",
+              "Ukuba urhoxisa umrhumo ohlawulelwayo ngempazamo okanye utshintsha ingqondo, ungawuqalisa kwakhona kwakwelo phepha ngaphambi kokuba ixesha liphele.",
             ],
           },
           {
@@ -866,8 +869,8 @@ Object.assign(HELP, {
             id: "failed-payment",
             q: "Intlawulo yam ayiphumelelanga. Ndenze ntoni?",
             a: [
-              "I-Stripe iphinda izame iintlawulo ezingaphumelelanga izihlandlo ezimbalwa kwiintsuku ezilandelayo. Uninzi lweempazamo zizisombulula ngokwazo xa ibhanki ikhulula imali ebibanjiwe okanye ikhadi linemali eyaneleyo.",
-              "Ukuba ufuna ukuyilungisa ngoko nangoko, yiya kwiAkhawunti → Lawula iintlawulo → Add payment method, faka ikhadi elisebenzayo, uze ulibeke njengeDefault. I-Stripe iza kuphinda izame intlawulo ebingaphumelelanga kwangoko kwikhadi elitsha. Ukuba umrhumo wakho sele ubuyele kwi-Basic, ungabhalisa kwakhona kwiphepha lamaXabiso kwaye incwadi yakho ihlala ingachukumiswanga.",
+              "I-Stripe izama ngokuzenzekelayo kwakhona iintlawulo ezingaphumelelanga izihlandlo ezimbalwa kwiintsuku ezilandelayo. Uninzi lweengxaki luzisombulula ngokwalo xa ibhanki ikhulula imali ebibanjiwe okanye ikhadi sele linemali eyaneleyo.",
+              "Ibha ephezulu ephepheni iya kuthi intlawulo ayiphumelelanga, kwaye ukufikelela kwakho kugcinwa ezinye iintsuku ezimbalwa. Cofa \"Hlaziya ikhadi\" apho, ufake ikhadi elisebenzayo, size sizame intlawulo kulo ngoko nangoko. Ukuba umrhumo wakho sele ubuyele kwi-Basic, ungabhalisa kwakhona kwiphepha lamaXabiso kwaye incwadi yakho ihlala injalo.",
             ],
           },
           {
@@ -898,40 +901,40 @@ Object.assign(HELP, {
             id: "forgot-password",
             q: "Ndiyilibele iphasiwedi yam",
             a: [
-              "Vula ibhokisi yokungena uze ucofe \"Uyilibele iphasiwedi?\". Faka i-imeyile oyisebenzisela i-Gadit kwaye uza kufumana ilinki yokutshintsha iphasiwedi kwisithuba somzuzu okanye emibini.",
-              "Ukuba i-imeyile ayifiki, jonga kwi-spam. Ukuba ayikafiki nangoko, usenokuba ubhalise nge-Google endaweni ye-imeyile nephasiwedi. Zama iqhosha elithi \"Qhubeka nge-Google\".",
+              "Kwifestile yokungena, chwetheza i-imeyile yakho, uze ucofe \"Uyilibele iphasiwedi?\". Ilinki yokuseta kwakhona idla ngokufika kwi-inbox yakho kwisithuba somzuzu okanye emibini. Unokucinezela no \"Ndithumelele ilinki yokungena nge-imeyile\" uze ungene ngaphandle kwephasiwedi.",
+              "Ukuba i-imeyile ayifiki, jonga kwi-spam. Ukuba ayikafiki, usenokuba ubhalise nge-Google endaweni ye-imeyile nephasiwedi. Zama iqhosha elithi \"Qhubeka nge-Google\".",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "Ndiqinisekile ukuba iphasiwedi yam ichanekile kodwa ithi \"I-imeyile okanye iphasiwedi ayichanekanga\"",
+            q: "Iphasiwedi yam ichanekile, kodwa ithi i-imeyile nephasiwedi azingqinelani",
             a: [
-              "Kukho izinto ezintathu zokujonga. Okokuqala, i-capslock. Okwesibini, isithuba esisekupheleni xa ukopa uncamathisela. Okwesithathu, ubhalise nge-Google kunokuba ubhalise ngephasiwedi (sebenzisa \"Qhubeka nge-Google\" endaweni yoko).",
-              "Usabambekile? Tshintsha iphasiwedi kwakwibhokisi leyo. Oko kukulungiselela ngokutsha.",
+              "Zintathu izinto onokuzijonga. Okokuqala, i-Caps Lock. Okwesibini, isithuba esongezelekileyo ekugqibeleni emva kokukopa nokuncamathisela. Okwesithathu, usenokuba ubhalise nge-Google kungekhona ngephasiwedi, sebenzisa \"Qhubeka nge-Google\" endaweni yoko.",
+              "Usabambekile? Kwakuloo myalezo, cofa \"Ndithumelele ilinki yokungena nge-imeyile\" ukuze ungene ngaphandle kwephasiwedi, okanye \"Khetha iphasiwedi entsha\".",
             ],
           },
           {
             id: "google-fails",
             q: "Ukungena nge-Google akusebenzi",
             a: [
-              "Owona nobangela uqhelekileyo: ibhrawuza yakho ivimba ii-cookie zabantu besithathu okanye ii-pop-up ze-gadit.app. Zivumele kwiimvume zebha yedilesi uze uzame kwakhona.",
-              "Ukuba ukwimo ye-incognito, ukungena nge-Google kuthintelwe ngabom. Tshintshela kwifestile eqhelekileyo yebhrawuza.",
+              "Ngaphakathi kwii-app ezifana no Instagram, Facebook okanye TikTok, iqhosha lika-Google liyafihlwa. Vula ilinki kwibhrawuza yakho yesiqhelo, okanye ungene nge-imeyile yakho. Ukuba ubhalise nge-Google, chwetheza loo imeyile uze ucofe \"Ndithumelele ilinki yokungena nge-imeyile\".",
+              "Kwifestile yabucala, ii-cookie ezivaliweyo zinokumisa ukungena nge-Google, ngoko zama ifestile eqhelekileyo.",
             ],
           },
           {
             id: "change-email",
             q: "Ndiyitshintsha njani i-imeyile kwiakhawunti yam?",
             a: [
-              "IAkhawunti, cofa i-imeyile yakho, Tshintsha i-imeyile. Kuza kufuneka uqinisekise idilesi entsha ngaphambi kokuba isebenze. Umrhumo wakho, imbali nencwadi yakho zonke ziyadluliselwa.",
-              "Ukuba i-imeyile inxulumene nomthengi we-Stripe, yihlaziye nakwiphothali yeentlawulo ye-Stripe ukuze iirisithi ezizayo ziye kwidilesi entsha.",
+              "Ukutshintsha i-imeyile yeakhawunti yakho kwenziwa liqela. Sithumelele i-imeyile isuka kwidilesi yakho yangoku uze ubhale idilesi entsha kumyalezo. Iqela liza kuyihlaziya, kwaye umrhumo wakho, imbali nencwadi yakho zihlala zinjalo.",
             ],
           },
           {
             id: "delete-account",
             q: "Ndiyicima njani iakhawunti yam?",
             a: [
-              "IAkhawunti, ezantsi kwiphepha, Cima iakhawunti. Oku kungunaphakade. Umrhumo wakho urhoxisiwe, incwadi nembali yakho ziyacinywa, kwaye i-imeyile iyakhululeka ukuze ubhalise ngokutsha.",
-              "Iirekhodi ze-Stripe zeentlawulo ezidlulileyo ziyahlala (umthetho usinyanzela ukuba sizigcine ngenjongo zobalo-mali). Akukho nto yimbi ihlalayo.",
+              "Ezantsi kwephepha elithi \"Iakhawunti\", cofa \"Cima iakhawunti\" uze uchwetheze i-imeyile yeakhawunti yakho ukuqinisekisa. Oku kungunaphakade. Umrhumo wakho uyarhoxiswa, incwadi nembali yakho ziyacinywa, kwaye i-imeyile iyakhululeka ukuze ubhalise ngokutsha.",
+              "Okukodwa kuphela ngumrhumo othengwe kwi-App Store. Ukucima iakhawunti akuwurhoxisi, ngoko kuqala wurhoxise kuseto lomrhumo lwe-Apple.",
+              "Iirekhodi zeentlawulo ezidlulileyo zihlala zikhona, kuba umthetho usifuna ukuba sizigcine ngenxa yobalo-mali.",
             ],
           },
           {
@@ -946,8 +949,8 @@ Object.assign(HELP, {
             id: "multiple-accounts",
             q: "Ndicinga ukuba ndineeakhawunti ezimbini ngempazamo. Ndenze ntoni ngoku?",
             a: [
-              "Oku kudla ngokwenzeka xa umntu ebhalisa kanye nge-Google aphinde abhalise nge-imeyile nephasiwedi esebenzisa idilesi enye, okanye xa ubhalisa kabini ngeedilesi ze-imeyile ezahlukeneyo. Ukubhalisa ngakunye kwenza iakhawunti ye-Gadit eyahlukileyo eneyayo incwadi, imbali nemeko yomrhumo.",
-              "Sibhalele ngazo zombini iidilesi ze-imeyile (okanye ii-UID ezivela kwiphepha leAkhawunti) nokuba ufuna ukugcina eyiphi. Iqela liza kudibanisa iincwadi nembali kwiakhawunti oyikhethayo, emva koko livale enye ngokucocekileyo. Akukho nkcukacha zilahlekayo.",
+              "Oku kudla ngokwenzeka xa umntu ebhalisa kanye nge-Google aze aphinde abhalise nge-imeyile nephasiwedi esebenzisa idilesi enye, okanye xa ubhalisa kabini ngeedilesi ze-imeyile ezahlukeneyo. Ukubhalisa ngakunye kwenza iakhawunti ye-Gadit eyahlukileyo eneyayo incwadi, imbali nemeko yomrhumo.",
+              "Sithumelele i-imeyile usuka kwenye yezo dilesi zimbini, uze ubhale nenye idilesi kunye nokuba yeyiphi iakhawunti ofuna ukuyigcina. Iqela liza kudibanisa iincwadi nembali kwiakhawunti oyikhethayo, emva koko livale enye ngokucocekileyo. Akukho nkcukacha zilahlekileyo.",
             ],
           },
         ],
@@ -959,26 +962,26 @@ Object.assign(HELP, {
         items: [
           {
             id: "wrong-definition",
-            q: "Ndicinga ukuba intsingiselo ayichanekanga. Ndenze ntoni?",
+            q: "Ndicinga ukuba inkcazelo ayichanekanga. Ndenze ntoni?",
             a: [
-              "Lonke iphepha leziphumo lineqhosha elincinci elithi \"Xela\" ezantsi. Licofe, khetha udidi (intsingiselo, imvelaphi, umzekelo, isaci, inkcazelo yabantwana, njalo njalo) uze ubhale inqaku elifutshane. Lifika ngqo kwiqela kwaye yonke ingxelo iyajongwa.",
-              "Musa ukukhathazeka ngokuba nobunzulu obugqithisileyo. Isichazi-magama siphucuka ngokukhawuleza ngale ngxelo kunangayo nantoni na enye.",
+              "Ecaleni kwentsingiselo nganye, nakumakhadi ezaci nawemvelaphi yegama, kukho uphawu oluncinci lweflegi. Licofe, ukhethe into engalunganga, uze wongeze inqaku elifutshane ukuba uyafuna. Lifika ngqo kwiqela, kwaye yonke ingxelo iyajongwa.",
+              "Musa ukukhathazeka ngokuba ngqongqo kakhulu. Isichazi-magama siphucuka ngokukhawuleza ngale ngxelo kunayo nantoni na enye.",
             ],
           },
           {
             id: "kids-not-working",
             q: "Imo yabantwana ayiyitshintshi inkcazelo",
             a: [
-              "Imo yabantwana itshintsha isicatshulwa kuphela apho igama sele linenkcazelo elungele abantwana. Kwigama osandula ukulikhangela okokuqala, linika imizuzwana eli-10 ukuya kweli-15 ngelixa kulungiswa inkcazelo yabantwana.",
-              "Imo yabantwana iyinxalenye yesicwangciso se-Family. Kwi-Basic, kwi-Individual, okanye ngaphandle kweakhawunti, iswitshi ibonisa isicwangciso se-Family endaweni yokuvula. Ababhalise kwi-Clear okanye kwi-Deep ngaphambi kuka-Okthobha 2026 bayayigcina iMo yabantwana. Ukuze uyifumane, jonga i-Family kwiphepha lamaxabiso.",
+              "Imo yabantwana itshintsha isicatshulwa kuphela apho igama sele linenkcazelo elungele abantwana. Kwigama osandula ukulikhangela okokuqala, linda imizuzwana eli-10 ukuya kweli-15 ngelixa kulungiswa inguqulelo yabantwana.",
+              "Imo yabantwana iyinxalenye yesicwangciso se-Family. Kwi-Individual uza kubona iswitshi ethi \"Ngamagama alula\" endaweni yayo, enika inkcazelo elula ngakumbi yentsingiselo nganye. Kwi-Basic okanye ngaphandle kweakhawunti akukho switshi. Ababhalise kwi-Clear okanye kwi-Deep ngaphambi kuka-Okthobha 2026 bayaqhubeka nokuba neMo yabantwana. Ukuze uyifumane, jonga i-Family kwiphepha lamaxabiso.",
             ],
           },
           {
             id: "voice-fails",
             q: "Ukukhangela ngelizwi akusebenzi",
             a: [
-              "Ukukhangela ngelizwi kufuna imvume yemayikrofoni. Uninzi lweebhrawuza zibuza kanye kwisiza ngasinye. Ukuba ucofe ngempazamo uBlock, kuza kufuneka uyibuyisele ngesandla: cofa umqondiso wesitshixo okanye wolwazi ecaleni kwe-gadit.app kwibha yedilesi, emva koko Site settings, emva koko Microphone, emva koko Allow.",
-              "Kwi-Safari kwi-iPhone nakwi-iPad, ukufikelela kwimayikrofoni kukwafuna i-Settings → Safari → Microphone. Ukukhangela ngelizwi yinxalenye yezicwangciso ze-Individual ne-Family: kwi-Basic uza kubona izicwangciso endaweni yoko, kwaye abatyeleli abangangenanga bacelwa ukuba bangene. Ukuze unyusele, vula iphepha lamaxabiso.",
+              "Ukukhangela ngelizwi kufuna imvume yemayikrofoni. Uninzi lweebhrawuza zibuza kanye kwisiza ngasinye. Ukuba uyivalile ngempazamo, cofa umqondiso osecaleni kwe-gadit.app kwibha yedilesi uze uvumele imayikrofoni kwiimvume zesiza.",
+              "Kwi-iPhone nakwi-iPad, kufuneka uvumele imayikrofoni ne-Safari kwi-app ye-Settings yesixhobo. Ukukhangela ngelizwi yinxalenye yezicwangciso ze-Individual ne-Family, ngoko kwi-Basic nangaphandle kweakhawunti iqhosha lemayikrofoni aliveli. Ukuze unyusele, vula iphepha lamaxabiso.",
             ],
           },
           {
@@ -999,10 +1002,10 @@ Object.assign(HELP, {
           },
           {
             id: "offline",
-            q: "Isebenza njani imo yokungabikho kwi-intanethi?",
+            q: "Ndiyisebenzisa njani i-Gadit ngaphandle kwe-intanethi?",
             a: [
-              "Ukusetyenziswa ngaphandle kwe-intanethi yinxalenye yezicwangciso ze-Individual ne-Family. Lonke igama olikhangelayo ligcinwa kwisixhobo sakho, ngoko liyavuleka kwakhona ngoko nangoko ngaphandle kwe-intanethi. Ungakhuphela nepakethe yamagama athandwa kakhulu kulwimi lwakho kwiphepha lakho leAkhawunti.",
-              "Ukukhangela igama elitsha ngokupheleleyo kusafuna unxibelelwano, kuba i-Gadit kufuneka ilungiselele isiphumo esipheleleyo salo. Ikopi engekho kwi-intanethi iquka amagama osele ekwisixhobo sakho. Ukuba ukwi-Basic, jonga izicwangciso kwiphepha lamaxabiso.",
+              "Ukusetyenziswa ngaphandle kwe-intanethi yinxalenye yezicwangciso ze-Individual ne-Family. Lonke igama olikhangelayo ligcinwa kwisixhobo sakho, ngoko liyavuleka kwakhona ngoko nangoko ngaphandle kwe-intanethi. Ungacofa no-\"Khuphela ipakethe yokufunda ungekho kwi-intanethi\" kwiphepha lakho le-\"Iakhawunti\" ukuze ugcine amagama esichazi-magama sethu kulwimi lwakho kwesi sixhobo.",
+              "Ukukhangela igama elitsha ngokupheleleyo kusafuna unxibelelwano, kuba Gadit kufuneka ilungiselele isiphumo esipheleleyo salo. Ikopi engekho kwi-intanethi iquka amagama asele ekwisixhobo sakho. Ukuba ukwi-Basic, jonga izicwangciso kwiphepha lamaxabiso.",
             ],
           },
           {
@@ -1017,16 +1020,16 @@ Object.assign(HELP, {
             id: "word-not-found",
             q: "Ndikhangele igama kodwa andafumana siphumo. Kwenzeka ntoni?",
             a: [
-              "Okokuqala, jonga upelo. Gadit iyakwazi ukulungisa iimpazamo ezincinci zokuchwetheza ixesha elininzi, kodwa isikhamiso esingachanekanga okanye unobumba ongekhoyo kunokuyiphazamisa. Zama ulungiso olucetyiswayo ukuba luyavela.",
-              "Ngaphezu koko: amagama anqabileyo kakhulu okanye esitsotsi asenokungabuyisi siphumo esiqinisekileyo. Ukuba uqinisekile ukuba igama likhona ngokwenene, cofa iqhosha elithi Xela kwiphepha leziphumo (okanye kwisikrini sempazamo) usazise. Yonke ingxelo iyajongwa kwaye amagama aphosiweyo ngokwenene afakwa kwakhona kwinkqubo.",
+              "Okokuqala, jonga upelo. Ukuba bekukho impazamo yokuchwetheza, Gadit idla ngokubonisa igama elilungisiweyo, kunye nelinki yokukhangela le uyichwethezileyo nokuba kunjalo.",
+              "Amagama anqabileyo kakhulu okanye awesitsotsi awasoloko efumana isiphumo. Ukuba uqinisekile ukuba igama likhona, sibhalele usuka kweli phepha, iqela liza kujonga.",
             ],
           },
           {
             id: "change-language",
             q: "Ndilutshintsha njani ulwimi lojongano?",
             a: [
-              "Phezulu ekunene kulo naliphi na iphepha, uza kubona umqondiso omncinci wefleyiki (okanye igama lolwimi lwakho lwangoku). Wucofe uze ukhethe kwiilwimi ezingama-41.",
-              "Ukhetho lwakho lugcinwa kwesi sixhobo. Yonke into iphinda ilayishe ngolwimi olutsha: ujongano, iimenyu, iintsingiselo zamagama ezizayo, imizekelo, iinkcazelo zabantwana, nkqu nemvelaphi. Iziphumo esele zigcinwe ngolwimi oludala zihlala de uphinde uwakhangele loo magama.",
+              "Phezulu ephepheni kukho umqondiso weglowubhu onolwimi lwakho lwangoku. Wucofe uze ukhethe ulwimi.",
+              "Ukhetho lwakho lugcinwa kwesi sixhobo. Yonke into iphinda ilayishe ngolwimi olutsha: ujongano, iimenyu, iintsingiselo zamagama oza kuwakhangela emva koko, imizekelo, iinkcazelo zabantwana, nkqu nemvelaphi yegama. Amagama osele uwakhangele ngolwimi oludala aya kuhlala eboniswa ngalo de uwakhangele kwakhona.",
             ],
           },
         ],
@@ -1040,7 +1043,7 @@ Object.assign(HELP, {
             id: "join-partner",
             q: "Ndiba njani liqabane le-Gadit?",
             a: [
-              "Vula /partners kulo naliphi na iphepha uze ucofe \"Yiba liqabane\". Bhalisa ngegama lakho ne-imeyile, kwaye ilinki yakho ekhethekileyo yokucebisa kunye nebhodi yokulandelela ukucofa neekhomishini zilunga ngoko nangoko. Akukho kulinda kuvunywa.",
+              "Yiya ku-gadit.app/partners uze ucofe u-\"Joyina simahla\". Faka igama lakho ne-imeyile, uze ucofe u-\"Ndinike ikhowudi yam yeqabane\". Ilinki yakho yobuqu nebhodi yeqabane, enokulandelela ukucofa neekhomishini, zilunga kwangoko, akukho kulinda kuvunywa. Ikhowudi nelinki zithunyelwa nange-imeyile.",
               "Ukujoyina kusimahla kwaye kuvulelekile kuwo wonke umntu. Akufuneki ube nomrhumo we-Gadit ukuze ube liqabane.",
             ],
           },
@@ -1048,25 +1051,25 @@ Object.assign(HELP, {
             id: "commission-model",
             q: "Zibalwa njani iikhomishini?",
             a: [
-              "Imiqathango esemgangathweni yi-25% yayo yonke intlawulo eyenziwa ngumthengi kunyaka wakhe wokuqala. Emva kwaloo nyaka wokuqala, ufumana i-10% yayo yonke intlawulo lo gama nje umthengi esaqhubeka ehlawula.",
+              "Imiqathango eqhelekileyo yi-25% yayo yonke intlawulo eyenziwa ngumthengi kunyaka wakhe wokuqala. Emva kwaloo nyaka wokuqala, ufumana i-10% yayo yonke intlawulo lo gama nje umthengi eqhubeka ehlawula. Ukuba uzisa abathengi abahlawulayo aba-5, isabelo sakho emva konyaka wokuqala sinyuka siye kwi-15% ubomi bonke.",
               "Oku kusebenza ngendlela efanayo kwizicwangciso zenyanga nezonyaka, kuba ikhomishini ibalwa kwintlawulo nganye yokwenyani. Ukuba umthengi uyarhoxisa, ikhomishini yakho iyayeka kwintlawulo yakhe yokugqibela.",
-              "Iqela lingamisela amazinga ahlukeneyo kumaqabane athile. Amazinga akho asoloko evela kwibhodi yakho yeqabane, onokuyifikelela kwi-/partners.",
+              "Iqela lingamisela amazinga ahlukeneyo kumaqabane athile. Amazinga akho asoloko ebonakala kwibhodi yakho yeqabane.",
             ],
           },
           {
             id: "payout",
             q: "Ndihlawulwa nini?",
             a: [
-              "Ngenyanga, xa ibhalansi yakho idlula i-$50. Sisebenzisa indlela yokuhlawula oyimisele kwibhodi yeqabane (ukudlulisela ebhankini, i-PayPal, njalo njalo). I-$50 ngumda ophantsi, ayingomda uphezulu. Ungazuza okungakumbi kakhulu, ufumana nje intlawulo xa udlula loo mda.",
-              "Iikhomishini zikhutshwa kwiintsuku ezingama-30 emva kwentlawulo yomrhumo, ukuze kuvunyelwe ixesha lembuyekezo. Ngoko umrhumo kaJanuwari ukhutshwa ekuqaleni kukaFebruwari kwaye ungena kwintlawulo yakho elandelayo xa ibhalansi yakho idlula i-$50.",
+              "Kanye ngenyanga, xa ibhalansi yakho ifikelela kweyona mali incinci iboniswe kwibhodi yakho yeqabane. Siyithumela kwiakhawunti ye-PayPal oyimisele apho. Le mali incinci ngumda osezantsi, ayingomda ophezulu. Ungafumana ngaphezulu kakhulu, kwaye ufumana intlawulo xa sele uwugqithile loo mda.",
+              "Iikhomishini zikhutshwa kwiintsuku ezingama-30 emva kwentlawulo yomrhumo, ukuze kubekho ixesha lembuyekezo. Ngoko umrhumo kaJanuwari ukhutshwa ekuqaleni kukaFebruwari, uze ungene kwintlawulo yakho elandelayo xa ibhalansi yakho ifikelela kweyona mali incinci.",
             ],
           },
           {
             id: "empty-dashboard",
             q: "Ndijoyinile kodwa ibhodi yam ayinanto",
             a: [
-              "Amanani avela emva kokucofa kokuqala kwilinki yakho. Ukungabi nanto kuthetha nje ukuba akukabikho mntu uyicofileyo. Hamba wabelane ngelinki. Ibhodi ihlaziywa phantse ngoko nangoko xa umsebenzi uqalisa.",
-              "Ukuba wabelene kwaye umntu ebhalisile kodwa ibhodi ayibonisi oko, sibhalele ngexesha eliqikelelweyo lokubhalisa kwaye iqela liza kujonga ukuba kubalelwe ngubani.",
+              "Amanani abonakala emva kokucofa kokuqala kwilinki yakho. Ukungabi nanto kuthetha nje ukuba akukabikho mntu uyicofileyo. Hamba wabelane ngelinki. Ibhodi ihlaziywa phantse ngexesha lokwenyani xa umsebenzi uqala.",
+              "Ukuba wabelene kwaye umntu ubhalisile kodwa ibhodi ayikubonisi oko, sibhalele ngexesha eliqikelelweyo lokubhalisa kwaye iqela liza kujonga ukuba ubhaliso luvela phi.",
             ],
           },
           {
@@ -1081,8 +1084,8 @@ Object.assign(HELP, {
             id: "missing-commission",
             q: "Umntu ubhalise ngelinki yam kodwa andiyiboni ikhomishini",
             a: [
-              "Ixesha elininzi oku kungenxa yexesha: ukubhalisa kuvela kwibhodi kwimizuzu embalwa, kodwa ikhomishini ibhalwa kuphela xa umrhumo uhlawulwe ngokwenene (okunokuba ziintsuku kamva ukuba bakuvavanyo lwasimahla). Phinda ujonge emva kokuba uvavanyo luphele.",
-              "Ukuba umrhumo uhlawulwe kodwa usayiboni ikhomishini emva kweeyure ezingama-48, sibhalele ngexesha eliqikelelweyo lokubhalisa kunye ne-imeyile okanye igama elimalunga lombhalisi ukuba uyalazi. Iqela liza kuphonononga ukulandelelana kokubalelwa kwaye lilungise nayiphi na into ephosiweyo ngesandla.",
+              "Amaxesha amaninzi oku kungenxa yexesha. Ubhaliso buvela kwibhodi kwimizuzu embalwa, kodwa ikhomishini ibhalwa kuphela xa umrhumo sele uhlawulwe ngokwenene, kwaye loo nto ingenzeka kwiintsuku ezimbalwa kamva ukuba bakuvavanyo lwasimahla. Phinda ujonge emva kokuba uvavanyo luphelile.",
+              "Ukuba umrhumo uhlawulwe kodwa usayiboni ikhomishini emva kweeyure ezingama-48, sibhalele ngexesha eliqikelelweyo lokubhalisa kunye ne-imeyile okanye igama eliqikelelweyo lombhalisi, ukuba uyalazi. Iqela liza kujonga ukuba ubhaliso luvela phi kwaye lilungise ngesandla nantoni na ephosiweyo.",
             ],
           },
         ],
@@ -1154,19 +1157,20 @@ Object.assign(HELP, {
             id: "change-card",
             q: "Nka fetoša bjang karata ya sekoloto ya peeletšo ya ka?",
             a: [
-              "O ka fetogela go karata ye mpsha ka nako ye nnyane go feta motsotso ntle le go khansela. Peeletšo ya gago ya bjale e tšwela pele, eupša ka karata ye mpsha.",
-              "1. Tsena go gadit.app gomme o bule letlakala la gago la Akhaonto (godimo ka go le letona). 2. Kgotla \"Laola ditefo\". 3. Letlakala le le šireletšegilego la Stripe le a bulega. Kgotla \"Add payment method\", tsenya karata ye mpsha, gomme o e swaye bjalo ka Default. 4. Ge o rata, tloša karata ya kgale.",
-              "Go tloga nakong ye e latelago ya tefo, tšohle di ya go karata ye mpsha. Tefo ya pele (ye e šetšego e lefilwe) e dula go karata ya kgale. Ga go nyakege go bušetšwa tšhelete ntle le ge o e nyaka ka nnete.",
+              "O ka fetogela go karata ye mpsha ka nako ye nnyane go feta motsotso ntle le go khansela. Peeletšo ya gago ya bjale e tšwela pele, feela e šomiša karata ye mpsha.",
+              "1. Tsena go gadit.app gomme o bule \"Akhaonto\" go tšwa go menu ya akhaonto. 2. Kgotla \"Laola ditefo\". 3. Letlakala le le šireletšegilego la Stripe le a bulega. Tsenya karata ye mpsha bjalo ka mokgwa wa tefo gomme o e swaye bjalo ka ya motheo. 4. Ge o rata, tloša karata ya kgale.",
+              "Go tloga potologong ye e latelago ya tefo, tšohle di ya go karata ye mpsha. Tefo ya pele, ye e šetšego e kgobokeditšwe, e dula go karata ya kgale. Ga go nyakege pusetšo ya tšhelete ntle le ge o e nyaka ka go lebanya.",
             ],
           },
           {
             id: "cancel",
             q: "Nka khansela bjang peeletšo ya ka?",
             a: [
-              "O itirela ka bowena, nako efe goba efe. Tsena, bula Akhaonto, gomme o kgotle Khansela peeletšo ka tlase ga leano la gago.",
-              "Ge o na le peeletšo ye o e lefelago, phihlelelo ya gago e tšwela pele go fihla mafelelong a nako yeo o šetšego o e lefetše. Ka morago ga fao akhaonto e fetogela go Basic (mahala). Mantšu ao o a bolokilego le histori di dula di bolokegile.",
-              "Nakong ya teko ya mahala ya matšatši a 14, go khansela go fediša teko gateetee gomme ga go na tefo. Ge o tshwenyega fela ka tefo ya go itiragalela, kgetha lebaka leo lefesetereng la go khansela, gomme o ka tima peeletšo ya go ipoeletša, wa boloka teko go fihla letšatšing la yona la mafelelo.",
-              "Ge o khansetše peeletšo ye o e lefelago ka phošo goba o fetoša monagano, o ka e tšwetša pele go tšwa letlakaleng le le swanago pele nako e fela.",
+              "O ka e dira ka bowena, nako efe goba efe. Tsena, bula Akhaonto, gomme o kgotle Khansela peeletšo ka tlase ga leano la gago.",
+              "Na o rekile peeletšo ya gago ka gare ga app ya iPhone goba iPad? E khansele ka dipeakanyo tša gago tša peeletšo tša Apple. Linki ya \"Laola peeletšo\" letlakaleng la gago la Akhaonto e go iša moo.",
+              "Ge o na le peeletšo ye e lefelwago, phihlelelo ya gago e tšwela pele go fihla mafelelong a nako yeo o šetšego o e lefetše. Ka morago ga moo akhaonto e fetogela go Basic, ya mahala. Mantšu ao o a bolokilego le histori di dula di bolokegile.",
+              "Nakong ya teko ya mahala ya matšatši a 14, go khansela go fediša teko gateetee gomme ga go na tefo. Ge se sego feela se go tshwenyago e le tefo ya go itiragalela, kgetha lebaka leo ka lefasetereng la go khansela gomme o ka tima go mpshafatša, wa boloka teko go fihla letšatšing la yona la mafelelo.",
+              "Ge o khansela peeletšo ye e lefelwago ka phošo goba o fetola monagano, o ka e tšwetša pele gape go tšwa letlakaleng leo leo pele nako e fela.",
             ],
           },
           {
@@ -1221,8 +1225,8 @@ Object.assign(HELP, {
             id: "failed-payment",
             q: "Tefo ya ka e paletšwe. Ke dire eng?",
             a: [
-              "Stripe e leka gape ka bowona ditefo tše di paletšwego ga mmalwa matšatšing a a latelago. Bontši bja diphošo di a rarollega ka botšona ge panka e lokolla thibelo goba karata e na le tšhelete ye e lekanego.",
-              "Ge o nyaka go e lokiša gateetee, eya go Akhaonto → Laola ditefo → Add payment method, tsenya karata ye e šomago, gomme o e beakanye bjalo ka Default. Stripe e tla leka gape tefo ye e paletšwego gateetee ka karata ye mpsha. Ge e ba peeletšo ya gago e šetše e boetše go Basic, o ka ingwadiša gape go tšwa go Ditheko gomme puku ya gago ya mantšu e dula e le gona.",
+              "Stripe e leka gape ka boyona ditefo tše di paletšwego ga mmalwa matšatšing a a latelago. Bontši bja diphošo bo a itokiša ge panka e lokolla go swara tšhelete goba ge karata e boela go ba le tšhelete ye e lekanego.",
+              "Bareng ya godimo ga letlakala go tla tšwelela molaetša wa gore tefo ga se ya feta, gomme phihlelelo ya gago e tla bolokwa matšatši a se makae gape. Kgotla \"Mpshafatša karata\" moo, tsenya karata ye e šomago, gomme re tla leka tefo ka yona gateetee. Ge peeletšo ya gago e šetše e boetše go Basic, o ka ingwadiša gape go tšwa letlakaleng la Ditheko gomme puku ya gago ya mantšu e dula e sa senyega.",
             ],
           },
           {
@@ -1253,40 +1257,40 @@ Object.assign(HELP, {
             id: "forgot-password",
             q: "Ke lebetše phasewete ya ka",
             a: [
-              "Bula lepokisi la go tsena gomme o kgotle \"O lebetše phasewete?\". Tsenya imeile ye o e šomišago go Gadit gomme o tla hwetša linki ya go fetoša phasewete ka gare ga motsotso goba ye mebedi.",
+              "Ka lefasetereng la go tsena, thaepe imeile ya gago, gomme o kgotle \"O lebetše phasewete?\". Linki ya go beakanya phasewete leswa gantši e fihla ka inbox ya gago ka motsotso o tee goba ye mebedi. O ka kgotla le \"Nthomele linki ya go tsena ka imeile\" gomme wa tsena ntle le phasewete.",
               "Ge imeile e sa fihle, lekola spam. Ge e sa fihle le gona, o ka ba o ingwadišitše ka Google go e na le imeile le phasewete. Leka konopo ya \"Tšwela pele ka Google\".",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "Ke kgonthišegile gore phasewete ya ka e nepagetše eupša e re \"Imeile goba phasewete e fošagetše\"",
+            q: "Phasewete ya ka e nepagetše, eupša e re imeile le phasewete ga di swane",
             a: [
-              "Go na le dilo tše tharo tša go lekola. Sa pele, capslock. Sa bobedi, sekgoba mafelelong ge o kopiša le go kgomaretša. Sa boraro, o ingwadišitše ka Google go e na le phasewete (šomiša \"Tšwela pele ka Google\" go e na le moo).",
-              "O sa kgomaretšwe? Fetoša phasewete go tšwa lepokising le le swanago. Go go thomiša lefsa gabotse.",
+              "Go na le dilo tše tharo tša go lekola. Sa pele, Caps Lock. Sa bobedi, sekgoba se sengwe mafelelong ka morago ga go kopiša le go kgomaretša. Sa boraro, mohlomongwe o ingwadišitše ka Google go e na le phasewete, ka gona šomiša \"Tšwela pele ka Google\".",
+              "O sa kgomaretšwe? Molaetšeng wo mongwe woo, kgotla \"Nthomele linki ya go tsena ka imeile\" gore o tsene ntle le phasewete, goba \"Kgetha phasewete ye mpsha\".",
             ],
           },
           {
             id: "google-fails",
             q: "Go tsena ka Google ga go šome",
             a: [
-              "Lebaka le le tlwaelegilego kudu: sefetleki sa gago se thibela dikhukhi tša batho ba bangwe goba mafasetere a go tšwelela bakeng sa gadit.app. Di dumelele ditumelelong tša bara ya aterese gomme o leke gape.",
-              "Ge o le mokgweng wa incognito, go tsena ka Google go thibetšwe ka morero. Fetogela go lefasetere la tlwaelo la sefetleki.",
+              "Ka gare ga di-app tša go swana le Instagram, Facebook goba TikTok, konopo ya Google e a utelwa. Bula linki ka sefetleki sa gago sa tlwaelo, goba o tsene ka imeile ya gago. Ge e ba o tsene pele ka Google, thaepe imeile yeo gomme o kgotle \"Nthomele linki ya go tsena ka imeile\".",
+              "Ka lefasetereng la sephiri, blocked cookies di ka emiša go tsena ka Google, ka fao leka lefasetere la tlwaelo.",
             ],
           },
           {
             id: "change-email",
             q: "Nka fetoša bjang imeile ya akhaonto ya ka?",
             a: [
-              "Akhaonto, kgotla imeile ya gago, Fetoša imeile. O tla swanela ke go kgonthiša aterese ye mpsha pele e šoma. Peeletšo ya gago, histori le puku ya mantšu ka moka di a fetišetšwa.",
-              "Ge imeile e tlemagantšwe le moreki wa Stripe, e mpshafatše le phothaleng ya ditefo ya Stripe gore dirasiti tša ka moso di ye atereseng ye mpsha.",
+              "Go fetoša imeile ya akhaonto ya gago go dirwa ke sehlopha. Re romele imeile go tšwa atereseng ya gago ya bjale gomme o ngwale aterese ye mpsha molaetšeng. Sehlopha se tla e mpshafatša, gomme peeletšo ya gago, histori le puku ya mantšu di tla dula di le ka moo di lego ka gona.",
             ],
           },
           {
             id: "delete-account",
             q: "Nka phumola bjang akhaonto ya ka?",
             a: [
-              "Akhaonto, ka fase ga letlakala, Phumola akhaonto. Se ke sa go ya go ile. Peeletšo ya gago e a khanselwa, puku ya gago ya mantšu le histori di a phumolwa, gomme imeile e lokologa bakeng sa go ingwadiša lefsa.",
-              "Direkoto tša Stripe tša ditefo tša kgale di a dula (molao o re gapeletša go di boloka bakeng sa dipalo tša ditšhelete). Ga go se sengwe se se dulago.",
+              "Ka fase ga letlakala la \"Akhaonto\", kgotla \"Phumola akhaonto\" gomme o thaepe imeile ya akhaonto ya gago go netefatša. Se ke sa ruri, peeletšo ya gago e a khanselwa, puku ya gago ya mantšu le histori di a phumolwa, gomme imeile e lokologela go ingwadiša lefsa.",
+              "Go na le taba e tee fela ya go fapana, ge e le peeletšo ye e rekilwego ka App Store, go phumola akhaonto ga go e khansela, ka fao e khansele pele ka dipeakanyo tša gago tša peeletšo tša Apple.",
+              "Direkoto tša ditefišo tša kgale di a dula, ka gobane molao o re nyaka gore re di boloke bakeng sa dipalo tša ditšhelete.",
             ],
           },
           {
@@ -1301,8 +1305,8 @@ Object.assign(HELP, {
             id: "multiple-accounts",
             q: "Ke nagana gore ke na le diakhaonto tše pedi ka phošo. Bjale?",
             a: [
-              "Se gantši se direga ge motho a ingwadiša gatee ka Google le gatee ka imeile le phasewete ka aterese ye e swanago, goba ge o ingwadiša gabedi ka diaterese tša imeile tše di fapanego. Go ingwadiša go go gongwe le go go gongwe go bula akhaonto ye e arogilego ya Gadit ye e nago le puku ya yona ya mantšu, histori le boemo bja peeletšo.",
-              "Re ngwalele ka diaterese ka bobedi tša imeile (goba di-UID go tšwa letlakaleng la Akhaonto) le gore o nyaka go boloka efe. Sehlopha se tla kopanya dipuku tša mantšu le histori akhaontong ye o e kgethago, ke moka sa tswalela ye nngwe gabotse. Ga go tshedimošo ye e lahlegago.",
+              "Se gantši se direga ge motho a ingwadiša gatee ka Google gomme gape a ingwadiša ka imeile le phasewete a diriša aterese ye e swanago, goba ge o ingwadiša gabedi ka diaterese tša imeile tše di fapanego. Go ingwadiša mo gongwe le mo gongwe go dira akhaonto ye e arogilego ya Gadit ye e nago le puku ya yona ya mantšu, histori le boemo bja peeletšo.",
+              "Re romelele imeile go tšwa go ye nngwe ya diaterese tše pedi, gomme o ngwale aterese ye nngwe le gore o nyaka go boloka akhaonto efe. Sehlopha se tla kopanya dipuku tša mantšu le histori akhaontong ye o e kgethago, ke moka sa tswalela ye nngwe gabotse. Ga go na tshedimošo ye e lahlegago.",
             ],
           },
         ],
@@ -1316,24 +1320,24 @@ Object.assign(HELP, {
             id: "wrong-definition",
             q: "Ke nagana gore tlhalošo e fošagetše. Ke dire eng?",
             a: [
-              "Letlakala le lengwe le le lengwe la sephetho le na le konopo ye nnyane ya \"Bega\" ka fase. E kgotle, kgetha mohuta (tlhalošo, mothopo wa lentšu, mohlala, seka, tlhalošo ya bana, bjalo bjalo) gomme o ngwale lengwalwana le lekopana. Le tla thwii go sehlopha gomme pego ye nngwe le ye nngwe e a lekolwa.",
-              "O se tshwenyege ka go ba yo a hlokomelago kudu. Pukuntšu e kaonafala ka pela ka dikarabelo tše go feta ka selo se sengwe.",
+              "Kgauswi le tlhalošo ye nngwe le ye nngwe, le godimo ga dikarata tša maele le mothopo wa lentšu, go na le seswantšho se sennyane sa folaga. Se kgotle, kgetha seo se fošagetšego, gomme ge o rata o oketše tshwayotshwayo ye kopana. Se ya thwii go sehlopha, gomme pego ye nngwe le ye nngwe e a lekolwa.",
+              "O se tshwenyege ka go ba yo a hlokomelago kudu. Pukuntšu e kaonafala ka pela ka ditshwayotshwayo tše go feta ka selo se sengwe le se sengwe.",
             ],
           },
           {
             id: "kids-not-working",
             q: "Mokgwa wa bana ga o fetoše tlhalošo",
             a: [
-              "Mokgwa wa bana o fetoša fela sengwalwa moo lentšu le šetšego le na le tlhalošo ye e loketšego bana. Bakeng sa lentšu leo o sa tšwago go le nyaka la mathomo, e fe metsotswana ye 10 go ya go ye 15 ge tlhalošo ya bana e lokišwa.",
-              "Mokgwa wa bana ke karolo ya leano la Family. Go Basic, go Individual, goba ntle le akhaonto, sefetoši se bontšha leano la Family go e na le go tšhuma. Batho bao ba ingwadišitšego go Clear goba Deep pele ga October 2026 ba boloka Mokgwa wa bana. Go o hwetša, bona Family letlakaleng la ditheko.",
+              "Mokgwa wa bana o fetoša fela sengwalwa moo lentšu le šetšego le na le tlhalošo ye e loketšego bana. Bakeng sa lentšu leo o sa tšwago go le nyaka la mathomo, e fe metsotswana ye 10 go ya go ye 15 ge tlhathollo ya bana e lokišwa.",
+              "Mokgwa wa bana ke karolo ya leano la Family. Go Individual o tla bona sefetoši sa \"Ka mantšu a bonolo\" legatong la yona, seo se neago tlhalošo ye bonolo ya tlhalošo e nngwe le e nngwe. Go Basic goba ntle le akhaonto ga go na sefetoši. Bangwadiši bao ba tsenetšego Clear goba Deep pele ga October 2026 ba boloka Mokgwa wa bana. Go e hwetša, bona Family letlakaleng la ditheko.",
             ],
           },
           {
             id: "voice-fails",
             q: "Go nyaka ka lentšu ga go šome",
             a: [
-              "Go nyaka ka lentšu go nyaka tumelelo ya maekrofouno. Bontši bja difetleki di botšiša gatee go weposaete ye nngwe le ye nngwe. Ge o kgotlile Block ka phošo, o tla swanela ke go e bušetša ka seatla: kgotla leswao la senotlelo goba la tshedimošo kgauswi le gadit.app bareng ya aterese, ke moka Site settings, ke moka Microphone, ke moka Allow.",
-              "Go Safari ya iPhone le iPad, phihlelelo ya maekrofouno gape e nyaka Settings → Safari → Microphone. Go nyaka ka lentšu ke karolo ya maano a Individual le Family: go Basic o tla bona maano go e na le yona, gomme baeti bao ba sa tsenago ba kgopelwa go tsena. Go kaonafatša, bula letlakala la ditheko.",
+              "Go nyaka ka lentšu go nyaka tumelelo ya maekrofouno. Bontši bja difetleki di botšiša gatee saete e nngwe le e nngwe. Ge o e thibetše ka phošo, kgotla leswao kgauswi le gadit.app bareng ya aterese gomme o dumelele maekrofouno ditumelelwaneng tša saete.",
+              "Go iPhone le iPad, gape dumelela maekrofouno go Safari ka app ya Settings ya sedirišwa. Go nyaka ka lentšu ke karolo ya maano a Individual le Family, ka fao go Basic le ntle le akhaonto konopo ya maekrofouno ga e tšwelele. Go kaonafatša, bula letlakala la ditheko.",
             ],
           },
           {
@@ -1354,10 +1358,10 @@ Object.assign(HELP, {
           },
           {
             id: "offline",
-            q: "Mokgwa wa ntle le inthanete o šoma bjang?",
+            q: "Nka diriša bjang Gadit ntle le inthanete?",
             a: [
-              "Tšhomišo ntle le inthanete ke karolo ya maano a Individual le Family. Lentšu le lengwe le le lengwe leo o le nyakago le bolokwa sedirišweng sa gago, ka fao le bulega gape gateetee ntle le inthanete. O ka laolla gape sephuthelwana sa mantšu ao a nyakwago kudu ka polelo ya gago go tšwa letlakaleng la gago la Akhaonto.",
-              "Go nyaka lentšu le leswa ka botlalo go sa nyaka inthanete, ka gobane Gadit e swanetše go lokiša sephetho ka moka sa lona. Kopi ya ntle le inthanete e akaretša mantšu ao a šetšego a le sedirišweng sa gago. Ge o le go Basic, bona maano letlakaleng la ditheko.",
+              "Tšhomišo ntle le inthanete ke karolo ya maano a Individual le Family. Lentšu le lengwe le le lengwe leo o le nyakago le bolokwa sedirišweng sa gago, ka fao le bulega gape gateetee le ge inthanete e se gona. O ka kgotla gape \"Laolla sephuthelwana sa ntle le inthanete\" letlakaleng la gago la \"Akhaonto\" go boloka mantšu a pukuntšu ya rena ka polelo ya gago sedirišweng se.",
+              "Go nyaka lentšu le leswa ka botlalo go sa nyaka kgokagano, ka gobane Gadit e swanetše go lokiša sephetho ka moka sa lona. Kopi ya ntle le inthanete e akaretša mantšu ao a šetšego a le sedirišweng sa gago. Ge o le go Basic, bona maano letlakaleng la ditheko.",
             ],
           },
           {
@@ -1372,16 +1376,16 @@ Object.assign(HELP, {
             id: "word-not-found",
             q: "Ke nyakile lentšu eupša ka se hwetše sephetho. Go direga eng?",
             a: [
-              "Sa pele, lekola mopeleto. Gadit gantši e kgona go šoma le diphošo tše nnyane, eupša ditlhaka tše di fošagetšego goba tlhaka ye e hlaelago di ka e gakantšha. Leka phošollo ye e šišintšwego ge e tšwelela.",
-              "Ka ntle ga fao: mantšu a a sa tlwaelegago kudu goba a polelo ya mmileng a ka se bušetše sephetho se se kgonthišegilego. Ge o kgonthišegile gore lentšu ke la nnete, kgotla konopo ya Bega letlakaleng la sephetho (goba sekirining sa phošo) gomme o re tsebiše. Pego ye nngwe le ye nngwe e a lekolwa gomme mantšu a nnete ao a hlaetšego a tsenywa gape tshepedišong.",
+              "Sa pele, lekola mopeleto. Ge go bile le phošo ya go thaepa, Gadit gantši e bontšha lentšu leo le lokišitšwego, ka linki ya go nyaka seo o se thaepilego le ge go le bjalo.",
+              "Mantšu a sa tlwaelegago kudu goba a polelo ya mmileng ga se ka mehla a hwetšago sephetho. Ge o kgonthišegile gore lentšu le gona, re ngwalele go tšwa letlakaleng le gomme sehlopha se tla le lekola.",
             ],
           },
           {
             id: "change-language",
             q: "Nka fetoša bjang polelo ya tšhebedišo?",
             a: [
-              "Godimo ka go le letona la letlakala lefe goba lefe, o tla bona leswao le lennyane la folaga (goba leina la polelo ya gago ya bjale). Le kgotle gomme o kgethe go tšwa dipolelong tše 41.",
-              "Kgetho ya gago e bolokwa sedirišweng se. Tšohle di laišega gape ka polelo ye mpsha: tšhebedišo, mananeo, ditlhalošo tša mantšu tša ka moso, mehlala, ditlhalošo tša bana, le mothopo wa lentšu. Dipoelo tše di šetšego di bolokilwe ka polelo ya kgale di dula go fihlela o nyaka mantšu ao gape.",
+              "Godimo ga letlakala go na le leswao la globe le polelo ya gago ya bjale. Le kgotle gomme o kgethe polelo.",
+              "Kgetho ya gago e bolokwa sedirišweng se. Tšohle di laišega gape ka polelo ye mpsha, tšhebedišo, mananeo, ditlhalošo tša mantšu tša ka moso, mehlala, ditlhalošo tša bana, gaešita le mothopo wa lentšu. Mantšu ao o šetšego o a nyakile ka polelo ya kgale a tla bontšhwa ka yona go fihlela o a nyaka gape.",
             ],
           },
         ],
@@ -1395,7 +1399,7 @@ Object.assign(HELP, {
             id: "join-partner",
             q: "Nka ba bjang molekane wa Gadit?",
             a: [
-              "Bula /partners go tšwa letlakaleng lefe goba lefe gomme o kgotle \"Become a partner\". Ingwadiše ka leina la gago le imeile, gomme linki ya gago ye e sa swanego le ye nngwe ya go šišinya gotee le letlakala la taolo la go latela dikgotlo le dikhomišene di lokile gateetee. Ga go go letela tumelelo.",
+              "Eya go gadit.app/partners gomme o kgotle \"Tsena ka mahala\". Tsenya leina la gago le imeile, morago o kgotle \"Hwetša khoutu ya ka ya molekane\". Linki ya gago ya sebele le letlakala la gago la taolo la molekane, ka dikgotlo le dikhomišene, di lokile gateetee, ntle le go leta tumelelo. Khoutu le linki di bile di romelwa go wena ka imeile.",
               "Go tsena ke mahala gomme go bulegetše mang le mang. Ga o nyake peeletšo ya Gadit gore o be molekane.",
             ],
           },
@@ -1403,25 +1407,25 @@ Object.assign(HELP, {
             id: "commission-model",
             q: "Dikhomišene di balwa bjang?",
             a: [
-              "Melawana ya tlwaelo ke 25% ya tefo ye nngwe le ye nngwe ye moreki a e dirago ngwageng wa gagwe wa mathomo. Ka morago ga ngwaga woo wa mathomo, o hwetša 10% ya tefo ye nngwe le ye nngwe go fihla ge moreki a tšwela pele a lefa.",
-              "Se se šoma ka tsela ye e swanago go maano a kgwedi le a ngwaga, ka gobane khomišene e balwa tefong ye nngwe le ye nngwe ya nnete. Ge moreki a khansela, khomišene ya gago e fela ka tefo ya gagwe ya mafelelo.",
-              "Sehlopha se ka beakanya dikhomišene tše di fapanego bakeng sa balekane ba itšego. Dikhomišene tša gago di bonagala ka mehla letlakaleng la gago la taolo la molekane, leo o ka le hwetšago go tšwa go /partners.",
+              "Melawana ya tlwaelo ke 25% ya tefo ye nngwe le ye nngwe ye moreki a e dirago ngwageng wa gagwe wa mathomo. Ka morago ga ngwaga woo wa mathomo, o hwetša 10% ya tefo ye nngwe le ye nngwe ge feela moreki a tšwela pele a lefa. Ge o tliša bareki ba 5 ba ba lefelago, kabelo ya gago ka morago ga ngwaga wa mathomo e hlatloga go 15% bophelo ka moka.",
+              "Se se šoma ka tsela ye e swanago go maano a kgwedi le a ngwaga, ka gobane khomišene e balwa go tefo ye nngwe le ye nngwe ya nnete. Ge moreki a khansela, khomišene ya gago e ema ka tefo ya gagwe ya mafelelo.",
+              "Sehlopha se ka beakanya diphesente tše di fapanego bakeng sa balekane ba itšego. Diphente tša gago ka mehla di bonagala letlakaleng la gago la taolo la molekane.",
             ],
           },
           {
             id: "payout",
             q: "Ke lefelwa neng?",
             a: [
-              "Kgwedi le kgwedi, ge tšhelete ya gago e feta $50. Re šomiša mokgwa wa tefo wo o o beakantšego letlakaleng la taolo la molekane (phetišetšo ya panka, PayPal, bjalo bjalo). $50 ke bonyenyane bjo bo nyakegago, e sego mollwane. O ka hwetša go feta kudu, o amogela tefo fela ge o feta bonyenyane bjoo.",
-              "Dikhomišene di lokollwa matšatši a 30 ka morago ga tefo ya peeletšo, go fa sebaka sa go bušetša tšhelete. Ka fao peeletšo ya Janaware e lokollwa mathomong a Feberware gomme e tsena tefong ya gago ye e latelago ge tšhelete ya gago e feta $50.",
+              "Gape ka kgwedi, ge tšhelete ya gago e fihla go bonyenyane bjo bo bontšhitšwego letlakaleng la gago la taolo la molekane. Re e romela akhaontong ya PayPal ye o e beakantšego moo. Bonyenyane bjoo ke moedi wa go lokolla tefo, ga se mollwane. O ka hwetša go feta kudu, gomme o amogela tefo ge o šetše o bo fetile.",
+              "Dikhomišene di lokollwa matšatši a 30 ka morago ga tefo ya peeletšo, go dumelela sebaka sa go bušetša tšhelete. Ka fao peeletšo ya Janaware e lokollwa mathomong a Feberware gomme e tsena tefong ya gago ye e latelago ge tšhelete ya gago e fihla go bonyenyane.",
             ],
           },
           {
             id: "empty-dashboard",
             q: "Ke tsene eupša letlakala la ka la taolo ga le na selo",
             a: [
-              "Dipalo di bonagala ka morago ga kgotlo ya mathomo go linki ya gago. Go se be le selo go ra fela gore ga go eso be le yo a kgotlilego. Eya o abelane linki. Letlakala la taolo le mpshafala e ka ba gateetee ge mošomo o thoma.",
-              "Ge o abelane gomme motho a ingwadišitše eupša letlakala la taolo le sa e bontšhe, re ngwalele ka nako ye e ka bago ya go ingwadiša gomme sehlopha se tla lekola go balelwa ga yona.",
+              "Dipalo di bonagala ka morago ga kgotlo ya mathomo go linki ya gago. Go se be le selo go ra feela gore ga go yo a šetšego a e kgotla. Abelana ka linki. Letlakala la taolo le mpshafala kgauswi le nako ya nnete ge mošomo o thoma.",
+              "Ge o abelane gomme motho a ingwadišitše eupša letlakala la taolo le sa e bontšhe, re ngwalele ka nako ye e ka bago ya go ingwadiša gomme sehlopha se tla lekola gore go ingwadiša go tšwile kae.",
             ],
           },
           {
@@ -1436,8 +1440,8 @@ Object.assign(HELP, {
             id: "missing-commission",
             q: "Motho o ingwadišitše ka linki ya ka eupša ga ke bone khomišene",
             a: [
-              "Gantši ke taba ya nako: go ingwadiša go bonagala letlakaleng la taolo ka gare ga metsotso, eupša khomišene e ngwalwa fela ge peeletšo e lefilwe ka nnete (se se ka tšea matšatši ge e ba a le tekong ya mahala). Lekola gape ka morago ga ge teko e fela.",
-              "Ge peeletšo e lefilwe eupša o sa bone khomišene ka morago ga diiri tše 48, re ngwalele ka nako ye e ka bago ya go ingwadiša le imeile goba leina la mongwadiši ge o le tseba. Sehlopha se tla nyakišiša tatelano ya go balelwa gomme se lokiše phošo efe goba efe ka seatla.",
+              "Gantši ke taba ya nako. Go ingwadiša go bonagala letlakaleng la taolo ka gare ga metsotso, eupša khomišene e ngwalwa fela ge peeletšo e lefilwe ka nnete, gomme seo se ka ba matšatši ka morago ge e ba ba le tekong ya mahala. Lekola gape ka morago ga ge teko e fela.",
+              "Ge peeletšo e lefilwe eupša o sa bone khomišene ka morago ga diiri tše 48, re ngwalele ka nako ye e ka bago ya go ingwadiša le imeile goba leina le le ka bago la mongwadiši, ge o le tseba. Sehlopha se tla lekola gore go ingwadiša go tšwile kae gomme se lokiše ka seatla ge sengwe se fošitšwe.",
             ],
           },
         ],
@@ -1510,18 +1514,19 @@ Object.assign(HELP, {
             q: "Ke fetola jang karata ya sekoloto mo ikwadisong ya me?",
             a: [
               "O ka fetolela go karata e ntšha mo nakong e e kwa tlase ga motsotso kwa ntle ga go khansela. Ikwadiso ya gago ya jaanong e tswelela, fela ka karata e ntšha.",
-              "1. Tsena mo gadit.app mme o bule tsebe ya gago ya Akhaonto (kwa godimo ka fa mojeng). 2. Tobetsa \"Laola dituelo\". 3. Tsebe e e sireletsegileng ya Stripe e a bulega. Tobetsa \"Add payment method\", tsenya karata e ntšha, mme o e tshwaye e le ya Default. 4. Fa o batla, tlosa karata ya kgale.",
-              "Go tloga mo nakong e e latelang ya tefo, sengwe le sengwe se ya mo karateng e ntšha. Tefo e e fetileng (e e setseng e duetswe) e nna mo karateng ya kgale. Ga go tlhokege go busediwa madi ntle le fa o a batla ka tlhamalalo.",
+              "1. Tsena mo gadit.app mme o bule \"Akhaonto\" go tswa mo menung ya akhaonto. 2. Tobetsa \"Laola dituelo\". 3. Tsebe e e sireletsegileng ya Stripe e a bulega. Tsenya karata e ntšha e le mokgwa wa tefo mme o e tshwaye e le ya ka metlha. 4. Fa o batla, tlosa karata ya kgale.",
+              "Go tloga mo nakong e e latelang ya tefo, tsotlhe di ya mo karateng e ntšha. Tefo e e fetileng, e e setseng e duetswe, e nna mo karateng ya kgale. Ga go tlhokege pusetso ya madi ntle le fa o e batla ka tlhamalalo.",
             ],
           },
           {
             id: "cancel",
             q: "Ke khansela jang ikwadiso ya me?",
             a: [
-              "O itirela, nako nngwe le nngwe. Tsena, bula Akhaonto, mme o tobetse Khansela ikwadiso fa tlase ga leano la gago.",
-              "Fa o na le ikwadiso e o e duelelang, phitlhelelo ya gago e tswelela go fitlha kwa bofelong jwa nako e o setseng o e duetse. Morago ga foo akhaonto e fetogela go Basic (mahala). Mafoko a o a bolokileng le hisitori di nna di babalesegile.",
-              "Mo nakong ya teko ya mahala ya malatsi a le 14, go khansela go fetsa teko ka bonako mme ga go na tefo. Fa o tshwenyega fela ka tefo e e itirelang, tlhopha lebaka leo mo lefesetereng la go khansela, mme o ka tima go ntšhafala ga ikwadiso, wa tswelela ka teko go fitlha letsatsing la yone la bofelo.",
-              "Fa o khanseditse ikwadiso e o e duelelang ka phoso kgotsa o fetola mogopolo, o ka e tswelela mo tsebeng e e tshwanang pele nako e fela.",
+              "O itirela, nako nngwe le nngwe. Tsena, bula Akhaonto, mme o tobetse go khansela ikwadiso fa tlase ga leano la gago.",
+              "A o rekile ikwadiso ya gago mo app ya iPhone kgotsa iPad? E khansela mo dipeakanyong tsa gago tsa ikwadiso tsa Apple. Kgolagano ya \"Laola ikwadiso\" mo tsebeng ya gago ya Akhaonto e go isa koo.",
+              "Fa o na le ikwadiso e o e duelelang, phitlhelelo ya gago e tswelela go fitlha kwa bofelong jwa nako e o setseng o e duetse. Morago ga foo akhaonto e fetogela go Basic, e e sa duelelweng. Mafoko a o a bolokileng le hisitori di nna di babalesegile.",
+              "Mo nakong ya teko ya mahala ya malatsi a le 14, go khansela go fetsa teko ka bonako mme ga go na tefo. Fa o tshwenyega fela ka tefo e e itiragalelang, tlhopha lebaka leo mo lefesetereng la go khansela, mme o ka tima go ntšhafala ga ikwadiso, wa tswelela ka teko go fitlha letsatsing la yone la bofelo.",
+              "Fa o khanseditse ikwadiso e o e duelelang ka phoso kgotsa o fetotse mogopolo, o ka e simolola gape go tswa mo tsebeng e e tshwanang pele nako e fela.",
             ],
           },
           {
@@ -1577,7 +1582,7 @@ Object.assign(HELP, {
             q: "Tefo ya me e padile. Ke dire eng?",
             a: [
               "Stripe e leka gape dituelo tse di paletsweng ka bo yone makgetlho a le mmalwa mo malatsing a a latelang. Bontsi jwa go palelwa go a rarabologa fa banka e lokolola thibelo kgotsa fa karata e na le madi a a lekaneng.",
-              "Fa o batla go e baakanya ka bonako, ya kwa Akhaonto → Laola dituelo → Add payment method, tsenya karata e e dirang, mme o e dire ya Default. Stripe e tla leka gape tefo e e paletsweng ka bonako ka karata e ntšha. Fa ikwadiso ya gago e setse e boetse kwa Basic, o ka ikwadisa gape mo Ditlhwatlhwa mme bukana ya gago e nna e ntse jalo.",
+              "Bara e e kwa godimo ga tsebe e tla re tefo ga e a feta, mme phitlhelelo ya gago e bolokwa malatsi a sekae gape. Tobetsa \"Ntšhafatsa karata\" foo, tsenya karata e e dirang, mme re tla leka tefo ka yone ka bonako. Fa ikwadiso ya gago e setse e falletse kwa Basic, o ka ikwadisa gape go tswa mo tsebeng ya Ditlhwatlhwa mme bukana ya gago e sala e siame.",
             ],
           },
           {
@@ -1608,40 +1613,40 @@ Object.assign(HELP, {
             id: "forgot-password",
             q: "Ke lebetse lefoko la me la sephiri",
             a: [
-              "Bula lebokoso la go tsena mme o tobetse \"A o lebetse lefoko la sephiri?\". Tsenya imeile e o e dirisang mo Gadit mme o tla amogela kgolagano ya go le fetola mo motsotsong kgotsa e le mebedi.",
+              "Mo lebokosong la go tsena, thaepe imeile ya gago, morago o tobetsa \"O lebetse lefoko la sephiri?\". Kgolagano ya go le fetola gantsi e goroga mo inbox ya gago mo motsotsong kgotsa e le mebedi. O ka tobetsa gape \"Nthomelele kgolagano ya go tsena ka imeile\" mme o tsene ntle le lefoko la sephiri.",
               "Fa imeile e sa goroge, tlhola spam. Fa e sa ntse e sa goroge, o ka tswa o ikwadisitse ka Google go na le imeile le lefoko la sephiri. Leka konopo ya \"Tswelela ka Google\".",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "Ke tlhomamisegile gore lefoko la me la sephiri le siame mme go kwadilwe \"Imeile kgotsa lefoko la sephiri ga di a siama\"",
+            q: "Lefoko la me la sephiri le siame, mme go tweng imeile le lefoko la sephiri ga di dumalane",
             a: [
-              "Dilo di le tharo tsa go tlhola. Sa ntlha, capslock. Sa bobedi, sekgala kwa bofelong fa o kopolola. Sa boraro, o ikwadisitse ka Google go na le lefoko la sephiri (dirisa \"Tswelela ka Google\").",
-              "A o sa ntse o kgoreletsegile? Fetola lefoko la sephiri mo lebokosong le le tshwanang. Go go simolodisa sešwa.",
+              "Dilo di le tharo tsa go tlhola. Sa ntlha, Caps Lock. Sa bobedi, sekgala se sengwe kwa bofelong morago ga go kopolola le go pega. Sa boraro, gongwe o ikwadisitse ka Google go na le lefoko la sephiri, dirisa \"Tswelela ka Google\".",
+              "A o sa ntse o kgoreletsegile? Mo molaetseng oo oo, tobetsa \"Nthomelele kgolagano ya go tsena ka imeile\" gore o tsene ntle le lefoko la sephiri, kgotsa \"Tlhopha lefoko le leša la sephiri\".",
             ],
           },
           {
             id: "google-fails",
             q: "Go tsena ka Google ga go dire",
             a: [
-              "Lebaka le le tlwaelegileng thata: sebatli sa gago se thibela di-cookie tsa batho ba bangwe kgotsa di-pop-up tsa gadit.app. Di letle mo ditetlelelong tsa mola wa aterese mme o leke gape.",
-              "Fa o le mo mokgweng wa incognito, go tsena ka Google go thibetswe ka boomo. Fetolela kwa letlhabaphefong le le tlwaelegileng la sebatli.",
+              "Mo teng ga di-app tse di jaaka Instagram, Facebook kgotsa TikTok, konopo ya Google e fitlhilwe. Bula kgolagano mo sebatling sa gago se se tlwaelegileng, kgotsa tsenya ka imeile ya gago. Fa o tsene ka Google, thaepe imeile eo mme o tobetsa \"Nthomelele kgolagano ya go tsena ka imeile\".",
+              "Mo letlhabaphefong la poraefete, incognito, di-cookie tse di thibetsweng di ka emisa go tsena ka Google, jalo leka letlhabaphefo le le tlwaelegileng.",
             ],
           },
           {
             id: "change-email",
             q: "Ke fetola jang imeile mo akhaontong ya me?",
             a: [
-              "Akhaonto, tobetsa imeile ya gago, Fetola imeile. O tla tlhoka go tlhomamisa aterese e ntšha pele e dira. Ikwadiso ya gago, hisitori, le bukana tsotlhe di a fetisediwa.",
-              "Fa imeile e golagane le moreki wa Stripe, e ntšhafatse le mo potaleng ya dituelo ya Stripe gore diresiti tsa isago di ye kwa aterese e ntšha.",
+              "Go fetola imeile ya akhaonto go dirwa ke setlhopha. Re romele imeile go tswa mo atereseng ya gago ya jaana mme o kwale aterese e ntšha mo molaetseng. Setlhopha se tla e ntšhafatsa, mme ikwadiso ya gago, hisitori le bukana di tla sala tsotlhe jaaka di ntse.",
             ],
           },
           {
             id: "delete-account",
             q: "Ke phimola jang akhaonto ya me?",
             a: [
-              "Akhaonto, kwa tlase ga tsebe, Phimola akhaonto. Se ke sa ka metlha. Ikwadiso ya gago e a khanselwa, bukana le hisitori di a phimolwa, mme imeile e a gololwa gore o ka ikwadisa sešwa.",
-              "Direkoto tsa Stripe tsa dituelo tse di fetileng di a sala (molao o re patelela go di boloka ka ntlha ya dibuka tsa madi). Ga go na sepe se sengwe se se salang.",
+              "Kwa tlase ga tsebe ya \"Akhaonto\", tobetsa \"Phimola akhaonto\" mme o thaepe imeile ya akhaonto ya gago go tlhomamisa. Se ke sa ka metlha, ikwadiso ya gago e a khanselwa, bukana le hisitori di a phimolwa, mme imeile e a gololwa gore o kgone go ikwadisa sešwa.",
+              "Pharologanyo e le nngwe ke ikwadiso e e rekilweng mo App Store, go phimola akhaonto ga go e khansole, jalo e khansole pele mo ditlhophong tsa gago tsa ikwadiso tsa Apple.",
+              "Direkoto tsa dituelo tse di fetileng di a sala, ka gonne molao o re patelela go di boloka ka ntlha ya dibuka tsa madi.",
             ],
           },
           {
@@ -1656,8 +1661,8 @@ Object.assign(HELP, {
             id: "multiple-accounts",
             q: "Ke akanya gore ke na le diakhaonto di le pedi ka phoso. Jaanong?",
             a: [
-              "Se gantsi se diragala fa motho a ikwadisa gangwe ka Google mme gangwe ka imeile le lefoko la sephiri a dirisa aterese e e tshwanang, kgotsa fa o ikwadisa gabedi ka diaterese tse di farologaneng tsa imeile. Go ikwadisa gongwe le gongwe go dira akhaonto ya Gadit e e farologaneng e e nang le bukana, hisitori, le seemo sa ikwadiso sa yone.",
-              "Re kwalele ka diaterese tsa imeile ka bobedi (kgotsa di-UID go tswa mo tsebeng ya Akhaonto) le gore ke efe e o batlang go e boloka. Setlhopha se tla kopanya dibukana le hisitori mo akhaontong e o e tlhophang, morago se tswale e nngwe sentle. Ga go na tshedimosetso e e latlhegang.",
+              "Se gantsi se diragala fa motho a ikwadisa gangwe ka Google mme gangwe ka imeile le lefoko la sephiri a dirisa aterese e e tshwanang, kgotsa fa o ikwadisa gabedi ka diaterese tse di farologaneng tsa imeile. Go ikwadisa gongwe le gongwe go dira akhaonto ya Gadit e e farologaneng e e nang le bukana, hisitori le seemo sa ikwadiso sa yone.",
+              "Re romele imeile go tswa mo go nngwe ya diaterese tseo tse pedi, mme o kwale aterese e nngwe le gore o batla go boloka akhaonto efe. Setlhopha se tla kopanya dibukana le hisitori mo akhaontong e o e tlhophang, mme morago se tswale e nngwe sentle. Ga go na tshedimosetso e e latlhegang.",
             ],
           },
         ],
@@ -1671,24 +1676,24 @@ Object.assign(HELP, {
             id: "wrong-definition",
             q: "Ke akanya gore tlhaloso e phoso. Ke dire eng?",
             a: [
-              "Tsebe nngwe le nngwe ya dipholo e na le konopo e nnye ya \"Bega\" kwa tlase. E tobetse, tlhopha karolo (tlhaloso, tshimologo ya lefoko, sekai, kapolelo, tlhaloso ya bana, jalo le jalo) mme o kwale molaetsa o mokhutshwane. O tla ka tlhamalalo kwa setlhopheng mme pego nngwe le nngwe e a sekasekwa.",
-              "O se tshwenyege ka go nna kelotlhoko thata. Thanodi e tokafala ka bonako go tswa mo maikutlong a go gaisa sepe se sengwe.",
+              "Fa thoko ga bokao bongwe le bongwe, le mo dikarateng tsa maele le tshimologo ya lefoko, go na le letshwao le lennye la folaga. Le tobetse, tlhopha se se phoso, mme fa o batla o tsenye le ntlhanyana e khutshwane. E ya ka tlhamalalo kwa setlhopheng, mme pego nngwe le nngwe e a sekasekwa.",
+              "O se tshwenyege ka go nna kelotlhoko thata. Thanodi e tokafala ka bonako go tswa mo maikutlong ano go feta sengwe le sengwe se sengwe.",
             ],
           },
           {
             id: "kids-not-working",
             q: "Mokgwa wa bana ga o fetole tlhaloso",
             a: [
-              "Mokgwa wa bana o fetola mokwalo fela fa lefoko le setse le na le tlhaloso e e tshwanetseng bana. Mo lefokong le o sa tswang go le batla la ntlha, ema metsotswana e le 10 go ya go 15 fa tlhaloso ya bana e ntse e baakanngwa.",
-              "Mokgwa wa bana ke karolo ya leano la Family. Mo Basic, mo Individual, kgotsa kwa ntle ga akhaonto, konopo e bontsha leano la Family go na le go tshuba. Ba ba ikwadisitseng mo Clear kgotsa Deep pele ga Diphalane 2026 ba tswelela ka Mokgwa wa bana. Go o bona, leba Family mo tsebeng ya ditlhwatlhwa.",
+              "Mokgwa wa bana o fetola mokwalo fela fa lefoko le setse le na le tlhaloso e e siametseng bana. Fa o sa tswa go batla lefoko ka lekgetlo la ntlha, ema metsotswana e le 10 go ya go 15 fa mofuta wa bana o ntse o baakanngwa.",
+              "Mokgwa wa bana ke karolo ya leano la Family. Mo Individual o tla bona switch ya \"Ka mafoko a a bonolo\" go na le yone, e e nayang tlhaloso e e motlhofo ya bokao bongwe le bongwe. Mo Basic kgotsa kwa ntle ga akhaonto ga go na switch. Ba ba ikwadisitseng mo Clear kgotsa Deep pele ga Diphalane 2026 ba tswelela ba na le Mokgwa wa bana. Go e bona, leba Family mo tsebeng ya ditlhwatlhwa.",
             ],
           },
           {
             id: "voice-fails",
             q: "Go batla ka lentswe ga go dire",
             a: [
-              "Go batla ka lentswe go tlhoka tetla ya maekerofouno. Bontsi jwa dibatli di kopa gangwe mo setsheng sengwe le sengwe. Fa o tobeditse Block ka phoso, o tla tlhoka go e fetola ka seatla: tobetsa setshwantshwana sa senotlolo kgotsa sa tshedimosetso fa thoko ga gadit.app mo moleng wa aterese, morago Site settings, morago Microphone, morago Allow.",
-              "Mo Safari ya iPhone le iPad, phitlhelelo ya maekerofouno e tlhoka gape Settings → Safari → Microphone. Go batla ka lentswe ke karolo ya maano a Individual le Family: mo Basic o tla bona maano go na le gone, mme baeti ba ba sa tsenang ba kopiwa go tsena. Go tlhatlosa, bula tsebe ya ditlhwatlhwa.",
+              "Go batla ka lentswe go tlhoka tetla ya maekerofouno. Bontsi jwa dibatli di botsa gangwe fela mo setsheng sengwe le sengwe. Fa o e thibetse ka phoso, tobetsa setshwantsho se se fa thoko ga gadit.app mo moleng wa aterese mme o letlele maekerofouno mo ditetleng tsa saete.",
+              "Mo iPhone le mo iPad, gape letlelela maekerofouno ya Safari mo app ya Settings ya sedirisiwa. Go batla ka lentswe ke karolo ya maano a Individual le Family, ka jalo mo Basic le kwa ntle ga akhaonto konopo ya maekerofouno ga e tlhagele. Go tlhatlosa, bula tsebe ya ditlhwatlhwa.",
             ],
           },
           {
@@ -1709,10 +1714,10 @@ Object.assign(HELP, {
           },
           {
             id: "offline",
-            q: "Mokgwa wa kwa ntle ga inthanete o dira jang?",
+            q: "Ke dirisa Gadit jang kwa ntle ga inthanete?",
             a: [
-              "Tiriso ntle le inthanete ke karolo ya maano a Individual le Family. Lefoko lengwe le lengwe le o le batlang le bolokwa mo sedirisweng sa gago, ka jalo le bulega gape ka bonako kwa ntle ga inthanete. O ka laolela gape sephuthelo sa mafoko a a tumileng thata mo puong ya gago go tswa mo tsebeng ya gago ya Akhaonto.",
-              "Go batla lefoko le leša gotlhelele go sa ntse go tlhoka inthanete, ka gonne Gadit e tshwanetse go baakanya dipholo tsotlhe tsa lone. Khopi ya kwa ntle ga inthanete e akaretsa mafoko a a setseng a le mo sedirisweng sa gago. Fa o le mo Basic, leba maano mo tsebeng ya ditlhwatlhwa.",
+              "Tiriso ya kwa ntle ga inthanete ke karolo ya maano a Individual le Family. Lefoko lengwe le lengwe le o le batlang le bolokwa mo sedirisweng sa gago, ka jalo le bula gape ka bonako ntle le inthanete. O ka tobetsa \"Laolola sephuthelo sa kwa ntle ga inthanete\" mo tsebeng ya gago ya \"Akhaonto\" gore o boloke mafoko a thanodi ya rona mo puong ya gago mo sedirisweng seno.",
+              "Go batla lefoko le lesha gotlhelele go sa ntse go tlhoka kgolagano, ka gonne Gadit e tshwanetse go le baakanyetsa dipholo tsotlhe. Khopi ya kwa ntle ga inthanete e akaretsa mafoko a a setseng a le mo sedirisweng sa gago. Fa o le mo Basic, leba maano mo tsebeng ya ditlhwatlhwa.",
             ],
           },
           {
@@ -1727,16 +1732,16 @@ Object.assign(HELP, {
             id: "word-not-found",
             q: "Ke batlile lefoko mme ka se bone dipholo. Go diragala eng?",
             a: [
-              "Pele, tlhola mopeleto. Gadit gantsi e tsamaisa diphoso tse dinnye tsa go kwala, mme tumanosi e e phoso kgotsa tlhaka e e tlhaelang e ka e tlhakatlhakanya. Leka paakanyo e e akantsweng fa e bonala.",
-              "Go feta foo: mafoko a a sa tlwaelegang thata kgotsa a puo ya mmila a ka se nne le dipholo tse di ikanyegang. Fa o tlhomamisegile gore lefoko ke la nnete, tobetsa konopo ya Bega mo tsebeng ya dipholo (kgotsa mo sekirining sa phoso) mme o re itsise. Pego nngwe le nngwe e a sekasekwa mme mafoko a nnete a a tlhaelang a tsenngwa mo thulaganyong.",
+              "Pele, tlhola mopeleto. Fa go ne go na le phoso ya go thaepa, Gadit gantsi e bontsha lefoko le le siameng, ka kgolagano ya go batla se o se thaepileng le fa go ntse jalo.",
+              "Mafoko a a sa tlwaelegang thata kgotsa a puo ya mmila ga a nne le dipholo ka tsotlhe. Fa o tlhomamisegile gore lefoko le teng, re kwaleleng go tswa mo tsebeng eno mme setlhopha se tla le tlhola.",
             ],
           },
           {
             id: "change-language",
             q: "Ke fetola jang puo ya tiriso?",
             a: [
-              "Kwa godimo ka fa mojeng mo tsebeng nngwe le nngwe, o tla bona setshwantshwana se sennye sa folaga (kgotsa leina la puo ya gago ya jaanong). Se tobetse mme o tlhophe mo dipuong di le 41.",
-              "Tlhopho ya gago e bolokwa mo sedirisweng se. Sengwe le sengwe se laisega gape ka puo e ntšha: tiriso, malenaane, ditlhaloso tsa mafoko tsa isago, dikai, ditlhaloso tsa bana, le tshimologo ya lefoko. Dipholo tse di setseng di bolokilwe ka puo ya kgale di nna jalo go fitlha o batla mafoko ao gape.",
+              "Kwa godimo ga tsebe go na le setshwantsho sa lefatshe se se nang le puo ya gago ya jaanong. Se tobetse mme o tlhophe puo.",
+              "Tlhopho ya gago e bolokwa mo sedirisweng seno. Sengwe le sengwe se laisiwa gape ka puo e ntšha, interface, dimenu, ditlhaloso tsa mafoko tse o tla di batlang morago, dikai, ditlhaloso tsa bana, tota le tshimologo ya lefoko. Mafoko a o setseng o a batlile ka puo ya kgale a tla bontshiwa ka yone go fitlha o a batla gape.",
             ],
           },
         ],
@@ -1750,33 +1755,33 @@ Object.assign(HELP, {
             id: "join-partner",
             q: "Ke nna jang molekane wa Gadit?",
             a: [
-              "Bula /partners go tswa mo tsebeng nngwe le nngwe mme o tobetse \"Nna molekane\". Ikwadise ka leina le imeile ya gago, mme kgolagano ya gago e e kgethegileng le lebota la go latela ditobetso le dikomishene di siametse ka bonako. Ga go na go letela tetla.",
-              "Go tsena ke mahala mme go bulegetse mongwe le mongwe. Ga o tlhoke ikwadiso ya Gadit go nna molekane.",
+              "Ya kwa gadit.app/partners mme o tobetse \"Tsena mahala\". Tsenya leina le imeile ya gago, mme o bo o tobetse \"Nnaya khoutu ya me ya molekane\". Kgolagano ya gago ya sebele le lebota la molekane, le le nang le go latela ditobetso le dikomishene, di siametse tsotlhe ka yone nako eo, ntle le go letela tetla. Khoutu le kgolagano le tsone di goroga ka imeile.",
+              "Go tsena ke mahala mme go bulegetse mongwe le mongwe. Ga o tlhoke ikwadiso ya Gadit gore o nne molekane.",
             ],
           },
           {
             id: "commission-model",
             q: "Dikomishene di balwa jang?",
             a: [
-              "Melawana e e tlwaelegileng ke 25% ya tefo nngwe le nngwe e moreki a e dirang mo ngwageng wa gagwe wa ntlha. Morago ga ngwaga oo wa ntlha, o kuna 10% ya tefo nngwe le nngwe fa fela moreki a ntse a duela.",
+              "Melawana e e tlwaelegileng ke 25% ya tefo nngwe le nngwe e moreki a e dirang mo ngwageng wa gagwe wa ntlha. Morago ga ngwaga oo wa ntlha, o bona 10% ya tefo nngwe le nngwe fa fela moreki a ntse a duela. Fa o tlisa bareki ba le 5 ba ba duelang, kabelo ya gago morago ga ngwaga wa ntlha e tlhatlogela go 15% botshelo jotlhe.",
               "Se se dira ka tsela e e tshwanang mo maanong a kgwedi le a ngwaga, ka gonne komishene e balwa mo tefong nngwe le nngwe ya nnete. Fa moreki a khansela, komishene ya gago e emisa ka tefo ya gagwe ya bofelo.",
-              "Setlhopha se ka baya dipalo tse di farologaneng mo balekaneng bangwe. Dipalo tsa gago di bonala ka metlha mo lebotong la gago la molekane, le o ka le fitlhelelang go tswa mo /partners.",
+              "Setlhopha se ka baya diperesente tse dingwe mo balekaneng ba ba rileng. Diperesente tsa gago tsotlhe di bonala ka metlha mo lebotong la gago la molekane.",
             ],
           },
           {
             id: "payout",
             q: "Ke duelwa leng?",
             a: [
-              "Kgwedi le kgwedi, fa madi a gago a feta $50. Re dirisa tsela ya tefo e o e beileng mo lebotong la molekane (phetisetso ya banka, PayPal, jalo le jalo). $50 ke bonnye jo bo tlhokegang, e seng selekanyo sa bogolo. O ka kuna go feta thata, o amogela fela tefo fa o feta selekanyo seo.",
-              "Dikomishene di lokollwa malatsi a le 30 morago ga tefo ya ikwadiso, go letla nako ya go busetsa madi. Ka jalo ikwadiso ya Ferikgong e lokollwa kwa tshimologong ya Tlhakole mme e tsena mo tefong ya gago e e latelang fa madi a gago a feta $50.",
+              "Gangwe ka kgwedi, fa madi a gago a fitlha mo bonnyeng jo bo bontshitsweng mo lebotong la gago la molekane. Re a romela kwa akhaontong ya PayPal e o e beileng koo. Bonnye joo ke selekanyo sa go simolola, e seng bokhutlo, o ka bona go feta moo thata, mme o amogela tefo fa o sena go bo feta.",
+              "Dikomishene di lokollwa malatsi a le 30 morago ga tefo ya ikwadiso, go letla nako ya go busetsa madi. Ka jalo ikwadiso ya Ferikgong e lokollwa kwa tshimologong ya Tlhakole, mme e tsena mo tefong ya gago e e latelang fa madi a gago a fitlha mo bonnyeng jo bo tlhokegang.",
             ],
           },
           {
             id: "empty-dashboard",
             q: "Ke tsene mme lebota la me ga le na sepe",
             a: [
-              "Dipalo di bonala morago ga go tobetsa ga ntlha mo kgolaganong ya gago. Fa go se na sepe go raya fela gore ga go ise go nne le ope yo o tobetsang. Ya o abelane kgolagano. Lebota le ntšhafala ka bonako fa tiro e simolola.",
-              "Fa o abetse mme mongwe a ikwadisitse mme lebota le sa se bontshe, re kwalele ka nako e e ka nnang ya go ikwadisa mme setlhopha se tla tlhola gore e tsewa e le ya ga mang.",
+              "Dipalo di bonala morago ga go tobetsa ga ntlha mo kgolaganong ya gago. Fa go se na sepe go raya fela gore ga go ise go nne le ope yo o e tobeditseng. Tsaya o abelane ka kgolagano eo. Lebota le ntšhafala gaufi le nako ya nnete fa tiro e simolola.",
+              "Fa o abelane mme mongwe a ikwadisitse, mme lebota le sa bontshe seo, re kwalele ka nako e e ka nnang ya go ikwadisa, mme setlhopha se tla tlhola gore go ikwadisa goo go tswa kae.",
             ],
           },
           {
@@ -1791,8 +1796,8 @@ Object.assign(HELP, {
             id: "missing-commission",
             q: "Mongwe o ikwadisitse ka kgolagano ya me mme ga ke bone komishene",
             a: [
-              "Gantsi se ke ka ntlha ya nako: go ikwadisa go bonala mo lebotong mo metsotsong, mme komishene e kwalwa fela fa ikwadiso e duetswe tota (se se ka diragala malatsi morago fa a le mo tekong ya mahala). Tlhola gape morago ga fa teko e fela.",
-              "Fa ikwadiso e duetswe mme o sa ntse o sa bone komishene morago ga diura di le 48, re kwalele ka nako e e ka nnang ya go ikwadisa le imeile kgotsa leina la moikwadisi fa o le itse. Setlhopha se tla sekaseka sentle mme se baakanye phoso epe ka seatla.",
+              "Gantsi se ke kgang ya nako. Go ikwadisa go bonala mo lebotong mo metsotsong e le mmalwa, mme komishene e kwalwa fela fa ikwadiso e duelwa tota, mme seo se ka nna malatsi moragonyana fa ba le mo tekong ya mahala. Tlhola gape morago ga fa teko e fela.",
+              "Fa ikwadiso e duetswe mme o sa ntse o sa bone komishene morago ga diura di le 48, re kwalele ka nako e e ka nnang ya go ikwadisa le imeile kgotsa leina le le ka nnang la moikwadisi fa o le itse. Setlhopha se tla tlhola gore go ikwadisa goo go tswa kae mme se baakanye sengwe le sengwe se se fositsweng ka seatla.",
             ],
           },
         ],
@@ -1865,17 +1870,18 @@ Object.assign(HELP, {
             q: "Nka fetola karete ya mokitlane ngodisong ya ka jwang?",
             a: [
               "O ka fetohela karete e ntjha ka nako e ka tlase ho motsotso ntle le ho emisa. Ngodiso ya hao ya hajwale e tswela pele, empa ka karete e ntjha.",
-              "1. Kena ho gadit.app mme o bule leqephe la hao la Akhaonte (hodimo ka ho le letona). 2. Tobetsa \"Laola ditefo\". 3. Leqephe le sireletsehileng la Stripe le a buleha. Tobetsa \"Add payment method\", kenya karete e ntjha, mme o e tshwaye e le ya Kamehla (Default). 4. Ha o rata, tlosa karete ya kgale.",
-              "Ho tloha nakong e latelang ya tefo, tsohle di ya kareteng e ntjha. Tefo e fetileng (e seng e nkuwe) e dula kareteng ya kgale. Ha ho hlokahale ho kgutliswa tjhelete ntle le haeba o e batla ka ho kgetheha.",
+              "1. Kena ho gadit.app mme o bule \"Akhaonte\" ho menu ya akhaonte. 2. Tobetsa \"Laola ditefo\". 3. Leqephe le sireletsehileng la Stripe le a buleha. Kenya karete e ntjha e le mokgwa wa tefo mme o e tshwaye e le ya kamehla. 4. Ha o rata, tlosa karete ya kgale.",
+              "Ho tloha nakong e latelang ya tefo, tsohle di ya kareteng e ntjha. Tefo e fetileng, e seng e nkuwe, e dula kareteng ya kgale. Ha ho hlokahale ho kgutliswa tjhelete ntle le haeba o e batla ka ho kgetheha.",
             ],
           },
           {
             id: "cancel",
             q: "Nka emisa ngodiso ya ka jwang?",
             a: [
-              "O iketsetsa yona, nako efe kapa efe. Kena, bula Akhaonte, mme o tobetse Emisa ngodiso ka tlase ho leano la hao.",
-              "Ha o na le ngodiso eo o e lefellang, phihlello ya hao e tswela pele ho fihlela qetellong ya nako eo o seng o e lefetse. Ka mora moo akhaonte e fetohela ho Basic (mahala). Mantswe ao o a bolokileng le nalane di dula di bolokehile.",
-              "Nakong ya teko ya mahala ya matsatsi a 14, ho emisa ho fedisa teko hang hang mme ha ho na tefo. Haeba o tshwenyeha feela ka tefo e iketsahallang, kgetha lebaka leo fensetereng ya ho emisa, mme o ka tima ntjhafatso ya ngodiso, wa boloka teko ho fihlela letsatsing la yona la ho qetela.",
+              "O iketsetsa yona, nako efe kapa efe. Kena, bula Akhaonte, mme o tobetse ho emisa ngodiso tlasa leano la hao.",
+              "Na o rekile ngodiso ya hao ho app ya iPhone kapa iPad? E emise ho disetting tsa ngodiso tsa Apple. Lehokela la \"Laola ngodiso ya hao\" leqepheng la hao la Akhaonte le o isa moo.",
+              "Ha o na le ngodiso eo o e lefellang, phihlello ya hao e tswela pele ho fihlela qetellong ya nako eo o seng o e lefetse. Ka mora moo akhaonte e fetohela ho Basic, mahala. Mantswe ao o a bolokileng le nalane di dula di bolokehile.",
+              "Nakong ya teko ya mahala ya matsatsi a 14, ho emisa ho fedisa teko hang hang mme ha ho na tefo. Haeba o tshwenyeha feela ka tefo e iketsahallang, kgetha lebaka leo fensetereng ya ho emisa, mme o ka tima ntjhafatso, wa boloka teko ho fihlela letsatsing la yona la ho qetela.",
               "Haeba o emisitse ngodiso eo o e lefellang ka phoso kapa o fetola mohopolo, o ka e tswela pele leqepheng lona leo pele nako e fela.",
             ],
           },
@@ -1932,7 +1938,7 @@ Object.assign(HELP, {
             q: "Tefo ya ka e hlolehile. Ke lokela ho etsa eng?",
             a: [
               "Stripe e leka hape ditefo tse hlolehileng ka bo yona ka makgetlo a mmalwa matsatsing a latelang. Boholo ba ho hloleha ho a itokisa ha banka e lokolla thibelo kapa karete e na le tjhelete e lekaneng.",
-              "Haeba o batla ho e lokisa hang hang, eya ho Akhaonte → Laola ditefo → Add payment method, kenya karete e sebetsang, mme o e behe e le ya Kamehla. Stripe e tla leka tefo e hlolehileng hape hang hang ka karete e ntjha. Haeba ngodiso ya hao e se e kgutletse ho Basic, o ka ngodisa hape leqepheng la Ditheko mme bukana ya hao e dula e le teng.",
+              "Bareng e hodimo ho leqephe ho tla hlaha molaetsa o reng tefo ha e a feta, mme phihlello ya hao e bolokwa matsatsi a seng makae hape. Tobetsa \"Ntjhafatsa karete\" moo, kenya karete e sebetsang, mme re tla leka tefo hang hang ka yona. Haeba ngodiso ya hao e se e fetetse ho Basic, o ka ngodisa hape leqepheng la Ditheko mme bukana ya hao e dula e le teng.",
             ],
           },
           {
@@ -1963,40 +1969,40 @@ Object.assign(HELP, {
             id: "forgot-password",
             q: "Ke lebetse phasewete ya ka",
             a: [
-              "Bula foromo ya ho kena mme o tobetse \"O lebetse phasewete?\". Kenya imeile eo o e sebedisang ho Gadit mme o tla fumana lehokela la ho seta phasewete botjha nakong ya motsotso kapa e mmedi.",
-              "Haeba imeile e sa fihle, sheba spam. Haeba e ntse e sa fihle, o kanna wa ba o ngodisitse ka Google ho ena le imeile le phasewete. Leka konopo ya \"Tswela pele ka Google\".",
+              "Fensetereng ya ho kena, thaepe imeile ya hao, ebe o tobetsa \"O lebetse phasewete?\". Lehokela la ho seta botjha hangata le fihla inbox ya hao nakong ya motsotso kapa e mmedi. O ka boela wa tobetsa \"Nthomele lehokela la ho kena ka imeile\" mme wa kena ntle le phasewete.",
+              "Haeba imeile e sa fihle, sheba spam. Haeba e ntse e sa fihle, mohlomong o ngodisitse ka Google ho ena le imeile le phasewete. Leka konopo ya \"Tswela pele ka Google\".",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "Ke na le bonnete ba hore phasewete ya ka e nepahetse empa e re \"Imeile kapa phasewete e fosahetse\"",
+            q: "Phasewete ya ka e nepahetse, empa e re imeile le phasewete ha di tsamaisane",
             a: [
-              "Dintho tse tharo tsa ho hlahloba. Ya pele, capslock. Ya bobedi, sebaka se setseng qetellong ha o kopitsa le ho kgomaretsa. Ya boraro, o ngodisitse ka Google ho ena le phasewete (sebedisa \"Tswela pele ka Google\").",
-              "O ntse o thatafallwa? Seta phasewete botjha foromong yona eo. E o lokisetsa botjha.",
+              "Dintho tse tharo tsa ho hlahloba. Ya pele, Caps Lock. Ya bobedi, sebaka se eketsehileng qetellong ka mora ho kopitsa le ho kgomaretsa. Ya boraro, mohlomong o ngodisitse ka Google ho ena le phasewete, sebedisa \"Tswela pele ka Google\".",
+              "O ntse o thatafallwa? Molaetseng wona oo, tobetsa \"Nthomele lehokela la ho kena ka imeile\" hore o kene ntle le phasewete, kapa \"Kgetha phasewete e ntjha\".",
             ],
           },
           {
             id: "google-fails",
             q: "Ho kena ka Google ha ho sebetse",
             a: [
-              "Sesosa se tlwaelehileng haholo: sebadi sa hao sa inthanete se thibela dikhukhi tsa batho ba bang kapa difensetere tse hlahang bakeng sa gadit.app. Di dumelle ditumellong tsa bara ya aterese mme o leke hape.",
-              "Haeba o le mokgweng wa incognito, ho kena ka Google ho thibetswe ka boomo. Fetohela fensetereng e tlwaelehileng ya sebadi.",
+              "Ka hare ho di-app tse kang Instagram, Facebook kapa TikTok, konopo ya Google e patilwe. Bula lehokela sebading sa hao se tlwaelehileng, kapa o kene ka imeile ya hao. Haeba o kene ka Google, thaepe imeile eo mme o tobetse \"Nthomele lehokela la ho kena ka imeile\".",
+              "Ka fensetereng ya sephiri, blocked cookies di ka emisa ho kena ka Google, kahoo leka fensetere e tlwaelehileng.",
             ],
           },
           {
             id: "change-email",
-            q: "Nka fetola imeile akhaonteng ya ka jwang?",
+            q: "Nka fetola imeile ya akhaonte ya ka jwang?",
             a: [
-              "Akhaonte, tobetsa imeile ya hao, Fetola imeile. O tla hloka ho netefatsa aterese e ntjha pele e sebetsa. Ngodiso ya hao, nalane, le bukana kaofela di a fetisetswa.",
-              "Haeba imeile e hokahantswe le moreki wa Stripe, e ntjhafatse le portal ya ditefo ya Stripe hore marasiti a tlang a ye atereseng e ntjha.",
+              "Ho fetola imeile ya akhaonte ya hao ho etswa ke sehlopha. Re romelle imeile ho tswa atereseng ya hao ya jwale mme o ngole aterese e ntjha molaetseng. Sehlopha se tla e ntjhafatsa, mme ngodiso ya hao, nalane le bukana di tla sala di le jwalo.",
             ],
           },
           {
             id: "delete-account",
             q: "Nka hlakola akhaonte ya ka jwang?",
             a: [
-              "Akhaonte, tlase leqepheng, Hlakola akhaonte. Sena ke sa ka ho sa feleng. Ngodiso ya hao e a emiswa, bukana le nalane ya hao di a hlakolwa, mme imeile e a lokollwa bakeng sa ngodiso e ntjha.",
-              "Direkoto tsa Stripe tsa ditefo tse fetileng di a sala (re tlamehile ka molao ho di boloka bakeng sa tsa ditjhelete). Ha ho letho le leng le salang.",
+              "Botlaseng ba leqephe la \"Akhaonte\", tobetsa \"Hlakola akhaonte\" mme o thaepe imeile ya akhaonte ya hao ho netefatsa. Sena ke sa ka ho sa feleng, ngodiso ya hao e a emiswa, bukana le nalane ya hao di a hlakolwa, mme imeile e a lokollwa bakeng sa ngodiso e ntjha.",
+              "Ntho e le nngwe e sa tshwaneng ke ngodiso e rekilweng ho App Store, ho hlakola akhaonte ha ho e emise, kahoo e emise pele ho disetting tsa hao tsa dingodiso tsa Apple.",
+              "Direkoto tsa ditefiso tse fetileng di a sala, hobane molao o re qobella ho di boloka bakeng sa tsa ditjhelete.",
             ],
           },
           {
@@ -2012,7 +2018,7 @@ Object.assign(HELP, {
             q: "Ke nahana hore ke na le diakhaonte tse pedi ka phoso. Ke etse eng jwale?",
             a: [
               "Hangata sena se etsahala ha motho a ngodisa hang ka Google le hang ka imeile le phasewete a sebedisa aterese e le nngwe, kapa ha o ngodisa habedi ka diaterese tsa imeile tse fapaneng. Ngodiso e nngwe le e nngwe e etsa akhaonte e arohileng ya Gadit e nang le bukana ya yona, nalane, le boemo ba ngodiso.",
-              "Re ngolle ka diaterese tsa imeile ka bobedi (kapa di-UID tse leqepheng la Akhaonte) le hore na o batla ho boloka efe. Sehlopha se tla kopanya dibukana le nalane akhaonteng eo o e kgethang, ebe se kwala e nngwe ka hloko. Ha ho dintlha tse lahlehang.",
+              "Re romelle imeile o sebedisa e nngwe ya diaterese tseo tse pedi, mme o ngole aterese e nngwe le hore na o batla ho boloka akhaonte efe. Sehlopha se tla kopanya dibukana le nalane ho akhaonte eo o e kgethang, ebe se kwala e nngwe ka hloko. Ha ho na dintlha tse lahlehang.",
             ],
           },
         ],
@@ -2026,7 +2032,7 @@ Object.assign(HELP, {
             id: "wrong-definition",
             q: "Ke nahana hore tlhaloso e fosahetse. Ke etse eng?",
             a: [
-              "Leqephe le leng le le leng la sephetho le na le konopo e nyenyane ya \"Tlaleha\" tlase. E tobetse, kgetha mofuta (tlhaloso, tshimoloho ya lentswe, mohlala, kapolelo, tlhaloso ya bana, jj.) mme o ngole molaetsa o mokgutshwane. E fihla ka kotloloho ho sehlopha mme tlaleho e nngwe le e nngwe e a hlahlojwa.",
+              "Haufi le moelelo o mong le o mong, le dikareteng tsa maele le tshimoloho ya lentswe, ho na le letshwao le lenyenyane la folaga. Le tobetse, kgetha se sa nepahalang, mme ha o rata o kenye le molaetsa o mokgutshwane. E fihla ka kotloloho ho sehlopha, mme tlaleho e nngwe le e nngwe e a hlahlojwa.",
               "O se ke wa tshwenyeha ka ho ba ya batlisisang haholo. Bukantswe e ntlafala ka maikutlo ana kapele ho feta ka eng kapa eng e nngwe.",
             ],
           },
@@ -2034,16 +2040,16 @@ Object.assign(HELP, {
             id: "kids-not-working",
             q: "Mokgwa wa bana ha o fetole tlhaloso",
             a: [
-              "Mokgwa wa bana o fetola feela sengolwa moo lentswe le seng le na le tlhaloso e loketseng bana. Bakeng sa lentswe leo o sa tswang ho le batla lekgetlo la pele, e fe metsotswana e 10 ho isa ho e 15 ha tlhaloso ya bana e ntse e lokiswa.",
-              "Mokgwa wa bana ke karolo ya leano la Family. Ho Basic, ho Individual, kapa ntle le akhaonte, konopo e bontsha leano la Family ho fapana le ho bulwa. Ba ngodisitseng ho Clear kapa Deep pele ho Mphalane 2026 ba boloka Mokgwa wa bana. Ho o fumana, sheba Family leqepheng la ditheko.",
+              "Mokgwa wa bana o fetola sengolwa feela moo lentswe le seng le na le tlhaloso e loketseng bana. Bakeng sa lentswe leo o sa tswang ho le batla lekgetlo la pele, e fe metsotswana e 10 ho isa ho e 15 ha tlhaloso ya bana e ntse e lokiswa.",
+              "Mokgwa wa bana ke karolo ya leano la Family. Ho Individual o tla bona switch ya \"Ka mantswe a bonolo\" ho e na le yona, e fanang ka tlhaloso e bonolo ho feta bakeng sa moelelo ka mong. Ho Basic kapa ntle le akhaonte ha ho na switch. Ba ngodisitseng ho Clear kapa Deep pele ho Mphalane 2026 ba boloka Mokgwa wa bana. Ho e fumana, sheba Family leqepheng la ditheko.",
             ],
           },
           {
             id: "voice-fails",
             q: "Ho batla ka lentswe ha ho sebetse",
             a: [
-              "Ho batla ka lentswe ho hloka tumello ya maekrofounu. Dibadi tse ngata di botsa hang bakeng sa wepesaete ka nngwe. Haeba o tobeditse Block ka phoso, o tla hloka ho e fetola ka letsoho: tobetsa letshwao la senotlolo kapa la tlhahisoleseding haufi le gadit.app bareng ya aterese, ebe Site settings, ebe Microphone, ebe Allow.",
-              "Ho Safari ya iPhone le iPad, phihlello ya maekrofounu e boetse e hloka Settings → Safari → Microphone. Ho batla ka lentswe ke karolo ya maano a Individual le Family: ho Basic o tla bona maano ho e na le hona, mme baeti ba sa kenang ba kopuwa ho kena. Ho ntlafatsa, bula leqephe la ditheko.",
+              "Ho batla ka lentswe ho hloka tumello ya maekrofounu. Dibadi tse ngata di botsa hang bakeng sa saete ka nngwe. Haeba o e thibetse ka phoso, tobetsa letshwao le haufi le gadit.app bareng ya aterese mme o dumelle maekrofounu ditumellong tsa saete.",
+              "Ho iPhone le iPad, boela o dumelle maekrofounu bakeng sa Safari ho app ya Settings ya sesebediswa. Ho batla ka lentswe ke karolo ya maano a Individual le Family, kahoo ho Basic le ntle le akhaonte konopo ya maekrofounu ha e hlahe. Ho ntlafatsa, bula leqephe la ditheko.",
             ],
           },
           {
@@ -2064,10 +2070,10 @@ Object.assign(HELP, {
           },
           {
             id: "offline",
-            q: "Mokgwa wa ntle le inthanete o sebetsa jwang?",
+            q: "Nka sebedisa Gadit ntle le inthanete jwang?",
             a: [
-              "Tshebediso ntle le inthanete ke karolo ya maano a Individual le Family. Lentswe ka leng leo o le batlang le bolokwa sesebedisweng sa hao, kahoo le buleha hape hang hang ntle le inthanete. O ka boela wa jarolla sephutheloana sa mantswe a ratwang haholo ka puo ya hao ho tswa leqepheng la hao la Akhaonte.",
-              "Ho batla lentswe le letjha ka ho fellang ho ntse ho hloka inthanete, hobane Gadit e tlameha ho lokisa sephetho sohle sa lona. Kopi ya ntle le inthanete e kenyeletsa mantswe a seng a le sesebedisweng sa hao. Haeba o ho Basic, sheba maano leqepheng la ditheko.",
+              "Tshebediso ntle le inthanete ke karolo ya maano a Individual le Family. Lentswe ka leng leo o le batlang le bolokwa sesebedisweng sa hao, kahoo le buleha hape hang hang ntle le inthanete. O ka boela wa tobetsa \"Jarolla sephutheloana sa ntle le inthanete\" leqepheng la hao la \"Akhaonte\" ho boloka mantswe a bukantswe ya rona ka puo ya hao sesebedisweng sena.",
+              "Ho batla lentswe le letjha ka ho felletseng ho ntse ho hloka kgokelo, hobane Gadit e tlameha ho lokisa sephetho se felletseng bakeng sa lona. Kopi ya ntle le inthanete e akaretsa mantswe a seng a le sesebedisweng sa hao. Haeba o ho Basic, sheba maano leqepheng la ditheko.",
             ],
           },
           {
@@ -2082,16 +2088,16 @@ Object.assign(HELP, {
             id: "word-not-found",
             q: "Ke batlile lentswe mme ha ke a fumana sephetho. Ho etsahalang?",
             a: [
-              "Pele, hlahloba mopeleto. Gadit e kgona ho lokisa diphoso tse nyenyane tsa mongolo boholo ba nako, empa liluma-nosi e fosahetseng kapa tlhaku e sieo e ka e ferekanya. Leka tokiso e sisinngwang haeba e hlaha.",
-              "Ntle le moo: mantswe a sa tlwaelehang haholo kapa a puo ya seterata a kanna a se fumane sephetho se tshepahalang. Haeba o na le bonnete ba hore lentswe ke la nnete, tobetsa konopo ya Tlaleha leqepheng la sephetho (kapa skrineng sa phoso) mme o re tsebise. Tlaleho e nngwe le e nngwe e a hlahlojwa mme mantswe a nnete a fositsweng a kenngwa hape sistimeng.",
+              "Pele, hlahloba mopeleto. Haeba ho bile le phoso ya ho thaepa, Gadit hangata e bontsha lentswe le lokisitsweng, ka lehokela la ho batla seo o se thaepileng leha ho le jwalo.",
+              "Mantswe a sa tlwaelehang haholo kapa a puo ya seterata ha se ka mehla a fumanang sephetho. Haeba o na le bonnete ba hore lentswe le teng, re ngolle ho tswa leqepheng lena mme sehlopha se tla hlahloba.",
             ],
           },
           {
             id: "change-language",
             q: "Nka fetola puo ya sebopeho jwang?",
             a: [
-              "Hodimo ka ho le letona leqepheng lefe kapa lefe, o tla bona letshwao le lenyenyane la folaga (kapa lebitso la puo ya hao ya hajwale). Le tobetse mme o kgethe hara dipuo tse 41.",
-              "Kgetho ya hao e bolokwa sesebedisweng sena. Tsohle di laela hape ka puo e ntjha: sebopeho, manane, ditlhaloso tsa mantswe tse tlang, mehlala, ditlhaloso tsa bana, esita le tshimoloho ya lentswe. Diphetho tse seng di bolokilwe ka puo ya kgale di dula ho fihlela o batla mantswe ao hape.",
+              "Hodimo ho leqephe ho na le letshwao la lefatshe le nang le puo ya hao ya hajwale. Le tobetse mme o kgethe puo.",
+              "Kgetho ya hao e bolokwa sesebedisweng sena. Tsohle di laela hape ka puo e ntjha: sebopeho, manane, ditlhaloso tsa mantswe tse tlang, mehlala, ditlhaloso tsa bana, esita le tshimoloho ya lentswe. Mantswe ao o seng o a batlile ka puo ya kgale a tla bontshwa ka yona ho fihlela o a batla hape.",
             ],
           },
         ],
@@ -2105,33 +2111,33 @@ Object.assign(HELP, {
             id: "join-partner",
             q: "Nka ba molekane wa Gadit jwang?",
             a: [
-              "Bula /partners leqepheng lefe kapa lefe mme o tobetse \"Eba molekane\". Ngodisa ka lebitso la hao le imeile, mme lehokela la hao le ikgethang la ho kgothaletsa hammoho le leqephe la taolo la ho latela ho tobetsa le dikhomishene di lokile hang hang. Ha ho ho emela tumello.",
-              "Ho kena ke mahala mme ho bulehetse motho ofe kapa ofe. Ha o hloke ngodiso ya Gadit ho ba molekane.",
+              "Eya ho gadit.app/partners mme o tobetse \"Kena mahala\". Kenya lebitso la hao le imeile, ebe o tobetsa \"Mphe khoutu ya ka ya molekane\". Lehokela la hao la botho le leqephe la hao la taolo la molekane, le nang le ho tobetsa le dikhomishene, di ba teng hanghang, ntle le ho emela tumello. Khoutu le lehokela di boetse di romelwa ka imeile.",
+              "Ho kena ke mahala mme ho bulehetse bohle. Ha o hloke ngodiso ya Gadit ho ba molekane.",
             ],
           },
           {
             id: "commission-model",
             q: "Dikhomishene di balwa jwang?",
             a: [
-              "Dipehelo tse tlwaelehileng ke 25% ya tefo e nngwe le e nngwe eo moreki a e etsang selemong sa hae sa pele. Ka mora selemo seo sa pele, o fumana 10% ya tefo e nngwe le e nngwe ha feela moreki a ntse a lefa.",
-              "Sena se sebetsa ka tsela e tshwanang bakeng sa merero ya kgwedi le ya selemo, hobane khomishene e balwa tefong e nngwe le e nngwe ya nnete. Haeba moreki a emisa, khomishene ya hao e emisa le tefo ya hae ya ho qetela.",
-              "Sehlopha se ka beha ditekanyetso tse fapaneng bakeng sa balekane ba itseng. Ditekanyetso tsa hao di dula di bonahala leqepheng la hao la taolo la molekane, leo o ka le fihlelang ho tswa ho /partners.",
+              "Dipehelo tse tlwaelehileng ke 25% ya tefo e nngwe le e nngwe eo moreki a e etsang selemong sa hae sa pele. Ka mora selemo seo sa pele, o fumana 10% ya tefo e nngwe le e nngwe ha feela moreki a ntse a lefa. Ha o tlisa bareki ba 5 ba lefang, kabelo ya hao ka mora selemo sa pele e nyolohela ho 15% ka ho sa feleng.",
+              "Sena se sebetsa ka tsela e tshwanang bakeng sa merero ya kgwedi le ya selemo, hobane khomishene e balwa tefong e nngwe le e nngwe ya nnete. Haeba moreki a hlakola, khomishene ya hao e emisa ka tefo ya hae ya ho qetela.",
+              "Sehlopha se ka beha ditekanyetso tse fapaneng bakeng sa balekane ba itseng. Ditekanyetso tsa hao di dula di bonahala leqepheng la hao la taolo la molekane.",
             ],
           },
           {
             id: "payout",
             q: "Ke lefuwa neng?",
             a: [
-              "Kgwedi le kgwedi, hang ha tjhelete ya hao e feta $50. Re sebedisa mokgwa wa tefo oo o o behileng leqepheng la taolo la molekane (phetisetso ya banka, PayPal, jj.). $50 ke bonyane, hase moeli. O ka fumana ho feta haholo, o fumana tefo feela ha o feta bonyane boo.",
-              "Dikhomishene di lokollwa matsatsi a 30 ka mora tefo ya ngodiso, ho lebella nako ya ho kgutlisa tjhelete. Kahoo ngodiso ya Pherekgong e lokollwa qalong ya Hlakola mme e kena tefong ya hao e latelang hang ha tjhelete ya hao e feta $50.",
+              "Hang ka kgwedi, ha tjhelete ya hao e fihla bonyaneng bo bontshitsweng leqepheng la hao la taolo la molekane. Re e romela akhaonteng ya PayPal eo o e behileng moo. Bonyane boo ke moedi wa ho qala, eseng moedi wa ho qetela. O ka fumana ho feta haholo, mme o fumana tefo hang ha o bo feta.",
+              "Dikhomishene di lokollwa matsatsi a 30 ka mora tefo ya ngodiso, ho dumella nako ya ho kgutlisa tjhelete. Kahoo ngodiso ya Pherekgong e lokollwa qalong ya Hlakola mme e kena tefong ya hao e latelang hang ha tjhelete ya hao e fihla bonyaneng.",
             ],
           },
           {
             id: "empty-dashboard",
             q: "Ke kene empa leqephe la ka la taolo ha le na letho",
             a: [
-              "Dipalo di hlaha ka mora ho tobetsa ha pele lehokeleng la hao. Ho se be le letho ho bolela feela hore ha ho eso be le ya tobetsang. Eya o arolelane lehokela. Leqephe la taolo le ntjhafala hoo e batlang e le hang hang hang ha mosebetsi o qala.",
-              "Haeba o arolelane mme motho a ngodisitse empa leqephe la taolo le sa e bontshe, re ngolle ka nako e ka bang ya ngodiso mme sehlopha se tla hlahloba hore na e balwa ho mang.",
+              "Dipalo di hlaha ka mora ho tobetsa ha pele lehokeleng la hao. Ho se be le letho ho bolela feela hore ha ho eso be le ya tobetsang. Eya o arolelane lehokela. Leqephe la taolo le ntjhafala hoo e batlang e le ka nako ya nnete hang ha mosebetsi o qala.",
+              "Haeba o arolelane mme motho a ngodisitse empa leqephe la taolo le sa e bontshe, re ngolle ka nako e ka bang ya ngodiso mme sehlopha se tla hlahloba hore na ngodiso e tswile hokae.",
             ],
           },
           {
@@ -2146,8 +2152,8 @@ Object.assign(HELP, {
             id: "missing-commission",
             q: "Motho o ngodisitse ka lehokela la ka empa ha ke bone khomishene",
             a: [
-              "Hangata ke taba ya nako: ngodiso e hlaha leqepheng la taolo nakong ya metsotso, empa khomishene e ngolwa feela hang ha ngodiso e lefilwe ka nnete (e leng ho ka nkang matsatsi haeba a le nakong ya teko ya mahala). Hlahloba hape ka mora hore nako ya teko e fele.",
-              "Haeba ngodiso e lefilwe empa o ntse o sa bone khomishene ka mora dihora tse 48, re ngolle ka nako e ka bang ya ngodiso le imeile kapa lebitso la mongodisi haeba o le tseba. Sehlopha se tla batlisisa ketane ya ho balelwa mme se lokise phoso efe kapa efe ka letsoho.",
+              "Hangata ke taba ya nako. Ngodiso e hlaha leqepheng la taolo nakong ya metsotso, empa khomishene e ngolwa feela hang ha ngodiso e lefilwe ka nnete, mme seo se ka nka matsatsi haeba a le nakong ya teko ya mahala. Hlahloba hape ka mora hore nako ya teko e fele.",
+              "Haeba ngodiso e lefilwe empa o ntse o sa bone khomishene ka mora dihora tse 48, re ngolle ka nako e ka bang ya ngodiso le imeile kapa lebitso le hakanyeditsweng la mongodisi, haeba o le tseba. Sehlopha se tla hlahloba hore na ngodiso e tswile hokae mme se lokise phoso efe kapa efe ka letsoho.",
             ],
           },
         ],
@@ -2219,19 +2225,20 @@ Object.assign(HELP, {
             id: "change-card",
             q: "Ndzi cinca njhani khadi ra xikweleti eka mbhaliso wa mina?",
             a: [
-              "Mi nga cincela eka khadi lerintshwa hi nkarhi wa le hansi ka minete handle ka ku khansela. Mbhaliso wa n'wina wa sweswi wu ya emahlweni wu tirha, ntsena hi khadi lerintshwa.",
-              "1. Nghenani eka gadit.app kutani mi pfula tluka ra Akhawunti ya n'wina (ehenhla exineneni). 2. Thintani \"Lawula ku hakela\". 3. Tluka ra Stripe leri sirhelelekeke ri pfuleka. Thintani \"Add payment method\", tsalani khadi lerintshwa, kutani mi ri funga tanihi Default. 4. Loko mi lava, susani khadi ra khale.",
-              "Ku sukela eka nkarhi lowu landzelaka wa ku hakela, hinkwaswo swi ya eka khadi lerintshwa. Ku hakerisiwa ka khale (loku se ku hakeriweke) ku tshama eka khadi ra khale. A ku laveki ku vuyiseriwa mali handle ka loko mi swi lava hi ku kongoma.",
+              "Mi nga cincela eka khadi lerintshwa hi nkarhi wa le hansi ka minete handle ka ku khansela. Mbhaliso wa n'wina wa sweswi wu tshama wu ri karhi wu tirha, ntsena hi khadi lerintshwa.",
+              "1. Nghenani eka gadit.app kutani mi pfula \"Akhawunti\" eka menyu ya akhawunti. 2. Thintani \"Lawula ku hakela\". 3. Tluka leri sirhelelekeke ra Stripe ri ta pfuleka. Engetelani khadi lerintshwa tanihi ndlela yo hakela kutani mi ri veka tanihi ra ntolovelo. 4. Loko mi lava, susani khadi ra khale.",
+              "Ku sukela eka nkarhi lowu landzelaka wa ku hakela, hinkwaswo swi ta ya eka khadi lerintshwa. Ku hakerisiwa ka khale, loku se ku hakeriweke, ku tshama eka khadi ra khale. A ku laveki ku vuyiseriwa mali handle ka loko mi swi lava hi ku kongoma.",
             ],
           },
           {
             id: "cancel",
             q: "Ndzi khansela njhani mbhaliso wa mina?",
             a: [
-              "Mi swi endla hi n'wexe, nkarhi wun'wana na wun'wana. Nghenani, pfulani Akhawunti, kutani mi thinta Khansela mbhaliso ehansi ka pulani ya n'wina.",
-              "Eka mbhaliso lowu hakeriwaka, ku nghena ka n'wina ku ya emahlweni ku fikela emakumu ka nkarhi lowu mi wu hakeleke. Endzhaku ka sweswo akhawunti yi tlhelela eka Basic (mahala). Marito lawa mi ma hlayiseke na matimu swi tshama swi hlayisekile.",
-              "Hi nkarhi wa ndzingo wa mahala wa masiku ya 14, ku khansela swi hetisa ndzingo hi ku hatlisa naswona a mi hakerisiwi nchumu. Loko mi vilela ntsena hi ku hakerisiwa hi ku tiendlela, hlawulani xivangelo xexo eka fasitere ro khansela, kutani mi nga tima ku pfuxetiwa, mi hlayisa ndzingo ku fikela siku ra wona ro hetelela.",
-              "Loko mi khansela mbhaliso lowu hakeriwaka hi xihoxo kumbe mi cinca miehleketo, mi nga wu pfuxeta eka tluka rero emahlweni ka loko nkarhi wu hela.",
+              "Mi swi endla hi n'wexe, nkarhi wun'wana na wun'wana. Nghenani, pfulani Akhawunti, kutani mi thinta ku khansela mbhaliso ehansi ka pulani ya n'wina.",
+              "Mi xave mbhaliso wa n'wina eka app ya iPhone kumbe iPad? Wu khanseleni eka swiyimiso swa mbhaliso swa Apple. Linki ya \"Lawula mbhaliso\" eka tluka ra n'wina ra Akhawunti yi mi yisa kwalaho.",
+              "Eka mbhaliso lowu hakeriwaka, ku nghena ka n'wina ku ya emahlweni ku fikela emakumu ka nkarhi lowu mi wu hakeleke. Endzhaku ka sweswo akhawunti yi hundzukela eka Basic, ya mahala. Marito lawa mi ma hlayiseke na matimu swi tshama swi hlayisekile.",
+              "Hi nkarhi wa ndzingo wa mahala wa masiku ya 14, ku khansela swi hetisa ndzingo hi ku hatlisa naswona a ku hakerisiwi nchumu. Loko leswi mi vilelisaka ku ri ntsena ku hakerisiwa hi ku tiendlela, hlawulani xivangelo xexo eka fasitere ro khansela, kutani mi nga tima ku pfuxetiwa, mi hlayisa ndzingo ku fikela siku ra wona ro hetelela.",
+              "Loko mi khansela mbhaliso lowu hakeriwaka hi xihoxo kumbe mi cinca miehleketo, mi nga tlhela mi wu sungula eka tluka rero rero emahlweni ka loko nkarhi wu hela.",
             ],
           },
           {
@@ -2286,8 +2293,8 @@ Object.assign(HELP, {
             id: "failed-payment",
             q: "Ku hakela ka mina a ku tirhanga. Ndzi fanele ku endla yini?",
             a: [
-              "Stripe yi ringeta nakambe hi ku tiendlela ku hakela loku nga tirhangiki minkarhi yi nga ri yingani eka masiku lama landzelaka. Swiphiqo swo tala swa tilulamisela loko bangi yi humesa ku khomiwa kumbe khadi ri ri na mali leyi ringaneke.",
-              "Loko mi lava ku swi lulamisa hi ku hatlisa, yanani eka Akhawunti → Lawula ku hakela → \"Add payment method\", tsalani khadi leri tirhaka, kutani mi ri veka tanihi Default. Stripe yi ta ringeta nakambe ku hakerisiwa loku nga tirhangiki hi ku hatlisa eka khadi lerintshwa. Loko mbhaliso wa n'wina wu se wu tlhelele eka Basic, mi nga tsarisa nakambe eka Minxavo naswona buku ya n'wina ya marito yi tshama yi ri kona.",
+              "Stripe yi ringeta hi ku tiendlela ku hakela loku nga tirhangiki minkarhi yi nga ri yingani eka masiku lama landzelaka. Swiphiqo swo tala swa tilulamisela hi swoxe loko bangi yi humesa ku khomiwa kumbe khadi ri tlhela ri va ni mali leyi ringaneke.",
+              "Bara ehenhla ka tluka yi ta vula leswaku ku hakerisiwa a ku fambanga, naswona ku nghena ka n'wina ku hlayisiwa masiku ma nga ri mangani lama engetelekeke. Thintani \"Pfuxeta khadi\" kwalaho, nghenisani khadi leri tirhaka, kutani hi ta ringeta ku hakerisa eka rona hi ku hatlisa. Loko mbhaliso wa n'wina wu se wu hundzuke Basic, mi nga tsarisa nakambe eka tluka ra minxavo naswona buku ya n'wina ya marito yi tshama yi hlayisekile.",
             ],
           },
           {
@@ -2318,40 +2325,40 @@ Object.assign(HELP, {
             id: "forgot-password",
             q: "Ndzi rivele phasiwedi ya mina",
             a: [
-              "Pfulani fasitere ro nghena kutani mi thinta \"Mi rivele phasiwedi?\". Tsalani imeyili leyi mi yi tirhisaka eka Gadit kutani mi ta kuma linki yo cinca phasiwedi endzhaku ka minete yin'we kumbe timbirhi.",
-              "Loko imeyili yi nga fiki, kambelani spam. Loko yi nga si fika, mi nga ha va mi tsarise hi Google ematshan'wini ya imeyili na phasiwedi. Ringetani buthoni ya \"Yisa emahlweni hi Google\".",
+              "Eka fasitere ro nghena, thaepani imeyili ya n'wina, kutani mi thinta \"Mi rivele phasiwedi?\". Linki yo tlhela mi veka phasiwedi hi ntolovelo yi fika eka inbox ya n'wina endzhaku ka minete yin'we kumbe timbirhi. Mi nga ha tlhela mi thinta \"Ndzi rhumeleni linki yo nghena hi imeyili\" kutani mi nghena handle ka phasiwedi.",
+              "Loko imeyili yi nga fiki, kambelani spam. Loko yi ya emahlweni yi nga fiki, swi nga endleka mi tsarise hi Google ematshan'weni ya imeyili na phasiwedi. Ringetani buthoni ya \"Yisa emahlweni hi Google\".",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "Ndzi tiyisile leswaku phasiwedi ya mina yi lulamile kambe yi ri \"Imeyili kumbe phasiwedi a swi lulamanga\"",
+            q: "Phasiwedi ya mina yi lulamile, kambe yi ri imeyili na phasiwedi a swi fambelani",
             a: [
-              "Swilo swinharhu swo kambela. Xo sungula, capslock. Xa vumbirhi, ndhawu leyi nga riki na nchumu emakumu loko mi kopa no nameka. Xa vunharhu, mi tsarise hi Google ku nga ri hi phasiwedi (tirhisani \"Yisa emahlweni hi Google\" ematshan'wini ya sweswo).",
-              "Xana ma ha khomekile? Cincani phasiwedi eka fasitere rero. Swi mi sungulisa nakambe kahle.",
+              "Ku na swilo swinharhu swo kambela. Xo sungula, Caps Lock. Xa vumbirhi, ndhawu leyi engetelekeke emakumu endzhaku ka ku kopa no nameka. Xa vunharhu, swi nga endleka mi tsarise hi Google ku nga ri hi phasiwedi, tirhisani \"Yisa emahlweni hi Google\" ematshan'weni ya sweswo.",
+              "Xana ma ha khomekile? Eka rungula rero ro fana, thintani \"Ndzi rhumeleni linki yo nghena hi imeyili\" leswaku mi nghena handle ka phasiwedi, kumbe \"Hlawula phasiwedi leyintshwa\".",
             ],
           },
           {
             id: "google-fails",
             q: "Ku nghena hi Google a ku tirhi",
             a: [
-              "Xivangelo lexi tolovelekeke ngopfu: bulawuza ya n'wina yi sivela ti-cookie ta van'wana kumbe ti-pop-up eka gadit.app. Ti pfumeleleni eka mpfumelelo wa bara ya adirese kutani mi ringeta nakambe.",
-              "Loko mi ri eka xiyimo xa incognito, ku nghena hi Google ku sivelekile hi xikongomelo. Cincelani eka fasitere ra bulawuza ra ntolovelo.",
+              "Endzeni ka ti-app to tanihi Instagram, Facebook kumbe TikTok, buthoni ya Google ya fihliwa. Pfulani linki eka bulawuza ya n'wina ya ntolovelo, kumbe mi nghena hi imeyili ya n'wina. Loko mi nghene hi Google, thaepani imeyili yoleyo kutani mi thinta \"Ndzi rhumeleni linki yo nghena hi imeyili\".",
+              "Eka fasitere ra private, ku siveriwa ka cookies ku nga yimisa ku nghena hi Google, hikwalaho ringetani fasitere ra ntolovelo.",
             ],
           },
           {
             id: "change-email",
             q: "Ndzi cinca njhani imeyili eka akhawunti ya mina?",
             a: [
-              "Akhawunti, thintani imeyili ya n'wina, Cinca imeyili. Mi ta fanela ku tiyisisa adirese leyintshwa emahlweni ka loko yi tirha. Mbhaliso wa n'wina, matimu na buku ya marito swi ya emahlweni hinkwaswo.",
-              "Loko imeyili yi hlanganisiwe na muxavi wa Stripe, yi pfuxeteni na le ka phortali ya ku hakela ya Stripe leswaku tirhisiti ta nkarhi lowu taka ti ya eka adirese leyintshwa.",
+              "Ku cinca imeyili ya akhawunti swi endliwa hi xipano. Hi rhumeleni imeyili hi adirese ya n'wina ya sweswi kutani mi tsala adirese leyintshwa eka rungula rero. Xipano xi ta yi pfuxeta, naswona mbhaliso, matimu na buku ya marito swi tshama hilaha swi nga hakona.",
             ],
           },
           {
             id: "delete-account",
             q: "Ndzi susa njhani akhawunti ya mina?",
             a: [
-              "Akhawunti, ehansi ka tluka, Susa akhawunti. Leswi i swa masiku hinkwawo. Mbhaliso wa n'wina wu khanseriwa, buku ya marito na matimu swi suriwa, naswona imeyili yi ntshunxeka leswaku yi tirhisiwa eka ku tsarisa lokuntshwa.",
-              "Rhekhodo ya Stripe ya ku hakerisiwa ka khale yi tshama (hi bohiwa hi nawu ku yi hlayisa hikwalaho ka tibuku ta timali). A ku na swin'wana leswi tshamaka.",
+              "Ehansi ka tluka ra \"Akhawunti\", thintani \"Susa akhawunti\" kutani mi thaepa imeyili ya akhawunti ya n'wina leswaku mi tiyisisa. Leswi i swa masiku hinkwawo, mbhaliso wa n'wina wu khanseriwa, buku ya marito na matimu swi suriwa, naswona imeyili yi ntshunxeka leswaku yi tirhisiwa eka ku tsarisa lokuntshwa.",
+              "Ku na nchumu wun'we ntsena lowu hambaneke, mbhaliso lowu xaviweke eka App Store. Ku sula akhawunti a ku wu khanseli, hikwalaho wu khanseleni ku sungula eka swiyimiso swa mbhaliso swa Apple.",
+              "Rhekhodo ya ku hakerisiwa ka khale yi tshama, hikuva nawu wu hi boha ku yi hlayisa hikwalaho ka tibuku ta timali.",
             ],
           },
           {
@@ -2366,8 +2373,8 @@ Object.assign(HELP, {
             id: "multiple-accounts",
             q: "Ndzi ehleketa leswaku ndzi na tiakhawunti timbirhi hi xihoxo. Ndzi endla yini?",
             a: [
-              "Leswi hi ntolovelo swi humelela loko munhu a tsarisa kan'we hi Google na kan'we hi imeyili na phasiwedi a tirhisa adirese yin'we, kumbe loko mi tsarisa kambirhi hi tiadirese ta imeyili to hambana. Ku tsarisa kun'wana na kun'wana ku endla akhawunti yo hambana ya Gadit leyi nga na buku ya yona ya marito, matimu na xiyimo xa mbhaliso.",
-              "Hi tsaleleni mi ri na tiadirese hatimbirhi ta imeyili (kumbe ti-UID eka tluka ra Akhawunti) na leyi mi lavaka ku yi hlayisa. Ntlawa wu ta hlanganisa tibuku ta marito na matimu eka akhawunti leyi mi yi hlawulaka, kutani wu pfala leyin'wana kahle. A ku lahleki vuxokoxoko.",
+              "Leswi hi ntolovelo swi humelela loko munhu a tsarisa kan'we hi Google na kan'we hi imeyili na phasiwedi hi adirese yin'we, kumbe loko mi tsarisa kambirhi hi tiadirese ta imeyili to hambana. Ku tsarisa kun'wana na kun'wana ku endla akhawunti yo hambana ya Gadit leyi nga ni buku ya yona ya marito, matimu na xiyimo xa mbhaliso.",
+              "Hi rhumeleni imeyili hi yin'we ya tiadirese leti timbirhi, kutani mi tsala adirese leyin'wana na akhawunti leyi mi lavaka ku yi hlayisa. Ntlawa wu ta hlanganisa buku ya marito na matimu eka akhawunti leyi mi yi hlawulaka, kutani wu pfala leyin'wana hi ndlela leyinene. A ku na vuxokoxoko lebyi lahlekaka.",
             ],
           },
         ],
@@ -2381,24 +2388,24 @@ Object.assign(HELP, {
             id: "wrong-definition",
             q: "Ndzi ehleketa leswaku nhlamuselo yi hoxile. Ndzi endla yini?",
             a: [
-              "Tluka rin'wana na rin'wana ra mbuyelo ri na buthoni yitsongo ya \"Vika xihoxo\" ehansi. Yi thinteni, hlawulani muxaka (nhlamuselo, masungulo, xikombiso, xivulavulelo, nhlamuselo ya vana, na swin'wana) kutani mi tsala rungula ro koma. Ri ta kongoma eka ntlawa naswona xiviko xin'wana na xin'wana xa languteriwa.",
-              "Mi nga vileli hi ku va mi kongomisa ngopfu. Dikixinari yi antswa hi switsundzuxo leswi hi ku hatlisa ku tlula hi nchumu wun'wana.",
+              "Ekusuhi ni nhlamuselo yin'wana na yin'wana, ni le ka tikhadi ta swivulavulelo ni masungulo ya rito, ku ni xifaniso lexitsongo xa baendela. Xi thinteni, hlawulani leswi hoxeke, kutani mi engetela rungula ro koma loko mi swi lava. Swi ya hi ku kongoma eka ntlawa, naswona xiviko xin'wana na xin'wana xa kamberiwa.",
+              "Mi nga vileli hi ku va mi hlawula ngopfu. Dikixinari yi antswa hi switsundzuxo leswi hi ku hatlisa ku tlula nchumu wun'wana na wun'wana.",
             ],
           },
           {
             id: "kids-not-working",
             q: "Xiyimo xa vana a xi cinci nhlamuselo",
             a: [
-              "Xiyimo xa vana xi cinca tsalwa ntsena laha rito ri se ri nga na nhlamuselo leyi vana va yi twisisaka. Eka rito leri mi ha ku ri lava ro sungula, yimelani tisekoni ta 10 ku ya eka 15 loko nhlamuselo ya vana yi ri karhi yi lunghiseleriwa.",
-              "Xiyimo xa vana i xiphemu xa pulani ya Family. Eka Basic, eka Individual, kumbe handle ka akhawunti, xilawuri xi kombisa pulani ya Family ematshan'wini yo pfuleka. Vatirhisi lava tsariseke eka Clear kumbe Deep emahlweni ka October 2026 va hlayisa Xiyimo xa vana. Ku xi kuma, langutani Family eka tluka ra minxavo.",
+              "Xiyimo xa vana xi cinca tsalwa ntsena laha rito ri nga ni nhlamuselo leyi se yi lulamiseriweke vana. Eka rito leri mi ha ku ri lava ro sungula, yimelani tisekoni ta 10 ku ya eka 15 loko ku ri karhi ku lunghiseleriwa vhidiyo ra vana.",
+              "Xiyimo xa vana i xiphemu xa pulani ya Family. Eka Individual mi ta vona swichi ya \"Hi marito yo olova\" ematshan'weni ya xona, leyi nyikaka nhlamuselo yo olova eka nhlamuselo yin'wana na yin'wana. Eka Basic kumbe handle ka akhawunti a ku na swichi. Lava tsariseke eka Clear kumbe Deep emahlweni ka October 2026 va tshama va ri na Xiyimo xa vana. Ku xi kuma, vonani Family eka tluka ra minxavo.",
             ],
           },
           {
             id: "voice-fails",
             q: "Ku lava hi rito a ku tirhi",
             a: [
-              "Ku lava hi rito ku lava mpfumelelo wa maykrofoni. Tibulawuza to tala ti vutisa kan'we eka websayiti yin'wana na yin'wana. Loko mi thintile Block hi xihoxo, mi ta fanela ku swi cinca hi voko: thintani aykhoni ya xilotlelo kumbe ya vuxokoxoko etlhelo ka gadit.app eka bara ya adirese, kutani Site settings, kutani Microphone, kutani Allow.",
-              "Eka Safari ya iPhone na iPad, ku nghena eka maykrofoni na kona ku lava Settings → Safari → Microphone. Ku lava hi rito i xiphemu xa tipulani ta Individual na Family: eka Basic mi ta vona tipulani ematshan'wini ya sweswo, naswona vaendzi lava nga ngheniki va kombeliwa ku nghena. Ku tlakusa, pfulani tluka ra minxavo.",
+              "Ku lava hi rito ku lava mpfumelelo wa maykrofoni. Tibulawuza to tala ti vutisa kan'we eka sayiti yin'wana na yin'wana. Loko mi yi siverile hi xihoxo, thintani ayikhoni leyi nga ekusuhi na gadit.app eka bara ya adirese kutani mi pfumelela maykrofoni eka mipfumelelo ya sayiti.",
+              "Eka iPhone na iPad, mi fanele mi tlhela mi pfumelela maykrofoni eka Safari eka app ya Settings ya xitirhisiwa. Ku lava hi rito i xiphemu xa tipulani ta Individual na Family, hikwalaho eka Basic ni handle ka akhawunti buthoni ya maykrofoni a yi humeleli. Ku tlakusa, pfulani tluka ra minxavo.",
             ],
           },
           {
@@ -2421,8 +2428,8 @@ Object.assign(HELP, {
             id: "offline",
             q: "Xana ku tirhisa handle ka inthanete swi tirha njhani?",
             a: [
-              "Ku tirhisa handle ka inthanete i xiphemu xa tipulani ta Individual na Family. Rito rin'wana na rin'wana leri mi ri lavaka ri hlayisiwa eka xitirhisiwa xa n'wina, hikwalaho ri pfuleka nakambe hi ku hatlisa handle ka inthanete. Mi nga tlhela mi dawunilodi phakete ya marito lama tirhisiwaka ngopfu eka ririmi ra n'wina eka tluka ra n'wina ra Akhawunti.",
-              "Ku lava rito lerintshwa ku ha lava inthanete, hikuva Gadit yi fanele ku lunghiselela mbuyelo hinkwawo wa rona. Khopi ya handle ka inthanete yi katsa marito lama se ma nga eka xitirhisiwa xa n'wina. Loko mi ri eka Basic, langutani tipulani eka tluka ra minxavo.",
+              "Ku tirhisa handle ka inthanete i xiphemu xa tipulani ta Individual na Family. Rito rin'wana na rin'wana leri mi ri lavaka ri hlayisiwa eka xitirhisiwa xa n'wina, hikwalaho ri tlhela ri pfuleka hi ku hatlisa handle ka inthanete. Mi nga tlhela mi thinta \"Dawuniloda phakete yo tirhisa handle ka inthanete\" eka tluka ra n'wina ra \"Akhawunti\" leswaku mi hlayisa marito ya xihlamusela-marito xa hina hi ririmi ra n'wina eka xitirhisiwa lexi.",
+              "Ku lava rito lerintshwa hi ku helela swa ha lava ku va ni nhlanganiso, hikuva Gadit yi fanele ku ri lunghiselela mbuyelo hinkwawo. Khopi ya handle ka inthanete yi katsa marito lama se ma nga eka xitirhisiwa xa n'wina. Loko mi ri eka Basic, langutani tipulani eka tluka ra minxavo.",
             ],
           },
           {
@@ -2437,16 +2444,16 @@ Object.assign(HELP, {
             id: "word-not-found",
             q: "Ndzi lave rito kambe a ndzi kumanga mbuyelo. Ku humelela yini?",
             a: [
-              "Xo sungula, kambelani mapeletelo. Gadit hakanyingi yi lulamisa swihoxo leswitsongo swa ku tsala, kambe vawele lowu hoxeke kumbe letere leri pfumalekaka swi nga yi pfilunganya. Ringetani ku lulamisa loku ringanyetiweke loko ku humelela.",
-              "Ku engetela kona: marito lama nga tolovelekangiki ngopfu kumbe ya xiluva ma nga ha tlherisi mbuyelo lowu tshembekaka. Loko mi tiyisile leswaku rito i ra xiviri, thintani buthoni ya Vika xihoxo eka tluka ra mbuyelo (kumbe eka xikirini xa xihoxo) mi hi tivisa. Xiviko xin'wana na xin'wana xa languteriwa naswona marito ya xiviri lama pfumalekaka ma engeteriwa eka sisiteme.",
+              "Xo sungula, kambelani mapeletelo. Loko ku ri ni xihoxo xo thaepa, Gadit hakanyingi yi kombisa rito leri lulamisiweke, ni linki yo lava leswi mi swi thaepeke hambiswiritano.",
+              "Marito lama nga taliki ngopfu kumbe ya xiluva a ma vuyi mbuyelo minkarhi hinkwayo. Loko mi tiyisile leswaku rito ri kona, mi tsalela eka hina mi ri eka tluka leri, kutani ntlawa wu ta kambela.",
             ],
           },
           {
             id: "change-language",
             q: "Ndzi cinca njhani ririmi ra xitirhisiwa?",
             a: [
-              "Ehenhla exineneni ka tluka rin'wana na rin'wana, mi ta vona aykhoni yitsongo ya mbendzele (kumbe vito ra ririmi ra n'wina ra sweswi). Yi thinteni kutani mi hlawula eka tindzimi ta 41.",
-              "Leswi mi swi hlawulaka swi hlayisiwa eka xitirhisiwa lexi. Hinkwaswo swi layicha nakambe hi ririmi lerintshwa: xitirhisiwa, timenyu, tinhlamuselo ta marito ta nkarhi lowu taka, swikombiso, tinhlamuselo ta vana, hambi ku ri masungulo. Mimbuyelo leyi se yi hlayisiweke hi ririmi ra khale yi tshama ku fikela loko mi lava marito wolawo nakambe.",
+              "Ehenhla ka tluka ku ni ayikhoni ya globu leyi nga ni ririmi ra n'wina ra sweswi. Yi thinteni kutani mi hlawula ririmi.",
+              "Leswi mi swi hlawulaka swi hlayisiwa eka xitirhisiwa lexi. Hinkwaswo swi tlhela swi layicha hi ririmi lerintshwa, xitirhisiwa, timenyu, tinhlamuselo ta marito leti taka, swikombiso, tinhlamuselo ta vana, hambi ku ri masungulo ya rito. Marito lawa mi se mi ma lavile hi ririmi ra khale ma ta tshama ma kombisa rona ku fikela loko mi tlhela mi ma lava.",
             ],
           },
         ],
@@ -2460,7 +2467,7 @@ Object.assign(HELP, {
             id: "join-partner",
             q: "Ndzi va njhani mutirhisani wa Gadit?",
             a: [
-              "Pfulani /partners eka tluka rin'wana na rin'wana kutani mi thinta \"Become a partner\". Tsarisani hi vito na imeyili ya n'wina, kutani linki ya n'wina yo hlawuleka na dashibodo yo landzelela ku thinta na tikhomixini swi lunghekile hi ku hatlisa. A ku yimeleriwi mpfumelelo.",
+              "Yana eka gadit.app/partners kutani mi thinta \"Nghenani mahala\". Nghenisani vito na imeyili ya n'wina, kutani mi thinta \"Kuma khodi ya mina ya mutirhisani\". Linki ya n'wina ya munhu hi xiyexe na dashibodo ya mutirhisani, leyi nga ni ku landzelela ku thinta na tikhomixini, swi tshama swi lunghekile hi ku hatlisa, mi nga yimelanga mpfumelelo. Khodi na linki swi tlhela swi mi fika hi imeyili.",
               "Ku nghena i mahala naswona ku pfulekele un'wana na un'wana. A mi lavi mbhaliso wa Gadit leswaku mi va mutirhisani.",
             ],
           },
@@ -2468,25 +2475,25 @@ Object.assign(HELP, {
             id: "commission-model",
             q: "Xana tikhomixini ti hlayiwa njhani?",
             a: [
-              "Swipimelo swa ntolovelo i 25% ya ku hakela kun'wana na kun'wana loku muxavi a ku endlaka hi lembe ra yena ro sungula. Endzhaku ka lembe rero ro sungula, mi kuma 10% ya ku hakela kun'wana na kun'wana loko muxavi a ya emahlweni a hakela.",
+              "Swipimelo swa ntolovelo i 25% ya ku hakela kun'wana na kun'wana loku muxavi a ku endlaka hi lembe ra yena ro sungula. Endzhaku ka lembe rero ro sungula, mi kuma 10% ya ku hakela kun'wana na kun'wana loko muxavi a ya emahlweni a hakela. Loko mi tisa vaxavi va 5 lava hakelaka, xiphemu xa n'wina endzhaku ka lembe ro sungula xi tlakuka xi va 15% vutomi hinkwabyo.",
               "Leswi swi tirha hi ndlela yin'we eka tipulani ta n'hweti na ta lembe, hikuva khomixini yi hlayiwa eka ku hakela kun'wana na kun'wana ka xiviri. Loko muxavi a khansela, khomixini ya n'wina yi yima eka ku hakela ka yena ko hetelela.",
-              "Ntlawa wu nga veka mimpimo yo hambana eka vatirhisani vo karhi. Mimpimo ya n'wina yi tshama yi kombisiwa eka dashibodo ya n'wina ya mutirhisani, leyi mi nga yi kumaka eka /partners.",
+              "Ntlawa wu nga veka mimpimo yo hambana eka vatirhisani vo karhi. Mimpimo ya n'wina yi tshama yi kombisiwa eka dashibodo ya n'wina ya mutirhisani.",
             ],
           },
           {
             id: "payout",
             q: "Ndzi hakeriwa rini?",
             a: [
-              "Hi n'hweti, loko mali ya n'wina yi tlula $50. Hi tirhisa ndlela yo hakela leyi mi yi vekeke eka dashibodo ya mutirhisani (ku hundzisela ebangini, PayPal, na swin'wana). $50 i ndzilakano wa le hansi, a hi ndzilakano wa le henhla. Mi nga kuma swo tala ngopfu, mi amukela ku hakeriwa ntsena loko mi tlula ndzilakano.",
-              "Tikhomixini ti humesiwa endzhaku ka masiku ya 30 ku sukela loko mbhaliso wu hakeriwile, leswaku ku va na nkarhi wa ku vuyiseriwa mali. Hikwalaho mbhaliso wa Sunguti wu humesiwa eku sunguleni ka Nyenyanyana kutani wu nghena eka ku hakeriwa ka n'wina loku landzelaka loko mali ya n'wina yi tlula $50.",
+              "Kan'we hi n'hweti, loko mali ya n'wina yi fika eka ntsengo wa le hansi lowu kombisiweke eka dashibodo ya n'wina ya mutirhisani. Hi yi rhumela eka akhawunti ya PayPal leyi mi yi vekeke kwalaho. Ntsengo wa le hansi i ndzilakano wa ku sungula, a hi wa le henhla. Mi nga kuma swo tala swinene, naswona mi amukela ku hakeriwa loko mi wu tlula.",
+              "Tikhomixini ti humesiwa endzhaku ka masiku ya 30 ku sukela eka ku hakela ka mbhaliso, leswaku ku va na nkarhi wa ku vuyiseriwa mali. Hikwalaho khomixini ya mbhaliso wa Sunguti yi humesiwa eku sunguleni ka Nyenyanyana, kutani yi nghena eka ku hakeriwa ka n'wina loku landzelaka loko mali ya n'wina yi fika eka ntsengo wa le hansi.",
             ],
           },
           {
             id: "empty-dashboard",
             q: "Ndzi nghenile kambe dashibodo ya mina a yi na nchumu",
             a: [
-              "Tinomboro ti humelela endzhaku ka ku thinta ko sungula eka linki ya n'wina. Ku pfumala nchumu swi vula ntsena leswaku a ku si va na loyi a thinteke. Yanani mi avelana linki. Dashibodo yi pfuxetiwa kwalomu ka hi nkarhi wa xiviri loko ntirho wu sungula.",
-              "Loko mi avelanile naswona munhu a tsarisile kambe dashibodo yi nga swi kombisi, hi tsaleleni mi ri na nkarhi wa kwalomu ka ku tsarisa kutani ntlawa wu ta kambela ku hlayeriwa.",
+              "Tinhlayo ti humelela endzhaku ka ku thinta ko sungula eka linki ya n'wina. Ku pfumala nchumu swi vula ntsena leswaku a ku si va na loyi a thinteke. Yanani mi avelana linki. Dashibodo yi pfuxetiwa kwalomu ka hi nkarhi wa xiviri loko ntirho wu sungula.",
+              "Loko mi avelanile naswona munhu a tsarisile kambe dashibodo yi nga swi kombisi, hi tsaleleni mi ri na nkarhi wa kwalomu ka ku tsarisa kutani ntlawa wu ta kambela laha ku tsarisa ku humaka kona.",
             ],
           },
           {
@@ -2501,8 +2508,8 @@ Object.assign(HELP, {
             id: "missing-commission",
             q: "Munhu u tsarise hi linki ya mina kambe a ndzi voni khomixini",
             a: [
-              "Hakanyingi i swa nkarhi: ku tsarisa ku humelela eka dashibodo endzhaku ka timinete, kambe khomixini yi tsariwa ntsena loko mbhaliso wu hakeriwile hakunene (leswi swi nga teka masiku loko a ri eka ndzingo wa mahala). Languteni nakambe endzhaku ka loko ndzingo wu herile.",
-              "Loko mbhaliso wu hakeriwile kambe ma ha nga voni khomixini endzhaku ka tiawara ta 48, hi tsaleleni mi ri na nkarhi wa kwalomu ka ku tsarisa na imeyili kumbe vito ra kwalomu ra mutsarisi loko mi ri tiva. Ntlawa wu ta lavisisa ndlela ya ku hlayeriwa naswona wu lulamisa xihoxo xin'wana na xin'wana hi voko.",
+              "Hakanyingi i swa nkarhi. Ku tsarisa ku humelela eka dashibodo endzhaku ka timinete, kambe khomixini yi tsariwa ntsena loko mbhaliso wu hakeriwile hakunene, leswi swi nga tekaka masiku loko va ri eka ndzingo wa mahala. Languteni nakambe endzhaku ka loko ndzingo wu herile.",
+              "Loko mbhaliso wu hakeriwile kambe ma ha nga voni khomixini endzhaku ka tiawara ta 48, hi tsaleleni mi ri na nkarhi wa kwalomu ka ku tsarisa na imeyili kumbe vito ra kwalomu ra loyi a tsariseke, loko mi ri tiva. Ntlawa wu ta kambela laha ku tsarisa ku humaka kona kutani wu lulamisa ku hundza kwihi na kwihi hi voko.",
             ],
           },
         ],
@@ -2575,18 +2582,19 @@ Object.assign(HELP, {
             q: "Ngilishintja njani likhadi lesikweleti ekubhaliseni kwami?",
             a: [
               "Ungashintjela kulikhadi lelisha ngaphansi kwemzuzu ngaphandle kwekukhansela. Kubhalisa kwakho kwanyalo kuchubeka, kodvwa ngelikhadi lelisha.",
-              "1. Ngena ku-gadit.app bese uvula likhasi le-Akhawunti yakho (etulu ngesekudla). 2. Cindzetela \"Phatsa tinkhokhelo\". 3. Kuvuleka likhasi le-Stripe lelivikelekile. Cindzetela \"Add payment method\", faka likhadi lelisha, bese ulibeka njengeleli-Default. 4. Uma utsandza, susa likhadi lelidzala.",
-              "Kusukela esikhatsini lesilandzelako sekukhokha, konkhe kuya kulikhadi lelisha. Inkhokhelo yangaphambilini (lesekhokhiwe) ihlala kulikhadi lelidzala. Akudzingeki kubuyiselwa imali ngaphandle uma uyifuna ngempela.",
+              "1. Ngena ku-gadit.app bese uvula \"I-akhawunti\" kumenyu ye-akhawunti. 2. Cindzetela \"Phatsa tinkhokhelo\". 3. Kuvuleka likhasi le-Stripe lelivikelekile. Faka likhadi lelisha njengendlela yekukhokha bese ulibeka njengaleliyinhloko. 4. Uma utsandza, susa likhadi lelidzala.",
+              "Kusukela emjikelezweni lolandzelako wekukhokha, konkhe kuya kulikhadi lelisha. Inkhokhelo yangaphambilini, lese ivele yakhokhwa, ihlala kulikhadi lelidzala. Akudzingeki kubuyiselwa imali ngaphandle uma uyifuna ngco.",
             ],
           },
           {
             id: "cancel",
             q: "Ngikukhansela njani kubhalisa kwami?",
             a: [
-              "Utentela wena, nobe nini. Ngena, vula i-Akhawunti, bese ucindzetela Khansela kubhalisa ngentasi kwelihlelo lakho.",
-              "Kubhalisa lokukhokhelwako, kungena kwakho kuchubeka kuze kuphele sikhatsi lesesikhokhele. Ngemuva kwaloko i-akhawunti ibuyela ku-Basic (mahhala). Emagama lowagcinile nemlandvo kuhlala kuphephile.",
+              "Utentela wena, nobe nini. Ngena, vula I-akhawunti, bese ucindzetela Khansela kubhalisa ngaphansi kwelihlelo lakho.",
+              "Utsenge kubhalisa kwakho ku-app ye-iPhone nobe ye-iPad? Kukhansela ku-Apple subscription settings yakho. Lilinki lelitsi \"Phatsa kubhalisa kwakho\" ekhasini lakho le-I-akhawunti likusa khona.",
+              "Kubhalisa lokukhokhelwako, kungena kwakho kuchubeka kuze kuphele sikhatsi lesuvele usikhokhele. Ngemuva kwaloko i-akhawunti ibuyela ku-Basic, mahhala. Emagama lowagcinile nemlandvo kuhlala kuphephile.",
               "Esikhatsini sekuzama samahhala semalanga langu-14, kukhansela kuphelisa kuzama khona manjalo futsi kute lokukhokhiswako. Nangabe ukhatsateke ngenkhokhelo letentekelako kuphela, khetsa leso sizatfu efasitelweni lekukhansela, bese ungacisha kuvuselela esikhundleni saloko, ugcine kuzama kuze kube lilanga lako lekugcina.",
-              "Uma ukhansela kubhalisa lokukhokhelwako ngephutsa nobe ushintja umcondvo, ungakuchubeka kulelo khasi ngaphambi kwekutsi sikhatsi siphele.",
+              "Uma ukhansela kubhalisa lokukhokhelwako ngephutsa nobe ushintja umcondvo, ungakuchubekisela futsi kulelo khasi ngaphambi kwekutsi sikhatsi siphele.",
             ],
           },
           {
@@ -2641,8 +2649,8 @@ Object.assign(HELP, {
             id: "failed-payment",
             q: "Inkhokhelo yami yehlulekile. Kufanele ngentenjani?",
             a: [
-              "I-Stripe iphindza ngekwayo tinkhokhelo letehlulekile tikhatsi letimbalwa emalangeni lalandzelako. Kwehluleka lokunyenti kuyalungiseka ngekwako nangabe libhange likhulula kubanjwa nobe likhadi linemali leyenele.",
-              "Uma ufuna kukulungisa masinyane, hamba ku-Akhawunti → Phatsa tinkhokhelo → Add payment method, faka likhadi lelisebentako, bese ulibeka njenge-Default. I-Stripe itawuphindza inkhokhelo leyehlulekile masinyane kulikhadi lelisha. Uma kubhalisa kwakho sekubuyele ku-Basic, ungabhalisa kabusha kusuka ku-Emanani futsi incwadzi yakho ihlala injalo.",
+              "Stripe iphinda ngekwayo tinkhokhelo letehlulekile tikhatsi letimbalwa emalangeni lalandzelako. Kwehluleka lokunyenti kuyalungiseka ngekwako nangabe libhange likhulula kubanjwa nobe likhadi liba nemali leyenele.",
+              "Kunelitjelelo etulu ekhasini lelitawutsi inkhokhelo ayikadluli, futsi kungena kwakho kugcinwa eminye imalanga lembalwa. Cindzetela \"Vuselela likhadi\" lapho, ufake likhadi lelisebentako, futsi sitawetama inkhokhelo khona lapho. Uma kubhalisa kwakho sekubuyele ku-Basic, ungabhalisa futsi ekhasini lemaNani, futsi incwadzi yakho ihlala injalo.",
             ],
           },
           {
@@ -2673,40 +2681,40 @@ Object.assign(HELP, {
             id: "forgot-password",
             q: "Ngikhohlwe liphasiwedi lami",
             a: [
-              "Vula libhokisi lekungena bese ucindzetela \"Ukhohlwe liphasiwedi?\". Faka i-imeyili loyisebentisela Gadit futsi utawutfola lilinki lekusetha kabusha ngekhatsi kwemzuzu munye nobe lemibili.",
-              "Uma i-imeyili ingafiki, hlola ku-spam. Uma isangafiki, kungenteka ubhalise nge-Google esikhundleni se-imeyili neliphasiwedi. Zama inkinobho letsi \"Chubeka nge-Google\".",
+              "Efasiteleni lekungena, thayipha i-imeyili yakho, bese ucindzetela \"Ukhohlwe liphasiwedi?\". Lilinki lekusetha kabusha livamise kufika ku-inbox yakho ngekhatsi kwemzuzu munye nobe lemibili. Ungaphindze ucindzetele \"Ngitfumelele lilinki lekungena nge-imeyili\" bese ungena ngaphandle kweliphasiwedi.",
+              "Uma i-imeyili ingafiki, hlola ku-spam. Uma isengafiki, kungenteka ubhalise nge-Google esikhundleni se-imeyili neliphasiwedi. Zama inkinobho letsi \"Chubeka nge-Google\".",
             ],
           },
           {
             id: "wrong-credentials",
             q: "Ngiciniseka kutsi liphasiwedi lami lilungile kodvwa kutsi \"I-imeyili nobe liphasiwedi akulungi\"",
             a: [
-              "Tintfo letintsatfu tekuhlola. Kwekucala, i-capslock. Kwesibili, sikhala ekugcineni nawukopisha uphindze unamatsisele. Kwesitsatfu, ubhalise nge-Google kunekutsi ubhalise ngeliphasiwedi (sebentisa \"Chubeka nge-Google\" esikhundleni saloko).",
-              "Usabambekile? Setha kabusha liphasiwedi kulelo bhokisi. Kukucalisa kabusha kahle.",
+              "Tintfo letintsatfu tekuhlola. Kwekucala, Caps Lock. Kwesibili, sikhala lesengetiwe ekugcineni ngemva kwekukopisha nokunamatselisa. Kwesitsatfu, mhlawumbe ubhalise nge-Google kunekutsi ubhalise ngeliphasiwedi, sebentisa \"Chubeka nge-Google\" esikhundleni saloko.",
+              "Usabambekile? Kulo lowomlayeto lofanako, cindzetela \"Ngitfumelele lilinki lekungena nge-imeyili\" kute ungene ngaphandle kweliphasiwedi, nobe \"Khetsa liphasiwedi lelisha\".",
             ],
           },
           {
             id: "google-fails",
             q: "Kungena nge-Google akusebenti",
             a: [
-              "Imbangela levame kakhulu: i-browser yakho ivimba ema-cookie langesiwo e-gadit.app nobe ema-pop-up. Kuvumele etimvumweni temugca wekheli bese uphindza uzama.",
-              "Uma usesimeni se-incognito, kungena nge-Google kuvinjelwe ngenhloso. Shintjela efasiteleni le-browser lelijwayelekile.",
+              "Ngaphakathi kuma-app lafana ne-Instagram, Facebook nobe TikTok, inkinobho ye-Google iyafihlwa. Vula lilinki ku-browser yakho lejwayelekile, nobe ungene nge-imeyili yakho. Uma wajoyina nge-Google, thayipha leyo imeyili bese ucindzetela \"Ngitfumelele lilinki lekungena nge-imeyili\".",
+              "Efasiteleni leliyimfihlo, incognito, ema-cookie lavinjiwe angamisa kungena nge-Google, ngako zama lifasitelo lelijwayelekile.",
             ],
           },
           {
             id: "change-email",
             q: "Ngiyishintja njani i-imeyili ku-akhawunti yami?",
             a: [
-              "I-Akhawunti, cindzetela i-imeyili yakho, Shintja i-imeyili. Kutawudzingeka ucinisekise likheli lelisha ngaphambi kwekutsi lisebente. Kubhalisa kwakho, umlandvo, nencwadzi konkhe kuyadluliselwa.",
-              "Uma i-imeyili ixhunywe kulikhasimende le-Stripe, yivuselele nasesangweni lekukhokha le-Stripe kute emarisidi latako aye kulikheli lelisha.",
+              "Kushintja i-imeyili ye-akhawunti kwentiwa yithimba. Sitfumelele i-imeyili isuka kulelikheli lakho lamanje, bese ubhala likheli lelisha emlayetweni. Lithimba litawulivuselela, futsi kubhalisa kwakho, umlandvo nencwadzi yakho kutawuhlala kunjalo.",
             ],
           },
           {
             id: "delete-account",
             q: "Ngiyicisha njani i-akhawunti yami?",
             a: [
-              "I-Akhawunti, ngentasi kwelikhasi, Cisha i-akhawunti. Loku kwanomphela. Kubhalisa kwakho kuyakhanselwa, incwadzi yakho nemlandvo kuyasulwa, futsi i-imeyili iyakhululeka kute kubhaliswe kabusha.",
-              "Emarekhodi e-Stripe etinkhokhelo tangaphambilini ayahlala (umtsetfo usibophelela kutsi siwagcine ngetinjongo tekubalwa kwemali). Kute lokunye lokuhlalako.",
+              "Ngentasi kwelikhasi le-Akhawunti, cindzetela \"Cisha i-akhawunti\" bese uthayipha i-imeyili ye-akhawunti yakho kute ucinisekise. Loku kwanomphela, kubhalisa kwakho kuyakhanselwa, incwadzi yakho nemlandvo kuyasulwa, futsi i-imeyili iyakhululeka kute kubhaliswe kabusha.",
+              "Lokunye kuphela kubhalisa lokutsengwe ku-App Store, kucisha i-akhawunti akulukhanseli, ngako lukhanseli kucala ku-Apple subscription settings yakho.",
+              "Emarekhodi etinkhokhelo tangaphambilini ayahlala, ngobe umtsetfo usibophelela kutsi siwagcine ngetinjongo tekubalwa kwemali.",
             ],
           },
           {
@@ -2721,8 +2729,8 @@ Object.assign(HELP, {
             id: "multiple-accounts",
             q: "Ngicabanga kutsi nginema-akhawunti lamabili ngephutsa. Ngentenjani nyalo?",
             a: [
-              "Loku kuvame kwenteka nangabe umuntfu abhalisa kanye nge-Google futsi kanye nge-imeyili neliphasiwedi asebentisa likheli lelifanako, nobe nangabe ubhalisa kabili ngema-imeyili lehlukene. Kubhalisa ngakunye kudala i-akhawunti ye-Gadit lehlukile lenencwadzi yayo, umlandvo wayo, nesimo sayo sekubhalisa.",
-              "Sibhalele unawo omabili ema-imeyili (nobe ema-UID lavela ekhasini le-Akhawunti) kanye nekutsi nguyiphi lofuna kuyigcina. Licembu litawuhlanganisa tincwadzi nemlandvo ku-akhawunti loyikhetsile, bese livala lenye kahle. Kute imininingwane lelahlekako.",
+              "Loku kuvame kwenteka nangabe umuntfu abhalisa kanye nge-Google futsi kanye nge-imeyili neliphasiwedi asebentisa likheli lelifanako, nobe nangabe ubhalisa kabili ngemakheli e-imeyili lehlukene. Kubhalisa ngakunye kudala i-akhawunti ye-Gadit lehlukile lenencwadzi yayo, umlandvo wayo, nesimo sayo sekubhalisa.",
+              "Sibhalele nge-imeyili usuka kulelinye kulamakheli lamabili, futsi ubhale lelinye likheli kanye nekutsi nguyiphi i-akhawunti lofuna kuyigcina. Licembu litawuhlanganisa tincwadzi nemlandvo ku-akhawunti loyikhetsile, bese livala lenye kahle. Kute imininingwane lelahlekako.",
             ],
           },
         ],
@@ -2736,8 +2744,8 @@ Object.assign(HELP, {
             id: "wrong-definition",
             q: "Ngicabanga kutsi inchazelo ayilungi. Ngentenjani?",
             a: [
-              "Lonkhe likhasi lemphumela linenkinobho lencane letsi \"Bika\" ngentasi. Yicindzetele, ukhetse luhlobo (inchazelo, imvelaphi, sibonelo, sisho, inchazelo yebantfwana, nalokunye) bese ubhala inchazelo lefishane. Iya ngco elicenjini futsi wonkhe umbiko uyabuketwa.",
-              "Ungakhatsateki ngekutsi ucinisa kakhulu. Sichazamagama siba ncono ngalemibono masinyane kunanobe yini lenye.",
+              "Eceleni kwayo yonkhe inchazelo, futsi nakumakhadi etaga nemvelaphi yeligama, kukhona sithonjana lesincane selifulegi. Sicindzetele, ukhetse lokungakalungi, bese ufaka liphawulo lelifisha nangabe uyatsandza. Kufika ngco elicenjini, futsi wonkhe umbiko uyabuketwa.",
+              "Ungakhatsateki ngekutsi ucophelela kakhulu. Sichazamagama siba ncono ngalemibono masinyane kunanobe yini lenye.",
             ],
           },
           {
@@ -2745,15 +2753,15 @@ Object.assign(HELP, {
             q: "Simo sebantfwana asiyishintji inchazelo",
             a: [
               "Simo sebantfwana sishintja umbhalo kuphela lapho ligama selinenchazelo lefanele bantfwana. Eligameni losandza kulisesha kwekucala, linda imizuzwana lesuka ku-10 kuya ku-15 ngesikhatsi inchazelo yebantfwana ilungiswa.",
-              "Simo sebantfwana siyincenye yelihlelo le-Family. Ku-Basic, ku-Individual, nobe ngaphandle kwe-akhawunti, inkinobho ikhombisa lihlelo le-Family esikhundleni sekuvuleka. Labo lababhalisa ku-Clear nobe ku-Deep ngaphambi kwa-October 2026 bagcina Simo sebantfwana. Kute usitfole, buka i-Family ekhasini lematengo.",
+              "Simo sebantfwana siyincenye yelihlelo le-Family. Ku-Individual utawubona inkinobho letsi \"Ngemagama lalula\" esikhundleni saso, lenika inchazelo lelula kakhulu kuyo yonkhe inchazelo. Ku-Basic nobe ngaphandle kwe-akhawunti ayikho inkinobho. Labo lababhalisa ku-Clear nobe ku-Deep ngaphambi kwa-October 2026 bagcina Simo sebantfwana. Kute usitfole, buka i-Family ekhasini lematengo.",
             ],
           },
           {
             id: "voice-fails",
             q: "Kusesha ngelivi akusebenti",
             a: [
-              "Kusesha ngelivi kudzinga imvumo ye-microphone. Ema-browser lamanyenti abuta kanye kusayithi ngalinye. Uma ucindzetele Block ngephutsa, kutawudzingeka ukubuyisele ngesandla: cindzetela lithonjana lekhiye nobe lemininingwane eceleni kwa-gadit.app emugceni wekheli, bese Site settings, bese Microphone, bese Allow.",
-              "Ku-Safari ku-iPhone naku-iPad, kungena kwe-microphone kudzinga futsi i-Settings → Safari → Microphone. Kusesha ngelivi kuyincenye yemahlelo e-Individual ne-Family: ku-Basic utawubona emahlelo esikhundleni saloko, futsi tivakashi letingakangeni ticelwa kutsi tingene. Kute ukhuphule, vula likhasi lematengo.",
+              "Kusesha ngelivi kudzinga imvumo ye-microphone. Ema-browser lamanyenti abuta kanye kusayithi ngalinye. Uma uyivimbe ngephutsa, cindzetela lithonjana leliseceleni kwa-gadit.app emugceni wekheli bese uvumela i-microphone etimvumeni tesayithi.",
+              "Ku-iPhone naku-iPad, vuma futsi i-microphone ku-Safari kuhlelo lwe-Settings lwedivayisi. Kusesha ngelivi kuyincenye yemahlelo e-Individual ne-Family, ngako ku-Basic nangaphandle kwe-akhawunti inkinobho ye-microphone ayiveli. Kute ukhuphule, vula likhasi lematengo.",
             ],
           },
           {
@@ -2774,9 +2782,9 @@ Object.assign(HELP, {
           },
           {
             id: "offline",
-            q: "Simo sangaphandle kwe-inthanethi sisebenta njani?",
+            q: "Ngiyisebentisa njani i-Gadit ngaphandle kwe-inthanethi?",
             a: [
-              "Kusebenta ungekho ku-inthanethi kuyincenye yemahlelo e-Individual ne-Family. Ligama ngalinye loliseshako ligcinwa edivayisini yakho, ngako liyavuleka futsi masinyane ngaphandle kwe-inthanethi. Ungalandza neliphakethe lemagama ladvume kakhulu elulwimini lwakho ekhasini lakho le-Akhawunti.",
+              "Kusebentisa ngaphandle kwe-inthanethi kuyincenye yemahlelo e-Individual ne-Family. Ligama ngalinye loliseshako ligcinwa edivayisini yakho, ngako livuleka futsi masinyane ngaphandle kwe-inthanethi. Ungacindzetela futsi \"Landza liphakethe lekufundza ngaphandle kwe-inthanethi\" ekhasini lakho le-\"I-akhawunti\" kute ugcine emagama esichazimagama selulwimi lwakho kule divayisi.",
               "Kusesha ligama lelisha nya kusadzinga kuxhumana, ngobe Gadit kufanele ilungise umphumela lophelele walo. Likhophi langaphandle kwe-inthanethi lifaka emagama lasesedivayisini yakho. Uma use-Basic, buka emahlelo ekhasini lematengo.",
             ],
           },
@@ -2790,18 +2798,18 @@ Object.assign(HELP, {
           },
           {
             id: "word-not-found",
-            q: "Ngiseshe ligama kodvwa angatfolanga umphumela. Kwentekani?",
+            q: "Ngiseshe ligama kodvwa angitfolanga umphumela. Kwentekani?",
             a: [
-              "Kwekucala, hlola kupela. Gadit ivame kulungisa emaphutsa lamancane ekubhala, kodvwa inkhamisa lengakalungi nobe inhlamvu lengekho kungayidida. Zama kulungisa lokuphakanyisiwe uma kuvela.",
-              "Ngaphandle kwaloko: emagama langavamile kakhulu nobe esitsetselo angahle angabuyisi umphumela lowetsembekile. Uma uciniseka kutsi ligama likhona ngempela, cindzetela inkinobho letsi Bika ekhasini lemphumela (nobe esikrinini seliphutsa) usatise. Wonkhe umbiko uyabuketwa futsi emagama langempela lebekaphutselwe ayabuyiselwa ehlelweni.",
+              "Kwekucala, hlola kupela. Uma kube neliphutsa lekubhala, Gadit ivamise kukhombisa ligama lelungisiwe, kanye nelilinki lekusesha loko lokubhalile noma kunjalo.",
+              "Emagama langavamile kakhulu nobe esitsetselo awatfoli umphumela sonkhe sikhatsi. Uma uciniseka kutsi ligama likhona, sibhalele kulelikhasi futsi licembu litawuhlola.",
             ],
           },
           {
             id: "change-language",
             q: "Ngilushintja njani lulwimi lwesikrini?",
             a: [
-              "Etulu ngesekudla kunobe nguliphi likhasi, utawubona lithonjana lelincane lelifulegi (nobe libito lelulwimi lwakho lwanyalo). Licindzetele bese ukhetsa kuletilwimi letingu-41.",
-              "Lokukhetsile kugcinwa kulelithuluzi. Konkhe kulayisha kabusha ngelulwimi lolusha: sikrini, ema-menyu, tinchazelo temagama letitako, tibonelo, tinchazelo tebantfwana, ngisho nemvelaphi. Imiphumela lesigciniwe ngelulwimi lwangaphambilini ihlala kuze uphindze usesha lawo magama.",
+              "Etulu kwelikhasi kunelithonjana lembulunga lelunelulwimi lwakho lwanyalo. Licindzetele bese ukhetsa lulwimi.",
+              "Lokukhetsile kugcinwa kule divayisi. Konkhe kulayisha kabusha ngelulwimi lolusha, sikrini, ema-menyu, tinchazelo temagama lotawasesha embili, tibonelo, tinchazelo tebantfwana, ngisho nemvelaphi yeligama. Emagama losewuwaseshile ngelulwimi lwakudzala atawuchubeka avela ngalolo lulwimi uze uwaseshe futsi.",
             ],
           },
         ],
@@ -2815,7 +2823,7 @@ Object.assign(HELP, {
             id: "join-partner",
             q: "Ngiba njani ngumlingani we-Gadit?",
             a: [
-              "Vula /partners kunobe nguliphi likhasi bese ucindzetela \"Yiba ngumlingani\". Bhalisa ngelibito lakho ne-imeyili, futsi lilinki lakho lekuncoma kanye nelibhodi lekulandzelela kucindzetelwa netikhomishini kulungile masinyane. Akulindwa kuvunywa.",
+              "Yani ku-gadit.app/partners bese ucindzetela \"Joyina mahhala\". Faka libito lakho ne-imeyili, bese ucindzetela \"Ngitfolele ikhodi yami yemlingani\". Lilinki lakho lemuntfu kanye nelibhodi lakho lemlingani, lelinekucindzetelwa netikhomishini, kulungele masinyane, ngaphandle kwekulindza kuvunywa. Ikhodi nelilinki nako kutfunyelwa nge-imeyili.",
               "Kujoyina kumahhala futsi kuvulekele wonkhe umuntfu. Awudzingi kubhalisa ku-Gadit kute ube ngumlingani.",
             ],
           },
@@ -2823,25 +2831,25 @@ Object.assign(HELP, {
             id: "commission-model",
             q: "Tikhomishini tibalwa njani?",
             a: [
-              "Imigomo lejwayelekile ngu-25% wayo yonkhe inkhokhelo likhasimende leliyenta emnyakeni walo wekucala. Ngemuva kwalowo mnyaka wekucala, utfola 10% wayo yonkhe inkhokhelo uma nje likhasimende lisachubeka likhokha.",
+              "Imigomo lejwayelekile ngu-25% wayo yonkhe inkhokhelo likhasimende leliyenta emnyakeni walo wekucala. Ngemuva kwalowo mnyaka wekucala, utfola 10% wayo yonkhe inkhokhelo uma nje likhasimende lisachubeka likhokha. Uma uletsa emakhasimende la-5 lakhokhako, sabelo sakho ngemuva kwemnyaka wekucala siyakhuphuka sibe ngu-15% kuze kube phakadze.",
               "Loku kusebenta ngendlela lefanako kumahlelo enyanga nawemnyaka, ngobe ikhomishini ibalwa enkhokhelweni ngayinye yangempela. Uma likhasimende likhansela, ikhomishini yakho iyema enkhokhelweni yalo yekugcina.",
-              "Licembu lingabeka emazinga lehlukene kubalingani labatsite. Emazinga akho ahlala abonakala elibhodini lakho lemlingani, longalifinyelela kusuka ku-/partners.",
+              "Licembu lingabeka emazinga lehlukene kubalingani labatsite. Emazinga akho ahlala abonakala elibhodini lakho lemlingani.",
             ],
           },
           {
             id: "payout",
             q: "Ngikhokhelwa nini?",
             a: [
-              "Ngenyanga, nangabe imali yakho seyidlula $50. Sisebentisa indlela yekukhokhela loyibeke elibhodini lemlingani (kudlulisela ebhange, i-PayPal, nalokunye). $50 ngumkhawulo lophansi, akusiwo umkhawulo lophakeme. Ungatfola lokunyenti kakhulu, utfola nje inkhokhelo nawudlula lomkhawulo.",
-              "Tikhomishini tikhululwa emalanga langu-30 ngemuva kwenkhokhelo yekubhalisa, kute kuvunyelwe sikhatsi sekubuyiselwa kwemali. Ngako kubhalisa kwaJanuwari kukhululwa ekucaleni kwaFebruwari futsi kungena enkhokhelweni yakho lelandzelako nangabe imali yakho idlula $50.",
+              "Kanye ngenyanga, uma ibhalansi yakho ifinyelela kusayizi lomncane lokhonjisiwe elibhodini lakho lemlingani. Siyitfumela ku-akhawunti ye-PayPal loyibeke khona. Lowomncane usilinganiselo, hhayi siphetfo. Ungahola lokunyenti kakhulu, futsi utfola inkhokhelo uma sewuwedlulile.",
+              "Tikhomishini tikhululwa emalanga langu-30 ngemuva kwenkhokhelo yekubhalisa, kute kube nesikhatsi sekubuyiselwa kwemali. Ngako kubhalisa kwaJanuwari kukhululwa ekucaleni kwaFebruwari futsi kungena enkhokhelweni yakho lelandzelako uma ibhalansi yakho ifinyelela kulowo mncane.",
             ],
           },
           {
             id: "empty-dashboard",
             q: "Ngijoyinile kodvwa libhodi lami alinalutfo",
             a: [
-              "Tibalo tivela ngemuva kwekucindzetelwa kwekucala kwelilinki lakho. Kungabi nalutfo kusho nje kutsi kute losacindzetele. Hamba wabelane ngelilinki. Libhodi liyavuseleleka cishe masinyane nangabe kusebenta sekucalile.",
-              "Uma wabelene futsi umuntfu wabhalisa kodvwa libhodi lingakukhombisi, sibhalele usitjele sikhatsi lesilinganisiwe sekubhalisa futsi licembu litawuhlola kubalwa kwakho.",
+              "Tibalo tivela ngemuva kwekucindzetelwa kwekucala kwelilinki lakho. Kungabi nalutfo kusho nje kutsi kute losalicindzetelile. Hamba wabelane ngelilinki. Libhodi liyavuseleleka cishe ngesikhathi mbamba uma sekucale kusebenta.",
+              "Uma wabelene futsi umuntfu abhalisile kodvwa libhodi lingakukhombisi loko, sibhalele usitjele sikhatsi lesilinganisiwe sekubhalisa, futsi licembu litawuhlola kutsi kubhalisa kuvelaphi.",
             ],
           },
           {
@@ -2856,8 +2864,8 @@ Object.assign(HELP, {
             id: "missing-commission",
             q: "Umuntfu ubhalise ngelilinki lami kodvwa angiyiboni ikhomishini",
             a: [
-              "Kuvame kuba yindzaba yesikhatsi: kubhalisa kuvela elibhodini ngekhatsi kwemizuzu, kodvwa ikhomishini ibhalwa kuphela nangabe kubhalisa sekukhokhelwe ngempela (lokungaba ngemuva kwemalanga uma basekulingeni kwamahhala). Phindza uhlole ngemuva kwekuphela kwekulinga.",
-              "Uma kubhalisa kukhokhelwe kodvwa usayiboni ikhomishini ngemuva kwemahora langu-48, sibhalele usitjele sikhatsi lesilinganisiwe sekubhalisa kanye ne-imeyili nobe libito lembhalisi uma ulati. Licembu litawuhlolisisa kubalwa futsi lilungise nobe yini lengekho ngesandla.",
+              "Kuvame kuba yindzaba yesikhatsi. Kubhalisa kuvela elibhodini ngekhatsi kwemizuzu, kodvwa ikhomishini ibhalwa kuphela uma kubhalisa sekukhokhelwe ngempela, lokungaba ngemalanga latsite kamuva uma basekulingeni kwamahhala. Phindza uhlole ngemuva kwekuphela kwekulinga.",
+              "Uma kubhalisa kukhokhelwe kodvwa usayiboni ikhomishini ngemuva kwemahora langu-48, sibhalele usitjele sikhatsi lesilinganisiwe sekubhalisa kanye ne-imeyili nobe libito lelinganisiwe lembhalisi, uma ulati. Licembu litawuhlola kutsi kubhalisa kuvelaphi futsi lilungise ngesandla noma nguyiphi lengekho.",
             ],
           },
         ],
@@ -2929,19 +2937,20 @@ Object.assign(HELP, {
             id: "change-card",
             q: "Ndi shandukisa hani garaṱa ya tshelede ya ṅwaliso wanga?",
             a: [
-              "Ni nga shandukela kha garaṱa ntswa nga tshifhinga tshi si tshinzhi u fhira minithi ni sa khansele. Ṅwaliso waṋu u bvela phanḓa u tshi shuma, nga garaṱa ntswa fhedzi.",
-              "1. Dzhenani kha gadit.app ni vule siaṱari ḽaṋu ḽa Akhaunthu (nṱha tshanḓa tshi ḽa). 2. Kiḽikani \"Langani mbadelo\". 3. Siaṱari ḽo tsireledzeaho ḽa Stripe ḽi a vulea. Kiḽikani \"Add payment method\", dzhenisani garaṱa ntswa, ni i swaye sa Default. 4. Arali ni tshi ṱoḓa, bvisani garaṱa ya kale.",
-              "U bva kha tshifhinga tshi tevhelaho tsha mbadelo, zwoṱhe zwi ya kha garaṱa ntswa. Mbadelo yo fhiraho (ye ya no badelwa) i dzula kha garaṱa ya kale. A hu ṱoḓei u humiselwa tshelede nga nnḓa ha musi ni tshi i ṱoḓa.",
+              "Ni nga shandukela kha garaṱa ntswa nga fhasi ha minithi, ni sa khansele. Ṅwaliso waṋu wa zwino u bvela phanḓa u tshi shuma, fhedzi nga garaṱa ntswa.",
+              "1. Dzhenani kha gadit.app ni vule \"Akhaunthu\" kha menu ya akhaunthu. 2. Kiḽikani \"Langani mbadelo\". 3. Siaṱari ḽo tsireledzeaho ḽa Stripe ḽi ḓo vulea. Engedzani garaṱa ntswa sa ndila ya mbadelo nahone ni i swaye sa ya default. 4. Arali ni tshi ṱoḓa, bvisani garaṱa ya kale.",
+              "U bva kha murendelo wa mbadelo u tevhelaho, zwoṱhe zwi ḓo ya kha garaṱa ntswa. Mbadelo yo fhiraho, ye ya no kuvhanganywa kale, i dzula kha garaṱa ya kale. A hu ṱoḓei u humiselwa tshelede nga nnḓa ha musi ni tshi i ṱoḓa nga ho khetheaho.",
             ],
           },
           {
             id: "cancel",
             q: "Ndi khansela hani ṅwaliso wanga?",
             a: [
-              "Ni zwi ita inwi vhaṋe, tshifhinga tshiṅwe na tshiṅwe. Dzhenani, vulani Akhaunthu, ni kwame Khansela ṅwaliso fhasi ha pulane yaṋu.",
-              "Kha ṅwaliso une wa badelwa, ni dzula ni tshi dzhena u swika magumoni a tshifhinga tshe na tshi badela. Nga murahu akhaunthu i humela kha Basic (mahala). Maipfi aṋu o vhulungwaho na zwe na ṱoḓa zwi dzula zwo tsireledzea.",
-              "Tshifhingani tsha nyingo ya mahala ya maḓuvha a 14, u khansela hu fhedza nyingo nga u ṱavhanya nahone a ni badeliswi tshithu. Arali ni tshi vhilaela fhedzi nga mbadelo ine ya ḓi ita yoṱhe, khethani tshiitisi itsho kha fasiṱere ḽa u khansela, nahone ni nga dzima u vusuluswa, ni dzula na nyingo u swika ḓuvha ḽayo ḽa u fhedza.",
-              "Arali na khansela ṅwaliso une wa badelwa nga vhukhakhi kana na shandula muhumbulo, ni nga u vusulula kha siaṱari ḽeneḽo phanḓa ha musi tshifhinga tshi tshi fhela.",
+              "Ni zwi ita inwi vhaṋe, tshifhinga tshiṅwe na tshiṅwe. Dzhenani, vulani Akhaunthu, ni kwame u khansela ṅwaliso fhasi ha pulane yaṋu.",
+              "No renga ṅwaliso waṋu kha app ya iPhone kana iPad? U khansela zwi iteni kha nzudzanyo dzaṋu dza ṅwaliso dza Apple. Vhukwamani ha \"Langani ṅwaliso\" kha siaṱari ḽaṋu ḽa Akhaunthu vhu ni isa henefho.",
+              "Kha ṅwaliso une wa badelwa, ni dzula ni tshi dzhena u swika magumoni a tshifhinga tshe na tshi badela. Nga murahu akhaunthu i humela kha Basic, ya mahala. Maipfi aṋu o vhulungwaho na ḓivhazwakale yaṋu zwi dzula zwo tsireledzea.",
+              "Tshifhingani tsha nyingo ya mahala ya maḓuvha a 14, u khansela hu fhedza nyingo nga u ṱavhanya nahone a hu na tshine tsha badelwa. Arali zwine zwa ni vhilaedzisa hu mbadelo ya othomethiki fhedzi, khethani itsho tshiitisi kha fasiṱere ḽa u khansela, nahone ni nga dzima u vusuluswa, ni tshi kha ḓiṋea nyingo u swika ḓuvha layo ḽa u fhedza.",
+              "Arali na khansela ṅwaliso une wa badelwa nga vhukhakhi kana na shandula muhumbulo, ni nga u dovha na u bvela phanḓa nawo kha siaṱari ḽeneḽo phanḓa ha musi tshifhinga tshi tshi fhela.",
             ],
           },
           {
@@ -2996,8 +3005,8 @@ Object.assign(HELP, {
             id: "failed-payment",
             q: "Mbadelo yanga yo kundelwa. Ndi ite mini?",
             a: [
-              "Stripe i lingedza hafhu mbadelo dzo kundelwaho lunzhi nga maḓuvha a tevhelaho. Vhunzhi ha u kundelwa hu a ḓilugisa musi bannga i tshi bvisa khaedu kana garaṱa i tshi vha na tshelede yo linganaho.",
-              "Arali ni tshi ṱoḓa u zwi lugisa zwino, iyani kha Akhaunthu → Langani mbadelo → Add payment method, dzhenisani garaṱa i shumaho, ni i vhee sa Default. Stripe i ḓo lingedza hafhu mbadelo yo kundelwaho nga u ṱavhanya kha garaṱa ntswa. Arali ṅwaliso waṋu wo no humela kha Basic, ni nga ḓiṅwalisa hafhu kha Mitengo nahone bugu yaṋu i dzula i hone.",
+              "Stripe i lingedza hafhu mbadelo dzo kundelwaho lu si gathi nga maḓuvha a tevhelaho. Vhunzhi ha u kundelwa hu a ḓilugisa musi bannga i tshi bvisa u farelwa kana garaṱa i tshi vha na tshelede yo linganaho.",
+              "Hu ḓo vha na bara nṱha ha siaṱari i tshi amba uri mbadelo a yo ngo fhira, nahone ni kha ḓiṋewa u dzhena lwa maḓuvha ma si gathi. Kwamani \"Vusuluseni garaṱa\" henefho, ni dzhenise garaṱa i shumaho, nahone ri ḓo lingedza mbadelo khayo nga u ṱavhanya. Arali ṅwaliso waṋu wo no humela kha Basic, ni nga ḓiṅwalisa hafhu kha siaṱari ḽa mitengo nahone bugu yaṋu i dzula i si na tsho tshinyalaho.",
             ],
           },
           {
@@ -3028,40 +3037,40 @@ Object.assign(HELP, {
             id: "forgot-password",
             q: "Ndo hangwa phasiwedi yanga",
             a: [
-              "Vulani fhethu ha u dzhena ni kiḽike \"No hangwa phasiwedi?\". Dzhenisani imeiḽi ine na i shumisa kha Gadit nahone ni ḓo wana vhukwamani ha u vusulusa nga minithi nthihi kana mbili.",
-              "Arali imeiḽi i sa swiki, ṱolani kha spam. Arali i tshi kha ḓi sa swika, ni nga vha no ḓiṅwalisa nga Google hu si nga imeiḽi na phasiwedi. Lingedzani bathoni ya \"Bvelani phanḓa nga Google\".",
+              "Kha windo ḽa u dzhena, thaiphani imeiḽi yaṋu, nga murahu ni puṱedze \"No hangwa phasiwedi?\". Vhukwamani ha u vusulusa kanzhi vhu swika kha inbox yaṋu nga minithi nthihi kana mbili. Ni nga dovha hafhu na puṱedza \"Nthumeleni vhukwamani ha u dzhena nga imeiḽi\" nahone na dzhena hu si na phasiwedi.",
+              "Arali imeiḽi i sa swiki, ṱolani spam. Arali i tshi kha ḓi sa swika, ni nga vha no ḓiṅwalisa nga Google hu si nga imeiḽi na phasiwedi. Lingedzani bathoni ya \"Bvelani phanḓa nga Google\".",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "Ndo khwaṱha uri phasiwedi yanga ndi yone fhedzi i ri \"Imeiḽi kana phasiwedi yo khakhea\"",
+            q: "Phasiwedi yanga ndi yone, fhedzi i ri imeiḽi na phasiwedi a zwi elani",
             a: [
-              "Hu na zwithu zwiraru zwa u ṱola. Tsha u thoma, capslock. Tsha vhuvhili, tshikhala magumoni musi ni tshi kopa na u dzhenisa. Tsha vhuraru, no ḓiṅwalisa nga Google hu si nga phasiwedi (shumisani \"Bvelani phanḓa nga Google\").",
-              "Ni kha ḓi kundwa? Vusuluseni phasiwedi kha fhethu honoho. Zwi ni thomisa hafhu zwo kuna.",
+              "Hu na zwithu zwiraru zwa u ṱola. Tsha u thoma, Caps Lock. Tsha vhuvhili, tshikhala tshi songo fanela magumoni nga murahu ha u kopa na u dzhenisa. Tsha vhuraru, ni nga vha no ḓiṅwalisa nga Google hu si nga phasiwedi, ngauralo shumisani \"Bvelani phanḓa nga Google\".",
+              "Ni kha ḓi kundwa? Kha wonoyo mulaedza muthihi, puṱedzani \"Nthumeleni vhukwamani ha u dzhena nga imeiḽi\" uri ni dzhene hu si na phasiwedi, kana \"Khethani phasiwedi ntswa\".",
             ],
           },
           {
             id: "google-fails",
             q: "U dzhena nga Google a zwi shumi",
             a: [
-              "Tshiitisi tshi ḓivheaho nga maanḓa: burausa yaṋu i khou thivhela cookies dza vhaṅwe kana pop-ups kha gadit.app. Zwi tendeleni kha thendelo dza bara ya adiresi ni lingedze hafhu.",
-              "Arali ni kha tshiimo tsha incognito, u dzhena nga Google ho thivhelwa nga zwiṱoḓwa. Shandukelani kha windo ḽa burausa ḽa misi yoṱhe.",
+              "Ngomu ha dziapp dzine dza nga Instagram, Facebook kana TikTok, bathoni ya Google i a dzumbama. Vulani vhukwamani kha burausa yaṋu ya misi yoṱhe, kana ni dzhene nga imeiḽi yaṋu. Arali no ḓiṅwalisa nga Google, thaiphani yeneyo imeiḽi nahone ni puṱedze \"Nthumeleni vhukwamani ha u dzhena nga imeiḽi\".",
+              "Kha windo ḽa private, cookies dzo thivhelwaho dzi nga imisa u dzhena nga Google, ngauralo lingedzani windo ḽa misi yoṱhe.",
             ],
           },
           {
             id: "change-email",
             q: "Ndi shandukisa hani imeiḽi kha akhaunthu yanga?",
             a: [
-              "Akhaunthu, kiḽikani imeiḽi yaṋu, Shandukani imeiḽi. Ni ḓo fanela u khwaṱhisa adiresi ntswa phanḓa ha musi i tshi shuma. Ṅwaliso waṋu, zwe na ṱoḓa, na bugu zwoṱhe zwi a pfulutshelwa.",
-              "Arali imeiḽi yo vhofhiwa na muthengi wa Stripe, i vusuluseni na kha fhethu ha mbadelo ha Stripe uri rasiti dza tshifhingani tshi ḓaho dzi ye kha adiresi ntswa.",
+              "U shandukisa imeiḽi ya akhaunthu yaṋu zwi itwa nga tshigwada. Ri rumeleni imeiḽi i bvaho kha adiresi yaṋu ya zwino nahone ni ṅwale adiresi ntswa kha mulaedza. Tshigwada tshi ḓo i vusulusa, nahone ṅwaliso waṋu, ḓivhazwakale na bugu yaṋu zwi ḓo sala zwo ralo.",
             ],
           },
           {
             id: "delete-account",
             q: "Ndi phumula hani akhaunthu yanga?",
             a: [
-              "Akhaunthu, fhasi ha siaṱari, Phumulani akhaunthu. Hezwi ndi zwa lini na lini. Ṅwaliso waṋu u a khanselwa, bugu yaṋu na zwe na ṱoḓa zwi a phumulwa, nahone imeiḽi i a vhofhololwa uri i shumiswe hafhu u ḓiṅwalisa.",
-              "Rekhodo dza Stripe dza mbadelo dzo fhiraho dzi a sala (ri ṱoḓiwa nga mulayo u dzi vhulunga u itela akhaunthu dza tshelede). A hu na tshiṅwe tshine tsha sala.",
+              "Fhasi ha siaṱari ḽa Akhaunthu, puṱedzani \"Phumulani akhaunthu\" nahone ni thaiphe imeiḽi ya akhaunthu yaṋu u khwaṱhisa. Hezwi ndi zwa lini na lini. Ṅwaliso waṋu u a khanselwa, bugu yaṋu na ḓivhazwakale zwi a phumulwa, nahone imeiḽi i a vhofhololwa uri hu kone u itwa u ḓiṅwalisa huswa.",
+              "Tshi no nga si tshi fane ndi ṅwaliso wo rengwaho kha App Store. U phumula akhaunthu a zwi khanseli wonoyo, ngauralo ni fanela u u khansela u thoma kha nzudzanyo dza ṅwaliso dza Apple.",
+              "Rekhodo dza mbadelo dzo fhiraho dzi a sala, ngauri mulayo u ri kombetshedza u dzi vhulunga u itela zwa u vhala tshelede.",
             ],
           },
           {
@@ -3076,8 +3085,8 @@ Object.assign(HELP, {
             id: "multiple-accounts",
             q: "Ndi humbula uri ndi na akhaunthu mbili nga vhukhakhi. Ndi ite mini?",
             a: [
-              "Hezwi kanzhi zwi itea musi muthu a tshi ḓiṅwalisa luthihi nga Google na luthihi nga imeiḽi na phasiwedi a tshi shumisa adiresi nthihi, kana musi ni tshi ḓiṅwalisa luvhili nga adiresi dza imeiḽi dzo fhambanaho. U ḓiṅwalisa huṅwe na huṅwe hu ita akhaunthu ya Gadit yo khethekanaho i na bugu yayo, zwe ya ṱoḓa, na tshiimo tsha ṅwaliso.",
-              "Ri ṅwaleleni ni tshi ri ṋea adiresi dza imeiḽi dzoṱhe (kana UID u bva kha siaṱari ḽa Akhaunthu) na uri ni ṱoḓa u dzula na ifhio. Tshigwada tshi ḓo ṱanganyisa bugu na zwe na ṱoḓa kha akhaunthu ine na i khetha, nga murahu tsha vala iṅwe zwavhuḓi. A hu na mafhungo ane a xela.",
+              "Hezwi kanzhi zwi itea musi muthu a tshi ḓiṅwalisa luthihi nga Google na luthihi nga imeiḽi na phasiwedi a tshi shumisa adiresi nthihi, kana musi ni tshi ḓiṅwalisa luvhili nga adiresi dza imeiḽi dzo fhambanaho. U ḓiṅwalisa huṅwe na huṅwe hu ita akhaunthu ya Gadit yo khethekanaho i na bugu yayo, ḓivhazwakale yayo, na tshiimo tshayo tsha ṅwaliso.",
+              "Ri rumeleni imeiḽi ni tshi shumisa nthihi ya adiresi mbili, ni ṅwale na iṅwe adiresi na uri ndi ifhio akhaunthu ine na ṱoḓa u i vhulunga. Tshigwada tshi ḓo ṱanganyisa bugu na ḓivhazwakale kha akhaunthu ine na i khetha, nga murahu tsha vala iṅwe zwavhuḓi. A hu na mafhungo ane a xela.",
             ],
           },
         ],
@@ -3091,24 +3100,24 @@ Object.assign(HELP, {
             id: "wrong-definition",
             q: "Ndi humbula uri ṱhalutshedzo yo khakhea. Ndi ite mini?",
             a: [
-              "Siaṱari ḽiṅwe na ḽiṅwe ḽa mvelelo ḽi na bathoni ṱhukhu ya \"Vhigani\" fhasi. I kwameni, khethani lushaka (ṱhalutshedzo, vhubvo ha ipfi, tsumbo, murero, ṱhalutshedzo ya vhana, na zwiṅwe) ni ṅwale mulaedza mupfufhi. U swika nga u ṱavhanya kha tshigwada nahone muvhigo muṅwe na muṅwe u a sedzwa.",
-              "Ni songo vhilaela uri ni khou ṱolesa. Bugu ya maipfi i khwinifhala nga u ṱavhanya nga vhuṱanzi uhu u fhira nga tshiṅwe tshithu.",
+              "Tsini na ṱhalutshedzo iṅwe na iṅwe, na kha garaṱa dza mirero na dza vhubvo ha ipfi, hu na tshiga tshiṱuku tsha fulaga. Tshi kwameni, ni khethe zwine zwa khou khakhea, nahone ni engedze na maṅwalo mapfufhi arali ni tshi ṱoḓa. Zwi swika thwii kha tshigwada, nahone muvhigo muṅwe na muṅwe wa sedzwa.",
+              "Ni songo vhilaela nga ha u ṱola-ṱola nga maanḓa. Bugu ya maipfi i khwinifhala nga u ṱavhanya nga mutevhe uyu wa mbuelo u fhira nga tshiṅwe tshithu.",
             ],
           },
           {
             id: "kids-not-working",
             q: "Tshiimo tsha vhana a tshi khou shandukisa ṱhalutshedzo",
             a: [
-              "Tshiimo tsha vhana tshi shandukisa maṅwalwa fhedzi hune ipfi ḽa vha ḽo no vha na ṱhalutshedzo ya vhana. Kha ipfi ḽe na kha ḓi ḽi ṱoḓa lwa u thoma, lindani tshekoni dza 10 u swika 15 musi ṱhalutshedzo ya vhana i tshi khou lugiselelwa.",
-              "Tshiimo tsha vhana ndi tshipiḓa tsha pulane ya Family. Kha Basic, kha Individual, kana hu si na akhaunthu, bathoni i sumbedza pulane ya Family nṱhani ha u vulea. Vhashumisi vhe vha ḓiṅwalisa kha Clear kana Deep phanḓa ha October 2026 vha dzula na Tshiimo tsha vhana. U tshi wana, sedzani Family kha siaṱari ḽa mitengo.",
+              "Tshiimo tsha vhana tshi shandukisa ḽiṅwalwa fhedzi hune ipfi ḽa vha ḽo no vha na ṱhalutshedzo yo teaho vhana. Kha ipfi ḽe na touḽi ṱoḓa lwa u thoma, lindani tshekoni dza 10 u swika 15 musi ṱhalutshedzo ya vhana i tshi khou lugiselelwa.",
+              "Tshiimo tsha vhana ndi tshipiḓa tsha pulane ya Family. Kha Individual ni ḓo vhona switshi ya \"Nga maipfi a leluwaho\" nṱhani hayo, ine ya ṋea ṱhalutshedzo i leluwaho ya ṱhalutshedzo iṅwe na iṅwe. Kha Basic kana hu si na akhaunthu a hu na switshi. Vhaṅwali vhe vha dzhena kha Clear kana Deep phanḓa ha October 2026 vha dzula na Tshiimo tsha vhana. U tshi wana, sedzani Family kha siaṱari ḽa mitengo.",
             ],
           },
           {
             id: "voice-fails",
             q: "U ṱoḓa nga ipfi a zwi shumi",
             a: [
-              "U ṱoḓa nga ipfi hu ṱoḓa thendelo ya maikhirofoni. Burausa nnzhi dzi vhudzisa luthihi kha saiti iṅwe na iṅwe. Arali no kiḽika Block nga vhukhakhi, ni ḓo fanela u zwi humisa nga tshanḓa: kiḽikani aikhoni ya khiyo kana ya mafhungo tsini na gadit.app kha bara ya adiresi, nga murahu Site settings, nga murahu Microphone, nga murahu Allow.",
-              "Kha Safari ya iPhone na iPad, u dzhena ha maikhirofoni hu ṱoḓa na Settings → Safari → Microphone. U ṱoḓa nga ipfi ndi tshipiḓa tsha pulane dza Individual na Family: kha Basic ni ḓo vhona pulane nṱhani hazwo, nahone vhadaleli vha songo dzhenaho vha humbelwa u dzhena. U khwinifhadza, vulani siaṱari ḽa mitengo.",
+              "U ṱoḓa nga ipfi hu ṱoḓa thendelo ya maikhirofoni. Burausa nnzhi dzi vhudzisa luthihi kha saiti iṅwe na iṅwe. Arali no i thivhela nga vhukhakhi, kwamisani aikhoni i re tsini na gadit.app kha bara ya adiresi nahone ni tendele maikhirofoni kha thendelo dza saiti.",
+              "Kha iPhone na iPad, dovhani na ni tendele maikhirofoni ya Safari kha app ya Settings ya tshishumiswa. U ṱoḓa nga ipfi ndi tshipiḓa tsha pulane dza Individual na Family, zwenezwo kha Basic na hu si na akhaunthu gunubu ya maikhirofoni a i vhonali. U itela u khwinifhadza, vulani siaṱari ḽa mitengo.",
             ],
           },
           {
@@ -3129,10 +3138,10 @@ Object.assign(HELP, {
           },
           {
             id: "offline",
-            q: "U shumisa hu si na inthanethe zwi shuma hani?",
+            q: "U shumisa Gadit hu si na inthanethe zwi shuma hani?",
             a: [
-              "U shumisa hu si na inthanethe ndi tshipiḓa tsha pulane dza Individual na Family. Ipfi ḽiṅwe na ḽiṅwe ḽine na ḽi ṱoḓa ḽi vhulungwa kha tshishumiswa tshaṋu, nga zwenezwo ḽi vulea hafhu nga u ṱavhanya hu si na inthanethe. Ni nga dovha na ḓaunuḽoda phakhethe ya maipfi a shumiswaho nga maanḓa nga luambo lwaṋu u bva kha siaṱari ḽaṋu ḽa Akhaunthu.",
-              "U ṱoḓa ipfi ḽiswa tshoṱhe hu kha ḓi ṱoḓa inthanethe, ngauri Gadit i fanela u lugiselela mvelelo yoṱhe yaḽo. Khophi ya hu si na inthanethe i na maipfi o no vha kha tshishumiswa tshaṋu. Arali ni kha Basic, sedzani pulane kha siaṱari ḽa mitengo.",
+              "U shumisa hu si na inthanethe ndi tshipiḓa tsha pulane dza Individual na Family. Ipfi ḽiṅwe na ḽiṅwe ḽine na ḽi ṱoḓa ḽi vhulungwa kha tshishumiswa tshaṋu, nga zwenezwo ḽi vulea hafhu nga u ṱavhanya hu si na inthanethe. Ni nga dovha na kwama \"Ḓaunuḽodani phakhethe ya hu si na inthanethe\" kha siaṱari ḽaṋu ḽa Akhaunthu u itela u vhulunga maipfi a ḓikishinari yashu nga luambo lwaṋu kha tshishumiswa itshi.",
+              "U ṱoḓa ipfi ḽiswa tshoṱhe zwi kha ḓi ṱoḓa ṱhumanyo, ngauri Gadit i fanela u lugiselela mvelelo yo fhelelaho yaḽo. Khophi ya hu si na inthanethe i katela maipfi o no vha kha tshishumiswa tshaṋu. Arali ni kha Basic, sedzani pulane kha siaṱari ḽa mitengo.",
             ],
           },
           {
@@ -3147,16 +3156,16 @@ Object.assign(HELP, {
             id: "word-not-found",
             q: "Ndo ṱoḓa ipfi fhedzi a tho ngo wana mvelelo. Hu khou itea mini?",
             a: [
-              "Tsha u thoma, ṱolani mupeleto. Gadit kanzhi i lugisa vhukhakhi vhuṱuku ha u ṅwala, fhedzi vokhali yo khakheaho kana ḽeḓere ḽi si ho zwi nga i vhilaedza. Lingedzani tshilugiso tsho themendelwaho arali tshi tshi vhonala.",
-              "Nga nnḓa ha zwenezwo: maipfi a sa wanali kanzhi kana a slang a nga sa ṋee mvelelo yo khwaṱhaho. Arali no khwaṱha uri ipfi ndi ḽa vhukuma, kiḽikani bathoni ya Vhigani kha siaṱari ḽa mvelelo (kana kha tshikirini tsha vhukhakhi) ni ri ḓivhadze. Muvhigo muṅwe na muṅwe u a sedzwa nahone maipfi a vhukuma e a vha a siho a dzheniswa kha sisiṱeme.",
+              "Tsha u thoma, ṱolani mupeleto. Arali ho vha na vhukhakhi ha u thaipa, Gadit kanzhi i sumbedza ipfi ḽo lugiswaho, na vhukwamani ha u ṱoḓa zwe na thaipa naho zwo ralo.",
+              "Maipfi a sa wanali kanzhi kana a slang a si misi oṱhe a tshi wana mvelelo. Arali ni na vhuṱanzi ha uri ipfi ḽi hone, ri ṅwaleleni ni tshi bva kha heḽi siaṱari, nahone tshigwada tshi ḓo ṱola.",
             ],
           },
           {
             id: "change-language",
             q: "Ndi shandukisa hani luambo lwa tshikirini?",
             a: [
-              "Nṱha tshanḓa tshi ḽa kha siaṱari ḽiṅwe na ḽiṅwe, ni ḓo vhona aikhoni ṱhukhu ya fulaga (kana dzina ḽa luambo lwaṋu lwa zwino). I kwameni ni khethe kha nyambo dza 41.",
-              "Khetho yaṋu i vhulungwa kha tshishumiswa itshi. Zwoṱhe zwi vulea hafhu nga luambo luswa: tshikirini, menyu, ṱhalutshedzo dza maipfi dza tshifhingani tshi ḓaho, tsumbo, ṱhalutshedzo dza vhana, na vhubvo ha ipfi. Mvelelo dzo no vhulungwaho nga luambo lwa kale dzi dzula u swika ni tshi ṱoḓa hafhu maipfi ayo.",
+              "Nṱha ha siaṱari hu na aikhoni ya globe ine ya vha na luambo lwaṋu lwa zwino. I kwameni ni khethe luambo.",
+              "Khetho yaṋu i vhulungwa kha tshishumiswa itshi. Zwoṱhe zwi dovha zwa longelwa nga luambo luswa, tshikirini, menyu, ṱhalutshedzo dza maipfi a tshifhingani tshi ḓaho, tsumbo, ṱhalutshedzo dza vhana, na vhubvo ha ipfi. Maipfi e na no no a ṱoḓa nga luambo lwa kale a ḓo dzula a tshi sumbedza ngalwo u swika ni tshi a ṱoḓa hafhu.",
             ],
           },
         ],
@@ -3170,7 +3179,7 @@ Object.assign(HELP, {
             id: "join-partner",
             q: "Ndi vha hani mushumisani wa Gadit?",
             a: [
-              "Vulani /partners u bva kha siaṱari ḽiṅwe na ḽiṅwe ni kiḽike \"Vhani mushumisani\". Ḓiṅwaliseni nga dzina na imeiḽi yaṋu, nahone vhukwamani haṋu ha u themendela na tshikirini tsha u tevhela u kwama na khomishini zwi a lugela nga u ṱavhanya. A hu na u lindela thendelo.",
+              "Iyani kha gadit.app/partners ni puṱedze \"Dzhenani mahala\". Dzhenisani dzina ḽaṋu na imeiḽi, ni dovhe ni puṱedze \"Wanani khoudu yanga ya mushumisani\". Vhukwamani haṋu haṋu na tshikirini tsha mushumisani, tshine tsha sumbedza u puṱedza na khomishini, zwi lugela nga u ṱavhanya, hu si na u lindela thendelo. Khoudu na vhukwamani zwi dovha zwa swika nga imeiḽi.",
               "U dzhena ndi mahala nahone ho vulelwa muthu muṅwe na muṅwe. A ni ṱoḓi ṅwaliso wa Gadit uri ni vhe mushumisani.",
             ],
           },
@@ -3178,25 +3187,25 @@ Object.assign(HELP, {
             id: "commission-model",
             q: "Khomishini dzi vhalelwa hani?",
             a: [
-              "Milayo ya misi yoṱhe ndi 25% ya mbadelo iṅwe na iṅwe ine muthengi a i ita kha ṅwaha wawe wa u thoma. Nga murahu ha ṅwaha wa u thoma, ni wana 10% ya mbadelo iṅwe na iṅwe tshifhinga tshoṱhe tshine muthengi a bvela phanḓa a tshi badela.",
+              "Milayo ya misi yoṱhe ndi 25% ya mbadelo iṅwe na iṅwe ine muthengi a i ita kha ṅwaha wawe wa u thoma. Nga murahu ha wonoyo ṅwaha wa u thoma, ni wana 10% ya mbadelo iṅwe na iṅwe tshifhinga tshoṱhe tshine muthengi a bvela phanḓa a tshi badela. Arali na ḓisa vharengi vha 5 vhane vha badela, mukovhe waṋu nga murahu ha ṅwaha wa u thoma u gonya wa vha 15% lwa tshoṱhe.",
               "Hezwi zwi shuma nga nḓila i fanaho kha pulane dza nga ṅwedzi na dza nga ṅwaha, ngauri khomishini i vhalelwa kha mbadelo iṅwe na iṅwe ya vhukuma. Arali muthengi a khansela, khomishini yaṋu i ima nga mbadelo yawe ya u fhedza.",
-              "Tshigwada tshi nga vhea mitengo yo fhambanaho kha vhashumisani vho khetheaho. Mitengo yaṋu i sumbedzwa tshifhinga tshoṱhe kha tshikirini tshaṋu tsha mushumisani, tshine na nga tshi swikela u bva kha /partners.",
+              "Tshigwada tshi nga vhea mipesente yo fhambanaho kha vhashumisani vho khetheaho. Mipesente yaṋu i dzulela u sumbedzwa kha tshikirini tshaṋu tsha mushumisani.",
             ],
           },
           {
             id: "payout",
             q: "Ndi ḓo badelwa lini?",
             a: [
-              "Nga ṅwedzi, musi tshelede yaṋu i tshi fhira $50. Ri shumisa nḓila ya mbadelo ye na i vhea kha tshikirini tsha mushumisani (u rumela tshelede bannga, PayPal, na dziṅwe). $50 ndi mukano wa fhasi, a si mukano wa nṱha. Ni nga wana zwinzhi vhukuma, ni wana mbadelo fhedzi musi ni tshi fhira mukano.",
-              "Khomishini dzi bviswa nga murahu ha maḓuvha a 30 a mbadelo ya ṅwaliso, u itela tshifhinga tsha u humiselwa tshelede. Ngauralo ṅwaliso wa Phando u bviswa mathomoni a Luhuhi nahone u dzhena kha mbadelo yaṋu i tevhelaho musi tshelede yaṋu i tshi fhira $50.",
+              "Luthihi nga ṅwedzi, musi tshelede yaṋu i tshi swika kha minimamu i sumbedzwaho kha tshikirini tshaṋu tsha mushumisani. Ri i rumela kha akhaunthu ya PayPal ye na i vhea henefho. Minimamu ndi mukano, a si mupimo wa nṱha, ni nga wana zwinzhi u fhira zwenezwo, nahone ni ṱanganedza mbadelo musi ni tshi i fhira.",
+              "Khomishini dzi bviswa nga murahu ha maḓuvha a 30 a mbadelo ya ṅwaliso, u itela fasiṱere ya u humiselwa tshelede. Ngauralo, khomishini ya ṅwaliso wa January i bviswa mathomoni a February nahone i dzhena kha mbadelo yaṋu i tevhelaho musi tshelede yaṋu i tshi swika kha minimamu.",
             ],
           },
           {
             id: "empty-dashboard",
             q: "Ndo dzhena fhedzi tshikirini tshanga a tshi na tshithu",
             a: [
-              "Zwiyelo zwi vhonala nga murahu ha u kwama ha u thoma kha vhukwamani haṋu. U sa vha na tshithu zwi amba uri a hu athu u vha na muthu o kwamaho. Iyani ni kovhekane vhukwamani. Tshikirini tshi vusuluswa nga u ṱavhanya musi mishumo i tshi thoma.",
-              "Arali no kovhekana nahone muṅwe o ḓiṅwalisa fhedzi tshikirini tshi sa sumbedzi, ri ṅwaleleni ni tshi ri vhudza tshifhinga tsha u ḓiṅwalisa nahone tshigwada tshi ḓo ṱola.",
+              "Zwiyelo zwi vhonala nga murahu ha u puṱedza ha u thoma kha vhukwamani haṋu. U sa vha na tshithu zwi amba fhedzi uri a hu athu u vha na muthu o puṱedzaho. Iyani ni kovhekane vhukwamani. Tshikirini tshi vusuluswa tsini na tshifhinga tsha vhukuma musi mushumo u tshi thoma.",
+              "Arali no kovhekana nahone muṅwe o ḓiṅwalisa fhedzi tshikirini tshi sa sumbedzi izwo, ri ṅwaleleni ni tshi ri vhudza tshifhinga tsha tsini tsha musi o ḓiṅwalisa, nahone tshigwada tshi ḓo ṱola he u ḓiṅwalisa honoho ha bva hone.",
             ],
           },
           {
@@ -3211,8 +3220,8 @@ Object.assign(HELP, {
             id: "missing-commission",
             q: "Muṅwe o ḓiṅwalisa nga vhukwamani hanga fhedzi a thi vhoni khomishini",
             a: [
-              "Kanzhi ndi zwa tshifhinga: u ḓiṅwalisa hu vhonala kha tshikirini nga mitsini, fhedzi khomishini i ṅwaliwa fhedzi musi ṅwaliso wo badelwa vhukuma (zwine zwa nga dzhia maḓuvha arali vha kha tshilingo tsha mahala). Ṱolani hafhu nga murahu ha musi tshilingo tsho fhela.",
-              "Arali ṅwaliso wo badelwa fhedzi ni sa athu u vhona khomishini nga murahu ha awara dza 48, ri ṅwaleleni ni tshi ri vhudza tshifhinga tsha u ḓiṅwalisa na imeiḽi kana dzina ḽa muṅwalisi arali ni tshi ḽi ḓivha. Tshigwada tshi ḓo ṱoḓisisa nahone tsha lugisa zwi si ho nga tshanḓa.",
+              "Kanzhi ndi zwa tshifhinga. U ḓiṅwalisa hu vhonala kha tshikirini nga murahu ha mitshelo i si gathi, fhedzi khomishini i ṅwaliwa fhedzi musi ṅwaliso wo no badelwa vhukuma, zwine zwa nga dzhia maḓuvha arali vha kha tshilingo tsha mahala. Ṱolani hafhu nga murahu ha musi tshilingo tsho fhela.",
+              "Arali ṅwaliso wo badelwa fhedzi ni sa athu u vhona khomishini nga murahu ha awara dza 48, ri ṅwaleleni ni tshi ri vhudza tshifhinga tsha tsini tsha u ḓiṅwalisa na imeiḽi kana dzina ḽa tsini ḽa o ḓiṅwalisaho, arali ni tshi ḓivha. Tshigwada tshi ḓo ṱola he u ḓiṅwalisa honoho ha bva hone nahone tsha lugisa zwo pfukwaho nga tshanḓa.",
             ],
           },
         ],
@@ -3285,17 +3294,18 @@ Object.assign(HELP, {
             q: "Ngiyitjhentjha njani ikarada yesikweletu ekubhaliseleni kwami?",
             a: [
               "Ungatjhentjhela kukarada etjha ngaphasi komzuzu ngaphandle kokukhansela. Ukubhalisela kwakho kwanje kuragela phambili, kwaphela ngekarada etjha.",
-              "1. Ngena ku-gadit.app bese uvula ikhasi lakho le-Akhawunti (phezulu kwesokudla). 2. Qhwarhaza \"Lawula ukubhadela\". 3. Ikhasi le-Stripe eliphephileko liyavuleka. Qhwarhaza \"Faka indlela yokubhadela\", tlola ikarada etjha, bese uyibeka njengejayelekileko. 4. Nawufuna, susa ikarada endala.",
-              "Kusukela esikhathini sokubhadela esilandelako, koke kuya kukarada etjha. Ukubhadeliswa kwangaphambili (osekuthethiwe) kuhlala kukarada endala. Akutlhogeki ukubuyiselwa imali ngaphandle kobana uyifuna ngokuqondileko.",
+              "1. Ngena ku-gadit.app bese uvula \"I-akhawunti\" kusuka kumenyu ye-akhawunti. 2. Qhwarhaza \"Lawula ukubhadela\". 3. Kuzokuvuleka ikhasi le-Stripe eliphephileko. Faka ikarada etjha njengendlela yokubhadela bese uyibeka njengejayelekileko. 4. Nawufuna, susa ikarada endala.",
+              "Kusukela esikhathini sokubhadela esilandelako, koke kuya kukarada etjha. Ukubhadeliswa kwangaphambili, osekuqoqiwe, kuhlala kukarada endala. Akutlhogeki ukubuyiselwa imali ngaphandle kobana uyifuna ngokuqondileko.",
             ],
           },
           {
             id: "cancel",
             q: "Ngikukhansela njani ukubhalisela kwami?",
             a: [
-              "Uzenzela wena, nanyana kunini. Ngena, vula i-Akhawunti, bese uthinta Khansela ukubhalisela ngaphasi kwehlelo lakho.",
-              "Ekubhaliseleni okubhadelwako, ukungena kwakho kuragela phambili bekube kuphela isikhathi osele usibhadelele. Ngemva kwalokho i-akhawunti ibuyela ku-Basic (mahala). Amezwi owabulungileko nomlando wakho kuhlala kuphephile.",
-              "Ngesikhathi sokulinga samahala samalanga ali-14, ukukhansela kuqeda isikhathi sokulinga khonokho begodu awubhadeliswa litho. Nange ukhathazwa kwaphela kukubhadeliswa okuzenzakalelako, khetha isizathu leso efasiteleni lokukhansela, bese ungacima ukuvuselelwa kunalokho, ugcine isikhathi sokulinga bekube lilanga laso lokugcina.",
+              "Uzenzela wena, nanyana kunini. Ngena, vula I-akhawunti, bese uthinta ukukhansela ukubhalisela ngaphasi kwehlelo lakho.",
+              "Uthenge ukubhalisela kwakho ku-app ye-iPhone namkha ye-iPad? Kukhansela kuzilungiselelo zakho zokubhalisela ze-Apple. Ilinki ethi \"Lawula ukubhalisela\" ekhasini lakho le-I-akhawunti ikusa khona.",
+              "Ekubhaliseleni okubhadelwako, ukungena kwakho kuragela phambili bekube kuphela isikhathi osele usibhadelele. Ngemva kwalokho i-akhawunti ibuyela ku-Basic, mahala. Amezwi owabulungileko nomlando wakho kuhlala kuphephile.",
+              "Ngesikhathi sokulinga samahala samalanga ali-14, ukukhansela kuqeda isikhathi sokulinga khona manjalo begodu akubhadeliswa litho. Nange okukukhathazako kukubhadeliswa okuzenzakalelako kwaphela, khetha isizathu leso efasiteleni lokukhansela, bese ungacima ukuvuselelwa kunalokho, ugcine isikhathi sokulinga bekube lilanga laso lokugcina.",
               "Nange ukhansele ukubhalisela okubhadelwako ngephutha namkha utjhentjha umkhumbulo, ungakuvuselela ekhasini elifanako ngaphambi kobana isikhathi siphele.",
             ],
           },
@@ -3351,8 +3361,8 @@ Object.assign(HELP, {
             id: "failed-payment",
             q: "Ukubhadela kwami kwehlulekile. Kufuze ngenzeni?",
             a: [
-              "I-Stripe ilinga godu ngokuzenzakalela ukubhadela okwehlulekileko kanengana emalangeni alandelako. Ukwehluleka okunengi kuzilungisa lokha ibhanga nalikhulula ukubanjwa namkha ikarada inemali eneleko.",
-              "Nange ufuna ukukulungisa khonokho, iya ku-Akhawunti → Lawula ukubhadela → Faka indlela yokubhadela, tlola ikarada esebenzako, bese uyibeka njengejayelekileko. I-Stripe izakulinga godu ukubhadeliswa okwehlulekileko khonokho ngekarada etjha. Nange ukubhalisela kwakho sele kubuyele ku-Basic, ungabhalisela godu emaNanini begodu ibhuku lakho lamezwi lihlala lingakathintwa.",
+              "I-Stripe ilinga godu ngokuzenzakalela ukubhadela okwehlulekileko kanengana emalangeni alandelako. Ukwehluleka okunengi kuzilungisa ngokwako lokha ibhanga nalikhulula ukubanjwa namkha ikarada isinemali eneleko.",
+              "Phezulu ekhasini kuzovela ibha ethi ukubhadeliswa akukaphumeleli, begodu ukungena kwakho kugcinwa amalanga ambalwa angeziweko. Thinta \"Vuselela ikarada\" lapho, ufake ikarada esebenzako, bese sizalinga ukubhadelisa khona manjalo. Nange ukubhalisela kwakho sele kubuyele ku-Basic, ungabhalisela godu ekhasini lamaNanini begodu ibhuku lakho lihlala liphelele.",
             ],
           },
           {
@@ -3383,7 +3393,7 @@ Object.assign(HELP, {
             id: "forgot-password",
             q: "Ngikhohlwe iphasiwedi yami",
             a: [
-              "Vula ibhokisi lokungena bese uqhwarhaza \"Ukhohlwe iphasiwedi?\". Tlola i-imeyili oyisebenzisela i-Gadit, uzakuthola ilinki yokutjhentjha phakathi komzuzu namkha emibili.",
+              "Efasiteleni lokungena, tlola i-imeyili yakho, bese uqhwarhaza \"Ukhohlwe iphasiwedi?\". Ilinki yokuyitjhentjha ijayele ukufika ku-imeyili yakho ngemizuzu emibili namkha ngaphasi kwalokho. Ungaqhwarhaza godu \"Ngithumelela ilinki yokungena nge-imeyili\" bese ungena ngaphandle kwephasiwedi.",
               "Nange i-imeyili ingafiki, hlola i-spam. Nange isengafiki, kungenzeka ubhalise nge-Google esikhundleni se-imeyili nephasiwedi. Linga ikunupu ethi \"Raga nge-Google\".",
             ],
           },
@@ -3391,32 +3401,32 @@ Object.assign(HELP, {
             id: "wrong-credentials",
             q: "Ngiqinisekile bona iphasiwedi yami ilungile kodwana kuthiwa \"I-imeyili namkha iphasiwedi akukalungi\"",
             a: [
-              "Izinto ezintathu okufuze uzihlole. Kokuthoma, i-capslock. Kwesibili, isikhala ekugcineni nawukopa begodu unamathisela. Kwesithathu, ubhalise nge-Google esikhundleni sephasiwedi (sebenzisa \"Raga nge-Google\" kunalokho).",
-              "Usabambekile? Tjhentjha iphasiwedi ebhokisini elifanako. Kukulungisela kuhle butjha.",
+              "Izinto ezintathu okufuze uzihlole. Kokuthoma, i-Caps Lock. Kwesibili, isikhala esingeziweko ekugcineni ngemva kokukopa nokunamathisela. Kwesithathu, kungenzeka ubhalise nge-Google esikhundleni sephasiwedi, sebenzisa \"Raga nge-Google\" kunalokho.",
+              "Usabambekile? Emlayezweni ofanako qhwarhaza \"Ngithumelela ilinki yokungena nge-imeyili\" bona ungene ngaphandle kwephasiwedi, namkha \"Khetha iphasiwedi etjha\".",
             ],
           },
           {
             id: "google-fails",
             q: "Ukungena nge-Google akusebenzi",
             a: [
-              "Isizathu esivamileko khulu: ibhrawuza yakho ivimba ama-cookie wabantu bangaphandle namkha ama-pop-up we-gadit.app. Kuvumele emvumweni yebhawa lekheli bese ulinga godu.",
-              "Nange useModini ye-incognito, ukungena nge-Google kuvinjelwe ngehloso. Tjhentjhela efasiteleni lebhrawuza elijayelekileko.",
+              "Ngaphakathi kwama-app afana ne-Instagram, Facebook namkha TikTok, ikunupu ye-Google ifihlekile. Vula ilinki kubhrawuza yakho ejayelekileko, namkha ungene nge-imeyili yakho. Nange ubhalise nge-Google, tlola leyo imeyili bese uqhwarhaza \"Ngithumelela ilinki yokungena nge-imeyili\".",
+              "Efasiteleni langasese, i-incognito, ama-cookie avinjiweko angavimba ukungena nge-Google, ngalokho linga ifasitela elijayelekileko.",
             ],
           },
           {
             id: "change-email",
             q: "Ngiyitjhentjha njani i-imeyili ku-akhawunti yami?",
             a: [
-              "I-Akhawunti, qhwarhaza i-imeyili yakho, Tjhentjha i-imeyili. Kuzakufuze uqinisekise ikheli elitjha ngaphambi kobana lisebenze. Ukubhalisela kwakho, umlando nebhuku lamezwi koke kuyadluliselwa.",
-              "Nange i-imeyili ibotjhelelwe ekhasimendeni le-Stripe, yivuselele naphothalini yokubhadela ye-Stripe bona amarisidi azako aye ekhelini elitjha.",
+              "Ukutjhentjha i-imeyili ye-akhawunti yakho kwenziwa liqembu. Sithumele i-imeyili usuka ekhelini lakho lamanje begodu utlolo ikheli elitjha emlayezweni. Ithimba lizakulitjhentjha, begodu ukubhalisela kwakho, umlando nebhuku lamezwi kuzohlala kunjengombana kunjalo.",
             ],
           },
           {
             id: "delete-account",
             q: "Ngiyisula njani i-akhawunti yami?",
             a: [
-              "I-Akhawunti, ngezansi kwekhasi, Sula i-akhawunti. Lokhu kungokwaphakade. Ukubhalisela kwakho kuyakhanselwa, ibhuku lakho lamezwi nomlando kuyasulwa, begodu i-imeyili iyakhululwa bona ubhalise butjha.",
-              "Amarekhodi we-Stripe wokubhadeliswa kwangaphambili ayahlala (umthetho usibophelela bona siwagcine ngebanga lokubalwa kwemali). Akukho okhunye okuhlalako.",
+              "Ezansi kwekhasi le-akhawunti, qhwarhaza \"Sula i-akhawunti\" bese utlola i-imeyili ye-akhawunti yakho ukuqinisekisa. Lokhu kungokwaphakade. Ukubhalisela kwakho kuyakhanselwa, ibhuku lakho lamezwi nomlando kuyasulwa, begodu i-imeyili iyakhululwa bona ubhalise butjha.",
+              "Okukodwa okuhlukileko kubhaliselo obuthengwe ku-App Store, ukusula i-akhawunti akukhanseli lokho, ngalokho khansela qangi kuzilungiselelo zakho zokubhalisela ze-Apple.",
+              "Amarekhodi wemali ebhadelwe ngaphambilini ayahlala, ngombana umthetho usibophelela ukuwugcina ngebanga lokubalwa kweencwadi zemali.",
             ],
           },
           {
@@ -3431,8 +3441,8 @@ Object.assign(HELP, {
             id: "multiple-accounts",
             q: "Ngicabanga bona nginama-akhawunti amabili ngephutha. Ngenzeni nje?",
             a: [
-              "Lokhu kanengi kwenzeka lokha umuntu abhalisa kanye nge-Google bese kanye nge-imeyili nephasiwedi asebenzisa ikheli elifanako, namkha nawubhalisa kabili ngama-imeyili ahlukeneko. Ukubhalisa ngakunye kwenza i-akhawunti ye-Gadit ehlukileko enebhuku layo lamezwi, umlando nesimo sokubhalisela.",
-              "Sitlolele ngama-imeyili womabili (namkha ama-UID asekhasini le-Akhawunti) nokobana ngiyiphi ofuna ukuyigcina. Ithimba lizakuhlanganisa amabhuku wamezwi nomlando ku-akhawunti oyikhethileko, bese livala enye ngokuhlelekileko. Ayikho imininingwana elahlekako.",
+              "Lokhu kuvame ukwenzeka lokha umuntu abhalisa kanye nge-Google bese kanye nge-imeyili nephasiwedi asebenzisa ikheli elifanako, namkha nawubhalisa kabili ngamakheli we-imeyili ahlukeneko. Ukubhalisa ngakunye kwenza i-akhawunti ye-Gadit ehlukileko enebhuku layo, umlando, nesimo saso sokubhalisela.",
+              "Sithumele i-imeyili isuka kwelinye lamakheli amabili, bese utlola elinye ikheli nokobana ngiyiphi i-akhawunti ofuna ukuyigcina. Ithimba lizakuhlanganisa ibhuku nomlando ku-akhawunti oyikhethileko, bese livala enye ngokuhlanzekileko. Akulahleki idatha.",
             ],
           },
         ],
@@ -3446,8 +3456,8 @@ Object.assign(HELP, {
             id: "wrong-definition",
             q: "Ngicabanga bona ihlathululo ayikalungi. Ngenzani?",
             a: [
-              "Ikhasi ngalinye lomphumela linekunupu encani ethi \"Bika\" ngezansi. Yithinte, khetha isigaba (ihlathululo, umsuka welizwi, isibonelo, isaga, ihlathululo yabantwana, njalo njalo) bese utlola umbhalo omfitjhani. Ufika ngokuqondileko ethimbeni begodu umbiko ngamunye uyahlolwa.",
-              "Ungatshwenyeki bona ukhetha khulu. Isihlathululimezwi sithuthuka msinyana ngamazwana la ukudlula nanyana yini enye.",
+              "Eceleni kwencazelo ngayinye, begodu nakumakhadi wezitjho nomlando welizwi, kunesithonjana esincani sefulegi. Sithinte, ukhethe okungalungileko, bese ungezelela inothi emfitjhani nawufuna. Uya ngqo ethimbeni, begodu umbiko ngamunye uyahlolwa.",
+              "Ungatshwenyeki ngokuba necophelelo khulu. Isihlathululimezwi sithuthuka msinyana ngalempendulo ukudlula nanyana yini enye.",
             ],
           },
           {
@@ -3455,15 +3465,15 @@ Object.assign(HELP, {
             q: "Imodi yabantwana ayitjhentjhi ihlathululo",
             a: [
               "Imodi yabantwana itjhentjha umtlolo kwaphela lapho ilizwi sele linehlathululo efanele abantwana. Elizwini osanda kulifuna kokuthoma, lindela imizuzwana eli-10 ukuya kwe-15 kusalungiswa ihlathululo yabantwana.",
-              "Imodi yabantwana iyingcenye yehlelo le-Family. Ku-Basic, ku-Individual namkha ngaphandle kwe-akhawunti, isitjhintjhi sitjengisa ihlelo le-Family kunokobana sivuleke. Ababhaliseli abajoyina i-Clear namkha i-Deep ngaphambi kuka-Oktoba 2026 bagcina iModi yabantwana. Bona uyithole, bona i-Family ekhasini lamanani.",
+              "Imodi yabantwana iyingcenye yehlelo le-Family. Ku-Individual uzakubona isitjhintjhi esithi \"Ngamagama alula\" esikhundleni salokho, esinika ihlathululo elula khudlwana yencazelo ngayinye. Ku-Basic namkha ngaphandle kwe-akhawunti akunasitjhintjhi. Ababhaliseli abajoyina i-Clear namkha i-Deep ngaphambi kuka-Oktoba 2026 bagcina iModi yabantwana. Bona uyithole, bona i-Family ekhasini lamanani.",
             ],
           },
           {
             id: "voice-fails",
             q: "Ukufuna ngelizwi akusebenzi",
             a: [
-              "Ukufuna ngelizwi kutlhoga imvumo yemakrofoni. Amabhrawuza amanengi abuza kanye ngesayithi ngayinye. Nange uqhwarhaze Vimba ngephutha, kuzakufuze ukubuyisele ngesandla: qhwarhaza itjhwayo lekhiya namkha lemininingwana eceleni kwe-gadit.app ebhaweni lekheli, bese Iinlungiselelo zesayithi, bese iMakrofoni, bese Vumela.",
-              "Ku-Safari ye-iPhone ne-iPad, ukungena kwemakrofoni godu kutlhoga i-Settings → Safari → Microphone. Ukufuna ngelizwi kuyingcenye yamahlelo we-Individual ne-Family: ku-Basic uzakubona amahlelo kunalokho, begodu abavakatjheli abangakangeni babawa bona bangene. Bona uthuthukise, vula ikhasi lamanani.",
+              "Ukufuna ngelizwi kutlhoga imvumo yemakrofoni. Amabhrawuza amanengi abuza kanye ngesayithi ngayinye. Nange uyivimbe ngephutha, thinta itjhwayo eliseceleni kwe-gadit.app ebhaweni lekheli bese uvumela imakrofoni eemvumeni zesayithi.",
+              "Ku-iPhone ne-iPad, godu vumela imakrofoni ye-Safari kuhlelo lwe-Settings yedivayisi. Ukufuna ngelizwi kuyingcenye yamahlelo we-Individual ne-Family, ngalokho ku-Basic nangaphandle kwe-akhawunti ikunupu yemakrofoni ayiveli. Bona uthuthukise, vula ikhasi lamanani.",
             ],
           },
           {
@@ -3486,8 +3496,8 @@ Object.assign(HELP, {
             id: "offline",
             q: "Imodi yangaphandle kwe-inthanethi isebenza njani?",
             a: [
-              "Ukusebenzisa ngaphandle kwe-inthanethi kuyingcenye yamahlelo we-Individual ne-Family. Ilizwi ngalinye olifunako libulungwa kudivayisi yakho, ngalokho livuleka godu khonokho ngaphandle kwe-inthanethi. Ungadawuniloda nephakethe lamezwi athandwa khulu ngelimi lakho ekhasini lakho le-Akhawunti.",
-              "Ukufuna ilizwi elitjha ngokupheleleko kusatlhoga i-inthanethi, ngombana i-Gadit kufuze ilungiselele umphumela opheleleko walo. Ikhophi yangaphandle kwe-inthanethi ifaka amezwi asele akudivayisi yakho. Nange use-Basic, bona amahlelo ekhasini lamanani.",
+              "Ukusebenzisa ngaphandle kwe-inthanethi kuyingcenye yamahlelo we-Individual ne-Family. Ilizwi ngalinye olifunako libulungwa kudivayisi yakho, ngalokho livuleka godu khonokho ngaphandle kwe-inthanethi. Ungathinta futhi \"Dawuniloda iphakethe langaphandle kwe-inthanethi\" ekhasini lakho le-\"I-akhawunti\" ukuze ubulunge amezwi wesichazamazwi sethu ngelimi lakho kudivayisi le.",
+              "Ukufuna ilizwi elitjha ngokupheleleko kusatlhoga ukuxhumana, ngombana i-Gadit kufuze ilungiselele umphumela opheleleko walo. Ikhophi yangaphandle kwe-inthanethi ifaka amezwi asele akudivayisi yakho. Nange use-Basic, bona amahlelo ekhasini lamanani.",
             ],
           },
           {
@@ -3502,16 +3512,16 @@ Object.assign(HELP, {
             id: "word-not-found",
             q: "Ngifune ilizwi angakhenge ngithole umphumela. Kwenzekani?",
             a: [
-              "Kokuthoma, hlola ukupela. I-Gadit kanengi ilungisa amaphutha amancani wokutlola, kodwana unkamisa ongakalungi namkha ilembu elingekho kungayidida. Linga isilungiso esiphakanyiswako nasivelako.",
-              "Ngaphezu kwalokho: amezwi angajayelekiko khulu namkha wesitsotsi angabuyisi umphumela othembekileko. Nange uqinisekile bona ilizwi lamambala, qhwarhaza ikunupu ethi Bika ekhasini lomphumela (namkha esikrinini sephutha) bese usazisa. Umbiko ngamunye uyahlolwa begodu okuphoswe ngamambala kubuyiselwa esistimini.",
+              "Kokuthoma, hlola ukupela. Nange bekunephutha lokutlola, i-Gadit ivamise ukutshengisa ilizwi elilungisiweko, ibe nelinki yokufuna lokho okutlolileko nanyana kunjalo.",
+              "Amezwi angajayelekiko khulu namkha wesitsotsi awahlali athola umphumela. Nange uqinisekile bona ilizwi likhona, sitlolele usuka ekhasini leli, ithimu izokuhlola.",
             ],
           },
           {
             id: "change-language",
             q: "Ngilitjhentjha njani ilimi lokusebenzisa?",
             a: [
-              "Phezulu kwesokudla kwekhasi nanyana ngiliphi, uzakubona itjhwayo elincani lefulege (namkha ibizo lelimi lakho lanje). Lithinte bese ukhetha emalimini ama-41.",
-              "Ukhetho lwakho lubulungwa kudivayisi le. Koke kulayitha godu ngelimi elitjha: ukusebenzisa, iimenyu, iinhlathululo zamezwi ezizako, izibonelo, iinhlathululo zabantwana, ngitjho nomsuka welizwi. Imiphumela esele ibulungiwe ngelimi elidala ihlala bekube ufuna amezwi lawo godu.",
+              "Phezulu kwekhasi kunetjhwayo leglobe elinelimi lakho lanje. Lithinte bese ukhetha ilimi.",
+              "Ukhetho lwakho lubulungwa kudivayisi le. Koke kulayitha godu ngelimi elitjha, ukusebenzisa, iimenyu, iinhlathululo zamezwi ezizako, izibonelo, iinhlathululo zabantwana, ngitjho nomsuka welizwi. Amezwi osuvele uwafunile ngelimi elidala azohlala atjengiswa ngalo bekube uwafuna godu.",
             ],
           },
         ],
@@ -3525,7 +3535,7 @@ Object.assign(HELP, {
             id: "join-partner",
             q: "Ngiba njani mlingani we-Gadit?",
             a: [
-              "Vula i-/partners ekhasini nanyana ngiliphi bese uqhwarhaza \"Yiba mlingani\". Bhalisa ngebizo lakho ne-imeyili, ilinki yakho ekhethekileko yokuncoma kunye nedeshibhodi yokulandelela ukuqhwarhaza neenkhomitjhini kulungile khonokho. Akunakulindela imvumo.",
+              "Iya ku-gadit.app/partners bese uqhwarhaza \"Joyina mahala\". Faka ibizo lakho ne-imeyili, bese uqhwarhaza \"Ngifuna ikhowudi yami yomlingani\". Ilinki yakho yomuntu mathupha nedeshibhodi yomlingani, enokuqhwarhaza neenkhomitjhini, kulungela msinyana, ngaphandle kokulinda imvumo. Ikhowudi nelinki kuthunyelwa kuwe nange-imeyili.",
               "Ukujoyina kumahala begodu kuvulekele woke umuntu. Awutlhogi ukubhalisela kwe-Gadit bona ube mlingani.",
             ],
           },
@@ -3533,25 +3543,25 @@ Object.assign(HELP, {
             id: "commission-model",
             q: "Iinkhomitjhini zibalwa njani?",
             a: [
-              "Imibandela ejayelekileko yi-25% yembhadelo ngayinye ikhasimende eliyenza emnyakeni walo wokuthoma. Ngemva komnyaka wokuthoma, uzuza i-10% yembhadelo ngayinye isikhathi soke ikhasimende lisabhadela.",
+              "Imibandela ejayelekileko yi-25% yembhadelo ngayinye ikhasimende eliyenza emnyakeni walo wokuthoma. Ngemva komnyaka wokuthoma, uzuza i-10% yembhadelo ngayinye isikhathi soke ikhasimende lisabhadela. Nawuletha amakhasimende ama-5 abhadelako, isabelo sakho ngemva komnyaka wokuthoma sikhuphukela ku-15% ipilo yoke.",
               "Lokhu kusebenza ngokufanako emahlelweni wenyanga nawonyaka, ngombana ikhomitjhini ibalwa embhadelweni ngamunye wamambala. Nange ikhasimende likhansela, ikhomitjhini yakho iyajama embhadelweni walo wokugcina.",
-              "Ithimba lingabeka amazinga ahlukeneko wabalingani abathileko. Amazinga wakho ahlala atjengiswa edeshibhodini yakho yomlingani, ongayifikelela ku-/partners.",
+              "Ithimba lingabeka amazinga ahlukeneko wabalingani abathileko. Amazinga wakho ahlala atjengiswa edeshibhodini yakho yomlingani.",
             ],
           },
           {
             id: "payout",
             q: "Ngibhadelwa nini?",
             a: [
-              "Ngenyanga, lokha imali yakho nayidlula i-$50. Sisebenzisa indlela yokubhadela oyibeke edeshibhodini yomlingani (ukudlulisela ebhanga, i-PayPal, njalo njalo). I-$50 mkhawulo omncani, ayisiwo mkhawulo ophezulu. Ungazuza okunengi khulu, uthola umbhadelo lokha nawudlula umkhawulo.",
-              "Iinkhomitjhini zikhululwa ngemva kwamalanga ama-30 ngemva kokubhadelela ukubhalisela, bona kube nesikhathi sokubuyiselwa imali. Ngalokho ukubhalisela kwakaJanabari kukhululwa ekuthomeni kwakaFebherbari begodu kungena embhadelweni wakho olandelako lokha imali yakho nayidlula i-$50.",
+              "Kanye ngenyanga, lokha ibhalansi yakho nayifika enanini elincani elitjengiswe edeshibhodini yakho yomlingani. Siyithumela ku-akhawunti ye-PayPal oyibeke khona. Lelo nani elincani lisilinganiso sokuthoma, akusimkhawulo ophezulu. Ungazuza okunengi khulu, begodu uthola umbhadelo nawudlula khona.",
+              "Iinkhomitjhini zikhululwa ngemva kwamalanga ama-30 ngemva kokubhadelela ukubhalisela, bona kube nesikhathi sokubuyiselwa imali. Ngalokho ikhomitjhini yokubhalisela kwakaJanabari ikhululwa ekuthomeni kwakaFebherbari, bese ingena embhadelweni wakho olandelako lokha ibhalansi yakho nayifika enanini elincani.",
             ],
           },
           {
             id: "empty-dashboard",
             q: "Ngijoyinile kodwana ideshibhodi yami ayinalitho",
             a: [
-              "Iinomboro zivela ngemva kokuqhwarhaza kokuthoma elinkini yakho. Ukungabi nalitho kutjho bona akukho okhe waqhwarhaza okwanje. Iya uyokwabelana ngelinki. Ideshibhodi ivuseleleka ngokuseduze ngesikhathi sinye lokha ukusebenza nakuthomako.",
-              "Nange wabelene begodu umuntu wabhalisa kodwana ideshibhodi ingakutjengisi, sitlolele ngesikhathi esiseduze sokubhalisa, ithimba lizakuhlola ukubalelwa.",
+              "Iinomboro zivela ngemva kokuqhwarhaza kokuthoma elinkini yakho. Ukungabi nalitho kutjho kwaphela bona akukabi khona oqhwarhazileko. Iya uyokwabelana ngelinki. Ideshibhodi ivuseleleka ngokuseduze ngesikhathi sinye lokha ukusebenza nakuthomako.",
+              "Nange wabelene begodu umuntu wabhalisa kodwana ideshibhodi ingakutjengisi, sitlolele ngesikhathi esiseduze sokubhalisa, ithimba lizakuhlola bona ukubhalisa kuvele ngaphi.",
             ],
           },
           {
@@ -3566,8 +3576,8 @@ Object.assign(HELP, {
             id: "missing-commission",
             q: "Umuntu ubhalise ngelinki yami kodwana angiyiboni ikhomitjhini",
             a: [
-              "Kanengi lokhu kusikhathi: ukubhalisa kuvela edeshibhodini phakathi kwemizuzu, kodwana ikhomitjhini ibhalwa kwaphela lokha ukubhalisela nakubhadelwe ngamambala (lokho okungaba ngemva kwamalanga nange basekulingeni kwamahala). Buyela uhlole ngemva kobana ukulinga kuphele.",
-              "Nange ukubhalisela kubhadelwe kodwana usayiboni ikhomitjhini ngemva kwamahora ama-48, sitlolele ngesikhathi esiseduze sokubhalisa ne-imeyili namkha ibizo elisondeleko lombhaliseli nawulazi. Ithimba lizakuhlola ngokujulileko ukubalelwa bese lilungisa okuphosiweko ngesandla.",
+              "Kanengi lokhu kusikhathi. Ukubhalisa kuvela edeshibhodini phakathi kwemizuzu, kodwana ikhomitjhini ibhalwa kwaphela lokha ukubhalisela nakubhadelwe ngamambala, begodu lokho kungathatha amalanga nange basekulingeni kwamahala. Buyela uhlole ngemva kobana ukulinga kuphele.",
+              "Nange ukubhalisela kubhadelwe kodwana usayiboni ikhomitjhini ngemva kwamahora ama-48, sitlolele ngesikhathi esiseduze sokubhalisa ne-imeyili namkha ibizo elisondeleko lombhaliseli nawulazi. Ithimba lizakuhlola bona ukubhalisa kuvele ngaphi bese lilungisa okuphosiweko ngesandla.",
             ],
           },
         ],
@@ -3640,16 +3650,17 @@ Object.assign(HELP, {
             q: "Πώς αλλάζω την πιστωτική κάρτα στη συνδρομή μου;",
             a: [
               "Μπορείς να περάσεις σε νέα κάρτα σε λιγότερο από ένα λεπτό, χωρίς να ακυρώσεις τίποτα. Η τρέχουσα συνδρομή σου συνεχίζει κανονικά, απλώς με τη νέα κάρτα.",
-              "1. Συνδέσου στο gadit.app και άνοιξε τη σελίδα του λογαριασμού σου (πάνω δεξιά). 2. Πάτησε \"Διαχείριση χρέωσης\". 3. Ανοίγει μια ασφαλής σελίδα του Stripe. Πάτησε \"Προσθήκη τρόπου πληρωμής\", καταχώρισε τη νέα κάρτα και όρισέ την ως προεπιλογή. 4. Προαιρετικά, αφαίρεσε την παλιά κάρτα.",
-              "Από τον επόμενο κύκλο χρέωσης και μετά, όλα πηγαίνουν στη νέα κάρτα. Η προηγούμενη χρέωση (που έχει ήδη εισπραχθεί) παραμένει στην παλιά κάρτα. Δεν χρειάζεται επιστροφή χρημάτων, εκτός αν τη θέλεις ειδικά.",
+              "1. Συνδέσου στο gadit.app και άνοιξε το \"Λογαριασμός\" από το μενού λογαριασμού. 2. Πάτησε \"Διαχείριση χρέωσης\". 3. Ανοίγει μια ασφαλής σελίδα του Stripe. Πρόσθεσε τη νέα κάρτα ως τρόπο πληρωμής και όρισέ την ως προεπιλογή. 4. Προαιρετικά, αφαίρεσε την παλιά κάρτα.",
+              "Από τον επόμενο κύκλο χρέωσης και μετά, όλα πηγαίνουν στη νέα κάρτα. Η προηγούμενη χρέωση, που έχει ήδη εισπραχθεί, παραμένει στην παλιά κάρτα. Δεν χρειάζεται επιστροφή χρημάτων, εκτός αν τη θέλεις ειδικά.",
             ],
           },
           {
             id: "cancel",
             q: "Πώς ακυρώνω τη συνδρομή μου;",
             a: [
-              "Μόνος σου, οποιαδήποτε στιγμή. Συνδέσου, άνοιξε τον Λογαριασμό και πάτησε Ακύρωση συνδρομής κάτω από το πλάνο σου.",
-              "Σε συνδρομή επί πληρωμή, η πρόσβασή σου συνεχίζεται μέχρι το τέλος της περιόδου που έχεις ήδη πληρώσει. Μετά ο λογαριασμός περνά στο Basic (δωρεάν). Οι αποθηκευμένες λέξεις σου και το ιστορικό σου μένουν ασφαλή.",
+              "Μόνος σου, οποιαδήποτε στιγμή. Συνδέσου, άνοιξε το Λογαριασμός και πάτησε Ακύρωση συνδρομής κάτω από το πλάνο σου.",
+              "Αγόρασες τη συνδρομή σου στην εφαρμογή για iPhone ή iPad; Ακύρωσέ τη από τις ρυθμίσεις συνδρομών της Apple. Ο σύνδεσμος \"Διαχείριση συνδρομής\" στη σελίδα Λογαριασμός σε πηγαίνει εκεί.",
+              "Σε συνδρομή επί πληρωμή, η πρόσβασή σου συνεχίζεται μέχρι το τέλος της περιόδου που έχεις ήδη πληρώσει. Μετά ο λογαριασμός περνά στο Basic, δωρεάν. Οι αποθηκευμένες λέξεις σου και το ιστορικό σου μένουν ασφαλή.",
               "Κατά τη δωρεάν δοκιμή 14 ημερών, η ακύρωση τερματίζει τη δοκιμή αμέσως και δεν γίνεται καμία χρέωση. Αν σε ανησυχεί μόνο η αυτόματη χρέωση, διάλεξε αυτόν τον λόγο στο παράθυρο ακύρωσης και μπορείς αντί γι' αυτό να απενεργοποιήσεις την ανανέωση, κρατώντας τη δοκιμή μέχρι την τελευταία της μέρα.",
               "Αν ακυρώσεις μια συνδρομή επί πληρωμή κατά λάθος ή αλλάξεις γνώμη, μπορείς να τη συνεχίσεις από την ίδια σελίδα πριν λήξει η περίοδος.",
             ],
@@ -3707,7 +3718,7 @@ Object.assign(HELP, {
             q: "Η πληρωμή μου απέτυχε. Τι πρέπει να κάνω;",
             a: [
               "Το Stripe επαναλαμβάνει αυτόματα τις αποτυχημένες πληρωμές μερικές φορές μέσα στις επόμενες μέρες. Οι περισσότερες αποτυχίες λύνονται από μόνες τους μόλις η τράπεζα απελευθερώσει τη δέσμευση ή η κάρτα έχει αρκετό υπόλοιπο.",
-              "Αν θέλεις να το διορθώσεις αμέσως, πήγαινε στο Λογαριασμός → Διαχείριση χρέωσης → Προσθήκη τρόπου πληρωμής, καταχώρισε μια κάρτα που λειτουργεί και όρισέ την ως προεπιλογή. Το Stripe θα επαναλάβει αμέσως την αποτυχημένη χρέωση στη νέα κάρτα. Αν η συνδρομή σου έχει ήδη υποβαθμιστεί σε Basic, μπορείς να ξαναγραφτείς από τη σελίδα Pricing και το σημειωματάριό σου μένει ανέπαφο.",
+              "Μια μπάρα στο πάνω μέρος της σελίδας θα λέει ότι η χρέωση δεν πέρασε και η πρόσβασή σου διατηρείται για λίγες ακόμα μέρες. Πάτησε εκεί \"Ενημέρωση κάρτας\", βάλε μια κάρτα που λειτουργεί και θα δοκιμάσουμε αμέσως τη χρέωση σε αυτήν. Αν η συνδρομή σου έχει ήδη περάσει σε Basic, μπορείς να γραφτείς ξανά από τη σελίδα Pricing και το σημειωματάριό σου μένει ανέπαφο.",
             ],
           },
           {
@@ -3738,40 +3749,40 @@ Object.assign(HELP, {
             id: "forgot-password",
             q: "Ξέχασα τον κωδικό μου",
             a: [
-              "Άνοιξε το παράθυρο σύνδεσης και πάτησε \"Ξέχασες τον κωδικό;\". Καταχώρισε το email που χρησιμοποιείς για το Gadit και θα λάβεις έναν σύνδεσμο επαναφοράς μέσα σε ένα ή δύο λεπτά.",
-              "Αν το email δεν φτάσει, έλεγξε τα ανεπιθύμητα. Αν και πάλι δεν φτάσει, ίσως έκανες εγγραφή με Google αντί για email και κωδικό. Δοκίμασε το κουμπί \"Continue with Google\".",
+              "Στο παράθυρο σύνδεσης, πληκτρολόγησε το email σου και μετά πάτησε \"Ξέχασες τον κωδικό;\". Ένας σύνδεσμος επαναφοράς φτάνει συνήθως στο email σου μέσα σε ένα ή δύο λεπτά. Μπορείς επίσης να πατήσεις \"Στείλτε μου σύνδεσμο σύνδεσης\" και να συνδεθείς χωρίς κωδικό.",
+              "Αν το email δεν φτάσει, έλεγξε τα ανεπιθύμητα. Αν πάλι δεν φτάσει, μπορεί να έκανες εγγραφή με Google αντί για email και κωδικό. Δοκίμασε το κουμπί \"Συνέχισε με Google\".",
             ],
           },
           {
             id: "wrong-credentials",
             q: "Είμαι σίγουρος ότι ο κωδικός μου είναι σωστός αλλά λέει \"Λάθος email ή κωδικός\"",
             a: [
-              "Τρία πράγματα να ελέγξεις. Πρώτον, το Caps Lock. Δεύτερον, κενό στο τέλος όταν κάνεις αντιγραφή-επικόλληση. Τρίτον, έκανες εγγραφή με Google αντί για κωδικό (χρησιμοποίησε το \"Continue with Google\").",
-              "Ακόμα κολλημένος; Κάνε επαναφορά του κωδικού από το ίδιο παράθυρο. Σε βάζει σε καθαρή αρχή.",
+              "Τρία πράγματα να ελέγξεις. Πρώτον, το Caps Lock. Δεύτερον, ένα έξτρα κενό στο τέλος μετά από αντιγραφή και επικόλληση. Τρίτον, μπορεί να έκανες εγγραφή με Google αντί για κωδικό, οπότε χρησιμοποίησε το \"Συνέχισε με Google\".",
+              "Ακόμα κολλημένος; Στο ίδιο μήνυμα πάτησε \"Στείλτε μου σύνδεσμο σύνδεσης\" για να μπεις χωρίς κωδικό, ή \"Ορισμός νέου κωδικού\".",
             ],
           },
           {
             id: "google-fails",
             q: "Η σύνδεση με Google δεν λειτουργεί",
             a: [
-              "Η πιο συνηθισμένη αιτία: ο browser σου μπλοκάρει cookies τρίτων ή pop-ups για το gadit.app. Επίτρεψέ τα από τις άδειες στη γραμμή διευθύνσεων και δοκίμασε ξανά.",
-              "Αν είσαι σε λειτουργία ανώνυμης περιήγησης, η σύνδεση με Google είναι περιορισμένη επίτηδες. Άλλαξε σε ένα κανονικό παράθυρο του browser.",
+              "Μέσα σε εφαρμογές όπως Instagram, Facebook ή TikTok, το κουμπί Google είναι κρυμμένο. Άνοιξε τον σύνδεσμο στον κανονικό σου browser ή συνδέσου με το email σου. Αν έκανες εγγραφή με Google, πληκτρολόγησε εκείνο το email και πάτησε \"Στείλτε μου σύνδεσμο σύνδεσης\".",
+              "Σε ιδιωτικό παράθυρο, τα μπλοκαρισμένα cookies μπορεί να εμποδίζουν τη σύνδεση με Google, οπότε δοκίμασε ένα κανονικό παράθυρο.",
             ],
           },
           {
             id: "change-email",
             q: "Πώς αλλάζω το email του λογαριασμού μου;",
             a: [
-              "Λογαριασμός, πάτησε το email σου, Αλλαγή email. Θα χρειαστεί να επιβεβαιώσεις τη νέα διεύθυνση πριν οριστικοποιηθεί. Η συνδρομή, το ιστορικό και το σημειωματάριό σου μεταφέρονται όλα.",
-              "Αν το email είναι συνδεδεμένο με έναν πελάτη του Stripe, ενημέρωσέ το και στην πύλη χρέωσης του Stripe, ώστε οι μελλοντικές αποδείξεις να πηγαίνουν στη νέα διεύθυνση.",
+              "Η αλλαγή του email του λογαριασμού γίνεται από την ομάδα. Στείλε μας email από την τωρινή σου διεύθυνση και γράψε το νέο email στο μήνυμα. Η ομάδα θα το ενημερώσει και η συνδρομή, το ιστορικό και το σημειωματάριό σου θα μείνουν όπως είναι.",
             ],
           },
           {
             id: "delete-account",
             q: "Πώς διαγράφω τον λογαριασμό μου;",
             a: [
-              "Λογαριασμός, στο κάτω μέρος της σελίδας, Διαγραφή λογαριασμού. Αυτό είναι μόνιμο. Η συνδρομή σου ακυρώνεται, το σημειωματάριο και το ιστορικό σου διαγράφονται, και το email απελευθερώνεται για μια νέα εγγραφή.",
-              "Τα αρχεία του Stripe για παλιές χρεώσεις παραμένουν (είμαστε νομικά υποχρεωμένοι να τα κρατάμε για λογιστικούς λόγους). Τίποτα άλλο δεν μένει.",
+              "Στο κάτω μέρος της σελίδας \"Λογαριασμός\", πάτησε \"Διαγραφή λογαριασμού\" και πληκτρολόγησε το email του λογαριασμού σου για επιβεβαίωση. Αυτό είναι μόνιμο: η συνδρομή σου ακυρώνεται, το σημειωματάριο και το ιστορικό σου διαγράφονται και το email απελευθερώνεται για νέα εγγραφή.",
+              "Η μόνη εξαίρεση είναι μια συνδρομή που αγοράστηκε στο App Store: η διαγραφή του λογαριασμού δεν την ακυρώνει, οπότε ακύρωσέ την πρώτα από τις ρυθμίσεις συνδρομών της Apple.",
+              "Τα αρχεία παλιών χρεώσεων παραμένουν, γιατί ο νόμος μάς υποχρεώνει να τα κρατάμε για λογιστικούς λόγους.",
             ],
           },
           {
@@ -3787,7 +3798,7 @@ Object.assign(HELP, {
             q: "Νομίζω ότι έχω δύο λογαριασμούς κατά λάθος. Τι κάνω τώρα;",
             a: [
               "Αυτό συνήθως συμβαίνει όταν κάποιος εγγράφεται μία φορά με Google και μία φορά με email και κωδικό χρησιμοποιώντας την ίδια διεύθυνση, ή όταν εγγράφεσαι δύο φορές με διαφορετικές διευθύνσεις email. Κάθε εγγραφή δημιουργεί έναν ξεχωριστό λογαριασμό Gadit με δικό του σημειωματάριο, ιστορικό και κατάσταση συνδρομής.",
-              "Γράψε μας με τις δύο διευθύνσεις email (ή τα UID από τη σελίδα του λογαριασμού) και ποιον θέλεις να κρατήσεις. Η ομάδα θα συγχωνεύσει τα σημειωματάρια και το ιστορικό στον λογαριασμό που θα επιλέξεις και μετά θα κλείσει τον άλλον καθαρά. Δεν χάνεται κανένα δεδομένο.",
+              "Στείλε μας email από μία από τις δύο διευθύνσεις και γράψε και την άλλη διεύθυνση, μαζί με ποιον λογαριασμό θέλεις να κρατήσεις. Η ομάδα θα συγχωνεύσει το σημειωματάριο και το ιστορικό στον λογαριασμό που θα επιλέξεις και μετά θα κλείσει τον άλλον καθαρά. Δεν θα χαθεί κανένα δεδομένο.",
             ],
           },
         ],
@@ -3801,7 +3812,7 @@ Object.assign(HELP, {
             id: "wrong-definition",
             q: "Νομίζω ότι ο ορισμός είναι λάθος. Τι κάνω;",
             a: [
-              "Κάθε σελίδα αποτελέσματος έχει ένα μικρό κουμπί \"Αναφορά\" στο κάτω μέρος. Πάτησέ το, διάλεξε μια κατηγορία (ορισμός, ετυμολογία, παράδειγμα, ιδιωματισμός, επεξήγηση για παιδιά και ούτω καθεξής) και γράψε μια σύντομη σημείωση. Έρχεται κατευθείαν στην ομάδα και κάθε αναφορά εξετάζεται.",
+              "Δίπλα σε κάθε σημασία, και στις κάρτες ιδιωματισμών και προέλευσης λέξης, υπάρχει ένα μικρό εικονίδιο σημαίας. Πάτησέ το, διάλεξε τι δεν πάει καλά και, αν θέλεις, πρόσθεσε μια σύντομη σημείωση. Έρχεται κατευθείαν στην ομάδα και κάθε αναφορά εξετάζεται.",
               "Μην ανησυχείς αν είσαι πολύ σχολαστικός. Το λεξικό βελτιώνεται από αυτή την ανατροφοδότηση πιο γρήγορα από οτιδήποτε άλλο.",
             ],
           },
@@ -3810,15 +3821,15 @@ Object.assign(HELP, {
             q: "Η λειτουργία για παιδιά δεν αλλάζει την επεξήγηση",
             a: [
               "Η λειτουργία για παιδιά αλλάζει το κείμενο μόνο όταν η λέξη έχει ήδη επεξήγηση φιλική προς τα παιδιά. Για μια λέξη που μόλις αναζήτησες για πρώτη φορά, δώσε 10 με 15 δευτερόλεπτα μέχρι να ετοιμαστεί η έκδοση για παιδιά.",
-              "Η λειτουργία για παιδιά είναι μέρος του πλάνου Family. Στο Basic, στο Individual ή χωρίς λογαριασμό, ο διακόπτης δείχνει το πλάνο Family αντί να ενεργοποιηθεί. Οι συνδρομητές που μπήκαν στο Clear ή στο Deep πριν τον Οκτώβριο του 2026 κρατούν τη λειτουργία για παιδιά. Για να την αποκτήσεις, δες το Family στη σελίδα τιμών.",
+              "Η λειτουργία για παιδιά είναι μέρος του πλάνου Family. Στο Individual θα δεις αντί γι' αυτήν τον διακόπτη \"Με απλά λόγια\", που δίνει πιο απλή επεξήγηση για κάθε σημασία. Στο Basic ή χωρίς λογαριασμό δεν υπάρχει διακόπτης. Οι συνδρομητές που μπήκαν στο Clear ή στο Deep πριν τον Οκτώβριο του 2026 κρατούν τη λειτουργία για παιδιά. Για να την αποκτήσεις, δες το Family στη σελίδα τιμών.",
             ],
           },
           {
             id: "voice-fails",
             q: "Η φωνητική αναζήτηση δεν λειτουργεί",
             a: [
-              "Η φωνητική αναζήτηση χρειάζεται άδεια μικροφώνου. Οι περισσότεροι browsers ρωτούν μία φορά ανά ιστότοπο. Αν κατά λάθος πάτησες Αποκλεισμός, θα χρειαστεί να το αλλάξεις πίσω χειροκίνητα: πάτησε το εικονίδιο του λουκέτου ή των πληροφοριών δίπλα στο gadit.app στη γραμμή διευθύνσεων, μετά Ρυθμίσεις ιστότοπου, μετά Μικρόφωνο, μετά Να επιτρέπεται.",
-              "Στο Safari για iPhone και iPad, η πρόσβαση στο μικρόφωνο χρειάζεται επίσης Ρυθμίσεις → Safari → Μικρόφωνο. Η φωνητική αναζήτηση είναι μέρος των πλάνων Individual και Family: στο Basic θα δεις τα πλάνα αντί γι' αυτήν, και οι επισκέπτες που δεν έχουν συνδεθεί καλούνται να συνδεθούν. Για αναβάθμιση, άνοιξε τη σελίδα τιμών.",
+              "Η φωνητική αναζήτηση χρειάζεται άδεια μικροφώνου. Οι περισσότεροι browsers ρωτούν μία φορά για κάθε ιστότοπο. Αν το μπλόκαρες κατά λάθος, πάτησε το εικονίδιο δίπλα στο gadit.app στη γραμμή διευθύνσεων και επέτρεψε το μικρόφωνο στις άδειες του ιστότοπου.",
+              "Σε iPhone και iPad, επέτρεψε επίσης το μικρόφωνο για το Safari από την εφαρμογή Ρυθμίσεις της συσκευής. Η φωνητική αναζήτηση είναι μέρος των πλάνων Individual και Family, οπότε στο Basic και χωρίς λογαριασμό το κουμπί του μικροφώνου δεν εμφανίζεται. Για αναβάθμιση, άνοιξε τη σελίδα τιμών.",
             ],
           },
           {
@@ -3839,10 +3850,10 @@ Object.assign(HELP, {
           },
           {
             id: "offline",
-            q: "Πώς λειτουργεί η χρήση χωρίς σύνδεση;",
+            q: "Πώς χρησιμοποιώ το Gadit χωρίς σύνδεση;",
             a: [
-              "Η χρήση χωρίς σύνδεση είναι μέρος των πλάνων Individual και Family. Κάθε λέξη που αναζητάς κρατιέται στη συσκευή σου, ώστε να ανοίγει ξανά αμέσως χωρίς ίντερνετ. Μπορείς επίσης να κατεβάσεις ένα πακέτο με τις πιο δημοφιλείς λέξεις στη γλώσσα σου από τη σελίδα Λογαριασμός.",
-              "Η αναζήτηση μιας ολοκαίνουριας λέξης χρειάζεται ακόμα σύνδεση, γιατί το Gadit πρέπει να ετοιμάσει το πλήρες αποτέλεσμα γι' αυτήν. Το αντίγραφο χωρίς σύνδεση καλύπτει τις λέξεις που είναι ήδη στη συσκευή σου. Αν είσαι στο Basic, δες τα πλάνα στη σελίδα τιμών.",
+              "Η χρήση χωρίς σύνδεση είναι μέρος των πλάνων Individual και Family. Κάθε λέξη που αναζητάς κρατιέται στη συσκευή σου, ώστε να ανοίγει ξανά αμέσως χωρίς ίντερνετ. Μπορείς επίσης να πατήσεις \"Κατέβασε πακέτο εκτός σύνδεσης\" στη σελίδα \"Λογαριασμός\" για να αποθηκεύσεις σε αυτή τη συσκευή τις λέξεις του λεξικού μας στη γλώσσα σου.",
+              "Η αναζήτηση μιας εντελώς καινούριας λέξης χρειάζεται ακόμα σύνδεση, γιατί το Gadit πρέπει να ετοιμάσει το πλήρες αποτέλεσμα γι' αυτήν. Το αντίγραφο χωρίς σύνδεση καλύπτει τις λέξεις που είναι ήδη στη συσκευή σου. Αν είσαι στο Basic, δες τα πλάνα στη σελίδα τιμών.",
             ],
           },
           {
@@ -3857,16 +3868,16 @@ Object.assign(HELP, {
             id: "word-not-found",
             q: "Αναζήτησα μια λέξη και δεν πήρα αποτέλεσμα. Τι συμβαίνει;",
             a: [
-              "Πρώτα, έλεγξε την ορθογραφία. Το Gadit χειρίζεται τα περισσότερα μικρά τυπογραφικά λάθη, αλλά ένα λάθος φωνήεν ή ένα γράμμα που λείπει μπορεί να το μπερδέψει. Δοκίμασε την προτεινόμενη διόρθωση, αν εμφανιστεί.",
-              "Πέρα από αυτό: πολύ σπάνιες λέξεις ή αργκό μπορεί να μην επιστρέψουν σίγουρο αποτέλεσμα. Αν είσαι σίγουρος ότι η λέξη είναι υπαρκτή, πάτησε το κουμπί Αναφορά στη σελίδα του αποτελέσματος (ή στην οθόνη σφάλματος) και ενημέρωσέ μας. Κάθε αναφορά εξετάζεται και οι πραγματικές αστοχίες τροφοδοτούνται πίσω στο σύστημα.",
+              "Πρώτα, έλεγξε την ορθογραφία. Αν υπήρχε τυπογραφικό λάθος, το Gadit συνήθως δείχνει τη διορθωμένη λέξη, με σύνδεσμο για να ψάξεις παρ' όλα αυτά αυτό που πληκτρολόγησες.",
+              "Πολύ σπάνιες λέξεις ή αργκό δεν δίνουν πάντα αποτέλεσμα. Αν είσαι σίγουρος ότι η λέξη υπάρχει, γράψε μας από αυτή τη σελίδα και η ομάδα θα το ελέγξει.",
             ],
           },
           {
             id: "change-language",
             q: "Πώς αλλάζω τη γλώσσα του περιβάλλοντος;",
             a: [
-              "Πάνω δεξιά σε κάθε σελίδα, θα δεις ένα μικρό εικονίδιο σημαίας (ή το όνομα της τρέχουσας γλώσσας σου). Πάτησέ το και διάλεξε ανάμεσα σε 41 γλώσσες.",
-              "Η επιλογή σου αποθηκεύεται σε αυτή τη συσκευή. Όλα ξαναφορτώνουν στη νέα γλώσσα: το περιβάλλον, τα μενού, οι μελλοντικοί ορισμοί λέξεων, τα παραδείγματα, οι επεξηγήσεις για παιδιά, ακόμα και η ετυμολογία. Τα ήδη αποθηκευμένα αποτελέσματα στην παλιά γλώσσα παραμένουν μέχρι να αναζητήσεις ξανά αυτές τις λέξεις.",
+              "Στην κορυφή της σελίδας υπάρχει ένα εικονίδιο υδρογείου με την τρέχουσα γλώσσα σου. Πάτησέ το και διάλεξε γλώσσα.",
+              "Η επιλογή σου αποθηκεύεται σε αυτή τη συσκευή. Όλα ξαναφορτώνουν στη νέα γλώσσα: το περιβάλλον, τα μενού, οι μελλοντικοί ορισμοί λέξεων, τα παραδείγματα, οι επεξηγήσεις για παιδιά, ακόμα και η προέλευση της λέξης. Οι λέξεις που έχεις ήδη αναζητήσει στην παλιά γλώσσα θα εμφανίζονται σε αυτήν μέχρι να τις αναζητήσεις ξανά.",
             ],
           },
         ],
@@ -3880,7 +3891,7 @@ Object.assign(HELP, {
             id: "join-partner",
             q: "Πώς γίνομαι συνεργάτης του Gadit;",
             a: [
-              "Άνοιξε το /partners από οποιαδήποτε σελίδα και πάτησε \"Γίνε συνεργάτης\". Κάνε εγγραφή με το όνομα και το email σου, και ο μοναδικός σου σύνδεσμος παραπομπής μαζί με έναν πίνακα για την παρακολούθηση κλικ και προμηθειών είναι έτοιμα αμέσως. Χωρίς αναμονή για έγκριση.",
+              "Πήγαινε στο gadit.app/partners και πάτησε \"Μπες δωρεάν\". Βάλε το όνομά σου και το email σου και μετά πάτησε \"Πάρε τον κωδικό συνεργάτη μου\". Ο προσωπικός σου σύνδεσμος και ο πίνακας συνεργατών σου, με κλικ και προμήθειες, είναι έτοιμα αμέσως, χωρίς αναμονή για έγκριση. Ο κωδικός και ο σύνδεσμος έρχονται και με email.",
               "Η συμμετοχή είναι δωρεάν και ανοιχτή σε όλους. Δεν χρειάζεσαι συνδρομή στο Gadit για να γίνεις συνεργάτης.",
             ],
           },
@@ -3888,17 +3899,17 @@ Object.assign(HELP, {
             id: "commission-model",
             q: "Πώς υπολογίζονται οι προμήθειες;",
             a: [
-              "Οι τυπικοί όροι είναι 25% από κάθε πληρωμή που κάνει ένας πελάτης τον πρώτο του χρόνο. Μετά τον πρώτο χρόνο, κερδίζεις 10% από κάθε πληρωμή για όσο ο πελάτης συνεχίζει να πληρώνει.",
+              "Οι κανονικοί όροι είναι 25% από κάθε πληρωμή που κάνει ένας πελάτης τον πρώτο του χρόνο. Μετά τον πρώτο χρόνο, κερδίζεις 10% από κάθε πληρωμή για όσο ο πελάτης συνεχίζει να πληρώνει. Αν φέρεις 5 πελάτες που πληρώνουν, το ποσοστό σου μετά τον πρώτο χρόνο ανεβαίνει στο 15% για πάντα.",
               "Αυτό ισχύει το ίδιο για μηνιαία και ετήσια πλάνα, γιατί η προμήθεια υπολογίζεται σε κάθε πραγματική πληρωμή. Αν ένας πελάτης ακυρώσει, η προμήθειά σου σταματά με την τελευταία του πληρωμή.",
-              "Η ομάδα μπορεί να ορίσει διαφορετικά ποσοστά για συγκεκριμένους συνεργάτες. Τα δικά σου ποσοστά φαίνονται πάντα στον πίνακα συνεργατών σου, στον οποίο φτάνεις από το /partners.",
+              "Η ομάδα μπορεί να ορίσει διαφορετικά ποσοστά για συγκεκριμένους συνεργάτες. Τα δικά σου ποσοστά φαίνονται πάντα στον πίνακα συνεργατών σου.",
             ],
           },
           {
             id: "payout",
             q: "Πότε πληρώνομαι;",
             a: [
-              "Μηνιαία, μόλις το υπόλοιπό σου ξεπεράσει τα $50. Χρησιμοποιούμε τη μέθοδο πληρωμής που όρισες στον πίνακα συνεργατών (τραπεζικό έμβασμα, PayPal και ούτω καθεξής). Τα $50 είναι το ελάχιστο όριο, όχι ανώτατο. Μπορείς να κερδίσεις πολύ περισσότερα, απλώς λαμβάνεις την πληρωμή όταν ξεπεράσεις το όριο.",
-              "Οι προμήθειες αποδεσμεύονται 30 ημέρες μετά την πληρωμή της συνδρομής, ώστε να καλυφθεί το παράθυρο επιστροφών. Έτσι μια συνδρομή του Ιανουαρίου αποδεσμεύεται στις αρχές Φεβρουαρίου και μπαίνει στην επόμενη πληρωμή σου μόλις το υπόλοιπό σου ξεπεράσει τα $50.",
+              "Μία φορά τον μήνα, όταν το υπόλοιπό σου φτάσει το ελάχιστο ποσό που φαίνεται στον πίνακα συνεργατών σου. Το στέλνουμε στον λογαριασμό PayPal που ορίζεις εκεί. Το ελάχιστο είναι όριο, όχι ταβάνι. Μπορείς να κερδίσεις πολύ περισσότερα και λαμβάνεις την πληρωμή μόλις το ξεπεράσεις.",
+              "Οι προμήθειες αποδεσμεύονται 30 ημέρες μετά την πληρωμή της συνδρομής, ώστε να υπάρχει το παράθυρο επιστροφών. Έτσι, μια συνδρομή του Ιανουαρίου αποδεσμεύεται στις αρχές Φεβρουαρίου και μπαίνει στην επόμενη πληρωμή σου μόλις το υπόλοιπό σου φτάσει το ελάχιστο.",
             ],
           },
           {
@@ -3906,7 +3917,7 @@ Object.assign(HELP, {
             q: "Εγγράφηκα αλλά ο πίνακάς μου είναι άδειος",
             a: [
               "Τα στατιστικά εμφανίζονται μετά το πρώτο κλικ στον σύνδεσμό σου. Άδειος σημαίνει απλώς ότι κανείς δεν έχει κάνει κλικ ακόμα. Πήγαινε να μοιραστείς τον σύνδεσμο. Ο πίνακας ενημερώνεται σχεδόν σε πραγματικό χρόνο μόλις ξεκινήσει η δραστηριότητα.",
-              "Αν έχεις μοιραστεί τον σύνδεσμο και κάποιος έχει εγγραφεί αλλά ο πίνακας δεν το αντικατοπτρίζει, γράψε μας με τον κατά προσέγγιση χρόνο της εγγραφής και η ομάδα θα ελέγξει την απόδοση.",
+              "Αν έχεις μοιραστεί τον σύνδεσμο και κάποιος έχει εγγραφεί αλλά ο πίνακας δεν το δείχνει, γράψε μας με τον κατά προσέγγιση χρόνο της εγγραφής και η ομάδα θα ελέγξει από πού ήρθε η εγγραφή.",
             ],
           },
           {
@@ -3921,8 +3932,8 @@ Object.assign(HELP, {
             id: "missing-commission",
             q: "Κάποιος εγγράφηκε μέσω του συνδέσμου μου αλλά δεν βλέπω την προμήθεια",
             a: [
-              "Τις περισσότερες φορές είναι θέμα χρονισμού: η εγγραφή εμφανίζεται στον πίνακα μέσα σε λεπτά, αλλά η προμήθεια καταχωρείται μόνο όταν η συνδρομή πληρωθεί πραγματικά (κάτι που μπορεί να αργήσει μέρες αν ο χρήστης είναι σε δωρεάν δοκιμή). Έλεγξε ξανά αφού λήξει η δοκιμή.",
-              "Αν η συνδρομή πληρώθηκε αλλά εξακολουθείς να μη βλέπεις την προμήθεια μετά από 48 ώρες, γράψε μας με τον κατά προσέγγιση χρόνο εγγραφής και το email ή το κατά προσέγγιση όνομα του συνδρομητή, αν το γνωρίζεις. Η ομάδα θα ψάξει την αλυσίδα απόδοσης και θα διορθώσει χειροκίνητα οποιαδήποτε αστοχία.",
+              "Τις περισσότερες φορές είναι θέμα χρονισμού. Η εγγραφή εμφανίζεται στον πίνακα μέσα σε λίγα λεπτά, αλλά η προμήθεια καταχωρείται μόνο όταν η συνδρομή πληρωθεί πραγματικά, κάτι που μπορεί να γίνει μέρες αργότερα αν είναι σε δωρεάν δοκιμή. Έλεγξε ξανά αφού λήξει η δοκιμή.",
+              "Αν η συνδρομή πληρώθηκε αλλά εξακολουθείς να μη βλέπεις την προμήθεια μετά από 48 ώρες, γράψε μας με τον κατά προσέγγιση χρόνο εγγραφής και το email ή το κατά προσέγγιση όνομα του συνδρομητή, αν το ξέρεις. Η ομάδα θα ελέγξει από πού ήρθε η εγγραφή και θα διορθώσει χειροκίνητα οποιαδήποτε αστοχία.",
             ],
           },
         ],
@@ -3992,10 +4003,10 @@ Object.assign(HELP, {
         items: [
           {
             id: "change-card",
-            q: "איך אני מחליף כרטיס אשראי לחיוב המנוי שלי?",
+            q: "איך מחליפים את כרטיס האשראי של המנוי?",
             a: [
               "אפשר להחליף לכרטיס חדש בפחות מדקה, בלי לבטל. המנוי הנוכחי שלכם ממשיך, פשוט עם הכרטיס החדש.",
-              "1. היכנסו ל-gadit.app ופתחו את עמוד החשבון (פינה ימנית עליונה). 2. לחצו על \"ניהול חיוב\". 3. ייפתח מסך מאובטח של Stripe. לחצו \"Add payment method\", הכניסו את הכרטיס החדש, וסמנו אותו כברירת מחדל. 4. אופציונלי, מחקו את הכרטיס הישן.",
+              "1. היכנסו ל-gadit.app ופתחו את \"החשבון שלי\" מתפריט החשבון. 2. לחצו על \"ניהול חיוב\". 3. ייפתח מסך מאובטח של Stripe. הוסיפו בו את הכרטיס החדש כאמצעי תשלום וסמנו אותו כברירת מחדל. 4. אם תרצו, מחקו את הכרטיס הישן.",
               "מהחיוב הבא והלאה הכל ילך לכרטיס החדש. החיוב הקודם (שכבר נגבה) נשאר על הכרטיס הישן. אין צורך בהחזר אלא אם תרצו אחד באופן ספציפי.",
             ],
           },
@@ -4004,6 +4015,7 @@ Object.assign(HELP, {
             q: "איך מבטלים מנוי?",
             a: [
               "בעצמכם, בכל רגע. מתחברים, נכנסים לחשבון ולוחצים \"ביטול המנוי\" מתחת למסלול.",
+              "קניתם את המנוי באפליקציה לאייפון או לאייפד? מבטלים אותו בהגדרות המנויים של Apple, והקישור \"ניהול המנוי\" בעמוד החשבון מוביל לשם.",
               "במנוי בתשלום, הגישה ממשיכה עד סוף התקופה ששילמתם עליה. אחר כך החשבון עובר ל-Basic (חינמי), והמילים השמורות וההיסטוריה נשארות שמורות.",
               "בתקופת הניסיון של 14 הימים, ביטול מסיים את הניסיון מיד, ולא יהיה שום חיוב. אם מה שמדאיג אתכם הוא רק החיוב האוטומטי, בחרו בסיבה הזאת בחלון הביטול, ותוכלו לכבות את החידוש ולהמשיך את הניסיון עד היום האחרון שלו.",
               "ביטלתם מנוי בתשלום בטעות או שיניתם את דעתכם? אפשר לחדש אותו מאותו עמוד לפני שהתקופה מסתיימת.",
@@ -4062,7 +4074,7 @@ Object.assign(HELP, {
             q: "התשלום שלי נכשל. מה לעשות?",
             a: [
               "Stripe מנסה אוטומטית לחייב מחדש כמה פעמים בימים שלאחר הכישלון. רוב הכשלים מסתדרים מעצמם ברגע שהבנק משחרר את ההקפאה או שהכרטיס חוזר ליתרה חיובית.",
-              "אם תרצו לתקן מיד, היכנסו לחשבון → ניהול חיוב → Add payment method, הוסיפו כרטיס תקין וסמנו אותו כברירת מחדל. Stripe ינסה לחייב את החיוב הכושל מיד בכרטיס החדש. אם המנוי כבר ירד ל-Basic, אפשר לחדש מחדש מעמוד המחירים, והמחברת שלכם נשארת שלמה.",
+              "בראש העמוד תופיע הודעה שהחיוב לא עבר, והגישה נשמרת עוד כמה ימים. לחצו שם \"עדכון כרטיס\", הזינו כרטיס תקין, וננסה לחייב אותו מיד. אם המנוי כבר ירד ל-Basic, אפשר להירשם שוב מעמוד המחירים, והמחברת שלכם נשארת שלמה.",
             ],
           },
           {
@@ -4093,40 +4105,40 @@ Object.assign(HELP, {
             id: "forgot-password",
             q: "שכחתי סיסמה",
             a: [
-              "פתחו את דיאלוג ההתחברות ולחצו \"שכחת סיסמה?\". הכניסו את האימייל שאתם משתמשים בו ב-Gadit ותקבלו לינק לאיפוס תוך דקה או שתיים.",
-              "אם המייל לא מגיע, בדקו ספאם. אם הוא עדיין לא מגיע, אולי נרשמתם עם Google ולא עם אימייל וסיסמה. נסו את הכפתור \"Continue with Google\".",
+              "בחלון ההתחברות הקלידו את האימייל ולחצו \"שכחתם סיסמה?\". קישור לאיפוס מגיע למייל בדרך כלל תוך דקה או שתיים. אפשר גם ללחוץ \"שלחו לי קישור כניסה למייל\" ולהיכנס בלי סיסמה.",
+              "אם המייל לא מגיע, בדקו ספאם. אם הוא עדיין לא מגיע, אולי נרשמתם עם Google ולא עם אימייל וסיסמה. נסו את הכפתור \"המשיכו עם Google\".",
             ],
           },
           {
             id: "wrong-credentials",
-            q: "אני בטוח שהסיסמה נכונה אבל מקבל \"אימייל או סיסמה שגויים\"",
+            q: "הסיסמה נכונה, אבל כתוב שהמייל או הסיסמה לא מתאימים",
             a: [
-              "שלושה דברים לבדוק. ראשית, Caps Lock. שנית, רווח מיותר אחרי העתקה. שלישית, נרשמתם עם Google ולא עם סיסמה (השתמשו ב-\"Continue with Google\").",
-              "עדיין תקועים? אפסו את הסיסמה מאותו דיאלוג. זה מסדר אתכם נקי.",
+              "שלושה דברים לבדוק. ראשית, Caps Lock. שנית, רווח מיותר בסוף אחרי העתקה. שלישית, אולי נרשמתם עם Google ולא עם סיסמה (השתמשו ב-\"המשיכו עם Google\").",
+              "עדיין תקועים? באותה הודעה לחצו \"שלחו לי קישור כניסה למייל\" כדי להיכנס בלי סיסמה, או \"בחירת סיסמה חדשה\".",
             ],
           },
           {
             id: "google-fails",
             q: "התחברות עם Google לא עובדת",
             a: [
-              "הסיבה הנפוצה ביותר: הדפדפן חוסם cookies של צד שלישי או pop-ups עבור gadit.app. אפשרו אותם בהרשאות שורת הכתובת ונסו שוב.",
-              "אם אתם במצב גלישה בסתר, התחברות Google מוגבלת בכוונה. עברו לחלון רגיל.",
+              "בתוך אפליקציות כמו Instagram, Facebook או TikTok כפתור Google מוסתר. פתחו את הקישור בדפדפן הרגיל, או היכנסו עם האימייל. אם נרשמתם עם Google, הקלידו את האימייל הזה ולחצו \"שלחו לי קישור כניסה למייל\".",
+              "בגלישה בסתר, חסימת cookies עלולה לעצור את הכניסה עם Google, לכן נסו בחלון רגיל.",
             ],
           },
           {
             id: "change-email",
             q: "איך משנים את האימייל של החשבון?",
             a: [
-              "חשבון, לחיצה על האימייל שלכם, Change email. תצטרכו לאשר את הכתובת החדשה לפני שזה תופס. המנוי, היסטוריה והמחברת, הכל עובר אוטומטית.",
-              "אם האימייל קשור ל-customer ב-Stripe, עדכנו אותו גם בפורטל החיוב של Stripe כדי שקבלות עתידיות ילכו לכתובת החדשה.",
+              "שינוי האימייל של החשבון נעשה דרך הצוות. שלחו לנו מייל מהכתובת הנוכחית וכתבו בו את הכתובת החדשה. הצוות יעדכן אותה, והמנוי, ההיסטוריה והמחברת נשארים כמו שהם.",
             ],
           },
           {
             id: "delete-account",
             q: "איך מוחקים חשבון?",
             a: [
-              "חשבון, תחתית העמוד, Delete account. זה לצמיתות. המנוי מבוטל, המחברת וההיסטוריה נמחקות, והאימייל מתפנה להרשמה חדשה.",
-              "רשומות Stripe של חיובים עבר נשארות (חייבים לפי חוק לשמור לצרכי הנהלת חשבונות). שום דבר אחר לא נשאר.",
+              "בתחתית עמוד החשבון לחצו \"מחיקת חשבון\" והקלידו את האימייל של החשבון לאישור. זה לצמיתות: המנוי מבוטל, המחברת וההיסטוריה נמחקות, והאימייל מתפנה להרשמה חדשה.",
+              "יוצא מן הכלל הוא מנוי שנקנה ב-App Store: מחיקת החשבון לא מבטלת אותו, ולכן בטלו אותו קודם בהגדרות המנויים של Apple.",
+              "רשומות של חיובים קודמים נשארות, כי החוק מחייב אותנו לשמור אותן לצורכי הנהלת חשבונות.",
             ],
           },
           {
@@ -4142,7 +4154,7 @@ Object.assign(HELP, {
             q: "נראה שיש לי שני חשבונות בטעות. מה עושים?",
             a: [
               "זה קורה בדרך כלל כשמישהו נרשם פעם אחת עם Google ופעם נוספת עם אימייל וסיסמה לאותה הכתובת, או כשנרשמים פעמיים בכתובות שונות. כל הרשמה יוצרת חשבון נפרד ב-Gadit עם מחברת, היסטוריה ומנוי משלו.",
-              "כתבו לנו עם שני האימיילים (או ה-UID של כל חשבון מעמוד החשבון) ועם איזה חשבון תרצו להשאיר. הצוות יאחד את המחברת וההיסטוריה אל החשבון שבחרתם, ויסגור את השני בצורה נקייה. שום מידע לא יאבד.",
+              "שלחו לנו מייל מאחת משתי הכתובות, וכתבו בו את הכתובת השנייה ואיזה חשבון תרצו להשאיר. הצוות יאחד את המחברת וההיסטוריה אל החשבון שבחרתם, ויסגור את השני בצורה נקייה. שום מידע לא יאבד.",
             ],
           },
         ],
@@ -4156,7 +4168,7 @@ Object.assign(HELP, {
             id: "wrong-definition",
             q: "ההגדרה לא נכונה. מה לעשות?",
             a: [
-              "בכל עמוד תוצאה יש כפתור \"דיווח\" קטן בתחתית. לחצו עליו, בחרו קטגוריה (הגדרה, אטימולוגיה, דוגמה, ניב, הסבר לילדים וכו') וכתבו הערה קצרה. זה מגיע ישירות לצוות וכל דיווח נבדק.",
+              "ליד כל משמעות, וגם בכרטיסי הניבים ומקור המילה, יש סמל קטן של דגל. לחצו עליו, בחרו מה לא בסדר, ואם רוצים, הוסיפו הערה קצרה. הדיווח מגיע ישירות לצוות, וכל דיווח נבדק.",
               "אל תדאגו להיות יותר מדי קפדנים. המילון משתפר מהפידבק הזה מהר יותר מכל דבר אחר.",
             ],
           },
@@ -4165,15 +4177,15 @@ Object.assign(HELP, {
             q: "מצב ילדים לא מחליף את ההסבר",
             a: [
               "מצב ילדים מחליף את הטקסט רק כשלמילה כבר יש הסבר מותאם לילדים. אם חיפשתם מילה בפעם הראשונה, חכו 10 עד 15 שניות עד שההסבר לילדים יהיה מוכן.",
-              "מצב ילדים הוא חלק ממסלול Family. ב-Basic, ב-Individual או בלי חשבון, המתג מציג את מסלול Family במקום להידלק. מי שנרשמו ל-Clear או ל-Deep לפני אוקטובר 2026 ממשיכים ליהנות ממצב ילדים. כדי לקבל אותו, היכנסו ל-Family בעמוד המחירים.",
+              "מצב ילדים הוא חלק ממסלול Family. ב-Individual מופיע במקומו המתג \"במילים פשוטות\", שמציג הסבר פשוט יותר לכל משמעות. ב-Basic או בלי חשבון אין מתג. מי שנרשמו ל-Clear או ל-Deep לפני אוקטובר 2026 ממשיכים ליהנות ממצב ילדים. כדי לקבל אותו, היכנסו ל-Family בעמוד המחירים.",
             ],
           },
           {
             id: "voice-fails",
             q: "חיפוש קולי לא עובד",
             a: [
-              "חיפוש קולי דורש הרשאת מיקרופון. רוב הדפדפנים שואלים פעם אחת לאתר. אם בטעות אמרתם חסום, צריך להחזיר ידנית: לחצו על אייקון המנעול או המידע ליד gadit.app בשורת הכתובת, אחר כך Site settings, אחר כך Microphone, אחר כך Allow.",
-              "ב-Safari באייפון ובאייפד, גישה למיקרופון דורשת גם הגדרה ב-Settings → Safari → Microphone. חיפוש בקול הוא חלק ממסלולי Individual ו-Family: ב-Basic תראו את המסלולים במקום, ומי שלא מחוברים יתבקשו להתחבר. כדי לשדרג, היכנסו לעמוד המחירים.",
+              "חיפוש קולי דורש הרשאת מיקרופון. רוב הדפדפנים שואלים פעם אחת לכל אתר. אם חסמתם את המיקרופון בטעות, לחצו על הסמל שליד gadit.app בשורת הכתובת ואפשרו את המיקרופון בהרשאות האתר.",
+              "באייפון ובאייפד צריך לאפשר את המיקרופון ל-Safari גם באפליקציית ההגדרות של המכשיר. חיפוש קולי הוא חלק ממסלולי Individual ו-Family, ולכן ב-Basic ובלי חשבון כפתור המיקרופון לא מופיע. כדי לשדרג, היכנסו לעמוד המחירים.",
             ],
           },
           {
@@ -4194,9 +4206,9 @@ Object.assign(HELP, {
           },
           {
             id: "offline",
-            q: "איך עובד המצב הלא־מקוון?",
+            q: "איך משתמשים ב-Gadit בלי אינטרנט?",
             a: [
-              "שימוש בלי אינטרנט הוא חלק ממסלולי Individual ו-Family. כל מילה שאתם מחפשים נשמרת במכשיר, כך שהיא נפתחת שוב מיד גם בלי אינטרנט. אפשר גם להוריד מעמוד החשבון חבילה של המילים הנפוצות ביותר בשפה שלכם.",
+              "שימוש בלי אינטרנט הוא חלק ממסלולי Individual ו-Family. כל מילה שאתם מחפשים נשמרת במכשיר, כך שהיא נפתחת שוב מיד גם בלי אינטרנט. אפשר גם ללחוץ \"הורדת חבילת אופליין\" בעמוד החשבון, ומילות המילון בשפה שלכם יישמרו במכשיר.",
               "חיפוש של מילה חדשה לגמרי עדיין דורש חיבור, כי Gadit צריך להכין בשבילה את התוצאה המלאה. העותק במכשיר כולל את המילים שכבר נמצאות בו. אם אתם ב-Basic, הציצו במסלולים בעמוד המחירים.",
             ],
           },
@@ -4212,16 +4224,16 @@ Object.assign(HELP, {
             id: "word-not-found",
             q: "חיפשתי מילה ולא קיבלתי תוצאה. מה קורה?",
             a: [
-              "קודם כל בדקו את הכתיב. Gadit מסתדר עם רוב טעויות הקלדה קטנות, אבל אות חסרה או תנועה לא נכונה יכולות לבלבל את המערכת. אם מופיעה הצעת תיקון, נסו אותה.",
-              "מעבר לזה, מילים נדירות מאוד או סלנג לא תמיד מצליחות לחזור עם תשובה בטוחה. אם אתם בטוחים שהמילה תקינה, לחצו על כפתור הדיווח בעמוד התוצאה (או במסך השגיאה) ושלחו לנו. כל דיווח נבדק, ופספוסים אמיתיים מוחזרים למערכת.",
+              "קודם כל בדקו את הכתיב. אם הייתה טעות הקלדה, Gadit מציג בדרך כלל את המילה המתוקנת, עם קישור לחפש בכל זאת את מה שהקלדתם.",
+              "מילים נדירות מאוד או סלנג לא תמיד מקבלות תוצאה. אם אתם בטוחים שהמילה קיימת, כתבו לנו מהעמוד הזה, והצוות יבדוק.",
             ],
           },
           {
             id: "change-language",
             q: "איך משנים את שפת הממשק?",
             a: [
-              "בפינה הימנית-עליונה של כל עמוד תראו אייקון קטן של דגל (או את שם השפה הנוכחית). לחצו עליו ובחרו מתוך 41 שפות.",
-              "הבחירה נשמרת על המכשיר. הכל ייטען מחדש בשפה החדשה: הממשק, התפריטים, הגדרות מילים עתידיות, הדוגמאות, ההסבר לילדים ואפילו האטימולוגיה. תוצאות שכבר נשמרו במטמון בשפה הישנה יישארו כך עד שתחפשו אותן שוב.",
+              "בראש העמוד יש סמל של גלובוס עם השפה הנוכחית. לחצו עליו ובחרו שפה.",
+              "הבחירה נשמרת במכשיר. הכל ייטען מחדש בשפה החדשה: הממשק, התפריטים, הגדרות מילים עתידיות, הדוגמאות, ההסבר לילדים ואפילו מקור המילה. מילים שכבר חיפשתם בשפה הקודמת יוצגו בה עד שתחפשו אותן שוב.",
             ],
           },
         ],
@@ -4233,9 +4245,9 @@ Object.assign(HELP, {
         items: [
           {
             id: "join-partner",
-            q: "איך אני נהיה שותף של Gadit?",
+            q: "איך מצטרפים כשותפים ל-Gadit?",
             a: [
-              "פתיחת /partners מכל עמוד, ולחיצה על \"הצטרפות כשותף\". ההרשמה היא עם שם ואימייל, והלינק הייחודי מגיע מיד יחד עם דשבורד למעקב אחרי קליקים ועמלות. אין המתנה לאישור.",
+              "היכנסו ל-gadit.app/partners ולחצו \"הצטרפות בחינם\". מלאו שם ואימייל ולחצו \"קבלת קוד שותף\". הקישור האישי ואזור השותפים, עם מעקב אחרי קליקים ועמלות, מוכנים מיד, בלי המתנה לאישור. הקוד והקישור נשלחים אליכם גם במייל.",
               "ההצטרפות חינמית ופתוחה לכולם. לא צריך מנוי ל-Gadit כדי להיות שותפים.",
             ],
           },
@@ -4243,25 +4255,25 @@ Object.assign(HELP, {
             id: "commission-model",
             q: "איך מחושבות העמלות?",
             a: [
-              "התנאים הרגילים הם 25% מכל תשלום של לקוח בשנה הראשונה שלו. אחרי השנה הראשונה תקבלו 10% מכל תשלום, כל עוד הלקוח ממשיך לשלם.",
+              "התנאים הרגילים הם 25% מכל תשלום של לקוח בשנה הראשונה שלו. אחרי השנה הראשונה תקבלו 10% מכל תשלום, כל עוד הלקוח ממשיך לשלם. הבאתם 5 לקוחות משלמים? העמלה אחרי השנה הראשונה עולה ל-15% לכל החיים.",
               "זה עובד אותו דבר במנוי חודשי ובמנוי שנתי, כי העמלה מחושבת על כל תשלום בפועל. אם לקוח מבטל, העמלה שלכם נעצרת בתשלום האחרון שלו.",
-              "הצוות יכול לקבוע אחוזים אחרים לשותפים מסוימים. האחוזים שלכם תמיד מופיעים בלוח השותפים שלכם, שאפשר להגיע אליו מ-/partners.",
+              "הצוות יכול לקבוע אחוזים אחרים לשותפים מסוימים. האחוזים שלכם תמיד מופיעים באזור השותפים.",
             ],
           },
           {
             id: "payout",
-            q: "מתי אני מקבל את הכסף?",
+            q: "מתי מקבלים את הכסף?",
             a: [
-              "חודשית, ברגע שהיתרה עוברת $50. אנחנו משתמשים בשיטת התשלום שהגדרתם בלוח השותפים (העברה בנקאית, PayPal וכו'). $50 הוא הסף המינימלי, לא תקרה. אתם יכולים להרוויח הרבה יותר, פשוט מקבלים את התשלום כשעוברים את הסף.",
-              "העמלות משתחררות 30 יום אחרי תשלום המנוי, כדי לאפשר חלון להחזרים. אז מנוי מינואר משוחרר בתחילת פברואר, וייכנס לתשלום הבא כשהיתרה שלכם עוברת $50.",
+              "פעם בחודש, כשהיתרה לתשלום מגיעה לסכום המינימום שמופיע באזור השותפים. התשלום נשלח לחשבון ה-PayPal שהגדרתם שם. המינימום הוא סף, לא תקרה: אפשר להרוויח הרבה יותר, והתשלום מגיע כשעוברים אותו.",
+              "העמלות משתחררות 30 יום אחרי תשלום המנוי, כדי לאפשר חלון להחזרים. כך עמלה על מנוי מינואר משתחררת בתחילת פברואר, ונכנסת לתשלום הבא כשהיתרה שלכם מגיעה למינימום.",
             ],
           },
           {
             id: "empty-dashboard",
-            q: "נרשמתי אבל לוח השותפים שלי ריק",
+            q: "הצטרפתם ואזור השותפים ריק?",
             a: [
-              "הסטטיסטיקות מופיעות אחרי הקליק הראשון על הלינק שלכם. ריק פירושו פשוט שאף אחד לא לחץ עדיין. צאו ושתפו את הלינק. לוח השותפים מתעדכן כמעט בזמן אמת ברגע שמתחילה פעילות.",
-              "אם שיתפתם ומישהו נרשם אבל לוח השותפים לא משקף את זה, כתבו לנו עם הזמן המשוער שבו הוא נרשם, והצוות יבדוק את השיוך.",
+              "הסטטיסטיקות מופיעות אחרי הקליק הראשון על הקישור שלכם. ריק פירושו פשוט שאף אחד לא לחץ עדיין. צאו ושתפו את הקישור. אזור השותפים מתעדכן כמעט בזמן אמת ברגע שמתחילה פעילות.",
+              "אם שיתפתם ומישהו נרשם אבל זה לא מופיע באזור השותפים, כתבו לנו עם הזמן המשוער שבו הוא נרשם, והצוות יבדוק מאיפה הגיעה ההרשמה.",
             ],
           },
           {
@@ -4274,10 +4286,10 @@ Object.assign(HELP, {
           },
           {
             id: "missing-commission",
-            q: "מישהו נרשם דרך הלינק שלי אבל אני לא רואה עמלה",
+            q: "מישהו נרשם דרך הקישור שלכם והעמלה לא מופיעה?",
             a: [
-              "ברוב המקרים זה עניין של תזמון: הרישום מופיע בלוח השותפים תוך דקות, אבל העמלה נרשמת רק כשהמנוי משלם בפועל, וזה יכול להיות כמה ימים אחר כך אם הוא בתקופת ניסיון. תבדקו שוב אחרי שתקופת הניסיון נגמרת.",
-              "אם המנוי שילם ועדיין אין עמלה אחרי 48 שעות, כתבו לנו עם הזמן המשוער של ההרשמה ועם האימייל או השם המשוער של הנרשם, אם אתם יודעים. הצוות יבדוק את שרשרת השיוך ויתקן ידנית כל פספוס.",
+              "ברוב המקרים זה עניין של תזמון: ההרשמה מופיעה באזור השותפים תוך דקות, אבל העמלה נרשמת רק כשהמנוי משולם בפועל, וזה יכול להיות כמה ימים אחר כך אם הוא בתקופת ניסיון. בדקו שוב אחרי שתקופת הניסיון נגמרת.",
+              "אם המנוי שולם ועדיין אין עמלה אחרי 48 שעות, כתבו לנו עם הזמן המשוער של ההרשמה ועם האימייל או השם המשוער של הנרשם, אם אתם יודעים. הצוות יבדוק מאיפה הגיעה ההרשמה ויתקן ידנית כל פספוס.",
             ],
           },
         ],

@@ -30,8 +30,14 @@ export function PrivacyBodyTn(): ReactElement {
         <li>ditshwantsho tse di dirilweng ka kopo ya gago;</li>
         <li>leano la gago la ikwadiso (subscription) le maemo a gago a go duela;</li>
         <li>hisetori ya bosheng ya dipatlo (mo badirising ba ba duelang, go fitlha mo mafokong a le 10 a bofelo), e e bolokwang gore o kgone go e bona gape moragonyana;</li>
+        <li>
+          {"fa o dirisa mothusi wa Gadit mo senthareng ya thuso: dipotso tse o di botsang, dikarabo tsa one le gore a o tshwaile gore karabo e ne e thusa, tsotlhe tsotlhe mmogo le ID ya akhaonto ya gago (le ID ya lelapa, fa o na le yone), aterese ya gago ya imeile, leano la gago, puo ya segokanyimmediamentsi, le gore a o dirisitse webosaete kgotsa app;"}
+        </li>
         <li>dikabelo tsa kgwedi (ka sekai, palo ya ditshwantsho tse o di dirileng mo nakong eno ya jaanong ya go duela).</li>
       </ul>
+      <p>
+        {"Mothusi wa Gadit ga a neelwe mo diporofaeleng tsa bana, mo Mokgweng wa Bana kgotsa go baeng ba ba sa tsenang mo akhaontong. Tsweetswee o se ka wa thaepa diphasewete kgotsa dinomoro tsa karata mo go one."}
+      </p>
       <h3>Data ya setegeniki le ya tshekatsheko</h3>
       <p>
         Re kokoanya ka boyone tshedimosetso ya motheo ya setegeniki jaaka aterese ya IP, mofuta wa sebatli (browser),
@@ -53,6 +59,9 @@ export function PrivacyBodyTn(): ReactElement {
         <li>go neela le go tokafatsa tirelo ya Gadit (go dira ditlhaloso, ditshwantsho, maikutlo ka dipolelo, le diteko);</li>
         <li>go tlhokomela akhaonto ya gago le go dira gore maitemogelo a gago a go tshwanele (hisetori ya dipatlo, puo e o e ratang, sefetoledi sa &ldquo;Mokgwa wa bana&rdquo;);</li>
         <li>go tsamaisa diikwadiso le go romela diimeile tsa ditirisano (dirasiti, diphetogo tsa ikwadiso);</li>
+        <li>
+          {"go araba dipotso tsa gago mo mothusing wa Gadit le go tokafatsa dikarabo tsa rona tsa thuso, mme, fa mothusi a fetisetsa potso kwa setlhopheng sa rona, go romela setlhopha ka imeile puisano ya bosheng mmogo le leina la gago, aterese ya imeile, leano la gago, puo ya segokanyimmediamentsi, le gore a o dirisitse webosaete kgotsa app, gore setlhopha se kgone go go araba ka imeile;"}
+        </li>
         <li>go lekanya le go tokafatsa tiragatso ya setlhagiswa le go thibela tiriso e e sa siamang;</li>
         <li>go obamela ditlamelo tsa semolao.</li>
       </ul>
@@ -68,9 +77,7 @@ export function PrivacyBodyTn(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>, e tsamaisa mafoko le dipolelo tse o di romelang go dira ditlhaloso, maikutlo ka
-          dipolelo, diteko, le go kwalolola se se buiwang (Whisper), mme e dira ditshwantsho (DALL·E 3). Data e e
-          romelwang kwa OpenAI e laolwa ke pholisi ya OpenAI ya tiriso ya data ya API.
+          <strong>OpenAI</strong>{", e tsamaisa mafoko le dipolelo tse o di romelang go dira ditlhaloso, maikutlo ka dipolelo, diteko, le go kwalolola se se buiwang (Whisper), mme e dira ditshwantsho (DALL·E 3). E bile e kwala dikarabo tsa mothusi wa Gadit: re e romelela potso ya gago, melaetsa ya pelenyana mo puisanong eo eo, puo ya segokanyimmediamentsi ya gago, leano la gago, le gore a o mo webosaeteng kgotsa mo app, mme ga re kgomaretse leina la gago kgotsa aterese ya imeile. Data e e romelwang kwa OpenAI e laolwa ke pholisi ya OpenAI ya tiriso ya data ya API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), e boloka akhaonto ya gago,
@@ -78,6 +85,9 @@ export function PrivacyBodyTn(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>, e tsamaisa dituelo, diikwadiso, le potale ya go duela.
+        </li>
+        <li>
+          <strong>Resend</strong>{", e romela diimeile tsa rona (jaaka dikgolagano tsa go tsena le dikitsiso), mme e tlisetsa setlhopha sa rona dipotso tse mothusi wa Gadit a di fetisetsang pele, ka aterese ya gago ya imeile e le aterese ya go araba."}
         </li>
         <li>
           <strong>Vercel</strong>, e tshwara le go tlamela webosaete, mme e neela tshekatsheko e e sa supeng motho le
@@ -98,8 +108,17 @@ export function PrivacyBodyTn(): ReactElement {
       <ul>
         <li>Tshedimosetso ya akhaonto: fa fela akhaonto ya gago e sa ntse e le teng.</li>
         <li>Hisetori ya dipatlo: dipatlo di le 10 tsa bofelo mo modirising mongwe le mongwe, e ntšhafadiwa ka patlo nngwe le nngwe e ntšha.</li>
+        <li>
+          {"Dipuisano le mothusi wa Gadit: malatsi a le 180, tsotlhe di bo di phimolwa ka go itirisa, kgotsa ka bonako fa o phimola akhaonto ya gago. Palo ya letsatsi le letsatsi ya dipotso tsa gago, e e dirisediwang molelwane wa letsatsi le letsatsi, e phimolwa morago ga malatsi a le 3."}
+        </li>
+        <li>
+          {"Dipotso tse mothusi wa Gadit a di fetisetsang kwa setlhopheng sa rona: di bolokwa mo lebokosong la imeile la setlhopha sa rona, jaaka imeile nngwe le nngwe e o re romelelang yone."}
+        </li>
         <li>Ditshwantsho tse di dirilweng: di a bolokwa gore lefoko le bokao tse di tshwanang (lefoko+bokao) di kgone go dirisa gape setshwantsho se se bolokilweng. Di ka bolokwa ka bosakhutleng fa fela akhaonto ya gago e santse e dira.</li>
         <li>Direkoto tsa dituelo le tsa lekgetho: jaaka molao o o dirang o tlhoka (gantsi dingwaga di le 7).</li>
+        <li>
+          {"Dikhaonto tse di phimotsweng: rekoto e khutshwane ya gore akhaonto e ne ya phimolwa (aterese ya yone ya imeile, leano, le lebaka le ntlha e o di neileng, fa di ne di le teng), e bolokwa gore re kgone go araba dipotso ka ga go phimolwa."}
+        </li>
         <li>Data ya tshekatsheko: e kopantswe, gantsi e bolokwa ke motlamedi wa tshekatsheko dikgwedi di le 13.</li>
       </ul>
 

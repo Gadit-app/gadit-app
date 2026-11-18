@@ -30,8 +30,14 @@ export function PrivacyBodyNr(): ReactElement {
         <li>iinthombe ezenziwe ngesibawo sakho;</li>
         <li>uhlelo lwakho lokubhalisa nesimo sokubhadela;</li>
         <li>umlando wakutjhanje wokufuna (kibasebenzisi ababhadelako, bekube mamezwi ama-10 wokugcina), ogcinwako bona uzokghona ukuwufumana godu ngemva kwalokho;</li>
+        <li>
+          {"nawusebenzisa umsizi we-Gadit esikhungweni sosizo: imibuzo oyibuzako, iimpendulo zakhe, nokuthi utjengise na bona ipendulo ibe lisizo, kunye nesazisi se-akhawunti yakho (nesazisi somndeni, nawunaso), ikheli lakho le-imeyili, uhlelo lwakho, ilimi lesikhombimsebenzisi, nokuthi usebenzise iwebhusayithi namkha i-app;"}
+        </li>
         <li>iinlinganiso zenyanga (isibonelo, inani leenthombe ozenzileko kilesi sikhathi sokubhadela).</li>
       </ul>
+      <p>
+        {"Umsizi we-Gadit awunikelwa kumaphrofayili wabantwana, ku-Imodi yabantwana, namkha ebavakatjhini abangakangeni ku-akhawunti. Sibawa ningatjhadi kiwo amaphasiwedi namkha iinomboro zamakhadi."}
+      </p>
       <h3>Idatha yobuthekinoloji neyeembalo</h3>
       <p>
         Sibuthelela ngokuzenzakalelako ilwazi elisisekelo lobuthekinoloji elifana nekheli le-IP, uhlobo lwebhrawuza,
@@ -52,6 +58,9 @@ export function PrivacyBodyNr(): ReactElement {
         <li>ukunikela nokuthuthukisa isevisi ye-Gadit (ukwenza iinhlathululo, iinthombe, imibono ngemitjho, imibuzo yokuhlola);</li>
         <li>ukugcina i-akhawunti yakho nokwenza bona okuhlangabezana nakho kufanelane nawe (umlando wokufuna, ilimi olikhethako, isikhethi se-&ldquo;Imodi yabantwana&rdquo;);</li>
         <li>ukusebenza ngokubhalisa nokuthumela ama-imeyili wokuthengiselana (amarasidi, amatjhuguluko wokubhalisa);</li>
+        <li>
+          {"ukuphendula imibuzo yakho kumsizi we-Gadit nokuthuthukisa iimpendulo zethu zosizo, begodu, lokha umsizi adlulisela umbuzo eqenjini lethu, ukuthumela iqembu nge-imeyili ingcoco yakutjhanje kunye nebizo lakho, ikheli lakho le-imeyili, uhlelo lwakho, ilimi lesikhombimsebenzisi, nokuthi usebenzise iwebhusayithi namkha i-app, bona iqembu likghone ukukuphendula nge-imeyili;"}
+        </li>
         <li>ukulinganisa nokuthuthukisa ukusebenza komkhiqizo nokuvimbela ukusetjenziswa kumbi;</li>
         <li>ukulandela iimbopho zomthetho.</li>
       </ul>
@@ -66,9 +75,7 @@ export function PrivacyBodyNr(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>, isebenza ngamezwi nemitjho oyithumelako ukwenza iinhlathululo, imibono ngemitjho,
-          imibuzo yokuhlola, nokutlola phasi ikulumo (Whisper), begodu yenza iinthombe (DALL·E 3). Idatha ethunyelwa
-          ku-OpenAI ilawulwa mthethomgomo we-OpenAI wokusetjenziswa kwedatha ye-API.
+          <strong>OpenAI</strong>{", isebenza ngamezwi nemitjho oyithumelako ukwenza iinhlathululo, imibono ngemitjho, imibuzo yokuhlola, nokutlola phasi ikulumo (Whisper), begodu yenza iinthombe (DALL·E 3). Begodu itlola iimpendulo zomsizi we-Gadit: siyithumela umbuzo wakho, imilayezo yangaphambilini yengcoco efanako, ilimi lesikhombimsebenzisi, uhlelo lwakho, nokuthi ukuwebhusayithi namkha ku-app, begodu asinamathiseli ibizo lakho namkha ikheli lakho le-imeyili. Idatha ethunyelwa ku-OpenAI ilawulwa mthethomgomo we-OpenAI wokusetjenziswa kwedatha ye-API."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage), igcina i-akhawunti yakho,
@@ -76,6 +83,9 @@ export function PrivacyBodyNr(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>, iphatha iimbhadelo, ukubhalisa, nekhasi lokuphatha iimbhadelo (billing portal).
+        </li>
+        <li>
+          <strong>Resend</strong>{", ithumela ama-imeyili wethu (njengamalinki wokungena nezaziso), begodu idlulisela eqenjini lethu imibuzo umsizi we-Gadit ayidlulisako, linekheli lakho le-imeyili njengekheli lokuphendula."}
         </li>
         <li>
           <strong>Vercel</strong>, ibamba begodu ihambisa iwebhusayidi, begodu inikela iimbalo ezingatjengisi umuntu
@@ -96,8 +106,17 @@ export function PrivacyBodyNr(): ReactElement {
       <ul>
         <li>Ilwazi le-akhawunti: lokha i-akhawunti yakho isekhona.</li>
         <li>Umlando wokufuna: ukufuna okuli-10 kokugcina komsebenzisi ngamunye, okuvuselelwa ngakho koke ukufuna okutjha.</li>
+        <li>
+          {"Iingcoco nomsizi we-Gadit: amalanga ali-180, bese zisuswa ngokuzenzakalela, namkha msinyana nawususa i-akhawunti yakho. Inani lansuku zoke lemibuzo yakho, elisetjenziselwa umkhawulo wansuku zoke, liyasuswa ngemva kwamalanga ama-3."}
+        </li>
+        <li>
+          {"Imibuzo umsizi we-Gadit ayidlulisela eqenjini lethu: igcinwa ebhokisini leposo leqembu lethu, njengawo woke ama-imeyili eniwathumela kithi."}
+        </li>
         <li>Iinthombe ezenziweko: ziyagcinwa bona ilizwi elifanako nehlathululo efanako kusetjenziswe godu isithombe esigciniweko. Zingagcinwa isikhathi esingapheliko lokha i-akhawunti yakho isasebenza.</li>
         <li>Amarekhodi wokubhadela newerhelo: njengombana kutlhogwa mthetho osebenzako (kanengi iminyaka eli-7).</li>
+        <li>
+          {"Ama-akhawunti asusiweko: irekhodi elifitjhani lokuthi i-akhawunti isusiwe (ikheli layo le-imeyili, uhlelo, nesizathu nenothi enilinikeleko, nange likhona), eligcinwako bona sikwazi ukuphendula imibuzo ngokususwa kwe-akhawunti."}
+        </li>
         <li>Idatha yeembalo: ehlanganisiweko, kanengi igcinwa mhlinzeki weembalo iinyanga ezili-13.</li>
       </ul>
 

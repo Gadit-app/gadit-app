@@ -29,8 +29,14 @@ export function PrivacyBodyHu(): ReactElement {
         <li>az Ön kérésére generált képek;</li>
         <li>az Ön előfizetési csomagja és számlázási állapota;</li>
         <li>a legutóbbi keresési előzmények (fizető felhasználók esetében legfeljebb az utolsó 10 szó), amelyeket azért tárolunk, hogy Ön később ismét hozzáférhessen azokhoz;</li>
+        <li>
+          {"ha a súgóközpontban a Gadit asszisztenst használja: az Ön által feltett kérdések, annak válaszai, valamint az, hogy hasznosnak jelölt-e egy választ, továbbá az Ön fiókazonosítója (és családazonosítója, ha van ilyen), e-mail-címe, előfizetési csomagja, a felület nyelve, valamint az, hogy a webhelyet vagy az alkalmazást használta;"}
+        </li>
         <li>havi kvóták (például az aktuális számlázási ciklusban Ön által generált képek száma).</li>
       </ul>
+      <p>
+        {"A Gadit asszisztens nem érhető el gyermekprofilokon, Gyerekmódban vagy olyan látogatók számára, akik nincsenek bejelentkezve. Kérjük, ne írjon bele jelszavakat vagy kártyaszámokat."}
+      </p>
       <h3>Technikai és analitikai adatok</h3>
       <p>
         Automatikusan gyűjtünk alapvető technikai információkat, például IP-címet, böngészőtípust, eszköztípust,
@@ -50,6 +56,9 @@ export function PrivacyBodyHu(): ReactElement {
         <li>a Gadit szolgáltatás nyújtására és fejlesztésére (definíciók, képek, mondatokra adott visszajelzések, kvízek generálása);</li>
         <li>az Ön fiókjának fenntartására és felhasználói élményének személyre szabására (keresési előzmények, előnyben részesített nyelv, „Gyerekmód” kapcsoló);</li>
         <li>az előfizetések feldolgozására és tranzakciós e-mailek küldésére (nyugták, előfizetés-módosítások);</li>
+        <li>
+          {"az Ön kérdéseinek megválaszolására a Gadit asszisztensben és súgóválaszaink javítására, továbbá amikor az asszisztens egy kérdést továbbít a csapatunknak, a közelmúltbeli beszélgetés e-mailben történő elküldésére a csapatnak az Ön nevével, e-mail-címével, előfizetési csomagjával, a felület nyelvével, valamint azzal, hogy a webhelyet vagy az alkalmazást használta, hogy a csapat e-mailben válaszolhasson Önnek;"}
+        </li>
         <li>a termék teljesítményének mérésére és javítására, valamint a visszaélések megelőzésére;</li>
         <li>jogi kötelezettségek teljesítésére.</li>
       </ul>
@@ -65,9 +74,7 @@ export function PrivacyBodyHu(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>: feldolgozza az Ön által beküldött szavakat és mondatokat definíciók, mondatokra adott
-          visszajelzések, kvízek és hangátírás (Whisper) generálása céljából, valamint képeket generál (DALL·E 3). Az
-          OpenAI részére küldött adatokra az OpenAI API-adathasználati szabályzata vonatkozik.
+          <strong>OpenAI</strong>{": feldolgozza az Ön által beküldött szavakat és mondatokat definíciók, mondatokra adott visszajelzések, kvízek és hangátírás (Whisper) generálása céljából, valamint képeket generál (DALL·E 3). A Gadit asszisztens válaszait is megírja: elküldjük neki az Ön kérdését, ugyanazon beszélgetés korábbi üzeneteit, a felület nyelvét, az előfizetési csomagját, valamint azt, hogy a webhelyet vagy az alkalmazást használja-e, és nem csatoljuk az Ön nevét vagy e-mail-címét. Az OpenAI részére küldött adatokra az OpenAI API-adathasználati szabályzata vonatkozik."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): tárolja az Ön fiókját, profilját,
@@ -75,6 +82,9 @@ export function PrivacyBodyHu(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>: kezeli a fizetéseket, az előfizetéseket és a számlázási portált.
+        </li>
+        <li>
+          <strong>Resend</strong>{": küldi az e-mailjeinket (például a bejelentkezési linkeket és értesítéseket), és továbbítja a csapatunknak a Gadit asszisztens által továbbított kérdéseket, az Ön e-mail-címével válaszcímként."}
         </li>
         <li>
           <strong>Vercel</strong>: tárhelyet biztosít a weboldalnak és kiszolgálja azt, valamint anonimizált analitikát
@@ -95,8 +105,17 @@ export function PrivacyBodyHu(): ReactElement {
       <ul>
         <li>Fiókadatok: amíg az Ön fiókja létezik.</li>
         <li>Keresési előzmények: felhasználónként az utolsó 10 keresés, minden új kereséssel frissítve.</li>
+        <li>
+          {"Gadit asszisztenssel folytatott beszélgetések: 180 napig, ezt követően automatikusan törlődnek, vagy ennél hamarabb, ha Ön törli a fiókját. Az Ön kérdéseinek napi számlálása, amelyet a napi korlát alkalmazásához használunk, 3 nap után törlődik."}
+        </li>
+        <li>
+          {"A Gadit asszisztens által a csapatunknak továbbított kérdések: a csapat postafiókjában őrizzük meg, ugyanúgy, mint bármely Ön által nekünk küldött e-mailt."}
+        </li>
         <li>Generált képek: megőrizzük őket, hogy ugyanaz a szó+jelentés kombináció újra felhasználhassa a gyorsítótárban tárolt képet. Határozatlan ideig megőrizhetők, amíg az Ön fiókja aktív.</li>
         <li>Számlázási és adózási nyilvántartások: az alkalmazandó jogszabályok által előírt ideig (jellemzően 7 évig).</li>
+        <li>
+          {"Törölt fiókok: rövid nyilvántartás arról, hogy a fiókot törölték (annak e-mail-címe, előfizetési csomagja, valamint az Ön által megadott indok és megjegyzés, ha volt ilyen), amelyet azért őrzünk meg, hogy válaszolni tudjunk a törléssel kapcsolatos kérdésekre."}
+        </li>
         <li>Analitikai adatok: összesített formában, amelyeket az analitikai szolgáltató jellemzően 13 hónapig őriz meg.</li>
       </ul>
 

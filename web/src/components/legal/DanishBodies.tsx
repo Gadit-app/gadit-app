@@ -30,8 +30,14 @@ export function PrivacyBodyDa(): ReactElement {
         <li>billeder, der genereres på din anmodning;</li>
         <li>dit abonnement og din faktureringsstatus;</li>
         <li>en nylig søgehistorik (for betalende brugere op til de seneste 10 ord), som gemmes, så du kan få adgang til den igen senere;</li>
+        <li>
+          {"hvis du bruger Gadit-assistenten i hjælpecentret: de spørgsmål, du stiller, dens svar, og om du markerede et svar som nyttigt, sammen med dit konto-id (og familie-id, hvis du har et), din e-mailadresse, dit abonnement, dit grænsefladesprog, og om du brugte webstedet eller appen;"}
+        </li>
         <li>månedlige kvoter (for eksempel antallet af billeder, du har genereret i den aktuelle faktureringsperiode).</li>
       </ul>
+      <p>
+        {"Gadit-assistenten tilbydes ikke på børneprofiler, i Børnetilstand eller til besøgende, der ikke er logget ind. Skriv venligst ikke adgangskoder eller kortnumre i den."}
+      </p>
       <h3>Tekniske data og analysedata</h3>
       <p>
         Vi indsamler automatisk grundlæggende tekniske oplysninger såsom IP-adresse, browsertype, enhedstype,
@@ -52,6 +58,9 @@ export function PrivacyBodyDa(): ReactElement {
         <li>til at levere og forbedre tjenesten Gadit (generering af definitioner, billeder, feedback på sætninger, quizzer);</li>
         <li>til at vedligeholde din konto og tilpasse din oplevelse (søgehistorik, foretrukket sprog, kontakt til Børnetilstand);</li>
         <li>til at behandle abonnementer og sende transaktionsmails (kvitteringer, ændringer i abonnementet);</li>
+        <li>
+          {"til at besvare dine spørgsmål i Gadit-assistenten og forbedre vores hjælpesvar, og, når assistenten sender et spørgsmål videre til vores team, at sende teamet den seneste samtale pr. e-mail sammen med dit navn, din e-mailadresse, dit abonnement, dit grænsefladesprog og om du brugte webstedet eller appen, så teamet kan svare dig via e-mail;"}
+        </li>
         <li>til at måle og forbedre produktets ydeevne og forhindre misbrug;</li>
         <li>til at overholde retlige forpligtelser.</li>
       </ul>
@@ -66,9 +75,7 @@ export function PrivacyBodyDa(): ReactElement {
       </p>
       <ul>
         <li>
-          <strong>OpenAI</strong>: behandler de ord og sætninger, du indsender, for at generere definitioner, feedback
-          på sætninger, quizzer og taletransskription (Whisper), og genererer billeder (DALL·E 3). Data, der sendes til
-          OpenAI, er underlagt OpenAIs politik for brug af API-data.
+          <strong>OpenAI</strong>{": behandler de ord og sætninger, du indsender, for at generere definitioner, feedback på sætninger, quizzer og taletransskription (Whisper), og genererer billeder (DALL·E 3). Den skriver også Gadit-assistentens svar: Vi sender dit spørgsmål, de tidligere beskeder i den samme samtale, dit grænsefladesprog, dit abonnement og om du er på webstedet eller i appen, og vi vedhæfter ikke dit navn eller din e-mailadresse. Data, der sendes til OpenAI, er underlagt OpenAIs politik for brug af API-data."}
         </li>
         <li>
           <strong>Google Firebase</strong> (Authentication, Firestore, Cloud Storage): gemmer din konto, din profil, din
@@ -76,6 +83,9 @@ export function PrivacyBodyDa(): ReactElement {
         </li>
         <li>
           <strong>Stripe</strong>: håndterer betalinger, abonnementer og faktureringsportalen.
+        </li>
+        <li>
+          <strong>Resend</strong>{": sender vores e-mails (såsom log ind-links og notifikationer) og leverer til vores team de spørgsmål, som Gadit-assistenten sender videre, med din e-mailadresse som svaradresse."}
         </li>
         <li>
           <strong>Vercel</strong>: hoster og leverer webstedet og stiller anonymiserede analyser og målinger af
@@ -95,8 +105,17 @@ export function PrivacyBodyDa(): ReactElement {
       <ul>
         <li>Kontooplysninger: så længe din konto eksisterer.</li>
         <li>Søgehistorik: de seneste 10 søgninger pr. bruger, opdateret ved hver ny søgning.</li>
+        <li>
+          {"Samtaler med Gadit-assistenten: 180 dage og slettes derefter automatisk, eller tidligere hvis du sletter din konto. En daglig optælling af dine spørgsmål, som bruges til den daglige grænse, slettes efter 3 dage."}
+        </li>
+        <li>
+          {"Spørgsmål, som Gadit-assistenten sender videre til vores team: opbevares i vores teams postkasse, som enhver anden e-mail, du sender os."}
+        </li>
         <li>Genererede billeder: opbevares, så den samme kombination af ord og betydning kan genbruge det cachelagrede billede. De kan opbevares på ubestemt tid, så længe din konto er aktiv.</li>
         <li>Fakturerings- og skatteregistreringer: som krævet i henhold til gældende lovgivning (typisk 7 år).</li>
+        <li>
+          {"Slettede konti: en kort registrering af, at kontoen blev slettet (e-mailadresse, abonnement og den årsag og note, du eventuelt angav), opbevares, så vi kan besvare spørgsmål om sletningen."}
+        </li>
         <li>Analysedata: aggregerede, typisk opbevaret af analyseudbyderen i 13 måneder.</li>
       </ul>
 

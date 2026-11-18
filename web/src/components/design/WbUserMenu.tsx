@@ -113,7 +113,7 @@ const COPY: Record<string, Copy> = {
   ve: { account: "Akhaunthu",            family: "Muṱa wanga",         school: "Tshikolo tshanga",         dashboard: "Fhethu ha mushumisani",  signOut: "Bvani",    openMenu: "Vulani menyu ya akhaunthu" },
   nr: { account: "I-akhawunti",            family: "Umndeni wami",         school: "Isikolo sami",         dashboard: "Indawo yomlingani",  signOut: "Phuma",    openMenu: "Vula imenyu ye-akhawunti" },
   el: { account: "Λογαριασμός",         family: "Η οικογένειά μου",  school: "Το σχολείο μου",    dashboard: "Περιοχή συνεργατών", signOut: "Αποσύνδεση",  openMenu: "Άνοιγμα μενού λογαριασμού" },
-  he: { account: "החשבון שלי",          family: "המשפחה שלי",        school: "בית הספר שלי",      dashboard: "אזור שותפים",   signOut: "התנתקות",     openMenu: "פתח תפריט חשבון" },
+  he: { account: "החשבון שלי",          family: "המשפחה שלי",        school: "בית הספר שלי",      dashboard: "אזור שותפים",   signOut: "התנתקות",     openMenu: "פתיחת תפריט החשבון" },
   ar: { account: "حسابي",               family: "عائلتي",           school: "مدرستي",            dashboard: "منطقة الشركاء", signOut: "تسجيل الخروج", openMenu: "افتح قائمة الحساب" },
   ru: { account: "Аккаунт",             family: "Моя семья",         school: "Моя школа",         dashboard: "Партнёрам",     signOut: "Выйти",       openMenu: "Открыть меню аккаунта" },
   es: { account: "Cuenta",              family: "Mi familia",        school: "Mi escuela",        dashboard: "Área de socios", signOut: "Cerrar sesión", openMenu: "Abrir menú de cuenta" },
