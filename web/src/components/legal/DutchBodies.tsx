@@ -184,9 +184,7 @@ export function TermsBodyNl(): ReactElement {
       <h2>3. Abonnementen en facturering</h2>
       <h3>Abonnementen en tarieven</h3>
       <p>
-        Gadit biedt een gratis Basic-abonnement en betaalde abonnementen (Clear en Deep) met de functies en prijzen die
-        op de prijspagina worden vermeld. Prijzen worden vermeld in USD en kunnen voor bestaande abonnees worden
-        gewijzigd met een opzegtermijn van ten minste 30 dagen.
+        {"Gadit biedt een gratis Basic-abonnement en betaalde abonnementen met de functies en prijzen die op de prijspagina worden vermeld. Prijzen worden vermeld in de valuta die op de prijspagina en bij het afrekenen voor uw locatie wordt getoond (in Israël: nieuwe Israëlische sjekels inclusief btw) en kunnen voor bestaande abonnees worden gewijzigd met een kennisgeving van ten minste 30 dagen vooraf."}
       </p>
       <h3>Automatische verlenging</h3>
       <p>

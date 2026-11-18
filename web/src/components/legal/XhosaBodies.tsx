@@ -187,9 +187,7 @@ export function TermsBodyXh(): ReactElement {
       <h2>3. Imirhumo nokuhlawula</h2>
       <h3>Izicwangciso neentlawulo</h3>
       <p>
-        I-Gadit ibonelela ngesicwangciso sasimahla se-Basic kunye nezicwangciso ezihlawulelwayo (Clear ne-Deep)
-        ezineempawu namaxabiso adweliswe kwiphepha lamaxabiso. Amaxabiso achazwa nge-USD kwaye angatshintshwa
-        ngesaziso seentsuku ezingama-30 ubuncinane kubabhalisi abakhoyo.
+        {"I-Gadit ibonelela ngesicwangciso sasimahla se-Basic kunye nezicwangciso ezihlawulelwayo ezineempawu namaxabiso adweliswe kwiphepha lamaxabiso. Amaxabiso achazwa ngemali eboniswe kwiphepha lamaxabiso nakwiphepha lokuhlawula ngokwendawo okuyo (kwaSirayeli, ngeeshekeli ezintsha zakwaSirayeli eziquka i-VAT) yaye angatshintshwa ngesaziso seentsuku ezingama-30 ubuncinane kubabhalisi abakhoyo."}
       </p>
       <h3>Ukuvuselelwa ngokuzenzekelayo</h3>
       <p>

@@ -187,9 +187,7 @@ export function TermsBodyTn(): ReactElement {
       <h2>3. Diikwadiso le go duelisa</h2>
       <h3>Maano le dituelo</h3>
       <p>
-        Gadit e neela leano la Basic le le sa duelelweng le maano a a duelelwang (Clear le Deep) a a nang le dikarolo le
-        ditlhwatlhwa tse di kwadilweng mo tsebeng ya ditlhwatlhwa. Ditlhwatlhwa di kwalwa ka USD mme di ka fetolwa ka
-        kitsiso ya bonnye malatsi a le 30 go baikwadisi ba ba leng teng.
+        {"Gadit e neela leano la Basic le le sa duelelweng le maano a a duelelwang a a nang le dikarolo le ditlhwatlhwa tse di kwadilweng mo tsebeng ya ditlhwatlhwa. Ditlhwatlhwa di kwalwa ka madi a a bontshitsweng mo tsebeng ya ditlhwatlhwa le mo tsebeng ya tuelo go ya ka lefelo la gago (mo Iseraele, ka dishekele tse disha tsa Iseraele tsotlhe di na le VAT) mme di ka fetolwa ka kitsiso ya bonnye malatsi a le 30 go baikwadisi ba ba leng teng."}
       </p>
       <h3>Ntšhafatso ka boyone</h3>
       <p>

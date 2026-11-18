@@ -160,7 +160,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Watch Gadit",
-      watchTitle: "See how every word opens, tier by tier.",
+      watchTitle: "See how every word opens up, layer by layer",
       watchLede: "A live walkthrough of a real word, in your language. Hover to pause.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -238,7 +238,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Buka i-Gadit",
-      watchTitle: "Bona ukuthi igama ngalinye livuleka kanjani, izinga ngezinga.",
+      watchTitle: "Bona ukuthi igama ngalinye livuleka kanjani, izinga ngezinga",
       watchLede: "Uhambo oluqondile lwegama langempela, ngolimi lwakho. Beka isikhombi ukuze umise.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -316,7 +316,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Iqabane elisebenzayo ⭐",
     l: {
       watchEyebrow: "Bukela i-Gadit",
-      watchTitle: "Bona indlela igama ngalinye elivuleka ngayo, inqanaba ngenqanaba.",
+      watchTitle: "Bona indlela igama ngalinye elivuleka ngayo, inqanaba ngenqanaba",
       watchLede: "Umboniso ophilayo wegama lokwenyani, ngolwimi lwakho. Beka isalathisi phezu kwawo ukuze umise.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -394,7 +394,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Molekane yo a Šomago ⭐",
     l: {
       watchEyebrow: "Lebelela Gadit",
-      watchTitle: "Bona ka moo lentšu le lengwe le le lengwe le bulegago ka gona, legato ka legato.",
+      watchTitle: "Bona ka moo lentšu le lengwe le le lengwe le bulegago ka gona, legato ka legato",
       watchLede: "Pontšho ye e phelago ya lentšu la nnete, ka polelo ya gago. Bea sešupi godimo go emiša.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -472,7 +472,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Molekane yo o Dirang ⭐",
     l: {
       watchEyebrow: "Lebelela Gadit",
-      watchTitle: "Bona kafa lefoko lengwe le lengwe le bulegang ka teng, maemo ka maemo.",
+      watchTitle: "Bona kafa lefoko lengwe le lengwe le bulegang ka teng, maemo ka maemo",
       watchLede: "Pontsho e e tshelang ya lefoko la nnete, ka puo ya gago. Baya sesupi fa godimo go emisa.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -550,7 +550,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Molekane ya Sebetsang ⭐",
     l: {
       watchEyebrow: "Sheba Gadit",
-      watchTitle: "Bona kamoo lentswe le leng le le leng le bulehang kateng, mokgahlelo ka mokgahlelo.",
+      watchTitle: "Bona kamoo lentswe le leng le le leng le bulehang kateng, mokgahlelo ka mokgahlelo",
       watchLede: "Pontsho e phelang ya lentswe la nnete, ka puo ya hao. Beha sesupa hodima yona ho e emisa.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -628,7 +628,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Mutirhisani loyi a tirhaka ⭐",
     l: {
       watchEyebrow: "Languta Gadit",
-      watchTitle: "Vonani ndlela leyi rito rin'wana na rin'wana ri pfulekaka ha yona, xiyimo hi xiyimo.",
+      watchTitle: "Vonani ndlela leyi rito rin'wana na rin'wana ri pfulekaka ha yona, xiyimo hi xiyimo",
       watchLede: "Ku famba hi rito ra xiviri, hi ririmi ra n'wina. Vekani mouse ehenhla leswaku mi yimisa.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -706,7 +706,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Umlingani Losebentako ⭐",
     l: {
       watchEyebrow: "Buka Gadit",
-      watchTitle: "Bona kutsi ligama ngalinye livuleka njani, lizinga ngelizinga.",
+      watchTitle: "Bona kutsi ligama ngalinye livuleka njani, lizinga ngelizinga",
       watchLede: "Kuhambisa lokubukhoma ngeligama langempela, ngelulwimi lwakho. Beka sikhombi kute umise.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -784,7 +784,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Mushumisani a khou shuma ⭐",
     l: {
       watchEyebrow: "Sedzani Gadit",
-      watchTitle: "Vhonani nḓila ine ipfi ḽiṅwe na ḽiṅwe ḽa vulea ngayo, pulane nga pulane.",
+      watchTitle: "Vhonani nḓila ine ipfi ḽiṅwe na ḽiṅwe ḽa vulea ngayo, pulane nga pulane",
       watchLede: "Tsumbo i khou itea ya ipfi ḽa vhukuma, nga luambo lwaṋu. Vhea mausu uri ni imise.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -862,7 +862,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Umlingani Osebenzako ⭐",
     l: {
       watchEyebrow: "Bukela i-Gadit",
-      watchTitle: "Bona bona ilizwi ngalinye livuleka njani, izinga ngezinga.",
+      watchTitle: "Bona ukuthi ilizwi ngalinye livuleka njani, izinga ngezinga",
       watchLede: "Ukukhamba ngelizwi lamambala ngesikhathi sinye, ngelimi lakho. Beka ikhesa phezu kwalo bona ulimise.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -940,7 +940,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Δες το Gadit",
-      watchTitle: "Δες πώς ανοίγει κάθε λέξη, επίπεδο προς επίπεδο.",
+      watchTitle: "Δες πώς ανοίγει κάθε λέξη, επίπεδο προς επίπεδο",
       watchLede: "Μια ζωντανή περιήγηση σε μια πραγματική λέξη, στη γλώσσα σου. Πέρασε τον δείκτη για παύση.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -1018,7 +1018,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "צפו ב-Gadit",
-      watchTitle: "ראו איך כל מילה נפתחת, מסלול אחרי מסלול.",
+      watchTitle: "ראו איך כל מילה נפתחת, שכבה אחרי שכבה",
       watchLede: "סיור חי על מילה אמיתית, בשפה שלכם. ריחפו כדי לעצור.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -1096,7 +1096,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "شاهد Gadit",
-      watchTitle: "شاهد كيف تنفتح كل كلمة, طبقة بعد طبقة.",
+      watchTitle: "شاهد كيف تنفتح كل كلمة، طبقة بعد طبقة",
       watchLede: "جولة حية على كلمة حقيقية بلغتك. مرر للإيقاف.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -1174,7 +1174,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Посмотрите Gadit",
-      watchTitle: "Как раскрывается каждое слово, уровень за уровнем.",
+      watchTitle: "Смотрите, как раскрывается каждое слово, слой за слоем",
       watchLede: "Живая прогулка по реальному слову на вашем языке. Наведите курсор, чтобы остановить.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -1252,7 +1252,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Mira Gadit",
-      watchTitle: "Mira cómo se abre cada palabra, plan por plan.",
+      watchTitle: "Mira cómo se abre cada palabra, capa por capa",
       watchLede: "Un recorrido en vivo de una palabra real, en tu idioma. Pasa el cursor para pausar.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -1330,7 +1330,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Veja o Gadit",
-      watchTitle: "Veja como cada palavra se abre, plano a plano.",
+      watchTitle: "Veja como cada palavra se abre, camada por camada",
       watchLede: "Um passeio ao vivo por uma palavra real, no seu idioma. Passe o mouse para pausar.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -1408,7 +1408,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Regardez Gadit",
-      watchTitle: "Comment chaque mot s'ouvre, palier par palier.",
+      watchTitle: "Voyez comment chaque mot s'ouvre, couche après couche",
       watchLede: "Une visite en direct d'un vrai mot, dans votre langue. Survolez pour mettre en pause.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -1486,7 +1486,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Schau Gadit",
-      watchTitle: "Wie sich jedes Wort öffnet, Stufe für Stufe.",
+      watchTitle: "Sieh, wie sich jedes Wort öffnet, Schicht für Schicht",
       watchLede: "Eine Live-Tour durch ein echtes Wort, in deiner Sprache. Hover zum Pausieren.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -1564,7 +1564,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Podívej se na Gadit",
-      watchTitle: "Jak se otevírá každé slovo, úroveň po úrovni.",
+      watchTitle: "Podívejte se, jak se každé slovo otevírá, vrstvu po vrstvě",
       watchLede: "Živá ukázka skutečného slova ve tvém jazyce. Najeď myší pro pauzu.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -1642,7 +1642,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Pozri si Gadit",
-      watchTitle: "Ako sa otvára každé slovo, úroveň za úrovňou.",
+      watchTitle: "Pozrite sa, ako sa každé slovo otvára, vrstva po vrstve",
       watchLede: "Živá ukážka skutočného slova v tvojom jazyku. Nájazd myšou pre pauzu.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -1720,7 +1720,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Guarda Gadit",
-      watchTitle: "Come si apre ogni parola, piano per piano.",
+      watchTitle: "Guarda come si apre ogni parola, strato dopo strato",
       watchLede: "Un tour dal vivo di una vera parola, nella tua lingua. Passa il mouse per mettere in pausa.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -1798,7 +1798,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Gadit を見る",
-      watchTitle: "ひとつの単語がどう開かれるか, プランごとに。",
+      watchTitle: "すべての単語が、層を重ねるように開いていく様子を見てみましょう",
       watchLede: "あなたの言語で、実際の単語のライブツアー。ホバーで一時停止。",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -1876,7 +1876,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Gadit देखें",
-      watchTitle: "एक शब्द कैसे खुलता है, हर टियर के साथ।",
+      watchTitle: "देखिए हर शब्द कैसे खुलता है, परत दर परत",
       watchLede: "आपकी भाषा में, असली शब्द का लाइव टूर। रोकने के लिए होवर करें।",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -1954,7 +1954,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Gaditን ይመልከቱ",
-      watchTitle: "አንድ ቃል እንዴት እንደሚከፈት፣ በእያንዳንዱ ደረጃ።",
+      watchTitle: "እያንዳንዱ ቃል እንዴት እንደሚከፈት፣ ደረጃ በደረጃ",
       watchLede: "በእርስዎ ቋንቋ፣ የእውነተኛ ቃል የቀጥታ ጉብኝት። ለማቆም ጠቋሚውን በላዩ ላይ ያሳርፉ።",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -2032,7 +2032,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Подивись Gadit",
-      watchTitle: "Як розкривається кожне слово, рівень за рівнем.",
+      watchTitle: "Подивіться, як розкривається кожне слово, шар за шаром",
       watchLede: "Жива екскурсія реальним словом твоєю мовою. Наведи курсор, щоб зупинити.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -2110,7 +2110,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Gadit'i izle",
-      watchTitle: "Her kelimenin seviye seviye nasıl açıldığını gör.",
+      watchTitle: "Her kelimenin katman katman nasıl açıldığını gör",
       watchLede: "Gerçek bir kelimenin kendi dilinde canlı tanıtımı. Durdurmak için imleci üzerine getir.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -2188,7 +2188,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Zobacz Gadit",
-      watchTitle: "Zobacz, jak otwiera się każde słowo, poziom po poziomie.",
+      watchTitle: "Zobacz, jak otwiera się każde słowo, poziom po poziomie",
       watchLede: "Pokaz na żywo prawdziwego słowa w Twoim języku. Najedź kursorem, aby zatrzymać.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -2266,7 +2266,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Gadit را ببینید",
-      watchTitle: "ببینید هر کلمه چگونه، سطح به سطح، باز می‌شود.",
+      watchTitle: "ببینید هر کلمه چطور، لایه‌به‌لایه، باز می‌شود",
       watchLede: "نمایش زندهٔ یک کلمهٔ واقعی، به زبان شما. برای توقف، نشانگر را روی آن ببرید.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -2344,7 +2344,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Tonton Gadit",
-      watchTitle: "Lihat bagaimana setiap kata terbuka, tingkat demi tingkat.",
+      watchTitle: "Lihat bagaimana setiap kata terbuka, lapis demi lapis",
       watchLede: "Panduan langsung sebuah kata nyata, dalam bahasamu. Arahkan kursor untuk menjeda.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -2422,7 +2422,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Bekijk Gadit",
-      watchTitle: "Zie hoe elk woord zich opent, niveau voor niveau.",
+      watchTitle: "Zie hoe elk woord zich opent, laag voor laag",
       watchLede: "Een live rondleiding langs een echt woord, in jouw taal. Beweeg erover om te pauzeren.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -2500,7 +2500,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Xem Gadit",
-      watchTitle: "Xem mỗi từ được mở ra như thế nào, từng cấp độ một.",
+      watchTitle: "Xem mỗi từ mở ra như thế nào, từng lớp một",
       watchLede: "Hướng dẫn trực tiếp với một từ thật, bằng ngôn ngữ của bạn. Di chuột vào để tạm dừng.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -2578,7 +2578,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Panoorin ang Gadit",
-      watchTitle: "Tingnan kung paano nabubuksan ang bawat salita, antas sa antas.",
+      watchTitle: "Tingnan kung paano nabubuksan ang bawat salita, antas sa antas",
       watchLede: "Isang live na paglilibot sa isang tunay na salita, sa iyong wika. I-hover para i-pause.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -2656,7 +2656,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Kyk na Gadit",
-      watchTitle: "Sien hoe elke woord oopgaan, vlak vir vlak.",
+      watchTitle: "Sien hoe elke woord oopgaan, vlak vir vlak",
       watchLede: "'n Regstreekse toer deur 'n regte woord, in jou taal. Beweeg die muis daaroor om te pouseer.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -2734,7 +2734,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Tazama Gadit",
-      watchTitle: "Ona jinsi kila neno linavyofunguka, ngazi kwa ngazi.",
+      watchTitle: "Ona jinsi kila neno linavyofunguka, tabaka baada ya tabaka",
       watchLede: "Matembezi ya moja kwa moja ya neno halisi, kwa lugha yako. Weka kipanya juu ili kusitisha.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -2812,7 +2812,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "观看 Gadit",
-      watchTitle: "看看每个词如何一层层展开。",
+      watchTitle: "看看每个词如何一层层展开",
       watchLede: "用你的语言，现场演示一个真实的词。鼠标悬停即可暂停。",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -2890,7 +2890,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "觀看 Gadit",
-      watchTitle: "看看每個詞如何一層層展開。",
+      watchTitle: "看看每個詞如何展開，一層又一層",
       watchLede: "用你的語言，現場示範一個真實的詞。滑鼠停留即可暫停。",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -2968,7 +2968,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Gadit 보기",
-      watchTitle: "모든 단어가 단계별로 어떻게 열리는지 확인해 보세요.",
+      watchTitle: "모든 단어가, 한 겹씩 열리는 모습을 확인해 보세요",
       watchLede: "실제 단어를 내 언어로 보여 주는 라이브 둘러보기. 마우스를 올리면 멈춰요.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -3046,7 +3046,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "ดู Gadit",
-      watchTitle: "ดูว่าแต่ละคำเปิดออกอย่างไร ทีละระดับ",
+      watchTitle: "ดูว่าแต่ละคำเปิดออกอย่างไร, ทีละชั้น",
       watchLede: "ชมคำจริงแบบสดๆ ในภาษาของคุณ วางเมาส์เพื่อหยุดชั่วคราว",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -3124,7 +3124,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Gadit দেখুন",
-      watchTitle: "দেখুন প্রতিটি শব্দ কীভাবে ধাপে ধাপে খুলে যায়।",
+      watchTitle: "দেখুন কীভাবে প্রতিটি শব্দ খুলে যায়, স্তর ধরে স্তর",
       watchLede: "আপনার ভাষায় একটি আসল শব্দের লাইভ ঝলক। থামাতে কার্সর রাখুন।",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -3202,7 +3202,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Se Gadit",
-      watchTitle: "Se hvordan hvert ord åbner sig, niveau for niveau.",
+      watchTitle: "Se, hvordan hvert ord åbner sig, lag for lag",
       watchLede: "En live gennemgang af et rigtigt ord på dit sprog. Hold musen over for at sætte på pause.",
       tierBasic: "Basic",
       tierClear: "Clear",
@@ -3280,7 +3280,7 @@ const DEMO: Record<string, DemoContent> = {
     partnerStatus: "Active Partner ⭐",
     l: {
       watchEyebrow: "Gadit bemutató",
-      watchTitle: "Nézd meg, hogyan nyílik ki minden szó, szintről szintre.",
+      watchTitle: "Nézd meg, hogyan nyílik ki minden szó, rétegről rétegre",
       watchLede: "Élő bemutató egy valódi szóval, a saját nyelveden. Vidd fölé az egeret a megállításhoz.",
       tierBasic: "Basic",
       tierClear: "Clear",

@@ -178,9 +178,7 @@ export function TermsBodyCs(): ReactElement {
       <h2>3. Předplatné a fakturace</h2>
       <h3>Tarify a poplatky</h3>
       <p>
-        Gadit nabízí bezplatný tarif Basic a placené tarify (Clear a Deep) s funkcemi a cenami uvedenými na stránce s
-        ceníkem. Ceny jsou uváděny v USD a u stávajících předplatitelů mohou být změněny s oznámením nejméně 30 dní
-        předem.
+        {"Gadit nabízí bezplatný tarif Basic a placené tarify s funkcemi a cenami uvedenými na stránce s ceníkem. Ceny jsou uváděny v měně zobrazené na stránce s ceníkem a při placení pro vaši lokalitu (v Izraeli v nových izraelských šekelech včetně DPH) a u stávajících předplatitelů mohou být změněny s oznámením nejméně 30 dní předem."}
       </p>
       <h3>Automatické obnovení</h3>
       <p>

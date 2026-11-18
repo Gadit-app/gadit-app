@@ -14,7 +14,7 @@ export function generateMetadata(): Promise<Metadata> {
 }
 
 /** ISO day; LegalPage writes it in the document's language. */
-const LAST_UPDATED = "2026-04-23";
+const LAST_UPDATED = "2026-11-18";
 
 const EnglishBody = () => (
   <>
@@ -42,9 +42,7 @@ const EnglishBody = () => (
     <h2>3. Subscriptions and billing</h2>
     <h3>Plans and fees</h3>
     <p>
-      Gadit offers a free Basic plan and paid plans (Clear and Deep) with the features and prices listed on the
-      pricing page. Prices are stated in USD and may be changed with at least 30 days&rsquo; notice for existing
-      subscribers.
+      {"Gadit offers a free Basic plan and paid plans with the features and prices listed on the pricing page. Prices are stated in the currency shown on the pricing page and at checkout for your location (in Israel, new Israeli shekels including VAT) and may be changed with at least 30 days' notice for existing subscribers."}
     </p>
     <h3>Auto-renewal</h3>
     <p>
@@ -209,8 +207,7 @@ const HebrewBody = () => (
     <h2>3. מנויים וחיוב</h2>
     <h3>תוכניות ותעריפים</h3>
     <p>
-      Gadit מציע תוכנית Basic חינמית, ותוכניות בתשלום (Clear ו-Deep) עם הפיצ&rsquo;רים והמחירים המפורטים בדף
-      התמחור. המחירים נקובים בדולר אמריקני ועשויים להשתנות בהודעה של לפחות 30 ימים מראש למנויים קיימים.
+      {"Gadit מציע תוכנית Basic חינמית ותוכניות בתשלום, עם הפיצ'רים והמחירים המפורטים בדף התמחור. המחירים נקובים במטבע המוצג בדף התמחור ובעמוד התשלום לפי המיקום שלכם (בישראל, בשקלים חדשים כולל מע״מ) ועשויים להשתנות בהודעה של לפחות 30 ימים מראש למנויים קיימים."}
     </p>
     <h3>חידוש אוטומטי</h3>
     <p>

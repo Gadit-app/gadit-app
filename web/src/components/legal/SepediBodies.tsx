@@ -186,9 +186,7 @@ export function TermsBodyNso(): ReactElement {
       <h2>3. Dingwadišo le ditefo</h2>
       <h3>Maano le ditefo</h3>
       <p>
-        Gadit e aba leano la Basic la mahala le maano ao a lefelwago (Clear le Deep) ka dikarolo le ditheko tšeo di
-        bontšhitšwego letlakaleng la ditheko. Ditheko di bontšhwa ka USD gomme di ka fetošwa ka tsebišo ya bonyane
-        matšatši a 30 go bangwadiši bao ba lego gona.
+        {"Gadit e aba leano la Basic la mahala le maano ao a lefelwago ka dikarolo le ditheko tšeo di bontšhitšwego letlakaleng la ditheko. Ditheko di bontšhwa ka tšhelete yeo e bontšhitšwego letlakaleng la ditheko le letlakeng la tefo go ya ka lefelo la lena (kua Israel, ka dišekele tše mpsha tša Israele go akaretšwa VAT) gomme di ka fetošwa ka tsebišo ya bonyane matšatši a 30 go bangwadiši bao ba lego gona."}
       </p>
       <h3>Mpshafatšo ya go itiragalela</h3>
       <p>

@@ -175,9 +175,7 @@ export function TermsBodyPt() {
       <h2>3. Assinaturas e cobrança</h2>
       <h3>Planos e tarifas</h3>
       <p>
-        O Gadit oferece um plano Basic gratuito e planos pagos (Clear e Deep) com os recursos e preços listados na
-        página de preços. Os preços são informados em USD e podem ser alterados mediante aviso prévio de pelo
-        menos 30 dias aos assinantes existentes.
+        {"O Gadit oferece um plano Basic gratuito e planos pagos com os recursos e preços listados na página de preços. Os preços são informados na moeda exibida na página de preços e no checkout para a sua localização (em Israel, novos shekels israelenses, incluindo IVA) e podem ser alterados mediante aviso prévio de pelo menos 30 dias aos assinantes existentes."}
       </p>
       <h3>Renovação automática</h3>
       <p>

@@ -178,9 +178,7 @@ export function TermsBodySk(): ReactElement {
       <h2>3. Predplatné a fakturácia</h2>
       <h3>Plány a poplatky</h3>
       <p>
-        Gadit ponúka bezplatný plán Basic a platené plány (Clear a Deep) s funkciami a cenami uvedenými na stránke s
-        cenníkom. Ceny sú uvedené v USD a pre existujúcich predplatiteľov sa môžu zmeniť s oznámením najmenej 30 dní
-        vopred.
+        {"Gadit ponúka bezplatný plán Basic a platené plány s funkciami a cenami uvedenými na stránke s cenníkom. Ceny sú uvedené v mene zobrazenej na stránke s cenníkom a pri platbe pre vašu lokalitu (v Izraeli v nových izraelských šekeloch vrátane DPH) a pre existujúcich predplatiteľov sa môžu zmeniť s oznámením najmenej 30 dní vopred."}
       </p>
       <h3>Automatické obnovenie</h3>
       <p>

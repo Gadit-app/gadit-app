@@ -179,9 +179,7 @@ export function TermsBodyDa(): ReactElement {
       <h2>3. Abonnementer og fakturering</h2>
       <h3>Abonnementer og gebyrer</h3>
       <p>
-        Gadit tilbyder et gratis Basic-abonnement og betalte abonnementer (Clear og Deep) med de funktioner og priser,
-        der er angivet på prissiden. Priserne er angivet i USD og kan ændres med mindst 30 dages varsel for eksisterende
-        abonnenter.
+        {"Gadit tilbyder et gratis Basic-abonnement og betalte abonnementer med de funktioner og priser, der er angivet på prissiden. Priserne er angivet i den valuta, der vises på prissiden og ved betaling for din placering (i Israel, nye israelske shekel inklusive moms), og kan ændres med mindst 30 dages varsel for eksisterende abonnenter."}
       </p>
       <h3>Automatisk fornyelse</h3>
       <p>

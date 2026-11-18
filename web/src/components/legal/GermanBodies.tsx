@@ -185,9 +185,7 @@ export function TermsBodyDe(): ReactElement {
       <h2>3. Abonnements und Abrechnung</h2>
       <h3>Tarife und Gebühren</h3>
       <p>
-        Gadit bietet einen kostenlosen Basic-Tarif und kostenpflichtige Tarife (Clear und Deep) mit den auf der
-        Preisseite aufgeführten Funktionen und Preisen an. Die Preise werden in USD angegeben und können für bestehende
-        Abonnenten mit einer Ankündigungsfrist von mindestens 30 Tagen geändert werden.
+        {"Gadit bietet einen kostenlosen Basic-Tarif und kostenpflichtige Tarife mit den auf der Preisseite aufgeführten Funktionen und Preisen an. Die Preise werden in der Währung angegeben, die auf der Preisseite und an der Kasse für den jeweiligen Standort angezeigt wird (in Israel in neuen israelischen Schekeln einschließlich MwSt.), und können für bestehende Abonnenten mit einer Ankündigungsfrist von mindestens 30 Tagen geändert werden."}
       </p>
       <h3>Automatische Verlängerung</h3>
       <p>

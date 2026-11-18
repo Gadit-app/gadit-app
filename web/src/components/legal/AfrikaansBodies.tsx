@@ -182,9 +182,7 @@ export function TermsBodyAf(): ReactElement {
       <h2>3. Intekeninge en fakturering</h2>
       <h3>Planne en fooie</h3>
       <p>
-        Gadit bied ’n gratis Basic-plan en betaalde planne (Clear en Deep) met die funksies en pryse wat op die
-        prysbladsy gelys word. Pryse word in USD aangedui en kan met minstens 30 dae kennisgewing aan bestaande
-        intekenaars verander word.
+        {"Gadit bied ’n gratis Basic-plan en betaalde planne met die funksies en pryse wat op die prysbladsy gelys word. Pryse word aangedui in die geldeenheid wat op die prysbladsy en by afrekening vir julle ligging gewys word (in Israel, nuwe Israeliese sikkels, BTW ingesluit) en kan met minstens 30 dae se kennisgewing aan bestaande intekenaars verander word."}
       </p>
       <h3>Outomatiese hernuwing</h3>
       <p>

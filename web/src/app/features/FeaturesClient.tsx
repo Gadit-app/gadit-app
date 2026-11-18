@@ -242,7 +242,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Тепер слово пройшло GAD!",
   },
   tr: {
     groupTitles: {
@@ -288,7 +288,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Şimdi kelimeye GAD yaptım!",
   },
   pl: {
     groupTitles: {
@@ -334,7 +334,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Teraz mam zrobione GAD!",
   },
   fa: {
     groupTitles: {
@@ -380,7 +380,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "الان روی کلمه GAD کردم!",
   },
   id: {
     groupTitles: {
@@ -426,7 +426,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Sekarang aku sudah GAD!",
   },
   nl: {
     groupTitles: {
@@ -472,7 +472,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Nu heb ik GAD gedaan!",
   },
   he: {
     groupTitles: {
@@ -520,7 +520,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
     },
     // Brand pun stays in Latin in every language - like the Gadit
     // wordmark itself. See feedback_brand_name_english memory.
-    bubble: "Now I gad it!",
+    bubble: "עכשיו עשיתי GAD למילה!",
   },
   en: {
     groupTitles: {
@@ -612,7 +612,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Manje sengi-GAD-e igama!",
   },
   xh: {
     groupTitles: {
@@ -658,7 +658,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Ngoku ndenze i-GAD kwigama!",
   },
   nso: {
     groupTitles: {
@@ -704,7 +704,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Bjale ke GAD-itše lentšu!",
   },
   tn: {
     groupTitles: {
@@ -750,7 +750,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Jaanong ke GADile lefoko!",
   },
   st: {
     groupTitles: {
@@ -796,7 +796,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Jwale ke GAD lentswe!",
   },
   ts: {
     groupTitles: {
@@ -842,7 +842,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Sweswi ndzi GAD-e rito!",
   },
   ss: {
     groupTitles: {
@@ -888,7 +888,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Nyalo ngi-GAD-ile ligama!",
   },
   ve: {
     groupTitles: {
@@ -934,7 +934,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Zwino ndo GAD ipfi!",
   },
   nr: {
     groupTitles: {
@@ -980,7 +980,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Nje ngenze i-GAD elizwini!",
   },
   el: {
     groupTitles: {
@@ -1026,7 +1026,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Τώρα GAD-άρισα τη λέξη!",
   },
   hi: {
     groupTitles: {
@@ -1072,7 +1072,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "अब मैंने शब्द को GAD किया!",
   },
   am: {
     groupTitles: {
@@ -1118,7 +1118,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "አሁን ቃሉን GAD አደረግሁ!",
   },
   ar: {
     groupTitles: {
@@ -1164,7 +1164,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "الآن عملت GAD للكلمة!",
   },
   ru: {
     groupTitles: {
@@ -1210,7 +1210,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Теперь слово GAD-нуто!",
   },
   es: {
     groupTitles: {
@@ -1256,7 +1256,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "¡Ahora le hice GAD a la palabra!",
   },
   pt: {
     groupTitles: {
@@ -1302,7 +1302,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Agora dei um GAD na palavra!",
   },
   fr: {
     groupTitles: {
@@ -1348,7 +1348,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Maintenant, j'ai fait un GAD sur le mot !",
   },
   de: {
     groupTitles: {
@@ -1394,7 +1394,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Jetzt habe ich GAD gemacht!",
   },
   cs: {
     groupTitles: {
@@ -1440,7 +1440,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Teď je slovo GADnuté!",
   },
   sk: {
     groupTitles: {
@@ -1486,7 +1486,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Teraz je slovo GADnuté!",
   },
   it: {
     groupTitles: {
@@ -1532,7 +1532,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Ora ho fatto GAD alla parola!",
   },
   ja: {
     groupTitles: {
@@ -1578,7 +1578,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "今、単語をGADした！",
   },
   vi: {
     groupTitles: {
@@ -1624,7 +1624,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Bây giờ mình đã GAD từ đó!",
   },
   fil: {
     groupTitles: {
@@ -1670,7 +1670,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Ngayon, nag-GAD ako sa salita!",
   },
   af: {
     groupTitles: {
@@ -1716,7 +1716,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Nou het ek GAD!",
   },
   sw: {
     groupTitles: {
@@ -1762,7 +1762,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Sasa nimefanya GAD kwa neno!",
   },
   "zh-CN": {
     groupTitles: {
@@ -1808,7 +1808,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "现在我把这个词 GAD 了！",
   },
   "zh-TW": {
     groupTitles: {
@@ -1854,7 +1854,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "現在我把這個字 GAD 了！",
   },
   ko: {
     groupTitles: {
@@ -1900,7 +1900,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "이제 GAD 했어요!",
   },
   th: {
     groupTitles: {
@@ -1946,7 +1946,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "ตอนนี้ฉัน GAD คำนั้นแล้ว!",
   },
   bn: {
     groupTitles: {
@@ -1992,7 +1992,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "এখন আমি শব্দটাকে GAD করলাম!",
   },
   da: {
     groupTitles: {
@@ -2038,7 +2038,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Nu GAD'ede jeg det!",
   },
   hu: {
     groupTitles: {
@@ -2084,7 +2084,7 @@ const GROUP_COPY: Record<string, GroupCopy> = {
         },
       ],
     },
-    bubble: "Now I gad it!",
+    bubble: "Most GAD-oltam a szót!",
   },
 };
 
@@ -2111,7 +2111,7 @@ const COPY: Record<string, {
 }> = {
   he: {
     heroEyebrow: "פיצ'רים",
-    heroTitle: "סוף סוף מילון שלא עוצר בהגדרה.",
+    heroTitle: "סוף סוף מילון שלא עוצר בהגדרה",
     heroSub: "Gadit מבין כל מילה עד הסוף. כל המשמעויות, דוגמאות בהקשר, ניבים, מקור היסטורי ותרגול. עד שהמילה באמת ברורה. אנחנו קוראים לזה לעשות GAD למילה.",
     ctaPrimary: "התחילו חינם",
     ctaSecondary: "צפו בתמחור",
@@ -2136,7 +2136,7 @@ const COPY: Record<string, {
   },
   en: {
     heroEyebrow: "Features",
-    heroTitle: "A dictionary that doesn't stop at the definition.",
+    heroTitle: "A dictionary that doesn't stop at the definition",
     heroSub: "Gadit understands a word all the way through. Every meaning, real sentences in context, idioms, origin and practice. Until the word actually clicks. That's what we call GAD-ing a word.",
     ctaPrimary: "Start free",
     ctaSecondary: "See pricing",
@@ -2161,7 +2161,7 @@ const COPY: Record<string, {
   },
   zu: {
     heroEyebrow: "Izici",
-    heroTitle: "Isichazamazwi esingagcini encazelweni.",
+    heroTitle: "Isichazamazwi esingagcini encazelweni",
     heroSub: "I-Gadit liqonda igama ngokugcwele. Yonke incazelo, imisho yangempela ngomongo, izisho, umsuka nokuzijwayeza. Kuze kube igama liqondakala ngempela. Yilokho esikubiza ngokuthi uku-GAD-a igama.",
     ctaPrimary: "Qala mahhala",
     ctaSecondary: "Bona amanani",
@@ -2186,7 +2186,7 @@ const COPY: Record<string, {
   },
   xh: {
     heroEyebrow: "Iimpawu",
-    heroTitle: "Isichazi-magama esingemi kwintsingiselo.",
+    heroTitle: "Isichazi-magama esingemi kwintsingiselo",
     heroSub: "I-Gadit iliqonda igama ukuya kuthi ga ekupheleni. Zonke iintsingiselo, izivakalisi zokwenyani ngokomxholo, izaci, imvelaphi nokuziqhelisa. De igama liqondakale ngokwenene. Yile nto siyibiza ngokuthi kukwenza i-GAD igama.",
     ctaPrimary: "Qalisa simahla",
     ctaSecondary: "Jonga amaxabiso",
@@ -2211,7 +2211,7 @@ const COPY: Record<string, {
   },
   nso: {
     heroEyebrow: "Dikarolo",
-    heroTitle: "Pukuntšu ye e sa emego go tlhalošo.",
+    heroTitle: "Pukuntšu ye e sa emego go tlhalošo",
     heroSub: "Gadit e kwešiša lentšu go fihla mafelelong. Tlhalošo ye nngwe le ye nngwe, mafoko a nnete ka bokao bja ona, dika, mothopo le tlwaetšo. Go fihlela lentšu le kwagala ka nnete. Ke seo re se bitšago go GAD lentšu.",
     ctaPrimary: "Thoma ka mahala",
     ctaSecondary: "Bona ditheko",
@@ -2236,7 +2236,7 @@ const COPY: Record<string, {
   },
   tn: {
     heroEyebrow: "Dintlha",
-    heroTitle: "Thanodi e e sa emeng fa tlhalosong.",
+    heroTitle: "Thanodi e e sa emeng fa tlhalosong",
     heroSub: "Gadit e tlhaloganya lefoko go fitlha kwa bofelong. Bokao bongwe le bongwe, dipolelo tsa nnete mo seemong sa tsone, dikapolelo, tshimologo le boikatiso. Go fitlha lefoko le tlhaloganngwa tota. Seo ke se re se bitsang go GAD lefoko.",
     ctaPrimary: "Simolola ka mahala",
     ctaSecondary: "Bona ditlhwatlhwa",
@@ -2261,7 +2261,7 @@ const COPY: Record<string, {
   },
   st: {
     heroEyebrow: "Dikarolo",
-    heroTitle: "Bukantswe e sa emeng tlhalosong feela.",
+    heroTitle: "Bukantswe e sa emeng tlhalosong feela",
     heroSub: "Gadit e utlwisisa lentswe ho fihlela qetellong. Moelelo o mong le o mong, dipolelo tsa nnete maemong a tsona, dikapolelo, tshimoloho le boikwetliso. Ho fihlela lentswe le utlwahala ka nnete. Sena ke seo re se bitsang ho GAD lentswe.",
     ctaPrimary: "Qala mahala",
     ctaSecondary: "Sheba ditheko",
@@ -2286,7 +2286,7 @@ const COPY: Record<string, {
   },
   ts: {
     heroEyebrow: "Swihlawulekisi",
-    heroTitle: "Dikixinari leyi nga yimiki eka nhlamuselo.",
+    heroTitle: "Dikixinari leyi nga yimiki eka nhlamuselo",
     heroSub: "Gadit yi twisisa rito ku fikela emakumu. Tinhlamuselo hinkwato, swivulwa swa xiviri eka xiyimo xa swona, swivulavulelo, masungulo na ntoloveto. Ku fikela loko rito ri twala hakunene. Hi swona leswi hi swi vitanaka ku GAD rito.",
     ctaPrimary: "Sungula mahala",
     ctaSecondary: "Vona minxavo",
@@ -2311,7 +2311,7 @@ const COPY: Record<string, {
   },
   ss: {
     heroEyebrow: "Lokukhona",
-    heroTitle: "Sichazamagama lesingemi enchazelweni nje.",
+    heroTitle: "Sichazamagama lesingemi enchazelweni nje",
     heroSub: "Gadit iyalicondza ligama kuze kube sekugcineni. Yonkhe inchazelo, imisho yangempela esimeni, tisho, imvelaphi nekuticecesha. Kuze ligama licace ngempela. Loko sikubita ngekutsi ku-GAD ligama.",
     ctaPrimary: "Cala mahhala",
     ctaSecondary: "Buka emanani",
@@ -2336,7 +2336,7 @@ const COPY: Record<string, {
   },
   ve: {
     heroEyebrow: "Zwine ya ita",
-    heroTitle: "Bugu ya maipfi i sa imi kha ṱhalutshedzo.",
+    heroTitle: "Bugu ya maipfi i sa imi kha ṱhalutshedzo",
     heroSub: "Gadit i pfesesa ipfi u swika magumoni. Ndeme dzoṱhe, mitaladzi ya vhukuma kha nyimele, mirero, vhubvo na nḓowelo. U swika ipfi ḽi tshi pfesesea vhukuma. Ndi zwone zwine ra zwi vhidza u GAD ipfi.",
     ctaPrimary: "Thomani mahala",
     ctaSecondary: "Vhonani mitengo",
@@ -2361,7 +2361,7 @@ const COPY: Record<string, {
   },
   nr: {
     heroEyebrow: "Iinzuzo",
-    heroTitle: "Isihlathululimezwi esingagcini ehlathululweni.",
+    heroTitle: "Isihlathululimezwi esingagcini ehlathululweni",
     heroSub: "I-Gadit izwisisa ilizwi ngokuzeleko. Zoke iinhlathululo, imitjho yamambala ngokwesimo, izaga, umsuka nokuzilolonga. Bekube ilizwi lizwisiseka ngamambala. Lokho kusikubiza ngokuthi kwenza i-GAD elizwini.",
     ctaPrimary: "Thoma mahala",
     ctaSecondary: "Bona amanani",
@@ -2386,7 +2386,7 @@ const COPY: Record<string, {
   },
   el: {
     heroEyebrow: "Δυνατότητες",
-    heroTitle: "Ένα λεξικό που δεν σταματά στον ορισμό.",
+    heroTitle: "Ένα λεξικό που δεν σταματά στον ορισμό",
     heroSub: "Το Gadit καταλαβαίνει μια λέξη ως το τέλος. Κάθε σημασία, αληθινές προτάσεις σε συμφραζόμενα, εκφράσεις, προέλευση και εξάσκηση. Μέχρι η λέξη να κάνει πραγματικά κλικ. Αυτό λέμε να GAD-άρεις μια λέξη.",
     ctaPrimary: "Ξεκίνα δωρεάν",
     ctaSecondary: "Δες τις τιμές",
@@ -2411,7 +2411,7 @@ const COPY: Record<string, {
   },
   de: {
     heroEyebrow: "Funktionen",
-    heroTitle: "Was ein Wörterbuch längst tun sollte.",
+    heroTitle: "Was ein Wörterbuch längst tun sollte",
     heroSub: "Gadit versteht ein Wort bis zum Ende. Nicht nur eine Definition. Jede Bedeutung, echte Beispielsätze im Kontext, Redewendungen, Herkunft und alles, was ein normales Wörterbuch nie zeigen konnte.",
     ctaPrimary: "Kostenlos starten",
     ctaSecondary: "Preise ansehen",
@@ -2436,7 +2436,7 @@ const COPY: Record<string, {
   },
   cs: {
     heroEyebrow: "Funkce",
-    heroTitle: "Co měl slovník dělat odjakživa.",
+    heroTitle: "Co měl slovník dělat odjakživa",
     heroSub: "Gadit rozumí slovu úplně. Ne jen jedna definice a hotovo. Každý význam, skutečné věty v kontextu, idiomy, původ a to, co běžný slovník nikdy neuměl ukázat.",
     ctaPrimary: "Začni zdarma",
     ctaSecondary: "Zobrazit ceník",
@@ -2461,7 +2461,7 @@ const COPY: Record<string, {
   },
   sk: {
     heroEyebrow: "Funkcie",
-    heroTitle: "Čo mal slovník robiť odjakživa.",
+    heroTitle: "Čo mal slovník robiť odjakživa",
     heroSub: "Gadit rozumie slovu úplne. Nielen jedna definícia a hotovo. Každý význam, skutočné vety v kontexte, idiómy, pôvod a to, čo bežný slovník nikdy nevedel ukázať.",
     ctaPrimary: "Začni zadarmo",
     ctaSecondary: "Zobraziť cenník",
@@ -2486,7 +2486,7 @@ const COPY: Record<string, {
   },
   hi: {
     heroEyebrow: "सुविधाएँ",
-    heroTitle: "एक शब्दकोश जो परिभाषा पर नहीं रुकता।",
+    heroTitle: "एक शब्दकोश जो परिभाषा पर नहीं रुकता",
     heroSub: "Gadit हर शब्द को पूरी तरह समझता है। हर अर्थ, संदर्भ में असली वाक्य, मुहावरे, उत्पत्ति और अभ्यास। जब तक शब्द सच में क्लिक न कर जाए। इसी को हम शब्द को GAD करना कहते हैं।",
     ctaPrimary: "मुफ्त शुरू करें",
     ctaSecondary: "क़ीमत देखें",
@@ -2511,7 +2511,7 @@ const COPY: Record<string, {
   },
   am: {
     heroEyebrow: "ባህሪያት",
-    heroTitle: "በትርጓሜ ላይ የማይቆም መዝገበ ቃላት።",
+    heroTitle: "በትርጓሜ ላይ የማይቆም መዝገበ ቃላት",
     heroSub: "Gadit እያንዳንዱን ቃል እስከ መጨረሻው ይረዳል። እያንዳንዱ ትርጉም፣ በአውድ ውስጥ እውነተኛ ዓረፍተ ነገሮች፣ ፈሊጦች፣ መነሻ እና ልምምድ። ቃሉ በእውነት ግልጽ እስኪሆን ድረስ። ይህን ቃልን GAD ማድረግ እንለዋለን።",
     ctaPrimary: "በነጻ ይጀምሩ",
     ctaSecondary: "ዋጋዎችን ይመልከቱ",
@@ -2536,7 +2536,7 @@ const COPY: Record<string, {
   },
   ar: {
     heroEyebrow: "الميزات",
-    heroTitle: "قاموس لا يتوقف عند التعريف.",
+    heroTitle: "قاموس لا يتوقف عند التعريف",
     heroSub: "Gadit يفهم الكلمة حتى النهاية. كل المعاني، جمل حقيقية في سياقها، التعابير، الأصل والتمرين. حتى تتضح الكلمة فعلاً. هذا ما نسميه أن تعمل GAD للكلمة.",
     ctaPrimary: "ابدأ مجاناً",
     ctaSecondary: "اطّلع على الأسعار",
@@ -2561,7 +2561,7 @@ const COPY: Record<string, {
   },
   ru: {
     heroEyebrow: "Возможности",
-    heroTitle: "Словарь, который не останавливается на определении.",
+    heroTitle: "Словарь, который не останавливается на определении",
     heroSub: "Gadit понимает слово до конца. Все значения, живые предложения в контексте, идиомы, происхождение и практика. Пока слово действительно не станет ясным. Мы называем это GAD-нуть слово.",
     ctaPrimary: "Начать бесплатно",
     ctaSecondary: "Посмотреть цены",
@@ -2586,7 +2586,7 @@ const COPY: Record<string, {
   },
   es: {
     heroEyebrow: "Funciones",
-    heroTitle: "Un diccionario que no se detiene en la definición.",
+    heroTitle: "Un diccionario que no se detiene en la definición",
     heroSub: "Gadit entiende cada palabra hasta el fondo. Todos los significados, oraciones reales en contexto, modismos, origen y práctica. Hasta que la palabra de verdad haga clic. A eso lo llamamos hacerle GAD a una palabra.",
     ctaPrimary: "Empieza gratis",
     ctaSecondary: "Ver precios",
@@ -2611,7 +2611,7 @@ const COPY: Record<string, {
   },
   pt: {
     heroEyebrow: "Recursos",
-    heroTitle: "Um dicionário que não para na definição.",
+    heroTitle: "Um dicionário que não para na definição",
     heroSub: "O Gadit entende a palavra até o fim. Todos os significados, frases reais em contexto, expressões idiomáticas, origem e prática. Até a palavra realmente fazer sentido. É o que chamamos de dar um GAD na palavra.",
     ctaPrimary: "Comece grátis",
     ctaSecondary: "Ver preços",
@@ -2636,7 +2636,7 @@ const COPY: Record<string, {
   },
   fr: {
     heroEyebrow: "Fonctionnalités",
-    heroTitle: "Un dictionnaire qui ne s'arrête pas à la définition.",
+    heroTitle: "Un dictionnaire qui ne s'arrête pas à la définition",
     heroSub: "Gadit comprend chaque mot jusqu'au bout. Tous les sens, de vraies phrases en contexte, les expressions, l'origine et la pratique. Jusqu'à ce que le mot devienne vraiment clair. C'est ce que nous appelons faire un GAD sur un mot.",
     ctaPrimary: "Commencez gratuitement",
     ctaSecondary: "Voir les tarifs",
@@ -2661,7 +2661,7 @@ const COPY: Record<string, {
   },
   it: {
     heroEyebrow: "Funzionalità",
-    heroTitle: "Un dizionario che non si ferma alla definizione.",
+    heroTitle: "Un dizionario che non si ferma alla definizione",
     heroSub: "Gadit capisce una parola fino in fondo. Tutti i significati, frasi vere nel contesto, modi di dire, origine e pratica. Finché la parola non diventa davvero chiara. È quello che chiamiamo fare GAD a una parola.",
     ctaPrimary: "Inizia gratis",
     ctaSecondary: "Vedi i prezzi",
@@ -2686,7 +2686,7 @@ const COPY: Record<string, {
   },
   ja: {
     heroEyebrow: "機能",
-    heroTitle: "定義だけで終わらない辞書。",
+    heroTitle: "定義だけで終わらない辞書",
     heroSub: "Gaditは単語を最後まで理解します。すべての意味、文脈の中の実際の例文、慣用句、語源、そして練習まで。単語が本当に腑に落ちるまで。私たちはこれを、単語をGADすると呼んでいます。",
     ctaPrimary: "無料で始める",
     ctaSecondary: "料金を見る",

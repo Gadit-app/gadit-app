@@ -176,9 +176,7 @@ export function TermsBodySw(): ReactElement {
       <h2>3. Usajili na malipo</h2>
       <h3>Mipango na ada</h3>
       <p>
-        Gadit inatoa mpango wa bure wa Basic na mipango ya kulipia (Clear na Deep) yenye vipengele na bei
-        zilizoorodheshwa kwenye ukurasa wa bei. Bei zimeelezwa kwa USD na zinaweza kubadilishwa kwa notisi ya angalau
-        siku 30 kwa wateja waliopo wa usajili.
+        {"Gadit inatoa mpango wa bure wa Basic na mipango ya kulipia yenye vipengele na bei zilizoorodheshwa kwenye ukurasa wa bei. Bei zinaonyeshwa katika sarafu iliyoonyeshwa kwenye ukurasa wa bei na wakati wa malipo kwa eneo lako (nchini Israeli, shekeli mpya za Israeli ikijumuisha VAT) na zinaweza kubadilishwa kwa notisi ya angalau siku 30 kwa waliojisajili waliopo."}
       </p>
       <h3>Usasishaji wa kiotomatiki</h3>
       <p>

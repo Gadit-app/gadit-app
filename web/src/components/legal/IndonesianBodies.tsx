@@ -184,9 +184,7 @@ export function TermsBodyId(): ReactElement {
       <h2>3. Langganan dan penagihan</h2>
       <h3>Paket dan biaya</h3>
       <p>
-        Gadit menawarkan paket Basic gratis dan paket berbayar (Clear dan Deep) dengan fitur dan harga yang tercantum di
-        halaman harga. Harga dinyatakan dalam USD dan dapat diubah dengan pemberitahuan sekurang-kurangnya 30 hari
-        sebelumnya kepada pelanggan yang sudah ada.
+        {"Gadit menawarkan paket Basic gratis dan paket berbayar dengan fitur dan harga yang tercantum di halaman harga. Harga dinyatakan dalam mata uang yang ditampilkan di halaman harga dan saat checkout untuk lokasi Anda (di Israel, syikal baru Israel termasuk PPN) dan dapat diubah dengan pemberitahuan sekurang-kurangnya 30 hari sebelumnya kepada pelanggan yang sudah ada."}
       </p>
       <h3>Perpanjangan otomatis</h3>
       <p>

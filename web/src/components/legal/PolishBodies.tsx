@@ -185,9 +185,7 @@ export function TermsBodyPl(): ReactElement {
       <h2>3. Subskrypcje i rozliczenia</h2>
       <h3>Plany i opłaty</h3>
       <p>
-        Gadit oferuje bezpłatny plan Basic oraz płatne plany (Clear i Deep) z funkcjami i cenami podanymi na stronie z
-        cennikiem. Ceny są podawane w USD i mogą zostać zmienione z co najmniej 30-dniowym wyprzedzeniem w przypadku
-        obecnych subskrybentów.
+        {"Gadit oferuje bezpłatny plan Basic oraz płatne plany z funkcjami i cenami podanymi na stronie z cennikiem. Ceny są podawane w walucie wyświetlanej na stronie z cennikiem i przy finalizacji zakupu dla Twojej lokalizacji (w Izraelu: nowe szekle izraelskie z VAT) i mogą zostać zmienione z co najmniej 30-dniowym wyprzedzeniem w przypadku obecnych subskrybentów."}
       </p>
       <h3>Automatyczne odnawianie</h3>
       <p>

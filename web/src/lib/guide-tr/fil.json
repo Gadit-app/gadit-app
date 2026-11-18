@@ -345,7 +345,7 @@
  "extras.s2": "I-tap ang isang tanong at bubukas ang sagot sa ibaba mismo.",
  "kids.title": "Kids Mode",
  "kids.desc": "Isang switch sa itaas na bar para ipaliwanag ang bawat salita gaya ng pagpapaliwanag mo sa isang bata.",
- "kids.s1": "Sa Family, i-on ang switch na 'Kids' sa tabi ng logo.",
+ "kids.s1": "Sa Family, i-on ang switch na 'Kids' sa itaas na bar.",
  "kids.s2": "Ngayon, bawat paliwanag ay nakasulat para sa bata.",
  "kids.s3": "Habang naka-on ito, 'Takdang-aralin' ang makikita sa menu sa halip na 'Pagsasanay'.",
  "kids.s4": "Sa shared device, buksan ang 'Shared kids screen' sa My family, at ita-tap ng bawat bata ang sarili nilang larawan.",
@@ -399,7 +399,7 @@
  "say.s3": "Pagkatapos, i-tap ang 'Magsanay sabihin ito' at sabihin ito nang malakas.",
  "say.s4": "Makakakuha ka ng hanggang limang bituin, at may tip kapag hindi pa ito tama.",
  "practice.title": "Pagsasanay",
- "practice.desc": "Para sa mga may edad sa Individual at Family: reading, paghahanda sa test, dictation at isang wika.",
+ "practice.desc": "Para sa mga may edad sa Individual at Family: reading, paghahanda sa test, dictation at pag-aaral ng wika.",
  "practice.s1": "Buksan ang 'Pagsasanay' sa menu sa itaas.",
  "practice.s2": "Pumili ng isa sa apat: reading, test, dictation o wika.",
  "practice.s3": "Para sa test, idikit ang listahan ng salita at magsanay hanggang sa araw nito.",
@@ -424,5 +424,11 @@
  "cancel.s1": "Sa Account, i-tap ang 'Cancel subscription' at pumili ng dahilan kung gusto mo.",
  "cancel.s2": "Sa buwanang plan, puwede mo muna itong i-pause nang isang buwan, walang bayad.",
  "cancel.s3": "Sa libreng trial, ang dahilang 'Ayoko ng automatic na charge' ay hahayaan kang i-off lang ang renewal.",
- "cancel.s4": "Kung magbago ang isip mo, i-tap ang 'Nagkamali ako ng pagkansela, panatilihin ang subscription'."
+ "cancel.s4": "Kung magbago ang isip mo, i-tap ang 'Nagkamali ako ng pagkansela, panatilihin ang subscription'.",
+ "extras.desc.app": "Mga kasalungat, mga katulad na salita, pamilya ng salita, mga karaniwang pagkakamali at paano tandaan ang salita.",
+ "addchild.desc.app": "Pumili ng role, pangalan at kulay para sa bawat bata.",
+ "homework.desc.app": "Para sa mga bata: magdagdag ng takdang-aralin sa pamamagitan ng larawan o pagdikit, tapos pagsanayan ito.",
+ "practice.desc.app": "Para sa mga may edad: reading, paghahanda sa test, dictation at pag-aaral ng wika.",
+ "save.s3.app": "Nandoon ang lahat ng salita mo.",
+ "kids.s1.app": "I-on ang switch na 'Kids' sa itaas na bar."
 }

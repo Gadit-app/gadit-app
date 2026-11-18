@@ -187,9 +187,7 @@ export function TermsBodySt(): ReactElement {
       <h2>3. Dingodiso le ditefo</h2>
       <h3>Maano le ditefello</h3>
       <p>
-        Gadit e fana ka leano la Basic la mahala le maano a lefellwang (Clear le Deep) a nang le dikarolo le ditheko
-        tse thathamisitsweng leqepheng la ditheko. Ditheko di bontshwa ka USD mme di ka fetolwa ka tsebiso ya bonyane
-        matsatsi a 30 ho bangodisi ba teng.
+        {"Gadit e fana ka leano la Basic la mahala le maano a lefellwang a nang le dikarolo le ditheko tse thathamisitsweng leqepheng la ditheko. Ditheko di bontshwa ka tjhelete e hlahang leqepheng la ditheko le ha o lefa ho ya ka sebaka sa hao (Iseraeleng, ka dishekele tse ntjha tsa Iseraele tse kenyeletsang VAT) mme di ka fetolwa ka tsebiso ya bonyane matsatsi a 30 esale pele ho bangodisi ba seng ba le teng."}
       </p>
       <h3>Ntjhafatso ka bo yona</h3>
       <p>

@@ -10,7 +10,7 @@
  */
 
 import type { Lang } from "@/lib/i18n";
-import { gt, gtf } from "@/lib/guide-i18n";
+import { gt, gtA, gtf, isInApp } from "@/lib/guide-i18n";
 import type { WalkStep } from "@/components/Walkthrough";
 import {
   Screen, AppBar, TopMenu, SearchPill, SentenceBox, WordHead, MeaningCard, SectionHead, TextLink,
@@ -236,7 +236,7 @@ export function saveSteps(lang: Lang): WalkStep[] {
       ),
     },
     {
-      caption: gt(lang, "save.s3"),
+      caption: gtA(lang, "save.s3"),
       screen: (
         <Screen>
           <AppBar />
@@ -346,7 +346,10 @@ export function wordPageSteps(lang: Lang): WalkStep[] {
         </Screen>
       ),
     },
-    {
+    // Inside the store apps this step is left out (council 2026-11-18): the
+    // '+ More example sentences' button is not on every account there, and
+    // the web text names the plans.
+    ...(isInApp() ? [] : [{
       caption: gt(lang, "wordpage.s3"),
       tap: { x: lang === "he" ? "64%" : "44%", y: "40%" },
       screen: (
@@ -356,7 +359,7 @@ export function wordPageSteps(lang: Lang): WalkStep[] {
             examples={[gt(lang, "demo.example"), gt(lang, "demo.moreEx1"), gt(lang, "demo.moreEx2")]} links={links} />
         </Screen>
       ),
-    },
+    }]),
     {
       caption: gt(lang, "wordpage.s4"),
       screen: (
@@ -404,7 +407,7 @@ export function kidsSteps(lang: Lang): WalkStep[] {
   const kids = gt(lang, "ui.kidsMode");
   return [
     {
-      caption: gt(lang, "kids.s1"),
+      caption: gtA(lang, "kids.s1"),
       tap: { x: lang === "he" ? "62%" : "40%", y: "6%" },
       screen: (
         <Screen>

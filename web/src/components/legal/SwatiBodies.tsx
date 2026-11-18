@@ -188,9 +188,7 @@ export function TermsBodySs(): ReactElement {
       <h2>3. Kubhalisa nekukhokha</h2>
       <h3>Tinhlelo nemanani</h3>
       <p>
-        I-Gadit inikela ngeluhlelo lwe-Basic lwemahhala kanye netinhlelo letikhokhelwako (Clear ne-Deep) letinetinsita
-        nemanani lasohlwini elikhasini lemanani. Emanani abhalwe nge-USD futsi angashintjwa ngesatiso lesingenani
-        emalanga langu-30 kulabasebabhalisile.
+        {"I-Gadit inikela ngeluhlelo lwe-Basic lwemahhala kanye netinhlelo letikhokhelwako, letinetinsita nemanani lasohlwini ekhasini lemanani. Emanani abhalwe ngemali lekhonjisiwe ekhasini lemanani nasekhasini lekukhokha ngekwendzawo yakho (e-Israel, ngemashikeli lamasha aka-Israel lafaka i-VAT) futsi angashintjwa ngesatiso lesingengci emalanga langu-30 kusengaphambili kubabhalisile labakhona."}
       </p>
       <h3>Kuvuseleleka ngalokutentekela</h3>
       <p>

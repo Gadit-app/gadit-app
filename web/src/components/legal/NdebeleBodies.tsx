@@ -185,9 +185,7 @@ export function TermsBodyNr(): ReactElement {
       <h2>3. Ukubhalisa nokubhadela</h2>
       <h3>Amahlelo nemirhelo</h3>
       <p>
-        I-Gadit inikela ngohlelo lwe-Basic lwamahhala namahlelo abhadelwako (Clear ne-Deep) anezinto namanani atlolwe
-        ekhasini lamanani. Amanani atlolwa nge-USD begodu angatjhugululwa ngesaziso samalanga ama-30 okungenani
-        kibabhalisi abakhona.
+        {"I-Gadit inikela ngohlelo lwe-Basic lwamahhala namahlelo abhadelwako anezinto namanani atlolwe ekhasini lamanani. Amanani atlolwa ngemali evezwe ekhasini lamanani nasekhasini lokubhadhala ngokuya ngendawo yakho (kwa-Israel, ngamashekeli amatjha wakwa-Israel ahlanganisa i-VAT) begodu angatjhugululwa ngesaziso okungenani samalanga ama-30 kusengaphambili kubabhalisi abakhona."}
       </p>
       <h3>Ukuvuselelwa ngokuzenzakalelako</h3>
       <p>

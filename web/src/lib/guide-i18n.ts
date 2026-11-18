@@ -444,6 +444,7 @@ const G: Dict = {
   "save.s1": { en: "Every word you look up is saved by itself, nothing to tap.", he: "כל מילה שמחפשים נשמרת מעצמה, בלי ללחוץ על כלום." },
   "save.s2": { en: "To see your words, open 'Notebook' in the top menu.", he: "כדי לראות את המילים, פותחים 'מחברת' בתפריט העליון." },
   "save.s3": { en: "All your words are there, and on paid plans they work offline too.", he: "כל המילים שם, ובמנויים בתשלום הן זמינות גם בלי אינטרנט." },
+  "save.s3.app": { en: "All your words are there.", he: "כל המילים שלכם שם." },
   "save.s4": { en: "On Basic, the free notebook keeps up to 30 words.", he: "ב-Basic, המחברת החינמית שומרת עד 30 מילים." },
 
   // ── guide: context (the sentence field) ──
@@ -464,13 +465,15 @@ const G: Dict = {
   // ── guide: extras (word questions) ──
   "extras.title": { en: "Questions about a word", he: "שאלות על המילה" },
   "extras.desc": { en: "On paid plans: opposites, similar words, word family, common mistakes and how to remember it.", he: "במנויים בתשלום: הפכים, מילים דומות, מילים מאותו שורש, טעויות נפוצות ואיך לזכור." },
+  "extras.desc.app": { en: "Opposites, similar words, word family, common mistakes and how to remember the word.", he: "הפכים, מילים דומות, מילים מאותו שורש, טעויות נפוצות ואיך לזכור את המילה." },
   "extras.s1": { en: "After 'Gad it!', 'Have a question about this word?' offers five questions.", he: "אחרי 'Gad it!', בחלק 'יש לך שאלה על המילה הזאת?' יש חמש שאלות." },
   "extras.s2": { en: "Tap a question and the answer opens right below.", he: "לוחצים על שאלה, והתשובה נפתחת מיד מתחת." },
 
   // ── guide: kids ──
   "kids.title": { en: "Kids Mode", he: "מצב ילדים" },
   "kids.desc": { en: "One switch in the top bar explains every word the way you'd explain it to a child.", he: "מתג אחד בסרגל העליון מסביר כל מילה כמו שמסבירים לילד." },
-  "kids.s1": { en: "On Family, turn on the 'Kids' switch next to the logo.", he: "ב-Family, מפעילים את המתג 'ילדים' שליד הלוגו." },
+  "kids.s1": { en: "On Family, turn on the 'Kids' switch in the top bar.", he: "ב-Family, מפעילים את המתג 'ילדים' שבסרגל העליון." },
+  "kids.s1.app": { en: "Turn on the 'Kids' switch in the top bar.", he: "מפעילים את המתג 'ילדים' שבסרגל העליון." },
   "kids.s2": { en: "Now every explanation is written for a child.", he: "עכשיו כל הסבר כתוב בשפה של ילד." },
   "kids.s3": { en: "While it is on, the menu shows 'Homework' instead of 'Practice'.", he: "כשהמתג פועל, בתפריט מופיע 'שיעורי בית' במקום 'תרגולים'." },
   "kids.s4": { en: "On a shared device, open 'Shared kids screen' in My family, and each child taps their own picture.", he: "במכשיר משותף, פותחים 'מסך משותף לילדים' ב'המשפחה שלי', וכל ילד לוחץ על התמונה שלו." },
@@ -486,6 +489,7 @@ const G: Dict = {
   // ── guide: addChild ──
   "addchild.title": { en: "Add a family member", he: "הוספת בן משפחה" },
   "addchild.desc": { en: "Pick a role, a name and a colour, with up to 5 children on Family.", he: "בוחרים תפקיד, שם וצבע, עד 5 ילדים ב-Family." },
+  "addchild.desc.app": { en: "Pick a role, a name and a colour for each child.", he: "בוחרים תפקיד, שם וצבע לכל ילד." },
   "addchild.s1": { en: "In My family, on the Family tab, tap 'Add a family member'.", he: "ב'המשפחה שלי', בלשונית 'בני המשפחה', לוחצים 'הוספת בן משפחה'." },
   "addchild.s2": { en: "Pick a role: Dad, Mom, Son or Daughter.", he: "בוחרים תפקיד: אבא, אמא, בן או בת." },
   "addchild.s3": { en: "Type a name, pick a colour, add an age if you like, and tap 'Add to family'.", he: "מקלידים שם, בוחרים צבע, מוסיפים גיל אם רוצים, ולוחצים 'הוסף למשפחה'." },
@@ -518,6 +522,7 @@ const G: Dict = {
   // ── guide: homework ──
   "homework.title": { en: "Homework", he: "שיעורי בית" },
   "homework.desc": { en: "For kids on Family: add homework by photo or paste, then practise it.", he: "לילדים ב-Family: מוסיפים שיעורי בית בצילום או בהדבקה, ומתרגלים אותם." },
+  "homework.desc.app": { en: "For kids: add homework by photo or paste, then practise it.", he: "לילדים: מוסיפים שיעורי בית בצילום או בהדבקה, ומתרגלים אותם." },
   "homework.s1": { en: "In 'Homework', tap Photograph, Upload or Paste to add tonight's homework.", he: "ב'שיעורי בית' לוחצים 'צלמו', 'העלו' או 'הדביקו' כדי להוסיף את שיעורי הבית." },
   "homework.s2": { en: "Check the words, choose what it is and when the test is, then tap Save.", he: "בודקים את המילים, בוחרים מה זה ומתי המבחן, ולוחצים 'שמרו'." },
   "homework.s3": { en: "The homework waits under 'To do', next to learning words, reading and test prep.", he: "שיעורי הבית מחכים ב'מה צריך להכין', ליד לימוד מילים, קריאה והכנה למבחן." },
@@ -549,7 +554,8 @@ const G: Dict = {
 
   // ── guide: practice ──
   "practice.title": { en: "Practice", he: "תרגולים" },
-  "practice.desc": { en: "For grown-ups on Individual and Family: reading, test prep, dictation and a language.", he: "למבוגרים ב-Individual וב-Family: קריאה, הכנה למבחן, הכתבה ושפה." },
+  "practice.desc": { en: "For grown-ups on Individual and Family: reading, test prep, dictation and learning a language.", he: "למבוגרים ב-Individual וב-Family: קריאה, הכנה למבחן, הכתבה ולימוד שפה." },
+  "practice.desc.app": { en: "For grown-ups: reading, test prep, dictation and learning a language.", he: "למבוגרים: קריאה, הכנה למבחן, הכתבה ולימוד שפה." },
   "practice.s1": { en: "Open 'Practice' in the top menu.", he: "פותחים 'תרגולים' בתפריט העליון." },
   "practice.s2": { en: "Pick one of four: reading, a test, dictation or a language.", he: "בוחרים אחד מארבעה: קריאה, מבחן, הכתבה או שפה." },
   "practice.s3": { en: "For a test, paste the word list and practise until the day.", he: "למבחן, מדביקים את רשימת המילים ומתרגלים עד היום עצמו." },
@@ -596,6 +602,20 @@ export function gt(lang: Lang, key: string): string {
   if (lang === "he") return e.he ?? e.en;
   if (lang === "en") return e.en;
   return GUIDE_PACK.data[lang]?.[key] ?? (key === "help.title" ? HELP_TITLE[lang] : undefined) ?? e.en;
+}
+
+/** Inside the store apps (html[data-play="1"]) a key's ".app" variant, when it
+ *  has one: the apps never name plans or upgrades (council 2026-11-18). Client
+ *  side only, for texts shown after a tap; server-rendered texts use the CSS
+ *  pair .gd-buy / .gd-play-only with hasAppVariant() instead. */
+export function isInApp(): boolean {
+  return typeof document !== "undefined" && document.documentElement.getAttribute("data-play") === "1";
+}
+export function hasAppVariant(key: string): boolean {
+  return !!G[`${key}.app`];
+}
+export function gtA(lang: Lang, key: string): string {
+  return isInApp() && hasAppVariant(key) ? gt(lang, `${key}.app`) : gt(lang, key);
 }
 
 /** Interpolate {n} etc. */

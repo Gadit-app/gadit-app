@@ -180,9 +180,7 @@ export function TermsBodyTr(): ReactElement {
       <h2>3. Abonelikler ve faturalandırma</h2>
       <h3>Planlar ve ücretler</h3>
       <p>
-        Gadit, ücretsiz bir Basic planı ile fiyatlandırma sayfasında belirtilen özelliklere ve fiyatlara sahip ücretli
-        planlar (Clear ve Deep) sunar. Fiyatlar USD cinsinden belirtilir ve mevcut abonelere en az 30 gün önceden
-        bildirimde bulunularak değiştirilebilir.
+        {"Gadit, ücretsiz bir Basic planı ile fiyatlandırma sayfasında listelenen özelliklere ve fiyatlara sahip ücretli planlar sunar. Fiyatlar, bulunduğunuz konum için fiyatlandırma sayfasında ve ödeme sırasında gösterilen para biriminde belirtilir (İsrail'de, KDV dahil yeni İsrail şekeli) ve mevcut aboneler için en az 30 gün önceden bildirimde bulunularak değiştirilebilir."}
       </p>
       <h3>Otomatik yenileme</h3>
       <p>

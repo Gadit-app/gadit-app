@@ -46,7 +46,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Головна",
-    heroTitle: "Рекомендуйте Gadit. Заробляйте регулярний дохід.",
+    heroTitle: "Рекомендуйте Gadit, заробляйте регулярний дохід",
     heroSub: "Кожен, хто зареєструється й заплатить через ваше особисте посилання, приносить вам 25% регулярної комісії в перший рік і 10% довічно.",
     heroCta: "Приєднатися безкоштовно",
     proofA: "25% перший рік",
@@ -101,7 +101,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Ana Sayfa",
-    heroTitle: "Gadit'i önerin. Düzenli gelir kazanın.",
+    heroTitle: "Gadit'i önerin, düzenli gelir kazanın",
     heroSub: "Kişisel bağlantınız üzerinden kaydolup ödeme yapan herkes, ilk yıl için size %25, ömür boyu için %10 düzenli komisyon kazandırır.",
     heroCta: "Ücretsiz katıl",
     proofA: "İlk yıl %25",
@@ -156,7 +156,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Strona główna",
-    heroTitle: "Polecaj Gadit. Zarabiaj cyklicznie.",
+    heroTitle: "Polecaj Gadit, zarabiaj cyklicznie",
     heroSub: "Każdy, kto zapisze się i zapłaci przez Twój osobisty link, przynosi Ci 25% cyklicznej prowizji w pierwszym roku i 10% dożywotnio.",
     heroCta: "Dołącz za darmo",
     proofA: "25% w pierwszym roku",
@@ -211,7 +211,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "خانه",
-    heroTitle: "Gadit را توصیه کن. درآمد بازگشتی کسب کن.",
+    heroTitle: "Gadit را توصیه کن، درآمد بازگشتی کسب کن",
     heroSub: "هرکس از راه لینک شخصی تو ثبت‌نام و پرداخت کند، در سال اول 25% کمیسیون بازگشتی و برای همیشه 10% برایت می‌سازد.",
     heroCta: "رایگان بپیوند",
     proofA: "25% سال اول",
@@ -266,7 +266,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Beranda",
-    heroTitle: "Rekomendasikan Gadit. Dapatkan penghasilan berulang.",
+    heroTitle: "Rekomendasikan Gadit, dapatkan penghasilan berulang",
     heroSub: "Setiap orang yang mendaftar dan membayar melalui tautan pribadi Anda memberi Anda komisi berulang 25% di tahun pertama, dan 10% seumur hidup.",
     heroCta: "Gabung gratis",
     proofA: "25% tahun pertama",
@@ -321,7 +321,7 @@ const COPY = {
     curSym: "₪",
     monthlyPrice: 14.9, // Individual monthly, ILS
     nav: "לאתר",
-    heroTitle: "להמליץ על Gadit, לקבל הכנסה חוזרת.",
+    heroTitle: "להמליץ על Gadit, לקבל הכנסה חוזרת",
     heroSub: "כל מי שנרשם ומשלם דרך הקישור האישי שלך מזכה אותך ב-25% עמלה חוזרת בשנה הראשונה, ו-10% לכל החיים.",
     heroCta: "הצטרפות בחינם",
     proofA: "25% שנה ראשונה",
@@ -376,7 +376,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Home",
-    heroTitle: "Recommend Gadit. Earn recurring income.",
+    heroTitle: "Recommend Gadit, earn recurring income",
     heroSub: "Everyone who signs up and pays through your personal link earns you 25% recurring commission in year one, and 10% for life.",
     heroCta: "Join free",
     proofA: "25% year one",
@@ -431,7 +431,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: " Ikhaya",
-    heroTitle: "Tusa i-Gadit. Thola imali ebuyayo njalo.",
+    heroTitle: "Tusa i-Gadit, Thola imali ebuyayo njalo",
     heroSub: "Wonke umuntu obhalisayo futhi akhokhe ngesixhumanisi sakho somuntu siqu ukuzuzela ikhomishini ebuyayo engu-25% ngonyaka wokuqala, kanye no-10% impilo yakho yonke.",
     heroCta: "Joyina mahhala",
     proofA: "25% unyaka wokuqala",
@@ -486,7 +486,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Ekhaya",
-    heroTitle: "Cebisa i-Gadit. Fumana ingeniso ephindaphindwayo.",
+    heroTitle: "Cebisa i-Gadit, Fumana ingeniso ephindaphindwayo",
     heroSub: "Wonke umntu obhalisayo ahlawule ngelinki yakho ukwenzela ikhomishini ephindaphindwayo eyi-25% kunyaka wokuqala, kunye ne-10% ubomi bonke.",
     heroCta: "Joyina simahla",
     proofA: "25% kunyaka wokuqala",
@@ -541,7 +541,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Gae",
-    heroTitle: "Šišinya Gadit. Hwetša letseno le le boelelwago.",
+    heroTitle: "Šišinya Gadit, Hwetša letseno le le boelelwago",
     heroSub: "Motho yo mongwe le yo mongwe yo a ingwadišago gomme a lefa ka linki ya gago o go hweletša khomišene ye e boelelwago ya 25% ngwageng wa mathomo, le 10% bophelo ka moka.",
     heroCta: "Tsena ka mahala",
     proofA: "25% ngwaga wa mathomo",
@@ -596,7 +596,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Gae",
-    heroTitle: "Kgothaletsa Gadit. Kuna letseno le le boelelang.",
+    heroTitle: "Kgothaletsa Gadit, Kuna letseno le le boelelang",
     heroSub: "Mongwe le mongwe yo o ikwadisang mme a duela ka kgolagano ya gago o go kunela komishene e e boelelang ya 25% mo ngwageng wa ntlha, le 10% ka botshelo jotlhe.",
     heroCta: "Tsena mahala",
     proofA: "25% ngwaga wa ntlha",
@@ -651,7 +651,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Lapeng",
-    heroTitle: "Kgothaletsa Gadit. Fumana lekeno le iphetang.",
+    heroTitle: "Kgothaletsa Gadit, Fumana lekeno le iphetang",
     heroSub: "Motho e mong le e mong ya ngodisang mme a lefa ka lehokela la hao o o fa khomishene e iphetang ya 25% selemong sa pele, le 10% bophelo bohle.",
     heroCta: "Kena mahala",
     proofA: "25% selemong sa pele",
@@ -706,7 +706,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Ekaya",
-    heroTitle: "Bumabumelani Gadit. Kumani mali leyi vuyelelaka.",
+    heroTitle: "Bumabumelani Gadit, Kumani mali leyi vuyelelaka",
     heroSub: "Un'wana na un'wana loyi a tsarisaka a hakela hi linki ya n'wina u mi kumisa khomixini leyi vuyelelaka ya 25% hi lembe ro sungula, na 10% vutomi hinkwabyo.",
     heroCta: "Nghenani mahala",
     proofA: "25% lembe ro sungula",
@@ -761,7 +761,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Ekhaya",
-    heroTitle: "Ncoma Gadit. Tfola imali lengenako njalo.",
+    heroTitle: "Ncoma Gadit, Tfola imali lengenako njalo",
     heroSub: "Wonkhe umuntfu lobhalisako futsi akhokhe ngelilinki lakho ukutfolela ikhomishini leyi-25% njalo emnyakeni wekucala, kanye ne-10% kuze kube phakadze.",
     heroCta: "Joyina mahhala",
     proofA: "25% emnyakeni wekucala",
@@ -816,7 +816,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Hayani",
-    heroTitle: "Themendelani Gadit. Wanani mbuelo ine ya dzula i tshi vhuya.",
+    heroTitle: "Themendelani Gadit, Wanani mbuelo ine ya dzula i tshi vhuya",
     heroSub: "Muthu muṅwe na muṅwe ane a ḓiṅwalisa a badela nga vhukwamani haṋu u ni ṋea khomishini ya 25% ine ya dzula i tshi vhuya kha ṅwaha wa u thoma, na 10% vhutshilo hoṱhe.",
     heroCta: "Dzhenani mahala",
     proofA: "25% ṅwaha wa u thoma",
@@ -871,7 +871,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Ekhaya",
-    heroTitle: "Ncoma i-Gadit. Zuza imali ephindaphindwako.",
+    heroTitle: "Ncoma i-Gadit, Zuza imali ephindaphindwako",
     heroSub: "Woke umuntu obhalisako begodu abhadele ngelinki yakho, ukuzuzisa ikhomitjhini ephindaphindwako ye-25% emnyakeni wokuthoma, ne-10% ipilo yoke.",
     heroCta: "Joyina mahala",
     proofA: "25% emnyakeni wokuthoma",
@@ -926,7 +926,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Αρχική",
-    heroTitle: "Σύστησε το Gadit. Κέρδισε επαναλαμβανόμενο εισόδημα.",
+    heroTitle: "Σύστησε το Gadit, κέρδισε επαναλαμβανόμενο εισόδημα",
     heroSub: "Όποιος εγγράφεται και πληρώνει μέσα από το προσωπικό σου σύνδεσμο σου αποφέρει 25% επαναλαμβανόμενη προμήθεια τον πρώτο χρόνο, και 10% εφ' όρου ζωής.",
     heroCta: "Μπες δωρεάν",
     proofA: "25% τον πρώτο χρόνο",
@@ -981,7 +981,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Home",
-    heroTitle: "Beveel Gadit aan. Verdien terugkerend inkomen.",
+    heroTitle: "Beveel Gadit aan, verdien terugkerend inkomen",
     heroSub: "Iedereen die zich aanmeldt en betaalt via jouw persoonlijke link levert je 25% terugkerende commissie op in het eerste jaar, en 10% levenslang.",
     heroCta: "Gratis meedoen",
     proofA: "25% eerste jaar",
@@ -1036,7 +1036,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "الرئيسية",
-    heroTitle: "أوصِ بـ Gadit. واكسب دخلاً متكرراً.",
+    heroTitle: "أوصِ بـ Gadit، واكسب دخلاً متكرراً",
     heroSub: "كل من يسجّل ويدفع عبر رابطك الشخصي يكسب لك عمولة متكررة بنسبة 25% في السنة الأولى، و10% مدى الحياة.",
     heroCta: "انضم مجاناً",
     proofA: "25% في السنة الأولى",
@@ -1091,7 +1091,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Главная",
-    heroTitle: "Рекомендуйте Gadit. Получайте регулярный доход.",
+    heroTitle: "Рекомендуйте Gadit, получайте регулярный доход",
     heroSub: "Каждый, кто зарегистрируется и оплатит по вашей персональной ссылке, приносит вам 25% регулярной комиссии в первый год и 10% пожизненно.",
     heroCta: "Присоединиться бесплатно",
     proofA: "25% в первый год",
@@ -1146,7 +1146,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Inicio",
-    heroTitle: "Recomienda Gadit. Gana ingresos recurrentes.",
+    heroTitle: "Recomienda Gadit, gana ingresos recurrentes",
     heroSub: "Cada persona que se registra y paga a través de tu enlace personal te genera un 25% de comisión recurrente el primer año, y un 10% de por vida.",
     heroCta: "Únete gratis",
     proofA: "25% el primer año",
@@ -1201,7 +1201,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Início",
-    heroTitle: "Recomende o Gadit. Ganhe renda recorrente.",
+    heroTitle: "Recomende o Gadit, ganhe renda recorrente",
     heroSub: "Cada pessoa que se cadastra e paga pelo seu link pessoal gera para você 25% de comissão recorrente no primeiro ano, e 10% para sempre.",
     heroCta: "Participar grátis",
     proofA: "25% no primeiro ano",
@@ -1256,7 +1256,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Accueil",
-    heroTitle: "Recommandez Gadit. Gagnez un revenu récurrent.",
+    heroTitle: "Recommandez Gadit, gagnez un revenu récurrent",
     heroSub: "Toute personne qui s'inscrit et paie via votre lien personnel vous rapporte une commission récurrente de 25% la première année, et 10% à vie.",
     heroCta: "Rejoindre gratuitement",
     proofA: "25% la première année",
@@ -1311,7 +1311,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Startseite",
-    heroTitle: "Empfiehl Gadit. Verdiene laufend mit.",
+    heroTitle: "Empfiehl Gadit, verdiene laufend mit",
     heroSub: "Für jede Person, die sich über deinen persönlichen Link anmeldet und zahlt, erhältst du im ersten Jahr 25% wiederkehrende Provision und danach 10% ein Leben lang.",
     heroCta: "Kostenlos beitreten",
     proofA: "25% im ersten Jahr",
@@ -1366,7 +1366,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Domů",
-    heroTitle: "Doporučte Gadit. Vydělávejte opakovaný příjem.",
+    heroTitle: "Doporučte Gadit, vydělávejte opakovaný příjem",
     heroSub: "Každý, kdo se zaregistruje a zaplatí přes váš osobní odkaz, vám vynese 25% opakovanou provizi v prvním roce a 10% napořád.",
     heroCta: "Připojit se zdarma",
     proofA: "25% první rok",
@@ -1421,7 +1421,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Domov",
-    heroTitle: "Odporúčaj Gadit. Zarábaj opakovaný príjem.",
+    heroTitle: "Odporúčaj Gadit, zarábaj opakovaný príjem",
     heroSub: "Každý, kto sa cez tvoj osobný odkaz zaregistruje a zaplatí, ti prinesie 25% opakovanú províziu v prvom roku a 10% navždy.",
     heroCta: "Pridaj sa zadarmo",
     proofA: "25% prvý rok",
@@ -1476,7 +1476,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Home",
-    heroTitle: "Consiglia Gadit. Guadagna un reddito ricorrente.",
+    heroTitle: "Consiglia Gadit, guadagna un reddito ricorrente",
     heroSub: "Ogni persona che si iscrive e paga tramite il tuo link personale ti fa guadagnare il 25% di commissione ricorrente il primo anno, e il 10% a vita.",
     heroCta: "Iscriviti gratis",
     proofA: "25% il primo anno",
@@ -1531,7 +1531,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "ホーム",
-    heroTitle: "Gadit をおすすめして、継続収入を得ましょう。",
+    heroTitle: "Gadit をおすすめして、継続収入を得ましょう",
     heroSub: "あなた専用のリンクから登録して支払ったすべての方から、初年度は25%、その後は生涯10%の継続報酬が得られます。",
     heroCta: "無料で参加",
     proofA: "初年度25%",
@@ -1586,7 +1586,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "होम",
-    heroTitle: "Gadit की सिफारिश करें। हर महीने कमाई पाएं।",
+    heroTitle: "Gadit की सिफारिश करें, हर महीने कमाई पाएं",
     heroSub: "जो भी आपके निजी लिंक से साइन अप करके भुगतान करता है, उससे आपको पहले साल में 25% रेकरिंग कमीशन मिलता है, और जीवन भर 10%।",
     heroCta: "मुफ्त में जुड़ें",
     proofA: "पहले साल 25%",
@@ -1641,7 +1641,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "መነሻ",
-    heroTitle: "Gadit ን ይምከሩ። ተደጋጋሚ ገቢ ያግኙ።",
+    heroTitle: "Gadit ን ይምከሩ፣ ተደጋጋሚ ገቢ ያግኙ",
     heroSub: "በግል አገናኝዎ በኩል ተመዝግቦ የሚከፍል እያንዳንዱ ሰው በመጀመሪያው ዓመት 25% ተደጋጋሚ ኮሚሽን፣ ለዘላለም ደግሞ 10% ያስገኝልዎታል።",
     heroCta: "በነጻ ይቀላቀሉ",
     proofA: "25% በመጀመሪያው ዓመት",
@@ -1696,7 +1696,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Trang chủ",
-    heroTitle: "Giới thiệu Gadit. Nhận thu nhập định kỳ.",
+    heroTitle: "Giới thiệu Gadit, Nhận thu nhập định kỳ",
     heroSub: "Mỗi người đăng ký và thanh toán qua liên kết cá nhân của bạn sẽ mang lại cho bạn 25% hoa hồng định kỳ trong năm đầu, và 10% trọn đời.",
     heroCta: "Tham gia miễn phí",
     proofA: "25% năm đầu",
@@ -1751,7 +1751,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Home",
-    heroTitle: "Irekomenda ang Gadit. Kumita nang paulit-ulit.",
+    heroTitle: "Irekomenda ang Gadit, Kumita nang paulit-ulit",
     heroSub: "Bawat taong mag-sign up at magbayad gamit ang personal mong link ay magbibigay sa iyo ng 25% paulit-ulit na komisyon sa unang taon, at 10% habambuhay.",
     heroCta: "Sumali nang libre",
     proofA: "25% sa unang taon",
@@ -1806,7 +1806,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Tuis",
-    heroTitle: "Beveel Gadit aan. Verdien herhalende inkomste.",
+    heroTitle: "Beveel Gadit aan, Verdien herhalende inkomste",
     heroSub: "Elke persoon wat deur jou persoonlike skakel inteken en betaal, verdien vir jou 25% herhalende kommissie in die eerste jaar, en 10% lewenslank.",
     heroCta: "Sluit gratis aan",
     proofA: "25% eerste jaar",
@@ -1861,7 +1861,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Nyumbani",
-    heroTitle: "Pendekeza Gadit. Pata mapato yanayojirudia.",
+    heroTitle: "Pendekeza Gadit, Pata mapato yanayojirudia",
     heroSub: "Kila mtu anayejisajili na kulipa kupitia kiungo chako binafsi anakuletea kamisheni ya 25% inayojirudia katika mwaka wa kwanza, na 10% maisha yote.",
     heroCta: "Jiunge bure",
     proofA: "25% mwaka wa kwanza",
@@ -1916,7 +1916,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "首页",
-    heroTitle: "推荐 Gadit，获得持续收入。",
+    heroTitle: "推荐 Gadit，获得持续收入",
     heroSub: "每位通过你的专属链接注册并付费的用户，都会在第一年为你带来 25% 的持续佣金，之后终身 10%。",
     heroCta: "免费加入",
     proofA: "第一年 25%",
@@ -1971,7 +1971,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "首頁",
-    heroTitle: "推薦 Gadit，獲得持續收入。",
+    heroTitle: "推薦 Gadit，獲得持續收入",
     heroSub: "每位透過你的專屬連結註冊並付費的使用者，都會在第一年為你帶來 25% 的持續佣金，之後終身 10%。",
     heroCta: "免費加入",
     proofA: "第一年 25%",
@@ -2026,7 +2026,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "홈",
-    heroTitle: "Gadit을 추천하세요. 꾸준한 수익을 얻으세요.",
+    heroTitle: "Gadit을 추천하세요, 꾸준한 수익을 얻으세요",
     heroSub: "개인 링크를 통해 가입하고 결제한 모든 분에게서 첫해 25%의 반복 수수료, 이후 평생 10%를 받습니다.",
     heroCta: "무료로 가입",
     proofA: "첫해 25%",
@@ -2081,7 +2081,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "หน้าแรก",
-    heroTitle: "แนะนำ Gadit แล้วรับรายได้ต่อเนื่อง",
+    heroTitle: "แนะนำ Gadit, รับรายได้ต่อเนื่อง",
     heroSub: "ทุกคนที่สมัครและชำระเงินผ่านลิงก์ส่วนตัวของคุณ จะทำให้คุณได้รับค่าคอมมิชชันต่อเนื่อง 25% ในปีแรก และ 10% ตลอดไป",
     heroCta: "เข้าร่วมฟรี",
     proofA: "25% ในปีแรก",
@@ -2136,7 +2136,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "হোম",
-    heroTitle: "Gadit সুপারিশ করুন। নিয়মিত আয় করুন।",
+    heroTitle: "Gadit সুপারিশ করুন, নিয়মিত আয় করুন",
     heroSub: "আপনার ব্যক্তিগত লিংকের মাধ্যমে যে-ই সাইন আপ করে পেমেন্ট করেন, তাঁর থেকে আপনি প্রথম বছরে 25% নিয়মিত কমিশন এবং আজীবন 10% পান।",
     heroCta: "বিনামূল্যে যোগ দিন",
     proofA: "প্রথম বছরে 25%",
@@ -2191,7 +2191,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Forside",
-    heroTitle: "Anbefal Gadit. Tjen en fast indkomst.",
+    heroTitle: "Anbefal Gadit, tjen en fast indkomst",
     heroSub: "Alle, der tilmelder sig og betaler via dit personlige link, giver dig 25% tilbagevendende provision det første år og 10% på livstid.",
     heroCta: "Deltag gratis",
     proofA: "25% første år",
@@ -2246,7 +2246,7 @@ const COPY = {
     curSym: "$",
     monthlyPrice: 3.99, // Individual monthly, USD
     nav: "Főoldal",
-    heroTitle: "Ajánld a Gaditot. Legyen rendszeres bevételed.",
+    heroTitle: "Ajánld a Gaditot, legyen rendszeres bevételed",
     heroSub: "Mindenki, aki a személyes linkeden keresztül regisztrál és fizet, az első évben 25% ismétlődő jutalékot hoz neked, utána pedig egy életen át 10%-ot.",
     heroCta: "Csatlakozz ingyen",
     proofA: "25% az első évben",

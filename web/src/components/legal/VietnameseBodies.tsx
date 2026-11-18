@@ -183,9 +183,7 @@ export function TermsBodyVi(): ReactElement {
       <h2>3. Gói đăng ký và thanh toán</h2>
       <h3>Gói và phí</h3>
       <p>
-        Gadit cung cấp gói Basic miễn phí và các gói trả phí (Clear và Deep) với các tính năng và mức giá được liệt kê
-        trên trang bảng giá. Giá được niêm yết bằng USD và có thể thay đổi với thông báo trước ít nhất 30 ngày cho những
-        người đăng ký hiện tại.
+        {"Gadit cung cấp gói Basic miễn phí và các gói trả phí với các tính năng và mức giá được liệt kê trên trang bảng giá. Giá được niêm yết bằng loại tiền tệ hiển thị trên trang bảng giá và tại trang thanh toán cho khu vực của bạn (ở Israel, là shekel mới của Israel đã bao gồm VAT) và có thể thay đổi với thông báo trước ít nhất 30 ngày cho những người đăng ký hiện tại."}
       </p>
       <h3>Tự động gia hạn</h3>
       <p>

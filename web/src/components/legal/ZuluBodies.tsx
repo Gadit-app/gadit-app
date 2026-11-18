@@ -187,9 +187,7 @@ export function TermsBodyZu(): ReactElement {
       <h2>3. Ukubhalisa nokukhokha</h2>
       <h3>Izinhlelo nezimali ezikhokhwayo</h3>
       <p>
-        I-Gadit inikeza uhlelo lwamahhala lwe-Basic kanye nezinhlelo ezikhokhelwayo (Clear ne-Deep) ezinezici
-        namanani abhalwe ekhasini lamanani. Amanani ashiwo nge-USD futhi angashintshwa ngesaziso sezinsuku okungenani
-        ezingama-30 kubabhalisile abakhona.
+        {"I-Gadit inikeza uhlelo lwamahhala lwe-Basic kanye nezinhlelo ezikhokhelwayo ezinezici namanani abhalwe ekhasini lamanani. Amanani ashiwo ngemali eboniswe ekhasini lamanani nasekukhokheni ngokwendawo okuyo (kwa-Israel, ngamashekeli amasha akwa-Israel ahlanganisa ne-VAT) futhi angashintshwa ngesaziso okungenani sezinsuku ezingama-30 kusengaphambili kubabhalisile abakhona."}
       </p>
       <h3>Ukuvuselelwa okuzenzakalelayo</h3>
       <p>

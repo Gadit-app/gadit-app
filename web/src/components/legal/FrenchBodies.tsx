@@ -189,9 +189,7 @@ export function TermsBodyFr() {
       <h2>3. Abonnements et facturation</h2>
       <h3>Formules et tarifs</h3>
       <p>
-        Gadit propose une formule Basic gratuite et des formules payantes (Clear et Deep), avec les
-        fonctionnalités et les tarifs indiqués sur la page de tarification. Les prix sont libellés en USD et
-        peuvent être modifiés moyennant un préavis d&rsquo;au moins 30 jours pour les abonnés existants.
+        {"Gadit propose une formule Basic gratuite et des formules payantes, avec les fonctionnalités et les tarifs indiqués sur la page de tarification. Les prix sont libellés dans la devise affichée sur la page de tarification et sur la page de paiement selon votre localisation (en Israël, en nouveaux shekels israéliens, TVA comprise) et peuvent être modifiés moyennant un préavis d’au moins 30 jours pour les abonnés existants."}
       </p>
       <h3>Renouvellement automatique</h3>
       <p>

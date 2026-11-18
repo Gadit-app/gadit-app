@@ -189,9 +189,7 @@ export function TermsBodyTs(): ReactElement {
       <h2>3. Ku tsarisa ni ku hakela</h2>
       <h3>Tipulani ni tihakelo</h3>
       <p>
-        Gadit yi nyika pulani ya Basic ya mahala ni tipulani leti hakeriwaka (Clear na Deep) leti nga ni
-        swihlawulekisi ni minxavo leswi tsariweke eka tluka ra minxavo. Minxavo yi kombisiwa hi USD naswona yi nga
-        cinciwa loko vatsarisi lava nga kona va nyikiwile xitiviso xa masiku ya 30 hi vuntsongo.
+        {"Gadit yi nyika pulani ya Basic ya mahala ni tipulani leti hakeriwaka, leti nga ni swihlawulekisi ni minxavo leswi tsariweke eka tluka ra minxavo. Minxavo yi kombisiwa hi mali leyi kombisiweke eka tluka ra minxavo ni le ka nkarhi wo hakela hi ku ya hi ndhawu ya n'wina (eIsrayele, hi ti-shekeli letintshwa ta Israyele leti katsaka VAT) naswona yi nga cinciwa loko vatsarisi lava nga kona va nyikiwe xitiviso xa masiku ya 30 hi vuntsongo."}
       </p>
       <h3>Ku pfuxeta hi ku tiendlekela</h3>
       <p>

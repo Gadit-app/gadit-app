@@ -187,9 +187,7 @@ export function TermsBodyFil(): ReactElement {
       <h2>3. Mga subscription at pagsingil</h2>
       <h3>Mga plan at bayarin</h3>
       <p>
-        Nag-aalok ang Gadit ng libreng Basic plan at mga bayad na plan (Clear at Deep) na may mga feature at presyong
-        nakalista sa pahina ng pagpepresyo. Ang mga presyo ay nakasaad sa USD at maaaring baguhin nang may abiso na hindi
-        bababa sa 30 araw para sa mga kasalukuyang subscriber.
+        {"Nag-aalok ang Gadit ng libreng Basic plan at mga bayad na plan na may mga feature at presyong nakalista sa pahina ng pagpepresyo. Ang mga presyo ay nakasaad sa currency na ipinapakita sa pahina ng pagpepresyo at sa pag-checkout para sa iyong lokasyon (sa Israel, mga bagong Israeli shekel kasama ang VAT) at maaaring baguhin nang may abiso na hindi bababa sa 30 araw para sa mga kasalukuyang subscriber."}
       </p>
       <h3>Awtomatikong pag-renew</h3>
       <p>

@@ -187,9 +187,7 @@ export function TermsBodyVe(): ReactElement {
       <h2>3. U ṅwalisa na mbadelo</h2>
       <h3>Pulane na mbadelo</h3>
       <p>
-        Gadit i ṋetshedza pulane ya Basic ya mahala na pulane dzine dza badelwa (Clear na Deep) dzi na zwiteṅwa na
-        mitengo yo ṅwalwaho kha siaṱari ḽa mitengo. Mitengo yo ṅwalwa nga USD nahone i nga shandukiswa nga nḓivhadzo
-        ya maḓuvha a 30 kana u fhira kha vho no ṅwalisaho.
+        {"Gadit i ṋetshedza pulane ya Basic ya mahala na pulane dzine dza badelwa dzi re na zwiteṅwa na mitengo yo ṅwalwaho kha siaṱari ḽa mitengo. Mitengo yo ṅwalwa nga tshelede i sumbedzwaho kha siaṱari ḽa mitengo na kha siaṱari ḽa u badela u ya nga fhethu hune na vha hone (kha Israel, nga shekele ntswa dza Israeli dzi katelaho VAT) nahone i nga shandukiswa nga nḓivhadzo ya maḓuvha a 30 kana u fhira kha vho no ṅwalisaho."}
       </p>
       <h3>U vusuluswa nga u ḓiitela</h3>
       <p>

@@ -182,9 +182,7 @@ export function TermsBodyHu(): ReactElement {
       <h2>3. Előfizetések és számlázás</h2>
       <h3>Csomagok és díjak</h3>
       <p>
-        A Gadit ingyenes Basic csomagot és fizetős csomagokat (Clear és Deep) kínál, az árazási oldalon feltüntetett
-        funkciókkal és árakkal. Az árak USD-ben értendők, és a meglévő előfizetők számára legalább 30 nappal korábbi
-        értesítés mellett módosíthatók.
+        {"A Gadit ingyenes Basic csomagot és fizetős csomagokat kínál, az árazási oldalon feltüntetett funkciókkal és árakkal. Az árak az árazási oldalon és a fizetéskor az Ön tartózkodási helyének megfelelően megjelenített pénznemben értendők (Izraelben új izraeli sékelben, áfával együtt), és a meglévő előfizetők számára legalább 30 nappal korábbi értesítés mellett módosíthatók."}
       </p>
       <h3>Automatikus megújítás</h3>
       <p>

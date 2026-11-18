@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useLang } from "@/lib/lang-context";
 import { useHref } from "@/lib/href";
-import { gt, useGuideLangWait } from "@/lib/guide-i18n";
+import { gt, hasAppVariant, useGuideLangWait } from "@/lib/guide-i18n";
 import { GUIDES, GUIDE_SECTIONS, getGuide } from "@/lib/guides";
 import { WalkthroughModal } from "@/components/Walkthrough";
 
@@ -139,7 +139,9 @@ function HelpScreen() {
                     <span style={{ width: 44, height: 44, flex: "none", borderRadius: 12, display: "grid", placeItems: "center", fontSize: 21, background: g.color + "1A" }}>{g.icon}</span>
                     <span style={{ flex: 1, minWidth: 0 }}>
                       <span style={{ display: "block", fontSize: 15.5, fontWeight: 700, color: "var(--ink,#0B1220)" }}>{gt(lang, g.titleKey)}</span>
-                      <span style={{ display: "block", fontSize: 12.5, color: "var(--ink-muted,#6B7280)", marginTop: 2, lineHeight: 1.45 }}>{gt(lang, g.descKey)}</span>
+                      {/* Inside the store apps a plan-free variant (council 2026-11-18). */}
+                      <span className={hasAppVariant(g.descKey) ? "gd-buy" : undefined} style={{ display: "block", fontSize: 12.5, color: "var(--ink-muted,#6B7280)", marginTop: 2, lineHeight: 1.45 }}>{gt(lang, g.descKey)}</span>
+                      {hasAppVariant(g.descKey) && <span className="gd-play-only" style={{ display: "block", fontSize: 12.5, color: "var(--ink-muted,#6B7280)", marginTop: 2, lineHeight: 1.45 }}>{gt(lang, `${g.descKey}.app`)}</span>}
                     </span>
                     <PlayCircle color={g.color} flip={dir === "rtl"} />
                   </button>
