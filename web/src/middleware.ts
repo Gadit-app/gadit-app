@@ -95,8 +95,13 @@ export function middleware(req: NextRequest) {
       // page to a page that lives on www: the cross-origin redirect below was
       // blocked (CORS) and a click on "Terms" hung about 5 s (night QA
       // 2026-11-18). Plain HTML makes the router do a normal full-page load,
-      // which the redirect then sends to www.
-      if (req.headers.get("rsc") === "1") {
+      // which the redirect then sends to www. Next strips the RSC headers and
+      // the _rsc query before middleware runs (server/web/adapter.js,
+      // FLIGHT_HEADERS), so the browser's own Sec-Fetch-Mode tells a fetch
+      // ("cors" / "same-origin") from a real page load ("navigate"). The
+      // matcher already skips api/, _next/ and files, so only pages get here.
+      const fetchMode = req.headers.get("sec-fetch-mode");
+      if (fetchMode && fetchMode !== "navigate") {
         return new NextResponse("<!doctype html><title>Gadit</title>", {
           status: 200,
           headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" },
