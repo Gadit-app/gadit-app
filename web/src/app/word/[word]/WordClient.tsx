@@ -1160,6 +1160,9 @@ export function WordClient({
   // null = the word has no picture by its unit's setting (projector only).
   const [imageUrl, setImageUrl] = useState<string | null | undefined>();
   const [imageGenerating, setImageGenerating] = useState(false);
+  // The word page: one picture per meaning (each sense has its own picture).
+  const [meaningImages, setMeaningImages] = useState<Record<number, string>>({});
+  const [meaningImgLoading, setMeaningImgLoading] = useState<Record<number, boolean>>({});
   // Kids Mode: a picture per meaning, keyed by meaning index, shown inline
   // under each definition. Adult mode never fills this.
   const [kidsImages, setKidsImages] = useState<Record<number, string>>({});
@@ -1427,6 +1430,8 @@ export function WordClient({
       setErrorMsg("");
       setResult(null);
       setImageUrl(undefined);
+      setMeaningImages({});
+      setMeaningImgLoading({});
       setKidsImages({});
       setAnonSearchesLeft(null);
 
@@ -1925,15 +1930,18 @@ export function WordClient({
   }, [classroomMode, bandWaiting, initialWord, setId, result, gemaraStage, currentM, isPilotTopicId(setId) || isSchoolSetId(setId) ? user : null]);
 
   // ── Action handlers ───────────────────────────────────────────
-  async function handleGenerate(opts?: { meaning?: string; example?: string; silent?: boolean }) {
+  async function handleGenerate(opts?: { meaning?: string; example?: string; silent?: boolean; index?: number }) {
+    // index: the meaning this picture belongs to on the word page.
+    const mIdx = opts?.index;
     // A student on a class code has no account; the server unlocks the
     // picture on the school's plan during class hours.
     if ((!result && !gemaraStage) || (!user && !classroomCode)) {
       if (!opts?.silent) promptLogin(v2(lang, "generateImage"));
       return;
     }
-    if (imageGenerating) return; // guard against double-click
-    setImageGenerating(true);
+    if (mIdx !== undefined ? meaningImgLoading[mIdx] : imageGenerating) return; // guard against double-click
+    if (mIdx !== undefined) setMeaningImgLoading((p) => ({ ...p, [mIdx]: true }));
+    else setImageGenerating(true);
     setImageError(null);
     try {
       const idToken = user ? await user.getIdToken() : null;
@@ -1993,7 +2001,9 @@ export function WordClient({
         return;
       }
       const data = (await res.json()) as { url?: string | null; skipped?: boolean };
-      if (data.url) setImageUrl(data.url);
+      if (mIdx !== undefined) {
+        if (data.url) setMeaningImages((p) => ({ ...p, [mIdx]: data.url as string }));
+      } else if (data.url) setImageUrl(data.url);
       else if (data.skipped) setImageUrl(null);
     } catch (e) {
       console.error("generate-image:", e);
@@ -2002,7 +2012,8 @@ export function WordClient({
         pick(NETWORK_LOST_COPY, lang)
       );
     } finally {
-      setImageGenerating(false);
+      if (mIdx !== undefined) setMeaningImgLoading((p) => ({ ...p, [mIdx]: false }));
+      else setImageGenerating(false);
     }
   }
 
@@ -2643,6 +2654,8 @@ export function WordClient({
             classroomInSession={classroomInSession}
             imageUrl={imageUrl ?? undefined}
             imageGenerating={imageGenerating}
+            meaningImages={meaningImages}
+            meaningImagesLoading={meaningImgLoading}
             kidsImages={kidsImages}
             kidsImagesLoading={kidsImgLoading}
             isSaved={isSaved}

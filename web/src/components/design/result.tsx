@@ -1008,6 +1008,8 @@ export function MeaningsBlock({
   classroomInSession = false,
   imageUrl,
   imageGenerating,
+  meaningImages,
+  meaningImagesLoading,
   onGenerate,
   onUpgrade,
   onAction,
@@ -1023,7 +1025,10 @@ export function MeaningsBlock({
   classroomInSession?: boolean;
   imageUrl?: string;
   imageGenerating?: boolean;
-  onGenerate?: () => void;
+  /** One picture per meaning, keyed by meaning index (each sense gets its own). */
+  meaningImages?: Record<number, string>;
+  meaningImagesLoading?: Record<number, boolean>;
+  onGenerate?: (opts?: { meaning?: string; example?: string; index?: number }) => void;
   /** Kids Mode: per-meaning pictures keyed by meaning index. */
   kidsImages?: Record<number, string>;
   /** Kids Mode: which meaning indexes are still generating a picture. */
@@ -1065,9 +1070,9 @@ export function MeaningsBlock({
             word={word}
             plan={plan}
             classroomInSession={classroomInSession}
-            imageUrl={imageUrl}
-            imageGenerating={imageGenerating}
-            onGenerate={onGenerate}
+            imageUrl={meaningImages ? meaningImages[i] : imageUrl}
+            imageGenerating={meaningImagesLoading ? !!meaningImagesLoading[i] : imageGenerating}
+            onGenerate={() => onGenerate?.({ meaning: m.meaning, example: m.examples?.[0] ?? "", index: i })}
             kidsImageUrl={kidsImages?.[i]}
             kidsImageLoading={kidsImagesLoading?.[i]}
             streaming={streaming}
@@ -1421,6 +1426,8 @@ export function ResultView({
   classroomInSession = false,
   imageUrl,
   imageGenerating = false,
+  meaningImages,
+  meaningImagesLoading,
   isSaved = false,
   notebookFull = false,
   savedAgo,
@@ -1448,12 +1455,15 @@ export function ResultView({
   classroomInSession?: boolean;
   imageUrl?: string;
   imageGenerating?: boolean;
+  /** One picture per meaning, keyed by meaning index (each sense gets its own). */
+  meaningImages?: Record<number, string>;
+  meaningImagesLoading?: Record<number, boolean>;
   isSaved?: boolean;
   /** A free notebook already holds FREE_NOTEBOOK_MAX words, so this one was not saved. */
   notebookFull?: boolean;
   savedAgo?: string;
   onShare?: () => void;
-  onGenerate?: () => void;
+  onGenerate?: (opts?: { meaning?: string; example?: string; index?: number }) => void;
   onUpgrade?: (tab?: TabId, tier?: "clear" | "deep") => void;
   onAction?: (id: ActionId) => void;
   onReport?: (section: string) => void;
@@ -1571,6 +1581,8 @@ export function ResultView({
         classroomInSession={classroomInSession}
         imageUrl={imageUrl}
         imageGenerating={imageGenerating}
+        meaningImages={meaningImages}
+        meaningImagesLoading={meaningImagesLoading}
         onGenerate={onGenerate}
         onUpgrade={onUpgrade}
         onAction={onAction}
