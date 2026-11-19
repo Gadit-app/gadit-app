@@ -38,7 +38,7 @@ function pick(d: Dict, lang: string): string {
 
 const HEADING: Dict = {
   en: "Have a question about this word?",
-  he: "יש לך שאלה על המילה הזאת?",
+  he: "יש לכם שאלה על המילה הזאת?",
   ar: "هل لديك سؤال عن هذه الكلمة؟",
   ru: "Есть вопрос об этом слове?",
   es: "¿Tienes una pregunta sobre esta palabra?",

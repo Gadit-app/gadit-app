@@ -135,7 +135,7 @@ const G: Dict = {
   "ui.compose": { en: "Write a sentence of your own and check you understood", he: "חברו משפט משלכם ובדקו שהבנתם" },
   "ui.checkSentence": { en: "Check sentence", he: "בדיקת המשפט" },
   "ui.perfect": { en: "Perfect", he: "מצוין" },
-  "ui.wqTitle": { en: "Have a question about this word?", he: "יש לך שאלה על המילה הזאת?" },
+  "ui.wqTitle": { en: "Have a question about this word?", he: "יש לכם שאלה על המילה הזאת?" },
   "ui.oppos": { en: "Opposites", he: "הפכים" },
   "ui.similar": { en: "Similar words", he: "מילים דומות במשמעות" },
   "ui.wordFamily": { en: "Word family", he: "מילים מאותו שורש" },
@@ -466,7 +466,7 @@ const G: Dict = {
   "extras.title": { en: "Questions about a word", he: "שאלות על המילה" },
   "extras.desc": { en: "On paid plans: opposites, similar words, word family, common mistakes and how to remember it.", he: "במנויים בתשלום: הפכים, מילים דומות, מילים מאותו שורש, טעויות נפוצות ואיך לזכור." },
   "extras.desc.app": { en: "Opposites, similar words, word family, common mistakes and how to remember the word.", he: "הפכים, מילים דומות, מילים מאותו שורש, טעויות נפוצות ואיך לזכור את המילה." },
-  "extras.s1": { en: "After 'Gad it!', 'Have a question about this word?' offers five questions.", he: "אחרי 'Gad it!', בחלק 'יש לך שאלה על המילה הזאת?' יש חמש שאלות." },
+  "extras.s1": { en: "After 'Gad it!', 'Have a question about this word?' offers five questions.", he: "אחרי 'Gad it!', בחלק 'יש לכם שאלה על המילה הזאת?' יש חמש שאלות." },
   "extras.s2": { en: "Tap a question and the answer opens right below.", he: "לוחצים על שאלה, והתשובה נפתחת מיד מתחת." },
 
   // ── guide: kids ──
