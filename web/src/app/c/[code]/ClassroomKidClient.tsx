@@ -958,6 +958,15 @@ export function ClassroomKidClient({ code }: { code: string }) {
                   autoFocus
                   className="wb-home-search-input"
                   aria-label={c.searchPh}
+                enterKeyHint="search"
+                onKeyDown={(e) => {
+                  // The tablet keyboard's action key: with a second field in the
+                  // form it would only jump to that field, so search explicitly.
+                  if (e.key === "Enter" && !e.nativeEvent.isComposing) {
+                    e.preventDefault();
+                    e.currentTarget.form?.requestSubmit();
+                  }
+                }}
                 />
                 <div className="wb-home-search-kids">
                   <KidsModeToggle plan="deep" allowed />

@@ -1231,7 +1231,7 @@ function StageInner({
               className="cs-search"
               onSubmit={(e) => { e.preventDefault(); const v = q.trim(); if (v) onSearch(v); }}
             >
-              <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder={c.searchPh} aria-label={c.search} dir="auto" />
+              <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder={c.searchPh} aria-label={c.search} dir="auto" enterKeyHint="search" />
               <button type="submit" aria-label={c.search}><SearchIcon /></button>
             </form>
           ) : (
