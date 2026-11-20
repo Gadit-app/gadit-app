@@ -17,6 +17,7 @@ export function WordiesChip() {
   const [kidsOn] = useKidsMode();
   const href = useHref();
   const n = useWordies(user, planReady);
+  // Signed out: the hook keeps the last number, the chip is simply not shown.
   if (!user || !planReady || n === null) return null;
   if (!(familyRole === "kid" || kidsOn || n > 0)) return null;
   return (

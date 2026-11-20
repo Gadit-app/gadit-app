@@ -35,7 +35,7 @@ export function setWordies(n: number) {
 export function useWordies(user: User | null | undefined, enabled = true): number | null {
   const [n, setN] = useState<number | null>(null);
   useEffect(() => {
-    if (!user || !enabled) { setN(null); return; }
+    if (!user || !enabled) return;
     let off = false;
     const onSet = (e: Event) => { const d = (e as CustomEvent<number>).detail; if (typeof d === "number") setN(d); };
     window.addEventListener(EVENT, onSet);
