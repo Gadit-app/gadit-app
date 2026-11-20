@@ -130,6 +130,17 @@ const view = (c: Stored, today: string) => ({
 export async function GET(req: NextRequest) {
   const user = await verifyUserAndGetPlan(bearer(req));
   if (!user) return NextResponse.json({ error: "login_required" }, { status: 401 });
+  // ?balance=1: only the Wordies the profile holds, for the chip beside the
+  // avatar on every page. Wordies are the journey's coins under their new name
+  // (Gadi 2026-11-20): known words + bonuses - spent. Nothing is written.
+  if (req.nextUrl.searchParams.get("balance") === "1") {
+    const [cs, ss] = await Promise.all([cardsOf(user.userId).limit(MAX_CARDS).get(), stateOf(user.userId).get()]);
+    const mine: Stored[] = [];
+    for (const d of cs.docs) { const c = readCard(d.id, d.data()); if (c) mine.push(c); }
+    const st = ss.data() ?? {};
+    const spent = typeof st.spent === "number" && st.spent > 0 ? Math.floor(st.spent) : 0;
+    return NextResponse.json({ wordies: Math.max(0, coinsOf(mine) + bonusOf(st.bonus) - spent) });
+  }
   const tz = zoneOf(req.nextUrl.searchParams.get("tz"));
   const today = dayKeyOf(new Date(), tz);
   const db = getAdminDb();

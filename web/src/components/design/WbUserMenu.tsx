@@ -35,6 +35,7 @@ import { useHref } from "@/lib/href";
 import { useTheme } from "@/lib/appearance";
 import { TopRankBadge } from "./KidsGameHeader";
 import { useKidsMode } from "@/lib/use-kids-mode";
+import { WordiesChip } from "@/components/WordiesChip";
 import { resolvePartnerArea } from "@/lib/partner-nav";
 
 // Per-uid cache of "is this user a registered partner", so the menu doesn't
@@ -331,6 +332,8 @@ export function WbUserMenu() {
       )}
       {/* The grown-up rank, quietly, next to the avatar on every page (Gadi 2026-10-19). */}
       {planReady && <TopRankBadge lang={lang} dir={dir} />}
+      {/* The child's Wordies, on every page (Gadi 2026-11-20). */}
+      <WordiesChip />
       {/* Plan chip, clicking it opens the same menu as clicking the
           avatar, so the entire grouping reads as one control. Hidden
           on very narrow viewports to keep the topbar from wrapping.

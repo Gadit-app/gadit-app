@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
 import { sfx } from "@/lib/game-sfx";
+import { setWordies } from "@/lib/use-wordies";
 import { DEFAULT_LOOK, SHOP, SLOTS, owns, shopItem, type Look, type Slot } from "@/lib/journey/shop";
 import { JRN_CSS, zone, type Data } from "../JourneyClient";
 import { startPreview, type PreviewHandle } from "../run/figure";
@@ -29,23 +30,23 @@ type Copy = {
 };
 const COPY: Record<"he" | "en", Copy> = {
   he: {
-    title: "החנות", coins: "מטבעות", slots: { shirt: "חולצה", hat: "כובע", back: "על הגב", pet: "חיה מלווה" },
+    title: "החנות", coins: "Wordies", slots: { shirt: "חולצה", hat: "כובע", back: "על הגב", pet: "חיה מלווה" },
     free: "חינם", mine: "שלי", wearing: "עליי עכשיו",
-    buy: (n) => `קונים ב-${n} מטבעות`, short: (n) => (n === 1 ? "חסר עוד מטבע אחד" : `חסרים עוד ${n} מטבעות`),
-    how: "מטבעות מקבלים על כל מילה שיודעים. מה שקונים נשאר שלכם לתמיד",
+    buy: (n) => `קונים ב-${n} Wordies`, short: (n) => (n === 1 ? "חסר עוד Wordie אחד" : `חסרים עוד ${n} Wordies`),
+    how: "Wordies מקבלים על כל מילה שיודעים. מה שקונים נשאר שלכם לתמיד",
     back: "חזרה למשחקים", run: "רצים אל המבצר",
     signIn: "כדי להיכנס לחנות צריך להתחבר", loading: "פותחים את החנות", failed: "החנות לא נטענה", retry: "לנסות שוב",
-    bought: "קניתם! זה שלכם לתמיד", price: (n) => `${n} מטבעות`,
+    bought: "קניתם! זה שלכם לתמיד", price: (n) => `${n} Wordies`,
     earn: (n) => `ב-${n} מילים`, earnMore: (n) => (n === 1 ? "עוד מילה אחת באוסף, וזה שלכם. את זה לא קונים" : `עוד ${n} מילים באוסף, וזה שלכם. את זה לא קונים`),
   },
   en: {
-    title: "The shop", coins: "coins", slots: { shirt: "Shirt", hat: "Hat", back: "On the back", pet: "Companion" },
+    title: "The shop", coins: "Wordies", slots: { shirt: "Shirt", hat: "Hat", back: "On the back", pet: "Companion" },
     free: "Free", mine: "Mine", wearing: "Wearing now",
-    buy: (n) => `Buy for ${n} coins`, short: (n) => (n === 1 ? "One more coin needed" : `${n} more coins needed`),
-    how: "You get coins for every word you know. What you buy is yours for good",
+    buy: (n) => `Buy for ${n} Wordies`, short: (n) => (n === 1 ? "One more Wordie needed" : `${n} more Wordies needed`),
+    how: "You get Wordies for every word you know. What you buy is yours for good",
     back: "Back to games", run: "Run to the fortress",
     signIn: "Sign in to enter the shop", loading: "Opening the shop", failed: "The shop did not load", retry: "Try again",
-    bought: "Bought! It is yours for good", price: (n) => `${n} coins`,
+    bought: "Bought! It is yours for good", price: (n) => `${n} Wordies`,
     earn: (n) => `At ${n} words`, earnMore: (n) => (n === 1 ? "One more word in your collection and it is yours. This one is not for sale" : `${n} more words in your index and it is yours. This one is not for sale`),
   },
 };
@@ -102,6 +103,8 @@ export function ShopClient({ demo = false }: { demo?: boolean }) {
   useEffect(() => { preview.current?.setLook(shown); }, [shown]);
 
   const balance = Math.max(0, earned - spent);
+  // The chip beside the avatar shows the same number right after a purchase.
+  useEffect(() => { if (!demo && state === "ready") setWordies(balance); }, [demo, state, balance]);
   const tried = trying ? shopItem(trying) : undefined;
 
   async function send(body: { buy?: string; wear?: string }): Promise<boolean> {

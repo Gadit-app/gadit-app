@@ -144,7 +144,7 @@ export async function answerHelp(o: { messages: HelpMsg[]; lang: string; platfor
   // A long dash is never shown (Gadi's house rule), whatever the model wrote.
   answer = answer.replace(/\s*[—–]\s*/g, ", ");
   // Sentences about game coins (the fortress shop) are not money.
-  const moneyText = answer.split(/(?<=[.!?\n])/).filter((x) => !/מטבעות|coins/i.test(x)).join(" ");
+  const moneyText = answer.split(/(?<=[.!?\n])/).filter((x) => !/מטבעות|coins|Wordies/i.test(x)).join(" ");
   if (app && MONEY_RE.test(moneyText) && reason !== "distress") {
     escalate = true; reason = "money"; linkId = "none";
     answer = "";
