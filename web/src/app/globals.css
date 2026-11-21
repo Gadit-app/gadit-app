@@ -12514,3 +12514,9 @@ html[data-theme="dark"] .wordbook .wb-word-sentence-input::placeholder { color: 
 
 /* whose idea the game was, under the game title (2026-11-12) */
 .wordbook .wb-play-header-title .wb-play-header-by { display: block; margin-top: 2px; font-size: 12px; font-weight: 700; line-height: 1.3; color: #8a5a00; white-space: nowrap; }
+
+/* Wordies chip in the top bar: no room for it on a phone, where it pushed the
+   menu button off the screen for child profiles (2026-11-21). */
+@media (max-width: 600px) {
+  .gd-wordies-chip { display: none !important; }
+}
