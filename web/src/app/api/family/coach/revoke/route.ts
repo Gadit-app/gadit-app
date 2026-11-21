@@ -1,9 +1,11 @@
 /**
  * Revoke a coach grant (owner only). POST { grantId } → { ok }.
- * The coach loses access immediately (checked at /api/coach/enter time).
+ * A new entry is refused at once (/api/coach/enter). A coach who is already
+ * inside the child's profile is refused on their next request, within a few
+ * seconds (coachSessionLive in lib/firebase-admin.ts).
  */
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminDb } from "@/lib/firebase-admin";
+import { getAdminDb, forgetCoachSession } from "@/lib/firebase-admin";
 import { resolveOwner, bearer } from "@/lib/coach";
 
 export const runtime = "nodejs";
@@ -30,5 +32,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "forbidden" }, { status: 403 });
   }
   await ref.set({ revoked: true, revokedAt: new Date().toISOString() }, { merge: true });
+  forgetCoachSession(grantId);
   return NextResponse.json({ ok: true });
 }

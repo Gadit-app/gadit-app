@@ -68,6 +68,7 @@ export async function POST(req: NextRequest) {
     memberId,
     coach: true,            // marks this as a coach session (app shows "exit coaching")
     coachEmail: coach.email,
+    grantId,                // every later token check looks this grant up (lib/firebase-admin.ts)
   });
   return NextResponse.json({ token, memberName: member.name });
 }

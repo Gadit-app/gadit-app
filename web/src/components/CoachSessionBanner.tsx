@@ -111,6 +111,36 @@ export function CoachSessionBanner() {
     return () => { cancelled = true; };
   }, [user, loading]);
 
+  // The parent can revoke the coach's access during a lesson. The server then
+  // refuses this session's requests; ask it on entry, when the tab comes back
+  // and once a minute, and leave the child's profile when it says the session
+  // ended (2026-11-21).
+  useEffect(() => {
+    if (!isCoach || !user) return;
+    let cancelled = false;
+    async function check() {
+      try {
+        const token = await user!.getIdToken();
+        const res = await fetch("/api/coach/session", { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" });
+        if (cancelled || res.status !== 401) return;
+        const body = (await res.json().catch(() => null)) as { ended?: boolean } | null;
+        if (cancelled || body?.ended !== true) return;
+        const { signOut, getAuth } = await import("firebase/auth");
+        await signOut(getAuth());
+        router.push("/coach");
+      } catch { /* offline or a passing fault: try again on the next tick */ }
+    }
+    check();
+    const timer = setInterval(check, 60_000);
+    const onVisible = () => { if (document.visibilityState === "visible") check(); };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [isCoach, user, router]);
+
   if (!isCoach) return null;
   const c = lbl(lang);
 

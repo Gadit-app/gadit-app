@@ -4,7 +4,8 @@
 // automatically, so this is the source of truth — keep this file
 // in sync with what's actually live in the console.
 //
-// Last updated: 2026-11-13: families and schools are read only from the browser.
+// Last updated: 2026-11-21: a coach whose grant was revoked can no longer read.
+// (2026-11-13: families and schools are read only from the browser.)
 
 rules_version = '2';
 
@@ -13,7 +14,19 @@ service cloud.firestore {
 
     // ─── Helpers ────────────────────────────────────────────────────
     function isSignedIn() {
-      return request.auth != null;
+      return request.auth != null && coachSessionLive();
+    }
+    // A coach inside a child's profile holds a token for the child's uid with
+    // the claims `coach: true` and `grantId` (/api/coach/enter). When the
+    // parent revokes the grant, that token must stop reading the child's and
+    // the family's data here too, the same way the server refuses it
+    // (lib/firebase-admin.ts). An ordinary token has no `coach` claim and
+    // costs no extra read. A coach token without `grantId` (minted before
+    // 2026-11-21) is refused: the coach enters again from /coach.
+    function coachSessionLive() {
+      return request.auth.token.get('coach', false) != true
+        || (request.auth.token.get('grantId', '') != ''
+            && get(/databases/$(database)/documents/coachGrants/$(request.auth.token.grantId)).data.get('revoked', false) != true);
     }
     function isUser(uid) {
       return isSignedIn() && request.auth.uid == uid;

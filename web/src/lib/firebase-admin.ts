@@ -1,6 +1,6 @@
 import { initializeApp, getApps, cert, App } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import { getAuth } from "firebase-admin/auth";
+import { getAuth, type Auth } from "firebase-admin/auth";
 import { getStorage } from "firebase-admin/storage";
 
 let adminApp: App | null = null;
@@ -40,8 +40,72 @@ export function getAdminDb() {
   return getFirestore(getAdminApp());
 }
 
-export function getAdminAuth() {
-  return getAuth(getAdminApp());
+// ── Coach sessions end when the parent revokes the grant ────────────────
+// A coach inside a child's profile holds a token for the CHILD's uid, with the
+// claims `coach: true` and `grantId`. Revoking the grant used to stop only a
+// NEW entry (/api/coach/enter): a coach who was already inside stayed inside
+// until they signed out (found 2026-11-21). Signing the uid out is not an
+// option, it is the child's own account. So every token check asks whether the
+// grant behind a coach token is still live. The answer is remembered for a few
+// seconds, so a coaching session costs one extra read now and then, and a
+// revoke takes effect within that time. Ordinary tokens are not touched.
+const COACH_LIVE_TTL_MS = 15_000;
+const coachLive = new Map<string, { ok: boolean; at: number }>();
+
+// A decoded token's custom claims: coach, grantId, coachEmail, familyId, memberId.
+type CoachClaims = Record<string, unknown>;
+
+/** True for an ordinary token. For a coach token: true only while its grant
+ *  exists, is not revoked and still names this coach, family and child. A
+ *  coach token from before 2026-11-21 has no grantId and is treated as ended:
+ *  the coach enters again from /coach with one tap. */
+export async function coachSessionLive(claims: CoachClaims): Promise<boolean> {
+  if (claims.coach !== true) return true;
+  const grantId = typeof claims.grantId === "string" ? claims.grantId : "";
+  if (!grantId) return false;
+  const hit = coachLive.get(grantId);
+  if (hit && Date.now() - hit.at < COACH_LIVE_TTL_MS) return hit.ok;
+  const snap = await getAdminDb().collection("coachGrants").doc(grantId).get();
+  const g = snap.data() as { revoked?: boolean; coachEmail?: string; familyId?: string; memberId?: string } | undefined;
+  const ok = !!g
+    && g.revoked !== true
+    && g.coachEmail === claims.coachEmail
+    && g.familyId === claims.familyId
+    && g.memberId === claims.memberId;
+  if (coachLive.size > 500) coachLive.clear();
+  coachLive.set(grantId, { ok, at: Date.now() });
+  return ok;
+}
+
+/** Drop the remembered answer for a grant (called on revoke). */
+export function forgetCoachSession(grantId: string) {
+  coachLive.delete(grantId);
+}
+
+/** The error a token check throws for a coach whose access was revoked. */
+export const COACH_SESSION_ENDED = "coach_session_ended";
+
+let guardedAuth: Auth | null = null;
+
+export function getAdminAuth(): Auth {
+  if (guardedAuth) return guardedAuth;
+  const auth = getAuth(getAdminApp());
+  // Every route verifies tokens through this object, so the coach check sits
+  // here once instead of in each of the routes.
+  guardedAuth = new Proxy(auth, {
+    get(target, prop) {
+      if (prop === "verifyIdToken") {
+        return async (idToken: string, checkRevoked?: boolean) => {
+          const decoded = await target.verifyIdToken(idToken, checkRevoked);
+          if (!(await coachSessionLive(decoded))) throw new Error(COACH_SESSION_ENDED);
+          return decoded;
+        };
+      }
+      const value = Reflect.get(target, prop, target);
+      return typeof value === "function" ? value.bind(target) : value;
+    },
+  });
+  return guardedAuth;
 }
 
 export function getAdminStorage() {
