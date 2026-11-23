@@ -37,6 +37,7 @@ import { SPELL_T_EXTRA } from "@/lib/spell-i18n";
 import { misc } from "@/lib/misc-i18n";
 import { ml } from "@/lib/my-lists-i18n";
 import { QText } from "@/components/play/QText";
+import { gadCopy } from "@/lib/gadit-button-copy";
 
 // Single source of truth: shared LANGUAGES registry (never drifts behind new langs).
 const LANGS = LANGUAGES;
@@ -842,7 +843,13 @@ export function NotebookPage() {
                     className="wb-notebook-card-link"
                   >
                     <div className="wb-notebook-card-head">
-                      <span className="wb-notebook-card-word">{item.word}</span>
+                      <span className="wb-notebook-card-word">
+                        {item.word}
+                        {/* A word marked with "I Gad it" on its page (Gadi 2026-11-23). */}
+                        {item.understood && (
+                          <span title={gadCopy(lang).button} aria-label={gadCopy(lang).button} style={{ color: "#0F9E6E", fontWeight: 800, marginInlineStart: 6 }}>✓</span>
+                        )}
+                      </span>
                       <span className="wb-notebook-card-lang">{wordLangLabel(item.language, lang)}</span>
                     </div>
                     {item.meaning && (

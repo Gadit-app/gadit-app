@@ -34,7 +34,7 @@ import { MeaningPractice } from "./MeaningPractice";
 import { meaningPracticeCopy } from "@/lib/meaning-practice-i18n";
 import { gadCopy, GAD_TAP_HINT } from "@/lib/gadit-button-copy";
 import { nativeShareFallback } from "@/lib/native-app";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { miscUi } from "@/lib/misc-ui-i18n";
 import { planCopy, FREE_NOTEBOOK_MAX } from "@/lib/plan-copy";
 import Link from "next/link";
@@ -1375,10 +1375,58 @@ export function OriginCard({ etymology, onReport, plan = "basic" }: { etymology:
 // No question any more: the tap itself says "I understood" and marks the word
 // as understood in the notebook. A plan without a notebook gets the
 // login/upgrade path through onLocked.
+// After the tap (Gadi 2026-11-23): the word itself flies from the button to
+// the notebook in the top menu (on a phone, to the menu button) and the link
+// gives one small bounce. Decoration only: any failure just skips it, and
+// with reduced motion there is only the bounce.
+function flyToNotebook(from: HTMLElement | null, word: string) {
+  try {
+    if (!from) return;
+    const target = Array.from(document.querySelectorAll<HTMLElement>('[data-nav="notebook"], .wb-shell-burger')).find((el) => {
+      const r = el.getBoundingClientRect();
+      return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== "hidden";
+    });
+    if (!target) return;
+    const bounce = () => target.animate(
+      [{ transform: "scale(1)" }, { transform: "scale(1.2)" }, { transform: "scale(1)" }],
+      { duration: 480, easing: "ease-out" },
+    );
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) { bounce(); return; }
+    const a = from.getBoundingClientRect();
+    const b = target.getBoundingClientRect();
+    const x0 = a.left + a.width / 2, y0 = a.top + a.height / 2;
+    const dx = b.left + b.width / 2 - x0, dy = b.top + b.height / 2 - y0;
+    const chip = document.createElement("div");
+    chip.textContent = word;
+    chip.dir = "auto";
+    chip.setAttribute("aria-hidden", "true");
+    Object.assign(chip.style, {
+      position: "fixed", left: `${x0}px`, top: `${y0}px`, zIndex: "9999", pointerEvents: "none",
+      background: "#0B7F7F", color: "#fff", fontWeight: "800", fontSize: "18px", lineHeight: "1.2",
+      padding: "6px 14px", borderRadius: "999px", whiteSpace: "nowrap",
+      boxShadow: "0 6px 18px rgba(11,127,127,.35)", transform: "translate(-50%, -50%)",
+    });
+    document.body.appendChild(chip);
+    const at = (f: number, lift: number, scale: number) =>
+      `translate(calc(-50% + ${dx * f}px), calc(-50% + ${dy * f - lift}px)) scale(${scale})`;
+    const flight = chip.animate(
+      [
+        { transform: at(0, 0, 1), opacity: 1 },
+        { transform: at(0.4, 70, 1.12), opacity: 1, offset: 0.35 },
+        { transform: at(1, 0, 0.35), opacity: 0.25 },
+      ],
+      { duration: 900, easing: "cubic-bezier(.45,0,.55,1)", fill: "forwards" },
+    );
+    flight.onfinish = () => { chip.remove(); bounce(); };
+    setTimeout(() => chip.remove(), 1600);
+  } catch { /* decoration only */ }
+}
+
 function GadItButton({ lang, word, language, paid, onLocked }: { lang: string; word: string; language: string; paid: boolean; onLocked: () => void }) {
   const c = gadCopy(lang);
-  const { user } = useAuth();
+  const { user, familyRole } = useAuth();
   const [state, setState] = useState<"idle" | "busy" | "done" | "already">("idle");
+  const btnRef = useRef<HTMLButtonElement | null>(null);
   const label = c.button;
   async function tap() {
     if (!user || !paid) { onLocked(); return; }
@@ -1397,31 +1445,40 @@ function GadItButton({ lang, word, language, paid, onLocked }: { lang: string; w
       // The automatic notebook save may still be on its way: one retry.
       if (j.skipped) { await new Promise((ok) => setTimeout(ok, 1500)); j = await send(); }
       setState(j.alreadyUnderstood ? "already" : j.understood ? "done" : "idle");
+      if (j.understood) flyToNotebook(btnRef.current, word);
       try { sessionStorage.removeItem("gadit-kid-rankindex"); } catch { /* ignore */ }
     } catch { setState("idle"); }
   }
   const done = state === "done" || state === "already";
+  // After the tap: one green line, no second "Gad it" (Gadi 2026-11-23). A
+  // child profile's menu calls the notebook "My words", so its line does too.
+  const doneText = state === "done"
+    ? (familyRole === "kid" ? c.doneKid : c.done)
+    : c.alreadySub.replace(/[.。]\s*$/, "");
   return (
-    <div style={{ margin: "22px 20px 8px" }}>
+    <div style={{ margin: "22px 20px 8px" }} aria-live="polite">
       <button
+        ref={btnRef}
         type="button"
         onClick={tap}
         disabled={state === "busy"}
-        aria-label={`${label} ${GAD_TAP_HINT[lang] ?? GAD_TAP_HINT.en}`}
-        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, width: "100%", minHeight: 56, borderRadius: 16, border: "none", background: done ? "#0F9E6E" : "#0B7F7F", color: "#fff", fontSize: 19, fontWeight: 800, cursor: done ? "default" : "pointer", fontFamily: "inherit", boxShadow: "0 2px 6px rgba(11,127,127,.25)", opacity: state === "busy" ? 0.75 : 1 }}
+        aria-label={done ? doneText : `${label} ${GAD_TAP_HINT[lang] ?? GAD_TAP_HINT.en}`}
+        style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", minHeight: 56, padding: "10px 16px", borderRadius: 16, border: "none", background: done ? "#0F9E6E" : "#0B7F7F", color: "#fff", fontSize: done ? 17 : 19, fontWeight: 800, lineHeight: 1.35, textAlign: "center", cursor: done ? "default" : "pointer", fontFamily: "inherit", boxShadow: "0 2px 6px rgba(11,127,127,.25)", opacity: state === "busy" ? 0.75 : 1 }}
       >
         {/* The check comes right after the words, in their own direction:
             "I Gad it ✓" on every page, also inside a Hebrew or Arabic one
             (Gadi 2026-11-23); dir="auto" keeps a local RTL phrase (Persian)
             reading the right way, with the check after it. */}
         <span dir="auto" style={{ unicodeBidi: "isolate" }}>
-          {done ? c.success : label}
+          {done ? doneText : label}
           <span aria-hidden="true" style={{ marginInlineStart: 10 }}>✓</span>
         </span>
       </button>
-      <div style={{ textAlign: "center", fontSize: 12.5, color: "var(--ink-muted, #6B7280)", marginTop: 6 }}>
-        {state === "done" ? c.doneSub : state === "already" ? c.alreadySub : (GAD_TAP_HINT[lang] ?? GAD_TAP_HINT.en)}
-      </div>
+      {!done && (
+        <div style={{ textAlign: "center", fontSize: 12.5, color: "var(--ink-muted, #6B7280)", marginTop: 6 }}>
+          {GAD_TAP_HINT[lang] ?? GAD_TAP_HINT.en}
+        </div>
+      )}
     </div>
   );
 }

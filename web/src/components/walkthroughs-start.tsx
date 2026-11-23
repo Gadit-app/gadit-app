@@ -137,7 +137,7 @@ export function searchSteps(lang: Lang): WalkStep[] {
       ),
     },
     {
-      caption: gt(lang, "search.s4"),
+      caption: gtf(lang, "search.s4", { btn: gadCopy(lang).button }),
       screen: (
         <Screen>
           <OriginBlock lang={lang} />
@@ -362,11 +362,11 @@ export function wordPageSteps(lang: Lang): WalkStep[] {
       ),
     }]),
     {
-      caption: gt(lang, "wordpage.s4"),
+      caption: gtf(lang, "wordpage.s4", { btn: gadCopy(lang).button }),
       screen: (
         <Screen>
           <OriginBlock lang={lang} />
-          <GadItBtn label={gadCopy(lang).success} hint={gt(lang, "ui.gadDoneSub")} done />
+          <GadItBtn label={gadCopy(lang).done} done />
         </Screen>
       ),
     },
@@ -377,7 +377,7 @@ export function wordPageSteps(lang: Lang): WalkStep[] {
 export function extrasSteps(lang: Lang): WalkStep[] {
   return [
     {
-      caption: gt(lang, "extras.s1"),
+      caption: gtf(lang, "extras.s1", { btn: gadCopy(lang).button }),
       tap: { x: lang === "he" ? "76%" : "22%", y: "57%" },
       screen: (
         <Screen>

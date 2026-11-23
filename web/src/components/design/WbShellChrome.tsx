@@ -451,6 +451,8 @@ export function WbShellNav({ active }: { active?: NavKey }) {
             href={l.href}
             onClick={(e) => backToStart(e, l.href)}
             className={`wb-shell-navlink${active === l.key ? " is-active" : ""}${BUY_NAV_KEYS.has(l.key) ? " gd-buy" : ""}`}
+            // Where "I Gad it" sends the word (result.tsx flyToNotebook).
+            data-nav={l.key}
             {...hide}
           >
             {l.label}

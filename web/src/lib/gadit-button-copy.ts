@@ -8,6 +8,11 @@
  * hint in the reader's language. Since 2026-11-23 (Gadi) the label carries
  * "I", because it speaks for the reader (plain "Gad it" read like the app's
  * own name), has no exclamation mark, and the check comes after "it".
+ * After the tap there is no second "Gad it" (Gadi, same day: "why the button
+ * twice?"): the word flies to the notebook in the top menu and one green line
+ * says "Good job! The word is in your notebook" (`done`), or "... in My
+ * words" for a child profile (`doneKid`), whose menu calls it that.
+ * `success` ("Now I Gad it") is left for the features page bubble only.
  * EXCEPT where "gad" sounds bad: in Russian,
  * Ukrainian, Polish, Czech and Slovak "гад/gad" is an insult or "vermin",
  * in Persian "gada" is a beggar and in Hindi "gadha" a donkey. Those
@@ -15,7 +20,7 @@
  */
 import { GADIT_BUTTON_I18N } from "@/lib/gadit-button-i18n";
 
-export type GadKey = "button" | "success" | "doneSub" | "alreadySub";
+export type GadKey = "button" | "success" | "done" | "doneKid" | "alreadySub";
 
 /** Languages where "gad" must never be shown or said. */
 export const NO_GAD_LANGS = new Set(["ru", "uk", "pl", "cs", "sk", "fa", "hi"]);
@@ -24,13 +29,15 @@ const BASE: Record<"en" | "he", Record<GadKey, string>> = {
   en: {
     button: "I Gad it",
     success: "Now I Gad it",
-    doneSub: "The word is marked as understood in your notebook.",
+    done: "Good job! The word is in your notebook",
+    doneKid: "Good job! The word is in My words",
     alreadySub: "This word is already in your understood words.",
   },
   he: {
     button: "I Gad it",
     success: "Now I Gad it",
-    doneSub: "המילה סומנה במחברת כמילה שהבנתם.",
+    done: "כל הכבוד! המילה במחברת שלכם",
+    doneKid: "כל הכבוד! המילה באוצר המילים שלכם",
     alreadySub: "המילה הזאת כבר נמצאת אצלכם במילים שהבנתם.",
   },
 };

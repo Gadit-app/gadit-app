@@ -126,7 +126,6 @@ const G: Dict = {
   "ui.originWord": { en: "Original word", he: "מילה מקורית" },
   "ui.originMeant": { en: "Originally meant", he: "המקור" },
   "ui.gadHint": { en: "Tap when you've understood, and the word is marked as understood in your notebook", he: "לחצו כשהבנתם, והמילה תסומן במחברת שלכם כמילה שהבנתם" },
-  "ui.gadDoneSub": { en: "The word is marked as understood in your notebook.", he: "המילה סומנה במחברת כמילה שהבנתם." },
   "ui.savedNote": { en: "This word and its meanings are saved in your notebook, and available offline too", he: "המילה והפירושים שלה נשמרו במחברת שלכם, וזמינים גם בלי אינטרנט" },
   "ui.niqqud": { en: "Niqqud", he: "ניקוד" },
   "ui.moreExamples": { en: "+ More example sentences", he: "+ עוד משפטים לדוגמה" },
@@ -422,7 +421,7 @@ const G: Dict = {
   "search.s1": { en: "Type a word in the search box, or tap the mic and say it.", he: "מקלידים מילה בתיבת החיפוש, או לוחצים על המיקרופון ואומרים אותה." },
   "search.s2": { en: "Gadit shows every meaning, not just one, each with examples.", he: "Gadit מראה את כל המשמעויות, לא רק אחת, כל אחת עם דוגמאות." },
   "search.s3": { en: "Tap 'Image' under a meaning to see a picture of it.", he: "לוחצים 'תמונה' מתחת למשמעות כדי לראות תמונה שלה." },
-  "search.s4": { en: "At the end: where the word comes from, then the 'Gad it!' button.", he: "בסוף: מקור המילה, ואחריו הכפתור 'Gad it!'." },
+  "search.s4": { en: "At the end: where the word comes from, then the '{btn}' button.", he: "בסוף: מקור המילה, ואחריו הכפתור '{btn}'." },
 
   // ── guide: listen ──
   "listen.title": { en: "Hear how a word sounds", he: "שומעים איך הוגים" },
@@ -458,13 +457,13 @@ const G: Dict = {
   "wordpage.s1": { en: "Under a meaning, tap 'Write a sentence of your own and check you understood'.", he: "מתחת למשמעות, לוחצים 'חברו משפט משלכם ובדקו שהבנתם'." },
   "wordpage.s2": { en: "Write or say your sentence, tap 'Check sentence' and get feedback right there.", he: "כותבים או מקליטים את המשפט, לוחצים 'בדיקת המשפט' ומקבלים משוב במקום." },
   "wordpage.s3": { en: "On paid plans, '+ More example sentences' adds three new examples.", he: "במנויים בתשלום, '+ עוד משפטים לדוגמה' מוסיף שלוש דוגמאות חדשות." },
-  "wordpage.s4": { en: "At the end, tap 'Gad it!' and the word is marked as understood in your notebook.", he: "בסוף, לוחצים 'Gad it!' והמילה מסומנת במחברת כמילה שהבנתם." },
+  "wordpage.s4": { en: "At the end, tap '{btn}' and the word is marked as understood in your notebook.", he: "בסוף, לוחצים '{btn}' והמילה מסומנת במחברת כמילה שהבנתם." },
 
   // ── guide: extras (word questions) ──
   "extras.title": { en: "Questions about a word", he: "שאלות על המילה" },
   "extras.desc": { en: "On paid plans: opposites, similar words, word family, common mistakes and how to remember it.", he: "במנויים בתשלום: הפכים, מילים דומות, מילים מאותו שורש, טעויות נפוצות ואיך לזכור." },
   "extras.desc.app": { en: "Opposites, similar words, word family, common mistakes and how to remember the word.", he: "הפכים, מילים דומות, מילים מאותו שורש, טעויות נפוצות ואיך לזכור את המילה." },
-  "extras.s1": { en: "After 'Gad it!', 'Have a question about this word?' offers five questions.", he: "אחרי 'Gad it!', בחלק 'יש לכם שאלה על המילה הזאת?' יש חמש שאלות." },
+  "extras.s1": { en: "After '{btn}', 'Have a question about this word?' offers five questions.", he: "אחרי '{btn}', בחלק 'יש לכם שאלה על המילה הזאת?' יש חמש שאלות." },
   "extras.s2": { en: "Tap a question and the answer opens right below.", he: "לוחצים על שאלה, והתשובה נפתחת מיד מתחת." },
 
   // ── guide: kids ──
