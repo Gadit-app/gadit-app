@@ -34,6 +34,7 @@ import { hasAffonsoReferral, ensureAffonsoPixel } from "@/lib/affonso";
 import { isBlockedSignupEmail } from "@/lib/signup-guard";
 import { nativeAuthAvailable, requestNativeAuth, type NativeAuthProvider } from "@/lib/native-auth";
 import { isIosApp } from "@/lib/native-app";
+import { installSessionBlackbox, blackboxOnAuth, noteSignOutReason } from "@/lib/session-blackbox";
 
 function getFirebaseAuth() {
   const firebaseConfig = {
@@ -45,7 +46,10 @@ function getFirebaseAuth() {
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   };
   const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-  return getAuth(app);
+  const auth = getAuth(app);
+  // Sessions that end on their own are recorded (2026-11-23). Once per page.
+  installSessionBlackbox(auth);
+  return auth;
 }
 
 function getFirebaseDb(getFirestore: FirestoreMod["getFirestore"]) {
@@ -274,6 +278,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       .then((cred) => { if (cred) postGoogleSignIn(cred); })
       .catch((err) => { console.warn("getRedirectResult failed:", err); });
     const unsub = onAuthStateChanged(auth, (u) => {
+      // A session that ended without "התנתקו" goes to the black box.
+      blackboxOnAuth(u);
       // Mark the plan unresolved IN THE SAME BATCH as the user appearing.
       // Otherwise the first render with a signed-in user still carries the
       // anonymous planReady=true + plan="basic", and child pages' gates (their
@@ -665,6 +671,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function logout() {
     const auth = getFirebaseAuth();
+    noteSignOutReason("user");
     await signOut(auth);
   }
 

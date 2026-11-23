@@ -11,6 +11,7 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
+import { noteSignOutReason } from "@/lib/session-blackbox";
 
 const LABEL: Record<string, { coaching: (name: string) => string; exit: string }> = {
   en: { coaching: (n) => (n ? `Coaching ${n}` : "Coaching a student"), exit: "Exit coaching" },
@@ -125,6 +126,7 @@ export function CoachSessionBanner() {
         if (cancelled || res.status !== 401) return;
         const body = (await res.json().catch(() => null)) as { ended?: boolean } | null;
         if (cancelled || body?.ended !== true) return;
+        noteSignOutReason("coach-ended");
         const { signOut, getAuth } = await import("firebase/auth");
         await signOut(getAuth());
         router.push("/coach");
@@ -146,6 +148,7 @@ export function CoachSessionBanner() {
 
   async function exit() {
     try {
+      noteSignOutReason("coach-exit");
       const { signOut, getAuth } = await import("firebase/auth");
       await signOut(getAuth());
     } catch { /* ignore */ }

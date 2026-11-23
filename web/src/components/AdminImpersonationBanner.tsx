@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useLang } from "@/lib/lang-context";
+import { noteSignOutReason } from "@/lib/session-blackbox";
 
 export function AdminImpersonationBanner() {
   const { user } = useAuth();
@@ -65,6 +66,7 @@ export function AdminImpersonationBanner() {
       }
     } catch { /* fall through to sign-out */ }
     try {
+      noteSignOutReason("admin-exit");
       const { signOut, getAuth } = await import("firebase/auth");
       await signOut(getAuth());
     } catch { /* ignore */ }

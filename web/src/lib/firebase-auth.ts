@@ -1,5 +1,6 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth, connectAuthEmulator } from "firebase/auth";
+import { installSessionBlackbox } from "@/lib/session-blackbox";
 
 /**
  * The Firebase app and Auth only, without Firestore (2026-10-31): screens on
@@ -18,6 +19,9 @@ const firebaseConfig = {
 
 export const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 export const auth = getAuth(app);
+// Sessions that end on their own are recorded (lib/session-blackbox.ts, 2026-11-23).
+// Installed right here, before Firebase's first request, whichever file creates Auth first.
+installSessionBlackbox(auth);
 
 // Local emulator tests only (see lib/firebase.ts): a normal build contains none of this.
 export const emulatorBuild = process.env.NODE_ENV !== "production" || process.env.NEXT_PUBLIC_GADIT_LOCAL_PREVIEW === "1";
