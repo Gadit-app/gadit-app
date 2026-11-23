@@ -13,7 +13,7 @@
  *                         quiz, word games)
  *   <IdiomsSection />     idioms from every meaning
  *   <OriginCard />        rust card: Language + Originally meant + optional story
- *   <GadItButton />       "Gad it!" at the end of the page
+ *   <GadItButton />       "I Gad it ✓" at the end of the page
  *   <WordQuestions />     ask-about-this-word chips
  *
  * Saving to the notebook and offline are automatic (WordClient), so the
@@ -1410,8 +1410,14 @@ function GadItButton({ lang, word, language, paid, onLocked }: { lang: string; w
         aria-label={`${label} ${GAD_TAP_HINT[lang] ?? GAD_TAP_HINT.en}`}
         style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, width: "100%", minHeight: 56, borderRadius: 16, border: "none", background: done ? "#0F9E6E" : "#0B7F7F", color: "#fff", fontSize: 19, fontWeight: 800, cursor: done ? "default" : "pointer", fontFamily: "inherit", boxShadow: "0 2px 6px rgba(11,127,127,.25)", opacity: state === "busy" ? 0.75 : 1 }}
       >
-        <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{done ? c.success : label}</span>
-        <span aria-hidden="true">✓</span>
+        {/* The check comes right after the words, in their own direction:
+            "I Gad it ✓" on every page, also inside a Hebrew or Arabic one
+            (Gadi 2026-11-23); dir="auto" keeps a local RTL phrase (Persian)
+            reading the right way, with the check after it. */}
+        <span dir="auto" style={{ unicodeBidi: "isolate" }}>
+          {done ? c.success : label}
+          <span aria-hidden="true" style={{ marginInlineStart: 10 }}>✓</span>
+        </span>
       </button>
       <div style={{ textAlign: "center", fontSize: 12.5, color: "var(--ink-muted, #6B7280)", marginTop: 6 }}>
         {state === "done" ? c.doneSub : state === "already" ? c.alreadySub : (GAD_TAP_HINT[lang] ?? GAD_TAP_HINT.en)}

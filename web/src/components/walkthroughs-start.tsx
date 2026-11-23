@@ -11,6 +11,7 @@
 
 import type { Lang } from "@/lib/i18n";
 import { gt, gtA, gtf, isInApp } from "@/lib/guide-i18n";
+import { gadCopy } from "@/lib/gadit-button-copy";
 import type { WalkStep } from "@/components/Walkthrough";
 import {
   Screen, AppBar, TopMenu, SearchPill, SentenceBox, WordHead, MeaningCard, SectionHead, TextLink,
@@ -140,7 +141,7 @@ export function searchSteps(lang: Lang): WalkStep[] {
       screen: (
         <Screen>
           <OriginBlock lang={lang} />
-          <GadItBtn label={gt(lang, "ui.gadIt")} hint={gt(lang, "ui.gadHint")} />
+          <GadItBtn label={gadCopy(lang).button} hint={gt(lang, "ui.gadHint")} />
           <QuestionsBlock lang={lang} />
         </Screen>
       ),
@@ -365,7 +366,7 @@ export function wordPageSteps(lang: Lang): WalkStep[] {
       screen: (
         <Screen>
           <OriginBlock lang={lang} />
-          <GadItBtn label={gt(lang, "ui.gadDone")} hint={gt(lang, "ui.gadDoneSub")} done />
+          <GadItBtn label={gadCopy(lang).success} hint={gt(lang, "ui.gadDoneSub")} done />
         </Screen>
       ),
     },
@@ -381,7 +382,7 @@ export function extrasSteps(lang: Lang): WalkStep[] {
       screen: (
         <Screen>
           <OriginBlock lang={lang} />
-          <GadItBtn label={gt(lang, "ui.gadIt")} hint={gt(lang, "ui.gadHint")} />
+          <GadItBtn label={gadCopy(lang).button} hint={gt(lang, "ui.gadHint")} />
           <QuestionsBlock lang={lang} />
         </Screen>
       ),

@@ -314,14 +314,16 @@ export function Tile({ img, title, sub, highlight }: { img?: string; title: stri
   );
 }
 
-/** The "Gad it!" button at the end of a word (result.tsx GadItButton):
- *  full width, deep teal, a check after the label, a hint line under it. */
+/** The "I Gad it ✓" button at the end of a word (result.tsx GadItButton):
+ *  full width, deep teal, the check right after the words, a hint line under it. */
 export function GadItBtn({ label, hint, done }: { label: string; hint?: string; done?: boolean }) {
   return (
     <div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, minHeight: 46, borderRadius: 14, fontSize: 16.5, fontWeight: 800, color: "#fff", background: done ? "#0F9E6E" : "#0B7F7F", boxShadow: "0 2px 6px rgba(11,127,127,.25)" }}>
-        <span dir="ltr" style={{ unicodeBidi: "isolate" }}>{label}</span>
-        <span aria-hidden="true">✓</span>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 46, borderRadius: 14, fontSize: 16.5, fontWeight: 800, color: "#fff", background: done ? "#0F9E6E" : "#0B7F7F", boxShadow: "0 2px 6px rgba(11,127,127,.25)" }}>
+        <span dir="auto" style={{ unicodeBidi: "isolate" }}>
+          {label}
+          <span aria-hidden="true" style={{ marginInlineStart: 8 }}>✓</span>
+        </span>
       </div>
       {hint && <div style={{ textAlign: "center", fontSize: 11.5, color: WT.muted, marginTop: 5 }}>{hint}</div>}
     </div>

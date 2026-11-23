@@ -4,8 +4,11 @@
  * question: the tap itself marks the word understood in the notebook, once,
  * and gives no rank points (/api/notebook/understood).
  *
- * The brand phrase stays English ("Gad it!", "Now I gad it!") with a small
- * hint in the reader's language, EXCEPT where "gad" sounds bad: in Russian,
+ * The brand phrase stays English ("I Gad it", "Now I Gad it") with a small
+ * hint in the reader's language. Since 2026-11-23 (Gadi) the label carries
+ * "I", because it speaks for the reader (plain "Gad it" read like the app's
+ * own name), has no exclamation mark, and the check comes after "it".
+ * EXCEPT where "gad" sounds bad: in Russian,
  * Ukrainian, Polish, Czech and Slovak "гад/gad" is an insult or "vermin",
  * in Persian "gada" is a beggar and in Hindi "gadha" a donkey. Those
  * languages get a plain local phrase and never show "gad".
@@ -19,14 +22,14 @@ export const NO_GAD_LANGS = new Set(["ru", "uk", "pl", "cs", "sk", "fa", "hi"]);
 
 const BASE: Record<"en" | "he", Record<GadKey, string>> = {
   en: {
-    button: "Gad it!",
-    success: "Now I gad it!",
+    button: "I Gad it",
+    success: "Now I Gad it",
     doneSub: "The word is marked as understood in your notebook.",
     alreadySub: "This word is already in your understood words.",
   },
   he: {
-    button: "Gad it!",
-    success: "Now I gad it!",
+    button: "I Gad it",
+    success: "Now I Gad it",
     doneSub: "המילה סומנה במחברת כמילה שהבנתם.",
     alreadySub: "המילה הזאת כבר נמצאת אצלכם במילים שהבנתם.",
   },
