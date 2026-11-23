@@ -180,6 +180,23 @@ const FORM_OF_COPY: Record<string, string> = {
   cs: "{form} je tvar slova {word}", sk: "{form} je tvar slova {word}", hi: "{form}, {word} का एक रूप है", am: "{form} የ{word} ቅርጽ ነው", ja: "{form} は {word} の活用形です",
 };
 
+/** Under the one meaning a sentence chose (context mode), the way to the
+ *  word's full entry (Gadi 2026-11-23: on "עולה" the burnt offering was out
+ *  of sight). */
+const ALL_MEANINGS_COPY: Record<string, string> = {
+  en: "All meanings of this word", he: "לכל המשמעויות של המילה", ar: "كل معاني الكلمة", ru: "Все значения слова",
+  es: "Todos los significados de la palabra", pt: "Todos os significados da palavra", fr: "Tous les sens du mot", de: "Alle Bedeutungen des Wortes",
+  cs: "Všechny významy slova", sk: "Všetky významy slova", it: "Tutti i significati della parola", ja: "このことばのすべての意味",
+  hi: "शब्द के सभी अर्थ", am: "የቃሉ ሁሉም ትርጉሞች", uk: "Усі значення слова", tr: "Kelimenin tüm anlamları",
+  pl: "Wszystkie znaczenia słowa", fa: "همهٔ معناهای واژه", id: "Semua arti kata ini", nl: "Alle betekenissen van het woord",
+  el: "Όλες οι σημασίες της λέξης", zu: "Zonke izincazelo zegama", vi: "Tất cả nghĩa của từ", fil: "Lahat ng kahulugan ng salita",
+  af: "Al die betekenisse van die woord", sw: "Maana zote za neno", "zh-CN": "这个词的所有意思", "zh-TW": "這個詞的所有意思",
+  ko: "이 단어의 모든 뜻", th: "ความหมายทั้งหมดของคำนี้", bn: "শব্দটির সব অর্থ", da: "Alle betydninger af ordet",
+  hu: "A szó összes jelentése", xh: "Zonke iintsingiselo zegama", nso: "Ditlhalošo ka moka tša lentšu", tn: "Dikao tsotlhe tsa lefoko",
+  st: "Meelelo yohle ya lentswe", ts: "Tinhlamuselo hinkwato ta rito", ss: "Tonkhe tinchazelo teligama", ve: "Ṱhalutshedzo dzoṱhe dza ipfi",
+  nr: "Zoke iinhlathululo zebizo",
+};
+
 const SPELLING_FIX_COPY: Record<string, string> = {
   en: "Spelling fix:", he: "תיקון כתיב:", ar: "تصحيح الإملاء:", ru: "Исправление написания:",
   es: "Corrección ortográfica:", pt: "Correção ortográfica:", fr: "Correction orthographique :",
@@ -1505,9 +1522,12 @@ export function ResultView({
   niqqudOn = false,
   onToggleNiqqud,
   streaming = false,
+  allMeaningsHref,
 }: {
   result: WordResult;
   plan: Plan;
+  /** Context mode: the word's full entry, linked under the chosen meaning. */
+  allMeaningsHref?: string;
   /** True while the SSE stream is still filling this result — threaded to the
    *  meanings so Kids Mode can withhold adult text until kids text lands. */
   streaming?: boolean;
@@ -1653,6 +1673,14 @@ export function ResultView({
         kidsImages={kidsImages}
         kidsImagesLoading={kidsImagesLoading}
       />
+
+      {allMeaningsHref && !streaming && (
+        <p dir={dir} style={{ margin: "-4px 0 18px", fontSize: 15 }}>
+          <Link href={allMeaningsHref} style={{ color: "var(--teal-deep,#0A7472)", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 }}>
+            {ALL_MEANINGS_COPY[lang] ?? ALL_MEANINGS_COPY.en}
+          </Link>
+        </p>
+      )}
 
       <IdiomsSection
         meanings={result.meanings ?? []}

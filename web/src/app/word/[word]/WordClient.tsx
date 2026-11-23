@@ -2647,6 +2647,7 @@ export function WordClient({
           <ResultView
             result={displayResult ?? result}
             streaming={loading}
+            allMeaningsHref={contextSentence ? href(`/word/${encodeURIComponent(initialWord)}`) : undefined}
             showNiqqud={(isHebrewWord || isArabicWord) && !!user}
             niqqudOn={niqqud}
             onToggleNiqqud={toggleNiqqud}

@@ -9,8 +9,10 @@ import { useWordies } from "@/lib/use-wordies";
 /**
  * The child's Wordies, next to the avatar on every page (Gadi 2026-11-20:
  * "it is always written somewhere how many Wordies they have"). Shown to a
- * child profile, in Kids Mode, and to anyone who already has some. A tap
- * opens the shop. "Wordies" stays in Latin letters in every language.
+ * child profile and in Kids Mode only: not to a grown-up because their own
+ * account happens to hold some (Gadi 2026-11-23: "I'm an adult, I don't know
+ * why I have Wordies"). A tap opens the shop. "Wordies" stays in Latin
+ * letters in every language.
  *
  * Hidden under 600px (globals.css, .gd-wordies-chip): on a phone the top bar
  * of a child profile has no room for it, and it pushed the menu button off
@@ -20,10 +22,10 @@ export function WordiesChip() {
   const { user, planReady, familyRole } = useAuth();
   const [kidsOn] = useKidsMode();
   const href = useHref();
-  const n = useWordies(user, planReady);
+  const forChild = familyRole === "kid" || kidsOn;
+  const n = useWordies(user, planReady && forChild);
   // Signed out: the hook keeps the last number, the chip is simply not shown.
-  if (!user || !planReady || n === null) return null;
-  if (!(familyRole === "kid" || kidsOn || n > 0)) return null;
+  if (!user || !planReady || !forChild || n === null) return null;
   return (
     <Link
       href={href("/journey/shop")}

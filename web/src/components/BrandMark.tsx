@@ -34,13 +34,25 @@ const GAME_STAGES = ".wst, .ctx-world";
 
 const homeOf = (lang: string) => ((BRAND as Record<string, { home: string }>)[lang] ?? BRAND.en);
 
+/** Inside a top bar that stays on screen while the page scrolls. */
+function pinned(el: HTMLElement): boolean {
+  for (let n: HTMLElement | null = el; n && n !== document.body; n = n.parentElement) {
+    const p = getComputedStyle(n).position;
+    if (p === "sticky" || p === "fixed") return true;
+  }
+  return false;
+}
+
 /** A logo near the top of the page that can really be seen (not this mark, not covered). */
 function visibleLogo(): boolean {
   for (const el of Array.from(document.querySelectorAll<HTMLElement>(LOGOS))) {
     if (el.closest("[data-brandmark]")) continue;
     const r = el.getBoundingClientRect();
     if (r.width <= 0 || r.height <= 0 || r.bottom < 0) continue;
-    if (r.top + window.scrollY > 220) continue;
+    // Near the top of the page, or in a top bar that stays put: the word page's
+    // sticky bar keeps "Gadit" in sight however far down the reader scrolls, so
+    // no second "Gadit" in the corner under the mic (Gadi 2026-11-23).
+    if (r.top + window.scrollY > 220 && !(r.top <= 220 && pinned(el))) continue;
     const st = getComputedStyle(el);
     if (st.visibility === "hidden" || st.opacity === "0") continue;
     // Covered by a full-screen game? Then it is not seen.

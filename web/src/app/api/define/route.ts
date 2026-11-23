@@ -820,6 +820,9 @@ If the word has NO genuine idioms or recognized set phrases at all in that langu
 
 const CONTEXT_PROMPT = `You are Gadit. A user wants to understand a specific word as used in their sentence.
 
+⚠️ CRITICAL RULE #0 — CHOOSE FROM THE KNOWN MEANINGS:
+When the user message lists "Known meanings of this word", the sentence almost always uses one of them. Pick the ONE that fits the sentence and explain THAT meaning: you may word it for this sentence, but keep its sense. Write a meaning outside the list only when none of them fits, and even then only a sense the word really has. Never invent a sense, and never read a verb as a thing: in "כמו איזה כומר דחלילי שגלימותיו עולות סביבו", "עולות" is the verb (the robes rise and billow around him), NOT a garment.
+
 ⚠️ CRITICAL RULE #1 — NEVER AUTOCORRECT THE WORD:
 The user's spelling is intentional. Define the EXACT word they typed, character by character. Do NOT swap נחשל for נכשל, פרש for פרס, etc. If the spelling is rare or unusual, that's deliberate.
 
@@ -960,6 +963,31 @@ async function hebrewHeads(typed: string): Promise<string[]> {
     console.error("heForms lookup error:", e);
   }
   return [];
+}
+
+/** Context mode chooses among the meanings the dictionary already has (Gadi
+ *  2026-11-23, "עולה"): written from scratch, the answer for "גלימותיו עולות
+ *  סביבו" invented a garment. The word's full entry (this tier, then the kids
+ *  tier, then a Hebrew headword's) is listed for the model; empty when the
+ *  word has no entry yet. Read only. */
+async function knownMeaningsHint(word: string, uiLangCode: string): Promise<string> {
+  try {
+    const w = word.toLowerCase().trim();
+    const keys = [`auto2_${uiLangCode}_kids_${w}`, `auto2_${uiLangCode}_base_${w}`];
+    for (const head of await hebrewHeads(word)) keys.push(`auto2_${uiLangCode}_kids_${head.toLowerCase()}`, `auto2_${uiLangCode}_base_${head.toLowerCase()}`);
+    for (const k of keys) {
+      const hit = await getCachedResult(k);
+      const list = Array.isArray(hit?.meanings) ? (hit.meanings as { meaning?: unknown; pos?: unknown }[]) : [];
+      const lines = list
+        .filter((m) => typeof m?.meaning === "string" && m.meaning.trim())
+        .slice(0, 14)
+        .map((m, i) => `${i + 1}. ${typeof m.pos === "string" && m.pos ? `[${m.pos}] ` : ""}${String(m.meaning).trim().slice(0, 220)}`);
+      if (lines.length) return `\nKnown meanings of this word in Gadit's dictionary (choose from these, see RULE #0):\n${lines.join("\n")}`;
+    }
+  } catch (e) {
+    console.error("knownMeaningsHint error:", e);
+  }
+  return "";
 }
 
 // Loose JSON schema for OpenAI Structured Outputs. The current prompt
@@ -1934,7 +1962,7 @@ export async function POST(req: NextRequest) {
     const basePrompt = contextSentence ? CONTEXT_PROMPT : SYSTEM_PROMPT;
     const systemPrompt = isPaid ? basePrompt + KIDS_ADDON : basePrompt;
     const userContent = contextSentence
-      ? `Word: ${word}\nSentence: ${contextSentence}\nUser's UI language (RESPOND ENTIRELY in this language, meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}`
+      ? `Word: ${word}\nSentence: ${contextSentence}\nUser's UI language (RESPOND ENTIRELY in this language, meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}${await knownMeaningsHint(String(word), uiLangCode)}`
       : `Word: ${word}\nUser's UI language (RESPOND ENTIRELY in this language, meaning text, example sentences, etymology fields, kidsExplanation, idiom meanings. Headword + original-script forms stay native): ${uiLangName}${await curriculumHint(word)}${keyboardHint(word, uiLangCode)}`;
 
     // Stream from OpenAI
