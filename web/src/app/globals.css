@@ -11864,6 +11864,13 @@ html[data-theme] .wb-kid-area .wb-tool-sub { color: var(--ink-soft); }
   .wordbook .wb-shell-topbar > .wb-kids-mini { margin-inline-start: 4px; margin-inline-end: 0; }
   .wordbook .wb-shell-nav a, .wordbook .wb-shell-nav .wb-shell-navlink { font-size: 13.5px; }
 }
+/* Wider screens: the nav stays centred on the page unless it would touch a
+   side item; then WbShellNav adds .wb-nav-inflow and it sits in the row like
+   above (a child's bar covered "משחקים", Gadi 2026-11-24). */
+@media (min-width: 1440px) {
+  .wordbook .wb-shell-topbar.wb-nav-inflow > .wb-shell-nav { position: static; transform: none; flex: 1 1 auto; min-width: 0; justify-content: center; margin-inline-start: 0; overflow-x: auto; scrollbar-width: none; }
+  .wordbook .wb-shell-topbar.wb-nav-inflow > .wb-shell-nav::-webkit-scrollbar { display: none; }
+}
 @media (min-width: 1024px) and (max-width: 1239px) {
   .wordbook .wb-shell-topbar > .wb-shell-nav { gap: 11px; }
   .wordbook .wb-shell-topbar > .wb-kids-mini .wb-kids-mini-label { display: none; }

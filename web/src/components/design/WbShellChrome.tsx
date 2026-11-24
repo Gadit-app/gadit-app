@@ -418,8 +418,50 @@ export function WbShellNav({ active }: { active?: NavKey }) {
   const pending = loading || (!!user && !planReady);
   const hide = pending ? ({ "aria-hidden": true, tabIndex: -1, style: { visibility: "hidden" } } as const) : {};
   const router = useRouter();
+  // On a wide screen the nav is centred on the page (position absolute, see
+  // globals.css). When the side items are wide it ran into them: a child's
+  // bar (Wordies, FAMILY, the appearance button) covered "משחקים" (Gadi
+  // 2026-11-24). Measure: if the centred nav would touch a side item, the
+  // bar gets .wb-nav-inflow and the nav takes its place in the row instead.
+  const navRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    const nav = navRef.current;
+    const bar = nav?.parentElement;
+    if (!nav || !bar || typeof ResizeObserver === "undefined") return;
+    let raf = 0;
+    const check = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        bar.classList.remove("wb-nav-inflow");
+        if (getComputedStyle(nav).position !== "absolute") return;
+        const n = nav.getBoundingClientRect();
+        const crowded = Array.from(bar.children).some((el) => {
+          if (el === nav) return false;
+          const r = el.getBoundingClientRect();
+          return r.width > 0 && r.left < n.right + 12 && r.right > n.left - 12;
+        });
+        if (crowded) bar.classList.add("wb-nav-inflow");
+      });
+    };
+    const ro = new ResizeObserver(check);
+    const watch = () => {
+      ro.disconnect();
+      ro.observe(bar);
+      Array.from(bar.children).forEach((el) => ro.observe(el));
+      check();
+    };
+    const mo = new MutationObserver(watch);
+    mo.observe(bar, { childList: true });
+    watch();
+    return () => {
+      ro.disconnect();
+      mo.disconnect();
+      cancelAnimationFrame(raf);
+      bar.classList.remove("wb-nav-inflow");
+    };
+  }, []);
   return (
-    <nav className="wb-shell-nav">
+    <nav className="wb-shell-nav" ref={navRef}>
       {/* Always there, so the bar sits the same on every page (Gadi 2026-10-12). */}
       {(
         <Link
