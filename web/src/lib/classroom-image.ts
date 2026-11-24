@@ -173,6 +173,25 @@ export async function houseImage(word: string, meaning: string, lang: string, ki
   return render(prompt.replace(/\s+/g, " "), refs, "low");
 }
 
+/** A picture drawn straight from a hand-written English brief, in the kids
+ *  house style (The Invading Words, Gadi 2026-11-24: every meaning of a
+ *  curated word has its own brief, so the picture shows exactly that meaning).
+ *  The house boy is drawn from his reference only when the brief has a child
+ *  and no girl or woman in it, so "two sisters" never turns into the boy. */
+export async function kidsBriefImage(briefText: string): Promise<{ b64: string; cost?: number }> {
+  const b = briefText.replace(/\s+/g, " ").trim();
+  const boy = /\b(child|children|boy|boys|kid|kids|toddler|brothers?)\b/i.test(b) && !/\b(girl|girls|sisters?|mother|woman|women|female|grandmother)\b/i.test(b);
+  const refs = boy ? ["kid.png"] : [];
+  const prompt = `${KIDS} ${refs.length ? KID_CHILD : ""} Draw this: ${b} ${NO_TEXT}`;
+  return render(prompt.replace(/\s+/g, " "), refs, "low");
+}
+
+/** A game scene or character from a full prompt (The Invading Words' sky and
+ *  its unmasked impostor), in the same soft 3D film look. No text in it. */
+export async function kidsSceneImage(prompt: string, quality: "low" | "medium" = "low"): Promise<{ b64: string; cost?: number }> {
+  return render(`${prompt} ${NO_TEXT}`.replace(/\s+/g, " "), [], quality);
+}
+
 export type ClassroomImageResult =
   | { status: "cached"; url: string; cacheKey: string }
   | { status: "generated"; url: string; cacheKey: string }
