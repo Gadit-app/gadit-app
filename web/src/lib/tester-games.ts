@@ -9,7 +9,7 @@ const NAMES: Record<string, [string, string]> = {
   "catch-fair-balloons": ["לונה פארק: בלונים", "Funfair: balloons"],
   "catch-fair-target": ["לונה פארק: מטרה", "Funfair: target"],
   "catch-fair": ["לונה פארק", "Funfair"],
-  invaders: ["המילים הפולשות", "The Invading Words"],
+  invaders: ["מילים פולשות", "The Impostor Words"],
   "world-peek": ["מסלול האותיות המציצות", "Peeking letters trail"],
   world: ["עולמות המילים", "Word Worlds"],
   "play-menu": ["עמוד המשחקים", "Games page"],

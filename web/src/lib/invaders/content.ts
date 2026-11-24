@@ -1,5 +1,5 @@
 /**
- * The Invading Words (המילים הפולשות, Gadi 2026-11-24): the words and their
+ * The Invading Words (מילים פולשות, Gadi 2026-11-24): the words and their
  * meanings. A word stays still and is spoken; its true meanings fall from the
  * sky among impostors (meanings of other words) and the child catches every
  * true one.

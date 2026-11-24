@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * The Invading Words (המילים הפולשות, Gadi 2026-11-24; the council chose the
+ * The Invading Words (מילים פולשות, Gadi 2026-11-24; the council chose the
  * game, Gadi named it). A word stays still at the top and is spoken. Its true
  * meanings fall from the sky on little parachutes, and so do impostors:
  * meanings of other words in the same disguise. The child moves the avatar
