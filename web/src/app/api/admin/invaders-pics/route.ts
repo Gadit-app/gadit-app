@@ -19,6 +19,7 @@ import { INV_SCENE, invPicKey, invSceneKey, variantBrief } from "@/lib/invaders/
  *   POST /api/admin/invaders-pics?secret=$ADMIN_SECRET
  *        { lang, words?: string[], max?: number }               → draws up to `max` (default 20, at most 60)
  *        { scene: true }                                        → the sky and the impostor, once (about $0.03)
+ *        { lang, redraw: ["כוכב:shape:1", ...] }                → draws those pictures again (one that came out wrong)
  *
  * Bounded: 3 at a time, and the admin daily spend cap.
  */
@@ -78,12 +79,15 @@ export async function POST(req: NextRequest) {
   let max = 20;
   let only: Set<string> | undefined;
   let scene = false;
+  let redraw: Set<string> | undefined;
   try {
-    const b = (await req.json()) as { lang?: unknown; words?: unknown; max?: unknown; scene?: unknown };
+    const b = (await req.json()) as { lang?: unknown; words?: unknown; max?: unknown; scene?: unknown; redraw?: unknown };
     if (typeof b.lang === "string") lang = b.lang;
     if (typeof b.max === "number") max = Math.max(1, Math.min(60, Math.floor(b.max)));
     if (Array.isArray(b.words)) only = new Set(b.words.filter((w): w is string => typeof w === "string"));
     scene = b.scene === true;
+    // { redraw: ["word:id:variant", ...] }: draw these again although they exist (a picture that came out wrong)
+    if (Array.isArray(b.redraw)) redraw = new Set(b.redraw.filter((x): x is string => typeof x === "string").slice(0, 20));
   } catch { /* defaults */ }
   if (!INV_SETS[lang]) return NextResponse.json({ error: "unknown_lang" }, { status: 400 });
 
@@ -110,8 +114,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ scene: done, costUsd: Number(cost.toFixed(4)) });
   }
 
-  const tasks = tasksOf(lang, only);
-  const have = await drawnKeys(tasks.map((t) => t.key));
+  const all = tasksOf(lang, only);
+  const tasks = redraw ? all.filter((t) => redraw.has(`${t.w}:${t.id}:${t.v}`)) : all;
+  const have = redraw ? new Set<string>() : await drawnKeys(tasks.map((t) => t.key));
   const pending = tasks.filter((t) => !have.has(t.key)).slice(0, max);
 
   const db = getAdminDb();

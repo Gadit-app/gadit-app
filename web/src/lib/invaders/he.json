@@ -6,7 +6,7 @@
     ["מים", "לשתות"], ["מים", "גשם"], ["מים", "עין:spring"], ["מים", "כבאי"], ["מים", "דג:fish"],
     ["חלב", "לשתות"], ["חם", "לשתות"], ["חם", "שמש:sun"],
     ["דלת", "ללכת:leave"], ["דלת", "בית:home"],
-    ["עיפרון", "עט"], ["ספר", "מחברת"], ["רגל", "ללכת:walk"], ["שולחן", "רגל:furniture"],
+    ["עיפרון", "עט"], ["ספר", "מחברת"], ["רגל", "ללכת:walk"], ["רגל", "כדור:ball"], ["ראש", "כובע"], ["ענן", "כוכב:star"], ["שמש", "ענן:cloud"], ["ספר", "כוכב:shape"], ["חנות", "רחוב"], ["שולחן", "רגל:furniture"],
     ["ענן", "גשם"], ["ענן", "שלג"], ["ירח", "כוכב:star"], ["ירח", "כדור:sphere"], ["כדור", "שמש:sun"],
     ["לאכול", "דג:food"], ["עצוב", "עייף"], ["לישון", "עייף"],
     ["גן", "משחק:game"], ["גן", "בובה"], ["גן", "עץ:tree"],
@@ -73,7 +73,7 @@
     { "w": "כוכב", "t": "nature", "s": [
       { "id": "star", "g": "נקודת אור בשמיים בלילה", "b": "one bright twinkling star in a dark night sky" },
       { "id": "celebrity", "g": "מישהו מפורסם מאוד", "b": "a young singer on a stage under spotlights with a cheering crowd" },
-      { "id": "shape", "g": "צורה עם חמישה קצוות", "b": "a yellow five-pointed star sticker" } ] },
+      { "id": "shape", "g": "צורה עם חמישה קצוות", "b": "one big yellow five-pointed star shape made of smooth matte plastic, standing alone" } ] },
     { "w": "שלג", "t": "nature", "s": [
       { "id": "snow", "g": "פתיתים לבנים וקרים", "b": "white snowflakes falling on a snowy hill" } ] },
     { "w": "רוח", "t": "nature", "s": [
