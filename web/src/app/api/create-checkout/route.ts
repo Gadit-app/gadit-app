@@ -7,6 +7,7 @@ import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { utmMetaFromClient, utmMetaFromUserDoc, type UtmMeta } from "@/lib/utm-meta";
 import { isNewSchoolsPrice, NEW_SCHOOLS_PRICE_IDS } from "@/lib/schools-prices";
 import { chargeCurrency } from "@/lib/pricing-currency";
+import { activePromoId } from "@/lib/promo-code";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -98,7 +99,7 @@ export async function POST(req: NextRequest) {
     if (req.cookies.get("gadit_play")?.value === "1" || isIosAppUA(req.headers.get("user-agent"))) {
       return NextResponse.json({ error: "not_available_in_app" }, { status: 403 });
     }
-    const { priceId, lang: rawLang, utm } = await req.json();
+    const { priceId, lang: rawLang, utm, code } = await req.json();
     if (!priceId) return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
     const lang = typeof rawLang === "string" && /^[a-z]{2,3}(-[A-Z]{2})?$/.test(rawLang) ? rawLang : "en";
 
@@ -232,6 +233,8 @@ export async function POST(req: NextRequest) {
       const ttCtx = tiktokContextFromRequest(req);
       if (Object.keys(ttCtx).length) await getAdminDb().collection("users").doc(userId).set({ tiktokCtx: ttCtx }, { merge: true }).catch(() => {});
     }
+    // A code from a link we handed out rides along; one that no longer works is dropped.
+    const promoId = await activePromoId(stripe, code).catch(() => null);
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       // Google Play Subscriptions policy requires the currency on the offer
@@ -248,11 +251,10 @@ export async function POST(req: NextRequest) {
       line_items: [{ price: priceId, quantity: 1 }],
       customer_email: userEmail,
       client_reference_id: userId,
-      // Enable promotion codes so Gadi can ship one-off "first month free"
-      // coupons to specific people (school principals, family/friend gifts,
-      // launch partners) without having to manually provision their
-      // accounts. Coupon codes are created in the Stripe dashboard.
-      allow_promotion_codes: true,
+      // No promotion code field on Stripe's page (Gadi 2026-11-24: buyers kept
+      // asking for a coupon because they saw one). A code reaches checkout
+      // only inside a link we hand out (?code=), applied here.
+      ...(promoId && { discounts: [{ promotion_code: promoId }] }),
       ...(trialMessage && { custom_text: { submit: { message: trialMessage } } }),
       // Checkout page language follows the app UI language when Stripe
       // supports it; otherwise Stripe auto-detects from the browser.

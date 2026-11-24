@@ -7,6 +7,7 @@ import { NEW_SCHOOLS_PRICE_IDS } from "@/lib/schools-prices";
 import { INDIVIDUAL_PRICE_IDS } from "@/lib/individual-prices";
 import { chargeCurrency } from "@/lib/pricing-currency";
 import { utmMetaFromClient, utmMetaFromUserDoc, type UtmMeta } from "@/lib/utm-meta";
+import { activePromoId } from "@/lib/promo-code";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -163,19 +164,14 @@ export async function POST(req: NextRequest) {
     const uid = decoded.uid;
     const email = decoded.email ?? undefined;
 
-    // Optional promotion code (e.g. GREENWARTH) typed on our page.
+    // Optional promotion code (e.g. GREENWARTH) from a link we handed out.
     let discounts: Stripe.SubscriptionCreateParams.Discount[] | undefined;
     if (code && typeof code === "string" && code.trim()) {
-      const promos = await stripe.promotionCodes.list({
-        code: code.trim().toUpperCase(),
-        active: true,
-        limit: 1,
-      });
-      const promo = promos.data[0];
-      if (!promo) {
+      const promoId = await activePromoId(stripe, code);
+      if (!promoId) {
         return NextResponse.json({ error: "invalid_code" }, { status: 400 });
       }
-      discounts = [{ promotion_code: promo.id }];
+      discounts = [{ promotion_code: promoId }];
     }
 
     // A family member (a child or the second parent) rides on the owner's
