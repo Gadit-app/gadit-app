@@ -29,6 +29,8 @@ export type InvCopy = {
   roundDone: string;
   newToday: (n: number) => string;
   newTodayNone: string;
+  speed: string;
+  speedName: Record<"slow" | "mid" | "fast", string>;
 };
 
 const iso = (s: string) => `⁨${s}⁩`;
@@ -67,6 +69,8 @@ const HE: InvCopy = {
   roundDone: "סיבוב שלם!",
   newToday: (n) => (n === 1 ? "היום הכרתם משמעות חדשה אחת" : `היום הכרתם ${n} משמעויות חדשות`),
   newTodayNone: "היום חזרתם על משמעויות שכבר הכרתם",
+  speed: "מהירות",
+  speedName: { slow: "איטי", mid: "בינוני", fast: "מהיר" },
 };
 
 const EN: InvCopy = {
@@ -94,6 +98,8 @@ const EN: InvCopy = {
   roundDone: "Round complete!",
   newToday: (n) => (n === 1 ? "Today you met one new meaning" : `Today you met ${n} new meanings`),
   newTodayNone: "Today you practised meanings you already knew",
+  speed: "Speed",
+  speedName: { slow: "Slow", mid: "Medium", fast: "Fast" },
 };
 
 export const invCopy = (lang: string): InvCopy => (lang === "he" ? HE : EN);

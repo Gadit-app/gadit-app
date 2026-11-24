@@ -1,193 +1,186 @@
 {
   "lang": "he",
   "no": [
-    ["גדול", "קטן"], ["אח", "אחות"], ["רופא", "אח:nurse"], ["רופא", "אחות:nurse"],
-    ["אמא", "גדול:grown"], ["אבא", "גדול:grown"], ["אמא", "קטן:young"], ["אבא", "קטן:young"], ["אבא", "ספר:told"],
-    ["מים", "לשתות"], ["מים", "גשם"], ["מים", "עין:spring"], ["מים", "כבאי"], ["מים", "דג:fish"],
-    ["חלב", "לשתות"], ["חם", "לשתות"], ["חם", "שמש:sun"],
-    ["דלת", "ללכת:leave"], ["דלת", "בית:home"],
-    ["עיפרון", "עט"], ["ספר", "מחברת"], ["רגל", "ללכת:walk"], ["רגל", "כדור:ball"], ["ראש", "כובע"], ["ענן", "כוכב:star"], ["שמש", "ענן:cloud"], ["ספר", "כוכב:shape"], ["חנות", "רחוב"], ["שולחן", "רגל:furniture"],
-    ["ענן", "גשם"], ["ענן", "שלג"], ["ירח", "כוכב:star"], ["ירח", "כדור:sphere"], ["כדור", "שמש:sun"],
-    ["לאכול", "דג:food"], ["עצוב", "עייף"], ["לישון", "עייף"],
-    ["גן", "משחק:game"], ["גן", "בובה"], ["גן", "עץ:tree"],
-    ["כובע", "שוטר"], ["כובע", "כבאי"], ["רחוב", "בית:home"], ["רחוב", "מכונית"],
-    ["משחק", "כדור:ball"], ["משחק", "בית:square"], ["כוכב", "כדור:sphere"], ["ללכת", "רכבת:line"], ["משחק", "כוכב:celebrity"], ["ראש", "רכבת:line"], ["תפוח", "ספר:counted"], ["עין", "ראש:head"]
+    ["גדול", "קטן"], ["אח", "אחות"], ["רופא", "אח:nurse"], ["רופא", "אחות:nurse"], ["אמא", "גדול:grown"],
+    ["אבא", "גדול:grown"], ["אמא", "קטן:young"], ["אבא", "קטן:young"], ["אבא", "סיפר:told"], ["מים", "לשתות"],
+    ["מים", "גשם"], ["מים", "עין:spring"], ["מים", "כבאי"], ["מים", "דג:fish"], ["חָלָב", "לשתות"],
+    ["חם", "לשתות"], ["חם", "שֶׁמֶשׁ:sun"], ["דלת", "ללכת:leave"], ["דלת", "בית:home"], ["עיפרון", "עט"],
+    ["סֵפֶר", "מחברת"], ["רגל", "ללכת:walk"], ["רגל", "כדור:ball"], ["ראש", "כובע"], ["ענן", "כוכב:star"],
+    ["שֶׁמֶשׁ", "ענן:cloud"], ["סֵפֶר", "כוכב:shape"], ["סַפָּר", "כוכב:shape"], ["סיפר", "כוכב:shape"], ["סָפַר", "כוכב:shape"],
+    ["חנות", "רחוב"], ["שולחן", "רגל:furniture"], ["ענן", "גשם"], ["ענן", "שלג"], ["יָרֵחַ", "כוכב:star"],
+    ["יָרֵחַ", "כדור:sphere"], ["כדור", "שֶׁמֶשׁ:sun"], ["לאכול", "דג:food"], ["עצוב", "עייף"], ["לישון", "עייף"],
+    ["גן", "משחק:game"], ["גן", "בובה"], ["גן", "עץ:tree"], ["כובע", "שוטר"], ["כובע", "כבאי"],
+    ["רחוב", "בית:home"], ["רחוב", "מכונית"], ["משחק", "כדור:ball"], ["משחק", "בית:square"], ["כוכב", "כדור:sphere"],
+    ["ללכת", "רכבת:line"], ["משחק", "כוכב:celebrity"], ["ראש", "רכבת:line"], ["תפוח", "סָפַר:counted"], ["עין", "ראש:head"]
   ],
   "words": [
-    { "w": "כלב", "t": "animals", "s": [
+    { "w": "כלב", "n": "כֶּלֶב", "t": "animals", "s": [
       { "id": "dog", "g": "חיה שנובחת", "b": "a friendly brown dog sitting and wagging its tail" } ] },
-    { "w": "חתול", "t": "animals", "s": [
+    { "w": "חתול", "n": "חָתוּל", "t": "animals", "s": [
       { "id": "cat", "g": "חיה שמייללת", "b": "a small orange cat sitting" } ] },
-    { "w": "ציפור", "t": "animals", "s": [
+    { "w": "ציפור", "n": "צִיפּוֹר", "t": "animals", "s": [
       { "id": "bird", "g": "חיה עם כנפיים ונוצות", "b": "a small blue bird standing on the ground" } ] },
-    { "w": "דג", "t": "animals", "s": [
+    { "w": "דג", "n": "דָּג", "t": "animals", "s": [
       { "id": "fish", "g": "חיה ששוחה במים", "b": "an orange fish swimming" },
       { "id": "food", "g": "אוכל מחיה ששוחה", "b": "a cooked fish on a white plate with a slice of lemon" } ] },
-
-    { "w": "אמא", "t": "family", "s": [
+    { "w": "אמא", "n": "אִמָּא", "t": "family", "s": [
       { "id": "mother", "g": "ההורה, אישה במשפחה", "b": "a mother hugging her young child" } ] },
-    { "w": "אבא", "t": "family", "s": [
+    { "w": "אבא", "n": "אַבָּא", "t": "family", "s": [
       { "id": "father", "g": "ההורה, איש במשפחה", "b": "a father carrying his young child on his shoulders" },
       { "id": "founder", "g": "מי שהתחיל דבר חשוב" } ] },
-    { "w": "אח", "t": "family", "s": [
+    { "w": "אח", "n": "אָח", "t": "family", "s": [
       { "id": "brother", "g": "בן של אותם הורים", "b": "two brothers smiling with their arms around each other's shoulders" },
       { "id": "nurse", "g": "מטפל בחולים בבית חולים", "b": "a male nurse in blue scrubs caring for a patient in a hospital bed" } ] },
-    { "w": "אחות", "t": "family", "s": [
+    { "w": "אחות", "n": "אָחוֹת", "t": "family", "s": [
       { "id": "sister", "g": "בת של אותם הורים", "b": "two sisters smiling and holding hands" },
       { "id": "nurse", "g": "מטפלת בחולים בבית חולים", "b": "a female nurse in blue scrubs taking a child's temperature" } ] },
-
-    { "w": "ראש", "t": "body", "s": [
+    { "w": "ראש", "n": "רֹאשׁ", "t": "body", "s": [
       { "id": "head", "g": "החלק העליון של הגוף", "b": "a child's head and face with a soft glowing outline around the head" },
       { "id": "leader", "g": "מי שמוביל קבוצה", "b": "a girl at the front of a group of hiking children, holding up a small flag to lead them" },
       { "id": "top", "g": "החלק הכי עליון של משהו", "b": "a tall mountain with a small flag glowing on its very top" },
       { "id": "mind", "g": "שכל, מחשבה" } ] },
-    { "w": "יד", "t": "body", "s": [
+    { "w": "יד", "n": "יָד", "t": "body", "s": [
       { "id": "hand", "g": "בה מחזיקים ותופסים", "b": "an open child's hand, palm forward" } ] },
-    { "w": "רגל", "t": "body", "s": [
+    { "w": "רגל", "n": "רֶגֶל", "t": "body", "s": [
       { "id": "leg", "g": "בה הולכים ורצים", "b": "a child's leg in a sneaker taking a step, the leg glowing softly" },
       { "id": "furniture", "g": "מה שכיסא עומד עליו", "b": "a wooden chair with one of its four legs glowing" } ] },
-    { "w": "עין", "t": "body", "s": [
+    { "w": "עין", "n": "עַיִן", "t": "body", "s": [
       { "id": "eye", "g": "בה רואים", "b": "a close-up of one bright eye with long lashes" },
       { "id": "spring", "g": "מקום שמים יוצאים בו מהאדמה", "b": "a small spring of clear water bubbling out from between mossy rocks" },
       { "id": "needle", "g": "החור הקטן שבמחט", "b": "a sewing needle with a red thread going through its small hole, the hole glowing" } ] },
-
-    { "w": "חולצה", "t": "clothes", "s": [
+    { "w": "חולצה", "n": "חוּלְצָה", "t": "clothes", "s": [
       { "id": "shirt", "g": "בגד לחלק העליון של הגוף", "b": "a blue t-shirt" } ] },
-    { "w": "מכנסיים", "t": "clothes", "s": [
+    { "w": "מכנסיים", "n": "מִכְנָסַיִים", "t": "clothes", "s": [
       { "id": "pants", "g": "בגד לרגליים", "b": "a pair of blue jeans" } ] },
-    { "w": "כובע", "t": "clothes", "s": [
+    { "w": "כובע", "n": "כּוֹבַע", "t": "clothes", "s": [
       { "id": "hat", "g": "שמים אותו על הראש", "b": "a red cap with a visor" } ] },
-
-    { "w": "שמש", "t": "nature", "s": [
-      { "id": "sun", "g": "מאירה ומחממת ביום", "b": "the bright yellow sun shining in a clear blue sky with no clouds" },
+    { "w": "שֶׁמֶשׁ", "n": "שֶׁמֶשׁ", "pk": "שמש", "t": "nature", "s": [
+      { "id": "sun", "g": "מאירה ומחממת ביום", "b": "the bright yellow sun shining in a clear blue sky with no clouds" } ] },
+    { "w": "שַׁמָּשׁ", "n": "שַׁמָּשׁ", "pk": "שמש", "t": "people", "s": [
       { "id": "candle", "g": "הנר שמדליק את החנוכייה", "b": "a lit Hanukkah menorah whose raised helper candle in the middle glows brighter than the others" },
       { "id": "helper", "g": "עוזר בבית הכנסת" } ] },
-    { "w": "גשם", "t": "nature", "s": [
+    { "w": "גשם", "n": "גֶּשֶׁם", "t": "nature", "s": [
       { "id": "rain", "g": "טיפות שיורדות מהשמיים", "b": "big rain drops splashing into a puddle" } ] },
-    { "w": "ענן", "t": "nature", "s": [
+    { "w": "ענן", "n": "עָנָן", "t": "nature", "s": [
       { "id": "cloud", "g": "מרחף בשמיים, לבן או אפור", "b": "one fluffy white cloud in a blue sky" },
       { "id": "swarm", "g": "המון דברים שעפים יחד", "b": "a swarm of many small yellow butterflies flying together" } ] },
-    { "w": "ירח", "t": "nature", "s": [
-      { "id": "moon", "g": "מאיר בשמיים בלילה", "b": "a big round full moon on a dark blue night sky with no stars" },
+    { "w": "יָרֵחַ", "n": "יָרֵחַ", "pk": "ירח", "t": "nature", "s": [
+      { "id": "moon", "g": "מאיר בשמיים בלילה", "b": "a big round full moon on a dark blue night sky with no stars" } ] },
+    { "w": "יֶרַח", "n": "יֶרַח", "pk": "ירח", "t": "nature", "s": [
       { "id": "month", "g": "חודש ימים" } ] },
-    { "w": "כוכב", "t": "nature", "s": [
+    { "w": "כוכב", "n": "כּוֹכָב", "t": "nature", "s": [
       { "id": "star", "g": "נקודת אור בשמיים בלילה", "b": "one bright twinkling star in a dark night sky" },
       { "id": "celebrity", "g": "מישהו מפורסם מאוד", "b": "a young singer on a stage under spotlights with a cheering crowd" },
       { "id": "shape", "g": "צורה עם חמישה קצוות", "b": "one big yellow five-pointed star shape made of smooth matte plastic, standing alone" } ] },
-    { "w": "שלג", "t": "nature", "s": [
+    { "w": "שלג", "n": "שֶׁלֶג", "t": "nature", "s": [
       { "id": "snow", "g": "פתיתים לבנים וקרים", "b": "white snowflakes falling on a snowy hill" } ] },
-    { "w": "רוח", "t": "nature", "s": [
+    { "w": "רוח", "n": "רוּחַ", "t": "nature", "s": [
       { "id": "wind", "g": "אוויר שזז בחוץ", "b": "a red kite flying high in a strong wind, with swirling wind lines" },
       { "id": "mood", "g": "ההרגשה שבלב" },
       { "id": "ghost", "g": "דמות דמיונית שקופה", "b": "a cute friendly white ghost floating" },
       { "id": "direction", "g": "כיוון כמו צפון או דרום", "b": "a compass rose with four colorful arrows pointing in four directions" } ] },
-    { "w": "עץ", "t": "nature", "s": [
+    { "w": "עץ", "n": "עֵץ", "t": "nature", "s": [
       { "id": "tree", "g": "צמח גבוה עם גזע", "b": "a big green tree" },
       { "id": "wood", "g": "החומר שעושים ממנו רהיטים", "b": "a neat stack of wooden planks" } ] },
-    { "w": "מים", "t": "nature", "s": [
+    { "w": "מים", "n": "מַיִם", "t": "nature", "s": [
       { "id": "water", "g": "נוזל שקוף ששותים", "b": "a clear glass of water" } ] },
-
-    { "w": "בית", "t": "home", "s": [
+    { "w": "בית", "n": "בַּיִת", "t": "home", "s": [
       { "id": "home", "g": "המקום שגרים בו", "b": "a cozy little house with a red roof and a warm lit window" },
       { "id": "verse", "g": "חלק בשיר" },
       { "id": "square", "g": "משבצת על לוח משחק", "b": "a chessboard seen from above with one square glowing yellow" },
       { "id": "place", "g": "המקום של ספרה במספר", "b": "the number 352 as big colorful 3D digits, the middle digit 5 glowing" } ] },
-    { "w": "דלת", "t": "home", "s": [
+    { "w": "דלת", "n": "דֶּלֶת", "t": "home", "s": [
       { "id": "door", "g": "נכנסים ויוצאים דרכה", "b": "a closed wooden door" } ] },
-    { "w": "חלון", "t": "home", "s": [
+    { "w": "חלון", "n": "חַלּוֹן", "t": "home", "s": [
       { "id": "window", "g": "פתח בקיר לאור ולאוויר", "b": "an open window with light curtains" } ] },
-    { "w": "שולחן", "t": "home", "s": [
+    { "w": "שולחן", "n": "שׁוּלְחָן", "t": "home", "s": [
       { "id": "table", "g": "רהיט שאוכלים וכותבים עליו", "b": "a wooden kitchen table" } ] },
-
-    { "w": "לחם", "t": "food", "s": [
+    { "w": "לֶחֶם", "n": "לֶחֶם", "pk": "לחם", "t": "food", "s": [
       { "id": "bread", "g": "מאפה מקמח", "b": "a fresh round loaf of bread" },
-      { "id": "living", "g": "פרנסה, מה שצריך כדי לחיות" },
+      { "id": "living", "g": "פרנסה, מה שצריך כדי לחיות" } ] },
+    { "w": "לָחַם", "n": "לָחַם", "pk": "לחם", "t": "actions", "s": [
       { "id": "fought", "g": "נאבק, ניסה לנצח" } ] },
-    { "w": "חלב", "t": "food", "s": [
-      { "id": "milk", "g": "משקה לבן מהפרה", "b": "a glass of white milk" },
+    { "w": "חָלָב", "n": "חָלָב", "pk": "חלב", "t": "food", "s": [
+      { "id": "milk", "g": "משקה לבן מהפרה", "b": "a glass of white milk" } ] },
+    { "w": "חֵלֶב", "n": "חֵלֶב", "pk": "חלב", "t": "food", "s": [
       { "id": "fat", "g": "שומן" } ] },
-    { "w": "תפוח", "t": "food", "s": [
+    { "w": "תפוח", "n": "תַּפּוּחַ", "t": "food", "s": [
       { "id": "apple", "g": "פרי עגול ומתוק", "b": "a shiny red apple" } ] },
-
-    { "w": "מכונית", "t": "transport", "s": [
+    { "w": "מכונית", "n": "מְכוֹנִית", "t": "transport", "s": [
       { "id": "car", "g": "רכב פרטי לנסיעה", "b": "a small red family car" } ] },
-    { "w": "אוטובוס", "t": "transport", "s": [
+    { "w": "אוטובוס", "n": "אוֹטוֹבּוּס", "t": "transport", "s": [
       { "id": "bus", "g": "רכב גדול להרבה נוסעים", "b": "a big yellow city bus" } ] },
-    { "w": "אופניים", "t": "transport", "s": [
+    { "w": "אופניים", "n": "אוֹפַנַּיִים", "t": "transport", "s": [
       { "id": "bicycle", "g": "שני גלגלים ודוושות", "b": "a green bicycle" } ] },
-    { "w": "רכבת", "t": "transport", "s": [
+    { "w": "רכבת", "n": "רַכֶּבֶת", "t": "transport", "s": [
       { "id": "train", "g": "נוסעת על פסים", "b": "a red train on railway tracks" },
       { "id": "line", "g": "שורה ארוכה שזזה יחד", "b": "children walking in a line, each holding the shoulders of the child in front" } ] },
-
-    { "w": "ספר", "t": "school", "s": [
-      { "id": "book", "g": "דפים לקריאה", "b": "an open colorful picture book" },
-      { "id": "barber", "g": "מי שגוזר שיער", "b": "a barber cutting a boy's hair with scissors, the boy sitting in a barber chair" },
-      { "id": "told", "g": "אמר סיפור", "b": "a grandfather telling a story with big hand gestures to an amazed child" },
+    { "w": "סֵפֶר", "n": "סֵפֶר", "pk": "ספר", "t": "school", "s": [
+      { "id": "book", "g": "דפים לקריאה", "b": "an open colorful picture book" } ] },
+    { "w": "סַפָּר", "n": "סַפָּר", "pk": "ספר", "t": "people", "s": [
+      { "id": "barber", "g": "מי שגוזר שיער", "b": "a barber cutting a boy's hair with scissors, the boy sitting in a barber chair" } ] },
+    { "w": "סיפר", "n": "סִיפֵּר", "pk": "ספר", "t": "actions", "s": [
+      { "id": "told", "g": "אמר סיפור", "b": "a grandfather telling a story with big hand gestures to an amazed child" } ] },
+    { "w": "סָפַר", "n": "סָפַר", "pk": "ספר", "t": "actions", "s": [
       { "id": "counted", "g": "מנה אחד אחד", "b": "a child counting five red apples on a table, pointing at them one by one" } ] },
-    { "w": "עיפרון", "t": "school", "s": [
+    { "w": "עיפרון", "n": "עִיפָּרוֹן", "t": "school", "s": [
       { "id": "pencil", "g": "כותבים בו ואפשר למחוק", "b": "a yellow pencil with a pink eraser" } ] },
-    { "w": "עט", "t": "school", "s": [
+    { "w": "עט", "n": "עֵט", "t": "school", "s": [
       { "id": "pen", "g": "כותבים בו בדיו", "b": "a blue ballpoint pen" },
       { "id": "style", "g": "דרך הכתיבה של סופר" } ] },
-    { "w": "מחברת", "t": "school", "s": [
+    { "w": "מחברת", "n": "מַחְבֶּרֶת", "t": "school", "s": [
       { "id": "notebook", "g": "כותבים בה בכיתה", "b": "a closed spiral notebook with a colorful cover" } ] },
-
-    { "w": "רופא", "t": "people", "s": [
+    { "w": "רופא", "n": "רוֹפֵא", "t": "people", "s": [
       { "id": "doctor", "g": "בודק חולים ומרפא אותם", "b": "a friendly doctor in a white coat with a stethoscope" } ] },
-    { "w": "שוטר", "t": "people", "s": [
+    { "w": "שוטר", "n": "שׁוֹטֵר", "t": "people", "s": [
       { "id": "police", "g": "שומר על החוק ועל הסדר", "b": "a friendly police officer in a blue uniform" } ] },
-    { "w": "כבאי", "t": "people", "s": [
+    { "w": "כבאי", "n": "כַּבַּאי", "t": "people", "s": [
       { "id": "firefighter", "g": "מכבה שריפות", "b": "a firefighter in a yellow suit and helmet next to a red fire truck" } ] },
-
-    { "w": "שמח", "t": "feelings", "s": [
+    { "w": "שמח", "n": "שָׂמֵחַ", "t": "feelings", "s": [
       { "id": "happy", "g": "מרגיש טוב ומחייך", "b": "a child jumping with joy and a big smile" } ] },
-    { "w": "עצוב", "t": "feelings", "s": [
+    { "w": "עצוב", "n": "עָצוּב", "t": "feelings", "s": [
       { "id": "sad", "g": "מרגיש רע, בא לו לבכות", "b": "a sad child with a small tear on the cheek" } ] },
-    { "w": "כועס", "t": "feelings", "s": [
+    { "w": "כועס", "n": "כּוֹעֵס", "t": "feelings", "s": [
       { "id": "angry", "g": "מרגיש כעס ועצבים", "b": "an angry child with crossed arms and a frown" } ] },
-    { "w": "עייף", "t": "feelings", "s": [
+    { "w": "עייף", "n": "עָיֵיף", "t": "feelings", "s": [
       { "id": "tired", "g": "אין לו כוח", "b": "a yawning child rubbing his eyes" },
       { "id": "fedup", "g": "נמאס לו" } ] },
-
-    { "w": "גדול", "t": "size", "s": [
+    { "w": "גדול", "n": "גָּדוֹל", "t": "size", "s": [
       { "id": "big", "g": "בגודל רב", "b": "a huge friendly elephant standing next to a tiny mouse, the elephant glowing softly" },
       { "id": "grown", "g": "כבר לא ילד", "b": "a tall teenage boy standing next to his little sister, the tall boy glowing softly" },
       { "id": "great", "g": "חשוב מאוד" } ] },
-    { "w": "קטן", "t": "size", "s": [
+    { "w": "קטן", "n": "קָטָן", "t": "size", "s": [
       { "id": "small", "g": "בגודל מועט", "b": "a tiny mouse standing next to a huge elephant, the mouse glowing softly" },
       { "id": "young", "g": "צעיר בגיל", "b": "a toddler standing next to his tall older brother, the toddler glowing softly" },
       { "id": "minor", "g": "לא חשוב במיוחד" } ] },
-    { "w": "חם", "t": "size", "s": [
+    { "w": "חם", "n": "חַם", "t": "size", "s": [
       { "id": "hot", "g": "בטמפרטורה גבוהה", "b": "a steaming mug of hot cocoa" },
       { "id": "warm", "g": "אוהב וחביב" } ] },
-
-    { "w": "ללכת", "t": "actions", "s": [
+    { "w": "ללכת", "n": "לָלֶכֶת", "t": "actions", "s": [
       { "id": "walk", "g": "לזוז ברגליים", "b": "a child walking along a path, mid-step" },
       { "id": "leave", "g": "לצאת ממקום", "b": "a child with a backpack waving goodbye while stepping out of a doorway" },
       { "id": "work", "g": "להצליח, להסתדר" } ] },
-    { "w": "לאכול", "t": "actions", "s": [
+    { "w": "לאכול", "n": "לֶאֱכוֹל", "t": "actions", "s": [
       { "id": "eat", "g": "להכניס אוכל לפה", "b": "a child eating a bowl of soup with a spoon" },
       { "id": "wear", "g": "לכלות לאט לאט" } ] },
-    { "w": "לשתות", "t": "actions", "s": [
+    { "w": "לשתות", "n": "לִשְׁתּוֹת", "t": "actions", "s": [
       { "id": "drink", "g": "להכניס משקה לפה", "b": "a child drinking orange juice through a straw" } ] },
-    { "w": "לישון", "t": "actions", "s": [
+    { "w": "לישון", "n": "לִישׁוֹן", "t": "actions", "s": [
       { "id": "sleep", "g": "לנוח בעיניים עצומות", "b": "a child sleeping in bed under a blanket" } ] },
-
-    { "w": "גן", "t": "places", "s": [
+    { "w": "גן", "n": "גַּן", "t": "places", "s": [
       { "id": "garden", "g": "מקום עם פרחים וצמחים", "b": "a small garden with colorful flower beds and a bench" },
       { "id": "kindergarten", "g": "המקום של ילדים לפני כיתה א'", "b": "a bright kindergarten room with small chairs, building blocks and children's drawings on the wall" } ] },
-    { "w": "חנות", "t": "places", "s": [
+    { "w": "חנות", "n": "חֲנוּת", "t": "places", "s": [
       { "id": "shop", "g": "קונים בה דברים", "b": "a small grocery shop counter with a cash register and shelves of jars" } ] },
-    { "w": "רחוב", "t": "places", "s": [
+    { "w": "רחוב", "n": "רְחוֹב", "t": "places", "s": [
       { "id": "street", "g": "דרך בין בתים", "b": "a quiet empty city street with a sidewalk and street lamps" } ] },
-
-    { "w": "כדור", "t": "play", "s": [
+    { "w": "כדור", "n": "כַּדּוּר", "t": "play", "s": [
       { "id": "ball", "g": "צעצוע עגול למשחק", "b": "a colorful soccer ball" },
       { "id": "pill", "g": "תרופה שבולעים", "b": "one small round white pill on a spoon" },
       { "id": "sphere", "g": "גוף עגול כמו כוכב לכת", "b": "the planet Earth floating in space" } ] },
-    { "w": "בובה", "t": "play", "s": [
+    { "w": "בובה", "n": "בּוּבָּה", "t": "play", "s": [
       { "id": "doll", "g": "צעצוע בדמות ילד", "b": "a rag doll with yellow yarn hair" } ] },
-    { "w": "משחק", "t": "play", "s": [
+    { "w": "משחק", "n": "מִשְׂחָק", "t": "play", "s": [
       { "id": "game", "g": "פעילות בשביל הכיף", "b": "two children playing a board game with dice" },
       { "id": "match", "g": "תחרות בספורט", "b": "two teams of children playing basketball in a gym" },
       { "id": "acting", "g": "הצגה על במה בתיאטרון", "b": "children in costumes acting a play on a small theater stage" } ] }

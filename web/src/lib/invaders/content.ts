@@ -20,7 +20,9 @@
 import he from "./he.json";
 
 export type InvSense = { id: string; g: string; b?: string };
-export type InvWord = { w: string; t: string; s: InvSense[] };
+/** `n` is the word with vowel points, checked by hand: shown when niqqud is on, and always what is spoken.
+ *  `pk` only on a written form split by reading (lib/invaders/rules.ts baseOf). */
+export type InvWord = { w: string; n: string; pk?: string; t: string; s: InvSense[] };
 export type InvSet = { lang: string; no: string[][]; words: InvWord[] };
 
 export const INV_SETS: Record<string, InvSet> = { he: he as InvSet };

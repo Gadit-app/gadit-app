@@ -7,6 +7,7 @@ import { adminBudgetExceeded } from "@/lib/ai-budget";
 import { kidsBriefImage, kidsSceneImage } from "@/lib/classroom-image";
 import { INV_SETS, INV_VARIANTS } from "@/lib/invaders/content";
 import { INV_SCENE, invPicKey, invSceneKey, variantBrief } from "@/lib/invaders/keys";
+import { baseOf } from "@/lib/invaders/rules";
 
 /**
  * Admin: draw the pictures of The Invading Words (Gadi 2026-11-24, about
@@ -37,7 +38,8 @@ function tasksOf(lang: string, only?: Set<string>): Task[] {
     if (only && !only.has(word.w)) continue;
     for (const s of word.s) {
       if (!s.b) continue;
-      for (let v = 1; v <= INV_VARIANTS; v++) out.push({ w: word.w, id: s.id, v, brief: variantBrief(s.b, v), key: invPicKey(lang, word.w, s.id, v) });
+      // keyed on the written form, so the readings of one split word keep the pictures drawn for it
+      for (let v = 1; v <= INV_VARIANTS; v++) out.push({ w: word.w, id: s.id, v, brief: variantBrief(s.b, v), key: invPicKey(lang, baseOf(word), s.id, v) });
     }
   }
   return out;

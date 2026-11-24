@@ -5,6 +5,7 @@ import { dayKeyOf } from "@/lib/journey/scheduler";
 import { INV_SETS, INV_VARIANTS } from "@/lib/invaders/content";
 import { INV_SCENE, invPicKey, invSceneKey } from "@/lib/invaders/keys";
 import { applyRound, cleanSense, CLUES, type Clue, type SenseEvent, type WordState } from "@/lib/invaders/progress";
+import { baseOf } from "@/lib/invaders/rules";
 
 /**
  * The Invading Words (Gadi 2026-11-24). Testers and the admin only for now.
@@ -64,7 +65,7 @@ export async function GET(req: NextRequest) {
 
   const db = getAdminDb();
   const keys: { w: string; id: string; v: number; key: string }[] = [];
-  for (const word of set.words) for (const s of word.s) if (s.b) for (let v = 1; v <= INV_VARIANTS; v++) keys.push({ w: word.w, id: s.id, v, key: invPicKey(lang, word.w, s.id, v) });
+  for (const word of set.words) for (const s of word.s) if (s.b) for (let v = 1; v <= INV_VARIANTS; v++) keys.push({ w: word.w, id: s.id, v, key: invPicKey(lang, baseOf(word), s.id, v) });
   const pics = new Map<string, string[]>();
   for (let i = 0; i < keys.length; i += 100) {
     const part = keys.slice(i, i + 100);
@@ -92,6 +93,8 @@ export async function GET(req: NextRequest) {
     no: set.no,
     words: set.words.map((word) => ({
       w: word.w,
+      n: word.n,
+      ...(word.pk ? { pk: word.pk } : {}),
       t: word.t,
       s: word.s.map((s) => ({ id: s.id, g: s.g, pics: (pics.get(`${word.w}:${s.id}`) ?? []).filter(Boolean) })),
     })),

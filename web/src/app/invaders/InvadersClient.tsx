@@ -12,9 +12,16 @@
  *
  * By grade: before grade 3 only pictures (and only the meanings that can be
  * drawn); grades 3-4 pictures, or the short gloss for what cannot be drawn;
- * grade 5 and up mostly glosses, and faster. The pace follows the child's
- * accuracy. Each meaning has two pictures, so the child learns the meaning,
- * not one picture; the clue the child has not caught it with yet comes first.
+ * grade 5 and up mostly glosses, and faster. The child picks a speed (slow,
+ * medium, fast; Gadi 2026-11-24) and the pace moves a little with accuracy.
+ * Each meaning has two pictures, so the child learns the meaning, not one
+ * picture; the clue the child has not caught it with yet comes first.
+ *
+ * A picture card falls only once its picture is in the browser (Gadi saw
+ * empty white cards on 2026-11-24): until then the gloss falls instead, and
+ * a card whose picture still fails shows its gloss under it. The word is
+ * spoken from its vowelled form, so a written form with two readings is two
+ * game words (lib/invaders/rules.ts baseOf), and niqqud can be switched on.
  *
  * The server keeps the progress per meaning and pays Wordies only for
  * learning (lib/invaders/progress.ts). Plain DOM, one requestAnimationFrame
@@ -36,8 +43,9 @@ import { notifyActivity } from "@/lib/notify-activity-client";
 import { sfx } from "@/lib/game-sfx";
 import { setTesterGame } from "@/lib/tester";
 import type { Band } from "@/lib/grade-bands";
-import { blockedFor, isBlocked } from "@/lib/invaders/rules";
+import { baseOf, blockedFor, isBlocked, plainHe } from "@/lib/invaders/rules";
 import type { Clue, SenseEvent, WordState } from "@/lib/invaders/progress";
+import { NiqqudProvider, NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
 import { invCopy, type InvCopy } from "./inv-i18n";
 
 const ROUND = 5;
@@ -54,13 +62,52 @@ function shuffle<T>(a: T[]): T[] {
 }
 
 type ApiSense = { id: string; g: string; pics: string[] };
-type ApiWord = { w: string; t: string; s: ApiSense[] };
+type ApiWord = { w: string; n?: string; pk?: string; t: string; s: ApiSense[] };
 export type ApiData = { lang: string; scene: Record<string, string>; no: string[][]; words: ApiWord[]; progress: Record<string, WordState> };
+
+/** What the child sees: the vowelled form when niqqud is on, else the letters only. */
+const shownWord = (w: ApiWord, niqqud: boolean) => (niqqud ? w.n ?? w.w : plainHe(w.w));
+/** What is spoken: always the vowelled form, so לָחַם is never read as לֶחֶם. */
+const spokenWord = (w: ApiWord) => w.n ?? w.w;
 
 type Mode = "pics" | "mixed" | "words";
 const modeOf = (b: Band | null): Mode => (b === "pre1" || b === "g12" ? "pics" : b === "g34" || !b ? "mixed" : "words");
-/** Seconds from the top of the sky to the meadow, before the pace. */
+/** Seconds from the top of the sky to the meadow at medium speed, before the pace. */
 const FALL_S: Record<Mode, number> = { pics: 8, mixed: 6.8, words: 5.8 };
+
+/** The child's choice (Gadi 2026-11-24): how long a fall takes, against medium. */
+type Speed = "slow" | "mid" | "fast";
+const SPEEDS: Speed[] = ["slow", "mid", "fast"];
+const SPEED_X: Record<Speed, number> = { slow: 1.5, mid: 1, fast: 0.7 };
+/** The pace moves this little with accuracy, so the speed the child chose stays the speed. */
+const PACE_MIN = 0.88, PACE_MAX = 1.15;
+const speedKey = (uid: string | undefined) => `gadit-inv-speed:${uid ?? "anon"}`;
+function readSpeed(uid: string | undefined, mode: Mode): Speed {
+  try {
+    const v = localStorage.getItem(speedKey(uid));
+    if (v === "slow" || v === "mid" || v === "fast") return v;
+  } catch { /* private window */ }
+  return mode === "pics" ? "slow" : "mid";
+}
+function writeSpeed(uid: string | undefined, s: Speed) {
+  try { localStorage.setItem(speedKey(uid), s); } catch { /* this visit only */ }
+}
+
+/* ---------- pictures: a picture card falls only once its picture is here ---------- */
+const picState = new Map<string, "loading" | "ok" | "bad">();
+const held = new Set<HTMLImageElement>();
+function warm(url: string | undefined) {
+  if (!url || picState.has(url) || typeof window === "undefined") return;
+  picState.set(url, "loading");
+  const im = new Image();
+  im.decoding = "async";
+  held.add(im);
+  const done = (s: "ok" | "bad") => { picState.set(url, s); held.delete(im); };
+  im.onload = () => { (im.decode ? im.decode() : Promise.resolve()).then(() => done("ok"), () => done("ok")); };
+  im.onerror = () => done("bad");
+  im.src = url;
+}
+const isReady = (url: string | undefined) => !!url && picState.get(url) === "ok";
 
 type Planned = { s: ApiSense; clue: Clue };
 type Plan = { word: ApiWord; senses: Planned[] };
@@ -105,31 +152,50 @@ function orderWords(d: ApiData, mode: Mode): ApiWord[] {
   return list;
 }
 
-type Decoy = { w: string; s: ApiSense };
-/** Impostors for a word: meanings of words of another topic that are not ruled out. */
+type Decoy = { w: string; word: ApiWord; s: ApiSense };
+/** Impostors for a word: meanings of words of another topic that are not ruled out,
+ *  never another reading of the same written form. */
 function decoysFor(d: ApiData, target: ApiWord, mode: Mode): Decoy[] {
   const blocked = blockedFor(d.no, target.w);
+  const base = baseOf(target);
   const out: Decoy[] = [];
   for (const w of d.words) {
-    if (w.t === target.t || w.w === target.w) continue;
+    if (w.t === target.t || w.w === target.w || baseOf(w) === base) continue;
     for (const s of w.s) {
       if (isBlocked(blocked, w.w, s.id)) continue;
       if (mode === "pics" && !s.pics.length) continue;
-      out.push({ w: w.w, s });
+      out.push({ w: w.w, word: w, s });
     }
   }
   return out;
 }
 
-type Item = { key: number; kind: "true" | "imp"; w: string; id: string; clue: Clue; pic?: string; g: string; hue: number; state: "fall" | "caught" | "flip" | "crash" };
+type Item = { key: number; kind: "true" | "imp"; w: string; word: ApiWord; id: string; clue: Clue; pic?: string; g: string; hue: number; state: "fall" | "caught" | "flip" | "crash" };
 type Motion = { x: number; y: number; vy: number; amp: number; ph: number; t: number; end?: number };
 export type WordResult = { events: SenseEvent[]; mistakes: number; caught: string[]; lost: string[] };
 
 /* ---------- one word: the sky ---------- */
-function Sky({ plan, decoys, mode, avatar, imp, c, onDone, onExit }: {
-  plan: Plan; decoys: Decoy[]; mode: Mode; avatar: string; imp: string | null; c: InvCopy;
+/** The clue a true meaning can fall as right now: its picture once it is here, the other
+ *  picture, else its gloss; for the youngest (pictures only) it waits a moment for the
+ *  picture and shows the gloss only if the picture does not come. null = not yet. */
+function readyClue(s: ApiSense, want: Clue, mode: Mode, waitedS: number): Clue | null {
+  if (want === "g") return "g";
+  const other: Clue = want === "p1" ? "p2" : "p1";
+  const a = picOf(s, want), b = s.pics[other === "p1" ? 0 : 1] ? picOf(s, other) : undefined;
+  warm(a); warm(b);
+  if (isReady(a)) return want;
+  if (isReady(b)) return other;
+  if (mode !== "pics") return "g";
+  const bad = [a, b].filter(Boolean).every((u) => picState.get(u!) === "bad");
+  return bad || waitedS > 3 ? "g" : null;
+}
+
+function Sky({ plan, decoys, mode, speed, avatar, imp, c, onDone, onExit }: {
+  plan: Plan; decoys: Decoy[]; mode: Mode; speed: Speed; avatar: string; imp: string | null; c: InvCopy;
   onDone: (r: WordResult) => void; onExit: () => void;
 }) {
+  const { on: nqOn, available: nqAvail, nq } = useNiqqud();
+  const niqqud = nqAvail && nqOn;
   const rootRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ w: 390, h: 740 });
   useEffect(() => {
@@ -177,29 +243,55 @@ function Sky({ plan, decoys, mode, avatar, imp, c, onDone, onExit }: {
 
   const commit = (list: Item[]) => { itemsRef.current = list; setItems(list); };
 
-  const spawn = useCallback(() => {
+  const wantSince = useRef(new Map<string, number>());
+  const fallS = useCallback(() => (FALL_S[mode] * SPEED_X[speed]) / pace.current, [mode, speed]);
+
+  /** Drops one item if one can fall now (its picture is here); false = try again in a moment. */
+  const spawn = useCallback((): boolean => {
     const g = geoRef.current;
     const live = itemsRef.current.filter((i) => i.state === "fall");
     const trueLive = live.filter((i) => i.kind === "true").length;
     const free = queue.current.filter((id) => !live.some((i) => i.kind === "true" && i.id === id));
     const room = trueLive < (mode === "pics" ? 1 : 2);
-    let item: Omit<Item, "key" | "hue" | "state">;
+    let item: Omit<Item, "key" | "hue" | "state"> | null = null;
     if (free.length && room && (sinceTrue.current >= 2 || Math.random() < 0.45)) {
       const id = free[0];
-      queue.current = queue.current.filter((x) => x !== id);
       const p = byId.get(id)!;
-      item = { kind: "true", w: plan.word.w, id, clue: p.clue, pic: picOf(p.s, p.clue), g: p.s.g };
-      sinceTrue.current = 0;
-    } else if (decoys.length) {
+      const now = performance.now();
+      if (!wantSince.current.has(id)) wantSince.current.set(id, now);
+      const clue = readyClue(p.s, p.clue, mode, (now - wantSince.current.get(id)!) / 1000);
+      if (clue) {
+        queue.current = queue.current.filter((x) => x !== id);
+        wantSince.current.delete(id);
+        item = { kind: "true", w: plan.word.w, word: plan.word, id, clue, pic: picOf(p.s, clue), g: p.s.g };
+        sinceTrue.current = 0;
+      }
+    }
+    if (!item && decoys.length) {
       const onScreen = new Set(live.map((i) => `${i.w}:${i.id}`));
-      const pool = decoys.filter((d) => !onScreen.has(`${d.w}:${d.s.id}`));
-      const d = pick(pool.length ? pool : decoys);
-      const pics: Clue[] = (["p1", "p2"] as Clue[]).filter((_, i) => !!d.s.pics[i]);
-      const usePic = pics.length && (mode === "pics" || (mode === "mixed" ? Math.random() < 0.7 : Math.random() < 0.4));
-      const clue: Clue = usePic ? pick(pics) : "g";
-      item = { kind: "imp", w: d.w, id: d.s.id, clue, pic: picOf(d.s, clue), g: d.s.g };
-      sinceTrue.current += 1;
-    } else return;
+      const free = decoys.filter((d) => !onScreen.has(`${d.w}:${d.s.id}`));
+      const pool = free.length ? free : decoys;
+      const drawn = pool.filter((d) => d.s.pics.length);
+      const usePic = drawn.length > 0 && (mode === "pics" || (mode === "mixed" ? Math.random() < 0.7 : Math.random() < 0.4));
+      let d: Decoy | null = null;
+      let clue: Clue | null = null;
+      if (usePic) {
+        // an impostor whose picture is already here; the pictures still coming wait for a later turn
+        const ready = drawn.filter((x) => x.s.pics.some(isReady));
+        if (ready.length) {
+          d = pick(ready);
+          clue = pick((["p1", "p2"] as Clue[]).filter((_, i) => isReady(d!.s.pics[i])));
+        }
+      }
+      if (!d && mode !== "pics") { d = pick(pool); clue = "g"; }
+      if (d && clue) {
+        item = { kind: "imp", w: d.w, word: d.word, id: d.s.id, clue, pic: picOf(d.s, clue), g: d.s.g };
+        sinceTrue.current += 1;
+      }
+    }
+    // the next pictures start coming while this one falls
+    for (const d of shuffle(decoys).slice(0, 2)) d.s.pics.forEach(warm);
+    if (!item) return false;
     // a free column, away from what is still near the top
     let x = rnd(g.S * 0.6, g.W - g.S * 0.6);
     for (let k = 0; k < 8; k++) {
@@ -208,10 +300,10 @@ function Sky({ plan, decoys, mode, avatar, imp, c, onDone, onExit }: {
       x = rnd(g.S * 0.6, g.W - g.S * 0.6);
     }
     const key = nextKey.current++;
-    const fall = FALL_S[mode] / pace.current;
-    motion.current.set(key, { x, y: -g.S * 1.6, vy: (g.ground + g.S * 0.1) / fall, amp: rnd(6, 16), ph: rnd(0, 6.28), t: 0 });
+    motion.current.set(key, { x, y: -g.S * 1.6, vy: (g.ground + g.S * 0.1) / fallS(), amp: rnd(6, 16), ph: rnd(0, 6.28), t: 0 });
     commit([...itemsRef.current, { ...item, key, hue: Math.floor(rnd(0, 360)), state: "fall" }]);
-  }, [byId, decoys, mode, plan.word.w]);
+    return true;
+  }, [byId, decoys, mode, plan.word, fallS]);
 
   const remove = useCallback((key: number) => {
     motion.current.delete(key);
@@ -241,7 +333,7 @@ function Sky({ plan, decoys, mode, avatar, imp, c, onDone, onExit }: {
       events.current.push({ id: it.id, r: "caught", c: it.clue });
       sfx.letter(caught.current.size - 1);
       setTimeout(() => sfx.correct(), 90);
-      pace.current = clamp(pace.current * 1.05, 0.8, 1.45);
+      pace.current = clamp(pace.current * 1.05, PACE_MIN, PACE_MAX);
       setFilled((f) => [...f, it.id]);
       commit(itemsRef.current.map((x) => (x.key === it.key ? { ...x, state: "caught" as const } : x)));
       setTimeout(() => remove(it.key), 650);
@@ -249,14 +341,14 @@ function Sky({ plan, decoys, mode, avatar, imp, c, onDone, onExit }: {
     } else {
       mistakes.current += 1;
       sfx.wrong();
-      pace.current = clamp(pace.current * 0.9, 0.8, 1.45);
-      say(c.impostor(it.w));
+      pace.current = clamp(pace.current * 0.9, PACE_MIN, PACE_MAX);
+      say(c.impostor(shownWord(it.word, niqqud)));
       const m = motion.current.get(it.key);
       if (m) m.vy = -260;
       commit(itemsRef.current.map((x) => (x.key === it.key ? { ...x, state: "flip" as const } : x)));
       setTimeout(() => remove(it.key), 1700);
     }
-  }, [c, finishIfDone, remove]);
+  }, [c, finishIfDone, remove, niqqud]);
 
   /* the loop */
   useEffect(() => {
@@ -272,7 +364,8 @@ function Sky({ plan, decoys, mode, avatar, imp, c, onDone, onExit }: {
       if (!doneRef.current) {
         spawnIn.current -= dt;
         const live = itemsRef.current.filter((i) => i.state === "fall").length;
-        if (spawnIn.current <= 0 && live < g.maxOn) { spawn(); spawnIn.current = (FALL_S[mode] / pace.current / g.maxOn) * rnd(0.8, 1.2); }
+        // nothing ready to fall yet (a picture still on its way): look again in a moment
+        if (spawnIn.current <= 0 && live < g.maxOn) spawnIn.current = spawn() ? (fallS() / g.maxOn) * rnd(0.8, 1.2) : 0.25;
       }
       // the net hangs above the avatar; an item's card sits under its parachute (CHUTE of its width)
       const netTop = g.H - 18 - g.A - g.S * 0.35;
@@ -297,7 +390,7 @@ function Sky({ plan, decoys, mode, avatar, imp, c, onDone, onExit }: {
               misses.current.set(it.id, n);
               events.current.push({ id: it.id, r: "missed", c: it.clue });
               if (n >= 2) lost.current.add(it.id); else queue.current.push(it.id);
-              pace.current = clamp(pace.current * 0.93, 0.8, 1.45);
+              pace.current = clamp(pace.current * 0.93, PACE_MIN, PACE_MAX);
               gone.push(it.key);
               finishIfDone();
             } else {
@@ -324,7 +417,7 @@ function Sky({ plan, decoys, mode, avatar, imp, c, onDone, onExit }: {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [spawn, remove, catchIt, finishIfDone, mode]);
+  }, [spawn, remove, catchIt, finishIfDone, fallS]);
 
   const move = (e: RPointerEvent) => {
     const r = rootRef.current?.getBoundingClientRect();
@@ -347,19 +440,19 @@ function Sky({ plan, decoys, mode, avatar, imp, c, onDone, onExit }: {
           </svg>
           <div className="iv-card" style={{ height: geo.S }}>
             <div className="iv-face">
+              {/* the gloss lies under the picture: a picture that fails never leaves an empty card */}
+              <span className="iv-gloss" style={{ fontSize: clamp(geo.S * 0.15, 14, 19) }}>{nq(it.g)}</span>
               {it.pic ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={it.pic} alt="" draggable={false} />
-              ) : (
-                <span className="iv-gloss" style={{ fontSize: clamp(geo.S * 0.15, 14, 19) }}>{it.g}</span>
-              )}
+                <img src={it.pic} alt="" draggable={false} onError={(e) => { e.currentTarget.style.display = "none"; }} />
+              ) : null}
             </div>
             <div className="iv-back">
               {imp ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={imp} alt="" draggable={false} />
               ) : <span className="iv-imp-face" aria-hidden="true">😜</span>}
-              <b dir="auto">{it.w}</b>
+              <b dir="rtl">{shownWord(it.word, niqqud)}</b>
             </div>
           </div>
           {it.state === "crash" ? <span className="iv-poof" aria-hidden="true" /> : null}
@@ -377,17 +470,18 @@ function Sky({ plan, decoys, mode, avatar, imp, c, onDone, onExit }: {
         <div className="iv-hud-side">
           <button type="button" className="iv-round" onClick={onExit} aria-label={c.back}>✕</button>
           <SfxToggle className="iv-round" />
+          <span className="iv-nq"><NiqqudToggle /></span>
         </div>
         <div className="iv-word" dir="rtl">
-          <span className="iv-say"><TTSButton text={plan.word.w} audioLang="he-IL" ariaLabel={c.hear} className="iv-tts" rate={0.85} useOpenAI /></span>
-          <strong>{plan.word.w}</strong>
+          <span className="iv-say"><TTSButton text={spokenWord(plan.word)} audioLang="he-IL" ariaLabel={c.hear} className="iv-tts" rate={0.85} useOpenAI /></span>
+          <strong>{shownWord(plan.word, niqqud)}</strong>
           <span className="iv-slots">
             {plan.senses.map((p) => {
               const got = filled.includes(p.s.id);
               const pic = got ? picOf(p.s, p.clue) : undefined;
               return (
                 <span key={p.s.id} className={`iv-slot${got ? " is-on" : ""}`}>
-                  {pic ? (
+                  {pic && isReady(pic) ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={pic} alt="" />
                   ) : got ? "✓" : null}
@@ -400,14 +494,23 @@ function Sky({ plan, decoys, mode, avatar, imp, c, onDone, onExit }: {
           <TesterButton game="invaders" word={plan.word.w} className="iv-round" />
         </div>
       </div>
-      <div className={`iv-tip${tip ? " is-alert" : ""}`}>{tip ?? c.tip(plan.word.w)}</div>
+      <div className={`iv-tip${tip ? " is-alert" : ""}`}>{tip ?? c.tip(shownWord(plan.word, niqqud))}</div>
     </div>
   );
 }
 
 /* ---------- the page ---------- */
-/** `demo`: words given straight to the page (a local check of the screen), no sign-in and nothing saved. */
+/** `demo`: words given straight to the page (a local check of the screen), no sign-in and nothing saved.
+ *  The words are Hebrew on every screen, so niqqud is always offered (lib/niqqud-display). */
 export function InvadersClient({ demo }: { demo?: ApiData } = {}) {
+  return (
+    <NiqqudProvider available lang="he">
+      <InvadersGame demo={demo} />
+    </NiqqudProvider>
+  );
+}
+
+function InvadersGame({ demo }: { demo?: ApiData }) {
   const { user, planReady, loading, promptLogin, avatarId, avatarPhotoUrl, memberBand } = useAuth();
   const { lang } = useLang();
   const href = useHref();
@@ -415,11 +518,20 @@ export function InvadersClient({ demo }: { demo?: ApiData } = {}) {
   const c = invCopy(lang);
   const dir = lang === "he" || lang === "ar" || lang === "fa" ? "rtl" : "ltr";
   const mode = modeOf(memberBand);
+  const { on: nqOn, available: nqAvail, nq } = useNiqqud();
+  const niqqud = nqAvail && nqOn;
 
   useEffect(() => {
     if (demo || loading) return;
     if (!user) promptLogin(c.title);
   }, [demo, loading, user, promptLogin, c.title]);
+
+  const [speed, setSpeed] = useState<Speed>("mid");
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the saved choice is read once the profile is known
+    setSpeed(readSpeed(user?.uid, mode));
+  }, [user?.uid, mode]);
+  const chooseSpeed = (s: Speed) => { setSpeed(s); writeSpeed(user?.uid, s); };
 
   const [data, setData] = useState<ApiData | null>(null);
   const [error, setError] = useState<"not_open" | "failed" | null>(null);
@@ -462,9 +574,15 @@ export function InvadersClient({ demo }: { demo?: ApiData } = {}) {
   // the pictures of the next words load ahead
   useEffect(() => {
     if (!data) return;
-    for (const w of queue.slice(idx, idx + 2)) for (const s of w.s) for (const p of s.pics) { const im = new Image(); im.src = p; }
-    if (data.scene.imp) { const im = new Image(); im.src = data.scene.imp; }
+    for (const w of queue.slice(idx, idx + 2)) for (const s of w.s) s.pics.forEach(warm);
+    warm(data.scene.imp);
   }, [data, queue, idx]);
+  // and, while the word is introduced, some of the impostors it will meet
+  useEffect(() => {
+    if (!plan) return;
+    for (const s of plan.word.s) s.pics.forEach(warm);
+    for (const d of shuffle(decoys).slice(0, 10)) d.s.pics.forEach(warm);
+  }, [plan, decoys]);
 
   useEffect(() => { setTesterGame("invaders", phase === "door" ? undefined : word?.w); }, [phase, word]);
   useEffect(() => () => setTesterGame(""), []);
@@ -504,7 +622,7 @@ export function InvadersClient({ demo }: { demo?: ApiData } = {}) {
         setData((d) => (d ? { ...d, progress: { ...d.progress, [plan.word.w]: j.state } } : d));
         if (j.wordies > 0) setTimeout(() => sfx.star(), 400);
       }
-      void notifyActivity(user, { kind: "game", label: `${c.title} · ${plan.word.w}`, score: r.caught.length, total: plan.senses.length });
+      void notifyActivity(user, { kind: "game", label: `${c.title} · ${plainHe(plan.word.w)}`, score: r.caught.length, total: plan.senses.length });
     } catch { /* the game goes on */ }
   }, [plan, user, data, c.title, demo]);
 
@@ -532,7 +650,7 @@ export function InvadersClient({ demo }: { demo?: ApiData } = {}) {
       <style>{CSS}</style>
 
       {plan && phase === "play" ? (
-        <Sky key={`${round}:${idx}:${plan.word.w}`} plan={plan} decoys={decoys} mode={mode} avatar={avatar} imp={data?.scene.imp ?? null} c={c} onDone={finish} onExit={toDoor} />
+        <Sky key={`${round}:${idx}:${plan.word.w}`} plan={plan} decoys={decoys} mode={mode} speed={speed} avatar={avatar} imp={data?.scene.imp ?? null} c={c} onDone={finish} onExit={toDoor} />
       ) : null}
 
       {plan && phase === "intro" ? (
@@ -540,8 +658,9 @@ export function InvadersClient({ demo }: { demo?: ApiData } = {}) {
           <button type="button" className="iv-round iv-x" onClick={toDoor} aria-label={c.back}>✕</button>
           <div className="iv-card-big">
             <span className="iv-label">{c.yourWord((done % ROUND) + 1, ROUND)}</span>
-            <strong className="iv-big-word" dir="rtl">{plan.word.w}</strong>
-            <span ref={introSay}><TTSButton text={plan.word.w} audioLang="he-IL" ariaLabel={c.hear} className="iv-tts" rate={0.85} useOpenAI /></span>
+            <strong className="iv-big-word" dir="rtl">{shownWord(plan.word, niqqud)}</strong>
+            <span ref={introSay}><TTSButton text={spokenWord(plan.word)} audioLang="he-IL" ariaLabel={c.hear} className="iv-tts" rate={0.85} useOpenAI /></span>
+            <NiqqudToggle />
             <p className="iv-goal">{c.goal(plan.senses.length)}</p>
             <button type="button" className="iv-btn" onClick={() => { sfx.whoosh(); setPhase("play"); }}>{c.go}</button>
           </div>
@@ -552,12 +671,12 @@ export function InvadersClient({ demo }: { demo?: ApiData } = {}) {
         <div className="iv-wrap" dir={dir}>
           <button type="button" className="iv-round iv-x" onClick={toDoor} aria-label={c.back}>✕</button>
           <div className="iv-card-big">
-            <strong className="iv-big-word is-small" dir="rtl">{plan.word.w}</strong>
+            <strong className="iv-big-word is-small" dir="rtl">{shownWord(plan.word, niqqud)}</strong>
             <span className="iv-title">{result.caught.length === plan.senses.length ? c.allFound : c.someFound(result.caught.length, plan.senses.length)}</span>
             <ul className="iv-senses">
               {plan.senses.map((p) => {
                 const ok = result.caught.includes(p.s.id);
-                const pic = p.s.pics[0];
+                const pic = p.s.pics.find(isReady);
                 return (
                   <li key={p.s.id} className={ok ? "is-ok" : "is-miss"}>
                     {pic ? (
@@ -565,7 +684,7 @@ export function InvadersClient({ demo }: { demo?: ApiData } = {}) {
                       <img src={pic} alt="" />
                     ) : <span className="iv-sense-dot" aria-hidden="true">{ok ? "✓" : "?"}</span>}
                     <span className="iv-sense-text">
-                      <b>{p.s.g}</b>
+                      <b>{nq(p.s.g)}</b>
                       {!ok ? <small>{c.missed}</small> : result.known.includes(p.s.id) ? <small className="is-known">{c.knownNow}</small> : null}
                     </span>
                   </li>
@@ -601,6 +720,14 @@ export function InvadersClient({ demo }: { demo?: ApiData } = {}) {
             ) : null}
             <strong className="iv-title is-big">{c.title}</strong>
             <p className="iv-goal">{c.sub}</p>
+            <div className="iv-speed" role="radiogroup" aria-label={c.speed}>
+              {SPEEDS.map((s) => (
+                <button key={s} type="button" role="radio" aria-checked={speed === s} className={speed === s ? "is-on" : undefined} onClick={() => chooseSpeed(s)}>
+                  {c.speedName[s]}
+                </button>
+              ))}
+            </div>
+            <NiqqudToggle />
             {lang !== "he" && !demo ? <p className="iv-note">{c.otherLang}</p>
               : error === "not_open" ? <p className="iv-note">{c.notOpen}</p>
               : error === "failed" || (data && !queue.length) ? <p className="iv-note">{c.noWords}</p>
@@ -624,7 +751,7 @@ const CSS = `
 .iv-card{position:relative;width:100%;perspective:600px}
 .iv-face,.iv-back{position:absolute;inset:0;border-radius:22px;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .45s cubic-bezier(.3,1.4,.5,1)}
 .iv-face{background:#fff;border:4px solid hsl(var(--hue) 75% 70%);box-shadow:0 8px 18px #0003;overflow:hidden;display:grid;place-items:center}
-.iv-face img{width:100%;height:100%;object-fit:cover;display:block}
+.iv-face img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .iv-gloss{padding:8px 10px;font-weight:800;line-height:1.25;text-align:center;color:#2a2350}
 .iv-item.is-gloss .iv-face{background:#fff8e6}
 .iv-back{background:#7c3aed;border:4px solid #c4b5fd;transform:rotateY(180deg);display:grid;place-items:center;align-content:center;gap:2px;color:#fff;box-shadow:0 8px 18px #0004}
@@ -666,6 +793,10 @@ const CSS = `
 .iv-goal{margin:0;color:#3b4a56;font-size:17px;line-height:1.45}
 .iv-note{color:#5f6b73;font-weight:700}
 .iv-door-imp{width:120px;height:auto;border-radius:50%}
+.iv-speed{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:#f1edff}
+.iv-speed button{border:0;border-radius:999px;background:none;font:inherit;font-weight:800;font-size:16px;padding:8px 16px;color:#4c3d8f;cursor:pointer}
+.iv-speed button.is-on{background:#7c3aed;color:#fff;box-shadow:0 3px 10px #7c3aed44}
+.iv-nq{display:inline-flex;align-items:center;background:#fffe;border-radius:999px;box-shadow:0 2px 8px #0003}
 .iv-btn{border:0;border-radius:999px;background:#7c3aed;color:#fff;font:inherit;font-weight:900;font-size:19px;padding:12px 30px;cursor:pointer;box-shadow:0 6px 16px #7c3aed55}
 .iv-btn.is-ghost{background:#eef2f6;color:#14202b;box-shadow:none}
 .iv-link{border:0;background:none;font:inherit;color:#5f6b73;font-weight:700;cursor:pointer;text-decoration:underline}
