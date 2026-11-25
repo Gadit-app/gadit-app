@@ -29,7 +29,7 @@
  * born, caught or leaves.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as RPointerEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { WaitText } from "@/components/WaitText";
 import { TTSButton } from "@/components/design/TTSButton";
@@ -47,13 +47,10 @@ import { baseOf, blockedFor, isBlocked, plainHe } from "@/lib/invaders/rules";
 import type { Clue, SenseEvent, WordState } from "@/lib/invaders/progress";
 import { NiqqudProvider, NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
 import { invCopy, type InvCopy } from "./inv-i18n";
+import { FallStage, type Drop } from "./FallStage";
 
 const ROUND = 5;
-const NET = "/catch/fireflies/net.webp";
-/** The parachute's height over an item's width (the svg is 100 x 62 at 92% width, less its overlap). */
-const CHUTE = 0.52;
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
-const rnd = (a: number, b: number) => a + Math.random() * (b - a);
 const pick = <T,>(a: T[]): T => a[Math.floor(Math.random() * a.length)];
 function shuffle<T>(a: T[]): T[] {
   const b = [...a];
@@ -79,8 +76,6 @@ const FALL_S: Record<Mode, number> = { pics: 8, mixed: 6.8, words: 5.8 };
 type Speed = "slow" | "mid" | "fast";
 const SPEEDS: Speed[] = ["slow", "mid", "fast"];
 const SPEED_X: Record<Speed, number> = { slow: 1.5, mid: 1, fast: 0.7 };
-/** The pace moves this little with accuracy, so the speed the child chose stays the speed. */
-const PACE_MIN = 0.88, PACE_MAX = 1.15;
 const speedKey = (uid: string | undefined) => `gadit-inv-speed:${uid ?? "anon"}`;
 function readSpeed(uid: string | undefined, mode: Mode): Speed {
   try {
@@ -170,8 +165,7 @@ function decoysFor(d: ApiData, target: ApiWord, mode: Mode): Decoy[] {
   return out;
 }
 
-type Item = { key: number; kind: "true" | "imp"; w: string; word: ApiWord; id: string; clue: Clue; pic?: string; g: string; hue: number; state: "fall" | "caught" | "flip" | "crash" };
-type Motion = { x: number; y: number; vy: number; amp: number; ph: number; t: number; end?: number };
+type WordDrop = { w: string; word: ApiWord; id: string; clue: Clue; pic?: string; g: string };
 export type WordResult = { events: SenseEvent[]; mistakes: number; caught: string[]; lost: string[] };
 
 /* ---------- one word: the sky ---------- */
@@ -190,42 +184,18 @@ function readyClue(s: ApiSense, want: Clue, mode: Mode, waitedS: number): Clue |
   return bad || waitedS > 3 ? "g" : null;
 }
 
+/** The words door on the shared falling engine (FallStage): what falls, what a catch means, when the word ends. */
 function Sky({ plan, decoys, mode, speed, avatar, imp, c, onDone, onExit }: {
   plan: Plan; decoys: Decoy[]; mode: Mode; speed: Speed; avatar: string; imp: string | null; c: InvCopy;
   onDone: (r: WordResult) => void; onExit: () => void;
 }) {
   const { on: nqOn, available: nqAvail, nq } = useNiqqud();
   const niqqud = nqAvail && nqOn;
-  const rootRef = useRef<HTMLDivElement>(null);
-  const [size, setSize] = useState({ w: 390, h: 740 });
-  useEffect(() => {
-    const el = rootRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(([e]) => setSize({ w: e.contentRect.width, h: e.contentRect.height }));
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-  const geo = useMemo(() => {
-    const W = size.w, H = size.h;
-    const S = clamp(Math.min(W * 0.27, H * 0.17), 84, 140);
-    const A = clamp(Math.min(W * 0.2, H * 0.13), 70, 104); // the avatar
-    const ground = H - 14;
-    return { W, H, S, A, ground, top: Math.max(120, H * 0.17), maxOn: W < 600 ? 3 : 4 };
-  }, [size]);
-  const geoRef = useRef(geo);
-  useEffect(() => { geoRef.current = geo; }, [geo]);
+  // the cards read these when drawn, so switching niqqud on changes the cards already falling
+  const view = useRef({ nq, niqqud });
+  useEffect(() => { view.current = { nq, niqqud }; });
 
-  const [items, setItems] = useState<Item[]>([]);
-  const itemsRef = useRef<Item[]>([]);
-  const motion = useRef(new Map<number, Motion>());
-  const els = useRef(new Map<number, HTMLDivElement>());
-  const avatarEl = useRef<HTMLDivElement>(null);
-  const ax = useRef(195);
-  const targetX = useRef(195);
-  const nextKey = useRef(1);
-  const spawnIn = useRef(0.6);
   const sinceTrue = useRef(1);
-  const pace = useRef(1);
   const queue = useRef<string[]>(shuffle(plan.senses.map((p) => p.s.id)));
   const misses = useRef(new Map<string, number>());
   const caught = useRef(new Set<string>());
@@ -237,23 +207,46 @@ function Sky({ plan, decoys, mode, speed, avatar, imp, c, onDone, onExit }: {
   const [tip, setTip] = useState<string | null>(null);
   const tipTm = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const byId = useMemo(() => new Map(plan.senses.map((p) => [p.s.id, p])), [plan]);
-
-  useEffect(() => { ax.current = targetX.current = geo.W / 2; }, [geo.W]);
+  const wantSince = useRef(new Map<string, number>());
   useEffect(() => () => clearTimeout(tipTm.current), []);
 
-  const commit = (list: Item[]) => { itemsRef.current = list; setItems(list); };
+  const say = useCallback((text: string) => {
+    clearTimeout(tipTm.current);
+    setTip(text);
+    tipTm.current = setTimeout(() => setTip(null), 1700);
+  }, []);
 
-  const wantSince = useRef(new Map<string, number>());
-  const fallS = useCallback(() => (FALL_S[mode] * SPEED_X[speed]) / pace.current, [mode, speed]);
+  const toDrop = useCallback((d: WordDrop, kind: "true" | "imp"): Drop<WordDrop> => ({
+    kind,
+    data: d,
+    isPic: !!d.pic,
+    face: (S) => (
+      <>
+        {/* the gloss lies under the picture: a picture that fails never leaves an empty card */}
+        <span className="iv-gloss" style={{ fontSize: clamp(S * 0.15, 14, 19) }}>{view.current.nq(d.g)}</span>
+        {d.pic ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={d.pic} alt="" draggable={false} onError={(e) => { e.currentTarget.style.display = "none"; }} />
+        ) : null}
+      </>
+    ),
+    back: () => (
+      <>
+        {imp ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={imp} alt="" draggable={false} />
+        ) : <span className="iv-imp-face" aria-hidden="true">😜</span>}
+        <b dir="rtl">{shownWord(d.word, view.current.niqqud)}</b>
+      </>
+    ),
+  }), [imp]);
 
-  /** Drops one item if one can fall now (its picture is here); false = try again in a moment. */
-  const spawn = useCallback((): boolean => {
-    const g = geoRef.current;
-    const live = itemsRef.current.filter((i) => i.state === "fall");
+  /** The next card: a true meaning when there is room for one (its picture is here), else an impostor. */
+  const next = useCallback((live: Drop<WordDrop>[]): Drop<WordDrop> | null => {
     const trueLive = live.filter((i) => i.kind === "true").length;
-    const free = queue.current.filter((id) => !live.some((i) => i.kind === "true" && i.id === id));
+    const free = queue.current.filter((id) => !live.some((i) => i.kind === "true" && i.data.id === id));
     const room = trueLive < (mode === "pics" ? 1 : 2);
-    let item: Omit<Item, "key" | "hue" | "state"> | null = null;
+    let drop: Drop<WordDrop> | null = null;
     if (free.length && room && (sinceTrue.current >= 2 || Math.random() < 0.45)) {
       const id = free[0];
       const p = byId.get(id)!;
@@ -263,12 +256,12 @@ function Sky({ plan, decoys, mode, speed, avatar, imp, c, onDone, onExit }: {
       if (clue) {
         queue.current = queue.current.filter((x) => x !== id);
         wantSince.current.delete(id);
-        item = { kind: "true", w: plan.word.w, word: plan.word, id, clue, pic: picOf(p.s, clue), g: p.s.g };
+        drop = toDrop({ w: plan.word.w, word: plan.word, id, clue, pic: picOf(p.s, clue), g: p.s.g }, "true");
         sinceTrue.current = 0;
       }
     }
-    if (!item && decoys.length) {
-      const onScreen = new Set(live.map((i) => `${i.w}:${i.id}`));
+    if (!drop && decoys.length) {
+      const onScreen = new Set(live.map((i) => `${i.data.w}:${i.data.id}`));
       const free = decoys.filter((d) => !onScreen.has(`${d.w}:${d.s.id}`));
       const pool = free.length ? free : decoys;
       const drawn = pool.filter((d) => d.s.pics.length);
@@ -285,217 +278,96 @@ function Sky({ plan, decoys, mode, speed, avatar, imp, c, onDone, onExit }: {
       }
       if (!d && mode !== "pics") { d = pick(pool); clue = "g"; }
       if (d && clue) {
-        item = { kind: "imp", w: d.w, word: d.word, id: d.s.id, clue, pic: picOf(d.s, clue), g: d.s.g };
+        drop = toDrop({ w: d.w, word: d.word, id: d.s.id, clue, pic: picOf(d.s, clue), g: d.s.g }, "imp");
         sinceTrue.current += 1;
       }
     }
     // the next pictures start coming while this one falls
     for (const d of shuffle(decoys).slice(0, 2)) d.s.pics.forEach(warm);
-    if (!item) return false;
-    // a free column, away from what is still near the top
-    let x = rnd(g.S * 0.6, g.W - g.S * 0.6);
-    for (let k = 0; k < 8; k++) {
-      const clash = live.some((i) => { const m = motion.current.get(i.key); return m && m.y < g.S * 1.6 && Math.abs(m.x - x) < g.S * 1.15; });
-      if (!clash) break;
-      x = rnd(g.S * 0.6, g.W - g.S * 0.6);
-    }
-    const key = nextKey.current++;
-    motion.current.set(key, { x, y: -g.S * 1.6, vy: (g.ground + g.S * 0.1) / fallS(), amp: rnd(6, 16), ph: rnd(0, 6.28), t: 0 });
-    commit([...itemsRef.current, { ...item, key, hue: Math.floor(rnd(0, 360)), state: "fall" }]);
-    return true;
-  }, [byId, decoys, mode, plan.word, fallS]);
-
-  const remove = useCallback((key: number) => {
-    motion.current.delete(key);
-    els.current.delete(key);
-    commit(itemsRef.current.filter((i) => i.key !== key));
-  }, []);
-
-  const say = (text: string) => {
-    clearTimeout(tipTm.current);
-    setTip(text);
-    tipTm.current = setTimeout(() => setTip(null), 1700);
-  };
+    return drop;
+  }, [byId, decoys, mode, plan.word, toDrop]);
 
   const finishIfDone = useCallback(() => {
     if (doneRef.current) return;
     if (caught.current.size + lost.current.size < plan.senses.length) return;
     doneRef.current = true;
-    commit(itemsRef.current.map((i) => (i.state === "fall" && i.kind === "imp" ? { ...i, state: "crash" as const } : i)));
     setTimeout(() => (caught.current.size === plan.senses.length ? sfx.magic() : sfx.star()), 200);
     setTimeout(() => onDone({ events: events.current, mistakes: mistakes.current, caught: [...caught.current], lost: [...lost.current] }), 1300);
   }, [onDone, plan.senses.length]);
 
-  const catchIt = useCallback((it: Item) => {
-    if (it.kind === "true") {
-      if (caught.current.has(it.id)) { remove(it.key); return; }
+  const onCatch = useCallback((d: Drop<WordDrop>): "caught" | "flip" | "gone" => {
+    const it = d.data;
+    if (d.kind === "true") {
+      if (caught.current.has(it.id)) return "gone";
       caught.current.add(it.id);
       events.current.push({ id: it.id, r: "caught", c: it.clue });
       sfx.letter(caught.current.size - 1);
       setTimeout(() => sfx.correct(), 90);
-      pace.current = clamp(pace.current * 1.05, PACE_MIN, PACE_MAX);
       setFilled((f) => [...f, it.id]);
-      commit(itemsRef.current.map((x) => (x.key === it.key ? { ...x, state: "caught" as const } : x)));
-      setTimeout(() => remove(it.key), 650);
       finishIfDone();
-    } else {
-      mistakes.current += 1;
-      sfx.wrong();
-      pace.current = clamp(pace.current * 0.9, PACE_MIN, PACE_MAX);
-      say(c.impostor(shownWord(it.word, niqqud)));
-      const m = motion.current.get(it.key);
-      if (m) m.vy = -260;
-      commit(itemsRef.current.map((x) => (x.key === it.key ? { ...x, state: "flip" as const } : x)));
-      setTimeout(() => remove(it.key), 1700);
+      return "caught";
     }
-  }, [c, finishIfDone, remove, niqqud]);
+    mistakes.current += 1;
+    sfx.wrong();
+    say(c.impostor(shownWord(it.word, view.current.niqqud)));
+    return "flip";
+  }, [c, finishIfDone, say]);
 
-  /* the loop */
-  useEffect(() => {
-    let raf = 0;
-    let last = performance.now();
-    const tick = (t: number) => {
-      const dt = Math.min(0.05, (t - last) / 1000);
-      last = t;
-      const g = geoRef.current;
-      // the avatar follows the finger or the mouse
-      ax.current += (targetX.current - ax.current) * Math.min(1, dt * 16);
-      if (avatarEl.current) avatarEl.current.style.transform = `translate3d(${ax.current - g.A / 2}px,0,0)`;
-      if (!doneRef.current) {
-        spawnIn.current -= dt;
-        const live = itemsRef.current.filter((i) => i.state === "fall").length;
-        // nothing ready to fall yet (a picture still on its way): look again in a moment
-        if (spawnIn.current <= 0 && live < g.maxOn) spawnIn.current = spawn() ? (fallS() / g.maxOn) * rnd(0.8, 1.2) : 0.25;
-      }
-      // the net hangs above the avatar; an item's card sits under its parachute (CHUTE of its width)
-      const netTop = g.H - 18 - g.A - g.S * 0.35;
-      const netBottom = g.H - 18 - g.A * 0.35;
-      const gone: number[] = [];
-      let crashed: number[] = [];
-      for (const it of itemsRef.current) {
-        const m = motion.current.get(it.key);
-        if (!m) continue;
-        m.t += dt;
-        if (it.state === "fall") {
-          m.y += m.vy * dt;
-          const cx = m.x + Math.sin(m.t * 1.4 + m.ph) * m.amp;
-          const cardTop = m.y + g.S * CHUTE;
-          const bottom = cardTop + g.S;
-          if (!doneRef.current && bottom >= netTop && cardTop <= netBottom && Math.abs(cx - ax.current) <= g.S * 0.45 + g.A * 0.35) {
-            catchIt(it);
-          } else if (bottom >= g.ground) {
-            if (it.kind === "true") {
-              // a true meaning that lands is missed; it comes back once
-              const n = (misses.current.get(it.id) ?? 0) + 1;
-              misses.current.set(it.id, n);
-              events.current.push({ id: it.id, r: "missed", c: it.clue });
-              if (n >= 2) lost.current.add(it.id); else queue.current.push(it.id);
-              pace.current = clamp(pace.current * 0.93, PACE_MIN, PACE_MAX);
-              gone.push(it.key);
-              finishIfDone();
-            } else {
-              // an impostor that lands crashes into the meadow
-              sfx.tap();
-              crashed = [...crashed, it.key];
-            }
-          }
-          const el = els.current.get(it.key);
-          if (el) el.style.transform = `translate3d(${cx - g.S / 2}px,${m.y}px,0)`;
-        } else if (it.state === "flip") {
-          m.vy += 700 * dt;
-          m.y += m.vy * dt * 0.5;
-          const el = els.current.get(it.key);
-          if (el) el.style.transform = `translate3d(${m.x - g.S / 2}px,${m.y}px,0)`;
-        } else if (it.state === "crash") {
-          if (m.end === undefined) m.end = m.t + 0.55;
-          if (m.t > m.end) gone.push(it.key);
-        }
-      }
-      if (crashed.length) commit(itemsRef.current.map((x) => (crashed.includes(x.key) ? { ...x, state: "crash" as const } : x)));
-      for (const k of gone) remove(k);
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [spawn, remove, catchIt, finishIfDone, fallS]);
+  const onLand = useCallback((d: Drop<WordDrop>) => {
+    // a true meaning that lands is missed; it comes back once
+    const it = d.data;
+    const n = (misses.current.get(it.id) ?? 0) + 1;
+    misses.current.set(it.id, n);
+    events.current.push({ id: it.id, r: "missed", c: it.clue });
+    if (n >= 2) lost.current.add(it.id); else queue.current.push(it.id);
+    finishIfDone();
+  }, [finishIfDone]);
 
-  const move = (e: RPointerEvent) => {
-    const r = rootRef.current?.getBoundingClientRect();
-    if (!r) return;
-    targetX.current = clamp(e.clientX - r.left, geo.A / 2, geo.W - geo.A / 2);
-  };
+  const done = useCallback(() => doneRef.current, []);
+
+  const hud = (
+    <div className="iv-hud">
+      <div className="iv-hud-side">
+        <button type="button" className="iv-round" onClick={onExit} aria-label={c.back}>✕</button>
+        <SfxToggle className="iv-round" />
+        <span className="iv-nq"><NiqqudToggle /></span>
+      </div>
+      <div className="iv-word" dir="rtl">
+        <span className="iv-say"><TTSButton text={spokenWord(plan.word)} audioLang="he-IL" ariaLabel={c.hear} className="iv-tts" rate={0.85} useOpenAI /></span>
+        <strong>{shownWord(plan.word, niqqud)}</strong>
+        <span className="iv-slots">
+          {plan.senses.map((p) => {
+            const got = filled.includes(p.s.id);
+            const pic = got ? picOf(p.s, p.clue) : undefined;
+            return (
+              <span key={p.s.id} className={`iv-slot${got ? " is-on" : ""}`}>
+                {pic && isReady(pic) ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={pic} alt="" />
+                ) : got ? "✓" : null}
+              </span>
+            );
+          })}
+        </span>
+      </div>
+      <div className="iv-hud-side is-end">
+        <TesterButton game="invaders" word={plan.word.w} className="iv-round" />
+      </div>
+    </div>
+  );
 
   return (
-    <div className="iv-stage" ref={rootRef} onPointerDown={move} onPointerMove={move}>
-      {items.map((it) => (
-        <div
-          key={it.key}
-          ref={(el) => { if (el) els.current.set(it.key, el); else els.current.delete(it.key); }}
-          className={`iv-item is-${it.state}${it.pic ? " is-pic" : " is-gloss"}`}
-          style={{ width: geo.S, ["--hue" as string]: it.hue } as CSSProperties}
-        >
-          <svg className="iv-chute" viewBox="0 0 100 62" aria-hidden="true">
-            <path d="M4 34 C4 8 96 8 96 34 C84 27 72 27 61 34 C50 27 39 27 28 34 C17 27 12 28 4 34 Z" className="iv-canopy" />
-            <path d="M6 34 L44 61 M33 33 L46 61 M67 33 L54 61 M94 34 L56 61" className="iv-lines" />
-          </svg>
-          <div className="iv-card" style={{ height: geo.S }}>
-            <div className="iv-face">
-              {/* the gloss lies under the picture: a picture that fails never leaves an empty card */}
-              <span className="iv-gloss" style={{ fontSize: clamp(geo.S * 0.15, 14, 19) }}>{nq(it.g)}</span>
-              {it.pic ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={it.pic} alt="" draggable={false} onError={(e) => { e.currentTarget.style.display = "none"; }} />
-              ) : null}
-            </div>
-            <div className="iv-back">
-              {imp ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={imp} alt="" draggable={false} />
-              ) : <span className="iv-imp-face" aria-hidden="true">😜</span>}
-              <b dir="rtl">{shownWord(it.word, niqqud)}</b>
-            </div>
-          </div>
-          {it.state === "crash" ? <span className="iv-poof" aria-hidden="true" /> : null}
-        </div>
-      ))}
-
-      <div className="iv-catcher" ref={avatarEl} style={{ width: geo.A, height: geo.A }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="iv-avatar" src={avatar} alt="" draggable={false} />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="iv-net" src={NET} alt="" draggable={false} />
-      </div>
-
-      <div className="iv-hud">
-        <div className="iv-hud-side">
-          <button type="button" className="iv-round" onClick={onExit} aria-label={c.back}>✕</button>
-          <SfxToggle className="iv-round" />
-          <span className="iv-nq"><NiqqudToggle /></span>
-        </div>
-        <div className="iv-word" dir="rtl">
-          <span className="iv-say"><TTSButton text={spokenWord(plan.word)} audioLang="he-IL" ariaLabel={c.hear} className="iv-tts" rate={0.85} useOpenAI /></span>
-          <strong>{shownWord(plan.word, niqqud)}</strong>
-          <span className="iv-slots">
-            {plan.senses.map((p) => {
-              const got = filled.includes(p.s.id);
-              const pic = got ? picOf(p.s, p.clue) : undefined;
-              return (
-                <span key={p.s.id} className={`iv-slot${got ? " is-on" : ""}`}>
-                  {pic && isReady(pic) ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={pic} alt="" />
-                  ) : got ? "✓" : null}
-                </span>
-              );
-            })}
-          </span>
-        </div>
-        <div className="iv-hud-side is-end">
-          <TesterButton game="invaders" word={plan.word.w} className="iv-round" />
-        </div>
-      </div>
-      <div className={`iv-tip${tip ? " is-alert" : ""}`}>{tip ?? c.tip(shownWord(plan.word, niqqud))}</div>
-    </div>
+    <FallStage<WordDrop>
+      fallS={FALL_S[mode] * SPEED_X[speed]}
+      next={next}
+      onCatch={onCatch}
+      onLand={onLand}
+      done={done}
+      avatar={avatar}
+      hud={hud}
+      tip={tip ?? c.tip(shownWord(plan.word, niqqud))}
+      tipAlert={!!tip}
+    />
   );
 }
 
