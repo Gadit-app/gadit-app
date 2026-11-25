@@ -101,5 +101,69 @@ for (const st of nq.STATIONS) {
   }
 }
 
+/* ---------- niqqud-progress.ts ---------- */
+const pr = await load("niqqud-progress.ts");
+const ORDER = nq.STATIONS.map((s) => s.id);
+const SIGN_IDS = Object.keys(nq.SIGNS);
+const D1 = "2026-11-25", D2 = "2026-11-26";
+let rid = 0;
+/** A round of 5 calls, `clean` of them clean. */
+const round = (station, stage, clean, extra = {}) => ({
+  rid: `r-${++rid}-abcdef`, station, stage,
+  calls: [0, 1, 2, 3, 4].map((i) => ({ clean: i < clean, ok: ["kamatz"], mix: i < clean ? [] : [["kamatz", "tsere"]] })),
+  ...extra,
+});
+const apply = (s, r, day = D1, jump = false) => pr.applyNqRound(s, r, ORDER, day, jump);
+
+let r = apply(pr.emptyNq(), round("s-a", 1, 4));
+check("pass at 4", r.counted && r.passed && r.firstPass && r.wordies === 2, JSON.stringify(r));
+eq("pass at 4: st", r.state.st["s-a"], 1);
+r = apply(pr.emptyNq(), round("s-a", 1, 3));
+check("no pass at 3", r.counted && !r.passed && r.wordies === 0 && !r.state.st["s-a"], JSON.stringify(r));
+
+let s = apply(pr.emptyNq(), round("s-a", 1, 4)).state;
+r = apply(s, round("s-a", 1, 4));
+check("replay pays 0", r.counted && r.passed && !r.firstPass && r.wordies === 0);
+
+s = apply(apply(pr.emptyNq(), round("s-a", 1, 4)).state, round("s-a", 2, 4)).state;
+r = apply(s, round("s-a", 3, 4));
+check("station done +3 once", r.stationDone && r.wordies === 5 && r.state.done["s-a"] === D1, JSON.stringify(r));
+r = apply(r.state, round("s-a", 3, 4));
+check("station done +3 once: again 0", !r.stationDone && r.wordies === 0);
+
+s = pr.emptyNq();
+let paid = 0;
+for (let i = 0; i < 6; i++) { const x = apply(s, round("s-a", 1, 5)); s = x.state; paid += x.wordies; }
+eq("clean cap: 2 for the pass + 5 clean", paid, 7);
+r = apply(s, round("s-a", 1, 5), D2);
+eq("clean cap: next day pays again", r.wordies, 1);
+
+r = apply(pr.emptyNq(), round("s-a", 2, 5));
+check("locked stage", !r.counted && r.wordies === 0 && !r.state.st["s-a"], JSON.stringify(r));
+r = apply(pr.emptyNq(), round("s-a", 2, 4), D1, true);
+check("jump", r.counted && r.passed && r.state.st["s-a"] === 2 && r.wordies === 2, JSON.stringify(r));
+s = apply(apply(pr.emptyNq(), round("s-a", 1, 4)).state, round("s-a", 2, 4)).state;
+r = apply(s, round("s-i", 1, 4));
+check("next station locked", !r.counted, JSON.stringify(r));
+check("unlocked after 3 stages", pr.unlocked(apply(s, round("s-a", 3, 4)).state, ORDER, "s-i", 1));
+
+const once = round("s-a", 1, 5);
+const a = apply(pr.emptyNq(), once);
+const b = apply(a.state, once);
+check("dup rid", a.counted && !b.counted && b.wordies === 0 && JSON.stringify(b.state) === JSON.stringify(a.state));
+const short = round("s-a", 1, 4);
+short.calls = short.calls.slice(0, 4);
+check("short round", !apply(pr.emptyNq(), short).counted);
+
+const cleaned = pr.cleanNq({ st: { "s-a": 7, zz: 2 }, done: { zz: D1 }, signs: { qq: { ok: 3, mix: {} }, tsere: { ok: 2, mix: { qq: 1, shva: 4 } } }, clean: { day: D1, n: 2 }, rids: ["x"] }, ORDER, SIGN_IDS);
+eq("clean unknown ids", cleaned, { st: { "s-a": 3 }, done: {}, signs: { tsere: { ok: 2, mix: { shva: 4 } } }, clean: { day: D1, n: 2 }, rids: ["x"] });
+eq("clean garbage", pr.cleanNq("nonsense", ORDER, SIGN_IDS), pr.emptyNq());
+
+const mixRound = round("s-e", 1, 3);
+mixRound.calls = mixRound.calls.map((c) => ({ ...c, ok: ["tsere"], mix: [["tsere", "shva"]] }));
+r = apply(pr.emptyNq(), mixRound, D1, true);
+eq("mix counted", r.state.signs.tsere.mix.shva, 5);
+eq("ok counted", r.state.signs.tsere.ok, 5);
+
 console.log(`${ok} ok, ${bad} failed`);
 process.exit(bad ? 1 : 0);
