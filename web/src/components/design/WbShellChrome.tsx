@@ -46,6 +46,8 @@ import { isPwaInstalledOrDone } from "@/components/InstallPwaPrompt";
 import { requestInstallOpen } from "@/lib/install-bus";
 import { isInAppBrowser } from "@/lib/in-app-browser";
 import { isIosApp } from "@/lib/native-app";
+import { canBuyInApp } from "@/lib/native-iap";
+import { subscribeCopy } from "@/lib/subscribe-copy";
 import { track } from "@/lib/track";
 import { practiceNav } from "@/lib/practice-i18n";
 import { subjectsLangFor, SUBJECTS_NAV } from "@/lib/subjects-langs";
@@ -122,6 +124,7 @@ export type NavKey =
   | "schools"
   | "families"
   | "pricing"
+  | "plans"
   | "affiliates";
 
 type NavLink = { key: NavKey; href: string; label: string };
@@ -313,6 +316,14 @@ function useNavLinks(placeholder = false): NavLink[] {
   const [kidsMode] = useKidsMode();
   const { lang } = useLang();
   const href = useHref();
+  // The iOS build that sells through the App Store (App Review 2.1(b),
+  // 2026-11-25: the reviewer could not find the plans, which were reachable
+  // only from a locked feature). Read once on the device after mount.
+  const [inAppPlans, setInAppPlans] = useState(false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from the device
+    setInAppPlans(canBuyInApp());
+  }, []);
 
   // Until auth AND the plan are resolved, render no nav rather than the wrong
   // nav: otherwise a logged-in user briefly sees the anonymous marketing links
@@ -380,10 +391,13 @@ function useNavLinks(placeholder = false): NavLink[] {
       return links;
     }
     // Basic (signed in, free): their free notebook (Gadi 2026-10-06) and a
-    // single gentle upsell.
+    // single gentle upsell. Inside the iOS app the upsell is the App Store
+    // plans screen (/subscribe), never /pricing, and never in Kids Mode.
     return [
       { key: "notebook", href: href("/notebook"), label: v2(lang, "navNotebook") },
-      { key: "pricing", href: href("/pricing"), label: v2(lang, "navPricing") },
+      inAppPlans && !kidsMode
+        ? { key: "plans", href: href("/subscribe"), label: subscribeCopy(lang).seePlans }
+        : { key: "pricing", href: href("/pricing"), label: v2(lang, "navPricing") },
     ];
   }
 
