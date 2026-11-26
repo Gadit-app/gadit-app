@@ -1,0 +1,314 @@
+{
+  "ar": {
+    "letters": ["الحروف والحركات", "نتعرّف على الحروف وأصواتها والحركات ونقرأ المقاطع"],
+    "meaning": ["الكلمة ومعناها", "نتعلّم معنى كل كلمة ونتذكّره"],
+    "sentence": ["كلمات في جملة", "نختار الكلمة والمعنى المناسبين للجملة"],
+    "spelling": ["الإملاء", "نبني الكلمة حرفًا حرفًا"],
+    "similar": ["كلمات متشابهة نخلط بينها", "نميّز بين الكلمات المتقاربة ونختار الكلمة الدقيقة"],
+    "origins": ["من أين تأتي الكلمات", "الجذور وأجزاء الكلمة واللغات التي جاءت منها الكلمات"]
+  },
+  "ru": {
+    "letters": ["Буквы и огласовки", "Знакомимся с буквами, их звуками и огласовками и читаем слоги"],
+    "meaning": ["Слово и его значение", "Узнаём, что значит каждое слово, и запоминаем его"],
+    "sentence": ["Слова в предложении", "Выбираем слово и значение, которые подходят к предложению"],
+    "spelling": ["Правописание", "Собираем слово буква за буквой"],
+    "similar": ["Похожие слова, которые путают", "Различаем близкие слова и выбираем точное"],
+    "origins": ["Откуда берутся слова", "Корни, части слова и языки, из которых пришли слова"]
+  },
+  "es": {
+    "letters": ["Letras y signos vocálicos", "Conocemos las letras, sus sonidos y los signos vocálicos, y leemos sílabas"],
+    "meaning": ["La palabra y su significado", "Aprendemos qué significa cada palabra y la recordamos"],
+    "sentence": ["Palabras en una oración", "Elegimos la palabra y el significado que encajan en la oración"],
+    "spelling": ["Ortografía", "Formamos la palabra letra por letra"],
+    "similar": ["Palabras parecidas que se confunden", "Distinguimos palabras cercanas y elegimos la exacta"],
+    "origins": ["De dónde vienen las palabras", "Raíces, partes de la palabra y los idiomas de donde vinieron las palabras"]
+  },
+  "pt": {
+    "letters": ["Letras e sinais vocálicos", "Conhecemos as letras, seus sons e os sinais vocálicos, e lemos sílabas"],
+    "meaning": ["A palavra e seu significado", "Aprendemos o que cada palavra significa e lembramos dela"],
+    "sentence": ["Palavras na frase", "Escolhemos a palavra e o significado que combinam com a frase"],
+    "spelling": ["Ortografia", "Montamos a palavra letra por letra"],
+    "similar": ["Palavras parecidas que confundem", "Diferenciamos palavras próximas e escolhemos a exata"],
+    "origins": ["De onde vêm as palavras", "Raízes, partes da palavra e as línguas de onde as palavras vieram"]
+  },
+  "fr": {
+    "letters": ["Lettres et signes voyelles", "On découvre les lettres, leurs sons et les signes voyelles, et on lit des syllabes"],
+    "meaning": ["Le mot et son sens", "On apprend ce que veut dire chaque mot et on le retient"],
+    "sentence": ["Des mots dans une phrase", "On choisit le mot et le sens qui vont avec la phrase"],
+    "spelling": ["Orthographe", "On construit le mot lettre par lettre"],
+    "similar": ["Mots proches souvent confondus", "On distingue les mots proches et on choisit le mot exact"],
+    "origins": ["D'où viennent les mots", "Racines, parties du mot et langues dont les mots sont venus"]
+  },
+  "de": {
+    "letters": ["Buchstaben und Vokalzeichen", "Wir lernen die Buchstaben, ihre Laute und die Vokalzeichen kennen und lesen Silben"],
+    "meaning": ["Das Wort und seine Bedeutung", "Wir lernen, was jedes Wort bedeutet, und merken es uns"],
+    "sentence": ["Wörter im Satz", "Wir wählen das Wort und die Bedeutung, die zum Satz passen"],
+    "spelling": ["Rechtschreibung", "Wir bauen das Wort Buchstabe für Buchstabe"],
+    "similar": ["Ähnliche Wörter, die man verwechselt", "Wir unterscheiden ähnliche Wörter und wählen das genau passende"],
+    "origins": ["Woher Wörter kommen", "Wortstämme, Wortteile und die Sprachen, aus denen Wörter kommen"]
+  },
+  "cs": {
+    "letters": ["Písmena a samohlásková znaménka", "Poznáváme písmena, jejich zvuky a samohlásková znaménka a čteme slabiky"],
+    "meaning": ["Slovo a jeho význam", "Učíme se, co každé slovo znamená, a pamatujeme si ho"],
+    "sentence": ["Slova ve větě", "Vybíráme slovo a význam, které se do věty hodí"],
+    "spelling": ["Pravopis", "Skládáme slovo písmeno po písmenu"],
+    "similar": ["Podobná slova, která se pletou", "Rozlišujeme blízká slova a vybíráme to přesné"],
+    "origins": ["Odkud se berou slova", "Kořeny, části slov a jazyky, ze kterých slova přišla"]
+  },
+  "sk": {
+    "letters": ["Písmená a samohláskové znamienka", "Spoznávame písmená, ich zvuky a samohláskové znamienka a čítame slabiky"],
+    "meaning": ["Slovo a jeho význam", "Učíme sa, čo každé slovo znamená, a pamätáme si ho"],
+    "sentence": ["Slová vo vete", "Vyberáme slovo a význam, ktoré sa do vety hodia"],
+    "spelling": ["Pravopis", "Skladáme slovo písmeno po písmene"],
+    "similar": ["Podobné slová, ktoré sa pletú", "Rozlišujeme blízke slová a vyberáme to presné"],
+    "origins": ["Odkiaľ sa berú slová", "Korene, časti slov a jazyky, z ktorých slová prišli"]
+  },
+  "it": {
+    "letters": ["Lettere e segni vocalici", "Conosciamo le lettere, i loro suoni e i segni vocalici, e leggiamo le sillabe"],
+    "meaning": ["La parola e il suo significato", "Impariamo che cosa significa ogni parola e la ricordiamo"],
+    "sentence": ["Parole in una frase", "Scegliamo la parola e il significato adatti alla frase"],
+    "spelling": ["Ortografia", "Costruiamo la parola lettera per lettera"],
+    "similar": ["Parole simili che si confondono", "Distinguiamo le parole vicine e scegliamo quella esatta"],
+    "origins": ["Da dove vengono le parole", "Radici, parti della parola e le lingue da cui sono arrivate le parole"]
+  },
+  "ja": {
+    "letters": ["文字と母音記号", "文字とその音、母音記号を知って、音節を読もう"],
+    "meaning": ["ことばと意味", "ことばの意味を学んで覚えよう"],
+    "sentence": ["文の中のことば", "文に合うことばと意味を選ぼう"],
+    "spelling": ["つづり", "一文字ずつことばを作ろう"],
+    "similar": ["まちがえやすい似たことば", "似たことばを見分けて、ぴったりのことばを選ぼう"],
+    "origins": ["ことばはどこから来たの", "語根、ことばのパーツ、ことばが生まれた言語"]
+  },
+  "hi": {
+    "letters": ["अक्षर और मात्राएँ", "अक्षरों, उनकी आवाज़ों और मात्राओं को जानें और अक्षर जोड़कर पढ़ें"],
+    "meaning": ["शब्द और उसका अर्थ", "हर शब्द का अर्थ सीखें और याद रखें"],
+    "sentence": ["वाक्य में शब्द", "वाक्य में सही बैठने वाला शब्द और अर्थ चुनें"],
+    "spelling": ["वर्तनी", "एक एक अक्षर जोड़कर शब्द बनाएँ"],
+    "similar": ["मिलते जुलते उलझाने वाले शब्द", "पास पास के शब्दों में फ़र्क पहचानें और सही शब्द चुनें"],
+    "origins": ["शब्द कहाँ से आते हैं", "मूल, शब्दों के हिस्से और वे भाषाएँ जिनसे शब्द आए"]
+  },
+  "am": {
+    "letters": ["ፊደላት እና የአናባቢ ምልክቶች", "ፊደላትን፣ ድምፆቻቸውን እና የአናባቢ ምልክቶችን እንወቅ፣ ክፍለ ቃላትንም እናንብብ"],
+    "meaning": ["ቃል እና ትርጉሙ", "የእያንዳንዱን ቃል ትርጉም እንማር እና እናስታውስ"],
+    "sentence": ["ቃላት በዓረፍተ ነገር ውስጥ", "ለዓረፍተ ነገሩ የሚስማማውን ቃል እና ትርጉም እንምረጥ"],
+    "spelling": ["የቃላት አጻጻፍ", "ቃሉን ፊደል በፊደል እንገንባ"],
+    "similar": ["የሚምታቱ ተመሳሳይ ቃላት", "ተቀራራቢ ቃላትን እንለይ እና ትክክለኛውን እንምረጥ"],
+    "origins": ["ቃላት ከየት ይመጣሉ", "ሥሮች፣ የቃል ክፍሎች እና ቃላት የመጡባቸው ቋንቋዎች"]
+  },
+  "uk": {
+    "letters": ["Літери та знаки голосних", "Знайомимося з літерами, їхніми звуками та знаками голосних і читаємо склади"],
+    "meaning": ["Слово та його значення", "Дізнаємося, що означає кожне слово, і запам'ятовуємо його"],
+    "sentence": ["Слова в реченні", "Обираємо слово і значення, які підходять до речення"],
+    "spelling": ["Правопис", "Складаємо слово літера за літерою"],
+    "similar": ["Схожі слова, які плутають", "Розрізняємо близькі слова й обираємо точне"],
+    "origins": ["Звідки беруться слова", "Корені, частини слова та мови, з яких прийшли слова"]
+  },
+  "tr": {
+    "letters": ["Harfler ve ünlü işaretleri", "Harfleri, seslerini ve ünlü işaretlerini tanıyalım, heceleri okuyalım"],
+    "meaning": ["Kelime ve anlamı", "Her kelimenin anlamını öğrenelim ve aklımızda tutalım"],
+    "sentence": ["Cümlede kelimeler", "Cümleye uyan kelimeyi ve anlamı seçelim"],
+    "spelling": ["Yazım", "Kelimeyi harf harf kuralım"],
+    "similar": ["Karıştırılan benzer kelimeler", "Yakın kelimeleri ayırt edelim ve tam doğru olanı seçelim"],
+    "origins": ["Kelimeler nereden gelir", "Kökler, kelime parçaları ve kelimelerin geldiği diller"]
+  },
+  "pl": {
+    "letters": ["Litery i znaki samogłosek", "Poznajemy litery, ich dźwięki i znaki samogłosek oraz czytamy sylaby"],
+    "meaning": ["Słowo i jego znaczenie", "Uczymy się, co znaczy każde słowo, i zapamiętujemy je"],
+    "sentence": ["Słowa w zdaniu", "Wybieramy słowo i znaczenie, które pasują do zdania"],
+    "spelling": ["Pisownia", "Układamy słowo litera po literze"],
+    "similar": ["Podobne słowa, które się mylą", "Rozróżniamy bliskie słowa i wybieramy to dokładne"],
+    "origins": ["Skąd się biorą słowa", "Rdzenie, części słów i języki, z których przyszły słowa"]
+  },
+  "fa": {
+    "letters": ["حرف‌ها و حرکت‌ها", "با حرف‌ها، صداهایشان و حرکت‌ها آشنا می‌شویم و هجاها را می‌خوانیم"],
+    "meaning": ["واژه و معنای آن", "معنای هر واژه را یاد می‌گیریم و به خاطر می‌سپاریم"],
+    "sentence": ["واژه‌ها در جمله", "واژه و معنایی را انتخاب می‌کنیم که به جمله می‌خورد"],
+    "spelling": ["املا", "واژه را حرف به حرف می‌سازیم"],
+    "similar": ["واژه‌های شبیه که اشتباه می‌شوند", "واژه‌های نزدیک را از هم تشخیص می‌دهیم و واژهٔ دقیق را انتخاب می‌کنیم"],
+    "origins": ["واژه‌ها از کجا می‌آیند", "ریشه‌ها، بخش‌های واژه و زبان‌هایی که واژه‌ها از آن‌ها آمده‌اند"]
+  },
+  "id": {
+    "letters": ["Huruf dan tanda vokal", "Mari kenali huruf, bunyinya, dan tanda vokal, lalu baca suku kata"],
+    "meaning": ["Kata dan artinya", "Kita pelajari arti setiap kata dan mengingatnya"],
+    "sentence": ["Kata dalam kalimat", "Kita pilih kata dan arti yang cocok dengan kalimat"],
+    "spelling": ["Ejaan", "Kita susun kata huruf demi huruf"],
+    "similar": ["Kata mirip yang sering tertukar", "Kita bedakan kata yang berdekatan dan pilih yang paling tepat"],
+    "origins": ["Dari mana kata berasal", "Akar kata, bagian kata, dan bahasa asal kata"]
+  },
+  "nl": {
+    "letters": ["Letters en klinkertekens", "We leren de letters, hun klanken en de klinkertekens kennen en lezen lettergrepen"],
+    "meaning": ["Het woord en zijn betekenis", "We leren wat elk woord betekent en onthouden het"],
+    "sentence": ["Woorden in een zin", "We kiezen het woord en de betekenis die bij de zin passen"],
+    "spelling": ["Spelling", "We bouwen het woord letter voor letter"],
+    "similar": ["Woorden die op elkaar lijken", "We houden woorden die op elkaar lijken uit elkaar en kiezen het juiste"],
+    "origins": ["Waar woorden vandaan komen", "Stammen, woorddelen en de talen waar woorden vandaan komen"]
+  },
+  "el": {
+    "letters": ["Γράμματα και σημάδια φωνηέντων", "Γνωρίζουμε τα γράμματα, τους ήχους τους και τα σημάδια των φωνηέντων και διαβάζουμε συλλαβές"],
+    "meaning": ["Η λέξη και η σημασία της", "Μαθαίνουμε τι σημαίνει κάθε λέξη και τη θυμόμαστε"],
+    "sentence": ["Λέξεις σε πρόταση", "Διαλέγουμε τη λέξη και τη σημασία που ταιριάζουν στην πρόταση"],
+    "spelling": ["Ορθογραφία", "Φτιάχνουμε τη λέξη γράμμα γράμμα"],
+    "similar": ["Λέξεις που μοιάζουν και μπερδεύονται", "Ξεχωρίζουμε τις κοντινές λέξεις και διαλέγουμε τη σωστή"],
+    "origins": ["Από πού έρχονται οι λέξεις", "Ρίζες, μέρη της λέξης και οι γλώσσες από όπου ήρθαν οι λέξεις"]
+  },
+  "zu": {
+    "letters": ["Izinhlamvu nezimpawu zonkamisa", "Sazi izinhlamvu, imisindo yazo nezimpawu zonkamisa, bese sifunda amalunga"],
+    "meaning": ["Igama nencazelo yalo", "Sifunda ukuthi igama ngalinye lisho ukuthini futhi silikhumbule"],
+    "sentence": ["Amagama emshweni", "Sikhetha igama nencazelo ehambisana nomusho"],
+    "spelling": ["Isipelingi", "Sakha igama ngohlamvu ngalunye"],
+    "similar": ["Amagama afanayo adidanayo", "Sihlukanisa amagama asondelene bese sikhetha elifanele ncamashi"],
+    "origins": ["Lapho amagama avela khona", "Izimpande, izingxenye zamagama nezilimi amagama avela kuzo"]
+  },
+  "vi": {
+    "letters": ["Chữ cái và dấu nguyên âm", "Cùng làm quen với chữ cái, âm của chúng và dấu nguyên âm, rồi đọc âm tiết"],
+    "meaning": ["Từ và nghĩa của từ", "Cùng học nghĩa của từng từ và ghi nhớ"],
+    "sentence": ["Từ trong câu", "Cùng chọn từ và nghĩa hợp với câu"],
+    "spelling": ["Chính tả", "Cùng ghép từ theo từng chữ cái"],
+    "similar": ["Từ giống nhau dễ nhầm", "Cùng phân biệt các từ gần nhau và chọn từ chính xác"],
+    "origins": ["Từ ngữ đến từ đâu", "Gốc từ, các phần của từ và những ngôn ngữ mà từ bắt nguồn"]
+  },
+  "fil": {
+    "letters": ["Mga titik at tanda ng patinig", "Kilalanin natin ang mga titik, ang tunog nila at ang mga tanda ng patinig, at bumasa ng mga pantig"],
+    "meaning": ["Salita at kahulugan nito", "Alamin natin ang kahulugan ng bawat salita at tandaan ito"],
+    "sentence": ["Mga salita sa pangungusap", "Piliin natin ang salita at kahulugang bagay sa pangungusap"],
+    "spelling": ["Pagbaybay", "Buuin natin ang salita nang titik sa titik"],
+    "similar": ["Magkahawig na salitang napagpapalit", "Kilalanin natin ang pagkakaiba ng magkalapit na salita at piliin ang eksakto"],
+    "origins": ["Saan galing ang mga salita", "Mga ugat, bahagi ng salita at mga wikang pinagmulan ng mga salita"]
+  },
+  "af": {
+    "letters": ["Letters en klinkertekens", "Ons leer die letters, hul klanke en die klinkertekens ken en lees lettergrepe"],
+    "meaning": ["Die woord en sy betekenis", "Ons leer wat elke woord beteken en onthou dit"],
+    "sentence": ["Woorde in sinne", "Ons kies die woord en die betekenis wat by die sin pas"],
+    "spelling": ["Spelling", "Ons bou die woord letter vir letter"],
+    "similar": ["Soortgelyke woorde wat verwar word", "Ons onderskei woorde wat na aan mekaar is en kies die presiese een"],
+    "origins": ["Waar woorde vandaan kom", "Stamme, woorddele en die tale waaruit woorde kom"]
+  },
+  "sw": {
+    "letters": ["Herufi na alama za irabu", "Tujue herufi, sauti zake na alama za irabu, kisha tusome silabi"],
+    "meaning": ["Neno na maana yake", "Tujifunze maana ya kila neno na tuikumbuke"],
+    "sentence": ["Maneno katika sentensi", "Tuchague neno na maana inayofaa sentensi"],
+    "spelling": ["Tahajia", "Tujenge neno herufi kwa herufi"],
+    "similar": ["Maneno yanayofanana na kuchanganywa", "Tutofautishe maneno yanayokaribiana na tuchague lililo sahihi kabisa"],
+    "origins": ["Maneno yanatoka wapi", "Mizizi, sehemu za maneno na lugha ambazo maneno yalitoka"]
+  },
+  "zh-CN": {
+    "letters": ["字母和元音符号", "认识字母、它们的发音和元音符号，一起读音节"],
+    "meaning": ["词语和它的意思", "学会每个词的意思并记住它"],
+    "sentence": ["句子里的词语", "选出适合句子的词语和意思"],
+    "spelling": ["拼写", "一个字母一个字母地拼出单词"],
+    "similar": ["容易混淆的相似词", "分清相近的词，选出最准确的那个"],
+    "origins": ["词语从哪里来", "词根、词的组成部分和词语来源的语言"]
+  },
+  "zh-TW": {
+    "letters": ["字母和母音符號", "認識字母、它們的發音和母音符號，一起讀音節"],
+    "meaning": ["詞語和它的意思", "學會每個詞的意思並記住它"],
+    "sentence": ["句子裡的詞語", "選出適合句子的詞語和意思"],
+    "spelling": ["拼字", "一個字母一個字母地拼出單字"],
+    "similar": ["容易混淆的相似詞", "分清相近的詞，選出最準確的那個"],
+    "origins": ["詞語從哪裡來", "字根、詞的組成部分和詞語來源的語言"]
+  },
+  "ko": {
+    "letters": ["글자와 모음 부호", "글자와 소리, 모음 부호를 알아보고 음절을 읽어요"],
+    "meaning": ["낱말과 뜻", "낱말의 뜻을 배우고 기억해요"],
+    "sentence": ["문장 속 낱말", "문장에 알맞은 낱말과 뜻을 골라요"],
+    "spelling": ["철자", "글자를 하나씩 놓아 낱말을 만들어요"],
+    "similar": ["헷갈리는 비슷한 낱말", "비슷한 낱말을 구별하고 딱 맞는 낱말을 골라요"],
+    "origins": ["낱말은 어디서 왔을까", "어근, 낱말의 부분, 낱말이 건너온 언어"]
+  },
+  "th": {
+    "letters": ["ตัวอักษรและเครื่องหมายสระ", "มารู้จักตัวอักษร เสียงของตัวอักษร และเครื่องหมายสระ แล้วอ่านพยางค์กัน"],
+    "meaning": ["คำและความหมาย", "มาเรียนรู้ความหมายของแต่ละคำและจำให้ได้กัน"],
+    "sentence": ["คำในประโยค", "มาเลือกคำและความหมายที่เข้ากับประโยคกัน"],
+    "spelling": ["การสะกดคำ", "มาสร้างคำทีละตัวอักษรกัน"],
+    "similar": ["คำคล้ายกันที่มักสับสน", "มาแยกคำที่ใกล้เคียงกันและเลือกคำที่ตรงที่สุดกัน"],
+    "origins": ["คำมาจากไหน", "รากศัพท์ ส่วนประกอบของคำ และภาษาที่คำเหล่านั้นมาจาก"]
+  },
+  "bn": {
+    "letters": ["অক্ষর ও স্বরচিহ্ন", "অক্ষর, তাদের ধ্বনি ও স্বরচিহ্ন চিনি, আর অক্ষর জুড়ে পড়ি"],
+    "meaning": ["শব্দ ও তার অর্থ", "প্রতিটি শব্দের অর্থ শিখি ও মনে রাখি"],
+    "sentence": ["বাক্যে শব্দ", "বাক্যের সঙ্গে মানানসই শব্দ ও অর্থ বেছে নিই"],
+    "spelling": ["বানান", "একটি একটি অক্ষর দিয়ে শব্দ গড়ি"],
+    "similar": ["গুলিয়ে যাওয়া কাছাকাছি শব্দ", "কাছাকাছি শব্দগুলো আলাদা করি ও ঠিক শব্দটি বেছে নিই"],
+    "origins": ["শব্দ কোথা থেকে আসে", "মূল, শব্দের অংশ আর যে ভাষাগুলো থেকে শব্দ এসেছে"]
+  },
+  "da": {
+    "letters": ["Bogstaver og vokaltegn", "Vi lærer bogstaverne, deres lyde og vokaltegnene at kende og læser stavelser"],
+    "meaning": ["Ordet og dets betydning", "Vi lærer, hvad hvert ord betyder, og husker det"],
+    "sentence": ["Ord i en sætning", "Vi vælger det ord og den betydning, der passer til sætningen"],
+    "spelling": ["Stavning", "Vi bygger ordet bogstav for bogstav"],
+    "similar": ["Ord der ligner hinanden", "Vi skelner mellem ord, der ligger tæt på hinanden, og vælger det præcise"],
+    "origins": ["Hvor ordene kommer fra", "Rødder, orddele og de sprog, ordene kommer fra"]
+  },
+  "hu": {
+    "letters": ["Betűk és magánhangzójelek", "Megismerjük a betűket, a hangjukat és a magánhangzójeleket, és szótagokat olvasunk"],
+    "meaning": ["A szó és a jelentése", "Megtanuljuk, mit jelent egy szó, és megjegyezzük"],
+    "sentence": ["Szavak a mondatban", "Kiválasztjuk a mondatba illő szót és jelentést"],
+    "spelling": ["Helyesírás", "Betűről betűre építjük fel a szót"],
+    "similar": ["Hasonló, könnyen összekeverhető szavak", "Megkülönböztetjük a közeli szavakat, és kiválasztjuk a pontosat"],
+    "origins": ["Honnan jönnek a szavak", "Szótövek, szóelemek és a nyelvek, amelyekből a szavak érkeztek"]
+  },
+  "xh": {
+    "letters": ["Oonobumba neempawu zezikhamiso", "Sazi oonobumba, izandi zabo neempawu zezikhamiso, size sifunde amalungu"],
+    "meaning": ["Igama nentsingiselo yalo", "Sifunda ukuba igama ngalinye lithetha ntoni size silikhumbule"],
+    "sentence": ["Amagama kwisivakalisi", "Sikhetha igama nentsingiselo ehambelana nesivakalisi"],
+    "spelling": ["Upelo", "Sakha igama ngonobumba ngamnye"],
+    "similar": ["Amagama afanayo abhidanisayo", "Sahlula amagama asondeleleneyo size sikhethe elona lichanekileyo"],
+    "origins": ["Apho amagama avela khona", "Iingcambu, iinxalenye zamagama neelwimi amagama avela kuzo"]
+  },
+  "nso": {
+    "letters": ["Ditlhaka le maswao a ditumanoši", "Re tseba ditlhaka, medumo ya tšona le maswao a ditumanoši, gomme re bala dinoko"],
+    "meaning": ["Lentšu le tlhalošo ya lona", "Re ithuta gore lentšu le lengwe le le lengwe le ra eng gomme re a le gopola"],
+    "sentence": ["Mantšu ka lefokong", "Re kgetha lentšu le tlhalošo tše di swanelago lefoko"],
+    "spelling": ["Mopeleto", "Re aga lentšu ka tlhaka e tee ka e tee"],
+    "similar": ["Mantšu a go swana a a gakantšhago", "Re hlaola mantšu a go batamelana gomme re kgetha la maleba"],
+    "origins": ["Mo mantšu a tšwago gona", "Medu, dikarolo tša mantšu le maleme ao mantšu a tšwago go ona"]
+  },
+  "tn": {
+    "letters": ["Ditlhaka le matshwao a ditumanosi", "Re itse ditlhaka, medumo ya tsone le matshwao a ditumanosi, mme re bala dinoko"],
+    "meaning": ["Lefoko le bokao jwa lone", "Re ithuta gore lefoko lengwe le lengwe le raya eng mme re le gakologelwa"],
+    "sentence": ["Mafoko mo polelong", "Re tlhopha lefoko le bokao tse di tshwanelang polelo"],
+    "spelling": ["Mopeleto", "Re aga lefoko ka tlhaka nngwe le nngwe"],
+    "similar": ["Mafoko a a tshwanang a a akabatsang", "Re farologanya mafoko a a atamelaneng mme re tlhopha le le nepagetseng"],
+    "origins": ["Kwa mafoko a tswang teng", "Medi, dikarolo tsa mafoko le dipuo tse mafoko a tswang mo go tsone"]
+  },
+  "st": {
+    "letters": ["Ditlhaku le matshwao a dilumanosi", "Re tseba ditlhaku, medumo ya tsona le matshwao a dilumanosi, mme re bala dinoko"],
+    "meaning": ["Lentswe le moelelo wa lona", "Re ithuta hore lentswe ka leng le bolelang mme re a le hopola"],
+    "sentence": ["Mantswe polelong", "Re kgetha lentswe le moelelo o lokelang polelo"],
+    "spelling": ["Mopeleto", "Re aha lentswe ka tlhaku e le nngwe ka nako"],
+    "similar": ["Mantswe a tshwanang a ferekanyang", "Re kgetholla mantswe a atamelaneng mme re kgetha le nepahetseng hantle"],
+    "origins": ["Moo mantswe a tswang teng", "Metso, dikarolo tsa mantswe le dipuo tseo mantswe a tswang ho tsona"]
+  },
+  "ts": {
+    "letters": ["Maletere na swikombiso swa swipfawulo", "Hi tiva maletere, mipfumawulo ya wona na swikombiso swa swipfawulo, kutani hi hlaya tisilabi"],
+    "meaning": ["Rito na nhlamuselo ya rona", "Hi dyondza leswi rito rin'wana na rin'wana ri vulaka swona kutani hi ri tsundzuka"],
+    "sentence": ["Marito eka xivulwa", "Hi hlawula rito na nhlamuselo leswi fambelanaka na xivulwa"],
+    "spelling": ["Mapeletelo", "Hi aka rito hi letere yin'we hi yin'we"],
+    "similar": ["Marito yo fana lama pfilunganyaka", "Hi hambanisa marito lama nga kusuhi kutani hi hlawula leri nga rona"],
+    "origins": ["Laha marito ma humaka kona", "Timitsu, swiphemu swa marito na tindzimi leti marito ma humaka eka tona"]
+  },
+  "ss": {
+    "letters": ["Tinhlavu netimphawu tabonkhamisa", "Sati tinhlavu, imisindvo yato netimphawu tabonkhamisa, bese sifundza emalunga"],
+    "meaning": ["Ligama nenchazelo yalo", "Sifundza kutsi ligama ngalinye lisho kutsini bese siyalikhumbula"],
+    "sentence": ["Emagama emushweni", "Sikhetsa ligama nenchazelo lehambisana nemusho"],
+    "spelling": ["Sipelingi", "Sakha ligama ngeluhlavu ngalunye"],
+    "similar": ["Emagama lafanako ladidanako", "Sehlukanisa emagama lasondzelene bese sikhetsa lelifanele ncamashi"],
+    "origins": ["Lapho emagama avela khona", "Timphandze, tincenye temagama netilwimi emagama lavela kuto"]
+  },
+  "ve": {
+    "letters": ["Maḽeḓere na zwiga zwa pfalandoṱhe", "Ri ḓivha maḽeḓere, mibvumo yao na zwiga zwa pfalandoṱhe, ra vhala zwipiḓa zwa maipfi"],
+    "meaning": ["Ipfi na ṱhalutshedzo yaḽo", "Ri guda uri ipfi ḽiṅwe na ḽiṅwe ḽi amba mini nahone ra ḽi elelwa"],
+    "sentence": ["Maipfi kha fhungo", "Ri nanga ipfi na ṱhalutshedzo zwi tshimbilelanaho na fhungo"],
+    "spelling": ["Mapeleṱele", "Ri fhaṱa ipfi nga ḽeḓere ḽithihi nga ḽithihi"],
+    "similar": ["Maipfi a fanaho a tshanganyiswaho", "Ri fhambanyisa maipfi a re tsini ra nanga ḽone ḽone"],
+    "origins": ["Hune maipfi a bva hone", "Midzi, zwipiḓa zwa maipfi na nyambo dze maipfi a bva khadzo"]
+  },
+  "nr": {
+    "letters": ["Amaledere neempawu zabokhamisa", "Sazi amaledere, imidumo yawo neempawu zabokhamisa, bese sifunda amalunga"],
+    "meaning": ["Igama nehlathululo yalo", "Sifunda bona igama ngalinye litjho ukuthini begodu silikhumbule"],
+    "sentence": ["Amagama emutjhweni", "Sikhetha igama nehlathululo ekhambisana nomutjho"],
+    "spelling": ["Ukupeleda", "Sakha igama ngeledere linye ngalinye"],
+    "similar": ["Amagama afanako aphambanisako", "Sihlukanisa amagama atjhideleneko bese sikhetha elifaneleko"],
+    "origins": ["Lapho amagama avela khona", "Imirabhu, iingcenye zamagama namalimi amagama avela kiwo"]
+  }
+}

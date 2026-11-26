@@ -62,7 +62,7 @@ const COPY: Record<string, Copy> = {
   },
 };
 
-export function GameIdea({ lang, dir }: { lang: string; dir: "ltr" | "rtl" }) {
+export function GameIdea({ lang, dir, compact = false }: { lang: string; dir: "ltr" | "rtl"; /** a small chip with the question only */ compact?: boolean }) {
   const c = COPY[lang] ?? COPY.en;
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
@@ -125,11 +125,11 @@ export function GameIdea({ lang, dir }: { lang: string; dir: "ltr" | "rtl" }) {
   return (
     <>
       <style>{CSS}</style>
-      <button type="button" className="gi-banner" dir={dir} onClick={() => setOpen(true)}>
+      <button type="button" className={`gi-banner${compact ? " gi-compact" : ""}`} dir={dir} title={compact ? c.bannerSub : undefined} onClick={() => setOpen(true)}>
         <span className="gi-bulb" aria-hidden="true">💡</span>
         <span className="gi-banner-text">
           <strong>{c.banner}</strong>
-          <span>{c.bannerSub}</span>
+          {compact ? null : <span>{c.bannerSub}</span>}
         </span>
       </button>
       {open && (
@@ -183,6 +183,9 @@ const CSS = `
 .gi-banner-text { display: grid; gap: 2px; min-width: 0; }
 .gi-banner-text strong { font-size: 19px; font-weight: 800; }
 .gi-banner-text span { font-size: 14px; color: #5b4520; }
+.gi-banner.gi-compact { width: auto; margin: 0; padding: 5px 13px 5px 13px; gap: 6px; border-radius: 999px; box-shadow: none; }
+.gi-compact .gi-bulb { width: auto; height: auto; background: transparent; font-size: 15px; box-shadow: none; }
+.gi-compact .gi-banner-text strong { font-size: 13px; font-weight: 700; }
 .gi-veil { position: fixed; inset: 0; z-index: 1200; display: grid; place-items: center; padding: 16px; background: #0b1220cc; }
 .gi-box { position: relative; display: grid; justify-items: center; gap: 12px; width: min(100%, 440px); max-height: calc(100dvh - 32px); overflow: auto; padding: 26px 22px 20px; border-radius: 26px; background: #fffdf6; color: #14202b; text-align: center; box-shadow: 0 20px 60px #0008; }
 .gi-box h2 { margin: 0; font-size: 24px; font-weight: 800; color: #14202b; }

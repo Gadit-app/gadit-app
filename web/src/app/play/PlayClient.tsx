@@ -19,6 +19,7 @@ import { ToolKidsToggle } from "@/components/design/ToolKidsToggle";
 import { planCopy } from "@/lib/plan-copy";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { BANDS, bandCopy, isBand, shelfOf, type Band } from "@/lib/grade-bands";
+import { TOPICS, allTopicsLabel, topicCopy, topicOf } from "@/lib/play-topics";
 import { LANGUAGES, langNameIn as uiLangName } from "@/lib/i18n";
 import { toggleLangGroup } from "@/lib/lang-groups";
 import { LangSearchList } from "@/components/LangSearch";
@@ -3575,7 +3576,6 @@ const FOCUS_GAMES: GameId[] = ["flashcards", "flashdefs", "quiz", "memory", "ana
 const LINK_GAMES: string[] = ["quiz", "flashcards", "flashdefs", "truefalse", "fillblank", "context", "memory", "anagram", "speed", "twin", "time", "passport", "friends", "root", "shade", "build", "idiom", "lens", "artist", "letterpairs", "letters", "vowels", "syllables", "wheel", "wordsearch", "crossword", "arrowword", "duel"];
 
 /** The first-reader games, shown together as "Letters and vowel signs". */
-const LETTER_GAMES = new Set<string>(["letterpairs", "letters", "vowels", "syllables", "wheel"]);
 
 /** Games with a cover picture in public/play/<id>.webp (Gadi 2026-10-09).
  *  Add an id here once its picture is in place; others keep their icon. */
@@ -3638,6 +3638,12 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
   const { user, plan, planReady, loading, promptLogin, familyRole, kidsAccess, tester, memberBand } = useAuth();
   const isKidPlayer = familyRole === "kid";
   const [pickedBand, setPickedBand] = usePickedBand();
+  // The topic tab that is open; kept for this visit so coming back from a game lands on it.
+  const [topic, setTopic] = useState("all");
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from the device
+    try { const v = sessionStorage.getItem("gadit.play.topic"); if (v) setTopic(v); } catch { /* private mode */ }
+  }, []);
   const { lang, dir } = useLang();
   const router = useRouter();
   const href = useHref();
@@ -3798,7 +3804,9 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
   }, [loading, user, lang]);
   const levelOk = levelWords.length >= MIN_WORDS_FOR_GAME.quiz;
   const notebookOk = (pool?.length ?? 0) >= MIN_WORDS_FOR_GAME.quiz;
-  const src = !sourceChosen ? (notebookOk || !levelOk ? "smart" : "level") : source === "level" && !levelOk ? "smart" : source;
+  // No "words of the grade" choice on the screen (Gadi 2026-11-26: "just the words
+  // of the notebook"): they only fill in quietly while the notebook is too small to play.
+  const src = !sourceChosen || source === "level" ? (notebookOk || !levelOk ? "smart" : "level") : source;
   // English for a Hebrew-speaking child (Gadi 2026-11-15): the Ministry of
   // Education Band I words, in topic sets, each with one checked Hebrew
   // translation (scripts/play-en-he-build.cjs). Four sets a day, in order.
@@ -4703,58 +4711,43 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
             doesn't have 4+ words; the other three categories are
             curated-content and always show. */}
         {(() => {
-          const notebookSection = { id: "notebook" as GameCategory, label: t.catNotebook };
-          const wordSections: Array<{ id: GameCategory; label: string }> = [
-            { id: "origin", label: t.catOrigin },
-            { id: "precision", label: t.catPrecision },
-            { id: "structure", label: t.catStructure },
-          ];
-          // Grown-ups see the word games first, kids see their own words first
-          // (council 2026-11-01). Only the order changes, never the art.
-          // By school grade (Gadi 2026-11-13): a child's profile, or the band a
-          // grown-up picked, arranges the same games on four shelves. Nothing
-          // is hidden or locked, only the order changes. The child sees "my
-          // games", never the name of a grade.
+          // By what a child learns (Gadi 2026-11-26): six topics, each with a
+          // heading and a line that says what is learnt, and tabs at the top
+          // that show one topic. A school grade (a child's profile, or the one
+          // a grown-up picked) only orders: the games that fit come first in
+          // each topic, and a topic with no fitting game goes last. Nothing is
+          // hidden or locked.
           const band: Band | null = isKidPlayer ? memberBand : pickedBand;
           const bc = bandCopy(lang);
-          const sections: Array<{ id: string; label: string }> = band
-            ? [
-                { id: "fit", label: isKidPlayer ? bc.mine : bc.fits(bc.bands[band]) },
-                { id: "warm", label: bc.warm },
-                { id: "challenge", label: bc.challenge },
-                { id: "more", label: bc.more },
-              ]
-            : kidsMode || isKidPlayer ? [notebookSection, ...wordSections] : [...wordSections, notebookSection];
-          // Letters and vowel signs (Gadi 2026-11-14): the first-reader games sit
-          // together in a section of their own. With a grade it holds the ones
-          // that fit the grade, and it comes first for the youngest two bands;
-          // without a grade it follows the child's own words.
-          const lettersSection = { id: "letters", label: lang === "he" ? "אותיות וניקוד" : "Letters and vowel signs" };
-          if (band === "pre1" || band === "g12") sections.unshift(lettersSection);
-          else sections.splice(band ? 1 : sections.findIndex((x) => x.id === "notebook") + 1, 0, lettersSection);
-          // The section that carries the word-source pickers, and where a game
-          // (or one of the four cards outside the catalog) sits.
-          const homeId = band ? "fit" : "notebook";
-          const secOf = (id: string, category: string) => {
-            const shelf = band ? shelfOf(id, band) : category;
-            return LETTER_GAMES.has(id) && (!band || shelf === "fit") ? "letters" : shelf;
-          };
+          const tc = topicCopy(lang);
+          const SHELF_RANK: Record<string, number> = { fit: 0, warm: 1, challenge: 2, more: 3 };
+          const rank = (id: string) => (band ? SHELF_RANK[shelfOf(id, band)] : 0);
+          const shown = games.filter(
+            // Kids Mode shows the games curated for younger players; testers
+            // see every game there too (Gadi 2026-11-02). The Hebrew reading
+            // games are not offered in another language at all.
+            (g) => (!kidsMode || g.kidsFriendly || tester) && !(topicOf(g.id) === "letters" && lang !== "he"),
+          );
           const extraCards = ["catch", "catch-fair", ...(isPaid ? ["world", "duel"] : [])];
-          // The grades: a small heading like the sections below, and the chips
-          // in one row on a computer (Gadi 2026-11-16: "the grades drop to a
-          // second line").
-          const chooser = !isKidPlayer && !kidsMode ? (
-            <div className="wb-play-grades">
-              <span className="wb-play-grades-label" id="wb-play-grades-label">{bc.showFor}</span>
-              <div className="wb-play-langs wb-play-grades-row" role="radiogroup" aria-labelledby="wb-play-grades-label">
-                {([null, ...BANDS] as Array<Band | null>).map((b) => (
-                  <button key={b ?? "all"} type="button" role="radio" aria-checked={pickedBand === b} className={`wb-play-lang${pickedBand === b ? " is-on" : ""}`} onClick={() => setPickedBand(b)}>
-                    {b ? bc.bands[b] : bc.all}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : null;
+          const topics = TOPICS.map((id) => ({
+            id,
+            games: shown.filter((g) => topicOf(g.id) === id).sort((a, b) => rank(a.id) - rank(b.id)),
+            extras: extraCards.filter((x) => topicOf(x) === id),
+          })).filter((s) => s.games.length + s.extras.length > 0);
+          const fits = (s: (typeof topics)[number]) => (!band || [...s.extras, ...s.games.map((g) => g.id)].some((x) => rank(x) === 0) ? 0 : 1);
+          topics.sort((a, b) => fits(a) - fits(b));
+          const active = topics.some((s) => s.id === topic) ? topic : "all";
+          const visible = active === "all" ? topics : topics.filter((s) => s.id === active);
+          const pickTopic = (v: string) => {
+            setTopic(v);
+            try { sessionStorage.setItem("gadit.play.topic", v); } catch { /* this visit */ }
+          };
+          // Which words the games use: the child's own words, the whole
+          // notebook once it is big, or a list from Homework. Shown only when
+          // there is a choice to make.
+          const sources: Array<[string, string]> = [["smart", ml("srcSmart", lang)], ...((pool?.length ?? 0) > 40 ? [["all", ml("srcAll", lang)] as [string, string]] : []), ...lists.map((l) => [`list:${l.setId}`, l.title] as [string, string])];
+          const srcOn = (v: string) => src === v || (v === "smart" && (src === "level" || (src.startsWith("list:") && !activeList)));
+          const wordLangs = [...langCounts.map(([c]) => c)].sort((a, b) => (a === "he" ? 0 : a === "en" ? 1 : 2) - (b === "he" ? 0 : b === "en" ? 1 : 2));
           // The journey game: testers first (Gadi 2026-11-14), then everyone, so as
           // many children as possible see it and send notes (Gadi 2026-11-15). Its
           // texts exist in Hebrew and English only, so the other languages wait.
@@ -4772,7 +4765,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                 </span>
                 <span className="wb-fort-text">
                   {/* "New" comes down by itself after a month (the council, 2026-11-15). */}
-                  {(tester || FORT_IS_NEW) && <span className="wb-fort-new">{tester ? (lang === "he" ? "🧪 חדש לבודקים" : "🧪 New for testers") : (lang === "he" ? "חדש" : "New")}</span>}
+                  {FORT_IS_NEW && <span className="wb-fort-new">{lang === "he" ? "חדש" : "New"}</span>}
                   <b>{lang === "he" ? "הדרך למבצר" : "The road to the fortress"}</b>
                   <small>{lang === "he" ? "משחק מילים: רצים אל המבצר ומשחררים את המילים שלכם" : "A word game: run to the fortress and set your words free"}</small>
                 </span>
@@ -4781,69 +4774,50 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
               <a href="/journey" className="wb-fort-cards"><span className="wb-fort-cards-icon" aria-hidden="true">🃏</span>{lang === "he" ? "הקלפים שלי" : "My cards"}</a>
             </div>
           ) : null;
-          // The top of the page lines up with the games grid below (Gadi
-          // 2026-11-16: "too busy, not aligned"): the fortress and "My cards"
-          // on the grid's columns, then the game-idea strip, then the grades.
-          return <><div className="wb-play-top"><style>{PLAY_TOP_CSS}</style>{testerNew}{/* Invent your learning game (Gadi 2026-11-12): subscribers tell us a game idea. */}{isPaid && planReady ? <GameIdea lang={lang} dir={dir} /> : null}{chooser}</div><div className="wb-play-sections">{sections.map((section) => {
-            // When Kids Mode is on, filter to games we've curated for
-            // younger players. The 5 notebook games always qualify
-            // (auto-adapt from the child's own vocabulary); the 4
-            // curated games with kids content join them.
-            const sectionGames = games.filter(
-              // Testers see every game, Kids Mode too (Gadi 2026-11-02).
-              (g) => secOf(g.id, g.category) === section.id && (!kidsMode || g.kidsFriendly || tester)
-                // The two Hebrew reading games are not offered in another
-                // language at all; they used to sit there as "Coming soon".
-                && !((g.id === "syllables" || g.id === "wheel" || g.id === "vowels" || g.id === "letters" || g.id === "letterpairs") && lang !== "he"),
-            );
-            if (sectionGames.length === 0 && !extraCards.some((id) => secOf(id, "notebook") === section.id)) return null;
-            // Notebook section always shows now — the effectivePool
-            // fallback means these games are always playable, even
-            // with an empty notebook.
-            return (
-              <section key={section.id} className={`wb-play-section wb-play-span-${Math.min(sectionGames.length, 4)}`}>
-                {section.id === homeId && (levelOk || (pool?.length ?? 0) > 40 || lists.length > 0) && (
-                  <div className="wb-play-langs" role="radiogroup" aria-label={ml("playOn", lang)} style={{ gridColumn: "1 / -1", width: "100%", maxWidth: "none", display: "flex", flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "flex-start", gap: 8, marginBottom: 12 }}>
-                    <span className="wb-play-langs-label">{ml("playOn", lang)}</span>
-                    {[...(levelOk ? [["level", lang === "he" ? "מילים לפי הכיתה" : "Words for my grade"]] : []), ["smart", ml("srcSmart", lang)], ...((pool?.length ?? 0) > 40 ? [["all", ml("srcAll", lang)]] : []), ...lists.map((l) => [`list:${l.setId}`, l.title] as [string, string])].map(([v, label]) => (
-                      <button
-                        key={v}
-                        type="button"
-                        role="radio"
-                        aria-checked={(src === v) || (v === "smart" && src.startsWith("list:") && !activeList)}
-                        className={`wb-play-lang${src === v || (v === "smart" && src.startsWith("list:") && !activeList) ? " is-on" : ""}`}
-                        onClick={() => chooseSource(v)}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-                {section.id === homeId && langCounts.length >= 2 && !listMode ? (
-                  <div className="wb-play-section-head">
-                    <h2 className="wb-play-section-heading">{section.label}</h2>
-                    <div className="wb-play-langs" role="radiogroup" aria-label={wordsInLabel(lang)}>
-                      <span className="wb-play-langs-label">{wordsInLabel(lang)}</span>
-                      {[...langCounts.map(([c]) => c), "all"].map((c) => (
-                        <button
-                          key={c}
-                          type="button"
-                          role="radio"
-                          aria-checked={activeWordLang === c}
-                          className={`wb-play-lang${activeWordLang === c ? " is-on" : ""}`}
-                          onClick={() => chooseWordLang(c)}
-                        >
-                          {c === "all" ? allLangsLabel(lang) : langNameIn(c, lang)}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <h2 className="wb-play-section-heading">{section.label}</h2>
-                )}
+          return <><div className="wb-play-top"><style>{PLAY_TOP_CSS}</style>{testerNew}
+            <div className="wb-play-tabs" role="tablist" aria-label={v2(lang, "navPlay")}>
+              {[["all", allTopicsLabel(lang)] as [string, string], ...topics.map((s) => [s.id, tc[s.id][0]] as [string, string])].map(([v, label]) => (
+                <button key={v} type="button" role="tab" aria-selected={active === v} className={`wb-play-tab${active === v ? " is-on" : ""}`} onClick={() => pickTopic(v)}>{label}</button>
+              ))}
+            </div>
+            <div className="wb-play-bar">
+              {sources.length > 1 && (
+                <div className="wb-play-langs" role="radiogroup" aria-label={ml("playOn", lang)}>
+                  <span className="wb-play-langs-label">{ml("playOn", lang)}</span>
+                  {sources.map(([v, label]) => (
+                    <button key={v} type="button" role="radio" aria-checked={srcOn(v)} className={`wb-play-lang${srcOn(v) ? " is-on" : ""}`} onClick={() => chooseSource(v)}>{label}</button>
+                  ))}
+                </div>
+              )}
+              {langCounts.length >= 2 && !listMode && (
+                <label className="wb-play-pick">
+                  <span>{wordsInLabel(lang)}</span>
+                  <select value={activeWordLang} onChange={(e) => chooseWordLang(e.target.value)}>
+                    {[...wordLangs, "all"].map((c) => <option key={c} value={c}>{c === "all" ? allLangsLabel(lang) : langNameIn(c, lang)}</option>)}
+                  </select>
+                </label>
+              )}
+              {!isKidPlayer && !kidsMode && (
+                <label className="wb-play-pick">
+                  <span>{bc.showFor}</span>
+                  <select value={pickedBand ?? ""} onChange={(e) => setPickedBand(isBand(e.target.value) ? e.target.value : null)}>
+                    <option value="">{bc.all}</option>
+                    {BANDS.map((b) => <option key={b} value={b}>{bc.bands[b]}</option>)}
+                  </select>
+                </label>
+              )}
+              {/* Invent your learning game (Gadi 2026-11-12): subscribers tell us a game idea. A small chip, not a banner (Gadi 2026-11-26). */}
+              {isPaid && planReady ? <GameIdea lang={lang} dir={dir} compact /> : null}
+            </div>
+          </div><div className="wb-play-sections">{visible.map((s) => (
+              <section key={s.id} className={`wb-play-section wb-play-span-${active === "all" ? Math.min(s.games.length + s.extras.length, 4) : 4}`}>
+                <div className="wb-play-topic-head">
+                  <h2 className="wb-play-topic-title">{tc[s.id][0]}</h2>
+                  <p className="wb-play-topic-sub">{tc[s.id][1]}</p>
+                </div>
                 <ul className="wb-play-grid">
                   {/* The world game (Gadi 2026-10-30): first card, a world to walk in. */}
-                  {isPaid && secOf("world", "notebook") === section.id && (
+                  {s.extras.includes("world") && (
                     <li key="world">
                       <Link href={href("/world")} className="wb-play-card wb-play-card-world wb-play-cat-notebook has-cover">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -4856,7 +4830,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                     </li>
                   )}
                   {/* Catch letters (Gadi 2026-11-02): open to every player. */}
-                  {secOf("catch", "notebook") === section.id && (
+                  {s.extras.includes("catch") && (
                     <li key="catch">
                       <Link href={href("/catch")} className="wb-play-card wb-play-cat-notebook has-cover">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -4869,7 +4843,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                     </li>
                   )}
                   {/* Din's funfair has its own card (Gadi 2026-11-12): it opens Letter Catch straight on the funfair. */}
-                  {secOf("catch-fair", "notebook") === section.id && (
+                  {s.extras.includes("catch-fair") && (
                     <li key="catch-fair">
                       <Link href={`${href("/catch")}?scene=fair`} className="wb-play-card wb-play-cat-notebook has-cover">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -4882,7 +4856,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                       </Link>
                     </li>
                   )}
-                  {isPaid && secOf("duel", "notebook") === section.id && (() => {
+                  {s.extras.includes("duel") && (() => {
                     const dc = duelCopy(lang);
                     return (
                       <li key="duel">
@@ -4897,7 +4871,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                       </li>
                     );
                   })()}
-                  {sectionGames.map((g) => (
+                  {s.games.map((g) => (
                     <li key={g.id}>
                       <button
                         type="button"
@@ -4925,8 +4899,7 @@ export function PlayPage({ openingLesson = false, openingGame = false }: { openi
                   ))}
                 </ul>
               </section>
-            );
-          })}</div></>;
+          ))}</div></>;
         })()}
       </main>
 
@@ -4949,15 +4922,28 @@ const FORT_IS_NEW = typeof Date !== "undefined" && new Date().getTime() < Date.U
 /* The top of the games page sits on the same columns as the games below. */
 const PLAY_TOP_CSS = `
 .wb-play-top { display: grid; gap: 14px; margin: -12px 0 28px; }
-.wb-play-top .gi-banner { margin: 0; padding: 10px 16px; border-radius: 20px; gap: 12px; box-shadow: 0 3px 10px rgba(0,0,0,.08); }
-.wb-play-top .gi-bulb { width: 40px; height: 40px; font-size: 21px; }
-.wb-play-top .gi-banner-text strong { font-size: 16.5px; }
-.wb-play-top .gi-banner-text span { font-size: 13.5px; }
-.wb-play-grades { display: grid; gap: 10px; margin-top: 6px; }
-.wordbook .wb-play-grades-label { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--wb-ink-soft); padding-inline-start: 4px; }
-.wordbook .wb-play-grades-row { display: flex; flex-wrap: wrap; gap: 8px; }
-.wordbook .wb-play-grades-row .wb-play-lang { white-space: nowrap; }
-@media (min-width: 900px) { .wordbook .wb-play-grades-row { flex-wrap: nowrap; } }
+/* The topic tabs: one row, swiped sideways on a phone. */
+.wb-play-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 4px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.wb-play-tabs::-webkit-scrollbar { display: none; }
+@media (min-width: 700px) { .wb-play-tabs { flex-wrap: wrap; overflow: visible; } }
+.wordbook .wb-play-tab { flex: none; min-height: 42px; padding: 9px 17px; border-radius: 999px; border: 1px solid rgba(15,111,108,.28); background: var(--surface, #fff); color: #0F6F6C; font: inherit; font-size: 15px; font-weight: 700; white-space: nowrap; cursor: pointer; }
+.wordbook .wb-play-tab.is-on { background: #0F6F6C; border-color: #0F6F6C; color: #fff; }
+.wordbook .wb-play-tab:focus-visible { outline: 3px solid #0EA5A5; outline-offset: 2px; }
+html[data-theme] .wordbook .wb-play-tab:not(.is-on) { color: var(--ink, #172320); border-color: color-mix(in srgb, var(--ink, #172320) 28%, transparent); background: color-mix(in srgb, var(--surface, #fff) 70%, transparent); }
+/* One small row of choices under the tabs. */
+.wb-play-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; }
+.wb-play-bar:empty { display: none; }
+.wordbook .wb-play-pick { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--wb-ink-soft); }
+.wordbook .wb-play-pick select { max-width: 60vw; padding: 6px 10px; border-radius: 999px; border: 1px solid rgba(15,111,108,.25); background: var(--surface, #fff); color: #0F6F6C; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+html[data-theme] .wordbook .wb-play-pick { color: var(--ink-soft, #5C6B66); }
+html[data-theme] .wordbook .wb-play-pick select { color: var(--ink, #172320); border-color: color-mix(in srgb, var(--ink, #172320) 28%, transparent); background: var(--surface, #fff); }
+.wb-play-bar .gi-banner { margin-inline-start: auto; }
+/* A topic: its name, and under it what is learnt there. */
+.wordbook .wb-play-sections > .wb-play-section > .wb-play-topic-head { grid-column: 1 / -1; margin: 0 0 12px; padding-inline-start: 4px; }
+.wordbook .wb-play-topic-title { margin: 0 0 2px; font-size: 21px; font-weight: 800; line-height: 1.25; color: var(--wb-ink); }
+.wordbook .wb-play-topic-sub { margin: 0; font-size: 14.5px; line-height: 1.45; color: var(--wb-ink-soft); }
+html[data-theme] .wordbook .wb-play-topic-title { color: var(--ink, #172320); }
+html[data-theme] .wordbook .wb-play-topic-sub { color: var(--ink-soft, #5C6B66); }
 `;
 
 const FORT_TILE_CSS = `
