@@ -110,7 +110,9 @@ export function applyNqRound(prev: NqState, r: NqRound, order: string[], today: 
     }
   }
   if (cleanCalls === NQ.calls) {
-    if (s.clean.day !== today) s.clean = { day: today, n: 0 };
+    // only a later day opens the count again: the day comes from the device's time zone,
+    // and a device that jumps back and forth between zones must not reset it
+    if (today > s.clean.day) s.clean = { day: today, n: 0 };
     if (s.clean.n < NQ.cleanPerDay) { s.clean.n += 1; wordies += NQ.wordies.clean; }
   }
   return { state: s, counted: true, passed, firstPass, stationDone, wordies };

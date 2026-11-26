@@ -48,6 +48,8 @@ import type { Clue, SenseEvent, WordState } from "@/lib/invaders/progress";
 import { NiqqudProvider, NiqqudToggle, useNiqqud } from "@/lib/niqqud-display";
 import { invCopy, type InvCopy } from "./inv-i18n";
 import { FallStage, type Drop } from "./FallStage";
+import { NiqqudDoor, type NqData } from "./NiqqudDoor";
+import { nqCopy } from "./nq-i18n";
 
 const ROUND = 5;
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
@@ -184,6 +186,16 @@ function readyClue(s: ApiSense, want: Clue, mode: Mode, waitedS: number): Clue |
   return bad || waitedS > 3 ? "g" : null;
 }
 
+/** The text of a falling card. Each reads the niqqud switch itself, so cards already falling change with it at once. */
+function CardGloss({ g, size }: { g: string; size: number }) {
+  const { nq } = useNiqqud();
+  return <span className="iv-gloss" style={{ fontSize: size }}>{nq(g)}</span>;
+}
+function CardWord({ word }: { word: Parameters<typeof shownWord>[0] }) {
+  const { on, available } = useNiqqud();
+  return <b dir="rtl">{shownWord(word, available && on)}</b>;
+}
+
 /** The words door on the shared falling engine (FallStage): what falls, what a catch means, when the word ends. */
 function Sky({ plan, decoys, mode, speed, avatar, imp, c, onDone, onExit }: {
   plan: Plan; decoys: Decoy[]; mode: Mode; speed: Speed; avatar: string; imp: string | null; c: InvCopy;
@@ -191,7 +203,7 @@ function Sky({ plan, decoys, mode, speed, avatar, imp, c, onDone, onExit }: {
 }) {
   const { on: nqOn, available: nqAvail, nq } = useNiqqud();
   const niqqud = nqAvail && nqOn;
-  // the cards read these when drawn, so switching niqqud on changes the cards already falling
+  // read at the moment of a catch (the impostor's message); the cards themselves follow the switch (CardGloss, CardWord)
   const view = useRef({ nq, niqqud });
   useEffect(() => { view.current = { nq, niqqud }; });
 
@@ -223,7 +235,7 @@ function Sky({ plan, decoys, mode, speed, avatar, imp, c, onDone, onExit }: {
     face: (S) => (
       <>
         {/* the gloss lies under the picture: a picture that fails never leaves an empty card */}
-        <span className="iv-gloss" style={{ fontSize: clamp(S * 0.15, 14, 19) }}>{view.current.nq(d.g)}</span>
+        <CardGloss g={d.g} size={clamp(S * 0.15, 14, 19)} />
         {d.pic ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={d.pic} alt="" draggable={false} onError={(e) => { e.currentTarget.style.display = "none"; }} />
@@ -236,7 +248,7 @@ function Sky({ plan, decoys, mode, speed, avatar, imp, c, onDone, onExit }: {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={imp} alt="" draggable={false} />
         ) : <span className="iv-imp-face" aria-hidden="true">😜</span>}
-        <b dir="rtl">{shownWord(d.word, view.current.niqqud)}</b>
+        <CardWord word={d.word} />
       </>
     ),
   }), [imp]);
@@ -372,22 +384,26 @@ function Sky({ plan, decoys, mode, speed, avatar, imp, c, onDone, onExit }: {
 }
 
 /* ---------- the page ---------- */
-/** `demo`: words given straight to the page (a local check of the screen), no sign-in and nothing saved.
- *  The words are Hebrew on every screen, so niqqud is always offered (lib/niqqud-display). */
-export function InvadersClient({ demo }: { demo?: ApiData } = {}) {
+/** `demo`: words given straight to the page (a local check of the screen), no sign-in and nothing saved;
+ *  `nqDemo` the same for the niqqud door. The words are Hebrew on every screen, so niqqud is always
+ *  offered (lib/niqqud-display). */
+export function InvadersClient({ demo, nqDemo }: { demo?: ApiData; nqDemo?: NqData } = {}) {
   return (
     <NiqqudProvider available lang="he">
-      <InvadersGame demo={demo} />
+      <InvadersGame demo={demo} nqDemo={nqDemo} />
     </NiqqudProvider>
   );
 }
 
-function InvadersGame({ demo }: { demo?: ApiData }) {
+function InvadersGame({ demo, nqDemo }: { demo?: ApiData; nqDemo?: NqData }) {
   const { user, planReady, loading, promptLogin, avatarId, avatarPhotoUrl, memberBand } = useAuth();
   const { lang } = useLang();
   const href = useHref();
   const router = useRouter();
   const c = invCopy(lang);
+  const nc = nqCopy(lang);
+  /** The niqqud door is open (Gadi 2026-11-25): the same sky, avatar and speed. */
+  const [nqOpen, setNqOpen] = useState(false);
   const dir = lang === "he" || lang === "ar" || lang === "fa" ? "rtl" : "ltr";
   const mode = modeOf(memberBand);
   const { on: nqOn, available: nqAvail, nq } = useNiqqud();
@@ -583,7 +599,11 @@ function InvadersGame({ demo }: { demo?: ApiData }) {
         </div>
       ) : null}
 
-      {phase === "door" ? (
+      {phase === "door" && nqOpen ? (
+        <NiqqudDoor fallS={FALL_S.pics * SPEED_X[speed]} avatar={avatar} imp={data?.scene.imp ?? null} lang={lang} demo={nqDemo} onBack={() => { sfx.whoosh(); setNqOpen(false); }} />
+      ) : null}
+
+      {phase === "door" && !nqOpen ? (
         <div className="iv-wrap is-door" dir={dir}>
           <div className="iv-card-big">
             {data?.scene.imp ? (
@@ -603,8 +623,18 @@ function InvadersGame({ demo }: { demo?: ApiData }) {
             {lang !== "he" && !demo ? <p className="iv-note">{c.otherLang}</p>
               : error === "not_open" ? <p className="iv-note">{c.notOpen}</p>
               : error === "failed" || (data && !queue.length) ? <p className="iv-note">{c.noWords}</p>
-              : !word ? <span className="iv-note"><WaitText text={c.loading} /></span>
-              : <button type="button" className="iv-btn" onClick={() => { sfx.whoosh(); openWord(idx); }}>{c.start}</button>}
+              : (
+                <div className="iv-doors">
+                  <button type="button" className="iv-door" disabled={!word} onClick={() => { sfx.whoosh(); openWord(idx); }}>
+                    <b>{nc.doorWords}</b>
+                    <small>{word ? nc.doorWordsSub : <WaitText text={c.loading} />}</small>
+                  </button>
+                  <button type="button" className="iv-door" onClick={() => { sfx.whoosh(); setNqOpen(true); }}>
+                    <b>{nc.doorNiqqud}</b>
+                    <small>{nc.doorNiqqudSub}</small>
+                  </button>
+                </div>
+              )}
             <button type="button" className="iv-link" onClick={exit}>{c.back}</button>
           </div>
         </div>
@@ -673,6 +703,12 @@ const CSS = `
 .iv-btn.is-ghost{background:#eef2f6;color:#14202b;box-shadow:none}
 .iv-link{border:0;background:none;font:inherit;color:#5f6b73;font-weight:700;cursor:pointer;text-decoration:underline}
 .iv-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.iv-doors{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.iv-door{border:0;border-radius:20px;background:#7c3aed;color:#fff;font:inherit;padding:14px 10px;cursor:pointer;display:grid;gap:4px;justify-items:center;box-shadow:0 6px 16px #7c3aed55}
+.iv-door b{font-size:21px;font-weight:900}
+.iv-door small{font-size:14px;font-weight:700;opacity:.92;line-height:1.3}
+.iv-door:disabled{opacity:.6;cursor:default}
+.iv-door + .iv-door{background:#0a7472;box-shadow:0 6px 16px #0a747255}
 .iv-senses{list-style:none;margin:0;padding:0;display:grid;gap:8px;width:100%}
 .iv-senses li{display:flex;align-items:center;gap:12px;padding:6px;border-radius:16px;background:#f0fdf4;text-align:start}
 .iv-senses li.is-miss{background:#fff7ed}
@@ -682,7 +718,7 @@ const CSS = `
 .iv-sense-text b{font-size:17px}
 .iv-sense-text small{color:#9a3412;font-weight:700}
 .iv-sense-text small.is-known{color:#15803d}
-.iv-wordies{background:#fff3c4;color:#5b3a00;border-radius:999px;padding:4px 14px;font-weight:900}
+.iv-wordies{background:#fff3c4;color:#5b3a00;border-radius:999px;padding:4px 14px;font-weight:900;direction:ltr;unicode-bidi:isolate}
 @keyframes iv-caught{to{transform:translateY(-40px) scale(.2);opacity:0}}
 @keyframes iv-crash{60%{transform:scaleY(.6) scaleX(1.15)}to{transform:scale(.4);opacity:0}}
 @keyframes iv-poof{from{opacity:1;transform:translateX(-50%) scale(.6)}to{opacity:0;transform:translateX(-50%) scale(1.4)}}

@@ -36,6 +36,9 @@ const SOUND_OF: Record<SignId, string> = {
   shuruk: "אוּ", kubutz: "אוּ", tsere: "אֶ", segol: "אֶ", shva: "שְׁוָא",
 };
 
+/** What a sign says on its own (an impostor's message at a sound station). */
+export const soundOf = (s: SignId): string => SOUND_OF[s];
+
 /** The letters of GameVowelSteps: clear at the start of a syllable, and its checked recordings exist for them. */
 export const NQ_LETTERS = ["מ", "ל", "נ", "ס", "ר", "שׁ", "ז", "ד", "ג", "ט", "ק", "בּ", "תּ"];
 

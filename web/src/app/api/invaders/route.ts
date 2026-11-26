@@ -43,18 +43,20 @@ async function who(req: NextRequest): Promise<{ uid: string; canJump: boolean } 
   const h = req.headers.get("authorization") || "";
   const token = h.toLowerCase().startsWith("bearer ") ? h.slice(7).trim() : "";
   if (!token) return { error: "login_required", status: 401 };
+  let d: Awaited<ReturnType<ReturnType<typeof getAdminAuth>["verifyIdToken"]>>;
   try {
-    const d = await getAdminAuth().verifyIdToken(token);
-    const admin = d.email === ADMIN_EMAIL && d.email_verified === true;
-    if (!admin) {
-      const u = await getAdminDb().collection("users").doc(d.uid).get();
-      if (u.data()?.tester !== true) return { error: "not_open", status: 403 };
-    }
-    // Everyone who may open the game today may also jump (the admin and testers).
-    return { uid: d.uid, canJump: true };
+    d = await getAdminAuth().verifyIdToken(token);
   } catch {
     return { error: "login_required", status: 401 };
   }
+  const admin = d.email === ADMIN_EMAIL && d.email_verified === true;
+  if (!admin) {
+    // a failed read here is the server's failure (500), not a bad sign-in: the device keeps its round and sends it again
+    const u = await getAdminDb().collection("users").doc(d.uid).get();
+    if (u.data()?.tester !== true) return { error: "not_open", status: 403 };
+  }
+  // Everyone who may open the game today may also jump (the admin and testers).
+  return { uid: d.uid, canJump: true };
 }
 
 const progressOf = (uid: string) => getAdminDb().collection("users").doc(uid).collection("invaders");

@@ -55,6 +55,8 @@ eq("syllable kubutz says shuruk", nq.syllable("ס", "kubutz"), { text: "סֻ", s
 eq("syllable holamHaser says holamMale", nq.syllable("ל", "holamHaser"), { text: "לֹ", say: "לוֹ" });
 eq("syllable shva says its name", nq.syllable("מ", "shva"), { text: "מְ", say: "שְׁוָא" });
 eq("syllable kamatz", nq.syllable("ד", "kamatz"), { text: "דָ", say: "דָ" });
+eq("soundOf kubutz", typeof nq.soundOf === "function" ? nq.soundOf("kubutz") : null, "אוּ");
+eq("soundOf shva", typeof nq.soundOf === "function" ? nq.soundOf("shva") : null, "שְׁוָא");
 eq("signAlone kamatz", nq.signAlone("kamatz"), "◌ָ");
 eq("signAlone holamMale", nq.signAlone("holamMale"), "וֹ");
 eq("signAlone shuruk", nq.signAlone("shuruk"), "וּ");
@@ -137,6 +139,11 @@ for (let i = 0; i < 6; i++) { const x = apply(s, round("s-a", 1, 5)); s = x.stat
 eq("clean cap: 2 for the pass + 5 clean", paid, 7);
 r = apply(s, round("s-a", 1, 5), D2);
 eq("clean cap: next day pays again", r.wordies, 1);
+// the day comes from the device's time zone: going back a day must not open the cap again
+r = apply(r.state, round("s-a", 1, 5), D1);
+eq("clean cap: an earlier day does not reset it", [r.wordies, r.state.clean.day], [1, D2]);
+for (let i = 0; i < 6; i++) r = apply(r.state, round("s-a", 1, 5), i % 2 ? D2 : D1);
+eq("clean cap: flipping days stops at the cap", r.state.clean, { day: D2, n: 5 });
 
 r = apply(pr.emptyNq(), round("s-a", 2, 5));
 check("locked stage", !r.counted && r.wordies === 0 && !r.state.st["s-a"], JSON.stringify(r));
